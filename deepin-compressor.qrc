@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/icon.svg</file>
+        <file>images/split_line.svg</file>
+        <file>images/close_normal.svg</file>
+        <file>images/close_hover.svg</file>
+        <file>images/close_press.svg</file>
+        <file>images/font-x-generic.svg</file>
+        <file>images/font_loaded.svg</file>
+        <file>images/font_unload.svg</file>
+        <file>images/deepin-compressor.svg</file>
+    </qresource>
+</RCC>
