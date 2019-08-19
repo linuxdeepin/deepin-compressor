@@ -21,6 +21,7 @@ DWIDGET_USE_NAMESPACE
 
 class CompressSetting :public QWidget
 {
+    Q_OBJECT
 public:
     CompressSetting(QWidget* parent = 0);
     ~CompressSetting();
@@ -52,6 +53,9 @@ private:
     DLabel* m_encryptedfilelistlabel;
 
     uint m_splitnum;
+
+signals:
+    void sigCompressPressed();
 
 public slots:
     void onPathButoonClicked();

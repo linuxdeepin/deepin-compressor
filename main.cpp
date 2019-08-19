@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <DLog>
 #include "utils.h"
+#include <DObject>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -72,6 +73,8 @@ int main(int argc, char *argv[])
     if (!fileList.isEmpty()) {
         QMetaObject::invokeMethod(&w, "onSelected", Qt::QueuedConnection, Q_ARG(QStringList, fileList));
     }
+
+    QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
 
     return app.exec();
 }

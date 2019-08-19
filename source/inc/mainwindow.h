@@ -28,6 +28,9 @@
 #include "uncompresspage.h"
 #include "compresspage.h"
 #include "compresssetting.h"
+#include "progress.h"
+#include "compressor_success.h"
+#include "compressor_fail.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,6 +39,12 @@ enum Page_ID{
     PAGE_UNZIP,
     PAGE_ZIP,
     PAGE_ZIPSET,
+    PAGE_ZIPPROGRESS,
+    PAGE_UNZIPPROGRESS,
+    PAGE_ZIP_SUCCESS,
+    PAGE_ZIP_FAIL,
+    PAGE_UNZIP_SUCCESS,
+    PAGE_UNZIP_FAIL,
     PAGE_MAX
 };
 
@@ -61,6 +70,11 @@ private slots:
     void refreshPage();
     void onSelected(const QStringList &);
     void onCompressNext();
+    void onCompressPressed();
+    void onCancelCompressPressed();
+
+signals:
+    void sigquitApp();
 
 private:
     QWidget *m_mainWidget;
@@ -69,6 +83,9 @@ private:
     UnCompressPage *m_UnCompressPage;
     CompressPage *m_CompressPage;
     CompressSetting *m_CompressSetting;
+    Progress* m_Progess;
+    Compressor_Success* m_CompressSuccess;
+    Compressor_Fail* m_CompressFail;
     QSettings m_settings;
     QAction *m_themeAction;
     Page_ID m_pageid;

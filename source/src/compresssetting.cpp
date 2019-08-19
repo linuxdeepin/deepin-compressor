@@ -66,9 +66,11 @@ void CompressSetting::InitUI()
     m_splitnumedit->setValidator(new QIntValidator(D_COMPRESS_SPLIT_MIN, D_COMPRESS_SPLIT_MIX, this));
     m_splitnumedit->setText(QString::number(m_splitnum));
     m_plusbutton = new DSuggestButton();
-//    m_plusbutton->setText("+");
+    m_plusbutton->setText("+");
+    m_plusbutton->setFixedWidth(40);
     m_minusbutton = new DSuggestButton();
-//    m_minusbutton->setText("-");
+    m_minusbutton->setText("-");
+    m_minusbutton->setFixedWidth(40);
     m_splitlayout->addWidget(m_splitnumedit);
     m_splitlayout->addWidget(m_plusbutton);
     m_splitlayout->addWidget(m_minusbutton);
@@ -157,7 +159,7 @@ void CompressSetting::onNextButoonClicked()
         m_nextbutton->setText(tr("Compress"));
     }
     else {
-
+        emit sigCompressPressed();
     }
 }
 

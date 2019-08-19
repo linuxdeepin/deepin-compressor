@@ -38,17 +38,24 @@ MainWindow::MainWindow(QWidget *parent)
       m_UnCompressPage(new UnCompressPage),
       m_CompressPage(new CompressPage),
       m_CompressSetting(new CompressSetting),
+      m_Progess(new Progress),
+      m_CompressSuccess(new Compressor_Success),
+      m_CompressFail(new Compressor_Fail),
       m_settings("deepin", "deepin-font-installer"),
       m_themeAction(new QAction(tr("Dark theme"), this))
 {
     titlebar()->setIcon(QIcon(":/images/icon.svg"));
     titlebar()->setTitle("");
+    titlebar()->setBackgroundTransparent(true);
 
     // add widget to main layout.
     m_mainLayout->addWidget(m_homePage);
     m_mainLayout->addWidget(m_UnCompressPage);
     m_mainLayout->addWidget(m_CompressPage);
     m_mainLayout->addWidget(m_CompressSetting);
+    m_mainLayout->addWidget(m_Progess);
+    m_mainLayout->addWidget(m_CompressSuccess);
+    m_mainLayout->addWidget(m_CompressFail);
 
     // init window flags.
     setWindowTitle(tr("Deepin Archive Manager"));
@@ -78,6 +85,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
     connect(m_themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
+    connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
+    connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
+    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
 
 }
 
@@ -194,15 +204,19 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_mainLayout->setCurrentIndex(1);
-        titlebar()->setTitle("UNZIP");
+        titlebar()->setTitle(tr("UNZIP"));
         break;
     case PAGE_ZIP:
-        m_mainLayout->setCurrentIndex(2);
-        titlebar()->setTitle("New Archive File");
+        m_mainLayout->setCurrentIndex(5);
+        titlebar()->setTitle(tr("New Archive File"));
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        titlebar()->setTitle("New Archive File");
+        titlebar()->setTitle(tr("New Archive File"));
+        break;
+    case PAGE_ZIPPROGRESS:
+        m_mainLayout->setCurrentIndex(4);
+        titlebar()->setTitle(tr("Compressing"));
         break;
     default:
         break;
@@ -227,5 +241,16 @@ void MainWindow::onCompressNext()
 {
     m_pageid = PAGE_ZIPSET;
     refreshPage();
+}
+
+void MainWindow::onCompressPressed()
+{
+    m_pageid = PAGE_ZIPPROGRESS;
+    refreshPage();
+}
+
+void MainWindow::onCancelCompressPressed()
+{
+    emit sigquitApp();
 }
 
