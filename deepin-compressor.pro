@@ -23,7 +23,9 @@ HEADERS +=  source/inc/homepage.h \
             source/inc/fileViewer.h \
             source/inc/compresspage.h \
             source/inc/uncompresspage.h \
-            source/inc/compresssetting.h
+            source/inc/compresssetting.h \
+    source/inc/lib_edit_button.h \
+    source/inc/dfmheaderview.h
 
 SOURCES +=  source/src/homepage.cpp \
             main.cpp \
@@ -32,7 +34,9 @@ SOURCES +=  source/src/homepage.cpp \
             source/src/fileViewer.cpp \
             source/src/compresspage.cpp \
             source/src/uncompresspage.cpp \
-            source/src/compresssetting.cpp
+            source/src/compresssetting.cpp \
+    source/src/lib_edit_button.cpp \
+    source/src/dfmheaderview.cpp
 
 RESOURCES += deepin-compressor.qrc
 TRANSLATIONS += translations/deepin-compressor.ts

@@ -20,18 +20,25 @@ CompressPage::CompressPage(QWidget *parent)
 {
     m_fileviewer = new fileViewer();
     m_nextbutton = new DSuggestButton(tr("NEXT"));
+    m_nextbutton->setFixedWidth(260);
 
-    QBoxLayout *contentLayout = new QHBoxLayout;
-    contentLayout->addSpacing(15);
+    QHBoxLayout *contentLayout = new QHBoxLayout;
+    contentLayout->addStretch();
     contentLayout->addWidget(m_fileviewer);
-    contentLayout->addSpacing(15);
+    contentLayout->addStretch();
+
+    QHBoxLayout *buttonlayout = new QHBoxLayout;
+    buttonlayout->addStretch();
+    buttonlayout->addWidget(m_nextbutton);
+    buttonlayout->addStretch();
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addStretch();
     mainLayout->addLayout(contentLayout);
-    mainLayout->addSpacing(15);
-    mainLayout->addWidget(m_nextbutton);
-    mainLayout->addSpacing(15);
+    mainLayout->addStretch();
+    mainLayout->addLayout(buttonlayout);
+    mainLayout->addStretch();
 
     connect(m_nextbutton, &DSuggestButton::clicked, this, &CompressPage::onNextPress);
 }
