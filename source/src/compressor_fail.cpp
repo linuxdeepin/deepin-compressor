@@ -16,16 +16,12 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
-    QFont ft;
-    ft.setPointSize(50);
-    ft.setBold(true);
-
     m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
-    m_stringinfolabel->setFont(ft);
+    m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
     m_stringdetaillabel = new DLabel();
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DSuggestButton();

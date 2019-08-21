@@ -9,22 +9,18 @@
 Compressor_Success::Compressor_Success(QWidget *parent)
     : QWidget(parent)
 {
-    m_stringinfo = tr("Compressor Successed!");
+    m_stringinfo = tr("Compress Successed!");
     InitUI();
     InitConnection();
 }
 
 void Compressor_Success::InitUI()
 {
-    QFont ft;
-    ft.setPointSize(30);
-    ft.setBold(true);
-
     m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
-    m_stringinfolabel->setFont(ft);
+    m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DSuggestButton();
     m_showfilebutton->setFixedWidth(260);

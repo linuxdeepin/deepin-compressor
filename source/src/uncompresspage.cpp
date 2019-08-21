@@ -72,94 +72,12 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     formLayout->setHorizontalSpacing(5);
     formLayout->setVerticalSpacing(7);
 
-    QWidget *btnsWidget = new QWidget;
-    QHBoxLayout *btnsLayout = new QHBoxLayout(btnsWidget);
-    btnsLayout->addStretch();
-    btnsLayout->addWidget(m_installBtn);
-    btnsLayout->addWidget(m_uninstallBtn);
-    btnsLayout->addWidget(m_reinstallBtn);
-    btnsLayout->addWidget(m_viewFileBtn);
-    btnsLayout->addWidget(m_closeBtn);
-    btnsLayout->addStretch();
-    btnsLayout->setSpacing(20);
-    btnsLayout->setMargin(0);
 
-    QWidget *progressWidget = new QWidget;
-    QVBoxLayout *progressLayout = new QVBoxLayout(progressWidget);
-    progressLayout->addWidget(m_spinner, 0, Qt::AlignCenter);
-    progressWidget->setFixedHeight(40);
-    m_spinner->setFixedSize(30, 30);
 
-    m_bottomLayout->addWidget(btnsWidget);
-    m_bottomLayout->addWidget(progressWidget);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(iconWidget, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(10);
-    mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(15);
-    mainLayout->addLayout(formLayout);
-    mainLayout->addStretch();
-    mainLayout->addWidget(m_tipsLabel, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(8);
-    mainLayout->addLayout(m_bottomLayout);
-    mainLayout->setSpacing(0);
-    mainLayout->setMargin(0);
-    mainLayout->setContentsMargins(50, 0, 50, 20);
 
-    // init property.
-    styleLabel->setStyleSheet("QLabel { color: #797979; font-size: 14px; }");
-    typeLabel->setStyleSheet("QLabel { color: #797979; font-size: 14px; }");
-    versionLabel->setStyleSheet("QLabel { color: #797979; font-size: 14px; }");
-    copyrightLabel->setStyleSheet("QLabel { color: #797979; font-size: 14px; }");
-    descLabel->setStyleSheet("QLabel { color: #797979; font-size: 14px; }");
 
-    m_nameLabel->setStyleSheet("QLabel { font-size: 18px; font-weight: 510; }");
-    m_styleLabel->setStyleSheet("QLabel { font-size: 14px; }");
-    m_typeLabel->setStyleSheet("QLabel { font-size: 14px; }");
-    m_versionLabel->setStyleSheet("QLabel { font-size: 14px; }");
-    m_copyrightLabel->setStyleSheet("QLabel { font-size: 14px; }");
-    m_descriptionLabel->setStyleSheet("QLabel { font-size: 14px; }");
 
-    m_copyrightLabel->setAlignment(Qt::AlignTop);
-    m_copyrightLabel->setWordWrap(true);
-
-    m_descriptionLabel->setAlignment(Qt::AlignTop);
-    m_descriptionLabel->setWordWrap(true);
-    m_tipsLabel->setText("");
-
-    m_installBtn->setText(tr("Install"));
-    m_installBtn->setFixedSize(160, 36);
-    m_installBtn->setFocusPolicy(Qt::NoFocus);
-    m_installBtn->setVisible(false);
-
-    m_uninstallBtn->setFixedSize(160, 36);
-    m_uninstallBtn->setFocusPolicy(Qt::NoFocus);
-    m_uninstallBtn->setObjectName("GrayButton");
-    m_uninstallBtn->setVisible(false);
-
-    m_reinstallBtn->setFixedSize(160, 36);
-    m_reinstallBtn->setFocusPolicy(Qt::NoFocus);
-    m_reinstallBtn->setObjectName("GrayButton");
-    m_reinstallBtn->setVisible(false);
-
-    m_viewFileBtn->setText(tr("View font directory"));
-    m_viewFileBtn->setFixedSize(180, 36);
-    m_viewFileBtn->setFocusPolicy(Qt::NoFocus);
-    m_viewFileBtn->setVisible(false);
-
-    m_closeBtn->setFixedSize(160, 36);
-    m_closeBtn->setFocusPolicy(Qt::NoFocus);
-    m_closeBtn->setVisible(false);
-    m_closeBtn->setText(tr("Done"));
-
-    // connect the signals to the slots function.
-
-    connect(m_installBtn, &QPushButton::clicked, this, &UnCompressPage::handleInstall);
-    connect(m_uninstallBtn, &QPushButton::clicked, this, &UnCompressPage::handleRemove);
-    connect(m_reinstallBtn, &QPushButton::clicked, this, &UnCompressPage::handleReinstall);
-    connect(m_viewFileBtn, &QPushButton::clicked, this, &UnCompressPage::viewFilePath);
-    connect(m_closeBtn, &QPushButton::clicked, this, &QApplication::quit);
 
 }
 
@@ -167,67 +85,4 @@ UnCompressPage::~UnCompressPage()
 {
 }
 
-void UnCompressPage::updateInfo()
-{
-    refreshPage();
 
-
-}
-
-void UnCompressPage::refreshPage()
-{
-
-        m_tipsLabel->setText("");
-        m_installBtn->setVisible(true);
-        m_uninstallBtn->setVisible(false);
-        m_reinstallBtn->setVisible(false);
-        m_viewFileBtn->setVisible(false);
-        m_closeBtn->setVisible(false);
-}
-
-void UnCompressPage::progressBarStart()
-{
-    m_bottomLayout->setCurrentIndex(1);
-    m_tipsLabel->setText("");
-    m_spinner->start();
-}
-
-void UnCompressPage::handleInstall()
-{
-
-}
-
-void UnCompressPage::handleRemove()
-{
-
-}
-
-void UnCompressPage::handleReinstall()
-{
-
-}
-
-void UnCompressPage::onInstallFinished()
-{
-
-}
-
-void UnCompressPage::onUninstallFinished()
-{
-
-}
-
-void UnCompressPage::onReinstallFinished()
-{
-
-}
-
-void UnCompressPage::viewFilePath()
-{
-    QUrl url = QUrl::fromLocalFile(QFileInfo(m_filePath).dir().absolutePath());
-    QUrlQuery query;
-    query.addQueryItem("selectUrl", QUrl::fromLocalFile(m_filePath).toString());
-    url.setQuery(query);
-
-    QProcess::startDetached("dde-file-manager", QStringList(url.toString()));
-}

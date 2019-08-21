@@ -4,7 +4,7 @@
 
 #include <QWidget>
 #include <DSuggestButton>
-#include <dlabel.h>
+#include <DLabel>
 
 DWIDGET_USE_NAMESPACE
 

@@ -5,7 +5,7 @@
 #include <DSuggestButton>
 #include <QImage>
 #include <QComboBox>
-#include <dlabel.h>
+#include <DLabel>
 #include <DLineEdit>
 #include "utils.h"
 #include <dimagebutton.h>
@@ -63,6 +63,8 @@ public slots:
     void onAdvanceButtonClicked(bool status);
     void onPlusButoonClicked();
     void onLessButoonClicked();
+
+    void onRetrunPressed();
 };
 
 #endif // COMPRESSSETTING_H

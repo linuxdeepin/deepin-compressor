@@ -8,6 +8,7 @@
 #include <QStackedLayout>
 #include <DFileDialog>
 #include <DSuggestButton>
+#include <QSettings>
 
 #include "fileViewer.h"
 
@@ -26,13 +27,16 @@ public:
 signals:
     void sigNextPress();
 
-private slots:
+public slots:
     void onNextPress();
+    void onAddfileSlot();
 
 private:
 
     fileViewer *m_fileviewer;
     DSuggestButton* m_nextbutton;
+    QSettings *m_settings;
+
 };
 
 #endif

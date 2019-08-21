@@ -32,6 +32,7 @@
 #include "compressor_success.h"
 #include "compressor_fail.h"
 
+#define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
 
 enum Page_ID{
@@ -56,6 +57,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void InitUI();
+    void InitConnection();
+    void initTitleBar();
+
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
     void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
@@ -72,11 +77,18 @@ private slots:
     void onCompressNext();
     void onCompressPressed();
     void onCancelCompressPressed();
+    void onTitleButtonPressed();
 
 signals:
     void sigquitApp();
+    void sigZipAddFile();
+    void sigZipReturn();
 
 private:
+    DLabel* m_logo;
+    QPixmap m_logoicon;
+    QFrame *m_titleFrame;
+    DLabel* m_titlelabel;
     QWidget *m_mainWidget;
     QStackedLayout *m_mainLayout;
     HomePage *m_homePage;
@@ -89,6 +101,8 @@ private:
     QSettings m_settings;
     QAction *m_themeAction;
     Page_ID m_pageid;
+
+    DSuggestButton* m_titlebutton;
 };
 
 #endif

@@ -14,7 +14,8 @@ PKGCONFIG += dtkwidget freetype2 fontconfig
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
-INCLUDEPATH += $$PWD/source/inc/
+INCLUDEPATH += $$PWD/source/inc/ \
+               $$PWD/3rdpart/
 
 # Input
 HEADERS +=  source/inc/homepage.h \
@@ -25,10 +26,12 @@ HEADERS +=  source/inc/homepage.h \
             source/inc/uncompresspage.h \
             source/inc/compresssetting.h \
     source/inc/lib_edit_button.h \
-    source/inc/dfmheaderview.h \
     source/inc/progress.h \
     source/inc/compressor_success.h \
     source/inc/compressor_fail.h
+#    3rdpart/dfilesystemmodel.h \
+#    3rdpart/dfileview.h \
+#    3rdpart/dfmheaderview.h
 
 SOURCES +=  source/src/homepage.cpp \
             main.cpp \
@@ -39,10 +42,12 @@ SOURCES +=  source/src/homepage.cpp \
             source/src/uncompresspage.cpp \
             source/src/compresssetting.cpp \
     source/src/lib_edit_button.cpp \
-    source/src/dfmheaderview.cpp \
     source/src/progress.cpp \
     source/src/compressor_success.cpp \
     source/src/compressor_fail.cpp
+#    3rdpart/dfilesystemmodel.cpp \
+#    3rdpart/dfileview.cpp \
+#    3rdpart/dfmheaderview.cpp
 
 RESOURCES += deepin-compressor.qrc
 TRANSLATIONS += translations/deepin-compressor.ts

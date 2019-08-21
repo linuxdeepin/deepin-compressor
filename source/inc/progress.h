@@ -4,9 +4,10 @@
 #include <QWidget>
 #include <DFileDialog>
 #include <DSuggestButton>
-#include <dlabel.h>
+#include <DLabel>
 #include "utils.h"
-#include <QProgressBar>
+#include <DProgressBar>
+
 
 DWIDGET_USE_NAMESPACE
 
@@ -23,7 +24,7 @@ private:
     QPixmap m_compressicon;
     DLabel* m_pixmaplabel;
     DLabel* m_filenamelabel;
-    QProgressBar* m_progressbar;
+    DProgressBar* m_progressbar;
     DLabel* m_progressfilelabel;
     QString m_progressfile;
 

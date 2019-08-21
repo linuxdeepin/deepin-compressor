@@ -39,18 +39,9 @@ public:
     UnCompressPage(QWidget *parent = nullptr);
     ~UnCompressPage();
 
-    void updateInfo();
-    void refreshPage();
-    void progressBarStart();
 
 private slots:
-    void handleInstall();
-    void handleRemove();
-    void handleReinstall();
-    void onInstallFinished();
-    void onUninstallFinished();
-    void onReinstallFinished();
-    void viewFilePath();
+
 
 private:
 

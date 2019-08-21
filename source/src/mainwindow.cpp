@@ -29,6 +29,7 @@
 #include <QMimeData>
 #include <QFileInfo>
 #include <QDir>
+#include <utils.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
@@ -44,10 +45,17 @@ MainWindow::MainWindow(QWidget *parent)
       m_settings("deepin", "deepin-font-installer"),
       m_themeAction(new QAction(tr("Dark theme"), this))
 {
-    titlebar()->setIcon(QIcon(":/images/icon.svg"));
-    titlebar()->setTitle("");
-    titlebar()->setBackgroundTransparent(true);
+    InitUI();
+    InitConnection();
 
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::InitUI()
+{
     // add widget to main layout.
     m_mainLayout->addWidget(m_homePage);
     m_mainLayout->addWidget(m_UnCompressPage);
@@ -63,36 +71,83 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
 
+    // init settings.
+    if (!m_settings.contains("darkTheme")) {
+        m_settings.setValue("darkTheme", false);
+    }
+
+    initTitleBar();
+    // init theme.
+    initTheme();
+}
+
+void MainWindow::InitConnection()
+{
+    // connect the signals to the slot function.
+    connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
+    connect(m_themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
+    connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
+    connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
+    connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
+    connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
+    connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
+    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
+    connect(m_titlebutton, &DSuggestButton::clicked, this, &MainWindow::onTitleButtonPressed);
+}
+
+void MainWindow::initTitleBar()
+{
     // add menu to titlebar.
     QMenu *menu = new QMenu;
     menu->addAction(m_themeAction);
     menu->addSeparator();
     titlebar()->setMenu(menu);
     titlebar()->setFixedHeight(50);
-
     // init theme action.
     m_themeAction->setCheckable(true);
 
-    // init settings.
-    if (!m_settings.contains("darkTheme")) {
-        m_settings.setValue("darkTheme", false);
-    }
+    m_logo = new DLabel("");
+    m_logoicon = Utils::renderSVG(":/images/icon.svg", QSize(26, 26));
+    m_logo->setPixmap(m_logoicon);
 
-    // init theme.
-    initTheme();
 
-    // connect the signals to the slot function.
-    connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
-    connect(m_themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
-    connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
-    connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
-    connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
-    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
+    m_titlebutton = new DSuggestButton();
+    m_titlebutton->setText("+");
+    m_titlebutton->setFixedSize(30, 30);
+    m_titlebutton->setVisible(false);
 
-}
+    m_titleFrame = new QFrame;
+    m_titleFrame->setObjectName("TitleBar");
+    QHBoxLayout *leftLayout = new QHBoxLayout;
+    leftLayout->setMargin(0);
+    leftLayout->setSpacing(0);
+    leftLayout->addSpacing(12);
+    leftLayout->addWidget(m_logo);
+    leftLayout->addSpacing(12);
+    leftLayout->addWidget(m_titlebutton);
+    leftLayout->setSpacing(0);
+    leftLayout->setContentsMargins(0, 0, 0, 0);
 
-MainWindow::~MainWindow()
-{
+    QFrame *left_frame = new QFrame();
+    left_frame->setFixedWidth(12+12+26+30);
+    left_frame->setContentsMargins(0, 0, 0, 0);
+    left_frame->setLayout(leftLayout);
+
+    m_titlelabel = new DLabel("");
+    m_titlelabel->setFixedSize(242, 40);
+
+    QHBoxLayout *titlemainLayout = new QHBoxLayout;
+    titlemainLayout->setSpacing(0);
+    titlemainLayout->setContentsMargins(0, 0, 0, 0);
+    titlemainLayout->addWidget(left_frame);
+    titlemainLayout->addSpacing(150);
+    titlemainLayout->addWidget(m_titlelabel, 1, Qt::AlignCenter);
+    titlemainLayout->addSpacing(50);
+
+    m_titleFrame->setLayout(titlemainLayout);
+    m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
+    titlebar()->setContentsMargins(0, 0, 0, 0);
+    titlebar()->setCustomWidget(m_titleFrame, Qt::AlignCenter, false);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -197,26 +252,40 @@ void MainWindow::setDisable()
 
 void MainWindow::refreshPage()
 {
+    m_titlebutton->setText("");
+    m_titlebutton->setVisible(false);
     switch (m_pageid) {
     case PAGE_HOME:
         m_mainLayout->setCurrentIndex(0);
-        titlebar()->setTitle("");
+        m_titlelabel->setText("");
         break;
     case PAGE_UNZIP:
         m_mainLayout->setCurrentIndex(1);
-        titlebar()->setTitle(tr("UNZIP"));
+        m_titlelabel->setText(tr("UNZIP"));
         break;
     case PAGE_ZIP:
-        m_mainLayout->setCurrentIndex(5);
-        titlebar()->setTitle(tr("New Archive File"));
+        m_mainLayout->setCurrentIndex(2);
+        m_titlelabel->setText(tr("New Archive File"));
+        m_titlebutton->setText("+");
+        m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        titlebar()->setTitle(tr("New Archive File"));
+        m_titlelabel->setText(tr("New Archive File"));
+        m_titlebutton->setText("<");
+        m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        titlebar()->setTitle(tr("Compressing"));
+        m_titlelabel->setText(tr("Compressing"));
+        break;
+    case PAGE_ZIP_SUCCESS:
+        m_mainLayout->setCurrentIndex(5);
+        m_titlelabel->setText("");
+        break;
+    case PAGE_ZIP_FAIL:
+        m_mainLayout->setCurrentIndex(6);
+        m_titlelabel->setText("");
         break;
     default:
         break;
@@ -252,5 +321,22 @@ void MainWindow::onCompressPressed()
 void MainWindow::onCancelCompressPressed()
 {
     emit sigquitApp();
+}
+
+void MainWindow::onTitleButtonPressed()
+{
+    switch (m_pageid) {
+    case PAGE_ZIP:
+        emit sigZipAddFile();
+        break;
+    case PAGE_ZIPSET:
+        emit sigZipReturn();
+        m_pageid = PAGE_ZIP;
+        refreshPage();
+        break;
+    default:
+        break;
+    }
+    return;
 }
 

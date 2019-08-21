@@ -25,13 +25,13 @@ fileViewer::fileViewer(QWidget *parent)
 //       QVBoxLayout * pVLayout = new QVBoxLayout( this );
 //       pVLayout->addWidget( pListWidgetFile );
 
-       m_headerView = new DFMHeaderView(Qt::Horizontal, this);
+//       m_headerView = new DFMHeaderView(Qt::Horizontal, this);
 
-       m_headerView->setHighlightSections(false);
-       m_headerView->setSectionsClickable(true);
-       m_headerView->setSortIndicatorShown(true);
-       m_headerView->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-       m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+//       m_headerView->setHighlightSections(false);
+//       m_headerView->setSectionsClickable(true);
+//       m_headerView->setSortIndicatorShown(true);
+//       m_headerView->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+//       m_headerView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 }
 

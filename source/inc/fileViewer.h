@@ -6,10 +6,10 @@
 #include <QListWidget>
 #include <QFileSystemModel>
 #include <QTreeView>
-#include <dlabel.h>
+#include <DLabel>
 #include <QTableWidget>
-#include "dfmheaderview.h"
-#include <dlistview.h>
+//#include "dfmheaderview.h"
+#include <DListView>
 
 class fileViewer : public QWidget
 {
@@ -29,7 +29,7 @@ private:
 private:
 //       QLineEdit * pLineEditDir;
 //       QTreeView * pListWidgetFile;
-       DFMHeaderView * m_headerView = nullptr;
+//       DFMHeaderView * m_headerView = nullptr;
 
 };
 

@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <DFileDialog>
+#include <QFormLayout>
 
 
 static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","iso","tar","tar.7z","tar.Z","tar.bz2","tar.gz","tar.lz","tar.lzma","tar.lzo","tar.xz"};
@@ -21,14 +22,9 @@ CompressSetting::~CompressSetting()
 
 void CompressSetting::InitUI()
 {
-    DLabel* namelable = new DLabel(tr("File Name") + ":");
-    DLabel* savetolable = new DLabel(tr("Save to") + ":");
-    m_nextbutton = new DSuggestButton(tr("NEXT"));
+    m_nextbutton = new DSuggestButton(tr("Compress"));
     m_nextbutton->setFixedWidth(260);
-    QHBoxLayout *buttonlayout = new QHBoxLayout;
-    buttonlayout->addStretch();
-    buttonlayout->addWidget(m_nextbutton);
-    buttonlayout->addStretch();
+
 
     QWidget* leftwidget = new QWidget();
     m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
@@ -38,6 +34,7 @@ void CompressSetting::InitUI()
     m_compresstype->setFixedSize(80, 40);
     m_compresstype->addItems(compress_typelist);
 
+    QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedWidth(230);
     m_filename->setText(tr("untitled file"));
@@ -46,6 +43,11 @@ void CompressSetting::InitUI()
     m_savepath->setFixedWidth(230);
     m_pathbutton = new Lib_Edit_Button(m_savepath);
 
+    filelayout->addRow(tr("File Name") + ":", m_filename);
+    filelayout->addRow(tr("Save to") + ":", m_savepath);
+    filelayout->setLabelAlignment(Qt::AlignLeft);
+    filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
+
     DLabel* moresetlabel = new DLabel(tr("Advanced Options"));
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
@@ -53,9 +55,9 @@ void CompressSetting::InitUI()
     m_moresetlayout->addWidget(m_moresetbutton,1 , Qt::AlignRight);
 
 
-    m_encryptedlabel = new DLabel(tr("Encrypted File"));
+    m_encryptedlabel = new DLabel(tr("Encrypted File")+":");
     m_password = new DPasswordEdit();
-    m_encryptedfilelistlabel = new DLabel(tr("Encrypted file list") + ":");
+    m_encryptedfilelistlabel = new DLabel(tr("Encrypted file list"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
@@ -80,26 +82,17 @@ void CompressSetting::InitUI()
 
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
-    QHBoxLayout *compresstype = new QHBoxLayout;
-    compresstype->addStretch();
-    compresstype->addWidget(m_compresstype);
-    compresstype->addStretch();
     typeLayout->addStretch();
-    typeLayout->addWidget(m_pixmaplabel);
-    typeLayout->addLayout(compresstype);
+    typeLayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typeLayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     typeLayout->addStretch();
     leftwidget->setLayout(typeLayout);
 
     m_fileLayout = new QVBoxLayout;
     m_fileLayout->addStretch();
-    m_fileLayout->addWidget(namelable);
-    m_fileLayout->addWidget(m_filename);
+    m_fileLayout->addLayout(filelayout);
     m_fileLayout->addStretch();
-    m_fileLayout->addWidget(savetolable);
-    m_fileLayout->addWidget(m_savepath);
-    m_fileLayout->addStretch();
-
-
+    m_fileLayout->addLayout(m_moresetlayout);
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
     infoLayout->addStretch();
@@ -116,7 +109,7 @@ void CompressSetting::InitUI()
     mainLayout->addStretch();
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
-    mainLayout->addLayout(buttonlayout);
+    mainLayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
 
 
 }
@@ -152,15 +145,7 @@ void CompressSetting::onPathButoonClicked()
 
 void CompressSetting::onNextButoonClicked()
 {
-    if(true == m_pathbutton->isVisible())
-    {
-        m_pathbutton->setVisible(false);
-        m_fileLayout->addLayout(m_moresetlayout);
-        m_nextbutton->setText(tr("Compress"));
-    }
-    else {
-        emit sigCompressPressed();
-    }
+    emit sigCompressPressed();
 }
 
 void CompressSetting::onAdvanceButtonClicked(bool status)
@@ -218,4 +203,9 @@ void CompressSetting::onLessButoonClicked()
         m_splitnum --;
         m_splitnumedit->setText(QString::number(m_splitnum));
     }
+}
+
+void CompressSetting::onRetrunPressed()
+{
+
 }

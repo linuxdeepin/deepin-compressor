@@ -25,7 +25,7 @@ void Progress::InitUI()
     m_filenamelabel->setText(m_filename);
     m_filenamelabel->setFont(ft);
 
-    m_progressbar = new QProgressBar();
+    m_progressbar = new DProgressBar();
     m_progressbar->setRange(0,100);
     m_progressbar->setFixedSize(200, 8);
     m_progressbar->setValue(50);
