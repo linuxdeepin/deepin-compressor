@@ -64,7 +64,8 @@ void Job::Private::run()
 }
 
 Job::Job(Archive *archive, ReadOnlyArchiveInterface *interface)
-    : m_archive(archive)
+    : KJob()
+    , m_archive(archive)
     , m_archiveInterface(interface)
     , d(new Private(this))
 {
@@ -106,9 +107,21 @@ Archive *Job::archive() const
 
 QString Job::errorString() const
 {
+    if (!errorText().isEmpty()) {
+        return errorText();
+    }
 
+    if (archive()) {
+        if (archive()->error() == NoPlugin) {
+            return tr("No suitable plugin found. Ark does not seem to support this file type.");
+        }
 
-    return "";
+        if (archive()->error() == FailedPlugin) {
+            return tr("Failed to load a suitable plugin. Make sure any executables needed to handle the archive type are installed.");
+        }
+    }
+
+    return QString();
 }
 
 void Job::start()
@@ -117,7 +130,9 @@ void Job::start()
 
     // We have an archive but it's not valid, nothing to do.
     if (archive() && !archive()->isValid()) {
-        onFinished(false);
+        QTimer::singleShot(0, this, [=]() {
+            onFinished(false);
+        });
         return;
     }
 
@@ -138,7 +153,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &Job::onProgress);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::info, this, &Job::onInfo);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::finished, this, &Job::onFinished);
-//    connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
 
     auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface*>(archiveInterface());
     if (readWriteInterface) {
@@ -148,7 +163,7 @@ void Job::connectToArchiveInterfaceSignals()
 
 void Job::onCancelled()
 {
-//    setError(KJob::KilledJobError);
+    setError(KJob::KilledJobError);
 }
 
 void Job::onError(const QString & message, const QString & details)
@@ -156,8 +171,8 @@ void Job::onError(const QString & message, const QString & details)
     Q_UNUSED(details)
 
 //    qCDebug(ARK) << "Error emitted:" << message;
-//    setError(KJob::UserDefinedError);
-//    setErrorText(message);
+    setError(KJob::UserDefinedError);
+    setErrorText(message);
 }
 
 void Job::onEntry(Archive::Entry *entry)
@@ -167,12 +182,12 @@ void Job::onEntry(Archive::Entry *entry)
 
 void Job::onProgress(double value)
 {
-//    setPercent(static_cast<unsigned long>(100.0*value));
+    setPercent(static_cast<unsigned long>(100.0*value));
 }
 
 void Job::onInfo(const QString& info)
 {
-//    emit infoMessage(this, info);
+    emit infoMessage(this, info);
 }
 
 void Job::onEntryRemoved(const QString & path)
@@ -184,11 +199,11 @@ void Job::onFinished(bool result)
 {
 
     if (archive() && !archive()->isValid()) {
-//        setError(KJob::UserDefinedError);
+        setError(KJob::UserDefinedError);
     }
 
     if (!d->isInterruptionRequested()) {
-//        emitResult();
+        emitResult();
     }
 }
 
@@ -245,7 +260,9 @@ void LoadJob::doWork()
     if (!archiveInterface()->waitForFinishedSignal()) {
         // onFinished() needs to be called after onNewEntry(), because the former reads members set in the latter.
         // So we need to put it in the event queue, just like the single-thread case does by emitting finished().
-        onFinished(ret);
+        QTimer::singleShot(0, this, [=]() {
+            onFinished(ret);
+        });
     }
 }
 
@@ -337,7 +354,7 @@ void BatchExtractJob::doWork()
 
     if (archiveInterface()->hasBatchExtractionProgress()) {
         // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
-//        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
+        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
     }
 
     // Forward LoadJob's signals.
@@ -415,7 +432,7 @@ void BatchExtractJob::setupDestination()
         }
 
         if (d.exists(subfolderName)) {
-//            subfolderName = KIO::suggestName(QUrl::fromUserInput(m_destination, QString(), QUrl::AssumeLocalFile), subfolderName);
+//TODO_DS            subfolderName = KIO::suggestName(QUrl::fromUserInput(m_destination, QString(), QUrl::AssumeLocalFile), subfolderName);
         }
 
         d.mkdir(subfolderName);

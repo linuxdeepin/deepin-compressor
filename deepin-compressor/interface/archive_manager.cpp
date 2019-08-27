@@ -37,6 +37,7 @@
 #include "kpluginloader.h"
 #include "kpluginfactory.h"
 
+Q_DECLARE_METATYPE(KPluginMetaData)
 
 Archive *Archive::create(const QString &fileName, QObject *parent)
 {
@@ -73,9 +74,9 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
     if (!factory) {
         return new Archive(FailedPlugin, parent);
     }
-//TODO
-    const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath())/*,
-                               QVariant().fromValue(plugin->metaData())*/};
+
+    const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
+                               QVariant().fromValue(plugin->metaData())};
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     if (!iface) {
         return new Archive(FailedPlugin, parent);
@@ -503,10 +504,10 @@ void Archive::onAddFinished(KJob* job)
     }
 }
 
-//void Archive::onUserQuery(Query* query)
-//{
-//    query->execute();
-//}
+void Archive::onUserQuery(Query* query)
+{
+    query->execute();
+}
 
 QString Archive::multiVolumeName() const
 {

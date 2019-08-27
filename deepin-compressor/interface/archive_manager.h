@@ -208,7 +208,7 @@ public:
 
 private Q_SLOTS:
     void onAddFinished(KJob*);
-//    void onUserQuery(Kerfuffle::Query*);
+    void onUserQuery(Query*);
     void onCompressionMethodFound(const QString &method);
     void onEncryptionMethodFound(const QString &method);
 

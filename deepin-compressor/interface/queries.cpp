@@ -69,6 +69,7 @@ OverwriteQuery::OverwriteQuery(const QString &filename) :
 
 void OverwriteQuery::execute()
 {
+//TODO_DS
 //    // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
 //    // at the moment (#231974)
 //    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));

@@ -66,7 +66,7 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry*> &files,
         return false;
     }
 
-//    KCompressionDevice *device = new KCompressionDevice(filename(), KFilterDev::compressionTypeForMimeType(m_mimeType));
+//    KCompressionDevice *device = new KCompressionDevice(filename(), KFilterDev::compressionTypeForMimeType(m_mimeType));TODO_DS
 //    if (!device) {
 //        emit error(tr("@info", "Ark could not open <filename>%1</filename> for extraction."));
 
@@ -116,7 +116,7 @@ QString LibSingleFileInterface::overwriteFileName(QString& filename)
         OverwriteQuery query(newFileName);
 
         query.setMultiMode(false);
-//        emit userQuery(&query);
+        emit userQuery(&query);
         query.waitForResponse();
 
         if ((query.responseCancelled()) || (query.responseSkip())) {

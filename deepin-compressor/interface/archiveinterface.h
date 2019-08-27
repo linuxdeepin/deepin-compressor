@@ -192,7 +192,7 @@ Q_SIGNALS:
     /**
      * Emitted when @p query needs to be executed on the GUI thread.
      */
-//    void userQuery(Kerfuffle::Query *query);
+    void userQuery(Query *query);
 
 protected:
 

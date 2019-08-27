@@ -34,7 +34,7 @@ class LibGzipInterface : public LibSingleFileInterface
 
 public:
     LibGzipInterface(QObject *parent, const QVariantList & args);
-    ~LibGzipInterface() ;
+    ~LibGzipInterface() override;
 };
 
 #endif // GZPLUGIN_H

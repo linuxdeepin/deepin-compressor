@@ -300,7 +300,7 @@ void KJob::emitSpeed(unsigned long value)
     d->speedTimer->start(5000);   // 5 seconds interval should be enough
 }
 
-//void KJobPrivate::_k_speedTimeout()
+//void KJobPrivate::_k_speedTimeout()//TODO_DS
 //{
 //    Q_Q(KJob);
 //    // send 0 and stop the timer

@@ -114,5 +114,7 @@ QDebug  operator<<(QDebug d, const CompressionOptions &options);
 QDebug  operator<<(QDebug d, const ExtractionOptions &options);
 
 
+Q_DECLARE_METATYPE(CompressionOptions)
+Q_DECLARE_METATYPE(ExtractionOptions)
 
 #endif

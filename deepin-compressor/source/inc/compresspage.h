@@ -9,7 +9,6 @@
 #include <DFileDialog>
 #include <DSuggestButton>
 #include <QSettings>
-#include <QFileSystemModel>
 
 #include "fileViewer.h"
 
@@ -23,7 +22,6 @@ public:
     CompressPage(QWidget *parent = 0);
     ~CompressPage();
 
-    void setupView();
     void addItems(const QStringList &paths);
 
 signals:
@@ -34,8 +32,8 @@ public slots:
     void onAddfileSlot();
 
 private:
-    QFileSystemModel* m_model;
-    FileViewer *m_fileviewer;
+
+    fileViewer *m_fileviewer;
     DSuggestButton* m_nextbutton;
     QSettings *m_settings;
 

@@ -259,7 +259,7 @@ bool CliInterface::runProcess(const QString& programName, const QStringList& arg
 
 
     m_process = new QProcess;
-//    m_process->setPtyChannels(KPtyProcess::StdinChannel);
+//    m_process->setPtyChannels(KPtyProcess::StdinChannel);//TODO_DS
 
 
 //    m_process->setOutputChannelMode(KProcess::MergedChannels);

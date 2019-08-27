@@ -34,7 +34,7 @@ class LibBzip2Interface : public LibSingleFileInterface
 
 public:
     LibBzip2Interface(QObject *parent, const QVariantList & args);
-    ~LibBzip2Interface() ;
+    ~LibBzip2Interface() override;
 };
 
 #endif // BZ2PLUGIN_H

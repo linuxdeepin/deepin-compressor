@@ -152,7 +152,7 @@ bool CliPlugin::handleLine(const QString& line)
         if (isPasswordPrompt(line)) {
 
             PasswordNeededQuery query(filename());
-//            emit userQuery(&query);//TODO
+            emit userQuery(&query);
             query.waitForResponse();
 
             if (query.responseCancelled()) {

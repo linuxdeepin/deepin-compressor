@@ -32,7 +32,7 @@
 #include <QDir>
 #include <QFileInfo>
 
-
+Q_DECLARE_METATYPE(KPluginMetaData)
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList & args)
         : QObject(parent)
         , m_numberOfVolumes(0)
@@ -47,7 +47,8 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
     m_filename = args.first().toString();
     m_mimetype = determineMimeType(m_filename);
     connect(this, &ReadOnlyArchiveInterface::entry, this, &ReadOnlyArchiveInterface::onEntry);
-//    m_metaData = args.at(1).value<KPluginMetaData>();//TODO
+
+    m_metaData = args.at(1).value<KPluginMetaData>();
 }
 
 ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()

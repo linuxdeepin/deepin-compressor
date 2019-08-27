@@ -35,7 +35,7 @@ class LibXzInterface : public LibSingleFileInterface
 
 public:
     LibXzInterface(QObject *parent, const QVariantList & args);
-    ~LibXzInterface() ;
+    ~LibXzInterface() override;
 };
 
 #endif // XZPLUGIN_H

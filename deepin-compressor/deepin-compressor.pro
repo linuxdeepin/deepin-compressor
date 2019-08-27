@@ -12,7 +12,7 @@ TEMPLATE = app
 TARGET = deepin-compressor
 
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget freetype2 fontconfig gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp udisks2-qt5 disomaster
+PKGCONFIG += dtkwidget gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp udisks2-qt5 disomaster
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
@@ -31,6 +31,7 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/progress.h \
     source/inc/compressor_success.h \
     source/inc/compressor_fail.h \
+    source/inc/myfilesystemmodel.h \
     interface/archiveinterface.h \
     interface/cliinterface.h \
     interface/archiveentry.h \
@@ -66,6 +67,7 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/progress.cpp \
     source/src/compressor_success.cpp \
     source/src/compressor_fail.cpp \
+    source/src/myfilesystemmodel.cpp \
     interface/archiveinterface.cpp \
     interface/cliinterface.cpp \
     interface/archiveentry.cpp \

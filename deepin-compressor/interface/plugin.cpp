@@ -40,7 +40,7 @@ Plugin::Plugin(QObject *parent, const KPluginMetaData &metaData)
 
 int Plugin::priority() const
 {
-    const int priority = 0;//m_metaData.rawData()[QStringLiteral("X-KDE-Priority")].toInt();
+    const int priority = m_metaData.rawData()[QStringLiteral("X-KDE-Priority")].toInt();
     return (priority > 0 ? priority : 0);
 }
 

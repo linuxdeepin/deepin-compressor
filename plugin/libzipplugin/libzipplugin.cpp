@@ -612,7 +612,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 return true;
             } else {
                 OverwriteQuery query(renamedEntry);
-//                emit userQuery(&query);
+                emit userQuery(&query);
                 query.waitForResponse();
 
                 if (query.responseCancelled()) {
@@ -646,7 +646,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
                        zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
                 PasswordNeededQuery query(filename(), !firstTry);
-//                emit userQuery(&query);
+                emit userQuery(&query);
                 query.waitForResponse();
 
                 if (query.responseCancelled()) {
@@ -706,7 +706,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         switch (opsys) {
         case ZIP_OPSYS_UNIX:
             // Unix permissions are stored in the leftmost 16 bits of the external file attribute.
-//            file.setPermissions(KIO::convertPermissions(attributes >> 16));
+//            file.setPermissions(KIO::convertPermissions(attributes >> 16)); //TODO_DS
             break;
         default:    // TODO: non-UNIX.
             break;

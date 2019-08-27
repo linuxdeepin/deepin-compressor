@@ -51,15 +51,15 @@ public:
      * @warning This method should not be called before start().
      */
     Archive *archive() const;
-    QString errorString() const ;
-    void start() ;
+    QString errorString() const override;
+    void start() override;
 
 protected:
     Job(Archive *archive, ReadOnlyArchiveInterface *interface);
     Job(Archive *archive);
     Job(ReadOnlyArchiveInterface *interface);
-    ~Job() ;
-    bool doKill() ;
+    ~Job() override;
+    bool doKill() override;
 
     ReadOnlyArchiveInterface *archiveInterface();
 
@@ -159,7 +159,7 @@ public Q_SLOTS:
     void doWork() override;
 
 protected:
-    bool doKill() ;
+    bool doKill() override;
 
 private Q_SLOTS:
     void slotLoadingProgress(double progress);
@@ -209,7 +209,7 @@ public Q_SLOTS:
     void doWork() override;
 
 protected:
-    bool doKill() ;
+    bool doKill() override;
 
 private:
     AddJob *m_addJob = nullptr;

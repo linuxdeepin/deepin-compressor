@@ -294,7 +294,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                     continue;
                 } else if (!overwriteAll && !skipAll) {
                     OverwriteQuery query(entryName);
-//                    emit userQuery(&query);
+                    emit userQuery(&query);
                     query.waitForResponse();
 
                     if (query.responseCancelled()) {
@@ -349,7 +349,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                     // Ask the user if he wants to continue extraction despite an error for this entry.
                     ContinueExtractionQuery query(QLatin1String(archive_error_string(writer.data())),
                                                              entryName);
-//                    emit userQuery(&query);
+                    emit userQuery(&query);
                     query.waitForResponse();
 
                     if (query.responseCancelled()) {
