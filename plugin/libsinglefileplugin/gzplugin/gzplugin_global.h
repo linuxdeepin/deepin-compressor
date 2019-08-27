@@ -1,0 +1,12 @@
+#ifndef GZPLUGIN_GLOBAL_H
+#define GZPLUGIN_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(GZPLUGIN_LIBRARY)
+#  define GZPLUGINSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define GZPLUGINSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // GZPLUGIN_GLOBAL_H

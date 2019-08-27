@@ -19,14 +19,14 @@ DWIDGET_USE_NAMESPACE
 CompressPage::CompressPage(QWidget *parent)
     : QWidget(parent)
 {
-    m_fileviewer = new fileViewer();
+    m_fileviewer = new FileViewer();
+    m_model = new QFileSystemModel();
+    m_model->setRootPath(QDir::currentPath());
     m_nextbutton = new DSuggestButton(tr("NEXT"));
     m_nextbutton->setFixedWidth(260);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
-    contentLayout->addStretch();
     contentLayout->addWidget(m_fileviewer);
-    contentLayout->addStretch();
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
@@ -35,11 +35,13 @@ CompressPage::CompressPage(QWidget *parent)
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addStretch();
+
     mainLayout->addLayout(contentLayout);
     mainLayout->addStretch();
     mainLayout->addLayout(buttonlayout);
-    mainLayout->addStretch();
+    mainLayout->setStretchFactor(contentLayout, 10);
+    mainLayout->setStretchFactor(buttonlayout, 1);
+    mainLayout->setContentsMargins(0, 0, 0, 20);
 
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat);
@@ -48,11 +50,25 @@ CompressPage::CompressPage(QWidget *parent)
         m_settings->setValue("dir", "");
     }
 
+    setupView();
+
     connect(m_nextbutton, &DSuggestButton::clicked, this, &CompressPage::onNextPress);
 }
 
 CompressPage::~CompressPage()
 {
+
+}
+
+void CompressPage::setupView()
+{
+
+
+
+    m_fileviewer->setModel(m_model);
+    m_fileviewer->setRootIndex(m_model->index(QDir::currentPath()));
+
+
 
 }
 

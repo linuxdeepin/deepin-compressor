@@ -1,0 +1,12 @@
+#ifndef LIBARCHIVE_GLOBAL_H
+#define LIBARCHIVE_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(LIBARCHIVE_LIBRARY)
+#  define LIBARCHIVESHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define LIBARCHIVESHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // LIBARCHIVE_GLOBAL_H
