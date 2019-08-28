@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <utils.h>
+#include "pluginmanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     InitUI();
     InitConnection();
+
 
 }
 
@@ -77,22 +79,21 @@ void MainWindow::InitUI()
     }
 
     initTitleBar();
-    // init theme.
-    initTheme();
+
 }
 
 void MainWindow::InitConnection()
 {
     // connect the signals to the slot function.
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
-    connect(m_themeAction, &QAction::triggered, this, &MainWindow::switchTheme);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
     connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
-    connect(m_titlebutton, &DSuggestButton::clicked, this, &MainWindow::onTitleButtonPressed);
+    connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
+    connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
 }
 
 void MainWindow::initTitleBar()
@@ -111,7 +112,7 @@ void MainWindow::initTitleBar()
     m_logo->setPixmap(m_logoicon);
 
 
-    m_titlebutton = new DSuggestButton();
+    m_titlebutton = new DPushButton();
     m_titlebutton->setText("+");
     m_titlebutton->setFixedSize(30, 30);
     m_titlebutton->setVisible(false);
@@ -205,31 +206,7 @@ void MainWindow::dragMoveEvent(QDragMoveEvent *event)
     event->accept();
 }
 
-void MainWindow::initTheme()
-{
-    const bool isDarkTheme = m_settings.value("darkTheme").toBool();
 
-    if (isDarkTheme) {
-        DThemeManager::instance()->setTheme("dark");
-        m_themeAction->setChecked(true);
-    } else {
-        DThemeManager::instance()->setTheme("light");
-        m_themeAction->setChecked(false);
-    }
-}
-
-void MainWindow::switchTheme()
-{
-    const bool isDarkTheme = m_settings.value("darkTheme").toBool();
-
-    if (isDarkTheme) {
-        m_settings.setValue("darkTheme", false);
-    } else {
-        m_settings.setValue("darkTheme", true);
-    }
-
-    initTheme();
-}
 
 void MainWindow::setEnable()
 {
@@ -301,6 +278,7 @@ void MainWindow::onSelected(const QStringList &files)
     }
     else {
         m_pageid = PAGE_ZIP;
+        emit sigZipSelectedFiles(files);
     }
 
     refreshPage();

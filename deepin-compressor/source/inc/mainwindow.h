@@ -68,8 +68,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void initTheme();
-    void switchTheme();
+
     void setEnable();
     void setDisable();
     void refreshPage();
@@ -83,6 +82,7 @@ signals:
     void sigquitApp();
     void sigZipAddFile();
     void sigZipReturn();
+    void sigZipSelectedFiles(const QStringList &files);
 
 private:
     DLabel* m_logo;
@@ -102,7 +102,7 @@ private:
     QAction *m_themeAction;
     Page_ID m_pageid;
 
-    DSuggestButton* m_titlebutton;
+    DPushButton* m_titlebutton;
 };
 
 #endif

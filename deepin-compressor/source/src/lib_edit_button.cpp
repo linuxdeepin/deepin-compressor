@@ -4,7 +4,7 @@
 
 
 Lib_Edit_Button::Lib_Edit_Button(DLineEdit *edit)
-    :DSuggestButton (edit)
+    :DPushButton (edit)
 {
     parent = edit;
     InitUI(edit);
@@ -44,7 +44,7 @@ void Lib_Edit_Button::addbutton()
 
 void Lib_Edit_Button::InitConnection()
 {
-//    connect(m_pathbutton, &DSuggestButton::clicked, this, &CompressSetting::onPathButoonClicked);
+//    connect(m_pathbutton, &DPushButton::clicked, this, &CompressSetting::onPathButoonClicked);
 }
 
 void Lib_Edit_Button::onPathButoonClicked()

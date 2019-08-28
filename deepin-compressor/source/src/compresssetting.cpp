@@ -22,7 +22,7 @@ CompressSetting::~CompressSetting()
 
 void CompressSetting::InitUI()
 {
-    m_nextbutton = new DSuggestButton(tr("Compress"));
+    m_nextbutton = new DPushButton(tr("Compress"));
     m_nextbutton->setFixedWidth(260);
 
 
@@ -67,10 +67,10 @@ void CompressSetting::InitUI()
     m_splitnumedit = new DLineEdit();
     m_splitnumedit->setValidator(new QIntValidator(D_COMPRESS_SPLIT_MIN, D_COMPRESS_SPLIT_MIX, this));
     m_splitnumedit->setText(QString::number(m_splitnum));
-    m_plusbutton = new DSuggestButton();
+    m_plusbutton = new DPushButton();
     m_plusbutton->setText("+");
     m_plusbutton->setFixedWidth(40);
-    m_minusbutton = new DSuggestButton();
+    m_minusbutton = new DPushButton();
     m_minusbutton->setText("-");
     m_minusbutton->setFixedWidth(40);
     m_splitlayout->addWidget(m_splitnumedit);
@@ -115,11 +115,11 @@ void CompressSetting::InitUI()
 }
 void CompressSetting::InitConnection()
 {
-    connect(m_pathbutton, &DSuggestButton::clicked, this, &CompressSetting::onPathButoonClicked);
-    connect(m_nextbutton, &DSuggestButton::clicked, this, &CompressSetting::onNextButoonClicked);
-    connect(m_moresetbutton, &DSwitchButton::checkedChanged, this, &CompressSetting::onAdvanceButtonClicked);
-    connect(m_plusbutton, &DSuggestButton::clicked, this, &CompressSetting::onPlusButoonClicked);
-    connect(m_minusbutton, &DSuggestButton::clicked, this, &CompressSetting::onLessButoonClicked);
+    connect(m_pathbutton, &DPushButton::clicked, this, &CompressSetting::onPathButoonClicked);
+    connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
+    connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
+    connect(m_plusbutton, &DPushButton::clicked, this, &CompressSetting::onPlusButoonClicked);
+    connect(m_minusbutton, &DPushButton::clicked, this, &CompressSetting::onLessButoonClicked);
 }
 
 

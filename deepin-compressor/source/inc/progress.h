@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <DFileDialog>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <DLabel>
 #include "utils.h"
 #include <DProgressBar>
@@ -20,7 +20,7 @@ public:
     void InitConnection();
 
 private:
-    DSuggestButton* m_cancelbutton;
+    DPushButton* m_cancelbutton;
     QPixmap m_compressicon;
     DLabel* m_pixmaplabel;
     DLabel* m_filenamelabel;

@@ -2,7 +2,7 @@
 #define COMPRESSOR_SUCCESS_H
 
 #include <QWidget>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <DLabel>
 
 DWIDGET_USE_NAMESPACE
@@ -16,7 +16,7 @@ public:
     void InitConnection();
 
 private:
-    DSuggestButton* m_showfilebutton;
+    DPushButton* m_showfilebutton;
     QPixmap m_compressicon;
     DLabel* m_pixmaplabel;
     DLabel* m_stringinfolabel;

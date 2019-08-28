@@ -2,7 +2,7 @@
 #define COMPRESSSETTING_H
 
 #include <QWidget>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <QImage>
 #include <QComboBox>
 #include <DLabel>
@@ -30,7 +30,7 @@ public:
     void InitConnection();
 
 private:
-    DSuggestButton* m_nextbutton;
+    DPushButton* m_nextbutton;
     QPixmap m_compressicon;
     QComboBox* m_compresstype;
     DLineEdit* m_filename;
@@ -46,8 +46,8 @@ private:
     DSwitchButton* m_file_secret;
     QHBoxLayout *m_splitlayout;
     DLineEdit* m_splitnumedit;
-    DSuggestButton* m_plusbutton;
-    DSuggestButton* m_minusbutton;
+    DPushButton* m_plusbutton;
+    DPushButton* m_minusbutton;
     DLabel* m_encryptedlabel;
     DLabel* m_splitcompress;
     DLabel* m_encryptedfilelistlabel;

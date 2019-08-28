@@ -3,7 +3,7 @@
 
 
 #include <QWidget>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <DLabel>
 
 DWIDGET_USE_NAMESPACE
@@ -17,7 +17,7 @@ public:
     void InitConnection();
 
 private:
-    DSuggestButton* m_retrybutton;
+    DPushButton* m_retrybutton;
     QPixmap m_compressicon;
     DLabel* m_pixmaplabel;
     DLabel* m_stringinfolabel;

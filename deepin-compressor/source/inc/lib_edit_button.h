@@ -2,13 +2,13 @@
 #define LIB_EDIT_BUTTON_H
 
 #include <DLineEdit>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <QWidget>
 #include <QBoxLayout>
 
 DWIDGET_USE_NAMESPACE
 
-class Lib_Edit_Button :public DSuggestButton
+class Lib_Edit_Button :public DPushButton
 {
 public:
     Lib_Edit_Button(DLineEdit *edit = nullptr);

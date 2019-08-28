@@ -22,7 +22,7 @@ void Compressor_Success::InitUI()
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
     m_stringinfolabel->setText(m_stringinfo);
-    m_showfilebutton = new DSuggestButton();
+    m_showfilebutton = new DPushButton();
     m_showfilebutton->setFixedWidth(260);
     m_showfilebutton->setText(tr("Show File"));
 
@@ -37,7 +37,7 @@ void Compressor_Success::InitUI()
 
 void Compressor_Success::InitConnection()
 {
-    connect(m_showfilebutton, &DSuggestButton::clicked, this, &Compressor_Success::showfiledirSlot);
+    connect(m_showfilebutton, &DPushButton::clicked, this, &Compressor_Success::showfiledirSlot);
 }
 
 void Compressor_Success::showfiledirSlot()

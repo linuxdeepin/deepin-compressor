@@ -215,7 +215,7 @@ QVector<Plugin*> PluginManager::filterBy(const QVector<Plugin*> &plugins, const 
 
 void PluginManager::loadPlugins()
 {
-    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("kerfuffle"));
+    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plugin"));
     QSet<QString> addedPlugins;
     for (const KPluginMetaData &metaData : plugins) {
         const auto pluginId = metaData.pluginId();

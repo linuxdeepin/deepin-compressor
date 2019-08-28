@@ -36,7 +36,7 @@ void Progress::InitUI()
     m_progressfilelabel = new DLabel();
     m_progressfilelabel->setText(tr("正在压缩") + ": " + m_progressfile);
 
-    m_cancelbutton = new DSuggestButton();
+    m_cancelbutton = new DPushButton();
     m_cancelbutton->setFixedWidth(260);
     m_cancelbutton->setText(tr("Cancel"));
 
@@ -50,7 +50,7 @@ void Progress::InitUI()
 
 void Progress::InitConnection()
 {
-    connect(m_cancelbutton, &DSuggestButton::clicked, this, &Progress::cancelbuttonPressedSlot);
+    connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
 void Progress::cancelbuttonPressedSlot()

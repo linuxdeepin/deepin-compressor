@@ -42,11 +42,11 @@ UnCompressPage::UnCompressPage(QWidget *parent)
       m_copyrightLabel(new QLabel),
       m_descriptionLabel(new QLabel),
       m_tipsLabel(new QLabel()),
-      m_installBtn(new DSuggestButton),
+      m_installBtn(new DPushButton),
       m_uninstallBtn(new QPushButton(tr("Remove"))),
       m_reinstallBtn(new QPushButton(tr("Reinstall"))),
-      m_viewFileBtn(new DSuggestButton),
-      m_closeBtn(new DSuggestButton),
+      m_viewFileBtn(new DPushButton),
+      m_closeBtn(new DPushButton),
       m_spinner(new DSpinner),
       m_bottomLayout(new QStackedLayout)
 {

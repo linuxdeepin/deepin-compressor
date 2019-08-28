@@ -24,7 +24,7 @@ void Compressor_Fail::InitUI()
     m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
     m_stringdetaillabel = new DLabel();
     m_stringdetaillabel->setText(m_stringdetail);
-    m_retrybutton = new DSuggestButton();
+    m_retrybutton = new DPushButton();
     m_retrybutton->setFixedWidth(260);
     m_retrybutton->setText(tr("Retry"));
 
@@ -40,7 +40,7 @@ void Compressor_Fail::InitUI()
 
 void Compressor_Fail::InitConnection()
 {
-    connect(m_retrybutton, &DSuggestButton::clicked, this, &Compressor_Fail::retrySlot);
+    connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::retrySlot);
 }
 
 void Compressor_Fail::retrySlot()

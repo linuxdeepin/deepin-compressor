@@ -23,10 +23,10 @@
 #include <QWidget>
 #include <QPropertyAnimation>
 #include <QStackedLayout>
-#include <QPushButton>
 #include <QLabel>
-#include "dsuggestbutton.h"
-#include "dspinner.h"
+#include <DPushButton>
+#include <DSpinner>
+
 
 
 DWIDGET_USE_NAMESPACE
@@ -52,10 +52,10 @@ private:
     QLabel *m_copyrightLabel;
     QLabel *m_descriptionLabel;
     QLabel *m_tipsLabel;
-    DSuggestButton *m_installBtn;
+    DPushButton *m_installBtn;
     QPushButton *m_uninstallBtn;
     QPushButton *m_reinstallBtn;
-    DSuggestButton *m_viewFileBtn;
+    DPushButton *m_viewFileBtn;
     QPushButton *m_closeBtn;
     DSpinner *m_spinner;
     QStackedLayout *m_bottomLayout;

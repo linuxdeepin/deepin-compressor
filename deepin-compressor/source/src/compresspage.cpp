@@ -19,8 +19,9 @@ DWIDGET_USE_NAMESPACE
 CompressPage::CompressPage(QWidget *parent)
     : QWidget(parent)
 {
+
     m_fileviewer = new fileViewer();
-    m_nextbutton = new DSuggestButton(tr("NEXT"));
+    m_nextbutton = new DPushButton(tr("NEXT"));
     m_nextbutton->setFixedWidth(260);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
@@ -48,7 +49,7 @@ CompressPage::CompressPage(QWidget *parent)
         m_settings->setValue("dir", "");
     }
 
-    connect(m_nextbutton, &DSuggestButton::clicked, this, &CompressPage::onNextPress);
+    connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
 }
 
 CompressPage::~CompressPage()
@@ -56,11 +57,7 @@ CompressPage::~CompressPage()
 
 }
 
-void CompressPage::addItems(const QStringList &paths)
-{
 
-
-}
 
 void CompressPage::onNextPress()
 {
@@ -69,6 +66,14 @@ void CompressPage::onNextPress()
 
 void CompressPage::onAddfileSlot()
 {
+    if(0 != m_fileviewer->getPathIndex())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please add files in the root path!");
+        msgBox.exec();
+        return;
+    }
+
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -83,11 +88,19 @@ void CompressPage::onAddfileSlot()
 
     // save the directory string to config file.
     m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
+    qDebug()<<dialog.directoryUrl().toLocalFile();
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {
         return;
     }
+    onSelectedFilesSlot(dialog.selectedFiles());
+}
+
+void CompressPage::onSelectedFilesSlot(const QStringList &files)
+{
+    m_filelist.append(files);
+    m_fileviewer->setFileList(m_filelist);
 }
 
 

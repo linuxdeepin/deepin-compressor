@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
-    app.setTheme("light");
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");

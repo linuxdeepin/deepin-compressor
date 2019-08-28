@@ -4,19 +4,19 @@
 #include <QFileInfo>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QFileSystemModel>
-#include <QTreeView>
 #include <QTableView>
 #include <DLabel>
 #include <QItemDelegate>
 #include <QApplication>
 #include <QPainter>
 #include "myfilesystemmodel.h"
-#include <QLabel>
 #include <QPushButton>
 #include <QScrollBar>
-//#include "dfmheaderview.h"
-#include <DListView>
+#include <QDateTime>
+#include <QStandardItemModel>
+
+
+DWIDGET_USE_NAMESPACE
 
 class MyScrollBar:public QScrollBar
 {
@@ -51,6 +51,15 @@ public:
     FirstRowDelegate(QObject* parent = 0);
     void setPathIndex(int *index);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option,
+                           const QRect &rect) const
+    {
+    }
+
+    virtual void drawCheck(QPainter *painter, const QStyleOptionViewItem &option,
+                           const QRect &rect, Qt::CheckState state) const
+    {
+    }
 
 protected:
 
@@ -67,8 +76,9 @@ public:
        ~fileViewer();
        void InitUI();
        void InitConnection();
-       void initTitleBar();
 
+       int getPathIndex();
+       void setFileList(const QStringList &files);
 protected slots:
        void slotShowDir( QListWidgetItem * item );
        void slotRowDoubleClicked(const QModelIndex index);
@@ -77,19 +87,21 @@ protected slots:
        void ScrollBarHideEvent ( QHideEvent * event );
 private:
        void showFileInfoList( QFileInfoList list );
+       void refreshTableview();
+       QString getfiletype(const QFileInfo &file);
 
 private:
        QLineEdit * pLineEditDir;
        QTableView * pTableViewFile;
-//       QFileSystemModel* pModel;
+
        int m_pathindex;
        MyFileSystemModel* pModel;
+       QStandardItemModel* firstmodel;
        FirstRowDelegate *pdelegate;
        MyLabel *plabel;
        QModelIndex m_indexmode;
        MyScrollBar *pScrollbar;
-//       QWidget *pwidget;
-//      DFMHeaderView * m_headerView = nullptr;
+       QFileInfoList m_curfilelist;
 
 };
 

@@ -7,8 +7,9 @@
 #include <QLabel>
 #include <QStackedLayout>
 #include <DFileDialog>
-#include <DSuggestButton>
+#include <DPushButton>
 #include <QSettings>
+#include <QMessageBox>
 
 #include "fileViewer.h"
 
@@ -22,20 +23,20 @@ public:
     CompressPage(QWidget *parent = 0);
     ~CompressPage();
 
-    void addItems(const QStringList &paths);
-
 signals:
     void sigNextPress();
 
 public slots:
     void onNextPress();
     void onAddfileSlot();
+    void onSelectedFilesSlot(const QStringList &files);
 
 private:
 
     fileViewer *m_fileviewer;
-    DSuggestButton* m_nextbutton;
+    DPushButton* m_nextbutton;
     QSettings *m_settings;
+    QStringList m_filelist;
 
 };
 

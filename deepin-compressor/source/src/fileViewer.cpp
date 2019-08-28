@@ -5,7 +5,9 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QHeaderView>
-//#include "../RbTableHeaderView.h"
+#include <DPalette>
+#include <QFileIconProvider>
+
 
 MyScrollBar::MyScrollBar(QWidget* parent)
     : QScrollBar(parent)
@@ -14,12 +16,10 @@ MyScrollBar::MyScrollBar(QWidget* parent)
 }
 
 void MyScrollBar::showEvent(QShowEvent *event){
-     qDebug()<<"showEvent";
      emit ScrollBarShowEvent ( event );
 }
 
 void MyScrollBar::hideEvent(QHideEvent *event) {
-     qDebug()<<"hideEvent";
      emit ScrollBarHideEvent ( event );
 }
 
@@ -30,7 +30,6 @@ MyLabel::MyLabel(QWidget* parent)
 }
 
 void MyLabel::mouseDoubleClickEvent ( QMouseEvent * event ){
-    //     qDebug()<<"mouseDoubleClickEvent";
     emit labelDoubleClickEvent ( event );
 }
 
@@ -55,8 +54,6 @@ void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
 
     if (row == 0&& ppathindex && *ppathindex>0)//UE
     {
-        //qDebug()<<"row == 0";
-
         //选项
         QStyleOptionFrame *FrameOption = new QStyleOptionFrame();
         FrameOption->rect = QRect(x,y,width,height/2);
@@ -86,31 +83,22 @@ fileViewer::~fileViewer()
 
 void fileViewer::InitUI()
 {
-    //    pwidget=new QWidget(this);
     pTableViewFile = new QTableView(this);
-
     pdelegate = new FirstRowDelegate(this);
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
-    //    pModel= new QFileSystemModel(this);
+    plabel=new MyLabel(pTableViewFile);
+    firstmodel = new QStandardItemModel();
     pModel= new MyFileSystemModel(this);
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
-    pModel->setPathIndex(&m_pathindex);
+    QStringList labels = QObject::trUtf8("名称,大小,类型,修改时间").simplified().split(",");
+    firstmodel->setHorizontalHeaderLabels(labels);
 
-    plabel=new MyLabel(this);
+
     pScrollbar= new MyScrollBar(this);
-    //    RbTableHeaderView* hHead = new RbTableHeaderView(Qt::Horizontal, 1, 6);
-    ////    QAbstractItemModel* hModel = hHead->model();
-
-    //    hHead->setSectionsClickable(true);
-    //MyQHeaderView *myHeader=new MyQHeaderView(Qt::Horizontal, pTableViewFile);
-    // pTableViewFile->setHorizontalHeader(myHeader);
-    //pTableViewFile->setHorizontalScrollBar(pScrollbar);
     pTableViewFile->setVerticalScrollBar(pScrollbar);
-    pTableViewFile->setModel(pModel);
-    m_indexmode=pModel->setRootPath(QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first());
-    pTableViewFile->setRootIndex(m_indexmode);
+    pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pTableViewFile->horizontalHeader()->setStretchLastSection(true);
     pTableViewFile->setShowGrid(false);
     pTableViewFile->verticalHeader()->hide();
@@ -122,18 +110,46 @@ void fileViewer::InitUI()
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
                                   "min-height:32px; background-color:white}");
+    pTableViewFile->setGeometry(0,0,520,340);
+
     plabel->setText(" ...返回上一层");
-    QPalette palette;
-    palette.setColor(QPalette::Background, QColor(245, 245, 245));
+    DPalette palette;
+    palette.setColor(DPalette::Background, QColor(245, 245, 245));
     plabel->setAutoFillBackground(true);
     plabel->setPalette(palette);
     plabel->hide();
-    //    QVBoxLayout * pVLayout = new QVBoxLayout( this );
-    //    pVLayout->addWidget( pwidget );
+
     pTableViewFile->setGeometry(0,0,520,340);
-    plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),pTableViewFile->horizontalHeader()->height());
-    qDebug()<<"height:"<<pTableViewFile->horizontalHeader()->height();
+    plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
+    refreshTableview();
 }
+
+void fileViewer::refreshTableview()
+{
+    QStandardItem* item = nullptr;
+    firstmodel->clear();
+    QStringList labels = QObject::trUtf8("名称,大小,类型,修改日期").simplified().split(",");
+    firstmodel->setHorizontalHeaderLabels(labels);
+
+    int rowindex = 0;
+    QFileIconProvider icon_provider;
+    foreach(QFileInfo fileinfo , m_curfilelist)
+    {
+        item = new QStandardItem(icon_provider.icon(fileinfo), fileinfo.fileName());
+        firstmodel->setItem(rowindex,0,item);
+        item = new QStandardItem(QString::number(fileinfo.size()) + " KB");
+        firstmodel->setItem(rowindex,1,item);
+        item = new QStandardItem(getfiletype(fileinfo));
+        firstmodel->setItem(rowindex,2,item);
+        item = new QStandardItem(fileinfo.lastModified().toString());
+        firstmodel->setItem(rowindex,3,item);
+        rowindex++;
+    }
+
+    pTableViewFile->setModel(firstmodel);
+}
+
+
 
 void fileViewer::InitConnection()
 {
@@ -144,14 +160,48 @@ void fileViewer::InitConnection()
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent ( QHideEvent *)), this, SLOT(ScrollBarHideEvent ( QHideEvent *)));
 }
 
+QString fileViewer::getfiletype(const QFileInfo &file)
+{
+    QString ret = "";
+    if(file.isDir())
+    {
+        ret = tr("文件夹");
+    }
+    else {
+        ret = tr("文件") + " " + file.suffix();
+    }
+    return ret;
+}
+
+int fileViewer::getPathIndex()
+{
+    return m_pathindex;
+}
+
+void fileViewer::setFileList(const QStringList &files)
+{
+    m_curfilelist.clear();
+    foreach(QString filepath , files)
+    {
+        QFile file(filepath);
+        m_curfilelist.append(file);
+    }
+    refreshTableview();
+}
+
 void fileViewer::slotRePreviousDoubleClicked(QMouseEvent *event){
-    qDebug()<<"RePreviousDoubleClicked";
-    if(m_pathindex>0){
+    if(m_pathindex>1){
         m_pathindex--;
         m_indexmode=pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
+        qDebug()<<pModel->fileInfo(m_indexmode).path();
         pTableViewFile->setRootIndex(m_indexmode);
+    }
+    else {
+        m_pathindex--;
+        refreshTableview();
         if(0==m_pathindex){
             plabel->hide();
+            pTableViewFile->setRowHeight(0,MyFileSystemDefine::gTableHeight);
         }
     }
 }
@@ -160,13 +210,24 @@ void fileViewer::slotRowDoubleClicked(const QModelIndex index){
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid())
     {
-        if(pModel->fileInfo(curindex).isDir()){
-            m_pathindex++;
-            plabel->show();
-            plabel->raise();
-            qDebug()<<"filePath"<<pModel->fileInfo(curindex).filePath();
+        if(0 == m_pathindex)
+        {
+            if(m_curfilelist.at(curindex.row()).isDir())
+            {
+                pModel->setPathIndex(&m_pathindex);
+                pTableViewFile->setModel(pModel);
+                m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
+                pTableViewFile->setRootIndex(m_indexmode);
+                m_pathindex++;
+                plabel->show();
+                plabel->raise();
+            }
+        }
+        else if(pModel && pModel->fileInfo(curindex).isDir())
+        {
             m_indexmode=pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             pTableViewFile->setRootIndex(m_indexmode);
+            m_pathindex++;
         }
     }
 }
