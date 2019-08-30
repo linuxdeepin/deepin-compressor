@@ -19,9 +19,7 @@
 
 #include "mainwindow.h"
 #include "utils.h"
-#include "dtitlebar.h"
-#include "dhidpihelper.h"
-#include "dthememanager.h"
+
 
 #include <QSvgWidget>
 #include <QDebug>
@@ -29,8 +27,9 @@
 #include <QMimeData>
 #include <QFileInfo>
 #include <QDir>
-#include <utils.h>
 #include "pluginmanager.h"
+#include "archivejob.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
@@ -48,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     InitUI();
     InitConnection();
-
+//    PluginManager pluginmanager;
 
 }
 
@@ -275,6 +274,7 @@ void MainWindow::onSelected(const QStringList &files)
     if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
         m_pageid = PAGE_UNZIP;
+        loadArchive(files.at(0));
     }
     else {
         m_pageid = PAGE_ZIP;
@@ -283,6 +283,24 @@ void MainWindow::onSelected(const QStringList &files)
 
     refreshPage();
 }
+
+void MainWindow::loadArchive(const QString &files)
+{
+    const QString fixedMimeType = "";
+
+    auto loadJob = Archive::load(files, fixedMimeType, this);
+//    connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
+//    connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
+//    connect(loadJob, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+
+    emit loadingStarted();
+
+    KJob *t = (KJob *)(loadJob);//TODO_DS
+    if (t) {
+        t->start();
+    }
+}
+
 
 void MainWindow::onCompressNext()
 {

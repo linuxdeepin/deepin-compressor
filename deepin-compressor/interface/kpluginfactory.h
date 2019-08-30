@@ -23,11 +23,10 @@
 #define KPLUGINFACTORY_H
 
 
-
 #include <QObject>
 #include <QVariant>
 #include <QStringList>
-#include <kexportplugin.h> // for source compat
+//#include "kexportplugin.h" // for source compat
 
 class QWidget;
 
@@ -134,13 +133,19 @@ public:
     /**
      * @deprecated since 4.0 use create<T>(QObject *parent, const QVariantList &args)
      */
-
+#ifndef KCOREADDONS_NO_DEPRECATED
+    template<typename T>
+    T *create(QObject *parent, const QStringList &args)
+    {
+        return create<T>(parent, stringListToVariantList(args));
+    }
+#endif
 
     /**
      * @deprecated since 4.0 use create<T>(QObject *parent, const QVariantList &args)
      */
 #ifndef KCOREADDONS_NO_DEPRECATED
-     QObject *create(QObject *parent = nullptr, const char *classname = "QObject", const QStringList &args = QStringList())
+    QObject *create(QObject *parent = nullptr, const char *classname = "QObject", const QStringList &args = QStringList())
     {
         return create(classname, nullptr, parent, stringListToVariantList(args), QString());
     }
@@ -288,7 +293,7 @@ inline T *KPluginFactory::create(QObject *parent, const QVariantList &args)
 {
     QObject *o = create(T::staticMetaObject.className(), parent && parent->isWidgetType() ? reinterpret_cast<QWidget *>(parent) : nullptr, parent, args, QString());
 
-    T *t = qobject_cast<T *>(o);
+    T *t = (T *)(o);//TODO_DS
     if (!t) {
         delete o;
     }

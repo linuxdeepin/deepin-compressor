@@ -24,6 +24,18 @@
 #define CLIPLUGIN_H
 
 #include "cliinterface.h"
+#include "kpluginfactory.h"
+
+class CliPluginFactory : public KPluginFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_cliunarchiver.json")
+    Q_INTERFACES(KPluginFactory)
+public:
+    explicit CliPluginFactory();
+    ~CliPluginFactory();
+};
+
 
 class CliPlugin : public CliInterface
 {

@@ -154,6 +154,7 @@ QString KPluginMetaData::metaDataFileName() const
 bool KPluginMetaData::isValid() const
 {
     // it can be valid even if m_fileName is empty (as long as the plugin id is set in the metadata)
+    qDebug()<<pluginId().isEmpty()<<m_metaData.isEmpty();
     return !pluginId().isEmpty() && !m_metaData.isEmpty();
 }
 

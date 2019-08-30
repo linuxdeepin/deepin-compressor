@@ -51,6 +51,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
 
     const QVector<Plugin*> offers = pluginManager.preferredPluginsFor(mimeType);
     if (offers.isEmpty()) {
+        qDebug() << "Could not find a plugin to handle" << fileName;
         return new Archive(NoPlugin, parent);
     }
 
@@ -63,6 +64,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
         }
     }
 
+    qDebug() << "Failed to find a usable plugin for" << fileName;
     return archive;
 }
 

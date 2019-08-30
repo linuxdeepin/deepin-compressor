@@ -28,6 +28,7 @@
 
 #include <QCoreApplication>
 #include <QMutex>
+#include <QDebug>
 
 // TODO: Upstream the versioning stuff to Qt
 // TODO: Patch for Qt to expose plugin-finding code directly
@@ -178,6 +179,7 @@ bool KPluginLoader::load()
     Q_D(KPluginLoader);
 
     if (!d->loader->load()) {
+        qDebug() << d->loader->errorString();
         return false;
     }
 
@@ -252,6 +254,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
             it.next();
             if (QLibrary::isLibrary(it.fileName())) {
                 callback(it.fileInfo().absoluteFilePath());
+                qDebug()<<it.fileInfo().absoluteFilePath();
             }
         }
     }
@@ -260,6 +263,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
 QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
+    qDebug()<<"1111111111111111111111111111111111"<<directory;
     forEachPlugin(directory, [&](const QString &pluginPath) {
         KPluginMetaData metadata(pluginPath);
         if (!metadata.isValid()) {

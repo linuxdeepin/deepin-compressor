@@ -18,7 +18,7 @@
 #ifndef KPLUGINLOADER_H
 #define KPLUGINLOADER_H
 
-#include <kexportplugin.h>
+//#include <kexportplugin.h>
 
 #include <QPluginLoader>
 #include <QtPlugin>

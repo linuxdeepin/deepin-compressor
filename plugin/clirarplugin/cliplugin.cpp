@@ -23,16 +23,21 @@
  */
 
 #include "cliplugin.h"
-#include "archiveentry.h"
+#include "../../deepin-compressor/interface/archiveentry.h"
 
 #include <QDateTime>
 
-//#include <KLocalizedString>
-#include "kpluginfactory.h"
 
 
+//K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
+CliPluginFactory::CliPluginFactory()
+{
+    registerPlugin<CliPlugin>();
+}
+CliPluginFactory::~CliPluginFactory()
+{
 
-K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
+}
 
 CliPlugin::CliPlugin(QObject *parent, const QVariantList& args)
         : CliInterface(parent, args)
@@ -603,4 +608,5 @@ bool CliPlugin::isLocked() const
     return m_isLocked;
 }
 
-//#include "cliplugin.moc"
+#include "moc_cliplugin.cpp"
+

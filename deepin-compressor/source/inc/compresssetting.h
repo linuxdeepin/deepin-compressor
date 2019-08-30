@@ -3,13 +3,11 @@
 
 #include <QWidget>
 #include <DPushButton>
-#include <QImage>
-#include <QComboBox>
+#include <DComboBox>
 #include <DLabel>
 #include <DLineEdit>
 #include "utils.h"
-#include <dimagebutton.h>
-#include <dswitchbutton.h>
+#include <DSwitchButton>
 #include <dpasswordedit.h>
 #include <QVBoxLayout>
 #include "lib_edit_button.h"
@@ -32,7 +30,7 @@ public:
 private:
     DPushButton* m_nextbutton;
     QPixmap m_compressicon;
-    QComboBox* m_compresstype;
+    DComboBox* m_compresstype;
     DLineEdit* m_filename;
     DLineEdit* m_savepath;
     DLabel* m_pixmaplabel;
@@ -55,7 +53,7 @@ private:
     uint m_splitnum;
 
 signals:
-    void sigCompressPressed();
+    void sigCompressPressed(QMap<QString, QString> &Args);
 
 public slots:
     void onPathButoonClicked();

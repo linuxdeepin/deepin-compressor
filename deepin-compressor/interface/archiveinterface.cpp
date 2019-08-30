@@ -71,15 +71,15 @@ QString ReadOnlyArchiveInterface::comment() const
     return m_comment;
 }
 
-bool ReadOnlyArchiveInterface::isReadOnly() const
-{
-    return true;
-}
+//bool ReadOnlyArchiveInterface::isReadOnly() const
+//{
+//    return true;
+//}
 
-bool ReadOnlyArchiveInterface::open()
-{
-    return true;
-}
+//bool ReadOnlyArchiveInterface::open()
+//{
+//    return true;
+//}
 
 void ReadOnlyArchiveInterface::setPassword(const QString &password)
 {
@@ -256,25 +256,25 @@ bool ReadOnlyArchiveInterface::isLocked() const
     return false;
 }
 
-bool ReadWriteArchiveInterface::isReadOnly() const
-{
-    if (isLocked()) {
-        return true;
-    }
+//bool ReadWriteArchiveInterface::isReadOnly() const
+//{
+//    if (isLocked()) {
+//        return true;
+//    }
 
-    // We set corrupt archives to read-only to avoid add/delete actions, that
-    // are likely to fail anyway.
-    if (isCorrupt()) {
-        return true;
-    }
+//    // We set corrupt archives to read-only to avoid add/delete actions, that
+//    // are likely to fail anyway.
+//    if (isCorrupt()) {
+//        return true;
+//    }
 
-    QFileInfo fileInfo(filename());
-    if (fileInfo.exists()) {
-        return !fileInfo.isWritable();
-    } else {
-        return !fileInfo.dir().exists(); // TODO: Should also check if we can create a file in that directory
-    }
-}
+//    QFileInfo fileInfo(filename());
+//    if (fileInfo.exists()) {
+//        return !fileInfo.isWritable();
+//    } else {
+//        return !fileInfo.dir().exists(); // TODO: Should also check if we can create a file in that directory
+//    }
+//}
 
 uint ReadOnlyArchiveInterface::numberOfEntries() const
 {

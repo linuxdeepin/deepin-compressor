@@ -22,18 +22,21 @@
  */
 
 #include "cliplugin.h"
-#include "cliinterface.h"
-
 #include <QDateTime>
 #include <QDir>
 #include <QRegularExpression>
 
-//#include <KLocalizedString>
-#include "kpluginfactory.h"
 
+//K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_cli7z.json")
 
+CliPluginFactory::CliPluginFactory()
+{
+    registerPlugin<CliPlugin>();
+}
+CliPluginFactory::~CliPluginFactory()
+{
 
-K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_cli7z.json")
+}
 
 CliPlugin::CliPlugin(QObject *parent, const QVariantList & args)
         : CliInterface(parent, args)
@@ -49,6 +52,8 @@ CliPlugin::CliPlugin(QObject *parent, const QVariantList & args)
 CliPlugin::~CliPlugin()
 {
 }
+
+
 
 void CliPlugin::resetParsing()
 {
@@ -371,4 +376,4 @@ bool CliPlugin::isFileExistsFileName(const QString &line)
             line.startsWith(QLatin1String("  Path:     ./")));
 }
 
-//#include "cliplugin.moc"
+//#include "moc_cliplugin.cpp"

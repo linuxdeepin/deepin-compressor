@@ -26,11 +26,25 @@
 #define CLIPLUGIN_H
 
 #include "cliinterface.h"
+#include "kpluginfactory.h"
+
+
+class CliPluginFactory : public KPluginFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_cli7z.json")
+    Q_INTERFACES(KPluginFactory)
+public:
+    explicit CliPluginFactory();
+    ~CliPluginFactory();
+};
+
+
+
 
 class CliPlugin : public CliInterface
 {
     Q_OBJECT
-
 public:
     explicit CliPlugin(QObject *parent, const QVariantList & args);
     ~CliPlugin() override;
@@ -73,5 +87,6 @@ private:
     Archive::Entry *m_currentArchiveEntry;
     bool m_isFirstInformationEntry;
 };
+
 
 #endif // CLIPLUGIN_H

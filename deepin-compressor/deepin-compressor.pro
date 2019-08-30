@@ -51,8 +51,8 @@ HEADERS +=  source/inc/homepage.h \
     interface/kexportplugin.h \
     interface/desktopfileparser_p.h \
     interface/cliproperties.h \
-    interface/archiveformat.h
-
+    interface/archiveformat.h \
+    interface/kcoreaddons_export.h
 
 
 SOURCES +=  source/src/homepage.cpp \

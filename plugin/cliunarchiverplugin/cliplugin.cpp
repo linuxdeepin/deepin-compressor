@@ -21,20 +21,25 @@
  */
 
 #include "cliplugin.h"
-#include "kpluginfactory.h"
+
 #include <QJsonArray>
 #include <QJsonParseError>
 #include "queries.h"
 
 
 
-//#include <KLocalizedString>
 
-//#include <KPtyProcess>
+CliPluginFactory::CliPluginFactory()
+{
+    registerPlugin<CliPlugin>();
+}
+CliPluginFactory::~CliPluginFactory()
+{
+
+}
 
 
-
-K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_cliunarchiver.json")
+//K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_cliunarchiver.json")
 
 CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
         : CliInterface(parent, args)
@@ -270,4 +275,4 @@ bool CliPlugin::isPasswordPrompt(const QString &line)
     return (line == QLatin1String("This archive requires a password to unpack. Use the -p option to provide one."));
 }
 
-//#include "cliplugin.moc"
+#include "moc_cliplugin.cpp"

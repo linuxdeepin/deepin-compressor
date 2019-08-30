@@ -145,7 +145,42 @@ void CompressSetting::onPathButoonClicked()
 
 void CompressSetting::onNextButoonClicked()
 {
-    emit sigCompressPressed();
+    QMap<QString, QString> m_openArgs;
+    const QUrl saveFileUrl = m_savepath->text() + "/" + m_filename->text() + "." + m_compresstype->currentText();
+    const QString password = m_password->text();
+    const QString fixedMimeType = m_compresstype->currentText();
+
+
+    m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
+    m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
+    m_openArgs[QStringLiteral("compressionLevel")] = 5;//5 is default
+
+    if (m_splitnum > 0) {
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(m_splitnum);
+    }
+//    if (!dialog.data()->compressionMethod().isEmpty()) {
+//        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
+//    }
+    if (!m_password->text().isEmpty()) {
+        m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";//5 is default
+    }
+
+    m_openArgs[QStringLiteral("encryptionPassword")] = password;
+
+    if (m_file_secret->isChecked()) {
+        m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("true");
+    }
+
+//    openUrl(saveFileUrl);
+
+    emit sigCompressPressed(m_openArgs);
+
+    m_openArgs.remove(QStringLiteral("showExtractDialog"));
+    m_openArgs.remove(QStringLiteral("createNewArchive"));
+    m_openArgs.remove(QStringLiteral("fixedMimeType"));
+    m_openArgs.remove(QStringLiteral("compressionLevel"));
+    m_openArgs.remove(QStringLiteral("encryptionPassword"));
+    m_openArgs.remove(QStringLiteral("encryptHeader"));
 }
 
 void CompressSetting::onAdvanceButtonClicked(bool status)

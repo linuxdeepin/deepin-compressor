@@ -72,9 +72,9 @@ public:
      * @return @c true  The file cannot be written.
      * @return @c false The file can be read and written.
      */
-    virtual bool isReadOnly() const;
+    virtual bool isReadOnly() const{return true;}
 
-    virtual bool open();
+    virtual bool open(){return true;}
 
     /**
      * List archive contents.
@@ -241,7 +241,7 @@ public:
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadWriteArchiveInterface() override;
 
-    bool isReadOnly() const override;
+//    bool isReadOnly() const override;
 
     /**
      * Adds the given @p files under the given @p destination.

@@ -23,7 +23,7 @@
 #include <DMainWindow>
 #include <QStackedLayout>
 #include <QSettings>
-
+#include <DTitlebar>
 #include "homepage.h"
 #include "uncompresspage.h"
 #include "compresspage.h"
@@ -31,6 +31,7 @@
 #include "progress.h"
 #include "compressor_success.h"
 #include "compressor_fail.h"
+#include "archive_manager.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -60,6 +61,7 @@ public:
     void InitUI();
     void InitConnection();
     void initTitleBar();
+    void loadArchive(const QString &files);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
@@ -83,6 +85,10 @@ signals:
     void sigZipAddFile();
     void sigZipReturn();
     void sigZipSelectedFiles(const QStringList &files);
+    void loadingStarted();
+
+private:
+    Archive* m_archive_manager;
 
 private:
     DLabel* m_logo;
