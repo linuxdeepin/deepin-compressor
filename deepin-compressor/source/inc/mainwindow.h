@@ -32,6 +32,7 @@
 #include "compressor_success.h"
 #include "compressor_fail.h"
 #include "archive_manager.h"
+#include "archivemodel.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -80,6 +81,8 @@ private slots:
     void onCancelCompressPressed();
     void onTitleButtonPressed();
 
+    void slotLoadingFinished(KJob *job);
+
 signals:
     void sigquitApp();
     void sigZipAddFile();
@@ -89,6 +92,7 @@ signals:
 
 private:
     Archive* m_archive_manager;
+    ArchiveModel         *m_model;
 
 private:
     DLabel* m_logo;

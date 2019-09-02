@@ -44,6 +44,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
 {
     Q_ASSERT(args.size() >= 2);
 
+    qDebug() << "Created read-only interface for" << args.first().toString();
     m_filename = args.first().toString();
     m_mimetype = determineMimeType(m_filename);
     connect(this, &ReadOnlyArchiveInterface::entry, this, &ReadOnlyArchiveInterface::onEntry);

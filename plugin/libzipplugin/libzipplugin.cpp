@@ -24,7 +24,7 @@
  */
 
 #include "libzipplugin.h"
-#include "kpluginfactory.h"
+//#include "kpluginfactory.h"
 
 
 //#include <KIO/Global>
@@ -44,7 +44,16 @@
 #include <memory>
 #include "queries.h"
 
-K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
+//K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
+
+LibzipPluginFactory::LibzipPluginFactory()
+{
+    registerPlugin<LibzipPlugin>();
+}
+LibzipPluginFactory::~LibzipPluginFactory()
+{
+
+}
 
 void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 {

@@ -29,7 +29,7 @@
 #include "readwritelibarchiveplugin.h"
 
 //#include <KLocalizedString>
-#include "kpluginfactory.h"
+//#include "kpluginfactory.h"
 
 #include <QDirIterator>
 #include <QSaveFile>
@@ -37,7 +37,16 @@
 
 #include <archive_entry.h>
 
-K_PLUGIN_CLASS_WITH_JSON(ReadWriteLibarchivePlugin, "kerfuffle_libarchive.json")
+//K_PLUGIN_CLASS_WITH_JSON(ReadWriteLibarchivePlugin, "kerfuffle_libarchive.json")
+
+ReadWriteLibarchivePluginFactory::ReadWriteLibarchivePluginFactory()
+{
+    registerPlugin<ReadWriteLibarchivePlugin>();
+}
+ReadWriteLibarchivePluginFactory::~ReadWriteLibarchivePluginFactory()
+{
+
+}
 
 ReadWriteLibarchivePlugin::ReadWriteLibarchivePlugin(QObject *parent, const QVariantList &args)
     : LibarchivePlugin(parent, args)

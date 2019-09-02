@@ -32,6 +32,7 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/compressor_success.h \
     source/inc/compressor_fail.h \
     source/inc/myfilesystemmodel.h \
+    source/inc/archivemodel.h \
     interface/archiveinterface.h \
     interface/cliinterface.h \
     interface/archiveentry.h \
@@ -52,7 +53,10 @@ HEADERS +=  source/inc/homepage.h \
     interface/desktopfileparser_p.h \
     interface/cliproperties.h \
     interface/archiveformat.h \
-    interface/kcoreaddons_export.h
+    interface/kcoreaddons_export.h \
+    interface/kprocess.h \
+    interface/kprocess_p.h \
+
 
 
 SOURCES +=  source/src/homepage.cpp \
@@ -68,6 +72,7 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/compressor_success.cpp \
     source/src/compressor_fail.cpp \
     source/src/myfilesystemmodel.cpp \
+    source/src/archivemodel.cpp \
     interface/archiveinterface.cpp \
     interface/cliinterface.cpp \
     interface/archiveentry.cpp \
@@ -84,7 +89,8 @@ SOURCES +=  source/src/homepage.cpp \
     interface/kpluginmetadata.cpp \
     interface/desktopfileparser.cpp \
     interface/cliproperties.cpp \
-    interface/archiveformat.cpp
+    interface/archiveformat.cpp \
+    interface/kprocess.cpp
 
 
 

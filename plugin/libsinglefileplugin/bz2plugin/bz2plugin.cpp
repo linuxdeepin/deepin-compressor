@@ -27,9 +27,18 @@
 
 #include <QString>
 
-#include "kpluginfactory.h"
+//#include "kpluginfactory.h"
 
-K_PLUGIN_CLASS_WITH_JSON(LibBzip2Interface, "kerfuffle_libbz2.json")
+//K_PLUGIN_CLASS_WITH_JSON(LibBzip2Interface, "kerfuffle_libbz2.json")
+
+LibBzip2InterfaceFactory::LibBzip2InterfaceFactory()
+{
+    registerPlugin<LibBzip2Interface>();
+}
+LibBzip2InterfaceFactory::~LibBzip2InterfaceFactory()
+{
+
+}
 
 LibBzip2Interface::LibBzip2Interface(QObject *parent, const QVariantList & args)
         : LibSingleFileInterface(parent, args)

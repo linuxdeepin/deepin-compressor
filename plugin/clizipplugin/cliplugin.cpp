@@ -22,19 +22,27 @@
 
 #include "cliplugin.h"
 
-#include "cliinterface.h"
 
-//#include <KLocalizedString>
-#include "kpluginfactory.h"
+
 
 #include <QDateTime>
 #include <QDir>
 #include <QRegularExpression>
 #include <QTemporaryDir>
 
+#include <QDateTime>
+#include "../../deepin-compressor/interface/kpluginfactory.h"
 
 
-K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clizip.json")
+//K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
+CliPluginFactory::CliPluginFactory()
+{
+    registerPlugin<CliPlugin>();
+}
+CliPluginFactory::~CliPluginFactory()
+{
+
+}
 
 CliPlugin::CliPlugin(QObject *parent, const QVariantList & args)
     : CliInterface(parent, args)

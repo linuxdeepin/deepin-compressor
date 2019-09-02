@@ -239,6 +239,7 @@ LoadJob::LoadJob(Archive *archive, ReadOnlyArchiveInterface *interface)
     , m_dirCount(0)
     , m_filesCount(0)
 {
+    qDebug() << "LoadJob job instance";
     connect(this, &LoadJob::newEntry, this, &LoadJob::onNewEntry);
 }
 

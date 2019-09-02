@@ -8,7 +8,7 @@ QT       -= gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = libzipplugin
 TEMPLATE = lib
-
+LIBS +=  -lzip
 DEFINES += LIBZIPPLUGIN_LIBRARY
 CONFIG         += plugin
 # The following define makes your compiler emit warnings if you use
@@ -24,11 +24,52 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += $$PWD/../../deepin-compressor/source/inc/ \
                 $$PWD/../../deepin-compressor/interface/
 SOURCES += \
-        libzipplugin.cpp
+        libzipplugin.cpp \
+    ../../deepin-compressor/interface/kprocess.cpp \
+    ../../deepin-compressor/interface/kpluginloader.cpp \
+    ../../deepin-compressor/interface/queries.cpp \
+    ../../deepin-compressor/interface/jobs.cpp \
+    ../../deepin-compressor/interface/archiveformat.cpp \
+    ../../deepin-compressor/interface/plugin.cpp \
+    ../../deepin-compressor/interface/cliinterface.cpp \
+    ../../deepin-compressor/interface/archive_manager.cpp \
+    ../../deepin-compressor/interface/desktopfileparser.cpp \
+    ../../deepin-compressor/interface/archiveentry.cpp \
+    ../../deepin-compressor/interface/cliproperties.cpp \
+    ../../deepin-compressor/interface/kpluginfactory.cpp \
+    ../../deepin-compressor/interface/mimetypes.cpp \
+    ../../deepin-compressor/interface/kpluginmetadata.cpp \
+    ../../deepin-compressor/interface/pluginmanager.cpp \
+    ../../deepin-compressor/interface/options.cpp \
+    ../../deepin-compressor/interface/archivejob.cpp \
+    ../../deepin-compressor/interface/archiveinterface.cpp
 
 HEADERS += \
         libzipplugin.h \
-        libzipplugin_global.h 
+        libzipplugin_global.h \ 
+    ../../deepin-compressor/interface/kcoreaddons_export.h \
+    ../../deepin-compressor/interface/kexportplugin.h \
+    ../../deepin-compressor/interface/kpluginfactory.h \
+    ../../deepin-compressor/interface/queries.h \
+    ../../deepin-compressor/interface/archiveentry.h \
+    ../../deepin-compressor/interface/mimetypes.h \
+    ../../deepin-compressor/interface/kpluginmetadata.h \
+    ../../deepin-compressor/interface/kprocess.h \
+    ../../deepin-compressor/interface/cliproperties.h \
+    ../../deepin-compressor/interface/kpluginloader.h \
+    ../../deepin-compressor/interface/options.h \
+    ../../deepin-compressor/interface/archiveformat.h \
+    ../../deepin-compressor/interface/cliinterface.h \
+    ../../deepin-compressor/interface/archivejob_p.h \
+    ../../deepin-compressor/interface/desktopfileparser_p.h \
+    ../../deepin-compressor/interface/jobs.h \
+    ../../deepin-compressor/interface/pluginmanager.h \
+    ../../deepin-compressor/interface/archiveinterface.h \
+    ../../deepin-compressor/interface/plugin.h \
+    ../../deepin-compressor/interface/kprocess_p.h \
+    ../../deepin-compressor/interface/archive_manager.h \
+    ../../deepin-compressor/interface/archivejob.h \
+    ../../deepin-compressor/interface/kpluginfactory_p.h
 
 unix {
     target.path = /usr/lib

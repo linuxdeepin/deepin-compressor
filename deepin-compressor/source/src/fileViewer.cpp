@@ -245,8 +245,15 @@ void fileViewer::showFileInfoList( QFileInfoList list )
 
 }
 
-void fileViewer::slotShowDir( QListWidgetItem * item )
+void fileViewer::setDecompressModel(QAbstractItemModel* model)
 {
+    m_decompressmodel = model;
 
+    pTableViewFile->setModel(m_decompressmodel);
+//    m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
+//    pTableViewFile->setRootIndex(m_indexmode);
+//    m_pathindex++;
+//    plabel->show();
+//    plabel->raise();
 }
 

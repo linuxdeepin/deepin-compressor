@@ -79,8 +79,8 @@ public:
 
        int getPathIndex();
        void setFileList(const QStringList &files);
+       void setDecompressModel(QAbstractItemModel* model);
 protected slots:
-       void slotShowDir( QListWidgetItem * item );
        void slotRowDoubleClicked(const QModelIndex index);
        void slotRePreviousDoubleClicked(QMouseEvent *event);
        void ScrollBarShowEvent ( QShowEvent * event );
@@ -97,6 +97,7 @@ private:
        int m_pathindex;
        MyFileSystemModel* pModel;
        QStandardItemModel* firstmodel;
+       QAbstractItemModel* m_decompressmodel;
        FirstRowDelegate *pdelegate;
        MyLabel *plabel;
        QModelIndex m_indexmode;

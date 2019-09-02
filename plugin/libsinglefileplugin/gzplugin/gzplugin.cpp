@@ -27,9 +27,17 @@
 
 #include <QString>
 
-#include "kpluginfactory.h"
+//#include "kpluginfactory.h"
 
-K_PLUGIN_CLASS_WITH_JSON(LibGzipInterface, "kerfuffle_libgz.json")
+//K_PLUGIN_CLASS_WITH_JSON(LibGzipInterface, "kerfuffle_libgz.json")
+LibGzipInterfaceFactory::LibGzipInterfaceFactory()
+{
+    registerPlugin<LibGzipInterface>();
+}
+LibGzipInterfaceFactory::~LibGzipInterfaceFactory()
+{
+
+}
 
 LibGzipInterface::LibGzipInterface(QObject *parent, const QVariantList & args)
         : LibSingleFileInterface(parent, args)

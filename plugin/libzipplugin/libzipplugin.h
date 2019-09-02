@@ -30,7 +30,18 @@
 
 
 #include <zip.h>
+#include "kpluginfactory.h"
 
+
+class LibzipPluginFactory : public KPluginFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_libzip.json")
+    Q_INTERFACES(KPluginFactory)
+public:
+    explicit LibzipPluginFactory();
+    ~LibzipPluginFactory();
+};
 
 class LibzipPlugin : public ReadWriteArchiveInterface
 {

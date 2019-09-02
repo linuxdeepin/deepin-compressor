@@ -88,7 +88,7 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
         return new Archive(FailedPlugin, parent);
     }
 
-
+    qDebug() << "Successfully loaded plugin" << plugin->metaData().pluginId();
     return new Archive(iface, !plugin->isReadWrite(), parent);
 }
 
@@ -155,7 +155,7 @@ Archive::Archive(ReadOnlyArchiveInterface *archiveInterface, bool isReadOnly, QO
         , m_error(NoError)
         , m_encryptionType(Unencrypted)
 {
-
+    qDebug() << "Created archive instance";
 
     Q_ASSERT(m_iface);
     m_iface->setParent(this);

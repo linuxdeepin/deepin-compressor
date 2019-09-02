@@ -28,7 +28,8 @@
 #include <QFileInfo>
 #include <QDir>
 #include "pluginmanager.h"
-#include "archivejob.h"
+//#include "archivejob.h"
+#include "jobs.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_settings("deepin", "deepin-font-installer"),
       m_themeAction(new QAction(tr("Dark theme"), this))
 {
+    m_model = new ArchiveModel(this);
     InitUI();
     InitConnection();
 //    PluginManager pluginmanager;
@@ -93,6 +95,7 @@ void MainWindow::InitConnection()
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
+    connect(m_model, &ArchiveModel::loadingFinished,this, &MainWindow::slotLoadingFinished);
 }
 
 void MainWindow::initTitleBar()
@@ -284,20 +287,21 @@ void MainWindow::onSelected(const QStringList &files)
     refreshPage();
 }
 
+void MainWindow::slotLoadingFinished(KJob *job)
+{
+    if (job->error()) {
+        return;
+    }
+    m_UnCompressPage->setModel(m_model);
+}
+
+
 void MainWindow::loadArchive(const QString &files)
 {
-    const QString fixedMimeType = "";
+    auto job = m_model->loadArchive(files, "", m_model);
 
-    auto loadJob = Archive::load(files, fixedMimeType, this);
-//    connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
-//    connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
-//    connect(loadJob, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
-
-    emit loadingStarted();
-
-    KJob *t = (KJob *)(loadJob);//TODO_DS
-    if (t) {
-        t->start();
+    if (job) {
+        job->start();
     }
 }
 

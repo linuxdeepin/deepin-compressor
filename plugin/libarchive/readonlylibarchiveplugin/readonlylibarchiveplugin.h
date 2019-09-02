@@ -29,6 +29,20 @@
 
 #include "../libarchiveplugin.h"
 
+#include "kpluginfactory.h"
+
+
+class ReadOnlyLibarchivePluginFactory : public KPluginFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_libarchive_readonly.json")
+    Q_INTERFACES(KPluginFactory)
+public:
+    explicit ReadOnlyLibarchivePluginFactory();
+    ~ReadOnlyLibarchivePluginFactory();
+};
+
+
 class ReadOnlyLibarchivePlugin : public LibarchivePlugin
 {
     Q_OBJECT

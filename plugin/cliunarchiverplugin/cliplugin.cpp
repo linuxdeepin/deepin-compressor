@@ -24,7 +24,7 @@
 
 #include <QJsonArray>
 #include <QJsonParseError>
-#include "queries.h"
+#include "../../deepin-compressor/interface/queries.h"
 
 
 

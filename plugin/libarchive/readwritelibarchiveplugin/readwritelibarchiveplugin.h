@@ -32,6 +32,18 @@
 
 #include <QStringList>
 #include <QSaveFile>
+#include "kpluginfactory.h"
+
+
+class ReadWriteLibarchivePluginFactory : public KPluginFactory
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_libarchive.json")
+    Q_INTERFACES(KPluginFactory)
+public:
+    explicit ReadWriteLibarchivePluginFactory();
+    ~ReadWriteLibarchivePluginFactory();
+};
 
 
 class ReadWriteLibarchivePlugin : public LibarchivePlugin

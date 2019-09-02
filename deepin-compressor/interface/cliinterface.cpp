@@ -31,6 +31,7 @@
 #include "queries.h"
 
 
+# include "kprocess.h"
 
 
 #include <QDir>
@@ -93,6 +94,7 @@ bool CliInterface::list()
 
 bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+    qDebug() << "destination directory:" << destinationDirectory;
 
     m_operationMode = Extract;
     m_extractionOptions = options;
@@ -102,6 +104,7 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QSt
 
 
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint() && password().isEmpty()) {
+        qDebug() << "Password hint enabled, querying user";
         if (!passwordQuery()) {
             return false;
         }
@@ -117,7 +120,9 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QSt
         // Create an hidden temp folder in the current directory.
         m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
 
+        qDebug() << "Using temporary extraction dir:" << m_extractTempDir->path();
         if (!m_extractTempDir->isValid()) {
+            qDebug() << "Creation of temporary directory failed.";
             emit finished(false);
             return false;
         }
@@ -145,6 +150,7 @@ bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive
                                     ? QString()
                                     : destination->fullPath();
 
+    qDebug() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
 
     if (!destinationPath.isEmpty()) {
         m_extractTempDir.reset(new QTemporaryDir());
@@ -164,12 +170,15 @@ bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive
             const QString filePath = QDir::currentPath() + QLatin1Char('/') + file->fullPath(NoTrailingSlash);
             const QString newFilePath = absoluteDestinationPath + file->fullPath(NoTrailingSlash);
             if (QFile::link(filePath, newFilePath)) {
+                qDebug() << "Symlink's created:" << filePath << newFilePath;
             } else {
+                qDebug() << "Can't create symlink" << filePath << newFilePath;
                 emit finished(false);
                 return false;
             }
         }
 
+        qDebug() << "Changing working dir again to " << m_extractTempDir->path();
         QDir::setCurrent(m_extractTempDir->path());
 
         filesToPass.push_back(new Archive::Entry(preservedParent, destinationPath.split(QLatin1Char('/'), QString::SkipEmptyParts).at(0)));
@@ -178,6 +187,7 @@ bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive
     }
 
     if (!m_cliProps->property("passwordSwitch").toString().isEmpty() && options.encryptedArchiveHint() && password().isEmpty()) {
+        qDebug() << "Password hint enabled, querying user";
         if (!passwordQuery()) {
             return false;
         }
@@ -256,15 +266,15 @@ bool CliInterface::runProcess(const QString& programName, const QStringList& arg
         emit finished(false);
         return false;
     }
+    qDebug() << "Executing" << programPath << arguments << "within directory" << QDir::currentPath();
 
-
-    m_process = new QProcess;
+    m_process = new KProcess;
 //    m_process->setPtyChannels(KPtyProcess::StdinChannel);//TODO_DS
 
 
-//    m_process->setOutputChannelMode(KProcess::MergedChannels);
-//    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-//    m_process->setProgram(programPath, arguments);
+    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    m_process->setProgram(programPath, arguments);
 
     connect(m_process, &QProcess::readyReadStandardOutput, this, [=]() {
         readStdout();
@@ -287,6 +297,7 @@ bool CliInterface::runProcess(const QString& programName, const QStringList& arg
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_exitCode = exitCode;
+    qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     if (m_process) {
         //handle all the remaining data in the process
@@ -336,6 +347,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     Q_ASSERT(m_operationMode == Extract);
 
     m_exitCode = exitCode;
+    qDebug() << "Extraction process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     if (m_process) {
         // Handle all the remaining data in the process.
@@ -355,8 +367,10 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         // This happens at least with wrong passwords or not enough space in the destination folder.
         if (m_exitCode == 1) {
             if (password().isEmpty()) {
+                qDebug() << "Extraction aborted, destination folder might not have enough space.";
                 emit error(tr("Extraction failed. Make sure that enough space is available."));
             } else {
+                qDebug() << "Extraction aborted, either the password is wrong or the destination folder doesn't have enough space.";
                 emit error(tr("Extraction failed. Make sure you provided the correct password and that enough space is available."));
                 setPassword(QString());
             }
@@ -422,6 +436,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry*> &files,
     // Move extracted files from a QTemporaryDir to the final destination.
 
     QDir finalDestDir(finalDest);
+    qDebug() << "Setting final dir to" << finalDest;
 
     bool overwriteAll = false;
     bool skipAll = false;
@@ -436,12 +451,14 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry*> &files,
 
             // For directories, just create the path.
             if (!finalDestDir.mkpath(relEntry.filePath())) {
+                qDebug() << "Failed to create directory" << relEntry.filePath() << "in final destination.";
             }
 
         } else {
 
             // If destination file exists, prompt the user.
             if (absDestEntry.exists()) {
+                qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
 
                 if (!skipAll && !overwriteAll) {
 
@@ -454,6 +471,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry*> &files,
                             overwriteAll = true;
                         }
                         if (!QFile::remove(absDestEntry.absoluteFilePath())) {
+                            qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                         }
 
                     } else if (query.responseSkip() || query.responseAutoSkip()) {
@@ -472,16 +490,19 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry*> &files,
                     continue;
                 } else if (overwriteAll) {
                     if (!QFile::remove(absDestEntry.absoluteFilePath())) {
+                        qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                     }
                 }
             }
 
             // Create any parent directories.
             if (!finalDestDir.mkpath(relEntry.path())) {
+                qDebug() << "Failed to create parent directory for file:" << absDestEntry.filePath();
             }
 
             // Move files to the final destination.
             if (!QFile(absSourceEntry.absoluteFilePath()).rename(absDestEntry.absoluteFilePath())) {
+                qDebug() << "Failed to move file" << absSourceEntry.filePath() << "to final destination.";
                 emit error(tr("Could not move the extracted file to the destination directory."));
                 emit finished(false);
                 return false;
@@ -512,6 +533,7 @@ void CliInterface::restoreWorkingDirExtraction()
     }
 
     if (!QDir::setCurrent(m_oldWorkingDirExtraction)) {
+        qDebug() << "Failed to restore old working directory:" << m_oldWorkingDirExtraction;
     } else {
         m_oldWorkingDirExtraction.clear();
     }
@@ -527,6 +549,7 @@ void CliInterface::finishCopying(bool result)
 
 bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, bool preservePaths)
 {
+    qDebug() << "Moving extracted files from temp dir" << tempDir.path() << "to final destination" << destDir.path();
 
     bool overwriteAll = false;
     bool skipAll = false;
@@ -555,6 +578,7 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
         QFileInfo absDestEntry(destDir.path() + QLatin1Char('/') + relEntry.filePath());
 
         if (absDestEntry.exists()) {
+            qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
 
             OverwriteQuery query(absDestEntry.absoluteFilePath());
             query.setNoRenameMode(true);
@@ -565,6 +589,7 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                     overwriteAll = true;
                 }
                 if (!QFile::remove(absDestEntry.absoluteFilePath())) {
+                    qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                 }
 
             } else if (query.responseSkip() || query.responseAutoSkip()) {
@@ -573,23 +598,27 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                 }
                 continue;
             } else if (query.responseCancelled()) {
+                qDebug() << "Copy action cancelled.";
                 return false;
             }
         } else if (skipAll) {
             continue;
         } else if (overwriteAll) {
             if (!QFile::remove(absDestEntry.absoluteFilePath())) {
+                qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
             }
         }
 
         if (preservePaths) {
             // Create any parent directories.
             if (!destDir.mkpath(relEntry.path())) {
+                qDebug() << "Failed to create parent directory for file:" << absDestEntry.filePath();
             }
         }
 
         // Move file to the final destination.
         if (!QFile(dirIt.filePath()).rename(absDestEntry.absoluteFilePath())) {
+            qDebug() << "Failed to move file" << dirIt.filePath() << "to final destination.";
             return false;
         }
     }
@@ -807,6 +836,7 @@ bool CliInterface::handleLine(const QString& line)
     if (m_operationMode == Extract) {
 
         if (isPasswordPrompt(line)) {
+            qDebug() << "Found a password prompt";
 
             PasswordNeededQuery query(filename());
             query.execute();
@@ -825,11 +855,13 @@ bool CliInterface::handleLine(const QString& line)
         }
 
         if (isDiskFullMsg(line)) {
+            qDebug() << "Found disk full message:" << line;
             emit error(tr("@info", "Extraction failed because the disk is full."));
             return false;
         }
 
         if (isWrongPasswordMsg(line)) {
+            qDebug() << "Wrong password!";
             setPassword(QString());
             emit error(tr("@info", "Extraction failed: Incorrect password"));
             return false;
@@ -844,6 +876,7 @@ bool CliInterface::handleLine(const QString& line)
 
     if (m_operationMode == List) {
         if (isPasswordPrompt(line)) {
+            qDebug() << "Found a password prompt";
 
             PasswordNeededQuery query(filename());
             query.execute();
@@ -862,12 +895,14 @@ bool CliInterface::handleLine(const QString& line)
         }
 
         if (isWrongPasswordMsg(line)) {
+            qDebug() << "Wrong password!";
             setPassword(QString());
             emit error(tr("Incorrect password."));
             return false;
         }
 
         if (isCorruptArchiveMsg(line)) {
+            qDebug() << "Archive corrupt";
             setCorrupt(true);
             // Special case: corrupt is not a "fatal" error so we return true here.
             return true;
@@ -883,11 +918,13 @@ bool CliInterface::handleLine(const QString& line)
     if (m_operationMode == Test) {
 
         if (isPasswordPrompt(line)) {
+            qDebug() << "Found a password prompt";
             emit error(tr("Ark does not currently support testing this archive."));
             return false;
         }
 
         if (m_cliProps->isTestPassedMsg(line)) {
+            qDebug() << "Test successful";
             emit testSuccess();
             return true;
         }
@@ -913,6 +950,7 @@ bool CliInterface::handleFileExistsMessage(const QString& line)
 
             if (rxMatch.hasMatch()) {
                 m_storedFileName = rxMatch.captured(1);
+                qDebug() << "Detected existing file:" << m_storedFileName;
             }
         }
     }
@@ -986,12 +1024,10 @@ void CliInterface::writeToProcess(const QByteArray& data)
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
+    qDebug() << "Writing" << data << "to the process";
 
-#ifdef Q_OS_WIN
-    m_process->write(data);
-#else
-    m_process->write(data);
-#endif
+	m_process->write(data);
+
 }
 
 bool CliInterface::addComment(const QString &comment)
@@ -1000,6 +1036,7 @@ bool CliInterface::addComment(const QString &comment)
 
     m_commentTempFile.reset(new QTemporaryFile());
     if (!m_commentTempFile->open()) {
+        qDebug() << "Failed to create temporary file for comment";
         emit finished(false);
         return false;
     }

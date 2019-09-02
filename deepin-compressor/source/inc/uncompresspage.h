@@ -20,14 +20,15 @@
 #ifndef SINGLEFILEPAGE_H
 #define SINGLEFILEPAGE_H
 
+
 #include <QWidget>
-#include <QPropertyAnimation>
-#include <QStackedLayout>
 #include <QLabel>
+#include <DFileDialog>
 #include <DPushButton>
-#include <DSpinner>
+#include <QSettings>
+#include <QMessageBox>
 
-
+#include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,30 +37,27 @@ class UnCompressPage : public QWidget
     Q_OBJECT
 
 public:
-    UnCompressPage(QWidget *parent = nullptr);
+    UnCompressPage(QWidget *parent = 0);
     ~UnCompressPage();
 
+    void setModel(QAbstractItemModel* model);
 
-private slots:
+signals:
+    void sigNextPress();
 
+public slots:
+    void onNextPress();
+    void onAddfileSlot();
+    void onSelectedFilesSlot(const QStringList &files);
 
 private:
 
-    QLabel *m_nameLabel;
-    QLabel *m_styleLabel;
-    QLabel *m_typeLabel;
-    QLabel *m_versionLabel;
-    QLabel *m_copyrightLabel;
-    QLabel *m_descriptionLabel;
-    QLabel *m_tipsLabel;
-    DPushButton *m_installBtn;
-    QPushButton *m_uninstallBtn;
-    QPushButton *m_reinstallBtn;
-    DPushButton *m_viewFileBtn;
-    QPushButton *m_closeBtn;
-    DSpinner *m_spinner;
-    QStackedLayout *m_bottomLayout;
-    QString m_filePath;
-};
+    fileViewer *m_fileviewer;
+    DPushButton* m_nextbutton;
+    QSettings *m_settings;
+    QStringList m_filelist;
 
+    QAbstractItemModel* m_model;
+
+};
 #endif

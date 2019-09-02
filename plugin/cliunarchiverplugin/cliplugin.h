@@ -23,8 +23,8 @@
 #ifndef CLIPLUGIN_H
 #define CLIPLUGIN_H
 
-#include "cliinterface.h"
-#include "kpluginfactory.h"
+#include "../../deepin-compressor/interface/cliinterface.h"
+#include "../../deepin-compressor/interface/kpluginfactory.h"
 
 class CliPluginFactory : public KPluginFactory
 {

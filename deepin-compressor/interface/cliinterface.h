@@ -37,7 +37,6 @@
 #include <QRegularExpression>
 
 class KProcess;
-class KPtyProcess;
 
 class QDir;
 class QTemporaryDir;
@@ -148,7 +147,7 @@ protected:
     Archive::Entry *m_passedDestination = nullptr;
     CompressionOptions m_passedOptions;
 
-    QProcess *m_process = nullptr;
+    KProcess *m_process = nullptr;
 
 
     bool m_abortingOperation = false;

@@ -18,71 +18,104 @@
  */
 
 #include "uncompresspage.h"
+#include "utils.h"
+
 #include <QApplication>
 #include <QVBoxLayout>
-#include <QFormLayout>
-#include <QTextLayout>
-#include <QSvgWidget>
-#include <QFileInfo>
-#include <QUrlQuery>
 #include <QProcess>
-#include <QDebug>
 #include <QTimer>
+#include <QDebug>
+#include <QFile>
 #include <QUrl>
-#include <QDir>
+#include <DRecentManager>
 
 
+
+DWIDGET_USE_NAMESPACE
 
 UnCompressPage::UnCompressPage(QWidget *parent)
-    : QWidget(parent),
-      m_nameLabel(new QLabel),
-      m_styleLabel(new QLabel),
-      m_typeLabel(new QLabel),
-      m_versionLabel(new QLabel),
-      m_copyrightLabel(new QLabel),
-      m_descriptionLabel(new QLabel),
-      m_tipsLabel(new QLabel()),
-      m_installBtn(new DPushButton),
-      m_uninstallBtn(new QPushButton(tr("Remove"))),
-      m_reinstallBtn(new QPushButton(tr("Reinstall"))),
-      m_viewFileBtn(new DPushButton),
-      m_closeBtn(new DPushButton),
-      m_spinner(new DSpinner),
-      m_bottomLayout(new QStackedLayout)
+    : QWidget(parent)
 {
-    QSvgWidget *iconWidget = new QSvgWidget(":/images/font-x-generic.svg");
-    iconWidget->setFixedSize(70, 70);
 
-    QLabel *styleLabel = new QLabel(tr("Style: "));
-    QLabel *typeLabel = new QLabel(tr("Type: "));
-    QLabel *versionLabel = new QLabel(tr("Version: "));
-    QLabel *copyrightLabel = new QLabel(tr("Copyright: "));
-    QLabel *descLabel = new QLabel(tr("Description: "));
+    m_fileviewer = new fileViewer();
+    m_nextbutton = new DPushButton(tr("decompress"));
+    m_nextbutton->setFixedWidth(260);
 
-    copyrightLabel->setAlignment(Qt::AlignTop);
-    descLabel->setAlignment(Qt::AlignTop);
+    QHBoxLayout *contentLayout = new QHBoxLayout;
+    contentLayout->addWidget(m_fileviewer);
 
-    QFormLayout *formLayout = new QFormLayout;
-    formLayout->addRow(styleLabel, m_styleLabel);
-    formLayout->addRow(typeLabel, m_typeLabel);
-    formLayout->addRow(versionLabel, m_versionLabel);
-    formLayout->addRow(copyrightLabel, m_copyrightLabel);
-    formLayout->addRow(descLabel, m_descriptionLabel);
-    formLayout->setLabelAlignment(Qt::AlignLeft);
-    formLayout->setHorizontalSpacing(5);
-    formLayout->setVerticalSpacing(7);
+    QHBoxLayout *buttonlayout = new QHBoxLayout;
+    buttonlayout->addStretch();
+    buttonlayout->addWidget(m_nextbutton);
+    buttonlayout->addStretch();
 
 
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+    mainLayout->addLayout(contentLayout);
+    mainLayout->addStretch();
+    mainLayout->addLayout(buttonlayout);
+    mainLayout->setStretchFactor(contentLayout, 10);
+    mainLayout->setStretchFactor(buttonlayout, 1);
+    mainLayout->setContentsMargins(10, 10, 10, 20);
 
 
-
-
-
-
+    connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::onNextPress);
 }
 
 UnCompressPage::~UnCompressPage()
 {
+
 }
 
 
+
+void UnCompressPage::onNextPress()
+{
+    emit sigNextPress();
+}
+
+void UnCompressPage::onAddfileSlot()
+{
+    if(0 != m_fileviewer->getPathIndex())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please add files in the root path!");
+        msgBox.exec();
+        return;
+    }
+
+    DFileDialog dialog;
+    dialog.setAcceptMode(DFileDialog::AcceptOpen);
+    dialog.setFileMode(DFileDialog::ExistingFiles);
+
+    QString historyDir = m_settings->value("dir").toString();
+    if (historyDir.isEmpty()) {
+        historyDir = QDir::homePath();
+    }
+    dialog.setDirectory(historyDir);
+
+    const int mode = dialog.exec();
+
+    // save the directory string to config file.
+    m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
+    qDebug()<<dialog.directoryUrl().toLocalFile();
+
+    // if click cancel button or close button.
+    if (mode != QDialog::Accepted) {
+        return;
+    }
+    onSelectedFilesSlot(dialog.selectedFiles());
+}
+
+void UnCompressPage::onSelectedFilesSlot(const QStringList &files)
+{
+    m_filelist.append(files);
+    m_fileviewer->setFileList(m_filelist);
+}
+
+void UnCompressPage::setModel(QAbstractItemModel* model)
+{
+    m_model = model;
+    m_fileviewer->setDecompressModel(m_model);
+}
