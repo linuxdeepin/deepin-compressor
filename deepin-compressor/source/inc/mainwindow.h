@@ -33,6 +33,7 @@
 #include "compressor_fail.h"
 #include "archive_manager.h"
 #include "archivemodel.h"
+#include "encryptionpage.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -48,6 +49,7 @@ enum Page_ID{
     PAGE_ZIP_FAIL,
     PAGE_UNZIP_SUCCESS,
     PAGE_UNZIP_FAIL,
+    PAGE_ENCRYPTION,
     PAGE_MAX
 };
 
@@ -63,6 +65,7 @@ public:
     void InitConnection();
     void initTitleBar();
     void loadArchive(const QString &files);
+
 
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
@@ -82,6 +85,11 @@ private slots:
     void onTitleButtonPressed();
 
     void slotLoadingFinished(KJob *job);
+    void slotExtractionDone(KJob* job);
+    void slotextractSelectedFilesTo(const QString& localPath);
+    void SlotProgress(KJob *job, unsigned long percent);
+    void SlotNeedPassword();
+    void SlotExtractPassword(QString password);
 
 signals:
     void sigquitApp();
@@ -93,6 +101,8 @@ signals:
 private:
     Archive* m_archive_manager;
     ArchiveModel         *m_model;
+    QString m_decompressfilename;
+    QString m_decompressfilepath;
 
 private:
     DLabel* m_logo;
@@ -108,11 +118,14 @@ private:
     Progress* m_Progess;
     Compressor_Success* m_CompressSuccess;
     Compressor_Fail* m_CompressFail;
+    EncryptionPage* m_encryptionpage;
     QSettings m_settings;
     QAction *m_themeAction;
     Page_ID m_pageid;
 
     DPushButton* m_titlebutton;
+
+    ExtractJob* m_encryptionjob;
 };
 
 #endif

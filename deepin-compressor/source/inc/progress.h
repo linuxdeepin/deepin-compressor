@@ -11,6 +11,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+enum COMPRESS_TYPE{
+    COMPRESSING,
+    DECOMPRESSING,
+};
+
 class Progress: public QWidget
 {
     Q_OBJECT
@@ -18,6 +23,9 @@ public:
     Progress(QWidget *parent = 0);
     void InitUI();
     void InitConnection();
+    void setprogress(uint percent);
+    void setFilename(QString filename);
+    void settype(COMPRESS_TYPE type);
 
 private:
     DPushButton* m_cancelbutton;
@@ -29,7 +37,7 @@ private:
     QString m_progressfile;
 
     QString m_filename;
-
+    COMPRESS_TYPE m_type;
 signals:
     void  sigCancelPressed();
 

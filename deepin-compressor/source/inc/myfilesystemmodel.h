@@ -11,7 +11,7 @@
 #include <QTableView>
 
 namespace  MyFileSystemDefine{
-    const int  gTableHeight=32;
+    const int  gTableHeight=36;
 }
 
 QT_REQUIRE_CONFIG(filesystemmodel);

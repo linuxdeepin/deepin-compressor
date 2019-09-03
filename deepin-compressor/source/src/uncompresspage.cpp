@@ -37,30 +37,45 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     : QWidget(parent)
 {
 
+    m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer();
     m_nextbutton = new DPushButton(tr("decompress"));
-    m_nextbutton->setFixedWidth(260);
+    m_nextbutton->setFixedSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
+
+
+    m_extractpath = new DLineEdit();
+    m_extractpath->setText(tr("Extract to") + ": ~/Desktop");
+    m_extractpath->setFixedWidth(340);
+    m_pathbutton = new Lib_Edit_Button(m_extractpath);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
     buttonlayout->addWidget(m_nextbutton);
     buttonlayout->addStretch();
 
+    QHBoxLayout *pathlayout = new QHBoxLayout;
+    pathlayout->addStretch();
+    pathlayout->addWidget(m_extractpath);
+    pathlayout->addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     mainLayout->addLayout(contentLayout);
     mainLayout->addStretch();
     mainLayout->addLayout(buttonlayout);
-    mainLayout->setStretchFactor(contentLayout, 10);
+    mainLayout->addSpacing(10);
+    mainLayout->addLayout(pathlayout);
+    mainLayout->setStretchFactor(contentLayout, 9);
     mainLayout->setStretchFactor(buttonlayout, 1);
-    mainLayout->setContentsMargins(10, 10, 10, 20);
+    mainLayout->setStretchFactor(pathlayout, 1);
+    mainLayout->setContentsMargins(20, 1, 20, 20);
 
 
-    connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::onNextPress);
+    connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);
+    connect(m_pathbutton, &DPushButton::clicked, this, &UnCompressPage::onPathButoonClicked);
 }
 
 UnCompressPage::~UnCompressPage()
@@ -68,54 +83,44 @@ UnCompressPage::~UnCompressPage()
 
 }
 
-
-
-void UnCompressPage::onNextPress()
+void UnCompressPage::oneCompressPress()
 {
-    emit sigNextPress();
+    emit sigDecompressPress(m_pathstr);
 }
 
-void UnCompressPage::onAddfileSlot()
-{
-    if(0 != m_fileviewer->getPathIndex())
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Please add files in the root path!");
-        msgBox.exec();
-        return;
-    }
-
-    DFileDialog dialog;
-    dialog.setAcceptMode(DFileDialog::AcceptOpen);
-    dialog.setFileMode(DFileDialog::ExistingFiles);
-
-    QString historyDir = m_settings->value("dir").toString();
-    if (historyDir.isEmpty()) {
-        historyDir = QDir::homePath();
-    }
-    dialog.setDirectory(historyDir);
-
-    const int mode = dialog.exec();
-
-    // save the directory string to config file.
-    m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
-    qDebug()<<dialog.directoryUrl().toLocalFile();
-
-    // if click cancel button or close button.
-    if (mode != QDialog::Accepted) {
-        return;
-    }
-    onSelectedFilesSlot(dialog.selectedFiles());
-}
-
-void UnCompressPage::onSelectedFilesSlot(const QStringList &files)
-{
-    m_filelist.append(files);
-    m_fileviewer->setFileList(m_filelist);
-}
 
 void UnCompressPage::setModel(QAbstractItemModel* model)
 {
     m_model = model;
     m_fileviewer->setDecompressModel(m_model);
+}
+
+void UnCompressPage::onPathButoonClicked()
+{
+    DFileDialog dialog;
+    dialog.setAcceptMode(DFileDialog::AcceptOpen);
+    dialog.setFileMode(DFileDialog::Directory);
+    dialog.setDirectory("~/Desktop");
+
+    const int mode = dialog.exec();
+
+    if (mode != QDialog::Accepted) {
+        return;
+    }
+
+    QList<QUrl> pathlist = dialog.selectedUrls();
+
+    QString curpath = pathlist.at(0).toLocalFile();
+    m_extractpath->setText(tr("Extract to") + ": " + curpath);
+    m_pathstr = curpath;
+}
+
+void UnCompressPage::setdefaultpath(QString path){
+    m_pathstr = path;
+    m_extractpath->setText(tr("Extract to") + ": " + m_pathstr);
+}
+
+QString UnCompressPage::getDecompressPath()
+{
+    return m_pathstr;
 }

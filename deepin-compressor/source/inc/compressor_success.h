@@ -14,6 +14,8 @@ public:
     Compressor_Success(QWidget *parent = 0);
     void InitUI();
     void InitConnection();
+    void setstringinfo(QString str);
+    void setCompressPath(QString path);
 
 private:
     DPushButton* m_showfilebutton;
@@ -21,7 +23,7 @@ private:
     DLabel* m_pixmaplabel;
     DLabel* m_stringinfolabel;
     QString m_stringinfo;
-
+    QString m_path;
 public slots:
     void showfiledirSlot();
 

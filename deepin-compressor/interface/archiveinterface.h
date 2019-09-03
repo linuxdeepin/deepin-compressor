@@ -188,6 +188,7 @@ Q_SIGNALS:
     void testSuccess();
     void compressionMethodFound(const QString &method);
     void encryptionMethodFound(const QString &method);
+    void sigExtractNeedPassword();
 
     /**
      * Emitted when @p query needs to be executed on the GUI thread.

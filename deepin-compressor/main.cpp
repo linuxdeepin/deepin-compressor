@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("deepin");
     app.setApplicationVersion(DApplication::buildVersion("20190828"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-XXX-XXX/");
-    app.setProductIcon(QIcon(":/images/deepin-compressor.svg"));
+    app.setProductIcon(QIcon(":/images/compress-96.svg"));
     app.setProductName(DApplication::translate("Main", "Deepin Compressor"));
     app.setApplicationDescription(DApplication::translate("Main","Deepin Compressor is used to XXXX."));
 
@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
 
     // init modules.
     MainWindow w;
-    w.setMinimumSize(520, 440);
-    w.setWindowIcon(QIcon(":/images/deepin-compressor.svg"));
+    w.setMinimumSize(620, 465);
+    w.setWindowIcon(QIcon(":/images/compress-96.svg"));
     w.show();
 
     if (app.setSingleInstance("deepin-compressor")) {

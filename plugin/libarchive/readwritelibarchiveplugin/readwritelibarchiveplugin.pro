@@ -8,7 +8,7 @@ QT       -= gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = readwritelibarchiveplugin
 TEMPLATE = lib
-
+LIBS +=  -larchive
 DEFINES += READWRITELIBARCHIVEPLUGIN_LIBRARY
 CONFIG         += plugin
 # The following define makes your compiler emit warnings if you use

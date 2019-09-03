@@ -56,6 +56,7 @@ HEADERS +=  source/inc/homepage.h \
     interface/kcoreaddons_export.h \
     interface/kprocess.h \
     interface/kprocess_p.h \
+    source/inc/encryptionpage.h
 
 
 
@@ -73,6 +74,7 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/compressor_fail.cpp \
     source/src/myfilesystemmodel.cpp \
     source/src/archivemodel.cpp \
+    source/src/encryptionpage.cpp \
     interface/archiveinterface.cpp \
     interface/cliinterface.cpp \
     interface/archiveentry.cpp \
@@ -91,6 +93,7 @@ SOURCES +=  source/src/homepage.cpp \
     interface/cliproperties.cpp \
     interface/archiveformat.cpp \
     interface/kprocess.cpp
+
 
 
 

@@ -27,8 +27,11 @@
 #include <DPushButton>
 #include <QSettings>
 #include <QMessageBox>
+#include <DLineEdit>
 
 #include "fileViewer.h"
+#include "jobs.h"
+#include "lib_edit_button.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -41,14 +44,17 @@ public:
     ~UnCompressPage();
 
     void setModel(QAbstractItemModel* model);
+    QString getDecompressPath();
+    void setdefaultpath(QString path);
+
 
 signals:
-    void sigNextPress();
+    void sigDecompressPress(const QString& localPath);
 
 public slots:
-    void onNextPress();
-    void onAddfileSlot();
-    void onSelectedFilesSlot(const QStringList &files);
+    void oneCompressPress();
+    void onPathButoonClicked();
+
 
 private:
 
@@ -56,6 +62,10 @@ private:
     DPushButton* m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
+    DLineEdit* m_extractpath;
+    DLabel* m_pixmaplabel;
+    Lib_Edit_Button* m_pathbutton;
+    QString m_pathstr;
 
     QAbstractItemModel* m_model;
 

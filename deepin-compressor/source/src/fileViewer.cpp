@@ -71,7 +71,7 @@ fileViewer::fileViewer(QWidget *parent)
     : QWidget(parent)
 {
     setWindowTitle( tr( "File Viewer" ) );
-    setMinimumSize(520, 340);
+    setMinimumSize(580, 300);
     m_pathindex=0;
     InitUI();
     InitConnection();
@@ -110,7 +110,7 @@ void fileViewer::InitUI()
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
                                   "min-height:32px; background-color:white}");
-    pTableViewFile->setGeometry(0,0,520,340);
+    pTableViewFile->setGeometry(0,0,580,300);
 
     plabel->setText(" ...返回上一层");
     DPalette palette;
@@ -119,7 +119,7 @@ void fileViewer::InitUI()
     plabel->setPalette(palette);
     plabel->hide();
 
-    pTableViewFile->setGeometry(0,0,520,340);
+    pTableViewFile->setGeometry(0,0,580,300);
     plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
     refreshTableview();
 }

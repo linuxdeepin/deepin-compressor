@@ -16,7 +16,7 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
-    m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
+    m_compressicon = Utils::renderSVG(":/images/fail.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();

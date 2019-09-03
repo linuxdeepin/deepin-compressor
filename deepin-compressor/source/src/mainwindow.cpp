@@ -43,14 +43,14 @@ MainWindow::MainWindow(QWidget *parent)
       m_Progess(new Progress),
       m_CompressSuccess(new Compressor_Success),
       m_CompressFail(new Compressor_Fail),
+      m_encryptionpage(new EncryptionPage),
       m_settings("deepin", "deepin-font-installer"),
       m_themeAction(new QAction(tr("Dark theme"), this))
 {
+    m_encryptionjob = nullptr;
     m_model = new ArchiveModel(this);
     InitUI();
     InitConnection();
-//    PluginManager pluginmanager;
-
 }
 
 MainWindow::~MainWindow()
@@ -67,6 +67,7 @@ void MainWindow::InitUI()
     m_mainLayout->addWidget(m_Progess);
     m_mainLayout->addWidget(m_CompressSuccess);
     m_mainLayout->addWidget(m_CompressFail);
+    m_mainLayout->addWidget(m_encryptionpage);
 
     // init window flags.
     setWindowTitle(tr("Deepin Archive Manager"));
@@ -96,6 +97,8 @@ void MainWindow::InitConnection()
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished,this, &MainWindow::slotLoadingFinished);
+    connect(m_UnCompressPage, &UnCompressPage::sigDecompressPress,this, &MainWindow::slotextractSelectedFilesTo);
+    connect(m_encryptionpage, &EncryptionPage::sigExtractPassword,this, &MainWindow::SlotExtractPassword);
 }
 
 void MainWindow::initTitleBar()
@@ -110,7 +113,7 @@ void MainWindow::initTitleBar()
     m_themeAction->setCheckable(true);
 
     m_logo = new DLabel("");
-    m_logoicon = Utils::renderSVG(":/images/icon.svg", QSize(26, 26));
+    m_logoicon = Utils::renderSVG(":/images/compress-Typeface-player.svg", QSize(30, 30));
     m_logo->setPixmap(m_logoicon);
 
 
@@ -257,14 +260,30 @@ void MainWindow::refreshPage()
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
         m_titlelabel->setText(tr("Compressing"));
+        m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_ZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         m_titlelabel->setText("");
+        m_CompressSuccess->setstringinfo(tr("Compressed Successfully!"));
         break;
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         m_titlelabel->setText("");
+        break;
+    case PAGE_UNZIP_SUCCESS:
+        m_mainLayout->setCurrentIndex(5);
+        m_titlelabel->setText("");
+        m_CompressSuccess->setCompressPath(m_decompressfilepath);
+        m_CompressSuccess->setstringinfo(tr("Decompressed Successfully!"));
+        break;
+    case PAGE_UNZIP_FAIL:
+        m_mainLayout->setCurrentIndex(6);
+        m_titlelabel->setText("");
+        break;
+    case  PAGE_ENCRYPTION:
+        m_mainLayout->setCurrentIndex(7);
+        m_titlelabel->setText(m_decompressfilename);
         break;
     default:
         break;
@@ -277,6 +296,10 @@ void MainWindow::onSelected(const QStringList &files)
     if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
         m_pageid = PAGE_UNZIP;
+        QFileInfo fileinfo(files.at(0));
+        m_decompressfilename = fileinfo.fileName();
+        m_UnCompressPage->setdefaultpath(fileinfo.path());
+
         loadArchive(files.at(0));
     }
     else {
@@ -302,6 +325,100 @@ void MainWindow::loadArchive(const QString &files)
 
     if (job) {
         job->start();
+    }
+}
+
+void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
+{
+    if (!m_model) {
+        return;
+    }
+
+    if(m_encryptionjob)
+    {
+        m_encryptionjob = nullptr;
+    }
+
+    ExtractionOptions options;
+    QVector<Archive::Entry*> files;
+
+    const QString destinationDirectory = localPath;
+    qDebug()<<"destinationDirectory:"<<destinationDirectory;
+    m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
+
+    connect(m_encryptionjob, SIGNAL(percent(KJob*,ulong)),
+            this, SLOT(SlotProgress(KJob*,ulong)));
+    connect(m_encryptionjob, &KJob::result,
+            this, &MainWindow::slotExtractionDone);
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
+            this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+    connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+            m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+
+    m_encryptionjob->start();
+    m_decompressfilepath = destinationDirectory;
+
+}
+
+void MainWindow::SlotProgress(KJob *job, unsigned long percent)
+{
+    qDebug()<<percent;
+    if(PAGE_ZIPPROGRESS == m_pageid)
+    {
+        m_Progess->setprogress(percent);
+    }
+    else if((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent > 0))
+    {
+        m_pageid = PAGE_ZIPPROGRESS;
+        m_Progess->settype(DECOMPRESSING);
+        refreshPage();
+    }
+}
+
+void MainWindow::slotExtractionDone(KJob* job)
+{
+    if (job->error() && job->error() != KJob::KilledJobError) {
+
+    } else {
+        m_pageid = PAGE_UNZIP_SUCCESS;
+        refreshPage();
+    }
+    m_encryptionjob = nullptr;
+}
+
+void MainWindow::SlotNeedPassword()
+{
+
+    m_pageid = PAGE_ENCRYPTION;
+    refreshPage();
+}
+
+void MainWindow::SlotExtractPassword(QString password)
+{
+    if(m_encryptionjob)//first  time to extract
+    {
+        m_encryptionjob->archiveInterface()->setPassword(password);
+
+        m_encryptionjob->start();
+
+    }
+    else //second or more  time to extract
+    {
+        ExtractionOptions options;
+        QVector<Archive::Entry*> files;
+
+        m_encryptionjob = m_model->extractFiles(files, m_decompressfilepath, options);
+        m_encryptionjob->archiveInterface()->setPassword(password);
+        connect(m_encryptionjob, SIGNAL(percent(KJob*,ulong)),
+                this, SLOT(SlotProgress(KJob*,ulong)));
+        connect(m_encryptionjob, &KJob::result,
+                this, &MainWindow::slotExtractionDone);
+        connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
+                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+        connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+                m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+
+        m_encryptionjob->start();
     }
 }
 

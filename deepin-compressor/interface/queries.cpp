@@ -104,35 +104,35 @@ void OverwriteQuery::execute()
 
 bool OverwriteQuery::responseCancelled()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_CANCEL;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_CANCEL;
 }
 bool OverwriteQuery::responseOverwriteAll()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_OVERWRITE_ALL;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_OVERWRITE_ALL;
 }
 bool OverwriteQuery::responseOverwrite()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_OVERWRITE;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_OVERWRITE;
 }
 
 bool OverwriteQuery::responseRename()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_RENAME;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_RENAME;
 }
 
 bool OverwriteQuery::responseSkip()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_SKIP;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_SKIP;
 }
 
 bool OverwriteQuery::responseAutoSkip()
 {
-//    return m_data.value(QStringLiteral( "response" )).toInt() == KIO::R_AUTO_SKIP;
+    return m_data.value(QStringLiteral( "response" )).toInt() == R_AUTO_SKIP;
 }
 
 QString OverwriteQuery::newFilename()
 {
-//    return m_data.value(QStringLiteral( "newFilename" )).toString();
+    return m_data.value(QStringLiteral( "newFilename" )).toString();
 }
 
 void OverwriteQuery::setNoRenameMode(bool enableNoRenameMode)

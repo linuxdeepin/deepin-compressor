@@ -16,7 +16,7 @@ Compressor_Success::Compressor_Success(QWidget *parent)
 
 void Compressor_Success::InitUI()
 {
-    m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
+    m_compressicon = Utils::renderSVG(":/images/success.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
@@ -42,6 +42,16 @@ void Compressor_Success::InitConnection()
 
 void Compressor_Success::showfiledirSlot()
 {
-    DDesktopServices::showFolder(QUrl("~/Desktop", QUrl::TolerantMode));
+    DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
     emit sigQuitApp();
+}
+
+void Compressor_Success::setstringinfo(QString str)
+{
+    m_stringinfolabel->setText(str);
+}
+
+void Compressor_Success::setCompressPath(QString path)
+{
+    m_path = path;
 }

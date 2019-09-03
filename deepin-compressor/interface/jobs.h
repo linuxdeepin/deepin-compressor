@@ -53,6 +53,7 @@ public:
     Archive *archive() const;
     QString errorString() const override;
     void start() override;
+    ReadOnlyArchiveInterface *archiveInterface();
 
 protected:
     Job(Archive *archive, ReadOnlyArchiveInterface *interface);
@@ -61,7 +62,7 @@ protected:
     ~Job() override;
     bool doKill() override;
 
-    ReadOnlyArchiveInterface *archiveInterface();
+
 
     void connectToArchiveInterfaceSignals();
 
@@ -82,6 +83,7 @@ Q_SIGNALS:
     void entryRemoved(const QString & entry);
     void newEntry(Archive::Entry*);
     void userQuery(Query*);
+    void sigWrongPassword();
 
 private:
     Archive *m_archive;
@@ -229,6 +231,9 @@ public:
 
 public Q_SLOTS:
     void doWork() override;
+
+signals:
+    void sigExtractJobPassword();
 
 private:
 

@@ -1,13 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/icon.svg</file>
         <file>images/split_line.svg</file>
         <file>images/close_normal.svg</file>
         <file>images/close_hover.svg</file>
         <file>images/close_press.svg</file>
-        <file>images/font-x-generic.svg</file>
-        <file>images/font_loaded.svg</file>
-        <file>images/font_unload.svg</file>
-        <file>images/deepin-compressor.svg</file>
+        <file>images/file.svg</file>
+        <file>images/lock.svg</file>
+        <file>images/folder-24 .svg</file>
+        <file>images/compress-96.svg</file>
+        <file>images/fail.svg</file>
+        <file>images/folder-128 .svg</file>
+        <file>images/deepin_logo.svg</file>
+        <file>images/Compression Packet.svg</file>
+        <file>images/compress-Typeface-player.svg</file>
+        <file>images/success.svg</file>
     </qresource>
 </RCC>

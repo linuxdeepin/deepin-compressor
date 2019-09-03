@@ -36,6 +36,35 @@
 #include <QMutex>
 #include <QVariant>
 
+enum RenameDialog_Result {
+    Result_Cancel = 0,
+    Result_Rename = 1,
+    Result_Skip = 2,
+    Result_AutoSkip = 3,
+    Result_Overwrite = 4,
+    Result_OverwriteAll = 5,
+    Result_Resume = 6,
+    Result_ResumeAll = 7,
+    Result_AutoRename = 8,
+    Result_Retry = 9,
+
+    // @deprecated since 5.0, use the RenameDialog_Option enum values
+    R_CANCEL = Result_Cancel,
+    R_RENAME = Result_Rename,
+    R_SKIP = Result_Skip,
+    R_AUTO_SKIP = Result_AutoSkip,
+    R_OVERWRITE = Result_Overwrite,
+    R_OVERWRITE_ALL = Result_OverwriteAll,
+    R_RESUME = Result_Resume,
+    R_RESUME_ALL = Result_ResumeAll,
+    R_AUTO_RENAME = Result_AutoRename,
+    R_RETRY = Result_Retry,
+
+    S_CANCEL = Result_Cancel,
+    S_SKIP = Result_Skip,
+    S_AUTO_SKIP = Result_AutoSkip,
+    S_RETRY = Result_Retry
+};
 
 typedef QHash<QString, QVariant> QueryData;
 
@@ -52,6 +81,7 @@ public:
      * Useful for worker threads that need to show a dialog.
      */
     void waitForResponse();
+    void setResponse(const QVariant &response);
 
     QVariant response() const;
 
@@ -62,7 +92,7 @@ protected:
     Query();
     virtual ~Query() {}
 
-    void setResponse(const QVariant &response);
+
 
     QueryData m_data;
 

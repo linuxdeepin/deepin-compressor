@@ -36,6 +36,7 @@
 #include <QProcess>
 #include <QRegularExpression>
 
+
 class KProcess;
 
 class QDir;
@@ -226,6 +227,8 @@ private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void continueCopying(bool result);
     void onEntry(Archive::Entry *archiveEntry);
+
+
 };
 
 

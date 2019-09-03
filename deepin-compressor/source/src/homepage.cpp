@@ -33,10 +33,10 @@ HomePage::HomePage(QWidget *parent)
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
 {
-    m_unloadPixmap = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
-    m_loadedPixmap = Utils::renderSVG(":/images/font_loaded.svg", QSize(160, 160));
+    m_unloadPixmap = Utils::renderSVG(":/images/folder-128 .svg", QSize(128, 128));
+    m_loadedPixmap = Utils::renderSVG(":/images/folder-128 .svg", QSize(128, 128));
 
-    m_iconLabel->setFixedSize(160, 160);
+    m_iconLabel->setFixedSize(128, 128);
     m_iconLabel->setPixmap(m_unloadPixmap);
     m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
     m_tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");

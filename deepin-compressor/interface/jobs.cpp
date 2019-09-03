@@ -170,7 +170,11 @@ void Job::onError(const QString & message, const QString & details)
 {
     Q_UNUSED(details)
 
-//    qCDebug(ARK) << "Error emitted:" << message;
+    qDebug() << "Error emitted:" << message;
+    if(message.contains("wrongpassword"))
+    {
+        emit sigWrongPassword();
+    }
     setError(KJob::UserDefinedError);
     setErrorText(message);
 }
@@ -490,7 +494,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry*> &entries, const QString &d
     , m_destinationDir(destinationDir)
     , m_options(options)
 {
-
+    connect( interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
 }
 
 void ExtractJob::doWork()

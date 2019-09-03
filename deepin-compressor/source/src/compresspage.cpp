@@ -40,7 +40,7 @@ CompressPage::CompressPage(QWidget *parent)
     mainLayout->addLayout(buttonlayout);
     mainLayout->setStretchFactor(contentLayout, 10);
     mainLayout->setStretchFactor(buttonlayout, 1);
-    mainLayout->setContentsMargins(10, 10, 10, 20);
+    mainLayout->setContentsMargins(20, 1, 20, 20);
 
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat);

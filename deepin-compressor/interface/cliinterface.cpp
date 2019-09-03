@@ -102,12 +102,13 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QSt
     m_extractDestDir = destinationDirectory;
 
 
-
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint() && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
-        if (!passwordQuery()) {
-            return false;
-        }
+        emit sigExtractNeedPassword();
+        return false;
+//        if (!passwordQuery()) {
+//            return false;
+//        }
     }
 
     QUrl destDir = QUrl(destinationDirectory);
@@ -703,17 +704,31 @@ void CliInterface::killProcess(bool emitFinished)
 
 bool CliInterface::passwordQuery()
 {
+//    PasswordNeededQuery query(filename());
+//    query.execute();
+
+//    if (query.responseCancelled()) {
+//        emit cancelled();
+//        // There is no process running, so finished() must be emitted manually.
+//        emit finished(false);
+//        return false;
+//    }
+
+//    setPassword(query.password());
+
     PasswordNeededQuery query(filename());
-    query.execute();
+
+//    query.waitForResponse();
+
 
     if (query.responseCancelled()) {
         emit cancelled();
-        // There is no process running, so finished() must be emitted manually.
+        // Process is gone, so we emit finished() manually and we return true.
         emit finished(false);
         return false;
     }
 
-    setPassword(query.password());
+//    setPassword(query.password());
     return true;
 }
 
@@ -863,7 +878,7 @@ bool CliInterface::handleLine(const QString& line)
         if (isWrongPasswordMsg(line)) {
             qDebug() << "Wrong password!";
             setPassword(QString());
-            emit error(tr("@info", "Extraction failed: Incorrect password"));
+            emit error("wrongpassword");
             return false;
         }
 

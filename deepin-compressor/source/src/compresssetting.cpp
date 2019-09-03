@@ -27,7 +27,7 @@ void CompressSetting::InitUI()
 
 
     QWidget* leftwidget = new QWidget();
-    m_compressicon = Utils::renderSVG(":/images/font_unload.svg", QSize(160, 160));
+    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_compresstype = new QComboBox();
