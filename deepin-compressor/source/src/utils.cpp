@@ -90,17 +90,22 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
 bool Utils::isCompressed_file(const QString &filePath)
 {
-    QString file_suffix ;
-    QFileInfo fileinfo;
+    QMimeType mimetype = determineMimeType(filePath);
+    qDebug()<< mimetype.name();
+    QString filetype = mimetype.name();
     bool ret = true;
-    fileinfo = QFileInfo(filePath);
-    file_suffix = fileinfo.suffix();
-    qDebug()<<file_suffix;
-    if(file_suffix.compare("7z") && file_suffix.compare("ar") && file_suffix.compare("cbz") && file_suffix.compare("cpio")
-            && file_suffix.compare("exe")&& file_suffix.compare("iso")&& file_suffix.compare("tar")
-            && file_suffix.compare("Z")&& file_suffix.compare("bz2")&&file_suffix.compare("gz")&& file_suffix.compare("lz")
-            && file_suffix.compare("lzma")&&file_suffix.compare("lzo")&&file_suffix.compare("xz")&&file_suffix.compare("zip")
-            && file_suffix.compare("rar"))
+
+
+    if(filetype.compare("application/x-7z-compressed") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")
+            && filetype.compare("application/x-java-archive")&& filetype.compare("application/x-deb")&& filetype.compare("application/x-cd-image")
+            && filetype.compare("application/x-bcpio")&& filetype.compare("application/x-cpio")&&filetype.compare("application/x-cpio-compressed")&& filetype.compare("application/x-sv4cpio")
+            && filetype.compare("application/x-sv4crc")&&filetype.compare("application/x-rpm")&&filetype.compare("application/x-source-rpm")&&filetype.compare("application/vnd.debian.binary-package")
+            && filetype.compare("application/vnd.ms-cab-compressed")&& filetype.compare("application/x-xar")&& filetype.compare("application/x-iso9660-appimage")
+            && filetype.compare("application/x-tarz")&& filetype.compare("application/x-tar")&& filetype.compare("application/x-compressed-tar")&& filetype.compare("application/x-bzip-compressed-tar")
+            && filetype.compare("application/x-xz-compressed-tar")&& filetype.compare("application/x-lzma-compressed-tar")&& filetype.compare("application/x-lzip-compressed-tar")
+            && filetype.compare("application/x-tzo")&& filetype.compare("application/x-lrzip-compressed-tar")&& filetype.compare("application/x-lz4-compressed-tar")
+            && filetype.compare("application/x-zstd-compressed-tar")&& filetype.compare("application/x-bzip")&& filetype.compare("application/gzip")&& filetype.compare("application/x-lzma")
+            && filetype.compare("application/x-xz")&& filetype.compare("application/zip"))
     {
         ret = false;
     }

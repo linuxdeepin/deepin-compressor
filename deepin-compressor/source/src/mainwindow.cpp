@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_themeAction(new QAction(tr("Dark theme"), this))
 {
     m_encryptionjob = nullptr;
+    m_encryptiontype = Encryption_NULL;
     m_model = new ArchiveModel(this);
     InitUI();
     InitConnection();
@@ -295,7 +296,7 @@ void MainWindow::onSelected(const QStringList &files)
 {
     if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
-        m_pageid = PAGE_UNZIP;
+
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -305,9 +306,10 @@ void MainWindow::onSelected(const QStringList &files)
     else {
         m_pageid = PAGE_ZIP;
         emit sigZipSelectedFiles(files);
+        refreshPage();
     }
 
-    refreshPage();
+
 }
 
 void MainWindow::slotLoadingFinished(KJob *job)
@@ -316,20 +318,28 @@ void MainWindow::slotLoadingFinished(KJob *job)
         return;
     }
     m_UnCompressPage->setModel(m_model);
+    m_pageid = PAGE_UNZIP;
+    refreshPage();
 }
 
 
 void MainWindow::loadArchive(const QString &files)
 {
-    auto job = m_model->loadArchive(files, "", m_model);
+    m_loadfile = files;
+    m_encryptiontype = Encryption_Load;
+    m_loadjob = (LoadJob*)m_model->loadArchive(files, "", m_model);
 
-    if (job) {
-        job->start();
+    connect(m_loadjob, &LoadJob::sigLodJobPassword,
+            this, &MainWindow::SlotNeedPassword);
+
+    if (m_loadjob) {
+        m_loadjob->start();
     }
 }
 
 void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
 {
+    m_encryptiontype = Encryption_Extract;
     if (!m_model) {
         return;
     }
@@ -395,6 +405,18 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
+    if(Encryption_Load == m_encryptiontype)
+    {
+        LoadPassword(password);
+    }
+    else if(Encryption_Extract == m_encryptiontype)
+    {
+        ExtractPassword(password);
+    }
+}
+
+void MainWindow::ExtractPassword(QString password)
+{
     if(m_encryptionjob)//first  time to extract
     {
         m_encryptionjob->archiveInterface()->setPassword(password);
@@ -419,6 +441,19 @@ void MainWindow::SlotExtractPassword(QString password)
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
 
         m_encryptionjob->start();
+    }
+}
+void MainWindow::LoadPassword(QString password)
+{
+    m_encryptiontype = Encryption_Load;
+    m_loadjob = (LoadJob*)m_model->loadArchive(m_loadfile, "", m_model);
+
+    connect(m_loadjob, &LoadJob::sigWrongPassword,
+            m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+
+    m_loadjob->archiveInterface()->setPassword(password);
+    if (m_loadjob) {
+        m_loadjob->start();
     }
 }
 

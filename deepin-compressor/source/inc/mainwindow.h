@@ -53,6 +53,12 @@ enum Page_ID{
     PAGE_MAX
 };
 
+enum EncryptionType{
+    Encryption_NULL,
+    Encryption_Load,
+    Encryption_Extract,
+};
+
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
@@ -65,6 +71,9 @@ public:
     void InitConnection();
     void initTitleBar();
     void loadArchive(const QString &files);
+
+    void ExtractPassword(QString password);
+    void LoadPassword(QString password);
 
 
 protected:
@@ -103,6 +112,7 @@ private:
     ArchiveModel         *m_model;
     QString m_decompressfilename;
     QString m_decompressfilepath;
+    QString m_loadfile;
 
 private:
     DLabel* m_logo;
@@ -126,6 +136,8 @@ private:
     DPushButton* m_titlebutton;
 
     ExtractJob* m_encryptionjob;
+    LoadJob* m_loadjob;
+    EncryptionType m_encryptiontype;
 };
 
 #endif

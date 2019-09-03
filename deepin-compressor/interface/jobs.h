@@ -143,6 +143,9 @@ private:
 
 private Q_SLOTS:
     void onNewEntry(const Archive::Entry*);
+
+signals:
+    void sigLodJobPassword();
 };
 
 /**

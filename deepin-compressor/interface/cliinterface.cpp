@@ -893,26 +893,30 @@ bool CliInterface::handleLine(const QString& line)
         if (isPasswordPrompt(line)) {
             qDebug() << "Found a password prompt";
 
-            PasswordNeededQuery query(filename());
-            query.execute();
+//            PasswordNeededQuery query(filename());
+//            query.execute();
 
-            if (query.responseCancelled()) {
-                emit cancelled();
-                return false;
-            }
+//            if (query.responseCancelled()) {
+//                emit cancelled();
+//                return false;
+//            }
 
-            setPassword(query.password());
+//            setPassword(query.password());
 
-            const QString response(password() + QLatin1Char('\n'));
-            writeToProcess(response.toLocal8Bit());
+//            const QString response(password() + QLatin1Char('\n'));
+//            writeToProcess(response.toLocal8Bit());
+            emit sigExtractNeedPassword();
+            emit error("nopassword");
+//            killProcess(true);
+//            emit finished(false);
 
-            return true;
+            return false;
         }
 
         if (isWrongPasswordMsg(line)) {
             qDebug() << "Wrong password!";
             setPassword(QString());
-            emit error(tr("Incorrect password."));
+            emit error("wrongpassword");
             return false;
         }
 

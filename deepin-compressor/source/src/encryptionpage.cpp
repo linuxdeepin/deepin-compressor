@@ -56,4 +56,6 @@ void EncryptionPage::nextbuttonClicked()
 void EncryptionPage::wrongPassWordSlot()
 {
     qDebug()<<"wrongPassWordSlot";
+    m_password->setAlert(true);
+    m_password->showAlertMessage(tr("密码错误"));
 }

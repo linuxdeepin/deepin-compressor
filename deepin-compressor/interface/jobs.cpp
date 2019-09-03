@@ -171,7 +171,7 @@ void Job::onError(const QString & message, const QString & details)
     Q_UNUSED(details)
 
     qDebug() << "Error emitted:" << message;
-    if(message.contains("wrongpassword"))
+    if(message.contains(QLatin1String("wrongpassword")))
     {
         emit sigWrongPassword();
     }
@@ -259,6 +259,7 @@ void LoadJob::doWork()
 {
     emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
     connectToArchiveInterfaceSignals();
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
 
     bool ret = archiveInterface()->list();
 
