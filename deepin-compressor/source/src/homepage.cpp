@@ -29,7 +29,7 @@ HomePage::HomePage(QWidget *parent)
       m_iconLabel(new QLabel),
       m_tipsLabel(new QLabel(tr("Drag file(folder) here"))),
       m_splitLine(new QLabel),
-      m_chooseBtn(new DLinkButton(tr("Select file"))),
+      m_chooseBtn(new DCommandLinkButton(tr("Select file"))),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
 {
@@ -57,7 +57,7 @@ HomePage::HomePage(QWidget *parent)
     m_layout->addStretch();
     m_layout->setSpacing(0);
 
-    connect(m_chooseBtn, &DLinkButton::clicked, this, &HomePage::onChooseBtnClicked);
+    connect(m_chooseBtn, &DCommandLinkButton::clicked, this, &HomePage::onChooseBtnClicked);
 }
 
 HomePage::~HomePage()

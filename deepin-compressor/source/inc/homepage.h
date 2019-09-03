@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QSettings>
-#include "dlinkbutton.h"
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,7 +52,7 @@ private:
     QLabel *m_iconLabel;
     QLabel *m_tipsLabel;
     QLabel *m_splitLine;
-    DLinkButton *m_chooseBtn;
+    DCommandLinkButton *m_chooseBtn;
     QSettings *m_settings;
 };
 

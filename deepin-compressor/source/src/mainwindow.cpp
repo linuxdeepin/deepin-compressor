@@ -153,7 +153,7 @@ void MainWindow::initTitleBar()
     m_titleFrame->setLayout(titlemainLayout);
     m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
     titlebar()->setContentsMargins(0, 0, 0, 0);
-    titlebar()->setCustomWidget(m_titleFrame, Qt::AlignCenter, false);
+    titlebar()->setCustomWidget(m_titleFrame, false);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
