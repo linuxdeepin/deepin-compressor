@@ -11,6 +11,7 @@
 #include <dpasswordedit.h>
 #include <QVBoxLayout>
 #include "lib_edit_button.h"
+#include "pluginmanager.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -51,6 +52,10 @@ private:
     DLabel* m_encryptedfilelistlabel;
 
     uint m_splitnum;
+
+    PluginManager m_pluginManger;
+    QStringList m_supportedMimeTypes;
+
 
 signals:
     void sigCompressPressed(QMap<QString, QString> &Args);

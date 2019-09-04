@@ -163,6 +163,7 @@ void Job::connectToArchiveInterfaceSignals()
 
 void Job::onCancelled()
 {
+    qDebug() << "Cancelled emitted";
     setError(KJob::KilledJobError);
 }
 
@@ -201,6 +202,7 @@ void Job::onEntryRemoved(const QString & path)
 
 void Job::onFinished(bool result)
 {
+    qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
 
     if (archive() && !archive()->isValid()) {
         setError(KJob::UserDefinedError);
@@ -214,7 +216,7 @@ void Job::onFinished(bool result)
 void Job::onUserQuery(Query *query)
 {
     if (archiveInterface()->waitForFinishedSignal()) {
-
+        qDebug() << "Plugins run from the main thread should call directly query->execute()";
     }
 
     emit userQuery(query);
@@ -228,6 +230,7 @@ bool Job::doKill()
     }
 
     if (d->isRunning()) {
+        qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
         d->requestInterruption();
         d->wait(1000);
     }
@@ -350,7 +353,7 @@ BatchExtractJob::BatchExtractJob(LoadJob *loadJob, const QString &destination, b
     , m_autoSubfolder(autoSubfolder)
     , m_preservePaths(preservePaths)
 {
-
+    qDebug() << "BatchExtractJob job instance";
 }
 
 void BatchExtractJob::doWork()
@@ -434,6 +437,7 @@ void BatchExtractJob::setupDestination()
         // Special case for single folder RPM archives.
         // We don't want the autodetected folder to have a meaningless "usr" name.
         if (isSingleFolderRPM && subfolderName == QStringLiteral("usr")) {
+            qDebug() << "Detected single folder RPM archive. Using archive basename as subfolder name";
             subfolderName = QFileInfo(archive()->fileName()).completeBaseName();
         }
 
@@ -452,7 +456,7 @@ CreateJob::CreateJob(Archive *archive, const QVector<Archive::Entry*> &entries, 
     , m_entries(entries)
     , m_options(options)
 {
-
+    qDebug() << "Created job instance";
 }
 
 void CreateJob::enableEncryption(const QString &password, bool encryptHeader)
@@ -495,6 +499,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry*> &entries, const QString &d
     , m_destinationDir(destinationDir)
     , m_options(options)
 {
+	qDebug() << "ExtractJob job instance";
     connect( interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
 }
 
@@ -517,6 +522,10 @@ void ExtractJob::doWork()
 
     connectToArchiveInterfaceSignals();
 
+    qDebug() << "Starting extraction with" << m_entries.count() << "selected files."
+             << m_entries
+             << "Destination dir:" << m_destinationDir
+             << "Options:" << m_options;
 
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 
@@ -578,6 +587,7 @@ void TempExtractJob::doWork()
 
     connectToArchiveInterfaceSignals();
 
+    qDebug() << "Extracting:" << m_entry;
 
     bool ret = archiveInterface()->extractFiles({m_entry}, extractionDir(), extractionOptions());
 
@@ -594,19 +604,19 @@ QString TempExtractJob::extractionDir() const
 PreviewJob::PreviewJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : TempExtractJob(entry, passwordProtectedHint, interface)
 {
-
+    qDebug() << "PreviewJob job instance";
 }
 
 OpenJob::OpenJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : TempExtractJob(entry, passwordProtectedHint, interface)
 {
-
+    qDebug() << "OpenJob job instance";
 }
 
 OpenWithJob::OpenWithJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : OpenJob(entry, passwordProtectedHint, interface)
 {
-
+    qDebug() << "OpenWithJob job instance";
 }
 
 AddJob::AddJob(const QVector<Archive::Entry*> &entries, const Archive::Entry *destination, const CompressionOptions& options, ReadWriteArchiveInterface *interface)
@@ -615,7 +625,7 @@ AddJob::AddJob(const QVector<Archive::Entry*> &entries, const Archive::Entry *de
     , m_destination(destination)
     , m_options(options)
 {
-
+    qDebug() << "AddJob job instance";
 }
 
 void AddJob::doWork()
@@ -624,6 +634,7 @@ void AddJob::doWork()
     const QString globalWorkDir = m_options.globalWorkDir();
     const QDir workDir = globalWorkDir.isEmpty() ? QDir::current() : QDir(globalWorkDir);
     if (!globalWorkDir.isEmpty()) {
+        qDebug() << "GlobalWorkDir is set, changing dir to " << globalWorkDir;
         m_oldWorkingDir = QDir::currentPath();
         QDir::setCurrent(globalWorkDir);
     }
@@ -643,12 +654,13 @@ void AddJob::doWork()
         }
     }
 
+    qDebug() << "Going to add" << totalCount << "entries, counted in" << timer.elapsed() << "ms";
 
     const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
     emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
-        qobject_cast<ReadWriteArchiveInterface*>(archiveInterface());
+        (ReadWriteArchiveInterface*)(archiveInterface());
 
     Q_ASSERT(m_writeInterface);
 
@@ -690,12 +702,12 @@ MoveJob::MoveJob(const QVector<Archive::Entry*> &entries, Archive::Entry *destin
     , m_destination(destination)
     , m_options(options)
 {
-
+    qDebug() << "MoveJob job instance";
 }
 
 void MoveJob::doWork()
 {
-
+    qDebug() << "Going to move" << m_entries.count() << "file(s)";
 
     QString desc = tr("Moving a file", "Moving %1 files", m_entries.count());
     emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
@@ -728,12 +740,12 @@ CopyJob::CopyJob(const QVector<Archive::Entry*> &entries, Archive::Entry *destin
     , m_destination(destination)
     , m_options(options)
 {
-
+    qDebug() << "CopyJob job instance";
 }
 
 void CopyJob::doWork()
 {
-
+    qDebug() << "Going to copy" << m_entries.count() << "file(s)";
 
     QString desc = tr("Copying a file", "Copying %1 files", m_entries.count());
     emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
@@ -814,6 +826,7 @@ TestJob::TestJob(ReadOnlyArchiveInterface *interface)
 
 void TestJob::doWork()
 {
+    qDebug() << "Job started";
 
     emit description(this, tr("Testing archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
 

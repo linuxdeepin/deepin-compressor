@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <DFileDialog>
 #include <QFormLayout>
+#include <QMimeDatabase>
+#include <QStandardPaths>
 
 
 static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","iso","tar","tar.7z","tar.Z","tar.bz2","tar.gz","tar.lz","tar.lzma","tar.lzo","tar.xz"};
@@ -10,7 +12,8 @@ static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
 {
-    m_splitnum = 1;
+    m_splitnum = 0;
+    m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     InitUI();
     InitConnection();
 }
@@ -30,16 +33,21 @@ void CompressSetting::InitUI()
     m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
-    m_compresstype = new QComboBox();
+    m_compresstype = new DComboBox();
     m_compresstype->setFixedSize(80, 40);
-    m_compresstype->addItems(compress_typelist);
+
+    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+        m_compresstype->addItem(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
+    }
+    m_compresstype->setCurrentText("zip");
 
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedWidth(230);
     m_filename->setText(tr("untitled file"));
     m_savepath = new DLineEdit();
-    m_savepath->setText("~/Desktop");
+
+    m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setFixedWidth(230);
     m_pathbutton = new Lib_Edit_Button(m_savepath);
 
@@ -146,14 +154,13 @@ void CompressSetting::onPathButoonClicked()
 void CompressSetting::onNextButoonClicked()
 {
     QMap<QString, QString> m_openArgs;
-    const QUrl saveFileUrl = m_savepath->text() + "/" + m_filename->text() + "." + m_compresstype->currentText();
     const QString password = m_password->text();
-    const QString fixedMimeType = m_compresstype->currentText();
+    const QString fixedMimeType = m_supportedMimeTypes.at(m_compresstype->currentIndex());
 
 
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
-    m_openArgs[QStringLiteral("compressionLevel")] = 5;//5 is default
+    m_openArgs[QStringLiteral("compressionLevel")] = "5";//5 is default
 
     if (m_splitnum > 0) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(m_splitnum);
@@ -171,16 +178,20 @@ void CompressSetting::onNextButoonClicked()
         m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("true");
     }
 
-//    openUrl(saveFileUrl);
+    m_openArgs[QStringLiteral("localFilePath")] = m_savepath->text();
+    m_openArgs[QStringLiteral("filename")] = m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+
 
     emit sigCompressPressed(m_openArgs);
 
-    m_openArgs.remove(QStringLiteral("showExtractDialog"));
+
     m_openArgs.remove(QStringLiteral("createNewArchive"));
     m_openArgs.remove(QStringLiteral("fixedMimeType"));
     m_openArgs.remove(QStringLiteral("compressionLevel"));
     m_openArgs.remove(QStringLiteral("encryptionPassword"));
     m_openArgs.remove(QStringLiteral("encryptHeader"));
+    m_openArgs.remove(QStringLiteral("localFilePath"));
+    m_openArgs.remove(QStringLiteral("filename"));
 }
 
 void CompressSetting::onAdvanceButtonClicked(bool status)

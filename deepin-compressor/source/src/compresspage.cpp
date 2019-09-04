@@ -103,6 +103,11 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
     m_fileviewer->setFileList(m_filelist);
 }
 
+QStringList CompressPage::getCompressFilelist()
+{
+    return m_filelist;
+}
+
 
 
 

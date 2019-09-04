@@ -383,6 +383,12 @@ void MainWindow::SlotProgress(KJob *job, unsigned long percent)
         m_Progess->settype(DECOMPRESSING);
         refreshPage();
     }
+    else if((PAGE_ZIPSET == m_pageid) && (percent < 100) && (percent > 0))
+    {
+        m_pageid = PAGE_ZIPPROGRESS;
+        m_Progess->settype(COMPRESSING);
+        refreshPage();
+    }
 }
 
 void MainWindow::slotExtractionDone(KJob* job)
@@ -464,11 +470,122 @@ void MainWindow::onCompressNext()
     refreshPage();
 }
 
-void MainWindow::onCompressPressed()
+void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
 {
-    m_pageid = PAGE_ZIPPROGRESS;
-    refreshPage();
+    creatArchive(Args);
 }
+
+void MainWindow::creatArchive(QMap<QString, QString> &Args)
+{
+//    const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
+//    m_model->createEmptyArchive(Args[QStringLiteral("localFilePath")], fixedMimeType, m_model);
+
+//    if (Args.contains(QStringLiteral("volumeSize"))) {
+//        m_model->archive()->setMultiVolume(true);
+//    }
+
+//    const QString password = Args[QStringLiteral("encryptionPassword")];
+//    if (!password.isEmpty()) {
+//        m_model->encryptArchive(password,
+//                                Args[QStringLiteral("encryptHeader")] == QLatin1String("true"));
+//    }
+
+//    const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
+
+//    if (!m_model->archive() || filesToAdd.isEmpty()) {
+//        return;
+//    }
+
+
+//    // We need to override the global options with a working directory.
+//    CompressionOptions compOptions = m_compressionOptions;
+
+//    // Now take the absolute path of the parent directory.
+//    globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+
+//    qDebug() << "Detected GlobalWorkDir to be " << globalWorkDir;
+//    compOptions.setGlobalWorkDir(globalWorkDir);
+
+//    AddJob *job = m_model->addFiles(m_jobTempEntries, destination, compOptions);
+//    if (!job) {
+//        qDeleteAll(m_jobTempEntries);
+//        m_jobTempEntries.clear();
+//        return;
+//    }
+
+//    connect(job, &KJob::result,
+//            this, &Part::slotAddFilesDone);
+//    registerJob(job);
+//    job->start();
+
+
+
+
+
+    const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
+    const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
+    const QString password = Args[QStringLiteral("encryptionPassword")];
+    const QString enableHeaderEncryption = Args[QStringLiteral("encryptHeader")];
+    const QString filename = Args[QStringLiteral("localFilePath")] + "/" + Args[QStringLiteral("filename")];
+    m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
+
+    if (filename.isEmpty()) {
+        qDebug()<<"filename.isEmpty()";
+        return;
+    }
+
+    CompressionOptions options;
+    options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
+//    options.setCompressionMethod(Args[QStringLiteral("compressionMethod")]);
+    options.setEncryptionMethod(Args[QStringLiteral("encryptionMethod")]);
+    options.setVolumeSize(Args[QStringLiteral("volumeSize")].toULongLong());
+
+    QVector<Archive::Entry*> all_entries;
+
+//    m_model->createEmptyArchive(filename, fixedMimeType, m_model);
+
+    foreach(QString file, filesToAdd)
+    {
+        Archive::Entry *entry = new Archive::Entry();
+        entry->setFullPath(file);
+        all_entries.append(entry);
+    }
+
+
+    if (all_entries.isEmpty()) {
+        qDebug()<<"all_entries.isEmpty()";
+        return;
+    }
+
+
+
+
+
+//    CreateJob* createJob = m_model->archive()->create(filename, fixedMimeType, all_entries, options, this);
+    CreateJob* createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
+
+    if (!password.isEmpty()) {
+        createJob->enableEncryption(password, enableHeaderEncryption.compare("true")?false:true);
+    }
+
+    connect(createJob, &KJob::result, this, &MainWindow::slotCompressFinished);
+    connect(createJob, SIGNAL(percent(KJob*,ulong)),
+            this, SLOT(SlotProgress(KJob*,ulong)));
+    createJob->start();
+
+}
+
+void MainWindow::slotCompressFinished(KJob *job)
+{
+    qDebug() << "job finished";
+
+    if (job->error() && !job->errorString().isEmpty()) {
+    }
+    m_pageid = PAGE_ZIP_SUCCESS;
+    refreshPage();
+
+}
+
 
 void MainWindow::onCancelCompressPressed()
 {

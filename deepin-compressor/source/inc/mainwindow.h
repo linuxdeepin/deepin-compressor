@@ -71,6 +71,7 @@ public:
     void InitConnection();
     void initTitleBar();
     void loadArchive(const QString &files);
+    void creatArchive(QMap<QString, QString> &Args);
 
     void ExtractPassword(QString password);
     void LoadPassword(QString password);
@@ -89,7 +90,7 @@ private slots:
     void refreshPage();
     void onSelected(const QStringList &);
     void onCompressNext();
-    void onCompressPressed();
+    void onCompressPressed(QMap<QString, QString> &Args);
     void onCancelCompressPressed();
     void onTitleButtonPressed();
 
@@ -99,6 +100,9 @@ private slots:
     void SlotProgress(KJob *job, unsigned long percent);
     void SlotNeedPassword();
     void SlotExtractPassword(QString password);
+    void slotCompressFinished(KJob *job);
+
+
 
 signals:
     void sigquitApp();

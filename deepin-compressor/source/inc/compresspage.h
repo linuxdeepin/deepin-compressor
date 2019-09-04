@@ -22,6 +22,7 @@ class CompressPage : public QWidget
 public:
     CompressPage(QWidget *parent = 0);
     ~CompressPage();
+    QStringList getCompressFilelist();
 
 signals:
     void sigNextPress();
