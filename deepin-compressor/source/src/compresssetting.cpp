@@ -12,7 +12,6 @@ static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
 {
-    m_splitnum = 0;
     m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     InitUI();
     InitConnection();
@@ -72,18 +71,15 @@ void CompressSetting::InitUI()
     m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
     m_splitcompress = new DLabel(tr("Separate compression"));
     m_splitlayout = new QHBoxLayout();
-    m_splitnumedit = new DLineEdit();
-    m_splitnumedit->setValidator(new QIntValidator(D_COMPRESS_SPLIT_MIN, D_COMPRESS_SPLIT_MIX, this));
-    m_splitnumedit->setText(QString::number(m_splitnum));
-    m_plusbutton = new DPushButton();
-    m_plusbutton->setText("+");
-    m_plusbutton->setFixedWidth(40);
-    m_minusbutton = new DPushButton();
-    m_minusbutton->setText("-");
-    m_minusbutton->setFixedWidth(40);
+    m_splitnumedit = new DDoubleSpinBox();
+    m_splitnumedit->setSuffix("megabytes");
+    m_splitnumedit->setRange(0.1, 1000000);
+    m_splitnumedit->setSingleStep(0.1);
+    m_splitnumedit->setDecimals(1);
+    m_splitnumedit->setValue(0.0);
+
     m_splitlayout->addWidget(m_splitnumedit);
-    m_splitlayout->addWidget(m_plusbutton);
-    m_splitlayout->addWidget(m_minusbutton);
+
     m_splitlayout->setStretch(0,4);
     m_splitlayout->setStretch(1,1);
     m_splitlayout->setStretch(2,1);
@@ -120,14 +116,16 @@ void CompressSetting::InitUI()
     mainLayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
 
 
+    m_splitnumedit->setEnabled(false);
+    m_password->setEnabled(true);
+    m_file_secret->setEnabled(true);
 }
 void CompressSetting::InitConnection()
 {
     connect(m_pathbutton, &DPushButton::clicked, this, &CompressSetting::onPathButoonClicked);
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
-    connect(m_plusbutton, &DPushButton::clicked, this, &CompressSetting::onPlusButoonClicked);
-    connect(m_minusbutton, &DPushButton::clicked, this, &CompressSetting::onLessButoonClicked);
+    connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
 }
 
 
@@ -162,12 +160,14 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
     m_openArgs[QStringLiteral("compressionLevel")] = "5";//5 is default
 
-    if (m_splitnum > 0) {
-        m_openArgs[QStringLiteral("volumeSize")] = QString::number(m_splitnum);
+    qDebug()<<m_splitnumedit->value();
+    if (m_splitnumedit->value() > 0) {
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast<int>(m_splitnumedit->value()* 1024));
     }
 //    if (!dialog.data()->compressionMethod().isEmpty()) {
 //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
 //    }
+    qDebug()<<m_openArgs[QStringLiteral("volumeSize")];
     if (!m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";//5 is default
     }
@@ -205,8 +205,7 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
         m_splitnumedit->setVisible(true);
-        m_plusbutton->setVisible(true);
-        m_minusbutton->setVisible(true);
+
         m_fileLayout->addWidget(m_encryptedlabel);
         m_fileLayout->addWidget(m_password);
         m_fileLayout->addLayout(m_file_secretlayout);
@@ -227,27 +226,30 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(false);
         m_splitcompress->setVisible(false);
         m_splitnumedit->setVisible(false);
-        m_plusbutton->setVisible(false);
-        m_minusbutton->setVisible(false);
+
     }
 }
 
 
-void CompressSetting::onPlusButoonClicked()
+void CompressSetting::ontypeChanged(int index)
 {
-    if(m_splitnum < D_COMPRESS_SPLIT_MIX)
+    qDebug()<<index;
+    if(0 == index)
     {
-        m_splitnum ++;
-        m_splitnumedit->setText(QString::number(m_splitnum));
+        m_splitnumedit->setEnabled(true);
+        m_password->setEnabled(true);
+        m_file_secret->setEnabled(true);
     }
-}
-
-void CompressSetting::onLessButoonClicked()
-{
-    if(m_splitnum > D_COMPRESS_SPLIT_MIN)
+    else if(10 == index)
     {
-        m_splitnum --;
-        m_splitnumedit->setText(QString::number(m_splitnum));
+        m_splitnumedit->setEnabled(false);
+        m_password->setEnabled(true);
+        m_file_secret->setEnabled(false);
+    }
+    else {
+        m_splitnumedit->setEnabled(false);
+        m_password->setEnabled(false);
+        m_file_secret->setEnabled(false);
     }
 }
 

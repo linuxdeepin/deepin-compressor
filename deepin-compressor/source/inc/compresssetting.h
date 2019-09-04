@@ -10,13 +10,14 @@
 #include <DSwitchButton>
 #include <dpasswordedit.h>
 #include <QVBoxLayout>
+#include <DSpinBox>
 #include "lib_edit_button.h"
 #include "pluginmanager.h"
 
 DWIDGET_USE_NAMESPACE
 
-#define D_COMPRESS_SPLIT_MIX    100
-#define D_COMPRESS_SPLIT_MIN   1
+#define D_COMPRESS_SPLIT_MIX    5000
+#define D_COMPRESS_SPLIT_MIN   0
 
 class CompressSetting :public QWidget
 {
@@ -44,14 +45,12 @@ private:
     QHBoxLayout *m_file_secretlayout;
     DSwitchButton* m_file_secret;
     QHBoxLayout *m_splitlayout;
-    DLineEdit* m_splitnumedit;
+    DDoubleSpinBox* m_splitnumedit;
     DPushButton* m_plusbutton;
     DPushButton* m_minusbutton;
     DLabel* m_encryptedlabel;
     DLabel* m_splitcompress;
     DLabel* m_encryptedfilelistlabel;
-
-    uint m_splitnum;
 
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
@@ -64,8 +63,7 @@ public slots:
     void onPathButoonClicked();
     void onNextButoonClicked();
     void onAdvanceButtonClicked(bool status);
-    void onPlusButoonClicked();
-    void onLessButoonClicked();
+    void ontypeChanged(int index);
 
     void onRetrunPressed();
 };
