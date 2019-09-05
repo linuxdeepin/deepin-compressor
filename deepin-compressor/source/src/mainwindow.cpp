@@ -540,9 +540,8 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     options.setEncryptionMethod(Args[QStringLiteral("encryptionMethod")]);
     options.setVolumeSize(Args[QStringLiteral("volumeSize")].toULongLong());
 
-    QVector<Archive::Entry*> all_entries;
 
-//    m_model->createEmptyArchive(filename, fixedMimeType, m_model);
+    QVector<Archive::Entry*> all_entries;
 
     foreach(QString file, filesToAdd)
     {
@@ -557,11 +556,22 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
         return;
     }
 
+    QString globalWorkDir = filesToAdd.first();
+    if (globalWorkDir.right(1) == QLatin1String("/")) {
+        globalWorkDir.chop(1);
+    }
+    globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+    options.setGlobalWorkDir(globalWorkDir);
 
+//    QString firstPath = Args[QStringLiteral("localFilePath")];
+//    const QDir stripDir(firstPath);
+//    for (Archive::Entry *entry : qAsConst(all_entries)) {
+//        entry->setFullPath(stripDir.absoluteFilePath(entry->fullPath()));
+//    }
 
+//    qDebug() << "Setting GlobalWorkDir to " << stripDir.path();
+//    options.setGlobalWorkDir(stripDir.path());
 
-
-//    CreateJob* createJob = m_model->archive()->create(filename, fixedMimeType, all_entries, options, this);
     CreateJob* createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty()) {

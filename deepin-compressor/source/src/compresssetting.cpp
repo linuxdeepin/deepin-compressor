@@ -25,7 +25,7 @@ CompressSetting::~CompressSetting()
 void CompressSetting::InitUI()
 {
     m_nextbutton = new DPushButton(tr("Compress"));
-    m_nextbutton->setFixedWidth(260);
+    m_nextbutton->setFixedSize(340,36);
 
 
     QWidget* leftwidget = new QWidget();
@@ -36,18 +36,19 @@ void CompressSetting::InitUI()
     m_compresstype->setFixedSize(80, 40);
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+            qDebug()<<QMimeDatabase().mimeTypeForName(type).preferredSuffix();
         m_compresstype->addItem(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
     m_compresstype->setCurrentText("zip");
 
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
-    m_filename->setFixedWidth(230);
+    m_filename->setFixedSize(260, 36);
     m_filename->setText(tr("untitled file"));
     m_savepath = new DLineEdit();
 
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-    m_savepath->setFixedWidth(230);
+    m_savepath->setFixedSize(260, 36);
     m_pathbutton = new Lib_Edit_Button(m_savepath);
 
     filelayout->addRow(tr("File Name") + ":", m_filename);
@@ -72,8 +73,8 @@ void CompressSetting::InitUI()
     m_splitcompress = new DLabel(tr("Separate compression"));
     m_splitlayout = new QHBoxLayout();
     m_splitnumedit = new DDoubleSpinBox();
-    m_splitnumedit->setSuffix("megabytes");
-    m_splitnumedit->setRange(0.1, 1000000);
+    m_splitnumedit->setSuffix("MB");
+    m_splitnumedit->setRange(0.0, 1000000);
     m_splitnumedit->setSingleStep(0.1);
     m_splitnumedit->setDecimals(1);
     m_splitnumedit->setValue(0.0);
@@ -118,7 +119,7 @@ void CompressSetting::InitUI()
 
     m_splitnumedit->setEnabled(false);
     m_password->setEnabled(true);
-    m_file_secret->setEnabled(true);
+    m_file_secret->setEnabled(false);
 }
 void CompressSetting::InitConnection()
 {
@@ -158,7 +159,13 @@ void CompressSetting::onNextButoonClicked()
 
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
-    m_openArgs[QStringLiteral("compressionLevel")] = "5";//5 is default
+    if("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType)
+    {
+        m_openArgs[QStringLiteral("compressionLevel")] = "-1";//-1 is unuseful
+    }
+    else {
+        m_openArgs[QStringLiteral("compressionLevel")] = "6";//6 is default
+    }
 
     qDebug()<<m_splitnumedit->value();
     if (m_splitnumedit->value() > 0) {
@@ -234,6 +241,7 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
 void CompressSetting::ontypeChanged(int index)
 {
     qDebug()<<index;
+    qDebug()<<m_supportedMimeTypes.at(index);
     if(0 == index)
     {
         m_splitnumedit->setEnabled(true);

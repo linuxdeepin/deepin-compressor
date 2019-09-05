@@ -15,7 +15,7 @@ void Lib_Edit_Button::InitUI(DLineEdit *edit)
 {
 
 
-    QSize size = QSize(40, edit->sizeHint().height());
+    QSize size = QSize(46, 36);
     setMinimumSize(size);
     setMaximumSize(size);
     setFocusPolicy(Qt::ClickFocus);
