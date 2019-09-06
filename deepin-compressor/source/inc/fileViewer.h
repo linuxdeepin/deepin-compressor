@@ -14,9 +14,15 @@
 #include <QScrollBar>
 #include <QDateTime>
 #include <QStandardItemModel>
+#include "archivemodel.h"
 
 
 DWIDGET_USE_NAMESPACE
+
+enum PAGE_TYPE{
+    PAGE_COMPRESS,
+    PAGE_UNCOMPRESS,
+};
 
 class MyScrollBar:public QScrollBar
 {
@@ -72,17 +78,19 @@ class fileViewer : public QWidget
 {
        Q_OBJECT
 public:
-       fileViewer(QWidget *parent = 0);
+       fileViewer(QWidget *parent = 0, PAGE_TYPE type = PAGE_COMPRESS);
        ~fileViewer();
        void InitUI();
        void InitConnection();
 
        int getPathIndex();
        void setFileList(const QStringList &files);
-       void setDecompressModel(QAbstractItemModel* model);
+       void setDecompressModel(ArchiveModel* model);
 protected slots:
-       void slotRowDoubleClicked(const QModelIndex index);
-       void slotRePreviousDoubleClicked(QMouseEvent *event);
+       void slotCompressRowDoubleClicked(const QModelIndex index);
+       void slotDecompressRowDoubleClicked(const QModelIndex index);
+       void slotCompressRePreviousDoubleClicked(QMouseEvent *event);
+       void slotDecompressRePreviousDoubleClicked(QMouseEvent *event);
        void ScrollBarShowEvent ( QShowEvent * event );
        void ScrollBarHideEvent ( QHideEvent * event );
 private:
@@ -97,12 +105,15 @@ private:
        int m_pathindex;
        MyFileSystemModel* pModel;
        QStandardItemModel* firstmodel;
-       QAbstractItemModel* m_decompressmodel;
+       ArchiveModel* m_decompressmodel;
        FirstRowDelegate *pdelegate;
        MyLabel *plabel;
        QModelIndex m_indexmode;
        MyScrollBar *pScrollbar;
        QFileInfoList m_curfilelist;
+
+       PAGE_TYPE m_pagetype;
+
 
 };
 

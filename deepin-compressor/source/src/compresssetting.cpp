@@ -36,7 +36,6 @@ void CompressSetting::InitUI()
     m_compresstype->setFixedSize(80, 40);
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-            qDebug()<<QMimeDatabase().mimeTypeForName(type).preferredSuffix();
         m_compresstype->addItem(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
     m_compresstype->setCurrentText("zip");

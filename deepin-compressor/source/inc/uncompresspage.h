@@ -43,7 +43,7 @@ public:
     UnCompressPage(QWidget *parent = 0);
     ~UnCompressPage();
 
-    void setModel(QAbstractItemModel* model);
+    void setModel(ArchiveModel* model);
     QString getDecompressPath();
     void setdefaultpath(QString path);
 
@@ -67,7 +67,7 @@ private:
     Lib_Edit_Button* m_pathbutton;
     QString m_pathstr;
 
-    QAbstractItemModel* m_model;
+    ArchiveModel* m_model;
 
 };
 #endif

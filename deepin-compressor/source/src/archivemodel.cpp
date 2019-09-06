@@ -6,6 +6,7 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QRegularExpression>
+
 #include <QUrl>
 
 
@@ -37,6 +38,22 @@ ArchiveModel::~ArchiveModel()
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const
 {
+    if(0==index.row() && 0==index.column())
+    {
+        if(m_ppathindex && *m_ppathindex > 0)
+        {
+            m_tableview->setRowHeight(0,ArchiveModelDefine::gTableHeight*2);
+        }
+        else {
+            m_tableview->setRowHeight(0,ArchiveModelDefine::gTableHeight);
+        }
+    }
+
+    if(0!=index.row())
+    {
+        m_tableview->setRowHeight(index.row(),ArchiveModelDefine::gTableHeight);
+    }
+
     if (index.isValid()) {
         Archive::Entry *entry = static_cast<Archive::Entry*>(index.internalPointer());
         switch (role) {
@@ -69,22 +86,25 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
                 return QLocale().toString(timeStamp, QLocale::ShortFormat);
             }
+
             default:
                 return entry->property(m_propertiesMap[column].constData());
             }
         }
         case Qt::DecorationRole:
-//            if (index.column() == 0) {
-//                const Archive::Entry *e = static_cast<Archive::Entry*>(index.internalPointer());
-//                QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
-//                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small), mode);
-//            }
+            if (index.column() == 0) {
+                const Archive::Entry *e = static_cast<Archive::Entry*>(index.internalPointer());
+                QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
+                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(16, 16, mode);
+            }
             return QVariant();
         case Qt::FontRole: {
             QFont f;
             f.setItalic(entry->property("isPasswordProtected").toBool());
             return f;
         }
+        case Qt::TextAlignmentRole:
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
         default:
             return QVariant();
         }
@@ -116,16 +136,20 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
 
         switch (columnId) {
         case FullPath:
-            return tr("Name");
+            return tr("名称");
         case Size:
-            return tr("Size");
+            return tr("大小");
         case Type:
-            return tr("Type");
+            return tr("类型");
         case Timestamp:
-            return tr("Date");
+            return tr("修改日期");
         default:
             return tr("Unnamed column", "??");
         }
+    }
+    else if(role == Qt::TextAlignmentRole)
+    {
+        return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     }
     return QVariant();
 }
@@ -146,6 +170,24 @@ QModelIndex ArchiveModel::index(int row, int column, const QModelIndex &parent) 
     }
 
     return QModelIndex();
+}
+
+bool ArchiveModel::isentryDir(const QModelIndex &index)
+{
+    const Archive::Entry *parentEntry = index.isValid()
+                                        ? static_cast<Archive::Entry*>(index.internalPointer())
+                                        : m_rootEntry.data();
+    return parentEntry->isDir();
+}
+
+void ArchiveModel::setPathIndex(int *index)
+{
+    m_ppathindex = index;
+}
+
+void ArchiveModel::setTableView(QTableView *tableview)
+{
+    m_tableview=tableview;
 }
 
 QModelIndex ArchiveModel::parent(const QModelIndex &index) const
@@ -504,17 +546,13 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     }
 
     // Save an icon for each newly added entry.
-//    QMimeDatabase db;
-//    QIcon icon;
-//    entry->isDir()
-//    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("directory")).iconName()).pixmap(IconSize(KIconLoader::Small),
-//                                                                                                       IconSize(KIconLoader::Small))
-//    : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(IconSize(KIconLoader::Small),
-//                                                                                       IconSize(KIconLoader::Small));
-
-    QFileIconProvider icon_provider;
-
-    m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon_provider.icon(entry->fullPath()));
+    QMimeDatabase db;
+    QIcon icon;
+    entry->isDir()
+    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(16,16)
+    : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(16,16);
+//    qDebug()<<icon;
+    m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon);
 }
 
 Archive* ArchiveModel::archive() const

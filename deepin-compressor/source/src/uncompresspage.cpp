@@ -38,7 +38,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 {
 
     m_pathstr = "~/Desktop";
-    m_fileviewer = new fileViewer();
+    m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
     m_nextbutton = new DPushButton(tr("decompress"));
     m_nextbutton->setFixedSize(340, 36);
 
@@ -89,7 +89,7 @@ void UnCompressPage::oneCompressPress()
 }
 
 
-void UnCompressPage::setModel(QAbstractItemModel* model)
+void UnCompressPage::setModel(ArchiveModel* model)
 {
     m_model = model;
     m_fileviewer->setDecompressModel(m_model);

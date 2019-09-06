@@ -6,7 +6,7 @@
 
 #include <QAbstractItemModel>
 #include <QScopedPointer>
-
+#include <QTableView>
 
 class Query;
 
@@ -23,6 +23,10 @@ enum EntryMetaDataType {
     Type,
     Timestamp            /**< The timestamp for the current entry */
 };
+
+namespace  ArchiveModelDefine{
+    const int  gTableHeight=36;
+}
 
 class ArchiveModel: public QAbstractItemModel
 {
@@ -56,6 +60,9 @@ public:
     QMap<int, QByteArray> propertiesMap() const;
 
     Archive::Entry *entryForIndex(const QModelIndex &index);
+    bool isentryDir(const QModelIndex &index);
+    void setPathIndex(int *index);
+    void setTableView(QTableView *tableview);
 
     ExtractJob* extractFile(Archive::Entry *file, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;
     ExtractJob* extractFiles(const QVector<Archive::Entry*>& files, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;
@@ -151,5 +158,8 @@ private:
     // Whether a file entry has been listed. Used to ensure all relevent columns are shown,
     // since directories might have fewer columns than files.
     bool m_fileEntryListed;
+
+    int *m_ppathindex;
+    QTableView *m_tableview;
 };
 #endif // ARCHIVEMODEL_H

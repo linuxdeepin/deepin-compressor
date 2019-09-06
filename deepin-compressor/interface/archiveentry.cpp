@@ -30,7 +30,7 @@ Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &r
     : QObject(parent)
     , rootNode(rootNode)
     , compressedSizeIsSet(true)
-    , m_parent(qobject_cast<Entry*>(parent))
+    , m_parent((Entry*)(parent))
     , m_size(0)
     , m_compressedSize(0)
     , m_isDirectory(false)

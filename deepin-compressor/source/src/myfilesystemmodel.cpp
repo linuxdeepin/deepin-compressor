@@ -23,19 +23,33 @@ void MyFileSystemModel::setTableView(QTableView *tableview){
     m_tableview=tableview;
 }
 
-QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const  {
-
-//    qDebug()<<"row : "<<index.row()<<" role : "<<role;
-    if(0==index.row()&&
-            0==index.column()){
-        if(ppathindex&&*ppathindex>0){
+QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
+{
+    if(0==index.row() && 0==index.column())
+    {
+        if(ppathindex && *ppathindex > 0)
+        {
             m_tableview->setRowHeight(0,MyFileSystemDefine::gTableHeight*2);
-        }else {
+        }
+        else {
             m_tableview->setRowHeight(0,MyFileSystemDefine::gTableHeight);
         }
     }
+
     if(0!=index.row())
-    m_tableview->setRowHeight(index.row(),MyFileSystemDefine::gTableHeight);
+    {
+        m_tableview->setRowHeight(index.row(),MyFileSystemDefine::gTableHeight);
+    }
+
+    if (index.isValid())
+    {
+        switch (role) {
+        case Qt::TextAlignmentRole:
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+        default:
+            break;
+        }
+    }
     return QFileSystemModel::data(index,role);
 }
 

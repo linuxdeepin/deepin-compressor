@@ -20,7 +20,7 @@ CompressPage::CompressPage(QWidget *parent)
     : QWidget(parent)
 {
 
-    m_fileviewer = new fileViewer();
+    m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
     m_nextbutton = new DPushButton(tr("NEXT"));
     m_nextbutton->setFixedWidth(260);
 

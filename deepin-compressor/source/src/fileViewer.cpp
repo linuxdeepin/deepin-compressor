@@ -67,8 +67,8 @@ void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     return QItemDelegate::paint (painter, option, index);
 }
 
-fileViewer::fileViewer(QWidget *parent)
-    : QWidget(parent)
+fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
+    : QWidget(parent), m_pagetype(type)
 {
     setWindowTitle( tr( "File Viewer" ) );
     setMinimumSize(580, 300);
@@ -109,7 +109,7 @@ void fileViewer::InitUI()
     pTableViewFile->setSortingEnabled(true);
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
-                                  "min-height:32px; background-color:white}");
+                                  "min-height:36px; background-color:white}");
     pTableViewFile->setGeometry(0,0,580,300);
 
     plabel->setText(" ...返回上一层");
@@ -128,20 +128,35 @@ void fileViewer::refreshTableview()
 {
     QStandardItem* item = nullptr;
     firstmodel->clear();
-    QStringList labels = QObject::trUtf8("名称,大小,类型,修改日期").simplified().split(",");
-    firstmodel->setHorizontalHeaderLabels(labels);
+
+    item = new QStandardItem(QObject::trUtf8("名称"));
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    firstmodel->setHorizontalHeaderItem(0, item);
+    item = new QStandardItem(QObject::trUtf8("大小"));
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    firstmodel->setHorizontalHeaderItem(1, item);
+    item = new QStandardItem(QObject::trUtf8("类型"));
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    firstmodel->setHorizontalHeaderItem(2, item);
+    item = new QStandardItem(QObject::trUtf8("修改日期"));
+    item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    firstmodel->setHorizontalHeaderItem(3, item);
 
     int rowindex = 0;
     QFileIconProvider icon_provider;
     foreach(QFileInfo fileinfo , m_curfilelist)
     {
         item = new QStandardItem(icon_provider.icon(fileinfo), fileinfo.fileName());
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,0,item);
         item = new QStandardItem(QString::number(fileinfo.size()) + " KB");
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,1,item);
         item = new QStandardItem(getfiletype(fileinfo));
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,2,item);
         item = new QStandardItem(fileinfo.lastModified().toString());
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,3,item);
         rowindex++;
     }
@@ -154,8 +169,17 @@ void fileViewer::refreshTableview()
 void fileViewer::InitConnection()
 {
     // connect the signals to the slot function.
-    connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotRowDoubleClicked(const QModelIndex &)));
-    connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotRePreviousDoubleClicked(QMouseEvent *)));
+    if(PAGE_COMPRESS == m_pagetype)
+    {
+        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
+
+    }
+    else {
+        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
+//        connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotDeCompressRePreviousDoubleClicked(QMouseEvent *)));
+    }
+    connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotCompressRePreviousDoubleClicked(QMouseEvent *)));
+
     connect(pScrollbar, SIGNAL(ScrollBarShowEvent ( QShowEvent *)), this, SLOT(ScrollBarShowEvent ( QShowEvent *)));
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent ( QHideEvent *)), this, SLOT(ScrollBarHideEvent ( QHideEvent *)));
 }
@@ -189,24 +213,45 @@ void fileViewer::setFileList(const QStringList &files)
     refreshTableview();
 }
 
-void fileViewer::slotRePreviousDoubleClicked(QMouseEvent *event){
-    if(m_pathindex>1){
-        m_pathindex--;
-        m_indexmode=pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
-        qDebug()<<pModel->fileInfo(m_indexmode).path();
-        pTableViewFile->setRootIndex(m_indexmode);
+void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
+    if(PAGE_COMPRESS == m_pagetype)
+    {
+        if(m_pathindex>1){
+            m_pathindex--;
+            m_indexmode=pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
+            qDebug()<<pModel->fileInfo(m_indexmode).path();
+            pTableViewFile->setRootIndex(m_indexmode);
+        }
+        else {
+            m_pathindex--;
+            refreshTableview();
+            if(0==m_pathindex){
+                plabel->hide();
+                pTableViewFile->setRowHeight(0,MyFileSystemDefine::gTableHeight);
+            }
+        }
     }
     else {
         m_pathindex--;
-        refreshTableview();
-        if(0==m_pathindex){
+        if(0 == m_pathindex)
+        {
+            pTableViewFile->setRootIndex(QModelIndex());
             plabel->hide();
-            pTableViewFile->setRowHeight(0,MyFileSystemDefine::gTableHeight);
+            pTableViewFile->setRowHeight(0,ArchiveModelDefine::gTableHeight);
+        }
+        else {
+            QModelIndex parent = m_decompressmodel->parent(m_indexmode);
+            pTableViewFile->setRootIndex(parent);
         }
     }
 }
 
-void fileViewer::slotRowDoubleClicked(const QModelIndex index){
+void fileViewer::slotDecompressRePreviousDoubleClicked(QMouseEvent *event)
+{
+
+}
+
+void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid())
     {
@@ -232,6 +277,32 @@ void fileViewer::slotRowDoubleClicked(const QModelIndex index){
     }
 }
 
+void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
+{
+    if (index.isValid())
+    {
+        qDebug()<<m_decompressmodel->isentryDir(index);
+        if(0 == m_pathindex)
+        {
+            if(m_decompressmodel->isentryDir(index))
+            {
+                m_decompressmodel->setPathIndex(&m_pathindex);
+                pTableViewFile->setRootIndex(index);
+                m_pathindex++;
+                plabel->show();
+                plabel->raise();
+                m_indexmode = index;
+            }
+        }
+        else if(m_decompressmodel->isentryDir(index))
+        {
+            pTableViewFile->setRootIndex(index);
+            m_pathindex++;
+            m_indexmode = index;
+        }
+    }
+}
+
 void fileViewer::ScrollBarShowEvent ( QShowEvent * event ){
     plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width()-10,pTableViewFile->horizontalHeader()->height());
 }
@@ -245,15 +316,15 @@ void fileViewer::showFileInfoList( QFileInfoList list )
 
 }
 
-void fileViewer::setDecompressModel(QAbstractItemModel* model)
+void fileViewer::setDecompressModel(ArchiveModel* model)
 {
+    m_pathindex = 0;
+    m_indexmode = QModelIndex();
     m_decompressmodel = model;
+    m_decompressmodel->setPathIndex(&m_pathindex);
+    m_decompressmodel->setTableView(pTableViewFile);
 
     pTableViewFile->setModel(m_decompressmodel);
-//    m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
-//    pTableViewFile->setRootIndex(m_indexmode);
-//    m_pathindex++;
-//    plabel->show();
-//    plabel->raise();
+
 }
 
