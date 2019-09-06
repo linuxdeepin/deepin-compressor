@@ -68,6 +68,18 @@ void Progress::setFilename(QString filename)
     m_filenamelabel->setText(filename);
 }
 
+void Progress::setProgressFilename(QString filename)
+{
+    if(m_type == COMPRESSING)
+    {
+        m_progressfilelabel->setText(tr("正在压缩") + ": " + filename);
+    }
+    else
+    {
+        m_progressfilelabel->setText(tr("正在解压") + ": " + filename);
+    }
+}
+
 void Progress::settype(COMPRESS_TYPE type)
 {
     m_type = type;

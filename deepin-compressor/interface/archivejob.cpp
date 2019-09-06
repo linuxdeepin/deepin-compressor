@@ -270,6 +270,11 @@ void KJob::setPercent(unsigned long percentage)
     }
 }
 
+void KJob::setPercentFilename(const QString &filename)
+{
+    emit percentfilename(this, filename);
+}
+
 void KJob::emitResult()
 {
     finishJob(true);

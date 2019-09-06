@@ -63,6 +63,7 @@ public:
     bool isentryDir(const QModelIndex &index);
     void setPathIndex(int *index);
     void setTableView(QTableView *tableview);
+    QModelIndex createNoncolumnIndex(const QModelIndex &index) const;
 
     ExtractJob* extractFile(Archive::Entry *file, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;
     ExtractJob* extractFiles(const QVector<Archive::Entry*>& files, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;

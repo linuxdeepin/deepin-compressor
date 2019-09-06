@@ -190,6 +190,18 @@ void ArchiveModel::setTableView(QTableView *tableview)
     m_tableview=tableview;
 }
 
+QModelIndex ArchiveModel::createNoncolumnIndex(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        Archive::Entry *item = static_cast<Archive::Entry*>(index.internalPointer());
+        Q_ASSERT(item);
+        if (item->getParent()) {
+            return createIndex(item->row(), 0, const_cast<Archive::Entry*>(item));
+        }
+    }
+    return QModelIndex();
+}
+
 QModelIndex ArchiveModel::parent(const QModelIndex &index) const
 {
     if (index.isValid()) {

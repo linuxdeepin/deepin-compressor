@@ -287,7 +287,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             if(m_decompressmodel->isentryDir(index))
             {
                 m_decompressmodel->setPathIndex(&m_pathindex);
-                pTableViewFile->setRootIndex(index);
+                pTableViewFile->setRootIndex(m_decompressmodel->createNoncolumnIndex(index));
                 m_pathindex++;
                 plabel->show();
                 plabel->raise();
@@ -296,7 +296,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
         }
         else if(m_decompressmodel->isentryDir(index))
         {
-            pTableViewFile->setRootIndex(index);
+            pTableViewFile->setRootIndex(m_decompressmodel->createNoncolumnIndex(index));
             m_pathindex++;
             m_indexmode = index;
         }

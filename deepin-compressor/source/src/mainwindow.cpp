@@ -260,7 +260,12 @@ void MainWindow::refreshPage()
         break;
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        m_titlelabel->setText(tr("Compressing"));
+        m_titlelabel->setText(tr("正在压缩"));
+        m_Progess->setFilename(m_decompressfilename);
+        break;
+    case PAGE_UNZIPPROGRESS:
+        m_mainLayout->setCurrentIndex(4);
+        m_titlelabel->setText(tr("正在解压"));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_ZIP_SUCCESS:
@@ -364,6 +369,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
             this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
             m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+    connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
+            this, SLOT(SlotProgressFile(KJob*, const QString &)));
 
     m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
@@ -388,6 +395,14 @@ void MainWindow::SlotProgress(KJob *job, unsigned long percent)
         m_pageid = PAGE_ZIPPROGRESS;
         m_Progess->settype(COMPRESSING);
         refreshPage();
+    }
+}
+
+void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
+{
+    if(PAGE_ZIPPROGRESS == m_pageid)
+    {
+        m_Progess->setProgressFilename(filename);
     }
 }
 
@@ -445,6 +460,8 @@ void MainWindow::ExtractPassword(QString password)
                 this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
         connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+        connect(m_encryptionpage, SIGNAL(percentfilename(KJob*, const QString &)),
+                this, SLOT(SlotProgressFile(KJob*, const QString &)));
 
         m_encryptionjob->start();
     }
@@ -581,6 +598,8 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     connect(createJob, &KJob::result, this, &MainWindow::slotCompressFinished);
     connect(createJob, SIGNAL(percent(KJob*,ulong)),
             this, SLOT(SlotProgress(KJob*,ulong)));
+    connect(createJob, &CreateJob::percentfilename,
+            this, &MainWindow::SlotProgressFile);
     createJob->start();
 
 }

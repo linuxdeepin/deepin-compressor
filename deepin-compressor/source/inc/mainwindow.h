@@ -98,6 +98,7 @@ private slots:
     void slotExtractionDone(KJob* job);
     void slotextractSelectedFilesTo(const QString& localPath);
     void SlotProgress(KJob *job, unsigned long percent);
+    void SlotProgressFile(KJob *job, const QString& filename);
     void SlotNeedPassword();
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);

@@ -476,6 +476,7 @@ Q_SIGNALS:
      * @param percent the percentage
      */
     void percent(KJob *job, unsigned long percent);
+    void percentfilename(KJob *job, const QString &filename);
 
     /**
      * Emitted to display information about the speed of this job.
@@ -552,6 +553,8 @@ protected:
      * @param percentage the new overall progress
      */
     void setPercent(unsigned long percentage);
+
+    void setPercentFilename(const QString &filename);
 
     /**
      * Utility function to emit the result signal, and suicide this job.

@@ -373,6 +373,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
             if (!extractAll && m_cachedArchiveEntryCount) {
                 ++progressEntryCount;
                 emit progress(float(progressEntryCount) / totalEntriesCount);
+                emit progress_filename(entryName);
             }
 
             extractedEntriesCount++;
@@ -485,6 +486,7 @@ void LibarchivePlugin::copyData(const QString& filename, struct archive *dest, b
         if (partialprogress) {
             m_currentExtractedFilesSize += readBytes;
             emit progress(float(m_currentExtractedFilesSize) / m_extractedFilesSize);
+            emit progress_filename(file.fileName());
         }
 
         readBytes = file.read(buff, sizeof(buff));
@@ -507,6 +509,7 @@ void LibarchivePlugin::copyData(const QString& filename, struct archive *source,
         if (partialprogress) {
             m_currentExtractedFilesSize += readBytes;
             emit progress(float(m_currentExtractedFilesSize) / m_extractedFilesSize);
+            emit progress_filename(filename);
         }
 
         readBytes = archive_read_data(source, buff, sizeof(buff));

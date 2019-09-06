@@ -75,6 +75,7 @@ protected Q_SLOTS:
     virtual void onInfo(const QString &info);
     virtual void onEntry(Archive::Entry *entry);
     virtual void onProgress(double progress);
+    virtual void onProgressFilename(const QString &filename);
     virtual void onEntryRemoved(const QString &path);
     virtual void onFinished(bool result);
     virtual void onUserQuery(Query *query);

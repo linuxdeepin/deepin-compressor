@@ -154,6 +154,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::info, this, &Job::onInfo);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::finished, this, &Job::onFinished);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename);
 
     auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface*>(archiveInterface());
     if (readWriteInterface) {
@@ -188,6 +189,11 @@ void Job::onEntry(Archive::Entry *entry)
 void Job::onProgress(double value)
 {
     setPercent(static_cast<unsigned long>(100.0*value));
+}
+
+void Job::onProgressFilename(const QString &filename)
+{
+    setPercentFilename(filename);
 }
 
 void Job::onInfo(const QString& info)
@@ -472,6 +478,7 @@ void CreateJob::setMultiVolume(bool isMultiVolume)
 void CreateJob::doWork()
 {
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &CreateJob::onProgress);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &CreateJob::onProgressFilename);
 
     m_addJob = archive()->addFiles(m_entries, nullptr, m_options);
 

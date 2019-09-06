@@ -91,6 +91,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
         }
         addedEntries++;
         emit progress(float(addedEntries)/float(totalCount));
+        emit progress_filename(selectedFile->name());
 
         // For directories, write all subfiles/folders.
         const QString &fullPath = selectedFile->fullPath();
@@ -120,8 +121,10 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
                 }
                 addedEntries++;
                 emit progress(float(addedEntries)/float(totalCount));
+                emit progress_filename(it.fileName());
             }
         }
+
     }
 
     bool isSuccessful = true;

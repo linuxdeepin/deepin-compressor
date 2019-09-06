@@ -25,6 +25,7 @@ public:
     void InitConnection();
     void setprogress(uint percent);
     void setFilename(QString filename);
+    void setProgressFilename(QString filename);
     void settype(COMPRESS_TYPE type);
 
 private:

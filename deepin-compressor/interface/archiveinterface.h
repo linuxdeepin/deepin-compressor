@@ -183,6 +183,7 @@ Q_SIGNALS:
     void error(const QString &message, const QString &details = QString());
     void entry(Archive::Entry *archiveEntry);
     void progress(double progress);
+    void progress_filename(const QString &filename);
     void info(const QString &info);
     void finished(bool result);
     void testSuccess();
