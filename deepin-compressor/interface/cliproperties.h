@@ -42,6 +42,7 @@ class  CliProperties: public QObject
     Q_PROPERTY(QString moveProgram MEMBER m_moveProgram)
     Q_PROPERTY(QString testProgram MEMBER m_testProgram)
 
+    Q_PROPERTY(QString progressarg MEMBER m_progressarg)
     Q_PROPERTY(QStringList addSwitch MEMBER m_addSwitch)
     Q_PROPERTY(QStringList commentSwitch MEMBER m_commentSwitch)
     Q_PROPERTY(QString deleteSwitch MEMBER m_deleteSwitch)
@@ -122,6 +123,7 @@ private:
 
     QStringList m_fileExistsInput;
     QStringList m_multiVolumeSuffix;
+    QString m_progressarg;
 
     bool m_captureProgress = false;
 

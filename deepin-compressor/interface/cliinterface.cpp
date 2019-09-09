@@ -761,10 +761,36 @@ void CliInterface::readStdout(bool handleAll)
         return;
     }
 
-    QByteArray dd = m_process->readAllStandardOutput();
-    m_stdOutData += dd;
+    if(m_process->program().at(0).contains("7z"))
+    {
+        QByteArray dd = m_process->readAllStandardOutput();
+        m_stdOutData += dd;
+        QList<QByteArray> outinfo = dd.split(' ');
+        outinfo.removeAll(QByteArray());
+        if(dd.contains('%'))
+        {
+            QString progress_str = outinfo.at(2).data();
+            emit progress(progress_str.remove(QChar('%')).toDouble()/100);
+            QString strfilename;
+            int count = outinfo.indexOf("+");
+            if(-1 == count)
+            {
+                count = outinfo.indexOf("-");
+            }
+
+            for (int loop = count + 1; loop < outinfo.count(); loop++) {
+                strfilename += outinfo.at(loop).data();
+            }
+
+            emit progress_filename(strfilename);
+
+        }
+    }
+
+
 
     QList<QByteArray> lines = m_stdOutData.split('\n');
+
 
     //The reason for this check is that archivers often do not end
     //queries (such as file exists, wrong password) on a new line, but

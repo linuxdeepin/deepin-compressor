@@ -9,7 +9,7 @@
 Compressor_Success::Compressor_Success(QWidget *parent)
     : QWidget(parent)
 {
-    m_stringinfo = tr("Compress Successed!");
+    m_stringinfo = tr("压缩成功！");
     InitUI();
     InitConnection();
 }
@@ -24,7 +24,7 @@ void Compressor_Success::InitUI()
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton();
     m_showfilebutton->setFixedWidth(260);
-    m_showfilebutton->setText(tr("Show File"));
+    m_showfilebutton->setText(tr("显示文件"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->setMargin(20);

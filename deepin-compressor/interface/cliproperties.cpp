@@ -62,6 +62,10 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
     if (volumeSize > 0) {
         args << substituteMultiVolumeSwitch(volumeSize);
     }
+    if(!m_progressarg.isEmpty())
+    {
+        args << m_progressarg;
+    }
     args << archive;
     args << files;
 
@@ -110,6 +114,10 @@ QStringList CliProperties::extractArgs(const QString &archive, const QStringList
 
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
+    }
+    if(!m_progressarg.isEmpty())
+    {
+        args << m_progressarg;
     }
     args << archive;
     args << files;

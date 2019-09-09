@@ -38,7 +38,7 @@ void Progress::InitUI()
 
     m_cancelbutton = new DPushButton();
     m_cancelbutton->setFixedSize(340, 36);
-    m_cancelbutton->setText(tr("Cancel"));
+    m_cancelbutton->setText(tr("取消"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->addWidget(m_pixmaplabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);

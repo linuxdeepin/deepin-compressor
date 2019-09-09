@@ -8,7 +8,7 @@
 Compressor_Fail::Compressor_Fail(QWidget *parent)
     : QWidget(parent)
 {
-    m_stringinfo = tr("Sorry, Compressor Failed!");
+    m_stringinfo = tr("抱歉，解压失败！");
     m_stringdetail = tr("xxxxxxxxxxxxx");
     InitUI();
     InitConnection();

@@ -244,17 +244,17 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_mainLayout->setCurrentIndex(1);
-        m_titlelabel->setText(tr("UNZIP"));
+        m_titlelabel->setText(m_decompressfilename);
         break;
     case PAGE_ZIP:
         m_mainLayout->setCurrentIndex(2);
-        m_titlelabel->setText(tr("New Archive File"));
+        m_titlelabel->setText(tr("新建归档文件"));
         m_titlebutton->setText("+");
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        m_titlelabel->setText(tr("New Archive File"));
+        m_titlelabel->setText(tr("新建归档文件"));
         m_titlebutton->setText("<");
         m_titlebutton->setVisible(true);
         break;
@@ -271,7 +271,7 @@ void MainWindow::refreshPage()
     case PAGE_ZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         m_titlelabel->setText("");
-        m_CompressSuccess->setstringinfo(tr("Compressed Successfully!"));
+        m_CompressSuccess->setstringinfo(tr("压缩成功!"));
         break;
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
@@ -281,7 +281,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(5);
         m_titlelabel->setText("");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("Decompressed Successfully!"));
+        m_CompressSuccess->setstringinfo(tr("解压成功！"));
         break;
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
@@ -380,13 +380,13 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
 void MainWindow::SlotProgress(KJob *job, unsigned long percent)
 {
     qDebug()<<percent;
-    if(PAGE_ZIPPROGRESS == m_pageid)
+    if(PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid)
     {
         m_Progess->setprogress(percent);
     }
     else if((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent > 0))
     {
-        m_pageid = PAGE_ZIPPROGRESS;
+        m_pageid = PAGE_UNZIPPROGRESS;
         m_Progess->settype(DECOMPRESSING);
         refreshPage();
     }
@@ -400,7 +400,7 @@ void MainWindow::SlotProgress(KJob *job, unsigned long percent)
 
 void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
 {
-    if(PAGE_ZIPPROGRESS == m_pageid)
+    if(PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid)
     {
         m_Progess->setProgressFilename(filename);
     }
@@ -494,56 +494,12 @@ void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
 
 void MainWindow::creatArchive(QMap<QString, QString> &Args)
 {
-//    const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
-//    m_model->createEmptyArchive(Args[QStringLiteral("localFilePath")], fixedMimeType, m_model);
-
-//    if (Args.contains(QStringLiteral("volumeSize"))) {
-//        m_model->archive()->setMultiVolume(true);
-//    }
-
-//    const QString password = Args[QStringLiteral("encryptionPassword")];
-//    if (!password.isEmpty()) {
-//        m_model->encryptArchive(password,
-//                                Args[QStringLiteral("encryptHeader")] == QLatin1String("true"));
-//    }
-
-//    const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
-
-//    if (!m_model->archive() || filesToAdd.isEmpty()) {
-//        return;
-//    }
-
-
-//    // We need to override the global options with a working directory.
-//    CompressionOptions compOptions = m_compressionOptions;
-
-//    // Now take the absolute path of the parent directory.
-//    globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
-
-//    qDebug() << "Detected GlobalWorkDir to be " << globalWorkDir;
-//    compOptions.setGlobalWorkDir(globalWorkDir);
-
-//    AddJob *job = m_model->addFiles(m_jobTempEntries, destination, compOptions);
-//    if (!job) {
-//        qDeleteAll(m_jobTempEntries);
-//        m_jobTempEntries.clear();
-//        return;
-//    }
-
-//    connect(job, &KJob::result,
-//            this, &Part::slotAddFilesDone);
-//    registerJob(job);
-//    job->start();
-
-
-
-
-
     const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
     const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
     const QString password = Args[QStringLiteral("encryptionPassword")];
     const QString enableHeaderEncryption = Args[QStringLiteral("encryptHeader")];
     const QString filename = Args[QStringLiteral("localFilePath")] + "/" + Args[QStringLiteral("filename")];
+    m_decompressfilename = Args[QStringLiteral("filename")];
     m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
 
     if (filename.isEmpty()) {

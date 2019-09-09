@@ -25,10 +25,10 @@ void EncryptionPage::InitUI()
     m_stringinfolabel->setText(tr("此文件已加密，请输入解压密码"));
     m_nextbutton = new DPushButton();
     m_nextbutton->setFixedSize(340, 36);
-    m_nextbutton->setText(tr("Next"));
+    m_nextbutton->setText(tr("下一步"));
     m_password = new DPasswordEdit();
     m_password->setFixedSize(340, 36);
-    m_password->setPlaceholderText(tr("Please enter your password to extract"));
+    m_password->setPlaceholderText(tr("请输入密码以解压"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->setMargin(63);

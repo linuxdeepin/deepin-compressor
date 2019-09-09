@@ -27,9 +27,9 @@ HomePage::HomePage(QWidget *parent)
     : QWidget(parent),
       m_layout(new QVBoxLayout(this)),
       m_iconLabel(new QLabel),
-      m_tipsLabel(new QLabel(tr("Drag file(folder) here"))),
+      m_tipsLabel(new QLabel(tr("拖拽文件（夹）到此"))),
       m_splitLine(new QLabel),
-      m_chooseBtn(new DCommandLinkButton(tr("Select file"))),
+      m_chooseBtn(new DCommandLinkButton(tr("选择文件"))),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
 {

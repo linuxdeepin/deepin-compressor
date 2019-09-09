@@ -105,12 +105,7 @@ bool LibzipPlugin::list()
         }
 
         emitEntryForIndex(archive, i);
-        if (m_listAfterAdd) {
-            // Start at 50%.
-            emit progress(0.5 + (0.5 * float(i + 1) / nofEntries));
-        } else {
-            emit progress(float(i + 1) / nofEntries);
-        }
+        emit progress(float(i + 1) / nofEntries);
     }
 
     zip_close(archive);
@@ -173,7 +168,8 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive
         i++;
 
     }
-
+    m_filesize = i;
+    m_addarchive = archive;
     // Register the callback function to get progress feedback.
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
 
@@ -192,6 +188,13 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive
 
 void LibzipPlugin::emitProgress(double percentage)
 {
+    int i = m_filesize*percentage;
+    if(m_addarchive)
+    {
+        QString name = zip_get_name(m_addarchive, i, ZIP_FL_ENC_GUESS);
+        emit progress_filename(name);
+    }
+
     // Go from 0 to 50%. The second half is the subsequent listing.
     emit progress(percentage);
 }
@@ -530,8 +533,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
                 return false;
             }
             emit progress(float(i + 1) / nofEntries);
-            QFileInfo fileinfo(QString::fromUtf8(zip_get_name(archive, i, ZIP_FL_ENC_GUESS)));
-            emit progress_filename(fileinfo.fileName());
+            QString name = QString::fromUtf8(zip_get_name(archive, i, ZIP_FL_ENC_GUESS));
+            emit progress_filename(name);
         }
     } else {
         // We extract only the entries in files.

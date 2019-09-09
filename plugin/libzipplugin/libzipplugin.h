@@ -74,6 +74,8 @@ private:
     bool m_overwriteAll;
     bool m_skipAll;
     bool m_listAfterAdd;
+    int m_filesize;
+    zip_t *m_addarchive;
 };
 
 #endif // LIBZIPPLUGIN_H

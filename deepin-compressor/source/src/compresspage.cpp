@@ -21,7 +21,7 @@ CompressPage::CompressPage(QWidget *parent)
 {
 
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
-    m_nextbutton = new DPushButton(tr("NEXT"));
+    m_nextbutton = new DPushButton(tr("下一步"));
     m_nextbutton->setFixedWidth(260);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
@@ -69,7 +69,7 @@ void CompressPage::onAddfileSlot()
     if(0 != m_fileviewer->getPathIndex())
     {
         QMessageBox msgBox;
-        msgBox.setText("Please add files in the root path!");
+        msgBox.setText("请在根目录添加文件！");
         msgBox.exec();
         return;
     }

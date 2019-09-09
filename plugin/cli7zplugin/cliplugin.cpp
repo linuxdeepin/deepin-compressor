@@ -76,6 +76,7 @@ void CliPlugin::setupCliProperties()
 
     m_cliProps->setProperty("extractProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("extractSwitch", QStringList{QStringLiteral("x")});
+    m_cliProps->setProperty("progressarg", QStringList{QStringLiteral("-bsp1")});
     m_cliProps->setProperty("extractSwitchNoPreserve", QStringList{QStringLiteral("e")});
 
     m_cliProps->setProperty("listProgram", QStringLiteral("7z"));

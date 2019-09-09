@@ -24,7 +24,7 @@ CompressSetting::~CompressSetting()
 
 void CompressSetting::InitUI()
 {
-    m_nextbutton = new DPushButton(tr("Compress"));
+    m_nextbutton = new DPushButton(tr("压缩"));
     m_nextbutton->setFixedSize(340,36);
 
 
@@ -50,26 +50,26 @@ void CompressSetting::InitUI()
     m_savepath->setFixedSize(260, 36);
     m_pathbutton = new Lib_Edit_Button(m_savepath);
 
-    filelayout->addRow(tr("File Name") + ":", m_filename);
-    filelayout->addRow(tr("Save to") + ":", m_savepath);
+    filelayout->addRow(tr("文件名") + ":", m_filename);
+    filelayout->addRow(tr("保存到") + ":", m_savepath);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
 
-    DLabel* moresetlabel = new DLabel(tr("Advanced Options"));
+    DLabel* moresetlabel = new DLabel(tr("高级选项"));
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel,0 , Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton,1 , Qt::AlignRight);
 
 
-    m_encryptedlabel = new DLabel(tr("Encrypted File")+":");
+    m_encryptedlabel = new DLabel(tr("加密文件")+":");
     m_password = new DPasswordEdit();
-    m_encryptedfilelistlabel = new DLabel(tr("Encrypted file list"));
+    m_encryptedfilelistlabel = new DLabel(tr("加密文件列表"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
-    m_splitcompress = new DLabel(tr("Separate compression"));
+    m_splitcompress = new DLabel(tr("分卷压缩"));
     m_splitlayout = new QHBoxLayout();
     m_splitnumedit = new DDoubleSpinBox();
     m_splitnumedit->setSuffix("MB");
