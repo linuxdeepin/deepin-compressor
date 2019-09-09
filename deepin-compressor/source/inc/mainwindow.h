@@ -119,6 +119,8 @@ private:
     QString m_decompressfilepath;
     QString m_loadfile;
 
+    void setCompressDefaultPath();
+
 private:
     DLabel* m_logo;
     QPixmap m_logoicon;

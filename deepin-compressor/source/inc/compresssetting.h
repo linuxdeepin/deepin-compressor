@@ -30,6 +30,8 @@ public:
     void InitConnection();
 
     void setTypeImage(QString type);
+    void setDefaultPath(QString path);
+    void setDefaultName(QString name);
 
 private:
     DPushButton* m_nextbutton;

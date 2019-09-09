@@ -217,7 +217,12 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         QStringList filelist;
         foreach(unsigned int index, selectlist)
         {
-            filelist.append(m_curfilelist.at(index).filePath());
+            m_curfilelist.removeAt(index);
+        }
+
+        foreach(QFileInfo fileinfo, m_curfilelist)
+        {
+            filelist.append(fileinfo.filePath());
         }
 
         emit sigFileRemoved(filelist);

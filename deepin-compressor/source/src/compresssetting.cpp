@@ -138,7 +138,7 @@ void CompressSetting::onPathButoonClicked()
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::Directory);
-    dialog.setDirectory("~/Desktop");
+    dialog.setDirectory(m_savepath->text());
 
     const int mode = dialog.exec();
 
@@ -258,6 +258,15 @@ void CompressSetting::setTypeImage(QString type)
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 
+void CompressSetting::setDefaultPath(QString path)
+{
+    m_savepath->setText(path);
+}
+
+void CompressSetting::setDefaultName(QString name)
+{
+    m_filename->setText(name);
+}
 
 void CompressSetting::ontypeChanged(int index)
 {

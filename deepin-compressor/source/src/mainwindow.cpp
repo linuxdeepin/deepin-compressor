@@ -27,6 +27,7 @@
 #include <QMimeData>
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
 #include "pluginmanager.h"
 //#include "archivejob.h"
 #include "jobs.h"
@@ -480,10 +481,37 @@ void MainWindow::LoadPassword(QString password)
     }
 }
 
+void MainWindow::setCompressDefaultPath()
+{
+    QString path;
+    QStringList fileslist = m_CompressPage->getCompressFilelist();
+
+    QFileInfo fileinfobase(fileslist.at(0));
+    for(int loop = 1; loop < fileslist.count();loop++)
+    {
+        QFileInfo fileinfo(fileslist.at(loop));
+        if(fileinfo.path() != fileinfobase.path())
+        {
+            m_CompressSetting->setDefaultPath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+            return;
+        }
+    }
+
+    m_CompressSetting->setDefaultPath(fileinfobase.path());
+    if(1 == fileslist.count())
+    {
+        m_CompressSetting->setDefaultName(fileinfobase.baseName());
+    }
+    else {
+        m_CompressSetting->setDefaultName(tr("新建归档文件"));
+    }
+
+}
 
 void MainWindow::onCompressNext()
 {
     m_pageid = PAGE_ZIPSET;
+    setCompressDefaultPath();
     refreshPage();
 }
 
