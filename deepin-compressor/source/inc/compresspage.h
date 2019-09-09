@@ -31,6 +31,7 @@ public slots:
     void onNextPress();
     void onAddfileSlot();
     void onSelectedFilesSlot(const QStringList &files);
+    void onRefreshFilelist(const QStringList &filelist);
 
 private:
 

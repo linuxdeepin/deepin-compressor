@@ -7,6 +7,7 @@
 #include <QHeaderView>
 #include <DPalette>
 #include <QFileIconProvider>
+#include <QDragEnterEvent>
 
 
 MyScrollBar::MyScrollBar(QWidget* parent)
@@ -172,7 +173,6 @@ void fileViewer::InitConnection()
     if(PAGE_COMPRESS == m_pagetype)
     {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
-
     }
     else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
@@ -195,6 +195,34 @@ QString fileViewer::getfiletype(const QFileInfo &file)
         ret = tr("文件") + " " + file.suffix();
     }
     return ret;
+}
+
+void fileViewer::keyPressEvent(QKeyEvent *event)
+{
+    if(!event)
+    {
+        return;
+    }
+    if(event->key() == Qt::Key_Delete) {
+        QItemSelectionModel *selections =  pTableViewFile->selectionModel();
+        QModelIndexList selected = selections->selectedIndexes();
+
+        QSet<unsigned int>  selectlist;
+
+        foreach (QModelIndex index, selected)
+        {
+            selectlist.insert(index.row());
+        }
+
+        QStringList filelist;
+        foreach(unsigned int index, selectlist)
+        {
+            filelist.append(m_curfilelist.at(index).filePath());
+        }
+
+        emit sigFileRemoved(filelist);
+
+    }
 }
 
 int fileViewer::getPathIndex()
@@ -244,11 +272,6 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
             pTableViewFile->setRootIndex(parent);
         }
     }
-}
-
-void fileViewer::slotDecompressRePreviousDoubleClicked(QMouseEvent *event)
-{
-
 }
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
@@ -311,10 +334,7 @@ void fileViewer::ScrollBarHideEvent ( QHideEvent * event ){
 
 }
 
-void fileViewer::showFileInfoList( QFileInfoList list )
-{
 
-}
 
 void fileViewer::setDecompressModel(ArchiveModel* model)
 {

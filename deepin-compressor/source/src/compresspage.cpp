@@ -50,6 +50,7 @@ CompressPage::CompressPage(QWidget *parent)
     }
 
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
+    connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
 }
 
 CompressPage::~CompressPage()
@@ -102,6 +103,13 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
     m_filelist.append(files);
     m_fileviewer->setFileList(m_filelist);
 }
+
+void CompressPage::onRefreshFilelist(const QStringList &filelist)
+{
+    m_filelist = filelist;
+    m_fileviewer->setFileList(m_filelist);
+}
+
 
 QStringList CompressPage::getCompressFilelist()
 {

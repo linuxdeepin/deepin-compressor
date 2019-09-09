@@ -90,13 +90,16 @@ protected slots:
        void slotCompressRowDoubleClicked(const QModelIndex index);
        void slotDecompressRowDoubleClicked(const QModelIndex index);
        void slotCompressRePreviousDoubleClicked(QMouseEvent *event);
-       void slotDecompressRePreviousDoubleClicked(QMouseEvent *event);
        void ScrollBarShowEvent ( QShowEvent * event );
        void ScrollBarHideEvent ( QHideEvent * event );
+
+signals:
+       void sigFileRemoved(const QStringList &filelist);
+
 private:
-       void showFileInfoList( QFileInfoList list );
        void refreshTableview();
        QString getfiletype(const QFileInfo &file);
+       void keyPressEvent(QKeyEvent *event) override;
 
 private:
        QLineEdit * pLineEditDir;
@@ -113,7 +116,6 @@ private:
        QFileInfoList m_curfilelist;
 
        PAGE_TYPE m_pagetype;
-
 
 };
 
