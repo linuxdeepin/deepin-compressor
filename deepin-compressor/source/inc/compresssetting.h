@@ -29,6 +29,8 @@ public:
     void InitUI();
     void InitConnection();
 
+    void setTypeImage(QString type);
+
 private:
     DPushButton* m_nextbutton;
     QPixmap m_compressicon;

@@ -114,10 +114,10 @@ void fileViewer::InitUI()
     pTableViewFile->setGeometry(0,0,580,300);
 
     plabel->setText(" ...返回上一层");
-    DPalette palette;
-    palette.setColor(DPalette::Background, QColor(245, 245, 245));
+//    DPalette palette;
+//    palette.setColor(DPalette::Background, QColor(245, 245, 245));
     plabel->setAutoFillBackground(true);
-    plabel->setPalette(palette);
+//    plabel->setPalette(palette);
     plabel->hide();
 
     pTableViewFile->setGeometry(0,0,580,300);

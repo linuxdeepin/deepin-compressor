@@ -5,6 +5,8 @@
 #include <QFormLayout>
 #include <QMimeDatabase>
 #include <QStandardPaths>
+#include <QFileIconProvider>
+#include <QTemporaryFile>
 
 
 static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","iso","tar","tar.7z","tar.Z","tar.bz2","tar.gz","tar.lz","tar.lzma","tar.lzo","tar.xz"};
@@ -29,9 +31,10 @@ void CompressSetting::InitUI()
 
 
     QWidget* leftwidget = new QWidget();
-    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
+//    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
-    m_pixmaplabel->setPixmap(m_compressicon);
+//    m_pixmaplabel->setPixmap(m_compressicon);
+
     m_compresstype = new DComboBox();
     m_compresstype->setFixedSize(80, 40);
 
@@ -39,11 +42,12 @@ void CompressSetting::InitUI()
         m_compresstype->addItem(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
     m_compresstype->setCurrentText("zip");
+    setTypeImage("zip");
 
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedSize(260, 36);
-    m_filename->setText(tr("untitled file"));
+    m_filename->setText(tr("新建归档文件"));
     m_savepath = new DLineEdit();
 
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
@@ -236,11 +240,32 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
     }
 }
 
+void CompressSetting::setTypeImage(QString type)
+{
+    QFileIconProvider provider;
+    QIcon icon;
+    QString strTemplateName = QDir::tempPath() + QDir::separator()  + "tempfile." + type;
+
+    QTemporaryFile tmpFile(strTemplateName);
+    tmpFile.setAutoRemove(false);
+
+    if (tmpFile.open())
+    {
+        tmpFile.close();
+        icon = provider.icon(QFileInfo(strTemplateName));
+    }
+
+    m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
+}
+
 
 void CompressSetting::ontypeChanged(int index)
 {
     qDebug()<<index;
     qDebug()<<m_supportedMimeTypes.at(index);
+
+    setTypeImage(m_compresstype->itemText(index));
+
     if(0 == index)
     {
         m_splitnumedit->setEnabled(true);
