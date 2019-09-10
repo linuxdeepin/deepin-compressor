@@ -761,10 +761,11 @@ void CliInterface::readStdout(bool handleAll)
         return;
     }
 
+    QByteArray dd = m_process->readAllStandardOutput();
+    m_stdOutData += dd;
+
     if(m_process->program().at(0).contains("7z"))
     {
-        QByteArray dd = m_process->readAllStandardOutput();
-        m_stdOutData += dd;
         QList<QByteArray> outinfo = dd.split(' ');
         outinfo.removeAll(QByteArray());
         if(dd.contains('%'))
