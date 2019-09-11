@@ -764,33 +764,7 @@ void CliInterface::readStdout(bool handleAll)
     QByteArray dd = m_process->readAllStandardOutput();
     m_stdOutData += dd;
 
-    if(m_process->program().at(0).contains("7z"))
-    {
-        QList<QByteArray> outinfo = dd.split(' ');
-        outinfo.removeAll(QByteArray());
-        if(dd.contains('%'))
-        {
-            QString progress_str = outinfo.at(2).data();
-            emit progress(progress_str.remove(QChar('%')).toDouble()/100);
-            QString strfilename;
-            int count = outinfo.indexOf("+");
-            if(-1 == count)
-            {
-                count = outinfo.indexOf("-");
-            }
-
-            for (int loop = count + 1; loop < outinfo.count(); loop++) {
-                strfilename += outinfo.at(loop).data();
-            }
-
-            emit progress_filename(strfilename);
-        }
-    }
-
-
-
     QList<QByteArray> lines = m_stdOutData.split('\n');
-
 
     //The reason for this check is that archivers often do not end
     //queries (such as file exists, wrong password) on a new line, but
@@ -803,6 +777,35 @@ void CliInterface::readStdout(bool handleAll)
     //       is suboptimal.
 
     bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
+
+    if(m_process->program().at(0).contains("7z") && !wrongPasswordMessage)
+    {
+        QString lineinfo = QString::fromLocal8Bit(dd);
+
+        int pos = lineinfo.indexOf(QLatin1Char( '%' ));
+        if (pos > 1)
+        {
+            int percentage = lineinfo.midRef(pos - 2, 2).toInt();
+
+            QStringRef strfilename;
+            int count = lineinfo.indexOf("+");
+            if(-1 == count)
+            {
+                count = lineinfo.indexOf("-");
+            }
+            if(count > 0)
+            {
+                strfilename = lineinfo.midRef(count + 2);
+            }
+
+            if(!strfilename.toString().contains("Wrong password"))
+            {
+                emit progress(float(percentage) / 100);
+                emit progress_filename(strfilename.toString());
+            }
+
+        }
+    }
 
     bool foundErrorMessage =
         (wrongPasswordMessage ||
@@ -902,7 +905,6 @@ bool CliInterface::handleLine(const QString& line)
         }
 
         if (isWrongPasswordMsg(line)) {
-            qDebug() << "Wrong password!";
             setPassword(QString());
 //            emit error("wrongpassword");
             emit sigExtractNeedPassword();
