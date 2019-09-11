@@ -661,15 +661,14 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
                        zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-                PasswordNeededQuery query(filename(), !firstTry);
-                emit userQuery(&query);
-                query.waitForResponse();
+//                PasswordNeededQuery query(filename(), !firstTry);
+                emit sigExtractNeedPassword();
 
-                if (query.responseCancelled()) {
-                    emit cancelled();
-                    return false;
-                }
-                setPassword(query.password());
+//                if (query.responseCancelled()) {
+//                    emit cancelled();
+//                    return false;
+//                }
+                setPassword(QString());
 
                 if (zip_set_default_password(archive, password().toUtf8().constData())) {
                 }

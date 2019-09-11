@@ -24,6 +24,8 @@ private:
     DLabel* m_stringinfolabel;
     DPushButton* m_nextbutton;
     DPasswordEdit* m_password;
+
+    bool m_inputflag;
 public slots:
     void nextbuttonClicked();
     void wrongPassWordSlot();

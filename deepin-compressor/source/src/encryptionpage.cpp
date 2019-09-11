@@ -7,7 +7,7 @@
 EncryptionPage::EncryptionPage(QWidget *parent)
     : QWidget(parent)
 {
-
+    m_inputflag = false;
     InitUI();
     InitConnection();
 }
@@ -50,12 +50,17 @@ void EncryptionPage::InitConnection()
 
 void EncryptionPage::nextbuttonClicked()
 {
+    m_inputflag = true;
     emit sigExtractPassword(m_password->text());
 }
 
 void EncryptionPage::wrongPassWordSlot()
 {
-    qDebug()<<"wrongPassWordSlot";
-    m_password->setAlert(true);
-    m_password->showAlertMessage(tr("密码错误"));
+    if(m_inputflag)
+    {
+        qDebug()<<"wrongPassWordSlot";
+        m_password->setAlert(true);
+        m_password->showAlertMessage(tr("密码错误"));
+    }
+
 }

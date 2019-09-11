@@ -369,7 +369,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
             this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
             this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-    connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
             m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
             this, SLOT(SlotProgressFile(KJob*, const QString &)));
@@ -479,9 +479,9 @@ void MainWindow::ExtractSinglePassword(QString password)
                 this, &MainWindow::slotExtractionDone);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-        connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+        connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
-        connect(m_encryptionpage, SIGNAL(percentfilename(KJob*, const QString &)),
+        connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
                 this, SLOT(SlotProgressFile(KJob*, const QString &)));
 
         m_encryptionjob->start();
@@ -510,9 +510,9 @@ void MainWindow::ExtractPassword(QString password)
                 this, &MainWindow::slotExtractionDone);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-        connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+        connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
-        connect(m_encryptionpage, SIGNAL(percentfilename(KJob*, const QString &)),
+        connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
                 this, SLOT(SlotProgressFile(KJob*, const QString &)));
 
         m_encryptionjob->start();
@@ -675,7 +675,7 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
             this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
             this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-    connect(m_encryptionjob, &ExtractJob::sigWrongPassword,
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
             m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
             this, SLOT(SlotProgressFile(KJob*, const QString &)));
