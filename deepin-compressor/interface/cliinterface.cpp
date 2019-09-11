@@ -784,7 +784,6 @@ void CliInterface::readStdout(bool handleAll)
             }
 
             emit progress_filename(strfilename);
-
         }
     }
 

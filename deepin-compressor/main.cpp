@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");
-    app.setApplicationVersion(DApplication::buildVersion("20190906"));
+    app.setApplicationVersion(DApplication::buildVersion("20190911"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-XXX-XXX/");
     app.setProductIcon(QIcon(":/images/compress-96.svg"));
     app.setProductName(DApplication::translate("Main", "深度解压缩"));
