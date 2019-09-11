@@ -50,10 +50,13 @@ public:
 
 signals:
     void sigDecompressPress(const QString& localPath);
+    void sigextractfiles(QVector<Archive::Entry*>, QString path);
+
 
 public slots:
     void oneCompressPress();
     void onPathButoonClicked();
+    void onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type);
 
 
 private:

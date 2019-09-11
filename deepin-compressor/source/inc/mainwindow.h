@@ -34,6 +34,7 @@
 #include "archive_manager.h"
 #include "archivemodel.h"
 #include "encryptionpage.h"
+#include "progressdialog.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -57,6 +58,7 @@ enum EncryptionType{
     Encryption_NULL,
     Encryption_Load,
     Encryption_Extract,
+    Encryption_SingleExtract,
 };
 
 class MainWindow : public DMainWindow
@@ -74,7 +76,10 @@ public:
     void creatArchive(QMap<QString, QString> &Args);
 
     void ExtractPassword(QString password);
+    void ExtractSinglePassword(QString password);
     void LoadPassword(QString password);
+
+
 
 
 protected:
@@ -102,7 +107,7 @@ private slots:
     void SlotNeedPassword();
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);
-
+    void slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path);
 
 
 signals:
@@ -136,9 +141,12 @@ private:
     Compressor_Success* m_CompressSuccess;
     Compressor_Fail* m_CompressFail;
     EncryptionPage* m_encryptionpage;
+    ProgressDialog* m_progressdialog;
     QSettings m_settings;
     QAction *m_themeAction;
     Page_ID m_pageid;
+
+    QVector<Archive::Entry*> m_extractSimpleFiles;
 
     DPushButton* m_titlebutton;
 

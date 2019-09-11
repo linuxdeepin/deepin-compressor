@@ -529,10 +529,10 @@ void ExtractJob::doWork()
 
     connectToArchiveInterfaceSignals();
 
-    qDebug() << "Starting extraction with" << m_entries.count() << "selected files."
-             << m_entries
-             << "Destination dir:" << m_destinationDir
-             << "Options:" << m_options;
+//    qDebug() << "Starting extraction with" << m_entries.count() << "selected files."
+//             << m_entries
+//             << "Destination dir:" << m_destinationDir
+//             << "Options:" << m_options;
 
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 

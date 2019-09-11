@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QStandardItemModel>
 #include "archivemodel.h"
+#include <DMenu>
 
 
 DWIDGET_USE_NAMESPACE
@@ -22,6 +23,11 @@ DWIDGET_USE_NAMESPACE
 enum PAGE_TYPE{
     PAGE_COMPRESS,
     PAGE_UNCOMPRESS,
+};
+
+enum EXTRACT_TYPE{
+    EXTRACT_HEAR,
+    EXTRACT_TO,
 };
 
 class MyScrollBar:public QScrollBar
@@ -86,15 +92,22 @@ public:
        int getPathIndex();
        void setFileList(const QStringList &files);
        void setDecompressModel(ArchiveModel* model);
+
+       QVector<Archive::Entry*> filesAndRootNodesForIndexes(const QModelIndexList& list) const;
+       QVector<Archive::Entry*> filesForIndexes(const QModelIndexList& list) const;
+       QModelIndexList addChildren(const QModelIndexList &list) const;
 protected slots:
        void slotCompressRowDoubleClicked(const QModelIndex index);
        void slotDecompressRowDoubleClicked(const QModelIndex index);
        void slotCompressRePreviousDoubleClicked(QMouseEvent *event);
        void ScrollBarShowEvent ( QShowEvent * event );
        void ScrollBarHideEvent ( QHideEvent * event );
+       void showRightMenu(const QPoint &pos);
+       void onRightMenuClicked(QAction *action);
 
 signals:
        void sigFileRemoved(const QStringList &filelist);
+       void sigextractfiles(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type);
 
 private:
        void refreshTableview();
@@ -114,6 +127,7 @@ private:
        QModelIndex m_indexmode;
        MyScrollBar *pScrollbar;
        QFileInfoList m_curfilelist;
+       DMenu* m_pRightMenu = nullptr;
 
        PAGE_TYPE m_pagetype;
 

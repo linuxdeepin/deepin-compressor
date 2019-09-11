@@ -122,6 +122,16 @@ void fileViewer::InitUI()
 
     pTableViewFile->setGeometry(0,0,580,300);
     plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
+
+    if(PAGE_UNCOMPRESS == m_pagetype)
+    {
+        pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
+        m_pRightMenu = new DMenu();
+        m_pRightMenu->setFixedWidth(200);
+        m_pRightMenu->addAction(tr("提取文件"));
+        m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
+
+    }
     refreshTableview();
 }
 
@@ -176,7 +186,11 @@ void fileViewer::InitConnection()
     }
     else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
-//        connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotDeCompressRePreviousDoubleClicked(QMouseEvent *)));
+        connect(pTableViewFile, &QTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+        if(m_pRightMenu)
+        {
+            connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
+        }
     }
     connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotCompressRePreviousDoubleClicked(QMouseEvent *)));
 
@@ -339,6 +353,94 @@ void fileViewer::ScrollBarHideEvent ( QHideEvent * event ){
 
 }
 
+void fileViewer::showRightMenu(const QPoint &pos)
+{
+    if (!pTableViewFile->indexAt(pos).isValid())
+    {
+        return;
+    }
+
+    m_pRightMenu->popup(QCursor::pos());
+
+}
+
+void fileViewer::onRightMenuClicked(QAction *action)
+{
+    if(action->text() == tr("提取文件"))
+    {
+        emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
+    }
+    else {
+        emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
+    }
+}
+
+
+QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
+{
+    Q_ASSERT(m_decompressmodel);
+
+    QModelIndexList ret = list;
+
+    // Iterate over indexes in list and add all children.
+    for (int i = 0; i < ret.size(); ++i) {
+        QModelIndex index = ret.at(i);
+
+        for (int j = 0; j < m_decompressmodel->rowCount(index); ++j) {
+            QModelIndex child = m_decompressmodel->index(j, 0, index);
+            if (!ret.contains(child)) {
+                ret << child;
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+QVector<Archive::Entry*> fileViewer::filesForIndexes(const QModelIndexList& list) const
+{
+    QVector<Archive::Entry*> ret;
+
+    for (const QModelIndex& index : list) {
+        ret << m_decompressmodel->entryForIndex(index);
+    }
+
+    return ret;
+}
+
+QVector<Archive::Entry*> fileViewer::filesAndRootNodesForIndexes(const QModelIndexList& list) const
+{
+    QVector<Archive::Entry*> fileList;
+    QStringList fullPathsList;
+
+    for (const QModelIndex& index : list) {
+        QModelIndex selectionRoot = index.parent();
+        while (pTableViewFile->selectionModel()->isSelected(selectionRoot) ||
+               list.contains(selectionRoot)) {
+            selectionRoot = selectionRoot.parent();
+        }
+
+        // Fetch the root node for the unselected parent.
+        const QString rootFileName = selectionRoot.isValid()
+            ? m_decompressmodel->entryForIndex(selectionRoot)->fullPath()
+            : QString();
+
+
+        // Append index with root node to fileList.
+        QModelIndexList alist = QModelIndexList() << index;
+        const auto filesIndexes = filesForIndexes(alist);
+        for (Archive::Entry *entry : filesIndexes) {
+            const QString fullPath = entry->fullPath();
+            if (!fullPathsList.contains(fullPath)) {
+                entry->rootNode = rootFileName;
+                fileList.append(entry);
+                fullPathsList.append(fullPath);
+            }
+        }
+    }
+    return fileList;
+}
 
 
 void fileViewer::setDecompressModel(ArchiveModel* model)

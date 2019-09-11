@@ -56,7 +56,8 @@ HEADERS +=  source/inc/homepage.h \
     interface/kcoreaddons_export.h \
     interface/kprocess.h \
     interface/kprocess_p.h \
-    source/inc/encryptionpage.h
+    source/inc/encryptionpage.h \
+    source/inc/progressdialog.h
 
 
 
@@ -92,7 +93,8 @@ SOURCES +=  source/src/homepage.cpp \
     interface/desktopfileparser.cpp \
     interface/cliproperties.cpp \
     interface/archiveformat.cpp \
-    interface/kprocess.cpp
+    interface/kprocess.cpp \
+    source/src/progressdialog.cpp
 
 
 

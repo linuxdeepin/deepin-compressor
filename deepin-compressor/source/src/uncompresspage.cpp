@@ -76,6 +76,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
     connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);
     connect(m_pathbutton, &DPushButton::clicked, this, &UnCompressPage::onPathButoonClicked);
+    connect(m_fileviewer, &fileViewer::sigextractfiles, this, &UnCompressPage::onextractfilesSlot);
 }
 
 UnCompressPage::~UnCompressPage()
@@ -123,4 +124,29 @@ void UnCompressPage::setdefaultpath(QString path){
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;
+}
+
+void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type)
+{
+    if(EXTRACT_TO == type)
+    {
+        DFileDialog dialog;
+        dialog.setAcceptMode(DFileDialog::AcceptOpen);
+        dialog.setFileMode(DFileDialog::Directory);
+        dialog.setDirectory(m_pathstr);
+
+        const int mode = dialog.exec();
+
+        if (mode != QDialog::Accepted) {
+            return;
+        }
+
+        QList<QUrl> pathlist = dialog.selectedUrls();
+        QString curpath = pathlist.at(0).toLocalFile();
+
+        emit sigextractfiles(fileList, curpath);
+    }
+    else {
+        emit sigextractfiles(fileList, m_pathstr);
+    }
 }
