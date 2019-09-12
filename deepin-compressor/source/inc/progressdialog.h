@@ -29,7 +29,11 @@ public:
     void closeEvent(QCloseEvent *) override;
 
 signals:
+<<<<<<< HEAD
     void stopExtract();
+=======
+    void closeClicked();
+>>>>>>> chore(Compressor):modify plugin load path
 
 public slots:
     void slotextractpress(int index);

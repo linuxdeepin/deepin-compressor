@@ -698,6 +698,7 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
 
 }
 
+<<<<<<< HEAD
 void MainWindow::slotKillExtractJob()
 {
     if(m_encryptionjob)
@@ -706,6 +707,8 @@ void MainWindow::slotKillExtractJob()
     }
 }
 
+=======
+>>>>>>> chore(Compressor):modify plugin load path
 
 void MainWindow::onCancelCompressPressed()
 {

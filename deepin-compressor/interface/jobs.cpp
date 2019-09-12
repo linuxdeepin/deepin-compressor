@@ -542,11 +542,14 @@ void ExtractJob::doWork()
     }
 }
 
+<<<<<<< HEAD
 bool ExtractJob::Killjob()
 {
     return kill();
 }
 
+=======
+>>>>>>> chore(Compressor):modify plugin load path
 
 QString ExtractJob::destinationDirectory() const
 {

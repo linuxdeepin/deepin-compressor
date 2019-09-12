@@ -36,7 +36,10 @@
 #include "encryptionpage.h"
 #include "progressdialog.h"
 #include "extractpausedialog.h"
+<<<<<<< HEAD
 #include "settingdialog.h"
+=======
+>>>>>>> chore(Compressor):modify plugin load path
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE

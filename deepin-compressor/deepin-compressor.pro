@@ -60,8 +60,12 @@ HEADERS +=  source/inc/homepage.h \
     interface/kprocess_p.h \
     source/inc/encryptionpage.h \
     source/inc/progressdialog.h \
+<<<<<<< HEAD
     source/inc/extractpausedialog.h \
     source/inc/settingdialog.h
+=======
+    source/inc/extractpausedialog.h
+>>>>>>> chore(Compressor):modify plugin load path
 
 
 
@@ -99,8 +103,12 @@ SOURCES +=  source/src/homepage.cpp \
     interface/archiveformat.cpp \
     interface/kprocess.cpp \
     source/src/progressdialog.cpp \
+<<<<<<< HEAD
     source/src/extractpausedialog.cpp \
     source/src/settingdialog.cpp
+=======
+    source/src/extractpausedialog.cpp
+>>>>>>> chore(Compressor):modify plugin load path
 
 
 
@@ -130,6 +138,6 @@ translations.path = /usr/share/deepin-compressor/translations
 translations.files = $$PWD/translations/*.qm
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/images/deepin-compressor.svg
+icon_files.files = $$PWD/images/compress-96.svg
 
 INSTALLS += target desktop translations icon_files
