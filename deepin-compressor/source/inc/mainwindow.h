@@ -109,6 +109,7 @@ private slots:
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);
     void slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path);
+    void slotKillExtractJob();
 
 
 signals:

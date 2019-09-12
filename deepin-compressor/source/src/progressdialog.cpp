@@ -58,7 +58,7 @@ void ProgressDialog::slotextractpress(int index)
     qDebug()<<index;
     if(0 == index)
     {
-
+        emit stopExtract();
     }
     else {
         exec();
@@ -67,7 +67,6 @@ void ProgressDialog::slotextractpress(int index)
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-//    emit closeClicked();
     if(m_circleprogress->value() < 100 && m_circleprogress->value() > 0)
     {
         accept();

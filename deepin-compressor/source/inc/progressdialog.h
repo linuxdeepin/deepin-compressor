@@ -29,7 +29,7 @@ public:
     void closeEvent(QCloseEvent *) override;
 
 signals:
-    void closeClicked();
+    void stopExtract();
 
 public slots:
     void slotextractpress(int index);

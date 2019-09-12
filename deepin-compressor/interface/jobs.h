@@ -237,6 +237,9 @@ public:
 public Q_SLOTS:
     void doWork() override;
 
+public:
+    bool Killjob();
+
 signals:
     void sigExtractJobPassword();
 

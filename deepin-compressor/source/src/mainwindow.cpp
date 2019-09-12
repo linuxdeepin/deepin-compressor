@@ -105,6 +105,7 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigDecompressPress,this, &MainWindow::slotextractSelectedFilesTo);
     connect(m_encryptionpage, &EncryptionPage::sigExtractPassword,this, &MainWindow::SlotExtractPassword);
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles,this, &MainWindow::slotExtractSimpleFiles);
+    connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
 }
 
 void MainWindow::initTitleBar()
@@ -693,9 +694,21 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
 
 }
 
+void MainWindow::slotKillExtractJob()
+{
+    if(m_encryptionjob)
+    {
+        m_encryptionjob->Killjob();
+    }
+}
+
 
 void MainWindow::onCancelCompressPressed()
 {
+    if(m_encryptionjob)
+    {
+        m_encryptionjob->Killjob();
+    }
     emit sigquitApp();
 }
 

@@ -542,6 +542,11 @@ void ExtractJob::doWork()
     }
 }
 
+bool ExtractJob::Killjob()
+{
+    return kill();
+}
+
 
 QString ExtractJob::destinationDirectory() const
 {
