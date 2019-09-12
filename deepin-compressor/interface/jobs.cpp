@@ -543,13 +543,19 @@ void ExtractJob::doWork()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat(Comressor):Extract files
 bool ExtractJob::Killjob()
 {
     return kill();
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> chore(Compressor):modify plugin load path
+=======
+>>>>>>> feat(Comressor):Extract files
 
 QString ExtractJob::destinationDirectory() const
 {
