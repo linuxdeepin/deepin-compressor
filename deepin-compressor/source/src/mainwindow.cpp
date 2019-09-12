@@ -117,7 +117,7 @@ QMenu* MainWindow::createSettingsMenu()
 
 void MainWindow::initTitleBar()
 {
-//    titlebar()->setMenu(createSettingsMenu());
+    titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
 
 
