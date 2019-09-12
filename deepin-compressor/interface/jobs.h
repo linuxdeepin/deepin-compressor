@@ -86,6 +86,7 @@ Q_SIGNALS:
     void userQuery(Query*);
     void sigWrongPassword();
 
+
 private:
     Archive *m_archive;
     ReadOnlyArchiveInterface *m_archiveInterface;

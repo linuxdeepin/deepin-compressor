@@ -2,9 +2,10 @@
 
 #include <QBoxLayout>
 #include <QFileIconProvider>
+#include <QDebug>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
-    DDialog(parent)
+    QDialog(parent)
 {
     initUI();
     initConnect();
@@ -12,9 +13,10 @@ ProgressDialog::ProgressDialog(QWidget *parent):
 
 void ProgressDialog::initUI()
 {
-    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
+//    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
     setFixedWidth(m_defaultWidth);
-    setTitle(tr("提取中..."));
+    setWindowTitle(QObject::tr("提取中..."));
 
     m_tasklable = new DLabel();
     m_filelable = new DLabel();
@@ -29,26 +31,57 @@ void ProgressDialog::initUI()
     m_circleprogress->setValue(0);
     m_circleprogress->setText("0");
 
-    insertContent(0, m_circleprogress, Qt::AlignLeft | Qt::AlignVCenter);
-    insertContent(1, m_tasklable);
-    addSpacing(10);
-    insertContent(2, m_filelable);
 
-    moveToCenter();
+    QVBoxLayout* rightlaout = new QVBoxLayout;
+    rightlaout->addWidget(m_tasklable, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    rightlaout->addWidget(m_filelable, 0, Qt::AlignLeft | Qt::AlignVCenter);
+
+    QHBoxLayout* mainlayout = new QHBoxLayout;
+    mainlayout->addWidget(m_circleprogress, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    mainlayout->addLayout(rightlaout, 0);
+
+    mainlayout->setStretch(0,1);
+    mainlayout->setStretch(1,4);
+
+    setLayout(mainlayout);
+
+    m_extractdialog = new ExtractPauseDialog();
 }
 
 void ProgressDialog::initConnect()
 {
-
+    connect(m_extractdialog, &ExtractPauseDialog::sigbuttonpress, this, &ProgressDialog::slotextractpress);
 }
 
+void ProgressDialog::slotextractpress(int index)
+{
+    qDebug()<<index;
+    if(0 == index)
+    {
+
+    }
+    else {
+        exec();
+    }
+}
+
+void ProgressDialog::closeEvent(QCloseEvent *)
+{
+//    emit closeClicked();
+    if(m_circleprogress->value() < 100 && m_circleprogress->value() > 0)
+    {
+        accept();
+        m_extractdialog->exec();
+    }
+}
 
 void ProgressDialog::setCurrentTask(const QString &file)
 {
     QFileIconProvider icon_provider;
     QFileInfo fileinfo(file);
     QIcon icon = icon_provider.icon(fileinfo);
-    setIcon(icon, QSize(16, 16));
+//    setIcon(icon, QSize(16, 16));
+    setWindowIcon(icon);
 
     m_tasklable->setText(tr("当前任务") + ":" + fileinfo.fileName());
 }
@@ -67,8 +100,20 @@ void ProgressDialog::setProcess(unsigned long  value)
 
 void ProgressDialog::setFinished(const QString &path)
 {
-    setTitle(tr(""));
+    setWindowTitle(tr(""));
     m_circleprogress->setValue(100);
     m_circleprogress->setText(QString::number(100));
-    m_filelable->setText(tr("提取完成") + ":" + "已提取到" + path);
+    m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
+    m_extractdialog->reject();
 }
+
+void ProgressDialog::showdialog()
+{
+    exec();
+}
+
+bool ProgressDialog::isshown()
+{
+    return this->isVisible() || m_extractdialog->isVisible();
+}
+

@@ -72,6 +72,6 @@ HEADERS += \
     ../../deepin-compressor/interface/kpluginloader.h
 
 unix {
-    target.path = /usr/lib
+    target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }

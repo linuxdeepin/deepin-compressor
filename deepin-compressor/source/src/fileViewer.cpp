@@ -8,6 +8,8 @@
 #include <DPalette>
 #include <QFileIconProvider>
 #include <QDragEnterEvent>
+#include <QMimeData>
+#include <QDrag>
 
 
 MyScrollBar::MyScrollBar(QWidget* parent)
@@ -130,8 +132,9 @@ void fileViewer::InitUI()
         m_pRightMenu->setFixedWidth(200);
         m_pRightMenu->addAction(tr("提取文件"));
         m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
-
+        pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
     }
+
     refreshTableview();
 }
 
@@ -453,5 +456,53 @@ void fileViewer::setDecompressModel(ArchiveModel* model)
 
     pTableViewFile->setModel(m_decompressmodel);
 
+}
+
+void fileViewer::dragEnterEvent(QDragEnterEvent *e)
+{
+//    const auto *mime = e->mimeData();
+
+//    // not has urls.
+//    if (!mime->hasUrls()) {
+//        return e->ignore();
+//    }
+
+//    // traverse.
+//    m_homePage->setIconPixmap(true);
+    e->accept();
+}
+
+void fileViewer::dragLeaveEvent(QDragLeaveEvent *e)
+{
+//    m_homePage->setIconPixmap(false);
+
+//    DMainWindow::dragLeaveEvent(e);
+    qDebug()<<e;
+    e->accept();
+}
+
+void fileViewer::dropEvent(QDropEvent *e)
+{
+
+
+    e->accept();
+
+
+
+}
+
+void fileViewer::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->accept();
+}
+
+void fileViewer::startDrag(Qt::DropActions supportedActions)
+{
+    QMimeData* mimeData = new QMimeData;
+    connect(mimeData, SIGNAL(dataRequested(QString)),
+            this, SLOT(createData(QString)), Qt::DirectConnection);
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->exec(Qt::CopyAction);
 }
 

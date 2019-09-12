@@ -215,7 +215,8 @@ QVector<Plugin*> PluginManager::filterBy(const QVector<Plugin*> &plugins, const 
 
 void PluginManager::loadPlugins()
 {
-    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("compressor"));
+    QCoreApplication::addLibraryPath("/usr/lib/deepin-compressor/");
+    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plugins"));
     QSet<QString> addedPlugins;
     for (const KPluginMetaData &metaData : plugins) {
         const auto pluginId = metaData.pluginId();

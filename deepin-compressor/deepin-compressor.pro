@@ -8,6 +8,8 @@ QT       += gui-private
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+
+
 TEMPLATE = app
 TARGET = deepin-compressor
 
@@ -57,7 +59,8 @@ HEADERS +=  source/inc/homepage.h \
     interface/kprocess.h \
     interface/kprocess_p.h \
     source/inc/encryptionpage.h \
-    source/inc/progressdialog.h
+    source/inc/progressdialog.h \
+    source/inc/extractpausedialog.h
 
 
 
@@ -94,7 +97,8 @@ SOURCES +=  source/src/homepage.cpp \
     interface/cliproperties.cpp \
     interface/archiveformat.cpp \
     interface/kprocess.cpp \
-    source/src/progressdialog.cpp
+    source/src/progressdialog.cpp \
+    source/src/extractpausedialog.cpp
 
 
 
@@ -117,6 +121,6 @@ translations.path = /usr/share/deepin-compressor/translations
 translations.files = $$PWD/translations/*.qm
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/images/deepin-compressor.svg
+icon_files.files = $$PWD/images/compress-96.svg
 
 INSTALLS += target translations icon_files

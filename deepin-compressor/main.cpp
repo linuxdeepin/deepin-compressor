@@ -34,6 +34,8 @@ int main(int argc, char *argv[])
     // load dtk xcb plugin.
     DApplication::loadDXcbPlugin();
 
+
+
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);

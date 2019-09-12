@@ -239,6 +239,7 @@ bool KPluginLoader::unload()
 void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(const QString &)> callback)
 {
     QStringList dirsToCheck;
+    qDebug()<<QCoreApplication::libraryPaths();
     if (QDir::isAbsolutePath(directory)) {
         dirsToCheck << directory;
     } else {

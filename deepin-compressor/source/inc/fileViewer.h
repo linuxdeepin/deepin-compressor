@@ -96,6 +96,15 @@ public:
        QVector<Archive::Entry*> filesAndRootNodesForIndexes(const QModelIndexList& list) const;
        QVector<Archive::Entry*> filesForIndexes(const QModelIndexList& list) const;
        QModelIndexList addChildren(const QModelIndexList &list) const;
+
+       void startDrag(Qt::DropActions supportedActions);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
+    void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
        void slotCompressRowDoubleClicked(const QModelIndex index);
        void slotDecompressRowDoubleClicked(const QModelIndex index);

@@ -156,6 +156,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename);
 
+
     auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface*>(archiveInterface());
     if (readWriteInterface) {
         connect(readWriteInterface, &ReadWriteArchiveInterface::entryRemoved, this, &Job::onEntryRemoved);
@@ -540,6 +541,7 @@ void ExtractJob::doWork()
         onFinished(ret);
     }
 }
+
 
 QString ExtractJob::destinationDirectory() const
 {

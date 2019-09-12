@@ -62,6 +62,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::InitUI()
 {
+//    m_extractdialog->exec();
     // add widget to main layout.
     m_mainLayout->addWidget(m_homePage);
     m_mainLayout->addWidget(m_UnCompressPage);
@@ -384,10 +385,14 @@ void MainWindow::SlotProgress(KJob *job, unsigned long percent)
     qDebug()<<percent;
     if((Encryption_SingleExtract == m_encryptiontype) && (percent < 100) && (percent > 0))
     {
-        m_pageid = PAGE_UNZIP;
-        refreshPage();
+        if(!m_progressdialog->isshown())
+        {
+            m_pageid = PAGE_UNZIP;
+            refreshPage();
+            m_progressdialog->showdialog();
+        }
         m_progressdialog->setProcess(percent);
-        m_progressdialog->exec();
+
     }
     else if(PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid)
     {
@@ -687,8 +692,6 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
     m_progressdialog->setCurrentTask(file.fileName());
 
 }
-
-
 
 
 void MainWindow::onCancelCompressPressed()

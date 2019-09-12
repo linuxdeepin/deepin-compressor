@@ -1007,28 +1007,28 @@ bool CliInterface::handleFileExistsMessage(const QString& line)
         return false;
     }
 
-    OverwriteQuery query(QDir::current().path() + QLatin1Char( '/' ) + m_storedFileName);
-    query.setNoRenameMode(true);
-    query.execute();
+//    OverwriteQuery query(QDir::current().path() + QLatin1Char( '/' ) + m_storedFileName);
+//    query.setNoRenameMode(true);
+//    query.execute();
 
     QString responseToProcess;
     const QStringList choices = m_cliProps->property("fileExistsInput").toStringList();
-
-    if (query.responseOverwrite()) {
-        responseToProcess = choices.at(0);
-    } else if (query.responseSkip()) {
-        responseToProcess = choices.at(1);
-    } else if (query.responseOverwriteAll()) {
-        responseToProcess = choices.at(2);
-    } else if (query.responseAutoSkip()) {
-        responseToProcess = choices.at(3);
-    } else if (query.responseCancelled()) {
-        emit cancelled();
-        if (choices.count() < 5) { // If the program has no way to cancel the extraction, we resort to killing it
-            return doKill();
-        }
-        responseToProcess = choices.at(4);
-    }
+    responseToProcess = choices.at(2);//overwrite
+//    if (query.responseOverwrite()) {
+//        responseToProcess = choices.at(0);
+//    } else if (query.responseSkip()) {
+//        responseToProcess = choices.at(1);
+//    } else if (query.responseOverwriteAll()) {
+//        responseToProcess = choices.at(2);
+//    } else if (query.responseAutoSkip()) {
+//        responseToProcess = choices.at(3);
+//    } else if (query.responseCancelled()) {
+//        emit cancelled();
+//        if (choices.count() < 5) { // If the program has no way to cancel the extraction, we resort to killing it
+//            return doKill();
+//        }
+//        responseToProcess = choices.at(4);
+//    }
 
     Q_ASSERT(!responseToProcess.isEmpty());
 

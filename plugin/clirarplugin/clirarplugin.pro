@@ -72,7 +72,7 @@ HEADERS += \
     ../../deepin-compressor/interface/kprocess.h
 
 unix {
-    target.path = /usr/lib
+    target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }
 

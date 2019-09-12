@@ -75,7 +75,7 @@ HEADERS += \
     ../../../deepin-compressor/interface/pluginmanager.h
 
 unix {
-    target.path = /usr/lib
+    target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }
 

@@ -35,6 +35,7 @@
 #include "archivemodel.h"
 #include "encryptionpage.h"
 #include "progressdialog.h"
+#include "extractpausedialog.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE

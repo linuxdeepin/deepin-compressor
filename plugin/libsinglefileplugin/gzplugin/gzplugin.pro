@@ -75,6 +75,6 @@ HEADERS += \
     ../../../deepin-compressor/interface/kcoreaddons_export.h
 
 unix {
-    target.path = /usr/lib
+    target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }

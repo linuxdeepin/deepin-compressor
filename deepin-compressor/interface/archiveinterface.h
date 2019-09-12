@@ -222,6 +222,7 @@ private:
 
 private Q_SLOTS:
     void onEntry(Archive::Entry *archiveEntry);
+
 };
 
 class  ReadWriteArchiveInterface: public ReadOnlyArchiveInterface
@@ -268,6 +269,8 @@ protected:
 
 private Q_SLOTS:
     void onEntryRemoved(const QString &path);
+
+
 };
 
 
