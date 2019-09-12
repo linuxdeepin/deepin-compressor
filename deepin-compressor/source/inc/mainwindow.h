@@ -73,6 +73,7 @@ public:
     void InitUI();
     void InitConnection();
     void initTitleBar();
+    QMenu* createSettingsMenu();
     void loadArchive(const QString &files);
     void creatArchive(QMap<QString, QString> &Args);
 

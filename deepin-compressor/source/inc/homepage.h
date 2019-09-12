@@ -22,10 +22,11 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QFileDialog>
+#include <DLabel>
+#include <DFileDialog>
 #include <QSettings>
 #include <DCommandLinkButton>
+#include <DSpinner>
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,6 +39,8 @@ public:
     ~HomePage();
 
     void setIconPixmap(bool isLoaded);
+    void spinnerStart();
+    void spinnerStop();
 
 signals:
     void fileSelected(const QStringList files) const;
@@ -49,11 +52,12 @@ private:
     QVBoxLayout *m_layout;
     QPixmap m_unloadPixmap;
     QPixmap m_loadedPixmap;
-    QLabel *m_iconLabel;
-    QLabel *m_tipsLabel;
-    QLabel *m_splitLine;
+    DLabel *m_iconLabel;
+    DLabel *m_tipsLabel;
+    DLabel *m_splitLine;
     DCommandLinkButton *m_chooseBtn;
     QSettings *m_settings;
+    DSpinner* m_spinner;
 };
 
 #endif

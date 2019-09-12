@@ -26,9 +26,9 @@
 HomePage::HomePage(QWidget *parent)
     : QWidget(parent),
       m_layout(new QVBoxLayout(this)),
-      m_iconLabel(new QLabel),
-      m_tipsLabel(new QLabel(tr("拖拽文件（夹）到此"))),
-      m_splitLine(new QLabel),
+      m_iconLabel(new DLabel),
+      m_tipsLabel(new DLabel(tr("拖拽文件（夹）到此"))),
+      m_splitLine(new DLabel),
       m_chooseBtn(new DCommandLinkButton(tr("选择文件"))),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
@@ -58,6 +58,12 @@ HomePage::HomePage(QWidget *parent)
     m_layout->setSpacing(0);
 
     connect(m_chooseBtn, &DCommandLinkButton::clicked, this, &HomePage::onChooseBtnClicked);
+
+    m_spinner = new DSpinner(this);
+    m_spinner->setFixedSize(40, 40);
+
+    m_spinner->move(285, 200);
+    m_spinner->hide();
 }
 
 HomePage::~HomePage()
@@ -71,6 +77,20 @@ void HomePage::setIconPixmap(bool isLoaded)
     } else {
         m_iconLabel->setPixmap(m_unloadPixmap);
     }
+}
+
+void HomePage::spinnerStart()
+{
+    m_spinner->show();
+    m_spinner->start();
+    m_chooseBtn->setEnabled(false);
+}
+
+void HomePage::spinnerStop()
+{
+    m_spinner->hide();
+    m_spinner->stop();
+    m_chooseBtn->setEnabled(true);
 }
 
 void HomePage::onChooseBtnClicked()

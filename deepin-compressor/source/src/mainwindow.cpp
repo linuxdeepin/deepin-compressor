@@ -108,16 +108,24 @@ void MainWindow::InitConnection()
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
 }
 
+QMenu* MainWindow::createSettingsMenu()
+{
+    QMenu *menu = new QMenu;
+
+    QAction *settingsAction = menu->addAction(tr("设置"));
+    connect(settingsAction, &QAction::triggered, this, [this] {
+//        m_settingsDialog->show();
+    });
+
+    return menu;
+}
+
+
 void MainWindow::initTitleBar()
 {
-    // add menu to titlebar.
-    QMenu *menu = new QMenu;
-    menu->addAction(m_themeAction);
-    menu->addSeparator();
-    titlebar()->setMenu(menu);
+    titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
-    // init theme action.
-    m_themeAction->setCheckable(true);
+
 
     m_logo = new DLabel("");
     m_logoicon = Utils::renderSVG(":/images/compress-Typeface-player.svg", QSize(30, 30));
@@ -328,6 +336,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
     }
     m_UnCompressPage->setModel(m_model);
     m_pageid = PAGE_UNZIP;
+    m_homePage->spinnerStop();
     refreshPage();
 }
 
@@ -343,6 +352,7 @@ void MainWindow::loadArchive(const QString &files)
 
     if (m_loadjob) {
         m_loadjob->start();
+        m_homePage->spinnerStart();
     }
 }
 
