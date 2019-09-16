@@ -1,0 +1,67 @@
+{
+    "groups": [
+        {
+            "key": "base",
+            "name": "基本设置",
+            "groups": [
+                {
+                    "key": "decompress",
+                    "name": "解压设置",
+                    "options": [
+                        {
+                            "key": "default_path",
+                            "name": "默认解压位置：",
+                            "type": "combobox",
+                            "items": [
+                                "当前目录",
+                                "桌面",
+                                "其他目录"
+                            ],
+                            "default": "当前目录"
+                        },
+                        {
+                            "key": "create_folder",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "自动创建文件夹",
+                            "default": true
+                        },
+                        {
+                            "key": "open_folder",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "当解压完成后自动打开对应的文件夹",
+                            "default": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "file_association",
+            "name": "文件关联",
+            "groups": [
+                {
+                    "key": "file_association_type",
+                    "name": "关联文件类型",
+                    "options": [
+                        {
+                            "key": "zip",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "自动创建文件夹",
+                            "default": true
+                        },
+                        {
+                            "key": "open_folder",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "当解压完成后自动打开对应的文件夹",
+                            "default": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

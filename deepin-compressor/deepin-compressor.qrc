@@ -7,12 +7,12 @@
         <file>images/file.svg</file>
         <file>images/lock.svg</file>
         <file>images/folder-24 .svg</file>
-        <file>images/compress-96.svg</file>
         <file>images/fail.svg</file>
         <file>images/folder-128 .svg</file>
         <file>images/deepin_logo.svg</file>
         <file>images/Compression Packet.svg</file>
         <file>images/compress-Typeface-player.svg</file>
         <file>images/success.svg</file>
+        <file>images/deepin-compressor.svg</file>
     </qresource>
 </RCC>

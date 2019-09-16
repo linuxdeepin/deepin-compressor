@@ -36,6 +36,7 @@
 #include "encryptionpage.h"
 #include "progressdialog.h"
 #include "extractpausedialog.h"
+#include "settingdialog.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -145,8 +146,8 @@ private:
     Compressor_Fail* m_CompressFail;
     EncryptionPage* m_encryptionpage;
     ProgressDialog* m_progressdialog;
+    SettingDialog* m_settingsDialog;
     QSettings m_settings;
-    QAction *m_themeAction;
     Page_ID m_pageid;
 
     QVector<Archive::Entry*> m_extractSimpleFiles;

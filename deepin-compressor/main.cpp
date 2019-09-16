@@ -41,9 +41,10 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");
+    app.setApplicationName("deepin-compressor");
     app.setApplicationVersion(DApplication::buildVersion("20190911"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-XXX-XXX/");
-    app.setProductIcon(QIcon(":/images/compress-96.svg"));
+    app.setProductIcon(QIcon(":/images/deepin-compressor.svg"));
     app.setProductName(DApplication::translate("Main", "深度解压缩"));
     app.setApplicationDescription(DApplication::translate("Main","深度解压缩是深度操作系统自带的解压缩软件。满足对文件解压缩的常用功能，快速、轻巧，使用简单。"));
 
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
     // init modules.
     MainWindow w;
     w.setMinimumSize(620, 465);
-    w.setWindowIcon(QIcon(":/images/compress-96.svg"));
+    w.setWindowIcon(QIcon(":/images/deepin-compressor.svg"));
     w.show();
 
     if (app.setSingleInstance("deepin-compressor")) {

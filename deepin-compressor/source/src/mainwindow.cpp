@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_CompressFail(new Compressor_Fail),
       m_encryptionpage(new EncryptionPage),
       m_progressdialog(new ProgressDialog),
-      m_settings("deepin", "deepin-font-installer"),
-      m_themeAction(new QAction(tr("Dark theme"), this))
+      m_settingsDialog(new SettingDialog),
+      m_settings("deepin", "deepin-compressor")
 {
     m_encryptionjob = nullptr;
     m_encryptiontype = Encryption_NULL;
@@ -77,11 +77,6 @@ void MainWindow::InitUI()
     setWindowTitle(tr("Deepin Archive Manager"));
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
-
-    // init settings.
-    if (!m_settings.contains("darkTheme")) {
-        m_settings.setValue("darkTheme", false);
-    }
 
     initTitleBar();
 
@@ -113,7 +108,7 @@ QMenu* MainWindow::createSettingsMenu()
 
     QAction *settingsAction = menu->addAction(tr("设置"));
     connect(settingsAction, &QAction::triggered, this, [this] {
-//        m_settingsDialog->show();
+        m_settingsDialog->show();
     });
 
     return menu;
@@ -122,7 +117,7 @@ QMenu* MainWindow::createSettingsMenu()
 
 void MainWindow::initTitleBar()
 {
-    titlebar()->setMenu(createSettingsMenu());
+//    titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
 
 

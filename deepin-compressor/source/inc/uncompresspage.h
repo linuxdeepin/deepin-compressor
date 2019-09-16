@@ -63,7 +63,6 @@ private:
 
     fileViewer *m_fileviewer;
     DPushButton* m_nextbutton;
-    QSettings *m_settings;
     QStringList m_filelist;
     DLineEdit* m_extractpath;
     DLabel* m_pixmaplabel;

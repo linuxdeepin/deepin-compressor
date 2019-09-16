@@ -60,7 +60,8 @@ HEADERS +=  source/inc/homepage.h \
     interface/kprocess_p.h \
     source/inc/encryptionpage.h \
     source/inc/progressdialog.h \
-    source/inc/extractpausedialog.h
+    source/inc/extractpausedialog.h \
+    source/inc/settingdialog.h
 
 
 
@@ -98,12 +99,14 @@ SOURCES +=  source/src/homepage.cpp \
     interface/archiveformat.cpp \
     interface/kprocess.cpp \
     source/src/progressdialog.cpp \
-    source/src/extractpausedialog.cpp
+    source/src/extractpausedialog.cpp \
+    source/src/settingdialog.cpp
 
 
 
 
 RESOURCES += deepin-compressor.qrc
+RESOURCES += config.qrc
 TRANSLATIONS += translations/deepin-compressor.ts
 
 
@@ -113,6 +116,12 @@ isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-compressor
 
 target.path = $$INSTROOT$$BINDIR
 
+desktop.path = $$INSTROOT$$APPDIR
+desktop.files =  deepin-compressor.desktop
+
+
+manual.path = /usr/share/dman/
+manual.files = $$PWD/dman/*
 
 # Automating generation .qm files from .ts files
 !system($$PWD/translate_generation.sh): error("Failed to generate translation")
@@ -121,6 +130,6 @@ translations.path = /usr/share/deepin-compressor/translations
 translations.files = $$PWD/translations/*.qm
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/images/compress-96.svg
+icon_files.files = $$PWD/images/deepin-compressor.svg
 
-INSTALLS += target translations icon_files
+INSTALLS += target desktop translations icon_files

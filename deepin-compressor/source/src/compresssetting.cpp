@@ -9,8 +9,6 @@
 #include <QTemporaryFile>
 
 
-static QStringList compress_typelist = {"zip", "7z", "ar", "cbz", "cpio","exe","iso","tar","tar.7z","tar.Z","tar.bz2","tar.gz","tar.lz","tar.lzma","tar.lzo","tar.xz"};
-
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
 {
