@@ -75,7 +75,6 @@ void MainWindow::InitUI()
 
     // init window flags.
     setWindowTitle(tr("Deepin Archive Manager"));
-    setWindowRadius(20);
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
 
