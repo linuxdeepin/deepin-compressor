@@ -10,7 +10,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QDrag>
-
+#include "utils.h"
 
 MyScrollBar::MyScrollBar(QWidget* parent)
     : QScrollBar(parent)
@@ -169,7 +169,8 @@ void fileViewer::refreshTableview()
         }
         else
         {
-            item = new QStandardItem(QString::number(fileinfo.size()) + " KB");
+//            item = new QStandardItem(QString::number((unsigned long)fileinfo.size()/1024) + " KB");
+            item = new QStandardItem(Utils::humanReadableSize(fileinfo.size(), 2));
         }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,1,item);
