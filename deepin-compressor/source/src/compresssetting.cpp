@@ -44,6 +44,7 @@ void CompressSetting::InitUI()
 
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
+    m_filename->setMaxLength(250);
     m_filename->setFixedSize(260, 36);
     m_filename->setText(tr("新建归档文件"));
     m_savepath = new DLineEdit();
@@ -66,6 +67,7 @@ void CompressSetting::InitUI()
 
     m_encryptedlabel = new DLabel(tr("加密文件")+":");
     m_password = new DPasswordEdit();
+    m_password->setMaxLength(250);
     m_encryptedfilelistlabel = new DLabel(tr("加密文件列表"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();

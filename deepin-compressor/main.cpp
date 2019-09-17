@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
-    DApplicationSettings settings(&app);
+
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");
@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     app.setProductIcon(QIcon(":/images/deepin-compressor.svg"));
     app.setProductName(DApplication::translate("Main", "深度解压缩"));
     app.setApplicationDescription(DApplication::translate("Main","深度解压缩是深度操作系统自带的解压缩软件。满足对文件解压缩的常用功能，快速、轻巧，使用简单。"));
+    DApplicationSettings settings(&app);
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
