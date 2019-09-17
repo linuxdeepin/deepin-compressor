@@ -29,6 +29,7 @@
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
+
 int main(int argc, char *argv[])
 {
     // load dtk xcb plugin.
@@ -38,12 +39,13 @@ int main(int argc, char *argv[])
 
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
+
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");
     app.setApplicationVersion(DApplication::buildVersion("20190911"));
-    app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-XXX-XXX/");
+    app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon(":/images/deepin-compressor.svg"));
     app.setProductName(DApplication::translate("Main", "深度解压缩"));
     app.setApplicationDescription(DApplication::translate("Main","深度解压缩是深度操作系统自带的解压缩软件。满足对文件解压缩的常用功能，快速、轻巧，使用简单。"));
@@ -56,7 +58,7 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("Deepin Compressor.");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("filename", "Font file path.", "file [file..]");
+    parser.addPositionalArgument("filename", "File path.", "file [file..]");
     parser.process(app);
 
     // init modules.
@@ -71,9 +73,10 @@ int main(int argc, char *argv[])
 
     const QStringList fileList = parser.positionalArguments();
 
+
     // handle command line parser.
     if (!fileList.isEmpty()) {
-        QMetaObject::invokeMethod(&w, "onSelected", Qt::QueuedConnection, Q_ARG(QStringList, fileList));
+        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::QueuedConnection, Q_ARG(QStringList, fileList));
     }
 
     QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);

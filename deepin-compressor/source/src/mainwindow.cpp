@@ -33,6 +33,7 @@
 #include "jobs.h"
 
 
+
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
       m_mainWidget(new QWidget),
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     m_encryptionjob = nullptr;
     m_encryptiontype = Encryption_NULL;
+    m_isrightmenu = false;
     m_model = new ArchiveModel(this);
     InitUI();
     InitConnection();
@@ -100,6 +102,17 @@ void MainWindow::InitConnection()
     connect(m_encryptionpage, &EncryptionPage::sigExtractPassword,this, &MainWindow::SlotExtractPassword);
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles,this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
+}
+
+void MainWindow::customMessageHandler(const QString &msg)
+{
+    QString txt;
+    txt = msg;
+
+    QFile outFile("/home/deepin/debug.log");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
 }
 
 QMenu* MainWindow::createSettingsMenu()
@@ -309,7 +322,6 @@ void MainWindow::onSelected(const QStringList &files)
 {
     if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
-
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -323,15 +335,50 @@ void MainWindow::onSelected(const QStringList &files)
     }
 }
 
+void MainWindow::onRightMenuSelected(const QStringList &files)
+{
+    if(files.count() == 2 && files.at(1) == QStringLiteral("extract_here") && Utils::isCompressed_file(files.at(0)))
+    {
+        m_isrightmenu = true;
+        QFileInfo fileinfo(files.at(0));
+        m_decompressfilename = fileinfo.fileName();
+        m_UnCompressPage->setdefaultpath(fileinfo.path());
+        loadArchive(files.at(0));
+        m_pageid = PAGE_UNZIPPROGRESS;
+        m_Progess->settype(DECOMPRESSING);
+        refreshPage();
+    }
+    else if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
+    {
+        QFileInfo fileinfo(files.at(0));
+        m_decompressfilename = fileinfo.fileName();
+        m_UnCompressPage->setdefaultpath(fileinfo.path());
+
+        loadArchive(files.at(0));
+    }
+    else {
+        emit sigZipSelectedFiles(files);
+        m_pageid = PAGE_ZIPSET;
+        setCompressDefaultPath();
+        refreshPage();
+    }
+}
+
 void MainWindow::slotLoadingFinished(KJob *job)
 {
     if (job->error()) {
         return;
     }
     m_UnCompressPage->setModel(m_model);
-    m_pageid = PAGE_UNZIP;
     m_homePage->spinnerStop();
-    refreshPage();
+    if(!m_isrightmenu)
+    {
+        m_pageid = PAGE_UNZIP;
+        refreshPage();
+    }
+    else {
+        slotextractSelectedFilesTo(m_UnCompressPage->getDecompressPath());
+    }
 }
 
 

@@ -131,11 +131,15 @@ TRANSLATIONS += translations/deepin-compressor.ts
 isEmpty(BINDIR):BINDIR=/usr/bin
 isEmpty(APPDIR):APPDIR=/usr/share/applications
 isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-compressor
+isEmpty(DESKTOPDIR):DESKTOPDIR=/usr/share/deepin/dde-file-manager/oem-menuextensions
 
 target.path = $$INSTROOT$$BINDIR
 
 desktop.path = $$INSTROOT$$APPDIR
 desktop.files =  deepin-compressor.desktop
+
+desktopcontext.path = $$INSTROOT$$DESKTOPDIR
+desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop
 
 
 manual.path = /usr/share/dman/
@@ -150,4 +154,4 @@ translations.files = $$PWD/translations/*.qm
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/images/deepin-compressor.svg
 
-INSTALLS += target desktop translations icon_files
+INSTALLS += target desktop translations icon_files desktopcontext

@@ -34,7 +34,7 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
 
     m_progressfilelabel = new DLabel();
-    m_progressfilelabel->setText(tr("正在解压") + ": " + m_progressfile);
+    m_progressfilelabel->setText(tr("正在计算中..."));
 
     m_cancelbutton = new DPushButton();
     m_cancelbutton->setFixedSize(340, 36);

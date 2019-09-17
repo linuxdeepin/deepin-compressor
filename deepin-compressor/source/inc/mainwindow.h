@@ -62,7 +62,9 @@ enum EncryptionType{
     Encryption_Load,
     Encryption_Extract,
     Encryption_SingleExtract,
+    Encryption_ExtractHere,
 };
+
 
 class MainWindow : public DMainWindow
 {
@@ -83,7 +85,7 @@ public:
     void ExtractSinglePassword(QString password);
     void LoadPassword(QString password);
 
-
+    void customMessageHandler(const QString &msg);
 
 
 protected:
@@ -98,6 +100,7 @@ private slots:
     void setDisable();
     void refreshPage();
     void onSelected(const QStringList &);
+    void onRightMenuSelected(const QStringList &);
     void onCompressNext();
     void onCompressPressed(QMap<QString, QString> &Args);
     void onCancelCompressPressed();
@@ -158,6 +161,7 @@ private:
     ExtractJob* m_encryptionjob;
     LoadJob* m_loadjob;
     EncryptionType m_encryptiontype;
+    bool m_isrightmenu;
 };
 
 #endif
