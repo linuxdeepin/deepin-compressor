@@ -163,7 +163,14 @@ void fileViewer::refreshTableview()
         item = new QStandardItem(icon_provider.icon(fileinfo), fileinfo.fileName());
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,0,item);
-        item = new QStandardItem(QString::number(fileinfo.size()) + " KB");
+        if(fileinfo.isDir())
+        {
+            item = new QStandardItem("-");
+        }
+        else
+        {
+            item = new QStandardItem(QString::number(fileinfo.size()) + " KB");
+        }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,1,item);
         item = new QStandardItem(getfiletype(fileinfo));

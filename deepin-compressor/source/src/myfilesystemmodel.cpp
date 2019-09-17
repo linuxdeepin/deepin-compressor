@@ -46,8 +46,20 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
         switch (role) {
         case Qt::TextAlignmentRole:
             return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-        default:
-            break;
+        case Qt::DisplayRole: {
+            switch (index.column()) {
+            case 1:
+            {
+                QFileInfo file = fileInfo(index);
+                if(file.isDir())
+                {
+                    return "-";
+                }
+            }
+
+            }
+        }
+
         }
     }
     return QFileSystemModel::data(index,role);
