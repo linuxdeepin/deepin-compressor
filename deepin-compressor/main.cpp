@@ -25,6 +25,7 @@
 #include <DLog>
 #include "utils.h"
 #include <DObject>
+#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
 
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
-
+    DApplicationSettings settings(&app);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.loadTranslator();
     app.setOrganizationName("deepin");

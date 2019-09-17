@@ -60,17 +60,8 @@ HEADERS +=  source/inc/homepage.h \
     interface/kprocess_p.h \
     source/inc/encryptionpage.h \
     source/inc/progressdialog.h \
-<<<<<<< HEAD
-<<<<<<< HEAD
     source/inc/extractpausedialog.h \
     source/inc/settingdialog.h
-=======
-    source/inc/extractpausedialog.h
->>>>>>> chore(Compressor):modify plugin load path
-=======
-    source/inc/extractpausedialog.h \
-    source/inc/settingdialog.h
->>>>>>> chorn(Compressor):add compressor desktop file
 
 
 
@@ -108,17 +99,8 @@ SOURCES +=  source/src/homepage.cpp \
     interface/archiveformat.cpp \
     interface/kprocess.cpp \
     source/src/progressdialog.cpp \
-<<<<<<< HEAD
-<<<<<<< HEAD
     source/src/extractpausedialog.cpp \
     source/src/settingdialog.cpp
-=======
-    source/src/extractpausedialog.cpp
->>>>>>> chore(Compressor):modify plugin load path
-=======
-    source/src/extractpausedialog.cpp \
-    source/src/settingdialog.cpp
->>>>>>> chorn(Compressor):add compressor desktop file
 
 
 
