@@ -104,6 +104,7 @@ void ProgressDialog::setFinished(const QString &path)
     m_circleprogress->setText(QString::number(100));
     m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
     m_extractdialog->reject();
+    reject();
 }
 
 void ProgressDialog::showdialog()

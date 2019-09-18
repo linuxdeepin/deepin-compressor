@@ -28,6 +28,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
+#include <DDesktopServices>
 #include "pluginmanager.h"
 //#include "archivejob.h"
 #include "jobs.h"
@@ -303,6 +304,10 @@ void MainWindow::refreshPage()
         m_titlelabel->setText("");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
         m_CompressSuccess->setstringinfo(tr("解压成功！"));
+        if(m_settingsDialog->isAutoOpen())
+        {
+            DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
+        }
         break;
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
@@ -324,7 +329,18 @@ void MainWindow::onSelected(const QStringList &files)
     {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        m_UnCompressPage->setdefaultpath(fileinfo.path());
+        if(1 == m_settingsDialog->getCurExtractPath())
+        {
+           m_UnCompressPage->setdefaultpath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+        }
+        else if(2 == m_settingsDialog->getCurExtractPath())
+        {
+           m_UnCompressPage->setdefaultpath(fileinfo.path());//TODO
+        }
+        else
+        {
+           m_UnCompressPage->setdefaultpath(fileinfo.path());
+        }
 
         loadArchive(files.at(0));
     }
@@ -352,7 +368,18 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        m_UnCompressPage->setdefaultpath(fileinfo.path());
+        if(1 == m_settingsDialog->getCurExtractPath())
+        {
+           m_UnCompressPage->setdefaultpath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+        }
+        else if(2 == m_settingsDialog->getCurExtractPath())
+        {
+           m_UnCompressPage->setdefaultpath(fileinfo.path());//TODO
+        }
+        else
+        {
+           m_UnCompressPage->setdefaultpath(fileinfo.path());
+        }
 
         loadArchive(files.at(0));
     }
@@ -412,7 +439,29 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
     ExtractionOptions options;
     QVector<Archive::Entry*> files;
 
-    const QString destinationDirectory = localPath;
+    QString userDestination = localPath;
+    QString destinationDirectory;
+
+    if(m_settingsDialog->isAutoCreatDir())
+    {
+        const QString detectedSubfolder = m_model->archive()->subfolderName();
+        qDebug() << "Detected subfolder" << detectedSubfolder;
+
+        if (m_model->archive()->hasMultipleTopLevelEntries()) {
+            if (!userDestination.endsWith(QDir::separator())) {
+                userDestination.append(QDir::separator());
+            }
+            destinationDirectory = userDestination + detectedSubfolder;
+            QDir(userDestination).mkdir(detectedSubfolder);
+        } else {
+            destinationDirectory = userDestination;
+        }
+    }
+    else {
+        destinationDirectory = userDestination;
+    }
+
+
     qDebug()<<"destinationDirectory:"<<destinationDirectory;
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
 

@@ -29,9 +29,7 @@ void CompressSetting::InitUI()
 
 
     QWidget* leftwidget = new QWidget();
-//    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
-//    m_pixmaplabel->setPixmap(m_compressicon);
 
     m_compresstype = new DComboBox();
     m_compresstype->setFixedSize(80, 40);

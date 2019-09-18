@@ -46,18 +46,207 @@
                     "name": "关联文件类型",
                     "options": [
                         {
-                            "key": "zip",
+                            "key": "x-7z-compressed",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "自动创建文件夹",
+                            "text": "x-7z-compressed(7z)",
                             "default": true
                         },
                         {
-                            "key": "open_folder",
+                            "key": "x-archive",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "当解压完成后自动打开对应的文件夹",
-                            "default": false
+                            "text": "x-archive(a)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-bcpio",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-bcpio(bcpio)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-bzip",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-bzip(bz2)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-cpio",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-cpio(cpio)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-cpio-compressed",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-cpio-compressed(cpio.gz)",
+                            "default": true
+                        },
+                        {
+                            "key": "vnd.debian.binary-package",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "vnd.debian.binary-package(deb)",
+                            "default": true
+                        },
+                        {
+                            "key": "gzip",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "gzip(gz)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-java-archive",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-java-archive(jar)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-lzma",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-lzma(lzma)",
+                            "default": true
+                        },
+                        {
+                            "key": "vnd.ms-cab-compressed",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "vnd.ms-cab-compressed(cab)",
+                            "default": true
+                        },
+                        {
+                            "key": "vnd.rar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "vnd.rar(rar)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-rpm",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-rpm(rpm)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-sv4cpio",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-sv4cpio(sv4cpio)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-sv4crc",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-sv4crc(sv4crc)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-tar(tar)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-bzip-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-bzip-compressed-tar(tar.bz2)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-compressed-tar(tar.gz)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-lzip-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-lzip-compressed-tar(tar.lz)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-lzma-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-lzma-compressed-tar(tar.lzma)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-tzo",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-tzo(tar.lzo)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-xz-compressed-tar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-xz-compressed-tar(tar.xz)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-tarz",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-tarz(tar.Z)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-xar",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-xar(xar)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-xz",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-xz(xz)",
+                            "default": true
+                        },
+                        {
+                            "key": "zip",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "zip(zip)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-cd-image",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-cd-image(iso)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-iso9660-appimage",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-iso9660-appimage(appimage)",
+                            "default": true
+                        },
+                        {
+                            "key": "x-source-rpm",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "x-source-rpm(src.rpm)",
+                            "default": true
                         }
                     ]
                 }
