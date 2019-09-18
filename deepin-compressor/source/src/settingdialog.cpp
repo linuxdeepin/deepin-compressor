@@ -41,8 +41,7 @@ void SettingDialog::initConnect()
 
 }
 
-<<<<<<< HEAD
-=======
+
 int SettingDialog::getCurExtractPath()
 {
     return m_settings->value("base.decompress.default_path").toInt();
@@ -58,7 +57,7 @@ bool SettingDialog::isAutoOpen()
     return m_settings->value("base.decompress.open_folder").toBool();
 }
 
->>>>>>> feat(Compressor):add settingpage
+
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
     qDebug()<<key<<value;
