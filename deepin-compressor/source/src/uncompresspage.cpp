@@ -101,7 +101,7 @@ void UnCompressPage::onPathButoonClicked()
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::Directory);
-    dialog.setDirectory("~/Desktop");
+    dialog.setDirectory(m_pathstr);
 
     const int mode = dialog.exec();
 
