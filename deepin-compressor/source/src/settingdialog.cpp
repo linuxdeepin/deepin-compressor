@@ -143,7 +143,7 @@ void SettingDialog::startcmd(QString &mimetype, bool state)
 
     QStringList arguments;
 
-    arguments<<"default"<<"/usr/share/applications/deepin-compressor.desktop"<<mimetype;
+    arguments<<"default"<<"deepin-compressor.desktop"<<mimetype;
 
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
