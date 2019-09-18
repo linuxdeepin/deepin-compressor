@@ -1,5 +1,7 @@
 #include "progress.h"
 
+#include <QFileIconProvider>
+#include <QTemporaryFile>
 #include <QVBoxLayout>
 
 Progress::Progress(QWidget *parent)
@@ -65,7 +67,27 @@ void Progress::setprogress(uint percent)
 
 void Progress::setFilename(QString filename)
 {
+    QFileInfo fileinfo(filename);
+    setTypeImage(fileinfo.suffix());
     m_filenamelabel->setText(filename);
+}
+
+void Progress::setTypeImage(QString type)
+{
+    QFileIconProvider provider;
+    QIcon icon;
+    QString strTemplateName = QDir::tempPath() + QDir::separator()  + "tempfile." + type;
+
+    QTemporaryFile tmpFile(strTemplateName);
+    tmpFile.setAutoRemove(false);
+
+    if (tmpFile.open())
+    {
+        tmpFile.close();
+        icon = provider.icon(QFileInfo(strTemplateName));
+    }
+
+    m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 
 void Progress::setProgressFilename(QString filename)

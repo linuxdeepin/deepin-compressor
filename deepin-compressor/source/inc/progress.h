@@ -27,6 +27,7 @@ public:
     void setFilename(QString filename);
     void setProgressFilename(QString filename);
     void settype(COMPRESS_TYPE type);
+    void setTypeImage(QString type);
 
 private:
     DPushButton* m_cancelbutton;
