@@ -86,6 +86,7 @@ public:
     void LoadPassword(QString password);
 
     void customMessageHandler(const QString &msg);
+    QString renameCompress(QString &filename, QString fixedMimeType);
 
 
 protected:

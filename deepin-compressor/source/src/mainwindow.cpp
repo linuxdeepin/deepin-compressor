@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <DDesktopServices>
+#include <QMimeDatabase>
 #include "pluginmanager.h"
 //#include "archivejob.h"
 #include "jobs.h"
@@ -677,13 +678,26 @@ void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
     creatArchive(Args);
 }
 
+QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
+{
+    QString localname = filename;
+    int num = 2;
+    while(QFileInfo::exists(filename))
+    {
+        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "0" + QString::number(num) + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+        num++;
+    }
+    return filename;
+}
+
+
 void MainWindow::creatArchive(QMap<QString, QString> &Args)
 {
     const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
     const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
     const QString password = Args[QStringLiteral("encryptionPassword")];
     const QString enableHeaderEncryption = Args[QStringLiteral("encryptHeader")];
-    const QString filename = Args[QStringLiteral("localFilePath")] + "/" + Args[QStringLiteral("filename")];
+    QString filename = Args[QStringLiteral("localFilePath")] + "/" + Args[QStringLiteral("filename")];
     m_decompressfilename = Args[QStringLiteral("filename")];
     m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
 
@@ -691,6 +705,10 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
         qDebug()<<"filename.isEmpty()";
         return;
     }
+
+    renameCompress(filename, fixedMimeType);
+    qDebug()<<filename;
+
 
     CompressionOptions options;
     options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
