@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_CompressFail(new Compressor_Fail),
       m_encryptionpage(new EncryptionPage),
       m_progressdialog(new ProgressDialog),
-      m_settingsDialog(new SettingDialog),
+      m_settingsDialog(new SettingDialog()),
       m_settings("deepin", "deepin-compressor")
 {
     m_encryptionjob = nullptr;

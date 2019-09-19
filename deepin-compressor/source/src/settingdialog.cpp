@@ -50,6 +50,7 @@ SettingDialog::SettingDialog(QWidget *parent):
         m_valuelist.append(m_settings->value(key).toBool());
 
     }
+    m_valuelisttemp = m_valuelist;
 }
 
 void SettingDialog::initUI()
@@ -92,9 +93,7 @@ void SettingDialog::initUI()
     // 通过DSettings对象构建设置界面
     updateSettings(m_settings);
 
-
-
-
+    moveToCenter();
 }
 
 void SettingDialog::initConnect()
@@ -107,14 +106,20 @@ void SettingDialog::done(int status)
 {
     Q_UNUSED(status);
     QDialog::done(status);
-    qDebug()<<"111111111111";
+
     int loop = 0;
-    foreach(QString key, m_associtionlist)
+    foreach(bool value, m_valuelisttemp)
     {
-        QString mimetype = "application/" + key.remove("file_association.file_association_type.");
-        startcmd(mimetype, m_valuelist.at(loop));
+        if(m_valuelist.at(loop) != value)
+        {
+            QString key = m_associtionlist.at(loop);
+            QString mimetype = "application/" + key.remove("file_association.file_association_type.");
+            startcmd(mimetype, m_valuelisttemp.at(loop));
+        }
+
         loop++;
     }
+    m_valuelist = m_valuelisttemp;
 }
 
 
@@ -143,16 +148,9 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
         int index = m_associtionlist.indexOf(key);
         if(index > -1)
         {
-            m_valuelist.replace(index, value.toBool());
+            m_valuelisttemp.replace(index, value.toBool());
         }
-//        foreach(QString key, m_associtionlist)
-//        {
-//            bool value = m_settings->value(key).toBool();
-//            QString mimetype = "application/" + key.remove("file_association.file_association_type.");
-//            startcmd(mimetype, value);
-//        }
     }
-
 }
 
 

@@ -41,6 +41,7 @@ private:
     KProcess *m_process = nullptr;
     QStringList m_associtionlist;
     QList<bool> m_valuelist;
+    QList<bool> m_valuelisttemp;
 };
 
 #endif // SETTINGDIALOG_H
