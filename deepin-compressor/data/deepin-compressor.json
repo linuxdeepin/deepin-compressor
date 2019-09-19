@@ -247,6 +247,12 @@
                             "type": "checkbox",
                             "text": "x-source-rpm(src.rpm)",
                             "default": true
+                        },
+                        {
+                            "key": "style",
+                            "name": "Font Style",
+                            "type": "custom-button",
+                            "text": "223"
                         }
                     ]
                 }

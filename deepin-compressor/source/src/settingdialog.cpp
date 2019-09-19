@@ -3,18 +3,80 @@
 #include <qsettingbackend.h>
 #include <QDebug>
 #include <DFileDialog>
+#include <QBoxLayout>
 
 
 
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
 {
+    m_associtionlist << "file_association.file_association_type.x-7z-compressed"
+                   << "file_association.file_association_type.x-archive"
+                   << "file_association.file_association_type.x-bcpio"
+                   << "file_association.file_association_type.x-bzip"
+                   << "file_association.file_association_type.x-cpio"
+                   << "file_association.file_association_type.x-cpio-compressed"
+                   << "file_association.file_association_type.vnd.debian.binary-package"
+                   << "file_association.file_association_type.gzip"
+                   << "file_association.file_association_type.x-java-archive"
+                   << "file_association.file_association_type.x-lzma"
+                   << "file_association.file_association_type.vnd.ms-cab-compressed"
+                   << "file_association.file_association_type.vnd.rar"
+                   << "file_association.file_association_type.x-rpm"
+                   << "file_association.file_association_type.x-sv4cpio"
+                   << "file_association.file_association_type.x-sv4crc"
+                   << "file_association.file_association_type.x-tar"
+                   << "file_association.file_association_type.x-bzip-compressed-tar"
+                   << "file_association.file_association_type.x-compressed-tar"
+                   << "file_association.file_association_type.x-lzip-compressed-tar"
+                   << "file_association.file_association_type.x-lzma-compressed-tar"
+                   << "file_association.file_association_type.x-tzo"
+                   << "file_association.file_association_type.x-xz-compressed-tar"
+                   << "file_association.file_association_type.x-tarz"
+                   << "file_association.file_association_type.x-xar"
+                   << "file_association.file_association_type.x-xz"
+                   << "file_association.file_association_type.zip"
+                   << "file_association.file_association_type.x-cd-image"
+                   << "file_association.file_association_type.x-iso9660-appimage"
+                   << "file_association.file_association_type.x-source-rpm";
+
+    m_valuelist.clear();
+
     initUI();
     initConnect();
+
+    foreach(QString key, m_associtionlist)
+    {
+        m_valuelist.append(m_settings->value(key).toBool());
+
+    }
 }
 
 void SettingDialog::initUI()
 {
+    this->widgetFactory()->registerWidget("custom-button", [this] (QObject *obj) -> QWidget* {
+        if (DSettingsOption *option = qobject_cast<DSettingsOption*>(obj)) {
+            QWidget* buttonwidget = new QWidget();
+            QHBoxLayout* layout = new QHBoxLayout();
+            QPushButton *button1 = new DPushButton(tr("全选"));
+            QPushButton *button2 = new DPushButton(tr("取消全选"));
+            button1->setFixedSize(100, 36);
+            button2->setFixedSize(100, 36);
+            layout->addStretch();
+            layout->addWidget(button1);
+            layout->addStretch();
+            layout->addWidget(button2);
+            layout->addStretch();
+            buttonwidget->setLayout(layout);
+
+            connect(button1, &QPushButton::clicked, this, &SettingDialog::selectpressed);
+            connect(button2, &QPushButton::clicked, this, &SettingDialog::cancelpressed);
+            return buttonwidget;
+        }
+
+        return nullptr;
+    });
+
     const QString confDir = DStandardPaths::writableLocation(
                     QStandardPaths::AppConfigLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
@@ -30,15 +92,29 @@ void SettingDialog::initUI()
     // 通过DSettings对象构建设置界面
     updateSettings(m_settings);
 
-    connect(m_settings, &DSettings::valueChanged,
-            this, &SettingDialog::settingsChanged);
+
 
 
 }
 
 void SettingDialog::initConnect()
 {
+    connect(m_settings, &DSettings::valueChanged,
+            this, &SettingDialog::settingsChanged);
+}
 
+void SettingDialog::done(int status)
+{
+    Q_UNUSED(status);
+    QDialog::done(status);
+    qDebug()<<"111111111111";
+    int loop = 0;
+    foreach(QString key, m_associtionlist)
+    {
+        QString mimetype = "application/" + key.remove("file_association.file_association_type.");
+        startcmd(mimetype, m_valuelist.at(loop));
+        loop++;
+    }
 }
 
 
@@ -61,70 +137,39 @@ bool SettingDialog::isAutoOpen()
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
     qDebug()<<key<<value;
-//    if(key == "base.decompress.default_path" && value.toInt() == 2)
-//    {
-//        DFileDialog dialog;
-//        dialog.setAcceptMode(DFileDialog::AcceptOpen);
-//        dialog.setFileMode(DFileDialog::Directory);
-//        dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
 
-//        const int mode = dialog.exec();
-
-//        if (mode != QDialog::Accepted) {
-//            return;
-//        }
-
-//        QList<QUrl> pathlist = dialog.selectedUrls();
-
-//        QString curpath = pathlist.at(0).toLocalFile();
-
-//        auto opt = m_settings->option("base.decompress.default_path");
-//        QStringList list = {"111", "222", "333"};
-//        opt->setData("items", list);
-
-//    }
     if(key.contains("file_association_type"))
     {
-        QStringList associtionlist;
-        associtionlist << "file_association.file_association_type.x-7z-compressed"
-                       << "file_association.file_association_type.x-archive"
-                       << "file_association.file_association_type.x-bcpio"
-                       << "file_association.file_association_type.x-bzip"
-                       << "file_association.file_association_type.x-cpio"
-                       << "file_association.file_association_type.x-cpio-compressed"
-                       << "file_association.file_association_type.vnd.debian.binary-package"
-                       << "file_association.file_association_type.gzip"
-                       << "file_association.file_association_type.x-java-archive"
-                       << "file_association.file_association_type.x-lzma"
-                       << "file_association.file_association_type.vnd.ms-cab-compressed"
-                       << "file_association.file_association_type.vnd.rar"
-                       << "file_association.file_association_type.x-rpm"
-                       << "file_association.file_association_type.x-sv4cpio"
-                       << "file_association.file_association_type.x-sv4crc"
-                       << "file_association.file_association_type.x-tar"
-                       << "file_association.file_association_type.x-bzip-compressed-tar"
-                       << "file_association.file_association_type.x-compressed-tar"
-                       << "file_association.file_association_type.x-lzip-compressed-tar"
-                       << "file_association.file_association_type.x-lzma-compressed-tar"
-                       << "file_association.file_association_type.x-tzo"
-                       << "file_association.file_association_type.x-xz-compressed-tar"
-                       << "file_association.file_association_type.x-tarz"
-                       << "file_association.file_association_type.x-xar"
-                       << "file_association.file_association_type.x-xz"
-                       << "file_association.file_association_type.zip"
-                       << "file_association.file_association_type.x-cd-image"
-                       << "file_association.file_association_type.x-iso9660-appimage"
-                       << "file_association.file_association_type.x-source-rpm";
-        foreach(QString key, associtionlist)
+        int index = m_associtionlist.indexOf(key);
+        if(index > -1)
         {
-            bool value = m_settings->value(key).toBool();
-            QString mimetype = "application/" + key.remove("file_association.file_association_type.");
-            startcmd(mimetype, value);
+            m_valuelist.replace(index, value.toBool());
         }
-
-
+//        foreach(QString key, m_associtionlist)
+//        {
+//            bool value = m_settings->value(key).toBool();
+//            QString mimetype = "application/" + key.remove("file_association.file_association_type.");
+//            startcmd(mimetype, value);
+//        }
     }
 
+}
+
+
+void SettingDialog::selectpressed()
+{
+    foreach(QString key, m_associtionlist)
+    {
+        m_settings->setOption(key, true);
+    }
+}
+void SettingDialog::cancelpressed()
+{
+
+    foreach(QString key, m_associtionlist)
+    {
+        m_settings->setOption(key, false);
+    }
 }
 
 void SettingDialog::startcmd(QString &mimetype, bool state)
@@ -143,6 +188,8 @@ void SettingDialog::startcmd(QString &mimetype, bool state)
     QStringList arguments;
 
     arguments<<"default"<<"deepin-compressor.desktop"<<mimetype;
+
+    qDebug()<<mimetype<<arguments;
 
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);

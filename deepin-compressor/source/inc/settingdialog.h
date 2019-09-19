@@ -10,6 +10,8 @@
 #include <DTableView>
 #include <DSettingsOption>
 #include "kprocess.h"
+#include <DSettingsWidgetFactory>
+#include <DPushButton>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -22,21 +24,23 @@ public:
     void initUI();
     void initConnect();
 
-<<<<<<< HEAD
-=======
     int getCurExtractPath();
     bool isAutoCreatDir();
     bool isAutoOpen();
 
     void startcmd(QString &mimetype, bool state);
 
->>>>>>> feat(Compressor):add settingpage
 public slots:
     void settingsChanged(const QString &key, const QVariant &value);
+    void selectpressed();
+    void cancelpressed();
+    virtual void done(int status) override;
 
 private:
     DSettings *m_settings;
     KProcess *m_process = nullptr;
+    QStringList m_associtionlist;
+    QList<bool> m_valuelist;
 };
 
 #endif // SETTINGDIALOG_H
