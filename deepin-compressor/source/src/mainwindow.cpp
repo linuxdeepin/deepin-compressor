@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_CompressFail(new Compressor_Fail),
       m_encryptionpage(new EncryptionPage),
       m_progressdialog(new ProgressDialog),
-      m_settingsDialog(new SettingDialog()),
+      m_settingsDialog(new SettingDialog),
       m_settings("deepin", "deepin-compressor")
 {
     m_encryptionjob = nullptr;
@@ -132,9 +132,8 @@ QMenu* MainWindow::createSettingsMenu()
 
 void MainWindow::initTitleBar()
 {
-//    titlebar()->setMenu(createSettingsMenu());
+    titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
-
 
     m_logo = new DLabel("");
     m_logoicon = Utils::renderSVG(":/images/compress-Typeface-player.svg", QSize(30, 30));

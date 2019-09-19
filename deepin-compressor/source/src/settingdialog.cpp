@@ -185,7 +185,13 @@ void SettingDialog::startcmd(QString &mimetype, bool state)
 
     QStringList arguments;
 
-    arguments<<"default"<<"deepin-compressor.desktop"<<mimetype;
+    if(state)
+    {
+        arguments<<"default"<<"deepin-compressor.desktop"<<mimetype;
+    }
+    else {
+        arguments<<"default"<<".desktop"<<mimetype;
+    }
 
     qDebug()<<mimetype<<arguments;
 

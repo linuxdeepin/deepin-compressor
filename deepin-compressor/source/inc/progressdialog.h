@@ -31,6 +31,7 @@ public:
 signals:
     void stopExtract();
 
+
 public slots:
     void slotextractpress(int index);
 

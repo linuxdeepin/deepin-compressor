@@ -38,7 +38,6 @@
 #include "extractpausedialog.h"
 #include "settingdialog.h"
 
-
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
 
