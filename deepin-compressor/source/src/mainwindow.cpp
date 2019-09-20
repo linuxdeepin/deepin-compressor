@@ -777,6 +777,7 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
     }
 
     ExtractionOptions options;
+    options.setDragAndDropEnabled(true);
     m_extractSimpleFiles = fileList;
 
     const QString destinationDirectory = path;
