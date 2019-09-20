@@ -738,15 +738,6 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-//    QString firstPath = Args[QStringLiteral("localFilePath")];
-//    const QDir stripDir(firstPath);
-//    for (Archive::Entry *entry : qAsConst(all_entries)) {
-//        entry->setFullPath(stripDir.absoluteFilePath(entry->fullPath()));
-//    }
-
-//    qDebug() << "Setting GlobalWorkDir to " << stripDir.path();
-//    options.setGlobalWorkDir(stripDir.path());
-
     CreateJob* createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty()) {

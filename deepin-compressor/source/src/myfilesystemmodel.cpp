@@ -3,7 +3,7 @@
 //#include "myfilesystemmodelprivate.h"
 #include "myfilesystemmodel.h"
 #include <QDebug>
-
+#include <utils.h>
 
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)
@@ -54,6 +54,10 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 if(file.isDir())
                 {
                     return "-";
+                }
+                else {
+
+                    return Utils::humanReadableSize(file.size(), 1);
                 }
             }
 

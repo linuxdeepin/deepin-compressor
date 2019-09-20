@@ -170,7 +170,7 @@ void fileViewer::refreshTableview()
         else
         {
 //            item = new QStandardItem(QString::number((unsigned long)fileinfo.size()/1024) + " KB");
-            item = new QStandardItem(Utils::humanReadableSize(fileinfo.size(), 2));
+            item = new QStandardItem(Utils::humanReadableSize(fileinfo.size(), 1));
         }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,1,item);

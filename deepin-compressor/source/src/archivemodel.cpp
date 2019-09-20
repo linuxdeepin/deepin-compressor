@@ -8,7 +8,7 @@
 #include <QRegularExpression>
 
 #include <QUrl>
-
+#include <utils.h>
 
 
 // Used to speed up the loading of large archives.
@@ -80,7 +80,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
-                    return QString::number(entry->property("size").toULongLong()/1024) + "KB";//KIO::convertSize(entry->property("size").toULongLong());
+                    return Utils::humanReadableSize(entry->property("size").toInt(), 1);
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
