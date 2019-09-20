@@ -329,13 +329,9 @@ void MainWindow::onSelected(const QStringList &files)
     {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        if(1 == m_settingsDialog->getCurExtractPath())
+        if("" != m_settingsDialog->getCurExtractPath())
         {
-           m_UnCompressPage->setdefaultpath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-        }
-        else if(2 == m_settingsDialog->getCurExtractPath())
-        {
-           m_UnCompressPage->setdefaultpath(fileinfo.path());//TODO
+           m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         }
         else
         {
@@ -368,13 +364,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        if(1 == m_settingsDialog->getCurExtractPath())
+        if("" != m_settingsDialog->getCurExtractPath())
         {
-           m_UnCompressPage->setdefaultpath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-        }
-        else if(2 == m_settingsDialog->getCurExtractPath())
-        {
-           m_UnCompressPage->setdefaultpath(fileinfo.path());//TODO
+           m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         }
         else
         {

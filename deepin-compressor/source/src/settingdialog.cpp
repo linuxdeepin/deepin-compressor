@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <DFileDialog>
 #include <QBoxLayout>
-
-
+#include <DComboBox>
+#include <DLabel>
 
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
@@ -55,6 +55,8 @@ SettingDialog::SettingDialog(QWidget *parent):
 
 void SettingDialog::initUI()
 {
+
+
     this->widgetFactory()->registerWidget("custom-button", [this] (QObject *obj) -> QWidget* {
         if (DSettingsOption *option = qobject_cast<DSettingsOption*>(obj)) {
             QWidget* buttonwidget = new QWidget();
@@ -73,6 +75,53 @@ void SettingDialog::initUI()
             connect(button1, &QPushButton::clicked, this, &SettingDialog::selectpressed);
             connect(button2, &QPushButton::clicked, this, &SettingDialog::cancelpressed);
             return buttonwidget;
+        }
+
+        return nullptr;
+    });
+
+    this->widgetFactory()->registerWidget("pathbox", [this] (QObject *obj) -> QWidget* {
+        if (m_comboboxoption = qobject_cast<DSettingsOption*>(obj)) {
+            QWidget* widget = new QWidget();
+            QHBoxLayout* layout = new QHBoxLayout();
+
+            DLabel* label = new DLabel;
+            label->setText(tr("默认解压位置") + ":");
+
+            DComboBox* combobox = new DComboBox;
+            combobox->setFixedWidth(300);
+            combobox->setEditable(true);
+            QStringList list;
+            list << tr("当前目录")<<tr("桌面")<<tr("其他目录");
+            combobox->addItems(list);
+            qDebug()<<m_comboboxoption->value();
+            if(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value())
+            {
+                combobox->setCurrentIndex(1);
+                m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+            }
+            else if("" == m_comboboxoption->value())
+            {
+                combobox->setCurrentIndex(0);
+                m_curpath = "";
+            }
+            else {
+                combobox->setCurrentIndex(2);
+                m_curpath = m_comboboxoption->value().toString();
+                combobox->setEditText(m_curpath);
+            }
+
+            layout->addWidget(label,0 , Qt::AlignLeft);
+            layout->addWidget(combobox,0 , Qt::AlignLeft);
+
+            widget->setLayout(layout);
+
+            connect(combobox, &DComboBox::currentTextChanged, this, &SettingDialog::comboxindexchanged);
+            connect(this, &SettingDialog::sigeditText ,combobox, &DComboBox::setEditText);
+
+
+            qDebug()<<m_curpath;
+            return widget;
         }
 
         return nullptr;
@@ -123,9 +172,10 @@ void SettingDialog::done(int status)
 }
 
 
-int SettingDialog::getCurExtractPath()
+QString SettingDialog::getCurExtractPath()
 {
-    return m_settings->value("base.decompress.default_path").toInt();
+    qDebug()<<m_curpath;
+    return m_curpath;
 }
 
 bool SettingDialog::isAutoCreatDir()
@@ -168,6 +218,40 @@ void SettingDialog::cancelpressed()
     {
         m_settings->setOption(key, false);
     }
+}
+
+void SettingDialog::comboxindexchanged(const QString & index)
+{
+    if(tr("其他目录") == index)
+    {
+        DFileDialog dialog;
+        dialog.setAcceptMode(DFileDialog::AcceptOpen);
+        dialog.setFileMode(DFileDialog::Directory);
+        dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+
+        const int mode = dialog.exec();
+
+        if (mode != QDialog::Accepted) {
+            return;
+        }
+
+        QList<QUrl> pathlist = dialog.selectedUrls();
+        QString curpath = pathlist.at(0).toLocalFile();
+
+        emit sigeditText(curpath);
+        m_curpath = curpath;
+    }
+    else if(tr("桌面") == index)
+    {
+        m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    }
+    else {
+        m_curpath = "";
+    }
+
+    m_comboboxoption->setValue(m_curpath);
+
+
 }
 
 void SettingDialog::startcmd(QString &mimetype, bool state)

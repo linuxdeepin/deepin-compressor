@@ -10,14 +10,7 @@
                     "options": [
                         {
                             "key": "default_path",
-                            "name": "默认解压位置：",
-                            "type": "combobox",
-                            "items": [
-                                "当前目录",
-                                "桌面",
-                                "其他目录"
-                            ],
-                            "default": "当前目录"
+                            "type": "pathbox"
                         },
                         {
                             "key": "create_folder",
