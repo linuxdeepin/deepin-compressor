@@ -61,7 +61,8 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/encryptionpage.h \
     source/inc/progressdialog.h \
     source/inc/extractpausedialog.h \
-    source/inc/settingdialog.h
+    source/inc/settingdialog.h \
+    source/inc/myfileitem.h
 
 
 
@@ -100,7 +101,8 @@ SOURCES +=  source/src/homepage.cpp \
     interface/kprocess.cpp \
     source/src/progressdialog.cpp \
     source/src/extractpausedialog.cpp \
-    source/src/settingdialog.cpp
+    source/src/settingdialog.cpp \
+    source/src/myfileitem.cpp
 
 
 

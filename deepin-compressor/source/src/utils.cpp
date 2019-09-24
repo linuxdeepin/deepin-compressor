@@ -124,3 +124,43 @@ QString Utils::humanReadableSize(const qint64 &size, int precision)
     }
     return QString::fromLatin1("%1 %2").arg(sizeAsDouble, 0, 'f', precision).arg(measure);
 }
+
+qint64 Utils::humanReadableToSize(const QString &size)
+{
+    QString sizeAsStr = size;
+    static QStringList measures;
+    if (measures.isEmpty())
+        measures << (" B")
+                 << (" KB")
+                 << (" MB")
+                 << (" GB")
+                 << (" TB")
+                 << (" PB")
+                 << (" EB")
+                 << (" ZB")
+                 << (" YB");
+
+    int loop = 0;
+    foreach(QString suffix, measures)
+    {
+        if(sizeAsStr.contains(suffix))
+        {
+            sizeAsStr.remove(suffix);
+            break;
+        }
+        loop++;
+    }
+
+    if(loop > measures.count())
+    {
+        return 0;
+    }
+
+    float intsize = sizeAsStr.toFloat();
+
+    for (int i = 0;i < loop; i++) {
+        intsize *= 1024.0;
+    }
+
+    return (qint64)intsize;
+}

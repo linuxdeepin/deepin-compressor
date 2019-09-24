@@ -36,6 +36,7 @@ public:
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
     static bool isCompressed_file(const QString &filePath);
     static QString humanReadableSize(const qint64 &size, int precision);
+    static qint64 humanReadableToSize(const QString &size);
 };
 
 #endif

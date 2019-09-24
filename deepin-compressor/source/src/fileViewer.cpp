@@ -11,6 +11,7 @@
 #include <QMimeData>
 #include <QDrag>
 #include "utils.h"
+#include "myfileitem.h"
 
 MyScrollBar::MyScrollBar(QWidget* parent)
     : QScrollBar(parent)
@@ -140,19 +141,19 @@ void fileViewer::InitUI()
 
 void fileViewer::refreshTableview()
 {
-    QStandardItem* item = nullptr;
+    MyFileItem* item = nullptr;
     firstmodel->clear();
 
-    item = new QStandardItem(QObject::trUtf8("名称"));
+    item = new MyFileItem(QObject::trUtf8("名称"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
-    item = new QStandardItem(QObject::trUtf8("大小"));
+    item = new MyFileItem(QObject::trUtf8("大小"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(1, item);
-    item = new QStandardItem(QObject::trUtf8("类型"));
+    item = new MyFileItem(QObject::trUtf8("类型"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new QStandardItem(QObject::trUtf8("修改日期"));
+    item = new MyFileItem(QObject::trUtf8("修改日期"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
 
@@ -160,24 +161,23 @@ void fileViewer::refreshTableview()
     QFileIconProvider icon_provider;
     foreach(QFileInfo fileinfo , m_curfilelist)
     {
-        item = new QStandardItem(icon_provider.icon(fileinfo), fileinfo.fileName());
+        item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,0,item);
         if(fileinfo.isDir())
         {
-            item = new QStandardItem("-");
+            item = new MyFileItem("-");
         }
         else
         {
-//            item = new QStandardItem(QString::number((unsigned long)fileinfo.size()/1024) + " KB");
-            item = new QStandardItem(Utils::humanReadableSize(fileinfo.size(), 1));
+            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1));
         }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,1,item);
-        item = new QStandardItem(getfiletype(fileinfo));
+        item = new MyFileItem(getfiletype(fileinfo));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,2,item);
-        item = new QStandardItem(fileinfo.lastModified().toString());
+        item = new MyFileItem(fileinfo.lastModified().toString());
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,3,item);
         rowindex++;
