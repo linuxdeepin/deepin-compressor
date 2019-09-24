@@ -1,4 +1,5 @@
 #include "myfileitem.h"
+#include <QDateTime>
 #include <QDebug>
 
 
@@ -28,9 +29,17 @@ bool MyFileItem::operator<(const QStandardItem &other) const
         {
             qint64 lint = Utils::humanReadableToSize(l.toString());
             qint64 rint = Utils::humanReadableToSize(r.toString());
-            qDebug()<<lint;
-            qDebug()<<rint;
             return lint < rint;
+        }
+        break;
+    }
+    case 3:
+    {
+        if (column() == other.column())
+        {
+            QDateTime ldate = QDateTime::fromString(l.toString(), "ddd MMM d hh:mm:ss yyyy");
+            QDateTime rdate = QDateTime::fromString(r.toString(), "ddd MMM d hh:mm:ss yyyy");
+            return !rdate.operator<(ldate);
         }
         break;
     }
