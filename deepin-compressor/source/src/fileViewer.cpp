@@ -468,24 +468,11 @@ void fileViewer::setDecompressModel(ArchiveModel* model)
 
 void fileViewer::dragEnterEvent(QDragEnterEvent *e)
 {
-//    const auto *mime = e->mimeData();
-
-//    // not has urls.
-//    if (!mime->hasUrls()) {
-//        return e->ignore();
-//    }
-
-//    // traverse.
-//    m_homePage->setIconPixmap(true);
     e->accept();
 }
 
 void fileViewer::dragLeaveEvent(QDragLeaveEvent *e)
 {
-//    m_homePage->setIconPixmap(false);
-
-//    DMainWindow::dragLeaveEvent(e);
-    qDebug()<<e;
     e->accept();
 }
 

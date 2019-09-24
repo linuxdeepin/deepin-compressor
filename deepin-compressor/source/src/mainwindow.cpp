@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_encryptionpage(new EncryptionPage),
       m_progressdialog(new ProgressDialog),
       m_settingsDialog(new SettingDialog),
+      m_encodingpage(new EncodingPage),
       m_settings("deepin", "deepin-compressor")
 {
     m_encryptionjob = nullptr;
@@ -66,7 +67,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::InitUI()
 {
-//    m_extractdialog->exec();
+
     // add widget to main layout.
     m_mainLayout->addWidget(m_homePage);
     m_mainLayout->addWidget(m_UnCompressPage);
@@ -76,6 +77,7 @@ void MainWindow::InitUI()
     m_mainLayout->addWidget(m_CompressSuccess);
     m_mainLayout->addWidget(m_CompressFail);
     m_mainLayout->addWidget(m_encryptionpage);
+    m_mainLayout->addWidget(m_encodingpage);
 
     // init window flags.
     setWindowTitle(tr("Deepin Archive Manager"));
@@ -84,7 +86,7 @@ void MainWindow::InitUI()
 
     initTitleBar();
 
-
+//    m_encodingpage->setFilename("123.rar");
 }
 
 void MainWindow::InitConnection()

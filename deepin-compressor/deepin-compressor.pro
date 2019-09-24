@@ -62,7 +62,8 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/progressdialog.h \
     source/inc/extractpausedialog.h \
     source/inc/settingdialog.h \
-    source/inc/myfileitem.h
+    source/inc/myfileitem.h \
+    source/inc/encodingpage.h
 
 
 
@@ -102,7 +103,8 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/progressdialog.cpp \
     source/src/extractpausedialog.cpp \
     source/src/settingdialog.cpp \
-    source/src/myfileitem.cpp
+    source/src/myfileitem.cpp \
+    source/src/encodingpage.cpp
 
 
 

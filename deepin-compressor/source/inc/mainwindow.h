@@ -37,6 +37,7 @@
 #include "progressdialog.h"
 #include "extractpausedialog.h"
 #include "settingdialog.h"
+#include "encodingpage.h"
 
 #define TITLE_FIXED_HEIGHT 40
 DWIDGET_USE_NAMESPACE
@@ -151,6 +152,7 @@ private:
     EncryptionPage* m_encryptionpage;
     ProgressDialog* m_progressdialog;
     SettingDialog* m_settingsDialog;
+    EncodingPage* m_encodingpage;
     QSettings m_settings;
     Page_ID m_pageid;
 
