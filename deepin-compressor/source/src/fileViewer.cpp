@@ -71,6 +71,18 @@ void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     return QItemDelegate::paint (painter, option, index);
 }
 
+MyTableView::MyTableView(QWidget* parent)
+    : QTableView(parent)
+{
+
+}
+
+void MyTableView::paintEvent(QPaintEvent *e)
+{
+//    qDebug()<<y();
+    QTableView::paintEvent(e);
+}
+
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : QWidget(parent), m_pagetype(type)
 {
@@ -89,7 +101,7 @@ void fileViewer::InitUI()
 {
     QHBoxLayout* mainlayout = new QHBoxLayout;
 
-    pTableViewFile = new QTableView();
+    pTableViewFile = new MyTableView();
     pdelegate = new FirstRowDelegate();
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
@@ -125,7 +137,7 @@ void fileViewer::InitUI()
 //    plabel->setPalette(palette);
     plabel->hide();
 
-    plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
+    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,MyFileSystemDefine::gTableHeight);
 
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
@@ -202,7 +214,7 @@ void fileViewer::InitConnection()
     }
     else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
-        connect(pTableViewFile, &QTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+        connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
         if(m_pRightMenu)
         {
             connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
@@ -362,10 +374,10 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 }
 
 void fileViewer::ScrollBarShowEvent ( QShowEvent * event ){
-    plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width()-10,pTableViewFile->horizontalHeader()->height());
+    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,pTableViewFile->horizontalHeader()->height());
 }
 void fileViewer::ScrollBarHideEvent ( QHideEvent * event ){
-    plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),pTableViewFile->horizontalHeader()->height());
+    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,pTableViewFile->horizontalHeader()->height());
 
 }
 

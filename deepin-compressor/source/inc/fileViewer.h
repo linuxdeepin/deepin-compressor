@@ -79,6 +79,20 @@ private:
     int *ppathindex;
 };
 
+class MyTableView:public QTableView
+{
+     Q_OBJECT
+public:
+   MyTableView(QWidget* parent = 0);
+
+protected:
+   void paintEvent(QPaintEvent *e) override;
+
+
+signals:
+
+};
+
 
 class fileViewer : public QWidget
 {
@@ -125,7 +139,7 @@ private:
 
 private:
        QLineEdit * pLineEditDir;
-       QTableView * pTableViewFile;
+       MyTableView * pTableViewFile;
 
        int m_pathindex;
        MyFileSystemModel* pModel;
