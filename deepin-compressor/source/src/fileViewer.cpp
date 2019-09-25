@@ -123,7 +123,6 @@ void fileViewer::InitUI()
 //    plabel->setPalette(palette);
     plabel->hide();
 
-    pTableViewFile->setGeometry(0,0,580,300);
     plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
 
     if(PAGE_UNCOMPRESS == m_pagetype)

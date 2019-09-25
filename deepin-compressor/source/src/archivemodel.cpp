@@ -7,6 +7,7 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 
+#include <QTextCodec>
 #include <QUrl>
 #include <utils.h>
 
@@ -446,6 +447,30 @@ void ArchiveModel::slotListEntry(Archive::Entry *entry)
 
 void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behaviour)
 {
+//    qDebug()<<receivedEntry->name();
+//    qDebug()<<receivedEntry->name().toLocal8Bit();
+//    qDebug()<<Utils::detectEncode(receivedEntry->name().toLocal8Bit());
+
+//    QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
+//    QTextCodec* codec = QTextCodec::codecForName(Utils::detectEncode(receivedEntry->name().toLocal8Bit()));
+//    qDebug()<<"utf8Codec"<<utf8Codec;
+//    qDebug()<<"codec"<<codec;
+//    QString strUnicode= codec->toUnicode(receivedEntry->name().toLocal8Bit().data());
+//    qDebug()<<"unicode:"<<strUnicode;
+//    QByteArray ByteUtf8= utf8Codec->fromUnicode(strUnicode);
+//    char *utf8code = ByteUtf8.data();
+//    qDebug()<<ByteUtf8;
+
+
+//    QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
+//    QTextCodec* gb2312Codec = QTextCodec::codecForName("gb18030");
+
+//    QString strUnicode= gb2312Codec->toUnicode(receivedEntry->name().toLocal8Bit().data());
+//    QByteArray ByteUtf8= utf8Codec->fromUnicode(strUnicode);
+
+//    char * strGb2312= ByteUtf8.data();
+//    qDebug()<<strGb2312;
+
     if (receivedEntry->fullPath().isEmpty()) {
         qDebug() << "Weird, received empty entry (no filename) - skipping";
         return;

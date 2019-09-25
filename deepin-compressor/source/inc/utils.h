@@ -37,6 +37,7 @@ public:
     static bool isCompressed_file(const QString &filePath);
     static QString humanReadableSize(const qint64 &size, int precision);
     static qint64 humanReadableToSize(const QString &size);
+    static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
 };
 
 #endif
