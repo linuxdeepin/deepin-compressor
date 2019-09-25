@@ -87,20 +87,22 @@ fileViewer::~fileViewer()
 
 void fileViewer::InitUI()
 {
-    pTableViewFile = new QTableView(this);
-    pdelegate = new FirstRowDelegate(this);
+    QHBoxLayout* mainlayout = new QHBoxLayout;
+
+    pTableViewFile = new QTableView();
+    pdelegate = new FirstRowDelegate();
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
     plabel=new MyLabel(pTableViewFile);
     firstmodel = new QStandardItemModel();
-    pModel= new MyFileSystemModel(this);
+    pModel= new MyFileSystemModel();
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
     QStringList labels = QObject::trUtf8("名称,大小,类型,修改时间").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
 
-    pScrollbar= new MyScrollBar(this);
+    pScrollbar= new MyScrollBar();
     pTableViewFile->setVerticalScrollBar(pScrollbar);
     pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pTableViewFile->horizontalHeader()->setStretchLastSection(true);
@@ -114,7 +116,7 @@ void fileViewer::InitUI()
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
                                   "min-height:36px; background-color:white}");
-    pTableViewFile->setGeometry(0,0,580,300);
+//    pTableViewFile->setGeometry(0,0,580,300);
 
     plabel->setText(" ...返回上一层");
 //    DPalette palette;
@@ -125,6 +127,9 @@ void fileViewer::InitUI()
 
     plabel->setGeometry(pTableViewFile->x(),pTableViewFile->y()+MyFileSystemDefine::gTableHeight,pTableViewFile->width(),MyFileSystemDefine::gTableHeight);
 
+    mainlayout->addWidget(pTableViewFile);
+    setLayout(mainlayout);
+
     if(PAGE_UNCOMPRESS == m_pagetype)
     {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -134,6 +139,7 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
     }
+
 
     refreshTableview();
 }
