@@ -125,7 +125,7 @@ QMenu* MainWindow::createSettingsMenu()
 
     QAction *settingsAction = menu->addAction(tr("设置"));
     connect(settingsAction, &QAction::triggered, this, [this] {
-        m_settingsDialog->show();
+        m_settingsDialog->exec();
     });
 
     return menu;

@@ -450,22 +450,38 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
 //    qDebug()<<receivedEntry->name();
 //    qDebug()<<receivedEntry->name().toLocal8Bit();
 //    qDebug()<<Utils::detectEncode(receivedEntry->name().toLocal8Bit());
-
 //    QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
 //    QTextCodec* codec = QTextCodec::codecForName(Utils::detectEncode(receivedEntry->name().toLocal8Bit()));
-//    qDebug()<<"utf8Codec"<<utf8Codec;
-//    qDebug()<<"codec"<<codec;
+
 //    QString strUnicode= codec->toUnicode(receivedEntry->name().toLocal8Bit().data());
 //    qDebug()<<"unicode:"<<strUnicode;
 //    QByteArray ByteUtf8= utf8Codec->fromUnicode(strUnicode);
 //    char *utf8code = ByteUtf8.data();
 //    qDebug()<<ByteUtf8;
 
+//    for (int mib : QTextCodec::availableMibs()) {
+//        QTextCodec *codec = QTextCodec::codecForMib(mib);
+//        QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
+//        qDebug()<<codec->name();
+
+//        QString strUnicode= codec->toUnicode("\xC1\xB6\xBC\xB1\xBE\xEE");
+//        qDebug()<<"unicode:"<<strUnicode;
+//        QByteArray ByteUtf8= utf8Codec->fromUnicode(strUnicode);
+//        char *utf8code = ByteUtf8.data();
+//        qDebug()<<utf8code;
+//    }
+
+
+
 
 //    QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
-//    QTextCodec* gb2312Codec = QTextCodec::codecForName("gb18030");
+//    QTextCodec* gb2312Codec = QTextCodec::codecForName("EUC-KR");
 
-//    QString strUnicode= gb2312Codec->toUnicode(receivedEntry->name().toLocal8Bit().data());
+//    QByteArray tempdata = "\xC1\xB6\xBC\xB1\xBE\xEE";
+//    qDebug()<<Utils::detectEncode(tempdata);
+
+//    QString strUnicode= gb2312Codec->toUnicode(tempdata.data());
+//    qDebug()<<strUnicode;
 //    QByteArray ByteUtf8= utf8Codec->fromUnicode(strUnicode);
 
 //    char * strGb2312= ByteUtf8.data();
