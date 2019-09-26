@@ -48,6 +48,7 @@ private:
     QList<bool> m_valuelist;
     QList<bool> m_valuelisttemp;
     QString m_curpath;
+    int m_index_last;
 
     DSettingsOption * m_comboboxoption;
 };

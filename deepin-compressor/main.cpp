@@ -30,6 +30,16 @@
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
+void customMessageHandler(const QString &msg)
+{
+    QString txt;
+    txt = msg;
+
+    QFile outFile("/home/deepin/debug.log");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
 
 int main(int argc, char *argv[])
 {
@@ -76,9 +86,19 @@ int main(int argc, char *argv[])
     const QStringList fileList = parser.positionalArguments();
 
 
+    QStringList newfilelist;
+    foreach(QString file, fileList)
+    {
+        if(file.contains("file://"))
+        {
+            file.remove("file://");
+        }
+        newfilelist.append(file);
+    }
+
     // handle command line parser.
     if (!fileList.isEmpty()) {
-        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::QueuedConnection, Q_ARG(QStringList, fileList));
+        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::QueuedConnection, Q_ARG(QStringList, newfilelist));
     }
 
     QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);

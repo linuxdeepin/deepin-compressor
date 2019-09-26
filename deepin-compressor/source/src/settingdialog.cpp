@@ -6,6 +6,7 @@
 #include <QBoxLayout>
 #include <DComboBox>
 #include <DLabel>
+#include <QMessageBox>
 
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
@@ -99,16 +100,19 @@ void SettingDialog::initUI()
             {
                 combobox->setCurrentIndex(1);
                 m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+                m_index_last = 1;
             }
             else if("" == m_comboboxoption->value())
             {
                 combobox->setCurrentIndex(0);
                 m_curpath = "";
+                m_index_last = 0;
             }
             else {
                 combobox->setCurrentIndex(2);
                 m_curpath = m_comboboxoption->value().toString();
                 combobox->setEditText(m_curpath);
+                m_index_last = 2;
             }
 
             layout->addWidget(label,0 , Qt::AlignLeft);
@@ -232,6 +236,16 @@ void SettingDialog::comboxindexchanged(const QString & index)
         const int mode = dialog.exec();
 
         if (mode != QDialog::Accepted) {
+            if(0 == m_index_last)
+            {
+                emit sigeditText(tr("当前目录"));
+            }
+            else if (1 == m_index_last) {
+                emit sigeditText(tr("桌面"));
+            }
+            else {
+                emit sigeditText(m_curpath);
+            }
             return;
         }
 
@@ -240,17 +254,19 @@ void SettingDialog::comboxindexchanged(const QString & index)
 
         emit sigeditText(curpath);
         m_curpath = curpath;
+        m_index_last = 2;
     }
     else if(tr("桌面") == index)
     {
         m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+        m_index_last = 1;
     }
-    else {
+    else if(tr("当前目录") == index){
         m_curpath = "";
+        m_index_last = 0;
     }
 
     m_comboboxoption->setValue(m_curpath);
-
 
 }
 
