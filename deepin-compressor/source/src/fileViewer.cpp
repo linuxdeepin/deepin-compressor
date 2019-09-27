@@ -128,6 +128,7 @@ void fileViewer::InitUI()
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
                                   "min-height:36px; background-color:white}");
+    pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 //    pTableViewFile->setGeometry(0,0,580,300);
 
     plabel->setText(" ...返回上一层");
@@ -201,6 +202,11 @@ void fileViewer::refreshTableview()
     }
 
     pTableViewFile->setModel(firstmodel);
+
+    foreach(int row ,m_fileaddindex)
+    {
+        pTableViewFile->selectRow(row);
+    }
 }
 
 
@@ -268,8 +274,9 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         }
 
         emit sigFileRemoved(filelist);
-
     }
+
+
 }
 
 int fileViewer::getPathIndex()
@@ -279,6 +286,17 @@ int fileViewer::getPathIndex()
 
 void fileViewer::setFileList(const QStringList &files)
 {
+
+    if(files.count() > m_curfilelist.count())
+    {
+        m_fileaddindex.clear();
+        for(int i = 0; i < files.count() - m_curfilelist.count(); i++)
+        {
+            m_fileaddindex.append(files.count() - 1 + i);
+        }
+    }
+
+
     m_curfilelist.clear();
     foreach(QString filepath , files)
     {
@@ -289,6 +307,7 @@ void fileViewer::setFileList(const QStringList &files)
 }
 
 void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
+
     if(PAGE_COMPRESS == m_pagetype)
     {
         if(m_pathindex>1){

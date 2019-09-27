@@ -150,6 +150,7 @@ private:
        QModelIndex m_indexmode;
        MyScrollBar *pScrollbar;
        QFileInfoList m_curfilelist;
+       QList<int> m_fileaddindex;
        DMenu* m_pRightMenu = nullptr;
 
        PAGE_TYPE m_pagetype;

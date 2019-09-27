@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QFileIconProvider>
 #include <QTemporaryFile>
+#include <QMessageBox>
 
 
 CompressSetting::CompressSetting(QWidget* parent)
@@ -133,6 +134,14 @@ void CompressSetting::InitConnection()
 
 void CompressSetting::onNextButoonClicked()
 {
+    QString name = m_filename->text().remove(" ");
+    if(name == "")
+    {
+        QMessageBox box;
+        box.setText(tr("文件名输入错误，请重新输入！"));
+        box.exec();
+        return;
+    }
     QMap<QString, QString> m_openArgs;
     const QString password = m_password->text();
     const QString fixedMimeType = m_supportedMimeTypes.at(m_compresstype->currentIndex());
