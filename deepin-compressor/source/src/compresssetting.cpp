@@ -45,6 +45,9 @@ void CompressSetting::InitUI()
     m_filename = new DLineEdit();
     m_filename->setFixedSize(260, 36);
     m_filename->setText(tr("新建归档文件"));
+    QLineEdit* qfilename = m_filename->lineEdit();
+    qfilename->setMaxLength(70);
+
     m_savepath = new DFileChooserEdit();
     m_savepath->setFileMode(DFileDialog::Directory);
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
