@@ -62,7 +62,16 @@ CompressPage::~CompressPage()
 
 void CompressPage::onNextPress()
 {
-    emit sigNextPress();
+    if(m_filelist.isEmpty())
+    {
+        QMessageBox box;
+        box.setText(tr("请添加文件！"));
+        box.exec();
+    }
+    else {
+        emit sigNextPress();
+    }
+
 }
 
 void CompressPage::onAddfileSlot()
