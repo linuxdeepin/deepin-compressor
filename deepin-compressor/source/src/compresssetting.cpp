@@ -42,14 +42,12 @@ void CompressSetting::InitUI()
 
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
-    m_filename->setMaxLength(250);
     m_filename->setFixedSize(260, 36);
     m_filename->setText(tr("新建归档文件"));
-    m_savepath = new DLineEdit();
-
+    m_savepath = new DFileChooserEdit();
+    m_savepath->setFileMode(DFileDialog::Directory);
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setFixedSize(260, 36);
-    m_pathbutton = new Lib_Edit_Button(m_savepath);
 
     filelayout->addRow(tr("文件名") + ":", m_filename);
     filelayout->addRow(tr("保存到") + ":", m_savepath);
@@ -65,7 +63,7 @@ void CompressSetting::InitUI()
 
     m_encryptedlabel = new DLabel(tr("加密文件")+":");
     m_password = new DPasswordEdit();
-    m_password->setMaxLength(250);
+    m_password->setFixedSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("加密文件列表"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
@@ -124,32 +122,14 @@ void CompressSetting::InitUI()
 }
 void CompressSetting::InitConnection()
 {
-    connect(m_pathbutton, &DPushButton::clicked, this, &CompressSetting::onPathButoonClicked);
+
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
 }
 
 
-void CompressSetting::onPathButoonClicked()
-{
-    DFileDialog dialog;
-    dialog.setAcceptMode(DFileDialog::AcceptOpen);
-    dialog.setFileMode(DFileDialog::Directory);
-    dialog.setDirectory(m_savepath->text());
 
-    const int mode = dialog.exec();
-
-    if (mode != QDialog::Accepted) {
-        return;
-    }
-
-    QList<QUrl> pathlist = dialog.selectedUrls();
-
-    QString curpath = pathlist.at(0).toLocalFile();
-    m_savepath->setText(curpath);
-
-}
 
 void CompressSetting::onNextButoonClicked()
 {
@@ -259,6 +239,8 @@ void CompressSetting::setTypeImage(QString type)
 void CompressSetting::setDefaultPath(QString path)
 {
     m_savepath->setText(path);
+    QUrl dir(path);
+    m_savepath->setDirectoryUrl(dir);
 }
 
 void CompressSetting::setDefaultName(QString name)

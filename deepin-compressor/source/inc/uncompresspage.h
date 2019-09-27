@@ -32,6 +32,7 @@
 #include "fileViewer.h"
 #include "jobs.h"
 #include "lib_edit_button.h"
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,7 +65,7 @@ private:
     fileViewer *m_fileviewer;
     DPushButton* m_nextbutton;
     QStringList m_filelist;
-    DLineEdit* m_extractpath;
+    DCommandLinkButton* m_extractpath;
     DLabel* m_pixmaplabel;
     Lib_Edit_Button* m_pathbutton;
     QString m_pathstr;

@@ -28,7 +28,8 @@ void EncryptionPage::InitUI()
     m_nextbutton->setText(tr("下一步"));
     m_password = new DPasswordEdit();
     m_password->setFixedSize(340, 36);
-    m_password->setPlaceholderText(tr("请输入密码以解压"));
+    QLineEdit* edit = m_password->lineEdit();
+    edit->setPlaceholderText(tr("请输入密码以解压"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->setMargin(63);

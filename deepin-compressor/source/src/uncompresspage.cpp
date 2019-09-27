@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QUrl>
 #include <DRecentManager>
+#include <QStandardPaths>
 
 
 
@@ -45,11 +46,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
-
-    m_extractpath = new DLineEdit();
-    m_extractpath->setText(tr("解压到") + ": ~/Desktop");
-    m_extractpath->setFixedWidth(340);
-    m_pathbutton = new Lib_Edit_Button(m_extractpath);
+    m_extractpath = new DCommandLinkButton(tr("解压到") + ": ~/Desktop");
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
@@ -65,17 +62,17 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
     mainLayout->addLayout(contentLayout);
     mainLayout->addStretch();
-    mainLayout->addLayout(buttonlayout);
-    mainLayout->addSpacing(10);
     mainLayout->addLayout(pathlayout);
+    mainLayout->addSpacing(10);
+    mainLayout->addLayout(buttonlayout);
     mainLayout->setStretchFactor(contentLayout, 9);
-    mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setStretchFactor(pathlayout, 1);
+    mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setContentsMargins(20, 1, 20, 20);
 
 
     connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);
-    connect(m_pathbutton, &DPushButton::clicked, this, &UnCompressPage::onPathButoonClicked);
+    connect(m_extractpath, &DPushButton::clicked, this, &UnCompressPage::onPathButoonClicked);
     connect(m_fileviewer, &fileViewer::sigextractfiles, this, &UnCompressPage::onextractfilesSlot);
 }
 

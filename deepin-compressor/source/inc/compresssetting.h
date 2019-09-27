@@ -13,6 +13,7 @@
 #include <DSpinBox>
 #include "lib_edit_button.h"
 #include "pluginmanager.h"
+#include "dfilechooseredit.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,9 +39,9 @@ private:
     QPixmap m_compressicon;
     DComboBox* m_compresstype;
     DLineEdit* m_filename;
-    DLineEdit* m_savepath;
+    DFileChooserEdit* m_savepath;
     DLabel* m_pixmaplabel;
-    Lib_Edit_Button* m_pathbutton;
+//    Lib_Edit_Button* m_pathbutton;
     QVBoxLayout *m_fileLayout;
 
     QHBoxLayout *m_moresetlayout;
@@ -64,7 +65,6 @@ signals:
     void sigCompressPressed(QMap<QString, QString> &Args);
 
 public slots:
-    void onPathButoonClicked();
     void onNextButoonClicked();
     void onAdvanceButtonClicked(bool status);
     void ontypeChanged(int index);
