@@ -69,6 +69,7 @@ private:
     void emitProgress(double percentage);
     QString permissionsToString(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
+    QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
 
     QVector<Archive::Entry*> m_emittedEntries;
     bool m_overwriteAll;

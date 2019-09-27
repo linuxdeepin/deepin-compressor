@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT += KCodecs
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = libzipplugin
 TEMPLATE = lib
