@@ -9,7 +9,7 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
     : QWidget(parent)
 {
     m_stringinfo = tr("抱歉，解压失败！");
-    m_stringdetail = tr("xxxxxxxxxxxxx");
+    m_stringdetail = tr("压缩文件已损坏");
     InitUI();
     InitConnection();
 }
@@ -25,8 +25,8 @@ void Compressor_Fail::InitUI()
     m_stringdetaillabel = new DLabel();
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
-    m_retrybutton->setFixedWidth(260);
-    m_retrybutton->setText(tr("Retry"));
+    m_retrybutton->setFixedSize(340, 36);
+    m_retrybutton->setText(tr("重试"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->setMargin(20);

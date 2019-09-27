@@ -388,6 +388,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 void MainWindow::slotLoadingFinished(KJob *job)
 {
     if (job->error()) {
+        m_pageid = PAGE_UNZIP_FAIL;
+        refreshPage();
         return;
     }
     m_UnCompressPage->setModel(m_model);
