@@ -33,6 +33,9 @@ public slots:
     void onSelectedFilesSlot(const QStringList &files);
     void onRefreshFilelist(const QStringList &filelist);
 
+signals:
+    void sigselectedFiles(const QStringList &files);
+
 private:
 
     fileViewer *m_fileviewer;

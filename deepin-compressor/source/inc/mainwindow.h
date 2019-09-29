@@ -65,7 +65,6 @@ enum EncryptionType{
     Encryption_ExtractHere,
 };
 
-
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
@@ -117,6 +116,7 @@ private slots:
     void slotCompressFinished(KJob *job);
     void slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path);
     void slotKillExtractJob();
+    void slotFailRetry();
 
 
 signals:

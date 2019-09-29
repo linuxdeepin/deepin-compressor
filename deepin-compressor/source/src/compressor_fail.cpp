@@ -40,10 +40,17 @@ void Compressor_Fail::InitUI()
 
 void Compressor_Fail::InitConnection()
 {
-    connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::retrySlot);
+    connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::sigFailRetry);
 }
 
-void Compressor_Fail::retrySlot()
+void Compressor_Fail::setFailStr(const QString& str)
 {
+    m_stringinfo = str;
+    m_stringinfolabel->setText(m_stringinfo);
+}
 
+void Compressor_Fail::setFailStrDetail(const QString& str)
+{
+    m_stringdetail = str;
+    m_stringdetaillabel->setText(m_stringdetail);
 }

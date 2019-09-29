@@ -258,6 +258,9 @@ void CompressSetting::setDefaultPath(QString path)
 void CompressSetting::setDefaultName(QString name)
 {
     m_filename->setText(name);
+    QLineEdit* qfilename = m_filename->lineEdit();
+    qfilename->selectAll();
+    qfilename->setFocus();
 }
 
 void CompressSetting::ontypeChanged(int index)

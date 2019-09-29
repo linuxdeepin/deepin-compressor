@@ -211,9 +211,11 @@ void Job::onFinished(bool result)
 {
     qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
 
-    if (archive() && !archive()->isValid()) {
+    if ((archive() && !archive()->isValid())  || (!result))
+    {
         setError(KJob::UserDefinedError);
     }
+
 
     if (!d->isInterruptionRequested()) {
         emitResult();

@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 #include <DDesktopServices>
 #include <QMimeDatabase>
+#include <QFileIconProvider>
 #include "pluginmanager.h"
 //#include "archivejob.h"
 #include "jobs.h"
@@ -93,6 +94,7 @@ void MainWindow::InitConnection()
 {
     // connect the signals to the slot function.
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
+    connect(m_CompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
     connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
@@ -106,6 +108,7 @@ void MainWindow::InitConnection()
     connect(m_encryptionpage, &EncryptionPage::sigExtractPassword,this, &MainWindow::SlotExtractPassword);
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles,this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
+    connect(m_CompressFail, &Compressor_Fail::sigFailRetry,this, &MainWindow::slotFailRetry);
 }
 
 void MainWindow::customMessageHandler(const QString &msg)
@@ -300,6 +303,7 @@ void MainWindow::refreshPage()
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         m_titlelabel->setText("");
+        m_CompressFail->setFailStr(tr("抱歉，压缩失败！"));
         break;
     case PAGE_UNZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
@@ -314,6 +318,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         m_titlelabel->setText("");
+        m_CompressFail->setFailStr(tr("抱歉，解压失败！"));
         break;
     case  PAGE_ENCRYPTION:
         m_mainLayout->setCurrentIndex(7);
@@ -329,18 +334,57 @@ void MainWindow::onSelected(const QStringList &files)
 {
     if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
-        QFileInfo fileinfo(files.at(0));
-        m_decompressfilename = fileinfo.fileName();
-        if("" != m_settingsDialog->getCurExtractPath())
+        if(0 == m_CompressPage->getCompressFilelist().count())
         {
-           m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
-        }
-        else
-        {
-           m_UnCompressPage->setdefaultpath(fileinfo.path());
-        }
+            QFileInfo fileinfo(files.at(0));
+            m_decompressfilename = fileinfo.fileName();
+            if("" != m_settingsDialog->getCurExtractPath())
+            {
+               m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
+            }
+            else
+            {
+               m_UnCompressPage->setdefaultpath(fileinfo.path());
+            }
 
-        loadArchive(files.at(0));
+            loadArchive(files.at(0));
+        }
+        else {
+            DDialog* dialog = new DDialog;
+            dialog->setMessage(tr("添加压缩文件到目录 或 在新窗口中打开该文件？"));
+            QFileIconProvider icon_provider;
+            QFileInfo fileinfo(files.at(0));
+            dialog->setIcon(icon_provider.icon(fileinfo), QSize(64, 64));
+            dialog->addButton(tr("取消"));
+            dialog->addButton(tr("添加"));
+            dialog->addButton(tr("在新窗口中打开"));
+            const int mode = dialog->exec();
+            qDebug()<<mode;
+            if(1 == mode)
+            {
+                emit sigZipSelectedFiles(files);
+            }
+            else if(2 == mode)
+            {
+                KProcess* cmdprocess = new KProcess;
+                QStringList arguments;
+
+                QString programPath = QStandardPaths::findExecutable("deepin-compressor");
+                if (programPath.isEmpty()) {
+                    qDebug()<<"error can't find xdg-mime";
+                    return;
+                }
+
+                arguments<<files.at(0);
+
+                qDebug()<<arguments;
+
+                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                cmdprocess->setProgram(programPath, arguments);
+                cmdprocess->start();
+            }
+        }
     }
     else {
         m_pageid = PAGE_ZIP;
@@ -524,7 +568,9 @@ void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
 void MainWindow::slotExtractionDone(KJob* job)
 {
     if (job->error() && job->error() != KJob::KilledJobError) {
-
+        m_pageid = PAGE_UNZIP_FAIL;
+        refreshPage();
+        return;
     }
     else if(Encryption_SingleExtract == m_encryptiontype)
     {
@@ -807,6 +853,23 @@ void MainWindow::slotKillExtractJob()
     }
 }
 
+void MainWindow::slotFailRetry()
+{
+    if(Encryption_Load == m_encryptiontype)
+    {
+        m_pageid = PAGE_HOME;
+        refreshPage();
+        loadArchive(m_loadfile);
+    }
+    else if(Encryption_Extract == m_encryptiontype)
+    {
+        slotextractSelectedFilesTo(m_UnCompressPage->getDecompressPath());
+    }
+    else if(Encryption_SingleExtract == m_encryptiontype)
+    {
+
+    }
+}
 
 void MainWindow::onCancelCompressPressed()
 {

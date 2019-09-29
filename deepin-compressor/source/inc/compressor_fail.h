@@ -16,6 +16,9 @@ public:
     void InitUI();
     void InitConnection();
 
+    void setFailStr(const QString& str);
+    void setFailStrDetail(const QString& str);
+
 private:
     DPushButton* m_retrybutton;
     QPixmap m_compressicon;
@@ -26,8 +29,9 @@ private:
     DLabel* m_stringdetaillabel;
     QString m_stringdetail;
 
-public slots:
-    void retrySlot();
+signals:
+    void sigFailRetry();
+
 };
 
 

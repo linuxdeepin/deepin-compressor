@@ -104,7 +104,7 @@ void CompressPage::onAddfileSlot()
     if (mode != QDialog::Accepted) {
         return;
     }
-    onSelectedFilesSlot(dialog.selectedFiles());
+    emit sigselectedFiles(dialog.selectedFiles());
 }
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
