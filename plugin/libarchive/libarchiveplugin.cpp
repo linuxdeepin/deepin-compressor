@@ -320,7 +320,6 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                         overwriteAll = true;
                     }
                 }
-                overwriteAll = true;//overwrite
             }
 
             // If there is an already existing directory.
