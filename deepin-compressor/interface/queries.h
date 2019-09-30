@@ -38,15 +38,16 @@
 
 enum RenameDialog_Result {
     Result_Cancel = 0,
-    Result_Rename = 1,
-    Result_Skip = 2,
-    Result_AutoSkip = 3,
-    Result_Overwrite = 4,
-    Result_OverwriteAll = 5,
-    Result_Resume = 6,
-    Result_ResumeAll = 7,
-    Result_AutoRename = 8,
-    Result_Retry = 9,
+
+    Result_Skip = 1,
+    Result_AutoSkip = 2,
+    Result_Overwrite = 3,
+    Result_OverwriteAll = 4,
+    Result_Resume = 5,
+    Result_ResumeAll = 6,
+    Result_AutoRename = 7,
+    Result_Retry = 8,
+    Result_Rename = 9,
 
     // @deprecated since 5.0, use the RenameDialog_Option enum values
     R_CANCEL = Result_Cancel,

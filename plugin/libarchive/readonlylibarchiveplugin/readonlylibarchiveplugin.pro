@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT += dtkwidget
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = readonlylibarchiveplugin
 TEMPLATE = lib

@@ -288,38 +288,38 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
 
             // Check if the file about to be written already exists.
             if (!entryIsDir && entryFI.exists()) {
-//                if (skipAll) {
-//                    archive_read_data_skip(m_archiveReader.data());
-//                    archive_entry_clear(entry);
-//                    continue;
-//                } else if (!overwriteAll && !skipAll) {
-//                    OverwriteQuery query(entryName);
-//                    emit userQuery(&query);
-//                    query.waitForResponse();
+                if (skipAll) {
+                    archive_read_data_skip(m_archiveReader.data());
+                    archive_entry_clear(entry);
+                    continue;
+                } else if (!overwriteAll && !skipAll) {
+                    OverwriteQuery query(entryName);
+                    emit userQuery(&query);
+                    query.waitForResponse();
 
-//                    if (query.responseCancelled()) {
-//                        emit cancelled();
-//                        archive_read_data_skip(m_archiveReader.data());
-//                        archive_entry_clear(entry);
-//                        break;
-//                    } else if (query.responseSkip()) {
-//                        archive_read_data_skip(m_archiveReader.data());
-//                        archive_entry_clear(entry);
-//                        continue;
-//                    } else if (query.responseAutoSkip()) {
-//                        archive_read_data_skip(m_archiveReader.data());
-//                        archive_entry_clear(entry);
-//                        skipAll = true;
-//                        continue;
-//                    } else if (query.responseRename()) {
-//                        const QString newName(query.newFilename());
-//                        fileBeingRenamed = newName;
-//                        archive_entry_copy_pathname(entry, QFile::encodeName(newName).constData());
-//                        goto retry;
-//                    } else if (query.responseOverwriteAll()) {
-//                        overwriteAll = true;
-//                    }
-//                }
+                    if (query.responseCancelled()) {
+                        emit cancelled();
+                        archive_read_data_skip(m_archiveReader.data());
+                        archive_entry_clear(entry);
+                        break;
+                    } else if (query.responseSkip()) {
+                        archive_read_data_skip(m_archiveReader.data());
+                        archive_entry_clear(entry);
+                        continue;
+                    } else if (query.responseAutoSkip()) {
+                        archive_read_data_skip(m_archiveReader.data());
+                        archive_entry_clear(entry);
+                        skipAll = true;
+                        continue;
+                    } else if (query.responseRename()) {
+                        const QString newName(query.newFilename());
+                        fileBeingRenamed = newName;
+                        archive_entry_copy_pathname(entry, QFile::encodeName(newName).constData());
+                        goto retry;
+                    } else if (query.responseOverwriteAll()) {
+                        overwriteAll = true;
+                    }
+                }
                 overwriteAll = true;//overwrite
             }
 

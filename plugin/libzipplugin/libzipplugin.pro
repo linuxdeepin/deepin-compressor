@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
-QT += KCodecs
+QT += KCodecs dtkwidget
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = libzipplugin
 TEMPLATE = lib

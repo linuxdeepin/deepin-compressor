@@ -34,7 +34,9 @@
 #include <QMessageBox>
 #include <QPointer>
 #include <QUrl>
+#include <DDialog>
 
+DWIDGET_USE_NAMESPACE
 
 Query::Query()
 {
@@ -98,6 +100,27 @@ void OverwriteQuery::execute()
 //    setResponse(dialog.data()->result());
 
 //    delete dialog.data();
+
+    QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
+
+    QString path = sourceUrl.toString();
+    if(path.contains("file:"))
+    {
+        path.remove("file:");
+    }
+
+    DDialog* dialog = new DDialog;
+    QString message = "文件已存在，是否覆盖?\n"  + path;
+    dialog->setMessage(message);
+    dialog->addButton("取消");
+    dialog->addButton("跳过");
+    dialog->addButton("全部跳过");
+    dialog->addButton("覆盖");
+    dialog->addButton("全部覆盖");
+    const int mode = dialog->exec();
+
+    setResponse(mode);
+
 
     QApplication::restoreOverrideCursor();
 }
