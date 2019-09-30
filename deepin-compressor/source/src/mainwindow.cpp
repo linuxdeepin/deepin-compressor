@@ -432,6 +432,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 void MainWindow::slotLoadingFinished(KJob *job)
 {
     if (job->error()) {
+        m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -568,6 +569,7 @@ void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
 void MainWindow::slotExtractionDone(KJob* job)
 {
     if (job->error() && job->error() != KJob::KilledJobError) {
+        m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -780,18 +782,18 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-    CreateJob* createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
+    m_createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty()) {
-        createJob->enableEncryption(password, enableHeaderEncryption.compare("true")?false:true);
+        m_createJob->enableEncryption(password, enableHeaderEncryption.compare("true")?false:true);
     }
 
-    connect(createJob, &KJob::result, this, &MainWindow::slotCompressFinished);
-    connect(createJob, SIGNAL(percent(KJob*,ulong)),
+    connect(m_createJob, &KJob::result, this, &MainWindow::slotCompressFinished);
+    connect(m_createJob, SIGNAL(percent(KJob*,ulong)),
             this, SLOT(SlotProgress(KJob*,ulong)));
-    connect(createJob, &CreateJob::percentfilename,
+    connect(m_createJob, &CreateJob::percentfilename,
             this, &MainWindow::SlotProgressFile);
-    createJob->start();
+    m_createJob->start();
 
 }
 
@@ -799,7 +801,11 @@ void MainWindow::slotCompressFinished(KJob *job)
 {
     qDebug() << "job finished";
 
-    if (job->error() && !job->errorString().isEmpty()) {
+    if (job->error() &&  job->error() != KJob::KilledJobError) {
+        m_pageid = PAGE_ZIP_FAIL;
+        m_CompressFail->setFailStrDetail(tr("原始文件已损坏！"));
+        refreshPage();
+        return;
     }
     m_pageid = PAGE_ZIP_SUCCESS;
     refreshPage();

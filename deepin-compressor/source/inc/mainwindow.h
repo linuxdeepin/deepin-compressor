@@ -162,6 +162,7 @@ private:
 
     ExtractJob* m_encryptionjob;
     LoadJob* m_loadjob;
+    CreateJob* m_createJob;
     EncryptionType m_encryptiontype;
     bool m_isrightmenu;
 };
