@@ -71,35 +71,6 @@ OverwriteQuery::OverwriteQuery(const QString &filename) :
 
 void OverwriteQuery::execute()
 {
-//TODO_DS
-//    // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
-//    // at the moment (#231974)
-//    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-
-//    KIO::RenameDialog_Options options = KIO::RenameDialog_Overwrite | KIO::RenameDialog_Skip;
-//    if (m_noRenameMode) {
-//        options = options | KIO::RenameDialog_NoRename;
-//    }
-//    if (m_multiMode) {
-//        options = options | KIO::RenameDialog_MultipleItems;
-//    }
-
-//    QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
-//    QUrl destUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
-
-//    QPointer<KIO::RenameDialog> dialog = new KIO::RenameDialog(
-//        nullptr,
-//        i18nc("@title:window", "File Already Exists"),
-//        sourceUrl,
-//        destUrl,
-//        options);
-//    dialog.data()->exec();
-
-//    m_data[QStringLiteral("newFilename")] = dialog.data()->newDestUrl().toDisplayString(QUrl::PreferLocalFile);
-
-//    setResponse(dialog.data()->result());
-
-//    delete dialog.data();
 
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
 
@@ -110,13 +81,13 @@ void OverwriteQuery::execute()
     }
 
     DDialog* dialog = new DDialog;
-    QString message = "文件已存在，是否覆盖?\n"  + path;
+    QString message = QObject::tr("文件已存在，是否覆盖?\n")  + path;
     dialog->setMessage(message);
-    dialog->addButton("取消");
-    dialog->addButton("跳过");
-    dialog->addButton("全部跳过");
-    dialog->addButton("覆盖");
-    dialog->addButton("全部覆盖");
+    dialog->addButton(QObject::tr("取消"));
+    dialog->addButton(QObject::tr("跳过"));
+    dialog->addButton(QObject::tr("全部跳过"));
+    dialog->addButton(QObject::tr("覆盖"));
+    dialog->addButton(QObject::tr("全部覆盖"));
     const int mode = dialog->exec();
 
     setResponse(mode);
