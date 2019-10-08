@@ -57,7 +57,7 @@ signals:
 public slots:
     void oneCompressPress();
     void onPathButoonClicked();
-    void onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type);
+    void onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path);
 
 
 private:

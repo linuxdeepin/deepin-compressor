@@ -123,8 +123,13 @@ QString UnCompressPage::getDecompressPath()
     return m_pathstr;
 }
 
-void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type)
+void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path)
 {
+    if(fileList.count() == 0)
+    {
+        return;
+    }
+
     if(EXTRACT_TO == type)
     {
         DFileDialog dialog;
@@ -142,6 +147,9 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRA
         QString curpath = pathlist.at(0).toLocalFile();
 
         emit sigextractfiles(fileList, curpath);
+    }
+    else if (EXTRACT_DRAG == type) {
+        emit sigextractfiles(fileList, path);
     }
     else {
         emit sigextractfiles(fileList, m_pathstr);

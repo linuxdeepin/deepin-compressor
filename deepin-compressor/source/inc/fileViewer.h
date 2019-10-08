@@ -14,11 +14,16 @@
 #include <QScrollBar>
 #include <QDateTime>
 #include <QStandardItemModel>
+#include <dfiledragserver.h>
+#include <dfiledrag.h>
 #include "archivemodel.h"
 #include <DMenu>
 
 
+
+
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 enum PAGE_TYPE{
     PAGE_COMPRESS,
@@ -28,6 +33,7 @@ enum PAGE_TYPE{
 enum EXTRACT_TYPE{
     EXTRACT_HEAR,
     EXTRACT_TO,
+    EXTRACT_DRAG,
 };
 
 class MyScrollBar:public QScrollBar
@@ -87,9 +93,23 @@ public:
 
 protected:
    void paintEvent(QPaintEvent *e) override;
-
+   void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
+   void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
+   void dropEvent(QDropEvent *) Q_DECL_OVERRIDE;
+   void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+   void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+   void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
 signals:
+   void sigdragLeave(QString path);
+
+public slots:
+   void slotDragpath(QUrl url);
+
+private:
+   QPoint dragpos;
+   DFileDragServer *s = nullptr;
+   QString m_path;
 
 };
 
@@ -114,10 +134,6 @@ public:
        void startDrag(Qt::DropActions supportedActions);
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:
        void slotCompressRowDoubleClicked(const QModelIndex index);
@@ -127,10 +143,11 @@ protected slots:
        void ScrollBarHideEvent ( QHideEvent * event );
        void showRightMenu(const QPoint &pos);
        void onRightMenuClicked(QAction *action);
+       void slotDragLeave(QString path);
 
 signals:
        void sigFileRemoved(const QStringList &filelist);
-       void sigextractfiles(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type);
+       void sigextractfiles(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path=nullptr);
 
 private:
        void refreshTableview();
@@ -154,6 +171,7 @@ private:
        DMenu* m_pRightMenu = nullptr;
 
        PAGE_TYPE m_pagetype;
+
 
 };
 

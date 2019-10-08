@@ -83,6 +83,77 @@ void MyTableView::paintEvent(QPaintEvent *e)
     QTableView::paintEvent(e);
 }
 
+void MyTableView::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+}
+
+void MyTableView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    qDebug()<<"dragLeaveEvent";
+    e->accept();
+}
+
+void MyTableView::dropEvent(QDropEvent *e)
+{
+    qDebug()<<"dragLeaveEvent";
+    e->accept();
+}
+
+void MyTableView::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->accept();
+}
+
+
+void MyTableView::mousePressEvent(QMouseEvent *e)
+{
+
+    if (e->button() == Qt::MouseButton::LeftButton) {
+        dragpos = e->pos();
+    }
+    QTableView::mousePressEvent(e);
+}
+
+void MyTableView::mouseMoveEvent(QMouseEvent *e)
+{
+
+    if (!(e->buttons() & Qt::MouseButton::LeftButton) || s) {
+        return;
+    }
+    if ((e->pos() - dragpos).manhattanLength() < QApplication::startDragDistance()) {
+        return;
+    }
+
+    s = new DFileDragServer();
+    DFileDrag *drag = new DFileDrag(this, s);
+    QMimeData *m = new QMimeData();
+    m->setText("your stuff here");
+    drag->setMimeData(m);
+
+//    connect(drag, &DFileDrag::targetUrlChanged, [drag] {
+//        static_path = drag->targetUrl().toString();
+//        qDebug()<<static_path;
+//    });
+
+    connect(drag, &DFileDrag::targetUrlChanged, this, &MyTableView::slotDragpath);
+    drag->exec();
+
+
+    s->setProgress(100);
+    s->deleteLater();
+    s = nullptr;
+    qDebug()<<"sigdragLeave";
+    emit sigdragLeave(m_path);
+    m_path.clear();
+}
+
+void MyTableView::slotDragpath(QUrl url)
+{
+    m_path = url.toLocalFile();
+    qDebug()<<m_path;
+}
+
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : QWidget(parent), m_pagetype(type)
 {
@@ -221,6 +292,7 @@ void fileViewer::InitConnection()
     else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
         connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+        connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
         if(m_pRightMenu)
         {
             connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
@@ -411,6 +483,16 @@ void fileViewer::showRightMenu(const QPoint &pos)
 
 }
 
+void fileViewer::slotDragLeave(QString path)
+{
+    if(path.isEmpty())
+    {
+        qDebug()<<"path is empty";
+        return;
+    }
+    emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_DRAG, path);
+}
+
 void fileViewer::onRightMenuClicked(QAction *action)
 {
     if(action->text() == tr("提取文件"))
@@ -502,30 +584,6 @@ void fileViewer::setDecompressModel(ArchiveModel* model)
 
 }
 
-void fileViewer::dragEnterEvent(QDragEnterEvent *e)
-{
-    e->accept();
-}
-
-void fileViewer::dragLeaveEvent(QDragLeaveEvent *e)
-{
-    e->accept();
-}
-
-void fileViewer::dropEvent(QDropEvent *e)
-{
-
-
-    e->accept();
-
-
-
-}
-
-void fileViewer::dragMoveEvent(QDragMoveEvent *event)
-{
-    event->accept();
-}
 
 void fileViewer::startDrag(Qt::DropActions supportedActions)
 {
