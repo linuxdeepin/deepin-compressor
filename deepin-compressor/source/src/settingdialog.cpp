@@ -7,7 +7,9 @@
 #include <DComboBox>
 #include <DLabel>
 #include <QMessageBox>
+#include <DPalette>
 
+DGUI_USE_NAMESPACE
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
 {
@@ -91,7 +93,7 @@ void SettingDialog::initUI()
 
             DComboBox* combobox = new DComboBox;
             combobox->setFixedWidth(300);
-            combobox->setEditable(true);
+            combobox->setEditable(false);
             QStringList list;
             list << tr("当前目录")<<tr("桌面")<<tr("其他目录");
             combobox->addItems(list);
@@ -109,6 +111,7 @@ void SettingDialog::initUI()
                 m_index_last = 0;
             }
             else {
+                combobox->setEditable(true);
                 combobox->setCurrentIndex(2);
                 m_curpath = m_comboboxoption->value().toString();
                 combobox->setEditText(m_curpath);
@@ -120,8 +123,71 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(combobox, &DComboBox::currentTextChanged, this, &SettingDialog::comboxindexchanged);
-            connect(this, &SettingDialog::sigeditText ,combobox, &DComboBox::setEditText);
+            connect(combobox, &DComboBox::currentTextChanged, [combobox, this] {
+                if(tr("当前目录") == combobox->currentText())
+                {
+                    combobox->setEditable(false);
+                    m_curpath = "";
+                    m_index_last = 0;
+                }
+                else if (tr("桌面") == combobox->currentText()) {
+                    combobox->setEditable(false);
+                    m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+                    m_index_last = 1;
+                }
+                else if(tr("其他目录") == combobox->currentText()){
+                    combobox->setEditable(true);
+                    DFileDialog dialog;
+                    dialog.setAcceptMode(DFileDialog::AcceptOpen);
+                    dialog.setFileMode(DFileDialog::Directory);
+                    dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+
+                    const int mode = dialog.exec();
+
+                    if (mode != QDialog::Accepted) {
+                        if(0 == m_index_last)
+                        {
+                            combobox->setEditable(false);
+                            combobox->setCurrentIndex(0);
+                        }
+                        else if (1 == m_index_last) {
+                            combobox->setEditable(false);
+                            combobox->setCurrentIndex(1);
+                        }
+                        else {
+                            combobox->setEditText(m_curpath);
+                        }
+                        return;
+                    }
+
+                    QList<QUrl> pathlist = dialog.selectedUrls();
+                    QString curpath = pathlist.at(0).toLocalFile();
+
+                    combobox->setEditText(curpath);
+                    m_curpath = curpath;
+                    m_index_last = 2;
+                }
+                else {
+                    m_curpath = combobox->currentText();
+                    QDir dir(m_curpath);
+                    DPalette plt = combobox->palette();
+
+                    if(!dir.exists())
+                    {
+                        plt.setColor(DPalette::Text, QColor(255, 0, 0));
+
+                    }
+                    else {
+                        plt.setColor(DPalette::Text, QColor(65, 77, 104));
+                    }
+
+                    combobox->setPalette(plt);
+                    m_index_last = 2;
+                }
+                m_comboboxoption->setValue(m_curpath);
+
+
+            });
 
 
             qDebug()<<m_curpath;
@@ -158,6 +224,17 @@ void SettingDialog::initConnect()
 void SettingDialog::done(int status)
 {
     Q_UNUSED(status);
+
+    QDir dir(m_curpath);
+
+    if(!dir.exists())
+    {
+        QMessageBox box;
+        box.setText(tr("默认解压路径不存在，请重新输入！"));
+        box.exec();
+        return;
+    }
+
     QDialog::done(status);
 
     int loop = 0;
@@ -222,52 +299,6 @@ void SettingDialog::cancelpressed()
     {
         m_settings->setOption(key, false);
     }
-}
-
-void SettingDialog::comboxindexchanged(const QString & index)
-{
-    if(tr("其他目录") == index)
-    {
-        DFileDialog dialog;
-        dialog.setAcceptMode(DFileDialog::AcceptOpen);
-        dialog.setFileMode(DFileDialog::Directory);
-        dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-
-        const int mode = dialog.exec();
-
-        if (mode != QDialog::Accepted) {
-            if(0 == m_index_last)
-            {
-                emit sigeditText(tr("当前目录"));
-            }
-            else if (1 == m_index_last) {
-                emit sigeditText(tr("桌面"));
-            }
-            else {
-                emit sigeditText(m_curpath);
-            }
-            return;
-        }
-
-        QList<QUrl> pathlist = dialog.selectedUrls();
-        QString curpath = pathlist.at(0).toLocalFile();
-
-        emit sigeditText(curpath);
-        m_curpath = curpath;
-        m_index_last = 2;
-    }
-    else if(tr("桌面") == index)
-    {
-        m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-        m_index_last = 1;
-    }
-    else if(tr("当前目录") == index){
-        m_curpath = "";
-        m_index_last = 0;
-    }
-
-    m_comboboxoption->setValue(m_curpath);
-
 }
 
 void SettingDialog::startcmd(QString &mimetype, bool state)

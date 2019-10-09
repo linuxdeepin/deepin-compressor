@@ -35,11 +35,9 @@ public slots:
     void settingsChanged(const QString &key, const QVariant &value);
     void selectpressed();
     void cancelpressed();
-    void comboxindexchanged(const QString & index);
     virtual void done(int status) override;
 
 signals:
-    void sigeditText(const  QString & text);
 
 private:
     DSettings *m_settings;
