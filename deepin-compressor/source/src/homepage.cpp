@@ -22,6 +22,8 @@
 #include <QApplication>
 #include <QDir>
 #include <DFileDialog>
+#include <DPalette>
+DGUI_USE_NAMESPACE
 
 HomePage::HomePage(QWidget *parent)
     : QWidget(parent),
@@ -39,23 +41,31 @@ HomePage::HomePage(QWidget *parent)
     m_iconLabel->setFixedSize(128, 128);
     m_iconLabel->setPixmap(m_unloadPixmap);
     m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
-    m_tipsLabel->setStyleSheet("QLabel { color: #6a6a6a; }");
+
+    QFont font;
+    font.setPixelSize(12);
+
+    DPalette pa;
+    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
+    m_tipsLabel->setPalette(pa);
+    m_tipsLabel->setFont(font);
+
+    m_chooseBtn->setFont(font);
 
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
 
-    m_layout->addSpacing(40);
-    m_layout->addWidget(m_iconLabel, 0, Qt::AlignTop | Qt::AlignHCenter);
-    m_layout->addSpacing(20);
+    m_layout->addStretch();
+    m_layout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
+    m_layout->addSpacing(13);
     m_layout->addWidget(m_tipsLabel, 0, Qt::AlignHCenter);
     m_layout->addSpacing(15);
     m_layout->addWidget(m_splitLine, 0, Qt::AlignHCenter);
     m_layout->addSpacing(15);
     m_layout->addWidget(m_chooseBtn, 0, Qt::AlignHCenter);
     m_layout->addStretch();
-    m_layout->setSpacing(0);
 
     connect(m_chooseBtn, &DCommandLinkButton::clicked, this, &HomePage::onChooseBtnClicked);
 
