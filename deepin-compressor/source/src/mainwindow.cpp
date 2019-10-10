@@ -32,6 +32,7 @@
 #include <QMimeDatabase>
 #include <QFileIconProvider>
 #include "pluginmanager.h"
+
 //#include "archivejob.h"
 #include "jobs.h"
 
@@ -87,7 +88,6 @@ void MainWindow::InitUI()
 
     initTitleBar();
 
-//    m_encodingpage->setFilename("123.rar");
 }
 
 void MainWindow::InitConnection()
@@ -145,38 +145,33 @@ void MainWindow::initTitleBar()
     m_logo->setPixmap(m_logoicon);
 
 
-    m_titlebutton = new DPushButton();
-    m_titlebutton->setText("+");
-    m_titlebutton->setFixedSize(30, 30);
+    m_titlebutton = new DIconButton(DStyle::StandardPixmap::SP_IncreaseElement, this);
+    m_titlebutton->setFixedSize(36, 36);
     m_titlebutton->setVisible(false);
 
     m_titleFrame = new QFrame;
     m_titleFrame->setObjectName("TitleBar");
     QHBoxLayout *leftLayout = new QHBoxLayout;
-    leftLayout->setMargin(0);
-    leftLayout->setSpacing(0);
-    leftLayout->addSpacing(12);
+    leftLayout->addSpacing(6);
     leftLayout->addWidget(m_logo);
-    leftLayout->addSpacing(12);
+    leftLayout->addSpacing(6);
     leftLayout->addWidget(m_titlebutton);
-    leftLayout->setSpacing(0);
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame();
-    left_frame->setFixedWidth(12+12+26+30);
+    left_frame->setFixedWidth(10+6+36+30);
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
     m_titlelabel = new DLabel("");
-    m_titlelabel->setFixedSize(242, 40);
+    m_titlelabel->setMinimumSize(100, TITLE_FIXED_HEIGHT);
+    m_titlelabel->setAlignment(Qt::AlignCenter);
 
     QHBoxLayout *titlemainLayout = new QHBoxLayout;
-    titlemainLayout->setSpacing(0);
     titlemainLayout->setContentsMargins(0, 0, 0, 0);
     titlemainLayout->addWidget(left_frame);
-    titlemainLayout->addSpacing(150);
-    titlemainLayout->addWidget(m_titlelabel, 1, Qt::AlignCenter);
-    titlemainLayout->addSpacing(50);
+    titlemainLayout->addSpacing(110);
+    titlemainLayout->addWidget(m_titlelabel, 0, Qt::AlignCenter);
 
     m_titleFrame->setLayout(titlemainLayout);
     m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
@@ -262,7 +257,6 @@ void MainWindow::setDisable()
 
 void MainWindow::refreshPage()
 {
-    m_titlebutton->setText("");
     m_titlebutton->setVisible(false);
     switch (m_pageid) {
     case PAGE_HOME:
@@ -276,13 +270,13 @@ void MainWindow::refreshPage()
     case PAGE_ZIP:
         m_mainLayout->setCurrentIndex(2);
         m_titlelabel->setText(tr("新建归档文件"));
-        m_titlebutton->setText("+");
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
         m_titlelabel->setText(tr("新建归档文件"));
-        m_titlebutton->setText("<");
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:

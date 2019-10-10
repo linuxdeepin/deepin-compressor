@@ -57,6 +57,9 @@ HomePage::HomePage(QWidget *parent)
         m_settings->setValue("dir", "");
     }
 
+    DLabel* buttomlabel = new DLabel();
+    buttomlabel->setFixedHeight(50);
+
     m_layout->addStretch();
     m_layout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
     m_layout->addSpacing(13);
@@ -65,6 +68,7 @@ HomePage::HomePage(QWidget *parent)
     m_layout->addWidget(m_splitLine, 0, Qt::AlignHCenter);
     m_layout->addSpacing(15);
     m_layout->addWidget(m_chooseBtn, 0, Qt::AlignHCenter);
+    m_layout->addWidget(buttomlabel, 0, Qt::AlignHCenter);
     m_layout->addStretch();
 
     connect(m_chooseBtn, &DCommandLinkButton::clicked, this, &HomePage::onChooseBtnClicked);

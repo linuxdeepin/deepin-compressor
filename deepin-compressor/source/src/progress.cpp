@@ -7,7 +7,7 @@
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
 {
-    m_filename = "new file.rar";
+    m_filename = "新建归档文件.rar";
     m_progressfile = "设计图111.jpg";
     InitUI();
     InitConnection();
@@ -23,9 +23,13 @@ void Progress::InitUI()
     ft.setPixelSize(17);
     ft.setBold(true);
 
+    DPalette pa;
+    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
+
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText(m_filename);
     m_filenamelabel->setFont(ft);
+    m_filenamelabel->setPalette(pa);
 
     m_progressbar = new DProgressBar();
     m_progressbar->setRange(0,100);
@@ -36,6 +40,11 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
 
     m_progressfilelabel = new DLabel();
+    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
+    ft.setPixelSize(12);
+    ft.setBold(false);
+    m_progressfilelabel->setPalette(pa);
+    m_progressfilelabel->setFont(ft);
     m_progressfilelabel->setText(tr("正在计算中..."));
 
     m_cancelbutton = new DPushButton();
@@ -43,11 +52,17 @@ void Progress::InitUI()
     m_cancelbutton->setText(tr("取消"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
-    mainlayout->addWidget(m_pixmaplabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(m_filenamelabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(m_progressbar, 50 , Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(m_progressfilelabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(m_cancelbutton, 100 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addStretch();
+    mainlayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(5);
+    mainlayout->addWidget(m_filenamelabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(25);
+    mainlayout->addWidget(m_progressbar, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(5);
+    mainlayout->addWidget(m_progressfilelabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addStretch();
+    mainlayout->addWidget(m_cancelbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
 }
 
 void Progress::InitConnection()

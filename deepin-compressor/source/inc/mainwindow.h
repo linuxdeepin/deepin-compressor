@@ -38,8 +38,9 @@
 #include "extractpausedialog.h"
 #include "settingdialog.h"
 #include "encodingpage.h"
+#include <DIconButton>
 
-#define TITLE_FIXED_HEIGHT 40
+#define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE
 
 enum Page_ID{
@@ -158,7 +159,7 @@ private:
 
     QVector<Archive::Entry*> m_extractSimpleFiles;
 
-    DPushButton* m_titlebutton;
+    DIconButton* m_titlebutton;
 
     ExtractJob* m_encryptionjob;
     LoadJob* m_loadjob;

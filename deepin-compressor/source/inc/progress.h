@@ -7,10 +7,11 @@
 #include <DLabel>
 #include "utils.h"
 #include <DProgressBar>
+#include <DPalette>
 
 
 DWIDGET_USE_NAMESPACE
-
+DGUI_USE_NAMESPACE
 enum COMPRESS_TYPE{
     COMPRESSING,
     DECOMPRESSING,

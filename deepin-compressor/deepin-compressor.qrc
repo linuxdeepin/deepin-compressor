@@ -14,5 +14,6 @@
         <file>images/compress-Typeface-player.svg</file>
         <file>images/success.svg</file>
         <file>images/deepin-compressor.svg</file>
+        <file>images/back_normal.svg</file>
     </qresource>
 </RCC>
