@@ -405,6 +405,12 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         emit finished(false);
         return;
     }
+    else if (m_exitCode == 9) {
+        qDebug() << "wrong password";
+        emit error(tr("wrong password"));
+        setPassword(QString());
+        return;
+    }
 
     if (m_extractionOptions.isDragAndDropEnabled()) {
         const bool droppedFilesMoved = moveDroppedFilesToDest(m_extractedFiles, m_extractDestDir);
@@ -705,13 +711,14 @@ void CliInterface::killProcess(bool emitFinished)
 
     m_abortingOperation = !emitFinished;
 
-    // Give some time for the application to finish gracefully
-    if (!m_process->waitForFinished(5)) {
-        m_process->kill();
+    m_process->kill();
+//    // Give some time for the application to finish gracefully
+//    if (!m_process->waitForFinished(5)) {
+//        m_process->kill();
 
-        // It takes a few hundred ms for the process to be killed.
-        m_process->waitForFinished(1000);
-    }
+//        // It takes a few hundred ms for the process to be killed.
+//        m_process->waitForFinished(1000);
+//    }
 
     m_abortingOperation = false;
 }

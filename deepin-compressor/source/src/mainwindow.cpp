@@ -580,6 +580,12 @@ void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
 
 void MainWindow::slotExtractionDone(KJob* job)
 {
+    if(m_encryptionjob)
+    {
+        m_encryptionjob->deleteLater();
+        m_encryptionjob = nullptr;
+    }
+
     if (job->error() && job->error() != KJob::KilledJobError) {
         m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
         m_pageid = PAGE_UNZIP_FAIL;
@@ -594,7 +600,6 @@ void MainWindow::slotExtractionDone(KJob* job)
         m_pageid = PAGE_UNZIP_SUCCESS;
         refreshPage();
     }
-    m_encryptionjob = nullptr;
 }
 
 void MainWindow::SlotNeedPassword()
@@ -640,7 +645,7 @@ void MainWindow::ExtractSinglePassword(QString password)
         connect(m_encryptionjob, &KJob::result,
                 this, &MainWindow::slotExtractionDone);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
-                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+                this, &MainWindow::SlotNeedPassword);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
         connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
@@ -671,7 +676,7 @@ void MainWindow::ExtractPassword(QString password)
         connect(m_encryptionjob, &KJob::result,
                 this, &MainWindow::slotExtractionDone);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
-                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+                this, &MainWindow::SlotNeedPassword);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword,
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
         connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),

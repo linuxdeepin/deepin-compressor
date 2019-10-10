@@ -215,6 +215,9 @@ void Job::onFinished(bool result)
     {
         setError(KJob::UserDefinedError);
     }
+    else {
+        setError(KJob::NoError);
+    }
 
 
     if (!d->isInterruptionRequested()) {
