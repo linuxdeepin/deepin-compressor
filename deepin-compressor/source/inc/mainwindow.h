@@ -89,6 +89,7 @@ public:
     QString renameCompress(QString &filename, QString fixedMimeType);
 
 
+
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
     void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
@@ -135,6 +136,7 @@ private:
     QString m_loadfile;
 
     void setCompressDefaultPath();
+    void setQLabelText(QLabel *label, const QString &text);
 
 private:
     DLabel* m_logo;

@@ -164,7 +164,7 @@ void MainWindow::initTitleBar()
     left_frame->setLayout(leftLayout);
 
     m_titlelabel = new DLabel("");
-    m_titlelabel->setMinimumSize(100, TITLE_FIXED_HEIGHT);
+    m_titlelabel->setMinimumSize(200, TITLE_FIXED_HEIGHT);
     m_titlelabel->setAlignment(Qt::AlignCenter);
 
     QHBoxLayout *titlemainLayout = new QHBoxLayout;
@@ -177,6 +177,23 @@ void MainWindow::initTitleBar()
     m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
     titlebar()->setContentsMargins(0, 0, 0, 0);
     titlebar()->setCustomWidget(m_titleFrame, false);
+}
+
+void MainWindow::setQLabelText(QLabel *label, const QString &text)
+{
+    QFontMetrics cs(label->font());
+    int textWidth = cs.width(text);
+    if(textWidth > label->width())
+    {
+        label->setToolTip(text);
+    }
+    else
+    {
+         label->setToolTip("");
+    }
+
+    QFontMetrics elideFont(label->font());
+    label->setText(elideFont.elidedText(text, Qt::ElideMiddle, label->width()));
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *e)
@@ -261,47 +278,48 @@ void MainWindow::refreshPage()
     switch (m_pageid) {
     case PAGE_HOME:
         m_mainLayout->setCurrentIndex(0);
-        m_titlelabel->setText("");
+        setQLabelText(m_titlelabel, "");
         break;
     case PAGE_UNZIP:
         m_mainLayout->setCurrentIndex(1);
-        m_titlelabel->setText(m_decompressfilename);
+//        m_titlelabel->setText(m_decompressfilename);
+        setQLabelText(m_titlelabel, m_decompressfilename);
         break;
     case PAGE_ZIP:
         m_mainLayout->setCurrentIndex(2);
-        m_titlelabel->setText(tr("新建归档文件"));
+        setQLabelText(m_titlelabel, tr("新建归档文件"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        m_titlelabel->setText(tr("新建归档文件"));
+        setQLabelText(m_titlelabel, tr("新建归档文件"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        m_titlelabel->setText(tr("正在压缩"));
+        setQLabelText(m_titlelabel, tr("正在压缩"));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_UNZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        m_titlelabel->setText(tr("正在解压"));
+        setQLabelText(m_titlelabel, tr("正在解压"));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_ZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
-        m_titlelabel->setText("");
+        setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setstringinfo(tr("压缩成功!"));
         break;
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
-        m_titlelabel->setText("");
+        setQLabelText(m_titlelabel, "");
         m_CompressFail->setFailStr(tr("抱歉，压缩失败！"));
         break;
     case PAGE_UNZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
-        m_titlelabel->setText("");
+        setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
         m_CompressSuccess->setstringinfo(tr("解压成功！"));
         if(m_settingsDialog->isAutoOpen())
@@ -311,12 +329,12 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
-        m_titlelabel->setText("");
+        setQLabelText(m_titlelabel, "");
         m_CompressFail->setFailStr(tr("抱歉，解压失败！"));
         break;
     case  PAGE_ENCRYPTION:
         m_mainLayout->setCurrentIndex(7);
-        m_titlelabel->setText(m_decompressfilename);
+        setQLabelText(m_titlelabel, m_decompressfilename);
         break;
     default:
         break;

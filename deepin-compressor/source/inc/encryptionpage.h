@@ -4,9 +4,10 @@
 #include <DPushButton>
 #include <DLabel>
 #include <dpasswordedit.h>
+#include <DPalette>
 
 
-
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class EncryptionPage: public QWidget
