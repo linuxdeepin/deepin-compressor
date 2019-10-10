@@ -443,6 +443,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
 void MainWindow::slotLoadingFinished(KJob *job)
 {
+    m_workstatus = WorkNone;
     if (job->error()) {
         m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
         m_pageid = PAGE_UNZIP_FAIL;
@@ -464,6 +465,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
 
 void MainWindow::loadArchive(const QString &files)
 {
+    m_workstatus = WorkProcess;
     m_loadfile = files;
     m_encryptiontype = Encryption_Load;
     m_loadjob = (LoadJob*)m_model->loadArchive(files, "", m_model);
@@ -479,6 +481,7 @@ void MainWindow::loadArchive(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
 {
+    m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
     if (!m_model) {
         return;
@@ -537,16 +540,18 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
 void MainWindow::SlotProgress(KJob *job, unsigned long percent)
 {
     qDebug()<<percent;
-    if((Encryption_SingleExtract == m_encryptiontype) && (percent < 100) && (percent > 0))
+    if((Encryption_SingleExtract == m_encryptiontype))
     {
-        if(!m_progressdialog->isshown())
+        if((percent < 100) && (percent > 0) && (WorkProcess == m_workstatus))
         {
-            m_pageid = PAGE_UNZIP;
-            refreshPage();
-            m_progressdialog->showdialog();
+            if(!m_progressdialog->isshown())
+            {
+                m_pageid = PAGE_UNZIP;
+                refreshPage();
+                m_progressdialog->showdialog();
+            }
+            m_progressdialog->setProcess(percent);
         }
-        m_progressdialog->setProcess(percent);
-
     }
     else if(PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid)
     {
@@ -580,6 +585,7 @@ void MainWindow::SlotProgressFile(KJob *job, const QString& filename)
 
 void MainWindow::slotExtractionDone(KJob* job)
 {
+    m_workstatus = WorkNone;
     if(m_encryptionjob)
     {
         m_encryptionjob->deleteLater();
@@ -627,6 +633,7 @@ void MainWindow::SlotExtractPassword(QString password)
 
 void MainWindow::ExtractSinglePassword(QString password)
 {
+    m_workstatus = WorkProcess;
     if(m_encryptionjob)//first  time to extract
     {
         m_encryptionjob->archiveInterface()->setPassword(password);
@@ -657,6 +664,7 @@ void MainWindow::ExtractSinglePassword(QString password)
 
 void MainWindow::ExtractPassword(QString password)
 {
+    m_workstatus = WorkProcess;
     if(m_encryptionjob)//first  time to extract
     {
         m_encryptionjob->archiveInterface()->setPassword(password);
@@ -687,6 +695,7 @@ void MainWindow::ExtractPassword(QString password)
 }
 void MainWindow::LoadPassword(QString password)
 {
+    m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Load;
     m_loadjob = (LoadJob*)m_model->loadArchive(m_loadfile, "", m_model);
 
@@ -811,13 +820,14 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     connect(m_createJob, &CreateJob::percentfilename,
             this, &MainWindow::SlotProgressFile);
     m_createJob->start();
+    m_workstatus = WorkProcess;
 
 }
 
 void MainWindow::slotCompressFinished(KJob *job)
 {
     qDebug() << "job finished";
-
+    m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
         m_pageid = PAGE_ZIP_FAIL;
         m_CompressFail->setFailStrDetail(tr("原始文件已损坏！"));
@@ -831,7 +841,9 @@ void MainWindow::slotCompressFinished(KJob *job)
 
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path)
 {
+    m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_SingleExtract;
+    m_progressdialog->clearprocess();
     if (!m_model) {
         return;
     }
@@ -870,6 +882,7 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QStri
 
 void MainWindow::slotKillExtractJob()
 {
+    m_workstatus = WorkNone;
     if(m_encryptionjob)
     {
         m_encryptionjob->Killjob();

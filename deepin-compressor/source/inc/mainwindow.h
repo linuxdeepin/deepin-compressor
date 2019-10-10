@@ -66,6 +66,11 @@ enum EncryptionType{
     Encryption_ExtractHere,
 };
 
+enum WorkState{
+    WorkNone,
+    WorkProcess,
+};
+
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
@@ -168,6 +173,7 @@ private:
     CreateJob* m_createJob;
     EncryptionType m_encryptiontype;
     bool m_isrightmenu;
+    WorkState m_workstatus;
 };
 
 #endif

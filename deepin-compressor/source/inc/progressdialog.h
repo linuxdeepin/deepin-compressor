@@ -25,6 +25,7 @@ public:
     void setFinished(const QString &path);
     void showdialog();
     bool isshown();
+    void clearprocess();
 
     void closeEvent(QCloseEvent *) override;
 
