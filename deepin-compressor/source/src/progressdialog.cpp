@@ -72,6 +72,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
         accept();
         m_extractdialog->exec();
     }
+
 }
 
 void ProgressDialog::setCurrentTask(const QString &file)
@@ -93,8 +94,11 @@ void ProgressDialog::setCurrentFile(const QString &file)
 
 void ProgressDialog::setProcess(unsigned long  value)
 {
-    m_circleprogress->setValue(value);
-    m_circleprogress->setText(QString::number(value));
+    if(value > m_circleprogress->value())
+    {
+        m_circleprogress->setValue(value);
+        m_circleprogress->setText(QString::number(value));
+    }
 }
 
 void ProgressDialog::setFinished(const QString &path)
