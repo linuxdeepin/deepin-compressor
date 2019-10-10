@@ -33,7 +33,9 @@
 #include "jobs.h"
 #include "lib_edit_button.h"
 #include <DCommandLinkButton>
+#include <DPalette>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class UnCompressPage : public QWidget

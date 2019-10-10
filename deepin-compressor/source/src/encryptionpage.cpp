@@ -46,6 +46,9 @@ void EncryptionPage::InitUI()
     mainlayout->addStretch();
     mainlayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
+
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    setPalette(pa);
 }
 
 void EncryptionPage::InitConnection()

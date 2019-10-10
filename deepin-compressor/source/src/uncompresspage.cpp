@@ -37,7 +37,8 @@ DWIDGET_USE_NAMESPACE
 UnCompressPage::UnCompressPage(QWidget *parent)
     : QWidget(parent)
 {
-
+    QFont ft;
+    ft.setPixelSize(12);
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
     m_nextbutton = new DPushButton(tr("解压"));
@@ -47,6 +48,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     contentLayout->addWidget(m_fileviewer);
 
     m_extractpath = new DCommandLinkButton(tr("解压到") + ": ~/Desktop");
+    m_extractpath->setFont(ft);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
@@ -69,6 +71,10 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     mainLayout->setStretchFactor(pathlayout, 1);
     mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setContentsMargins(20, 1, 20, 20);
+
+    DPalette pa;
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    setPalette(pa);
 
 
     connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);

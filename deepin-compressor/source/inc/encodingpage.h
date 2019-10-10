@@ -5,8 +5,9 @@
 #include <DLabel>
 #include "utils.h"
 #include <DComboBox>
+#include <DPalette>
 
-
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class EncodingPage: public QWidget

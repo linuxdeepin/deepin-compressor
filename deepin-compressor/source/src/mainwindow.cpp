@@ -80,6 +80,15 @@ void MainWindow::InitUI()
     m_mainLayout->addWidget(m_CompressFail);
     m_mainLayout->addWidget(m_encryptionpage);
     m_mainLayout->addWidget(m_encodingpage);
+    m_homePage->setAutoFillBackground(true);
+    m_UnCompressPage->setAutoFillBackground(true);
+    m_CompressPage->setAutoFillBackground(true);
+    m_CompressSetting->setAutoFillBackground(true);
+    m_Progess->setAutoFillBackground(true);
+    m_CompressSuccess->setAutoFillBackground(true);
+    m_CompressFail->setAutoFillBackground(true);
+    m_encryptionpage->setAutoFillBackground(true);
+    m_encodingpage->setAutoFillBackground(true);
 
     // init window flags.
     setWindowTitle(tr("Deepin Archive Manager"));

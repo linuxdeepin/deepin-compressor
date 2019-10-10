@@ -10,10 +10,12 @@
 #include <DPushButton>
 #include <QSettings>
 #include <QMessageBox>
+#include <DPalette>
 
 #include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class CompressPage : public QWidget
 {

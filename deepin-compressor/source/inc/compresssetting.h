@@ -14,7 +14,9 @@
 #include "lib_edit_button.h"
 #include "pluginmanager.h"
 #include "dfilechooseredit.h"
+#include <DPalette>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 #define D_COMPRESS_SPLIT_MIX    5000

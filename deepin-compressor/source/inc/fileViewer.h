@@ -85,7 +85,7 @@ private:
     int *ppathindex;
 };
 
-class MyTableView:public QTableView
+class MyTableView:public DTableView
 {
      Q_OBJECT
 public:

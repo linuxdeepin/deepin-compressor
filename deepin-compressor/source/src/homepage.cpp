@@ -78,6 +78,9 @@ HomePage::HomePage(QWidget *parent)
 
     m_spinner->move(285, 200);
     m_spinner->hide();
+
+    pa.setColor(DPalette::Background,QColor(248, 248, 248));
+    setPalette(pa);
 }
 
 HomePage::~HomePage()

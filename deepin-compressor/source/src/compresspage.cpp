@@ -51,6 +51,11 @@ CompressPage::CompressPage(QWidget *parent)
 
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
+
+    DPalette pa;
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    setPalette(pa);
+
 }
 
 CompressPage::~CompressPage()

@@ -83,6 +83,10 @@ void EncodingPage::InitUI()
     mainlayout->addSpacing(41);
     mainlayout->addLayout(buttonlayout);
     mainlayout->addSpacing(20);
+
+    DPalette pa;
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    setPalette(pa);
 }
 
 void EncodingPage::InitConnection()

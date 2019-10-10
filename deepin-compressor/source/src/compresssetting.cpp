@@ -123,6 +123,10 @@ void CompressSetting::InitUI()
     m_splitnumedit->setEnabled(false);
     m_password->setEnabled(true);
     m_file_secret->setEnabled(false);
+
+    DPalette pa;
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    setPalette(pa);
 }
 void CompressSetting::InitConnection()
 {
