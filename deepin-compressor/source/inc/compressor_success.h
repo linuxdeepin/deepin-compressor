@@ -4,8 +4,9 @@
 #include <QWidget>
 #include <DPushButton>
 #include <DLabel>
-
+#include <DPalette>
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class Compressor_Success: public QWidget
 {

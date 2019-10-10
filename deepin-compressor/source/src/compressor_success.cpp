@@ -16,23 +16,31 @@ Compressor_Success::Compressor_Success(QWidget *parent)
 
 void Compressor_Success::InitUI()
 {
+    QFont ft;
+    ft.setPixelSize(17);
+    ft.setBold(true);
+
+    DPalette pa;
+    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
+
     m_compressicon = Utils::renderSVG(":/images/success.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
-    m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
+    m_stringinfolabel->setFont(ft);
+    m_stringinfolabel->setPalette(pa);
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton();
-    m_showfilebutton->setFixedWidth(260);
+    m_showfilebutton->setFixedSize(340, 36);
     m_showfilebutton->setText(tr("显示文件"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
-    mainlayout->setMargin(20);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringinfolabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
     mainlayout->addWidget(m_showfilebutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
 }
 
 void Compressor_Success::InitConnection()

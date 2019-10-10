@@ -26,6 +26,7 @@
 #include "utils.h"
 #include <DObject>
 #include <DApplicationSettings>
+#include <QFontDatabase>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -102,6 +103,13 @@ int main(int argc, char *argv[])
     }
 
     QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
+
+//    QFontDatabase database;
+//    foreach (const QString &family, database.families())
+//    {
+//         qDebug()<<family;
+//    }
+//    qDebug()<<app.font();
 
     return app.exec();
 }

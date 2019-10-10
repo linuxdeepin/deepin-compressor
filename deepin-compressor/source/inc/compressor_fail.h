@@ -5,7 +5,9 @@
 #include <QWidget>
 #include <DPushButton>
 #include <DLabel>
+#include <DPalette>
 
+DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class Compressor_Fail: public QWidget

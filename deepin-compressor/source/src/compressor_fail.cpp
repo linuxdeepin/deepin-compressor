@@ -16,26 +16,37 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
+
+    QFont ft;
+    ft.setPixelSize(17);
+    ft.setBold(true);
+
+    DPalette pa;
+    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
+
     m_compressicon = Utils::renderSVG(":/images/fail.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
-    m_stringinfolabel->setStyleSheet("QLabel { font-size: 18px; }");
+    m_stringinfolabel->setFont(ft);
+    m_stringinfolabel->setPalette(pa);
     m_stringdetaillabel = new DLabel();
+    ft.setBold(false);
+    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);
     m_retrybutton->setText(tr("重试"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
-    mainlayout->setMargin(20);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringinfolabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringdetaillabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
     mainlayout->addWidget(m_retrybutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
 }
 
 void Compressor_Fail::InitConnection()
