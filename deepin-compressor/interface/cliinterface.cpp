@@ -337,7 +337,15 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit progress(1.0);
             emit finished(true);
         }
-    } else  {
+    }
+    else if (m_operationMode == List && (9 == exitCode || 2 == exitCode))
+    {
+        qDebug() << "wrong password";
+        emit error(tr("wrong password"));
+        setPassword(QString());
+        return;
+    }
+    else  {
         emit progress(1.0);
         emit finished(true);
     }

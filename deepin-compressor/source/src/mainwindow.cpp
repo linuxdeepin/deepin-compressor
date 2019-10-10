@@ -140,9 +140,9 @@ void MainWindow::initTitleBar()
     titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
 
+    QIcon icon = QIcon::fromTheme("deepin-compressor");
     m_logo = new DLabel("");
-    m_logoicon = Utils::renderSVG(":/images/compress-Typeface-player.svg", QSize(30, 30));
-    m_logo->setPixmap(m_logoicon);
+    m_logo->setPixmap(icon.pixmap(QSize(30, 30)));
 
 
     m_titlebutton = new DIconButton(DStyle::StandardPixmap::SP_IncreaseElement, this);
