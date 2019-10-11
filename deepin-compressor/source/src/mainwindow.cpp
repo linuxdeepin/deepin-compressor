@@ -53,7 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
       m_progressdialog(new ProgressDialog),
       m_settingsDialog(new SettingDialog),
       m_encodingpage(new EncodingPage),
-      m_settings("deepin", "deepin-compressor")
+      m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
+                               QSettings::IniFormat))
 {
     m_encryptionjob = nullptr;
     m_encryptiontype = Encryption_NULL;
@@ -69,6 +70,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::InitUI()
 {
+
+    if (m_settings->value("dir").toString().isEmpty()) {
+        m_settings->setValue("dir", "");
+    }
 
     // add widget to main layout.
     m_mainLayout->addWidget(m_homePage);
@@ -135,10 +140,37 @@ QMenu* MainWindow::createSettingsMenu()
 {
     QMenu *menu = new QMenu;
 
+    QAction *openAction = menu->addAction(tr("打开"));
+    connect(openAction, &QAction::triggered, this, [this] {
+        DFileDialog dialog;
+        dialog.setAcceptMode(DFileDialog::AcceptOpen);
+        dialog.setFileMode(DFileDialog::ExistingFiles);
+
+        QString historyDir = m_settings->value("dir").toString();
+        if (historyDir.isEmpty()) {
+            historyDir = QDir::homePath();
+        }
+        dialog.setDirectory(historyDir);
+
+        const int mode = dialog.exec();
+
+        // save the directory string to config file.
+        m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
+
+        // if click cancel button or close button.
+        if (mode != QDialog::Accepted) {
+            return;
+        }
+
+        onSelected(dialog.selectedFiles());
+    });
+
     QAction *settingsAction = menu->addAction(tr("设置"));
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
+
+
 
     return menu;
 }

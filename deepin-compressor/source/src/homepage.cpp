@@ -29,7 +29,7 @@ HomePage::HomePage(QWidget *parent)
     : QWidget(parent),
       m_layout(new QVBoxLayout(this)),
       m_iconLabel(new DLabel),
-      m_tipsLabel(new DLabel(tr("拖拽文件（夹）到此"))),
+      m_tipsLabel(new DLabel(tr("拖拽文件(夹)到此"))),
       m_splitLine(new DLabel),
       m_chooseBtn(new DCommandLinkButton(tr("选择文件"))),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),

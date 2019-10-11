@@ -161,7 +161,7 @@ private:
     ProgressDialog* m_progressdialog;
     SettingDialog* m_settingsDialog;
     EncodingPage* m_encodingpage;
-    QSettings m_settings;
+    QSettings* m_settings;
     Page_ID m_pageid;
 
     QVector<Archive::Entry*> m_extractSimpleFiles;
