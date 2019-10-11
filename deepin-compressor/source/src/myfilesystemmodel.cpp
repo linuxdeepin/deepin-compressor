@@ -2,6 +2,7 @@
 
 //#include "myfilesystemmodelprivate.h"
 #include "myfilesystemmodel.h"
+#include <QDateTime>
 #include <QDebug>
 #include <utils.h>
 
@@ -21,6 +22,32 @@ void MyFileSystemModel::setPathIndex(int *index){
 
 void MyFileSystemModel::setTableView(QTableView *tableview){
     m_tableview=tableview;
+}
+
+QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) const
+{
+    if (role == Qt::DisplayRole) {
+
+        qDebug()<<section;
+
+        switch (section) {
+        case 0:
+            return tr("名称");
+        case 3:
+            return tr("大小");
+        case 2:
+            return tr("类型");
+        case 1:
+            return tr("修改时间");
+        default:
+            return tr("Unnamed column", "??");
+        }
+    }
+    else if(role == Qt::TextAlignmentRole)
+    {
+        return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+    }
+    return QVariant();
 }
 
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
@@ -48,7 +75,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
         case Qt::DisplayRole: {
             switch (index.column()) {
-            case 1:
+            case 3:
             {
                 QFileInfo file = fileInfo(index);
                 if(file.isDir())
@@ -59,6 +86,10 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
                     return Utils::humanReadableSize(file.size(), 1);
                 }
+            }
+            case 1:
+            {
+                return QLocale().toString(lastModified(index), "yyyy/MM/dd hh:mm:ss");
             }
 
             }

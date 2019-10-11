@@ -28,6 +28,8 @@ class MyFileSystemModel : public QFileSystemModel
         explicit MyFileSystemModel(QObject *parent = nullptr);
         ~MyFileSystemModel();
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+        QVariant headerData(int section, Qt::Orientation orientation,
+                            int role = Qt::DisplayRole) const override;
         void setPathIndex(int *index);
         void setTableView(QTableView *tableview);
     private:

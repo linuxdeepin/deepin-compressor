@@ -19,9 +19,9 @@ class Query;
  */
 enum EntryMetaDataType {
     FullPath,            /**< The entry's file name */
-    Size,                /**< The entry's original size */
+    Timestamp,           /**< The timestamp for the current entry */
     Type,
-    Timestamp            /**< The timestamp for the current entry */
+    Size                /**< The entry's original size */
 };
 
 namespace  ArchiveModelDefine{

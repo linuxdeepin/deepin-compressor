@@ -27,9 +27,10 @@ ArchiveModel::ArchiveModel(QObject *parent)
     // Mappings between column indexes and entry properties.
     m_propertiesMap = {
         { FullPath, "fullPath" },
-        { Size, "size" },
-        { Type, "type" },
         { Timestamp, "timestamp" },
+        { Type, "type" },
+        { Size, "size" },
+
     };
 }
 
@@ -85,7 +86,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
-                return QLocale().toString(timeStamp, QLocale::ShortFormat);
+                return QLocale().toString(timeStamp, "yyyy/MM/dd hh:mm:ss");
             }
 
             default:
@@ -143,7 +144,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
         case Type:
             return tr("类型");
         case Timestamp:
-            return tr("修改日期");
+            return tr("修改时间");
         default:
             return tr("Unnamed column", "??");
         }

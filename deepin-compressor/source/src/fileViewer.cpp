@@ -74,7 +74,7 @@ void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
 MyTableView::MyTableView(QWidget* parent)
     : QTableView(parent)
 {
-
+    setMinimumSize(580, 300);
 }
 
 void MyTableView::paintEvent(QPaintEvent *e)
@@ -199,14 +199,17 @@ void fileViewer::InitUI()
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
                                   "min-height:36px; background-color:white}");
+    pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//    pTableViewFile->setGeometry(0,0,580,300);
+//    pTableViewFile->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    plabel->setText(" ...返回上一层");
-//    DPalette palette;
-//    palette.setColor(DPalette::Background, QColor(245, 245, 245));
+    QHeaderView* header = pTableViewFile->horizontalHeader();
+
+    DPalette pa;
+    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    plabel->setPalette(pa);
+    plabel->setText(".. 返回上一级");
     plabel->setAutoFillBackground(true);
-//    plabel->setPalette(palette);
     plabel->hide();
 
     plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,MyFileSystemDefine::gTableHeight);
@@ -236,15 +239,17 @@ void fileViewer::refreshTableview()
     item = new MyFileItem(QObject::trUtf8("名称"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
-    item = new MyFileItem(QObject::trUtf8("大小"));
+    item = new MyFileItem(QObject::trUtf8("修改时间"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(1, item);
     item = new MyFileItem(QObject::trUtf8("类型"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new MyFileItem(QObject::trUtf8("修改日期"));
+    item = new MyFileItem(QObject::trUtf8("大小"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
+
+
 
     int rowindex = 0;
     QFileIconProvider icon_provider;
@@ -262,17 +267,18 @@ void fileViewer::refreshTableview()
             item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1));
         }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        firstmodel->setItem(rowindex,1,item);
+        firstmodel->setItem(rowindex,3,item);
         item = new MyFileItem(getfiletype(fileinfo));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,2,item);
-        item = new MyFileItem(fileinfo.lastModified().toString());
+        item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        firstmodel->setItem(rowindex,3,item);
+        firstmodel->setItem(rowindex,1,item);
         rowindex++;
     }
 
     pTableViewFile->setModel(firstmodel);
+    resizecolumn();
 
     foreach(int row ,m_fileaddindex)
     {
@@ -302,6 +308,21 @@ void fileViewer::InitConnection()
 
     connect(pScrollbar, SIGNAL(ScrollBarShowEvent ( QShowEvent *)), this, SLOT(ScrollBarShowEvent ( QShowEvent *)));
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent ( QHideEvent *)), this, SLOT(ScrollBarHideEvent ( QHideEvent *)));
+}
+
+void fileViewer::resizecolumn()
+{
+    qDebug()<<pTableViewFile->width();
+    pTableViewFile->setColumnWidth(0, pTableViewFile->width()*8/20);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*6/20);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*3/20);
+    pTableViewFile->setColumnWidth(3, pTableViewFile->width()*3/20);
+}
+
+void fileViewer::resizeEvent(QResizeEvent* size)
+{
+    qDebug()<<pTableViewFile->width();
+    resizecolumn();
 }
 
 QString fileViewer::getfiletype(const QFileInfo &file)
@@ -427,6 +448,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
                 m_pathindex++;
                 plabel->show();
                 plabel->raise();
+                resizecolumn();
             }
         }
         else if(pModel && pModel->fileInfo(curindex).isDir())
@@ -581,6 +603,7 @@ void fileViewer::setDecompressModel(ArchiveModel* model)
     m_decompressmodel->setTableView(pTableViewFile);
 
     pTableViewFile->setModel(m_decompressmodel);
+    resizecolumn();
 
 }
 

@@ -133,7 +133,10 @@ public:
 
        void startDrag(Qt::DropActions supportedActions);
 
+
 protected:
+       void resizecolumn();
+       void resizeEvent(QResizeEvent* size) override;
 
 protected slots:
        void slotCompressRowDoubleClicked(const QModelIndex index);
