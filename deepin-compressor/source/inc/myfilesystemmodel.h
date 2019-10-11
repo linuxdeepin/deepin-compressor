@@ -8,6 +8,7 @@
 #include <QtGui/qicon.h>
 #include <QtCore/qdiriterator.h>
 #include <QFileSystemModel>
+#include <QStandardItem>
 #include <QTableView>
 #include "mimetypedisplaymanager.h"
 
@@ -31,8 +32,12 @@ class MyFileSystemModel : public QFileSystemModel
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation,
                             int role = Qt::DisplayRole) const override;
+        void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
         void setPathIndex(int *index);
         void setTableView(QTableView *tableview);
+
+
+
     private:
         bool m_showreprevious;
         int *ppathindex;

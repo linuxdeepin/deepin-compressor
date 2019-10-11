@@ -202,15 +202,14 @@ void fileViewer::InitUI()
                                   "min-height:36px; background-color:white}");
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//    pTableViewFile->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    QHeaderView* header = pTableViewFile->horizontalHeader();
+//    DPalette pa;
+//    pa.setColor(DPalette::Background,QColor(246, 246, 246));
 
-    DPalette pa;
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
-    plabel->setPalette(pa);
     plabel->setText(".. 返回上一级");
-    plabel->setAutoFillBackground(true);
+    plabel->setStyleSheet("background-color:#F6F6F6");
+//    plabel->setPalette(pa);
+//    plabel->setAutoFillBackground(true);
     plabel->hide();
 
     plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,MyFileSystemDefine::gTableHeight);

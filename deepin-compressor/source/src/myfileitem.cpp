@@ -23,7 +23,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
 {
     const QVariant l = data(Qt::DisplayRole), r = other.data(Qt::DisplayRole);
     switch (column()) {
-    case 1:
+    case 3:
     {
         if (column() == other.column())
         {
@@ -33,7 +33,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
         }
         break;
     }
-    case 3:
+    case 1:
     {
         if (column() == other.column())
         {

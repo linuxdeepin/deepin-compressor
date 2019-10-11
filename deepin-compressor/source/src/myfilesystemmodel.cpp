@@ -106,3 +106,17 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     return QFileSystemModel::data(index,role);
 }
 
+void MyFileSystemModel::sort(int column, Qt::SortOrder order)
+{
+    if(1 == column)
+    {
+        QFileSystemModel::sort(3, order);
+    }
+    else if (3 == column) {
+        QFileSystemModel::sort(1, order);
+    }
+    else {
+        QFileSystemModel::sort(column, order);
+    }
+}
+

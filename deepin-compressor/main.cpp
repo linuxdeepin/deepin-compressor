@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");
-    app.setApplicationVersion(DApplication::buildVersion("20191009"));
+    app.setApplicationVersion(DApplication::buildVersion("20191011"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon(":/images/deepin-compressor.svg"));
     app.setProductName(DApplication::translate("Main", "深度解压缩"));
