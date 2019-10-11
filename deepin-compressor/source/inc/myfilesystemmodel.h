@@ -9,6 +9,7 @@
 #include <QtCore/qdiriterator.h>
 #include <QFileSystemModel>
 #include <QTableView>
+#include "mimetypedisplaymanager.h"
 
 namespace  MyFileSystemDefine{
     const int  gTableHeight=36;
@@ -36,6 +37,7 @@ class MyFileSystemModel : public QFileSystemModel
         bool m_showreprevious;
         int *ppathindex;
         QTableView *m_tableview;
+        MimeTypeDisplayManager* m_mimetype;
 
 };
 

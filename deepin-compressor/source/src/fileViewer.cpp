@@ -160,6 +160,7 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     setWindowTitle( tr( "File Viewer" ) );
     setMinimumSize(580, 300);
     m_pathindex=0;
+    m_mimetype = new MimeTypeDisplayManager();
     InitUI();
     InitConnection();
 }
@@ -268,7 +269,8 @@ void fileViewer::refreshTableview()
         }
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,3,item);
-        item = new MyFileItem(getfiletype(fileinfo));
+        QMimeType mimetype = determineMimeType(fileinfo.filePath());
+        item = new MyFileItem(m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,2,item);
         item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
@@ -314,8 +316,8 @@ void fileViewer::resizecolumn()
 {
     qDebug()<<pTableViewFile->width();
     pTableViewFile->setColumnWidth(0, pTableViewFile->width()*9/20);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*6/20);
-    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*2/20);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*5/20);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*3/20);
     pTableViewFile->setColumnWidth(3, pTableViewFile->width()*3/20);
 }
 
@@ -325,18 +327,6 @@ void fileViewer::resizeEvent(QResizeEvent* size)
     resizecolumn();
 }
 
-QString fileViewer::getfiletype(const QFileInfo &file)
-{
-    QString ret = "";
-    if(file.isDir())
-    {
-        ret = tr("文件夹");
-    }
-    else {
-        ret = tr("文件") + " " + file.suffix();
-    }
-    return ret;
-}
 
 void fileViewer::keyPressEvent(QKeyEvent *event)
 {

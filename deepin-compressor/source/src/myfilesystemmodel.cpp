@@ -9,6 +9,7 @@
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)
 {
+    m_mimetype = new MimeTypeDisplayManager;
     m_showreprevious=false;
 }
 
@@ -70,6 +71,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
     if (index.isValid())
     {
+        QFileInfo file = fileInfo(index);
         switch (role) {
         case Qt::TextAlignmentRole:
             return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
@@ -77,7 +79,6 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case 3:
             {
-                QFileInfo file = fileInfo(index);
                 if(file.isDir())
                 {
                     return "-";
@@ -86,6 +87,11 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
                     return Utils::humanReadableSize(file.size(), 1);
                 }
+            }
+            case 2:
+            {
+                QMimeType mimetype = determineMimeType(file.filePath());
+                return m_mimetype->displayName(mimetype.name());
             }
             case 1:
             {

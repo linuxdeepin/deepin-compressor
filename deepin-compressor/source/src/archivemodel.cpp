@@ -24,6 +24,7 @@ ArchiveModel::ArchiveModel(QObject *parent)
 {
     initRootEntry();
 
+    m_mimetype = new MimeTypeDisplayManager;
     // Mappings between column indexes and entry properties.
     m_propertiesMap = {
         { FullPath, "fullPath" },
@@ -66,13 +67,10 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             case FullPath:
                 return entry->name();
             case Type:
-                if (entry->isDir())
-                {
-                    return tr("文件夹");
-                }
-                else {
-                    return tr("文件");
-                }
+            {
+                QMimeType mimetype = determineMimeType(entry->fullPath());
+                return m_mimetype->displayName(mimetype.name());
+            }
             case Size:
                 if (entry->isDir()) {
                     uint dirs;

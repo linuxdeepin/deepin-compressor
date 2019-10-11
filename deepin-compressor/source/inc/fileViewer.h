@@ -18,7 +18,7 @@
 #include <dfiledrag.h>
 #include "archivemodel.h"
 #include <DMenu>
-
+#include "mimetypedisplaymanager.h"
 
 
 
@@ -154,7 +154,6 @@ signals:
 
 private:
        void refreshTableview();
-       QString getfiletype(const QFileInfo &file);
        void keyPressEvent(QKeyEvent *event) override;
 
 private:
@@ -174,6 +173,7 @@ private:
        DMenu* m_pRightMenu = nullptr;
 
        PAGE_TYPE m_pagetype;
+       MimeTypeDisplayManager* m_mimetype;
 
 
 };

@@ -7,6 +7,7 @@
 #include <QAbstractItemModel>
 #include <QScopedPointer>
 #include <QTableView>
+#include "mimetypedisplaymanager.h"
 
 class Query;
 
@@ -162,5 +163,6 @@ private:
 
     int *m_ppathindex;
     QTableView *m_tableview;
+    MimeTypeDisplayManager* m_mimetype;
 };
 #endif // ARCHIVEMODEL_H

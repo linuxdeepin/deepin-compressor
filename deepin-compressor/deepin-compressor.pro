@@ -63,7 +63,8 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/extractpausedialog.h \
     source/inc/settingdialog.h \
     source/inc/myfileitem.h \
-    source/inc/encodingpage.h
+    source/inc/encodingpage.h \
+    source/inc/mimetypedisplaymanager.h
 
 
 
@@ -104,7 +105,8 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/extractpausedialog.cpp \
     source/src/settingdialog.cpp \
     source/src/myfileitem.cpp \
-    source/src/encodingpage.cpp
+    source/src/encodingpage.cpp \
+    source/src/mimetypedisplaymanager.cpp
 
 
 
