@@ -260,7 +260,17 @@ void fileViewer::refreshTableview()
         firstmodel->setItem(rowindex,0,item);
         if(fileinfo.isDir())
         {
-            item = new MyFileItem("-");
+//            item = new MyFileItem("-");
+            QDir dir(fileinfo.filePath());
+            QStringList filter;
+            QList<QFileInfo> *fileInfo=new QList<QFileInfo>(dir.entryInfoList(filter));
+
+            int count=fileInfo->count();
+            if(count > 2)
+            {
+                count -= 2;
+            }
+            item = new MyFileItem(QString::number(count) + tr("项"));
         }
         else
         {

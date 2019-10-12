@@ -81,7 +81,17 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             {
                 if(file.isDir())
                 {
-                    return "-";
+//                    return "-";
+                    QDir dir(file.filePath());
+                    QStringList filter;
+                    QList<QFileInfo> *fileInfo=new QList<QFileInfo>(dir.entryInfoList(filter));
+
+                    int count=fileInfo->count();
+                    if(count > 2)
+                    {
+                        count -= 2;
+                    }
+                    return QString::number(count) + tr("项");
                 }
                 else {
 

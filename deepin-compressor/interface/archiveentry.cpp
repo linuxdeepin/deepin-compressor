@@ -191,6 +191,11 @@ bool Archive::Entry::operator==(const Archive::Entry &right) const
     return m_fullPath == right.m_fullPath;
 }
 
+bool Archive::Entry::operator<(const Archive::Entry &other) const
+{
+    qDebug()<<other;
+}
+
 QDebug operator<<(QDebug d, const Archive::Entry &entry)
 {
     d.nospace() << "Entry(" << entry.property("fullPath");
