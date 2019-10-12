@@ -313,6 +313,46 @@ bool ArchiveModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
     return true;
 }
 
+//void ArchiveModel::sort(int column, Qt::SortOrder order)
+//{
+//    class ProjectInfoSort
+//    {
+//    public:
+//        ProjectInfoSort(int column, Qt::SortOrder order)
+//            : mColumn(column)
+//            , mSortOrder(order)
+//        {}
+
+//        bool operator()(const Archive::Entry& info1, const Archive::Entry& info2)
+//        {
+//            bool is_less = false;
+//            switch ( mColumn )
+//            {
+//            case Id:
+
+//                break;
+//            default:
+//                break;
+//            }
+
+//            if ( mSortOrder == Qt::DescendingOrder )
+//            {
+//                is_less = !is_less;
+//            }
+
+//            return is_less;
+//        }
+//    private:
+//        int                 mColumn;
+//        Qt::SortOrder       mSortOrder;
+//    };
+
+//    ProjectInfoSort sorter(column, order);
+//    qSort(mProjectInfo.begin(), mProjectInfo.end(), sorter);
+
+
+//}
+
 // For a rationale, see bugs #194241, #241967 and #355839
 QString ArchiveModel::cleanFileName(const QString& fileName)
 {

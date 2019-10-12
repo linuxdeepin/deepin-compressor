@@ -39,6 +39,7 @@
 #include "settingdialog.h"
 #include "encodingpage.h"
 #include <DIconButton>
+#include "archivesortfiltermodel.h"
 
 #define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE
@@ -136,6 +137,7 @@ signals:
 private:
     Archive* m_archive_manager;
     ArchiveModel         *m_model;
+    ArchiveSortFilterModel *m_filterModel;
     QString m_decompressfilename;
     QString m_decompressfilepath;
     QString m_loadfile;

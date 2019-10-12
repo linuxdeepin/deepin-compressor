@@ -64,7 +64,8 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/settingdialog.h \
     source/inc/myfileitem.h \
     source/inc/encodingpage.h \
-    source/inc/mimetypedisplaymanager.h
+    source/inc/mimetypedisplaymanager.h \
+    source/inc/archivesortfiltermodel.h
 
 
 
@@ -106,7 +107,8 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/settingdialog.cpp \
     source/src/myfileitem.cpp \
     source/src/encodingpage.cpp \
-    source/src/mimetypedisplaymanager.cpp
+    source/src/mimetypedisplaymanager.cpp \
+    source/src/archivesortfiltermodel.cpp
 
 
 

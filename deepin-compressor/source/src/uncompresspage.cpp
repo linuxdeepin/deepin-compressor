@@ -93,7 +93,7 @@ void UnCompressPage::oneCompressPress()
 }
 
 
-void UnCompressPage::setModel(ArchiveModel* model)
+void UnCompressPage::setModel(ArchiveSortFilterModel* model)
 {
     m_model = model;
     m_fileviewer->setDecompressModel(m_model);

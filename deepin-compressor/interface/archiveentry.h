@@ -98,7 +98,6 @@ public:
     void countChildren(uint &dirs, uint &files) const;
 
     bool operator==(const Archive::Entry &right) const;
-    bool operator<(const Archive::Entry &other) const;
 
 public:
     QString rootNode;

@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_encryptiontype = Encryption_NULL;
     m_isrightmenu = false;
     m_model = new ArchiveModel(this);
+    m_filterModel = new ArchiveSortFilterModel(this);
     InitUI();
     InitConnection();
 }
@@ -491,7 +492,12 @@ void MainWindow::slotLoadingFinished(KJob *job)
         refreshPage();
         return;
     }
-    m_UnCompressPage->setModel(m_model);
+    m_filterModel->setSourceModel(m_model);
+    m_filterModel->setFilterKeyColumn(0);
+    m_filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_UnCompressPage->setModel(m_filterModel);
+
+
     m_homePage->spinnerStop();
     if(!m_isrightmenu)
     {

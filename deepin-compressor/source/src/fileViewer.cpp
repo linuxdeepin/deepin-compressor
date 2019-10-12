@@ -426,8 +426,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
             pTableViewFile->setRowHeight(0,ArchiveModelDefine::gTableHeight);
         }
         else {
-            QModelIndex parent = m_decompressmodel->parent(m_indexmode);
-            pTableViewFile->setRootIndex(parent);
+            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
         }
     }
 }
@@ -463,24 +462,26 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 {
     if (index.isValid())
     {
-        qDebug()<<m_decompressmodel->isentryDir(index);
+        qDebug()<<m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index));
         if(0 == m_pathindex)
         {
-            if(m_decompressmodel->isentryDir(index))
+            if(m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index)))
             {
                 m_decompressmodel->setPathIndex(&m_pathindex);
-                pTableViewFile->setRootIndex(m_decompressmodel->createNoncolumnIndex(index));
+                QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
+                pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
                 m_pathindex++;
                 plabel->show();
                 plabel->raise();
-                m_indexmode = index;
+                m_indexmode = sourceindex;
             }
         }
-        else if(m_decompressmodel->isentryDir(index))
+        else if(m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index)))
         {
-            pTableViewFile->setRootIndex(m_decompressmodel->createNoncolumnIndex(index));
+            QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
+            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
             m_pathindex++;
-            m_indexmode = index;
+            m_indexmode = sourceindex;
         }
     }
 }
@@ -593,15 +594,17 @@ QVector<Archive::Entry*> fileViewer::filesAndRootNodesForIndexes(const QModelInd
 }
 
 
-void fileViewer::setDecompressModel(ArchiveModel* model)
+void fileViewer::setDecompressModel(ArchiveSortFilterModel* model)
 {
     m_pathindex = 0;
     m_indexmode = QModelIndex();
-    m_decompressmodel = model;
+    m_sortmodel = model;
+
+    m_decompressmodel = (ArchiveModel*)m_sortmodel->sourceModel();
     m_decompressmodel->setPathIndex(&m_pathindex);
     m_decompressmodel->setTableView(pTableViewFile);
 
-    pTableViewFile->setModel(m_decompressmodel);
+    pTableViewFile->setModel(model);
     resizecolumn();
 
 }

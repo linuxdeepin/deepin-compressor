@@ -19,7 +19,7 @@
 #include "archivemodel.h"
 #include <DMenu>
 #include "mimetypedisplaymanager.h"
-
+#include "archivesortfiltermodel.h"
 
 
 DWIDGET_USE_NAMESPACE
@@ -125,7 +125,7 @@ public:
 
        int getPathIndex();
        void setFileList(const QStringList &files);
-       void setDecompressModel(ArchiveModel* model);
+       void setDecompressModel(ArchiveSortFilterModel* model);
 
        QVector<Archive::Entry*> filesAndRootNodesForIndexes(const QModelIndexList& list) const;
        QVector<Archive::Entry*> filesForIndexes(const QModelIndexList& list) const;
@@ -164,6 +164,7 @@ private:
        MyFileSystemModel* pModel;
        QStandardItemModel* firstmodel;
        ArchiveModel* m_decompressmodel;
+       ArchiveSortFilterModel* m_sortmodel;
        FirstRowDelegate *pdelegate;
        MyLabel *plabel;
        QModelIndex m_indexmode;

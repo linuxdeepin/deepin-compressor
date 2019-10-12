@@ -34,6 +34,7 @@
 #include "lib_edit_button.h"
 #include <DCommandLinkButton>
 #include <DPalette>
+#include "archivesortfiltermodel.h"
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -46,7 +47,7 @@ public:
     UnCompressPage(QWidget *parent = 0);
     ~UnCompressPage();
 
-    void setModel(ArchiveModel* model);
+    void setModel(ArchiveSortFilterModel* model);
     QString getDecompressPath();
     void setdefaultpath(QString path);
 
@@ -72,7 +73,7 @@ private:
     Lib_Edit_Button* m_pathbutton;
     QString m_pathstr;
 
-    ArchiveModel* m_model;
+    ArchiveSortFilterModel* m_model;
 
 };
 #endif

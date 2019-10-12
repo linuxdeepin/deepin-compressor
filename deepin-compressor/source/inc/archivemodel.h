@@ -51,6 +51,7 @@ public:
     QStringList mimeTypes() const override;
     QMimeData *mimeData(const QModelIndexList & indexes) const override;
     bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+//    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
     void reset();
     void createEmptyArchive(const QString &path, const QString &mimeType, QObject *parent);
