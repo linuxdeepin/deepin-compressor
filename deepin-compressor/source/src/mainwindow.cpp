@@ -884,6 +884,11 @@ void MainWindow::slotCompressFinished(KJob *job)
     m_pageid = PAGE_ZIP_SUCCESS;
     refreshPage();
 
+    if(m_createJob)
+    {
+        m_createJob->kill();
+    }
+
 }
 
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path)
@@ -960,6 +965,15 @@ void MainWindow::onCancelCompressPressed()
     {
         m_encryptionjob->Killjob();
     }
+    if(m_createJob)
+    {
+        m_createJob->kill();
+    }
+
+    ExtractJob* m_encryptionjob;
+    LoadJob* m_loadjob;
+    CreateJob* m_createJob;
+
     emit sigquitApp();
 }
 

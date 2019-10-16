@@ -227,7 +227,6 @@ void fileViewer::InitUI()
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
     }
 
-
     refreshTableview();
 }
 

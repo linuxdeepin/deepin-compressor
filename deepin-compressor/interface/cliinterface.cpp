@@ -325,9 +325,10 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         m_newMovedFiles.clear();
     }
 
-    if (m_operationMode == Add && !isMultiVolume()) {
-        list();
-    } else if (m_operationMode == List && isCorrupt()) {
+//    if (m_operationMode == Add && !isMultiVolume()) {
+//        list();
+//    } else
+    if (m_operationMode == List && isCorrupt()) {
         LoadCorruptQuery query(filename());
         query.execute();
         if (!query.responseYes()) {
