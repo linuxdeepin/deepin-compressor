@@ -97,7 +97,7 @@ void MainWindow::InitUI()
     m_encodingpage->setAutoFillBackground(true);
 
     // init window flags.
-    setWindowTitle(tr("Deepin Archive Manager"));
+    setWindowTitle(tr("解压缩"));
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
 
