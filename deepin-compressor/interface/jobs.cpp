@@ -178,6 +178,12 @@ void Job::onError(const QString & message, const QString & details)
     {
         emit sigWrongPassword();
     }
+    else if (message.contains("Listing the archive failed")) {
+        setError(KJob::LoadError);
+        setErrorText(message);
+        emitResult();
+        return;
+    }
     setError(KJob::UserDefinedError);
     setErrorText(message);
 }

@@ -212,6 +212,7 @@ public:
         NoError = 0,
         /*** Indicates the job was killed */
         KilledJobError = 1,
+        LoadError = 2,
         /*** Subclasses should define error codes starting at this value */
         UserDefinedError = 100
     };
