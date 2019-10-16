@@ -639,7 +639,11 @@ void MainWindow::slotExtractionDone(KJob* job)
         m_encryptionjob = nullptr;
     }
 
-    if (job->error() && job->error() != KJob::KilledJobError) {
+    if((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError))
+    {
+        //do noting:wrong password
+    }
+    else if (job->error() && job->error() != KJob::KilledJobError) {
         m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
