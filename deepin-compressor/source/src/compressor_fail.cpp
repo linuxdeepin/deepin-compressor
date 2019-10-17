@@ -21,8 +21,8 @@ void Compressor_Fail::InitUI()
     ft.setPixelSize(17);
     ft.setBold(true);
 
+
     DPalette pa;
-    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
 
     m_compressicon = Utils::renderSVG(":/images/fail.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
@@ -30,14 +30,21 @@ void Compressor_Fail::InitUI()
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
     m_stringinfolabel->setFont(ft);
+
+    pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
     m_stringinfolabel->setPalette(pa);
+
     m_stringdetaillabel = new DLabel();
     ft.setBold(false);
-    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
+    pa = DApplicationHelper::instance()->palette(m_stringdetaillabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
+    m_stringdetaillabel->setPalette(pa);
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);
     m_retrybutton->setText(tr("重试"));
+    m_retrybutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
@@ -48,9 +55,9 @@ void Compressor_Fail::InitUI()
     mainlayout->addWidget(m_retrybutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
-    setFocusPolicy(Qt::NoFocus);
 }
 
 void Compressor_Fail::InitConnection()

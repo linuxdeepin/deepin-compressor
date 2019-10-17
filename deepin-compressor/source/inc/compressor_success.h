@@ -5,6 +5,7 @@
 #include <DPushButton>
 #include <DLabel>
 #include <DPalette>
+#include <DApplicationHelper>
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
