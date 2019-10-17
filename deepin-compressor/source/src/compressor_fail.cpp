@@ -50,6 +50,7 @@ void Compressor_Fail::InitUI()
 
     pa.setColor(DPalette::Background,QColor(255, 255, 255));
     setPalette(pa);
+    setFocusPolicy(Qt::NoFocus);
 }
 
 void Compressor_Fail::InitConnection()
