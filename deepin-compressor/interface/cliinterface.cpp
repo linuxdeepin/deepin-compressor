@@ -401,7 +401,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         }
     }
 
-    if (m_exitCode == 2 || m_exitCode == 3) {
+    if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {
         if (password().isEmpty()) {
             qDebug() << "Extraction failed, the file is broken";
             emit error(tr("Extraction failed. the file is broken"));
@@ -420,6 +420,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         setPassword(QString());
         return;
     }
+
 
     if (m_extractionOptions.isDragAndDropEnabled()) {
         const bool droppedFilesMoved = moveDroppedFilesToDest(m_extractedFiles, m_extractDestDir);

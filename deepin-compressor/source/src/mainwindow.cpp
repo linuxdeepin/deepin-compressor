@@ -316,11 +316,13 @@ void MainWindow::setDisable()
 
 void MainWindow::refreshPage()
 {
+    setAcceptDrops(false);
     m_titlebutton->setVisible(false);
     switch (m_pageid) {
     case PAGE_HOME:
         m_mainLayout->setCurrentIndex(0);
         setQLabelText(m_titlelabel, "");
+        setAcceptDrops(true);
         break;
     case PAGE_UNZIP:
         m_mainLayout->setCurrentIndex(1);
