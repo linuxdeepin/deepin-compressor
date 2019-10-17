@@ -810,31 +810,7 @@ void CliInterface::readStdout(bool handleAll)
 
     if(m_process->program().at(0).contains("7z") && !wrongPasswordMessage)
     {
-        QString lineinfo = QString::fromLocal8Bit(dd);
-
-        int pos = lineinfo.indexOf(QLatin1Char( '%' ));
-        if (pos > 1)
-        {
-            int percentage = lineinfo.midRef(pos - 2, 2).toInt();
-
-            QStringRef strfilename;
-            int count = lineinfo.indexOf("+");
-            if(-1 == count)
-            {
-                count = lineinfo.indexOf("-");
-            }
-            if(count > 0)
-            {
-                strfilename = lineinfo.midRef(count + 2);
-            }
-
-            if(!strfilename.toString().contains("Wrong password"))
-            {
-                emit progress(float(percentage) / 100);
-                emit progress_filename(strfilename.toString());
-            }
-
-        }
+        handleAll = true;//7z output has no \n
     }
 
     bool foundErrorMessage =
@@ -906,6 +882,34 @@ bool CliInterface::handleLine(const QString& line)
             return true;
         }
     }
+
+    if(m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line))
+    {
+        int pos = line.indexOf(QLatin1Char( '%' ));
+        if (pos > 1)
+        {
+            int percentage = line.midRef(pos - 2, 2).toInt();
+
+            QStringRef strfilename;
+            int count = line.indexOf("+");
+            if(-1 == count)
+            {
+                count = line.indexOf("-");
+            }
+            if(count > 0)
+            {
+                strfilename = line.midRef(count + 2);
+            }
+
+            if(!strfilename.toString().contains("Wrong password"))
+            {
+                emit progress(float(percentage) / 100);
+                emit progress_filename(strfilename.toString());
+            }
+
+        }
+    }
+
 
     if (m_operationMode == Extract) {
 
