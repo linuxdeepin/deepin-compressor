@@ -269,7 +269,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive
     // We list the entire archive after adding files to ensure entry
     // properties are up-to-date.
     m_listAfterAdd = true;
-    list();
+//    list();
 
     return true;
 }
@@ -279,13 +279,11 @@ void LibzipPlugin::emitProgress(double percentage)
     int i = m_filesize*percentage;
     if(m_addarchive)
     {
-        QString name = zip_get_name(m_addarchive, i, ZIP_FL_ENC_GUESS);
+        QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
+        QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
+        QString nameunicode = codec->toUnicode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW));
+        QString name = codecutf8->fromUnicode(nameunicode);
         emit progress_filename(name);
-//        QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
-//        QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
-//        QString nameunicode = codec->toUnicode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW));
-//        QString name = codecutf8->fromUnicode(nameunicode);
-//        emit progress_filename(name);
     }
 
     // Go from 0 to 50%. The second half is the subsequent listing.
@@ -369,17 +367,15 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     Q_ASSERT(archive);
 
     zip_stat_t statBuffer;
-    if (zip_stat_index(archive, index, ZIP_FL_ENC_GUESS, &statBuffer)) {
+    if (zip_stat_index(archive, index, ZIP_FL_ENC_RAW, &statBuffer)) {
         return false;
     }
 
     auto e = new Archive::Entry();
 
     if (statBuffer.valid & ZIP_STAT_NAME) {
-//        QTextCodec* codec = QTextCodec::codecForName(detectEncode(statBuffer.name));
-//        QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
-//        QString name = codec->toUnicode(statBuffer.name);
-        e->setFullPath(QString::fromUtf8(statBuffer.name));
+        QTextCodec* codec = QTextCodec::codecForName(detectEncode(statBuffer.name));
+        e->setFullPath(codec->toUnicode(statBuffer.name));
     }
 
     if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {
@@ -620,14 +616,12 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
-//            qDebug()<<zip_get_name(archive, i, ZIP_FL_ENC_RAW);
-//            QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
-//            QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
-//            QString nameunicode = codec->toUnicode(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-//            QString name = codecutf8->fromUnicode(nameunicode);
-//            qDebug()<<name.toLocal8Bit();
+            QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
+            QString nameunicode = codec->toUnicode(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+            QString name = codecutf8->fromUnicode(nameunicode);
             if (!extractEntry(archive,
-                              QDir::fromNativeSeparators(QString::fromUtf8(zip_get_name(archive, i, ZIP_FL_ENC_GUESS))),
+                              QDir::fromNativeSeparators(name),
                               QString(),
                               destinationDirectory,
                               options.preservePaths(),
@@ -635,7 +629,6 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
                 return false;
             }
             emit progress(float(i + 1) / nofEntries);
-            QString name = QString::fromUtf8(zip_get_name(archive, i, ZIP_FL_ENC_GUESS));
             emit progress_filename(name);
         }
     } else {
@@ -714,11 +707,12 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
     // Get statistic for entry. Used to get entry size and mtime.
     zip_stat_t statBuffer;
-//    QTextCodec* codec = QTextCodec::codecForName("gb18030");
-//    QByteArray  name = codec->fromUnicode(entry.toLocal8Bit());
+    QTextCodec* codec = QTextCodec::codecForName(m_codecstr);
+    qDebug()<<m_codecstr;
+    QByteArray  name = codec->fromUnicode(entry.toLocal8Bit());
 
-//    qDebug()<<name.constData();
-    if (zip_stat(archive, entry.toUtf8().constData(), 0, &statBuffer) != 0) {
+
+    if (zip_stat(archive, name.constData(), 0, &statBuffer) != 0) {
         if (isDirectory && zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOENT) {
             return true;
         }
@@ -762,7 +756,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         zip_file *zipFile = nullptr;
         bool firstTry = true;
         while (!zipFile) {
-            zipFile = zip_fopen(archive, entry.toUtf8().constData(), 0);
+            zipFile = zip_fopen(archive, name.constData(), 0);
             if (zipFile) {
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
@@ -779,6 +773,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 if (zip_set_default_password(archive, password().toUtf8().constData())) {
                 }
                 firstTry = false;
+                return false;
             } else {
                 emit error(tr("Failed to open '%1':<nl/>%2"));
                 return false;
@@ -810,7 +805,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             sum += readBytes;
         }
 
-        const auto index = zip_name_locate(archive, entry.toUtf8().constData(), ZIP_FL_ENC_GUESS);
+        const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
         if (index == -1) {
             emit error(tr("Failed to locate entry: %1"));
             return false;
@@ -1178,8 +1173,11 @@ confidence:
     }
 
     if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
+        m_codecstr = def_codec->name();
         return def_codec->name();
     }
+
+    m_codecstr = encoding;
 
     return encoding;
 }

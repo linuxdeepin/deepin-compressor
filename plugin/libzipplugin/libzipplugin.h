@@ -77,6 +77,7 @@ private:
     bool m_listAfterAdd;
     int m_filesize;
     zip_t *m_addarchive;
+    QByteArray m_codecstr;
 };
 
 #endif // LIBZIPPLUGIN_H
