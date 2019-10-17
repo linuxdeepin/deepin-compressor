@@ -528,7 +528,7 @@ void fileViewer::onRightMenuClicked(QAction *action)
 
 QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
 {
-    Q_ASSERT(m_decompressmodel);
+    Q_ASSERT(m_sortmodel);
 
     QModelIndexList ret = list;
 
@@ -536,8 +536,8 @@ QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
     for (int i = 0; i < ret.size(); ++i) {
         QModelIndex index = ret.at(i);
 
-        for (int j = 0; j < m_decompressmodel->rowCount(index); ++j) {
-            QModelIndex child = m_decompressmodel->index(j, 0, index);
+        for (int j = 0; j < m_sortmodel->rowCount(index); ++j) {
+            QModelIndex child = m_sortmodel->index(j, 0, index);
             if (!ret.contains(child)) {
                 ret << child;
             }
@@ -553,7 +553,7 @@ QVector<Archive::Entry*> fileViewer::filesForIndexes(const QModelIndexList& list
     QVector<Archive::Entry*> ret;
 
     for (const QModelIndex& index : list) {
-        ret << m_decompressmodel->entryForIndex(index);
+        ret << m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
     }
 
     return ret;
@@ -573,7 +573,7 @@ QVector<Archive::Entry*> fileViewer::filesAndRootNodesForIndexes(const QModelInd
 
         // Fetch the root node for the unselected parent.
         const QString rootFileName = selectionRoot.isValid()
-            ? m_decompressmodel->entryForIndex(selectionRoot)->fullPath()
+            ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
             : QString();
 
 
