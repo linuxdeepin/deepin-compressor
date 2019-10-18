@@ -333,6 +333,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("新建归档文件"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
+        setAcceptDrops(true);
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
@@ -406,10 +407,7 @@ void MainWindow::onSelected(const QStringList &files)
         }
         else {
             DDialog* dialog = new DDialog;
-            dialog->setMessage(tr("添加压缩文件到目录 或 在新窗口中打开该文件？"));
-            QFileIconProvider icon_provider;
-            QFileInfo fileinfo(files.at(0));
-            dialog->setIcon(icon_provider.icon(fileinfo), QSize(64, 64));
+            dialog->setMessage(tr("添加压缩文件到目录或在新窗口中打开该文件？"));
             dialog->addButton(tr("取消"));
             dialog->addButton(tr("添加"));
             dialog->addButton(tr("在新窗口中打开"));
@@ -974,10 +972,6 @@ void MainWindow::onCancelCompressPressed()
     {
         m_createJob->kill();
     }
-
-    ExtractJob* m_encryptionjob;
-    LoadJob* m_loadjob;
-    CreateJob* m_createJob;
 
     emit sigquitApp();
 }
