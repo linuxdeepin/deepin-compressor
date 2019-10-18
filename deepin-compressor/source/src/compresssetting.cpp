@@ -116,6 +116,7 @@ void CompressSetting::InitUI()
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
     mainLayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainLayout->setContentsMargins(20, 16, 20, 20);
 
 
     m_splitnumedit->setEnabled(false);

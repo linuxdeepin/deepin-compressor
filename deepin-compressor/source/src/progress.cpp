@@ -45,7 +45,7 @@ void Progress::InitUI()
     ft.setPixelSize(12);
     ft.setBold(false);
     pa = DApplicationHelper::instance()->palette(m_progressfilelabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_progressfilelabel->setPalette(pa);
     m_progressfilelabel->setFont(ft);
     m_progressfilelabel->setText(tr("正在计算中..."));
@@ -53,6 +53,7 @@ void Progress::InitUI()
     m_cancelbutton = new DPushButton();
     m_cancelbutton->setFixedSize(340, 36);
     m_cancelbutton->setText(tr("取消"));
+    m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
