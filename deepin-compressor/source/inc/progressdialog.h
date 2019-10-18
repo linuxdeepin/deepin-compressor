@@ -5,13 +5,13 @@
 #include <DDialog>
 #include <DPushButton>
 #include <DLabel>
-#include <dcircleprogress.h>
+#include <DProgressBar>
 #include "extractpausedialog.h"
-
+#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
-class ProgressDialog: public QDialog
+class ProgressDialog: public DDialog
 {
     Q_OBJECT
 public:
@@ -37,12 +37,12 @@ public slots:
     void slotextractpress(int index);
 
 private:
-    int m_defaultWidth = 525;
+    int m_defaultWidth = 380;
     int m_defaultHeight = 120;
 
     DLabel* m_tasklable;
     DLabel* m_filelable;
-    DCircleProgress* m_circleprogress;
+    DProgressBar* m_circleprogress;
 
     ExtractPauseDialog* m_extractdialog;
 
