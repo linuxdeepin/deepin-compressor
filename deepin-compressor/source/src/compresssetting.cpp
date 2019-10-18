@@ -125,7 +125,8 @@ void CompressSetting::InitUI()
     m_file_secret->setEnabled(false);
 
     DPalette pa;
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 }
 void CompressSetting::InitConnection()

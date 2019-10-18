@@ -35,6 +35,7 @@
 #include <DCommandLinkButton>
 #include <DPalette>
 #include "archivesortfiltermodel.h"
+#include <DApplicationHelper>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE

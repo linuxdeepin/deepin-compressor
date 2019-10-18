@@ -53,7 +53,8 @@ CompressPage::CompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
 
     DPalette pa;
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 
 }

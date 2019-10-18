@@ -8,6 +8,7 @@
 #include "utils.h"
 #include <DProgressBar>
 #include <DPalette>
+#include <DApplicationHelper>
 
 
 DWIDGET_USE_NAMESPACE

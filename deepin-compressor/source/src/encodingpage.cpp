@@ -85,7 +85,8 @@ void EncodingPage::InitUI()
     mainlayout->addSpacing(20);
 
     DPalette pa;
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 }
 

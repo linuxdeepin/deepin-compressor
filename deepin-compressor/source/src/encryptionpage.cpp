@@ -19,13 +19,14 @@ void EncryptionPage::InitUI()
     ft.setBold(true);
 
     DPalette pa;
-    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
 
     m_encrypticon = Utils::renderSVG(":/images/lock.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_encrypticon);
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setFont(ft);
+    pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
     m_stringinfolabel->setPalette(pa);
     m_stringinfolabel->setText(tr("此文件已加密，请输入解压密码"));
     m_nextbutton = new DPushButton();
@@ -47,7 +48,8 @@ void EncryptionPage::InitUI()
     mainlayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 }
 

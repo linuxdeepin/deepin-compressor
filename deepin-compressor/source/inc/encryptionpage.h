@@ -5,6 +5,7 @@
 #include <DLabel>
 #include <dpasswordedit.h>
 #include <DPalette>
+#include <DApplicationHelper>
 
 
 DGUI_USE_NAMESPACE

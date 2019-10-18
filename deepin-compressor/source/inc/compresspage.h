@@ -11,6 +11,7 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <DPalette>
+#include <DApplicationHelper>
 
 #include "fileViewer.h"
 

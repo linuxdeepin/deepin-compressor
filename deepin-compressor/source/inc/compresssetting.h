@@ -15,6 +15,7 @@
 #include "pluginmanager.h"
 #include "dfilechooseredit.h"
 #include <DPalette>
+#include <DApplicationHelper>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE

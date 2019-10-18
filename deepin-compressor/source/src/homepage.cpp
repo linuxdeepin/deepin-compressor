@@ -46,7 +46,8 @@ HomePage::HomePage(QWidget *parent)
     font.setPixelSize(12);
 
     DPalette pa;
-    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
+    pa = DApplicationHelper::instance()->palette(m_tipsLabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_tipsLabel->setPalette(pa);
     m_tipsLabel->setFont(font);
 
@@ -79,7 +80,8 @@ HomePage::HomePage(QWidget *parent)
     m_spinner->move(285, 200);
     m_spinner->hide();
 
-    pa.setColor(DPalette::Background,QColor(248, 248, 248));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Background));
     setPalette(pa);
 }
 

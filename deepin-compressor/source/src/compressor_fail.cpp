@@ -55,7 +55,6 @@ void Compressor_Fail::InitUI()
     mainlayout->addWidget(m_retrybutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    pa = DApplicationHelper::instance()->palette(this);
     pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 }

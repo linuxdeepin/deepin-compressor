@@ -24,11 +24,13 @@ void Progress::InitUI()
     ft.setBold(true);
 
     DPalette pa;
-    pa.setColor(DPalette::WindowText,QColor(0, 26, 46));
+
 
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText(m_filename);
     m_filenamelabel->setFont(ft);
+    pa = DApplicationHelper::instance()->palette(m_filenamelabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
     m_filenamelabel->setPalette(pa);
 
     m_progressbar = new DProgressBar();
@@ -40,9 +42,10 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
 
     m_progressfilelabel = new DLabel();
-    pa.setColor(DPalette::WindowText,QColor(82, 106, 127));
     ft.setPixelSize(12);
     ft.setBold(false);
+    pa = DApplicationHelper::instance()->palette(m_progressfilelabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
     m_progressfilelabel->setPalette(pa);
     m_progressfilelabel->setFont(ft);
     m_progressfilelabel->setText(tr("正在计算中..."));
@@ -64,7 +67,8 @@ void Progress::InitUI()
     mainlayout->addWidget(m_cancelbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 }
 

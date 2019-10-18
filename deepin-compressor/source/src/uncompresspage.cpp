@@ -73,7 +73,8 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     mainLayout->setContentsMargins(20, 1, 20, 20);
 
     DPalette pa;
-    pa.setColor(DPalette::Background,QColor(255, 255, 255));
+    pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
 
 

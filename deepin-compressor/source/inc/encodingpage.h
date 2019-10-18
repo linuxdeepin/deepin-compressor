@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <DComboBox>
 #include <DPalette>
+#include <DApplicationHelper>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE

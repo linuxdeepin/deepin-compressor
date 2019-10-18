@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <DCommandLinkButton>
 #include <DSpinner>
+#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
