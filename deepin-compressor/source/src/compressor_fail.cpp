@@ -43,7 +43,7 @@ void Compressor_Fail::InitUI()
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);
-    m_retrybutton->setText(tr("重试"));
+    m_retrybutton->setText(tr("重 试"));
     m_retrybutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);

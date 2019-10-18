@@ -73,8 +73,7 @@ void CompressSetting::InitUI()
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
-    m_splitcompress = new DLabel(tr("分卷压缩"));
-    m_splitlayout = new QHBoxLayout();
+    m_splitcompress = new DLabel(tr("分卷压缩") + ":");
     m_splitnumedit = new DDoubleSpinBox();
     m_splitnumedit->setSuffix("MB");
     m_splitnumedit->setRange(0.0, 1000000);
@@ -82,25 +81,25 @@ void CompressSetting::InitUI()
     m_splitnumedit->setDecimals(1);
     m_splitnumedit->setValue(0.0);
 
-    m_splitlayout->addWidget(m_splitnumedit);
-
-    m_splitlayout->setStretch(0,4);
-    m_splitlayout->setStretch(1,1);
-    m_splitlayout->setStretch(2,1);
-
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
-    typeLayout->addStretch();
+    typeLayout->addSpacing(65);
     typeLayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     typeLayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     typeLayout->addStretch();
     leftwidget->setLayout(typeLayout);
 
     m_fileLayout = new QVBoxLayout;
-    m_fileLayout->addStretch();
     m_fileLayout->addLayout(filelayout);
-    m_fileLayout->addStretch();
     m_fileLayout->addLayout(m_moresetlayout);
+    m_fileLayout->addWidget(m_encryptedlabel);
+    m_fileLayout->addWidget(m_password);
+    m_fileLayout->addLayout(m_file_secretlayout);
+    m_fileLayout->addWidget(m_splitcompress);
+    m_fileLayout->addWidget(m_splitnumedit);
+    m_fileLayout->addStretch();
+
+    onAdvanceButtonClicked(false);
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
     infoLayout->addStretch();
@@ -113,8 +112,7 @@ void CompressSetting::InitUI()
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(20);
-    mainLayout->addStretch();
+    mainLayout->setMargin(16);
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
     mainLayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
@@ -210,20 +208,8 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
         m_splitnumedit->setVisible(true);
-
-        m_fileLayout->addWidget(m_encryptedlabel);
-        m_fileLayout->addWidget(m_password);
-        m_fileLayout->addLayout(m_file_secretlayout);
-        m_fileLayout->addWidget(m_splitcompress);
-        m_fileLayout->addLayout(m_splitlayout);
     }
     else {
-
-        m_fileLayout->removeWidget(m_encryptedlabel);
-        m_fileLayout->removeWidget(m_password);
-        m_fileLayout->removeItem(m_file_secretlayout);
-        m_fileLayout->removeWidget(m_splitcompress);
-        m_fileLayout->removeItem(m_splitlayout);
         m_encryptedlabel->setVisible(false);
         m_password->setVisible(false);
         m_splitcompress->setVisible(false);
@@ -231,7 +217,6 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(false);
         m_splitcompress->setVisible(false);
         m_splitnumedit->setVisible(false);
-
     }
 }
 
