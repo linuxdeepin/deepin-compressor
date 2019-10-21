@@ -877,7 +877,7 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
 
 void MainWindow::slotCompressFinished(KJob *job)
 {
-    qDebug() << "job finished";
+    qDebug() << "job finished"<<job->error();
     m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
         m_pageid = PAGE_ZIP_FAIL;
@@ -888,10 +888,10 @@ void MainWindow::slotCompressFinished(KJob *job)
     m_pageid = PAGE_ZIP_SUCCESS;
     refreshPage();
 
-    if(m_createJob)
-    {
-        m_createJob->kill();
-    }
+//    if(m_createJob)
+//    {
+//        m_createJob->kill();
+//    }
 
 }
 
