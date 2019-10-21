@@ -144,7 +144,7 @@ void CompressSetting::onNextButoonClicked()
     QString name = m_filename->text().remove(" ");
     if(name == "")
     {
-        QMessageBox box;
+        DMessageBox box;
         box.setText(tr("文件名输入错误，请重新输入！"));
         box.exec();
         return;

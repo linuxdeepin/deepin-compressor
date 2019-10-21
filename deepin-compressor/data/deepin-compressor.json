@@ -2,11 +2,11 @@
     "groups": [
         {
             "key": "base",
-            "name": "基本设置",
+            "name": "设置",
             "groups": [
                 {
                     "key": "decompress",
-                    "name": "解压设置",
+                    "name": "解压",
                     "options": [
                         {
                             "key": "default_path",
@@ -32,11 +32,11 @@
         },
         {
             "key": "file_association",
-            "name": "文件关联",
+            "name": "关联文件",
             "groups": [
                 {
                     "key": "file_association_type",
-                    "name": "关联文件类型",
+                    "name": "文件类型",
                     "options": [
                         {
                             "key": "x-7z-compressed",

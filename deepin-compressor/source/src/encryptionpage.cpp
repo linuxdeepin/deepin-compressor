@@ -51,6 +51,7 @@ void EncryptionPage::InitUI()
     pa = DApplicationHelper::instance()->palette(this);
     pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
     setPalette(pa);
+
 }
 
 void EncryptionPage::InitConnection()
