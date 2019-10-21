@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
     // init modules.
     MainWindow w;
-    w.setMinimumSize(620, 465);
+    w.setFixedSize(620, 465);
     w.setWindowIcon(QIcon(":/images/deepin-compressor.svg"));
     w.show();
 
