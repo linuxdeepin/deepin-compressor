@@ -52,10 +52,7 @@ CompressPage::CompressPage(QWidget *parent)
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
 
-    DPalette pa;
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Base);
 
 }
 

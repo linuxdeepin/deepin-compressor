@@ -171,6 +171,7 @@ fileViewer::~fileViewer()
 
 void fileViewer::InitUI()
 {
+
     QHBoxLayout* mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView();

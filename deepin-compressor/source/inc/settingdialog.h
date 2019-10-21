@@ -12,6 +12,7 @@
 #include "kprocess.h"
 #include <DSettingsWidgetFactory>
 #include <DPushButton>
+#include <DApplicationHelper>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE

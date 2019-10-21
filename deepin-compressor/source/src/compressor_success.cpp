@@ -44,9 +44,7 @@ void Compressor_Success::InitUI()
     mainlayout->addWidget(m_showfilebutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Base);
 }
 
 void Compressor_Success::InitConnection()

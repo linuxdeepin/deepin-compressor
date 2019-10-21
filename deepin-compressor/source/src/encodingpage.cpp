@@ -84,10 +84,7 @@ void EncodingPage::InitUI()
     mainlayout->addLayout(buttonlayout);
     mainlayout->addSpacing(20);
 
-    DPalette pa;
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Base);
 }
 
 void EncodingPage::InitConnection()

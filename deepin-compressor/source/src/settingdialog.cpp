@@ -170,15 +170,17 @@ void SettingDialog::initUI()
                 else {
                     m_curpath = combobox->currentText();
                     QDir dir(m_curpath);
-                    DPalette plt = combobox->palette();
+                    DPalette plt;
+                    plt = DApplicationHelper::instance()->palette(combobox);
 
                     if(!dir.exists())
                     {
-                        plt.setColor(DPalette::Text, QColor(255, 0, 0));
+
+                        plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
 
                     }
                     else {
-                        plt.setColor(DPalette::Text, QColor(65, 77, 104));
+                        plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
                     }
 
                     combobox->setPalette(plt);

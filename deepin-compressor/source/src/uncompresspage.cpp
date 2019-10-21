@@ -72,10 +72,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setContentsMargins(20, 1, 20, 20);
 
-    DPalette pa;
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Base);
 
 
     connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);

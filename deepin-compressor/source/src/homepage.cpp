@@ -80,9 +80,7 @@ HomePage::HomePage(QWidget *parent)
     m_spinner->move(285, 200);
     m_spinner->hide();
 
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Background));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Background);
 }
 
 HomePage::~HomePage()

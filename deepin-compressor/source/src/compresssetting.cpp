@@ -123,10 +123,7 @@ void CompressSetting::InitUI()
     m_password->setEnabled(true);
     m_file_secret->setEnabled(false);
 
-    DPalette pa;
-    pa = DApplicationHelper::instance()->palette(this);
-    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-    setPalette(pa);
+    setBackgroundRole(DPalette::Base);
 }
 void CompressSetting::InitConnection()
 {
