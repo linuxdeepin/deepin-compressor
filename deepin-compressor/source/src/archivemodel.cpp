@@ -98,11 +98,6 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(16, 16, mode);
             }
             return QVariant();
-        case Qt::FontRole: {
-            QFont f;
-            f.setItalic(entry->property("isPasswordProtected").toBool());
-            return f;
-        }
         case Qt::TextAlignmentRole:
             return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
         default:
