@@ -69,6 +69,11 @@ MainWindow::~MainWindow()
 {
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    emit sigquitApp();
+}
+
 void MainWindow::InitUI()
 {
     if (m_settings->value("dir").toString().isEmpty()) {

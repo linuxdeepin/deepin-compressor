@@ -79,6 +79,7 @@ class MainWindow : public DMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void closeEvent(QCloseEvent *event) override;
 
     void InitUI();
     void InitConnection();
