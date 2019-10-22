@@ -42,16 +42,15 @@ HomePage::HomePage(QWidget *parent)
     m_iconLabel->setPixmap(m_unloadPixmap);
     m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
-    QFont font;
-    font.setPixelSize(12);
 
+    m_tipsLabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_tipsLabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_tipsLabel->setPalette(pa);
-    m_tipsLabel->setFont(font);
 
-    m_chooseBtn->setFont(font);
+
+    m_chooseBtn->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {

@@ -19,18 +19,17 @@ void Progress::InitUI()
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
 
-    QFont ft;
-    ft.setPixelSize(17);
-    ft.setBold(true);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    font.setBold(true);
 
     DPalette pa;
 
 
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText(m_filename);
-    m_filenamelabel->setFont(ft);
+    m_filenamelabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_filenamelabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
     m_filenamelabel->setPalette(pa);
 
     m_progressbar = new DProgressBar();
@@ -42,12 +41,10 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
 
     m_progressfilelabel = new DLabel();
-    ft.setPixelSize(12);
-    ft.setBold(false);
     pa = DApplicationHelper::instance()->palette(m_progressfilelabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_progressfilelabel->setPalette(pa);
-    m_progressfilelabel->setFont(ft);
+    m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     m_progressfilelabel->setText(tr("正在计算中..."));
 
     m_cancelbutton = new DPushButton();

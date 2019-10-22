@@ -8,6 +8,7 @@
 #include <DProgressBar>
 #include "extractpausedialog.h"
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 

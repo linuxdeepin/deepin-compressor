@@ -28,6 +28,7 @@
 #include <DCommandLinkButton>
 #include <DSpinner>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 

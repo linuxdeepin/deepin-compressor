@@ -6,6 +6,7 @@
 #include <DLabel>
 #include <DPalette>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 

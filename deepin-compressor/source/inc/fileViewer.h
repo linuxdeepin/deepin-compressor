@@ -20,7 +20,7 @@
 #include <DMenu>
 #include "mimetypedisplaymanager.h"
 #include "archivesortfiltermodel.h"
-
+#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE

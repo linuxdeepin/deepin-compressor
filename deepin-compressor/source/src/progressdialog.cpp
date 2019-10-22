@@ -23,16 +23,14 @@ void ProgressDialog::initUI()
 
     DWidget* widget = new DWidget;
     DPalette pa;
-    QFont ft;
-    ft.setPixelSize(14);
+
     m_tasklable = new DLabel();
-    m_tasklable->setFont(ft);
+    m_tasklable->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T6));
     pa = DApplicationHelper::instance()->palette(m_tasklable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     m_tasklable->setPalette(pa);
     m_filelable = new DLabel();
-    ft.setPixelSize(12);
-    m_filelable->setFont(ft);
+    m_filelable->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     pa = DApplicationHelper::instance()->palette(m_filelable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_filelable->setPalette(pa);

@@ -212,7 +212,7 @@ void MainWindow::initTitleBar()
     QHBoxLayout *titlemainLayout = new QHBoxLayout;
     titlemainLayout->setContentsMargins(0, 0, 0, 0);
     titlemainLayout->addWidget(left_frame);
-    titlemainLayout->addSpacing(110);
+    titlemainLayout->addSpacing(50);
     titlemainLayout->addWidget(m_titlelabel, 0, Qt::AlignCenter);
 
     m_titleFrame->setLayout(titlemainLayout);

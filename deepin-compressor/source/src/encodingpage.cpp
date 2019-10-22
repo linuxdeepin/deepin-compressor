@@ -18,13 +18,12 @@ void EncodingPage::InitUI()
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_fileicon);
 
-    QFont ft;
-    ft.setPixelSize(17);
-    ft.setBold(true);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    font.setBold(true);
 
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText("");
-    m_filenamelabel->setFont(ft);
+    m_filenamelabel->setFont(font);
 
 
     QStringList encodeList;
@@ -54,10 +53,9 @@ void EncodingPage::InitUI()
     encodelayout->addWidget(m_codebox);
     encodelayout->addStretch();
 
-    ft.setPixelSize(12);
-    ft.setBold(false);
     m_detaillabel = new DLabel;
     m_detaillabel->setText(tr("请提供文件名编码以解压此文档"));
+    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 
     m_cancelbutton = new DPushButton(tr("取消"));
     m_confirmbutton = new DPushButton(tr("确定"));

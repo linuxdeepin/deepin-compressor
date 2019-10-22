@@ -16,12 +16,6 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
-
-    QFont ft;
-    ft.setPixelSize(17);
-    ft.setBold(true);
-
-
     DPalette pa;
 
     m_compressicon = Utils::renderSVG(":/images/fail.svg", QSize(128, 128));
@@ -29,17 +23,19 @@ void Compressor_Fail::InitUI()
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
-    m_stringinfolabel->setFont(ft);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    font.setBold(true);
+    m_stringinfolabel->setFont(font);
 
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
     m_stringinfolabel->setPalette(pa);
 
     m_stringdetaillabel = new DLabel();
-    ft.setBold(false);
     pa = DApplicationHelper::instance()->palette(m_stringdetaillabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_stringdetaillabel->setPalette(pa);
+    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);

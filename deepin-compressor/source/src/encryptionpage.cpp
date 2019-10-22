@@ -14,9 +14,8 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 
 void EncryptionPage::InitUI()
 {
-    QFont ft;
-    ft.setPixelSize(17);
-    ft.setBold(true);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    font.setBold(true);
 
     DPalette pa;
 
@@ -24,9 +23,9 @@ void EncryptionPage::InitUI()
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_encrypticon);
     m_stringinfolabel = new DLabel();
-    m_stringinfolabel->setFont(ft);
+    m_stringinfolabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
     m_stringinfolabel->setPalette(pa);
     m_stringinfolabel->setText(tr("此文件已加密，请输入解压密码"));
     m_nextbutton = new DPushButton();
