@@ -413,6 +413,8 @@ void MainWindow::onSelected(const QStringList &files)
         }
         else {
             DDialog* dialog = new DDialog;
+            QIcon icon = QIcon::fromTheme("deepin-compressor");
+            dialog->setIcon(icon, QSize(32, 32));
             dialog->setMessage(tr("添加压缩文件到目录或在新窗口中打开该文件？"));
             dialog->addButton(tr("取消"));
             dialog->addButton(tr("添加"));

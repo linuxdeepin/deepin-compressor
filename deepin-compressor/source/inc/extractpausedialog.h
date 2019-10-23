@@ -4,6 +4,8 @@
 #include <DPushButton>
 #include <DDialog>
 #include <DLabel>
+#include <DApplicationHelper>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 

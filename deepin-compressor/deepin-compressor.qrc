@@ -15,5 +15,6 @@
         <file>images/success.svg</file>
         <file>images/deepin-compressor.svg</file>
         <file>images/back_normal.svg</file>
+        <file>images/warning.svg</file>
     </qresource>
 </RCC>
