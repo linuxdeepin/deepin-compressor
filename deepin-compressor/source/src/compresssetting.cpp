@@ -8,7 +8,7 @@
 #include <QFileIconProvider>
 #include <QTemporaryFile>
 #include <QMessageBox>
-
+#include <QFileInfo>
 
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
@@ -251,6 +251,31 @@ void CompressSetting::setDefaultName(QString name)
     qfilename->setFocus();
 }
 
+quint64 CompressSetting::dirFileSize(const QString &path)
+{
+    QDir dir(path);
+    quint64 size = 0;
+    //dir.entryInfoList(QDir::Files)返回文件信息
+    foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
+    {
+        //计算文件大小
+        size += fileInfo.size();
+    }
+    //dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
+    foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        //若存在子目录，则递归调用dirFileSize()函数
+        size += dirFileSize(path + QDir::separator() + subDir);
+    }
+    return size;
+}
+
+
+void CompressSetting::setFilepath(QStringList pathlist)
+{
+    m_pathlist = pathlist;
+}
+
 void CompressSetting::ontypeChanged(int index)
 {
     qDebug()<<index;
@@ -263,17 +288,37 @@ void CompressSetting::ontypeChanged(int index)
         m_splitnumedit->setEnabled(true);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(true);
+
+        int filesize = 0;
+        foreach(QString path, m_pathlist)
+        {
+            filesize += dirFileSize(path);
+        }
+
+        if(filesize < 1024*1024*5)
+        {
+            m_splitnumedit->setEnabled(false);
+            m_splitnumedit->setValue(double(filesize)/(1024*1024));
+        }
+        else {
+            m_splitnumedit->setValue(5.0);
+            m_splitnumedit->setRange(5.0, double(filesize)/(1024*1024));
+        }
     }
     else if(10 == index)
     {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(false);
+        m_splitnumedit->setRange(0.0, 5.0);
+        m_splitnumedit->setValue(0.0);
     }
     else {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(false);
         m_file_secret->setEnabled(false);
+        m_splitnumedit->setRange(0.0, 5.0);
+        m_splitnumedit->setValue(0.0);
     }
 }
 

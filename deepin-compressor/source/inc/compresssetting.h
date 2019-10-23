@@ -36,6 +36,8 @@ public:
     void setTypeImage(QString type);
     void setDefaultPath(QString path);
     void setDefaultName(QString name);
+    void setFilepath(QStringList pathlist);
+    quint64 dirFileSize(const QString &path);
 
 private:
     DPushButton* m_nextbutton;
@@ -62,6 +64,7 @@ private:
 
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
+    QStringList m_pathlist;
 
 
 signals:

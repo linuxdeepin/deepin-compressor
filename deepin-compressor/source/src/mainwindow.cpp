@@ -769,6 +769,7 @@ void MainWindow::setCompressDefaultPath()
     QString path;
     QStringList fileslist = m_CompressPage->getCompressFilelist();
 
+    m_CompressSetting->setFilepath(fileslist);
     QFileInfo fileinfobase(fileslist.at(0));
     for(int loop = 1; loop < fileslist.count();loop++)
     {
