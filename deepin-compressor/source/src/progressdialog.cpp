@@ -16,10 +16,9 @@ void ProgressDialog::initUI()
 //    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
     setFixedWidth(m_defaultWidth);
-    setTitle("                                     " + QObject::tr("有1个任务正在进行"));
-    setWindowIcon(QIcon::fromTheme("deepin-compressor"));
-//    QIcon icon = QIcon::fromTheme("deepin-compressor");
-//    setIconPixmap(icon.pixmap(QSize(32, 32)));
+    setTitle(QObject::tr("有1个任务正在进行"));
+    QIcon icon = QIcon::fromTheme("deepin-compressor");
+    setIcon(icon, QSize(32, 32));
 
     DWidget* widget = new DWidget;
     DPalette pa;
