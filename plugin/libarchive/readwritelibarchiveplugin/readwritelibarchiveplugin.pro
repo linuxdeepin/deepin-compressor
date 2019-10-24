@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
-QT += dtkwidget
+QT += dtkwidget KCodecs
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = readwritelibarchiveplugin
 TEMPLATE = lib
