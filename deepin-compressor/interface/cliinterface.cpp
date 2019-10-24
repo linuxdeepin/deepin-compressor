@@ -88,6 +88,10 @@ bool CliInterface::list()
     // To compute progress.
     m_archiveSizeOnDisk = static_cast<qulonglong>(QFileInfo(filename()).size());
     connect(this, &ReadOnlyArchiveInterface::entry, this, &CliInterface::onEntry);
+    if((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password()))//qprocess can't read all the output string,so set wrong password to detect if need password
+    {
+        setPassword("temp");
+    }
 
     return runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(filename(), password()));
 }
@@ -339,7 +343,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit finished(true);
         }
     }
-    else if (m_operationMode == List && (9 == exitCode || 2 == exitCode))
+    else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode))
     {
         qDebug() << "wrong password";
         emit error(tr("wrong password"));
@@ -980,6 +984,7 @@ bool CliInterface::handleLine(const QString& line)
         if (isWrongPasswordMsg(line)) {
             qDebug() << "Wrong password!";
             setPassword(QString());
+            setWrongPassword(true);
             emit error("wrongpassword");
             return false;
         }

@@ -206,6 +206,8 @@ protected:
 
     void setCorrupt(bool isCorrupt);
     bool isCorrupt() const;
+    void setWrongPassword(bool isWrong);
+    bool isWrongPassword() const;
     QString m_comment;
     int m_numberOfVolumes;
     uint m_numberOfEntries;
@@ -219,6 +221,7 @@ private:
     bool m_isHeaderEncryptionEnabled;
     bool m_isCorrupt;
     bool m_isMultiVolume;
+    bool m_isWrongPassword;
 
 private Q_SLOTS:
     void onEntry(Archive::Entry *archiveEntry);

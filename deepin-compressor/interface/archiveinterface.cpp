@@ -41,6 +41,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
         , m_isHeaderEncryptionEnabled(false)
         , m_isCorrupt(false)
         , m_isMultiVolume(false)
+        , m_isWrongPassword(false)
 {
     Q_ASSERT(args.size() >= 2);
 
@@ -111,6 +112,16 @@ void ReadOnlyArchiveInterface::setCorrupt(bool isCorrupt)
 bool ReadOnlyArchiveInterface::isCorrupt() const
 {
     return m_isCorrupt;
+}
+
+void ReadOnlyArchiveInterface::setWrongPassword(bool isWrong)
+{
+    m_isWrongPassword = isWrong;
+}
+
+bool ReadOnlyArchiveInterface::isWrongPassword() const
+{
+    return m_isWrongPassword;
 }
 
 bool ReadOnlyArchiveInterface::isMultiVolume() const

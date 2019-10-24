@@ -499,6 +499,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
         refreshPage();
         return;
     }
+
     m_filterModel->setSourceModel(m_model);
     m_filterModel->setFilterKeyColumn(0);
     m_filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -525,6 +526,8 @@ void MainWindow::loadArchive(const QString &files)
     m_loadjob = (LoadJob*)m_model->loadArchive(files, "", m_model);
 
     connect(m_loadjob, &LoadJob::sigLodJobPassword,
+            this, &MainWindow::SlotNeedPassword);
+    connect(m_loadjob, &LoadJob::sigWrongPassword,
             this, &MainWindow::SlotNeedPassword);
 
     if (m_loadjob) {
@@ -668,9 +671,11 @@ void MainWindow::slotExtractionDone(KJob* job)
 
 void MainWindow::SlotNeedPassword()
 {
-
-    m_pageid = PAGE_ENCRYPTION;
-    refreshPage();
+    if(PAGE_ENCRYPTION != m_pageid)
+    {
+        m_pageid = PAGE_ENCRYPTION;
+        refreshPage();
+    }
 }
 
 void MainWindow::SlotExtractPassword(QString password)
