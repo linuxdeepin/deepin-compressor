@@ -886,6 +886,13 @@ bool CliInterface::handleLine(const QString& line)
         if (pos > 1) {
             int percentage = line.midRef(pos - 2, 2).toInt();
             emit progress(float(percentage) / 100);
+
+            if(line.contains("Extracting"))
+            {
+                QStringRef strfilename = line.midRef(12, pos - 24);
+                emit progress_filename(strfilename.toString());
+            }
+
             return true;
         }
     }

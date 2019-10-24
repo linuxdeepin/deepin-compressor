@@ -41,6 +41,7 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
 
     m_progressfilelabel = new DLabel();
+    m_progressfilelabel->setMaximumWidth(520);
     pa = DApplicationHelper::instance()->palette(m_progressfilelabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_progressfilelabel->setPalette(pa);
@@ -110,13 +111,14 @@ void Progress::setTypeImage(QString type)
 
 void Progress::setProgressFilename(QString filename)
 {
+    QFontMetrics elideFont(m_progressfilelabel->font());
     if(m_type == COMPRESSING)
-    {
-        m_progressfilelabel->setText(tr("正在压缩") + ": " + filename);
+    {   
+        m_progressfilelabel->setText(elideFont.elidedText(tr("正在压缩") + ": " + filename, Qt::ElideMiddle, 520));
     }
     else
     {
-        m_progressfilelabel->setText(tr("正在解压") + ": " + filename);
+        m_progressfilelabel->setText(elideFont.elidedText(tr("正在解压") + ": " + filename, Qt::ElideMiddle, 520));
     }
 }
 
