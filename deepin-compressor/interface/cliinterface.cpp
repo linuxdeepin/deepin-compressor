@@ -156,6 +156,8 @@ bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive
                                     : destination->fullPath();
 
     qDebug() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
+    m_curfilenumber = 0;
+    m_allfilenumber = numberOfEntriesToAdd;
 
     if (!destinationPath.isEmpty()) {
         m_extractTempDir.reset(new QTemporaryDir());
@@ -888,7 +890,19 @@ bool CliInterface::handleLine(const QString& line)
         }
     }
 
-    if(m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line))
+    if ((m_operationMode == Extract) && (m_process->program().at(0).contains("zip"))) {
+        //read the percentage
+        int pos = line.indexOf(QLatin1Char( ':' ));
+        if (pos > 1 && line.length()>17) {
+
+            m_curfilenumber++;
+            emit progress(float(m_curfilenumber) / m_allfilenumber);
+            QStringRef strfilename = line.midRef(pos + 2, line.length()-24);
+            emit progress_filename(strfilename.toString());
+            return true;
+        }
+    }
+    else if(m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line))
     {
         int pos = line.indexOf(QLatin1Char( '%' ));
         if (pos > 1)

@@ -219,6 +219,8 @@ private:
     QVector<Archive::Entry*> m_extractedFiles;
     qulonglong m_archiveSizeOnDisk = 0;
     qulonglong m_listedSize = 0;
+    int m_curfilenumber = 0;
+    int m_allfilenumber = 0;
 
 protected Q_SLOTS:
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
