@@ -1,31 +1,3 @@
-/*
- * Copyright (c) 2007 Henrique Pinto <henrique.pinto@kdemail.net>
- * Copyright (c) 2008-2009 Harald Hvaal <haraldhv@stud.ntnu.no>
- * Copyright (c) 2009-2012 Raphael Kubo da Costa <rakuco@FreeBSD.org>
- * Copyright (c) 2016 Vladyslav Batyrenko <mvlabat@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ( INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION ) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * ( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 #ifndef JOBS_H
 #define JOBS_H
 
@@ -46,10 +18,6 @@ class  Job : public KJob
 
 public:
 
-    /**
-     * @return The archive processed by this job.
-     * @warning This method should not be called before start().
-     */
     Archive *archive() const;
     QString errorString() const override;
     void start() override;
@@ -96,23 +64,7 @@ private:
     Private * const d;
 };
 
-/**
- * Load an existing archive.
- * Example usage:
- *
- * \code
- *
- * auto job = Archive::load(filename);
- * connect(job, &KJob::result, [](KJob *job) {
- *     if (!job->error) {
- *         auto archive = qobject_cast<Archive::LoadJob*>(job)->archive();
- *         // do something with archive.
- *     }
- * });
- * job->start();
- *
- * \endcode
- */
+
 class LoadJob : public Job
 {
     Q_OBJECT
@@ -150,11 +102,7 @@ signals:
     void sigLodJobPassword();
 };
 
-/**
- * Perform a batch extraction of an existing archive.
- * Internally it runs a LoadJob before the actual extraction,
- * to figure out properties such as the subfolder name.
- */
+
 class BatchExtractJob : public Job
 {
     Q_OBJECT
@@ -175,9 +123,6 @@ private Q_SLOTS:
 
 private:
 
-    /**
-     * Tracks whether the job is loading or extracting the archive.
-     */
     enum Step {Loading, Extracting};
 
     void setupDestination();
@@ -191,9 +136,7 @@ private:
     unsigned long m_lastPercentage = 0;
 };
 
-/**
- * Create a new archive given a bunch of entries.
- */
+
 class CreateJob : public Job
 {
     Q_OBJECT
@@ -201,15 +144,8 @@ class CreateJob : public Job
 public:
     explicit CreateJob(Archive *archive, const QVector<Archive::Entry*> &entries, const CompressionOptions& options);
 
-    /**
-     * @param password The password to encrypt the archive with.
-     * @param encryptHeader Whether to encrypt also the list of files.
-     */
     void enableEncryption(const QString &password, bool encryptHeader);
 
-    /**
-     * Set whether the new archive should be multivolume.
-     */
     void setMultiVolume(bool isMultiVolume);
 
 public Q_SLOTS:
@@ -250,30 +186,16 @@ private:
     ExtractionOptions m_options;
 };
 
-/**
- * Abstract base class for jobs that extract a single file to a temporary dir.
- * It's not possible to pass extraction options and paths will be always preserved.
- * The only option that the job needs to know is whether the file is password protected.
- */
+
 class TempExtractJob : public Job
 {
     Q_OBJECT
 
 public:
     TempExtractJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface);
-
-    /**
-     * @return The absolute path of the extracted file.
-     * The path is validated in order to prevent directory traversal attacks.
-     */
     QString validatedFilePath() const;
 
     ExtractionOptions extractionOptions() const;
-
-    /**
-     * @return The temporary dir used for the extraction.
-     * It is safe to delete this pointer in order to remove the directory.
-     */
     QTemporaryDir *tempDir() const;
 
 public Q_SLOTS:
@@ -287,10 +209,6 @@ private:
     bool m_passwordProtectedHint;
 };
 
-/**
- * This TempExtractJob can be used to preview a file.
- * The temporary extraction directory will be deleted upon job's completion.
- */
 class PreviewJob : public TempExtractJob
 {
     Q_OBJECT
@@ -299,10 +217,7 @@ public:
     PreviewJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface);
 };
 
-/**
- * This TempExtractJob can be used to open a file in its dedicated application.
- * For this reason, the temporary extraction directory will NOT be deleted upon job's completion.
- */
+
 class OpenJob : public TempExtractJob
 {
     Q_OBJECT
@@ -339,10 +254,6 @@ private:
     CompressionOptions m_options;
 };
 
-/**
- * This MoveJob can be used to rename or move entries within the archive.
- * @see Archive::moveFiles for more details.
- */
 class MoveJob : public Job
 {
 Q_OBJECT
@@ -363,10 +274,7 @@ private:
     CompressionOptions m_options;
 };
 
-/**
- * This CopyJob can be used to copy entries within the archive.
- * @see Archive::copyFiles for more details.
- */
+
 class CopyJob : public Job
 {
 Q_OBJECT

@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 2016 Vladyslav Batyrenko <mvlabat@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ( INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION ) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * ( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 #ifndef ARCHIVEENTRY_H
 #define ARCHIVEENTRY_H
 
@@ -41,16 +16,6 @@ class Archive::Entry : public QObject
 {
     Q_OBJECT
 
-    /**
-     * Meta data related to one entry in a compressed archive.
-     *
-     * When creating a plugin, information about every single entry in
-     * an archive is contained in an ArchiveEntry, and metadata
-     * is set with the entries in this enum.
-     *
-     * Please notice that not all archive formats support all the properties
-     * below, so set those that are available.
-     */
     Q_PROPERTY(QString fullPath MEMBER m_fullPath WRITE setFullPath)
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString permissions MEMBER m_permissions)
@@ -90,11 +55,6 @@ public:
     int row() const;
     Entry *find(const QString &name) const;
     Entry *findByPath(const QStringList & pieces, int index = 0) const;
-
-    /**
-     * Fills @p dirs and @p files with the number of directories and files
-     * in the entry (both will be 0 if the entry is not a directory).
-     */
     void countChildren(uint &dirs, uint &files) const;
 
     bool operator==(const Archive::Entry &right) const;
