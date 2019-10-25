@@ -68,7 +68,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     mainLayout->setStretchFactor(contentLayout, 9);
     mainLayout->setStretchFactor(pathlayout, 1);
     mainLayout->setStretchFactor(buttonlayout, 1);
-    mainLayout->setContentsMargins(20, 1, 20, 20);
+    mainLayout->setContentsMargins(12, 1, 20, 20);
 
     setBackgroundRole(DPalette::Base);
 

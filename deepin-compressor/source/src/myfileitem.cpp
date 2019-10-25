@@ -16,6 +16,7 @@ MyFileItem::MyFileItem(const QString &text)
 MyFileItem::MyFileItem(const QIcon &icon, const QString &text)
    : QStandardItem(icon, text)
 {
+
 }
 
 

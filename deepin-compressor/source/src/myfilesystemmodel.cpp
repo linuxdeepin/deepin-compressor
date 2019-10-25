@@ -35,7 +35,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
         case 0:
             return tr("名称");
         case 3:
-            return tr("大小");
+            return "      " + tr("大小");
         case 2:
             return tr("类型");
         case 1:
@@ -53,7 +53,8 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
 
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
-    if(0==index.row() && 0==index.column())
+
+    if(1==index.row() && 0==index.column())
     {
         if(ppathindex && *ppathindex > 0)
         {
@@ -74,7 +75,25 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
         QFileInfo file = fileInfo(index);
         switch (role) {
         case Qt::TextAlignmentRole:
-            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+            if(3 == index.column())
+            {
+                return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            }
+            else {
+                return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+            }
+        case Qt::FontRole:
+            if(0 == index.column())
+            {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                font.setWeight(QFont::Medium);
+                return font;
+            }
+            else {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                font.setWeight(QFont::Normal);
+                return font;
+            }
         case Qt::DisplayRole: {
             switch (index.column()) {
             case 3:
@@ -91,21 +110,21 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                     {
                         count -= 2;
                     }
-                    return QString::number(count) + tr("项");
+                    return QString::number(count) + " " + tr("项")+  "    ";
                 }
                 else {
 
-                    return Utils::humanReadableSize(file.size(), 1);
+                    return Utils::humanReadableSize(file.size(), 1)+  "    ";
                 }
             }
             case 2:
             {
                 QMimeType mimetype = determineMimeType(file.filePath());
-                return m_mimetype->displayName(mimetype.name());
+                return " " + m_mimetype->displayName(mimetype.name());
             }
             case 1:
             {
-                return QLocale().toString(lastModified(index), "yyyy/MM/dd hh:mm:ss");
+                return " " + QLocale().toString(lastModified(index), "yyyy/MM/dd hh:mm:ss");
             }
 
             }

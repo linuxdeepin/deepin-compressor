@@ -40,7 +40,7 @@ CompressPage::CompressPage(QWidget *parent)
     mainLayout->addLayout(buttonlayout);
     mainLayout->setStretchFactor(contentLayout, 10);
     mainLayout->setStretchFactor(buttonlayout, 1);
-    mainLayout->setContentsMargins(20, 1, 20, 20);
+    mainLayout->setContentsMargins(12, 1, 20, 20);
 
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                              QSettings::IniFormat);
@@ -53,6 +53,7 @@ CompressPage::CompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
 
     setBackgroundRole(DPalette::Base);
+    m_fileviewer->setAutoFillBackground(true);
 
 }
 

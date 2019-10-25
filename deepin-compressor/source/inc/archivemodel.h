@@ -8,6 +8,8 @@
 #include <QScopedPointer>
 #include <QTableView>
 #include "mimetypedisplaymanager.h"
+#include <DFontSizeManager>
+DWIDGET_USE_NAMESPACE
 
 class Query;
 

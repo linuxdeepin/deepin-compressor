@@ -41,7 +41,7 @@ ArchiveModel::~ArchiveModel()
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const
 {
-    if(0==index.row() && 0==index.column())
+    if(1==index.row() && 0==index.column())
     {
         if(m_ppathindex && *m_ppathindex > 0)
         {
@@ -69,22 +69,22 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             case Type:
             {
                 QMimeType mimetype = determineMimeType(entry->fullPath());
-                return m_mimetype->displayName(mimetype.name());
+                return " " + m_mimetype->displayName(mimetype.name());
             }
             case Size:
                 if (entry->isDir()) {
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    return QString::number(dirs + files) + tr("项");//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    return QString::number(dirs + files) + " " + tr("项") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
-                    return Utils::humanReadableSize(entry->property("size").toInt(), 1);
+                    return Utils::humanReadableSize(entry->property("size").toInt(), 1) +  "    ";
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
-                return QLocale().toString(timeStamp, "yyyy/MM/dd hh:mm:ss");
+                return " " + QLocale().toString(timeStamp, "yyyy/MM/dd hh:mm:ss");
             }
 
             default:
@@ -99,7 +99,25 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             }
             return QVariant();
         case Qt::TextAlignmentRole:
-            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+            if(m_showColumns.at(index.column()) == Size)
+            {
+                return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            }
+            else {
+                return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+            }
+        case Qt::FontRole:
+            if(0 == index.column())
+            {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                font.setWeight(QFont::Medium);
+                return font;
+            }
+            else {
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                font.setWeight(QFont::Normal);
+                return font;
+            }
         default:
             return QVariant();
         }
@@ -133,7 +151,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
         case FullPath:
             return tr("名称");
         case Size:
-            return tr("大小");
+            return "      " + tr("大小");
         case Type:
             return tr("类型");
         case Timestamp:

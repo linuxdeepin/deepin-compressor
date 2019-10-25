@@ -11,6 +11,9 @@
 #include <QStandardItem>
 #include <QTableView>
 #include "mimetypedisplaymanager.h"
+#include <DFontSizeManager>
+
+DWIDGET_USE_NAMESPACE
 
 namespace  MyFileSystemDefine{
     const int  gTableHeight=36;

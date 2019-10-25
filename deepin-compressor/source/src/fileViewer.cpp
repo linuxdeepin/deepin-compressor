@@ -171,7 +171,6 @@ fileViewer::~fileViewer()
 
 void fileViewer::InitUI()
 {
-
     QHBoxLayout* mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView();
@@ -186,7 +185,6 @@ void fileViewer::InitUI()
     QStringList labels = QObject::trUtf8("名称,大小,类型,修改时间").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
-
     pScrollbar= new MyScrollBar();
     pTableViewFile->setVerticalScrollBar(pScrollbar);
     pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -199,18 +197,18 @@ void fileViewer::InitUI()
     pTableViewFile->horizontalHeader()->setHighlightSections(false);  //防止表头塌陷
     pTableViewFile->setSortingEnabled(true);
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
-    pTableViewFile->setStyleSheet("QHeaderView::section{border: 0px solid white;"
-                                  "min-height:36px; background-color:white}");
+
+    QHeaderView* headerview = pTableViewFile->horizontalHeader();
+    headerview->setMinimumHeight(MyFileSystemDefine::gTableHeight);
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(headerview);
+    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
+    headerview->setPalette(pa);
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-//    DPalette pa;
-//    pa.setColor(DPalette::Background,QColor(246, 246, 246));
-
     plabel->setText(".. 返回上一级");
-    plabel->setStyleSheet("background-color:#F6F6F6");
-//    plabel->setPalette(pa);
-//    plabel->setAutoFillBackground(true);
+    plabel->setAutoFillBackground(true);
     plabel->hide();
 
     plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,MyFileSystemDefine::gTableHeight);
@@ -227,6 +225,10 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
     }
+
+    pTableViewFile->setBackgroundRole(DPalette::Base);
+    pTableViewFile->setAutoFillBackground(true);
+    setBackgroundRole(DPalette::Base);
 
     refreshTableview();
 }
@@ -245,7 +247,7 @@ void fileViewer::refreshTableview()
     item = new MyFileItem(QObject::trUtf8("类型"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new MyFileItem(QObject::trUtf8("大小"));
+    item = new MyFileItem("      " + QObject::trUtf8("大小"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
 
@@ -257,6 +259,9 @@ void fileViewer::refreshTableview()
     {
         item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+        font.setWeight(QFont::Medium);
+        item->setFont(font);
         firstmodel->setItem(rowindex,0,item);
         if(fileinfo.isDir())
         {
@@ -270,20 +275,29 @@ void fileViewer::refreshTableview()
             {
                 count -= 2;
             }
-            item = new MyFileItem(QString::number(count) + tr("项"));
+            item = new MyFileItem(QString::number(count) + " " + tr("项")+  "    ");
         }
         else
         {
-            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1));
+            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1)+  "    ");
         }
-        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+        font.setWeight(QFont::Normal);
+        item->setFont(font);
+        item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
         firstmodel->setItem(rowindex,3,item);
         QMimeType mimetype = determineMimeType(fileinfo.filePath());
-        item = new MyFileItem(m_mimetype->displayName(mimetype.name()));
+        item = new MyFileItem(" " + m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+        font.setWeight(QFont::Normal);
+        item->setFont(font);
         firstmodel->setItem(rowindex,2,item);
-        item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
+        item = new MyFileItem(" " + QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+        font.setWeight(QFont::Normal);
+        item->setFont(font);
         firstmodel->setItem(rowindex,1,item);
         rowindex++;
     }
@@ -324,10 +338,10 @@ void fileViewer::InitConnection()
 void fileViewer::resizecolumn()
 {
     qDebug()<<pTableViewFile->width();
-    pTableViewFile->setColumnWidth(0, pTableViewFile->width()*9/20);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*5/20);
-    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*3/20);
-    pTableViewFile->setColumnWidth(3, pTableViewFile->width()*3/20);
+    pTableViewFile->setColumnWidth(0, pTableViewFile->width()*14/29);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*8/29);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*3/29);
+    pTableViewFile->setColumnWidth(3, pTableViewFile->width()*3/29);
 }
 
 void fileViewer::resizeEvent(QResizeEvent* size)
