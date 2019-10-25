@@ -8,3 +8,4 @@ MimeType=application/x-tar;application/x-compressed-tar;application/x-bzip-compr
 GenericName[zh_CN]=解压缩到当前文件夹(deepin)
 Name[zh_CN]=解压缩到当前文件夹(deepin)
 X-DFM-MenuTypes=SingleFile;SingleDir
+X-DFM-SupportSchemes=file

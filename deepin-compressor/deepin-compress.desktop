@@ -8,3 +8,4 @@ X-DFM-ExcludeMimeTypes=application/x-tar;application/x-compressed-tar;applicatio
 GenericName[zh_CN]=压缩(deepin)
 Name[zh_CN]=压缩(deepin)
 X-DFM-MenuTypes=SingleFile;SingleDir
+X-DFM-SupportSchemes=file

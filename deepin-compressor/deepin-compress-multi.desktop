@@ -7,3 +7,4 @@ MimeType=*
 GenericName[zh_CN]=压缩工具
 Name[zh_CN]=压缩(deepin)
 X-DFM-MenuTypes=MultiFileDirs
+X-DFM-SupportSchemes=file
