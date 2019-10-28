@@ -8,8 +8,33 @@
 #include <QPointer>
 #include <QUrl>
 #include <DDialog>
+#include <DFontSizeManager>
+#include <DApplicationHelper>
+#include <DLabel>
+#include <QBoxLayout>
+#include <QImageReader>
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
+
+static QPixmap renderSVG(const QString &filePath, const QSize &size)
+{
+    QImageReader reader;
+    QPixmap pixmap;
+
+    reader.setFileName(filePath);
+
+    if (reader.canRead()) {
+        const qreal ratio = qApp->devicePixelRatio();
+        reader.setScaledSize(size * ratio);
+        pixmap = QPixmap::fromImage(reader.read());
+        pixmap.setDevicePixelRatio(ratio);
+    } else {
+        pixmap.load(filePath);
+    }
+
+    return pixmap;
+}
 
 Query::Query()
 {
@@ -48,23 +73,84 @@ void OverwriteQuery::execute()
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
 
     QString path = sourceUrl.toString();
-    if(path.contains("file:"))
+    if(path.contains("file://"))
     {
-        path.remove("file:");
+        path.remove("file://");
     }
 
+    QFileInfo file(path);
+
     DDialog* dialog = new DDialog;
-    QString message = QObject::tr("文件已存在，是否覆盖?\n")  + path;
-    dialog->setMessage(message);
-    dialog->addButton(QObject::tr("取消"));
+    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(32, 32));
+    dialog->setIconPixmap(pixmap);
+
+    DPalette pa;
+
+    DLabel* strlabel = new DLabel;
+    pa = DApplicationHelper::instance()->palette(strlabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+    strlabel->setPalette(pa);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    font.setWeight(QFont::Medium);
+    strlabel->setFont(font);
+    strlabel->setText(file.fileName());
+    DLabel* strlabel2 = new DLabel;
+    pa = DApplicationHelper::instance()->palette(strlabel2);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextWarning));
+    strlabel2->setPalette(pa);
+
+    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    strlabel2->setFont(font);
+    strlabel2->setText(QObject::tr("文件已存在，如何处理？"));
+
     dialog->addButton(QObject::tr("跳过"));
-    dialog->addButton(QObject::tr("全部跳过"));
     dialog->addButton(QObject::tr("覆盖"));
-    dialog->addButton(QObject::tr("全部覆盖"));
+
+    DCheckBox* checkbox = new DCheckBox;
+    checkbox->setText(QObject::tr("应用到全部文件"));
+
+    QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    DWidget* widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+//    QString message = QObject::tr("文件已存在，是否覆盖?\n")  + path;
+//    dialog->setMessage(message);
+//    dialog->addButton(QObject::tr("取消"));
+//    dialog->addButton(QObject::tr("跳过"));
+//    dialog->addButton(QObject::tr("全部跳过"));
+//    dialog->addButton(QObject::tr("覆盖"));
+//    dialog->addButton(QObject::tr("全部覆盖"));
     const int mode = dialog->exec();
 
-    setResponse(mode);
-
+    if(-1 == mode)
+    {
+        setResponse(Result_Cancel);
+    }
+    else if(0 == mode)
+    {
+        if(checkbox->isChecked())
+        {
+            setResponse(Result_AutoSkip);
+        }
+        else {
+            setResponse(Result_Skip);
+        }
+    }
+    else if(1 == mode)
+    {
+        if(checkbox->isChecked())
+        {
+            setResponse(Result_OverwriteAll);
+        }
+        else {
+            setResponse(Result_Overwrite);
+        }
+    }
 
     QApplication::restoreOverrideCursor();
 }
