@@ -868,7 +868,7 @@ bool CliInterface::handleLine(const QString& line)
         }
     }
 
-    if ((m_operationMode == Extract) && (m_process->program().at(0).contains("zip"))) {
+    if ((m_operationMode == Extract || m_operationMode == Add) && (m_process->program().at(0).contains("zip"))) {
         //read the percentage
         int pos = line.indexOf(QLatin1Char( ':' ));
         if (pos > 1 && line.length()>17) {
