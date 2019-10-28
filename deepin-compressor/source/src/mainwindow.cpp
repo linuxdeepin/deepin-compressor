@@ -74,6 +74,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
     emit sigquitApp();
 }
 
+void MainWindow::timerEvent(QTimerEvent* event)
+{
+    if(m_timerId == event->timerId())
+    {
+        m_progressTransFlag = true;
+        killTimer(m_timerId);
+        m_timerId = 0;
+    }
+}
+
 void MainWindow::InitUI()
 {
     if (m_settings->value("dir").toString().isEmpty()) {
@@ -538,6 +548,7 @@ void MainWindow::loadArchive(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
 {
+    m_progressTransFlag = false;
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
     if (!m_model) {
@@ -616,9 +627,18 @@ void MainWindow::SlotProgress(KJob *job, unsigned long percent)
     }
     else if((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent > 0))
     {
-        m_pageid = PAGE_UNZIPPROGRESS;
-        m_Progess->settype(DECOMPRESSING);
-        refreshPage();
+        if(!m_progressTransFlag)
+        {
+            if(0 == m_timerId)
+            {
+                m_timerId = startTimer(800);
+            }
+        }
+        else {
+            m_pageid = PAGE_UNZIPPROGRESS;
+            m_Progess->settype(DECOMPRESSING);
+            refreshPage();
+        }
     }
     else if((PAGE_ZIPSET == m_pageid) && (percent < 100) && (percent > 0))
     {
@@ -680,6 +700,7 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
+    m_progressTransFlag = false;
     if(Encryption_Load == m_encryptiontype)
     {
         LoadPassword(password);
@@ -910,6 +931,7 @@ void MainWindow::slotCompressFinished(KJob *job)
 
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path)
 {
+    m_progressTransFlag = false;
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_SingleExtract;
     m_progressdialog->clearprocess();

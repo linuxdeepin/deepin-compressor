@@ -80,6 +80,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void closeEvent(QCloseEvent *event) override;
+    void timerEvent(QTimerEvent* event) override;
 
     void InitUI();
     void InitConnection();
@@ -177,6 +178,9 @@ private:
     EncryptionType m_encryptiontype;
     bool m_isrightmenu;
     WorkState m_workstatus;
+
+    int m_timerId = 0;
+    bool m_progressTransFlag = false;
 };
 
 #endif
