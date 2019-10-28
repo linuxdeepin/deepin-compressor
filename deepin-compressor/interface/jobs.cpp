@@ -139,6 +139,7 @@ void Job::onCancelled()
 {
     qDebug() << "Cancelled emitted";
     setError(KJob::KilledJobError);
+    emit sigCancelled();
 }
 
 void Job::onError(const QString & message, const QString & details)

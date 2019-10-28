@@ -670,6 +670,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
             m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
             this, SLOT(SlotProgressFile(KJob*, const QString &)));
+    connect(m_encryptionjob, &ExtractJob::sigCancelled,
+            this, &MainWindow::sigquitApp);
 
     m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
@@ -844,6 +846,8 @@ void MainWindow::ExtractPassword(QString password)
                 m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
         connect(m_encryptionjob, SIGNAL(percentfilename(KJob*, const QString &)),
                 this, SLOT(SlotProgressFile(KJob*, const QString &)));
+        connect(m_encryptionjob, &ExtractJob::sigCancelled,
+                this, &MainWindow::sigquitApp);
 
         m_encryptionjob->start();
     }

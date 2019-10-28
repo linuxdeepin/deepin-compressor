@@ -81,7 +81,7 @@ void OverwriteQuery::execute()
     QFileInfo file(path);
 
     DDialog* dialog = new DDialog;
-    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(32, 32));
+    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
 
     DPalette pa;
@@ -110,9 +110,9 @@ void OverwriteQuery::execute()
     checkbox->setText(QObject::tr("应用到全部文件"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel2, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    mainlayout->addWidget(checkbox, 0, Qt::AlignLeft | Qt::AlignVCenter);
 
     DWidget* widget = new DWidget;
 

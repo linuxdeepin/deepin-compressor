@@ -53,6 +53,7 @@ Q_SIGNALS:
     void newEntry(Archive::Entry*);
     void userQuery(Query*);
     void sigWrongPassword();
+    void sigCancelled();
 
 
 private:
