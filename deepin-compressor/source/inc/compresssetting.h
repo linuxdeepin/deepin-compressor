@@ -74,6 +74,7 @@ public slots:
     void onNextButoonClicked();
     void onAdvanceButtonClicked(bool status);
     void ontypeChanged(int index);
+    void onSplitValueChanged(double value);
 
     void onRetrunPressed();
 };

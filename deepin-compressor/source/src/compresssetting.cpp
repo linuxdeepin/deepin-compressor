@@ -131,6 +131,7 @@ void CompressSetting::InitConnection()
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
+    connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
 }
 
 
@@ -288,22 +289,6 @@ void CompressSetting::ontypeChanged(int index)
         m_splitnumedit->setEnabled(true);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(true);
-
-        int filesize = 0;
-        foreach(QString path, m_pathlist)
-        {
-            filesize += dirFileSize(path);
-        }
-
-        if(filesize < 1024*1024*5)
-        {
-            m_splitnumedit->setEnabled(false);
-            m_splitnumedit->setValue(double(filesize)/(1024*1024));
-        }
-        else {
-            m_splitnumedit->setValue(5.0);
-            m_splitnumedit->setRange(5.0, double(filesize)/(1024*1024));
-        }
     }
     else if(10 == index)
     {
@@ -320,6 +305,25 @@ void CompressSetting::ontypeChanged(int index)
         m_splitnumedit->setRange(0.0, 5.0);
         m_splitnumedit->setValue(0.0);
     }
+}
+
+void CompressSetting::onSplitValueChanged(double value)
+{
+//    int filesize = 0;
+//    foreach(QString path, m_pathlist)
+//    {
+//        filesize += dirFileSize(path);
+//    }
+
+//    if(filesize < 1024*1024*5)
+//    {
+//        m_splitnumedit->setEnabled(false);
+//        m_splitnumedit->setValue(double(filesize)/(1024*1024));
+//    }
+//    else if(value < 5.0){
+//        m_splitnumedit->setValue(5.0);
+//        m_splitnumedit->setRange(5.0, double(filesize)/(1024*1024));
+//    }
 }
 
 void CompressSetting::onRetrunPressed()
