@@ -3,6 +3,7 @@
 #include <QFileIconProvider>
 #include <QTemporaryFile>
 #include <QVBoxLayout>
+#include <QDebug>
 
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
@@ -17,7 +18,7 @@ void Progress::InitUI()
 {
     m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
-    m_pixmaplabel->setPixmap(m_compressicon);
+//    m_pixmaplabel->setPixmap(m_compressicon);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
     font.setBold(true);
@@ -87,7 +88,7 @@ void Progress::setprogress(uint percent)
 void Progress::setFilename(QString filename)
 {
     QFileInfo fileinfo(filename);
-    setTypeImage(fileinfo.suffix());
+    setTypeImage(fileinfo.completeSuffix());
     m_filenamelabel->setText(filename);
 }
 
