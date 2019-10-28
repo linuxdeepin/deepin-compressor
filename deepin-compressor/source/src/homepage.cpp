@@ -23,6 +23,7 @@
 #include <QDir>
 #include <DFileDialog>
 #include <DPalette>
+#include <QShortcut>
 DGUI_USE_NAMESPACE
 
 HomePage::HomePage(QWidget *parent)
@@ -78,6 +79,10 @@ HomePage::HomePage(QWidget *parent)
 
     m_spinner->move(285, 200);
     m_spinner->hide();
+
+    auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
+    openkey->setContext(Qt::ApplicationShortcut);
+    connect(openkey, &QShortcut::activated, this, &HomePage::onChooseBtnClicked);
 
     setBackgroundRole(DPalette::Background);
 }

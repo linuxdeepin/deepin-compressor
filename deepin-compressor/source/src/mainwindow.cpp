@@ -31,11 +31,15 @@
 #include <DDesktopServices>
 #include <QMimeDatabase>
 #include <QFileIconProvider>
+#include <QShortcut>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include "pluginmanager.h"
 
 //#include "archivejob.h"
 #include "jobs.h"
 
+//static QString shortcut_json =
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -120,6 +124,53 @@ void MainWindow::InitUI()
 
 }
 
+QJsonObject MainWindow::creatShorcutJson()
+{
+    QJsonObject shortcut1;
+    shortcut1.insert("name", tr("关闭"));
+    shortcut1.insert("value", "Alt+F4");
+
+    QJsonObject shortcut2;
+    shortcut2.insert("name", tr("帮助"));
+    shortcut2.insert("value", "F1");
+
+    QJsonObject shortcut3;
+    shortcut3.insert("name", tr("选择文件"));
+    shortcut3.insert("value", "Ctrl+O");
+
+    QJsonObject shortcut4;
+    shortcut4.insert("name", tr("删除"));
+    shortcut4.insert("value", "Delete");
+
+    QJsonObject shortcut5;
+    shortcut5.insert("name", tr("显示快捷键预览"));
+    shortcut5.insert("value", "Ctrl+Shift+/");
+
+    QJsonObject shortcut6;
+    shortcut6.insert("name", tr("重命名"));
+    shortcut6.insert("value", "F2");
+
+    QJsonArray shortcutArray;
+    shortcutArray.append(shortcut1);
+    shortcutArray.append(shortcut2);
+    shortcutArray.append(shortcut3);
+    shortcutArray.append(shortcut4);
+    shortcutArray.append(shortcut5);
+    shortcutArray.append(shortcut6);
+
+    QJsonObject shortcut_group;
+    shortcut_group.insert("groupName", "快捷键");
+    shortcut_group.insert("groupItems", shortcutArray);
+
+    QJsonArray shortcutArrayall;
+    shortcutArrayall.append(shortcut_group);
+
+    QJsonObject main_shortcut;
+    main_shortcut.insert("shortcut", shortcutArrayall);
+
+    return main_shortcut;
+}
+
 void MainWindow::InitConnection()
 {
     // connect the signals to the slot function.
@@ -139,6 +190,25 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles,this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry,this, &MainWindow::slotFailRetry);
+
+    auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
+    openkey->setContext(Qt::ApplicationShortcut);
+    connect(openkey, &QShortcut::activated, this, [this] {
+        QRect rect = window()->geometry();
+        QPoint pos(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
+        QStringList shortcutString;
+        QJsonObject json = creatShorcutJson();
+
+        QString param1 = "-j=" + QString(QJsonDocument(json).toJson());
+        QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+        shortcutString << param1 << param2;
+
+        QProcess* shortcutViewProcess = new QProcess();
+        shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+        connect(shortcutViewProcess, SIGNAL(finished(int)),
+        shortcutViewProcess, SLOT(deleteLater()));
+    });
 }
 
 void MainWindow::customMessageHandler(const QString &msg)
@@ -156,8 +226,8 @@ QMenu* MainWindow::createSettingsMenu()
 {
     QMenu *menu = new QMenu;
 
-    QAction *openAction = menu->addAction(tr("打开"));
-    connect(openAction, &QAction::triggered, this, [this] {
+    m_openAction = menu->addAction(tr("打开"));
+    connect(m_openAction, &QAction::triggered, this, [this] {
         DFileDialog dialog;
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
         dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -185,8 +255,6 @@ QMenu* MainWindow::createSettingsMenu()
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
-
-
 
     return menu;
 }
@@ -331,10 +399,12 @@ void MainWindow::setDisable()
 
 void MainWindow::refreshPage()
 {
+    m_openAction->setEnabled(false);
     setAcceptDrops(false);
     m_titlebutton->setVisible(false);
     switch (m_pageid) {
     case PAGE_HOME:
+        m_openAction->setEnabled(true);
         m_mainLayout->setCurrentIndex(0);
         setQLabelText(m_titlelabel, "");
         setAcceptDrops(true);
@@ -345,6 +415,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, m_decompressfilename);
         break;
     case PAGE_ZIP:
+        m_openAction->setEnabled(true);
         m_mainLayout->setCurrentIndex(2);
         setQLabelText(m_titlelabel, tr("新建归档文件"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);

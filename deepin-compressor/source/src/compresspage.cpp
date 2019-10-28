@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QUrl>
 #include <DRecentManager>
+#include <QShortcut>
 
 
 
@@ -51,6 +52,9 @@ CompressPage::CompressPage(QWidget *parent)
 
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
+    auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
+    openkey->setContext(Qt::ApplicationShortcut);
+    connect(openkey, &QShortcut::activated, this, &CompressPage::onAddfileSlot);
 
     setBackgroundRole(DPalette::Base);
     m_fileviewer->setAutoFillBackground(true);

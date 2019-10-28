@@ -9,6 +9,7 @@
 #include <QTemporaryFile>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <qevent.h>
 
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
@@ -324,6 +325,38 @@ void CompressSetting::onSplitValueChanged(double value)
 //        m_splitnumedit->setValue(5.0);
 //        m_splitnumedit->setRange(5.0, double(filesize)/(1024*1024));
 //    }
+}
+
+void CompressSetting::keyPressEvent(QKeyEvent *event)
+{
+    if(!event)
+    {
+        return;
+    }
+    if(event->key() == Qt::Key_F2) {
+
+        QLineEdit* qfilename = m_filename->lineEdit();
+        QLineEdit* qpath = m_savepath->lineEdit();
+        QLineEdit* qpassword = m_password->lineEdit();
+        if(qfilename->hasFocus())
+        {
+            qfilename->selectAll();
+        }
+        else if(qpath->hasFocus())
+        {
+            qpath->selectAll();
+        }
+        else if(qpassword->hasFocus())
+        {
+            qpassword->selectAll();
+        }
+        else if(m_splitnumedit->hasFocus())
+        {
+            m_splitnumedit->selectAll();
+        }
+    }
+
+
 }
 
 void CompressSetting::onRetrunPressed()

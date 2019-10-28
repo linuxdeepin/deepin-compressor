@@ -351,6 +351,10 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     if (statBuffer.valid & ZIP_STAT_NAME) {
         QTextCodec* codec = QTextCodec::codecForName(detectEncode(statBuffer.name));
         e->setFullPath(codec->toUnicode(statBuffer.name));
+//        QByteArray bytearrary(statBuffer.name);
+//        qDebug()<<detectEncode(statBuffer.name);
+//        qDebug()<<bytearrary;
+//        qDebug()<<codec->toUnicode(statBuffer.name);
     }
 
     if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {

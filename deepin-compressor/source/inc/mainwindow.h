@@ -146,6 +146,7 @@ private:
 
     void setCompressDefaultPath();
     void setQLabelText(QLabel *label, const QString &text);
+    QJsonObject creatShorcutJson();
 
 private:
     DLabel* m_logo;
@@ -181,6 +182,7 @@ private:
 
     int m_timerId = 0;
     bool m_progressTransFlag = false;
+    QAction *m_openAction;
 };
 
 #endif

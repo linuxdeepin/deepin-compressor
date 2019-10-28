@@ -30,6 +30,8 @@ public:
     CompressSetting(QWidget* parent = 0);
     ~CompressSetting();
 
+    void keyPressEvent(QKeyEvent *event) override;
+
     void InitUI();
     void InitConnection();
 
