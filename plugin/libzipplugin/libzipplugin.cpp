@@ -160,6 +160,7 @@ bool LibzipPlugin::list()
     // Get number of archive entries.
     const auto nofEntries = zip_get_num_entries(archive, 0);
 
+    detectAllfile(archive, nofEntries);
     // Loop through all archive entries.
     for (int i = 0; i < nofEntries; i++) {
 
@@ -174,6 +175,62 @@ bool LibzipPlugin::list()
     zip_close(archive);
     m_listAfterAdd = false;
     return true;
+}
+
+void LibzipPlugin::detectAllfile(zip_t *archive, int num)
+{
+    m_codecname.clear();
+    QByteArrayList codeclist;
+
+    // Loop through all archive entries.
+    for (int i = 0; i < num; i++) {
+        zip_stat_t statBuffer;
+        if (zip_stat_index(archive, i, ZIP_FL_ENC_RAW, &statBuffer)) {
+            return;
+        }
+
+        if (statBuffer.valid & ZIP_STAT_NAME) {
+            QByteArray codec = detectEncode(statBuffer.name);
+            codeclist.append(codec);
+        }
+    }
+    if(codeclist.count() > 1)
+    {
+        QMap<QByteArray, int> codec_map;
+        QByteArray max_codec;
+
+        foreach(QByteArray codec, codeclist)
+        {
+
+            if(!codec_map.contains(codec))
+            {
+                int count = codeclist.count(codec);
+                codec_map.insert(codec, count);
+
+                if (codec_map.value(max_codec) < count)
+                {
+                    max_codec = codec;
+                }
+            }
+        }
+
+        m_codecname = max_codec;
+    }
+}
+
+QString  LibzipPlugin::trans2uft8(const char* str)
+{
+    QByteArray codec_name = detectEncode(str);
+    if("UTF-8" != codec_name)
+    {
+        QTextCodec* codec = QTextCodec::codecForName(m_codecname);
+        m_codecstr = m_codecname;
+        return codec->toUnicode(str);
+    }
+    else {
+        m_codecstr = "UTF-8";
+        return QString(str);
+    }
 }
 
 bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, uint numberOfEntriesToAdd)
@@ -254,11 +311,7 @@ void LibzipPlugin::emitProgress(double percentage)
     int i = m_filesize*percentage;
     if(m_addarchive)
     {
-        QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
-        QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
-        QString nameunicode = codec->toUnicode(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW));
-        QString name = codecutf8->fromUnicode(nameunicode);
-        emit progress_filename(name);
+        emit progress_filename(trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
     }
 
     // Go from 0 to 50%. The second half is the subsequent listing.
@@ -349,12 +402,7 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     auto e = new Archive::Entry();
 
     if (statBuffer.valid & ZIP_STAT_NAME) {
-        QTextCodec* codec = QTextCodec::codecForName(detectEncode(statBuffer.name));
-        e->setFullPath(codec->toUnicode(statBuffer.name));
-//        QByteArray bytearrary(statBuffer.name);
-//        qDebug()<<detectEncode(statBuffer.name);
-//        qDebug()<<bytearrary;
-//        qDebug()<<codec->toUnicode(statBuffer.name);
+        e->setFullPath(trans2uft8(statBuffer.name));
     }
 
     if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {
@@ -595,12 +643,9 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
-            QTextCodec* codec = QTextCodec::codecForName(detectEncode(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
-            QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
-            QString nameunicode = codec->toUnicode(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-            QString name = codecutf8->fromUnicode(nameunicode);
+
             if (!extractEntry(archive,
-                              QDir::fromNativeSeparators(name),
+                              QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))),
                               QString(),
                               destinationDirectory,
                               options.preservePaths(),
@@ -608,7 +653,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
                 return false;
             }
             emit progress(float(i + 1) / nofEntries);
-            emit progress_filename(name);
+            emit progress_filename(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
         }
     } else {
         // We extract only the entries in files.
@@ -1152,11 +1197,9 @@ confidence:
     }
 
     if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
-        m_codecstr = def_codec->name();
         return def_codec->name();
     }
 
-    m_codecstr = encoding;
 
     return encoding;
 }

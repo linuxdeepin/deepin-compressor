@@ -45,6 +45,8 @@ private:
     QString permissionsToString(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
     QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    void detectAllfile(zip_t *archive, int num);
+    QString  trans2uft8(const char* str);
 
     QVector<Archive::Entry*> m_emittedEntries;
     bool m_overwriteAll;
@@ -53,6 +55,7 @@ private:
     int m_filesize;
     zip_t *m_addarchive;
     QByteArray m_codecstr;
+    QByteArray m_codecname;
 };
 
 #endif // LIBZIPPLUGIN_H
