@@ -221,7 +221,13 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
 QString  LibzipPlugin::trans2uft8(const char* str)
 {
     QByteArray codec_name = detectEncode(str);
-    if("UTF-8" != codec_name)
+    if("" == m_codecname)
+    {
+        QTextCodec* codec = QTextCodec::codecForName(codec_name);
+        m_codecstr = codec_name;
+        return codec->toUnicode(str);
+    }
+    else if("UTF-8" != codec_name)
     {
         QTextCodec* codec = QTextCodec::codecForName(m_codecname);
         m_codecstr = m_codecname;
