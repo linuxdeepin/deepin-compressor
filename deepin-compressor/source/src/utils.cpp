@@ -1,8 +1,9 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
+ * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
  *
- * Author:     rekols <rekols@foxmail.com>
- * Maintainer: rekols <rekols@foxmail.com>
+ * Author:     dongsen <dongsen@deepin.com>
+ *
+ * Maintainer: dongsen <dongsen@deepin.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
