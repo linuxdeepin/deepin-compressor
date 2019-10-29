@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
 
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");

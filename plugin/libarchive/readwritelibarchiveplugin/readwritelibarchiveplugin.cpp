@@ -298,6 +298,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
         ret = archive_write_add_filter_lzip(m_archiveWriter.data());
     } else if (filename().right(3).toUpper() == QLatin1String("LZO")) {
         ret = archive_write_add_filter_lzop(m_archiveWriter.data());
+        requiresExecutable = true;
     } else if (filename().right(3).toUpper() == QLatin1String("LRZ")) {
         ret = archive_write_add_filter_lrzip(m_archiveWriter.data());
         requiresExecutable = true;
