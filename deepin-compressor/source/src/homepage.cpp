@@ -43,7 +43,14 @@ HomePage::HomePage(QWidget *parent)
 
     m_iconLabel->setFixedSize(128, 128);
     m_iconLabel->setPixmap(m_unloadPixmap);
-    m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if(themeType == DGuiApplicationHelper::LightType)
+        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+    else if(themeType == DGuiApplicationHelper::DarkType)
+        m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+    else
+        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
 
     m_tipsLabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
@@ -85,6 +92,8 @@ HomePage::HomePage(QWidget *parent)
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &HomePage::onChooseBtnClicked);
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+                        this, &HomePage::themeChanged);
 
     setBackgroundRole(DPalette::Background);
 }
@@ -140,4 +149,15 @@ void HomePage::onChooseBtnClicked()
     }
 
     emit fileSelected(dialog.selectedFiles());
+}
+
+void HomePage::themeChanged()
+{
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if(themeType == DGuiApplicationHelper::LightType)
+        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+    else if(themeType == DGuiApplicationHelper::DarkType)
+        m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+    else
+        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 }

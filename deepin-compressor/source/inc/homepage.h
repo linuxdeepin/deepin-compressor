@@ -49,6 +49,9 @@ public:
 signals:
     void fileSelected(const QStringList files) const;
 
+public slots:
+    void themeChanged();
+
 private:
     void onChooseBtnClicked();
 
