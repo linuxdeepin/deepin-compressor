@@ -468,6 +468,10 @@ void MainWindow::refreshPage()
     case  PAGE_ENCRYPTION:
         m_mainLayout->setCurrentIndex(7);
         setQLabelText(m_titlelabel, m_decompressfilename);
+        if(m_progressdialog->isshown())
+        {
+            m_progressdialog->reject();
+        }
         break;
     default:
         break;
