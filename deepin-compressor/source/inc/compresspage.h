@@ -45,6 +45,7 @@ public:
     CompressPage(QWidget *parent = 0);
     ~CompressPage();
     QStringList getCompressFilelist();
+    void showDialog();
 
 signals:
     void sigNextPress();

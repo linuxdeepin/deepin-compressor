@@ -31,6 +31,7 @@
 #include <QUrl>
 #include <DRecentManager>
 #include <QShortcut>
+#include <DDialog>
 
 
 
@@ -101,16 +102,48 @@ void CompressPage::onNextPress()
 
 }
 
+void CompressPage::showDialog()
+{
+    DDialog* dialog = new DDialog(this);
+
+    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+    dialog->setIconPixmap(pixmap);
+
+    DPalette pa;
+
+    DLabel* strlabel = new DLabel;
+    pa = DApplicationHelper::instance()->palette(strlabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+    strlabel->setPalette(pa);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    font.setWeight(QFont::Medium);
+    strlabel->setFont(font);
+    strlabel->setText(QObject::tr("请在根目录下添加文件！"));
+
+    dialog->addButton(QObject::tr("确定"));
+
+
+    QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
+
+    DWidget* widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    dialog->moveToCenter();
+    dialog->exec();
+    return;
+}
+
 void CompressPage::onAddfileSlot()
 {
+
     if(0 != m_fileviewer->getPathIndex())
     {
-        QMessageBox msgBox;
-        msgBox.setText("请在根目录添加文件！");
-        msgBox.exec();
+        showDialog();
         return;
     }
-
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -136,6 +169,11 @@ void CompressPage::onAddfileSlot()
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
 {
+    if(0 != m_fileviewer->getPathIndex())
+    {
+        showDialog();
+        return;
+    }
     m_filelist.append(files);
     m_fileviewer->setFileList(m_filelist);
 }
