@@ -36,6 +36,7 @@
 #include "dfilechooseredit.h"
 #include <DPalette>
 #include <DApplicationHelper>
+#include <DCheckBox>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -81,7 +82,7 @@ private:
     DPushButton* m_plusbutton;
     DPushButton* m_minusbutton;
     DLabel* m_encryptedlabel;
-    DLabel* m_splitcompress;
+    DCheckBox* m_splitcompress;
     DLabel* m_encryptedfilelistlabel;
 
     PluginManager m_pluginManger;
@@ -97,6 +98,7 @@ public slots:
     void onAdvanceButtonClicked(bool status);
     void ontypeChanged(int index);
     void onSplitValueChanged(double value);
+    void onSplitChanged(int status);
 
     void onRetrunPressed();
 };

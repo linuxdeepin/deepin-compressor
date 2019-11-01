@@ -94,13 +94,15 @@ void CompressSetting::InitUI()
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
-    m_splitcompress = new DLabel(tr("分卷压缩") + ":");
+    m_splitcompress = new DCheckBox(tr("分卷压缩") + ":");
+    m_splitcompress->setEnabled(false);
     m_splitnumedit = new DDoubleSpinBox();
     m_splitnumedit->setSuffix("MB");
     m_splitnumedit->setRange(0.0, 1000000);
     m_splitnumedit->setSingleStep(0.1);
     m_splitnumedit->setDecimals(1);
     m_splitnumedit->setValue(0.0);
+    m_splitnumedit->setSpecialValueText(" ");
 
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
@@ -153,6 +155,7 @@ void CompressSetting::InitConnection()
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
+    connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
 }
 
 
@@ -298,6 +301,17 @@ void CompressSetting::setFilepath(QStringList pathlist)
     m_pathlist = pathlist;
 }
 
+void CompressSetting::onSplitChanged(int status)
+{
+    if(m_splitcompress->isChecked() && 0 == m_compresstype->currentIndex())
+    {
+        m_splitnumedit->setEnabled(true);
+    }
+    else {
+        m_splitnumedit->setEnabled(false);
+    }
+}
+
 void CompressSetting::ontypeChanged(int index)
 {
     qDebug()<<index;
@@ -307,15 +321,21 @@ void CompressSetting::ontypeChanged(int index)
 
     if(0 == index)
     {
-        m_splitnumedit->setEnabled(true);
+        if(m_splitcompress->isChecked())
+        {
+            m_splitnumedit->setEnabled(true);
+        }
         m_password->setEnabled(true);
         m_file_secret->setEnabled(true);
+        m_splitcompress->setEnabled(true);
     }
     else if(10 == index)
     {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(false);
+        m_splitcompress->setEnabled(false);
+        m_splitcompress->setChecked(false);
         m_splitnumedit->setRange(0.0, 5.0);
         m_splitnumedit->setValue(0.0);
     }
@@ -323,6 +343,8 @@ void CompressSetting::ontypeChanged(int index)
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(false);
         m_file_secret->setEnabled(false);
+        m_splitcompress->setEnabled(false);
+        m_splitcompress->setChecked(false);
         m_splitnumedit->setRange(0.0, 5.0);
         m_splitnumedit->setValue(0.0);
     }
