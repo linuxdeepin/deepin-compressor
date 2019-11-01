@@ -117,6 +117,7 @@ private slots:
     void onCompressPressed(QMap<QString, QString> &Args);
     void onCancelCompressPressed();
     void onTitleButtonPressed();
+    void onCompressAddfileSlot(bool status);
 
     void slotLoadingFinished(KJob *job);
     void slotExtractionDone(KJob* job);

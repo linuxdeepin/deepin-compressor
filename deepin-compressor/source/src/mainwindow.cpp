@@ -192,6 +192,7 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles,this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry,this, &MainWindow::slotFailRetry);
+    connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
     openkey->setContext(Qt::ApplicationShortcut);
@@ -423,6 +424,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
+        m_CompressPage->onPathIndexChanged();
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
@@ -1108,5 +1110,21 @@ void MainWindow::onTitleButtonPressed()
         break;
     }
     return;
+}
+
+void MainWindow::onCompressAddfileSlot(bool status)
+{
+    if(false == status)
+    {
+        m_titlebutton->setVisible(false);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+    }
+    else {
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
+        m_titlebutton->setVisible(true);
+        m_openAction->setEnabled(true);
+        setAcceptDrops(true);
+    }
 }
 

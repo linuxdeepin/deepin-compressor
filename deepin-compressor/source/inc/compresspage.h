@@ -55,9 +55,11 @@ public slots:
     void onAddfileSlot();
     void onSelectedFilesSlot(const QStringList &files);
     void onRefreshFilelist(const QStringList &filelist);
+    void onPathIndexChanged();
 
 signals:
     void sigselectedFiles(const QStringList &files);
+    void sigiscanaddfile(bool status);
 
 private:
 

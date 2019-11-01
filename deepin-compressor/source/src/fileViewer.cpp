@@ -463,6 +463,8 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
         }
     }
+
+    emit  sigpathindexChanged();
 }
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
@@ -490,6 +492,8 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
             m_pathindex++;
         }
     }
+
+    emit sigpathindexChanged();
 }
 
 void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)

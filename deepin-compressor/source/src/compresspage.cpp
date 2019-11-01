@@ -72,6 +72,7 @@ CompressPage::CompressPage(QWidget *parent)
 
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
+    connect(m_fileviewer, &fileViewer::sigpathindexChanged, this, &CompressPage::onPathIndexChanged);
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &CompressPage::onAddfileSlot);
@@ -182,6 +183,17 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
 {
     m_filelist = filelist;
     m_fileviewer->setFileList(m_filelist);
+}
+
+void CompressPage::onPathIndexChanged()
+{
+    if(m_fileviewer->getPathIndex() > 0)
+    {
+        emit sigiscanaddfile(false);
+    }
+    else {
+        emit sigiscanaddfile(true);
+    }
 }
 
 

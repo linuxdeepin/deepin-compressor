@@ -154,7 +154,6 @@ public:
 
        void startDrag(Qt::DropActions supportedActions);
 
-
 protected:
        void resizecolumn();
        void resizeEvent(QResizeEvent* size) override;
@@ -172,6 +171,7 @@ protected slots:
 signals:
        void sigFileRemoved(const QStringList &filelist);
        void sigextractfiles(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path=nullptr);
+       void sigpathindexChanged();
 
 private:
        void refreshTableview();
