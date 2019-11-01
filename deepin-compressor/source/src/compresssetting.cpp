@@ -30,6 +30,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <qevent.h>
+#include <DDialog>
 
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
@@ -166,9 +167,23 @@ void CompressSetting::onNextButoonClicked()
     QString name = m_filename->text().remove(" ");
     if(name == "")
     {
-        DMessageBox box;
-        box.setText(tr("文件名输入错误，请重新输入！"));
-        box.exec();
+        DDialog* dialog = new DDialog;
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        dialog->setIconPixmap(pixmap);
+        dialog->setMessage(tr("文件名输入错误，请重新输入！"));
+        dialog->addButton(tr("确定"));
+        dialog->exec();
+
+        return;
+    }
+    else if(m_savepath->text().remove(" ") == "")
+    {
+        DDialog* dialog = new DDialog;
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        dialog->setIconPixmap(pixmap);
+        dialog->setMessage(tr("请输入保存路径！"));
+        dialog->addButton(tr("确定"));
+        dialog->exec();
         return;
     }
     QMap<QString, QString> m_openArgs;
