@@ -24,6 +24,7 @@
 #include <QTemporaryFile>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <DDialog>
 
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
@@ -95,9 +96,44 @@ void Progress::InitConnection()
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
+int Progress::showConfirmDialog()
+{
+    DDialog* dialog = new DDialog;
+
+    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
+    dialog->setIconPixmap(pixmap);
+
+    DPalette pa;
+
+    DLabel* strlabel = new DLabel;
+    pa = DApplicationHelper::instance()->palette(strlabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+    strlabel->setPalette(pa);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    font.setWeight(QFont::Medium);
+    strlabel->setFont(font);
+    strlabel->setText(tr("确定终止当前任务？"));
+
+    dialog->addButton(tr("取消"));
+    dialog->addButton(tr("确定"));
+
+    QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    DWidget* widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    return dialog->exec();
+}
+
 void Progress::cancelbuttonPressedSlot()
 {
-    emit sigCancelPressed();
+    if(1 == showConfirmDialog())
+    {
+        emit sigCancelPressed();
+    }
 }
 
 void Progress::setprogress(uint percent)

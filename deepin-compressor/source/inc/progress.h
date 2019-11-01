@@ -51,6 +51,7 @@ public:
     void settype(COMPRESS_TYPE type);
     void setTypeImage(QString type);
 
+    int showConfirmDialog();
 private:
     DPushButton* m_cancelbutton;
     QPixmap m_compressicon;
