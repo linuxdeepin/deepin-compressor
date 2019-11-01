@@ -102,6 +102,17 @@ bool Utils::isCompressed_file(const QString &filePath)
     {
         ret = false;
     }
+
+    if(true == ret)
+    {
+        QFileInfo file(filePath);
+        qDebug()<<file.suffix();
+        if(file.suffix() == "pptx" || file.suffix() == "ppt" || file.suffix() == "xls" ||
+                file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx")
+        {
+            ret = false;
+        }
+    }
     qDebug()<<ret;
     return ret;
 }
