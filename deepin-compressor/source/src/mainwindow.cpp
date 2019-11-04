@@ -1071,7 +1071,12 @@ void MainWindow::slotKillExtractJob()
 
 void MainWindow::slotFailRetry()
 {
-    if(Encryption_Load == m_encryptiontype)
+    if(PAGE_ZIP_FAIL == m_pageid)
+    {
+        m_pageid = PAGE_ZIPSET;
+        refreshPage();
+    }
+    else if(Encryption_Load == m_encryptiontype)
     {
         m_pageid = PAGE_HOME;
         refreshPage();
@@ -1085,6 +1090,8 @@ void MainWindow::slotFailRetry()
     {
 
     }
+
+
 }
 
 void MainWindow::onCancelCompressPressed()
