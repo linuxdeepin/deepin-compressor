@@ -77,6 +77,17 @@ void Compressor_Fail::InitUI()
 void Compressor_Fail::InitConnection()
 {
     connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::sigFailRetry);
+    auto changeTheme = [this](){
+            DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+            pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+            m_stringinfolabel->setPalette(pa);
+
+            pa = DApplicationHelper::instance()->palette(m_stringdetaillabel);
+            pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
+            m_stringdetaillabel->setPalette(pa);
+        };
+
+   connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
 
 void Compressor_Fail::setFailStr(const QString& str)

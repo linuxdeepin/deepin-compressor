@@ -68,6 +68,14 @@ void Compressor_Success::InitUI()
 void Compressor_Success::InitConnection()
 {
     connect(m_showfilebutton, &DPushButton::clicked, this, &Compressor_Success::showfiledirSlot);
+
+    auto changeTheme = [this](){
+            DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+            pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+            m_stringinfolabel->setPalette(pa);
+        };
+
+   connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
 
 void Compressor_Success::showfiledirSlot()
