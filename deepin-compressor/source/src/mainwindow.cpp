@@ -993,8 +993,15 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
             this, SLOT(SlotProgress(KJob*,ulong)));
     connect(m_createJob, &CreateJob::percentfilename,
             this, &MainWindow::SlotProgressFile);
+
+    m_pageid = PAGE_ZIPPROGRESS;
+    m_Progess->settype(COMPRESSING);
+    refreshPage();
+
     m_createJob->start();
     m_workstatus = WorkProcess;
+
+
 
 }
 
