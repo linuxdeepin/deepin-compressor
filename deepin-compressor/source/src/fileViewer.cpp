@@ -377,7 +377,7 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     {
         return;
     }
-    if(event->key() == Qt::Key_Delete) {
+    if(event->key() == Qt::Key_Delete && 0 == m_pathindex) {
         QItemSelectionModel *selections =  pTableViewFile->selectionModel();
         QModelIndexList selected = selections->selectedIndexes();
 

@@ -92,10 +92,34 @@ CompressPage::~CompressPage()
 void CompressPage::onNextPress()
 {
     if(m_filelist.isEmpty())
-    {
-        QMessageBox box;
-        box.setText(tr("请添加文件！"));
-        box.exec();
+    {   
+        DDialog* dialog = new DDialog;
+
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        dialog->setIconPixmap(pixmap);
+
+        DPalette pa;
+
+        DLabel* strlabel = new DLabel;
+        pa = DApplicationHelper::instance()->palette(strlabel);
+        pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+        strlabel->setPalette(pa);
+        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+        font.setWeight(QFont::Medium);
+        strlabel->setFont(font);
+        strlabel->setText(tr("请添加文件！"));
+
+        dialog->addButton(tr("确定"));
+
+        QVBoxLayout* mainlayout = new QVBoxLayout;
+        mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+        DWidget* widget = new DWidget;
+
+        widget->setLayout(mainlayout);
+        dialog->addContent(widget);
+
+        dialog->exec();
     }
     else {
         emit sigNextPress();
@@ -137,6 +161,40 @@ void CompressPage::showDialog()
     return;
 }
 
+int CompressPage::showReplaceDialog(QString name)
+{
+    DDialog* dialog = new DDialog(this);
+
+    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+    dialog->setIconPixmap(pixmap);
+
+    DPalette pa;
+
+    DLabel* strlabel = new DLabel;
+    pa = DApplicationHelper::instance()->palette(strlabel);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+    strlabel->setPalette(pa);
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    font.setWeight(QFont::Medium);
+    strlabel->setFont(font);
+    strlabel->setText("“" + name + "”" + QObject::tr("已存在，是否替换？"));
+
+    dialog->addButton(QObject::tr("取消"));
+    dialog->addButton(QObject::tr("确定"));
+
+    QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
+
+    DWidget* widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    dialog->moveToCenter();
+
+    return dialog->exec();
+}
+
 void CompressPage::onAddfileSlot()
 {
 
@@ -165,6 +223,7 @@ void CompressPage::onAddfileSlot()
     if (mode != QDialog::Accepted) {
         return;
     }
+
     emit sigselectedFiles(dialog.selectedFiles());
 }
 
@@ -175,7 +234,29 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
         showDialog();
         return;
     }
-    m_filelist.append(files);
+
+    QStringList inputlist = files;
+    foreach(QString m_path, m_filelist)
+    {
+        foreach(QString path, files)
+        {
+            QFileInfo mfile(m_path);
+            QFileInfo file(path);
+            if(file.fileName() == mfile.fileName())
+            {
+                int mode = showReplaceDialog(file.fileName());
+                if(0 == mode)
+                {
+                    inputlist.removeOne(path);
+                }
+                else {
+                    m_filelist.removeOne(m_path);
+                }
+            }
+        }
+    }
+
+    m_filelist.append(inputlist);
     m_fileviewer->setFileList(m_filelist);
 }
 

@@ -46,6 +46,7 @@ public:
     ~CompressPage();
     QStringList getCompressFilelist();
     void showDialog();
+    int showReplaceDialog(QString name);
 
 signals:
     void sigNextPress();
