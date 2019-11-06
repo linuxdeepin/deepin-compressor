@@ -103,28 +103,6 @@ void MyTableView::paintEvent(QPaintEvent *e)
     QTableView::paintEvent(e);
 }
 
-void MyTableView::dragEnterEvent(QDragEnterEvent *e)
-{
-    e->accept();
-}
-
-void MyTableView::dragLeaveEvent(QDragLeaveEvent *e)
-{
-    qDebug()<<"dragLeaveEvent";
-    e->accept();
-}
-
-void MyTableView::dropEvent(QDropEvent *e)
-{
-    qDebug()<<"dragLeaveEvent";
-    e->accept();
-}
-
-void MyTableView::dragMoveEvent(QDragMoveEvent *event)
-{
-    event->accept();
-}
-
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
@@ -244,6 +222,7 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("提取文件"));
         m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
+        pTableViewFile->setAcceptDrops(false);
     }
 
     pTableViewFile->setBackgroundRole(DPalette::Base);
