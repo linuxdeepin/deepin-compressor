@@ -21,6 +21,7 @@
 #include "myfileitem.h"
 #include <QDateTime>
 #include <QDebug>
+#include <QObject>
 
 
 MyFileItem::MyFileItem()
@@ -48,8 +49,26 @@ bool MyFileItem::operator<(const QStandardItem &other) const
     {
         if (column() == other.column())
         {
-            qint64 lint = Utils::humanReadableToSize(l.toString());
-            qint64 rint = Utils::humanReadableToSize(r.toString());
+            QString lstr = l.toString();
+            QString rstr = r.toString();
+
+            if (lstr.contains(QObject::tr("项")) && !rstr.contains(QObject::tr("项"))) {
+                return true;
+            } else if (!lstr.contains(QObject::tr("项")) && rstr.contains(QObject::tr("项"))) {
+                return false;
+            }
+            else if (lstr.contains(QObject::tr("项")) && rstr.contains(QObject::tr("项"))){
+                lstr = lstr.remove(QRegExp("\\s"));
+                lstr = lstr.remove(QObject::tr("项"));
+                rstr = rstr.remove(QRegExp("\\s"));
+                rstr = rstr.remove(QObject::tr("项"));
+                return lstr.toInt() < rstr.toInt();
+            }
+            lstr = l.toString().simplified();
+            rstr = r.toString().simplified();
+
+            qint64 lint = Utils::humanReadableToSize(lstr);
+            qint64 rint = Utils::humanReadableToSize(rstr);
             return lint < rint;
         }
         break;
@@ -58,9 +77,22 @@ bool MyFileItem::operator<(const QStandardItem &other) const
     {
         if (column() == other.column())
         {
-            QDateTime ldate = QDateTime::fromString(l.toString(), "yyyy/MM/dd hh:mm:ss");
-            QDateTime rdate = QDateTime::fromString(r.toString(), "yyyy/MM/dd hh:mm:ss");
+            QDateTime ldate = QDateTime::fromString(l.toString(), " yyyy/MM/dd hh:mm:ss");
+            QDateTime rdate = QDateTime::fromString(r.toString(), " yyyy/MM/dd hh:mm:ss");
             return !rdate.operator<(ldate);
+        }
+        break;
+    }
+    case 0:
+    {
+        if (column() == other.column())
+        {
+            QString lstr = l.toString();
+            QString rstr = r.toString();
+            lstr = lstr.remove(QRegExp("\\s"));
+            rstr = rstr.remove(QRegExp("\\s"));
+            qDebug()<<l.toString().at(0)<<r.toString().at(0);
+            return QString::compare(l.toString(), r.toString(), Qt::CaseInsensitive);
         }
         break;
     }
