@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/usr/bin/deepin-compressor  %U
+Exec=/usr/bin/deepin-compressor  %U extract
 GenericName=Compress
 Name=Compress
 Icon=
