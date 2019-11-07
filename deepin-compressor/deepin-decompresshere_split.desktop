@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/deepin-compressor  %U extract_here_split
+GenericName=Compress
+Name=Compress
+Icon=
+MimeType=application/octet-stream;
+GenericName[zh_CN]=解压缩到当前文件夹
+Name[zh_CN]=解压缩到当前文件夹
+X-DFM-MenuTypes=SingleFile;SingleDir
+X-DFM-SupportSchemes=file
+X-DFM-SupportSuffix=7z.*
+X-DFM-ExcludeMimeTypes=application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-tarz;application/x-xz-compressed-tar;application/x-lzma-compressed-tar;application/x-lzip-compressed-tar;application/x-tzo;application/x-lrzip-compressed-tar;application/x-lz4-compressed-tar;application/x-zstd-compressed-tar;application/vnd.debian.binary-package;application/x-deb;application/x-cd-image;application/x-bcpio;application/x-cpio;application/x-cpio-compressed;application/x-sv4cpio;application/x-sv4crc;application/x-rpm;application/x-source-rpm;application/vnd.ms-cab-compressed;application/x-xar;application/x-iso9660-appimage;application/x-archive;application/vnd.rar;application/x-rar;application/x-7z-compressed;application/zip;application/x-java-archive;application/x-compress;application/gzip;application/x-bzip;application/x-lzma;application/x-xz;
