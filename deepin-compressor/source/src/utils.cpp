@@ -103,15 +103,18 @@ bool Utils::isCompressed_file(const QString &filePath)
         ret = false;
     }
 
+    QFileInfo file(filePath);
+    qDebug()<<file.suffix();
     if(true == ret)
     {
-        QFileInfo file(filePath);
-        qDebug()<<file.suffix();
         if(file.suffix() == "pptx" || file.suffix() == "ppt" || file.suffix() == "xls" ||
                 file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx")
         {
             ret = false;
         }
+    }
+    else if(filePath.contains(".7z.")){
+        ret = true;
     }
     qDebug()<<ret;
     return ret;

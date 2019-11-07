@@ -42,17 +42,6 @@
 #include "jobs.h"
 
 //static QString shortcut_json =
-static void customMessageHandler(const QString &msg)
-{
-    QString txt;
-    txt = msg;
-
-    QFile outFile("/home/deepin/debug.log");
-    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
-}
-
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
@@ -513,7 +502,13 @@ void MainWindow::onSelected(const QStringList &files)
     {
         if(0 == m_CompressPage->getCompressFilelist().count())
         {
-            QFileInfo fileinfo(files.at(0));
+            QString filename;
+            filename = files.at(0);
+            if(filename.contains(".7z."))
+            {
+                filename = filename.left(filename.length() - 3) + "001";
+            }
+            QFileInfo fileinfo(filename);
             m_decompressfilename = fileinfo.fileName();
             if("" != m_settingsDialog->getCurExtractPath())
             {
@@ -524,7 +519,8 @@ void MainWindow::onSelected(const QStringList &files)
                m_UnCompressPage->setdefaultpath(fileinfo.path());
             }
 
-            loadArchive(files.at(0));
+            loadArchive(filename);
+
         }
         else {
             DDialog* dialog = new DDialog;
@@ -571,8 +567,6 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-    customMessageHandler(files.last());
-    customMessageHandler(files.at(0));
     if(files.last() == QStringLiteral("extract_here"))
     {
         m_isrightmenu = true;
@@ -659,39 +653,33 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             refreshPage();
         }
     }
+    else if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
+    {
+        QString filename;
+        filename = files.at(0);
+        if(filename.contains(".7z."))
+        {
+            filename = filename.left(filename.length() - 3) + "001";
+        }
+        QFileInfo fileinfo(filename);
+        m_decompressfilename = fileinfo.fileName();
+        if("" != m_settingsDialog->getCurExtractPath())
+        {
+           m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
+        }
+        else
+        {
+           m_UnCompressPage->setdefaultpath(fileinfo.path());
+        }
 
-//    if(files.count() == 2 && files.at(1) == QStringLiteral("extract_here") && Utils::isCompressed_file(files.at(0)))
-//    {
-//        m_isrightmenu = true;
-//        QFileInfo fileinfo(files.at(0));
-//        m_decompressfilename = fileinfo.fileName();
-//        m_UnCompressPage->setdefaultpath(fileinfo.path());
-//        loadArchive(files.at(0));
-//        m_pageid = PAGE_UNZIPPROGRESS;
-//        m_Progess->settype(DECOMPRESSING);
-//        refreshPage();
-//    }
-//    else if(files.count() == 1 && Utils::isCompressed_file(files.at(0)))
-//    {
-//        QFileInfo fileinfo(files.at(0));
-//        m_decompressfilename = fileinfo.fileName();
-//        if("" != m_settingsDialog->getCurExtractPath())
-//        {
-//           m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
-//        }
-//        else
-//        {
-//           m_UnCompressPage->setdefaultpath(fileinfo.path());
-//        }
-
-//        loadArchive(files.at(0));
-//    }
-//    else {
-//        emit sigZipSelectedFiles(files);
-//        m_pageid = PAGE_ZIPSET;
-//        setCompressDefaultPath();
-//        refreshPage();
-//    }
+        loadArchive(filename);
+    }
+    else {
+        emit sigZipSelectedFiles(files);
+        m_pageid = PAGE_ZIPSET;
+        setCompressDefaultPath();
+        refreshPage();
+    }
 }
 
 void MainWindow::slotLoadingFinished(KJob *job)
