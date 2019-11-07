@@ -87,10 +87,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if((PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) && (1 != m_Progess->showConfirmDialog()))
+    if(4 == m_mainLayout->currentIndex())//now is progress page
     {
-        event->ignore();
-        return;
+        if(1 != m_Progess->showConfirmDialog())
+        {
+            event->ignore();
+            return;
+        }
     }
     event->accept();
     emit sigquitApp();
