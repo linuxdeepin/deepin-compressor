@@ -61,6 +61,7 @@ public:
     void setDefaultName(QString name);
     void setFilepath(QStringList pathlist);
     quint64 dirFileSize(const QString &path);
+    bool checkfilename(QString str);
 
 private:
     DPushButton* m_nextbutton;

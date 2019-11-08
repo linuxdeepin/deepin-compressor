@@ -157,6 +157,38 @@ void CompressSetting::InitConnection()
     connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
+    connect(m_savepath, &DFileChooserEdit::textChanged, this, [=]{
+        QDir dir(m_savepath->text());
+        DPalette plt;
+        plt = DApplicationHelper::instance()->palette(m_savepath->lineEdit());
+
+        if(!dir.exists())
+        {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+
+        }
+        else {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
+        }
+
+        m_savepath->lineEdit()->setPalette(plt);
+    });
+    connect(m_filename, &DLineEdit::textChanged, this, [=]{
+        DPalette plt;
+        plt = DApplicationHelper::instance()->palette(m_filename);
+
+
+        if(!checkfilename(m_filename->text()))
+        {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+
+        }
+        else {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
+        }
+
+        m_filename->setPalette(plt);
+    });
 }
 
 
@@ -164,11 +196,12 @@ void CompressSetting::InitConnection()
 
 void CompressSetting::onNextButoonClicked()
 {
+    QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
-    if(name == "")
+    if(!checkfilename(name))
     {
         DDialog* dialog = new DDialog;
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("文件名输入错误，请重新输入！"));
         dialog->addButton(tr("确定"));
@@ -179,9 +212,19 @@ void CompressSetting::onNextButoonClicked()
     else if(m_savepath->text().remove(" ") == "")
     {
         DDialog* dialog = new DDialog;
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("请输入保存路径！"));
+        dialog->addButton(tr("确定"));
+        dialog->exec();
+        return;
+    }
+    else if(!dir.exists())
+    {
+        DDialog* dialog = new DDialog;
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
+        dialog->setIconPixmap(pixmap);
+        dialog->setMessage(tr("路径不存在，请重新输入"));
         dialog->addButton(tr("确定"));
         dialog->exec();
         return;
@@ -308,6 +351,40 @@ quint64 CompressSetting::dirFileSize(const QString &path)
         size += dirFileSize(path + QDir::separator() + subDir);
     }
     return size;
+}
+
+bool CompressSetting::checkfilename(QString str)
+{
+    if(str.length() == 0)
+    {
+        return false;
+    }
+    if(str.length() > 255)
+    {
+        return false;
+    }
+
+    QList<QChar> black_list;
+    black_list<<'+';
+    black_list<<'-';
+    black_list<<'.';
+    black_list<<',';
+    if (black_list.contains(str.at(0)))
+    {
+        return false;
+    }
+
+    black_list.clear();
+    black_list = {'/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']'};
+    foreach(QChar black_char, black_list)
+    {
+        if(str.contains(black_char))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
