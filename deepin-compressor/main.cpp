@@ -61,8 +61,9 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(DApplication::buildVersion("20191011"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
-    app.setProductName(DApplication::translate("Main", "深度解压缩"));
-    app.setApplicationDescription(DApplication::translate("Main","深度解压缩是深度操作系统自带的解压缩软件。满足对文件解压缩的常用功能，快速、轻巧，使用简单。"));
+    app.setProductName(DApplication::translate("Main", "归档管理器"));
+    app.setApplicationDescription(DApplication::translate("Main","归档管理器是一款提供对文件解压、压缩常用功能的软件工具。"));
+//    app.setApplicationDescription(QString("%1\n%2\n").arg(QObject::tr("归档管理器是一款提供对文件解压、")).arg(QObject::tr("压缩常用功能的软件工具。")));
     DApplicationSettings settings(&app);
 
     DLogManager::registerConsoleAppender();

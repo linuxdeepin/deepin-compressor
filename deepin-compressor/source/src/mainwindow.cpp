@@ -125,7 +125,7 @@ void MainWindow::InitUI()
     m_encodingpage->setAutoFillBackground(true);
 
     // init window flags.
-    setWindowTitle(tr("解压缩"));
+    setWindowTitle(tr("归档管理器"));
     setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint);
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
