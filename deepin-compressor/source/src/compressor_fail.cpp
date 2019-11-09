@@ -44,7 +44,7 @@ void Compressor_Fail::InitUI()
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
     m_stringinfolabel->setFont(font);
 
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);

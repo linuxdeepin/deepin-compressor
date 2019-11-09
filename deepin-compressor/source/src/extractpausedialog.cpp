@@ -53,7 +53,7 @@ void ExtractPauseDialog::initUI()
     strlabel2->setPalette(pa);
 
     font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
     strlabel2->setFont(font);
     strlabel2->setText(tr("当前有提取任务正在进行"));
 

@@ -43,7 +43,7 @@ void Compressor_Success::InitUI()
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
     m_stringinfolabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));

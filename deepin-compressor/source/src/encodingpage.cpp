@@ -39,7 +39,7 @@ void EncodingPage::InitUI()
     m_pixmaplabel->setPixmap(m_fileicon);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
 
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText("");

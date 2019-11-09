@@ -42,7 +42,7 @@ void Progress::InitUI()
 //    m_pixmaplabel->setPixmap(m_compressicon);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
 
     DPalette pa;
 

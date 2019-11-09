@@ -35,7 +35,7 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 void EncryptionPage::InitUI()
 {
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
 
     DPalette pa;
 
