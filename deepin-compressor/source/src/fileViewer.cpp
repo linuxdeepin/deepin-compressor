@@ -370,7 +370,15 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         QStringList filelist;
         foreach(unsigned int index, selectlist)
         {
-            m_curfilelist.removeAt(index);
+            m_curfilelist.replace(index, QFileInfo(""));
+        }
+
+        foreach(QFileInfo file, m_curfilelist)
+        {
+            if(file.path() == "")
+            {
+                m_curfilelist.removeOne(file);
+            }
         }
 
         foreach(QFileInfo fileinfo, m_curfilelist)
