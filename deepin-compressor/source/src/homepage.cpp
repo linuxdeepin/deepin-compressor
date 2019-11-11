@@ -130,6 +130,7 @@ void HomePage::onChooseBtnClicked()
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
+    dialog.setAllowMixedSelection(true);
 //    dialog.setNameFilter(Utils::suffixList());
 
     QString historyDir = m_settings->value("dir").toString();

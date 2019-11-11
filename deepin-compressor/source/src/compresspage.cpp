@@ -206,6 +206,7 @@ void CompressPage::onAddfileSlot()
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
+    dialog.setAllowMixedSelection(true);
 
     QString historyDir = m_settings->value("dir").toString();
     if (historyDir.isEmpty()) {
