@@ -90,9 +90,9 @@ bool Utils::isCompressed_file(const QString &filePath)
 
 
     if(filetype.compare("application/x-7z-compressed") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")
-            && filetype.compare("application/x-java-archive")&& filetype.compare("application/x-deb")&& filetype.compare("application/x-cd-image")
+            && filetype.compare("application/x-java-archive") && filetype.compare("application/x-cd-image")
             && filetype.compare("application/x-bcpio")&& filetype.compare("application/x-cpio")&&filetype.compare("application/x-cpio-compressed")&& filetype.compare("application/x-sv4cpio")
-            && filetype.compare("application/x-sv4crc")&&filetype.compare("application/x-rpm")&&filetype.compare("application/x-source-rpm")&&filetype.compare("application/vnd.debian.binary-package")
+            && filetype.compare("application/x-sv4crc")&&filetype.compare("application/x-rpm")&&filetype.compare("application/x-source-rpm")
             && filetype.compare("application/vnd.ms-cab-compressed")&& filetype.compare("application/x-xar")&& filetype.compare("application/x-iso9660-appimage")
             && filetype.compare("application/x-tarz")&& filetype.compare("application/x-tar")&& filetype.compare("application/x-compressed-tar")&& filetype.compare("application/x-bzip-compressed-tar")
             && filetype.compare("application/x-xz-compressed-tar")&& filetype.compare("application/x-lzma-compressed-tar")&& filetype.compare("application/x-lzip-compressed-tar")
