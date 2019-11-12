@@ -48,7 +48,7 @@ void Compressor_Fail::InitUI()
     m_stringinfolabel->setFont(font);
 
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);
 
     m_stringdetaillabel = new DLabel();

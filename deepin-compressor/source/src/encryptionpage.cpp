@@ -45,7 +45,7 @@ void EncryptionPage::InitUI()
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);
     m_stringinfolabel->setText(tr("此文件已加密，请输入解压密码"));
     m_nextbutton = new DPushButton();

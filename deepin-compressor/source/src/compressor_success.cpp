@@ -46,7 +46,7 @@ void Compressor_Success::InitUI()
     font.setWeight(QFont::DemiBold);
     m_stringinfolabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton();

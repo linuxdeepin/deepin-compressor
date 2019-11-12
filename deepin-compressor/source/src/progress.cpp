@@ -51,7 +51,7 @@ void Progress::InitUI()
     m_filenamelabel->setText(m_filename);
     m_filenamelabel->setFont(font);
     pa = DApplicationHelper::instance()->palette(m_filenamelabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_filenamelabel->setPalette(pa);
 
     m_progressbar = new DProgressBar();

@@ -41,7 +41,7 @@ void ExtractPauseDialog::initUI()
 
     DLabel* strlabel = new DLabel;
     pa = DApplicationHelper::instance()->palette(strlabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::Text));
     strlabel->setPalette(pa);
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::Medium);

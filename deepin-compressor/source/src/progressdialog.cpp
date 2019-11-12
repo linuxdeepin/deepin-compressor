@@ -44,12 +44,16 @@ void ProgressDialog::initUI()
     DPalette pa;
 
     m_tasklable = new DLabel();
-    m_tasklable->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T6));
+    QFont ft = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    ft.setWeight(QFont::Medium);
+    m_tasklable->setFont(ft);
     pa = DApplicationHelper::instance()->palette(m_tasklable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     m_tasklable->setPalette(pa);
     m_filelable = new DLabel();
-    m_filelable->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    ft = DFontSizeManager::instance()->get(DFontSizeManager::T8);
+    ft.setWeight(QFont::Normal);
+    m_filelable->setFont(ft);
     pa = DApplicationHelper::instance()->palette(m_filelable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_filelable->setPalette(pa);
