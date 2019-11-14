@@ -65,7 +65,9 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/myfileitem.h \
     source/inc/encodingpage.h \
     source/inc/mimetypedisplaymanager.h \
-    source/inc/archivesortfiltermodel.h
+    source/inc/archivesortfiltermodel.h \
+    source/inc/batchextract.h \
+    interface/batchjobs.h
 
 
 
@@ -108,7 +110,9 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/myfileitem.cpp \
     source/src/encodingpage.cpp \
     source/src/mimetypedisplaymanager.cpp \
-    source/src/archivesortfiltermodel.cpp
+    source/src/archivesortfiltermodel.cpp \
+    source/src/batchextract.cpp \
+    interface/batchjobs.cpp
 
 
 
@@ -129,7 +133,7 @@ desktop.path = $$INSTROOT$$APPDIR
 desktop.files =  deepin-compressor.desktop
 
 desktopcontext.path = $$INSTROOT$$DESKTOPDIR
-desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop deepin-compress-multi.desktop deepin-decompress_split.desktop deepin-decompresshere_split.desktop
+desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop deepin-compress-multi.desktop deepin-decompress-split.desktop deepin-decompresshere-split.desktop deepin-decompress-multi.desktop deepin-decompresshere-multi.desktop
 
 
 manual.path = /usr/share/dman/

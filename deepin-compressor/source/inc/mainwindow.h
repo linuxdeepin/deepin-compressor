@@ -42,6 +42,8 @@
 #include "encodingpage.h"
 #include <DIconButton>
 #include "archivesortfiltermodel.h"
+#include "batchextract.h"
+
 
 #define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE

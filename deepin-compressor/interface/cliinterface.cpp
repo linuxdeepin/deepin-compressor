@@ -871,6 +871,7 @@ bool CliInterface::handleLine(const QString& line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
+    qDebug()<<line;
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         //read the percentage
         int pos = line.indexOf(QLatin1Char( '%' ));

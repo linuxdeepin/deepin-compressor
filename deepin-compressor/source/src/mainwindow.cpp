@@ -388,6 +388,7 @@ void MainWindow::dropEvent(QDropEvent *e)
 
     m_homePage->setIconPixmap(false);
     onSelected(fileList);
+//    onRightMenuSelected(fileList);
 }
 
 void MainWindow::dragMoveEvent(QDragMoveEvent *event)
@@ -579,6 +580,42 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_Progess->settype(DECOMPRESSING);
         refreshPage();
     }
+    else if(files.last() == QStringLiteral("extract_here_multi"))
+    {
+        QStringList pathlist = files;
+        pathlist.removeLast();
+        QFileInfo fileinfo(pathlist.at(0));
+        m_decompressfilename = fileinfo.fileName();
+        m_UnCompressPage->setdefaultpath(fileinfo.path());
+        m_pageid = PAGE_UNZIPPROGRESS;
+        m_Progess->settype(DECOMPRESSING);
+        refreshPage();
+
+        BatchExtract *batchJob = new BatchExtract();
+        batchJob->setAutoSubfolder(true);
+        batchJob->setDestinationFolder(fileinfo.path());
+        batchJob->setPreservePaths(true);
+
+        for (const QString& url : qAsConst(pathlist)) {
+            batchJob->addInput(QUrl::fromLocalFile(url));
+        }
+
+        connect(batchJob, SIGNAL(percent(KJob*,ulong)),
+                this, SLOT(SlotProgress(KJob*,ulong)));
+        connect(batchJob, &KJob::result,
+                this, &MainWindow::slotExtractionDone);
+//        connect(batchJob, &BatchExtract::sigExtractJobPassword,
+//                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+//        connect(batchJob, &BatchExtract::sigExtractJobPassword,
+//                m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+        connect(batchJob, SIGNAL(percentfilename(KJob*, const QString &)),
+                this, SLOT(SlotProgressFile(KJob*, const QString &)));
+//        connect(batchJob, &BatchExtract::sigCancelled,
+//                this, &MainWindow::sigquitApp);
+
+        qDebug() << "Starting job";
+        batchJob->start();
+    }
     else if(files.last() == QStringLiteral("extract"))
     {
         QFileInfo fileinfo(files.at(0));
@@ -593,6 +630,10 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         }
 
         loadArchive(files.at(0));
+    }
+    else if(files.last() == QStringLiteral("extract_multi"))
+    {
+
     }
     else if(files.last() == QStringLiteral("compress"))
     {

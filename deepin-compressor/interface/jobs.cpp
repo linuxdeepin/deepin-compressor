@@ -402,7 +402,7 @@ void BatchExtractJob::slotLoadingProgress(double progress)
 void BatchExtractJob::slotExtractProgress(double progress)
 {
     // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
-    setPercent(m_lastPercentage + static_cast<unsigned long>(50.0*progress));
+    setPercent(m_lastPercentage + static_cast<unsigned long>(progress));
 }
 
 void BatchExtractJob::slotLoadingFinished(KJob *job)
