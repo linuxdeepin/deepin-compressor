@@ -37,12 +37,25 @@
 #include <DPalette>
 #include <DApplicationHelper>
 #include <DCheckBox>
+#include <DMenu>
+#include <DFontSizeManager>
 
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 #define D_COMPRESS_SPLIT_MIX    5000
 #define D_COMPRESS_SPLIT_MIN   0
+
+class TypeLabel:public DLabel
+{
+     Q_OBJECT
+public:
+   TypeLabel(QWidget* parent = 0);
+protected:
+   void mousePressEvent ( QMouseEvent * event ) override;
+signals:
+   void labelClickEvent ( QMouseEvent * event );
+};
 
 class CompressSetting :public QWidget
 {
@@ -66,7 +79,7 @@ public:
 private:
     DPushButton* m_nextbutton;
     QPixmap m_compressicon;
-    DComboBox* m_compresstype;
+    TypeLabel* m_compresstype;
     DLineEdit* m_filename;
     DFileChooserEdit* m_savepath;
     DLabel* m_pixmaplabel;
@@ -85,6 +98,7 @@ private:
     DLabel* m_encryptedlabel;
     DCheckBox* m_splitcompress;
     DLabel* m_encryptedfilelistlabel;
+    DMenu* m_typemenu;
 
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
@@ -97,9 +111,10 @@ signals:
 public slots:
     void onNextButoonClicked();
     void onAdvanceButtonClicked(bool status);
-    void ontypeChanged(int index);
+    void ontypeChanged(QAction *action);
     void onSplitValueChanged(double value);
     void onSplitChanged(int status);
+    void showRightMenu(QMouseEvent * e);
 
     void onRetrunPressed();
 };

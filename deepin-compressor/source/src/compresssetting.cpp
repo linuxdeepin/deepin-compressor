@@ -31,6 +31,17 @@
 #include <QFileInfo>
 #include <qevent.h>
 #include <DDialog>
+#include <DStyle>
+
+TypeLabel::TypeLabel(QWidget* parent)
+    : QLabel(parent)
+{
+
+}
+
+void TypeLabel::mousePressEvent ( QMouseEvent * event ){
+    emit labelClickEvent ( event );
+}
 
 CompressSetting::CompressSetting(QWidget* parent)
     :QWidget(parent)
@@ -50,17 +61,29 @@ void CompressSetting::InitUI()
     m_nextbutton = new DPushButton(tr("压缩"));
     m_nextbutton->setFixedSize(340,36);
 
+    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    font.setWeight(QFont::DemiBold);
+
 
     QWidget* leftwidget = new QWidget();
     m_pixmaplabel = new DLabel();
 
-    m_compresstype = new DComboBox();
-    m_compresstype->setFixedSize(80, 40);
+    m_compresstype = new TypeLabel();
+    DPalette pa;
 
+    pa = DApplicationHelper::instance()->palette(m_compresstype);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
+    m_compresstype->setFixedSize(80, 25);
+
+    m_compresstype->setText("zip");
+    m_compresstype->setPalette(pa);
+    m_compresstype->setAlignment(Qt::AlignCenter);
+    m_compresstype->setFont(font);
+    m_typemenu = new DMenu;
+    m_typemenu->setFixedWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-        m_compresstype->addItem(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
+        m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
-    m_compresstype->setCurrentText("zip");
     setTypeImage("zip");
 
     QFormLayout* filelayout = new QFormLayout();
@@ -154,7 +177,6 @@ void CompressSetting::InitConnection()
 
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
-    connect(m_compresstype, SIGNAL(currentIndexChanged(int)), this, SLOT(ontypeChanged(int)));
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
     connect(m_savepath, &DFileChooserEdit::textChanged, this, [=]{
@@ -189,9 +211,18 @@ void CompressSetting::InitConnection()
 
         m_filename->setPalette(plt);
     });
+    connect(m_compresstype, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
+    connect(m_typemenu, &DMenu::triggered, this, &CompressSetting::ontypeChanged);
 }
 
+void CompressSetting::showRightMenu(QMouseEvent * e)
+{
+    QPoint pos;
+    pos.setX(window()->x() + m_compresstype->x() + 40);
+    pos.setY(window()->y() + m_compresstype->y() + 100);
+    m_typemenu->popup(pos);
 
+}
 
 
 void CompressSetting::onNextButoonClicked()
@@ -231,8 +262,13 @@ void CompressSetting::onNextButoonClicked()
     }
     QMap<QString, QString> m_openArgs;
     const QString password = m_password->text();
-    const QString fixedMimeType = m_supportedMimeTypes.at(m_compresstype->currentIndex());
-
+    QString fixedMimeType;
+    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+         if(m_compresstype->text().contains(QMimeDatabase().mimeTypeForName(type).preferredSuffix()))
+         {
+             fixedMimeType = type;
+         }
+    }
 
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
@@ -395,7 +431,7 @@ void CompressSetting::setFilepath(QStringList pathlist)
 
 void CompressSetting::onSplitChanged(int status)
 {
-    if(m_splitcompress->isChecked() && 0 == m_compresstype->currentIndex())
+    if(m_splitcompress->isChecked() && "7z" == m_compresstype->text())
     {
         m_splitnumedit->setEnabled(true);
     }
@@ -404,14 +440,14 @@ void CompressSetting::onSplitChanged(int status)
     }
 }
 
-void CompressSetting::ontypeChanged(int index)
+void CompressSetting::ontypeChanged(QAction *action)
 {
-    qDebug()<<index;
-    qDebug()<<m_supportedMimeTypes.at(index);
+    qDebug()<<action->text();
 
-    setTypeImage(m_compresstype->itemText(index));
+    setTypeImage(action->text());
+    m_compresstype->setText(action->text());
 
-    if(0 == index)
+    if(action->text().contains("7z"))
     {
         if(m_splitcompress->isChecked())
         {
@@ -421,7 +457,7 @@ void CompressSetting::ontypeChanged(int index)
         m_file_secret->setEnabled(true);
         m_splitcompress->setEnabled(true);
     }
-    else if(10 == index)
+    else if(action->text().contains("zip"))
     {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(true);
@@ -441,6 +477,7 @@ void CompressSetting::ontypeChanged(int index)
         m_splitnumedit->setValue(0.0);
     }
 }
+
 
 void CompressSetting::onSplitValueChanged(double value)
 {
