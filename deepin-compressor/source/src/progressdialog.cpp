@@ -133,17 +133,24 @@ void ProgressDialog::setCurrentFile(const QString &file)
 
 void ProgressDialog::setProcess(unsigned long  value)
 {
-    m_circleprogress->setValue(value);
+    if(100 != m_circleprogress->value())
+    {
+        m_circleprogress->setValue(value);
+    }
+
 }
 
 void ProgressDialog::setFinished(const QString &path)
 {
-    setWindowTitle(tr(""));
-    m_circleprogress->setValue(100);
-    m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
-    m_extractdialog->reject();
-    reject();
-    emit extractSuccess();
+    if(100 != m_circleprogress->value())
+    {
+        setWindowTitle(tr(""));
+        m_circleprogress->setValue(100);
+        m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
+        m_extractdialog->reject();
+        reject();
+        emit extractSuccess();
+    }
 }
 
 void ProgressDialog::showdialog()
