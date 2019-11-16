@@ -39,6 +39,7 @@ public:
     void InitConnection();
     void setstringinfo(QString str);
     void setCompressPath(QString path);
+    QString getPath();
 
 private:
     DPushButton* m_showfilebutton;

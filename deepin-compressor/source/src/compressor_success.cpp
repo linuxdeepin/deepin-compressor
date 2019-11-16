@@ -93,3 +93,8 @@ void Compressor_Success::setCompressPath(QString path)
 {
     m_path = path;
 }
+
+QString Compressor_Success::getPath()
+{
+    return m_path;
+}

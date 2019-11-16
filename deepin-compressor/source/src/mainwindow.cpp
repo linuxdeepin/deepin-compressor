@@ -81,6 +81,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             event->ignore();
             return;
         }
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_CompressSuccess->getPath()));
     }
     event->accept();
     emit sigquitApp();
@@ -1072,6 +1073,53 @@ QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
     return filename;
 }
 
+QStringList MainWindow::CheckAllFiles(QString path)
+{
+    QDir dir(path);
+    QStringList nameFilters;
+    return dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+}
+
+void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
+{
+    if(newfiles.count() <= oldfiles.count())
+    {
+        qDebug()<<"Nofile to delete";
+        return;
+    }
+
+    QStringList deletefile;
+    foreach(QString newpath, newfiles)
+    {
+        int count = 0;
+        foreach(QString oldpath, oldfiles)
+        {
+            if(oldpath == newpath)
+            {
+                break;
+            }
+            count++;
+        }
+        if(count == oldfiles.count())
+        {
+            deletefile<<newpath;
+        }
+    }
+
+    qDebug()<<deletefile;
+    foreach(QString path, deletefile)
+    {
+        QFileInfo fileInfo(path);
+        if (fileInfo.isFile() || fileInfo.isSymLink())
+        {
+            QFile::setPermissions(path, QFile::WriteOwner);
+            if (!QFile::remove(path))
+            {
+                qDebug()<<"delete error!!!!!!!!!";
+            }
+        }
+    }
+}
 
 void MainWindow::creatArchive(QMap<QString, QString> &Args)
 {
@@ -1137,6 +1185,7 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     m_Progess->settype(COMPRESSING);
     refreshPage();
 
+    m_compressDirFiles = CheckAllFiles(Args[QStringLiteral("localFilePath")]);
     m_createJob->start();
     m_workstatus = WorkProcess;
 
@@ -1250,6 +1299,8 @@ void MainWindow::onCancelCompressPressed()
     {
         m_createJob->kill();
     }
+
+    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_CompressSuccess->getPath()));
 
     emit sigquitApp();
 }

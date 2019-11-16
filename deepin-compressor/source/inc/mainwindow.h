@@ -153,6 +153,9 @@ private:
     void setQLabelText(QLabel *label, const QString &text);
     QJsonObject creatShorcutJson();
 
+    QStringList CheckAllFiles(QString path);
+    void deleteCompressFile(QStringList oldfiles, QStringList newfiles);
+
 private:
     DLabel* m_logo;
     QPixmap m_logoicon;
@@ -188,6 +191,8 @@ private:
     int m_timerId = 0;
     bool m_progressTransFlag = false;
     QAction *m_openAction;
+
+    QStringList m_compressDirFiles;
 };
 
 #endif
