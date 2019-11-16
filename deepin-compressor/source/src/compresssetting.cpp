@@ -65,7 +65,11 @@ void CompressSetting::InitUI()
     font.setWeight(QFont::DemiBold);
 
 
+
+
+
     QWidget* leftwidget = new QWidget();
+    QHBoxLayout* typelayout = new QHBoxLayout();
     m_pixmaplabel = new DLabel();
 
     m_compresstype = new TypeLabel();
@@ -73,12 +77,22 @@ void CompressSetting::InitUI()
 
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_compresstype->setFixedSize(80, 25);
+    m_compresstype->setFixedHeight(25);
 
+    DStyle* style = new DStyle;
+    QPixmap pixmap = style->standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
+    DLabel* typepixmap = new DLabel;
+    typepixmap->setFixedHeight(25);
+    typepixmap->setPixmap(pixmap);
     m_compresstype->setText("zip");
     m_compresstype->setPalette(pa);
     m_compresstype->setAlignment(Qt::AlignCenter);
     m_compresstype->setFont(font);
+    typelayout->addStretch();
+    typelayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typelayout->addWidget(typepixmap, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typelayout->addStretch();
+
     m_typemenu = new DMenu;
     m_typemenu->setFixedWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
@@ -132,7 +146,7 @@ void CompressSetting::InitUI()
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
     typeLayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
-    typeLayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typeLayout->addLayout(typelayout);
     typeLayout->addStretch();
     leftwidget->setLayout(typeLayout);
 
@@ -235,6 +249,7 @@ void CompressSetting::onNextButoonClicked()
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("文件名输入错误，请重新输入！"));
+        dialog->addSpacing(15);
         dialog->addButton(tr("确定"));
         dialog->exec();
 
@@ -246,6 +261,7 @@ void CompressSetting::onNextButoonClicked()
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("请输入保存路径！"));
+        dialog->addSpacing(15);
         dialog->addButton(tr("确定"));
         dialog->exec();
         return;
@@ -256,6 +272,7 @@ void CompressSetting::onNextButoonClicked()
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("路径不存在，请重新输入"));
+        dialog->addSpacing(15);
         dialog->addButton(tr("确定"));
         dialog->exec();
         return;

@@ -40,6 +40,7 @@ void ExtractPauseDialog::initUI()
     DPalette pa;
 
     DLabel* strlabel = new DLabel;
+    strlabel->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::Text));
     strlabel->setPalette(pa);
@@ -48,6 +49,7 @@ void ExtractPauseDialog::initUI()
     strlabel->setFont(font);
     strlabel->setText(tr("停止提取！"));
     DLabel* strlabel2 = new DLabel;
+    strlabel2->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel2);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     strlabel2->setPalette(pa);
@@ -58,11 +60,13 @@ void ExtractPauseDialog::initUI()
     strlabel2->setText(tr("当前有提取任务正在进行"));
 
     addButton(tr("停止提取"));
-    addButton(tr("继续提取"));
+    addButton(tr("继续提取"), true, ButtonRecommend);
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(15);
 
     DWidget* widget = new DWidget;
 

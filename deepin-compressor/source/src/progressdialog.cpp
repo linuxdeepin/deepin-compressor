@@ -25,7 +25,7 @@
 #include <QDebug>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
-   DDialog(parent)
+   DAbstractDialog(parent)
 {
     initUI();
     initConnect();
@@ -33,14 +33,20 @@ ProgressDialog::ProgressDialog(QWidget *parent):
 
 void ProgressDialog::initUI()
 {
-//    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
-    setFixedWidth(m_defaultWidth);
-    setTitle(QObject::tr("有1个任务正在进行"));
-    QIcon icon = QIcon::fromTheme("deepin-compressor");
-    setIcon(icon, QSize(32, 32));
 
-    DWidget* widget = new DWidget;
+    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
+    setFixedWidth(m_defaultWidth);
+
+    m_titlebar = new DTitlebar(this);
+    m_titlebar->setFixedHeight(50);
+    m_titlebar->layout()->setContentsMargins(0, 0, 0, 0);
+    m_titlebar->setMenuVisible(false);
+    m_titlebar->setIcon(QIcon::fromTheme("deepin-compressor"));
+    m_titlebar->setFixedWidth(m_defaultWidth);
+    m_titlebar->setTitle(QObject::tr("有1个任务正在进行"));
+    m_titlebar->setBackgroundTransparent(true);
+
+    QVBoxLayout* contentlayout = new QVBoxLayout;
     DPalette pa;
 
     m_tasklable = new DLabel();
@@ -64,14 +70,21 @@ void ProgressDialog::initUI()
     m_circleprogress->setFixedSize(336, 6);
     m_circleprogress->setValue(0);
 
+    contentlayout->setContentsMargins(20, 0, 10, 0);
+    contentlayout->addWidget(m_tasklable, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    contentlayout->addSpacing(7);
+    contentlayout->addWidget(m_filelable, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    contentlayout->addSpacing(7);
+    contentlayout->addWidget(m_circleprogress, 0, Qt::AlignLeft | Qt::AlignVCenter);
+
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
-    mainlayout->addWidget(m_tasklable, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    mainlayout->addWidget(m_filelable, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    mainlayout->addWidget(m_circleprogress, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    mainlayout->setContentsMargins(0, 0, 10, 20);
+    mainlayout->setSpacing(0);
+    mainlayout->addWidget(m_titlebar);
+    mainlayout->addLayout(contentlayout);
 
-    widget->setLayout(mainlayout);
-    addContent(widget);
+    setLayout(mainlayout);
     m_extractdialog = new ExtractPauseDialog();
 }
 

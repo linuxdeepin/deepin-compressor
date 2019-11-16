@@ -106,6 +106,7 @@ int Progress::showConfirmDialog()
     DPalette pa;
 
     DLabel* strlabel = new DLabel;
+    strlabel->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     strlabel->setPalette(pa);
@@ -118,7 +119,9 @@ int Progress::showConfirmDialog()
     dialog->addButton(tr("确定"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(15);
 
     DWidget* widget = new DWidget;
 

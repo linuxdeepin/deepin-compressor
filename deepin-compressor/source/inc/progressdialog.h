@@ -32,7 +32,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class ProgressDialog: public DDialog
+class ProgressDialog: public DAbstractDialog
 {
     Q_OBJECT
 public:
@@ -66,6 +66,8 @@ private:
     DProgressBar* m_circleprogress;
 
     ExtractPauseDialog* m_extractdialog;
+
+    DTitlebar* m_titlebar;
 
 };
 

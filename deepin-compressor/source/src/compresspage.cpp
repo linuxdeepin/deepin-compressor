@@ -95,29 +95,11 @@ void CompressPage::onNextPress()
     {   
         DDialog* dialog = new DDialog;
 
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-
-        DPalette pa;
-
-        DLabel* strlabel = new DLabel;
-        pa = DApplicationHelper::instance()->palette(strlabel);
-        pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-        strlabel->setPalette(pa);
-        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-        font.setWeight(QFont::Medium);
-        strlabel->setFont(font);
-        strlabel->setText(tr("请添加文件！"));
-
+        dialog->setMessage(tr("请添加文件！"));
         dialog->addButton(tr("确定"));
-
-        QVBoxLayout* mainlayout = new QVBoxLayout;
-        mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-
-        DWidget* widget = new DWidget;
-
-        widget->setLayout(mainlayout);
-        dialog->addContent(widget);
+        dialog->addSpacing(15);
 
         dialog->exec();
     }
@@ -165,30 +147,13 @@ int CompressPage::showReplaceDialog(QString name)
 {
     DDialog* dialog = new DDialog(this);
 
-    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
+    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
     dialog->setIconPixmap(pixmap);
 
-    DPalette pa;
-
-    DLabel* strlabel = new DLabel;
-    pa = DApplicationHelper::instance()->palette(strlabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-    strlabel->setPalette(pa);
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::Medium);
-    strlabel->setFont(font);
-    strlabel->setText("“" + name + "”" + QObject::tr("已存在，是否替换？"));
-
+    dialog->setMessage("“" + name + "”" + QObject::tr("已存在，是否替换？"));
+    dialog->addSpacing(15);
     dialog->addButton(QObject::tr("取消"));
     dialog->addButton(QObject::tr("确定"));
-
-    QVBoxLayout* mainlayout = new QVBoxLayout;
-    mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
-
-    DWidget* widget = new DWidget;
-
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
 
     dialog->moveToCenter();
 
