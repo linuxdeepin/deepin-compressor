@@ -52,14 +52,11 @@ HomePage::HomePage(QWidget *parent)
     else
         m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
-
     m_tipsLabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_tipsLabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_tipsLabel->setPalette(pa);
-
-
     m_chooseBtn->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 
     // initalize the configuration file.

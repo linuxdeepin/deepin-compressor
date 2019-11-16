@@ -495,7 +495,6 @@ void CompressSetting::ontypeChanged(QAction *action)
     }
 }
 
-
 void CompressSetting::onSplitValueChanged(double value)
 {
 //    int filesize = 0;

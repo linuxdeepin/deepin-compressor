@@ -21,8 +21,6 @@
 
 #include "mainwindow.h"
 #include "utils.h"
-
-
 #include <QSvgWidget>
 #include <QDebug>
 #include <QDragEnterEvent>
@@ -37,7 +35,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include "pluginmanager.h"
-
+#include <DMessageManager>
 //#include "archivejob.h"
 #include "jobs.h"
 
@@ -201,6 +199,10 @@ void MainWindow::InitConnection()
     connect(m_progressdialog, &ProgressDialog::stopExtract,this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry,this, &MainWindow::slotFailRetry);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
+    connect(m_progressdialog,&ProgressDialog::extractSuccess,this,[=]{
+        QIcon icon = Utils::renderSVG(":/images/icon_toast_sucess.svg",QSize(30,30));
+        this->sendMessage(icon,tr("提取成功"));
+    });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
     openkey->setContext(Qt::ApplicationShortcut);
@@ -267,7 +269,6 @@ QMenu* MainWindow::createSettingsMenu()
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
-
     return menu;
 }
 
@@ -280,7 +281,6 @@ void MainWindow::initTitleBar()
     QIcon icon = QIcon::fromTheme("deepin-compressor");
     m_logo = new DLabel("");
     m_logo->setPixmap(icon.pixmap(QSize(30, 30)));
-
 
     m_titlebutton = new DIconButton(DStyle::StandardPixmap::SP_IncreaseElement, this);
     m_titlebutton->setFixedSize(36, 36);

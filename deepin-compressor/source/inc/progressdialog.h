@@ -29,6 +29,7 @@
 #include "extractpausedialog.h"
 #include <DApplicationHelper>
 #include <DFontSizeManager>
+#include <DFloatingMessage>
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,7 +53,7 @@ public:
 
 signals:
     void stopExtract();
-
+    void extractSuccess();
 
 public slots:
     void slotextractpress(int index);

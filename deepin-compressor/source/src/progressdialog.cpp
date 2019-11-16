@@ -77,7 +77,6 @@ void ProgressDialog::initUI()
     contentlayout->addSpacing(7);
     contentlayout->addWidget(m_circleprogress, 0, Qt::AlignLeft | Qt::AlignVCenter);
 
-
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 10, 20);
     mainlayout->setSpacing(0);
@@ -144,6 +143,7 @@ void ProgressDialog::setFinished(const QString &path)
     m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
     m_extractdialog->reject();
     reject();
+    emit extractSuccess();
 }
 
 void ProgressDialog::showdialog()
