@@ -232,8 +232,8 @@ void CompressSetting::InitConnection()
 void CompressSetting::showRightMenu(QMouseEvent * e)
 {
     QPoint pos;
-    pos.setX(window()->x() + m_compresstype->x() + 40);
-    pos.setY(window()->y() + m_compresstype->y() + 100);
+    pos.setX(window()->x() + m_pixmaplabel->x() + 60);
+    pos.setY(window()->y() + m_pixmaplabel->y() + 240);
     m_typemenu->popup(pos);
 
 }
