@@ -101,39 +101,57 @@ int Progress::showConfirmDialog()
     DDialog* dialog = new DDialog;
 
     QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
-    dialog->setIconPixmap(pixmap);
-
-    DPalette pa;
-
-    DLabel* strlabel = new DLabel;
-    strlabel->setFixedHeight(20);
+    dialog->setIconPixmap(pixmap);    
+    DPalette pa, pa2;
+    DLabel* strlabel = new DLabel;    
+    strlabel->setFixedHeight(20);    
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-    strlabel->setPalette(pa);
+    strlabel->setPalette(pa);    
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::Medium);
-    strlabel->setFont(font);
-    strlabel->setText(tr("确定终止当前任务？"));
+    strlabel->setFont(font);        
+    DLabel*strlabel2 = new DLabel;
+    strlabel2->setFixedHeight(18);
+    pa2 = DApplicationHelper::instance()->palette(strlabel2);
+    pa2.setBrush(DPalette::WindowText, pa2.color(DPalette::WindowText));
+    strlabel2->setPalette(pa2);
+    QFont font2 = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+    font2.setWeight(QFont::Medium);
+    strlabel2->setFont(font2);
 
-    dialog->addButton(tr("取消"));
-    dialog->addButton(tr("确定"));
+    if(m_type == COMPRESSING)
+    {
+        strlabel->setText(tr("停止压缩! "));
+        strlabel2->setText(tr("当前有压缩任务正在进行"));
+        dialog->addButton(tr("停止压缩"));
+        dialog->addButton(tr("继续压缩"),true,DDialog::ButtonRecommend);
+
+    }
+    else
+    {
+        strlabel->setText(tr("停止解压! "));
+        strlabel2->setText(tr("当前有解压任务正在进行"));
+        dialog->addButton(tr("停止解压"));
+        dialog->addButton(tr("继续解压"), true, DDialog::ButtonRecommend);
+    }
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel,0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel2,0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 
     DWidget* widget = new DWidget;
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
-
     return dialog->exec();
 }
 
 void Progress::cancelbuttonPressedSlot()
 {
-    if(1 == showConfirmDialog())
+    if(0 == showConfirmDialog())
     {
         emit sigCancelPressed();
     }

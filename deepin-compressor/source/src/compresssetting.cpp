@@ -169,9 +169,6 @@ void CompressSetting::InitUI()
     infoLayout->addLayout(m_fileLayout);
     infoLayout->addStretch();
 
-
-
-
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(16);
     mainLayout->addLayout(infoLayout);
