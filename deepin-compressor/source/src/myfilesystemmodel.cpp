@@ -47,9 +47,6 @@ void MyFileSystemModel::setTableView(QTableView *tableview){
 QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) const
 {
     if (role == Qt::DisplayRole) {
-
-        qDebug()<<section;
-
         switch (section) {
         case 0:
             return tr("名称");

@@ -41,6 +41,35 @@
 
 //static QString shortcut_json =
 
+static bool DeleteDirectory(const QString &path)
+{
+    if (path.isEmpty())
+    {
+        return false;
+    }
+
+    QDir dir(path);
+    if(!dir.exists())
+    {
+        return true;
+    }
+
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    QFileInfoList fileList = dir.entryInfoList();
+    foreach (QFileInfo fi, fileList)
+    {
+        if (fi.isFile())
+        {
+            fi.dir().remove(fi.fileName());
+        }
+        else
+        {
+            DeleteDirectory(fi.absoluteFilePath());
+        }
+    }
+    return dir.rmpath(dir.absolutePath());
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
       m_mainWidget(new QWidget),
@@ -81,7 +110,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             event->ignore();
             return;
         }
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_CompressSuccess->getPath()));
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
     }
     event->accept();
     emit sigquitApp();
@@ -190,7 +219,7 @@ void MainWindow::InitConnection()
     connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
-    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::onCancelCompressPressed);
+    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::sigquitApp);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished,this, &MainWindow::slotLoadingFinished);
@@ -791,6 +820,9 @@ void MainWindow::slotextractSelectedFilesTo(const QString& localPath)
     QString userDestination = localPath;
     QString destinationDirectory;
 
+    m_pathstore = userDestination;
+    m_compressDirFiles = CheckAllFiles(m_pathstore);
+
     if(m_settingsDialog->isAutoCreatDir())
     {
         const QString detectedSubfolder = m_model->archive()->subfolderName();
@@ -1077,8 +1109,16 @@ QStringList MainWindow::CheckAllFiles(QString path)
 {
     QDir dir(path);
     QStringList nameFilters;
-    return dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+    QStringList entrys = dir.entryList(nameFilters, QDir::AllEntries|QDir::Readable, QDir::Name);
+
+    for(int i = 0; i < entrys.count(); i++)
+    {
+        entrys.replace(i, path + QDir::separator() + entrys.at(i));
+    }
+    return entrys;
 }
+
+
 
 void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
 {
@@ -1117,6 +1157,15 @@ void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
             {
                 qDebug()<<"delete error!!!!!!!!!";
             }
+        }
+        else if (fileInfo.isDir()) {
+            QProcess p(0);
+            QString command = "rm";
+            QStringList args;
+            args.append("-fr");
+            args.append(path);
+            p.execute(command,args);
+            p.waitForFinished();
         }
     }
 }
@@ -1185,7 +1234,9 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     m_Progess->settype(COMPRESSING);
     refreshPage();
 
-    m_compressDirFiles = CheckAllFiles(Args[QStringLiteral("localFilePath")]);
+    m_pathstore = Args[QStringLiteral("localFilePath")];
+    m_compressDirFiles = CheckAllFiles(m_pathstore);
+
     m_createJob->start();
     m_workstatus = WorkProcess;
 
@@ -1291,6 +1342,8 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed()
 {
+    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+
     if(m_encryptionjob)
     {
         m_encryptionjob->Killjob();
@@ -1299,8 +1352,6 @@ void MainWindow::onCancelCompressPressed()
     {
         m_createJob->kill();
     }
-
-    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_CompressSuccess->getPath()));
 
     emit sigquitApp();
 }

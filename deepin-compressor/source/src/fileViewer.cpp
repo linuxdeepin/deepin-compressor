@@ -206,7 +206,7 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    plabel->setText(".. 返回上一级");
+    plabel->setText(".. " + tr("返回上一级"));
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
@@ -238,16 +238,16 @@ void fileViewer::refreshTableview()
     MyFileItem* item = nullptr;
     firstmodel->clear();
 
-    item = new MyFileItem(QObject::trUtf8("名称"));
+    item = new MyFileItem(QObject::tr("名称"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
-    item = new MyFileItem(QObject::trUtf8("修改时间"));
+    item = new MyFileItem(QObject::tr("修改时间"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(1, item);
-    item = new MyFileItem(QObject::trUtf8("类型"));
+    item = new MyFileItem(QObject::tr("类型"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new MyFileItem("      " + QObject::trUtf8("大小"));
+    item = new MyFileItem("      " + QObject::tr("大小"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
 

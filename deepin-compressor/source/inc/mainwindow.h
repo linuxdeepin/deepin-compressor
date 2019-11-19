@@ -193,6 +193,7 @@ private:
     QAction *m_openAction;
 
     QStringList m_compressDirFiles;
+    QString m_pathstore;
 };
 
 #endif
