@@ -88,13 +88,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="954"/>
+        <location filename="../interface/cliinterface.cpp" line="955"/>
         <source>@info</source>
         <comment>Extraction failed because the disk is full.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="1022"/>
+        <location filename="../interface/cliinterface.cpp" line="1023"/>
         <source>Ark does not currently support testing this archive.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,56 +115,78 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresspage.cpp" line="96"/>
+        <location filename="../source/src/compresspage.cpp" line="100"/>
         <source>请添加文件！</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresspage.cpp" line="101"/>
+        <source>确定</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CompressSetting</name>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="49"/>
+        <location filename="../source/src/compresssetting.cpp" line="61"/>
         <source>压缩</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="68"/>
+        <location filename="../source/src/compresssetting.cpp" line="106"/>
         <source>新建归档文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="77"/>
+        <location filename="../source/src/compresssetting.cpp" line="115"/>
         <source>文件名</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="78"/>
+        <location filename="../source/src/compresssetting.cpp" line="116"/>
         <source>保存到</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="82"/>
+        <location filename="../source/src/compresssetting.cpp" line="120"/>
         <source>高级选项</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="89"/>
+        <location filename="../source/src/compresssetting.cpp" line="127"/>
         <source>加密文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="92"/>
+        <location filename="../source/src/compresssetting.cpp" line="130"/>
         <source>加密文件列表</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="97"/>
+        <location filename="../source/src/compresssetting.cpp" line="135"/>
         <source>分卷压缩</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="167"/>
+        <location filename="../source/src/compresssetting.cpp" line="248"/>
         <source>文件名输入错误，请重新输入！</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="250"/>
+        <location filename="../source/src/compresssetting.cpp" line="262"/>
+        <location filename="../source/src/compresssetting.cpp" line="273"/>
+        <source>确定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="260"/>
+        <source>请输入保存路径！</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="271"/>
+        <source>路径不存在，请重新输入</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -307,22 +329,22 @@
 <context>
     <name>ExtractPauseDialog</name>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="49"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="50"/>
         <source>停止提取！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="58"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="60"/>
         <source>当前有提取任务正在进行</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="60"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="62"/>
         <source>停止提取</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="61"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="63"/>
         <source>继续提取</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,127 +400,134 @@
     <name>Main</name>
     <message>
         <location filename="../main.cpp" line="64"/>
-        <source>深度解压缩</source>
+        <source>归档管理器</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="65"/>
-        <source>深度解压缩是深度操作系统自带的解压缩软件。满足对文件解压缩的常用功能，快速、轻巧，使用简单。</source>
+        <source>归档管理器是一款提供对文件解压、压缩常用功能的软件工具。</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="120"/>
-        <source>解压缩</source>
+        <location filename="../source/src/mainwindow.cpp" line="156"/>
+        <source>归档管理器</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="132"/>
+        <location filename="../source/src/mainwindow.cpp" line="168"/>
         <source>关闭</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="136"/>
+        <location filename="../source/src/mainwindow.cpp" line="172"/>
         <source>帮助</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="140"/>
+        <location filename="../source/src/mainwindow.cpp" line="176"/>
         <source>选择文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="144"/>
+        <location filename="../source/src/mainwindow.cpp" line="180"/>
         <source>删除</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="148"/>
+        <location filename="../source/src/mainwindow.cpp" line="184"/>
         <source>显示快捷键预览</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="152"/>
+        <location filename="../source/src/mainwindow.cpp" line="188"/>
         <source>重命名</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="231"/>
+        <location filename="../source/src/mainwindow.cpp" line="234"/>
+        <source>提取成功</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="272"/>
         <source>打开</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="256"/>
+        <location filename="../source/src/mainwindow.cpp" line="298"/>
         <source>设置</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="422"/>
-        <location filename="../source/src/mainwindow.cpp" line="429"/>
-        <location filename="../source/src/mainwindow.cpp" line="899"/>
+        <location filename="../source/src/mainwindow.cpp" line="470"/>
+        <location filename="../source/src/mainwindow.cpp" line="478"/>
+        <location filename="../source/src/mainwindow.cpp" line="1079"/>
         <source>新建归档文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="435"/>
+        <location filename="../source/src/mainwindow.cpp" line="484"/>
         <source>正在压缩</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="440"/>
+        <location filename="../source/src/mainwindow.cpp" line="489"/>
         <source>正在解压</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="446"/>
+        <location filename="../source/src/mainwindow.cpp" line="495"/>
         <source>压缩成功!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="451"/>
+        <location filename="../source/src/mainwindow.cpp" line="500"/>
         <source>抱歉，压缩失败！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="457"/>
+        <location filename="../source/src/mainwindow.cpp" line="506"/>
         <source>解压成功！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="466"/>
+        <location filename="../source/src/mainwindow.cpp" line="515"/>
         <source>抱歉，解压失败！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="505"/>
+        <location filename="../source/src/mainwindow.cpp" line="561"/>
         <source>添加压缩文件到目录或在新窗口中打开该文件？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="506"/>
+        <location filename="../source/src/mainwindow.cpp" line="562"/>
         <source>取消</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="507"/>
+        <location filename="../source/src/mainwindow.cpp" line="563"/>
         <source>添加</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="508"/>
+        <location filename="../source/src/mainwindow.cpp" line="564"/>
         <source>在新窗口中打开</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="584"/>
-        <location filename="../source/src/mainwindow.cpp" line="756"/>
+        <location filename="../source/src/mainwindow.cpp" line="696"/>
+        <location filename="../source/src/mainwindow.cpp" line="723"/>
+        <location filename="../source/src/mainwindow.cpp" line="761"/>
+        <location filename="../source/src/mainwindow.cpp" line="936"/>
         <source>压缩文件已损坏!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="999"/>
+        <location filename="../source/src/mainwindow.cpp" line="1253"/>
         <source>原始文件已损坏！</source>
         <translation type="unfinished"></translation>
     </message>
@@ -575,33 +604,33 @@
 <context>
     <name>MyFileSystemModel</name>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="55"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="52"/>
         <source>名称</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="57"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="54"/>
         <source>大小</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="59"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="56"/>
         <source>类型</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="61"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="58"/>
         <source>修改时间</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="63"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="60"/>
         <source>Unnamed column</source>
         <comment>??</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="132"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="129"/>
         <source>项</source>
         <translation type="unfinished"></translation>
     </message>
@@ -609,22 +638,62 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../source/src/progress.cpp" line="70"/>
+        <location filename="../source/src/progress.cpp" line="71"/>
         <source>正在计算中...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="74"/>
+        <location filename="../source/src/progress.cpp" line="75"/>
         <source>取消</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="138"/>
+        <location filename="../source/src/progress.cpp" line="125"/>
+        <source>停止压缩! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="126"/>
+        <source>当前有压缩任务正在进行</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="127"/>
+        <source>停止压缩</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="128"/>
+        <source>继续压缩</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="133"/>
+        <source>停止解压! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="134"/>
+        <source>当前有解压任务正在进行</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="135"/>
+        <source>停止解压</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="136"/>
+        <source>继续解压</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="195"/>
         <source>正在压缩</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="142"/>
+        <location filename="../source/src/progress.cpp" line="199"/>
         <source>正在解压</source>
         <translation type="unfinished"></translation>
     </message>
@@ -632,24 +701,24 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="56"/>
-        <location filename="../source/src/progressdialog.cpp" line="109"/>
+        <location filename="../source/src/progressdialog.cpp" line="66"/>
+        <location filename="../source/src/progressdialog.cpp" line="125"/>
         <source>当前任务</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="57"/>
-        <location filename="../source/src/progressdialog.cpp" line="115"/>
+        <location filename="../source/src/progressdialog.cpp" line="67"/>
+        <location filename="../source/src/progressdialog.cpp" line="131"/>
         <source>正在提取</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="127"/>
+        <location filename="../source/src/progressdialog.cpp" line="149"/>
         <source>提取完成</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="127"/>
+        <location filename="../source/src/progressdialog.cpp" line="149"/>
         <source>已提取到</source>
         <translation type="unfinished"></translation>
     </message>
@@ -657,47 +726,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../source/src/utils.cpp" line="114"/>
+        <location filename="../source/src/utils.cpp" line="128"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="115"/>
+        <location filename="../source/src/utils.cpp" line="129"/>
         <source>KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="116"/>
+        <location filename="../source/src/utils.cpp" line="130"/>
         <source>MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="117"/>
+        <location filename="../source/src/utils.cpp" line="131"/>
         <source>GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="118"/>
+        <location filename="../source/src/utils.cpp" line="132"/>
         <source>TB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="119"/>
+        <location filename="../source/src/utils.cpp" line="133"/>
         <source>PB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="120"/>
+        <location filename="../source/src/utils.cpp" line="134"/>
         <source>EB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="121"/>
+        <location filename="../source/src/utils.cpp" line="135"/>
         <source>ZB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="122"/>
+        <location filename="../source/src/utils.cpp" line="136"/>
         <source>YB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -705,62 +774,82 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../interface/queries.cpp" line="124"/>
+        <location filename="../interface/queries.cpp" line="126"/>
         <source>文件已存在，如何处理？</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/queries.cpp" line="126"/>
+        <location filename="../interface/queries.cpp" line="128"/>
         <source>跳过</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/queries.cpp" line="127"/>
+        <location filename="../interface/queries.cpp" line="129"/>
         <source>覆盖</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/queries.cpp" line="130"/>
+        <location filename="../interface/queries.cpp" line="132"/>
         <source>应用到全部文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresspage.cpp" line="121"/>
+        <location filename="../source/src/compresspage.cpp" line="128"/>
         <source>请在根目录下添加文件！</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresspage.cpp" line="123"/>
+        <location filename="../source/src/compresspage.cpp" line="130"/>
+        <location filename="../source/src/compresspage.cpp" line="156"/>
         <source>确定</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="205"/>
+        <location filename="../source/src/compresspage.cpp" line="153"/>
+        <source>已存在，是否替换？</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresspage.cpp" line="155"/>
+        <source>取消</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="184"/>
         <source>名称,大小,类型,修改时间</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="261"/>
+        <location filename="../source/src/fileViewer.cpp" line="241"/>
         <source>名称</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="264"/>
+        <location filename="../source/src/fileViewer.cpp" line="244"/>
         <source>修改时间</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="267"/>
+        <location filename="../source/src/fileViewer.cpp" line="247"/>
         <source>类型</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="270"/>
+        <location filename="../source/src/fileViewer.cpp" line="250"/>
         <source>大小</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="39"/>
+        <location filename="../source/src/myfileitem.cpp" line="55"/>
+        <location filename="../source/src/myfileitem.cpp" line="57"/>
+        <location filename="../source/src/myfileitem.cpp" line="60"/>
+        <location filename="../source/src/myfileitem.cpp" line="62"/>
+        <location filename="../source/src/myfileitem.cpp" line="64"/>
+        <source>项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progressdialog.cpp" line="46"/>
         <source>有1个任务正在进行</source>
         <translation type="unfinished"></translation>
     </message>
@@ -853,23 +942,28 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="180"/>
+        <location filename="../source/src/fileViewer.cpp" line="159"/>
         <source>File Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="244"/>
-        <location filename="../source/src/fileViewer.cpp" line="554"/>
+        <location filename="../source/src/fileViewer.cpp" line="209"/>
+        <source>返回上一级</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="223"/>
+        <location filename="../source/src/fileViewer.cpp" line="591"/>
         <source>提取文件</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="245"/>
+        <location filename="../source/src/fileViewer.cpp" line="224"/>
         <source>提取文件到当前文件夹</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="298"/>
+        <location filename="../source/src/fileViewer.cpp" line="278"/>
         <source>项</source>
         <translation type="unfinished"></translation>
     </message>
