@@ -84,8 +84,8 @@ void SettingDialog::initUI()
         if (DSettingsOption *option = qobject_cast<DSettingsOption*>(obj)) {
             QWidget* buttonwidget = new QWidget();
             QHBoxLayout* layout = new QHBoxLayout();
-            QPushButton *button1 = new DPushButton(tr("全选"));
-            QPushButton *button2 = new DPushButton(tr("取消全选"));
+            QPushButton *button1 = new DPushButton(tr("select all"));
+            QPushButton *button2 = new DPushButton(tr("Cancel all selection"));
             button1->setFixedSize(100, 36);
             button2->setFixedSize(100, 36);
             layout->addStretch();
@@ -109,13 +109,13 @@ void SettingDialog::initUI()
             QHBoxLayout* layout = new QHBoxLayout();
 
             DLabel* label = new DLabel;
-            label->setText(tr("默认解压位置") + ":");
+            label->setText(tr("Default extraction location") + ":");
 
             DComboBox* combobox = new DComboBox;
             combobox->setFixedWidth(300);
             combobox->setEditable(false);
             QStringList list;
-            list << tr("当前目录")<<tr("桌面")<<tr("其他目录");
+            list << tr("Current directory")<<tr("desktop")<<tr("Other directory");
             combobox->addItems(list);
             qDebug()<<m_comboboxoption->value();
             if(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value())
@@ -144,18 +144,18 @@ void SettingDialog::initUI()
             widget->setLayout(layout);
 
             connect(combobox, &DComboBox::currentTextChanged, [combobox, this] {
-                if(tr("当前目录") == combobox->currentText())
+                if(tr("Current directory") == combobox->currentText())
                 {
                     combobox->setEditable(false);
                     m_curpath = "";
                     m_index_last = 0;
                 }
-                else if (tr("桌面") == combobox->currentText()) {
+                else if (tr("desktop") == combobox->currentText()) {
                     combobox->setEditable(false);
                     m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
                     m_index_last = 1;
                 }
-                else if(tr("其他目录") == combobox->currentText()){
+                else if(tr("Other directory") == combobox->currentText()){
                     combobox->setEditable(true);
                     DFileDialog dialog;
                     dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -252,7 +252,7 @@ void SettingDialog::done(int status)
     if(!dir.exists())
     {
         QMessageBox box;
-        box.setText(tr("默认解压路径不存在，请重新输入！"));
+        box.setText(tr("The default extraction path does not exist, please re-enter!"));
         box.exec();
         return;
     }

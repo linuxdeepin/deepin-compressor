@@ -42,7 +42,7 @@ CompressPage::CompressPage(QWidget *parent)
 {
 
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
-    m_nextbutton = new DPushButton(tr("下一步"));
+    m_nextbutton = new DPushButton(tr("Next"));
     m_nextbutton->setFixedSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
@@ -97,8 +97,8 @@ void CompressPage::onNextPress()
 
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("请添加文件！"));
-        dialog->addButton(tr("确定"));
+        dialog->setMessage(tr("Please add files!"));
+        dialog->addButton(tr("OK"));
         dialog->addSpacing(15);
 
         dialog->exec();
@@ -125,9 +125,9 @@ void CompressPage::showDialog()
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::Medium);
     strlabel->setFont(font);
-    strlabel->setText(QObject::tr("请在根目录下添加文件！"));
+    strlabel->setText(QObject::tr("Please add files in the root directory!"));
 
-    dialog->addButton(QObject::tr("确定"));
+    dialog->addButton(QObject::tr("OK"));
 
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
@@ -150,10 +150,10 @@ int CompressPage::showReplaceDialog(QString name)
     QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
     dialog->setIconPixmap(pixmap);
 
-    dialog->setMessage("“" + name + "”" + QObject::tr("已存在，是否替换？"));
+    dialog->setMessage("“" + name + "”" + QObject::tr("Already exist, is it replaced?"));
     dialog->addSpacing(15);
-    dialog->addButton(QObject::tr("取消"));
-    dialog->addButton(QObject::tr("确定"));
+    dialog->addButton(QObject::tr("Cancel"));
+    dialog->addButton(QObject::tr("OK"));
 
     dialog->moveToCenter();
 

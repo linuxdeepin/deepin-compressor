@@ -28,8 +28,8 @@
 Compressor_Fail::Compressor_Fail(QWidget *parent)
     : QWidget(parent)
 {
-    m_stringinfo = tr("抱歉，解压失败！");
-    m_stringdetail = tr("压缩文件已损坏");
+    m_stringinfo = tr("Sorry, the extraction failed!");
+    m_stringdetail = tr("Compressed file is corrupt");
     InitUI();
     InitConnection();
 }
@@ -59,7 +59,7 @@ void Compressor_Fail::InitUI()
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);
-    m_retrybutton->setText(tr("重 试"));
+    m_retrybutton->setText(tr("Retry"));
     m_retrybutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);

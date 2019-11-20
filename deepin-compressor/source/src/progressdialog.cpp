@@ -43,7 +43,7 @@ void ProgressDialog::initUI()
     m_titlebar->setMenuVisible(false);
     m_titlebar->setIcon(QIcon::fromTheme("deepin-compressor"));
     m_titlebar->setFixedWidth(m_defaultWidth);
-    m_titlebar->setTitle(QObject::tr("有1个任务正在进行"));
+    m_titlebar->setTitle(QObject::tr("There is 1 task in progress"));
     m_titlebar->setBackgroundTransparent(true);
 
     QVBoxLayout* contentlayout = new QVBoxLayout;
@@ -63,8 +63,8 @@ void ProgressDialog::initUI()
     pa = DApplicationHelper::instance()->palette(m_filelable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_filelable->setPalette(pa);
-    m_tasklable->setText(tr("当前任务") + ":");
-    m_filelable->setText(tr("正在提取") + ":");
+    m_tasklable->setText(tr("Current task") + ":");
+    m_filelable->setText(tr("Extracting") + ":");
 
     m_circleprogress = new  DProgressBar();
     m_circleprogress->setFixedSize(336, 6);
@@ -122,13 +122,13 @@ void ProgressDialog::setCurrentTask(const QString &file)
 //    setIcon(icon, QSize(16, 16));
 //    setWindowIcon(icon);
 
-    m_tasklable->setText(tr("当前任务") + ":" + fileinfo.fileName());
+    m_tasklable->setText(tr("Current task") + ":" + fileinfo.fileName());
 }
 
 void ProgressDialog::setCurrentFile(const QString &file)
 {
     QFileInfo fileinfo(file);
-    m_filelable->setText(tr("正在提取") + ":" + fileinfo.fileName());
+    m_filelable->setText(tr("Extracting") + ":" + fileinfo.fileName());
 }
 
 void ProgressDialog::setProcess(unsigned long  value)
@@ -146,7 +146,7 @@ void ProgressDialog::setFinished(const QString &path)
     {
         setWindowTitle(tr(""));
         m_circleprogress->setValue(100);
-        m_filelable->setText(tr("提取完成") + ":" + tr("已提取到") + path);
+        m_filelable->setText(tr("Extraction completed") + ":" + tr("Extracted to") + path);
         m_extractdialog->reject();
         reject();
         emit extractSuccess();

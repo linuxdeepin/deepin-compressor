@@ -47,14 +47,14 @@ void EncryptionPage::InitUI()
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);
-    m_stringinfolabel->setText(tr("此文件已加密，请输入解压密码"));
+    m_stringinfolabel->setText(tr("This file is encrypted, please enter the extraction password"));
     m_nextbutton = new DPushButton();
     m_nextbutton->setFixedSize(340, 36);
-    m_nextbutton->setText(tr("下一步"));
+    m_nextbutton->setText(tr("Next"));
     m_password = new DPasswordEdit();
     m_password->setFixedSize(340, 36);
     QLineEdit* edit = m_password->lineEdit();
-    edit->setPlaceholderText(tr("请输入密码以解压"));
+    edit->setPlaceholderText(tr("Please enter password to extract"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
@@ -88,7 +88,7 @@ void EncryptionPage::wrongPassWordSlot()
     {
         qDebug()<<"wrongPassWordSlot";
         m_password->setAlert(true);
-        m_password->showAlertMessage(tr("密码错误"));
+        m_password->showAlertMessage(tr("password is error"));
     }
 
 }

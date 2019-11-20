@@ -47,16 +47,16 @@ MimeTypeDisplayManager::~MimeTypeDisplayManager()
 
 void MimeTypeDisplayManager::initData()
 {
-    m_displayNames[FileType::Directory] = tr("目录");
-    m_displayNames[FileType::DesktopApplication] = tr("应用程序");
-    m_displayNames[FileType::Videos] = tr("视频");
-    m_displayNames[FileType::Audios] = tr("音频");
-    m_displayNames[FileType::Images] = tr("图片");
-    m_displayNames[FileType::Archives] = tr("压缩文件");
-    m_displayNames[FileType::Documents] = tr("文档");
-    m_displayNames[FileType::Executable] = tr("可执行程序");
-    m_displayNames[FileType::Backups] = tr("备份文件");
-    m_displayNames[FileType::Unknown] = tr("未知");
+    m_displayNames[FileType::Directory] = tr("Directory");
+    m_displayNames[FileType::DesktopApplication] = tr("Application");
+    m_displayNames[FileType::Videos] = tr("Video");
+    m_displayNames[FileType::Audios] = tr("Audio");
+    m_displayNames[FileType::Images] = tr("Image");
+    m_displayNames[FileType::Archives] = tr("Compressed file");
+    m_displayNames[FileType::Documents] = tr("Document");
+    m_displayNames[FileType::Executable] = tr("Executable program");
+    m_displayNames[FileType::Backups] = tr("Backup file");
+    m_displayNames[FileType::Unknown] = tr("Unknown");
 
 
     m_defaultIconNames[FileType::Directory] = "folder";

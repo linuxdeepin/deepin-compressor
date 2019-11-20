@@ -49,13 +49,13 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
     if (role == Qt::DisplayRole) {
         switch (section) {
         case 0:
-            return tr("名称");
+            return tr("Name");
         case 3:
-            return "      " + tr("大小");
+            return "      " + tr("Size");
         case 2:
-            return tr("类型");
+            return tr("Type");
         case 1:
-            return tr("修改时间");
+            return tr("Modify");
         default:
             return tr("Unnamed column", "??");
         }
@@ -126,7 +126,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                     {
                         count -= 2;
                     }
-                    return QString::number(count) + " " + tr("项")+  "    ";
+                    return QString::number(count) + " " + tr("Item")+  "    ";
                 }
                 else {
 

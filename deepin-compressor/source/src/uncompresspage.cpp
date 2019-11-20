@@ -41,13 +41,13 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 {
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
-    m_nextbutton = new DPushButton(tr("解压"));
+    m_nextbutton = new DPushButton(tr("Extracted"));
     m_nextbutton->setFixedSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
-    m_extractpath = new DCommandLinkButton(tr("解压到") + ": ~/Desktop");
+    m_extractpath = new DCommandLinkButton(tr("Extracted to") + ": ~/Desktop");
     m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
@@ -102,7 +102,7 @@ void UnCompressPage::onPathButoonClicked()
     DFileDialog dialog;
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::Directory);
-    dialog.setWindowTitle(tr("查找目录"));
+    dialog.setWindowTitle(tr("Find directory"));
     dialog.setDirectory(m_pathstr);
 
     const int mode = dialog.exec();
@@ -114,13 +114,13 @@ void UnCompressPage::onPathButoonClicked()
     QList<QUrl> pathlist = dialog.selectedUrls();
 
     QString curpath = pathlist.at(0).toLocalFile();
-    m_extractpath->setText(tr("解压到") + ": " + curpath);
+    m_extractpath->setText(tr("Extracted to") + ": " + curpath);
     m_pathstr = curpath;
 }
 
 void UnCompressPage::setdefaultpath(QString path){
     m_pathstr = path;
-    m_extractpath->setText(tr("解压到") + ": " + m_pathstr);
+    m_extractpath->setText(tr("Extracted to") + ": " + m_pathstr);
 }
 
 QString UnCompressPage::getDecompressPath()

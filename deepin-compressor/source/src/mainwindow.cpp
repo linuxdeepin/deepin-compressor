@@ -153,7 +153,7 @@ void MainWindow::InitUI()
     m_encodingpage->setAutoFillBackground(true);
 
     // init window flags.
-    setWindowTitle(tr("归档管理器"));
+    setWindowTitle(tr("Archive manager"));
     setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint);
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
@@ -165,27 +165,27 @@ void MainWindow::InitUI()
 QJsonObject MainWindow::creatShorcutJson()
 {
     QJsonObject shortcut1;
-    shortcut1.insert("name", tr("关闭"));
+    shortcut1.insert("name", tr("Close"));
     shortcut1.insert("value", "Alt+F4");
 
     QJsonObject shortcut2;
-    shortcut2.insert("name", tr("帮助"));
+    shortcut2.insert("name", tr("Help"));
     shortcut2.insert("value", "F1");
 
     QJsonObject shortcut3;
-    shortcut3.insert("name", tr("选择文件"));
+    shortcut3.insert("name", tr("Select the file"));
     shortcut3.insert("value", "Ctrl+O");
 
     QJsonObject shortcut4;
-    shortcut4.insert("name", tr("删除"));
+    shortcut4.insert("name", tr("Delete"));
     shortcut4.insert("value", "Delete");
 
     QJsonObject shortcut5;
-    shortcut5.insert("name", tr("显示快捷键预览"));
+    shortcut5.insert("name", tr("Show shortcut preview"));
     shortcut5.insert("value", "Ctrl+Shift+/");
 
     QJsonObject shortcut6;
-    shortcut6.insert("name", tr("重命名"));
+    shortcut6.insert("name", tr("Rename"));
     shortcut6.insert("value", "F2");
 
     QJsonArray shortcutArray;
@@ -197,7 +197,7 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcutArray.append(shortcut6);
 
     QJsonObject shortcut_group;
-    shortcut_group.insert("groupName", "快捷键");
+    shortcut_group.insert("groupName", "hot key");
     shortcut_group.insert("groupItems", shortcutArray);
 
     QJsonArray shortcutArrayall;
@@ -231,7 +231,7 @@ void MainWindow::InitConnection()
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog,&ProgressDialog::extractSuccess,this,[=]{
         QIcon icon = Utils::renderSVG(":/images/icon_toast_sucess.svg",QSize(30,30));
-        this->sendMessage(icon,tr("提取成功"));
+        this->sendMessage(icon,tr("Successful extraction"));
     });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
@@ -269,7 +269,7 @@ QMenu* MainWindow::createSettingsMenu()
 {
     QMenu *menu = new QMenu;
 
-    m_openAction = menu->addAction(tr("打开"));
+    m_openAction = menu->addAction(tr("Open"));
     connect(m_openAction, &QAction::triggered, this, [this] {
         DFileDialog dialog;
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -295,7 +295,7 @@ QMenu* MainWindow::createSettingsMenu()
         onSelected(dialog.selectedFiles());
     });
 
-    QAction *settingsAction = menu->addAction(tr("设置"));
+    QAction *settingsAction = menu->addAction(tr("Setting"));
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
@@ -467,7 +467,7 @@ void MainWindow::refreshPage()
     case PAGE_ZIP:
         m_openAction->setEnabled(true);
         m_mainLayout->setCurrentIndex(2);
-        setQLabelText(m_titlelabel, tr("新建归档文件"));
+        setQLabelText(m_titlelabel, tr("New archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
@@ -475,35 +475,35 @@ void MainWindow::refreshPage()
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        setQLabelText(m_titlelabel, tr("新建归档文件"));
+        setQLabelText(m_titlelabel, tr("New archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        setQLabelText(m_titlelabel, tr("正在压缩"));
+        setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_UNZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        setQLabelText(m_titlelabel, tr("正在解压"));
+        setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_ZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
-        m_CompressSuccess->setstringinfo(tr("压缩成功!"));
+        m_CompressSuccess->setstringinfo(tr("Successful compression!"));
         break;
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("抱歉，压缩失败！"));
+        m_CompressFail->setFailStr(tr("Sorry, the compression failed!"));
         break;
     case PAGE_UNZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("解压成功！"));
+        m_CompressSuccess->setstringinfo(tr("Successful extraction"));
         if(m_settingsDialog->isAutoOpen())
         {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
@@ -512,7 +512,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("抱歉，解压失败！"));
+        m_CompressFail->setFailStr(tr("Sorry, the extraction failed!"));
         break;
     case  PAGE_ENCRYPTION:
         m_mainLayout->setCurrentIndex(7);
@@ -558,10 +558,10 @@ void MainWindow::onSelected(const QStringList &files)
             DDialog* dialog = new DDialog;
             QIcon icon = QIcon::fromTheme("deepin-compressor");
             dialog->setIcon(icon, QSize(32, 32));
-            dialog->setMessage(tr("添加压缩文件到目录或在新窗口中打开该文件？"));
-            dialog->addButton(tr("取消"));
-            dialog->addButton(tr("添加"));
-            dialog->addButton(tr("在新窗口中打开"));
+            dialog->setMessage(tr("Add a compressed file to a directory or open it in a new window?"));
+            dialog->addButton(tr("Cancel"));
+            dialog->addButton(tr("Add"));
+            dialog->addButton(tr("Open in new window"));
             const int mode = dialog->exec();
             qDebug()<<mode;
             if(1 == mode)
@@ -693,7 +693,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 refreshPage();
             }
             else {
-                m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
+                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
                 m_pageid = PAGE_UNZIP_FAIL;
                 refreshPage();
             }
@@ -720,7 +720,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             loadArchive(filepath);
         }
         else {
-            m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
+            m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
             m_pageid = PAGE_UNZIP_FAIL;
             refreshPage();
         }
@@ -758,7 +758,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
 {
     m_workstatus = WorkNone;
     if (job->error()) {
-        m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
+        m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -933,7 +933,7 @@ void MainWindow::slotExtractionDone(KJob* job)
         //do noting:wrong password
     }
     else if (job->error() && job->error() != KJob::KilledJobError) {
-        m_CompressFail->setFailStrDetail(tr("压缩文件已损坏!"));
+        m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -1076,7 +1076,7 @@ void MainWindow::setCompressDefaultPath()
         m_CompressSetting->setDefaultName(fileinfobase.baseName());
     }
     else {
-        m_CompressSetting->setDefaultName(tr("新建归档文件"));
+        m_CompressSetting->setDefaultName(tr("New archive"));
     }
 
 }
@@ -1250,7 +1250,7 @@ void MainWindow::slotCompressFinished(KJob *job)
     m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
         m_pageid = PAGE_ZIP_FAIL;
-        m_CompressFail->setFailStrDetail(tr("原始文件已损坏！"));
+        m_CompressFail->setFailStrDetail(tr("The original file is corrupt!"));
         refreshPage();
         return;
     }

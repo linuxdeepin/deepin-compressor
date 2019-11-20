@@ -181,7 +181,7 @@ void fileViewer::InitUI()
     pModel= new MyFileSystemModel();
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
-    QStringList labels = QObject::trUtf8("名称,大小,类型,修改时间").simplified().split(",");
+    QStringList labels = QObject::trUtf8("Name,Size,Type,Modify").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
     pScrollbar= new MyScrollBar();
@@ -206,7 +206,7 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    plabel->setText(".. " + tr("返回上一级"));
+    plabel->setText(".. " + tr("Back to previous"));
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
@@ -220,8 +220,8 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setFixedWidth(200);
-        m_pRightMenu->addAction(tr("提取文件"));
-        m_pRightMenu->addAction(tr("提取文件到当前文件夹"));
+        m_pRightMenu->addAction(tr("Extract files"));
+        m_pRightMenu->addAction(tr("Extract files to current folder"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
@@ -238,16 +238,16 @@ void fileViewer::refreshTableview()
     MyFileItem* item = nullptr;
     firstmodel->clear();
 
-    item = new MyFileItem(QObject::tr("名称"));
+    item = new MyFileItem(QObject::tr("Name"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
-    item = new MyFileItem(QObject::tr("修改时间"));
+    item = new MyFileItem(QObject::tr("Modify"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(1, item);
-    item = new MyFileItem(QObject::tr("类型"));
+    item = new MyFileItem(QObject::tr("Type"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new MyFileItem("      " + QObject::tr("大小"));
+    item = new MyFileItem("      " + QObject::tr("Size"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
 
@@ -275,7 +275,7 @@ void fileViewer::refreshTableview()
             {
                 count -= 2;
             }
-            item = new MyFileItem(QString::number(count) + " " + tr("项")+  "    ");
+            item = new MyFileItem(QString::number(count) + " " + tr("Item")+  "    ");
         }
         else
         {
@@ -588,7 +588,7 @@ void fileViewer::slotDragLeave(QString path)
 
 void fileViewer::onRightMenuClicked(QAction *action)
 {
-    if(action->text() == tr("提取文件"))
+    if(action->text() == tr("Extract files"))
     {
         emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
     }

@@ -47,7 +47,7 @@ void ExtractPauseDialog::initUI()
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::Medium);
     strlabel->setFont(font);
-    strlabel->setText(tr("停止提取！"));
+    strlabel->setText(tr("Stop extracting!"));
     DLabel* strlabel2 = new DLabel;
     strlabel2->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel2);
@@ -57,10 +57,10 @@ void ExtractPauseDialog::initUI()
     font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::DemiBold);
     strlabel2->setFont(font);
-    strlabel2->setText(tr("当前有提取任务正在进行"));
+    strlabel2->setText(tr("There are currently extraction tasks in progress"));
 
-    addButton(tr("停止提取"));
-    addButton(tr("继续提取"), true, ButtonRecommend);
+    addButton(tr("Stop"));
+    addButton(tr("Continue"), true, ButtonRecommend);
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);

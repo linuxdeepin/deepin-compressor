@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>AddJob</name>
     <message numerus="yes">
@@ -481,7 +481,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="495"/>
         <source>压缩成功!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Extracting</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="500"/>

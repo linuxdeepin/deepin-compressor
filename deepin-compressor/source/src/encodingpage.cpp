@@ -61,7 +61,7 @@ void EncodingPage::InitUI()
     encodeList.prepend("UTF-8");
 
     m_codelabel = new DLabel;
-    m_codelabel->setText(tr("文件名编码") + ":");
+    m_codelabel->setText(tr("File name encoding") + ":");
     m_codebox = new DComboBox;
     m_codebox->setFixedWidth(260);
     m_codebox->setEditable(true);
@@ -74,11 +74,11 @@ void EncodingPage::InitUI()
     encodelayout->addStretch();
 
     m_detaillabel = new DLabel;
-    m_detaillabel->setText(tr("请提供文件名编码以解压此文档"));
+    m_detaillabel->setText(tr("Please provide a filename encoding to extract this document"));
     m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 
-    m_cancelbutton = new DPushButton(tr("取消"));
-    m_confirmbutton = new DPushButton(tr("确定"));
+    m_cancelbutton = new DPushButton(tr("Cancel"));
+    m_confirmbutton = new DPushButton(tr("OK"));
     m_cancelbutton->setFixedSize(165, 36);
     m_confirmbutton->setFixedSize(165, 36);
     QHBoxLayout* buttonlayout = new QHBoxLayout;
@@ -115,7 +115,7 @@ void EncodingPage::setFilename(QString filename)
     QFileInfo fileinfo(filename);
     setTypeImage(fileinfo.suffix());
     m_filenamelabel->setText(filename);
-    m_codebox->setEditText("Unicode(UTF-8) 世界城市.txt");
+    m_codebox->setEditText("Unicode(UTF-8) World city.txt");
 }
 
 void EncodingPage::setTypeImage(QString type)

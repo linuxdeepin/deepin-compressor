@@ -68,11 +68,11 @@ void Progress::InitUI()
     pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_progressfilelabel->setPalette(pa);
     m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    m_progressfilelabel->setText(tr("正在计算中..."));
+    m_progressfilelabel->setText(tr("Being calculated..."));
 
     m_cancelbutton = new DPushButton();
     m_cancelbutton->setFixedSize(340, 36);
-    m_cancelbutton->setText(tr("取消"));
+    m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);
@@ -122,18 +122,18 @@ int Progress::showConfirmDialog()
 
     if(m_type == COMPRESSING)
     {
-        strlabel->setText(tr("停止压缩! "));
-        strlabel2->setText(tr("当前有压缩任务正在进行"));
-        dialog->addButton(tr("停止压缩"));
-        dialog->addButton(tr("继续压缩"),true,DDialog::ButtonRecommend);
+        strlabel->setText(tr("Stop compression! "));
+        strlabel2->setText(tr("There is currently a compression task in progress"));
+        dialog->addButton(tr("Stop"));
+        dialog->addButton(tr("Continue"),true,DDialog::ButtonRecommend);
 
     }
     else
     {
-        strlabel->setText(tr("停止解压! "));
-        strlabel2->setText(tr("当前有解压任务正在进行"));
-        dialog->addButton(tr("停止解压"));
-        dialog->addButton(tr("继续解压"), true, DDialog::ButtonRecommend);
+        strlabel->setText(tr("Stop extraction! "));
+        strlabel2->setText(tr("There is currently a extraction task in progress"));
+        dialog->addButton(tr("Stop"));
+        dialog->addButton(tr("Continue"), true, DDialog::ButtonRecommend);
     }
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
@@ -192,11 +192,11 @@ void Progress::setProgressFilename(QString filename)
     QFontMetrics elideFont(m_progressfilelabel->font());
     if(m_type == COMPRESSING)
     {   
-        m_progressfilelabel->setText(elideFont.elidedText(tr("正在压缩") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
     }
     else
     {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("正在解压") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
     }
 }
 

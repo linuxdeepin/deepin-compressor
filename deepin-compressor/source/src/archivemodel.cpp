@@ -96,7 +96,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    return QString::number(dirs + files) + " " + tr("项") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    return QString::number(dirs + files) + " " + tr("Item") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
@@ -169,13 +169,13 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
 
         switch (columnId) {
         case FullPath:
-            return tr("名称");
+            return tr("Name");
         case Size:
-            return "      " + tr("大小");
+            return "      " + tr("Size");
         case Type:
-            return tr("类型");
+            return tr("Type");
         case Timestamp:
-            return tr("修改时间");
+            return tr("Modify");
         default:
             return tr("Unnamed column", "??");
         }

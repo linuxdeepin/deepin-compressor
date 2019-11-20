@@ -58,16 +58,11 @@ CompressSetting::~CompressSetting()
 
 void CompressSetting::InitUI()
 {
-    m_nextbutton = new DPushButton(tr("压缩"));
+    m_nextbutton = new DPushButton(tr("Compress"));
     m_nextbutton->setFixedSize(340,36);
 
     QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
     font.setWeight(QFont::DemiBold);
-
-
-
-
-
     QWidget* leftwidget = new QWidget();
     QHBoxLayout* typelayout = new QHBoxLayout();
     m_pixmaplabel = new DLabel();
@@ -103,7 +98,7 @@ void CompressSetting::InitUI()
     QFormLayout* filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedSize(260, 36);
-    m_filename->setText(tr("新建归档文件"));
+    m_filename->setText(tr("New archive"));
     QLineEdit* qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
@@ -112,27 +107,27 @@ void CompressSetting::InitUI()
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setFixedSize(260, 36);
 
-    filelayout->addRow(tr("文件名") + ":", m_filename);
-    filelayout->addRow(tr("保存到") + ":", m_savepath);
+    filelayout->addRow(tr("File Name") + ":", m_filename);
+    filelayout->addRow(tr("Save To") + ":", m_savepath);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
 
-    DLabel* moresetlabel = new DLabel(tr("高级选项"));
+    DLabel* moresetlabel = new DLabel(tr("Advanced Options"));
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel,0 , Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton,1 , Qt::AlignRight);
 
 
-    m_encryptedlabel = new DLabel(tr("加密文件")+":");
+    m_encryptedlabel = new DLabel(tr("Encrypted File")+":");
     m_password = new DPasswordEdit();
     m_password->setFixedSize(260, 36);
-    m_encryptedfilelistlabel = new DLabel(tr("加密文件列表"));
+    m_encryptedfilelistlabel = new DLabel(tr("Encrypted File List"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
-    m_splitcompress = new DCheckBox(tr("分卷压缩") + ":");
+    m_splitcompress = new DCheckBox(tr("Volume Compression") + ":");
     m_splitcompress->setEnabled(false);
     m_splitnumedit = new DDoubleSpinBox();
     m_splitnumedit->setSuffix("MB");
@@ -245,9 +240,9 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("文件名输入错误，请重新输入！"));
+        dialog->setMessage(tr("The file name is error, please re-enter!"));
         dialog->addSpacing(15);
-        dialog->addButton(tr("确定"));
+        dialog->addButton(tr("OK"));
         dialog->exec();
 
         return;
@@ -257,9 +252,9 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("请输入保存路径！"));
+        dialog->setMessage(tr("Please enter the save path!"));
         dialog->addSpacing(15);
-        dialog->addButton(tr("确定"));
+        dialog->addButton(tr("OK"));
         dialog->exec();
         return;
     }
@@ -268,9 +263,9 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("路径不存在，请重新输入"));
+        dialog->setMessage(tr("The path does not exist, please re-enter!"));
         dialog->addSpacing(15);
-        dialog->addButton(tr("确定"));
+        dialog->addButton(tr("OK"));
         dialog->exec();
         return;
     }

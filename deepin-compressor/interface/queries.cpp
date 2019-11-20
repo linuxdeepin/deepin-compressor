@@ -123,13 +123,13 @@ void OverwriteQuery::execute()
 
     font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     strlabel2->setFont(font);
-    strlabel2->setText(QObject::tr("文件已存在，如何处理？"));
+    strlabel2->setText(QObject::tr("The file already exists. How to deal with it?"));
 
-    dialog->addButton(QObject::tr("跳过"));
-    dialog->addButton(QObject::tr("覆盖"));
+    dialog->addButton(QObject::tr("Jump over"));
+    dialog->addButton(QObject::tr("Rover"));
 
     DCheckBox* checkbox = new DCheckBox;
-    checkbox->setText(QObject::tr("应用到全部文件"));
+    checkbox->setText(QObject::tr("Apply to all files"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
