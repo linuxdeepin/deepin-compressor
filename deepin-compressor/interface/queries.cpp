@@ -125,11 +125,11 @@ void OverwriteQuery::execute()
     strlabel2->setFont(font);
     strlabel2->setText(QObject::tr("The file already exists. How to deal with it?"));
 
-    dialog->addButton(QObject::tr("Jump over"));
-    dialog->addButton(QObject::tr("Rover"));
+    dialog->addButton(QObject::tr("Skip"));
+    dialog->addButton(QObject::tr("Override"));
 
     DCheckBox* checkbox = new DCheckBox;
-    checkbox->setText(QObject::tr("Apply to all files"));
+    checkbox->setText(QObject::tr("Apply to all"));
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);

@@ -32,9 +32,9 @@ HomePage::HomePage(QWidget *parent)
     : QWidget(parent),
       m_layout(new QVBoxLayout(this)),
       m_iconLabel(new DLabel),
-      m_tipsLabel(new DLabel(tr("Drag files or folders to this"))),
+      m_tipsLabel(new DLabel(tr("Drag files(folders) to this"))),
       m_splitLine(new DLabel),
-      m_chooseBtn(new DCommandLinkButton(tr("Select the file"))),
+      m_chooseBtn(new DCommandLinkButton(tr("Select files"))),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
 {

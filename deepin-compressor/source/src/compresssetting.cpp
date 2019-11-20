@@ -240,7 +240,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("The file name is error, please re-enter!"));
+        dialog->setMessage(tr("The file name is error, please retry!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
@@ -252,7 +252,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("Please enter the save path!"));
+        dialog->setMessage(tr("Please enter the path!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
@@ -263,7 +263,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog* dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
-        dialog->setMessage(tr("The path does not exist, please re-enter!"));
+        dialog->setMessage(tr("The path does not exist, please retry!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();

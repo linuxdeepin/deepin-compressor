@@ -47,7 +47,7 @@ void EncryptionPage::InitUI()
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);
-    m_stringinfolabel->setText(tr("This file is encrypted, please enter the extraction password"));
+    m_stringinfolabel->setText(tr("This file is encrypted, please enter the password"));
     m_nextbutton = new DPushButton();
     m_nextbutton->setFixedSize(340, 36);
     m_nextbutton->setText(tr("Next"));
@@ -88,7 +88,7 @@ void EncryptionPage::wrongPassWordSlot()
     {
         qDebug()<<"wrongPassWordSlot";
         m_password->setAlert(true);
-        m_password->showAlertMessage(tr("password is error"));
+        m_password->showAlertMessage(tr("Wrong password"));
     }
 
 }

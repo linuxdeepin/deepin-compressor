@@ -57,7 +57,7 @@ void ExtractPauseDialog::initUI()
     font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::DemiBold);
     strlabel2->setFont(font);
-    strlabel2->setText(tr("There are currently extraction tasks in progress"));
+    strlabel2->setText(tr("There is currently extraction task in progress"));
 
     addButton(tr("Stop"));
     addButton(tr("Continue"), true, ButtonRecommend);
