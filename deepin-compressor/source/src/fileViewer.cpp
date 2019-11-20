@@ -221,7 +221,7 @@ void fileViewer::InitUI()
         m_pRightMenu = new DMenu();
         m_pRightMenu->setFixedWidth(200);
         m_pRightMenu->addAction(tr("Extract files"));
-        m_pRightMenu->addAction(tr("Extract files to current folder"));
+        m_pRightMenu->addAction(tr("Extract files here"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }

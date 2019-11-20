@@ -123,22 +123,24 @@ int Progress::showConfirmDialog()
 
     if(m_type == COMPRESSING)
     {
-        strlabel->setText(tr("Stop compression! "));
+        strlabel->setText(tr("Stop compressing! "));
         strlabel2->setText(tr("There is currently a compression task in progress"));
-        dialog->addButton(tr("Stop"));
-        dialog->addButton(tr("Continue"),true,DDialog::ButtonRecommend);
+
+        dialog->addButton(tr("Stop compressing"));
+        dialog->addButton(tr("Continue compressing"),true,DDialog::ButtonRecommend);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0,4);
         effect->setColor(QColor(0,145,255, 76));
         effect->setBlurRadius(4);
         dialog->getButton(1)->setGraphicsEffect(effect);
+
     }
     else
     {
-        strlabel->setText(tr("Stop extraction! "));
+        strlabel->setText(tr("Stop extracting! "));
         strlabel2->setText(tr("There is currently a extraction task in progress"));
-        dialog->addButton(tr("Stop"));
-        dialog->addButton(tr("Continue"), true, DDialog::ButtonRecommend);
+        dialog->addButton(tr("Stop extracting"));
+        dialog->addButton(tr("Continue extracting"), true, DDialog::ButtonRecommend);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0,4);
         effect->setColor(QColor(0,145,255, 76));

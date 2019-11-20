@@ -51,7 +51,7 @@ void Compressor_Success::InitUI()
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton();
     m_showfilebutton->setFixedSize(340, 36);
-    m_showfilebutton->setText(tr("Show files"));
+    m_showfilebutton->setText(tr("show files"));
     m_showfilebutton->setFocusPolicy(Qt::ClickFocus);
 
     QVBoxLayout* mainlayout = new QVBoxLayout(this);

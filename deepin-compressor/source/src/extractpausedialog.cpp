@@ -58,10 +58,11 @@ void ExtractPauseDialog::initUI()
     font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     font.setWeight(QFont::DemiBold);
     strlabel2->setFont(font);
-    strlabel2->setText(tr("There is currently extraction task in progress"));
 
-    addButton(tr("Stop"));
-    addButton(tr("Continue"), true, ButtonRecommend);
+    strlabel2->setText(tr("There is currently a extraction tasks in progress"));
+
+    addButton(tr("Stop extracting"));
+    addButton(tr("Continue extracting"), true, ButtonRecommend);
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
     effect->setOffset(0,4);
     effect->setColor(QColor(0,145,255, 76));
