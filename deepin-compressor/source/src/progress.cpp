@@ -62,6 +62,13 @@ void Progress::InitUI()
     m_progressbar->setOrientation(Qt::Horizontal);  //水平方向
     m_progressbar->setAlignment(Qt::AlignVCenter);
     m_progressbar->setTextVisible(false);
+    m_shadow = new DLabel();
+    m_shadow->setFixedSize(8, 1);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setOffset(0,4);
+    effect->setColor(QColor(44,167,248, 120));
+    effect->setBlurRadius(6);
+    m_shadow->setGraphicsEffect(effect);
 
     m_progressfilelabel = new DLabel();
     m_progressfilelabel->setMaximumWidth(520);
@@ -83,6 +90,7 @@ void Progress::InitUI()
     mainlayout->addWidget(m_filenamelabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(25);
     mainlayout->addWidget(m_progressbar, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_shadow, 0 , Qt::AlignLeft | Qt::AlignTop);
     mainlayout->addSpacing(5);
     mainlayout->addWidget(m_progressfilelabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
@@ -172,6 +180,12 @@ void Progress::cancelbuttonPressedSlot()
 void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
+    m_shadow->setFixedWidth(percent*240/100);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setOffset(0,4);
+    effect->setColor(QColor(44,167,248, 120));
+    effect->setBlurRadius(6);
+    m_shadow->setGraphicsEffect(effect);
 }
 
 void Progress::setFilename(QString filename)

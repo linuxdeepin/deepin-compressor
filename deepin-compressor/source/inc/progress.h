@@ -60,6 +60,7 @@ private:
     DProgressBar* m_progressbar;
     DLabel* m_progressfilelabel;
     QString m_progressfile;
+    DLabel* m_shadow;
 
     QString m_filename;
     COMPRESS_TYPE m_type;

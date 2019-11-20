@@ -353,7 +353,7 @@
     <name>HomePage</name>
     <message>
         <location filename="../source/src/homepage.cpp" line="35"/>
-        <source>Drag files(folders) to this</source>
+        <source>Drag files(folders) here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -448,7 +448,6 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="506"/>
         <source>Successful extraction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -487,6 +486,11 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="500"/>
         <source>Sorry, the compression failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="506"/>
+        <source>Successful extraction!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -634,62 +638,62 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../source/src/progress.cpp" line="72"/>
+        <location filename="../source/src/progress.cpp" line="79"/>
         <source>Being calculated...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="76"/>
+        <location filename="../source/src/progress.cpp" line="83"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="126"/>
+        <location filename="../source/src/progress.cpp" line="134"/>
         <source>Stop compressing! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="127"/>
+        <location filename="../source/src/progress.cpp" line="135"/>
         <source>There is currently a compression task in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="129"/>
+        <location filename="../source/src/progress.cpp" line="137"/>
         <source>Stop compressing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="130"/>
+        <location filename="../source/src/progress.cpp" line="138"/>
         <source>Continue compressing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="140"/>
+        <location filename="../source/src/progress.cpp" line="148"/>
         <source>Stop extracting! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="141"/>
+        <location filename="../source/src/progress.cpp" line="149"/>
         <source>There is currently a extraction task in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="142"/>
+        <location filename="../source/src/progress.cpp" line="150"/>
         <source>Stop extracting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="143"/>
+        <location filename="../source/src/progress.cpp" line="151"/>
         <source>Continue extracting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="207"/>
+        <location filename="../source/src/progress.cpp" line="221"/>
         <source>Compressing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="211"/>
+        <location filename="../source/src/progress.cpp" line="225"/>
         <source>Extracting</source>
         <translation type="unfinished"></translation>
     </message>

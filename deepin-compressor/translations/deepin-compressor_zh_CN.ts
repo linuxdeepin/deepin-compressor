@@ -181,8 +181,12 @@
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="255"/>
-        <source>Please enter the save path!</source>
+        <source>Please enter the path!</source>
         <translation>请输入保存路径!</translation>
+    </message>
+    <message>
+        <source>Please enter the save path!</source>
+        <translation type="vanished">请输入保存路径!</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="266"/>
@@ -193,13 +197,21 @@
 <context>
     <name>Compressor_Fail</name>
     <message>
-        <location filename="../source/src/compressor_fail.cpp" line="31"/>
         <source>Sorry, the extraction failed!</source>
+        <translation type="vanished">抱歉,解压失败!</translation>
+    </message>
+    <message>
+        <source>Compressed file is corrupt</source>
+        <translation type="vanished">压缩文件已损坏</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compressor_fail.cpp" line="31"/>
+        <source>Sorry,Extraction failed!</source>
         <translation>抱歉,解压失败!</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="32"/>
-        <source>Compressed file is corrupt</source>
+        <source>The file is corrupt</source>
         <translation>压缩文件已损坏</translation>
     </message>
     <message>
@@ -329,22 +341,22 @@
 <context>
     <name>ExtractPauseDialog</name>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="50"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="51"/>
         <source>Stop extracting!</source>
         <translation>停止提取!</translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="60"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="62"/>
         <source>There is currently a extraction tasks in progress</source>
         <translation>当前有提取任务正在进行</translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="62"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="64"/>
         <source>Stop extracting</source>
         <translation>停止提取</translation>
     </message>
     <message>
-        <location filename="../source/src/extractpausedialog.cpp" line="63"/>
+        <location filename="../source/src/extractpausedialog.cpp" line="65"/>
         <source>Continue extracting</source>
         <translation>继续提取</translation>
     </message>
@@ -360,13 +372,21 @@
 <context>
     <name>HomePage</name>
     <message>
-        <location filename="../source/src/homepage.cpp" line="35"/>
         <source>Drag files or folders to this</source>
+        <translation type="vanished">拖拽文件(夹)到此</translation>
+    </message>
+    <message>
+        <source>Select the file</source>
+        <translation type="vanished">选择文件</translation>
+    </message>
+    <message>
+        <location filename="../source/src/homepage.cpp" line="35"/>
+        <source>Drag files(folders) here</source>
         <translation>拖拽文件(夹)到此</translation>
     </message>
     <message>
         <location filename="../source/src/homepage.cpp" line="37"/>
-        <source>Select the file</source>
+        <source>Select files</source>
         <translation>选择文件</translation>
     </message>
 </context>
@@ -414,7 +434,7 @@
     <message>
         <location filename="../main.cpp" line="65"/>
         <source>Archive Manager is a software tool that provides common functions for Extracting files and compressing files</source>
-        <translation type="unfinished">归档管理器是一款提供对文件解压、压缩常用功能的软件工具</translation>
+        <translation>归档管理器是一款提供对文件解压、压缩常用功能的软件工具</translation>
     </message>
 </context>
 <context>
@@ -456,7 +476,6 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="506"/>
         <source>Successful extraction</source>
         <translation>提取成功</translation>
     </message>
@@ -496,6 +515,11 @@
         <location filename="../source/src/mainwindow.cpp" line="500"/>
         <source>Sorry, the compression failed!</source>
         <translation>抱歉,压缩失败!</translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="506"/>
+        <source>Successful extraction!</source>
+        <translation>解压成功！</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="515"/>
@@ -642,42 +666,42 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../source/src/progress.cpp" line="71"/>
+        <location filename="../source/src/progress.cpp" line="79"/>
         <source>Being calculated...</source>
         <translation>正在计算中...</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="75"/>
+        <location filename="../source/src/progress.cpp" line="83"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="125"/>
+        <location filename="../source/src/progress.cpp" line="134"/>
         <source>Stop compressing! </source>
         <translation>停止压缩!</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="127"/>
+        <location filename="../source/src/progress.cpp" line="137"/>
         <source>Stop compressing</source>
         <translation>停止压缩</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="128"/>
+        <location filename="../source/src/progress.cpp" line="138"/>
         <source>Continue compressing</source>
         <translation>继续压缩</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="133"/>
+        <location filename="../source/src/progress.cpp" line="148"/>
         <source>Stop extracting! </source>
         <translation>停止提取!</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="135"/>
+        <location filename="../source/src/progress.cpp" line="150"/>
         <source>Stop extracting</source>
         <translation>停止提取</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="136"/>
+        <location filename="../source/src/progress.cpp" line="151"/>
         <source>Continue extracting</source>
         <translation>继续提取</translation>
     </message>
@@ -694,7 +718,7 @@
         <translation type="vanished">停止压缩!</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="126"/>
+        <location filename="../source/src/progress.cpp" line="135"/>
         <source>There is currently a compression task in progress</source>
         <translation>当前有压缩任务正在进行</translation>
     </message>
@@ -719,7 +743,7 @@
         <translation type="vanished">停止解压!</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="134"/>
+        <location filename="../source/src/progress.cpp" line="149"/>
         <source>There is currently a extraction task in progress</source>
         <translation>当前有解压任务正在进行</translation>
     </message>
@@ -732,12 +756,12 @@
         <translation type="vanished">继续解压</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="195"/>
+        <location filename="../source/src/progress.cpp" line="221"/>
         <source>Compressing</source>
         <translation>正在压缩</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="199"/>
+        <location filename="../source/src/progress.cpp" line="225"/>
         <source>Extracting</source>
         <translation>正在解压</translation>
     </message>

@@ -503,7 +503,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("Successful extraction"));
+        m_CompressSuccess->setstringinfo(tr("Successful extraction!"));
         if(m_settingsDialog->isAutoOpen())
         {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
