@@ -41,16 +41,13 @@ void Progress::InitUI()
     m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
 //    m_pixmaplabel->setPixmap(m_compressicon);
-
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setWeight(QFont::DemiBold);
-
-    DPalette pa;
-
-
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText(m_filename);
-    m_filenamelabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+//    font.setWeight(QFont::DemiBold);
+//    m_filenamelabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_filenamelabel,DFontSizeManager::T5,QFont::DemiBold);
+    DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_filenamelabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_filenamelabel->setPalette(pa);
@@ -75,7 +72,8 @@ void Progress::InitUI()
     pa = DApplicationHelper::instance()->palette(m_progressfilelabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_progressfilelabel->setPalette(pa);
-    m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+//    m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    DFontSizeManager::instance()->bind(m_progressfilelabel,DFontSizeManager::T8);
     m_progressfilelabel->setText(tr("Being calculated..."));
 
     m_cancelbutton = new DPushButton();
@@ -117,17 +115,19 @@ int Progress::showConfirmDialog()
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     strlabel->setPalette(pa);    
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::Medium);
-    strlabel->setFont(font);        
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    font.setWeight(QFont::Medium);
+//    strlabel->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6,QFont::Medium);
     DLabel*strlabel2 = new DLabel;
     strlabel2->setFixedHeight(18);
     pa2 = DApplicationHelper::instance()->palette(strlabel2);
     pa2.setBrush(DPalette::WindowText, pa2.color(DPalette::WindowText));
     strlabel2->setPalette(pa2);
-    QFont font2 = DFontSizeManager::instance()->get(DFontSizeManager::T7);
-    font2.setWeight(QFont::Medium);
-    strlabel2->setFont(font2);
+//    QFont font2 = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+//    font2.setWeight(QFont::Medium);
+//    strlabel2->setFont(font2);
+    DFontSizeManager::instance()->bind(strlabel2,DFontSizeManager::T7,QFont::Medium);
 
     if(m_type == COMPRESSING)
     {

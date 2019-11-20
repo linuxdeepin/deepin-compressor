@@ -110,21 +110,21 @@ void OverwriteQuery::execute()
     strlabel->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-    strlabel->setPalette(pa);
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::Medium);
-    strlabel->setFont(font);
+    strlabel->setPalette(pa);    
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    font.setWeight(QFont::Medium);
+//    strlabel->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6,QFont::Medium);
     strlabel->setText(file.fileName());
     DLabel* strlabel2 = new DLabel;
     pa = DApplicationHelper::instance()->palette(strlabel2);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextWarning));
     strlabel2->setPalette(pa);
     strlabel2->setFixedHeight(20);
-
-    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    strlabel2->setFont(font);
+//    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    strlabel2->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel2,DFontSizeManager::T6,QFont::Medium);
     strlabel2->setText(QObject::tr("The file already exists. How to deal with it?"));
-
     dialog->addButton(QObject::tr("Skip"));
     dialog->addButton(QObject::tr("Override"));
 

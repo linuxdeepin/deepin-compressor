@@ -61,8 +61,6 @@ void CompressSetting::InitUI()
     m_nextbutton = new DPushButton(tr("Compress"));
     m_nextbutton->setFixedSize(340,36);
 
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setWeight(QFont::DemiBold);
     QWidget* leftwidget = new QWidget();
     QHBoxLayout* typelayout = new QHBoxLayout();
     m_pixmaplabel = new DLabel();
@@ -82,7 +80,10 @@ void CompressSetting::InitUI()
     m_compresstype->setText("zip");
     m_compresstype->setPalette(pa);
     m_compresstype->setAlignment(Qt::AlignCenter);
-    m_compresstype->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+//    font.setWeight(QFont::DemiBold);
+//    m_compresstype->setFont(font);
+    DFontSizeManager::instance()->bind(m_compresstype,DFontSizeManager::T5, QFont::DemiBold);
     typelayout->addStretch();
     typelayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addWidget(typepixmap, 0 , Qt::AlignHCenter | Qt::AlignVCenter);

@@ -45,9 +45,10 @@ void ExtractPauseDialog::initUI()
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::Text));
     strlabel->setPalette(pa);
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::Medium);
-    strlabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    font.setWeight(QFont::Medium);
+//    strlabel->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6,QFont::Medium);
     strlabel->setText(tr("Stop extracting!"));
     DLabel* strlabel2 = new DLabel;
     strlabel2->setFixedHeight(20);
@@ -55,9 +56,10 @@ void ExtractPauseDialog::initUI()
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     strlabel2->setPalette(pa);
 
-    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::DemiBold);
-    strlabel2->setFont(font);
+//    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    font.setWeight(QFont::DemiBold);
+//    strlabel2->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel2,DFontSizeManager::T6,QFont::DemiBold);
 
     strlabel2->setText(tr("There is currently a extraction tasks in progress"));
 

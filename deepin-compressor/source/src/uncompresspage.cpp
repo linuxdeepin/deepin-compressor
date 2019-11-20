@@ -32,8 +32,6 @@
 #include <DRecentManager>
 #include <QStandardPaths>
 
-
-
 DWIDGET_USE_NAMESPACE
 
 UnCompressPage::UnCompressPage(QWidget *parent)
@@ -48,7 +46,8 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     contentLayout->addWidget(m_fileviewer);
 
     m_extractpath = new DCommandLinkButton(tr("Extracted to") + ": ~/Desktop");
-    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+//    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    DFontSizeManager::instance()->bind(m_extractpath,DFontSizeManager::T8);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();

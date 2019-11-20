@@ -34,6 +34,7 @@
 #include "myfileitem.h"
 #include "kprocess.h"
 
+
 MyScrollBar::MyScrollBar(QWidget* parent)
     : QScrollBar(parent)
 {
@@ -262,6 +263,7 @@ void fileViewer::refreshTableview()
         QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Medium);
         item->setFont(font);
+
         firstmodel->setItem(rowindex,0,item);
         if(fileinfo.isDir())
         {

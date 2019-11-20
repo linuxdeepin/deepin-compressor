@@ -34,16 +34,15 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 
 void EncryptionPage::InitUI()
 {
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setWeight(QFont::DemiBold);
-
-    DPalette pa;
-
     m_encrypticon = Utils::renderSVG(":/images/lock.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_encrypticon);
     m_stringinfolabel = new DLabel();
-    m_stringinfolabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+//    font.setWeight(QFont::DemiBold);
+//    m_stringinfolabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_stringinfolabel,DFontSizeManager::T5,QFont::DemiBold);
+    DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_stringinfolabel->setPalette(pa);

@@ -122,14 +122,13 @@ void CompressPage::showDialog()
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     strlabel->setPalette(pa);
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    font.setWeight(QFont::Medium);
-    strlabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+//    font.setWeight(QFont::Medium);
+//    strlabel->setFont(font);
+    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6, QFont::Medium);
+
     strlabel->setText(QObject::tr("Please add files in the root directory!"));
-
     dialog->addButton(QObject::tr("OK"));
-
-
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
 

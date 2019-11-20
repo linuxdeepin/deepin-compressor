@@ -43,9 +43,10 @@ void Compressor_Fail::InitUI()
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel();
     m_stringinfolabel->setText(m_stringinfo);
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setWeight(QFont::DemiBold);
-    m_stringinfolabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+//    font.setWeight(QFont::DemiBold);
+//    m_stringinfolabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_stringinfolabel,DFontSizeManager::T5,QFont::DemiBold);
 
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
@@ -55,7 +56,8 @@ void Compressor_Fail::InitUI()
     pa = DApplicationHelper::instance()->palette(m_stringdetaillabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
     m_stringdetaillabel->setPalette(pa);
-    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+//    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    DFontSizeManager::instance()->bind(m_stringdetaillabel,DFontSizeManager::T8);
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton();
     m_retrybutton->setFixedSize(340, 36);

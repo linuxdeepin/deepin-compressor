@@ -37,13 +37,12 @@ void EncodingPage::InitUI()
     m_fileicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_fileicon);
-
-    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    font.setWeight(QFont::DemiBold);
-
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText("");
-    m_filenamelabel->setFont(font);
+//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+//    font.setWeight(QFont::DemiBold);
+//    m_filenamelabel->setFont(font);
+    DFontSizeManager::instance()->bind(m_filenamelabel,DFontSizeManager::T5, QFont::DemiBold);
 
 
     QStringList encodeList;
@@ -75,7 +74,8 @@ void EncodingPage::InitUI()
 
     m_detaillabel = new DLabel;
     m_detaillabel->setText(tr("Please provide a filename encoding to extract this document"));
-    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+//    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+    DFontSizeManager::instance()->bind(m_detaillabel,DFontSizeManager::T8);
 
     m_cancelbutton = new DPushButton(tr("Cancel"));
     m_confirmbutton = new DPushButton(tr("OK"));
