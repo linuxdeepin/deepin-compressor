@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <DDialog>
+#include <QGraphicsDropShadowEffect>
 
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
@@ -126,7 +127,11 @@ int Progress::showConfirmDialog()
         strlabel2->setText(tr("There is currently a compression task in progress"));
         dialog->addButton(tr("Stop"));
         dialog->addButton(tr("Continue"),true,DDialog::ButtonRecommend);
-
+        QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+        effect->setOffset(0,4);
+        effect->setColor(QColor(0,145,255, 76));
+        effect->setBlurRadius(4);
+        dialog->getButton(1)->setGraphicsEffect(effect);
     }
     else
     {
@@ -134,6 +139,11 @@ int Progress::showConfirmDialog()
         strlabel2->setText(tr("There is currently a extraction task in progress"));
         dialog->addButton(tr("Stop"));
         dialog->addButton(tr("Continue"), true, DDialog::ButtonRecommend);
+        QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+        effect->setOffset(0,4);
+        effect->setColor(QColor(0,145,255, 76));
+        effect->setBlurRadius(4);
+        dialog->getButton(1)->setGraphicsEffect(effect);
     }
 
     QVBoxLayout* mainlayout = new QVBoxLayout;

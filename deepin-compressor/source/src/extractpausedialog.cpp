@@ -21,6 +21,7 @@
 #include "extractpausedialog.h"
 #include <QBoxLayout>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 #include <utils.h>
 
 ExtractPauseDialog::ExtractPauseDialog(QWidget *parent):
@@ -61,6 +62,11 @@ void ExtractPauseDialog::initUI()
 
     addButton(tr("Stop"));
     addButton(tr("Continue"), true, ButtonRecommend);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setOffset(0,4);
+    effect->setColor(QColor(0,145,255, 76));
+    effect->setBlurRadius(4);
+    getButton(1)->setGraphicsEffect(effect);
 
     QVBoxLayout* mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
