@@ -140,13 +140,26 @@ desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepi
 manual.path = /usr/share/dman/
 manual.files = $$PWD/dman/*
 
-# Automating generation .qm files from .ts files
-!system($$PWD/translate_generation.sh): error("Failed to generate translation")
+## Automating generation .qm files from .ts files
+#!system($$PWD/translate_generation.sh): error("Failed to generate translation")
 
-translations.path = /usr/share/deepin-compressor/translations
-translations.files = $$PWD/translations/*.qm
+#translations.path = /usr/share/deepin-compressor/translations
+#translations.files = $$PWD/translations/*.qm
+
+CONFIG(release, debug|release) {
+    TRANSLATIONS = $$files($$PWD/translations/*.ts)
+    #遍历目录中的ts文件，调用lrelease将其生成为qm文件
+    for(tsfile, TRANSLATIONS) {
+        qmfile = $$replace(tsfile, .ts$, .qm)
+        system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
+    }
+    #将qm文件添加到安装包
+    dtk_translations.path = /usr/share/$$TARGET/translations
+    dtk_translations.files = $$PWD/translations/*.qm
+    INSTALLS += dtk_translations
+}
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/images/deepin-compressor.svg
 
-INSTALLS += target desktop translations icon_files desktopcontext
+INSTALLS += target desktop icon_files desktopcontext

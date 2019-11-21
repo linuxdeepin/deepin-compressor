@@ -46,15 +46,13 @@ void customMessageHandler(const QString &msg)
 
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     // load dtk xcb plugin.
     DApplication::loadDXcbPlugin();
-
-
 
     // init Dtk application's attrubites.
     DApplication app(argc, argv);
 
-    app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");
