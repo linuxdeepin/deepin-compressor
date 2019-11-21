@@ -112,7 +112,8 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/mimetypedisplaymanager.cpp \
     source/src/archivesortfiltermodel.cpp \
     source/src/batchextract.cpp \
-    interface/batchjobs.cpp
+    interface/batchjobs.cpp \
+    source/src/settings_translation.cpp
 
 
 

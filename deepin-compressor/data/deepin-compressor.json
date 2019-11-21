@@ -2,7 +2,7 @@
     "groups": [
         {
             "key": "base",
-            "name": "设置",
+            "name": "setting",
             "groups": [
                 {
                     "key": "decompress",
