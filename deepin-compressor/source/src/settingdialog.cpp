@@ -84,8 +84,8 @@ void SettingDialog::initUI()
         if (DSettingsOption *option = qobject_cast<DSettingsOption*>(obj)) {
             QWidget* buttonwidget = new QWidget();
             QHBoxLayout* layout = new QHBoxLayout();
-            QPushButton *button1 = new DPushButton(tr("select all"));
-            QPushButton *button2 = new DPushButton(tr("Cancel all selection"));
+            QPushButton *button1 = new DPushButton(tr("Select All"));
+            QPushButton *button2 = new DPushButton(tr("Unselect All"));
             button1->setFixedSize(100, 36);
             button2->setFixedSize(100, 36);
             layout->addStretch();

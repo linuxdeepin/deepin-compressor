@@ -959,13 +959,21 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../source/src/settingdialog.cpp" line="87"/>
         <source>select all</source>
+        <translation type="vanished">全选</translation>
+    </message>
+    <message>
+        <source>Cancel all selection</source>
+        <translation type="vanished">取消全选</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settingdialog.cpp" line="87"/>
+        <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="88"/>
-        <source>Cancel all selection</source>
+        <source>Unselect All</source>
         <translation>取消全选</translation>
     </message>
     <message>

@@ -897,14 +897,22 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../source/src/settingdialog.cpp" line="87"/>
         <source>select all</source>
-        <translation>select all</translation>
+        <translation type="vanished">select all</translation>
+    </message>
+    <message>
+        <source>Cancel all selection</source>
+        <translation type="vanished">Cancel all selection</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settingdialog.cpp" line="87"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="88"/>
-        <source>Cancel all selection</source>
-        <translation>Cancel all selection</translation>
+        <source>Unselect All</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="112"/>
