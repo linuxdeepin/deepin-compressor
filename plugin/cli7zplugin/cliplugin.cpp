@@ -15,12 +15,12 @@ CliPluginFactory::~CliPluginFactory()
 
 }
 
-CliPlugin::CliPlugin(QObject *parent, const QVariantList & args)
-        : CliInterface(parent, args)
-        , m_archiveType(ArchiveType7z)
-        , m_parseState(ParseStateTitle)
-        , m_linesComment(0)
-        , m_isFirstInformationEntry(true)
+CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
+    : CliInterface(parent, args)
+    , m_archiveType(ArchiveType7z)
+    , m_parseState(ParseStateTitle)
+    , m_linesComment(0)
+    , m_isFirstInformationEntry(true)
 {
 
     setupCliProperties();
@@ -46,7 +46,7 @@ void CliPlugin::setupCliProperties()
 
     m_cliProps->setProperty("addProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("addSwitch", QStringList{QStringLiteral("a"),
-                                                 QStringLiteral("-l")});
+                                                     QStringLiteral("-l")});
 
     m_cliProps->setProperty("deleteProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("deleteSwitch", QStringLiteral("d"));
@@ -58,7 +58,7 @@ void CliPlugin::setupCliProperties()
 
     m_cliProps->setProperty("listProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("listSwitch", QStringList{QStringLiteral("l"),
-                                                  QStringLiteral("-slt")});
+                                                      QStringLiteral("-slt")});
 
     m_cliProps->setProperty("moveProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("moveSwitch", QStringLiteral("rn"));
@@ -68,21 +68,23 @@ void CliPlugin::setupCliProperties()
 
     m_cliProps->setProperty("passwordSwitch", QStringList{QStringLiteral("-p$Password")});
     m_cliProps->setProperty("passwordSwitchHeaderEnc", QStringList{QStringLiteral("-p$Password"),
-                                                               QStringLiteral("-mhe=on")});
+                                                                   QStringLiteral("-mhe=on")});
     m_cliProps->setProperty("compressionLevelSwitch", QStringLiteral("-mx=$CompressionLevel"));
-    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString,QVariant>{{QStringLiteral("application/x-7z-compressed"), QStringLiteral("-m0=$CompressionMethod")},
-                                                                               {QStringLiteral("application/zip"), QStringLiteral("-mm=$CompressionMethod")}});
-    m_cliProps->setProperty("encryptionMethodSwitch", QHash<QString,QVariant>{{QStringLiteral("application/x-7z-compressed"), QString()},
-                                                                              {QStringLiteral("application/zip"), QStringLiteral("-mem=$EncryptionMethod")}});
+    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/x-7z-compressed"), QStringLiteral("-m0=$CompressionMethod")},
+        {QStringLiteral("application/zip"), QStringLiteral("-mm=$CompressionMethod")}
+    });
+    m_cliProps->setProperty("encryptionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/x-7z-compressed"), QString()},
+        {QStringLiteral("application/zip"), QStringLiteral("-mem=$EncryptionMethod")}
+    });
     m_cliProps->setProperty("multiVolumeSwitch", QStringLiteral("-v$VolumeSizek"));
     m_cliProps->setProperty("testPassedPatterns", QStringList{QStringLiteral("^Everything is Ok$")});
     m_cliProps->setProperty("fileExistsFileNameRegExp", QStringList{QStringLiteral("^file \\./(.*)$"),
                                                                     QStringLiteral("^  Path:     \\./(.*)$")});
     m_cliProps->setProperty("fileExistsInput", QStringList{QStringLiteral("Y"),   //Overwrite
-                                                       QStringLiteral("N"),   //Skip
-                                                       QStringLiteral("A"),   //Overwrite all
-                                                       QStringLiteral("S"),   //Autoskip
-                                                       QStringLiteral("Q")}); //Cancel
+                                                           QStringLiteral("N"),   //Skip
+                                                           QStringLiteral("A"),   //Overwrite all
+                                                           QStringLiteral("S"),   //Autoskip
+                                                           QStringLiteral("Q")}); //Cancel
     m_cliProps->setProperty("multiVolumeSuffix", QStringList{QStringLiteral("$Suffix.001")});
 }
 
@@ -96,7 +98,7 @@ void CliPlugin::fixDirectoryFullName()
     }
 }
 
-bool CliPlugin::readListLine(const QString& line)
+bool CliPlugin::readListLine(const QString &line)
 {
     static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+
     static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04
@@ -252,8 +254,7 @@ bool CliPlugin::readListLine(const QString& line)
             m_isFirstInformationEntry = true;
             if (!m_currentArchiveEntry->fullPath().isEmpty()) {
                 emit entry(m_currentArchiveEntry);
-            }
-            else {
+            } else {
                 delete m_currentArchiveEntry;
             }
             m_currentArchiveEntry = nullptr;
@@ -272,7 +273,7 @@ bool CliPlugin::readExtractLine(const QString &line)
     }
 
     if (line.startsWith(QLatin1String("ERROR: CRC Failed")) ||
-        line.startsWith(QLatin1String("ERROR: Headers Error"))) {
+            line.startsWith(QLatin1String("ERROR: Headers Error"))) {
         emit error(tr("Extraction failed due to one or more corrupt files. Any extracted files may be damaged."));
         return false;
     }
@@ -283,7 +284,7 @@ bool CliPlugin::readExtractLine(const QString &line)
 bool CliPlugin::readDeleteLine(const QString &line)
 {
     if (line.startsWith(QLatin1String("Error: ")) &&
-        line.endsWith(QLatin1String(" is not supported archive"))) {
+            line.endsWith(QLatin1String(" is not supported archive"))) {
         emit error(tr("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
         return false;
     }

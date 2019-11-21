@@ -42,10 +42,10 @@ public:
     QString getPath();
 
 private:
-    DPushButton* m_showfilebutton;
+    DPushButton *m_showfilebutton;
     QPixmap m_compressicon;
-    DLabel* m_pixmaplabel;
-    DLabel* m_stringinfolabel;
+    DLabel *m_pixmaplabel;
+    DLabel *m_stringinfolabel;
     QString m_stringinfo;
     QString m_path;
 public slots:

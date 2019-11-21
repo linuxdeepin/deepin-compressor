@@ -47,8 +47,8 @@ enum EntryMetaDataType {
     Size                /**< The entry's original size */
 };
 
-namespace  ArchiveModelDefine{
-    const int  gTableHeight=36;
+namespace  ArchiveModelDefine {
+const int  gTableHeight = 36;
 }
 
 class ArchiveModel: public QAbstractItemModel
@@ -71,13 +71,13 @@ public:
     //drag and drop related
     Qt::DropActions supportedDropActions() const override;
     QStringList mimeTypes() const override;
-    QMimeData *mimeData(const QModelIndexList & indexes) const override;
-    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 //    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
     void reset();
     void createEmptyArchive(const QString &path, const QString &mimeType, QObject *parent);
-    KJob* loadArchive(const QString &path, const QString &mimeType, QObject *parent);
+    KJob *loadArchive(const QString &path, const QString &mimeType, QObject *parent);
     Archive *archive() const;
 
     QList<int> shownColumns() const;
@@ -89,17 +89,17 @@ public:
     void setTableView(QTableView *tableview);
     QModelIndex createNoncolumnIndex(const QModelIndex &index) const;
 
-    ExtractJob* extractFile(Archive::Entry *file, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;
-    ExtractJob* extractFiles(const QVector<Archive::Entry*>& files, const QString& destinationDir, const ExtractionOptions& options = ExtractionOptions()) const;
+    ExtractJob *extractFile(Archive::Entry *file, const QString &destinationDir, const ExtractionOptions &options = ExtractionOptions()) const;
+    ExtractJob *extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options = ExtractionOptions()) const;
 
-    PreviewJob* preview(Archive::Entry *file) const;
-    OpenJob* open(Archive::Entry *file) const;
-    OpenWithJob* openWith(Archive::Entry *file) const;
+    PreviewJob *preview(Archive::Entry *file) const;
+    OpenJob *open(Archive::Entry *file) const;
+    OpenWithJob *openWith(Archive::Entry *file) const;
 
-    AddJob* addFiles(QVector<Archive::Entry*> &entries, const Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    MoveJob* moveFiles(QVector<Archive::Entry*> &entries, Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    CopyJob* copyFiles(QVector<Archive::Entry*> &entries, Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    DeleteJob* deleteFiles(QVector<Archive::Entry*> entries);
+    AddJob *addFiles(QVector<Archive::Entry *> &entries, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    MoveJob *moveFiles(QVector<Archive::Entry *> &entries, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    CopyJob *copyFiles(QVector<Archive::Entry *> &entries, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    DeleteJob *deleteFiles(QVector<Archive::Entry *> entries);
 
     /**
      * @param password The password to encrypt the archive with.
@@ -112,30 +112,30 @@ public:
     qulonglong numberOfFolders() const;
     qulonglong uncompressedSize() const;
 
-    bool conflictingEntries(QList<const Archive::Entry*> &conflictingEntries, const QStringList &entries, bool allowMerging) const;
+    bool conflictingEntries(QList<const Archive::Entry *> &conflictingEntries, const QStringList &entries, bool allowMerging) const;
 
     static bool hasDuplicatedEntries(const QStringList &entries);
 
-    static QMap<QString, Archive::Entry*> entryMap(const QVector<Archive::Entry*> &entries);
+    static QMap<QString, Archive::Entry *> entryMap(const QVector<Archive::Entry *> &entries);
 
     const QHash<QString, QIcon> entryIcons() const;
 
-    QMap<QString, Archive::Entry*> filesToMove;
-    QMap<QString, Archive::Entry*> filesToCopy;
+    QMap<QString, Archive::Entry *> filesToMove;
+    QMap<QString, Archive::Entry *> filesToCopy;
 
 Q_SIGNALS:
     void loadingStarted();
     void loadingFinished(KJob *);
     void extractionFinished(bool success);
-    void error(const QString& error, const QString& details);
-    void droppedFiles(const QStringList& files, const Archive::Entry*);
+    void error(const QString &error, const QString &details);
+    void droppedFiles(const QStringList &files, const Archive::Entry *);
 
 
 private Q_SLOTS:
     void slotNewEntry(Archive::Entry *entry);
     void slotListEntry(Archive::Entry *entry);
     void slotLoadingFinished(KJob *job);
-    void slotEntryRemoved(const QString & path);
+    void slotEntryRemoved(const QString &path);
     void slotUserQuery(Query *query);
     void slotCleanupEmptyDirs();
 
@@ -149,15 +149,15 @@ private:
      *
      * @return @p fileName without the leading './'
      */
-    QString cleanFileName(const QString& fileName);
+    QString cleanFileName(const QString &fileName);
 
     void initRootEntry();
 
     enum InsertBehaviour { NotifyViews, DoNotNotifyViews };
     Archive::Entry *parentFor(const Archive::Entry *entry, InsertBehaviour behaviour = NotifyViews);
     QModelIndex indexForEntry(Archive::Entry *entry);
-    static bool compareAscending(const QModelIndex& a, const QModelIndex& b);
-    static bool compareDescending(const QModelIndex& a, const QModelIndex& b);
+    static bool compareAscending(const QModelIndex &a, const QModelIndex &b);
+    static bool compareDescending(const QModelIndex &a, const QModelIndex &b);
     /**
      * Insert the node @p node into the model, ensuring all views are notified
      * of the change.
@@ -186,6 +186,6 @@ private:
 
     int *m_ppathindex;
     QTableView *m_tableview;
-    MimeTypeDisplayManager* m_mimetype;
+    MimeTypeDisplayManager *m_mimetype;
 };
 #endif // ARCHIVEMODEL_H

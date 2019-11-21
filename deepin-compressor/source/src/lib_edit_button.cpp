@@ -24,7 +24,7 @@
 
 
 Lib_Edit_Button::Lib_Edit_Button(DLineEdit *edit)
-    :DPushButton (edit)
+    : DPushButton(edit)
 {
     parent = edit;
     InitUI(edit);
@@ -46,9 +46,9 @@ void Lib_Edit_Button::InitUI(DLineEdit *edit)
     m_buttonLayout->addStretch();
     m_buttonLayout->addWidget(this);
 
-    QWidget* empty = new QWidget;
+    QWidget *empty = new QWidget;
     empty->setFixedSize(150, 36);
-    QHBoxLayout* mainlayout = new QHBoxLayout;
+    QHBoxLayout *mainlayout = new QHBoxLayout;
     mainlayout->addWidget(empty, 0, Qt::AlignLeft);
     mainlayout->addStretch();
     mainlayout->addWidget(this, 0, Qt::AlignRight);
@@ -57,7 +57,7 @@ void Lib_Edit_Button::InitUI(DLineEdit *edit)
 
     edit->setLayout(mainlayout);
 
-    QLineEdit* qedit = edit->lineEdit();
+    QLineEdit *qedit = edit->lineEdit();
     // 设置输入框中文件输入区，不让输入的文字在被隐藏在按钮下
     qedit->setTextMargins(0, 1, size.width(), 1);
 

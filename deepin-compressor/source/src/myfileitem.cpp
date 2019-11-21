@@ -30,12 +30,12 @@ MyFileItem::MyFileItem()
 }
 
 MyFileItem::MyFileItem(const QString &text)
-   :QStandardItem(text)
+    : QStandardItem(text)
 {
 }
 
 MyFileItem::MyFileItem(const QIcon &icon, const QString &text)
-   : QStandardItem(icon, text)
+    : QStandardItem(icon, text)
 {
 
 }
@@ -45,10 +45,8 @@ bool MyFileItem::operator<(const QStandardItem &other) const
 {
     const QVariant l = data(Qt::DisplayRole), r = other.data(Qt::DisplayRole);
     switch (column()) {
-    case 3:
-    {
-        if (column() == other.column())
-        {
+    case 3: {
+        if (column() == other.column()) {
             QString lstr = l.toString();
             QString rstr = r.toString();
 
@@ -56,8 +54,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
                 return true;
             } else if (!lstr.contains(QObject::tr("Item")) && rstr.contains(QObject::tr("Item"))) {
                 return false;
-            }
-            else if (lstr.contains(QObject::tr("Item")) && rstr.contains(QObject::tr("Item"))){
+            } else if (lstr.contains(QObject::tr("Item")) && rstr.contains(QObject::tr("Item"))) {
                 lstr = lstr.remove(QRegExp("\\s"));
                 lstr = lstr.remove(QObject::tr("Item"));
                 rstr = rstr.remove(QRegExp("\\s"));
@@ -73,25 +70,21 @@ bool MyFileItem::operator<(const QStandardItem &other) const
         }
         break;
     }
-    case 1:
-    {
-        if (column() == other.column())
-        {
+    case 1: {
+        if (column() == other.column()) {
             QDateTime ldate = QDateTime::fromString(l.toString(), " yyyy/MM/dd hh:mm:ss");
             QDateTime rdate = QDateTime::fromString(r.toString(), " yyyy/MM/dd hh:mm:ss");
-            return !rdate.operator<(ldate);
+            return !rdate.operator < (ldate);
         }
         break;
     }
-    case 0:
-    {
-        if (column() == other.column())
-        {
+    case 0: {
+        if (column() == other.column()) {
             QString lstr = l.toString();
             QString rstr = r.toString();
             lstr = lstr.remove(QRegExp("\\s"));
             rstr = rstr.remove(QRegExp("\\s"));
-            qDebug()<<l.toString().at(0)<<r.toString().at(0);
+            qDebug() << l.toString().at(0) << r.toString().at(0);
             return QString::compare(l.toString(), r.toString(), Qt::CaseInsensitive);
         }
         break;

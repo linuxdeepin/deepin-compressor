@@ -52,33 +52,33 @@ public:
     UnCompressPage(QWidget *parent = 0);
     ~UnCompressPage();
 
-    void setModel(ArchiveSortFilterModel* model);
+    void setModel(ArchiveSortFilterModel *model);
     QString getDecompressPath();
     void setdefaultpath(QString path);
 
 
 signals:
-    void sigDecompressPress(const QString& localPath);
-    void sigextractfiles(QVector<Archive::Entry*>, QString path);
+    void sigDecompressPress(const QString &localPath);
+    void sigextractfiles(QVector<Archive::Entry *>, QString path);
 
 
 public slots:
     void oneCompressPress();
     void onPathButoonClicked();
-    void onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path);
+    void onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path);
 
 
 private:
 
     fileViewer *m_fileviewer;
-    DPushButton* m_nextbutton;
+    DPushButton *m_nextbutton;
     QStringList m_filelist;
-    DCommandLinkButton* m_extractpath;
-    DLabel* m_pixmaplabel;
-    Lib_Edit_Button* m_pathbutton;
+    DCommandLinkButton *m_extractpath;
+    DLabel *m_pixmaplabel;
+    Lib_Edit_Button *m_pathbutton;
     QString m_pathstr;
 
-    ArchiveSortFilterModel* m_model;
+    ArchiveSortFilterModel *m_model;
 
 };
 #endif

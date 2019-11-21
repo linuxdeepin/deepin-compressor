@@ -80,8 +80,7 @@ class Archive : public QObject
 
 public:
 
-    enum EncryptionType
-    {
+    enum EncryptionType {
         Unencrypted,
         Encrypted,
         HeaderEncrypted
@@ -114,33 +113,33 @@ public:
 
     bool hasMultipleTopLevelEntries() const;
     static BatchExtractJob *batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent = nullptr);
-    static CreateJob* create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry*> &entries, const CompressionOptions& options, QObject *parent = nullptr);
+    static CreateJob *create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent = nullptr);
     static Archive *createEmpty(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
-    static LoadJob* load(const QString &fileName, QObject *parent = nullptr);
-    static LoadJob* load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
-    static LoadJob* load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
+    static LoadJob *load(const QString &fileName, QObject *parent = nullptr);
+    static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
+    static LoadJob *load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
 
     ~Archive() override;
 
     ArchiveError error() const;
     bool isValid() const;
 
-    DeleteJob* deleteFiles(QVector<Archive::Entry*> &entries);
-    CommentJob* addComment(const QString &comment);
-    TestJob* testArchive();
+    DeleteJob *deleteFiles(QVector<Archive::Entry *> &entries);
+    CommentJob *addComment(const QString &comment);
+    TestJob *testArchive();
 
-    AddJob* addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    MoveJob* moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    CopyJob* copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options = CompressionOptions());
-    ExtractJob* extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDir, const ExtractionOptions &options = ExtractionOptions());
-    PreviewJob* preview(Archive::Entry *entry);
-    OpenJob* open(Archive::Entry *entry);
-    OpenWithJob* openWith(Archive::Entry *entry);
+    AddJob *addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    MoveJob *moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    CopyJob *copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    ExtractJob *extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options = ExtractionOptions());
+    PreviewJob *preview(Archive::Entry *entry);
+    OpenJob *open(Archive::Entry *entry);
+    OpenWithJob *openWith(Archive::Entry *entry);
     void encrypt(const QString &password, bool encryptHeader);
 
 private Q_SLOTS:
-    void onAddFinished(KJob*);
-    void onUserQuery(Query*);
+    void onAddFinished(KJob *);
+    void onUserQuery(Query *);
     void onCompressionMethodFound(const QString &method);
     void onEncryptionMethodFound(const QString &method);
 

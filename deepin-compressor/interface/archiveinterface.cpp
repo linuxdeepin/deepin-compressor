@@ -25,15 +25,15 @@
 #include <QFileInfo>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
-ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList & args)
-        : QObject(parent)
-        , m_numberOfVolumes(0)
-        , m_numberOfEntries(0)
-        , m_waitForFinishedSignal(false)
-        , m_isHeaderEncryptionEnabled(false)
-        , m_isCorrupt(false)
-        , m_isMultiVolume(false)
-        , m_isWrongPassword(false)
+ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
+    : QObject(parent)
+    , m_numberOfVolumes(0)
+    , m_numberOfEntries(0)
+    , m_waitForFinishedSignal(false)
+    , m_isHeaderEncryptionEnabled(false)
+    , m_isCorrupt(false)
+    , m_isMultiVolume(false)
+    , m_isWrongPassword(false)
 {
     Q_ASSERT(args.size() >= 2);
 
@@ -137,7 +137,7 @@ QString ReadOnlyArchiveInterface::multiVolumeName() const
 }
 
 ReadWriteArchiveInterface::ReadWriteArchiveInterface(QObject *parent, const QVariantList &args)
-        : ReadOnlyArchiveInterface(parent, args)
+    : ReadOnlyArchiveInterface(parent, args)
 {
 
     connect(this, &ReadWriteArchiveInterface::entryRemoved, this, &ReadWriteArchiveInterface::onEntryRemoved);
@@ -152,7 +152,8 @@ bool ReadOnlyArchiveInterface::waitForFinishedSignal()
     return m_waitForFinishedSignal;
 }
 
-int ReadOnlyArchiveInterface::moveRequiredSignals() const {
+int ReadOnlyArchiveInterface::moveRequiredSignals() const
+{
     return 1;
 }
 
@@ -166,7 +167,7 @@ void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
     m_waitForFinishedSignal = value;
 }
 
-QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entry*> &entries, PathFormat format)
+QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entry *> &entries, PathFormat format)
 {
     QStringList filesList;
     for (const Archive::Entry *file : entries) {
@@ -175,15 +176,15 @@ QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entr
     return filesList;
 }
 
-QVector<Archive::Entry*> ReadOnlyArchiveInterface::entriesWithoutChildren(const QVector<Archive::Entry*> &entries)
+QVector<Archive::Entry *> ReadOnlyArchiveInterface::entriesWithoutChildren(const QVector<Archive::Entry *> &entries)
 {
     // QMap is easy way to get entries sorted by their fullPath.
-    QMap<QString, Archive::Entry*> sortedEntries;
+    QMap<QString, Archive::Entry *> sortedEntries;
     for (Archive::Entry *entry : entries) {
         sortedEntries.insert(entry->fullPath(), entry);
     }
 
-    QVector<Archive::Entry*> filteredEntries;
+    QVector<Archive::Entry *> filteredEntries;
     QString lastFolder;
     for (Archive::Entry *entry : qAsConst(sortedEntries)) {
         if (lastFolder.count() > 0 && entry->fullPath().startsWith(lastFolder)) {

@@ -137,7 +137,7 @@ struct CustomPropertyDefinition {
     // default ctor needed for QVector
     CustomPropertyDefinition() : type(QVariant::String) {}
     CustomPropertyDefinition(const QByteArray &key, QVariant::Type type)
-        : key(key) , type(type) {}
+        : key(key), type(type) {}
     QJsonValue fromString(const QString &str) const
     {
         switch (type) {
@@ -225,7 +225,7 @@ QByteArray readTypeEntryForCurrentGroup(QFile &df, QByteArray *nextGroup)
         }
 
         const static QRegularExpression typeEntryRegex(
-                QStringLiteral("^Type\\s*=\\s*(.*)$"));
+            QStringLiteral("^Type\\s*=\\s*(.*)$"));
         const auto match = typeEntryRegex.match(QString::fromUtf8(line));
         if (match.hasMatch()) {
             type = match.captured(1).toUtf8();
@@ -255,7 +255,7 @@ bool tokenizeKeyValue(QFile &df, const QString &src, QByteArray &key, QString &v
     const int equalsIndex = line.indexOf('=');
     if (equalsIndex == -1) {
         qCWarning(DESKTOPPARSER).nospace() << qPrintable(src) << ':' << lineNr << ": Line is neither comment nor group "
-            "and doesn't contain an '=' character: \"" << line.constData() << '\"';
+                                           "and doesn't contain an '=' character: \"" << line.constData() << '\"';
         return true;
     }
     // trim key and value to remove spaces around the '=' char
@@ -285,7 +285,7 @@ static QString locateRelativeServiceType(const QString &relPath)
                                   QStringLiteral("kservicetypes5/") + relPath);
 }
 
-static QVector<CustomPropertyDefinition>* parseServiceTypesFile(const QString &inputPath)
+static QVector<CustomPropertyDefinition> *parseServiceTypesFile(const QString &inputPath)
 {
     int lineNr = 0;
     QString path = inputPath;
@@ -319,7 +319,7 @@ static QVector<CustomPropertyDefinition>* parseServiceTypesFile(const QString &i
     QByteArray typeStr = readTypeEntryForCurrentGroup(df, &nextGroup);
     if (typeStr != QByteArrayLiteral("ServiceType")) {
         qCWarning(DESKTOPPARSER) << path << "is not a valid service type: Type entry should be 'ServiceType', got"
-            << typeStr << "instead.";
+                                 << typeStr << "instead.";
         return nullptr;
     }
     while (!df.atEnd()) {
@@ -336,21 +336,21 @@ static QVector<CustomPropertyDefinition>* parseServiceTypesFile(const QString &i
         QByteArray propertyName = currentGroup.mid(qstrlen("PropertyDef::"));
         QVariant::Type type = QVariant::nameToType(typeStr.constData());
         switch (type) {
-            case QVariant::String:
-            case QVariant::StringList:
-            case QVariant::Int:
-            case QVariant::Double:
-            case QVariant::Bool:
-                qCDebug(DESKTOPPARSER) << "Found property definition" << propertyName << "with type" << typeStr;
-                result.push_back(CustomPropertyDefinition(propertyName, type));
-                break;
-            case QVariant::Invalid:
-                qCWarning(DESKTOPPARSER) << "Property type" << typeStr << "is not a known QVariant type."
-                        " Found while parsing property definition for" << propertyName << "in" << path;
-                break;
-            default:
-                qCWarning(DESKTOPPARSER) << "Unsupported property type" << typeStr << "for property" << propertyName
-                        << "found in" << path << "\nOnly QString, QStringList, int, double and bool are supported.";
+        case QVariant::String:
+        case QVariant::StringList:
+        case QVariant::Int:
+        case QVariant::Double:
+        case QVariant::Bool:
+            qCDebug(DESKTOPPARSER) << "Found property definition" << propertyName << "with type" << typeStr;
+            result.push_back(CustomPropertyDefinition(propertyName, type));
+            break;
+        case QVariant::Invalid:
+            qCWarning(DESKTOPPARSER) << "Property type" << typeStr << "is not a known QVariant type."
+                                     " Found while parsing property definition for" << propertyName << "in" << path;
+            break;
+        default:
+            qCWarning(DESKTOPPARSER) << "Unsupported property type" << typeStr << "for property" << propertyName
+                                     << "found in" << path << "\nOnly QString, QStringList, int, double and bool are supported.";
         }
     }
     return new QVector<CustomPropertyDefinition>(result);
@@ -384,16 +384,15 @@ ServiceTypeDefinition ServiceTypeDefinition::fromFiles(const QStringList &paths)
     return ret;
 }
 
-bool ServiceTypeDefinition::addFile(const QString& path)
+bool ServiceTypeDefinition::addFile(const QString &path)
 {
     QMutexLocker lock(&s_serviceTypesMutex);
-    QVector<CustomPropertyDefinition>* def = s_serviceTypes->object(path);
+    QVector<CustomPropertyDefinition> *def = s_serviceTypes->object(path);
 
     if (def) {
         // in cache but we still must make our own copy
         m_definitions << *def;
-    }
-    else {
+    } else {
         // not found in cache -> we need to parse the file
         qCDebug(DESKTOPPARSER) << "About to parse service type file" << path;
         def = parseServiceTypesFile(path);
@@ -477,7 +476,7 @@ void DesktopFileParser::convertToJson(const QByteArray &key, ServiceTypeDefiniti
         } else {
             if (value.toLower() != QLatin1String("false")) {
                 qCWarning(DESKTOPPARSER).nospace() << "Expected boolean value for key \"" << key
-                    << "\" at line " << lineNr << "but got \"" << value << "\" instead.";
+                                                   << "\" at line " << lineNr << "but got \"" << value << "\" instead.";
             }
         }
         kplugin[QStringLiteral("EnabledByDefault")] = boolValue;
@@ -504,10 +503,10 @@ void DesktopFileParser::convertToJson(const QByteArray &key, ServiceTypeDefiniti
         kplugin[QStringLiteral("Description") + QString::fromUtf8(key.mid(qstrlen("Comment")))] = value;
     } else if (key == QByteArrayLiteral("Hidden")) {
         DESKTOPTOJSON_VERBOSE_WARNING << "Hidden= key found in desktop file, this makes no sense"
-                " with metadata inside the plugin.";
+                                      " with metadata inside the plugin.";
         kplugin[QString::fromUtf8(key)] = (value.toLower() == QLatin1String("true"));
     } else if (key == QByteArrayLiteral("Exec") || key == QByteArrayLiteral("Type")
-            || key == QByteArrayLiteral("X-KDE-Library") || key == QByteArrayLiteral("Encoding")) {
+               || key == QByteArrayLiteral("X-KDE-Library") || key == QByteArrayLiteral("Encoding")) {
         // Exec= doesn't make sense here, however some .desktop files (like e.g. in kdevelop) have a dummy value here
         // also the Type=Service entry is no longer needed
         // X-KDE-Library is also not needed since we already have the library to read this metadata
@@ -544,10 +543,10 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
             for (const auto &service : serviceList) {
                 // Make up the filename from the service type name. This assumes consistent naming...
                 QString absFileName = locateRelativeServiceType(
-                        service.toLower().replace(slashChar, QLatin1Char('-')) + dotDesktop);
+                                          service.toLower().replace(slashChar, QLatin1Char('-')) + dotDesktop);
                 if (absFileName.isEmpty()) {
                     absFileName = locateRelativeServiceType(
-                        service.toLower().remove(slashChar) + dotDesktop);
+                                      service.toLower().remove(slashChar) + dotDesktop);
                 }
                 if (absFileName.isEmpty()) {
                     qCWarning(DESKTOPPARSER) << "Unable to find service type for service" << service << "listed in" << src;
@@ -558,7 +557,7 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
             break;
         }
     }
-    lineNr=0;
+    lineNr = 0;
     df.seek(startPos);
 
     QJsonObject kplugin; // the "KPlugin" key of the metadata

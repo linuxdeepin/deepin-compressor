@@ -31,7 +31,7 @@
 #include <QMessageBox>
 #include <DPalette>
 #include <DApplicationHelper>
-
+q
 #include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
@@ -65,7 +65,7 @@ signals:
 private:
 
     fileViewer *m_fileviewer;
-    DPushButton* m_nextbutton;
+    DPushButton *m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
 

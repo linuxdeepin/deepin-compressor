@@ -152,7 +152,7 @@ bool LibarchivePlugin::list()
 
         m_extractedFilesSize += (qlonglong)archive_entry_size(aentry);
 
-        emit progress(float(archive_filter_bytes(m_archiveReader.data(), -1))/float(compressedArchiveSize));
+        emit progress(float(archive_filter_bytes(m_archiveReader.data(), -1)) / float(compressedArchiveSize));
 
         m_cachedArchiveEntryCount++;
         archive_read_data_skip(m_archiveReader.data());
@@ -165,7 +165,7 @@ bool LibarchivePlugin::list()
     return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
 }
 
-bool LibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
+bool LibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
     Q_UNUSED(files)
     Q_UNUSED(destination)
@@ -174,7 +174,7 @@ bool LibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, const Arc
     return false;
 }
 
-bool LibarchivePlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool LibarchivePlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(destination)
@@ -182,7 +182,7 @@ bool LibarchivePlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive:
     return false;
 }
 
-bool LibarchivePlugin::copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool LibarchivePlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(destination)
@@ -190,7 +190,7 @@ bool LibarchivePlugin::copyFiles(const QVector<Archive::Entry*> &files, Archive:
     return false;
 }
 
-bool LibarchivePlugin::deleteFiles(const QVector<Archive::Entry*> &files)
+bool LibarchivePlugin::deleteFiles(const QVector<Archive::Entry *> &files)
 {
     Q_UNUSED(files)
     return false;
@@ -217,7 +217,7 @@ bool LibarchivePlugin::doKill()
     return false;
 }
 
-bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options)
+bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
     if (!initializeReader()) {
         return false;
@@ -286,8 +286,8 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
         }
 
         // entryName is the name inside the archive, full path
-        QTextCodec* codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
-        QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
+        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
+        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
         QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
         QString utf8path = codecutf8->fromUnicode(nameunicode);
         QString entryName = QDir::fromNativeSeparators(utf8path);
@@ -306,16 +306,16 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
 
         // For now we just can't handle absolute filenames in a tar archive.
         // TODO: find out what to do here!!
-        if (entryName.startsWith(QLatin1Char( '/' ))) {
+        if (entryName.startsWith(QLatin1Char('/'))) {
             emit error(tr("This archive contains archive entries with absolute paths, "
-                            "which are not supported by Ark."));
+                          "which are not supported by Ark."));
             return false;
         }
 
         // Should the entry be extracted?
         if (extractAll ||
-            remainingFiles.contains(entryName) ||
-            entryName == fileBeingRenamed) {
+                remainingFiles.contains(entryName) ||
+                entryName == fileBeingRenamed) {
 
             // Find the index of entry.
             if (entryName != fileBeingRenamed) {
@@ -341,7 +341,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                 archive_entry_copy_pathname(entry, QFile::encodeName(fileWithoutPath).constData());
                 entryFI = QFileInfo(fileWithoutPath);
 
-            // OR, if the file has a rootNode attached, remove it from file path.
+                // OR, if the file has a rootNode attached, remove it from file path.
             } else if (!extractAll && removeRootNode && entryName != fileBeingRenamed) {
                 const QString &rootNode = files.at(index)->rootNode;
                 if (!rootNode.isEmpty()) {
@@ -349,8 +349,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                     archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
                     entryFI = QFileInfo(truncatedFilename);
                 }
-            }
-            else {
+            } else {
                 archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
             }
 
@@ -416,7 +415,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry*> &files, const
                 if (!dontPromptErrors) {
                     // Ask the user if he wants to continue extraction despite an error for this entry.
                     ContinueExtractionQuery query(QLatin1String(archive_error_string(writer.data())),
-                                                             entryName);
+                                                  entryName);
                     emit userQuery(&query);
                     query.waitForResponse();
 
@@ -485,8 +484,8 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
 {
     auto e = new Archive::Entry();
 
-    QTextCodec* codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
-    QTextCodec* codecutf8 = QTextCodec::codecForName("utf-8");
+    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
+    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
     QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
     QString utf8path = codecutf8->fromUnicode(nameunicode);
 
@@ -508,7 +507,7 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
     e->setProperty("isDirectory", S_ISDIR(archive_entry_mode(aentry)));
 
     if (archive_entry_symlink(aentry)) {
-        e->setProperty("link", QLatin1String( archive_entry_symlink(aentry) ));
+        e->setProperty("link", QLatin1String(archive_entry_symlink(aentry)));
     }
 
     auto time = static_cast<uint>(archive_entry_mtime(aentry));
@@ -537,7 +536,7 @@ int LibarchivePlugin::extractionFlags() const
     return result;
 }
 
-void LibarchivePlugin::copyData(const QString& filename, struct archive *dest, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, bool partialprogress)
 {
     char buff[10240];
     QFile file(filename);
@@ -565,7 +564,7 @@ void LibarchivePlugin::copyData(const QString& filename, struct archive *dest, b
     file.close();
 }
 
-void LibarchivePlugin::copyData(const QString& filename, struct archive *source, struct archive *dest, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *source, struct archive *dest, bool partialprogress)
 {
     char buff[10240];
 
@@ -743,7 +742,7 @@ QByteArray LibarchivePlugin::detectEncode(const QByteArray &data, const QString 
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;

@@ -45,29 +45,29 @@ HomePage::HomePage(QWidget *parent)
     m_iconLabel->setPixmap(m_unloadPixmap);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
+    if (themeType == DGuiApplicationHelper::LightType)
         m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
-    else if(themeType == DGuiApplicationHelper::DarkType)
+    else if (themeType == DGuiApplicationHelper::DarkType)
         m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
     else
         m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
 
 //    m_tipsLabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    DFontSizeManager::instance()->bind(m_tipsLabel,DFontSizeManager::T8);
+    DFontSizeManager::instance()->bind(m_tipsLabel, DFontSizeManager::T8);
 
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_tipsLabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_tipsLabel->setPalette(pa);
 //    m_chooseBtn->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    DFontSizeManager::instance()->bind(m_chooseBtn,DFontSizeManager::T8);
+    DFontSizeManager::instance()->bind(m_chooseBtn, DFontSizeManager::T8);
 
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
 
-    DLabel* buttomlabel = new DLabel();
+    DLabel *buttomlabel = new DLabel();
     buttomlabel->setFixedHeight(50);
 
     m_layout->addStretch();
@@ -93,7 +93,7 @@ HomePage::HomePage(QWidget *parent)
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &HomePage::onChooseBtnClicked);
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
-                        this, &HomePage::themeChanged);
+                     this, &HomePage::themeChanged);
 
     setBackgroundRole(DPalette::Background);
 }
@@ -155,9 +155,9 @@ void HomePage::onChooseBtnClicked()
 void HomePage::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
+    if (themeType == DGuiApplicationHelper::LightType)
         m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
-    else if(themeType == DGuiApplicationHelper::DarkType)
+    else if (themeType == DGuiApplicationHelper::DarkType)
         m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
     else
         m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));

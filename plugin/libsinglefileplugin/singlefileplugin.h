@@ -9,16 +9,16 @@ class  LibSingleFileInterface : public ReadOnlyArchiveInterface
     Q_OBJECT
 
 public:
-    LibSingleFileInterface(QObject *parent, const QVariantList & args);
+    LibSingleFileInterface(QObject *parent, const QVariantList &args);
     ~LibSingleFileInterface() ;
 
     bool list() ;
     bool testArchive() ;
-    bool extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
+    bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
 
 protected:
     const QString uncompressedFileName() const;
-    QString overwriteFileName(QString& filename);
+    QString overwriteFileName(QString &filename);
 
     QString m_mimeType;
     QStringList m_possibleExtensions;

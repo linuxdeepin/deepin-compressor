@@ -8,8 +8,8 @@
 //#include <KFilterDev>
 //#include <KLocalizedString>
 
-LibSingleFileInterface::LibSingleFileInterface(QObject *parent, const QVariantList & args)
-        : ReadOnlyArchiveInterface(parent, args)
+LibSingleFileInterface::LibSingleFileInterface(QObject *parent, const QVariantList &args)
+    : ReadOnlyArchiveInterface(parent, args)
 {
 }
 
@@ -17,7 +17,7 @@ LibSingleFileInterface::~LibSingleFileInterface()
 {
 }
 
-bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options)
+bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
@@ -51,7 +51,7 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry*> &files,
 //    device->open(QIODevice::ReadOnly);//TODO
 
     qint64 bytesRead;
-    QByteArray dataChunk(1024*16, '\0');   // 16Kb
+    QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
 
 //    while (true) {
 //        bytesRead = device->read(dataChunk.data(), dataChunk.size());
@@ -83,7 +83,7 @@ bool LibSingleFileInterface::list()
     return true;
 }
 
-QString LibSingleFileInterface::overwriteFileName(QString& filename)
+QString LibSingleFileInterface::overwriteFileName(QString &filename)
 {
     QString newFileName(filename);
 
@@ -116,7 +116,7 @@ const QString LibSingleFileInterface::uncompressedFileName() const
         return uncompressedName;
     }
 
-    for (const QString & extension : qAsConst(m_possibleExtensions)) {
+    for (const QString &extension : qAsConst(m_possibleExtensions)) {
 
         if (uncompressedName.endsWith(extension, Qt::CaseInsensitive)) {
             uncompressedName.chop(extension.size());
@@ -124,7 +124,7 @@ const QString LibSingleFileInterface::uncompressedFileName() const
         }
     }
 
-    return uncompressedName + QStringLiteral( ".uncompressed" );
+    return uncompressedName + QStringLiteral(".uncompressed");
 }
 
 bool LibSingleFileInterface::testArchive()

@@ -69,9 +69,9 @@ protected Q_SLOTS:
     virtual void onUserQuery(Query *query);
 
 Q_SIGNALS:
-    void entryRemoved(const QString & entry);
-    void newEntry(Archive::Entry*);
-    void userQuery(Query*);
+    void entryRemoved(const QString &entry);
+    void newEntry(Archive::Entry *);
+    void userQuery(Query *);
     void sigWrongPassword();
     void sigCancelled();
 
@@ -82,7 +82,7 @@ private:
     QElapsedTimer jobTimer;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 
@@ -117,7 +117,7 @@ private:
     qlonglong m_filesCount;
 
 private Q_SLOTS:
-    void onNewEntry(const Archive::Entry*);
+    void onNewEntry(const Archive::Entry *);
 
 signals:
     void sigLodJobPassword();
@@ -163,7 +163,7 @@ class CreateJob : public Job
     Q_OBJECT
 
 public:
-    explicit CreateJob(Archive *archive, const QVector<Archive::Entry*> &entries, const CompressionOptions& options);
+    explicit CreateJob(Archive *archive, const QVector<Archive::Entry *> &entries, const CompressionOptions &options);
 
     void enableEncryption(const QString &password, bool encryptHeader);
 
@@ -177,7 +177,7 @@ protected:
 
 private:
     AddJob *m_addJob = nullptr;
-    QVector<Archive::Entry*> m_entries;
+    QVector<Archive::Entry *> m_entries;
     CompressionOptions m_options;
 };
 
@@ -186,7 +186,7 @@ class ExtractJob : public Job
     Q_OBJECT
 
 public:
-    ExtractJob(const QVector<Archive::Entry*> &entries, const QString& destinationDir, const ExtractionOptions& options, ReadOnlyArchiveInterface *interface);
+    ExtractJob(const QVector<Archive::Entry *> &entries, const QString &destinationDir, const ExtractionOptions &options, ReadOnlyArchiveInterface *interface);
 
     QString destinationDirectory() const;
     ExtractionOptions extractionOptions() const;
@@ -202,7 +202,7 @@ signals:
 
 private:
 
-    QVector<Archive::Entry*> m_entries;
+    QVector<Archive::Entry *> m_entries;
     QString m_destinationDir;
     ExtractionOptions m_options;
 };
@@ -260,7 +260,7 @@ class AddJob : public Job
     Q_OBJECT
 
 public:
-    AddJob(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, ReadWriteArchiveInterface *interface);
+    AddJob(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, ReadWriteArchiveInterface *interface);
 
 public Q_SLOTS:
     void doWork() override;
@@ -270,17 +270,17 @@ protected Q_SLOTS:
 
 private:
     QString m_oldWorkingDir;
-    const QVector<Archive::Entry*> m_entries;
+    const QVector<Archive::Entry *> m_entries;
     const Archive::Entry *m_destination;
     CompressionOptions m_options;
 };
 
 class MoveJob : public Job
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    MoveJob(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options, ReadWriteArchiveInterface *interface);
+    MoveJob(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options, ReadWriteArchiveInterface *interface);
 
 public Q_SLOTS:
     void doWork() override;
@@ -290,7 +290,7 @@ protected Q_SLOTS:
 
 private:
     int m_finishedSignalsCount;
-    const QVector<Archive::Entry*> m_entries;
+    const QVector<Archive::Entry *> m_entries;
     Archive::Entry *m_destination;
     CompressionOptions m_options;
 };
@@ -298,10 +298,10 @@ private:
 
 class CopyJob : public Job
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    CopyJob(const QVector<Archive::Entry*> &entries, Archive::Entry *destination, const CompressionOptions& options, ReadWriteArchiveInterface *interface);
+    CopyJob(const QVector<Archive::Entry *> &entries, Archive::Entry *destination, const CompressionOptions &options, ReadWriteArchiveInterface *interface);
 
 public Q_SLOTS:
     void doWork() override;
@@ -311,7 +311,7 @@ protected Q_SLOTS:
 
 private:
     int m_finishedSignalsCount;
-    const QVector<Archive::Entry*> m_entries;
+    const QVector<Archive::Entry *> m_entries;
     Archive::Entry *m_destination;
     CompressionOptions m_options;
 };
@@ -321,13 +321,13 @@ class DeleteJob : public Job
     Q_OBJECT
 
 public:
-    DeleteJob(const QVector<Archive::Entry*> &files, ReadWriteArchiveInterface *interface);
+    DeleteJob(const QVector<Archive::Entry *> &files, ReadWriteArchiveInterface *interface);
 
 public Q_SLOTS:
     void doWork() override;
 
 private:
-    QVector<Archive::Entry*> m_entries;
+    QVector<Archive::Entry *> m_entries;
 };
 
 class CommentJob : public Job
@@ -335,7 +335,7 @@ class CommentJob : public Job
     Q_OBJECT
 
 public:
-    CommentJob(const QString& comment, ReadWriteArchiveInterface *interface);
+    CommentJob(const QString &comment, ReadWriteArchiveInterface *interface);
 
 public Q_SLOTS:
     void doWork() override;

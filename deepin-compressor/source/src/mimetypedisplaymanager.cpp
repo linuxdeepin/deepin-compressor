@@ -123,17 +123,17 @@ QStringList MimeTypeDisplayManager::readlines(const QString &path)
     QStringList result;
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-      return result;
+        return result;
     }
     QTextStream in(&file);
     while (!in.atEnd()) {
-      // Read new line
-      QString line = in.readLine();
-      // Skip empty line or line with invalid format
-      if (line.trimmed().isEmpty()) {
-        continue;
-      }
-      result.append(line.trimmed());
+        // Read new line
+        QString line = in.readLine();
+        // Skip empty line or line with invalid format
+        if (line.trimmed().isEmpty()) {
+            continue;
+        }
+        result.append(line.trimmed());
     }
     file.close();
     return result;

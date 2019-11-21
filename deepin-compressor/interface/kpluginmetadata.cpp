@@ -156,7 +156,7 @@ QString KPluginMetaData::metaDataFileName() const
 bool KPluginMetaData::isValid() const
 {
     // it can be valid even if m_fileName is empty (as long as the plugin id is set in the metadata)
-    qDebug()<<pluginId().isEmpty()<<m_metaData.isEmpty();
+    qDebug() << pluginId().isEmpty() << m_metaData.isEmpty();
     return !pluginId().isEmpty() && !m_metaData.isEmpty();
 }
 
@@ -317,7 +317,7 @@ QString KPluginMetaData::value(const QString &key, const QString &defaultValue) 
         }
         return list.join(QChar::fromLatin1(','));
     } else if (value.isBool()) {
-            " but it is a bool";
+        " but it is a bool";
         return value.toBool() ? QStringLiteral("true") : QStringLiteral("false");
     }
     return defaultValue;
@@ -328,7 +328,7 @@ bool KPluginMetaData::operator==(const KPluginMetaData &other) const
     return m_fileName == other.m_fileName && m_metaData == other.m_metaData;
 }
 
-QObject* KPluginMetaData::instantiate() const
+QObject *KPluginMetaData::instantiate() const
 {
     return QPluginLoader(m_fileName).instance();
 }

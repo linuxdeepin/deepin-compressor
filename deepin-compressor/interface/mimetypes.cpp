@@ -27,7 +27,7 @@
 
 
 
-QMimeType determineMimeType(const QString& filename)
+QMimeType determineMimeType(const QString &filename)
 {
     QMimeDatabase db;
 
@@ -84,23 +84,23 @@ QMimeType determineMimeType(const QString& filename)
     // detecting by content. The following code fixes detection of tar.gz, tar.bz2, tar.xz,
     // tar.lzo, tar.lz, tar.lrz and tar.zst.
     if ((mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/gzip"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-bzip-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-bzip"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-xz-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-xz"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-tarz")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-compress"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-tzo")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lzop"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lzip-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lzip"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lrzip-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lrzip"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lz4-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lz4"))) ||
-        (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-zstd-compressed-tar")) &&
-         mimeFromContent == db.mimeTypeForName(QStringLiteral("application/zstd")))) {
+            mimeFromContent == db.mimeTypeForName(QStringLiteral("application/gzip"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-bzip-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-bzip"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-xz-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-xz"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-tarz")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-compress"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-tzo")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lzop"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lzip-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lzip"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lrzip-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lrzip"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-lz4-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lz4"))) ||
+            (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-zstd-compressed-tar")) &&
+             mimeFromContent == db.mimeTypeForName(QStringLiteral("application/zstd")))) {
         return mimeFromExtension;
     }
 

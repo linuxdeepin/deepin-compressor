@@ -33,18 +33,19 @@
 #include <DDialog>
 #include <DStyle>
 
-TypeLabel::TypeLabel(QWidget* parent)
+TypeLabel::TypeLabel(QWidget *parent)
     : QLabel(parent)
 {
 
 }
 
-void TypeLabel::mousePressEvent ( QMouseEvent * event ){
-    emit labelClickEvent ( event );
+void TypeLabel::mousePressEvent(QMouseEvent *event)
+{
+    emit labelClickEvent(event);
 }
 
-CompressSetting::CompressSetting(QWidget* parent)
-    :QWidget(parent)
+CompressSetting::CompressSetting(QWidget *parent)
+    : QWidget(parent)
 {
     m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     InitUI();
@@ -59,10 +60,10 @@ CompressSetting::~CompressSetting()
 void CompressSetting::InitUI()
 {
     m_nextbutton = new DPushButton(tr("Compress"));
-    m_nextbutton->setFixedSize(340,36);
+    m_nextbutton->setFixedSize(340, 36);
 
-    QWidget* leftwidget = new QWidget();
-    QHBoxLayout* typelayout = new QHBoxLayout();
+    QWidget *leftwidget = new QWidget();
+    QHBoxLayout *typelayout = new QHBoxLayout();
     m_pixmaplabel = new DLabel();
 
     m_compresstype = new TypeLabel();
@@ -72,9 +73,9 @@ void CompressSetting::InitUI()
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_compresstype->setFixedHeight(25);
 
-    DStyle* style = new DStyle;
+    DStyle *style = new DStyle;
     QPixmap pixmap = style->standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
-    DLabel* typepixmap = new DLabel;
+    DLabel *typepixmap = new DLabel;
     typepixmap->setFixedHeight(25);
     typepixmap->setPixmap(pixmap);
     m_compresstype->setText("zip");
@@ -83,10 +84,10 @@ void CompressSetting::InitUI()
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
 //    font.setWeight(QFont::DemiBold);
 //    m_compresstype->setFont(font);
-    DFontSizeManager::instance()->bind(m_compresstype,DFontSizeManager::T5, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(m_compresstype, DFontSizeManager::T5, QFont::DemiBold);
     typelayout->addStretch();
-    typelayout->addWidget(m_compresstype, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
-    typelayout->addWidget(typepixmap, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typelayout->addWidget(m_compresstype, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    typelayout->addWidget(typepixmap, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addStretch();
 
     m_typemenu = new DMenu;
@@ -96,11 +97,11 @@ void CompressSetting::InitUI()
     }
     setTypeImage("zip");
 
-    QFormLayout* filelayout = new QFormLayout();
+    QFormLayout *filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedSize(260, 36);
     m_filename->setText(tr("New archive"));
-    QLineEdit* qfilename = m_filename->lineEdit();
+    QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
     m_savepath = new DFileChooserEdit();
@@ -113,21 +114,21 @@ void CompressSetting::InitUI()
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
 
-    DLabel* moresetlabel = new DLabel(tr("Advanced Options"));
+    DLabel *moresetlabel = new DLabel(tr("Advanced Options"));
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
-    m_moresetlayout->addWidget(moresetlabel,0 , Qt::AlignLeft);
-    m_moresetlayout->addWidget(m_moresetbutton,1 , Qt::AlignRight);
+    m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
+    m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
 
 
-    m_encryptedlabel = new DLabel(tr("Encrypted File")+":");
+    m_encryptedlabel = new DLabel(tr("Encrypted File") + ":");
     m_password = new DPasswordEdit();
     m_password->setFixedSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypted File List"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
-    m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0 , Qt::AlignLeft);
-    m_file_secretlayout->addWidget(m_file_secret, 1 , Qt::AlignRight);
+    m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
+    m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
     m_splitcompress = new DCheckBox(tr("Volume Compression") + ":");
     m_splitcompress->setEnabled(false);
     m_splitnumedit = new DDoubleSpinBox();
@@ -141,7 +142,7 @@ void CompressSetting::InitUI()
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
-    typeLayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    typeLayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typeLayout->addLayout(typelayout);
     typeLayout->addStretch();
     leftwidget->setLayout(typeLayout);
@@ -169,7 +170,7 @@ void CompressSetting::InitUI()
     mainLayout->setMargin(16);
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
-    mainLayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainLayout->addWidget(m_nextbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainLayout->setContentsMargins(20, 16, 20, 20);
 
 
@@ -186,33 +187,33 @@ void CompressSetting::InitConnection()
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
-    connect(m_savepath, &DFileChooserEdit::textChanged, this, [=]{
+    connect(m_savepath, &DFileChooserEdit::textChanged, this, [ = ] {
         QDir dir(m_savepath->text());
         DPalette plt;
         plt = DApplicationHelper::instance()->palette(m_savepath->lineEdit());
 
-        if(!dir.exists())
+        if (!dir.exists())
         {
             plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
 
-        }
-        else {
+        } else
+        {
             plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
         }
 
         m_savepath->lineEdit()->setPalette(plt);
     });
-    connect(m_filename, &DLineEdit::textChanged, this, [=]{
+    connect(m_filename, &DLineEdit::textChanged, this, [ = ] {
         DPalette plt;
         plt = DApplicationHelper::instance()->palette(m_filename);
 
 
-        if(!checkfilename(m_filename->text()))
+        if (!checkfilename(m_filename->text()))
         {
             plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
 
-        }
-        else {
+        } else
+        {
             plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
         }
 
@@ -222,7 +223,7 @@ void CompressSetting::InitConnection()
     connect(m_typemenu, &DMenu::triggered, this, &CompressSetting::ontypeChanged);
 }
 
-void CompressSetting::showRightMenu(QMouseEvent * e)
+void CompressSetting::showRightMenu(QMouseEvent *e)
 {
     QPoint pos;
     pos.setX(window()->x() + m_pixmaplabel->x() + 60);
@@ -236,9 +237,8 @@ void CompressSetting::onNextButoonClicked()
 {
     QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
-    if(!checkfilename(name))
-    {
-        DDialog* dialog = new DDialog;
+    if (!checkfilename(name)) {
+        DDialog *dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("The file name is error, please retry!"));
@@ -247,10 +247,8 @@ void CompressSetting::onNextButoonClicked()
         dialog->exec();
 
         return;
-    }
-    else if(m_savepath->text().remove(" ") == "")
-    {
-        DDialog* dialog = new DDialog;
+    } else if (m_savepath->text().remove(" ") == "") {
+        DDialog *dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("Please enter the path!"));
@@ -258,10 +256,8 @@ void CompressSetting::onNextButoonClicked()
         dialog->addButton(tr("OK"));
         dialog->exec();
         return;
-    }
-    else if(!dir.exists())
-    {
-        DDialog* dialog = new DDialog;
+    } else if (!dir.exists()) {
+        DDialog *dialog = new DDialog;
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("The path does not exist, please retry!"));
@@ -274,30 +270,27 @@ void CompressSetting::onNextButoonClicked()
     const QString password = m_password->text();
     QString fixedMimeType;
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-         if(m_compresstype->text().contains(QMimeDatabase().mimeTypeForName(type).preferredSuffix()))
-         {
-             fixedMimeType = type;
-         }
+        if (m_compresstype->text().contains(QMimeDatabase().mimeTypeForName(type).preferredSuffix())) {
+            fixedMimeType = type;
+        }
     }
 
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
-    if("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType)
-    {
+    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "-1";//-1 is unuseful
-    }
-    else {
+    } else {
         m_openArgs[QStringLiteral("compressionLevel")] = "6";//6 is default
     }
 
-    qDebug()<<m_splitnumedit->value();
+    qDebug() << m_splitnumedit->value();
     if (m_splitnumedit->value() > 0) {
-        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast<int>(m_splitnumedit->value()* 1024));
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast<int>(m_splitnumedit->value() * 1024));
     }
 //    if (!dialog.data()->compressionMethod().isEmpty()) {
 //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
 //    }
-    qDebug()<<m_openArgs[QStringLiteral("volumeSize")];
+    qDebug() << m_openArgs[QStringLiteral("volumeSize")];
     if (!m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";//5 is default
     }
@@ -326,8 +319,7 @@ void CompressSetting::onNextButoonClicked()
 
 void CompressSetting::onAdvanceButtonClicked(bool status)
 {
-    if(status)
-    {
+    if (status) {
         m_encryptedlabel->setVisible(true);
         m_password->setVisible(true);
         m_splitcompress->setVisible(true);
@@ -335,8 +327,7 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
         m_splitnumedit->setVisible(true);
-    }
-    else {
+    } else {
         m_encryptedlabel->setVisible(false);
         m_password->setVisible(false);
         m_splitcompress->setVisible(false);
@@ -356,8 +347,7 @@ void CompressSetting::setTypeImage(QString type)
     QTemporaryFile tmpFile(strTemplateName);
     tmpFile.setAutoRemove(false);
 
-    if (tmpFile.open())
-    {
+    if (tmpFile.open()) {
         tmpFile.close();
         icon = provider.icon(QFileInfo(strTemplateName));
     }
@@ -375,7 +365,7 @@ void CompressSetting::setDefaultPath(QString path)
 void CompressSetting::setDefaultName(QString name)
 {
     m_filename->setText(name);
-    QLineEdit* qfilename = m_filename->lineEdit();
+    QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->selectAll();
     qfilename->setFocus();
 }
@@ -385,14 +375,12 @@ quint64 CompressSetting::dirFileSize(const QString &path)
     QDir dir(path);
     quint64 size = 0;
     //dir.entryInfoList(QDir::Files)返回文件信息
-    foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
-    {
+    foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
         //计算文件大小
         size += fileInfo.size();
     }
     //dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
-    foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
+    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         //若存在子目录，则递归调用dirFileSize()函数
         size += dirFileSize(path + QDir::separator() + subDir);
     }
@@ -401,31 +389,26 @@ quint64 CompressSetting::dirFileSize(const QString &path)
 
 bool CompressSetting::checkfilename(QString str)
 {
-    if(str.length() == 0)
-    {
+    if (str.length() == 0) {
         return false;
     }
-    if(str.length() > 255)
-    {
+    if (str.length() > 255) {
         return false;
     }
 
     QList<QChar> black_list;
-    black_list<<'+';
-    black_list<<'-';
-    black_list<<'.';
-    black_list<<',';
-    if (black_list.contains(str.at(0)))
-    {
+    black_list << '+';
+    black_list << '-';
+    black_list << '.';
+    black_list << ',';
+    if (black_list.contains(str.at(0))) {
         return false;
     }
 
     black_list.clear();
     black_list = {'/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']'};
-    foreach(QChar black_char, black_list)
-    {
-        if(str.contains(black_char))
-        {
+    foreach (QChar black_char, black_list) {
+        if (str.contains(black_char)) {
             return false;
         }
     }
@@ -441,34 +424,28 @@ void CompressSetting::setFilepath(QStringList pathlist)
 
 void CompressSetting::onSplitChanged(int status)
 {
-    if(m_splitcompress->isChecked() && "7z" == m_compresstype->text())
-    {
+    if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) {
         m_splitnumedit->setEnabled(true);
-    }
-    else {
+    } else {
         m_splitnumedit->setEnabled(false);
     }
 }
 
 void CompressSetting::ontypeChanged(QAction *action)
 {
-    qDebug()<<action->text();
+    qDebug() << action->text();
 
     setTypeImage(action->text());
     m_compresstype->setText(action->text());
 
-    if(action->text().contains("7z"))
-    {
-        if(m_splitcompress->isChecked())
-        {
+    if (action->text().contains("7z")) {
+        if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }
         m_password->setEnabled(true);
         m_file_secret->setEnabled(true);
         m_splitcompress->setEnabled(true);
-    }
-    else if(action->text().contains("zip"))
-    {
+    } else if (action->text().contains("zip")) {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(false);
@@ -476,8 +453,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitcompress->setChecked(false);
         m_splitnumedit->setRange(0.0, 5.0);
         m_splitnumedit->setValue(0.0);
-    }
-    else {
+    } else {
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(false);
         m_file_secret->setEnabled(false);
@@ -509,29 +485,21 @@ void CompressSetting::onSplitValueChanged(double value)
 
 void CompressSetting::keyPressEvent(QKeyEvent *event)
 {
-    if(!event)
-    {
+    if (!event) {
         return;
     }
-    if(event->key() == Qt::Key_F2) {
+    if (event->key() == Qt::Key_F2) {
 
-        QLineEdit* qfilename = m_filename->lineEdit();
-        QLineEdit* qpath = m_savepath->lineEdit();
-        QLineEdit* qpassword = m_password->lineEdit();
-        if(qfilename->hasFocus())
-        {
+        QLineEdit *qfilename = m_filename->lineEdit();
+        QLineEdit *qpath = m_savepath->lineEdit();
+        QLineEdit *qpassword = m_password->lineEdit();
+        if (qfilename->hasFocus()) {
             qfilename->selectAll();
-        }
-        else if(qpath->hasFocus())
-        {
+        } else if (qpath->hasFocus()) {
             qpath->selectAll();
-        }
-        else if(qpassword->hasFocus())
-        {
+        } else if (qpassword->hasFocus()) {
             qpassword->selectAll();
-        }
-        else if(m_splitnumedit->hasFocus())
-        {
+        } else if (m_splitnumedit->hasFocus()) {
             m_splitnumedit->selectAll();
         }
     }

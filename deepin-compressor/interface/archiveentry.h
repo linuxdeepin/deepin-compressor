@@ -60,8 +60,8 @@ public:
 
     void copyMetaData(const Archive::Entry *sourceEntry);
 
-    QVector<Entry*> entries();
-    const QVector<Entry*> entries() const;
+    QVector<Entry *> entries();
+    const QVector<Entry *> entries() const;
     void setEntryAt(int index, Entry *value);
     void appendEntry(Entry *entry);
     void removeEntryAt(int index);
@@ -74,7 +74,7 @@ public:
     bool isDir() const;
     int row() const;
     Entry *find(const QString &name) const;
-    Entry *findByPath(const QStringList & pieces, int index = 0) const;
+    Entry *findByPath(const QStringList &pieces, int index = 0) const;
     void countChildren(uint &dirs, uint &files) const;
 
     bool operator==(const Archive::Entry &right) const;
@@ -84,7 +84,7 @@ public:
     bool compressedSizeIsSet;
 
 private:
-    QVector<Entry*> m_entries;
+    QVector<Entry *> m_entries;
     QString         m_name;
     Entry           *m_parent;
 
@@ -109,6 +109,6 @@ QDebug  operator<<(QDebug d, const Archive::Entry &entry);
 QDebug  operator<<(QDebug d, const Archive::Entry *entry);
 
 
-Q_DECLARE_METATYPE(Archive::Entry*)
+Q_DECLARE_METATYPE(Archive::Entry *)
 
 #endif //ARCHIVEENTRY_H

@@ -36,7 +36,7 @@
 #include <QTimer>
 #include <QUrl>
 
-BatchExtract::BatchExtract(QObject* parent)
+BatchExtract::BatchExtract(QObject *parent)
     : m_autoSubfolder(false),
       m_preservePaths(true),
       m_openDestinationAfterExtraction(false)
@@ -50,7 +50,7 @@ BatchExtract::~BatchExtract()
 {
 }
 
-void BatchExtract::addExtraction(const QUrl& url)
+void BatchExtract::addExtraction(const QUrl &url)
 {
 
     QString destination = destinationFolder();
@@ -63,17 +63,17 @@ void BatchExtract::addExtraction(const QUrl& url)
 
     m_fileNames[job] = qMakePair(url.toLocalFile(), destination);
 
-    connect(job, SIGNAL(percent(KJob*,ulong)),
-            this, SLOT(forwardProgress(KJob*,ulong)));
+    connect(job, SIGNAL(percent(KJob *, ulong)),
+            this, SLOT(forwardProgress(KJob *, ulong)));
     connect(job, &BatchExtractJob::userQuery,
             this, &BatchExtract::slotUserQuery);
-    connect(job, SIGNAL(percentfilename(KJob*, const QString &)),
-            this, SLOT(SlotProgressFile(KJob*, const QString &)));
+    connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
+            this, SLOT(SlotProgressFile(KJob *, const QString &)));
 }
 
-void BatchExtract::SlotProgressFile(KJob* job, const QString & name)
+void BatchExtract::SlotProgressFile(KJob *job, const QString &name)
 {
-    qDebug()<<name;
+    qDebug() << name;
 }
 
 bool BatchExtract::doKill()
@@ -112,7 +112,7 @@ void BatchExtract::slotStartJob()
         return;
     }
 
-    for (const auto& url : qAsConst(m_inputs)) {
+    for (const auto &url : qAsConst(m_inputs)) {
         addExtraction(url);
     }
 
@@ -185,13 +185,13 @@ void BatchExtract::slotResult(KJob *job)
 void BatchExtract::forwardProgress(KJob *job, unsigned long percent)
 {
     Q_UNUSED(job)
-    qDebug()<<percent;
+    qDebug() << percent;
     auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
     auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
     setPercent(jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
 }
 
-void BatchExtract::addInput(const QUrl& url)
+void BatchExtract::addInput(const QUrl &url)
 {
     qDebug() << "Adding archive" << url.toLocalFile();
 
@@ -222,7 +222,7 @@ QString BatchExtract::destinationFolder() const
     }
 }
 
-void BatchExtract::setDestinationFolder(const QString& folder)
+void BatchExtract::setDestinationFolder(const QString &folder)
 {
     if (QFileInfo(folder).isDir()) {
         m_destinationFolder = folder;

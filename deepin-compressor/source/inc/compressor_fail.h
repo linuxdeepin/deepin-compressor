@@ -40,17 +40,17 @@ public:
     void InitUI();
     void InitConnection();
 
-    void setFailStr(const QString& str);
-    void setFailStrDetail(const QString& str);
+    void setFailStr(const QString &str);
+    void setFailStrDetail(const QString &str);
 
 private:
-    DPushButton* m_retrybutton;
+    DPushButton *m_retrybutton;
     QPixmap m_compressicon;
-    DLabel* m_pixmaplabel;
-    DLabel* m_stringinfolabel;
+    DLabel *m_pixmaplabel;
+    DLabel *m_stringinfolabel;
     QString m_stringinfo;
 
-    DLabel* m_stringdetaillabel;
+    DLabel *m_stringdetaillabel;
     QString m_stringdetail;
 
 signals:

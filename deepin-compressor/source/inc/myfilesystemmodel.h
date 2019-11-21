@@ -35,8 +35,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-namespace  MyFileSystemDefine{
-    const int  gTableHeight=36;
+namespace  MyFileSystemDefine {
+const int  gTableHeight = 36;
 }
 
 QT_REQUIRE_CONFIG(filesystemmodel);
@@ -49,23 +49,23 @@ class MyFileIconProvider;
 
 class MyFileSystemModel : public QFileSystemModel
 {
-    public:
-        explicit MyFileSystemModel(QObject *parent = nullptr);
-        ~MyFileSystemModel();
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-        QVariant headerData(int section, Qt::Orientation orientation,
-                            int role = Qt::DisplayRole) const override;
-        void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
-        void setPathIndex(int *index);
-        void setTableView(QTableView *tableview);
+public:
+    explicit MyFileSystemModel(QObject *parent = nullptr);
+    ~MyFileSystemModel();
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+    void setPathIndex(int *index);
+    void setTableView(QTableView *tableview);
 
 
 
-    private:
-        bool m_showreprevious;
-        int *ppathindex;
-        QTableView *m_tableview;
-        MimeTypeDisplayManager* m_mimetype;
+private:
+    bool m_showreprevious;
+    int *ppathindex;
+    QTableView *m_tableview;
+    MimeTypeDisplayManager *m_mimetype;
 
 };
 

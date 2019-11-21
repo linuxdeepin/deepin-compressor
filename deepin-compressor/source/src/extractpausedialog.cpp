@@ -40,7 +40,7 @@ void ExtractPauseDialog::initUI()
 
     DPalette pa;
 
-    DLabel* strlabel = new DLabel;
+    DLabel *strlabel = new DLabel;
     strlabel->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::Text));
@@ -48,9 +48,9 @@ void ExtractPauseDialog::initUI()
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::Medium);
 //    strlabel->setFont(font);
-    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6,QFont::Medium);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("Stop extracting!"));
-    DLabel* strlabel2 = new DLabel;
+    DLabel *strlabel2 = new DLabel;
     strlabel2->setFixedHeight(20);
     pa = DApplicationHelper::instance()->palette(strlabel2);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
@@ -59,25 +59,25 @@ void ExtractPauseDialog::initUI()
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::DemiBold);
 //    strlabel2->setFont(font);
-    DFontSizeManager::instance()->bind(strlabel2,DFontSizeManager::T6,QFont::DemiBold);
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::DemiBold);
 
     strlabel2->setText(tr("There is currently a extraction tasks in progress"));
 
     addButton(tr("Stop extracting"));
     addButton(tr("Continue extracting"), true, ButtonRecommend);
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-    effect->setOffset(0,4);
-    effect->setColor(QColor(0,145,255, 76));
+    effect->setOffset(0, 4);
+    effect->setColor(QColor(0, 145, 255, 76));
     effect->setBlurRadius(4);
     getButton(1)->setGraphicsEffect(effect);
 
-    QVBoxLayout* mainlayout = new QVBoxLayout;
+    QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 
-    DWidget* widget = new DWidget;
+    DWidget *widget = new DWidget;
 
     widget->setLayout(mainlayout);
     addContent(widget);

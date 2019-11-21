@@ -25,7 +25,7 @@
 #include <QDebug>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
-   DAbstractDialog(parent)
+    DAbstractDialog(parent)
 {
     initUI();
     initConnect();
@@ -46,14 +46,14 @@ void ProgressDialog::initUI()
     m_titlebar->setTitle(QObject::tr("There is 1 task in progress"));
     m_titlebar->setBackgroundTransparent(true);
 
-    QVBoxLayout* contentlayout = new QVBoxLayout;
+    QVBoxLayout *contentlayout = new QVBoxLayout;
     DPalette pa;
 
     m_tasklable = new DLabel();
 //    QFont ft = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    ft.setWeight(QFont::Medium);
 //    m_tasklable->setFont(ft);
-    DFontSizeManager::instance()->bind(m_tasklable,DFontSizeManager::T6,QFont::Medium);
+    DFontSizeManager::instance()->bind(m_tasklable, DFontSizeManager::T6, QFont::Medium);
     pa = DApplicationHelper::instance()->palette(m_tasklable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     m_tasklable->setPalette(pa);
@@ -61,7 +61,7 @@ void ProgressDialog::initUI()
 //    ft = DFontSizeManager::instance()->get(DFontSizeManager::T8);
 //    ft.setWeight(QFont::Normal);
 //    m_filelable->setFont(ft);
-    DFontSizeManager::instance()->bind(m_filelable,DFontSizeManager::T8,QFont::Normal);
+    DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
     pa = DApplicationHelper::instance()->palette(m_filelable);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
     m_filelable->setPalette(pa);
@@ -79,7 +79,7 @@ void ProgressDialog::initUI()
     contentlayout->addSpacing(7);
     contentlayout->addWidget(m_circleprogress, 0, Qt::AlignLeft | Qt::AlignVCenter);
 
-    QVBoxLayout* mainlayout = new QVBoxLayout;
+    QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 10, 20);
     mainlayout->setSpacing(0);
     mainlayout->addWidget(m_titlebar);
@@ -96,20 +96,17 @@ void ProgressDialog::initConnect()
 
 void ProgressDialog::slotextractpress(int index)
 {
-    qDebug()<<index;
-    if(0 == index)
-    {
+    qDebug() << index;
+    if (0 == index) {
         emit stopExtract();
-    }
-    else {
+    } else {
         exec();
     }
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-    if(m_circleprogress->value() < 100 && m_circleprogress->value() > 0)
-    {
+    if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
         accept();
         m_extractdialog->exec();
     }
@@ -135,8 +132,7 @@ void ProgressDialog::setCurrentFile(const QString &file)
 
 void ProgressDialog::setProcess(unsigned long  value)
 {
-    if(100 != m_circleprogress->value())
-    {
+    if (100 != m_circleprogress->value()) {
         m_circleprogress->setValue(value);
     }
 
@@ -144,8 +140,7 @@ void ProgressDialog::setProcess(unsigned long  value)
 
 void ProgressDialog::setFinished(const QString &path)
 {
-    if(100 != m_circleprogress->value())
-    {
+    if (100 != m_circleprogress->value()) {
         setWindowTitle(tr(""));
         m_circleprogress->setValue(100);
         m_filelable->setText(tr("Extraction completed") + ":" + tr("Extracted to") + path);

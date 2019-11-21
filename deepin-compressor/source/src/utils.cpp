@@ -84,39 +84,35 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 bool Utils::isCompressed_file(const QString &filePath)
 {
     QMimeType mimetype = determineMimeType(filePath);
-    qDebug()<< mimetype.name();
+    qDebug() << mimetype.name();
     QString filetype = mimetype.name();
     bool ret = true;
 
 
-    if(filetype.compare("application/x-7z-compressed") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")
+    if (filetype.compare("application/x-7z-compressed") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")
             && filetype.compare("application/x-java-archive") && filetype.compare("application/x-cd-image")
-            && filetype.compare("application/x-bcpio")&& filetype.compare("application/x-cpio")&&filetype.compare("application/x-cpio-compressed")&& filetype.compare("application/x-sv4cpio")
-            && filetype.compare("application/x-sv4crc")&&filetype.compare("application/x-rpm")&&filetype.compare("application/x-source-rpm")
-            && filetype.compare("application/vnd.ms-cab-compressed")&& filetype.compare("application/x-xar")&& filetype.compare("application/x-iso9660-appimage")
-            && filetype.compare("application/x-tarz")&& filetype.compare("application/x-tar")&& filetype.compare("application/x-compressed-tar")&& filetype.compare("application/x-bzip-compressed-tar")
-            && filetype.compare("application/x-xz-compressed-tar")&& filetype.compare("application/x-lzma-compressed-tar")&& filetype.compare("application/x-lzip-compressed-tar")
-            && filetype.compare("application/x-tzo")&& filetype.compare("application/x-lrzip-compressed-tar")&& filetype.compare("application/x-lz4-compressed-tar")
-            && filetype.compare("application/x-zstd-compressed-tar")&& filetype.compare("application/x-bzip")&& filetype.compare("application/gzip")&& filetype.compare("application/x-lzma")
-            && filetype.compare("application/x-xz")&& filetype.compare("application/zip"))
-    {
+            && filetype.compare("application/x-bcpio") && filetype.compare("application/x-cpio") && filetype.compare("application/x-cpio-compressed") && filetype.compare("application/x-sv4cpio")
+            && filetype.compare("application/x-sv4crc") && filetype.compare("application/x-rpm") && filetype.compare("application/x-source-rpm")
+            && filetype.compare("application/vnd.ms-cab-compressed") && filetype.compare("application/x-xar") && filetype.compare("application/x-iso9660-appimage")
+            && filetype.compare("application/x-tarz") && filetype.compare("application/x-tar") && filetype.compare("application/x-compressed-tar") && filetype.compare("application/x-bzip-compressed-tar")
+            && filetype.compare("application/x-xz-compressed-tar") && filetype.compare("application/x-lzma-compressed-tar") && filetype.compare("application/x-lzip-compressed-tar")
+            && filetype.compare("application/x-tzo") && filetype.compare("application/x-lrzip-compressed-tar") && filetype.compare("application/x-lz4-compressed-tar")
+            && filetype.compare("application/x-zstd-compressed-tar") && filetype.compare("application/x-bzip") && filetype.compare("application/gzip") && filetype.compare("application/x-lzma")
+            && filetype.compare("application/x-xz") && filetype.compare("application/zip")) {
         ret = false;
     }
 
     QFileInfo file(filePath);
-    qDebug()<<file.suffix();
-    if(true == ret)
-    {
-        if(file.suffix() == "pptx" || file.suffix() == "ppt" || file.suffix() == "xls" ||
-                file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx")
-        {
+    qDebug() << file.suffix();
+    if (true == ret) {
+        if (file.suffix() == "pptx" || file.suffix() == "ppt" || file.suffix() == "xls" ||
+                file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx") {
             ret = false;
         }
-    }
-    else if(filePath.contains(".7z.")){
+    } else if (filePath.contains(".7z.")) {
         ret = true;
     }
-    qDebug()<<ret;
+    qDebug() << ret;
     return ret;
 }
 
@@ -159,24 +155,21 @@ qint64 Utils::humanReadableToSize(const QString &size)
                  << (" YB");
 
     int loop = 0;
-    foreach(QString suffix, measures)
-    {
-        if(sizeAsStr.contains(suffix))
-        {
+    foreach (QString suffix, measures) {
+        if (sizeAsStr.contains(suffix)) {
             sizeAsStr.remove(suffix);
             break;
         }
         loop++;
     }
 
-    if(loop > measures.count())
-    {
+    if (loop > measures.count()) {
         return 0;
     }
 
     float intsize = sizeAsStr.toFloat();
 
-    for (int i = 0;i < loop; i++) {
+    for (int i = 0; i < loop; i++) {
         intsize *= 1024.0;
     }
 
@@ -387,7 +380,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;

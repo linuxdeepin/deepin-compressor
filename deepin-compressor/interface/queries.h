@@ -91,7 +91,7 @@ private:
 class  OverwriteQuery : public Query
 {
 public:
-    explicit OverwriteQuery(const QString& filename);
+    explicit OverwriteQuery(const QString &filename);
     void execute() override;
     bool responseCancelled();
     bool responseOverwriteAll();
@@ -117,7 +117,7 @@ private:
 class PasswordNeededQuery : public Query
 {
 public:
-    explicit PasswordNeededQuery(const QString& archiveFilename, bool incorrectTryAgain = false);
+    explicit PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
     void execute() override;
 
     bool responseCancelled();
@@ -131,7 +131,7 @@ public:
 class LoadCorruptQuery : public Query
 {
 public:
-    explicit LoadCorruptQuery(const QString& archiveFilename);
+    explicit LoadCorruptQuery(const QString &archiveFilename);
     void execute() override;
 
     bool responseYes();
@@ -140,7 +140,7 @@ public:
 class ContinueExtractionQuery : public Query
 {
 public:
-    explicit ContinueExtractionQuery(const QString& error, const QString& archiveEntry);
+    explicit ContinueExtractionQuery(const QString &error, const QString &archiveEntry);
     void execute() override;
 
     bool responseCancelled();

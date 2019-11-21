@@ -42,10 +42,10 @@ public:
 
 private:
     QPixmap m_encrypticon;
-    DLabel* m_pixmaplabel;
-    DLabel* m_stringinfolabel;
-    DPushButton* m_nextbutton;
-    DPasswordEdit* m_password;
+    DLabel *m_pixmaplabel;
+    DLabel *m_stringinfolabel;
+    DPushButton *m_nextbutton;
+    DPasswordEdit *m_password;
 
     bool m_inputflag;
 public slots:

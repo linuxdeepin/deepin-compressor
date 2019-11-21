@@ -24,9 +24,9 @@
 #include <QRegularExpression>
 
 CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, const QMimeType &archiveType)
-        : QObject(parent)
-        , m_mimeType(archiveType)
-        , m_metaData(metaData)
+    : QObject(parent)
+    , m_mimeType(archiveType)
+    , m_metaData(metaData)
 {
 }
 
@@ -55,8 +55,7 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
     if (volumeSize > 0) {
         args << substituteMultiVolumeSwitch(volumeSize);
     }
-    if(!m_progressarg.isEmpty())
-    {
+    if (!m_progressarg.isEmpty()) {
         args << m_progressarg;
     }
     args << archive;
@@ -79,7 +78,7 @@ QStringList CliProperties::commentArgs(const QString &archive, const QString &co
     return args;
 }
 
-QStringList CliProperties::deleteArgs(const QString &archive, const QVector<Archive::Entry*> &files, const QString &password)
+QStringList CliProperties::deleteArgs(const QString &archive, const QVector<Archive::Entry *> &files, const QString &password)
 {
     QStringList args;
     args << m_deleteSwitch;
@@ -108,8 +107,7 @@ QStringList CliProperties::extractArgs(const QString &archive, const QStringList
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
     }
-    if(!m_progressarg.isEmpty())
-    {
+    if (!m_progressarg.isEmpty()) {
         args << m_progressarg;
     }
     args << archive;
@@ -136,7 +134,7 @@ QStringList CliProperties::listArgs(const QString &archive, const QString &passw
     return args;
 }
 
-QStringList CliProperties::moveArgs(const QString &archive, const QVector<Archive::Entry*> &entries, Archive::Entry *destination, const QString &password)
+QStringList CliProperties::moveArgs(const QString &archive, const QVector<Archive::Entry *> &entries, Archive::Entry *destination, const QString &password)
 {
     QStringList args;
     args << m_moveSwitch;
@@ -232,7 +230,7 @@ QString CliProperties::substituteCompressionLevelSwitch(int level) const
 }
 
 QString CliProperties::substituteCompressionMethodSwitch(const QString &method) const
-{   
+{
     if (method.isEmpty()) {
         return QString();
     }

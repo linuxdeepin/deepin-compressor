@@ -27,10 +27,10 @@ public:
     explicit ReadWriteLibarchivePlugin(QObject *parent, const QVariantList &args);
     ~ReadWriteLibarchivePlugin() override;
 
-    bool addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
-    bool moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool deleteFiles(const QVector<Archive::Entry*> &files) override;
+    bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
+    bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
+    bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
+    bool deleteFiles(const QVector<Archive::Entry *> &files) override;
 
 protected:
     bool initializeWriter(const bool creatingNewFile = false, const CompressionOptions &options = CompressionOptions());

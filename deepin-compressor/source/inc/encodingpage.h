@@ -44,13 +44,13 @@ public:
     void setFilename(QString filename);
 private:
     QPixmap m_fileicon;
-    DLabel* m_pixmaplabel;
-    DLabel* m_filenamelabel;
-    DComboBox* m_codebox;
-    DLabel* m_codelabel;
-    DLabel* m_detaillabel;
-    DPushButton* m_cancelbutton;
-    DPushButton* m_confirmbutton;
+    DLabel *m_pixmaplabel;
+    DLabel *m_filenamelabel;
+    DComboBox *m_codebox;
+    DLabel *m_codelabel;
+    DLabel *m_detaillabel;
+    DPushButton *m_cancelbutton;
+    DPushButton *m_confirmbutton;
 };
 
 #endif // ENCODINGPAGE_H

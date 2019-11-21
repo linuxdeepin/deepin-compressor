@@ -41,7 +41,7 @@ void EncryptionPage::InitUI()
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
 //    font.setWeight(QFont::DemiBold);
 //    m_stringinfolabel->setFont(font);
-    DFontSizeManager::instance()->bind(m_stringinfolabel,DFontSizeManager::T5,QFont::DemiBold);
+    DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
@@ -52,18 +52,18 @@ void EncryptionPage::InitUI()
     m_nextbutton->setText(tr("Next"));
     m_password = new DPasswordEdit();
     m_password->setFixedSize(340, 36);
-    QLineEdit* edit = m_password->lineEdit();
+    QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Please enter password to extract"));
 
-    QVBoxLayout* mainlayout = new QVBoxLayout(this);
+    QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(4);
-    mainlayout->addWidget(m_stringinfolabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(33);
-    mainlayout->addWidget(m_password, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_password, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_nextbutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_nextbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
     setBackgroundRole(DPalette::Base);
@@ -83,9 +83,8 @@ void EncryptionPage::nextbuttonClicked()
 
 void EncryptionPage::wrongPassWordSlot()
 {
-    if(m_inputflag)
-    {
-        qDebug()<<"wrongPassWordSlot";
+    if (m_inputflag) {
+        qDebug() << "wrongPassWordSlot";
         m_password->setAlert(true);
         m_password->showAlertMessage(tr("Wrong Password"));
     }

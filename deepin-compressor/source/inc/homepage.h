@@ -64,7 +64,7 @@ private:
     DLabel *m_splitLine;
     DCommandLinkButton *m_chooseBtn;
     QSettings *m_settings;
-    DSpinner* m_spinner;
+    DSpinner *m_spinner;
 };
 
 #endif

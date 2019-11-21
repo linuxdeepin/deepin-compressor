@@ -69,7 +69,7 @@ private:
     QString m_curpath;
     int m_index_last;
 
-    DSettingsOption * m_comboboxoption;
+    DSettingsOption *m_comboboxoption;
 };
 
 #endif // SETTINGDIALOG_H

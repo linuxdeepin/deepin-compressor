@@ -15,12 +15,12 @@ LibXzInterfaceFactory::~LibXzInterfaceFactory()
 
 }
 
-LibXzInterface::LibXzInterface(QObject *parent, const QVariantList & args)
-        : LibSingleFileInterface(parent, args)
+LibXzInterface::LibXzInterface(QObject *parent, const QVariantList &args)
+    : LibSingleFileInterface(parent, args)
 {
-    m_mimeType = QStringLiteral( "application/x-lzma" );
-    m_possibleExtensions.append(QStringLiteral( ".lzma" ));
-    m_possibleExtensions.append(QStringLiteral( ".xz" ));
+    m_mimeType = QStringLiteral("application/x-lzma");
+    m_possibleExtensions.append(QStringLiteral(".lzma"));
+    m_possibleExtensions.append(QStringLiteral(".xz"));
 }
 
 LibXzInterface::~LibXzInterface()

@@ -42,7 +42,7 @@ void EncodingPage::InitUI()
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
 //    font.setWeight(QFont::DemiBold);
 //    m_filenamelabel->setFont(font);
-    DFontSizeManager::instance()->bind(m_filenamelabel,DFontSizeManager::T5, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(m_filenamelabel, DFontSizeManager::T5, QFont::DemiBold);
 
 
     QStringList encodeList;
@@ -66,7 +66,7 @@ void EncodingPage::InitUI()
     m_codebox->setEditable(true);
     m_codebox->addItems(encodeList);
 
-    QHBoxLayout* encodelayout = new QHBoxLayout;
+    QHBoxLayout *encodelayout = new QHBoxLayout;
     encodelayout->addStretch();
     encodelayout->addWidget(m_codelabel);
     encodelayout->addWidget(m_codebox);
@@ -75,13 +75,13 @@ void EncodingPage::InitUI()
     m_detaillabel = new DLabel;
     m_detaillabel->setText(tr("Please provide a filename encoding to extract this document"));
 //    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    DFontSizeManager::instance()->bind(m_detaillabel,DFontSizeManager::T8);
+    DFontSizeManager::instance()->bind(m_detaillabel, DFontSizeManager::T8);
 
     m_cancelbutton = new DPushButton(tr("Cancel"));
     m_confirmbutton = new DPushButton(tr("OK"));
     m_cancelbutton->setFixedSize(165, 36);
     m_confirmbutton->setFixedSize(165, 36);
-    QHBoxLayout* buttonlayout = new QHBoxLayout;
+    QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
     buttonlayout->addWidget(m_cancelbutton);
     buttonlayout->addSpacing(10);
@@ -89,15 +89,15 @@ void EncodingPage::InitUI()
     buttonlayout->addStretch();
 
 
-    QVBoxLayout* mainlayout = new QVBoxLayout(this);
+    QVBoxLayout *mainlayout = new QVBoxLayout(this);
 //    mainlayout->addSpacing(62);
-    mainlayout->addWidget(m_pixmaplabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pixmaplabel, 10, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(5);
-    mainlayout->addWidget(m_filenamelabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_filenamelabel, 10, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(33);
     mainlayout->addLayout(encodelayout);
     mainlayout->addSpacing(10);
-    mainlayout->addWidget(m_detaillabel, 10 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_detaillabel, 10, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(41);
     mainlayout->addLayout(buttonlayout);
     mainlayout->addSpacing(20);
@@ -127,8 +127,7 @@ void EncodingPage::setTypeImage(QString type)
     QTemporaryFile tmpFile(strTemplateName);
     tmpFile.setAutoRemove(false);
 
-    if (tmpFile.open())
-    {
+    if (tmpFile.open()) {
         tmpFile.close();
         icon = provider.icon(QFileInfo(strTemplateName));
     }

@@ -20,7 +20,7 @@ class LibXzInterface : public LibSingleFileInterface
     Q_OBJECT
 
 public:
-    LibXzInterface(QObject *parent, const QVariantList & args);
+    LibXzInterface(QObject *parent, const QVariantList &args);
     ~LibXzInterface() override;
 };
 

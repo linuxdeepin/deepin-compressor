@@ -29,7 +29,7 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 {
 }
 
-bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
+bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
 
     const bool creatingNewFile = !QFileInfo::exists(filename());
@@ -62,7 +62,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
             return false;
         }
         addedEntries++;
-        emit progress(float(addedEntries)/float(totalCount));
+        emit progress(float(addedEntries) / float(totalCount));
         emit progress_filename(selectedFile->fullPath());
 
         // For directories, write all subfiles/folders.
@@ -77,7 +77,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
                 QString path = it.next();
 
                 if ((it.fileName() == QLatin1String("..")) ||
-                    (it.fileName() == QLatin1String("."))) {
+                        (it.fileName() == QLatin1String("."))) {
                     continue;
                 }
 
@@ -92,7 +92,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
                     return false;
                 }
                 addedEntries++;
-                emit progress(float(addedEntries)/float(totalCount));
+                emit progress(float(addedEntries) / float(totalCount));
                 emit progress_filename(it.filePath());
             }
         }
@@ -113,7 +113,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry*> &files, 
     return isSuccessful;
 }
 
-bool ReadWriteLibarchivePlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool ReadWriteLibarchivePlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(options);
 
@@ -140,7 +140,7 @@ bool ReadWriteLibarchivePlugin::moveFiles(const QVector<Archive::Entry*> &files,
     return isSuccessful;
 }
 
-bool ReadWriteLibarchivePlugin::copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool ReadWriteLibarchivePlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(options);
 
@@ -166,7 +166,7 @@ bool ReadWriteLibarchivePlugin::copyFiles(const QVector<Archive::Entry*> &files,
     return isSuccessful;
 }
 
-bool ReadWriteLibarchivePlugin::deleteFiles(const QVector<Archive::Entry*> &files)
+bool ReadWriteLibarchivePlugin::deleteFiles(const QVector<Archive::Entry *> &files)
 {
 
     if (!initializeReader()) {
@@ -272,7 +272,7 @@ bool ReadWriteLibarchivePlugin::initializeWriterFilters()
 
     // Libarchive emits a warning for lrzip due to using external executable.
     if ((requiresExecutable && ret != ARCHIVE_WARN) ||
-        (!requiresExecutable && ret != ARCHIVE_OK)) {
+            (!requiresExecutable && ret != ARCHIVE_OK)) {
         emit error(tr("@info", "Could not set the compression method."));
         return false;
     }
@@ -312,7 +312,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
 
     // Libarchive emits a warning for lrzip due to using external executable.
     if ((requiresExecutable && ret != ARCHIVE_WARN) ||
-        (!requiresExecutable && ret != ARCHIVE_OK)) {
+            (!requiresExecutable && ret != ARCHIVE_OK)) {
         emit error(tr("@info", "Could not set the compression method."));
         return false;
     }
@@ -392,7 +392,7 @@ bool ReadWriteLibarchivePlugin::processOldEntries(uint &entriesCounter, Operatio
             case Delete:
                 entriesCounter++;
                 emit entryRemoved(file);
-                emit progress(float(newEntries + entriesCounter + iteratedEntries)/float(totalCount));
+                emit progress(float(newEntries + entriesCounter + iteratedEntries) / float(totalCount));
                 break;
 
             case Add:
@@ -419,7 +419,7 @@ bool ReadWriteLibarchivePlugin::processOldEntries(uint &entriesCounter, Operatio
         } else {
             return false;
         }
-        emit progress(float(newEntries + entriesCounter + iteratedEntries)/float(totalCount));
+        emit progress(float(newEntries + entriesCounter + iteratedEntries) / float(totalCount));
     }
 
     return !QThread::currentThread()->isInterruptionRequested();
@@ -473,7 +473,7 @@ bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QSt
     } else {
 
         emit error(tr("@info Error in a message box",
-                         "Could not compress entry."));
+                      "Could not compress entry."));
 
         archive_entry_free(entry);
 

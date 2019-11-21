@@ -137,9 +137,9 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
             if (0 == qstrcmp(iface, current->className())) {
                 if (obj) {
                 }
-                qDebug()<<"111111111111111111";
+                qDebug() << "111111111111111111";
                 obj = plugin.second(parentWidget, parent, args);
-                qDebug()<<"222222222222222222";
+                qDebug() << "222222222222222222";
                 break;
             }
         }

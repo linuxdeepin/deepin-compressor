@@ -13,7 +13,7 @@ ReadOnlyLibarchivePluginFactory::~ReadOnlyLibarchivePluginFactory()
 
 }
 
-ReadOnlyLibarchivePlugin::ReadOnlyLibarchivePlugin(QObject *parent, const QVariantList & args)
+ReadOnlyLibarchivePlugin::ReadOnlyLibarchivePlugin(QObject *parent, const QVariantList &args)
     : LibarchivePlugin(parent, args)
 {
 }

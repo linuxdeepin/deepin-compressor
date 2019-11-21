@@ -28,7 +28,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class Lib_Edit_Button :public DPushButton
+class Lib_Edit_Button : public DPushButton
 {
 public:
     Lib_Edit_Button(DLineEdit *edit = nullptr);

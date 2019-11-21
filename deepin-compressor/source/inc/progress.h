@@ -33,7 +33,7 @@
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
-enum COMPRESS_TYPE{
+enum COMPRESS_TYPE {
     COMPRESSING,
     DECOMPRESSING,
 };
@@ -53,14 +53,14 @@ public:
 
     int showConfirmDialog();
 private:
-    DPushButton* m_cancelbutton;
+    DPushButton *m_cancelbutton;
     QPixmap m_compressicon;
-    DLabel* m_pixmaplabel;
-    DLabel* m_filenamelabel;
-    DProgressBar* m_progressbar;
-    DLabel* m_progressfilelabel;
+    DLabel *m_pixmaplabel;
+    DLabel *m_filenamelabel;
+    DProgressBar *m_progressbar;
+    DLabel *m_progressfilelabel;
     QString m_progressfile;
-    DLabel* m_shadow;
+    DLabel *m_shadow;
 
     QString m_filename;
     COMPRESS_TYPE m_type;

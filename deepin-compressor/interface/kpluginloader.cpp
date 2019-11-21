@@ -241,7 +241,7 @@ bool KPluginLoader::unload()
 void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(const QString &)> callback)
 {
     QStringList dirsToCheck;
-    qDebug()<<QCoreApplication::libraryPaths();
+    qDebug() << QCoreApplication::libraryPaths();
     if (QDir::isAbsolutePath(directory)) {
         dirsToCheck << directory;
     } else {
@@ -257,7 +257,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
             it.next();
             if (QLibrary::isLibrary(it.fileName())) {
                 callback(it.fileInfo().absoluteFilePath());
-                qDebug()<<it.fileInfo().absoluteFilePath();
+                qDebug() << it.fileInfo().absoluteFilePath();
             }
         }
     }
@@ -266,8 +266,8 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
 QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
-    qDebug()<<"1111111111111111111111111111111111"<<directory;
-    forEachPlugin(directory, [&](const QString &pluginPath) {
+    qDebug() << "1111111111111111111111111111111111" << directory;
+    forEachPlugin(directory, [&](const QString & pluginPath) {
         KPluginMetaData metadata(pluginPath);
         if (!metadata.isValid()) {
             return;
@@ -280,23 +280,22 @@ QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, st
     return ret;
 }
 
-QVector< KPluginMetaData > KPluginLoader::findPluginsById(const QString& directory, const QString& pluginId)
+QVector< KPluginMetaData > KPluginLoader::findPluginsById(const QString &directory, const QString &pluginId)
 {
-    auto filter = [&pluginId](const KPluginMetaData &md) -> bool
-    {
+    auto filter = [&pluginId](const KPluginMetaData & md) -> bool {
         return md.pluginId() == pluginId;
     };
     return KPluginLoader::findPlugins(directory, filter);
 }
 
 QList<QObject *> KPluginLoader::instantiatePlugins(const QString &directory,
-        std::function<bool(const KPluginMetaData &)> filter, QObject* parent)
+                                                   std::function<bool(const KPluginMetaData &)> filter, QObject *parent)
 {
     QList<QObject *> ret;
     QPluginLoader loader;
     foreach (const KPluginMetaData &metadata, findPlugins(directory, filter)) {
         loader.setFileName(metadata.fileName());
-        QObject* obj = loader.instance();
+        QObject *obj = loader.instance();
         if (!obj) {
             continue;
         }

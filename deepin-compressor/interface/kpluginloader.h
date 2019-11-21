@@ -280,8 +280,8 @@ public:
      * @since 5.1
      */
     static QList<QObject *> instantiatePlugins(const QString &directory,
-            std::function<bool(const KPluginMetaData &)> filter = std::function<bool(const KPluginMetaData &)>(),
-            QObject* parent = nullptr);
+                                               std::function<bool(const KPluginMetaData &)> filter = std::function<bool(const KPluginMetaData &)>(),
+                                               QObject *parent = nullptr);
 
     /**
      * Find all plugins inside @p directory. Only plugins which have JSON metadata will be considered.
@@ -300,7 +300,7 @@ public:
      * @since 5.1
      */
     static QVector<KPluginMetaData> findPlugins(const QString &directory,
-            std::function<bool(const KPluginMetaData &)> filter = std::function<bool(const KPluginMetaData &)>());
+                                                std::function<bool(const KPluginMetaData &)> filter = std::function<bool(const KPluginMetaData &)>());
 
     /**
      * Find all plugins inside @p directory with a given pluginId. Only plugins which have JSON metadata will be considered.
@@ -339,7 +339,7 @@ public:
      * @since 5.1
      */
     static void forEachPlugin(const QString &directory,
-            std::function<void(const QString &)> callback = std::function<void(const QString &)>());
+                              std::function<void(const QString &)> callback = std::function<void(const QString &)>());
 private:
     Q_DECLARE_PRIVATE(KPluginLoader)
     Q_DISABLE_COPY(KPluginLoader)

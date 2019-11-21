@@ -14,11 +14,11 @@ LibGzipInterfaceFactory::~LibGzipInterfaceFactory()
 
 }
 
-LibGzipInterface::LibGzipInterface(QObject *parent, const QVariantList & args)
-        : LibSingleFileInterface(parent, args)
+LibGzipInterface::LibGzipInterface(QObject *parent, const QVariantList &args)
+    : LibSingleFileInterface(parent, args)
 {
-    m_mimeType = QStringLiteral( "application/x-gzip" );
-    m_possibleExtensions.append(QStringLiteral( ".gz" ));
+    m_mimeType = QStringLiteral("application/x-gzip");
+    m_possibleExtensions.append(QStringLiteral(".gz"));
 }
 
 LibGzipInterface::~LibGzipInterface()

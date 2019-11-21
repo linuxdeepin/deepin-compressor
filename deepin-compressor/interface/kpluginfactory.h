@@ -31,8 +31,7 @@
 class QWidget;
 
 class KPluginFactoryPrivate;
-namespace KParts
-{
+namespace KParts {
 class Part;
 }
 

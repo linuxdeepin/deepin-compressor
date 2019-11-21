@@ -62,12 +62,12 @@ public:
     void initData();
     void initConnect();
 
-    QString displayName(const QString& mimeType);
-    FileType displayNameToEnum(const QString& mimeType);
-    QString defaultIcon(const QString& mimeType);
+    QString displayName(const QString &mimeType);
+    FileType displayNameToEnum(const QString &mimeType);
+    QString defaultIcon(const QString &mimeType);
 
     QMap<FileType, QString> displayNames();
-    static QStringList readlines(const QString& path);
+    static QStringList readlines(const QString &path);
     static void loadSupportMimeTypes();
     static QStringList supportArchiveMimetypes();
     static QStringList supportVideoMimeTypes();

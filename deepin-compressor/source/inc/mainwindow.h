@@ -48,7 +48,7 @@
 #define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE
 
-enum Page_ID{
+enum Page_ID {
     PAGE_HOME,
     PAGE_UNZIP,
     PAGE_ZIP,
@@ -63,7 +63,7 @@ enum Page_ID{
     PAGE_MAX
 };
 
-enum EncryptionType{
+enum EncryptionType {
     Encryption_NULL,
     Encryption_Load,
     Encryption_Extract,
@@ -71,7 +71,7 @@ enum EncryptionType{
     Encryption_ExtractHere,
 };
 
-enum WorkState{
+enum WorkState {
     WorkNone,
     WorkProcess,
 };
@@ -84,12 +84,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void closeEvent(QCloseEvent *event) override;
-    void timerEvent(QTimerEvent* event) override;
+    void timerEvent(QTimerEvent *event) override;
 
     void InitUI();
     void InitConnection();
     void initTitleBar();
-    QMenu* createSettingsMenu();
+    QMenu *createSettingsMenu();
     void loadArchive(const QString &files);
     void creatArchive(QMap<QString, QString> &Args);
 
@@ -122,14 +122,14 @@ private slots:
     void onCompressAddfileSlot(bool status);
 
     void slotLoadingFinished(KJob *job);
-    void slotExtractionDone(KJob* job);
-    void slotextractSelectedFilesTo(const QString& localPath);
+    void slotExtractionDone(KJob *job);
+    void slotextractSelectedFilesTo(const QString &localPath);
     void SlotProgress(KJob *job, unsigned long percent);
-    void SlotProgressFile(KJob *job, const QString& filename);
+    void SlotProgressFile(KJob *job, const QString &filename);
     void SlotNeedPassword();
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);
-    void slotExtractSimpleFiles(QVector<Archive::Entry*> fileList, QString path);
+    void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path);
     void slotKillExtractJob();
     void slotFailRetry();
 
@@ -142,7 +142,7 @@ signals:
     void loadingStarted();
 
 private:
-    Archive* m_archive_manager;
+    Archive *m_archive_manager;
     ArchiveModel         *m_model;
     ArchiveSortFilterModel *m_filterModel;
     QString m_decompressfilename;
@@ -157,33 +157,33 @@ private:
     void deleteCompressFile(QStringList oldfiles, QStringList newfiles);
 
 private:
-    DLabel* m_logo;
+    DLabel *m_logo;
     QPixmap m_logoicon;
     QFrame *m_titleFrame;
-    DLabel* m_titlelabel;
+    DLabel *m_titlelabel;
     QWidget *m_mainWidget;
     QStackedLayout *m_mainLayout;
     HomePage *m_homePage;
     UnCompressPage *m_UnCompressPage;
     CompressPage *m_CompressPage;
     CompressSetting *m_CompressSetting;
-    Progress* m_Progess;
-    Compressor_Success* m_CompressSuccess;
-    Compressor_Fail* m_CompressFail;
-    EncryptionPage* m_encryptionpage;
-    ProgressDialog* m_progressdialog;
-    SettingDialog* m_settingsDialog;
-    EncodingPage* m_encodingpage;
-    QSettings* m_settings;
+    Progress *m_Progess;
+    Compressor_Success *m_CompressSuccess;
+    Compressor_Fail *m_CompressFail;
+    EncryptionPage *m_encryptionpage;
+    ProgressDialog *m_progressdialog;
+    SettingDialog *m_settingsDialog;
+    EncodingPage *m_encodingpage;
+    QSettings *m_settings;
     Page_ID m_pageid;
 
-    QVector<Archive::Entry*> m_extractSimpleFiles;
+    QVector<Archive::Entry *> m_extractSimpleFiles;
 
-    DIconButton* m_titlebutton;
+    DIconButton *m_titlebutton;
 
-    ExtractJob* m_encryptionjob;
-    LoadJob* m_loadjob;
-    CreateJob* m_createJob;
+    ExtractJob *m_encryptionjob;
+    LoadJob *m_loadjob;
+    CreateJob *m_createJob;
     EncryptionType m_encryptiontype;
     bool m_isrightmenu;
     WorkState m_workstatus;

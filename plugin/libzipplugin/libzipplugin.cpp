@@ -123,7 +123,7 @@ void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
     static_cast<LibzipPlugin *>(that)->emitProgress(progress);
 }
 
-LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList & args)
+LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
     , m_overwriteAll(false)
     , m_skipAll(false)
@@ -194,21 +194,17 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
             codeclist.append(codec);
         }
     }
-    if(codeclist.count() > 1)
-    {
+    if (codeclist.count() > 1) {
         QMap<QByteArray, int> codec_map;
         QByteArray max_codec;
 
-        foreach(QByteArray codec, codeclist)
-        {
+        foreach (QByteArray codec, codeclist) {
 
-            if(!codec_map.contains(codec))
-            {
+            if (!codec_map.contains(codec)) {
                 int count = codeclist.count(codec);
                 codec_map.insert(codec, count);
 
-                if (codec_map.value(max_codec) < count)
-                {
+                if (codec_map.value(max_codec) < count) {
                     max_codec = codec;
                 }
             }
@@ -218,35 +214,29 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
     }
 }
 
-QString  LibzipPlugin::trans2uft8(const char* str)
+QString  LibzipPlugin::trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
-    qDebug()<<codec_name;
-    if("" == m_codecname)
-    {
-        QTextCodec* codec = QTextCodec::codecForName(codec_name);
+    qDebug() << codec_name;
+    if ("" == m_codecname) {
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
-    }
-    else if("gb18030" == codec_name)
-    {
-        QTextCodec* codec = QTextCodec::codecForName(codec_name);
+    } else if ("gb18030" == codec_name) {
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
-    }
-    else if("UTF-8" != codec_name)
-    {
-        QTextCodec* codec = QTextCodec::codecForName(m_codecname);
+    } else if ("UTF-8" != codec_name) {
+        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
         m_codecstr = m_codecname;
         return codec->toUnicode(str);
-    }
-    else {
+    } else {
         m_codecstr = "UTF-8";
         return QString(str);
     }
 }
 
-bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, uint numberOfEntriesToAdd)
+bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
     Q_UNUSED(numberOfEntriesToAdd)
     int errcode = 0;
@@ -261,7 +251,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive
     }
 
     uint i = 0;
-    for (const Archive::Entry* e : files) {
+    for (const Archive::Entry *e : files) {
 
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
@@ -321,9 +311,8 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry*> &files, const Archive
 
 void LibzipPlugin::emitProgress(double percentage)
 {
-    int i = m_filesize*percentage;
-    if(m_addarchive)
-    {
+    int i = m_filesize * percentage;
+    if (m_addarchive) {
         emit progress_filename(trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
     }
 
@@ -331,7 +320,7 @@ void LibzipPlugin::emitProgress(double percentage)
     emit progress(percentage);
 }
 
-bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive::Entry* destination, const CompressionOptions& options, bool isDir)
+bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive::Entry *destination, const CompressionOptions &options, bool isDir)
 {
     Q_ASSERT(archive);
 
@@ -437,49 +426,49 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         }
     }
     if (statBuffer.valid & ZIP_STAT_COMP_METHOD) {
-        switch(statBuffer.comp_method) {
-            case ZIP_CM_STORE:
-                e->setProperty("method", QStringLiteral("Store"));
-                emit compressionMethodFound(QStringLiteral("Store"));
-                break;
-            case ZIP_CM_DEFLATE:
-                e->setProperty("method", QStringLiteral("Deflate"));
-                emit compressionMethodFound(QStringLiteral("Deflate"));
-                break;
-            case ZIP_CM_DEFLATE64:
-                e->setProperty("method", QStringLiteral("Deflate64"));
-                emit compressionMethodFound(QStringLiteral("Deflate64"));
-                break;
-            case ZIP_CM_BZIP2:
-                e->setProperty("method", QStringLiteral("BZip2"));
-                emit compressionMethodFound(QStringLiteral("BZip2"));
-                break;
-            case ZIP_CM_LZMA:
-                e->setProperty("method", QStringLiteral("LZMA"));
-                emit compressionMethodFound(QStringLiteral("LZMA"));
-                break;
-            case ZIP_CM_XZ:
-                e->setProperty("method", QStringLiteral("XZ"));
-                emit compressionMethodFound(QStringLiteral("XZ"));
-                break;
+        switch (statBuffer.comp_method) {
+        case ZIP_CM_STORE:
+            e->setProperty("method", QStringLiteral("Store"));
+            emit compressionMethodFound(QStringLiteral("Store"));
+            break;
+        case ZIP_CM_DEFLATE:
+            e->setProperty("method", QStringLiteral("Deflate"));
+            emit compressionMethodFound(QStringLiteral("Deflate"));
+            break;
+        case ZIP_CM_DEFLATE64:
+            e->setProperty("method", QStringLiteral("Deflate64"));
+            emit compressionMethodFound(QStringLiteral("Deflate64"));
+            break;
+        case ZIP_CM_BZIP2:
+            e->setProperty("method", QStringLiteral("BZip2"));
+            emit compressionMethodFound(QStringLiteral("BZip2"));
+            break;
+        case ZIP_CM_LZMA:
+            e->setProperty("method", QStringLiteral("LZMA"));
+            emit compressionMethodFound(QStringLiteral("LZMA"));
+            break;
+        case ZIP_CM_XZ:
+            e->setProperty("method", QStringLiteral("XZ"));
+            emit compressionMethodFound(QStringLiteral("XZ"));
+            break;
         }
     }
     if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
         if (statBuffer.encryption_method != ZIP_EM_NONE) {
             e->setProperty("isPasswordProtected", true);
-            switch(statBuffer.encryption_method) {
-                case ZIP_EM_TRAD_PKWARE:
-                    emit encryptionMethodFound(QStringLiteral("ZipCrypto"));
-                    break;
-                case ZIP_EM_AES_128:
-                    emit encryptionMethodFound(QStringLiteral("AES128"));
-                    break;
-                case ZIP_EM_AES_192:
-                    emit encryptionMethodFound(QStringLiteral("AES192"));
-                    break;
-                case ZIP_EM_AES_256:
-                    emit encryptionMethodFound(QStringLiteral("AES256"));
-                    break;
+            switch (statBuffer.encryption_method) {
+            case ZIP_EM_TRAD_PKWARE:
+                emit encryptionMethodFound(QStringLiteral("ZipCrypto"));
+                break;
+            case ZIP_EM_AES_128:
+                emit encryptionMethodFound(QStringLiteral("AES128"));
+                break;
+            case ZIP_EM_AES_192:
+                emit encryptionMethodFound(QStringLiteral("AES192"));
+                break;
+            case ZIP_EM_AES_256:
+                emit encryptionMethodFound(QStringLiteral("AES256"));
+                break;
             }
         }
     }
@@ -508,7 +497,7 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     return true;
 }
 
-bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry*> &files)
+bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
 {
     int errcode = 0;
     zip_error_t err;
@@ -522,7 +511,7 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry*> &files)
     }
 
     qulonglong i = 0;
-    for (const Archive::Entry* e : files) {
+    for (const Archive::Entry *e : files) {
 
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
@@ -548,7 +537,7 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry*> &files)
     return true;
 }
 
-bool LibzipPlugin::addComment(const QString& comment)
+bool LibzipPlugin::addComment(const QString &comment)
 {
     int errcode = 0;
     zip_error_t err;
@@ -623,7 +612,7 @@ bool LibzipPlugin::doKill()
     return false;
 }
 
-bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QString& destinationDirectory, const ExtractionOptions& options)
+bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
     const bool extractAll = files.isEmpty();
     const bool removeRootNode = options.isDragAndDropEnabled();
@@ -671,7 +660,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry*> &files, const QSt
     } else {
         // We extract only the entries in files.
         qulonglong i = 0;
-        for (const Archive::Entry* e : files) {
+        for (const Archive::Entry *e : files) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
@@ -744,8 +733,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
     // Get statistic for entry. Used to get entry size and mtime.
     zip_stat_t statBuffer;
-    QTextCodec* codec = QTextCodec::codecForName(m_codecstr);
-    qDebug()<<m_codecstr;
+    QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
+    qDebug() << m_codecstr;
     QByteArray  name = codec->fromUnicode(entry.toLocal8Bit());
 
 
@@ -884,7 +873,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     return true;
 }
 
-bool LibzipPlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool LibzipPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(options)
     int errcode = 0;
@@ -918,7 +907,7 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Ent
 
         emit entryRemoved(filePaths.at(i));
         emitEntryForIndex(archive, index);
-        emit progress(i/filePaths.count());
+        emit progress(i / filePaths.count());
     }
     if (zip_close(archive)) {
         emit error(tr("Failed to write archive."));
@@ -928,7 +917,7 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Ent
     return true;
 }
 
-bool LibzipPlugin::copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(options)
     int errcode = 0;
@@ -1171,7 +1160,7 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;

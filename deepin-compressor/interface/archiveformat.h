@@ -31,7 +31,7 @@ class  ArchiveFormat
 {
 public:
     explicit ArchiveFormat();
-    explicit ArchiveFormat(const QMimeType& mimeType,
+    explicit ArchiveFormat(const QMimeType &mimeType,
                            Archive::EncryptionType encryptionType,
                            int minCompLevel,
                            int maxCompLevel,
@@ -39,12 +39,12 @@ public:
                            bool supportsWriteComment,
                            bool supportsTesting,
                            bool suppportsMultiVolume,
-                           const QVariantMap& compressionMethods,
-                           const QString& defaultCompressionMethod,
+                           const QVariantMap &compressionMethods,
+                           const QString &defaultCompressionMethod,
                            const QStringList &encryptionMethods,
                            const QString &defaultEncryptionMethod);
 
-    static ArchiveFormat fromMetadata(const QMimeType& mimeType, const KPluginMetaData& metadata);
+    static ArchiveFormat fromMetadata(const QMimeType &mimeType, const KPluginMetaData &metadata);
     bool isValid() const;
     Archive::EncryptionType encryptionType() const;
 

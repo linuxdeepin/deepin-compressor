@@ -35,28 +35,31 @@
 #include "kprocess.h"
 
 
-MyScrollBar::MyScrollBar(QWidget* parent)
+MyScrollBar::MyScrollBar(QWidget *parent)
     : QScrollBar(parent)
 {
 
 }
 
-void MyScrollBar::showEvent(QShowEvent *event){
-     emit ScrollBarShowEvent ( event );
+void MyScrollBar::showEvent(QShowEvent *event)
+{
+    emit ScrollBarShowEvent(event);
 }
 
-void MyScrollBar::hideEvent(QHideEvent *event) {
-     emit ScrollBarHideEvent ( event );
+void MyScrollBar::hideEvent(QHideEvent *event)
+{
+    emit ScrollBarHideEvent(event);
 }
 
-MyLabel::MyLabel(QWidget* parent)
+MyLabel::MyLabel(QWidget *parent)
     : QLabel(parent)
 {
 
 }
 
-void MyLabel::mouseDoubleClickEvent ( QMouseEvent * event ){
-    emit labelDoubleClickEvent ( event );
+void MyLabel::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit labelDoubleClickEvent(event);
 }
 
 
@@ -66,11 +69,12 @@ FirstRowDelegate::FirstRowDelegate(QObject *parent)
 
 }
 
-void FirstRowDelegate::setPathIndex(int *index){
-    ppathindex=index;
+void FirstRowDelegate::setPathIndex(int *index)
+{
+    ppathindex = index;
 }
 
-void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     int row = index.row();
     int x = option.rect.x();
@@ -78,22 +82,21 @@ void FirstRowDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     int width = option.rect.width();
     int height = option.rect.height();
 
-    if (row == 0&& ppathindex && *ppathindex>0)//UE
-    {
+    if (row == 0 && ppathindex && *ppathindex > 0) { //UE
         //选项
         QStyleOptionFrame *FrameOption = new QStyleOptionFrame();
-        FrameOption->rect = QRect(x,y,width,height/2);
+        FrameOption->rect = QRect(x, y, width, height / 2);
         //绘制
-        QApplication::style()->drawControl(QStyle::CE_ShapedFrame, FrameOption , painter);
-        QStyleOptionViewItem loption=option;
-        loption.rect = QRect(x,y+height/2,width,height/2);
-        return QItemDelegate::paint (painter, loption, index);
+        QApplication::style()->drawControl(QStyle::CE_ShapedFrame, FrameOption, painter);
+        QStyleOptionViewItem loption = option;
+        loption.rect = QRect(x, y + height / 2, width, height / 2);
+        return QItemDelegate::paint(painter, loption, index);
     }
 
-    return QItemDelegate::paint (painter, option, index);
+    return QItemDelegate::paint(painter, option, index);
 }
 
-MyTableView::MyTableView(QWidget* parent)
+MyTableView::MyTableView(QWidget *parent)
     : QTableView(parent)
 {
     setMinimumSize(580, 300);
@@ -143,7 +146,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     s->setProgress(100);
     s->deleteLater();
     s = nullptr;
-    qDebug()<<"sigdragLeave";
+    qDebug() << "sigdragLeave";
     emit sigdragLeave(m_path);
     m_path.clear();
 }
@@ -151,15 +154,15 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 void MyTableView::slotDragpath(QUrl url)
 {
     m_path = url.toLocalFile();
-    qDebug()<<m_path;
+    qDebug() << m_path;
 }
 
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : QWidget(parent), m_pagetype(type)
 {
-    setWindowTitle( tr( "File Viewer" ) );
+    setWindowTitle(tr("File Viewer"));
     setMinimumSize(580, 300);
-    m_pathindex=0;
+    m_pathindex = 0;
     m_mimetype = new MimeTypeDisplayManager();
     InitUI();
     InitConnection();
@@ -171,21 +174,21 @@ fileViewer::~fileViewer()
 
 void fileViewer::InitUI()
 {
-    QHBoxLayout* mainlayout = new QHBoxLayout;
+    QHBoxLayout *mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView();
     pdelegate = new FirstRowDelegate();
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
-    plabel=new MyLabel(pTableViewFile);
+    plabel = new MyLabel(pTableViewFile);
     firstmodel = new QStandardItemModel();
-    pModel= new MyFileSystemModel();
+    pModel = new MyFileSystemModel();
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
     QStringList labels = QObject::trUtf8("Name,Size,Type,Modify").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
-    pScrollbar= new MyScrollBar();
+    pScrollbar = new MyScrollBar();
     pTableViewFile->setVerticalScrollBar(pScrollbar);
     pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pTableViewFile->horizontalHeader()->setStretchLastSection(true);
@@ -198,7 +201,7 @@ void fileViewer::InitUI()
     pTableViewFile->setSortingEnabled(true);
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
 
-    QHeaderView* headerview = pTableViewFile->horizontalHeader();
+    QHeaderView *headerview = pTableViewFile->horizontalHeader();
     headerview->setMinimumHeight(MyFileSystemDefine::gTableHeight);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(headerview);
@@ -211,13 +214,12 @@ void fileViewer::InitUI()
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
-    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,MyFileSystemDefine::gTableHeight);
+    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, MyFileSystemDefine::gTableHeight);
 
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
 
-    if(PAGE_UNCOMPRESS == m_pagetype)
-    {
+    if (PAGE_UNCOMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setFixedWidth(200);
@@ -236,7 +238,7 @@ void fileViewer::InitUI()
 
 void fileViewer::refreshTableview()
 {
-    MyFileItem* item = nullptr;
+    MyFileItem *item = nullptr;
     firstmodel->clear();
 
     item = new MyFileItem(QObject::tr("Name"));
@@ -256,59 +258,53 @@ void fileViewer::refreshTableview()
 
     int rowindex = 0;
     QFileIconProvider icon_provider;
-    foreach(QFileInfo fileinfo , m_curfilelist)
-    {
+    foreach (QFileInfo fileinfo, m_curfilelist) {
         item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Medium);
         item->setFont(font);
 
-        firstmodel->setItem(rowindex,0,item);
-        if(fileinfo.isDir())
-        {
+        firstmodel->setItem(rowindex, 0, item);
+        if (fileinfo.isDir()) {
 //            item = new MyFileItem("-");
             QDir dir(fileinfo.filePath());
             QStringList filter;
-            QList<QFileInfo> *fileInfo=new QList<QFileInfo>(dir.entryInfoList(filter));
+            QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(filter));
 
-            int count=fileInfo->count();
-            if(count > 2)
-            {
+            int count = fileInfo->count();
+            if (count > 2) {
                 count -= 2;
             }
-            item = new MyFileItem(QString::number(count) + " " + tr("Item")+  "    ");
-        }
-        else
-        {
-            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1)+  "    ");
+            item = new MyFileItem(QString::number(count) + " " + tr("Item") +  "    ");
+        } else {
+            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1) +  "    ");
         }
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
         item->setFont(font);
         item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        firstmodel->setItem(rowindex,3,item);
+        firstmodel->setItem(rowindex, 3, item);
         QMimeType mimetype = determineMimeType(fileinfo.filePath());
         item = new MyFileItem(" " + m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
         item->setFont(font);
-        firstmodel->setItem(rowindex,2,item);
+        firstmodel->setItem(rowindex, 2, item);
         item = new MyFileItem(" " + QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
         item->setFont(font);
-        firstmodel->setItem(rowindex,1,item);
+        firstmodel->setItem(rowindex, 1, item);
         rowindex++;
     }
 
     pTableViewFile->setModel(firstmodel);
     resizecolumn();
 
-    foreach(int row ,m_fileaddindex)
-    {
+    foreach (int row, m_fileaddindex) {
         pTableViewFile->selectRow(row);
     }
 }
@@ -318,74 +314,65 @@ void fileViewer::refreshTableview()
 void fileViewer::InitConnection()
 {
     // connect the signals to the slot function.
-    if(PAGE_COMPRESS == m_pagetype)
-    {
+    if (PAGE_COMPRESS == m_pagetype) {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
-    }
-    else {
+    } else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
         connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
         connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
-        if(m_pRightMenu)
-        {
+        if (m_pRightMenu) {
             connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
         }
     }
     connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotCompressRePreviousDoubleClicked(QMouseEvent *)));
 
-    connect(pScrollbar, SIGNAL(ScrollBarShowEvent ( QShowEvent *)), this, SLOT(ScrollBarShowEvent ( QShowEvent *)));
-    connect(pScrollbar, SIGNAL(ScrollBarHideEvent ( QHideEvent *)), this, SLOT(ScrollBarHideEvent ( QHideEvent *)));
+    connect(pScrollbar, SIGNAL(ScrollBarShowEvent(QShowEvent *)), this, SLOT(ScrollBarShowEvent(QShowEvent *)));
+    connect(pScrollbar, SIGNAL(ScrollBarHideEvent(QHideEvent *)), this, SLOT(ScrollBarHideEvent(QHideEvent *)));
 }
 
 void fileViewer::resizecolumn()
 {
-    qDebug()<<pTableViewFile->width();
-    pTableViewFile->setColumnWidth(0, pTableViewFile->width()*14/29);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width()*8/29);
-    pTableViewFile->setColumnWidth(2, pTableViewFile->width()*3/29);
-    pTableViewFile->setColumnWidth(3, pTableViewFile->width()*3/29);
+    qDebug() << pTableViewFile->width();
+    pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 14 / 29);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 8 / 29);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 3 / 29);
+    pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 3 / 29);
 }
 
-void fileViewer::resizeEvent(QResizeEvent* size)
+void fileViewer::resizeEvent(QResizeEvent *size)
 {
-    qDebug()<<pTableViewFile->width();
+    qDebug() << pTableViewFile->width();
     resizecolumn();
 }
 
 
 void fileViewer::keyPressEvent(QKeyEvent *event)
 {
-    if(!event)
-    {
+    if (!event) {
         return;
     }
-    if(event->key() == Qt::Key_Delete && 0 == m_pathindex) {
+    if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
         QItemSelectionModel *selections =  pTableViewFile->selectionModel();
         QModelIndexList selected = selections->selectedIndexes();
 
         QSet<unsigned int>  selectlist;
 
-        foreach (QModelIndex index, selected)
-        {
+        foreach (QModelIndex index, selected) {
             selectlist.insert(index.row());
         }
 
         QStringList filelist;
-        foreach(unsigned int index, selectlist)
-        {
+        foreach (unsigned int index, selectlist) {
             m_curfilelist.replace(index, QFileInfo(""));
         }
 
-        foreach(QFileInfo file, m_curfilelist)
-        {
-            if(file.path() == "")
-            {
+        foreach (QFileInfo file, m_curfilelist) {
+            if (file.path() == "") {
                 m_curfilelist.removeOne(file);
             }
         }
 
-        foreach(QFileInfo fileinfo, m_curfilelist)
-        {
+        foreach (QFileInfo fileinfo, m_curfilelist) {
             filelist.append(fileinfo.filePath());
         }
 
@@ -403,53 +390,46 @@ int fileViewer::getPathIndex()
 void fileViewer::setFileList(const QStringList &files)
 {
 
-    if(files.count() > m_curfilelist.count())
-    {
+    if (files.count() > m_curfilelist.count()) {
         m_fileaddindex.clear();
-        for(int i = 0; i < files.count() - m_curfilelist.count(); i++)
-        {
+        for (int i = 0; i < files.count() - m_curfilelist.count(); i++) {
             m_fileaddindex.append(files.count() - 1 + i);
         }
     }
 
 
     m_curfilelist.clear();
-    foreach(QString filepath , files)
-    {
+    foreach (QString filepath, files) {
         QFile file(filepath);
         m_curfilelist.append(file);
     }
     refreshTableview();
 }
 
-void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
+void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event)
+{
 
-    if(PAGE_COMPRESS == m_pagetype)
-    {
-        if(m_pathindex>1){
+    if (PAGE_COMPRESS == m_pagetype) {
+        if (m_pathindex > 1) {
             m_pathindex--;
-            m_indexmode=pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
-            qDebug()<<pModel->fileInfo(m_indexmode).path();
+            m_indexmode = pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
+            qDebug() << pModel->fileInfo(m_indexmode).path();
             pTableViewFile->setRootIndex(m_indexmode);
-        }
-        else {
+        } else {
             m_pathindex--;
             refreshTableview();
-            if(0==m_pathindex){
+            if (0 == m_pathindex) {
                 plabel->hide();
-                pTableViewFile->setRowHeight(0,MyFileSystemDefine::gTableHeight);
+                pTableViewFile->setRowHeight(0, MyFileSystemDefine::gTableHeight);
             }
         }
-    }
-    else {
+    } else {
         m_pathindex--;
-        if(0 == m_pathindex)
-        {
+        if (0 == m_pathindex) {
             pTableViewFile->setRootIndex(QModelIndex());
             plabel->hide();
-            pTableViewFile->setRowHeight(0,ArchiveModelDefine::gTableHeight);
-        }
-        else {
+            pTableViewFile->setRowHeight(0, ArchiveModelDefine::gTableHeight);
+        } else {
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
         }
     }
@@ -457,14 +437,12 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event){
     emit  sigpathindexChanged();
 }
 
-void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
+void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
+{
     QModelIndex curindex = pTableViewFile->currentIndex();
-    if (curindex.isValid())
-    {
-        if(0 == m_pathindex)
-        {
-            if(m_curfilelist.at(curindex.row()).isDir())
-            {
+    if (curindex.isValid()) {
+        if (0 == m_pathindex) {
+            if (m_curfilelist.at(curindex.row()).isDir()) {
                 pModel->setPathIndex(&m_pathindex);
                 pTableViewFile->setModel(pModel);
                 m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
@@ -473,22 +451,20 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
                 plabel->show();
                 plabel->raise();
                 resizecolumn();
-            }
-            else{
-                if(Utils::isCompressed_file(m_curfilelist.at(curindex.row()).filePath()))
-                {
-                    KProcess* cmdprocess = new KProcess;
+            } else {
+                if (Utils::isCompressed_file(m_curfilelist.at(curindex.row()).filePath())) {
+                    KProcess *cmdprocess = new KProcess;
                     QStringList arguments;
 
                     QString programPath = QStandardPaths::findExecutable("deepin-compressor");
                     if (programPath.isEmpty()) {
-                        qDebug()<<"error can't find xdg-mime";
+                        qDebug() << "error can't find xdg-mime";
                         return;
                     }
 
-                    arguments<<m_curfilelist.at(curindex.row()).filePath();
+                    arguments << m_curfilelist.at(curindex.row()).filePath();
 
-                    qDebug()<<arguments;
+                    qDebug() << arguments;
 
                     cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
                     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
@@ -496,29 +472,24 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
                     cmdprocess->start();
                 }
             }
-        }
-        else if(pModel && pModel->fileInfo(curindex).isDir())
-        {
-            m_indexmode=pModel->setRootPath(pModel->fileInfo(curindex).filePath());
+        } else if (pModel && pModel->fileInfo(curindex).isDir()) {
+            m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             pTableViewFile->setRootIndex(m_indexmode);
             m_pathindex++;
-        }
-        else if(pModel && !pModel->fileInfo(curindex).isDir())
-        {
-            if(Utils::isCompressed_file(pModel->fileInfo(curindex).filePath()))
-            {
-                KProcess* cmdprocess = new KProcess;
+        } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
+            if (Utils::isCompressed_file(pModel->fileInfo(curindex).filePath())) {
+                KProcess *cmdprocess = new KProcess;
                 QStringList arguments;
 
                 QString programPath = QStandardPaths::findExecutable("deepin-compressor");
                 if (programPath.isEmpty()) {
-                    qDebug()<<"error can't find xdg-mime";
+                    qDebug() << "error can't find xdg-mime";
                     return;
                 }
 
-                arguments<<pModel->fileInfo(curindex).filePath();
+                arguments << pModel->fileInfo(curindex).filePath();
 
-                qDebug()<<arguments;
+                qDebug() << arguments;
 
                 cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
                 cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
@@ -533,13 +504,10 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index){
 
 void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 {
-    if (index.isValid())
-    {
-        qDebug()<<m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index));
-        if(0 == m_pathindex)
-        {
-            if(m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index)))
-            {
+    if (index.isValid()) {
+        qDebug() << m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index));
+        if (0 == m_pathindex) {
+            if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
                 m_decompressmodel->setPathIndex(&m_pathindex);
                 QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
                 pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
@@ -548,9 +516,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 plabel->raise();
                 m_indexmode = sourceindex;
             }
-        }
-        else if(m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index)))
-        {
+        } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
             QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
             m_pathindex++;
@@ -559,18 +525,19 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
     }
 }
 
-void fileViewer::ScrollBarShowEvent ( QShowEvent * event ){
-    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,pTableViewFile->horizontalHeader()->height());
+void fileViewer::ScrollBarShowEvent(QShowEvent *event)
+{
+    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
 }
-void fileViewer::ScrollBarHideEvent ( QHideEvent * event ){
-    plabel->setGeometry(0,MyFileSystemDefine::gTableHeight,1920,pTableViewFile->horizontalHeader()->height());
+void fileViewer::ScrollBarHideEvent(QHideEvent *event)
+{
+    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
 
 }
 
 void fileViewer::showRightMenu(const QPoint &pos)
 {
-    if (!pTableViewFile->indexAt(pos).isValid())
-    {
+    if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
 
@@ -580,9 +547,8 @@ void fileViewer::showRightMenu(const QPoint &pos)
 
 void fileViewer::slotDragLeave(QString path)
 {
-    if(path.isEmpty())
-    {
-        qDebug()<<"path is empty";
+    if (path.isEmpty()) {
+        qDebug() << "path is empty";
         return;
     }
     emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_DRAG, path);
@@ -590,11 +556,9 @@ void fileViewer::slotDragLeave(QString path)
 
 void fileViewer::onRightMenuClicked(QAction *action)
 {
-    if(action->text() == tr("Extract files"))
-    {
+    if (action->text() == tr("Extract files")) {
         emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
-    }
-    else {
+    } else {
         emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
     }
 }
@@ -622,33 +586,33 @@ QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
 }
 
 
-QVector<Archive::Entry*> fileViewer::filesForIndexes(const QModelIndexList& list) const
+QVector<Archive::Entry *> fileViewer::filesForIndexes(const QModelIndexList &list) const
 {
-    QVector<Archive::Entry*> ret;
+    QVector<Archive::Entry *> ret;
 
-    for (const QModelIndex& index : list) {
+    for (const QModelIndex &index : list) {
         ret << m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
     }
 
     return ret;
 }
 
-QVector<Archive::Entry*> fileViewer::filesAndRootNodesForIndexes(const QModelIndexList& list) const
+QVector<Archive::Entry *> fileViewer::filesAndRootNodesForIndexes(const QModelIndexList &list) const
 {
-    QVector<Archive::Entry*> fileList;
+    QVector<Archive::Entry *> fileList;
     QStringList fullPathsList;
 
-    for (const QModelIndex& index : list) {
+    for (const QModelIndex &index : list) {
         QModelIndex selectionRoot = index.parent();
         while (pTableViewFile->selectionModel()->isSelected(selectionRoot) ||
-               list.contains(selectionRoot)) {
+                list.contains(selectionRoot)) {
             selectionRoot = selectionRoot.parent();
         }
 
         // Fetch the root node for the unselected parent.
         const QString rootFileName = selectionRoot.isValid()
-            ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
-            : QString();
+                                     ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
+                                     : QString();
 
 
         // Append index with root node to fileList.
@@ -667,13 +631,13 @@ QVector<Archive::Entry*> fileViewer::filesAndRootNodesForIndexes(const QModelInd
 }
 
 
-void fileViewer::setDecompressModel(ArchiveSortFilterModel* model)
+void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 {
     m_pathindex = 0;
     m_indexmode = QModelIndex();
     m_sortmodel = model;
 
-    m_decompressmodel = (ArchiveModel*)m_sortmodel->sourceModel();
+    m_decompressmodel = (ArchiveModel *)m_sortmodel->sourceModel();
     m_decompressmodel->setPathIndex(&m_pathindex);
     m_decompressmodel->setTableView(pTableViewFile);
 
@@ -685,7 +649,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel* model)
 
 void fileViewer::startDrag(Qt::DropActions supportedActions)
 {
-    QMimeData* mimeData = new QMimeData;
+    QMimeData *mimeData = new QMimeData;
     connect(mimeData, SIGNAL(dataRequested(QString)),
             this, SLOT(createData(QString)), Qt::DirectConnection);
     QDrag *drag = new QDrag(this);

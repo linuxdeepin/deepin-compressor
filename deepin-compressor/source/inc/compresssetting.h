@@ -46,22 +46,22 @@ DWIDGET_USE_NAMESPACE
 #define D_COMPRESS_SPLIT_MIX    5000
 #define D_COMPRESS_SPLIT_MIN   0
 
-class TypeLabel:public DLabel
-{
-     Q_OBJECT
-public:
-   TypeLabel(QWidget* parent = 0);
-protected:
-   void mousePressEvent ( QMouseEvent * event ) override;
-signals:
-   void labelClickEvent ( QMouseEvent * event );
-};
-
-class CompressSetting :public QWidget
+class TypeLabel: public DLabel
 {
     Q_OBJECT
 public:
-    CompressSetting(QWidget* parent = 0);
+    TypeLabel(QWidget *parent = 0);
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+signals:
+    void labelClickEvent(QMouseEvent *event);
+};
+
+class CompressSetting : public QWidget
+{
+    Q_OBJECT
+public:
+    CompressSetting(QWidget *parent = 0);
     ~CompressSetting();
 
     void keyPressEvent(QKeyEvent *event) override;
@@ -77,28 +77,28 @@ public:
     bool checkfilename(QString str);
 
 private:
-    DPushButton* m_nextbutton;
+    DPushButton *m_nextbutton;
     QPixmap m_compressicon;
-    TypeLabel* m_compresstype;
-    DLineEdit* m_filename;
-    DFileChooserEdit* m_savepath;
-    DLabel* m_pixmaplabel;
+    TypeLabel *m_compresstype;
+    DLineEdit *m_filename;
+    DFileChooserEdit *m_savepath;
+    DLabel *m_pixmaplabel;
 //    Lib_Edit_Button* m_pathbutton;
     QVBoxLayout *m_fileLayout;
 
     QHBoxLayout *m_moresetlayout;
-    DSwitchButton* m_moresetbutton;
-    DPasswordEdit* m_password;
+    DSwitchButton *m_moresetbutton;
+    DPasswordEdit *m_password;
     QHBoxLayout *m_file_secretlayout;
-    DSwitchButton* m_file_secret;
+    DSwitchButton *m_file_secret;
     QHBoxLayout *m_splitlayout;
-    DDoubleSpinBox* m_splitnumedit;
-    DPushButton* m_plusbutton;
-    DPushButton* m_minusbutton;
-    DLabel* m_encryptedlabel;
-    DCheckBox* m_splitcompress;
-    DLabel* m_encryptedfilelistlabel;
-    DMenu* m_typemenu;
+    DDoubleSpinBox *m_splitnumedit;
+    DPushButton *m_plusbutton;
+    DPushButton *m_minusbutton;
+    DLabel *m_encryptedlabel;
+    DCheckBox *m_splitcompress;
+    DLabel *m_encryptedfilelistlabel;
+    DMenu *m_typemenu;
 
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
@@ -114,7 +114,7 @@ public slots:
     void ontypeChanged(QAction *action);
     void onSplitValueChanged(double value);
     void onSplitChanged(int status);
-    void showRightMenu(QMouseEvent * e);
+    void showRightMenu(QMouseEvent *e);
 
     void onRetrunPressed();
 };

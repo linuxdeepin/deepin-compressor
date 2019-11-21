@@ -15,16 +15,16 @@ CliPluginFactory::~CliPluginFactory()
 
 }
 
-CliPlugin::CliPlugin(QObject *parent, const QVariantList& args)
-        : CliInterface(parent, args)
-        , m_parseState(ParseStateTitle)
-        , m_isUnrar5(false)
-        , m_isPasswordProtected(false)
-        , m_isSolid(false)
-        , m_isRAR5(false)
-        , m_isLocked(false)
-        , m_remainingIgnoreLines(1) //The first line of UNRAR output is empty.
-        , m_linesComment(0)
+CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
+    : CliInterface(parent, args)
+    , m_parseState(ParseStateTitle)
+    , m_isUnrar5(false)
+    , m_isPasswordProtected(false)
+    , m_isSolid(false)
+    , m_isRAR5(false)
+    , m_isLocked(false)
+    , m_remainingIgnoreLines(1) //The first line of UNRAR output is empty.
+    , m_linesComment(0)
 {
 
     // Empty lines are needed for parsing output of unrar.
@@ -59,15 +59,15 @@ void CliPlugin::setupCliProperties()
 
     m_cliProps->setProperty("extractProgram", QStringLiteral("unrar"));
     m_cliProps->setProperty("extractSwitch", QStringList{QStringLiteral("x"),
-                                                     QStringLiteral("-kb"),
-                                                     QStringLiteral("-p-")});
+                                                         QStringLiteral("-kb"),
+                                                         QStringLiteral("-p-")});
     m_cliProps->setProperty("extractSwitchNoPreserve", QStringList{QStringLiteral("e"),
-                                                               QStringLiteral("-kb"),
-                                                               QStringLiteral("-p-")});
+                                                                   QStringLiteral("-kb"),
+                                                                   QStringLiteral("-p-")});
 
     m_cliProps->setProperty("listProgram", QStringLiteral("unrar"));
     m_cliProps->setProperty("listSwitch", QStringList{QStringLiteral("vt"),
-                                                  QStringLiteral("-v")});
+                                                      QStringLiteral("-v")});
 
     m_cliProps->setProperty("moveProgram", QStringLiteral("rar"));
     m_cliProps->setProperty("moveSwitch", QStringLiteral("rn"));
@@ -76,14 +76,15 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("testSwitch", QStringLiteral("t"));
 
     m_cliProps->setProperty("commentSwitch", QStringList{QStringLiteral("c"),
-                                                     QStringLiteral("-z$CommentFile")});
+                                                         QStringLiteral("-z$CommentFile")});
 
     m_cliProps->setProperty("passwordSwitch", QStringList{QStringLiteral("-p$Password")});
     m_cliProps->setProperty("passwordSwitchHeaderEnc", QStringList{QStringLiteral("-hp$Password")});
 
     m_cliProps->setProperty("compressionLevelSwitch", QStringLiteral("-m$CompressionLevel"));
-    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString,QVariant>{{QStringLiteral("application/vnd.rar"), QStringLiteral("-ma$CompressionMethod")},
-                                                                           {QStringLiteral("application/x-rar"), QStringLiteral("-ma$CompressionMethod")}});
+    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/vnd.rar"), QStringLiteral("-ma$CompressionMethod")},
+        {QStringLiteral("application/x-rar"), QStringLiteral("-ma$CompressionMethod")}
+    });
     m_cliProps->setProperty("multiVolumeSwitch", QStringLiteral("-v$VolumeSizek"));
 
 
@@ -91,15 +92,15 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("fileExistsFileNameRegExp", QStringList{QStringLiteral("^(.+) already exists. Overwrite it"),  // unrar 3 & 4
                                                                     QStringLiteral("^Would you like to replace the existing file (.+)$")}); // unrar 5
     m_cliProps->setProperty("fileExistsInput", QStringList{QStringLiteral("Y"),   //Overwrite
-                                                       QStringLiteral("N"),   //Skip
-                                                       QStringLiteral("A"),   //Overwrite all
-                                                       QStringLiteral("E"),   //Autoskip
-                                                       QStringLiteral("Q")}); //Cancel
+                                                           QStringLiteral("N"),   //Skip
+                                                           QStringLiteral("A"),   //Overwrite all
+                                                           QStringLiteral("E"),   //Autoskip
+                                                           QStringLiteral("Q")}); //Cancel
 
     // rar will sometimes create multi-volume archives where first volume is
     // called name.part1.rar and other times name.part01.rar.
     m_cliProps->setProperty("multiVolumeSuffix", QStringList{QStringLiteral("part01.$Suffix"),
-                                                         QStringLiteral("part1.$Suffix")});
+                                                             QStringLiteral("part1.$Suffix")});
 }
 
 bool CliPlugin::readListLine(const QString &line)
@@ -129,8 +130,8 @@ bool CliPlugin::readListLine(const QString &line)
             return false;
         }
 
-    // Or see what version of unrar we are dealing with and call specific
-    // handler functions.
+        // Or see what version of unrar we are dealing with and call specific
+        // handler functions.
     } else if (m_isUnrar5) {
         return handleUnrar5Line(line);
     } else {
@@ -204,7 +205,7 @@ bool CliPlugin::handleUnrar5Line(const QString &line)
             m_parseState = ParseStateHeader;
             return true;
 
-        // Empty line indicates end of entry.
+            // Empty line indicates end of entry.
         } else if (line.trimmed().isEmpty() && !m_unrar5Details.isEmpty()) {
             handleUnrar5Entry();
 
@@ -381,19 +382,19 @@ bool CliPlugin::handleUnrar4Line(const QString &line)
             m_parseState = ParseStateHeader;
             return true;
 
-        // Encrypted files are marked with an asterisk.
+            // Encrypted files are marked with an asterisk.
         } else if (line.startsWith(QLatin1Char('*'))) {
             m_isPasswordProtected = true;
             m_unrar4Details.append(QString(line.trimmed()).remove(0, 1)); //Remove the asterisk
             emit encryptionMethodFound(QStringLiteral("AES128"));
 
-        // Entry names always start at the second position, so a line not
-        // starting with a space is not an entry name.
+            // Entry names always start at the second position, so a line not
+            // starting with a space is not an entry name.
         } else if (!line.startsWith(QLatin1Char(' '))) {
             return true;
 
-        // If we reach this, then we can assume the line is an entry name, so
-        // save it, and move on to the rest of the entry details.
+            // If we reach this, then we can assume the line is an entry name, so
+            // save it, and move on to the rest of the entry details.
         } else {
             m_unrar4Details.append(line.trimmed());
         }
@@ -491,8 +492,8 @@ void CliPlugin::handleUnrar4Entry()
     // instead of the compression ratio.
     QString compressionRatio = m_unrar4Details.at(3);
     if ((compressionRatio == QStringLiteral("<--")) ||
-        (compressionRatio == QStringLiteral("<->")) ||
-        (compressionRatio == QStringLiteral("-->"))) {
+            (compressionRatio == QStringLiteral("<->")) ||
+            (compressionRatio == QStringLiteral("-->"))) {
         compressionRatio = QLatin1Char('0');
     } else {
         compressionRatio.chop(1); // Remove the '%'

@@ -22,7 +22,7 @@ class CliPlugin : public CliInterface
 {
     Q_OBJECT
 public:
-    explicit CliPlugin(QObject *parent, const QVariantList & args);
+    explicit CliPlugin(QObject *parent, const QVariantList &args);
     ~CliPlugin() override;
 
     void resetParsing() override;

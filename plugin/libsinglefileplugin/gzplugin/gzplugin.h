@@ -20,7 +20,7 @@ class LibGzipInterface : public LibSingleFileInterface
     Q_OBJECT
 
 public:
-    LibGzipInterface(QObject *parent, const QVariantList & args);
+    LibGzipInterface(QObject *parent, const QVariantList &args);
     ~LibGzipInterface() override;
 };
 

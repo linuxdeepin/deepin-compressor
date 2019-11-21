@@ -29,7 +29,7 @@ ArchiveFormat::ArchiveFormat()
 {
 }
 
-ArchiveFormat::ArchiveFormat(const QMimeType& mimeType,
+ArchiveFormat::ArchiveFormat(const QMimeType &mimeType,
                              Archive::EncryptionType encryptionType,
                              int minCompLevel,
                              int maxCompLevel,
@@ -37,8 +37,8 @@ ArchiveFormat::ArchiveFormat(const QMimeType& mimeType,
                              bool supportsWriteComment,
                              bool supportsTesting,
                              bool supportsMultiVolume,
-                             const QVariantMap& compressionMethods,
-                             const QString& defaultCompressionMethod,
+                             const QVariantMap &compressionMethods,
+                             const QString &defaultCompressionMethod,
                              const QStringList &encryptionMethods,
                              const QString &defaultEncryptionMethod) :
     m_mimeType(mimeType),
@@ -56,11 +56,11 @@ ArchiveFormat::ArchiveFormat(const QMimeType& mimeType,
 {
 }
 
-ArchiveFormat ArchiveFormat::fromMetadata(const QMimeType& mimeType, const KPluginMetaData& metadata)
+ArchiveFormat ArchiveFormat::fromMetadata(const QMimeType &mimeType, const KPluginMetaData &metadata)
 {
     const QJsonObject json = metadata.rawData();
     const QStringList mimeTypes = metadata.mimeTypes();
-    for (const QString& mime : mimeTypes) {
+    for (const QString &mime : mimeTypes) {
         if (mimeType.name() != mime) {
             continue;
         }

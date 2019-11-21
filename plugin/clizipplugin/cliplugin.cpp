@@ -19,7 +19,7 @@ CliPluginFactory::~CliPluginFactory()
 
 }
 
-CliPlugin::CliPlugin(QObject *parent, const QVariantList & args)
+CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
     : CliInterface(parent, args)
     , m_parseState(ParseStateHeader)
     , m_linesComment(0)
@@ -88,8 +88,9 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("passwordSwitch", QStringList{QStringLiteral("-P$Password")});
 
     m_cliProps->setProperty("compressionLevelSwitch", QStringLiteral("-$CompressionLevel"));
-    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString,QVariant>{{QStringLiteral("application/zip"), QStringLiteral("-Z$CompressionMethod")},
-                                                                               {QStringLiteral("application/x-java-archive"), QStringLiteral("-Z$CompressionMethod")}});
+    m_cliProps->setProperty("compressionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/zip"), QStringLiteral("-Z$CompressionMethod")},
+        {QStringLiteral("application/x-java-archive"), QStringLiteral("-Z$CompressionMethod")}
+    });
     m_cliProps->setProperty("multiVolumeSwitch", QStringLiteral("-v$VolumeSizek"));
 
     m_cliProps->setProperty("testPassedPatterns", QStringList{QStringLiteral("^No errors detected in compressed data of ")});
@@ -104,7 +105,7 @@ void CliPlugin::setupCliProperties()
 bool CliPlugin::readListLine(const QString &line)
 {
     static const QRegularExpression entryPattern(QStringLiteral(
-        "^(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\d{8}).(\\d{6})\\s+(.+)$") );
+                                                     "^(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\d{8}).(\\d{6})\\s+(.+)$"));
 
     // RegExp to identify the line preceding comments.
     const QRegularExpression commentPattern(QStringLiteral("^Archive:  .*$"));
@@ -115,7 +116,7 @@ bool CliPlugin::readListLine(const QString &line)
     case ParseStateHeader:
         if (commentPattern.match(line).hasMatch()) {
             m_parseState = ParseStateComment;
-        } else if (commentEndPattern.match(line).hasMatch()){
+        } else if (commentEndPattern.match(line).hasMatch()) {
             m_parseState = ParseStateEntry;
         }
         break;
@@ -189,7 +190,7 @@ bool CliPlugin::readExtractLine(const QString &line)
     return true;
 }
 
-bool CliPlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool CliPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
 
     m_oldWorkingDir = QDir::currentPath();
@@ -206,7 +207,8 @@ bool CliPlugin::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry 
     return extractFiles(files, QDir::currentPath(), ExtractionOptions());
 }
 
-int CliPlugin::moveRequiredSignals() const {
+int CliPlugin::moveRequiredSignals() const
+{
     return 4;
 }
 

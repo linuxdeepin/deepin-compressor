@@ -43,7 +43,7 @@
 //#include <KLocalizedString>
 
 
-CliInterface::CliInterface(QObject *parent, const QVariantList & args)
+CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
     //because this interface uses the event loop
@@ -79,15 +79,14 @@ bool CliInterface::list()
     // To compute progress.
     m_archiveSizeOnDisk = static_cast<qulonglong>(QFileInfo(filename()).size());
     connect(this, &ReadOnlyArchiveInterface::entry, this, &CliInterface::onEntry);
-    if((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password()))//qprocess can't read all the output string,so set wrong password to detect if need password
-    {
+    if ((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password())) { //qprocess can't read all the output string,so set wrong password to detect if need password
         setPassword("temp");
     }
 
     return runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(filename(), password()));
 }
 
-bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options)
+bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
     qDebug() << "destination directory:" << destinationDirectory;
 
@@ -127,19 +126,19 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry*> &files, const QSt
     }
 
     return runProcess(m_cliProps->property("extractProgram").toString(),
-                    m_cliProps->extractArgs(filename(),
-                                            extractFilesList(files),
-                                            options.preservePaths(),
-                                            password()));
+                      m_cliProps->extractArgs(filename(),
+                                              extractFilesList(files),
+                                              options.preservePaths(),
+                                              password()));
 }
 
-bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, uint numberOfEntriesToAdd)
+bool CliInterface::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
     Q_UNUSED(numberOfEntriesToAdd)
 
     m_operationMode = Add;
 
-    QVector<Archive::Entry*> filesToPass = QVector<Archive::Entry*>();
+    QVector<Archive::Entry *> filesToPass = QVector<Archive::Entry *>();
     // If destination path is specified, we have recreate its structure inside the temp directory
     // and then place symlinks of targeted files there.
     const QString destinationPath = (destination == nullptr)
@@ -202,14 +201,14 @@ bool CliInterface::addFiles(const QVector<Archive::Entry*> &files, const Archive
                                           options.volumeSize()));
 }
 
-bool CliInterface::moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool CliInterface::moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     Q_UNUSED(options);
 
     m_operationMode = Move;
 
     m_removedFiles = files;
-    QVector<Archive::Entry*> withoutChildren = entriesWithoutChildren(files);
+    QVector<Archive::Entry *> withoutChildren = entriesWithoutChildren(files);
     setNewMovedFiles(files, destination, withoutChildren.count());
 
     return runProcess(m_cliProps->property("moveProgram").toString(),
@@ -219,7 +218,7 @@ bool CliInterface::moveFiles(const QVector<Archive::Entry*> &files, Archive::Ent
                                            password()));
 }
 
-bool CliInterface::copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions &options)
+bool CliInterface::copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options)
 {
     m_oldWorkingDir = QDir::currentPath();
     m_tempWorkingDir.reset(new QTemporaryDir());
@@ -236,7 +235,7 @@ bool CliInterface::copyFiles(const QVector<Archive::Entry*> &files, Archive::Ent
     return extractFiles(files, QDir::currentPath(), ExtractionOptions());
 }
 
-bool CliInterface::deleteFiles(const QVector<Archive::Entry*> &files)
+bool CliInterface::deleteFiles(const QVector<Archive::Entry *> &files)
 {
     m_operationMode = Delete;
 
@@ -254,7 +253,7 @@ bool CliInterface::testArchive()
     return runProcess(m_cliProps->property("testProgram").toString(), m_cliProps->testArgs(filename(), password()));
 }
 
-bool CliInterface::runProcess(const QString& programName, const QStringList& arguments)
+bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
     Q_ASSERT(!m_process);
 
@@ -274,7 +273,7 @@ bool CliInterface::runProcess(const QString& programName, const QStringList& arg
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     m_process->setProgram(programPath, arguments);
 
-    connect(m_process, &QProcess::readyReadStandardOutput, this, [=]() {
+    connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         readStdout();
     });
 
@@ -335,15 +334,12 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit progress(1.0);
             emit finished(true);
         }
-    }
-    else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode))
-    {
+    } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
         qDebug() << "wrong password";
         emit error(tr("wrong password"));
         setPassword(QString());
         return;
-    }
-    else  {
+    } else  {
         emit progress(1.0);
         emit finished(true);
     }
@@ -410,8 +406,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         cleanUpExtracting();
         emit finished(false);
         return;
-    }
-    else if (m_exitCode == 9) {
+    } else if (m_exitCode == 9) {
         qDebug() << "wrong password";
         emit error(tr("wrong password"));
         setPassword(QString());
@@ -459,7 +454,7 @@ void CliInterface::continueCopying(bool result)
     }
 }
 
-bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry*> &files, const QString &finalDest)
+bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files, const QString &finalDest)
 {
     // Move extracted files from a QTemporaryDir to the final destination.
 
@@ -654,11 +649,11 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
     return true;
 }
 
-void CliInterface::setNewMovedFiles(const QVector<Archive::Entry*> &entries, const Archive::Entry *destination, int entriesWithoutChildren)
+void CliInterface::setNewMovedFiles(const QVector<Archive::Entry *> &entries, const Archive::Entry *destination, int entriesWithoutChildren)
 {
     m_newMovedFiles.clear();
-    QMap<QString, const Archive::Entry*> entryMap;
-    for (const Archive::Entry* entry : entries) {
+    QMap<QString, const Archive::Entry *> entryMap;
+    for (const Archive::Entry *entry : entries) {
         entryMap.insert(entry->fullPath(), entry);
     }
 
@@ -666,7 +661,7 @@ void CliInterface::setNewMovedFiles(const QVector<Archive::Entry*> &entries, con
 
     QString newPath;
     int nameLength = 0;
-    for (const Archive::Entry* entry : qAsConst(entryMap)) {
+    for (const Archive::Entry *entry : qAsConst(entryMap)) {
         if (lastFolder.count() > 0 && entry->fullPath().startsWith(lastFolder)) {
             // Replace last moved or copied folder path with destination path.
             int charsCount = entry->fullPath().count() - lastFolder.count();
@@ -698,7 +693,7 @@ void CliInterface::setNewMovedFiles(const QVector<Archive::Entry*> &entries, con
     }
 }
 
-QStringList CliInterface::extractFilesList(const QVector<Archive::Entry*> &entries) const
+QStringList CliInterface::extractFilesList(const QVector<Archive::Entry *> &entries) const
 {
     QStringList filesList;
     for (const Archive::Entry *e : entries) {
@@ -806,8 +801,7 @@ void CliInterface::readStdout(bool handleAll)
 
     bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
 
-    if(m_process->program().at(0).contains("7z") && !wrongPasswordMessage)
-    {
+    if (m_process->program().at(0).contains("7z") && !wrongPasswordMessage) {
         handleAll = true;//7z output has no \n
     }
 
@@ -815,7 +809,7 @@ void CliInterface::readStdout(bool handleAll)
         (wrongPasswordMessage ||
          isDiskFullMsg(QLatin1String(lines.last())) ||
          isFileExistsMsg(QLatin1String(lines.last()))) ||
-         isPasswordPrompt(QLatin1String(lines.last()));
+        isPasswordPrompt(QLatin1String(lines.last()));
 
     if (foundErrorMessage) {
         handleAll = true;
@@ -843,7 +837,7 @@ void CliInterface::readStdout(bool handleAll)
         m_stdOutData = lines.takeLast();
     }
 
-    for (const QByteArray& line : qAsConst(lines)) {
+    for (const QByteArray &line : qAsConst(lines)) {
         if (!line.isEmpty() || (m_listEmptyLines && m_operationMode == List)) {
             if (!handleLine(QString::fromLocal8Bit(line))) {
                 killProcess();
@@ -867,20 +861,19 @@ bool CliInterface::setAddedFiles()
     return true;
 }
 
-bool CliInterface::handleLine(const QString& line)
+bool CliInterface::handleLine(const QString &line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
-    qDebug()<<line;
+    qDebug() << line;
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         //read the percentage
-        int pos = line.indexOf(QLatin1Char( '%' ));
+        int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 2, 2).toInt();
             emit progress(float(percentage) / 100);
 
-            if(line.contains("Extracting"))
-            {
+            if (line.contains("Extracting")) {
                 QStringRef strfilename = line.midRef(12, pos - 24);
                 emit progress_filename(strfilename.toString());
             }
@@ -891,36 +884,30 @@ bool CliInterface::handleLine(const QString& line)
 
     if ((m_operationMode == Extract || m_operationMode == Add) && (m_process->program().at(0).contains("zip"))) {
         //read the percentage
-        int pos = line.indexOf(QLatin1Char( ':' ));
-        if (pos > 1 && line.length()>17) {
+        int pos = line.indexOf(QLatin1Char(':'));
+        if (pos > 1 && line.length() > 17) {
 
             m_curfilenumber++;
             emit progress(float(m_curfilenumber) / m_allfilenumber);
-            QStringRef strfilename = line.midRef(pos + 2, line.length()-24);
+            QStringRef strfilename = line.midRef(pos + 2, line.length() - 24);
             emit progress_filename(strfilename.toString());
             return true;
         }
-    }
-    else if(m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line))
-    {
-        int pos = line.indexOf(QLatin1Char( '%' ));
-        if (pos > 1)
-        {
+    } else if (m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
+        int pos = line.indexOf(QLatin1Char('%'));
+        if (pos > 1) {
             int percentage = line.midRef(pos - 2, 2).toInt();
 
             QStringRef strfilename;
             int count = line.indexOf("+");
-            if(-1 == count)
-            {
+            if (-1 == count) {
                 count = line.indexOf("-");
             }
-            if(count > 0)
-            {
+            if (count > 0) {
                 strfilename = line.midRef(count + 2);
             }
 
-            if(!strfilename.toString().contains("Wrong password"))
-            {
+            if (!strfilename.toString().contains("Wrong password")) {
                 emit progress(float(percentage) / 100);
                 emit progress_filename(strfilename.toString());
             }
@@ -1040,7 +1027,7 @@ bool CliInterface::readDeleteLine(const QString &line)
     return true;
 }
 
-bool CliInterface::handleFileExistsMessage(const QString& line)
+bool CliInterface::handleFileExistsMessage(const QString &line)
 {
     // Check for a filename and store it.
     if (isFileExistsFileName(line)) {
@@ -1060,7 +1047,7 @@ bool CliInterface::handleFileExistsMessage(const QString& line)
         return false;
     }
 
-    OverwriteQuery query(QDir::current().path() + QLatin1Char( '/' ) + m_storedFileName);
+    OverwriteQuery query(QDir::current().path() + QLatin1Char('/') + m_storedFileName);
     query.setNoRenameMode(true);
     query.execute();
 
@@ -1085,7 +1072,7 @@ bool CliInterface::handleFileExistsMessage(const QString& line)
 
     Q_ASSERT(!responseToProcess.isEmpty());
 
-    responseToProcess += QLatin1Char( '\n' );
+    responseToProcess += QLatin1Char('\n');
 
     writeToProcess(responseToProcess.toLocal8Bit());
 
@@ -1102,12 +1089,12 @@ bool CliInterface::doKill()
     return false;
 }
 
-QString CliInterface::escapeFileName(const QString& fileName) const
+QString CliInterface::escapeFileName(const QString &fileName) const
 {
     return fileName;
 }
 
-QStringList CliInterface::entryPathDestinationPairs(const QVector<Archive::Entry*> &entriesWithoutChildren, const Archive::Entry *destination)
+QStringList CliInterface::entryPathDestinationPairs(const QVector<Archive::Entry *> &entriesWithoutChildren, const Archive::Entry *destination)
 {
     QStringList pairList;
     if (entriesWithoutChildren.count() > 1) {
@@ -1120,14 +1107,14 @@ QStringList CliInterface::entryPathDestinationPairs(const QVector<Archive::Entry
     return pairList;
 }
 
-void CliInterface::writeToProcess(const QByteArray& data)
+void CliInterface::writeToProcess(const QByteArray &data)
 {
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
     qDebug() << "Writing" << data << "to the process";
 
-	m_process->write(data);
+    m_process->write(data);
 
 }
 
@@ -1181,7 +1168,7 @@ void CliInterface::onEntry(Archive::Entry *archiveEntry)
     if (archiveEntry->compressedSizeIsSet) {
         m_listedSize += archiveEntry->property("compressedSize").toULongLong();
         if (m_listedSize <= m_archiveSizeOnDisk) {
-            emit progress(float(m_listedSize)/float(m_archiveSizeOnDisk));
+            emit progress(float(m_listedSize) / float(m_archiveSizeOnDisk));
         } else {
             // In case summed compressed size exceeds archive size on disk.
             emit progress(1);

@@ -16,20 +16,20 @@ class BatchExtract : public BatchJobs
 
 public:
 
-    explicit BatchExtract(QObject* parent = nullptr);
+    explicit BatchExtract(QObject *parent = nullptr);
 
     ~BatchExtract();
 
-    void addExtraction(const QUrl& url);
+    void addExtraction(const QUrl &url);
 
     bool doKill() override;
     void start() override;
     bool autoSubfolder() const;
     void setAutoSubfolder(bool value);
-    void addInput(const QUrl& url);
+    void addInput(const QUrl &url);
     bool showExtractDialog();
     QString destinationFolder() const;
-    void setDestinationFolder(const QString& folder);
+    void setDestinationFolder(const QString &folder);
     bool openDestinationAfterExtraction() const;
     void setOpenDestinationAfterExtraction(bool value);
     bool preservePaths() const;
@@ -42,11 +42,11 @@ private Q_SLOTS:
     void slotUserQuery(Query *query);
     void slotStartJob();
 
-    void SlotProgressFile(KJob* job, const QString & name);
+    void SlotProgressFile(KJob *job, const QString &name);
 
 private:
     int m_initialJobCount;
-    QMap<KJob*, QPair<QString, QString> > m_fileNames;
+    QMap<KJob *, QPair<QString, QString> > m_fileNames;
     bool m_autoSubfolder;
 
     QVector<QUrl> m_inputs;

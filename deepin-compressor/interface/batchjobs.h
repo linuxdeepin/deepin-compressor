@@ -16,7 +16,7 @@
 //    Q_DECLARE_PUBLIC(BatchJobs)
 //};
 
-class BatchJobs :public KJob
+class BatchJobs : public KJob
 {
     Q_OBJECT
 public:

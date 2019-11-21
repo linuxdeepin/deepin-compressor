@@ -62,13 +62,13 @@ private:
     int m_defaultWidth = 380;
     int m_defaultHeight = 120;
 
-    DLabel* m_tasklable;
-    DLabel* m_filelable;
-    DProgressBar* m_circleprogress;
+    DLabel *m_tasklable;
+    DLabel *m_filelable;
+    DProgressBar *m_circleprogress;
 
-    ExtractPauseDialog* m_extractdialog;
+    ExtractPauseDialog *m_extractdialog;
 
-    DTitlebar* m_titlebar;
+    DTitlebar *m_titlebar;
 
 };
 

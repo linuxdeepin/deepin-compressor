@@ -47,7 +47,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
     m_extractpath = new DCommandLinkButton(tr("Extracted to") + ": ~/Desktop");
 //    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
-    DFontSizeManager::instance()->bind(m_extractpath,DFontSizeManager::T8);
+    DFontSizeManager::instance()->bind(m_extractpath, DFontSizeManager::T8);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
     buttonlayout->addStretch();
@@ -90,7 +90,7 @@ void UnCompressPage::oneCompressPress()
 }
 
 
-void UnCompressPage::setModel(ArchiveSortFilterModel* model)
+void UnCompressPage::setModel(ArchiveSortFilterModel *model)
 {
     m_model = model;
     m_fileviewer->setDecompressModel(m_model);
@@ -117,7 +117,8 @@ void UnCompressPage::onPathButoonClicked()
     m_pathstr = curpath;
 }
 
-void UnCompressPage::setdefaultpath(QString path){
+void UnCompressPage::setdefaultpath(QString path)
+{
     m_pathstr = path;
     m_extractpath->setText(tr("Extracted to") + ": " + m_pathstr);
 }
@@ -127,15 +128,13 @@ QString UnCompressPage::getDecompressPath()
     return m_pathstr;
 }
 
-void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRACT_TYPE type, QString path)
+void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path)
 {
-    if(fileList.count() == 0)
-    {
+    if (fileList.count() == 0) {
         return;
     }
 
-    if(EXTRACT_TO == type)
-    {
+    if (EXTRACT_TO == type) {
         DFileDialog dialog;
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
         dialog.setFileMode(DFileDialog::Directory);
@@ -151,11 +150,9 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry*> fileList, EXTRA
         QString curpath = pathlist.at(0).toLocalFile();
 
         emit sigextractfiles(fileList, curpath);
-    }
-    else if (EXTRACT_DRAG == type) {
+    } else if (EXTRACT_DRAG == type) {
         emit sigextractfiles(fileList, path);
-    }
-    else {
+    } else {
         emit sigextractfiles(fileList, m_pathstr);
     }
 }

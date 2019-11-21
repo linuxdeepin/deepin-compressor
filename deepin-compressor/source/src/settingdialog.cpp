@@ -34,42 +34,41 @@ SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
 {
     m_associtionlist << "file_association.file_association_type.x-7z-compressed"
-                   << "file_association.file_association_type.x-archive"
-                   << "file_association.file_association_type.x-bcpio"
-                   << "file_association.file_association_type.x-bzip"
-                   << "file_association.file_association_type.x-cpio"
-                   << "file_association.file_association_type.x-cpio-compressed"
-                   << "file_association.file_association_type.vnd.debian.binary-package"
-                   << "file_association.file_association_type.gzip"
-                   << "file_association.file_association_type.x-java-archive"
-                   << "file_association.file_association_type.x-lzma"
-                   << "file_association.file_association_type.vnd.ms-cab-compressed"
-                   << "file_association.file_association_type.vnd.rar"
-                   << "file_association.file_association_type.x-rpm"
-                   << "file_association.file_association_type.x-sv4cpio"
-                   << "file_association.file_association_type.x-sv4crc"
-                   << "file_association.file_association_type.x-tar"
-                   << "file_association.file_association_type.x-bzip-compressed-tar"
-                   << "file_association.file_association_type.x-compressed-tar"
-                   << "file_association.file_association_type.x-lzip-compressed-tar"
-                   << "file_association.file_association_type.x-lzma-compressed-tar"
-                   << "file_association.file_association_type.x-tzo"
-                   << "file_association.file_association_type.x-xz-compressed-tar"
-                   << "file_association.file_association_type.x-tarz"
-                   << "file_association.file_association_type.x-xar"
-                   << "file_association.file_association_type.x-xz"
-                   << "file_association.file_association_type.zip"
-                   << "file_association.file_association_type.x-cd-image"
-                   << "file_association.file_association_type.x-iso9660-appimage"
-                   << "file_association.file_association_type.x-source-rpm";
+                     << "file_association.file_association_type.x-archive"
+                     << "file_association.file_association_type.x-bcpio"
+                     << "file_association.file_association_type.x-bzip"
+                     << "file_association.file_association_type.x-cpio"
+                     << "file_association.file_association_type.x-cpio-compressed"
+                     << "file_association.file_association_type.vnd.debian.binary-package"
+                     << "file_association.file_association_type.gzip"
+                     << "file_association.file_association_type.x-java-archive"
+                     << "file_association.file_association_type.x-lzma"
+                     << "file_association.file_association_type.vnd.ms-cab-compressed"
+                     << "file_association.file_association_type.vnd.rar"
+                     << "file_association.file_association_type.x-rpm"
+                     << "file_association.file_association_type.x-sv4cpio"
+                     << "file_association.file_association_type.x-sv4crc"
+                     << "file_association.file_association_type.x-tar"
+                     << "file_association.file_association_type.x-bzip-compressed-tar"
+                     << "file_association.file_association_type.x-compressed-tar"
+                     << "file_association.file_association_type.x-lzip-compressed-tar"
+                     << "file_association.file_association_type.x-lzma-compressed-tar"
+                     << "file_association.file_association_type.x-tzo"
+                     << "file_association.file_association_type.x-xz-compressed-tar"
+                     << "file_association.file_association_type.x-tarz"
+                     << "file_association.file_association_type.x-xar"
+                     << "file_association.file_association_type.x-xz"
+                     << "file_association.file_association_type.zip"
+                     << "file_association.file_association_type.x-cd-image"
+                     << "file_association.file_association_type.x-iso9660-appimage"
+                     << "file_association.file_association_type.x-source-rpm";
 
     m_valuelist.clear();
 
     initUI();
     initConnect();
 
-    foreach(QString key, m_associtionlist)
-    {
+    foreach (QString key, m_associtionlist) {
         m_valuelist.append(m_settings->value(key).toBool());
 
     }
@@ -80,10 +79,11 @@ void SettingDialog::initUI()
 {
 
 
-    this->widgetFactory()->registerWidget("custom-button", [this] (QObject *obj) -> QWidget* {
-        if (DSettingsOption *option = qobject_cast<DSettingsOption*>(obj)) {
-            QWidget* buttonwidget = new QWidget();
-            QHBoxLayout* layout = new QHBoxLayout();
+    this->widgetFactory()->registerWidget("custom-button", [this](QObject * obj) -> QWidget* {
+        if (DSettingsOption *option = qobject_cast<DSettingsOption *>(obj))
+        {
+            QWidget *buttonwidget = new QWidget();
+            QHBoxLayout *layout = new QHBoxLayout();
             QPushButton *button1 = new DPushButton(tr("Select All"));
             QPushButton *button2 = new DPushButton(tr("Unselect All"));
             button1->setFixedSize(100, 36);
@@ -103,34 +103,31 @@ void SettingDialog::initUI()
         return nullptr;
     });
 
-    this->widgetFactory()->registerWidget("pathbox", [this] (QObject *obj) -> QWidget* {
-        if (m_comboboxoption = qobject_cast<DSettingsOption*>(obj)) {
-            QWidget* widget = new QWidget();
-            QHBoxLayout* layout = new QHBoxLayout();
+    this->widgetFactory()->registerWidget("pathbox", [this](QObject * obj) -> QWidget* {
+        if (m_comboboxoption = qobject_cast<DSettingsOption *>(obj))
+        {
+            QWidget *widget = new QWidget();
+            QHBoxLayout *layout = new QHBoxLayout();
 
-            DLabel* label = new DLabel;
+            DLabel *label = new DLabel;
             label->setText(tr("Default extraction location") + ":");
 
-            DComboBox* combobox = new DComboBox;
+            DComboBox *combobox = new DComboBox;
             combobox->setFixedWidth(300);
             combobox->setEditable(false);
             QStringList list;
-            list << tr("Current directory")<<tr("desktop")<<tr("Other directory");
+            list << tr("Current directory") << tr("desktop") << tr("Other directory");
             combobox->addItems(list);
-            qDebug()<<m_comboboxoption->value();
-            if(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value())
-            {
+            qDebug() << m_comboboxoption->value();
+            if (QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value()) {
                 combobox->setCurrentIndex(1);
                 m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
                 m_index_last = 1;
-            }
-            else if("" == m_comboboxoption->value())
-            {
+            } else if ("" == m_comboboxoption->value()) {
                 combobox->setCurrentIndex(0);
                 m_curpath = "";
                 m_index_last = 0;
-            }
-            else {
+            } else {
                 combobox->setEditable(true);
                 combobox->setCurrentIndex(2);
                 m_curpath = m_comboboxoption->value().toString();
@@ -138,24 +135,24 @@ void SettingDialog::initUI()
                 m_index_last = 2;
             }
 
-            layout->addWidget(label,0 , Qt::AlignLeft);
-            layout->addWidget(combobox,0 , Qt::AlignLeft);
+            layout->addWidget(label, 0, Qt::AlignLeft);
+            layout->addWidget(combobox, 0, Qt::AlignLeft);
 
             widget->setLayout(layout);
 
             connect(combobox, &DComboBox::currentTextChanged, [combobox, this] {
-                if(tr("Current directory") == combobox->currentText())
+                if (tr("Current directory") == combobox->currentText())
                 {
                     combobox->setEditable(false);
                     m_curpath = "";
                     m_index_last = 0;
-                }
-                else if (tr("desktop") == combobox->currentText()) {
+                } else if (tr("desktop") == combobox->currentText())
+                {
                     combobox->setEditable(false);
                     m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
                     m_index_last = 1;
-                }
-                else if(tr("Other directory") == combobox->currentText()){
+                } else if (tr("Other directory") == combobox->currentText())
+                {
                     combobox->setEditable(true);
                     DFileDialog dialog;
                     dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -165,16 +162,13 @@ void SettingDialog::initUI()
                     const int mode = dialog.exec();
 
                     if (mode != QDialog::Accepted) {
-                        if(0 == m_index_last)
-                        {
+                        if (0 == m_index_last) {
                             combobox->setEditable(false);
                             combobox->setCurrentIndex(0);
-                        }
-                        else if (1 == m_index_last) {
+                        } else if (1 == m_index_last) {
                             combobox->setEditable(false);
                             combobox->setCurrentIndex(1);
-                        }
-                        else {
+                        } else {
                             combobox->setEditText(m_curpath);
                         }
                         return;
@@ -186,20 +180,18 @@ void SettingDialog::initUI()
                     combobox->setEditText(curpath);
                     m_curpath = curpath;
                     m_index_last = 2;
-                }
-                else {
+                } else
+                {
                     m_curpath = combobox->currentText();
                     QDir dir(m_curpath);
                     DPalette plt;
                     plt = DApplicationHelper::instance()->palette(combobox);
 
-                    if(!dir.exists())
-                    {
+                    if (!dir.exists()) {
 
                         plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
 
-                    }
-                    else {
+                    } else {
                         plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
                     }
 
@@ -212,7 +204,7 @@ void SettingDialog::initUI()
             });
 
 
-            qDebug()<<m_curpath;
+            qDebug() << m_curpath;
             return widget;
         }
 
@@ -220,7 +212,7 @@ void SettingDialog::initUI()
     });
 
     const QString confDir = DStandardPaths::writableLocation(
-                    QStandardPaths::AppConfigLocation);
+                                QStandardPaths::AppConfigLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
     // 创建设置项存储后端
@@ -249,8 +241,7 @@ void SettingDialog::done(int status)
 
     QDir dir(m_curpath);
 
-    if(!dir.exists())
-    {
+    if (!dir.exists()) {
         QMessageBox box;
         box.setText(tr("The default extraction path does not exist, please retry!"));
         box.exec();
@@ -260,10 +251,8 @@ void SettingDialog::done(int status)
     QDialog::done(status);
 
     int loop = 0;
-    foreach(bool value, m_valuelisttemp)
-    {
-        if(m_valuelist.at(loop) != value)
-        {
+    foreach (bool value, m_valuelisttemp) {
+        if (m_valuelist.at(loop) != value) {
             QString key = m_associtionlist.at(loop);
             QString mimetype = "application/" + key.remove("file_association.file_association_type.");
             startcmd(mimetype, m_valuelisttemp.at(loop));
@@ -277,7 +266,7 @@ void SettingDialog::done(int status)
 
 QString SettingDialog::getCurExtractPath()
 {
-    qDebug()<<m_curpath;
+    qDebug() << m_curpath;
     return m_curpath;
 }
 
@@ -294,13 +283,11 @@ bool SettingDialog::isAutoOpen()
 
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
-    qDebug()<<key<<value;
+    qDebug() << key << value;
 
-    if(key.contains("file_association_type"))
-    {
+    if (key.contains("file_association_type")) {
         int index = m_associtionlist.indexOf(key);
-        if(index > -1)
-        {
+        if (index > -1) {
             m_valuelisttemp.replace(index, value.toBool());
         }
     }
@@ -309,44 +296,39 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 
 void SettingDialog::selectpressed()
 {
-    foreach(QString key, m_associtionlist)
-    {
+    foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, true);
     }
 }
 void SettingDialog::cancelpressed()
 {
 
-    foreach(QString key, m_associtionlist)
-    {
+    foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, false);
     }
 }
 
 void SettingDialog::startcmd(QString &mimetype, bool state)
 {
-    if(!m_process)
-    {
+    if (!m_process) {
         m_process = new KProcess;
     }
 
     QString programPath = QStandardPaths::findExecutable("xdg-mime");
     if (programPath.isEmpty()) {
-        qDebug()<<"error can't find xdg-mime";
+        qDebug() << "error can't find xdg-mime";
         return;
     }
 
     QStringList arguments;
 
-    if(state)
-    {
-        arguments<<"default"<<"deepin-compressor.desktop"<<mimetype;
-    }
-    else {
-        arguments<<"default"<<".desktop"<<mimetype;
+    if (state) {
+        arguments << "default" << "deepin-compressor.desktop" << mimetype;
+    } else {
+        arguments << "default" << ".desktop" << mimetype;
     }
 
-    qDebug()<<mimetype<<arguments;
+    qDebug() << mimetype << arguments;
 
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);

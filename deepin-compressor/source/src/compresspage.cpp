@@ -64,7 +64,7 @@ CompressPage::CompressPage(QWidget *parent)
     mainLayout->setContentsMargins(12, 1, 20, 20);
 
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
-                             QSettings::IniFormat);
+                               QSettings::IniFormat);
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
@@ -91,9 +91,8 @@ CompressPage::~CompressPage()
 
 void CompressPage::onNextPress()
 {
-    if(m_filelist.isEmpty())
-    {   
-        DDialog* dialog = new DDialog;
+    if (m_filelist.isEmpty()) {
+        DDialog *dialog = new DDialog;
 
         QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
@@ -102,8 +101,7 @@ void CompressPage::onNextPress()
         dialog->addSpacing(15);
 
         dialog->exec();
-    }
-    else {
+    } else {
         emit sigNextPress();
     }
 
@@ -111,28 +109,28 @@ void CompressPage::onNextPress()
 
 void CompressPage::showDialog()
 {
-    DDialog* dialog = new DDialog(this);
+    DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(48, 48));
     dialog->setIconPixmap(pixmap);
 
     DPalette pa;
 
-    DLabel* strlabel = new DLabel;
+    DLabel *strlabel = new DLabel;
     pa = DApplicationHelper::instance()->palette(strlabel);
     pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
     strlabel->setPalette(pa);
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::Medium);
 //    strlabel->setFont(font);
-    DFontSizeManager::instance()->bind(strlabel,DFontSizeManager::T6, QFont::Medium);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
     strlabel->setText(QObject::tr("Please add files in the root directory!"));
     dialog->addButton(QObject::tr("OK"));
-    QVBoxLayout* mainlayout = new QVBoxLayout;
+    QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
 
-    DWidget* widget = new DWidget;
+    DWidget *widget = new DWidget;
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
@@ -144,7 +142,7 @@ void CompressPage::showDialog()
 
 int CompressPage::showReplaceDialog(QString name)
 {
-    DDialog* dialog = new DDialog(this);
+    DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
     dialog->setIconPixmap(pixmap);
@@ -162,8 +160,7 @@ int CompressPage::showReplaceDialog(QString name)
 void CompressPage::onAddfileSlot()
 {
 
-    if(0 != m_fileviewer->getPathIndex())
-    {
+    if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
     }
@@ -182,7 +179,7 @@ void CompressPage::onAddfileSlot()
 
     // save the directory string to config file.
     m_settings->setValue("dir", dialog.directoryUrl().toLocalFile());
-    qDebug()<<dialog.directoryUrl().toLocalFile();
+    qDebug() << dialog.directoryUrl().toLocalFile();
 
     // if click cancel button or close button.
     if (mode != QDialog::Accepted) {
@@ -194,27 +191,21 @@ void CompressPage::onAddfileSlot()
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
 {
-    if(0 != m_fileviewer->getPathIndex())
-    {
+    if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
     }
 
     QStringList inputlist = files;
-    foreach(QString m_path, m_filelist)
-    {
-        foreach(QString path, files)
-        {
+    foreach (QString m_path, m_filelist) {
+        foreach (QString path, files) {
             QFileInfo mfile(m_path);
             QFileInfo file(path);
-            if(file.fileName() == mfile.fileName())
-            {
+            if (file.fileName() == mfile.fileName()) {
                 int mode = showReplaceDialog(file.fileName());
-                if(0 == mode)
-                {
+                if (0 == mode) {
                     inputlist.removeOne(path);
-                }
-                else {
+                } else {
                     m_filelist.removeOne(m_path);
                 }
             }
@@ -233,11 +224,9 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
 
 void CompressPage::onPathIndexChanged()
 {
-    if(m_fileviewer->getPathIndex() > 0)
-    {
+    if (m_fileviewer->getPathIndex() > 0) {
         emit sigiscanaddfile(false);
-    }
-    else {
+    } else {
         emit sigiscanaddfile(true);
     }
 }

@@ -20,7 +20,7 @@ class LibBzip2Interface : public LibSingleFileInterface
     Q_OBJECT
 
 public:
-    LibBzip2Interface(QObject *parent, const QVariantList & args);
+    LibBzip2Interface(QObject *parent, const QVariantList &args);
     ~LibBzip2Interface() override;
 };
 

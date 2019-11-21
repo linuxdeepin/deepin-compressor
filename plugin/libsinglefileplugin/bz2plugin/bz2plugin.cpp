@@ -15,11 +15,11 @@ LibBzip2InterfaceFactory::~LibBzip2InterfaceFactory()
 
 }
 
-LibBzip2Interface::LibBzip2Interface(QObject *parent, const QVariantList & args)
-        : LibSingleFileInterface(parent, args)
+LibBzip2Interface::LibBzip2Interface(QObject *parent, const QVariantList &args)
+    : LibSingleFileInterface(parent, args)
 {
-    m_mimeType = QStringLiteral( "application/x-bzip" );
-    m_possibleExtensions.append(QStringLiteral( ".bz2" ));
+    m_mimeType = QStringLiteral("application/x-bzip");
+    m_possibleExtensions.append(QStringLiteral(".bz2"));
 }
 
 LibBzip2Interface::~LibBzip2Interface()

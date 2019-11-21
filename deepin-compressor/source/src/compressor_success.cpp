@@ -46,7 +46,7 @@ void Compressor_Success::InitUI()
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
 //    font.setWeight(QFont::DemiBold);
 //    m_stringinfolabel->setFont(font);
-    DFontSizeManager::instance()->bind(m_stringinfolabel,DFontSizeManager::T5, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
 
     pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
@@ -57,12 +57,12 @@ void Compressor_Success::InitUI()
     m_showfilebutton->setText(tr("show files"));
     m_showfilebutton->setFocusPolicy(Qt::ClickFocus);
 
-    QVBoxLayout* mainlayout = new QVBoxLayout(this);
+    QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_pixmaplabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(m_stringinfolabel, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_showfilebutton, 0 , Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_showfilebutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
     setBackgroundRole(DPalette::Base);
@@ -72,13 +72,13 @@ void Compressor_Success::InitConnection()
 {
     connect(m_showfilebutton, &DPushButton::clicked, this, &Compressor_Success::showfiledirSlot);
 
-    auto changeTheme = [this](){
-            DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-            pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
-            m_stringinfolabel->setPalette(pa);
-        };
+    auto changeTheme = [this]() {
+        DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+        pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+        m_stringinfolabel->setPalette(pa);
+    };
 
-   connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
 
 void Compressor_Success::showfiledirSlot()

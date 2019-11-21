@@ -52,12 +52,12 @@ public:
     virtual bool testArchive() = 0;
     void setPassword(const QString &password);
     void setHeaderEncryptionEnabled(bool enabled);
-    virtual bool extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
+    virtual bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
     bool waitForFinishedSignal();
     virtual int moveRequiredSignals() const;
     virtual int copyRequiredSignals() const;
-    static QStringList entryFullPaths(const QVector<Archive::Entry*> &entries, PathFormat format = WithTrailingSlash);
-    static QVector<Archive::Entry*> entriesWithoutChildren(const QVector<Archive::Entry*> &entries);
+    static QStringList entryFullPaths(const QVector<Archive::Entry *> &entries, PathFormat format = WithTrailingSlash);
+    static QVector<Archive::Entry *> entriesWithoutChildren(const QVector<Archive::Entry *> &entries);
     static QStringList entryPathsFromDestination(QStringList entries, const Archive::Entry *destination, int entriesWithoutChildren);
 
     virtual bool doKill();
@@ -134,10 +134,10 @@ public:
     ~ReadWriteArchiveInterface() override;
 
     bool isReadOnly() const override;
-    virtual bool addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, uint numberOfEntriesToAdd = 0) = 0;
-    virtual bool moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options) = 0;
-    virtual bool copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options) = 0;
-    virtual bool deleteFiles(const QVector<Archive::Entry*> &files) = 0;
+    virtual bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) = 0;
+    virtual bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) = 0;
+    virtual bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) = 0;
+    virtual bool deleteFiles(const QVector<Archive::Entry *> &files) = 0;
     virtual bool addComment(const QString &comment) = 0;
 
 Q_SIGNALS:
