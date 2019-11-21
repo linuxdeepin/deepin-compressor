@@ -188,7 +188,7 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcutArray.append(shortcut6);
 
     QJsonObject shortcut_group;
-    shortcut_group.insert("groupName", "hot key");
+    shortcut_group.insert("groupName", tr("hot key"));
     shortcut_group.insert("groupItems", shortcutArray);
 
     QJsonArray shortcutArrayall;
