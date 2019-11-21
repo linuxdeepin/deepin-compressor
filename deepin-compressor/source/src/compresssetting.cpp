@@ -34,7 +34,7 @@
 #include <DStyle>
 
 TypeLabel::TypeLabel(QWidget *parent)
-    : QLabel(parent)
+    : DLabel(parent)
 {
 
 }

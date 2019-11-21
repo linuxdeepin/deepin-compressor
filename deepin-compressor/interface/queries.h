@@ -22,7 +22,7 @@
 #define QUERIES_H
 
 
-#include <QCheckBox>
+#include <DCheckBox>
 #include <QString>
 #include <QHash>
 #include <QWaitCondition>

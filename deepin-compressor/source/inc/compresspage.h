@@ -31,7 +31,6 @@
 #include <QMessageBox>
 #include <DPalette>
 #include <DApplicationHelper>
-q
 #include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
