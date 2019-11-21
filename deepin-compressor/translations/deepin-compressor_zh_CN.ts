@@ -922,9 +922,38 @@
         <translation>有1个任务正在进行</translation>
     </message>
     <message>
-        <location filename="../source/src/settings_translation.cpp" line="5"/>
         <source>setting</source>
+        <translation type="vanished">设置</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="5"/>
+        <source>Setting</source>
         <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="6"/>
+        <source>Extraction</source>
+        <translation>解压</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="7"/>
+        <source>Create folder automatically</source>
+        <translation>自动创建文件夹</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="8"/>
+        <source>Corresponding folder is automatically opened</source>
+        <translation>当解压完成后自动打开对应的文件夹</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="9"/>
+        <source>File association</source>
+        <translation>关联文件</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settings_translation.cpp" line="10"/>
+        <source>File type</source>
+        <translation>文件类型</translation>
     </message>
 </context>
 <context>

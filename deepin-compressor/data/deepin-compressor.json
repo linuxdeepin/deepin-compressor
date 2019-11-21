@@ -2,11 +2,11 @@
     "groups": [
         {
             "key": "base",
-            "name": "setting",
+            "name": "Setting",
             "groups": [
                 {
                     "key": "decompress",
-                    "name": "解压",
+                    "name": "Extraction",
                     "options": [
                         {
                             "key": "default_path",
@@ -16,14 +16,14 @@
                             "key": "create_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "自动创建文件夹",
+                            "text": "Create folder automatically",
                             "default": true
                         },
                         {
                             "key": "open_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "当解压完成后自动打开对应的文件夹",
+                            "text": "Corresponding folder is automatically opened",
                             "default": false
                         }
                     ]
@@ -32,11 +32,11 @@
         },
         {
             "key": "file_association",
-            "name": "关联文件",
+            "name": "File association",
             "groups": [
                 {
                     "key": "file_association_type",
-                    "name": "文件类型",
+                    "name": "File type",
                     "options": [
                         {
                             "key": "x-7z-compressed",
