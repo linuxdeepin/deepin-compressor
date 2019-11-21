@@ -110,6 +110,7 @@ void SettingDialog::initUI()
             QHBoxLayout *layout = new QHBoxLayout();
 
             DLabel *label = new DLabel;
+            label->setForegroundRole(DPalette::WindowText);
             label->setText(tr("Default extraction location") + ":");
 
             DComboBox *combobox = new DComboBox;

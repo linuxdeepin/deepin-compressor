@@ -38,14 +38,9 @@ void EncryptionPage::InitUI()
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_encrypticon);
     m_stringinfolabel = new DLabel();
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-//    font.setWeight(QFont::DemiBold);
-//    m_stringinfolabel->setFont(font);
+
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
-    DPalette pa;
-    pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_stringinfolabel->setPalette(pa);
+    m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(tr("This file is encrypted, please enter the password"));
     m_nextbutton = new DPushButton();
     m_nextbutton->setFixedSize(340, 36);

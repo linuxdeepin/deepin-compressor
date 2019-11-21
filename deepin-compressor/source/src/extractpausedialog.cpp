@@ -42,19 +42,13 @@ void ExtractPauseDialog::initUI()
 
     DLabel *strlabel = new DLabel;
     strlabel->setFixedHeight(20);
-    pa = DApplicationHelper::instance()->palette(strlabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::Text));
-    strlabel->setPalette(pa);
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    font.setWeight(QFont::Medium);
-//    strlabel->setFont(font);
+    strlabel->setForegroundRole(DPalette::WindowText);
+
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("Stop extracting!"));
     DLabel *strlabel2 = new DLabel;
     strlabel2->setFixedHeight(20);
-    pa = DApplicationHelper::instance()->palette(strlabel2);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
-    strlabel2->setPalette(pa);
+    strlabel2->setForegroundRole(DPalette::TextTips);
 
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::DemiBold);

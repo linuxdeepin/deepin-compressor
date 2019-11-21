@@ -328,14 +328,9 @@ void MainWindow::initTitleBar()
     m_titlelabel->setMinimumSize(200, TITLE_FIXED_HEIGHT);
     m_titlelabel->setAlignment(Qt::AlignCenter);
 
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    font.setWeight(QFont::Medium);
-//    m_titlelabel->setFont(font);
     DFontSizeManager::instance()->bind(m_titlelabel, DFontSizeManager::T6, QFont::Medium);
 
-    DPalette pa = DApplicationHelper::instance()->palette(m_titlelabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::WindowText));
-    m_titlelabel->setPalette(pa);
+    m_titlelabel->setForegroundRole(DPalette::WindowText);
 
     QHBoxLayout *titlemainLayout = new QHBoxLayout;
     titlemainLayout->setContentsMargins(0, 0, 0, 0);

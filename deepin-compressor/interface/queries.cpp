@@ -102,23 +102,17 @@ void OverwriteQuery::execute()
     QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
 
-    DPalette pa;
-
     DLabel *strlabel = new DLabel;
     strlabel->setFixedHeight(20);
-    pa = DApplicationHelper::instance()->palette(strlabel);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-    strlabel->setPalette(pa);
+    strlabel->setForegroundRole(DPalette::WindowText);
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::Medium);
 //    strlabel->setFont(font);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(file.fileName());
     DLabel *strlabel2 = new DLabel;
-    pa = DApplicationHelper::instance()->palette(strlabel2);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextWarning));
-    strlabel2->setPalette(pa);
     strlabel2->setFixedHeight(20);
+    strlabel2->setForegroundRole(DPalette::TextWarning);
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    strlabel2->setFont(font);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);

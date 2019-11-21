@@ -50,21 +50,11 @@ void ProgressDialog::initUI()
     DPalette pa;
 
     m_tasklable = new DLabel();
-//    QFont ft = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    ft.setWeight(QFont::Medium);
-//    m_tasklable->setFont(ft);
     DFontSizeManager::instance()->bind(m_tasklable, DFontSizeManager::T6, QFont::Medium);
-    pa = DApplicationHelper::instance()->palette(m_tasklable);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
-    m_tasklable->setPalette(pa);
+    m_tasklable->setForegroundRole(DPalette::WindowText);
     m_filelable = new DLabel();
-//    ft = DFontSizeManager::instance()->get(DFontSizeManager::T8);
-//    ft.setWeight(QFont::Normal);
-//    m_filelable->setFont(ft);
     DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
-    pa = DApplicationHelper::instance()->palette(m_filelable);
-    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
-    m_filelable->setPalette(pa);
+    m_filelable->setForegroundRole(DPalette::WindowText);
     m_tasklable->setText(tr("Current task") + ":");
     m_filelable->setText(tr("Extracting") + ":");
 

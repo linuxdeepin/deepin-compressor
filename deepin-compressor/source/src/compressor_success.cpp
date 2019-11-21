@@ -36,8 +36,6 @@ Compressor_Success::Compressor_Success(QWidget *parent)
 
 void Compressor_Success::InitUI()
 {
-    DPalette pa;
-
     m_compressicon = Utils::renderSVG(":/images/success.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
@@ -47,10 +45,7 @@ void Compressor_Success::InitUI()
 //    font.setWeight(QFont::DemiBold);
 //    m_stringinfolabel->setFont(font);
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
-
-    pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_stringinfolabel->setPalette(pa);
+    m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton();
     m_showfilebutton->setFixedSize(340, 36);

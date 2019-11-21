@@ -36,8 +36,6 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
-    DPalette pa;
-
     m_compressicon = Utils::renderSVG(":/images/fail.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
@@ -47,15 +45,10 @@ void Compressor_Fail::InitUI()
 //    font.setWeight(QFont::DemiBold);
 //    m_stringinfolabel->setFont(font);
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
-
-    pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_stringinfolabel->setPalette(pa);
+    m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
 
     m_stringdetaillabel = new DLabel();
-    pa = DApplicationHelper::instance()->palette(m_stringdetaillabel);
-    pa.setBrush(DPalette::Text, pa.color(DPalette::TextTips));
-    m_stringdetaillabel->setPalette(pa);
+    m_stringdetaillabel->setForegroundRole(DPalette::TextTips);
 //    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_stringdetaillabel, DFontSizeManager::T8);
     m_stringdetaillabel->setText(m_stringdetail);

@@ -115,6 +115,7 @@ void CompressSetting::InitUI()
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
 
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"));
+    moresetlabel->setForegroundRole(DPalette::WindowText);
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
@@ -122,6 +123,7 @@ void CompressSetting::InitUI()
 
 
     m_encryptedlabel = new DLabel(tr("Encrypted File") + ":");
+    m_encryptedlabel->setForegroundRole(DPalette::WindowText);
     m_password = new DPasswordEdit();
     m_password->setFixedSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypted File List"));
