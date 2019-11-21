@@ -36,6 +36,7 @@
 #include <QJsonDocument>
 #include "pluginmanager.h"
 #include <DMessageManager>
+#include <QGraphicsDropShadowEffect>
 //#include "archivejob.h"
 #include "jobs.h"
 
@@ -544,7 +545,13 @@ void MainWindow::onSelected(const QStringList &files)
             dialog->setMessage(tr("Add a compressed file to a directory or open it in a new window?"));
             dialog->addButton(tr("Cancel"));
             dialog->addButton(tr("Add"));
-            dialog->addButton(tr("Open in new window"));
+            dialog->addButton(tr("Open in new window"), true, DDialog::ButtonRecommend);
+            QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+            effect->setOffset(0, 4);
+            effect->setColor(QColor(0, 145, 255, 76));
+            effect->setBlurRadius(4);
+            dialog->getButton(2)->setGraphicsEffect(effect);
+
             const int mode = dialog->exec();
             qDebug() << mode;
             if (1 == mode) {
