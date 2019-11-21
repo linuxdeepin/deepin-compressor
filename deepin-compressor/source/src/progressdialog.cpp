@@ -54,7 +54,7 @@ void ProgressDialog::initUI()
     m_tasklable->setForegroundRole(DPalette::WindowText);
     m_filelable = new DLabel();
     DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
-    m_filelable->setForegroundRole(DPalette::WindowText);
+    m_filelable->setForegroundRole(DPalette::TextTips);
     m_tasklable->setText(tr("Current task") + ":");
     m_filelable->setText(tr("Extracting") + ":");
 
