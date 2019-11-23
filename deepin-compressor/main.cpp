@@ -109,6 +109,5 @@ int main(int argc, char *argv[])
 //         qDebug()<<family;
 //    }
 //    qDebug()<<app.font();
-
     return app.exec();
 }

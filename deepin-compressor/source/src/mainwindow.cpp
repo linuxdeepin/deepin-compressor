@@ -296,7 +296,6 @@ QMenu *MainWindow::createSettingsMenu()
     return menu;
 }
 
-
 void MainWindow::initTitleBar()
 {
     titlebar()->setMenu(createSettingsMenu());
@@ -1006,7 +1005,7 @@ QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
     QString localname = filename;
     int num = 2;
     while (QFileInfo::exists(filename)) {
-        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "0" + QString::number(num) + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) +"("+"0" + QString::number(num) + ")" + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
         num++;
     }
     return filename;
