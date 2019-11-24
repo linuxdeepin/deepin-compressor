@@ -99,6 +99,7 @@ public:
 
     void customMessageHandler(const QString &msg);
     QString renameCompress(QString &filename, QString fixedMimeType);
+    qint64 getDiskFreeSpace();
 
 
 

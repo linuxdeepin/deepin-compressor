@@ -37,6 +37,7 @@
 #include "pluginmanager.h"
 #include <DMessageManager>
 #include <QGraphicsDropShadowEffect>
+#include <QStorageInfo>
 //#include "archivejob.h"
 #include "jobs.h"
 
@@ -95,6 +96,18 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
 }
+
+qint64 MainWindow::getDiskFreeSpace()
+{
+
+    QStorageInfo storage = QStorageInfo::root();
+
+    storage.refresh();
+    qDebug() << "availableSize:" << storage.bytesAvailable() / 1024 / 1024 << "MB";
+    return storage.bytesAvailable();
+
+}
+
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -859,9 +872,16 @@ void MainWindow::slotExtractionDone(KJob *job)
     if ((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError)) {
         //do noting:wrong password
     } else if (job->error() && job->error() != KJob::KilledJobError) {
-        m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-        m_pageid = PAGE_UNZIP_FAIL;
-        refreshPage();
+        if (getDiskFreeSpace() <= 50) {
+            m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+            m_pageid = PAGE_UNZIP_FAIL;
+            refreshPage();
+        } else {
+            m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+            m_pageid = PAGE_UNZIP_FAIL;
+            refreshPage();
+        }
+
         return;
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
@@ -1005,7 +1025,7 @@ QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
     QString localname = filename;
     int num = 2;
     while (QFileInfo::exists(filename)) {
-        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) +"("+"0" + QString::number(num) + ")" + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0" + QString::number(num) + ")" + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
         num++;
     }
     return filename;
@@ -1144,9 +1164,15 @@ void MainWindow::slotCompressFinished(KJob *job)
     qDebug() << "job finished" << job->error();
     m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
-        m_pageid = PAGE_ZIP_FAIL;
-        m_CompressFail->setFailStrDetail(tr("The original file is corrupt!"));
-        refreshPage();
+        if (getDiskFreeSpace() <= 50) {
+            m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+            m_pageid = PAGE_UNZIP_FAIL;
+            refreshPage();
+        } else {
+            m_pageid = PAGE_ZIP_FAIL;
+            m_CompressFail->setFailStrDetail(tr("The original file is corrupt!"));
+            refreshPage();
+        }
         return;
     }
     m_pageid = PAGE_ZIP_SUCCESS;
