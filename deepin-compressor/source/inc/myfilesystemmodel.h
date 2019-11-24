@@ -49,6 +49,7 @@ class MyFileIconProvider;
 
 class MyFileSystemModel : public QFileSystemModel
 {
+    Q_OBJECT
 public:
     explicit MyFileSystemModel(QObject *parent = nullptr);
     ~MyFileSystemModel();
@@ -59,6 +60,8 @@ public:
     void setPathIndex(int *index);
     void setTableView(QTableView *tableview);
 
+signals:
+    void sigShowLabel() const;
 
 
 private:

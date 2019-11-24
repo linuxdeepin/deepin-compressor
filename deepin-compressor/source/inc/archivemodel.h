@@ -129,6 +129,7 @@ Q_SIGNALS:
     void extractionFinished(bool success);
     void error(const QString &error, const QString &details);
     void droppedFiles(const QStringList &files, const Archive::Entry *);
+    void sigShowLabel() const;
 
 
 private Q_SLOTS:

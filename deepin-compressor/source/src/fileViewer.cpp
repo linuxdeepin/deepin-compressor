@@ -181,6 +181,7 @@ void fileViewer::InitUI()
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
     plabel = new MyLabel(pTableViewFile);
+    plabel->setFixedSize(580, 36);
     firstmodel = new QStandardItemModel();
     pModel = new MyFileSystemModel();
     pModel->setNameFilterDisables(false);
@@ -214,7 +215,7 @@ void fileViewer::InitUI()
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
-    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, MyFileSystemDefine::gTableHeight);
+//    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);
 
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
@@ -328,6 +329,8 @@ void fileViewer::InitConnection()
 
     connect(pScrollbar, SIGNAL(ScrollBarShowEvent(QShowEvent *)), this, SLOT(ScrollBarShowEvent(QShowEvent *)));
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent(QHideEvent *)), this, SLOT(ScrollBarHideEvent(QHideEvent *)));
+    connect(pModel,&MyFileSystemModel::sigShowLabel , this, &fileViewer::showPlable);
+
 }
 
 void fileViewer::resizecolumn()
@@ -437,6 +440,13 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event)
     emit  sigpathindexChanged();
 }
 
+void fileViewer::showPlable()
+{
+    plabel->raise();
+    plabel->show();
+    plabel->move(0, 36);
+}
+
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
     QModelIndex curindex = pTableViewFile->currentIndex();
@@ -448,8 +458,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
                 pTableViewFile->setRootIndex(m_indexmode);
                 m_pathindex++;
-                plabel->show();
-                plabel->raise();
+
                 resizecolumn();
             } else {
                 if (Utils::isCompressed_file(m_curfilelist.at(curindex.row()).filePath())) {
@@ -506,8 +515,6 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
                 pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
                 m_pathindex++;
-                plabel->show();
-                plabel->raise();
                 m_indexmode = sourceindex;
             }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
@@ -634,6 +641,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
     m_decompressmodel = (ArchiveModel *)m_sortmodel->sourceModel();
     m_decompressmodel->setPathIndex(&m_pathindex);
     m_decompressmodel->setTableView(pTableViewFile);
+    connect(m_decompressmodel,&ArchiveModel::sigShowLabel , this, &fileViewer::showPlable);
 
     pTableViewFile->setModel(model);
     resizecolumn();

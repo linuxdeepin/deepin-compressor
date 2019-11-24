@@ -150,6 +150,9 @@ public:
 
     void startDrag(Qt::DropActions supportedActions);
 
+public slots:
+    void showPlable();
+
 protected:
     void resizecolumn();
     void resizeEvent(QResizeEvent *size) override;

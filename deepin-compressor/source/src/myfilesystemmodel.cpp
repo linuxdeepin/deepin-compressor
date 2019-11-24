@@ -70,10 +70,10 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
 
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
-
-    if (1 == index.row() && 0 == index.column()) {
+    if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
         if (ppathindex && *ppathindex > 0) {
             m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight * 2);
+            emit sigShowLabel();
         } else {
             m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
         }
