@@ -368,10 +368,11 @@ void BatchExtractJob::doWork()
     connect(m_loadJob, &KJob::result, this, &BatchExtractJob::slotLoadingFinished);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &BatchExtractJob::onCancelled);
 
-    if (archiveInterface()->hasBatchExtractionProgress()) {
+//    if (archiveInterface()->hasBatchExtractionProgress()) {
         // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
         connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
-    }
+        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &BatchExtractJob::slotExtractFilenameProgress);
+//    }
 
     // Forward LoadJob's signals.
     connect(m_loadJob, &Job::newEntry, this, &BatchExtractJob::newEntry);
@@ -391,13 +392,21 @@ bool BatchExtractJob::doKill()
 void BatchExtractJob::slotLoadingProgress(double progress)
 {
     // Progress from LoadJob counts only for 50% of the BatchExtractJob's duration.
-    m_lastPercentage = static_cast<unsigned long>(50.0 * progress);
+
+    m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
+    qDebug()<<m_lastPercentage;
     setPercent(m_lastPercentage);
+}
+
+void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
+{
+    setPercentFilename(filename);
 }
 
 void BatchExtractJob::slotExtractProgress(double progress)
 {
     // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
+    qDebug()<<m_lastPercentage + static_cast<unsigned long>(progress);
     setPercent(m_lastPercentage + static_cast<unsigned long>(progress));
 }
 
@@ -415,16 +424,17 @@ void BatchExtractJob::slotLoadingFinished(KJob *job)
 
     ExtractionOptions options;
     options.setPreservePaths(m_preservePaths);
+    options.setBatchExtract(true);
 
     m_extractJob = archive()->extractFiles({}, m_destination, options);
     if (m_extractJob) {
         connect(m_extractJob, &KJob::result, this, &BatchExtractJob::emitResult);
         connect(m_extractJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
-        if (archiveInterface()->hasBatchExtractionProgress()) {
+//        if (archiveInterface()->hasBatchExtractionProgress()) {
             // The LoadJob is done, change slot and start setting the percentage from m_lastPercentage on.
             disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
             connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
-        }
+//        }
         m_step = Extracting;
         m_extractJob->start();
     } else {
@@ -678,10 +688,11 @@ void AddJob::doWork()
 
     Q_ASSERT(m_writeInterface);
 
+
     // The file paths must be relative to GlobalWorkDir.
     for (Archive::Entry *entry : qAsConst(m_entries)) {
-        // #191821: workDir must be used instead of QDir::current()
-        //          so that symlinks aren't resolved automatically
+        qDebug()<<entry->fullPath();
+
         const QString &fullPath = entry->fullPath();
         QString relativePath = workDir.relativeFilePath(fullPath);
 

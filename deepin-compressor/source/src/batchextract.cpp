@@ -69,11 +69,16 @@ void BatchExtract::addExtraction(const QUrl &url)
             this, &BatchExtract::slotUserQuery);
     connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
+    connect(job, &BatchExtractJob::signeedpassword,
+            this, [=]
+    {
+        qDebug()<<"need password";
+    });
 }
 
 void BatchExtract::SlotProgressFile(KJob *job, const QString &name)
 {
-    qDebug() << name;
+    emit batchFilenameProgress(job, name);
 }
 
 bool BatchExtract::doKill()
@@ -179,6 +184,10 @@ void BatchExtract::slotResult(KJob *job)
 //                         qMakePair(i18n("Destination"), m_fileNames.value(subjobs().at(0)).second)
 //                        );
         subjobs().at(0)->start();
+        QString curfile = m_fileNames[subjobs().at(0)].first;
+        qDebug() << "Send curfilename"<<curfile;
+        QFileInfo file(curfile);
+        emit sendCurFile(file.fileName());
     }
 }
 
@@ -188,7 +197,8 @@ void BatchExtract::forwardProgress(KJob *job, unsigned long percent)
     qDebug() << percent;
     auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
     auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
-    setPercent(jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
+
+    emit batchProgress(job, jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
 }
 
 void BatchExtract::addInput(const QUrl &url)
@@ -215,6 +225,7 @@ bool BatchExtract::preservePaths() const
 
 QString BatchExtract::destinationFolder() const
 {
+    qDebug()<<m_destinationFolder;
     if (m_destinationFolder.isEmpty()) {
         return QDir::currentPath();
     } else {

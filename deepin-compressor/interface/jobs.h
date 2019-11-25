@@ -140,7 +140,11 @@ protected:
 private Q_SLOTS:
     void slotLoadingProgress(double progress);
     void slotExtractProgress(double progress);
+    void slotExtractFilenameProgress(const QString &filename);
     void slotLoadingFinished(KJob *job);
+
+signals:
+    void signeedpassword();
 
 private:
 

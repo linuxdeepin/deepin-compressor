@@ -76,12 +76,15 @@ public:
     void setDragAndDropEnabled(bool enabled);
     bool alwaysUseTempDir() const;
     void setAlwaysUseTempDir(bool alwaysUseTempDir);
+    bool isBatchExtract();
+    void setBatchExtract(bool status);
 
 private:
 
     bool m_preservePaths = true;
     bool m_dragAndDrop = false;
     bool m_alwaysUseTempDir = false;
+    bool m_isBatch = false;
 };
 
 QDebug  operator<<(QDebug d, const CompressionOptions &options);

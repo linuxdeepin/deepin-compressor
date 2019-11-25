@@ -98,8 +98,17 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint() && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
-        emit sigExtractNeedPassword();
-        return false;
+        if(m_extractionOptions.isBatchExtract())
+        {
+            if (!passwordQuery()) {
+                return false;
+            }
+        }
+        else {
+            emit sigExtractNeedPassword();
+            return false;
+        }
+
 //        if (!passwordQuery()) {
 //            return false;
 //        }
@@ -727,29 +736,29 @@ void CliInterface::killProcess(bool emitFinished)
 
 bool CliInterface::passwordQuery()
 {
-//    PasswordNeededQuery query(filename());
-//    query.execute();
+    PasswordNeededQuery query(filename());
+    query.execute();
 
-//    if (query.responseCancelled()) {
-//        emit cancelled();
-//        // There is no process running, so finished() must be emitted manually.
-//        emit finished(false);
-//        return false;
-//    }
+    if (query.responseCancelled()) {
+        emit cancelled();
+        // There is no process running, so finished() must be emitted manually.
+        emit finished(false);
+        return false;
+    }
 
 //    setPassword(query.password());
 
-    PasswordNeededQuery query(filename());
+//    PasswordNeededQuery query(filename());
 
 //    query.waitForResponse();
 
 
-    if (query.responseCancelled()) {
-        emit cancelled();
-        // Process is gone, so we emit finished() manually and we return true.
-        emit finished(false);
-        return false;
-    }
+//    if (query.responseCancelled()) {
+//        emit cancelled();
+//        // Process is gone, so we emit finished() manually and we return true.
+//        emit finished(false);
+//        return false;
+//    }
 
 //    setPassword(query.password());
     return true;

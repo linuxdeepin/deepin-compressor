@@ -159,12 +159,12 @@ void Progress::cancelbuttonPressedSlot()
 void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
-    m_shadow->setFixedWidth(percent * 240 / 100);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-    effect->setOffset(0, 4);
-    effect->setColor(QColor(44, 167, 248, 120));
-    effect->setBlurRadius(6);
-    m_shadow->setGraphicsEffect(effect);
+//    m_shadow->setFixedWidth(percent * 240 / 100);
+//    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+//    effect->setOffset(0, 4);
+//    effect->setColor(QColor(44, 167, 248, 120));
+//    effect->setBlurRadius(6);
+//    m_shadow->setGraphicsEffect(effect);
 }
 
 void Progress::setFilename(QString filename)

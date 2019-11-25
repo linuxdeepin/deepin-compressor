@@ -35,6 +35,11 @@ public:
     bool preservePaths() const;
     void setPreservePaths(bool value);
 
+Q_SIGNALS:
+    void batchProgress(KJob *job, ulong progress);
+    void batchFilenameProgress(KJob *job, const QString & name);
+    void sendCurFile(const QString&  filename);
+
 private Q_SLOTS:
     void forwardProgress(KJob *job, unsigned long percent);
     void showFailedFiles();

@@ -60,6 +60,16 @@ void ExtractionOptions::setAlwaysUseTempDir(bool alwaysUseTempDir)
     m_alwaysUseTempDir = alwaysUseTempDir;
 }
 
+void ExtractionOptions::setBatchExtract(bool status)
+{
+    m_isBatch = status;
+}
+
+bool ExtractionOptions::isBatchExtract()
+{
+    return m_isBatch;
+}
+
 bool CompressionOptions::isCompressionLevelSet() const
 {
     return compressionLevel() != -1;

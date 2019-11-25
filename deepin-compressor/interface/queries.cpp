@@ -33,6 +33,7 @@
 #include <QBoxLayout>
 #include <QImageReader>
 #include <QDebug>
+#include <DPasswordEdit>
 
 DWIDGET_USE_NAMESPACE
 
@@ -220,23 +221,57 @@ void PasswordNeededQuery::execute()
     // at the moment (#231974)
 //    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 
-//    QPointer<KPasswordDialog> dlg = new KPasswordDialog;
-//    dlg.data()->setPrompt(xi18nc("@info", "The archive <filename>%1</filename> is password protected. Please enter the password.",
-//                                 m_data.value(QStringLiteral("archiveFilename")).toString()));
+//    DDialog* dlg = new DDialog;
+//    dlg->setMessage(QObject::tr("This file is encrypted, please enter the password"));
 
-//    if (m_data.value(QStringLiteral("incorrectTryAgain")).toBool()) {
-//        dlg.data()->showErrorMessage(i18n("Incorrect password, please try again."), KPasswordDialog::PasswordError);
-//    }
 
-//    const bool notCancelled = dlg.data()->exec();
-//    const QString password = dlg.data()->password();
+//    const bool notCancelled = dlg->exec();
+//    const QString password = "";
 
 //    m_data[QStringLiteral("password")] = password;
 //    setResponse(notCancelled && !password.isEmpty());
 
-//    QApplication::restoreOverrideCursor();
 
-//    delete dlg.data();
+    DDialog *dialog = new DDialog;
+    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
+    dialog->setIconPixmap(pixmap);
+
+    DLabel *strlabel = new DLabel;
+    strlabel->setFixedHeight(20);
+    strlabel->setForegroundRole(DPalette::WindowText);
+
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    strlabel->setText(QObject::tr("This file is encrypted, please enter the password"));
+
+    DPasswordEdit* passwordedit = new DPasswordEdit;
+
+    dialog->addButton(QObject::tr("OK"));
+
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(passwordedit, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    DWidget *widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    const int mode = dialog->exec();
+
+    const QString password = "";
+
+    m_data[QStringLiteral("password")] = passwordedit->text();
+
+    if (-1 == mode) {
+        setResponse(Result_Cancel);
+    } else {
+        setResponse(Result_Skip);
+    }
+
+
+    delete dialog;
 }
 
 QString PasswordNeededQuery::password()

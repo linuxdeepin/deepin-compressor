@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.setFixedSize(620, 465);
     w.setWindowIcon(QIcon::fromTheme("deepin-compressor"));
-    w.show();
+//    w.show();
 
     if (app.setSingleInstance("deepin-compressor")) {
         Dtk::Widget::moveToCenter(&w);
@@ -96,18 +96,13 @@ int main(int argc, char *argv[])
         newfilelist.append(file);
     }
 
+    QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
     // handle command line parser.
     if (!fileList.isEmpty()) {
-        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::QueuedConnection, Q_ARG(QStringList, newfilelist));
+        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
     }
 
-    QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
+    w.show();
 
-//    QFontDatabase database;
-//    foreach (const QString &family, database.families())
-//    {
-//         qDebug()<<family;
-//    }
-//    qDebug()<<app.font();
     return app.exec();
 }

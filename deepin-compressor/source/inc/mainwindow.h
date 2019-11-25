@@ -133,6 +133,7 @@ private slots:
     void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path);
     void slotKillExtractJob();
     void slotFailRetry();
+    void slotBatchExtractFileChanged(const QString& name);
 
 
 signals:
