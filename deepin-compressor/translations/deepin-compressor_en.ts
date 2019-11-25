@@ -27,27 +27,32 @@
         <translation>Item</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="165"/>
+        <location filename="../source/src/archivemodel.cpp" line="104"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/archivemodel.cpp" line="170"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="167"/>
+        <location filename="../source/src/archivemodel.cpp" line="172"/>
         <source>Size</source>
         <translation>Size</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="169"/>
+        <location filename="../source/src/archivemodel.cpp" line="174"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="171"/>
+        <location filename="../source/src/archivemodel.cpp" line="176"/>
         <source>Modify</source>
         <translation>Modify</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="173"/>
+        <location filename="../source/src/archivemodel.cpp" line="178"/>
         <source>Unnamed column</source>
         <comment>??</comment>
         <translation>Unnamed column</translation>
@@ -651,9 +656,14 @@
         <translation>Unnamed column</translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="118"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="123"/>
         <source>Item</source>
         <translation>Item</translation>
+    </message>
+    <message>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="134"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -1014,7 +1024,7 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="227"/>
-        <location filename="../source/src/fileViewer.cpp" line="560"/>
+        <location filename="../source/src/fileViewer.cpp" line="565"/>
         <source>Extract files</source>
         <translation>Extract files</translation>
     </message>
@@ -1024,9 +1034,14 @@
         <translation>Extract files here</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="280"/>
+        <location filename="../source/src/fileViewer.cpp" line="285"/>
         <source>Item</source>
         <translation>Item</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="301"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
 </context>
 </TS>

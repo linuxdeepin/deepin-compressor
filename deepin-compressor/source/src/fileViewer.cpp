@@ -260,11 +260,16 @@ void fileViewer::refreshTableview()
     int rowindex = 0;
     QFileIconProvider icon_provider;
     foreach (QFileInfo fileinfo, m_curfilelist) {
-        item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
+        item = new MyFileItem(icon_provider.icon(fileinfo), "  " + fileinfo.fileName());
+
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
         font.setWeight(QFont::Medium);
         item->setFont(font);
+
+//        DPalette pal ;
+//        pal.setBrush(DPalette::WindowText,pal.color(DPalette::WindowText));
+
 
         firstmodel->setItem(rowindex, 0, item);
         if (fileinfo.isDir()) {
@@ -293,7 +298,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Normal);
         item->setFont(font);
         firstmodel->setItem(rowindex, 2, item);
-        item = new MyFileItem(" " + QLocale().toString(fileinfo.lastModified(), "yyyy/MM/dd hh:mm:ss"));
+        item = new MyFileItem(" " + QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd hh:mm:ss")));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);

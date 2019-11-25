@@ -86,6 +86,11 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     if (index.isValid()) {
         QFileInfo file = fileInfo(index);
         switch (role) {
+        case Qt::TextColorRole:{
+            DPalette pa;
+            pa.setBrush(DPalette::WindowText,pa.color(DPalette::WindowText));
+            return pa;
+        }
         case Qt::TextAlignmentRole:
             if (3 == index.column()) {
                 return QVariant(Qt::AlignRight | Qt::AlignVCenter);
@@ -94,7 +99,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             }
         case Qt::FontRole:
             if (0 == index.column()) {
-                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
                 font.setWeight(QFont::Medium);
                 return font;
             } else {
@@ -126,7 +131,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 return " " + m_mimetype->displayName(mimetype.name());
             }
             case 1: {
-                return " " + QLocale().toString(lastModified(index), "yyyy/MM/dd hh:mm:ss");
+                return " " + QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
             }
 
             }

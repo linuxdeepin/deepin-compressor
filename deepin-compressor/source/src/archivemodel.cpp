@@ -101,7 +101,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
-                return " " + QLocale().toString(timeStamp, "yyyy/MM/dd hh:mm:ss");
+                return " " + QLocale().toString(timeStamp, tr("yyyy/MM/dd hh:mm:ss"));
             }
 
             default:
@@ -112,7 +112,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             if (index.column() == 0) {
                 const Archive::Entry *e = static_cast<Archive::Entry *>(index.internalPointer());
                 QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
-                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(16, 16, mode);
+                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(22, 18, mode);
             }
             return QVariant();
         case Qt::TextAlignmentRole:
@@ -121,9 +121,14 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             } else {
                 return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
             }
+        case Qt::TextColorRole:{
+            DPalette pa;
+            pa.setBrush(DPalette::WindowText,pa.color(DPalette::WindowText));
+            return pa;
+        }
         case Qt::FontRole:
             if (0 == index.column()) {
-                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+                QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
                 font.setWeight(QFont::Medium);
                 return font;
             } else {

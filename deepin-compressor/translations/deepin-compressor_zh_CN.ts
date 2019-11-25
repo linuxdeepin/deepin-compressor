@@ -25,27 +25,40 @@
         <translation>项</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="165"/>
+        <source>yyyy年MM月dd日 hh:mm:ss</source>
+        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyyyearMMmonthddday hh:mm:ss</source>
+        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/archivemodel.cpp" line="104"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/archivemodel.cpp" line="170"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="167"/>
+        <location filename="../source/src/archivemodel.cpp" line="172"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="169"/>
+        <location filename="../source/src/archivemodel.cpp" line="174"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="171"/>
+        <location filename="../source/src/archivemodel.cpp" line="176"/>
         <source>Modify</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../source/src/archivemodel.cpp" line="173"/>
+        <location filename="../source/src/archivemodel.cpp" line="178"/>
         <source>Unnamed column</source>
         <comment>??</comment>
         <translation type="unfinished">未知列</translation>
@@ -669,9 +682,22 @@
         <translation>未知列</translation>
     </message>
     <message>
-        <location filename="../source/src/myfilesystemmodel.cpp" line="118"/>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="123"/>
         <source>Item</source>
         <translation>项</translation>
+    </message>
+    <message>
+        <location filename="../source/src/myfilesystemmodel.cpp" line="134"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyyyearMMmonthddday hh:mm:ss</source>
+        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyy年MM月dd日 hh:mm:ss</source>
+        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -1074,7 +1100,7 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="227"/>
-        <location filename="../source/src/fileViewer.cpp" line="560"/>
+        <location filename="../source/src/fileViewer.cpp" line="565"/>
         <source>Extract files</source>
         <translation>提取文件</translation>
     </message>
@@ -1084,9 +1110,22 @@
         <translation>提取文件到当前文件夹</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="280"/>
+        <location filename="../source/src/fileViewer.cpp" line="285"/>
         <source>Item</source>
         <translation>项</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="301"/>
+        <source>yyyy/MM/dd hh:mm:ss</source>
+        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyyyearMMmonthddday hh:mm:ss</source>
+        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyy年MM月dd日 hh:mm:ss</source>
+        <translation type="obsolete">yyyy年MM月dd日 hh:mm:ss</translation>
     </message>
 </context>
 </TS>
