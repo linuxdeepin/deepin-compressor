@@ -151,7 +151,7 @@ int Progress::showConfirmDialog()
 
 void Progress::cancelbuttonPressedSlot()
 {
-    if (0 == showConfirmDialog()) {
+    if (1 == showConfirmDialog()) {
         emit sigCancelPressed();
     }
 }

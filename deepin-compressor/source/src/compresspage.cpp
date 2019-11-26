@@ -145,7 +145,7 @@ int CompressPage::showReplaceDialog(QString name)
     dialog->setMessage("“" + name + "”" + QObject::tr("Already exist, replaced?"));
     dialog->addSpacing(15);
     dialog->addButton(QObject::tr("Cancel"));
-    dialog->addButton(QObject::tr("OK"));
+    dialog->addButton(QObject::tr("Confirm"));
 
     dialog->moveToCenter();
 

@@ -114,7 +114,7 @@ qint64 MainWindow::getDiskFreeSpace()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (4 == m_mainLayout->currentIndex()) { //now is progress page
-        if (0 != m_Progess->showConfirmDialog()) {
+        if (1 != m_Progess->showConfirmDialog()) {
             event->ignore();
             return;
         }
