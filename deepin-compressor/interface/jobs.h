@@ -91,8 +91,8 @@ class LoadJob : public Job
     Q_OBJECT
 
 public:
-    explicit LoadJob(Archive *archive);
-    explicit LoadJob(ReadOnlyArchiveInterface *interface);
+    explicit LoadJob(Archive *archive, bool isbatch = false);
+    explicit LoadJob(ReadOnlyArchiveInterface *interface, bool isbatch = false);
 
     qlonglong extractedFilesSize() const;
     bool isPasswordProtected() const;
@@ -115,6 +115,7 @@ private:
     qlonglong m_extractedFilesSize;
     qlonglong m_dirCount;
     qlonglong m_filesCount;
+    bool m_isbatch;
 
 private Q_SLOTS:
     void onNewEntry(const Archive::Entry *);

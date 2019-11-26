@@ -23,7 +23,7 @@ public:
     explicit CliPlugin(QObject *parent, const QVariantList &args);
     ~CliPlugin() override;
 
-    bool list() override;
+    bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
     void resetParsing() override;
     bool readListLine(const QString &line) override;

@@ -48,7 +48,7 @@ public:
     int numberOfVolumes() const;
     virtual bool isReadOnly() const;
     virtual bool open();
-    virtual bool list() = 0;
+    virtual bool list(bool isbatch = false) = 0;
     virtual bool testArchive() = 0;
     void setPassword(const QString &password);
     void setHeaderEncryptionEnabled(bool enabled);

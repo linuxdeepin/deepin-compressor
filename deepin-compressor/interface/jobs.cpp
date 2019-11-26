@@ -257,13 +257,17 @@ LoadJob::LoadJob(Archive *archive, ReadOnlyArchiveInterface *interface)
     connect(this, &LoadJob::newEntry, this, &LoadJob::onNewEntry);
 }
 
-LoadJob::LoadJob(Archive *archive)
+LoadJob::LoadJob(Archive *archive, bool isbatch)
     : LoadJob(archive, nullptr)
-{}
+{
+    m_isbatch = isbatch;
+}
 
-LoadJob::LoadJob(ReadOnlyArchiveInterface *interface)
+LoadJob::LoadJob(ReadOnlyArchiveInterface *interface, bool isbatch)
     : LoadJob(nullptr, interface)
-{}
+{
+    m_isbatch = isbatch;
+}
 
 void LoadJob::doWork()
 {
@@ -271,7 +275,7 @@ void LoadJob::doWork()
     connectToArchiveInterfaceSignals();
     connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
 
-    bool ret = archiveInterface()->list();
+    bool ret = archiveInterface()->list(m_isbatch);
 
     if (!archiveInterface()->waitForFinishedSignal()) {
         // onFinished() needs to be called after onNewEntry(), because the former reads members set in the latter.

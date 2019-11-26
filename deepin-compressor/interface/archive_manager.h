@@ -118,6 +118,7 @@ public:
     static LoadJob *load(const QString &fileName, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
+    static LoadJob *load(const QString &fileName, bool isbatch = false, QObject *parent = nullptr);
 
     ~Archive() override;
 

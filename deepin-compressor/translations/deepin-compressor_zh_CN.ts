@@ -4,7 +4,7 @@
 <context>
     <name>AddJob</name>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="683"/>
+        <location filename="../interface/jobs.cpp" line="687"/>
         <source>Compressing a file</source>
         <comment>Compressing %1 files</comment>
         <translation type="unfinished">
@@ -12,7 +12,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="684"/>
+        <location filename="../interface/jobs.cpp" line="688"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -67,41 +67,41 @@
 <context>
     <name>CliInterface</name>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="271"/>
+        <location filename="../interface/cliinterface.cpp" line="268"/>
         <source>@info</source>
         <comment>Failed to locate program &lt;filename&gt;%1&lt;/filename&gt; on disk.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="348"/>
-        <location filename="../interface/cliinterface.cpp" line="420"/>
+        <location filename="../interface/cliinterface.cpp" line="345"/>
+        <location filename="../interface/cliinterface.cpp" line="417"/>
         <source>wrong password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="383"/>
+        <location filename="../interface/cliinterface.cpp" line="380"/>
         <source>Extraction failed. Make sure that enough space is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="386"/>
+        <location filename="../interface/cliinterface.cpp" line="383"/>
         <source>Extraction failed. Make sure you provided the correct password and that enough space is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="396"/>
-        <location filename="../interface/cliinterface.cpp" line="538"/>
+        <location filename="../interface/cliinterface.cpp" line="393"/>
+        <location filename="../interface/cliinterface.cpp" line="535"/>
         <source>Could not move the extracted file to the destination directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../interface/cliinterface.cpp" line="406"/>
         <location filename="../interface/cliinterface.cpp" line="409"/>
-        <location filename="../interface/cliinterface.cpp" line="412"/>
         <source>Extraction failed. the file is broken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/cliinterface.cpp" line="951"/>
+        <location filename="../interface/cliinterface.cpp" line="941"/>
         <source>@info</source>
         <comment>Extraction failed because the disk is full.</comment>
         <translation type="unfinished"></translation>
@@ -115,7 +115,7 @@
 <context>
     <name>CommentJob</name>
     <message>
-        <location filename="../interface/jobs.cpp" line="831"/>
+        <location filename="../interface/jobs.cpp" line="835"/>
         <source>Adding comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,7 +249,7 @@
 <context>
     <name>CopyJob</name>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="775"/>
+        <location filename="../interface/jobs.cpp" line="779"/>
         <source>Copying a file</source>
         <comment>Copying %1 files</comment>
         <translation type="unfinished">
@@ -257,7 +257,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="776"/>
+        <location filename="../interface/jobs.cpp" line="780"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -265,7 +265,7 @@
 <context>
     <name>DeleteJob</name>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="807"/>
+        <location filename="../interface/jobs.cpp" line="811"/>
         <source>Deleting a file from the archive</source>
         <comment>Deleting %1 files</comment>
         <translation type="unfinished">
@@ -273,7 +273,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="808"/>
+        <location filename="../interface/jobs.cpp" line="812"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,12 +327,12 @@
 <context>
     <name>ExtractJob</name>
     <message>
-        <location filename="../interface/jobs.cpp" line="529"/>
+        <location filename="../interface/jobs.cpp" line="533"/>
         <source>Extracting all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="531"/>
+        <location filename="../interface/jobs.cpp" line="535"/>
         <source>Extracting one file</source>
         <comment>Extracting %1 files</comment>
         <translation type="unfinished">
@@ -340,12 +340,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="533"/>
+        <location filename="../interface/jobs.cpp" line="537"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="533"/>
+        <location filename="../interface/jobs.cpp" line="537"/>
         <source>extraction folder</source>
         <comment>Destination</comment>
         <translation type="unfinished"></translation>
@@ -427,12 +427,12 @@
 <context>
     <name>LoadJob</name>
     <message>
-        <location filename="../interface/jobs.cpp" line="270"/>
+        <location filename="../interface/jobs.cpp" line="274"/>
         <source>Loading archive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="270"/>
+        <location filename="../interface/jobs.cpp" line="274"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -509,8 +509,12 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="472"/>
+        <source>Create New archive</source>
+        <translation>新建归档文件</translation>
+    </message>
+    <message>
         <location filename="../source/src/mainwindow.cpp" line="480"/>
-        <location filename="../source/src/mainwindow.cpp" line="1078"/>
+        <location filename="../source/src/mainwindow.cpp" line="1090"/>
         <source>New archive</source>
         <translation>新建归档文件</translation>
     </message>
@@ -565,26 +569,31 @@
         <translation>在新窗口中打开</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="664"/>
+        <location filename="../source/src/mainwindow.cpp" line="666"/>
         <source>Find directory</source>
         <translation>查找目录</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="738"/>
-        <location filename="../source/src/mainwindow.cpp" line="758"/>
-        <location filename="../source/src/mainwindow.cpp" line="789"/>
-        <location filename="../source/src/mainwindow.cpp" line="952"/>
+        <location filename="../source/src/mainwindow.cpp" line="742"/>
+        <location filename="../source/src/mainwindow.cpp" line="762"/>
+        <location filename="../source/src/mainwindow.cpp" line="793"/>
+        <location filename="../source/src/mainwindow.cpp" line="964"/>
         <source>Compressed file is corrupt!</source>
         <translation>压缩文件已损坏!</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="948"/>
-        <location filename="../source/src/mainwindow.cpp" line="1240"/>
+        <location filename="../source/src/mainwindow.cpp" line="943"/>
+        <source>Wrong password!</source>
+        <translation>密码错误！</translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="960"/>
+        <location filename="../source/src/mainwindow.cpp" line="1252"/>
         <source>No space left, please clean and retry</source>
         <translation>空间不足,请清理后重试</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1245"/>
+        <location filename="../source/src/mainwindow.cpp" line="1257"/>
         <source>The original file is corrupt!</source>
         <translation>原始文件已损坏!</translation>
     </message>
@@ -645,7 +654,7 @@
 <context>
     <name>MoveJob</name>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="737"/>
+        <location filename="../interface/jobs.cpp" line="741"/>
         <source>Moving a file</source>
         <comment>Moving %1 files</comment>
         <translation type="unfinished">
@@ -653,7 +662,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="738"/>
+        <location filename="../interface/jobs.cpp" line="742"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -909,12 +918,18 @@
         <translation>此文件已加密,请输入解压密码</translation>
     </message>
     <message>
+        <location filename="../interface/queries.cpp" line="319"/>
+        <source>Wrong password!</source>
+        <translation>密码错误！</translation>
+    </message>
+    <message>
         <location filename="../source/src/compresspage.cpp" line="123"/>
         <source>Please add files in the root directory!</source>
         <translation>请在根目录添加文件!</translation>
     </message>
     <message>
-        <location filename="../interface/queries.cpp" line="248"/>
+        <location filename="../interface/queries.cpp" line="249"/>
+        <location filename="../interface/queries.cpp" line="321"/>
         <location filename="../source/src/compresspage.cpp" line="124"/>
         <source>OK</source>
         <translation>确定</translation>
@@ -1060,7 +1075,7 @@
 <context>
     <name>TempExtractJob</name>
     <message numerus="yes">
-        <location filename="../interface/jobs.cpp" line="610"/>
+        <location filename="../interface/jobs.cpp" line="614"/>
         <source>Extracting one file</source>
         <comment>Extracting %1 files</comment>
         <translation type="unfinished">
@@ -1071,12 +1086,12 @@
 <context>
     <name>TestJob</name>
     <message>
-        <location filename="../interface/jobs.cpp" line="856"/>
+        <location filename="../interface/jobs.cpp" line="860"/>
         <source>Testing archive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../interface/jobs.cpp" line="856"/>
+        <location filename="../interface/jobs.cpp" line="860"/>
         <source>Archive</source>
         <translation type="unfinished"></translation>
     </message>

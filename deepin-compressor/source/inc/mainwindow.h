@@ -134,7 +134,7 @@ private slots:
     void slotKillExtractJob();
     void slotFailRetry();
     void slotBatchExtractFileChanged(const QString& name);
-
+    void slotBatchExtractError(const QString& name);
 
 signals:
     void sigquitApp();

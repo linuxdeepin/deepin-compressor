@@ -141,48 +141,25 @@ void BatchExtract::slotResult(KJob *job)
     if (job->error()) {
         qDebug() << "There was en error:" << job->error() << ", errorText:" << job->errorString();
 
-        setErrorText(job->errorString());
-        setError(job->error());
-
+        QString curfile = m_fileNames[subjobs().at(0)].first;
+        qDebug() << "Fail curfilename"<<curfile;
+        QFileInfo file(curfile);
+//        while (hasSubjobs()) {
+//            removeSubjob(job);
+//        }
         removeSubjob(job);
+        emit sendFailFile(file.fileName());
 
-        if (job->error() != KJob::KilledJobError) {
-            const QString filename = m_fileNames.value(job).first;
-            if (hasSubjobs()) {
-//                KMessageBox::error(nullptr,
-//                                   job->errorString().isEmpty() ?
-//                                   xi18nc("@info", "There was an error while extracting <filename>%1</filename>. Any further archive will not be extracted.", filename) :
-//                                   xi18nc("@info", "There was an error while extracting <filename>%1</filename>:<nl/><message>%2</message><nl/>Any further archive will not be extracted.", filename, job->errorString()));
-            } else {
-//                KMessageBox::error(nullptr,
-//                                   job->errorString().isEmpty() ?
-//                                   xi18nc("@info", "There was an error while extracting <filename>%1</filename>.", filename) :
-//                                   xi18nc("@info", "There was an error while extracting <filename>%1</filename>:<nl/><message>%2</message>", filename, job->errorString()));
-            }
-        }
-
-        emitResult();
         return;
     }
 
     removeSubjob(job);
 
     if (!hasSubjobs()) {
-//        if (openDestinationAfterExtraction()) {
-//            QUrl destination(destinationFolder());
-//            destination.setPath(QDir::cleanPath(destination.path()));
-//            KRun::runUrl(destination, QStringLiteral("inode/directory"), nullptr, KRun::RunExecutables, QString(), QByteArray());
-//        }
-
         qDebug() << "Finished, emitting the result";
         emitResult();
     } else {
         qDebug() << "Starting the next job";
-//        emit description(this,
-//                         i18n("Extracting Files"),
-//                         qMakePair(i18n("Source archive"), m_fileNames.value(subjobs().at(0)).first),
-//                         qMakePair(i18n("Destination"), m_fileNames.value(subjobs().at(0)).second)
-//                        );
         subjobs().at(0)->start();
         QString curfile = m_fileNames[subjobs().at(0)].first;
         qDebug() << "Send curfilename"<<curfile;
@@ -252,58 +229,6 @@ void BatchExtract::setPreservePaths(bool value)
 
 bool BatchExtract::showExtractDialog()
 {
-//    QPointer<Kerfuffle::ExtractionDialog> dialog =
-//        new Kerfuffle::ExtractionDialog;
-
-//    if (m_inputs.size() > 1) {
-//        dialog.data()->batchModeOption();
-//    }
-
-//    dialog.data()->setModal(true);
-//    dialog.data()->setAutoSubfolder(autoSubfolder());
-//    dialog.data()->setCurrentUrl(QUrl::fromUserInput(destinationFolder(), QString(), QUrl::AssumeLocalFile));
-//    dialog.data()->setPreservePaths(preservePaths());
-
-//    // Only one archive, we need a LoadJob to get the single-folder and subfolder properties.
-//    // TODO: find a better way (e.g. let the dialog handle everything), otherwise we list
-//    // the archive twice (once here and once in the following BatchExtractJob).
-//    Kerfuffle::LoadJob *loadJob = nullptr;
-//    if (m_inputs.size() == 1) {
-//        loadJob = Kerfuffle::Archive::load(m_inputs.at(0).toLocalFile(), this);
-//        // We need to access the job after result has been emitted, if the user rejects the dialog.
-//        loadJob->setAutoDelete(false);
-
-//        connect(loadJob, &KJob::result, this, [=](KJob *job) {
-//            if (job->error()) {
-//                return;
-//            }
-
-//            auto archive = qobject_cast<Kerfuffle::LoadJob*>(job)->archive();
-//            dialog->setExtractToSubfolder(archive->hasMultipleTopLevelEntries());
-//            dialog->setSubfolder(archive->subfolderName());
-//        });
-
-//        connect(loadJob, &KJob::result, dialog.data(), &Kerfuffle::ExtractionDialog::setReadyGui);
-//        dialog->setBusyGui();
-//        // NOTE: we exploit the dialog->exec() below to run this job.
-//        loadJob->start();
-//    }
-
-//    if (!dialog.data()->exec()) {
-//        if (loadJob) {
-//            loadJob->kill();
-//            loadJob->deleteLater();
-//        }
-//        delete dialog.data();
-//        return false;
-//    }
-
-//    setAutoSubfolder(dialog.data()->autoSubfolders());
-//    setDestinationFolder(dialog.data()->destinationDirectory().toDisplayString(QUrl::PreferLocalFile));
-//    setOpenDestinationAfterExtraction(dialog.data()->openDestinationAfterExtraction());
-//    setPreservePaths(dialog.data()->preservePaths());
-
-//    delete dialog.data();
 
     return true;
 }

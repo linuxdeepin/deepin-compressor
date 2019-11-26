@@ -12,7 +12,7 @@ public:
     LibSingleFileInterface(QObject *parent, const QVariantList &args);
     ~LibSingleFileInterface() ;
 
-    bool list() ;
+    bool list(bool isbatch = false) ;
     bool testArchive() ;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
 

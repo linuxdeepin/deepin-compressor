@@ -139,7 +139,7 @@ LibzipPlugin::~LibzipPlugin()
     }
 }
 
-bool LibzipPlugin::list()
+bool LibzipPlugin::list(bool isbatch)
 {
     m_numberOfEntries = 0;
 
@@ -616,6 +616,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 {
     const bool extractAll = files.isEmpty();
     const bool removeRootNode = options.isDragAndDropEnabled();
+    m_extractionOptions = options;
 
     int errcode = 0;
     zip_error_t err;
@@ -787,19 +788,52 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
                        zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-//                PasswordNeededQuery query(filename(), !firstTry);
-                emit sigExtractNeedPassword();
+                if(zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD)
+                {
 
-//                if (query.responseCancelled()) {
-//                    emit cancelled();
-//                    return false;
-//                }
-                setPassword(QString());
+                    if(m_extractionOptions.isBatchExtract())
+                    {
+                        PasswordNeededQuery query(filename());
+                        emit userQuery(&query);
+                        query.waitForResponse();
 
-                if (zip_set_default_password(archive, password().toUtf8().constData())) {
+                        if (query.responseCancelled()) {
+                            setPassword(QString());
+                            emit cancelled();
+                            return false;
+                        }
+
+                        setPassword(query.password());
+
+                        if (zip_set_default_password(archive, password().toUtf8().constData())) {
+                        }
+                        firstTry = false;
+                    }
+                    else {
+                        emit sigExtractNeedPassword();
+                        setPassword(QString());
+                        zip_set_default_password(archive, password().toUtf8().constData());
+                        return false;
+                    }
                 }
-                firstTry = false;
-                return false;
+                else if(zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD)
+                {
+                    if(m_extractionOptions.isBatchExtract())
+                    {
+                        setPassword(QString());
+                        emit cancelled();
+                        return false;
+                    }
+                    else {
+                        emit sigExtractNeedPassword();
+                    }
+                    setPassword(QString());
+                    zip_set_default_password(archive, password().toUtf8().constData());
+                    return false;
+                }
+
+
+
             } else {
                 emit error(tr("Failed to open '%1':<nl/>%2"));
                 return false;

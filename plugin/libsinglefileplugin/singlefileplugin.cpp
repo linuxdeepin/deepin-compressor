@@ -71,7 +71,7 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     return true;
 }
 
-bool LibSingleFileInterface::list()
+bool LibSingleFileInterface::list(bool isbatch)
 {
 
     Archive::Entry *e = new Archive::Entry();

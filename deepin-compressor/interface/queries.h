@@ -124,6 +124,20 @@ public:
     QString password();
 };
 
+/* **************************************
+ * Used to query the user for a password.
+ * **************************************
+ */
+class WrongPasswordQuery : public Query
+{
+public:
+    explicit WrongPasswordQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
+    void execute() override;
+
+    bool responseCancelled();
+    QString password();
+};
+
 /* *************************************************************
  * Used to query the user if a corrupt archive should be loaded.
  * *************************************************************

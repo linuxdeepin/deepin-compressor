@@ -87,7 +87,7 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
 
 BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent)
 {
-    auto loadJob = load(fileName, parent);
+    auto loadJob = load(fileName, true, parent);
     auto batchJob = new BatchExtractJob(loadJob, destination, autoSubfolder, preservePaths);
 
     return batchJob;
@@ -126,6 +126,14 @@ LoadJob *Archive::load(const QString &fileName, Plugin *plugin, QObject *parent)
 {
     auto archive = create(fileName, plugin, parent);
     auto loadJob = new LoadJob(archive);
+
+    return loadJob;
+}
+
+LoadJob *Archive::load(const QString &fileName, bool isbatch, QObject *parent)
+{
+    auto archive = create(fileName, QString(), parent);
+    auto loadJob = new LoadJob(archive, isbatch);
 
     return loadJob;
 }

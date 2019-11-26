@@ -29,7 +29,7 @@ CliPlugin::~CliPlugin()
 {
 }
 
-bool CliPlugin::list()
+bool CliPlugin::list(bool isbatch)
 {
     resetParsing();
     m_operationMode = List;

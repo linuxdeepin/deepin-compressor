@@ -39,6 +39,7 @@ Q_SIGNALS:
     void batchProgress(KJob *job, ulong progress);
     void batchFilenameProgress(KJob *job, const QString & name);
     void sendCurFile(const QString&  filename);
+    void sendFailFile(const QString&  filename);
 
 private Q_SLOTS:
     void forwardProgress(KJob *job, unsigned long percent);

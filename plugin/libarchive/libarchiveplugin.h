@@ -15,7 +15,7 @@ public:
     explicit LibarchivePlugin(QObject *parent, const QVariantList &args);
     ~LibarchivePlugin() override;
 
-    bool list() override;
+    bool list(bool isbatch = false) override;
     bool doKill() override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
 

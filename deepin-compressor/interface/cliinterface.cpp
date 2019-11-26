@@ -70,12 +70,12 @@ int CliInterface::copyRequiredSignals() const
     return 2;
 }
 
-bool CliInterface::list()
+bool CliInterface::list(bool isbatch)
 {
     resetParsing();
     m_operationMode = List;
     m_numberOfEntries = 0;
-
+    m_isbatchlist = isbatch;
     // To compute progress.
     m_archiveSizeOnDisk = static_cast<qulonglong>(QFileInfo(filename()).size());
     connect(this, &ReadOnlyArchiveInterface::entry, this, &CliInterface::onEntry);
@@ -103,15 +103,12 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QS
             if (!passwordQuery()) {
                 return false;
             }
+
         }
         else {
             emit sigExtractNeedPassword();
             return false;
         }
-
-//        if (!passwordQuery()) {
-//            return false;
-//        }
     }
 
     QUrl destDir = QUrl(destinationDirectory);
@@ -746,21 +743,7 @@ bool CliInterface::passwordQuery()
         return false;
     }
 
-//    setPassword(query.password());
-
-//    PasswordNeededQuery query(filename());
-
-//    query.waitForResponse();
-
-
-//    if (query.responseCancelled()) {
-//        emit cancelled();
-//        // Process is gone, so we emit finished() manually and we return true.
-//        emit finished(false);
-//        return false;
-//    }
-
-//    setPassword(query.password());
+    setPassword(query.password());
     return true;
 }
 
@@ -826,6 +809,14 @@ void CliInterface::readStdout(bool handleAll)
 
     if (wrongPasswordMessage) {
         setPassword(QString());
+        if(m_extractionOptions.isBatchExtract())
+        {
+            emit cancelled();
+            // There is no process running, so finished() must be emitted manually.
+            emit finished(false);
+//            return;
+        }
+
     }
 
     //this is complex, here's an explanation:
@@ -874,7 +865,6 @@ bool CliInterface::handleLine(const QString &line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
-    qDebug() << line;
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         //read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
@@ -891,7 +881,7 @@ bool CliInterface::handleLine(const QString &line)
         }
     }
 
-    if ((m_operationMode == Extract || m_operationMode == Add) && (m_process->program().at(0).contains("zip"))) {
+    if ((m_operationMode == Extract || m_operationMode == Add) && m_process && (m_process->program().at(0).contains("zip"))) {
         //read the percentage
         int pos = line.indexOf(QLatin1Char(':'));
         if (pos > 1 && line.length() > 17) {
@@ -902,7 +892,7 @@ bool CliInterface::handleLine(const QString &line)
             emit progress_filename(strfilename.toString());
             return true;
         }
-    } else if (m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
+    } else if (m_process && m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 2, 2).toInt();
@@ -927,48 +917,8 @@ bool CliInterface::handleLine(const QString &line)
 
     if (m_operationMode == Extract) {
 
-        if (isPasswordPrompt(line)) {
-            qDebug() << "Found a password prompt";
-
-            PasswordNeededQuery query(filename());
-            query.execute();
-
-            if (query.responseCancelled()) {
-                emit cancelled();
-                return false;
-            }
-
-            setPassword(query.password());
-
-            const QString response(password() + QLatin1Char('\n'));
-            writeToProcess(response.toLocal8Bit());
-
-            return true;
-        }
-
-        if (isDiskFullMsg(line)) {
-            qDebug() << "Found disk full message:" << line;
-            emit error(tr("@info", "Extraction failed because the disk is full."));
-            return false;
-        }
-
-        if (isWrongPasswordMsg(line)) {
-            setPassword(QString());
-//            emit error("wrongpassword");
-            emit sigExtractNeedPassword();
-            return false;
-        }
-
-        if (handleFileExistsMessage(line)) {
-            return true;
-        }
-
-        return readExtractLine(line);
-    }
-
-    if (m_operationMode == List) {
-        if (isPasswordPrompt(line)) {
-            qDebug() << "Found a password prompt";
+//        if (isPasswordPrompt(line)) {
+//            qDebug() << "Found a password prompt";
 
 //            PasswordNeededQuery query(filename());
 //            query.execute();
@@ -982,12 +932,62 @@ bool CliInterface::handleLine(const QString &line)
 
 //            const QString response(password() + QLatin1Char('\n'));
 //            writeToProcess(response.toLocal8Bit());
-            emit sigExtractNeedPassword();
-            emit error("nopassword");
-//            killProcess(true);
-//            emit finished(false);
 
+//            return true;
+//        }
+
+        if (isDiskFullMsg(line)) {
+            qDebug() << "Found disk full message:" << line;
+            emit error(tr("@info", "Extraction failed because the disk is full."));
             return false;
+        }
+
+        if (isWrongPasswordMsg(line)) {
+            setPassword(QString());
+            if(m_extractionOptions.isBatchExtract())
+            {
+            }
+            else {
+                emit sigExtractNeedPassword();
+                return false;
+            }
+        }
+
+        if (handleFileExistsMessage(line)) {
+            return true;
+        }
+
+        return readExtractLine(line);
+    }
+
+    if (m_operationMode == List) {
+        if (isPasswordPrompt(line)) {
+            qDebug() << "Found a password prompt"<<m_isbatchlist;
+
+            if(m_isbatchlist)
+            {
+                PasswordNeededQuery query(filename());
+                query.execute();
+
+                if (query.responseCancelled()) {
+                    emit cancelled();
+                    // There is no process running, so finished() must be emitted manually.
+                    emit finished(false);
+                    return false;
+                }
+
+                setPassword(query.password());
+
+                const QString response(password() + QLatin1Char('\n'));
+                writeToProcess(response.toLocal8Bit());
+
+            }
+            else {
+                emit sigExtractNeedPassword();
+                emit error("nopassword");
+                return false;
+            }
+
         }
 
         if (isWrongPasswordMsg(line)) {

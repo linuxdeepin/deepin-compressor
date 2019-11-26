@@ -46,7 +46,7 @@ public:
 
     int copyRequiredSignals() const override;
 
-    bool list() override;
+    bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
     bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
     bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
@@ -211,6 +211,7 @@ private:
     QVector<Archive::Entry *> m_extractedFiles;
     qulonglong m_archiveSizeOnDisk = 0;
     qulonglong m_listedSize = 0;
+    bool m_isbatchlist=false;
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
 

@@ -231,7 +231,7 @@ void PasswordNeededQuery::execute()
 //    m_data[QStringLiteral("password")] = password;
 //    setResponse(notCancelled && !password.isEmpty());
 
-
+    qDebug()<<m_data[QStringLiteral("archiveFilename")];
     DDialog *dialog = new DDialog;
     QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
@@ -244,6 +244,7 @@ void PasswordNeededQuery::execute()
     strlabel->setText(QObject::tr("This file is encrypted, please enter the password"));
 
     DPasswordEdit* passwordedit = new DPasswordEdit;
+    passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("OK"));
 
@@ -251,7 +252,9 @@ void PasswordNeededQuery::execute()
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
     mainlayout->addWidget(passwordedit, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
 
     DWidget *widget = new DWidget;
 
@@ -280,6 +283,69 @@ QString PasswordNeededQuery::password()
 }
 
 bool PasswordNeededQuery::responseCancelled()
+{
+    return !m_data.value(QStringLiteral("response")).toBool();
+}
+
+WrongPasswordQuery::WrongPasswordQuery(const QString &archiveFilename, bool incorrectTryAgain)
+{
+    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
+    m_data[QStringLiteral("incorrectTryAgain")] = incorrectTryAgain;
+}
+
+void WrongPasswordQuery::execute()
+{
+    // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
+    // at the moment (#231974)
+
+    qDebug()<<m_data[QStringLiteral("archiveFilename")];
+    QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
+    DDialog *dialog = new DDialog;
+    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
+    dialog->setIconPixmap(pixmap);
+
+    DLabel *strlabel = new DLabel;
+    strlabel->setFixedHeight(20);
+    strlabel->setForegroundRole(DPalette::TextTitle);
+
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    strlabel->setText(file.fileName());
+
+    DLabel *strlabel2 = new DLabel;
+    strlabel2->setFixedHeight(20);
+    strlabel2->setForegroundRole(DPalette::TextWarning);
+
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
+    strlabel2->setText(QObject::tr("Wrong password!"));
+
+    dialog->addButton(QObject::tr("OK"));
+
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(10);
+
+    DWidget *widget = new DWidget;
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    dialog->exec();
+
+    setResponse(Result_Cancel);
+
+
+    delete dialog;
+}
+
+QString WrongPasswordQuery::password()
+{
+    return m_data.value(QStringLiteral("password")).toString();
+}
+
+bool WrongPasswordQuery::responseCancelled()
 {
     return !m_data.value(QStringLiteral("response")).toBool();
 }

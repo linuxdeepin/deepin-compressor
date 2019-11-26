@@ -26,7 +26,7 @@ public:
     explicit LibzipPlugin(QObject *parent, const QVariantList &args);
     ~LibzipPlugin() override;
 
-    bool list() override;
+    bool list(bool isbatch = false) override;
     bool doKill() override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
 
@@ -56,6 +56,7 @@ private:
     zip_t *m_addarchive;
     QByteArray m_codecstr;
     QByteArray m_codecname;
+    ExtractionOptions m_extractionOptions;
 };
 
 #endif // LIBZIPPLUGIN_H

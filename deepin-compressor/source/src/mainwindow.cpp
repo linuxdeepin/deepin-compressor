@@ -469,7 +469,7 @@ void MainWindow::refreshPage()
     case PAGE_ZIP:
         m_openAction->setEnabled(true);
         m_mainLayout->setCurrentIndex(2);
-        setQLabelText(m_titlelabel, tr("New archive"));
+        setQLabelText(m_titlelabel, tr("Create New archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
@@ -628,6 +628,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile,
                 this, &MainWindow::slotBatchExtractFileChanged);
+        connect(batchJob, &BatchExtract::sendFailFile,
+                this, &MainWindow::slotBatchExtractError);
 //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
 //                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
 //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
@@ -701,6 +703,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile,
                 this, &MainWindow::slotBatchExtractFileChanged);
+        connect(batchJob, &BatchExtract::sendFailFile,
+                this, &MainWindow::slotBatchExtractError);
 //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
 //                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
 //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
@@ -931,6 +935,14 @@ void MainWindow::slotBatchExtractFileChanged(const QString& name)
 {
     qDebug()<<name;
     m_Progess->setFilename(name);
+}
+
+void MainWindow::slotBatchExtractError(const QString& name)
+{
+    qDebug()<<name;
+    m_CompressFail->setFailStrDetail(name + ":" + tr("Wrong password!"));
+    m_pageid = PAGE_UNZIP_FAIL;
+    refreshPage();
 }
 
 void MainWindow::slotExtractionDone(KJob *job)
