@@ -414,7 +414,7 @@
     <message>
         <location filename="../main.cpp" line="62"/>
         <source>Archive manager</source>
-        <translation>Archive manager</translation>
+        <translation>Archive Manager</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="63"/>
