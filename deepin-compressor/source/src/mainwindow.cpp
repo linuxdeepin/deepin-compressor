@@ -619,6 +619,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         QFileInfo fileinfo(pathlist.at(0));
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
+        m_decompressfilepath = fileinfo.path();
         m_pageid = PAGE_UNZIPPROGRESS;
         m_Progess->settype(DECOMPRESSING);
         refreshPage();
@@ -694,6 +695,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         pathlist.removeLast();
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(curpath);
+        m_decompressfilepath = curpath;
         m_pageid = PAGE_UNZIPPROGRESS;
         m_Progess->settype(DECOMPRESSING);
         refreshPage();

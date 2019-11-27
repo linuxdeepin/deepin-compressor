@@ -24,7 +24,7 @@
 #include <QBoxLayout>
 #include <utils.h>
 #include <DDesktopServices>
-
+#include <QDebug>
 
 Compressor_Success::Compressor_Success(QWidget *parent)
     : QWidget(parent)
@@ -78,6 +78,7 @@ void Compressor_Success::InitConnection()
 
 void Compressor_Success::showfiledirSlot()
 {
+    qDebug()<<m_path;
     DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
     emit sigQuitApp();
 }
@@ -89,6 +90,7 @@ void Compressor_Success::setstringinfo(QString str)
 
 void Compressor_Success::setCompressPath(QString path)
 {
+    qDebug()<<path;
     m_path = path;
 }
 
