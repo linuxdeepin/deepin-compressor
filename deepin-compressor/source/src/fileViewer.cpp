@@ -225,7 +225,7 @@ void fileViewer::InitUI()
     }
     else if (themeType == DGuiApplicationHelper::DarkType) {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(50,50,50));
+        pal.setBrush(DPalette::Background,QColor(39,39,39));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
@@ -694,7 +694,7 @@ void fileViewer::themeChanged(){
     }
     else if (themeType == DGuiApplicationHelper::DarkType) {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(50,50,50));
+        pal.setBrush(DPalette::Background,QColor(39,39,39));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
