@@ -1,12 +1,14 @@
 [Desktop Entry]
 Type=Application
 Exec=/usr/bin/deepin-compressor  %U extract_here_split
-GenericName=Compress
-Name=Compress
+GenericName=Extract here
+Name=Extract here
 Icon=
 MimeType=application/octet-stream;
 GenericName[zh_CN]=解压缩到当前文件夹
+GenericName[en]=Extract here
 Name[zh_CN]=解压缩到当前文件夹
+Name[en]=Extract here
 X-DFM-MenuTypes=SingleFile;SingleDir
 X-DFM-SupportSchemes=file
 X-DFM-SupportSuffix=7z.*
