@@ -211,13 +211,30 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    DPalette pal;
-    pal.setBrush(DPalette::Background,QColor(247,247,247));
-    plabel->setPalette(pal);
     plabel->setText(".. " + tr("Back to previous"));
     plabel->setAutoFillBackground(true);
     plabel->hide();
-    plabel->setBackgroundRole(DPalette::Background);
+
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if(themeType == DGuiApplicationHelper::LightType)
+    {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
+    else if (themeType == DGuiApplicationHelper::DarkType) {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(50,50,50));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
+    else {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
 
 //    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);
 
@@ -258,8 +275,6 @@ void fileViewer::refreshTableview()
     item = new MyFileItem("      " + QObject::tr("Size"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
-
-
 
     int rowindex = 0;
     QFileIconProvider icon_provider;
@@ -339,7 +354,8 @@ void fileViewer::InitConnection()
     connect(pScrollbar, SIGNAL(ScrollBarShowEvent(QShowEvent *)), this, SLOT(ScrollBarShowEvent(QShowEvent *)));
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent(QHideEvent *)), this, SLOT(ScrollBarHideEvent(QHideEvent *)));
     connect(pModel,&MyFileSystemModel::sigShowLabel , this, &fileViewer::showPlable);
-
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+                     this, &fileViewer::themeChanged);
 }
 
 void fileViewer::resizecolumn()
@@ -657,7 +673,6 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 
 }
 
-
 void fileViewer::startDrag(Qt::DropActions supportedActions)
 {
     QMimeData *mimeData = new QMimeData;
@@ -666,5 +681,28 @@ void fileViewer::startDrag(Qt::DropActions supportedActions)
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
     drag->exec(Qt::CopyAction);
+}
+
+void fileViewer::themeChanged(){
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if(themeType == DGuiApplicationHelper::LightType)
+    {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
+    else if (themeType == DGuiApplicationHelper::DarkType) {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(50,50,50));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
+    else {
+        DPalette pal;
+        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        plabel->setPalette(pal);
+        plabel->setBackgroundRole(DPalette::Background);
+    }
 }
 

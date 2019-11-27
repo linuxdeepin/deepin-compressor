@@ -152,6 +152,7 @@ public:
 
 public slots:
     void showPlable();
+    void themeChanged();
 
 protected:
     void resizecolumn();
