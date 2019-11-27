@@ -419,7 +419,7 @@
     <message>
         <location filename="../main.cpp" line="63"/>
         <source>Archive Manager is a software tool that provides common functions for Extracting files and compressing files</source>
-        <translation>Archive Manager is a fast and lightweight application for creating and extracting archives</translation>
+        <translation>Archive Manager is a fast and lightweight application for creating and extracting archives.</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1257"/>
         <source>The original file is corrupt!</source>
-        <translation>The original file is corrupt!</translation>
+        <translation>Damaged file</translation>
     </message>
 </context>
 <context>
@@ -821,7 +821,7 @@
     <message>
         <location filename="../interface/queries.cpp" line="120"/>
         <source>The file already exists. How to deal with it?</source>
-        <translation>The file already exists. How to deal with it?</translation>
+        <translation>Another file with the same name already exists, replace it?</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="121"/>
@@ -863,7 +863,7 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="145"/>
         <source>Already exist, replaced?</source>
-        <translation>Another file with the same name already exists, replace it?</translation>
+        <translation>already exists, are you sure you want to replace it?</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="147"/>
@@ -980,7 +980,7 @@
         <location filename="../source/src/settingdialog.cpp" line="120"/>
         <location filename="../source/src/settingdialog.cpp" line="150"/>
         <source>desktop</source>
-        <translation>Deskto</translation>
+        <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="120"/>
@@ -1056,7 +1056,7 @@
         <location filename="../source/src/fileViewer.cpp" line="227"/>
         <location filename="../source/src/fileViewer.cpp" line="565"/>
         <source>Extract files</source>
-        <translation>Extract files</translation>
+        <translation>Extract</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="228"/>
