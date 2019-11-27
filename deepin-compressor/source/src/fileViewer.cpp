@@ -219,19 +219,19 @@ void fileViewer::InitUI()
     if(themeType == DGuiApplicationHelper::LightType)
     {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        pal.setBrush(DPalette::Background,QColor(251,251,251));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
     else if (themeType == DGuiApplicationHelper::DarkType) {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(39,39,39));
+        pal.setBrush(DPalette::Background,QColor(38,38,38));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
     else {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        pal.setBrush(DPalette::Background,QColor(251,251,251));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
@@ -688,19 +688,19 @@ void fileViewer::themeChanged(){
     if(themeType == DGuiApplicationHelper::LightType)
     {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        pal.setBrush(DPalette::Background,QColor(251,251,251));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
     else if (themeType == DGuiApplicationHelper::DarkType) {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(39,39,39));
+        pal.setBrush(DPalette::Background,QColor(38,38,38));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
     else {
         DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(247,247,247));
+        pal.setBrush(DPalette::Background,QColor(251,251,251));
         plabel->setPalette(pal);
         plabel->setBackgroundRole(DPalette::Background);
     }
