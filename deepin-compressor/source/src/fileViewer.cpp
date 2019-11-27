@@ -211,9 +211,13 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
+    DPalette pal;
+    pal.setBrush(DPalette::Background,QColor(247,247,247));
+    plabel->setPalette(pal);
     plabel->setText(".. " + tr("Back to previous"));
     plabel->setAutoFillBackground(true);
     plabel->hide();
+    plabel->setBackgroundRole(DPalette::Background);
 
 //    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);
 
