@@ -99,17 +99,27 @@ MainWindow::~MainWindow()
 {
 }
 
-qint64 MainWindow::getDiskFreeSpace()
+qint64 MainWindow::getMediaFreeSpace()
 {
-
-    QStorageInfo storage = QStorageInfo::root();
-
-    storage.refresh();
-    qDebug() << "availableSize:" << storage.bytesAvailable() / 1024 / 1024 << "MB";
-    return storage.bytesAvailable();
-
+    QList<QStorageInfo> list = QStorageInfo::mountedVolumes();
+    qDebug() << "Volume Num: " << list.size();
+    for(QStorageInfo& si : list)
+    {
+        if(si.displayName().count() > 7 && si.displayName().left(6) == "/media")
+        {
+            qDebug() << "Bytes Avaliable: " << si.bytesAvailable()/ 1024 / 1024 << "MB";
+            return si.bytesAvailable()/ 1024 / 1024;
+        }
+    }
 }
 
+qint64 MainWindow::getDiskFreeSpace()
+{
+    QStorageInfo storage = QStorageInfo::root();
+    storage.refresh();
+    qDebug() << "availableSize:" << storage.bytesAvailable() / 1024 / 1024 << "MB";
+    return storage.bytesAvailable()/ 1024 / 1024;
+}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -956,16 +966,32 @@ void MainWindow::slotExtractionDone(KJob *job)
     if ((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError)) {
         //do noting:wrong password
     } else if (job->error() && job->error() != KJob::KilledJobError) {
-        if (getDiskFreeSpace() <= 50) {
-            m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            m_pageid = PAGE_UNZIP_FAIL;
-            refreshPage();
-        } else {
-            m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-            m_pageid = PAGE_UNZIP_FAIL;
-            refreshPage();
+        if(m_pathstore.left(6) == "/media")
+        {
+            if(getMediaFreeSpace() <= 50)
+            {
+                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+            else {
+                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
         }
-
+        else {
+            if (getDiskFreeSpace() <= 50) {
+                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+            else {
+                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+        }
         return;
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
@@ -1248,25 +1274,40 @@ void MainWindow::slotCompressFinished(KJob *job)
     qDebug() << "job finished" << job->error();
     m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
-        if (getDiskFreeSpace() <= 50) {
-            m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            m_pageid = PAGE_UNZIP_FAIL;
-            refreshPage();
-        } else {
-            m_pageid = PAGE_ZIP_FAIL;
-            m_CompressFail->setFailStrDetail(tr("The original file is corrupt!"));
-            refreshPage();
+        if(m_pathstore.left(6) == "/media")
+        {
+            if(getMediaFreeSpace() <= 50)
+            {
+                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+            else {
+                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+        }
+        else {
+            if (getDiskFreeSpace() <= 50) {
+                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
+            else {
+                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_pageid = PAGE_UNZIP_FAIL;
+                refreshPage();
+            }
         }
         return;
     }
     m_pageid = PAGE_ZIP_SUCCESS;
     refreshPage();
-
 //    if(m_createJob)
 //    {
 //        m_createJob->kill();
 //    }
-
 }
 
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path)
