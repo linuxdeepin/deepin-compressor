@@ -1413,12 +1413,12 @@ void MainWindow::onCompressAddfileSlot(bool status)
     if (false == status) {
         m_titlebutton->setVisible(false);
         m_openAction->setEnabled(false);
-        setAcceptDrops(false);
+//        setAcceptDrops(false);
     } else {
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         m_openAction->setEnabled(true);
-        setAcceptDrops(true);
+//        setAcceptDrops(true);
     }
 }
 

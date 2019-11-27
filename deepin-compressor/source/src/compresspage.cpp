@@ -123,7 +123,7 @@ void CompressPage::showDialog()
     strlabel->setText(QObject::tr("Please add files in the root directory!"));
     dialog->addButton(QObject::tr("OK"));
     QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->addWidget(strlabel, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     DWidget *widget = new DWidget;
 
