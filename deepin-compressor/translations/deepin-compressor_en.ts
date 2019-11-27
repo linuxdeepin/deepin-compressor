@@ -307,7 +307,7 @@
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="84"/>
         <source>Wrong Password</source>
-        <translation>Wrong Password</translation>
+        <translation>Incorrect Password</translation>
     </message>
 </context>
 <context>
