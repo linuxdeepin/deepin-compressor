@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     }
 
     QStringList multilist;
-    if (newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi"))
+    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi"))))
     {
         multilist.append(newfilelist.at(0));
         multilist.append(newfilelist.last().remove("_multi"));
