@@ -133,10 +133,11 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             case 1: {
                 return " " + QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
             }
-
+            case 0:{
+                return "  "+ file.fileName();
+            }
             }
         }
-
         }
     }
     return QFileSystemModel::data(index, role);

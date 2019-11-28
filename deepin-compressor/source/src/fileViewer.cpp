@@ -201,6 +201,7 @@ void fileViewer::InitUI()
     pTableViewFile->horizontalHeader()->setHighlightSections(false);  //防止表头塌陷
     pTableViewFile->setSortingEnabled(true);
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
+    pTableViewFile->setIconSize(QSize(24,24));
 
     QHeaderView *headerview = pTableViewFile->horizontalHeader();
     headerview->setMinimumHeight(MyFileSystemDefine::gTableHeight);

@@ -61,7 +61,6 @@ ArchiveModel::~ArchiveModel()
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const
 {
-
     if ((1 == index.row() || 0 == index.row())&& 0 == index.column()) {
         if (m_ppathindex && *m_ppathindex > 0) {
             m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight * 2);
@@ -83,7 +82,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             int column = m_showColumns.at(index.column());
             switch (column) {
             case FullPath:
-                return entry->name();
+                return "  " + entry->name();
             case Type: {
                 QMimeType mimetype = determineMimeType(entry->fullPath());
                 return " " + m_mimetype->displayName(mimetype.name());
@@ -112,7 +111,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             if (index.column() == 0) {
                 const Archive::Entry *e = static_cast<Archive::Entry *>(index.internalPointer());
                 QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
-                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(22, 18, mode);
+                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(24,24,mode);
             }
             return QVariant();
         case Qt::TextAlignmentRole:
@@ -670,8 +669,8 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     QMimeDatabase db;
     QIcon icon;
     entry->isDir()
-    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(16, 16)
-             : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(16, 16);
+    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24,24)
+             : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24,24);
 //    qDebug()<<icon;
     m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon);
 }
