@@ -978,7 +978,7 @@ void MainWindow::slotExtractionDone(KJob *job)
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
             }
             else {
-                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
         }
         else {
@@ -986,7 +986,7 @@ void MainWindow::slotExtractionDone(KJob *job)
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
             }
             else {
-                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
         }
         m_pageid = PAGE_UNZIP_FAIL;
@@ -1280,7 +1280,7 @@ void MainWindow::slotCompressFinished(KJob *job)
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
             }
             else {
-                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }
         }
         else {
@@ -1288,7 +1288,7 @@ void MainWindow::slotCompressFinished(KJob *job)
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
             }
             else {
-                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }
         }
         m_pageid = PAGE_ZIP_FAIL;
