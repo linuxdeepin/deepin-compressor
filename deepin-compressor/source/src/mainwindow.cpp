@@ -976,27 +976,21 @@ void MainWindow::slotExtractionDone(KJob *job)
             if(getMediaFreeSpace() <= 50)
             {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-                m_pageid = PAGE_UNZIP_FAIL;
-                refreshPage();
             }
             else {
                 m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-                m_pageid = PAGE_UNZIP_FAIL;
-                refreshPage();
             }
         }
         else {
             if (getDiskFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-                m_pageid = PAGE_UNZIP_FAIL;
-                refreshPage();
             }
             else {
                 m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-                m_pageid = PAGE_UNZIP_FAIL;
-                refreshPage();
             }
         }
+        m_pageid = PAGE_UNZIP_FAIL;
+        refreshPage();
         return;
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
@@ -1284,27 +1278,21 @@ void MainWindow::slotCompressFinished(KJob *job)
             if(getMediaFreeSpace() <= 50)
             {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-                m_pageid = PAGE_ZIP_FAIL;
-                refreshPage();
             }
             else {
                 m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-                m_pageid = PAGE_ZIP_FAIL;
-                refreshPage();
             }
         }
         else {
             if (getDiskFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-                m_pageid = PAGE_ZIP_FAIL;
-                refreshPage();
             }
             else {
                 m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
-                m_pageid = PAGE_ZIP_FAIL;
-                refreshPage();
             }
         }
+        m_pageid = PAGE_ZIP_FAIL;
+        refreshPage();
         return;
     }
     m_pageid = PAGE_ZIP_SUCCESS;
