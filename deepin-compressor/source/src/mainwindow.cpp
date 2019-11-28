@@ -105,12 +105,15 @@ qint64 MainWindow::getMediaFreeSpace()
     qDebug() << "Volume Num: " << list.size();
     for(QStorageInfo& si : list)
     {
+        qDebug()<<si.displayName();
         if(si.displayName().count() > 7 && si.displayName().left(6) == "/media")
         {
             qDebug() << "Bytes Avaliable: " << si.bytesAvailable()/ 1024 / 1024 << "MB";
             return si.bytesAvailable()/ 1024 / 1024;
         }
     }
+
+    return 0;
 }
 
 qint64 MainWindow::getDiskFreeSpace()
