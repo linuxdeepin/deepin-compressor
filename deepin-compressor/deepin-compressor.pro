@@ -135,7 +135,7 @@ desktop.files =  deepin-compressor.desktop
 
 desktopcontext.path = $$INSTROOT$$DESKTOPDIR
 desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop deepin-compress-multi.desktop deepin-decompress-split.desktop deepin-decompresshere-split.desktop deepin-decompress-multi.desktop deepin-decompresshere-multi.desktop
-
+desktopcontext.files +=  deepin-decompress-split_multi.desktop deepin-decompresshere-split_multi.desktop
 
 manual.path = /usr/share/dman/
 manual.files = $$PWD/dman/*
