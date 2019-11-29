@@ -201,12 +201,14 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcut4.insert("value", "Delete");
 
     QJsonObject shortcut5;
-    shortcut5.insert("name", tr("Show shortcut preview"));
-    shortcut5.insert("value", "Ctrl+Shift+/");
+    shortcut5.insert("name", tr("Rename"));
+    shortcut5.insert("value", "F2");
 
     QJsonObject shortcut6;
-    shortcut6.insert("name", tr("Rename"));
-    shortcut6.insert("value", "F2");
+    shortcut6.insert("name", tr("Display shortcuts"));
+    shortcut6.insert("value", "Ctrl+Shift+?");
+
+
 
     QJsonArray shortcutArray;
     shortcutArray.append(shortcut1);
