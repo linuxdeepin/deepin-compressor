@@ -997,6 +997,8 @@ void MainWindow::slotExtractionDone(KJob *job)
         return;
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
+        m_pageid = PAGE_UNZIP;
+        refreshPage();
     } else {
         m_pageid = PAGE_UNZIP_SUCCESS;
         refreshPage();
