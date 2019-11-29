@@ -1326,7 +1326,8 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QStr
     options.setDragAndDropEnabled(true);
     m_extractSimpleFiles = fileList;
 
-    const QString destinationDirectory = path;
+    const QString destinationDirectory = path;    
+    m_compressDirFiles = CheckAllFiles(path);
     qDebug() << "destinationDirectory:" << destinationDirectory;
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
 
@@ -1350,11 +1351,12 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QStr
 }
 
 void MainWindow::slotKillExtractJob()
-{
+{    
     m_workstatus = WorkNone;
     if (m_encryptionjob) {
         m_encryptionjob->Killjob();
     }
+    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_decompressfilepath));
 }
 
 void MainWindow::slotFailRetry()
