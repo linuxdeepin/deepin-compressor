@@ -564,6 +564,7 @@ void MainWindow::onSelected(const QStringList &files)
 
         } else {
             DDialog *dialog = new DDialog;
+            dialog->setFixedWidth(440);
             QIcon icon = QIcon::fromTheme("deepin-compressor");
             dialog->setIcon(icon, QSize(32, 32));
             dialog->setMessage(tr("Add a compressed file to a directory or open it in a new window?"));
