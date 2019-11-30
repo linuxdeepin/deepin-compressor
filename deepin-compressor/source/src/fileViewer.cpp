@@ -77,29 +77,162 @@ void FirstRowDelegate::setPathIndex(int *index)
 void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     int row = index.row();
-    int x = option.rect.x();
-    int y = option.rect.y();
-    int width = option.rect.width();
-    int height = option.rect.height();
-
-    if (row == 0 && ppathindex && *ppathindex > 0) { //UE
+    if (row == 0 && ppathindex && *ppathindex > 0) {  //UE
+        int x = option.rect.x();
+        int y = option.rect.y();
+        int width = option.rect.width();
+        int height = option.rect.height();
         //选项
         QStyleOptionFrame *FrameOption = new QStyleOptionFrame();
         FrameOption->rect = QRect(x, y, width, height / 2);
         //绘制
         QApplication::style()->drawControl(QStyle::CE_ShapedFrame, FrameOption, painter);
         QStyleOptionViewItem loption = option;
-        loption.rect = QRect(x, y + height / 2, width, height / 2);
-        return QItemDelegate::paint(painter, loption, index);
+//        loption.rect = QRect(x, y + height / 2, width, height / 2);
+        const_cast<QStyleOptionViewItem &>(option).rect = QRect(x, y + height / 2, width, height / 2);
+//        loption.rect.setX(loption.rect.x() + 12);
+//        return QItemDelegate::paint(painter, loption, index);
     }
 
-    return QItemDelegate::paint(painter, option, index);
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setOpacity(1);
+    QPainterPath path;
+    QPainterPath clipPath;
+    QRect rect = option.rect;
+    if (index.column() == 0) {
+        rect.setX(rect.x());  // left margin
+        QPainterPath rectPath, roundedPath;
+        roundedPath.addRoundedRect(rect.x(), rect.y(), rect.width() * 2, rect.height(), 8, 8);
+        rectPath.addRect(rect.x() + rect.width(), rect.y(), rect.width(), rect.height());
+        clipPath = roundedPath.subtracted(rectPath);
+        painter->setClipPath(clipPath);
+        path.addRect(rect);
+    } else if (index.column() == 3) {
+        rect.setWidth(rect.width());  // right margin
+        QPainterPath rectPath, roundedPath;
+        roundedPath.addRoundedRect(rect.x() - rect.width(), rect.y(), rect.width() * 2, rect.height(), 8, 8);
+        rectPath.addRect(rect.x() - rect.width(), rect.y(), rect.width(), rect.height());
+        clipPath = roundedPath.subtracted(rectPath);
+        painter->setClipPath(clipPath);
+        path.addRect(rect);
+    } else {
+        path.addRect(rect);
+    }
+
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DPalette palette = dAppHelper->applicationPalette();
+    if (row % 2) {
+        painter->fillPath(path, palette.alternateBase());
+    }
+    if (option.showDecorationSelected && (option.state & QStyle::State_Selected)) {
+        painter->fillPath(path, palette.highlight());
+    }
+    QStyleOptionViewItem opt = setOptions(index, option);
+
+    // prepare
+    // get the data and the rectangles
+    QVariant value;
+    QPixmap pixmap;
+    QRect decorationRect;
+    value = index.data(Qt::DecorationRole);
+    if (value.isValid()) {
+        // ### we need the pixmap to call the virtual function
+        pixmap = decoration(opt, value);
+        if (value.type() == QVariant::Icon) {
+            QIcon icon = qvariant_cast<QIcon>(value);
+            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+        } else {
+            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+        }
+    } else {
+        decorationRect = QRect();
+    }
+
+    QRect checkRect;
+    Qt::CheckState checkState = Qt::Unchecked;
+    value = index.data(Qt::CheckStateRole);
+    if (value.isValid()) {
+        checkState = static_cast<Qt::CheckState>(value.toInt());
+        checkRect = doCheck(opt, opt.rect, value);
+    }
+    QFontMetrics fm(opt.font);
+    QRect displayRect;
+    displayRect.setX(decorationRect.x() + decorationRect.width());
+    displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x());
+    QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width());
+
+    // do the layout
+    doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
+    if (index.column() == 0 /*&& decorationRect.x() < 10*/) {
+        decorationRect.setX(decorationRect.x() + 23);
+        displayRect.setX(displayRect.x() + 10);
+        displayRect.setWidth(displayRect.width() - 10);
+    }
+
+    // draw the item
+    //drawBackground(painter, opt, index);
+    drawCheck(painter, opt, checkRect, checkState);
+    drawDecoration(painter, opt, decorationRect, pixmap);
+
+    //drawDisplay(painter, opt, displayRect, text);
+    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
+    if (option.state & QStyle::State_Selected) {
+        painter->setPen(option.palette.color(cg, QPalette::HighlightedText));
+    } else {
+        painter->setPen(option.palette.color(cg, QPalette::Text));
+    }
+    if (text.isEmpty() == false) {
+        painter->drawText(displayRect, static_cast<int>(opt.displayAlignment), text);
+    }
+    drawFocus(painter, opt, displayRect);
+
+    // done
+    painter->restore();
+
+//    if(index.column() == 0)
+//    {
+//        QStyleOptionViewItem loption = option;
+//        loption.rect.setX(loption.rect.x() + 6);
+//        return QItemDelegate::paint(painter, loption, index);;
+//    }
+//    return QItemDelegate::paint(painter, option, index);
+}
+
+void MyLabel::paintEvent(QPaintEvent *e)
+{
+    QRectF rectangle(0, 0, width(), height());
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QColor bgColor;
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(247, 247, 247);
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(38, 38, 38);
+    }
+
+    QPainterPath pp;
+    pp.addRoundedRect(rectangle, 8, 8);
+    painter.fillPath(pp, bgColor);
+    QLabel::paintEvent(e);
 }
 
 MyTableView::MyTableView(QWidget *parent)
     : QTableView(parent)
 {
     setMinimumSize(580, 300);
+    auto changeTheme = [this]() {
+        DPalette pa = palette();
+        //pa.setBrush(DPalette::ColorType::ItemBackground, pa.highlight());
+        pa.setBrush(QPalette::Highlight, pa.base());
+        pa.setBrush(DPalette::AlternateBase, pa.base());
+        //pa.setBrush(QPalette::Base, pa.highlight());
+        setPalette(pa);
+        //update();
+    };
+    changeTheme();
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, changeTheme);
 }
 
 void MyTableView::paintEvent(QPaintEvent *e)
@@ -107,7 +240,6 @@ void MyTableView::paintEvent(QPaintEvent *e)
 //    qDebug()<<y();
     QTableView::paintEvent(e);
 }
-
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
@@ -201,7 +333,7 @@ void fileViewer::InitUI()
     pTableViewFile->horizontalHeader()->setHighlightSections(false);  //防止表头塌陷
     pTableViewFile->setSortingEnabled(true);
     pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
-    pTableViewFile->setIconSize(QSize(24,24));
+    pTableViewFile->setIconSize(QSize(24, 24));
 
     QHeaderView *headerview = pTableViewFile->horizontalHeader();
     headerview->setMinimumHeight(MyFileSystemDefine::gTableHeight);
@@ -211,34 +343,11 @@ void fileViewer::InitUI()
     headerview->setPalette(pa);
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    plabel->setText(".. " + tr("Back to previous"));
+    plabel->setText("     .. " + tr("Back to previous"));
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
-    {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(251,251,251));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-    else if (themeType == DGuiApplicationHelper::DarkType) {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(38,38,38));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-    else {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(251,251,251));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-
 //    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);
-
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
 
@@ -264,7 +373,7 @@ void fileViewer::refreshTableview()
     MyFileItem *item = nullptr;
     firstmodel->clear();
 
-    item = new MyFileItem(QObject::tr("Name"));
+    item = new MyFileItem("  " + QObject::tr("Name"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
     item = new MyFileItem(QObject::tr("Modify"));
@@ -354,9 +463,7 @@ void fileViewer::InitConnection()
 
     connect(pScrollbar, SIGNAL(ScrollBarShowEvent(QShowEvent *)), this, SLOT(ScrollBarShowEvent(QShowEvent *)));
     connect(pScrollbar, SIGNAL(ScrollBarHideEvent(QHideEvent *)), this, SLOT(ScrollBarHideEvent(QHideEvent *)));
-    connect(pModel,&MyFileSystemModel::sigShowLabel , this, &fileViewer::showPlable);
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
-                     this, &fileViewer::themeChanged);
+    connect(pModel, &MyFileSystemModel::sigShowLabel, this, &fileViewer::showPlable);
 }
 
 void fileViewer::resizecolumn()
@@ -667,7 +774,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
     m_decompressmodel = (ArchiveModel *)m_sortmodel->sourceModel();
     m_decompressmodel->setPathIndex(&m_pathindex);
     m_decompressmodel->setTableView(pTableViewFile);
-    connect(m_decompressmodel,&ArchiveModel::sigShowLabel , this, &fileViewer::showPlable);
+    connect(m_decompressmodel, &ArchiveModel::sigShowLabel, this, &fileViewer::showPlable);
 
     pTableViewFile->setModel(model);
     resizecolumn();
@@ -684,26 +791,4 @@ void fileViewer::startDrag(Qt::DropActions supportedActions)
     drag->exec(Qt::CopyAction);
 }
 
-void fileViewer::themeChanged(){
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
-    {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(251,251,251));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-    else if (themeType == DGuiApplicationHelper::DarkType) {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(38,38,38));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-    else {
-        DPalette pal;
-        pal.setBrush(DPalette::Background,QColor(251,251,251));
-        plabel->setPalette(pal);
-        plabel->setBackgroundRole(DPalette::Background);
-    }
-}
 

@@ -75,6 +75,7 @@ class MyLabel: public QLabel
     Q_OBJECT
 public:
     MyLabel(QWidget *parent = 0);
+    void paintEvent(QPaintEvent *e) override;
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
 signals:
@@ -152,8 +153,6 @@ public:
 
 public slots:
     void showPlable();
-    void themeChanged();
-
 protected:
     void resizecolumn();
     void resizeEvent(QResizeEvent *size) override;

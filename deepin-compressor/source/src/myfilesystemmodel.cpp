@@ -52,7 +52,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
     if (role == Qt::DisplayRole) {
         switch (section) {
         case 0:
-            return tr("Name");
+            return "  " + tr("Name");
         case 3:
             return "      " + tr("Size");
         case 2:

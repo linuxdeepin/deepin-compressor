@@ -166,7 +166,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
 
         switch (columnId) {
         case FullPath:
-            return tr("Name");
+            return "  " + tr("Name");
         case Size:
             return "      " + tr("Size");
         case Type:
