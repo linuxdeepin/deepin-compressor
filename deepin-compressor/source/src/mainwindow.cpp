@@ -974,6 +974,10 @@ void MainWindow::slotExtractionDone(KJob *job)
     if ((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError)) {
         //do noting:wrong password
     } else if (job->error() && job->error() != KJob::KilledJobError) {
+        if(m_progressdialog->isshown())
+        {
+            m_progressdialog->reject();
+        }
         if(m_pathstore.left(6) == "/media")
         {
             if(getMediaFreeSpace() <= 50)
