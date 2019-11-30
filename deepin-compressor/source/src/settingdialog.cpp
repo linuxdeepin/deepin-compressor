@@ -141,6 +141,11 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
+            connect(this, &SettingDialog::sigReset, this, [=]
+            {
+                combobox->setCurrentIndex(0);
+            });
+
             connect(combobox, &DComboBox::currentTextChanged, [combobox, this] {
                 if (tr("Current directory") == combobox->currentText())
                 {
@@ -291,6 +296,9 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
         if (index > -1) {
             m_valuelisttemp.replace(index, value.toBool());
         }
+    }
+    else if (key.contains("default_path")&&value.toString() == "") {
+        emit sigReset();
     }
 }
 

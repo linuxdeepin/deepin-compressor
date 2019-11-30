@@ -10,7 +10,8 @@
                     "options": [
                         {
                             "key": "default_path",
-                            "type": "pathbox"
+                            "type": "pathbox",
+                            "default": ""
                         },
                         {
                             "key": "create_folder",
