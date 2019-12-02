@@ -33,7 +33,7 @@
 #include "utils.h"
 #include "myfileitem.h"
 #include "kprocess.h"
-
+#include "logviewheaderview.h"
 
 MyScrollBar::MyScrollBar(QWidget *parent)
     : QScrollBar(parent)
@@ -122,9 +122,18 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
-    if (row % 2) {
-        painter->fillPath(path, palette.alternateBase());
+    if(ppathindex && *ppathindex > 0)
+    {
+        if (row % 2) {
+            painter->fillPath(path, palette.alternateBase());
+        }
     }
+    else {
+        if (!row % 2) {
+            painter->fillPath(path, palette.alternateBase());
+        }
+    }
+
     if (option.showDecorationSelected && (option.state & QStyle::State_Selected)) {
         painter->fillPath(path, palette.highlight());
     }
@@ -222,6 +231,7 @@ MyTableView::MyTableView(QWidget *parent)
     : QTableView(parent)
 {
     setMinimumSize(580, 300);
+    setHorizontalHeader(new LogViewHeaderView(Qt::Horizontal, this));
     auto changeTheme = [this]() {
         DPalette pa = palette();
         //pa.setBrush(DPalette::ColorType::ItemBackground, pa.highlight());
@@ -373,7 +383,7 @@ void fileViewer::refreshTableview()
     MyFileItem *item = nullptr;
     firstmodel->clear();
 
-    item = new MyFileItem("  " + QObject::tr("Name"));
+    item = new MyFileItem(QObject::tr("Name"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(0, item);
     item = new MyFileItem(QObject::tr("Modify"));
@@ -382,7 +392,7 @@ void fileViewer::refreshTableview()
     item = new MyFileItem(QObject::tr("Type"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(2, item);
-    item = new MyFileItem("      " + QObject::tr("Size"));
+    item = new MyFileItem(QObject::tr("Size"));
     item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     firstmodel->setHorizontalHeaderItem(3, item);
 
