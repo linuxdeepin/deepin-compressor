@@ -469,10 +469,10 @@ void fileViewer::InitConnection()
 void fileViewer::resizecolumn()
 {
     qDebug() << pTableViewFile->width();
-    pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 14 / 29);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 8 / 29);
+    pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 13 / 29);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 9 / 29);
     pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 3 / 29);
-    pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 3 / 29);
+    pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 4 / 29);
 }
 
 void fileViewer::resizeEvent(QResizeEvent *size)
