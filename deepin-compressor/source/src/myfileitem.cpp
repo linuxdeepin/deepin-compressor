@@ -74,6 +74,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
         if (column() == other.column()) {
             QDateTime ldate = QDateTime::fromString(l.toString(), " yyyy/MM/dd hh:mm:ss");
             QDateTime rdate = QDateTime::fromString(r.toString(), " yyyy/MM/dd hh:mm:ss");
+            qDebug() <<ldate<<rdate;
             return !rdate.operator < (ldate);
         }
         break;

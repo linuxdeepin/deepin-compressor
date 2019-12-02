@@ -129,7 +129,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         }
     }
     else {
-        if (!row % 2) {
+        if (!(row % 2)) {
             painter->fillPath(path, palette.alternateBase());
         }
     }
