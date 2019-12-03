@@ -437,7 +437,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Normal);
         item->setFont(font);
         firstmodel->setItem(rowindex, 2, item);
-        item = new MyFileItem(" " + QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd hh:mm:ss")));
+        item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd/ hh:mm:ss")));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);

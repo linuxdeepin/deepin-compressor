@@ -71,9 +71,21 @@ bool MyFileItem::operator<(const QStandardItem &other) const
         break;
     }
     case 1: {
+
         if (column() == other.column()) {
-            QDateTime ldate = QDateTime::fromString(l.toString(), " yyyy/MM/dd hh:mm:ss");
-            QDateTime rdate = QDateTime::fromString(r.toString(), " yyyy/MM/dd hh:mm:ss");
+            qDebug()<<l;
+            QString lstr = l.toString();
+            QString rstr = r.toString();
+            lstr = lstr.remove(4, 1);
+            lstr = lstr.remove(6, 1);
+            lstr = lstr.remove(8, 1);
+            rstr = rstr.remove(4, 1);
+            rstr = rstr.remove(6, 1);
+            rstr = rstr.remove(8, 1);
+            qDebug()<<lstr<<rstr;
+            QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMdd hh:mm:ss");
+
+            QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMdd hh:mm:ss");
             qDebug() <<ldate<<rdate;
             return !rdate.operator < (ldate);
         }
