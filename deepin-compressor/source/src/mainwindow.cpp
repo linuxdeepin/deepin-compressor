@@ -1161,6 +1161,56 @@ QStringList MainWindow::CheckAllFiles(QString path)
     return entrys;
 }
 
+bool clearTempFiles(const QString& temp_path)
+{
+    bool ret = false;
+//    qDebug()<<temp_path;
+//    QDir dir(temp_path);
+//    if(dir.isEmpty())
+//    {
+//        qDebug()<<"dir.isEmpty()";
+//        return false;
+//    }
+//    QStringList filter; //过滤器
+//    filter.append("*");
+//    QDirIterator it(temp_path, filter, QDir::Dirs | QDir::Files, QDirIterator::NoIteratorFlags);
+//    while(it.hasNext()) { //若容器中还有成员，继续执行删除操作
+//        if(it.next().contains("/..") || it.next().contains("/.") || it.next().toStdString() == "")
+//        {
+//            continue;
+//        }
+
+//        QFileInfo fileinfo(it.next());
+//        qDebug()<<it.next();
+//        if(fileinfo.isDir())
+//        {
+//            clearTempFiles(it.next());
+//            ret = dir.rmpath(it.next());
+//            if(false == ret)
+//            {
+//                qDebug()<<"error"<<it.next();
+//            }
+//        }
+//        else {
+//            ret = dir.remove(it.next());
+//            if(false == ret)
+//            {
+//                qDebug()<<"error"<<it.next();
+//            }
+//        }
+//    }
+//    qDebug()<<ret;
+    QProcess p(0);
+    QString command = "rm";
+    QStringList args;
+    args.append("-fr");
+    args.append(temp_path);
+    p.execute(command, args);
+    p.waitForFinished();
+    return ret;
+}
+
+
 
 
 void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
@@ -1193,13 +1243,13 @@ void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
                 qDebug() << "delete error!!!!!!!!!";
             }
         } else if (fileInfo.isDir()) {
-            QProcess p(0);
-            QString command = "rm";
-            QStringList args;
-            args.append("-fr");
-            args.append(path);
-            p.execute(command, args);
-            p.waitForFinished();
+            clearTempFiles(path);
+            qDebug()<<"delete ok!!!!!!!!!!!!!!";
+            if(fileInfo.exists())
+            {
+                clearTempFiles(path);
+            }
+
         }
     }
 }
