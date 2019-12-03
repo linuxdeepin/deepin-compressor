@@ -604,44 +604,29 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 
                 resizecolumn();
             } else {
-                if (Utils::isCompressed_file(m_curfilelist.at(curindex.row()).filePath())) {
-                    KProcess *cmdprocess = new KProcess;
-                    QStringList arguments;
-                    QString programPath = QStandardPaths::findExecutable("deepin-compressor");
-                    if (programPath.isEmpty()) {
-                        qDebug() << "error can't find xdg-mime";
-                        return;
-                    }
-
-                    arguments << m_curfilelist.at(curindex.row()).filePath();
-
-                    qDebug() << arguments;
-                    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-                    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                    cmdprocess->setProgram(programPath, arguments);
-                    cmdprocess->start();
-                }
+                KProcess *cmdprocess = new KProcess;
+                QStringList arguments;
+                QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
+                arguments << m_curfilelist.at(curindex.row()).filePath();
+                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                cmdprocess->setProgram(programPath, arguments);
+                cmdprocess->start();
             }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             pTableViewFile->setRootIndex(m_indexmode);
             m_pathindex++;
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
-            if (Utils::isCompressed_file(pModel->fileInfo(curindex).filePath())) {
-                KProcess *cmdprocess = new KProcess;
-                QStringList arguments;
-                QString programPath = QStandardPaths::findExecutable("deepin-compressor");
-                if (programPath.isEmpty()) {
-                    qDebug() << "error can't find xdg-mime";
-                    return;
-                }
-                arguments << pModel->fileInfo(curindex).filePath();
-                qDebug() << arguments;
-                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                cmdprocess->setProgram(programPath, arguments);
-                cmdprocess->start();
-            }
+
+            KProcess *cmdprocess = new KProcess;
+            QStringList arguments;
+            QString programPath = QStandardPaths::findExecutable("xdg-open");
+            arguments << pModel->fileInfo(curindex).filePath();
+            cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+            cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+            cmdprocess->setProgram(programPath, arguments);
+            cmdprocess->start();
         }
     }
 
