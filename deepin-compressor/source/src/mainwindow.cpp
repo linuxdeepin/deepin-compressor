@@ -1260,9 +1260,10 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
     const QString password = Args[QStringLiteral("encryptionPassword")];
     const QString enableHeaderEncryption = Args[QStringLiteral("encryptHeader")];
-    QString filename = Args[QStringLiteral("localFilePath")] + "/" + Args[QStringLiteral("filename")];
+    QString filename = Args[QStringLiteral("localFilePath")] + QDir::separator() + Args[QStringLiteral("filename")];
     m_decompressfilename = Args[QStringLiteral("filename")];
     m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
+    m_CompressSuccess->setCompressFullPath(filename);
 
     if (filename.isEmpty()) {
         qDebug() << "filename.isEmpty()";

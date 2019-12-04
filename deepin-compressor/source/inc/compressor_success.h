@@ -40,6 +40,7 @@ public:
     void setstringinfo(QString str);
     void setCompressPath(QString path);
     QString getPath();
+    void setCompressFullPath(QString path);
 
 private:
     DPushButton *m_showfilebutton;
@@ -48,6 +49,7 @@ private:
     DLabel *m_stringinfolabel;
     QString m_stringinfo;
     QString m_path;
+    QString m_fullpath;
 public slots:
     void showfiledirSlot();
 
