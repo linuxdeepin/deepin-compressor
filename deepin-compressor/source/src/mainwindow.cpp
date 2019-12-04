@@ -41,6 +41,7 @@
 #include <QTimer>
 //#include "archivejob.h"
 #include "jobs.h"
+#include <DFileWatcher>
 
 //static QString shortcut_json =
 
@@ -832,6 +833,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
 
 void MainWindow::loadArchive(const QString &files)
 {
+    WatcherFile(files);
     m_workstatus = WorkProcess;
     m_loadfile = files;
     m_encryptiontype = Encryption_Load;
@@ -846,6 +848,16 @@ void MainWindow::loadArchive(const QString &files)
         m_loadjob->start();
         m_homePage->spinnerStart();
     }
+}
+void MainWindow::WatcherFile(const QString &files)
+{
+    DFileWatcher *m_fileManager = new DFileWatcher(files,this);
+        m_fileManager->startWatcher();
+        qDebug()<<m_fileManager->startWatcher()<<"="<<files;
+        connect(m_fileManager, &DFileWatcher::fileMoved, this, [=](){                       //监控压缩包，重命名时提示
+            QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
+            this->sendMessage(icon,tr("The current compressed file has been moved or deleted"));  //当前压缩文件已经被移动或删除
+        });
 }
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
