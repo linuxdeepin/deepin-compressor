@@ -30,8 +30,9 @@
 #include <QFile>
 #include <QUrl>
 #include <DRecentManager>
-#include <QStandardPaths>
+#include <DStandardPaths>
 
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 UnCompressPage::UnCompressPage(QWidget *parent)
@@ -134,6 +135,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         return;
     }
 
+    qDebug()<<fileList;
     if (EXTRACT_TO == type) {
         DFileDialog dialog;
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -152,6 +154,14 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         emit sigextractfiles(fileList, curpath);
     } else if (EXTRACT_DRAG == type) {
         emit sigextractfiles(fileList, path);
+    } else if (EXTRACT_TEMP == type) {
+        QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+        QDir dir(tmppath);
+        if(!dir.exists())
+        {
+            dir.mkdir(tmppath);
+        }
+        emit sigextractfiles(fileList,tmppath);
     } else {
         emit sigextractfiles(fileList, m_pathstr);
     }

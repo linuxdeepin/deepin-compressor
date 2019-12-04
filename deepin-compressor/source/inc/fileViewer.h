@@ -55,6 +55,7 @@ enum EXTRACT_TYPE {
     EXTRACT_HEAR,
     EXTRACT_TO,
     EXTRACT_DRAG,
+    EXTRACT_TEMP,
 };
 
 class MyScrollBar: public QScrollBar

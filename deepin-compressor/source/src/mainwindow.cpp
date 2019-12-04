@@ -134,7 +134,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
     }
     event->accept();
-    emit sigquitApp();
+    slotquitApp();
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -241,7 +241,7 @@ void MainWindow::InitConnection()
     connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
-    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::sigquitApp);
+    connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished, this, &MainWindow::slotLoadingFinished);
@@ -688,7 +688,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         if (mode != QDialog::Accepted) {
             QTimer::singleShot(100, this, [=]
             {
-                emit sigquitApp();
+                slotquitApp();
             });
             return;
         }
@@ -902,7 +902,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     connect(m_encryptionjob, SIGNAL(percentfilename(KJob *, const QString &)),
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(m_encryptionjob, &ExtractJob::sigCancelled,
-            this, &MainWindow::sigquitApp);
+            this, &MainWindow::slotquitApp);
 
     m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
@@ -999,7 +999,19 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
-    } else if (Encryption_SingleExtract == m_encryptiontype) {
+    }
+    else if (Encryption_TempExtract == m_encryptiontype) {
+        KProcess *cmdprocess = new KProcess;
+        QStringList arguments;
+        QString programPath = QStandardPaths::findExecutable("xdg-open");
+        arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + m_extractSimpleFiles.at(0)->name();
+        qDebug() << arguments ;
+        cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+        cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+        cmdprocess->setProgram(programPath, arguments);
+        cmdprocess->start();
+    }
+    else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
         m_pageid = PAGE_UNZIP;
         refreshPage();
@@ -1082,7 +1094,7 @@ void MainWindow::ExtractPassword(QString password)
         connect(m_encryptionjob, SIGNAL(percentfilename(KJob *, const QString &)),
                 this, SLOT(SlotProgressFile(KJob *, const QString &)));
         connect(m_encryptionjob, &ExtractJob::sigCancelled,
-                this, &MainWindow::sigquitApp);
+                this, &MainWindow::slotquitApp);
 
         m_encryptionjob->start();
     }
@@ -1192,7 +1204,7 @@ bool clearTempFiles(const QString& temp_path)
 //            }
 //        }
 //        else {
-//            ret = dir.remove(it.next());
+//            ret = dir.remove(it.next());Q
 //            if(false == ret)
 //            {
 //                qDebug()<<"error"<<it.next();
@@ -1209,9 +1221,6 @@ bool clearTempFiles(const QString& temp_path)
     p.waitForFinished();
     return ret;
 }
-
-
-
 
 void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
 {
@@ -1366,8 +1375,13 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path)
 {
     m_progressTransFlag = false;
-    m_workstatus = WorkProcess;
-    m_encryptiontype = Encryption_SingleExtract;
+    m_workstatus = WorkProcess;   
+    if(path == DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles")
+    {
+        m_encryptiontype = Encryption_TempExtract;
+    }else {
+        m_encryptiontype = Encryption_SingleExtract;
+    }
     m_progressdialog->clearprocess();
     if (!m_model) {
         return;
@@ -1380,8 +1394,8 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QStr
     ExtractionOptions options;
     options.setDragAndDropEnabled(true);
     m_extractSimpleFiles = fileList;
+    const QString destinationDirectory = path;
 
-    const QString destinationDirectory = path;    
     m_compressDirFiles = CheckAllFiles(path);
     qDebug() << "destinationDirectory:" << destinationDirectory;
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
@@ -1402,7 +1416,6 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QStr
 
     QFileInfo file(m_loadfile);
     m_progressdialog->setCurrentTask(file.fileName());
-
 }
 
 void MainWindow::slotKillExtractJob()
@@ -1428,8 +1441,6 @@ void MainWindow::slotFailRetry()
     } else if (Encryption_SingleExtract == m_encryptiontype) {
 
     }
-
-
 }
 
 void MainWindow::onCancelCompressPressed()
@@ -1442,6 +1453,19 @@ void MainWindow::onCancelCompressPressed()
     if (m_createJob) {
         m_createJob->kill();
     }
+
+    emit sigquitApp();
+}
+
+void MainWindow::slotquitApp()
+{
+    QProcess p(0);
+    QString command = "rm";
+    QStringList args;
+    args.append("-rf");
+    args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles");
+    p.execute(command, args);
+    p.waitForFinished();
 
     emit sigquitApp();
 }

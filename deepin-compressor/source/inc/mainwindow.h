@@ -69,6 +69,7 @@ enum EncryptionType {
     Encryption_Extract,
     Encryption_SingleExtract,
     Encryption_ExtractHere,
+    Encryption_TempExtract
 };
 
 enum WorkState {
@@ -136,6 +137,7 @@ private slots:
     void slotFailRetry();
     void slotBatchExtractFileChanged(const QString& name);
     void slotBatchExtractError(const QString& name);
+    void slotquitApp();
 
 signals:
     void sigquitApp();

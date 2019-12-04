@@ -645,11 +645,17 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 m_pathindex++;
                 m_indexmode = sourceindex;
             }
+            else {
+                emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
+            }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
             QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
             m_pathindex++;
             m_indexmode = sourceindex;
+        }
+        else {
+            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
         }
     }
 }

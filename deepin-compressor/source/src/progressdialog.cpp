@@ -19,10 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "progressdialog.h"
-
+#include <kprocess.h>
 #include <QBoxLayout>
 #include <QFileIconProvider>
 #include <QDebug>
+#include <DStandardPaths>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
