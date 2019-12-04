@@ -120,11 +120,11 @@ void CompressSetting::InitUI()
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
-
-
     m_encryptedlabel = new DLabel(tr("Encrypted File") + ":");
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
     m_password = new DPasswordEdit();
+    QLineEdit *edit = m_password->lineEdit();
+    edit->setPlaceholderText(tr("Please enter the password"));
     m_password->setFixedSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypted File List"));
     m_file_secret = new DSwitchButton();

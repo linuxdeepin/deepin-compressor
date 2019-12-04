@@ -166,9 +166,14 @@
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="125"/>
+        <location filename="../source/src/compresssetting.cpp" line="123"/>
         <source>Encrypted File</source>
         <translation>加密文件</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="127"/>
+        <source>Please enter the password</source>
+        <translation>请输入密码</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="129"/>

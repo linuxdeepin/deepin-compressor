@@ -160,9 +160,14 @@
         <translation>Advanced Options</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="125"/>
+        <location filename="../source/src/compresssetting.cpp" line="123"/>
         <source>Encrypted File</source>
         <translation>Encrypt the archive</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="127"/>
+        <source>Please enter the password</source>
+        <translation>Please enter the password</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="129"/>
