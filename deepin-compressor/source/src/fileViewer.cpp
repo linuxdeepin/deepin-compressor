@@ -370,6 +370,14 @@ void fileViewer::InitUI()
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
+    if(PAGE_COMPRESS == m_pagetype){
+        pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
+        m_pRightMenu = new DMenu();
+        m_pRightMenu->setFixedWidth(200);
+        m_pRightMenu->addAction(tr("Delete"));
+        pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
+        pTableViewFile->setAcceptDrops(false);
+    }
 
     pTableViewFile->setBackgroundRole(DPalette::Base);
     pTableViewFile->setAutoFillBackground(true);
@@ -461,6 +469,10 @@ void fileViewer::InitConnection()
     // connect the signals to the slot function.
     if (PAGE_COMPRESS == m_pagetype) {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
+        if (m_pRightMenu) {
+            connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+            connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::DeleteCompressFile);
+        }
     } else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
         connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
@@ -498,34 +510,37 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         return;
     }
     if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
-        QItemSelectionModel *selections =  pTableViewFile->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+        DeleteCompressFile();
+    }
+}
 
-        QSet<unsigned int>  selectlist;
+void fileViewer::DeleteCompressFile()
+{
+    QItemSelectionModel *selections =  pTableViewFile->selectionModel();
+    QModelIndexList selected = selections->selectedIndexes();
 
-        foreach (QModelIndex index, selected) {
-            selectlist.insert(index.row());
-        }
+    QSet<unsigned int>  selectlist;
 
-        QStringList filelist;
-        foreach (unsigned int index, selectlist) {
-            m_curfilelist.replace(index, QFileInfo(""));
-        }
-
-        foreach (QFileInfo file, m_curfilelist) {
-            if (file.path() == "") {
-                m_curfilelist.removeOne(file);
-            }
-        }
-
-        foreach (QFileInfo fileinfo, m_curfilelist) {
-            filelist.append(fileinfo.filePath());
-        }
-
-        emit sigFileRemoved(filelist);
+    foreach (QModelIndex index, selected) {
+        selectlist.insert(index.row());
     }
 
+    QStringList filelist;
+    foreach (unsigned int index, selectlist) {
+        m_curfilelist.replace(index, QFileInfo(""));
+    }
 
+    foreach (QFileInfo file, m_curfilelist) {
+        if (file.path() == "") {
+            m_curfilelist.removeOne(file);
+        }
+    }
+
+    foreach (QFileInfo fileinfo, m_curfilelist) {
+        filelist.append(fileinfo.filePath());
+    }
+
+    emit sigFileRemoved(filelist);
 }
 
 int fileViewer::getPathIndex()
@@ -675,9 +690,12 @@ void fileViewer::showRightMenu(const QPoint &pos)
     if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
-
-    m_pRightMenu->popup(QCursor::pos());
-
+    if(m_pagetype == PAGE_COMPRESS && m_pathindex > 0)
+    {
+        //DoNothing
+    }else {
+        m_pRightMenu->popup(QCursor::pos());
+    }
 }
 
 void fileViewer::slotDragLeave(QString path)

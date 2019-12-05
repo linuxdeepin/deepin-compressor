@@ -916,22 +916,22 @@
         <translation>Name,Size,Type,Time Time modified</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="386"/>
+        <location filename="../source/src/fileViewer.cpp" line="394"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="389"/>
+        <location filename="../source/src/fileViewer.cpp" line="397"/>
         <source>Modify</source>
         <translation>Time modified</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="392"/>
+        <location filename="../source/src/fileViewer.cpp" line="400"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="395"/>
+        <location filename="../source/src/fileViewer.cpp" line="403"/>
         <source>Size</source>
         <translation>Size</translation>
     </message>
@@ -1089,7 +1089,7 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="368"/>
-        <location filename="../source/src/fileViewer.cpp" line="694"/>
+        <location filename="../source/src/fileViewer.cpp" line="729"/>
         <source>Extract files</source>
         <translation>Extract</translation>
     </message>
@@ -1099,14 +1099,19 @@
         <translation>Extract here</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="424"/>
+        <location filename="../source/src/fileViewer.cpp" line="377"/>
+        <source>Delete</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="432"/>
         <source>Item</source>
         <translation>Item</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="440"/>
+        <location filename="../source/src/fileViewer.cpp" line="448"/>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
-        <translation type="unfinished">yyyy/MM/dd  hh:mm:ss</translation>
+        <translation>yyyy/MM/dd  hh:mm:ss</translation>
     </message>
     <message>
         <source>yyyy!MM@dd# hh:mm:ss</source>

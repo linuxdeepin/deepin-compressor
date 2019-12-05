@@ -151,6 +151,7 @@ public:
     QModelIndexList addChildren(const QModelIndexList &list) const;
 
     void startDrag(Qt::DropActions supportedActions);
+    void DeleteCompressFile();
 
 public slots:
     void showPlable();

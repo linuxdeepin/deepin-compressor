@@ -990,22 +990,22 @@
         <translation>名称,大小,类型,修改时间</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="386"/>
+        <location filename="../source/src/fileViewer.cpp" line="394"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="389"/>
+        <location filename="../source/src/fileViewer.cpp" line="397"/>
         <source>Modify</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="392"/>
+        <location filename="../source/src/fileViewer.cpp" line="400"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="395"/>
+        <location filename="../source/src/fileViewer.cpp" line="403"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
@@ -1165,7 +1165,7 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="368"/>
-        <location filename="../source/src/fileViewer.cpp" line="694"/>
+        <location filename="../source/src/fileViewer.cpp" line="729"/>
         <source>Extract files</source>
         <translation>提取文件</translation>
     </message>
@@ -1175,12 +1175,17 @@
         <translation>提取文件到当前文件夹</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="424"/>
+        <location filename="../source/src/fileViewer.cpp" line="377"/>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="432"/>
         <source>Item</source>
         <translation>项</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="440"/>
+        <location filename="../source/src/fileViewer.cpp" line="448"/>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
         <translation>yyyy年MM月dd日 hh:mm:ss</translation>
     </message>
