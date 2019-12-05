@@ -104,13 +104,11 @@ qint64 MainWindow::getMediaFreeSpace()
 {
     QList<QStorageInfo> list = QStorageInfo::mountedVolumes();
     qDebug() << "Volume Num: " << list.size();
-    for(QStorageInfo& si : list)
-    {
-        qDebug()<<si.displayName();
-        if(si.displayName().count() > 7 && si.displayName().left(6) == "/media")
-        {
-            qDebug() << "Bytes Avaliable: " << si.bytesAvailable()/ 1024 / 1024 << "MB";
-            return si.bytesAvailable()/ 1024 / 1024;
+    for (QStorageInfo &si : list) {
+        qDebug() << si.displayName();
+        if (si.displayName().count() > 7 && si.displayName().left(6) == "/media") {
+            qDebug() << "Bytes Avaliable: " << si.bytesAvailable() / 1024 / 1024 << "MB";
+            return si.bytesAvailable() / 1024 / 1024;
         }
     }
 
@@ -122,7 +120,7 @@ qint64 MainWindow::getDiskFreeSpace()
     QStorageInfo storage = QStorageInfo::root();
     storage.refresh();
     qDebug() << "availableSize:" << storage.bytesAvailable() / 1024 / 1024 << "MB";
-    return storage.bytesAvailable()/ 1024 / 1024;
+    return storage.bytesAvailable() / 1024 / 1024;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -687,15 +685,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         const int mode = dialog.exec();
 
         if (mode != QDialog::Accepted) {
-            QTimer::singleShot(100, this, [=]
-            {
+            QTimer::singleShot(100, this, [ = ] {
                 slotquitApp();
             });
             return;
         }
 
         QList<QUrl> selectpath = dialog.selectedUrls();
-        qDebug()<<selectpath;
+        qDebug() << selectpath;
         QString curpath = selectpath.at(0).toLocalFile();
 
         QStringList pathlist = files;
@@ -851,27 +848,27 @@ void MainWindow::loadArchive(const QString &files)
 }
 void MainWindow::WatcherFile(const QString &files)
 {
-    DFileWatcher *m_fileManager = new DFileWatcher(files,this);
-        m_fileManager->startWatcher();
-        qDebug()<<m_fileManager->startWatcher()<<"="<<files;
-        connect(m_fileManager, &DFileWatcher::fileMoved, this, [=](){                       //监控压缩包，重命名时提示
-            DDialog *dialog = new DDialog;
-            dialog->setFixedWidth(440);
-            QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
-            dialog->setIcon(icon);
-            dialog->setMessage(tr("The current compressed file has changed and may be renamed, moved or deleted, please re-import the file."));
-            dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
-            QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-            effect->setOffset(0, 4);
-            effect->setColor(QColor(0, 145, 255, 76));
-            effect->setBlurRadius(4);
-            dialog->getButton(0)->setFixedWidth(340);
-            dialog->getButton(0)->setGraphicsEffect(effect);
-            dialog->exec();
+    DFileWatcher *m_fileManager = new DFileWatcher(files, this);
+    m_fileManager->startWatcher();
+    qDebug() << m_fileManager->startWatcher() << "=" << files;
+    connect(m_fileManager, &DFileWatcher::fileMoved, this, [ = ]() {                    //监控压缩包，重命名时提示
+        DDialog *dialog = new DDialog;
+        dialog->setFixedWidth(440);
+        QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
+        dialog->setIcon(icon);
+        dialog->setMessage(tr("The current compressed file has changed and may be renamed, moved or deleted, please re-import the file."));
+        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+        QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+        effect->setOffset(0, 4);
+        effect->setColor(QColor(0, 145, 255, 76));
+        effect->setBlurRadius(4);
+        dialog->getButton(0)->setFixedWidth(340);
+        dialog->getButton(0)->setGraphicsEffect(effect);
+        dialog->exec();
 
-            m_pageid = PAGE_HOME;
-            this->refreshPage();
-        });
+        m_pageid = PAGE_HOME;
+        this->refreshPage();
+    });
 }
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
@@ -975,15 +972,15 @@ void MainWindow::SlotProgressFile(KJob *job, const QString &filename)
     }
 }
 
-void MainWindow::slotBatchExtractFileChanged(const QString& name)
+void MainWindow::slotBatchExtractFileChanged(const QString &name)
 {
-    qDebug()<<name;
+    qDebug() << name;
     m_Progess->setFilename(name);
 }
 
-void MainWindow::slotBatchExtractError(const QString& name)
+void MainWindow::slotBatchExtractError(const QString &name)
 {
-    qDebug()<<name;
+    qDebug() << name;
     m_CompressFail->setFailStrDetail(name + ":" + tr("Wrong password!"));
     m_pageid = PAGE_UNZIP_FAIL;
     refreshPage();
@@ -1000,33 +997,26 @@ void MainWindow::slotExtractionDone(KJob *job)
     if ((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError)) {
         //do noting:wrong password
     } else if (job->error() && job->error() != KJob::KilledJobError) {
-        if(m_progressdialog->isshown())
-        {
+        if (m_progressdialog->isshown()) {
             m_progressdialog->reject();
         }
-        if(m_pathstore.left(6) == "/media")
-        {
-            if(getMediaFreeSpace() <= 50)
-            {
+        if (m_pathstore.left(6) == "/media") {
+            if (getMediaFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            }
-            else {
+            } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
-        }
-        else {
+        } else {
             if (getDiskFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            }
-            else {
+            } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
         }
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
-    }
-    else if (Encryption_TempExtract == m_encryptiontype) {
+    } else if (Encryption_TempExtract == m_encryptiontype) {
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
         QString programPath = QStandardPaths::findExecutable("xdg-open");
@@ -1036,8 +1026,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
         cmdprocess->setProgram(programPath, arguments);
         cmdprocess->start();
-    }
-    else if (Encryption_SingleExtract == m_encryptiontype) {
+    } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
         m_pageid = PAGE_UNZIP;
         refreshPage();
@@ -1199,7 +1188,7 @@ QStringList MainWindow::CheckAllFiles(QString path)
     return entrys;
 }
 
-bool clearTempFiles(const QString& temp_path)
+bool clearTempFiles(const QString &temp_path)
 {
     bool ret = false;
 //    qDebug()<<temp_path;
@@ -1269,7 +1258,6 @@ void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
         }
     }
 
-    qDebug() << deletefile;
     foreach (QString path, deletefile) {
         QFileInfo fileInfo(path);
         if (fileInfo.isFile() || fileInfo.isSymLink()) {
@@ -1279,9 +1267,8 @@ void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
             }
         } else if (fileInfo.isDir()) {
             clearTempFiles(path);
-            qDebug()<<"delete ok!!!!!!!!!!!!!!";
-            if(fileInfo.exists())
-            {
+            qDebug() << "delete ok!!!!!!!!!!!!!!";
+            if (fileInfo.exists()) {
                 clearTempFiles(path);
             }
 
@@ -1368,21 +1355,16 @@ void MainWindow::slotCompressFinished(KJob *job)
     qDebug() << "job finished" << job->error();
     m_workstatus = WorkNone;
     if (job->error() &&  job->error() != KJob::KilledJobError) {
-        if(m_pathstore.left(6) == "/media")
-        {
-            if(getMediaFreeSpace() <= 50)
-            {
+        if (m_pathstore.left(6) == "/media") {
+            if (getMediaFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            }
-            else {
+            } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }
-        }
-        else {
+        } else {
             if (getDiskFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
-            }
-            else {
+            } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }
         }
@@ -1401,11 +1383,10 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path)
 {
     m_progressTransFlag = false;
-    m_workstatus = WorkProcess;   
-    if(path == DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles")
-    {
+    m_workstatus = WorkProcess;
+    if (path == DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles") {
         m_encryptiontype = Encryption_TempExtract;
-    }else {
+    } else {
         m_encryptiontype = Encryption_SingleExtract;
     }
     m_progressdialog->clearprocess();
@@ -1445,7 +1426,7 @@ void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QStr
 }
 
 void MainWindow::slotKillExtractJob()
-{    
+{
     m_workstatus = WorkNone;
     if (m_encryptionjob) {
         m_encryptionjob->Killjob();
@@ -1471,15 +1452,13 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed()
 {
-    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
-
     if (m_encryptionjob) {
         m_encryptionjob->Killjob();
     }
+    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
     if (m_createJob) {
         m_createJob->kill();
     }
-
     emit sigquitApp();
 }
 
