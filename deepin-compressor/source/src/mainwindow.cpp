@@ -1030,6 +1030,8 @@ void MainWindow::slotExtractionDone(KJob *job)
         cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
         cmdprocess->setProgram(programPath, arguments);
         cmdprocess->start();
+        m_pageid = PAGE_UNZIP;
+        refreshPage();
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         m_progressdialog->setFinished(m_decompressfilepath);
         m_pageid = PAGE_UNZIP;
@@ -1057,7 +1059,9 @@ void MainWindow::SlotExtractPassword(QString password)
         ExtractPassword(password);
     } else if (Encryption_SingleExtract == m_encryptiontype) {
         ExtractSinglePassword(password);
-    }
+    } else if (Encryption_TempExtract == m_encryptiontype) {
+        ExtractSinglePassword(password);
+}
 }
 
 void MainWindow::ExtractSinglePassword(QString password)
