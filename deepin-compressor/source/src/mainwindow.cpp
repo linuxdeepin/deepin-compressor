@@ -132,6 +132,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
         deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
     }
+    else if (7 == m_mainLayout->currentIndex()) {
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+    }
+
     event->accept();
     slotquitApp();
 }
@@ -1345,9 +1349,6 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
 
     m_createJob->start();
     m_workstatus = WorkProcess;
-
-
-
 }
 
 void MainWindow::slotCompressFinished(KJob *job)
