@@ -495,7 +495,7 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="496"/>
-        <location filename="../source/src/mainwindow.cpp" line="1148"/>
+        <location filename="../source/src/mainwindow.cpp" line="1162"/>
         <source>New archive</source>
         <translation>New Archive</translation>
     </message>
@@ -562,32 +562,41 @@
         <translation>Damaged file, unable to extract</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="859"/>
-        <source>The current compressed file has been moved or deleted</source>
-        <translation>The current compressed file has been moved or deleted</translation>
+        <location filename="../source/src/mainwindow.cpp" line="862"/>
+        <source>The current compressed file has changed and may be renamed, moved or deleted, please re-import the file.</source>
+        <translation>The current compressed file has changed and may be renamed, moved or deleted, please re-import the file.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="973"/>
+        <location filename="../source/src/mainwindow.cpp" line="863"/>
+        <source>Confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
+        <source>The current compressed file has been moved or deleted</source>
+        <translation type="vanished">The current compressed file has been moved or deleted</translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="987"/>
         <source>Wrong password!</source>
         <translation>Wrong password!</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="997"/>
-        <location filename="../source/src/mainwindow.cpp" line="1005"/>
-        <location filename="../source/src/mainwindow.cpp" line="1361"/>
-        <location filename="../source/src/mainwindow.cpp" line="1369"/>
+        <location filename="../source/src/mainwindow.cpp" line="1011"/>
+        <location filename="../source/src/mainwindow.cpp" line="1019"/>
+        <location filename="../source/src/mainwindow.cpp" line="1375"/>
+        <location filename="../source/src/mainwindow.cpp" line="1383"/>
         <source>No space left, please clean and retry</source>
         <translation>Insufficient space, please clear and retry</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1000"/>
-        <location filename="../source/src/mainwindow.cpp" line="1008"/>
+        <location filename="../source/src/mainwindow.cpp" line="1014"/>
+        <location filename="../source/src/mainwindow.cpp" line="1022"/>
         <source>Damaged file, unable to extract</source>
         <translation>Damaged file, unable to extract</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1364"/>
-        <location filename="../source/src/mainwindow.cpp" line="1372"/>
+        <location filename="../source/src/mainwindow.cpp" line="1378"/>
+        <location filename="../source/src/mainwindow.cpp" line="1386"/>
         <source>Damaged file</source>
         <translation>Damaged file</translation>
     </message>

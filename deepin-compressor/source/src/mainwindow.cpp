@@ -855,8 +855,22 @@ void MainWindow::WatcherFile(const QString &files)
         m_fileManager->startWatcher();
         qDebug()<<m_fileManager->startWatcher()<<"="<<files;
         connect(m_fileManager, &DFileWatcher::fileMoved, this, [=](){                       //监控压缩包，重命名时提示
-            QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
-            this->sendMessage(icon,tr("The current compressed file has been moved or deleted"));  //当前压缩文件已经被移动或删除
+            DDialog *dialog = new DDialog;
+            dialog->setFixedWidth(440);
+            QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
+            dialog->setIcon(icon);
+            dialog->setMessage(tr("The current compressed file has changed and may be renamed, moved or deleted, please re-import the file."));
+            dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+            QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+            effect->setOffset(0, 4);
+            effect->setColor(QColor(0, 145, 255, 76));
+            effect->setBlurRadius(4);
+            dialog->getButton(0)->setFixedWidth(340);
+            dialog->getButton(0)->setGraphicsEffect(effect);
+            dialog->exec();
+
+            m_pageid = PAGE_HOME;
+            this->refreshPage();
         });
 }
 

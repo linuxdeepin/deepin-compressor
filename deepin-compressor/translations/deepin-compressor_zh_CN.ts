@@ -523,7 +523,7 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="496"/>
-        <location filename="../source/src/mainwindow.cpp" line="1148"/>
+        <location filename="../source/src/mainwindow.cpp" line="1162"/>
         <source>New archive</source>
         <translation>新建归档文件</translation>
     </message>
@@ -590,32 +590,41 @@
         <translation>文件损坏，无法解压</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="859"/>
-        <source>The current compressed file has been moved or deleted</source>
-        <translation>当前压缩文件已经被移动或删除</translation>
+        <location filename="../source/src/mainwindow.cpp" line="862"/>
+        <source>The current compressed file has changed and may be renamed, moved or deleted, please re-import the file.</source>
+        <translation>当前压缩文件已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="973"/>
+        <location filename="../source/src/mainwindow.cpp" line="863"/>
+        <source>Confirm</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <source>The current compressed file has been moved or deleted</source>
+        <translation type="vanished">当前压缩文件已经被移动或删除</translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="987"/>
         <source>Wrong password!</source>
         <translation>密码错误！</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="997"/>
-        <location filename="../source/src/mainwindow.cpp" line="1005"/>
-        <location filename="../source/src/mainwindow.cpp" line="1361"/>
-        <location filename="../source/src/mainwindow.cpp" line="1369"/>
+        <location filename="../source/src/mainwindow.cpp" line="1011"/>
+        <location filename="../source/src/mainwindow.cpp" line="1019"/>
+        <location filename="../source/src/mainwindow.cpp" line="1375"/>
+        <location filename="../source/src/mainwindow.cpp" line="1383"/>
         <source>No space left, please clean and retry</source>
         <translation>空间不足,请清理后重试</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1000"/>
-        <location filename="../source/src/mainwindow.cpp" line="1008"/>
+        <location filename="../source/src/mainwindow.cpp" line="1014"/>
+        <location filename="../source/src/mainwindow.cpp" line="1022"/>
         <source>Damaged file, unable to extract</source>
         <translation>文件损坏，无法解压</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1364"/>
-        <location filename="../source/src/mainwindow.cpp" line="1372"/>
+        <location filename="../source/src/mainwindow.cpp" line="1378"/>
+        <location filename="../source/src/mainwindow.cpp" line="1386"/>
         <source>Damaged file</source>
         <translation>原始文件已损坏</translation>
     </message>
