@@ -64,18 +64,18 @@ void CompressSetting::InitUI()
 
     QWidget *leftwidget = new QWidget();
     QHBoxLayout *typelayout = new QHBoxLayout();
+    QHBoxLayout *layout = new QHBoxLayout();
     m_pixmaplabel = new DLabel();
 
     m_compresstype = new TypeLabel();
     DPalette pa;
-
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_compresstype->setFixedHeight(25);
 
     DStyle *style = new DStyle;
     QPixmap pixmap = style->standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
-    DLabel *typepixmap = new DLabel;
+    typepixmap = new TypeLabel;
     typepixmap->setFixedHeight(25);
     typepixmap->setPixmap(pixmap);
     m_compresstype->setText("zip");
@@ -89,6 +89,11 @@ void CompressSetting::InitUI()
     typelayout->addWidget(m_compresstype, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addWidget(typepixmap, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addStretch();
+
+    m_clicklabel = new TypeLabel();
+    m_clicklabel->setFixedSize(92,40);
+    m_clicklabel->setLayout(typelayout);
+    layout->addWidget(m_clicklabel,0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     m_typemenu = new DMenu;
     m_typemenu->setFixedWidth(162);
@@ -145,7 +150,7 @@ void CompressSetting::InitUI()
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
     typeLayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    typeLayout->addLayout(typelayout);
+    typeLayout->addLayout(layout);
     typeLayout->addStretch();
     leftwidget->setLayout(typeLayout);
 
@@ -221,7 +226,9 @@ void CompressSetting::InitConnection()
 
         m_filename->setPalette(plt);
     });
+    connect(typepixmap, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_compresstype, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
+    connect(m_clicklabel, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_typemenu, &DMenu::triggered, this, &CompressSetting::ontypeChanged);
 }
 

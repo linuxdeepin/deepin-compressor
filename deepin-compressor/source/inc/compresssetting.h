@@ -83,6 +83,8 @@ private:
     DLineEdit *m_filename;
     DFileChooserEdit *m_savepath;
     DLabel *m_pixmaplabel;
+    TypeLabel *m_clicklabel;
+    TypeLabel *typepixmap;
 //    Lib_Edit_Button* m_pathbutton;
     QVBoxLayout *m_fileLayout;
 
