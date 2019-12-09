@@ -592,6 +592,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event)
             pTableViewFile->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         } else {
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
         }
     }
 
@@ -659,6 +660,12 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
                 m_pathindex++;
                 m_indexmode = sourceindex;
+                Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+                if(0 == entry->entries().count())
+                {
+                    showPlable();
+                }
+//
             }
             else {
                 emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
@@ -668,6 +675,11 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
             m_pathindex++;
             m_indexmode = sourceindex;
+            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+            if(0 == entry->entries().count())
+            {
+                showPlable();
+            }
         }
         else {
             emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
