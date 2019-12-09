@@ -192,6 +192,17 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setPen(option.palette.color(cg, QPalette::Text));
     }
     if (text.isEmpty() == false) {
+        if(index.column() == 0)
+        {
+            QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+            pFont.setWeight(QFont::Weight::Medium);
+            painter->setFont(pFont);
+        }
+        else {
+            QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T7);
+            pFont.setWeight(QFont::Weight::Normal);
+            painter->setFont(pFont);
+        }
         painter->drawText(displayRect, static_cast<int>(opt.displayAlignment), text);
     }
     drawFocus(painter, opt, displayRect);
@@ -354,6 +365,9 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
     plabel->setText("     .. " + tr("Back to previous"));
+    QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    pFont.setWeight(QFont::Weight::Medium);
+    plabel->setFont(pFont);
     plabel->setAutoFillBackground(true);
     plabel->hide();
 
