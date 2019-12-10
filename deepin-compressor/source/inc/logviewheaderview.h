@@ -24,6 +24,7 @@
 
 #include <DHeaderView>
 #include <DStyle>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 

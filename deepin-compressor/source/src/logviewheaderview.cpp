@@ -93,6 +93,9 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     //    int align = model()->headerData(logicalIndex, orientation(),
     //    Qt::TextAlignmentRole).toInt();
     int align = Qt::AlignLeft | Qt::AlignVCenter;
+    QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
+    pFont.setWeight(QFont::Weight::Medium);
+    painter->setFont(pFont);
     if (logicalIndex == 0) {
         QRect col0Rect = textRect;
         col0Rect.setX(textRect.x() + margin - 2);
