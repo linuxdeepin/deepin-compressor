@@ -44,7 +44,6 @@
 #include "archivesortfiltermodel.h"
 #include "batchextract.h"
 
-
 #define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE
 
@@ -199,6 +198,8 @@ private:
 
     QStringList m_compressDirFiles;
     QString m_pathstore;
+    bool m_initflag = false;
+    int m_startTimer = 0;
 };
 
 #endif

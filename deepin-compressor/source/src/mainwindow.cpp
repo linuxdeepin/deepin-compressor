@@ -45,6 +45,8 @@
 
 //static QString shortcut_json =
 
+
+
 static bool DeleteDirectory(const QString &path)
 {
     if (path.isEmpty()) {
@@ -69,22 +71,7 @@ static bool DeleteDirectory(const QString &path)
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : DMainWindow(parent),
-      m_mainWidget(new QWidget),
-      m_mainLayout(new QStackedLayout(m_mainWidget)),
-      m_homePage(new HomePage),
-      m_UnCompressPage(new UnCompressPage),
-      m_CompressPage(new CompressPage),
-      m_CompressSetting(new CompressSetting),
-      m_Progess(new Progress),
-      m_CompressSuccess(new Compressor_Success),
-      m_CompressFail(new Compressor_Fail),
-      m_encryptionpage(new EncryptionPage),
-      m_progressdialog(new ProgressDialog),
-      m_settingsDialog(new SettingDialog),
-      m_encodingpage(new EncodingPage),
-      m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
-                               QSettings::IniFormat))
+    : DMainWindow(parent)
 {
     m_encryptionjob = nullptr;
     m_encryptiontype = Encryption_NULL;
@@ -92,8 +79,21 @@ MainWindow::MainWindow(QWidget *parent)
     m_model = new ArchiveModel(this);
     m_filterModel = new ArchiveSortFilterModel(this);
 
-    InitUI();
-    InitConnection();
+    m_mainWidget = new QWidget;
+    m_mainLayout = new QStackedLayout(m_mainWidget);
+    m_homePage = new HomePage;
+    m_mainLayout->addWidget(m_homePage);
+    m_homePage->setAutoFillBackground(true);
+
+    // init window flags.
+    setWindowTitle(tr("Archive manager"));
+    setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+    setCentralWidget(m_mainWidget);
+    setAcceptDrops(true);
+
+    initTitleBar();
+
+    m_startTimer = startTimer(500);
 }
 
 MainWindow::~MainWindow()
@@ -147,16 +147,39 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     }
+    else if (m_startTimer == event->timerId()) {
+        if(!m_initflag)
+        {
+            InitUI();
+            InitConnection();
+            m_initflag = true;
+        }
+
+        killTimer(m_startTimer);
+        m_startTimer = 0;
+    }
 }
 
 void MainWindow::InitUI()
 {
+    m_UnCompressPage = new UnCompressPage;
+    m_CompressPage = new CompressPage;
+    m_CompressSetting = new CompressSetting;
+    m_Progess = new Progress;
+    m_CompressSuccess = new Compressor_Success;
+    m_CompressFail = new Compressor_Fail;
+    m_encryptionpage = new EncryptionPage;
+    m_progressdialog = new ProgressDialog;
+    m_settingsDialog = new SettingDialog;
+    m_encodingpage = new EncodingPage;
+    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
+                           QSettings::IniFormat);
+
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
 
     // add widget to main layout.
-    m_mainLayout->addWidget(m_homePage);
     m_mainLayout->addWidget(m_UnCompressPage);
     m_mainLayout->addWidget(m_CompressPage);
     m_mainLayout->addWidget(m_CompressSetting);
@@ -165,7 +188,6 @@ void MainWindow::InitUI()
     m_mainLayout->addWidget(m_CompressFail);
     m_mainLayout->addWidget(m_encryptionpage);
     m_mainLayout->addWidget(m_encodingpage);
-    m_homePage->setAutoFillBackground(true);
     m_UnCompressPage->setAutoFillBackground(true);
     m_CompressPage->setAutoFillBackground(true);
     m_CompressSetting->setAutoFillBackground(true);
@@ -174,15 +196,6 @@ void MainWindow::InitUI()
     m_CompressFail->setAutoFillBackground(true);
     m_encryptionpage->setAutoFillBackground(true);
     m_encodingpage->setAutoFillBackground(true);
-
-    // init window flags.
-    setWindowTitle(tr("Archive manager"));
-    setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
-    setCentralWidget(m_mainWidget);
-    setAcceptDrops(true);
-
-    initTitleBar();
-
 }
 
 QJsonObject MainWindow::creatShorcutJson()
@@ -611,8 +624,16 @@ void MainWindow::onSelected(const QStringList &files)
     }
 }
 
+
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
+    if(!m_initflag)
+    {
+        InitUI();
+        InitConnection();
+        m_initflag = true;
+    }
+
     if (files.last() == QStringLiteral("extract_here")) {
         m_isrightmenu = true;
         QFileInfo fileinfo(files.at(0));
