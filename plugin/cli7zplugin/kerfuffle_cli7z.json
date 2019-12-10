@@ -36,7 +36,8 @@
         "Id": "kerfuffle_cli7z",
         "MimeTypes": [
             "application/x-7z-compressed",
-    "application/zip"
+    "application/zip",
+    "application/x-cd-image"
         ],
         "Name": "P7zip plugin",
         "Name[ca@valencia]": "Connector del P7zip",
@@ -49,7 +50,7 @@
         "Name[es]": "Complemento P7zip",
         "Name[eu]": "P7zip plugina",
         "Name[fi]": "P7zip-liitännäinen",
-        "Name[fr]": "Module externe « P7zip »",
+        "Name[fr]": "Module externe « P7zip »",
         "Name[gl]": "Complemento de p7zip",
         "Name[ia]": "Plugin de P7zip",
         "Name[it]": "Estensione P7zip",
@@ -129,5 +130,10 @@
         ],
         "SupportsMultiVolume": true,
         "SupportsTesting": true
+    },
+    "application/x-cd-image":{
+        "CompressionLevelDefault": 5,
+        "CompressionLevelMax": 9,
+        "CompressionLevelMin": 0
     }
 }

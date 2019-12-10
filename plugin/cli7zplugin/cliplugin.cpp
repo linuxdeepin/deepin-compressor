@@ -154,6 +154,8 @@ bool CliPlugin::readListLine(const QString &line)
                 m_archiveType = ArchiveTypeRar;
             } else if (type == QLatin1String("Split")) {
                 setMultiVolume(true);
+            }else if (type == QLatin1String("Udf")) {
+                m_archiveType = ArchiveTypeUdf;
             } else {
                 // Should not happen
                 return false;
@@ -253,6 +255,16 @@ bool CliPlugin::readListLine(const QString &line)
                    line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;
             if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+                qDebug()<<m_currentArchiveEntry->fullPath();
+                emit entry(m_currentArchiveEntry);
+            } else {
+                delete m_currentArchiveEntry;
+            }
+            m_currentArchiveEntry = nullptr;
+        } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
+            m_isFirstInformationEntry = true;
+            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+                qDebug()<<m_currentArchiveEntry->fullPath();
                 emit entry(m_currentArchiveEntry);
             } else {
                 delete m_currentArchiveEntry;
