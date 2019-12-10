@@ -266,7 +266,6 @@ bool ReadWriteLibarchivePlugin::initializeWriterFilters()
         ret = archive_write_add_filter_none(m_archiveWriter.data());
         break;
     default:
-        emit error(tr("The compression type '%1' is not supported by Ark."));
         return false;
     }
 

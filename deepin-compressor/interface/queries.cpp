@@ -357,21 +357,11 @@ LoadCorruptQuery::LoadCorruptQuery(const QString &archiveFilename)
 
 void LoadCorruptQuery::execute()
 {
-//    qCDebug(ARK) << "Executing prompt";
-//    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 
-//    setResponse(KMessageBox::warningYesNo(nullptr,
-//                                          xi18nc("@info", "The archive you're trying to open is corrupt.<nl/>"
-//                                                 "Some files may be missing or damaged."),
-//                                          i18nc("@title:window", "Corrupt archive"),
-//                                          KGuiItem(i18nc("@action:button", "Open as Read-Only")),
-//                                          KGuiItem(i18nc("@action:button", "Don't Open"))));
-//    QApplication::restoreOverrideCursor();
 }
 
 bool LoadCorruptQuery::responseYes()
 {
-//    return (m_data.value(QStringLiteral("response")).toInt() == KMessageBox::Yes);
     return true;
 }
 
@@ -386,16 +376,6 @@ void ContinueExtractionQuery::execute()
 {
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 
-//    QMessageBox box(QMessageBox::Warning,
-//                    i18n("Error during extraction"),
-//                    xi18n("Extraction of the entry:<nl/>"
-//                          "    <filename>%1</filename><nl/>"
-//                          "failed with the error message:<nl/>    %2<nl/><nl/>"
-//                          "Do you want to continue extraction?<nl/>", m_data.value(QStringLiteral("archiveEntry")).toString(),
-//                          m_data.value(QStringLiteral("error")).toString()),
-//                    QMessageBox::Yes|QMessageBox::Cancel);
-//    box.setCheckBox(&m_chkDontAskAgain);
-//    setResponse(box.exec());
     QApplication::restoreOverrideCursor();
 }
 

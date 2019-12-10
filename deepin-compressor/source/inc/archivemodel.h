@@ -70,7 +70,6 @@ public:
 
     //drag and drop related
     Qt::DropActions supportedDropActions() const override;
-    QStringList mimeTypes() const override;
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 //    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;

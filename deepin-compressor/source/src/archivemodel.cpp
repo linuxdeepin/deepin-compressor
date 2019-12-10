@@ -277,21 +277,6 @@ Qt::DropActions ArchiveModel::supportedDropActions() const
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-QStringList ArchiveModel::mimeTypes() const
-{
-    QStringList types;
-
-    // MIME types we accept for dragging (eg. Dolphin -> Ark).
-    types << QStringLiteral("text/uri-list")
-          << QStringLiteral("text/plain")
-          << QStringLiteral("text/x-moz-url");
-
-    // MIME types we accept for dropping (eg. Ark -> Dolphin).
-    types << QStringLiteral("application/x-kde-ark-dndextract-service")
-          << QStringLiteral("application/x-kde-ark-dndextract-path");
-
-    return types;
-}
 
 QMimeData *ArchiveModel::mimeData(const QModelIndexList &indexes) const
 {

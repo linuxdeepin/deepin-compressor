@@ -36,37 +36,14 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
 
     QFile outputFile(outputFileName);
     if (!outputFile.open(QIODevice::WriteOnly)) {
-        emit error(tr("@info", "Ark could not extract <filename>%1</filename>."));
-
         return false;
     }
 
-//    KCompressionDevice *device = new KCompressionDevice(filename(), KFilterDev::compressionTypeForMimeType(m_mimeType));TODO_DS
-//    if (!device) {
-//        emit error(tr("@info", "Ark could not open <filename>%1</filename> for extraction."));
 
-//        return false;
-//    }
-
-//    device->open(QIODevice::ReadOnly);//TODO
 
     qint64 bytesRead;
     QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
 
-//    while (true) {
-//        bytesRead = device->read(dataChunk.data(), dataChunk.size());
-
-//        if (bytesRead == -1) {
-//            emit error(tr("@info", "There was an error while reading <filename>%1</filename> during extraction."));
-//            break;
-//        } else if (bytesRead == 0) {
-//            break;
-//        }
-
-//        outputFile.write(dataChunk.data(), bytesRead);
-//    }
-
-//    delete device;//TODO
 
     return true;
 }

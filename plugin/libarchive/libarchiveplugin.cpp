@@ -307,8 +307,6 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         // For now we just can't handle absolute filenames in a tar archive.
         // TODO: find out what to do here!!
         if (entryName.startsWith(QLatin1Char('/'))) {
-            emit error(tr("This archive contains archive entries with absolute paths, "
-                          "which are not supported by Ark."));
             return false;
         }
 
@@ -329,7 +327,6 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             // entryFI is the fileinfo pointing to where the file will be
             // written from the archive.
             QFileInfo entryFI(entryName);
-            //qCDebug(ARK) << "setting path to " << archive_entry_pathname( entry );
 
             const QString fileWithoutPath(entryFI.fileName());
             // If we DON'T preserve paths, we cut the path and set the entryFI

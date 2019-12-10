@@ -105,11 +105,11 @@ QString Job::errorString() const
 
     if (archive()) {
         if (archive()->error() == NoPlugin) {
-            return tr("No suitable plugin found. Ark does not seem to support this file type.");
+            return tr("No suitable plugin found.");
         }
 
         if (archive()->error() == FailedPlugin) {
-            return tr("Failed to load a suitable plugin. Make sure any executables needed to handle the archive type are installed.");
+            return tr("Failed to load a suitable plugin.");
         }
     }
 

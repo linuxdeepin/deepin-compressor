@@ -1016,7 +1016,6 @@ bool CliInterface::handleLine(const QString &line)
 
         if (isPasswordPrompt(line)) {
             qDebug() << "Found a password prompt";
-            emit error(tr("Ark does not currently support testing this archive."));
             return false;
         }
 

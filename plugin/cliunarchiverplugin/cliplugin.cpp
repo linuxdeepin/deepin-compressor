@@ -41,13 +41,6 @@ bool CliPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QStri
 {
     ExtractionOptions newOptions = options;
 
-    // unar has the following limitations:
-    // 1. creates an empty file upon entering a wrong password.
-    // 2. detects that the stdout has been redirected and blocks the stdin.
-    //    This prevents Ark from executing unar's overwrite queries.
-    // To prevent both, we always extract to a temporary directory
-    // and then we move the files to the intended destination.
-
     newOptions.setAlwaysUseTempDir(true);
 
     return CliInterface::extractFiles(files, destinationDirectory, newOptions);
