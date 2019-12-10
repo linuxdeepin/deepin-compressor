@@ -39,6 +39,12 @@ Archive *Archive::create(const QString &fileName, QObject *parent)
 Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, QObject *parent)
 {
     PluginManager pluginManager;
+    QFileInfo fileinfo(fileName);
+    if(fileinfo.suffix() == QString("iso"))
+    {
+        pluginManager.setFileSize(fileinfo.size());
+    }
+
     const QMimeType mimeType = fixedMimeType.isEmpty() ? determineMimeType(fileName) : QMimeDatabase().mimeTypeForName(fixedMimeType);
 
     const QVector<Plugin *> offers = pluginManager.preferredPluginsFor(mimeType);
