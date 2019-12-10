@@ -243,6 +243,18 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
         return p1->priority() > p2->priority();
     });
 
+    if((!readWrite) &&  mimeType.name() == QString("application/zip"))
+    {
+        foreach(Plugin* plugin, preferredPlugins)
+        {
+            if(plugin->metaData().name().contains("7zip"))
+            {
+                preferredPlugins.removeOne(plugin);
+                break;
+            }
+        }
+    }
+
     return preferredPlugins;
 }
 

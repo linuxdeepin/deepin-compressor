@@ -66,6 +66,44 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
+Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent)
+{
+    PluginManager pluginManager;
+    QFileInfo fileinfo(fileName);
+    if(fileinfo.suffix() == QString("iso"))
+    {
+        pluginManager.setFileSize(fileinfo.size());
+    }
+
+    const QMimeType mimeType = fixedMimeType.isEmpty() ? determineMimeType(fileName) : QMimeDatabase().mimeTypeForName(fixedMimeType);
+
+    QVector<Plugin *> offers;
+    if(write)
+    {
+        offers = pluginManager.preferredWritePluginsFor(mimeType);
+    }
+    else {
+        offers = pluginManager.preferredPluginsFor(mimeType);
+    }
+
+    if (offers.isEmpty()) {
+        qDebug() << "Could not find a plugin to handle" << fileName;
+        return new Archive(NoPlugin, parent);
+    }
+
+    Archive *archive = nullptr;
+    for (Plugin *plugin : offers) {
+        archive = create(fileName, plugin, parent);
+        // Use the first valid plugin, according to the priority sorting.
+        if (archive->isValid()) {
+            return archive;
+        }
+    }
+
+    qDebug() << "Failed to find a usable plugin for" << fileName;
+    return archive;
+}
+
 Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *parent)
 {
     Q_ASSERT(plugin);
@@ -101,7 +139,7 @@ BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &d
 
 CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent)
 {
-    auto archive = create(fileName, mimeType, parent);
+    auto archive = create(fileName, mimeType, true, parent);
     auto createJob = new CreateJob(archive, entries, options);
 
     return createJob;

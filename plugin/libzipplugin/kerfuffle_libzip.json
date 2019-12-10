@@ -77,7 +77,7 @@
         "Version": "19.11.70"
     },
     "X-KDE-Kerfuffle-ReadWrite": true,
-    "X-KDE-Priority": 200,
+    "X-KDE-Priority": 170,
     "application/zip": {
         "CompressionLevelDefault": 6,
         "CompressionLevelMax": 9,

@@ -37,7 +37,8 @@
         "MimeTypes": [
             "application/x-7z-compressed",
     "application/zip",
-    "application/x-cd-image"
+    "application/x-cd-image",
+    "application/zip"
         ],
         "Name": "P7zip plugin",
         "Name[ca@valencia]": "Connector del P7zip",
@@ -135,5 +136,26 @@
         "CompressionLevelDefault": 5,
         "CompressionLevelMax": 9,
         "CompressionLevelMin": 0
+    },
+    "application/zip": {
+        "CompressionLevelDefault": 6,
+        "CompressionLevelMax": 9,
+        "CompressionLevelMin": 1,
+        "CompressionMethodDefault": "Default",
+        "CompressionMethods": {
+            "BZip2": "BZip2",
+            "Default": "Default",
+            "Deflate": "Deflate",
+            "Store": "Store"
+        },
+        "Encryption": true,
+        "EncryptionMethodDefault": "AES256",
+        "EncryptionMethods": [
+            "AES256",
+            "AES192",
+            "AES128"
+        ],
+        "SupportsTesting": true,
+        "SupportsWriteComment": true
     }
 }
