@@ -255,7 +255,6 @@ bool CliPlugin::readListLine(const QString &line)
                    line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;
             if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                qDebug()<<m_currentArchiveEntry->fullPath();
                 emit entry(m_currentArchiveEntry);
             } else {
                 delete m_currentArchiveEntry;
@@ -264,7 +263,6 @@ bool CliPlugin::readListLine(const QString &line)
         } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
             m_isFirstInformationEntry = true;
             if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                qDebug()<<m_currentArchiveEntry->fullPath();
                 emit entry(m_currentArchiveEntry);
             } else {
                 delete m_currentArchiveEntry;

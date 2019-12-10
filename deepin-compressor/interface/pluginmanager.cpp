@@ -211,7 +211,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
     return filteredPlugins;
 }
 
-void PluginManager::setFileSize(int size)
+void PluginManager::setFileSize(qint64 size)
 {
     m_filesize = size;
 }

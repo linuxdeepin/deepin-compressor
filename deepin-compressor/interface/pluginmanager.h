@@ -49,7 +49,7 @@ public:
     QStringList supportedMimeTypes(MimeSortingMode mode = Unsorted) const;
     QStringList supportedWriteMimeTypes(MimeSortingMode mode = Unsorted) const;
     QVector<Plugin *> filterBy(const QVector<Plugin *> &plugins, const QMimeType &mimeType) const;
-    void setFileSize(int size);
+    void setFileSize(qint64 size);
 
 private:
 
@@ -60,7 +60,7 @@ private:
 
     QVector<Plugin *> m_plugins;
     QHash<QString, QVector<Plugin *>> m_preferredPluginsCache;
-    unsigned long  m_filesize = 0;
+    qint64  m_filesize = 0;
 };
 
 
