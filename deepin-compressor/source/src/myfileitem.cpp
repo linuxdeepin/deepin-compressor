@@ -73,7 +73,6 @@ bool MyFileItem::operator<(const QStandardItem &other) const
     case 1: {
 
         if (column() == other.column()) {
-            qDebug()<<l;
             QString lstr = l.toString();
             QString rstr = r.toString();
             lstr = lstr.remove(4, 1);
@@ -82,11 +81,9 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             rstr = rstr.remove(4, 1);
             rstr = rstr.remove(6, 1);
             rstr = rstr.remove(8, 1);
-            qDebug()<<lstr<<rstr;
             QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMdd hh:mm:ss");
 
             QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMdd hh:mm:ss");
-            qDebug() <<ldate<<rdate;
             return !rdate.operator < (ldate);
         }
         break;
@@ -97,7 +94,6 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             QString rstr = r.toString();
             lstr = lstr.remove(QRegExp("\\s"));
             rstr = rstr.remove(QRegExp("\\s"));
-            qDebug() << l.toString().at(0) << r.toString().at(0);
             return QString::compare(l.toString(), r.toString(), Qt::CaseInsensitive);
         }
         break;

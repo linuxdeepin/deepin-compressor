@@ -625,10 +625,26 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
-            if (m_curfilelist.at(curindex.row()).isDir()) {
+
+            QStandardItem* item = firstmodel->itemFromIndex(index);
+            QString itemText = item->text().trimmed();
+            int row = 0;
+            foreach(QFileInfo file, m_curfilelist)
+            {
+                if(file.fileName() == itemText)
+                {
+                    break;
+                }
+                row++;
+            }
+            if(row >= m_curfilelist.count())
+            {
+                row = 0;
+            }
+            if (m_curfilelist.at(row).isDir()) {
                 pModel->setPathIndex(&m_pathindex);
                 pTableViewFile->setModel(pModel);
-                m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
+                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
                 pTableViewFile->setRootIndex(m_indexmode);
                 m_pathindex++;
 
@@ -637,7 +653,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 KProcess *cmdprocess = new KProcess;
                 QStringList arguments;
                 QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
-                arguments << m_curfilelist.at(curindex.row()).filePath();
+                arguments << m_curfilelist.at(row).filePath();
                 cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
                 cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
                 cmdprocess->setProgram(programPath, arguments);
