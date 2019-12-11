@@ -225,16 +225,11 @@ void MyLabel::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QColor bgColor;
-    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
-        bgColor = QColor(247, 247, 247);
-    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        bgColor = QColor(38, 38, 38);
-    }
-
+    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DPalette palette = dAppHelper->applicationPalette();
     QPainterPath pp;
     pp.addRoundedRect(rectangle, 8, 8);
-    painter.fillPath(pp, bgColor);
+    painter.fillPath(pp, palette.alternateBase());
     QLabel::paintEvent(e);
 }
 
@@ -330,6 +325,7 @@ void fileViewer::InitUI()
     QHBoxLayout *mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView();
+    pTableViewFile->verticalHeader()->setDefaultSectionSize(MyFileSystemDefine::gTableHeight);
     pdelegate = new FirstRowDelegate();
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
