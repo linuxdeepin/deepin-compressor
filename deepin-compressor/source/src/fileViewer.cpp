@@ -96,7 +96,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setOpacity(1);
+//    painter->setOpacity(1);
     QPainterPath path;
     QPainterPath clipPath;
     QRect rect = option.rect;
@@ -143,16 +143,20 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     // get the data and the rectangles
     QVariant value;
     QPixmap pixmap;
+    QIcon icon;
     QRect decorationRect;
     value = index.data(Qt::DecorationRole);
     if (value.isValid()) {
         // ### we need the pixmap to call the virtual function
         pixmap = decoration(opt, value);
         if (value.type() == QVariant::Icon) {
-            QIcon icon = qvariant_cast<QIcon>(value);
-            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+//            QIcon icon = qvariant_cast<QIcon>(value);
+//            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+            icon = qvariant_cast<QIcon>(value);
+            decorationRect = QRect(QPoint(0, 0), QSize(24,24));
         } else {
-            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+//            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+            decorationRect = QRect(QPoint(0, 0), QSize(24,24));
         }
     } else {
         decorationRect = QRect();
@@ -174,15 +178,19 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     // do the layout
     doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
     if (index.column() == 0 /*&& decorationRect.x() < 10*/) {
-        decorationRect.setX(decorationRect.x() + 23);
-        displayRect.setX(displayRect.x() + 10);
-        displayRect.setWidth(displayRect.width() - 10);
+//        decorationRect.setX(decorationRect.x() + 23);
+//        displayRect.setX(displayRect.x() + 10);
+//        displayRect.setWidth(displayRect.width() - 10);
+        decorationRect.setX(decorationRect.x() + 8);
+        decorationRect.setWidth(decorationRect.width() + 8);
+        displayRect.setX(displayRect.x() + 8);
     }
 
     // draw the item
     //drawBackground(painter, opt, index);
     drawCheck(painter, opt, checkRect, checkState);
-    drawDecoration(painter, opt, decorationRect, pixmap);
+//    drawDecoration(painter, opt, decorationRect, pixmap);
+    icon.paint(painter, decorationRect);
 
     //drawDisplay(painter, opt, displayRect, text);
     QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
@@ -432,14 +440,9 @@ void fileViewer::refreshTableview()
         if (fileinfo.isDir()) {
 //            item = new MyFileItem("-");
             QDir dir(fileinfo.filePath());
-            QStringList filter;
-            QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(filter));
+//            QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(QDir::NoDotDot));
 
-            int count = fileInfo->count();
-            if (count > 2) {
-                count -= 2;
-            }
-            item = new MyFileItem(QString::number(count) + " " + tr("Item") +  "    ");
+            item = new MyFileItem(QString::number(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) + " " + tr("Item") +  "    ");
         } else {
             item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1) +  "    ");
         }
@@ -643,6 +646,15 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
                 pTableViewFile->setRootIndex(m_indexmode);
                 m_pathindex++;
+
+
+
+                QDir dir(m_curfilelist.at(row).filePath());
+                qDebug()<<dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+                if(0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count())
+                {
+                    showPlable();
+                }
 
                 resizecolumn();
             } else {
