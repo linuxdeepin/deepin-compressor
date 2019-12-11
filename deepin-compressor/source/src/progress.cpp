@@ -193,6 +193,10 @@ void Progress::setTypeImage(QString type)
 
 void Progress::setProgressFilename(QString filename)
 {
+    if(filename.isEmpty())
+    {
+        return;
+    }
     QFontMetrics elideFont(m_progressfilelabel->font());
     if (m_type == COMPRESSING) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));

@@ -1191,8 +1191,81 @@ void MainWindow::onCompressNext()
 
 void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
 {
-    creatArchive(Args);
+    const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
+
+    QSet<QString> globalWorkDirList;
+    foreach (QString file, filesToAdd) {
+        QString globalWorkDir = file;
+        if (globalWorkDir.right(1) == QLatin1String("/")) {
+            globalWorkDir.chop(1);
+        }
+        globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+        globalWorkDirList.insert(globalWorkDir);
+    }
+
+
+    if(globalWorkDirList.count() == 1)
+    {
+        creatArchive(Args);
+    }
+    else if(globalWorkDirList.count() > 1){
+        QMap<QString, QStringList> compressmap;
+        foreach(QString workdir, globalWorkDirList)
+        {
+            QStringList filelist;
+            foreach (QString file, filesToAdd) {
+                QString globalWorkDir = file;
+                if (globalWorkDir.right(1) == QLatin1String("/")) {
+                    globalWorkDir.chop(1);
+                }
+                globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+                if(workdir == globalWorkDir)
+                {
+                    filelist.append(file);
+                }
+            }
+            compressmap.insert(workdir, filelist);
+        }
+
+        qDebug()<<compressmap;
+        creatBatchArchive(Args, compressmap);
+    }
+    else {
+        qDebug()<<"Compress file count error!";
+    }
+
 }
+
+void MainWindow::creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, QStringList> &filetoadd)
+{
+    BatchCompress *batchJob = new BatchCompress();
+    batchJob->setCompressArgs(Args);
+
+    for(QString &key : filetoadd.keys())
+    {
+        batchJob->addInput(filetoadd.value(key));
+    }
+
+    connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)),
+            this, SLOT(SlotProgress(KJob *, ulong)));
+    connect(batchJob, &KJob::result,
+            this, &MainWindow::slotCompressFinished);
+    connect(batchJob, SIGNAL(batchFilenameProgress(KJob *, const QString &)),
+            this, SLOT(SlotProgressFile(KJob *, const QString &)));
+
+    qDebug() << "Starting job";
+    m_decompressfilename = Args[QStringLiteral("filename")];
+    m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
+    m_CompressSuccess->setCompressFullPath(Args[QStringLiteral("localFilePath")] + QDir::separator() + Args[QStringLiteral("filename")]);
+    m_pathstore = Args[QStringLiteral("localFilePath")];
+    m_compressDirFiles = CheckAllFiles(m_pathstore);
+
+    m_pageid = PAGE_ZIPPROGRESS;
+    m_Progess->settype(COMPRESSING);
+    refreshPage();
+    batchJob->start();
+}
+
 
 QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {

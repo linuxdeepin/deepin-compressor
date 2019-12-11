@@ -43,6 +43,7 @@
 #include <DIconButton>
 #include "archivesortfiltermodel.h"
 #include "batchextract.h"
+#include "batchcompress.h"
 
 #define TITLE_FIXED_HEIGHT 50
 DWIDGET_USE_NAMESPACE
@@ -92,6 +93,7 @@ public:
     QMenu *createSettingsMenu();
     void loadArchive(const QString &files);
     void creatArchive(QMap<QString, QString> &Args);
+    void creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, QStringList> &filetoadd);
 
     void ExtractPassword(QString password);
     void ExtractSinglePassword(QString password);

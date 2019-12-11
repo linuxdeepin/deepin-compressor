@@ -67,7 +67,8 @@ HEADERS +=  source/inc/homepage.h \
     source/inc/mimetypedisplaymanager.h \
     source/inc/archivesortfiltermodel.h \
     source/inc/batchextract.h \
-    interface/batchjobs.h
+    interface/batchjobs.h \
+    source/inc/batchcompress.h
 
 
 
@@ -114,7 +115,8 @@ SOURCES +=  source/src/homepage.cpp \
     source/src/batchextract.cpp \
     interface/batchjobs.cpp \
     source/src/settings_translation.cpp \
-    source/src/logviewheaderview.cpp
+    source/src/logviewheaderview.cpp \
+    source/src/batchcompress.cpp
 
 
 
