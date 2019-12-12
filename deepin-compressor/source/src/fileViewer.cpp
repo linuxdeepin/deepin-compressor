@@ -234,11 +234,16 @@ void MyLabel::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
+    QColor bgColor;
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(247, 247, 247);
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(38, 38, 38);
+    }
+
     QPainterPath pp;
     pp.addRoundedRect(rectangle, 8, 8);
-    painter.fillPath(pp, palette.alternateBase());
+    painter.fillPath(pp, bgColor);
     QLabel::paintEvent(e);
 }
 
