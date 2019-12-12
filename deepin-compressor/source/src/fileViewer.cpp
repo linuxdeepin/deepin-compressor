@@ -369,10 +369,8 @@ void fileViewer::InitUI()
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
     plabel->setText("     .. " + tr("Back to previous"));
-    QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-    pFont.setWeight(QFont::Weight::Medium);
-    plabel->setFont(pFont);
-    plabel->setAutoFillBackground(true);
+    DFontSizeManager::instance()->bind(plabel, DFontSizeManager::T6, QFont::Weight::Medium);
+//    plabel->setAutoFillBackground(true);
     plabel->hide();
 
 //    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);

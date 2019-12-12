@@ -30,6 +30,7 @@ MyFileSystemModel::MyFileSystemModel(QObject *parent)
 {
     m_mimetype = new MimeTypeDisplayManager;
     m_showreprevious = false;
+    setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 }
 
 MyFileSystemModel::~MyFileSystemModel()
@@ -113,14 +114,9 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 if (file.isDir()) {
 //                    return "-";
                     QDir dir(file.filePath());
-                    QStringList filter;
-                    QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(filter));
+                    QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files));
 
-                    int count = fileInfo->count();
-                    if (count > 2) {
-                        count -= 2;
-                    }
-                    return QString::number(count) + " " + tr("Item") +  "    ";
+                    return QString::number(fileInfo->count()) + " " + tr("Item") +  "    ";
                 } else {
 
                     return Utils::humanReadableSize(file.size(), 1) +  "    ";
