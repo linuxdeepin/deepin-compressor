@@ -156,6 +156,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             decorationRect = QRect(QPoint(0, 0), QSize(24,24));
         } else {
 //            decorationRect = QRect(QPoint(10, 0), pixmap.size());
+            icon = QPixmap(pixmap);
             decorationRect = QRect(QPoint(0, 0), QSize(24,24));
         }
     } else {
