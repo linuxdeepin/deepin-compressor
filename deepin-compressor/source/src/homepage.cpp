@@ -38,19 +38,19 @@ HomePage::HomePage(QWidget *parent)
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat))
 {
-    m_unloadPixmap = Utils::renderSVG(":/images/folder-128 .svg", QSize(128, 128));
-    m_loadedPixmap = Utils::renderSVG(":/images/folder-128 .svg", QSize(128, 128));
+    m_unloadPixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
+    m_loadedPixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
 
     m_iconLabel->setFixedSize(128, 128);
     m_iconLabel->setPixmap(m_unloadPixmap);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     if (themeType == DGuiApplicationHelper::LightType)
-        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/split_line.svg"));
     else if (themeType == DGuiApplicationHelper::DarkType)
-        m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/dark/icons/split_line_dark.svg"));
     else
-        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/split_line.svg"));
 
     DFontSizeManager::instance()->bind(m_tipsLabel, DFontSizeManager::T8);
     m_tipsLabel->setForegroundRole(DPalette::TextTips);
@@ -150,9 +150,9 @@ void HomePage::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     if (themeType == DGuiApplicationHelper::LightType)
-        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/split_line.svg"));
     else if (themeType == DGuiApplicationHelper::DarkType)
-        m_splitLine->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/dark/icons/split_line_dark.svg"));
     else
-        m_splitLine->setPixmap(QPixmap(":/images/split_line.svg"));
+        m_splitLine->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/split_line.svg"));
 }

@@ -248,7 +248,7 @@ void CompressSetting::onNextButoonClicked()
     QString name = m_filename->text().remove(" ");
     if (!checkfilename(name)) {
         DDialog *dialog = new DDialog;
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
+        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("The file name is error, please retry!"));
         dialog->addSpacing(15);
@@ -258,7 +258,7 @@ void CompressSetting::onNextButoonClicked()
         return;
     } else if (m_savepath->text().remove(" ") == "") {
         DDialog *dialog = new DDialog;
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
+        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("Please enter the path!"));
         dialog->addSpacing(15);
@@ -267,7 +267,7 @@ void CompressSetting::onNextButoonClicked()
         return;
     } else if (!dir.exists()) {
         DDialog *dialog = new DDialog;
-        QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
+        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);
         dialog->setMessage(tr("The path does not exist, please retry!"));
         dialog->addSpacing(15);

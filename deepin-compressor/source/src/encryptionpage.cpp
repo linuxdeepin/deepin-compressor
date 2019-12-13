@@ -34,7 +34,7 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 
 void EncryptionPage::InitUI()
 {
-    m_encrypticon = Utils::renderSVG(":/images/lock.svg", QSize(128, 128));
+    m_encrypticon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_lock_128px.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_encrypticon);
     m_stringinfolabel = new DLabel();

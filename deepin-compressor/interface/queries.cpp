@@ -100,7 +100,7 @@ void OverwriteQuery::execute()
     QFileInfo file(path);
 
     DDialog *dialog = new DDialog;
-    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
+    QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
 
     DLabel *strlabel = new DLabel;
@@ -233,7 +233,7 @@ void PasswordNeededQuery::execute()
 
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
     DDialog *dialog = new DDialog;
-    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
+    QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
 
     DLabel *strlabel = new DLabel;
@@ -301,7 +301,7 @@ void WrongPasswordQuery::execute()
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
     DDialog *dialog = new DDialog;
-    QPixmap pixmap = renderSVG(":/images/warning.svg", QSize(64, 64));
+    QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIconPixmap(pixmap);
 
     DLabel *strlabel = new DLabel;

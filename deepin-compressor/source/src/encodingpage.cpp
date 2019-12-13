@@ -34,7 +34,7 @@ EncodingPage::EncodingPage(QWidget *parent)
 
 void EncodingPage::InitUI()
 {
-    m_fileicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
+//    m_fileicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_fileicon);
     m_filenamelabel = new DLabel();

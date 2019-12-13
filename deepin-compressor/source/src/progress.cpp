@@ -38,7 +38,7 @@ Progress::Progress(QWidget *parent)
 
 void Progress::InitUI()
 {
-    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
+//    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_filenamelabel = new DLabel();
     m_filenamelabel->setText(m_filename);
@@ -98,7 +98,7 @@ int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog;
 
-    QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIconPixmap(pixmap);
     DPalette pa, pa2;
     DLabel *strlabel = new DLabel;

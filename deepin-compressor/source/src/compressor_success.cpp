@@ -36,7 +36,7 @@ Compressor_Success::Compressor_Success(QWidget *parent)
 
 void Compressor_Success::InitUI()
 {
-    m_compressicon = Utils::renderSVG(":/images/success.svg", QSize(128, 128));
+    m_compressicon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_128px.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel();
     m_pixmaplabel->setPixmap(m_compressicon);
 

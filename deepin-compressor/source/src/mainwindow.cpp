@@ -268,7 +268,7 @@ void MainWindow::InitConnection()
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [ = ] {
-        QIcon icon = Utils::renderSVG(":/images/icon_toast_sucess.svg", QSize(30, 30));
+        QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
         this->sendMessage(icon, tr("Extraction successful"));
     });
 
@@ -879,7 +879,7 @@ void MainWindow::WatcherFile(const QString &files)
     connect(m_fileManager, &DFileWatcher::fileMoved, this, [ = ]() {                    //监控压缩包，重命名时提示
         DDialog *dialog = new DDialog;
         dialog->setFixedWidth(440);
-        QIcon icon = Utils::renderSVG(":/images/warning.svg", QSize(32, 32));
+        QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);
         dialog->setMessage(tr("The current compressed file has changed and may be renamed, moved or deleted, please re-import the file."));
         dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
