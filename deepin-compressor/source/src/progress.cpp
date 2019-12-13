@@ -199,9 +199,9 @@ void Progress::setProgressFilename(QString filename)
     }
     QFontMetrics elideFont(m_progressfilelabel->font());
     if (m_type == COMPRESSING) {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing...") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
     } else {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting...") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
     }
 }
 
