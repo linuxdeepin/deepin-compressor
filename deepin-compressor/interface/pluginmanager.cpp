@@ -178,6 +178,8 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
         supported.remove(QStringLiteral("application/x-tzo"));
     }
 
+    supported.remove(QStringLiteral("application/x-cd-image"));
+
     if (mode == SortByComment) {
         return sortByComment(supported);
     }
