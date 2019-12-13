@@ -269,7 +269,7 @@ void MainWindow::InitConnection()
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [ = ] {
         QIcon icon = Utils::renderSVG(":/images/icon_toast_sucess.svg", QSize(30, 30));
-        this->sendMessage(icon, tr("Successful extraction"));
+        this->sendMessage(icon, tr("Extraction successful"));
     });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
@@ -335,7 +335,7 @@ QMenu *MainWindow::createSettingsMenu()
         onSelected(dialog.selectedFiles());
     });
 
-    QAction *settingsAction = menu->addAction(tr("Setting"));
+    QAction *settingsAction = menu->addAction(tr("Settings"));
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
@@ -500,7 +500,7 @@ void MainWindow::refreshPage()
     case PAGE_ZIP:
         m_openAction->setEnabled(true);
         m_mainLayout->setCurrentIndex(2);
-        setQLabelText(m_titlelabel, tr("Create New archive"));
+        setQLabelText(m_titlelabel, tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
@@ -508,35 +508,35 @@ void MainWindow::refreshPage()
         break;
     case PAGE_ZIPSET:
         m_mainLayout->setCurrentIndex(3);
-        setQLabelText(m_titlelabel, tr("New archive"));
+        setQLabelText(m_titlelabel, tr("New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        setQLabelText(m_titlelabel, tr("Compressing"));
+        setQLabelText(m_titlelabel, tr("Compressing..."));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_UNZIPPROGRESS:
         m_mainLayout->setCurrentIndex(4);
-        setQLabelText(m_titlelabel, tr("Extracting"));
+        setQLabelText(m_titlelabel, tr("Extracting..."));
         m_Progess->setFilename(m_decompressfilename);
         break;
     case PAGE_ZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
-        m_CompressSuccess->setstringinfo(tr("Successful compression!"));
+        m_CompressSuccess->setstringinfo(tr("Compression successful!"));
         break;
     case PAGE_ZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("Sorry, the compression failed!"));
+        m_CompressFail->setFailStr(tr("Sorry, Compression failed!"));
         break;
     case PAGE_UNZIP_SUCCESS:
         m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("Successful extraction!"));
+        m_CompressSuccess->setstringinfo(tr("Extraction successful!"));
         if (m_settingsDialog->isAutoOpen()) {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
         }
@@ -544,7 +544,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("Sorry, the extraction failed!"));
+        m_CompressFail->setFailStr(tr("Sorry, Extraction failed!"));
         break;
     case  PAGE_ENCRYPTION:
         m_mainLayout->setCurrentIndex(7);
@@ -583,7 +583,7 @@ void MainWindow::onSelected(const QStringList &files)
             dialog->setFixedWidth(440);
             QIcon icon = QIcon::fromTheme("deepin-compressor");
             dialog->setIcon(icon, QSize(32, 32));
-            dialog->setMessage(tr("Add a compressed file to a directory or open it in a new window?"));
+            dialog->setMessage(tr("Do you want to add the archive to the list or open it in new window?"));
             dialog->addButton(tr("Cancel"));
             dialog->addButton(tr("Add"));
             dialog->addButton(tr("Open in new window"), true, DDialog::ButtonRecommend);
@@ -780,7 +780,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 m_Progess->settype(DECOMPRESSING);
                 refreshPage();
             } else {
-                m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+                m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
                 m_pageid = PAGE_UNZIP_FAIL;
                 refreshPage();
             }
@@ -800,7 +800,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
             loadArchive(filepath);
         } else {
-            m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+            m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             m_pageid = PAGE_UNZIP_FAIL;
             refreshPage();
         }
@@ -831,7 +831,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
 {
     m_workstatus = WorkNone;
     if (job->error()) {
-        m_CompressFail->setFailStrDetail(tr("Compressed file is corrupt!"));
+        m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -1027,13 +1027,13 @@ void MainWindow::slotExtractionDone(KJob *job)
         }
         if (m_pathstore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {
-                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
         } else {
             if (getDiskFreeSpace() <= 50) {
-                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
             }
@@ -1456,13 +1456,13 @@ void MainWindow::slotCompressFinished(KJob *job)
     if (job->error() &&  job->error() != KJob::KilledJobError) {
         if (m_pathstore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {
-                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }
         } else {
             if (getDiskFreeSpace() <= 50) {
-                m_CompressFail->setFailStrDetail(tr("No space left, please clean and retry"));
+                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file"));
             }

@@ -117,9 +117,9 @@ void OverwriteQuery::execute()
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    strlabel2->setFont(font);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
-    strlabel2->setText(QObject::tr("The file already exists. How to deal with it?"));
+    strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
     dialog->addButton(QObject::tr("Skip"));
-    dialog->addButton(QObject::tr("Override"));
+    dialog->addButton(QObject::tr("Replace"));
 
     DCheckBox *checkbox = new DCheckBox;
     checkbox->setText(QObject::tr("Apply to all"));
@@ -241,7 +241,7 @@ void PasswordNeededQuery::execute()
     strlabel->setForegroundRole(DPalette::WindowText);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(QObject::tr("This file is encrypted, please enter the password"));
+    strlabel->setText(QObject::tr("Encrypted file, please enter the password"));
 
     DPasswordEdit* passwordedit = new DPasswordEdit;
     passwordedit->setFixedWidth(280);

@@ -172,7 +172,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
         case Type:
             return tr("Type");
         case Timestamp:
-            return tr("Modify");
+            return tr("Time modified");
         default:
             return tr("Unnamed column", "??");
         }

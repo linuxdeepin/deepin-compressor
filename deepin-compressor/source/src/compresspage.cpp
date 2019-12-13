@@ -120,7 +120,7 @@ void CompressPage::showDialog()
     strlabel->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
-    strlabel->setText(QObject::tr("Please add files in the root directory!"));
+    strlabel->setText(QObject::tr("Please add files to the top-level directory!"));
     dialog->addButton(QObject::tr("OK"));
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -142,7 +142,7 @@ int CompressPage::showReplaceDialog(QString name)
     QPixmap pixmap = Utils::renderSVG(":/images/warning.svg", QSize(30, 30));
     dialog->setIconPixmap(pixmap);
 
-    dialog->setMessage("“" + name + "”" + QObject::tr("Already exist, replaced?"));
+    dialog->setMessage("“" + name + "”" + QObject::tr("already exists, are you sure you want to replace it?"));
     dialog->addSpacing(15);
     dialog->addButton(QObject::tr("Cancel"));
     dialog->addButton(QObject::tr("Confirm"));

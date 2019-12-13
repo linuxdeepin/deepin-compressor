@@ -41,14 +41,14 @@ void EncryptionPage::InitUI()
 
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
-    m_stringinfolabel->setText(tr("This file is encrypted, please enter the password"));
+    m_stringinfolabel->setText(tr("Encrypted file, please enter the password"));
     m_nextbutton = new DPushButton();
     m_nextbutton->setFixedSize(340, 36);
     m_nextbutton->setText(tr("Next"));
     m_password = new DPasswordEdit();
     m_password->setFixedSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
-    edit->setPlaceholderText(tr("Please enter password to extract"));
+    edit->setPlaceholderText(tr("Password"));
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();

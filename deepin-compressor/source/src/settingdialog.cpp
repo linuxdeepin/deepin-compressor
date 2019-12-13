@@ -85,7 +85,7 @@ void SettingDialog::initUI()
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
             QPushButton *button1 = new DPushButton(tr("Select All"));
-            QPushButton *button2 = new DPushButton(tr("Unselect All"));
+            QPushButton *button2 = new DPushButton(tr("Clear All"));
             button1->setFixedSize(100, 36);
             button2->setFixedSize(100, 36);
             layout->addStretch();
@@ -111,13 +111,13 @@ void SettingDialog::initUI()
 
             DLabel *label = new DLabel;
             label->setForegroundRole(DPalette::WindowText);
-            label->setText(tr("Default extraction location") + ":");
+            label->setText(tr("Extract archives to") + ":");
 
             DComboBox *combobox = new DComboBox;
             combobox->setFixedWidth(300);
             combobox->setEditable(false);
             QStringList list;
-            list << tr("Current directory") << tr("desktop") << tr("Other directory");
+            list << tr("Current directory") << tr("Desktop") << tr("Other directory");
             combobox->addItems(list);
             qDebug() << m_comboboxoption->value();
             if (QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value()) {
@@ -152,7 +152,7 @@ void SettingDialog::initUI()
                     combobox->setEditable(false);
                     m_curpath = "";
                     m_index_last = 0;
-                } else if (tr("desktop") == combobox->currentText())
+                } else if (tr("Desktop") == combobox->currentText())
                 {
                     combobox->setEditable(false);
                     m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);

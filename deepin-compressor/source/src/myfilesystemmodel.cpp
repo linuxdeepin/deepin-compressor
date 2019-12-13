@@ -59,7 +59,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
         case 2:
             return tr("Type");
         case 1:
-            return tr("Modify");
+            return tr("Time modified");
         default:
             return tr("Unnamed column", "??");
         }

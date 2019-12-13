@@ -29,7 +29,7 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
     : QWidget(parent)
 {
     m_stringinfo = tr("Sorry,Extraction failed!");
-    m_stringdetail = tr("The file is corrupt");
+    m_stringdetail = tr("Damaged file, unable to extract");
     InitUI();
     InitConnection();
 }

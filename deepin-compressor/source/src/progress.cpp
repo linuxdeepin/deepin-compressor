@@ -114,10 +114,10 @@ int Progress::showConfirmDialog()
 
     if (m_type == COMPRESSING) {
         strlabel->setText(tr("Stop compressing! "));
-        strlabel2->setText(tr("There is currently a compression task in progress"));
+        strlabel2->setText(tr("Are you sure you want to stop the compression?"));
 
-        dialog->addButton(tr("Stop compressing"));
-        dialog->addButton(tr("Continue compressing"), true, DDialog::ButtonRecommend);
+        dialog->addButton(tr("Cancel"));
+        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0, 4);
         effect->setColor(QColor(0, 145, 255, 76));
@@ -126,9 +126,9 @@ int Progress::showConfirmDialog()
 
     } else {
         strlabel->setText(tr("Stop extracting! "));
-        strlabel2->setText(tr("There is currently a extraction task in progress"));
-        dialog->addButton(tr("Stop extracting"));
-        dialog->addButton(tr("Continue extracting"), true, DDialog::ButtonRecommend);
+        strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+        dialog->addButton(tr("Cancel"));
+        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0, 4);
         effect->setColor(QColor(0, 145, 255, 76));
@@ -199,9 +199,9 @@ void Progress::setProgressFilename(QString filename)
     }
     QFontMetrics elideFont(m_progressfilelabel->font());
     if (m_type == COMPRESSING) {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing...") + ": " + filename, Qt::ElideMiddle, 520));
     } else {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting...") + ": " + filename, Qt::ElideMiddle, 520));
     }
 }
 

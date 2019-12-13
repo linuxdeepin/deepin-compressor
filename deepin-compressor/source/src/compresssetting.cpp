@@ -105,7 +105,7 @@ void CompressSetting::InitUI()
     QFormLayout *filelayout = new QFormLayout();
     m_filename = new DLineEdit();
     m_filename->setFixedSize(260, 36);
-    m_filename->setText(tr("New archive"));
+    m_filename->setText(tr("New Archive"));
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
@@ -114,8 +114,8 @@ void CompressSetting::InitUI()
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setFixedSize(260, 36);
 
-    filelayout->addRow(tr("File Name") + ":", m_filename);
-    filelayout->addRow(tr("Save To") + ":", m_savepath);
+    filelayout->addRow(tr("Name") + ":", m_filename);
+    filelayout->addRow(tr("Save to") + ":", m_savepath);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
 
@@ -125,18 +125,18 @@ void CompressSetting::InitUI()
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
-    m_encryptedlabel = new DLabel(tr("Encrypted File") + ":");
+    m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":");
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
     m_password = new DPasswordEdit();
     QLineEdit *edit = m_password->lineEdit();
-    edit->setPlaceholderText(tr("Please enter the password"));
+    edit->setPlaceholderText(tr("Password"));
     m_password->setFixedSize(260, 36);
-    m_encryptedfilelistlabel = new DLabel(tr("Encrypted File List"));
+    m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
-    m_splitcompress = new DCheckBox(tr("Volume Compression") + ":");
+    m_splitcompress = new DCheckBox(tr("Split to volumes") + ":");
     m_splitcompress->setEnabled(false);
     m_splitnumedit = new DDoubleSpinBox();
     m_splitnumedit->setSuffix("MB");

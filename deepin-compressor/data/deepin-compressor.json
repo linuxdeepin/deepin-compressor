@@ -2,7 +2,7 @@
     "groups": [
         {
             "key": "base",
-            "name": "Setting",
+            "name": "General",
             "groups": [
                 {
                     "key": "decompress",
@@ -17,14 +17,14 @@
                             "key": "create_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "Create folder automatically",
+                            "text": "Auto create a folder for multiple extracted files",
                             "default": true
                         },
                         {
                             "key": "open_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "Corresponding folder is automatically opened",
+                            "text": "Show extracted files when complete",
                             "default": false
                         }
                     ]
@@ -33,11 +33,11 @@
         },
         {
             "key": "file_association",
-            "name": "File association",
+            "name": "Files Associated",
             "groups": [
                 {
                     "key": "file_association_type",
-                    "name": "File type",
+                    "name": "File Type",
                     "options": [
                         {
                             "key": "x-7z-compressed",

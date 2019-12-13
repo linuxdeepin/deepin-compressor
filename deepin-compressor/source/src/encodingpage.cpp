@@ -60,7 +60,7 @@ void EncodingPage::InitUI()
     encodeList.prepend("UTF-8");
 
     m_codelabel = new DLabel;
-    m_codelabel->setText(tr("File name encoding") + ":");
+    m_codelabel->setText(tr("Filename Encoding") + ":");
     m_codebox = new DComboBox;
     m_codebox->setFixedWidth(260);
     m_codebox->setEditable(true);
@@ -73,12 +73,12 @@ void EncodingPage::InitUI()
     encodelayout->addStretch();
 
     m_detaillabel = new DLabel;
-    m_detaillabel->setText(tr("Please provide a filename encoding to extract this document"));
+    m_detaillabel->setText(tr("Select an encoding to continue"));
 //    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_detaillabel, DFontSizeManager::T8);
 
     m_cancelbutton = new DPushButton(tr("Cancel"));
-    m_confirmbutton = new DPushButton(tr("OK"));
+    m_confirmbutton = new DPushButton(tr("Select Character Encoding"));
     m_cancelbutton->setFixedSize(165, 36);
     m_confirmbutton->setFixedSize(165, 36);
     QHBoxLayout *buttonlayout = new QHBoxLayout;
