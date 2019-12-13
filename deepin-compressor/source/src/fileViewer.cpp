@@ -608,8 +608,10 @@ void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event)
             plabel->hide();
             pTableViewFile->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         } else {
-            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
-            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+//            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+//            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+            m_indexmode = m_decompressmodel->parent(m_indexmode);
+            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_indexmode));
         }
     }
 
