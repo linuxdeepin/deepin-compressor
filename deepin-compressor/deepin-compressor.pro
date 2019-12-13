@@ -163,6 +163,6 @@ CONFIG(release, debug|release) {
 }
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/icons/deepin/builtin/icons/compress_titleicon_96px.svg
+icon_files.files = $$PWD/icons/deepin/builtin/icons/deepin-compressor.svg
 
 INSTALLS += target desktop icon_files desktopcontext
