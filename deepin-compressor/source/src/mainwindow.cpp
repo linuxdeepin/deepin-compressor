@@ -173,7 +173,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->getButton(0)->setGraphicsEffect(effect);
                 dialog->exec();
                 filelist.removeAt(i);
-                if(!PAGE_ZIP){
+                if(m_pageid != PAGE_ZIP){
                     m_pageid = PAGE_ZIP;
                     refreshPage();
                 }
