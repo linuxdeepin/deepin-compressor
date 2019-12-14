@@ -163,7 +163,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->setFixedWidth(440);
                 QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(icon);
-                dialog->setMessage(tr("The current file has changed and may be renamed, moved or deleted, please re-import the file."));
+                dialog->setMessage(QChar('\"') + tr("%1").arg(filein.fileName() + QChar('\"') +tr(" has changed and may be renamed, moved or deleted, please re-import the file.")));
                 dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
                 QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
                 effect->setOffset(0, 4);
@@ -173,8 +173,10 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->getButton(0)->setGraphicsEffect(effect);
                 dialog->exec();
                 filelist.removeAt(i);
-                m_pageid = PAGE_ZIP;
-                refreshPage();
+                if(!PAGE_ZIP){
+                    m_pageid = PAGE_ZIP;
+                    refreshPage();
+                }
                 m_CompressPage->onRefreshFilelist(filelist);
                 if (filelist.isEmpty()) {
                     m_pageid = PAGE_HOME;
@@ -539,8 +541,10 @@ void MainWindow::refreshPage()
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
-        killTimer(m_watchTimer);
-        m_watchTimer =0;
+        if(0 != m_watchTimer){
+            killTimer(m_watchTimer);
+            m_watchTimer =0;
+        }
         m_mainLayout->setCurrentIndex(4);
         setQLabelText(m_titlelabel, tr("Compressing..."));
         m_Progess->setFilename(m_decompressfilename);
