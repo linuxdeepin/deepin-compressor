@@ -202,6 +202,7 @@ private:
     QString m_pathstore;
     bool m_initflag = false;
     int m_startTimer = 0;
+    int m_watchTimer = 0;
 };
 
 #endif

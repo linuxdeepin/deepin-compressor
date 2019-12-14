@@ -131,8 +131,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             return;
         }
         deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
-    }
-    else if (7 == m_mainLayout->currentIndex()) {
+    } else if (7 == m_mainLayout->currentIndex()) {
         deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
     }
 
@@ -146,10 +145,8 @@ void MainWindow::timerEvent(QTimerEvent *event)
         m_progressTransFlag = true;
         killTimer(m_timerId);
         m_timerId = 0;
-    }
-    else if (m_startTimer == event->timerId()) {
-        if(!m_initflag)
-        {
+    } else if (m_startTimer == event->timerId()) {
+        if (!m_initflag) {
             InitUI();
             InitConnection();
             m_initflag = true;
@@ -157,6 +154,34 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
         killTimer(m_startTimer);
         m_startTimer = 0;
+    } else if (m_watchTimer == event->timerId()) {
+        QStringList filelist = m_CompressPage->getCompressFilelist();
+        for (int i = 0; i < filelist.count(); i++) {
+            QFileInfo filein(filelist.at(i));
+            if (!filein.exists()) {
+                DDialog *dialog = new DDialog;
+                dialog->setFixedWidth(440);
+                QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+                dialog->setIcon(icon);
+                dialog->setMessage(tr("The current file has changed and may be renamed, moved or deleted, please re-import the file."));
+                dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+                QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+                effect->setOffset(0, 4);
+                effect->setColor(QColor(0, 145, 255, 76));
+                effect->setBlurRadius(4);
+                dialog->getButton(0)->setFixedWidth(340);
+                dialog->getButton(0)->setGraphicsEffect(effect);
+                dialog->exec();
+                filelist.removeAt(i);
+                m_pageid = PAGE_ZIP;
+                refreshPage();
+                m_CompressPage->onRefreshFilelist(filelist);
+                if (filelist.isEmpty()) {
+                    m_pageid = PAGE_HOME;
+                    refreshPage();
+                }
+            }
+        }
     }
 }
 
@@ -173,7 +198,7 @@ void MainWindow::InitUI()
     m_settingsDialog = new SettingDialog;
     m_encodingpage = new EncodingPage;
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
-                           QSettings::IniFormat);
+                               QSettings::IniFormat);
 
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
@@ -504,6 +529,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
+        m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         break;
     case PAGE_ZIPSET:
@@ -513,6 +539,8 @@ void MainWindow::refreshPage()
         m_titlebutton->setVisible(true);
         break;
     case PAGE_ZIPPROGRESS:
+        killTimer(m_watchTimer);
+        m_watchTimer =0;
         m_mainLayout->setCurrentIndex(4);
         setQLabelText(m_titlelabel, tr("Compressing..."));
         m_Progess->setFilename(m_decompressfilename);
@@ -627,8 +655,7 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-    if(!m_initflag)
-    {
+    if (!m_initflag) {
         InitUI();
         InitConnection();
         m_initflag = true;
@@ -1082,7 +1109,7 @@ void MainWindow::SlotExtractPassword(QString password)
         ExtractSinglePassword(password);
     } else if (Encryption_TempExtract == m_encryptiontype) {
         ExtractSinglePassword(password);
-}
+    }
 }
 
 void MainWindow::ExtractSinglePassword(QString password)
@@ -1162,7 +1189,6 @@ void MainWindow::setCompressDefaultPath()
 {
     QString path;
     QStringList fileslist = m_CompressPage->getCompressFilelist();
-
     m_CompressSetting->setFilepath(fileslist);
     QFileInfo fileinfobase(fileslist.at(0));
     for (int loop = 1; loop < fileslist.count(); loop++) {
@@ -1204,14 +1230,11 @@ void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
     }
 
 
-    if(globalWorkDirList.count() == 1)
-    {
+    if (globalWorkDirList.count() == 1) {
         creatArchive(Args);
-    }
-    else if(globalWorkDirList.count() > 1){
+    } else if (globalWorkDirList.count() > 1) {
         QMap<QString, QStringList> compressmap;
-        foreach(QString workdir, globalWorkDirList)
-        {
+        foreach (QString workdir, globalWorkDirList) {
             QStringList filelist;
             foreach (QString file, filesToAdd) {
                 QString globalWorkDir = file;
@@ -1219,19 +1242,17 @@ void MainWindow::onCompressPressed(QMap<QString, QString> &Args)
                     globalWorkDir.chop(1);
                 }
                 globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
-                if(workdir == globalWorkDir)
-                {
+                if (workdir == globalWorkDir) {
                     filelist.append(file);
                 }
             }
             compressmap.insert(workdir, filelist);
         }
 
-        qDebug()<<compressmap;
+        qDebug() << compressmap;
         creatBatchArchive(Args, compressmap);
-    }
-    else {
-        qDebug()<<"Compress file count error!";
+    } else {
+        qDebug() << "Compress file count error!";
     }
 
 }
@@ -1241,8 +1262,7 @@ void MainWindow::creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, Q
     BatchCompress *batchJob = new BatchCompress();
     batchJob->setCompressArgs(Args);
 
-    for(QString &key : filetoadd.keys())
-    {
+    for (QString &key : filetoadd.keys()) {
         batchJob->addInput(filetoadd.value(key));
     }
 
