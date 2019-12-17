@@ -32,6 +32,7 @@
 #include <qevent.h>
 #include <DDialog>
 #include <DStyle>
+#include <QScrollArea>
 
 TypeLabel::TypeLabel(QWidget *parent)
     : DLabel(parent)
@@ -104,7 +105,7 @@ void CompressSetting::InitUI()
 
     QFormLayout *filelayout = new QFormLayout();
     m_filename = new DLineEdit();
-    m_filename->setFixedSize(260, 36);
+    m_filename->setMinimumSize(260, 36);
     m_filename->setText(tr("New Archive"));
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
@@ -112,12 +113,13 @@ void CompressSetting::InitUI()
     m_savepath = new DFileChooserEdit();
     m_savepath->setFileMode(DFileDialog::Directory);
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-    m_savepath->setFixedSize(260, 36);
+    m_savepath->setMinimumSize(260, 36);
 
     filelayout->addRow(tr("Name") + ":", m_filename);
     filelayout->addRow(tr("Save to") + ":", m_savepath);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
+    filelayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
 
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"));
     moresetlabel->setForegroundRole(DPalette::WindowText);
@@ -130,7 +132,7 @@ void CompressSetting::InitUI()
     m_password = new DPasswordEdit();
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
-    m_password->setFixedSize(260, 36);
+    m_password->setMinimumSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"));
     m_file_secret = new DSwitchButton();
     m_file_secretlayout = new QHBoxLayout();
@@ -139,13 +141,13 @@ void CompressSetting::InitUI()
     m_splitcompress = new DCheckBox(tr("Split to volumes") + ":");
     m_splitcompress->setEnabled(false);
     m_splitnumedit = new DDoubleSpinBox();
+    m_splitnumedit->setMinimumSize(260, 36);
     m_splitnumedit->setSuffix("MB");
     m_splitnumedit->setRange(0.0, 1000000);
     m_splitnumedit->setSingleStep(0.1);
     m_splitnumedit->setDecimals(1);
     m_splitnumedit->setValue(0.0);
     m_splitnumedit->setSpecialValueText(" ");
-
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
@@ -164,21 +166,29 @@ void CompressSetting::InitUI()
     m_fileLayout->addWidget(m_splitnumedit);
     m_fileLayout->addStretch();
 
-    onAdvanceButtonClicked(false);
+    DWidget *m_rightwidget = new DWidget();
+    m_rightwidget->setLayout(m_fileLayout);
+
+    QScrollArea *m_scroll = new QScrollArea();
+    m_scroll->setWidget(m_rightwidget);
+    m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroll->setFrameShape(QFrame::NoFrame);
+    m_scroll->setWidgetResizable(true);
+
+
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
     infoLayout->addStretch();
     infoLayout->addWidget(leftwidget);
     infoLayout->addStretch();
-    infoLayout->addLayout(m_fileLayout);
+    infoLayout->addWidget(m_scroll);
     infoLayout->addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(16);
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
     mainLayout->addWidget(m_nextbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainLayout->setContentsMargins(20, 16, 20, 20);
+    mainLayout->setContentsMargins(20, 6, 20, 20);
 
 
     m_splitnumedit->setEnabled(false);
@@ -373,6 +383,7 @@ void CompressSetting::setDefaultPath(QString path)
 
 void CompressSetting::setDefaultName(QString name)
 {
+    onAdvanceButtonClicked(m_moresetbutton->isChecked());
     m_filename->setText(name);
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->selectAll();
