@@ -572,9 +572,13 @@
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="299"/>
         <source>Extraction successful</source>
-        <translation>提取成功</translation>
+        <translation type="vanished">提取成功</translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="299"/>
+        <source>Extraction task completed</source>
+        <translation>提取任务已完成</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="365"/>
