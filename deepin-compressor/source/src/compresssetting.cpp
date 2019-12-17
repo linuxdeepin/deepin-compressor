@@ -469,6 +469,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(true);
         m_file_secret->setEnabled(false);
+        m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
         m_splitcompress->setChecked(false);
         m_splitnumedit->setRange(0.0, 5.0);
@@ -477,6 +478,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitnumedit->setEnabled(false);
         m_password->setEnabled(false);
         m_file_secret->setEnabled(false);
+        m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
         m_splitcompress->setChecked(false);
         m_splitnumedit->setRange(0.0, 5.0);
