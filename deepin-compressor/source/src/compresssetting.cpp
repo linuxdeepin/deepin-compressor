@@ -72,14 +72,15 @@ void CompressSetting::InitUI()
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_compresstype->setFixedHeight(25);
+    m_compresstype->setMinimumHeight(25);
 
     DStyle *style = new DStyle;
     QPixmap pixmap = style->standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
     typepixmap = new TypeLabel;
-    typepixmap->setFixedHeight(25);
+    typepixmap->setMinimumHeight(25);
     typepixmap->setPixmap(pixmap);
     m_compresstype->setText("zip");
+    m_compresstype->setWordWrap(true);
     m_compresstype->setPalette(pa);
     m_compresstype->setAlignment(Qt::AlignCenter);
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
@@ -92,7 +93,7 @@ void CompressSetting::InitUI()
     typelayout->addStretch();
 
     m_clicklabel = new TypeLabel();
-    m_clicklabel->setFixedSize(92,40);
+    m_clicklabel->setMinimumSize(125,40);
     m_clicklabel->setLayout(typelayout);
     layout->addWidget(m_clicklabel,0, Qt::AlignHCenter | Qt::AlignVCenter);
 
