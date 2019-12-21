@@ -159,7 +159,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         for (int i = 0; i < filelist.count(); i++) {
             QFileInfo filein(filelist.at(i));
             if (!filein.exists()) {
-                DDialog *dialog = new DDialog;
+                DDialog *dialog = new DDialog(this);
                 dialog->setFixedWidth(440);
                 QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(icon);
@@ -611,7 +611,7 @@ void MainWindow::onSelected(const QStringList &files)
             loadArchive(filename);
 
         } else {
-            DDialog *dialog = new DDialog;
+            DDialog *dialog = new DDialog(this);
             dialog->setFixedWidth(440);
             QIcon icon = QIcon::fromTheme("deepin-compressor");
             dialog->setIcon(icon, QSize(32, 32));
@@ -908,7 +908,7 @@ void MainWindow::WatcherFile(const QString &files)
     m_fileManager->startWatcher();
     qDebug() << m_fileManager->startWatcher() << "=" << files;
     connect(m_fileManager, &DFileWatcher::fileMoved, this, [ = ]() {                    //监控压缩包，重命名时提示
-        DDialog *dialog = new DDialog;
+        DDialog *dialog = new DDialog(this);
         dialog->setFixedWidth(440);
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);

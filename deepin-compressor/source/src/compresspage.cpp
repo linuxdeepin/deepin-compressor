@@ -92,7 +92,7 @@ CompressPage::~CompressPage()
 void CompressPage::onNextPress()
 {
     if (m_filelist.isEmpty()) {
-        DDialog *dialog = new DDialog;
+        DDialog *dialog = new DDialog(this);
 
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIconPixmap(pixmap);

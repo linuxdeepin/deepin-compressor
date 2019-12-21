@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-compressor");
-    app.setApplicationVersion(DApplication::buildVersion("20191011"));
+    app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
     app.setProductName(DApplication::translate("Main", "Archive Manager"));

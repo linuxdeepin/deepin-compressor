@@ -166,3 +166,10 @@ icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/icons/deepin/builtin/icons/deepin-compressor.svg
 
 INSTALLS += target desktop icon_files desktopcontext
+
+DISTFILES += \
+    ../README.md \
+    ../debian/control \
+    ../debian/rules \
+    translations/deepin-compressor_en.ts \
+    translations/deepin-compressor_zh_CN.ts

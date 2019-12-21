@@ -96,7 +96,7 @@ void Progress::InitConnection()
 
 int Progress::showConfirmDialog()
 {
-    DDialog *dialog = new DDialog;
+    DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIconPixmap(pixmap);
