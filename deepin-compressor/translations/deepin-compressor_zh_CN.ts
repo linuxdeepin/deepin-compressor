@@ -375,8 +375,8 @@
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="51"/>
-        <source>Password</source>
-        <translation>密码</translation>
+        <source>Please enter password to extract</source>
+        <translation>请输入密码以解压</translation>
     </message>
     <message>
         <source>Please enter password to extract</source>

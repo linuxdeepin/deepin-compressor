@@ -121,16 +121,7 @@ void EncodingPage::setFilename(QString filename)
 void EncodingPage::setTypeImage(QString type)
 {
     QFileIconProvider provider;
-    QIcon icon;
-    QString strTemplateName = QDir::tempPath() + QDir::separator()  + "tempfile." + type;
-
-    QTemporaryFile tmpFile(strTemplateName);
-    tmpFile.setAutoRemove(false);
-
-    if (tmpFile.open()) {
-        tmpFile.close();
-        icon = provider.icon(QFileInfo(strTemplateName));
-    }
+    QIcon icon = provider.icon(QFileInfo("temp."+type));
 
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }

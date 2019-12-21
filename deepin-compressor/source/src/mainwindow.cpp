@@ -30,7 +30,6 @@
 #include <QStandardPaths>
 #include <DDesktopServices>
 #include <QMimeDatabase>
-#include <QFileIconProvider>
 #include <QShortcut>
 #include <QJsonArray>
 #include <QJsonDocument>

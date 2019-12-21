@@ -543,8 +543,12 @@ void fileViewer::DeleteCompressFile()
     }
 
     QStringList filelist;
-    foreach (unsigned int index, selectlist) {
-        m_curfilelist.replace(index, QFileInfo(""));
+    foreach (unsigned int index, selectlist)
+    {
+        if(m_curfilelist.size() > index )
+        {
+            m_curfilelist.replace(index, QFileInfo(""));
+        }
     }
 
     foreach (QFileInfo file, m_curfilelist) {

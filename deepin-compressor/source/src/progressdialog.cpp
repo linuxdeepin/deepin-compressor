@@ -21,9 +21,9 @@
 #include "progressdialog.h"
 #include <kprocess.h>
 #include <QBoxLayout>
-#include <QFileIconProvider>
 #include <QDebug>
 #include <DStandardPaths>
+#include <QFileInfo>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
