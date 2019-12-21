@@ -30,7 +30,8 @@
 #include <QUrl>
 
 BatchExtract::BatchExtract(QObject *parent)
-    : m_autoSubfolder(false),
+    : BatchJobs(parent),
+      m_autoSubfolder(false),
       m_preservePaths(true),
       m_openDestinationAfterExtraction(false)
 {

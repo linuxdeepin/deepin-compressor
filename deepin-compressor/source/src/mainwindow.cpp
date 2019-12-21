@@ -613,7 +613,7 @@ void MainWindow::onSelected(const QStringList &files)
             DDialog *dialog = new DDialog(this);
             dialog->setFixedWidth(440);
             QIcon icon = QIcon::fromTheme("deepin-compressor");
-            dialog->setIcon(icon, QSize(32, 32));
+            dialog->setIcon(icon/*, QSize(32, 32)*/);
             dialog->setMessage(tr("Do you want to add the archive to the list or open it in new window?"));
             dialog->addButton(tr("Cancel"));
             dialog->addButton(tr("Add"));
@@ -987,7 +987,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
 }
 
-void MainWindow::SlotProgress(KJob *job, unsigned long percent)
+void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
 {
     qDebug() << percent;
     if ((Encryption_SingleExtract == m_encryptiontype)) {

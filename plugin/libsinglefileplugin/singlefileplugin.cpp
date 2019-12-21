@@ -40,15 +40,13 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     }
 
 
-
-    qint64 bytesRead;
     QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
 
 
     return true;
 }
 
-bool LibSingleFileInterface::list(bool isbatch)
+bool LibSingleFileInterface::list(bool /*isbatch*/)
 {
 
     Archive::Entry *e = new Archive::Entry();

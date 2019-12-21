@@ -29,7 +29,7 @@ CliPlugin::~CliPlugin()
 {
 }
 
-bool CliPlugin::list(bool isbatch)
+bool CliPlugin::list(bool /*isbatch*/)
 {
     resetParsing();
     m_operationMode = List;
@@ -146,7 +146,7 @@ bool CliPlugin::handleLine(const QString &line)
     return true;
 }
 
-void CliPlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void CliPlugin::processFinished(int exitCode, QProcess::ExitStatus /*exitStatus*/)
 {
 
     if (m_process) {

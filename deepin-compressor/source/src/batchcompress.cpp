@@ -30,7 +30,7 @@
 #include <QTimer>
 #include <QUrl>
 
-BatchCompress::BatchCompress(QObject *parent)
+BatchCompress::BatchCompress(QObject *parent):BatchJobs(parent)
 {
     setCapabilities(KJob::Killable);
 

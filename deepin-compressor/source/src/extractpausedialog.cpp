@@ -36,7 +36,7 @@ void ExtractPauseDialog::initUI()
 
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-    setIconPixmap(pixmap);
+    setIcon(pixmap);
 
     DPalette pa;
 
@@ -85,12 +85,12 @@ void ExtractPauseDialog::initConnect()
     connect(this, &DDialog::buttonClicked, this, &ExtractPauseDialog::clickedSlot);
 }
 
-void ExtractPauseDialog::clickedSlot(int index, const QString &text)
+void ExtractPauseDialog::clickedSlot(int index, const QString &/*text*/)
 {
     emit sigbuttonpress(index);
 }
 
-void ExtractPauseDialog::closeEvent(QCloseEvent *event)
+void ExtractPauseDialog::closeEvent(QCloseEvent */*event*/)
 {
     emit sigbuttonpress(2);
 }

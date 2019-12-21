@@ -62,7 +62,7 @@ class MyScrollBar: public QScrollBar
 {
     Q_OBJECT
 public:
-    MyScrollBar(QWidget *parent = 0);
+    MyScrollBar(QWidget *parent = nullptr);
 protected:
     void hideEvent(QHideEvent *) override;
     void showEvent(QShowEvent *) override;
@@ -75,10 +75,10 @@ class MyLabel: public QLabel
 {
     Q_OBJECT
 public:
-    MyLabel(QWidget *parent = 0);
+    MyLabel(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *e) override;
 protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 signals:
     void labelDoubleClickEvent(QMouseEvent *event);
 };
@@ -89,16 +89,16 @@ class FirstRowDelegate : public QItemDelegate
 
 public:
 
-    FirstRowDelegate(QObject *parent = 0);
+    FirstRowDelegate(QObject *parent =nullptr);
     void setPathIndex(int *index);
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option,
-                           const QRect &rect) const
+    virtual void drawFocus(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
+                           const QRect &/*rect*/) const
     {
     }
 
-    virtual void drawCheck(QPainter *painter, const QStyleOptionViewItem &option,
-                           const QRect &rect, Qt::CheckState state) const
+    virtual void drawCheck(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
+                           const QRect &/*rect*/, Qt::CheckState /*state*/) const
     {
     }
 
@@ -112,7 +112,7 @@ class MyTableView: public DTableView
 {
     Q_OBJECT
 public:
-    MyTableView(QWidget *parent = 0);
+    MyTableView(QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
@@ -137,8 +137,8 @@ class fileViewer : public QWidget
 {
     Q_OBJECT
 public:
-    fileViewer(QWidget *parent = 0, PAGE_TYPE type = PAGE_COMPRESS);
-    ~fileViewer();
+    fileViewer(QWidget *parent = nullptr, PAGE_TYPE type = PAGE_COMPRESS);
+
     void InitUI();
     void InitConnection();
 

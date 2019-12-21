@@ -243,7 +243,7 @@ void CompressSetting::InitConnection()
     connect(m_typemenu, &DMenu::triggered, this, &CompressSetting::ontypeChanged);
 }
 
-void CompressSetting::showRightMenu(QMouseEvent *e)
+void CompressSetting::showRightMenu(QMouseEvent */*e*/)
 {
     QPoint pos;
     pos.setX(window()->x() + m_pixmaplabel->x() + 60);
@@ -260,7 +260,7 @@ void CompressSetting::onNextButoonClicked()
     if (!checkfilename(name)) {
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIconPixmap(pixmap);
+        dialog->setIcon(pixmap);
         dialog->setMessage(tr("The file name is error, please retry!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
@@ -270,7 +270,7 @@ void CompressSetting::onNextButoonClicked()
     } else if (m_savepath->text().remove(" ") == "") {
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIconPixmap(pixmap);
+        dialog->setIcon(pixmap);
         dialog->setMessage(tr("Please enter the path!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
@@ -279,7 +279,7 @@ void CompressSetting::onNextButoonClicked()
     } else if (!dir.exists()) {
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIconPixmap(pixmap);
+        dialog->setIcon(pixmap);
         dialog->setMessage(tr("The path does not exist, please retry!"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
@@ -434,7 +434,7 @@ void CompressSetting::setFilepath(QStringList pathlist)
     m_pathlist = pathlist;
 }
 
-void CompressSetting::onSplitChanged(int status)
+void CompressSetting::onSplitChanged(int /*status*/)
 {
     if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) {
         m_splitnumedit->setEnabled(true);
@@ -478,7 +478,7 @@ void CompressSetting::ontypeChanged(QAction *action)
     }
 }
 
-void CompressSetting::onSplitValueChanged(double value)
+void CompressSetting::onSplitValueChanged(double /*value*/)
 {
 //    int filesize = 0;
 //    foreach(QString path, m_pathlist)

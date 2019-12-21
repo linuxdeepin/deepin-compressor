@@ -330,10 +330,6 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     InitConnection();
 }
 
-fileViewer::~fileViewer()
-{
-}
-
 void fileViewer::InitUI()
 {
     QHBoxLayout *mainlayout = new QHBoxLayout;
@@ -514,7 +510,7 @@ void fileViewer::resizecolumn()
     pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 4 / 29);
 }
 
-void fileViewer::resizeEvent(QResizeEvent *size)
+void fileViewer::resizeEvent(QResizeEvent */*size*/)
 {
     qDebug() << pTableViewFile->width();
     resizecolumn();
@@ -588,7 +584,7 @@ void fileViewer::setFileList(const QStringList &files)
     refreshTableview();
 }
 
-void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent *event)
+void fileViewer::slotCompressRePreviousDoubleClicked(QMouseEvent */*event*/)
 {
 
     if (PAGE_COMPRESS == m_pagetype) {
@@ -735,11 +731,11 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
     }
 }
 
-void fileViewer::ScrollBarShowEvent(QShowEvent *event)
+void fileViewer::ScrollBarShowEvent(QShowEvent */*event*/)
 {
     plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
 }
-void fileViewer::ScrollBarHideEvent(QHideEvent *event)
+void fileViewer::ScrollBarHideEvent(QHideEvent */*event*/)
 {
     plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
 
@@ -860,7 +856,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 
 }
 
-void fileViewer::startDrag(Qt::DropActions supportedActions)
+void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
 {
     QMimeData *mimeData = new QMimeData;
     connect(mimeData, SIGNAL(dataRequested(QString)),

@@ -95,7 +95,7 @@ void CompressPage::onNextPress()
         DDialog *dialog = new DDialog(this);
 
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIconPixmap(pixmap);
+        dialog->setIcon(pixmap);
         dialog->setMessage(tr("Please add files!"));
         dialog->addButton(tr("OK"));
         dialog->addSpacing(15);
@@ -112,7 +112,7 @@ void CompressPage::showDialog()
     DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(48, 48));
-    dialog->setIconPixmap(pixmap);
+    dialog->setIcon(pixmap);
 
     DPalette pa;
 
@@ -140,7 +140,7 @@ int CompressPage::showReplaceDialog(QString name)
     DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-    dialog->setIconPixmap(pixmap);
+    dialog->setIcon(pixmap);
 
     dialog->setMessage("“" + name + "”" + QObject::tr("already exists, are you sure you want to replace it?"));
     dialog->addSpacing(15);

@@ -139,7 +139,7 @@ LibzipPlugin::~LibzipPlugin()
     }
 }
 
-bool LibzipPlugin::list(bool isbatch)
+bool LibzipPlugin::list(bool /*isbatch*/)
 {
     m_numberOfEntries = 0;
 
@@ -781,7 +781,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         // Handle password-protected files.
         zip_file *zipFile = nullptr;
-        bool firstTry = true;
+
         while (!zipFile) {
             zipFile = zip_fopen(archive, name.constData(), 0);
             if (zipFile) {
@@ -807,7 +807,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
                         if (zip_set_default_password(archive, password().toUtf8().constData())) {
                         }
-                        firstTry = false;
+
                     }
                     else {
                         emit sigExtractNeedPassword();

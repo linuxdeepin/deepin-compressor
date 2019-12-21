@@ -80,7 +80,7 @@ void SettingDialog::initUI()
 
 
     this->widgetFactory()->registerWidget("custom-button", [this](QObject * obj) -> QWidget* {
-        if (DSettingsOption *option = qobject_cast<DSettingsOption *>(obj))
+        if (/*DSettingsOption *option = */qobject_cast<DSettingsOption *>(obj))
         {
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
@@ -104,7 +104,8 @@ void SettingDialog::initUI()
     });
 
     this->widgetFactory()->registerWidget("pathbox", [this](QObject * obj) -> QWidget* {
-        if (m_comboboxoption = qobject_cast<DSettingsOption *>(obj))
+        m_comboboxoption = qobject_cast<DSettingsOption *>(obj);
+        if (m_comboboxoption)
         {
             QWidget *widget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
@@ -243,7 +244,7 @@ void SettingDialog::initConnect()
 
 void SettingDialog::done(int status)
 {
-    Q_UNUSED(status);
+    Q_UNUSED(status)
 
     QDir dir(m_curpath);
 

@@ -119,7 +119,7 @@ LibarchivePlugin::~LibarchivePlugin()
     }
 }
 
-bool LibarchivePlugin::list(bool isbatch)
+bool LibarchivePlugin::list(bool /*isbatch*/)
 {
 
     if (!initializeReader()) {

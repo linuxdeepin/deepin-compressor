@@ -317,7 +317,7 @@ QString KPluginMetaData::value(const QString &key, const QString &defaultValue) 
         }
         return list.join(QChar::fromLatin1(','));
     } else if (value.isBool()) {
-        " but it is a bool";
+        //" but it is a bool";
         return value.toBool() ? QStringLiteral("true") : QStringLiteral("false");
     }
     return defaultValue;
