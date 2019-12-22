@@ -41,33 +41,7 @@
 //#include "archivejob.h"
 #include "jobs.h"
 #include <DFileWatcher>
-
-//static QString shortcut_json =
-
-
-
-static bool DeleteDirectory(const QString &path)
-{
-    if (path.isEmpty()) {
-        return false;
-    }
-
-    QDir dir(path);
-    if (!dir.exists()) {
-        return true;
-    }
-
-    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
-    QFileInfoList fileList = dir.entryInfoList();
-    foreach (QFileInfo fi, fileList) {
-        if (fi.isFile()) {
-            fi.dir().remove(fi.fileName());
-        } else {
-            DeleteDirectory(fi.absoluteFilePath());
-        }
-    }
-    return dir.rmpath(dir.absolutePath());
-}
+#include <QStackedLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
@@ -93,10 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
     initTitleBar();
 
     m_startTimer = startTimer(500);
-}
-
-MainWindow::~MainWindow()
-{
 }
 
 qint64 MainWindow::getMediaFreeSpace()
@@ -889,7 +859,7 @@ void MainWindow::loadArchive(const QString &files)
     m_workstatus = WorkProcess;
     m_loadfile = files;
     m_encryptiontype = Encryption_Load;
-    m_loadjob = (LoadJob *)m_model->loadArchive(files, "", m_model);
+    m_loadjob = dynamic_cast<LoadJob *>(m_model->loadArchive(files, "", m_model));
 
     connect(m_loadjob, &LoadJob::sigLodJobPassword,
             this, &MainWindow::SlotNeedPassword);
@@ -1018,7 +988,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
     }
 }
 
-void MainWindow::SlotProgressFile(KJob *job, const QString &filename)
+void MainWindow::SlotProgressFile(KJob */*job*/, const QString &filename)
 {
     if (Encryption_SingleExtract == m_encryptiontype && PAGE_UNZIP == m_pageid) {
         m_progressdialog->setCurrentFile(filename);
@@ -1177,7 +1147,7 @@ void MainWindow::LoadPassword(QString password)
 {
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Load;
-    m_loadjob = (LoadJob *)m_model->loadArchive(m_loadfile, "", m_model);
+    m_loadjob = dynamic_cast<LoadJob *>(m_model->loadArchive(m_loadfile, "", m_model));
 
     connect(m_loadjob, &LoadJob::sigWrongPassword,
             m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
@@ -1352,7 +1322,7 @@ bool clearTempFiles(const QString &temp_path)
 //        }
 //    }
 //    qDebug()<<ret;
-    QProcess p(0);
+    QProcess p;
     QString command = "rm";
     QStringList args;
     args.append("-fr");
@@ -1586,7 +1556,7 @@ void MainWindow::onCancelCompressPressed()
 
 void MainWindow::slotquitApp()
 {
-    QProcess p(0);
+    QProcess p;
     QString command = "rm";
     QStringList args;
     args.append("-rf");

@@ -21,20 +21,13 @@
 #ifndef EXTRACTPAUSEDIALOG_H
 #define EXTRACTPAUSEDIALOG_H
 
-#include <DPushButton>
 #include <DDialog>
-#include <DLabel>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
 
-DWIDGET_USE_NAMESPACE
-
-
-class ExtractPauseDialog: public DDialog
+class ExtractPauseDialog: public Dtk::Widget::DDialog
 {
     Q_OBJECT
 public:
-    explicit ExtractPauseDialog(QWidget *parent = 0);
+    explicit ExtractPauseDialog(QWidget *parent = nullptr);
     void initUI();
     void initConnect();
 

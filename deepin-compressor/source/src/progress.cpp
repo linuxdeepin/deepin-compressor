@@ -21,11 +21,11 @@
 #include "progress.h"
 
 #include <QFileIconProvider>
-#include <QTemporaryFile>
 #include <QVBoxLayout>
 #include <QDebug>
 #include <DDialog>
 #include <QGraphicsDropShadowEffect>
+#include "DFontSizeManager"
 
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
@@ -54,7 +54,7 @@ void Progress::InitUI()
     m_progressbar->setTextVisible(false);
     m_shadow = new DLabel();
     m_shadow->setFixedSize(8, 1);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 4);
     effect->setColor(QColor(44, 167, 248, 120));
     effect->setBlurRadius(6);
@@ -99,7 +99,7 @@ int Progress::showConfirmDialog()
     DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-    dialog->setIconPixmap(pixmap);
+    dialog->setIcon(pixmap);
     DPalette pa, pa2;
     DLabel *strlabel = new DLabel;
     strlabel->setFixedHeight(20);
@@ -159,12 +159,6 @@ void Progress::cancelbuttonPressedSlot()
 void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
-//    m_shadow->setFixedWidth(percent * 240 / 100);
-//    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-//    effect->setOffset(0, 4);
-//    effect->setColor(QColor(44, 167, 248, 120));
-//    effect->setBlurRadius(6);
-//    m_shadow->setGraphicsEffect(effect);
 }
 
 void Progress::setFilename(QString filename)

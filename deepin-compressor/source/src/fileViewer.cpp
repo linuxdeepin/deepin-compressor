@@ -34,9 +34,10 @@
 #include "myfileitem.h"
 #include "kprocess.h"
 #include "logviewheaderview.h"
+#include <QApplication>
 
 MyScrollBar::MyScrollBar(QWidget *parent)
-    : QScrollBar(parent)
+    : DScrollBar(parent)
 {
 
 }
@@ -846,7 +847,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
     m_indexmode = QModelIndex();
     m_sortmodel = model;
 
-    m_decompressmodel = (ArchiveModel *)m_sortmodel->sourceModel();
+    m_decompressmodel = dynamic_cast<ArchiveModel *>(m_sortmodel->sourceModel());
     m_decompressmodel->setPathIndex(&m_pathindex);
     m_decompressmodel->setTableView(pTableViewFile);
     connect(m_decompressmodel, &ArchiveModel::sigShowLabel, this, &fileViewer::showPlable);

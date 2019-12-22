@@ -23,8 +23,6 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QRegularExpression>
-#include <QStandardPaths>
-
 
 
 QMimeType determineMimeType(const QString &filename)

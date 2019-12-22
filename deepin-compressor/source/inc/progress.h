@@ -21,7 +21,7 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include <QWidget>
+#include <DWidget>
 #include <DFileDialog>
 #include <DPushButton>
 #include <DLabel>
@@ -29,20 +29,19 @@
 #include <DProgressBar>
 #include <DPalette>
 #include <DApplicationHelper>
-#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
-DGUI_USE_NAMESPACE
+
 enum COMPRESS_TYPE {
     COMPRESSING,
     DECOMPRESSING,
 };
 
-class Progress: public QWidget
+class Progress: public DWidget
 {
     Q_OBJECT
 public:
-    Progress(QWidget *parent = 0);
+    Progress(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
     void setprogress(uint percent);

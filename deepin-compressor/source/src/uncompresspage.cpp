@@ -22,25 +22,21 @@
 #include "uncompresspage.h"
 #include "utils.h"
 
-#include <QApplication>
 #include <QVBoxLayout>
-#include <QProcess>
-#include <QTimer>
 #include <QDebug>
 #include <QFile>
 #include <QUrl>
-#include <DRecentManager>
 #include <DStandardPaths>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 UnCompressPage::UnCompressPage(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
-    m_nextbutton = new DPushButton(tr("Extract"));
+    m_nextbutton = new DPushButton(tr("Extract"), this);
     m_nextbutton->setFixedSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;

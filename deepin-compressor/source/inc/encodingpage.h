@@ -20,23 +20,18 @@
  */
 #ifndef ENCODINGPAGE_H
 #define ENCODINGPAGE_H
-#include <QWidget>
+#include <DWidget>
 #include <DPushButton>
 #include <DLabel>
-#include "utils.h"
 #include <DComboBox>
-#include <DPalette>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
 
-DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class EncodingPage: public QWidget
+class EncodingPage: public DWidget
 {
     Q_OBJECT
 public:
-    EncodingPage(QWidget *parent = 0);
+    EncodingPage(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
 

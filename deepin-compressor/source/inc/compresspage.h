@@ -22,26 +22,20 @@
 #ifndef COMPRESSPAGE_H
 #define COMPRESSPAGE_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QStackedLayout>
-#include <DFileDialog>
+#include <DWidget>
 #include <DPushButton>
 #include <QSettings>
-#include <QMessageBox>
-#include <DPalette>
-#include <DApplicationHelper>
-#include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
-DGUI_USE_NAMESPACE
 
-class CompressPage : public QWidget
+class fileViewer;
+
+class CompressPage : public DWidget
 {
     Q_OBJECT
 
 public:
-    CompressPage(QWidget *parent = 0);
+    CompressPage(QWidget *parent = nullptr);
     ~CompressPage();
     QStringList getCompressFilelist();
     void showDialog();

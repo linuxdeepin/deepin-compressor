@@ -23,7 +23,6 @@
 #define MAINWINDOW_H
 
 #include <DMainWindow>
-#include <QStackedLayout>
 #include <QSettings>
 #include <DTitlebar>
 #include "homepage.h"
@@ -45,7 +44,9 @@
 #include "batchextract.h"
 #include "batchcompress.h"
 
+
 #define TITLE_FIXED_HEIGHT 50
+
 DWIDGET_USE_NAMESPACE
 
 enum Page_ID {
@@ -77,13 +78,15 @@ enum WorkState {
     WorkProcess,
 };
 
+class QStackedLayout;
+
 class MainWindow : public DMainWindow
 {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+
     void closeEvent(QCloseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 

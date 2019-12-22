@@ -30,7 +30,10 @@
 #include <QTextCodec>
 #include <QUrl>
 #include <utils.h>
+#include "DPalette"
+#include "DFontSizeManager"
 
+DWIDGET_USE_NAMESPACE
 
 // Used to speed up the loading of large archives.
 static Archive::Entry *s_previousMatch = nullptr;
@@ -53,10 +56,6 @@ ArchiveModel::ArchiveModel(QObject *parent)
         { Size, "size" },
 
     };
-}
-
-ArchiveModel::~ArchiveModel()
-{
 }
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const

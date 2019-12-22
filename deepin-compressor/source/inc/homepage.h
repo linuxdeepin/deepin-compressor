@@ -22,25 +22,22 @@
 #ifndef HOMEPAGE_H
 #define HOMEPAGE_H
 
-#include <QWidget>
+#include <DWidget>
 #include <QVBoxLayout>
 #include <DLabel>
 #include <DFileDialog>
 #include <QSettings>
 #include <DCommandLinkButton>
 #include <DSpinner>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 
-class HomePage : public QWidget
+class HomePage : public DWidget
 {
     Q_OBJECT
 
 public:
     HomePage(QWidget *parent = nullptr);
-    ~HomePage();
 
     void setIconPixmap(bool isLoaded);
     void spinnerStart();

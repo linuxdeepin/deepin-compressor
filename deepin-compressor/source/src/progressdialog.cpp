@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "progressdialog.h"
-#include <kprocess.h>
+#include "kprocess.h"
 #include <QBoxLayout>
 #include <QDebug>
-#include <DStandardPaths>
 #include <QFileInfo>
+#include "DFontSizeManager"
 
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
@@ -50,16 +50,16 @@ void ProgressDialog::initUI()
     QVBoxLayout *contentlayout = new QVBoxLayout;
     DPalette pa;
 
-    m_tasklable = new DLabel();
+    m_tasklable = new DLabel(this);
     DFontSizeManager::instance()->bind(m_tasklable, DFontSizeManager::T6, QFont::Medium);
     m_tasklable->setForegroundRole(DPalette::WindowText);
-    m_filelable = new DLabel();
+    m_filelable = new DLabel(this);
     DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
     m_filelable->setForegroundRole(DPalette::TextTips);
     m_tasklable->setText(tr("Current task") + ":");
     m_filelable->setText(tr("Extracting") + ":");
 
-    m_circleprogress = new  DProgressBar();
+    m_circleprogress = new  DProgressBar(this);
     m_circleprogress->setFixedSize(336, 6);
     m_circleprogress->setValue(0);
 
@@ -77,7 +77,7 @@ void ProgressDialog::initUI()
     mainlayout->addLayout(contentlayout);
 
     setLayout(mainlayout);
-    m_extractdialog = new ExtractPauseDialog();
+    m_extractdialog = new ExtractPauseDialog(this);
 }
 
 void ProgressDialog::initConnect()
@@ -106,11 +106,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
 
 void ProgressDialog::setCurrentTask(const QString &file)
 {
-//    QFileIconProvider icon_provider;
     QFileInfo fileinfo(file);
-//    QIcon icon = icon_provider.icon(fileinfo);
-//    setIcon(icon, QSize(16, 16));
-//    setWindowIcon(icon);
 
     m_tasklable->setText(tr("Current task") + ":" + fileinfo.fileName());
 }

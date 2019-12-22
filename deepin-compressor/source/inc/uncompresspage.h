@@ -22,34 +22,27 @@
 #ifndef SINGLEFILEPAGE_H
 #define SINGLEFILEPAGE_H
 
-
-#include <QWidget>
-#include <QLabel>
+#include "DWidget"
 #include <DFileDialog>
 #include <DPushButton>
-#include <QSettings>
-#include <QMessageBox>
 #include <DLineEdit>
-
-#include "fileViewer.h"
+#include "DLabel"
 #include "jobs.h"
 #include "lib_edit_button.h"
 #include <DCommandLinkButton>
 #include <DPalette>
 #include "archivesortfiltermodel.h"
 #include <DApplicationHelper>
-#include <DFontSizeManager>
+#include "fileViewer.h"
 
-
-DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class UnCompressPage : public QWidget
+class UnCompressPage : public DWidget
 {
     Q_OBJECT
 
 public:
-    UnCompressPage(QWidget *parent = 0);
+    UnCompressPage(QWidget *parent = nullptr);
     ~UnCompressPage();
 
     void setModel(ArchiveSortFilterModel *model);

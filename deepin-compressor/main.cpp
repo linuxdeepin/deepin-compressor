@@ -23,12 +23,9 @@
 #include <DApplication>
 #include <DWidgetUtil>
 #include <QCommandLineParser>
-#include <QDebug>
 #include <DLog>
 #include "utils.h"
-#include <DObject>
 #include <DApplicationSettings>
-#include <QFontDatabase>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE

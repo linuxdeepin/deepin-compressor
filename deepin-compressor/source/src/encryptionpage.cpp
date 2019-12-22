@@ -21,11 +21,11 @@
 #include "encryptionpage.h"
 #include <QBoxLayout>
 #include <utils.h>
-#include <DDesktopServices>
 #include <QDebug>
+#include "DFontSizeManager"
 
 EncryptionPage::EncryptionPage(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     m_inputflag = false;
     InitUI();
@@ -35,17 +35,17 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 void EncryptionPage::InitUI()
 {
     m_encrypticon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_lock_128px.svg", QSize(128, 128));
-    m_pixmaplabel = new DLabel();
+    m_pixmaplabel = new DLabel(this);
     m_pixmaplabel->setPixmap(m_encrypticon);
-    m_stringinfolabel = new DLabel();
+    m_stringinfolabel = new DLabel(this);
 
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(tr("Encrypted file, please enter the password"));
-    m_nextbutton = new DPushButton();
+    m_nextbutton = new DPushButton(this);
     m_nextbutton->setFixedSize(340, 36);
     m_nextbutton->setText(tr("Next"));
-    m_password = new DPasswordEdit();
+    m_password = new DPasswordEdit(this);
     m_password->setFixedSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Please enter password to extract"));

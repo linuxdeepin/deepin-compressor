@@ -26,19 +26,13 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeDatabase>
-#include <QPointer>
 #include <QTimer>
-#include <QUrl>
 
 BatchCompress::BatchCompress(QObject *parent):BatchJobs(parent)
 {
     setCapabilities(KJob::Killable);
 
 //    connect(this, &KJob::result, this, &BatchExtract::showFailedFiles);
-}
-
-BatchCompress::~BatchCompress()
-{
 }
 
 void BatchCompress::setCompressArgs(const QMap<QString, QString> &Args)

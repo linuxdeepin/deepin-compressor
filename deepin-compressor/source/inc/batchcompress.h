@@ -2,21 +2,15 @@
 #define BATCHCOMPRESS_H
 
 #include <QMap>
-#include <QObject>
 #include <QVector>
-#include "queries.h"
 #include "batchjobs.h"
-#include "archivemodel.h"
 
 class BatchCompress: public BatchJobs
 {
     Q_OBJECT
-
 public:
 
     explicit BatchCompress(QObject *parent = nullptr);
-
-    ~BatchCompress();
 
     void addCompress(const QStringList &files);
     void setCompressArgs(const QMap<QString, QString> &Args);

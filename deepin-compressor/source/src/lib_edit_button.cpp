@@ -18,10 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "lib_edit_button.h"
-
-#include <DFileDialog>
-
 
 Lib_Edit_Button::Lib_Edit_Button(DLineEdit *edit)
     : DPushButton(edit)
@@ -33,8 +31,6 @@ Lib_Edit_Button::Lib_Edit_Button(DLineEdit *edit)
 
 void Lib_Edit_Button::InitUI(DLineEdit *edit)
 {
-
-
     QSize size = QSize(46, 36);
     setMinimumSize(size);
     setMaximumSize(size);
@@ -46,7 +42,7 @@ void Lib_Edit_Button::InitUI(DLineEdit *edit)
     m_buttonLayout->addStretch();
     m_buttonLayout->addWidget(this);
 
-    QWidget *empty = new QWidget;
+    DWidget *empty = new DWidget(this);
     empty->setFixedSize(150, 36);
     QHBoxLayout *mainlayout = new QHBoxLayout;
     mainlayout->addWidget(empty, 0, Qt::AlignLeft);

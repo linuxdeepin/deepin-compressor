@@ -25,9 +25,11 @@
 #include <utils.h>
 #include <DDesktopServices>
 #include <QDebug>
+#include "DFontSizeManager"
+#include "DApplicationHelper"
 
 Compressor_Success::Compressor_Success(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     m_stringinfo = tr("Compression successful!");
     InitUI();
@@ -37,17 +39,17 @@ Compressor_Success::Compressor_Success(QWidget *parent)
 void Compressor_Success::InitUI()
 {
     m_compressicon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_128px.svg", QSize(128, 128));
-    m_pixmaplabel = new DLabel();
+    m_pixmaplabel = new DLabel(this);
     m_pixmaplabel->setPixmap(m_compressicon);
 
-    m_stringinfolabel = new DLabel();
+    m_stringinfolabel = new DLabel(this);
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
 //    font.setWeight(QFont::DemiBold);
 //    m_stringinfolabel->setFont(font);
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
-    m_showfilebutton = new DPushButton();
+    m_showfilebutton = new DPushButton(this);
     m_showfilebutton->setFixedSize(340, 36);
     m_showfilebutton->setText(tr("View"));
     m_showfilebutton->setFocusPolicy(Qt::ClickFocus);

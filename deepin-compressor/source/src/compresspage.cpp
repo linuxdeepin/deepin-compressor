@@ -28,17 +28,16 @@
 #include <QTimer>
 #include <QDebug>
 #include <QFile>
-#include <QUrl>
 #include <DRecentManager>
 #include <QShortcut>
 #include <DDialog>
-
-
+#include "fileViewer.h"
+#include "DFileDialog"
 
 DWIDGET_USE_NAMESPACE
 
 CompressPage::CompressPage(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
 
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
@@ -116,7 +115,7 @@ void CompressPage::showDialog()
 
     DPalette pa;
 
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(this);
     strlabel->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
@@ -125,7 +124,7 @@ void CompressPage::showDialog()
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(this);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);

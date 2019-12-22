@@ -22,21 +22,17 @@
 #define COMPRESSOR_FAIL_H
 
 
-#include <QWidget>
+#include <DWidget>
 #include <DPushButton>
 #include <DLabel>
-#include <DPalette>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
 
-DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class Compressor_Fail: public QWidget
+class Compressor_Fail: public DWidget
 {
     Q_OBJECT
 public:
-    Compressor_Fail(QWidget *parent = 0);
+    Compressor_Fail(QWidget *parent =nullptr);
     void InitUI();
     void InitConnection();
 

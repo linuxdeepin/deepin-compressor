@@ -28,8 +28,6 @@
 #include <QScopedPointer>
 #include <QTableView>
 #include "mimetypedisplaymanager.h"
-#include <DFontSizeManager>
-DWIDGET_USE_NAMESPACE
 
 class Query;
 
@@ -56,7 +54,6 @@ class ArchiveModel: public QAbstractItemModel
     Q_OBJECT
 public:
     explicit ArchiveModel(QObject *parent = nullptr);
-    ~ArchiveModel() override;
 
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;

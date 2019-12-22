@@ -8,7 +8,7 @@
 #include "queries.h"
 #include "batchjobs.h"
 #include "archivemodel.h"
-
+#include <QUrl>
 
 class BatchExtract : public BatchJobs
 {
@@ -17,8 +17,6 @@ class BatchExtract : public BatchJobs
 public:
 
     explicit BatchExtract(QObject *parent = nullptr);
-
-    ~BatchExtract();
 
     void addExtraction(const QUrl &url);
 

@@ -22,8 +22,6 @@
 #define MYFILEITEM_H
 
 #include <QStandardItemModel>
-#include "utils.h"
-
 
 class MyFileItem : public QStandardItem
 {

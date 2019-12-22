@@ -21,26 +21,20 @@
 #ifndef COMPRESSSETTING_H
 #define COMPRESSSETTING_H
 
-#include <QWidget>
+#include <DWidget>
 #include <DPushButton>
-#include <DComboBox>
 #include <DLabel>
 #include <DLineEdit>
-#include "utils.h"
 #include <DSwitchButton>
 #include <dpasswordedit.h>
 #include <QVBoxLayout>
-#include <DSpinBox>
 #include "lib_edit_button.h"
 #include "pluginmanager.h"
 #include "dfilechooseredit.h"
-#include <DPalette>
-#include <DApplicationHelper>
 #include <DCheckBox>
 #include <DMenu>
-#include <DFontSizeManager>
+#include "DSpinBox"
 
-DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 #define D_COMPRESS_SPLIT_MIX    5000
@@ -50,19 +44,18 @@ class TypeLabel: public DLabel
 {
     Q_OBJECT
 public:
-    TypeLabel(QWidget *parent = 0);
+    TypeLabel(QWidget *parent = nullptr);
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 signals:
     void labelClickEvent(QMouseEvent *event);
 };
 
-class CompressSetting : public QWidget
+class CompressSetting : public DWidget
 {
     Q_OBJECT
 public:
-    CompressSetting(QWidget *parent = 0);
-    ~CompressSetting();
+    CompressSetting(QWidget *parent = nullptr);
 
     void keyPressEvent(QKeyEvent *event) override;
 

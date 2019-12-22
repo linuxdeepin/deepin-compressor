@@ -23,10 +23,11 @@
 #include <DFileDialog>
 #include <QBoxLayout>
 #include <utils.h>
-
+#include "DFontSizeManager"
+#include "DApplicationHelper"
 
 Compressor_Fail::Compressor_Fail(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     m_stringinfo = tr("Sorry,Extraction failed!");
     m_stringdetail = tr("Damaged file, unable to extract");

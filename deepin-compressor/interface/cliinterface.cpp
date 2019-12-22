@@ -33,15 +33,9 @@
 #include <QRegularExpression>
 #include <QStandardPaths>
 #include <QTemporaryDir>
-#include <QTemporaryFile>
-#include <QThread>
 #include <QUrl>
 #include <QCoreApplication>
-
-//# include <KPtyDevice>
-//# include <KPtyProcess>
-//#include <KLocalizedString>
-
+#include <QTemporaryFile>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)

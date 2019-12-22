@@ -23,10 +23,10 @@
 
 #include <DLineEdit>
 #include <DPushButton>
-#include <QWidget>
-#include <QBoxLayout>
 
 DWIDGET_USE_NAMESPACE
+
+class QHBoxLayout;
 
 class Lib_Edit_Button : public DPushButton
 {

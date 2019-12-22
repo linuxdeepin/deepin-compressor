@@ -52,12 +52,9 @@ enum FileType {
 class MimeTypeDisplayManager : public QObject
 {
     Q_OBJECT
-
 public:
 
-
     explicit MimeTypeDisplayManager(QObject *parent = nullptr);
-    ~MimeTypeDisplayManager();
 
     void initData();
     void initConnect();

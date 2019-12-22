@@ -28,9 +28,6 @@
 #include <QRegularExpression>
 #include <QThread>
 #include <QTimer>
-#include <QUrl>
-
-
 
 
 class Job::Private : public QThread

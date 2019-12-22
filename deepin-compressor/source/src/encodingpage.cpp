@@ -24,9 +24,10 @@
 #include <QDir>
 #include <QTemporaryFile>
 #include <QTextCodec>
+#include "DFontSizeManager"
 
 EncodingPage::EncodingPage(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     InitUI();
     InitConnection();
@@ -35,13 +36,11 @@ EncodingPage::EncodingPage(QWidget *parent)
 void EncodingPage::InitUI()
 {
 //    m_fileicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
-    m_pixmaplabel = new DLabel();
+    m_pixmaplabel = new DLabel(this);
     m_pixmaplabel->setPixmap(m_fileicon);
-    m_filenamelabel = new DLabel();
+    m_filenamelabel = new DLabel(this);
     m_filenamelabel->setText("");
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-//    font.setWeight(QFont::DemiBold);
-//    m_filenamelabel->setFont(font);
+
     DFontSizeManager::instance()->bind(m_filenamelabel, DFontSizeManager::T5, QFont::DemiBold);
 
 
@@ -59,9 +58,9 @@ void EncodingPage::InitUI()
     encodeList.sort();
     encodeList.prepend("UTF-8");
 
-    m_codelabel = new DLabel;
+    m_codelabel = new DLabel(this);
     m_codelabel->setText(tr("Filename Encoding") + ":");
-    m_codebox = new DComboBox;
+    m_codebox = new DComboBox(this);
     m_codebox->setFixedWidth(260);
     m_codebox->setEditable(true);
     m_codebox->addItems(encodeList);
@@ -72,13 +71,13 @@ void EncodingPage::InitUI()
     encodelayout->addWidget(m_codebox);
     encodelayout->addStretch();
 
-    m_detaillabel = new DLabel;
+    m_detaillabel = new DLabel(this);
     m_detaillabel->setText(tr("Select an encoding to continue"));
 //    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_detaillabel, DFontSizeManager::T8);
 
-    m_cancelbutton = new DPushButton(tr("Cancel"));
-    m_confirmbutton = new DPushButton(tr("Select Character Encoding"));
+    m_cancelbutton = new DPushButton(tr("Cancel"), this);
+    m_confirmbutton = new DPushButton(tr("Select Character Encoding"), this);
     m_cancelbutton->setFixedSize(165, 36);
     m_confirmbutton->setFixedSize(165, 36);
     QHBoxLayout *buttonlayout = new QHBoxLayout;

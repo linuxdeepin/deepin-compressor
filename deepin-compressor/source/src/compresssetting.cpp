@@ -33,6 +33,9 @@
 #include <DDialog>
 #include <DStyle>
 #include <QScrollArea>
+#include "DFontSizeManager"
+#include "DApplicationHelper"
+#include "utils.h"
 
 TypeLabel::TypeLabel(QWidget *parent)
     : DLabel(parent)
@@ -43,19 +46,15 @@ TypeLabel::TypeLabel(QWidget *parent)
 void TypeLabel::mousePressEvent(QMouseEvent *event)
 {
     emit labelClickEvent(event);
+    DLabel::mousePressEvent(event);
 }
 
 CompressSetting::CompressSetting(QWidget *parent)
-    : QWidget(parent)
+    : DWidget(parent)
 {
     m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     InitUI();
     InitConnection();
-}
-
-CompressSetting::~CompressSetting()
-{
-
 }
 
 void CompressSetting::InitUI()
@@ -63,10 +62,10 @@ void CompressSetting::InitUI()
     m_nextbutton = new DPushButton(tr("Compress"));
     m_nextbutton->setFixedSize(340, 36);
 
-    QWidget *leftwidget = new QWidget();
-    QHBoxLayout *typelayout = new QHBoxLayout();
-    QHBoxLayout *layout = new QHBoxLayout();
-    m_pixmaplabel = new DLabel();
+    QWidget *leftwidget = new QWidget(this);
+    QHBoxLayout *typelayout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
+    m_pixmaplabel = new DLabel(this);
 
     m_compresstype = new TypeLabel();
     DPalette pa;
@@ -74,9 +73,10 @@ void CompressSetting::InitUI()
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_compresstype->setMinimumHeight(25);
 
-    DStyle *style = new DStyle;
-    QPixmap pixmap = style->standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
-    typepixmap = new TypeLabel;
+    DStyle style;
+    QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
+
+    typepixmap = new TypeLabel(this);
     typepixmap->setMinimumHeight(25);
     typepixmap->setPixmap(pixmap);
     m_compresstype->setText("zip");
@@ -92,12 +92,12 @@ void CompressSetting::InitUI()
     typelayout->addWidget(typepixmap, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addStretch();
 
-    m_clicklabel = new TypeLabel();
+    m_clicklabel = new TypeLabel(this);
     m_clicklabel->setMinimumSize(125,40);
     m_clicklabel->setLayout(typelayout);
     layout->addWidget(m_clicklabel,0, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    m_typemenu = new DMenu;
+    m_typemenu = new DMenu(this);
     m_typemenu->setFixedWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
@@ -139,9 +139,9 @@ void CompressSetting::InitUI()
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
-    m_splitcompress = new DCheckBox(tr("Split to volumes") + ":");
+    m_splitcompress = new DCheckBox(tr("Split to volumes") + ":", this);
     m_splitcompress->setEnabled(false);
-    m_splitnumedit = new DDoubleSpinBox();
+    m_splitnumedit = new DDoubleSpinBox(this);
     m_splitnumedit->setMinimumSize(260, 36);
     m_splitnumedit->setSuffix("MB");
     m_splitnumedit->setRange(0.0, 1000000);
@@ -167,7 +167,7 @@ void CompressSetting::InitUI()
     m_fileLayout->addWidget(m_splitnumedit);
     m_fileLayout->addStretch();
 
-    DWidget *m_rightwidget = new DWidget();
+    DWidget *m_rightwidget = new DWidget(this);
     m_rightwidget->setLayout(m_fileLayout);
 
     QScrollArea *m_scroll = new QScrollArea();

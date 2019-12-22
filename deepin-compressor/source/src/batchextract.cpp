@@ -40,10 +40,6 @@ BatchExtract::BatchExtract(QObject *parent)
     connect(this, &KJob::result, this, &BatchExtract::showFailedFiles);
 }
 
-BatchExtract::~BatchExtract()
-{
-}
-
 void BatchExtract::addExtraction(const QUrl &url)
 {
 

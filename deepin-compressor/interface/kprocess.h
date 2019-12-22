@@ -47,7 +47,7 @@ public:
     };
 
     explicit KProcess(QObject *parent = nullptr);
-    ~KProcess() override;
+    ~KProcess();
 
     void setOutputChannelMode(OutputChannelMode mode);
     OutputChannelMode outputChannelMode() const;

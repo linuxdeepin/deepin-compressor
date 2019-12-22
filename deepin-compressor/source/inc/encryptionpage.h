@@ -20,22 +20,18 @@
  */
 #ifndef ENCRYPTIONPAGE_H
 #define ENCRYPTIONPAGE_H
-#include <QWidget>
+#include <DWidget>
 #include <DPushButton>
 #include <DLabel>
-#include <dpasswordedit.h>
-#include <DPalette>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
+#include <DPasswordEdit>
 
-DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class EncryptionPage: public QWidget
+class EncryptionPage: public DWidget
 {
     Q_OBJECT
 public:
-    EncryptionPage(QWidget *parent = 0);
+    EncryptionPage(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
 

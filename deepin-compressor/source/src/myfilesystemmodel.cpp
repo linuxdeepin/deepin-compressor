@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <utils.h>
+#include "DFontSizeManager"
 
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)
@@ -33,17 +34,12 @@ MyFileSystemModel::MyFileSystemModel(QObject *parent)
     setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 }
 
-MyFileSystemModel::~MyFileSystemModel()
-{
-
-}
-
 void MyFileSystemModel::setPathIndex(int *index)
 {
     ppathindex = index;
 }
 
-void MyFileSystemModel::setTableView(QTableView *tableview)
+void MyFileSystemModel::setTableView(DTableView *tableview)
 {
     m_tableview = tableview;
 }

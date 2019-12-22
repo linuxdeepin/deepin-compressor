@@ -21,20 +21,17 @@
 #ifndef COMPRESSOR_SUCCESS_H
 #define COMPRESSOR_SUCCESS_H
 
-#include <QWidget>
+#include <DWidget>
 #include <DPushButton>
 #include <DLabel>
-#include <DPalette>
-#include <DApplicationHelper>
-#include <DFontSizeManager>
-DWIDGET_USE_NAMESPACE
-DGUI_USE_NAMESPACE
 
-class Compressor_Success: public QWidget
+DWIDGET_USE_NAMESPACE
+
+class Compressor_Success: public DWidget
 {
     Q_OBJECT
 public:
-    Compressor_Success(QWidget *parent = 0);
+    Compressor_Success(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
     void setstringinfo(QString str);

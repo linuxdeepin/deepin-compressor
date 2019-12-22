@@ -42,7 +42,7 @@ class SettingDialog: public DSettingsDialog
 {
     Q_OBJECT
 public:
-    explicit SettingDialog(QWidget *parent = 0);
+    explicit SettingDialog(QWidget *parent = nullptr);
     void initUI();
     void initConnect();
 

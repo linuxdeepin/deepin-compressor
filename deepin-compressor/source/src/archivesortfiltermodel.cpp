@@ -30,10 +30,6 @@ ArchiveSortFilterModel::ArchiveSortFilterModel(QObject *parent)
 {
 }
 
-ArchiveSortFilterModel::~ArchiveSortFilterModel()
-{
-}
-
 bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                                       const QModelIndex &rightIndex) const
 {

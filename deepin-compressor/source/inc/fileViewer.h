@@ -20,19 +20,18 @@
  */
 #ifndef FILEVIWER_H
 #define FILEVIWER_H
-#include <QDialog>
+
 #include <QFileInfo>
 #include <QLineEdit>
-#include <QListWidget>
 #include <QTableView>
 #include <DLabel>
 #include <QItemDelegate>
-#include <QApplication>
+
 #include <QPainter>
 #include "myfilesystemmodel.h"
-#include <QPushButton>
-#include <QScrollBar>
-#include <QDateTime>
+
+#include <DScrollBar>
+
 #include <QStandardItemModel>
 #include <dfiledragserver.h>
 #include <dfiledrag.h>
@@ -42,6 +41,7 @@
 #include "archivesortfiltermodel.h"
 #include <DApplicationHelper>
 #include <DFontSizeManager>
+#include <QUrl>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -58,7 +58,7 @@ enum EXTRACT_TYPE {
     EXTRACT_TEMP,
 };
 
-class MyScrollBar: public QScrollBar
+class MyScrollBar: public DScrollBar
 {
     Q_OBJECT
 public:

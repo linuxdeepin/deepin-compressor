@@ -30,7 +30,6 @@ class ArchiveSortFilterModel: public QSortFilterProxyModel
 
 public:
     explicit ArchiveSortFilterModel(QObject *parent = nullptr);
-    ~ArchiveSortFilterModel() override;
 
     bool lessThan(const QModelIndex &leftIndex, const QModelIndex &rightIndex) const override;
 };

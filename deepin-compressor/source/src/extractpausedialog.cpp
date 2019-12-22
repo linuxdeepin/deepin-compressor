@@ -23,6 +23,12 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <utils.h>
+#include "DFontSizeManager"
+#include "DLabel"
+#include "QAbstractButton"
+#include "DWidget"
+
+DWIDGET_USE_NAMESPACE
 
 ExtractPauseDialog::ExtractPauseDialog(QWidget *parent):
     DDialog(parent)
@@ -40,13 +46,13 @@ void ExtractPauseDialog::initUI()
 
     DPalette pa;
 
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(this);
     strlabel->setFixedHeight(20);
     strlabel->setForegroundRole(DPalette::WindowText);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("Stop extracting!"));
-    DLabel *strlabel2 = new DLabel;
+    DLabel *strlabel2 = new DLabel(this);
     strlabel2->setFixedHeight(20);
     strlabel2->setForegroundRole(DPalette::TextTips);
 
@@ -59,7 +65,7 @@ void ExtractPauseDialog::initUI()
 
     addButton(tr("Stop extracting"));
     addButton(tr("Continue extracting"), true, ButtonRecommend);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 4);
     effect->setColor(QColor(0, 145, 255, 76));
     effect->setBlurRadius(4);
@@ -71,7 +77,7 @@ void ExtractPauseDialog::initUI()
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(this);
 
     widget->setLayout(mainlayout);
     addContent(widget);

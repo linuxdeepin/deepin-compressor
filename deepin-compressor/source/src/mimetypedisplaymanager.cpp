@@ -40,11 +40,6 @@ MimeTypeDisplayManager::MimeTypeDisplayManager(QObject *parent) : QObject(parent
     initConnect();
 }
 
-MimeTypeDisplayManager::~MimeTypeDisplayManager()
-{
-
-}
-
 void MimeTypeDisplayManager::initData()
 {
     m_displayNames[FileType::Directory] = tr("Directory");

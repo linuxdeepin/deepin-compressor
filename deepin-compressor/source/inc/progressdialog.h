@@ -22,14 +22,10 @@
 #define PROGRESSDIALOG_H
 
 #include <DTitlebar>
-#include <DDialog>
 #include <DPushButton>
 #include <DLabel>
 #include <DProgressBar>
 #include "extractpausedialog.h"
-#include <DApplicationHelper>
-#include <DFontSizeManager>
-#include <DFloatingMessage>
 
 DWIDGET_USE_NAMESPACE
 
@@ -37,7 +33,7 @@ class ProgressDialog: public DAbstractDialog
 {
     Q_OBJECT
 public:
-    explicit ProgressDialog(QWidget *parent = 0);
+    explicit ProgressDialog(QWidget *parent = nullptr);
     void initUI();
     void initConnect();
 
