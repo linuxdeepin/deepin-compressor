@@ -62,16 +62,16 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
 {
     if ((1 == index.row() || 0 == index.row())&& 0 == index.column()) {
         if (m_ppathindex && *m_ppathindex > 0) {
-            m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight * 2);
+            //m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight * 2);
             emit sigShowLabel();
         } else {
-            m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight);
+            //m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         }
     }
 
-    if (0 != index.row()) {
-        m_tableview->setRowHeight(index.row(), ArchiveModelDefine::gTableHeight);
-    }
+//    if (0 != index.row()) {
+//        m_tableview->setRowHeight(index.row(), ArchiveModelDefine::gTableHeight);
+//    }
 
     if (index.isValid()) {
         Archive::Entry *entry = static_cast<Archive::Entry *>(index.internalPointer());
@@ -472,7 +472,7 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
     if (entry) {
         Archive::Entry *parent = entry->getParent();
         QModelIndex index = indexForEntry(entry);
-        Q_UNUSED(index);
+        Q_UNUSED(index)
 
         beginRemoveRows(indexForEntry(parent), entry->row(), entry->row());
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));

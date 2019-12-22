@@ -23,6 +23,7 @@ INCLUDEPATH += $$PWD/source/inc/ \
 
 # Input
 HEADERS +=  source/inc/homepage.h \
+    source/inc/logviewheaderview.h \
             source/inc/mainwindow.h \
             source/inc/utils.h \
             source/inc/fileViewer.h \

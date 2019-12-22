@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "logviewheaderview.h"
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
@@ -26,19 +27,98 @@
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
-
-#include "logviewheaderview.h"
-
+#include "DFontSizeManager"
 static const int kSpacingMargin = 4;
 
+DWIDGET_USE_NAMESPACE
+
+MyLabel::MyLabel(QWidget *parent)
+    : DLabel(parent)
+{
+
+}
+
+void MyLabel::paintEvent(QPaintEvent *e)
+{
+    QRectF rectangle(0, 0, width(), height());
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QColor bgColor;
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(247, 247, 247);
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(38, 38, 38);
+    }
+
+    QPainterPath pp;
+    pp.addRoundedRect(rectangle, 8, 8);
+    painter.fillPath(pp, bgColor);
+    QLabel::paintEvent(e);
+}
+
+void MyLabel::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit labelDoubleClickEvent(event);
+}
+
+PreviousLabel::PreviousLabel(const QString &text, LogViewHeaderView *parent ): DLabel(text, parent),headerView_(parent)
+{
+
+}
+
+void PreviousLabel::paintEvent(QPaintEvent *e)
+{
+    QRectF rectangle(0, 0, width(), height());
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QColor bgColor;
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(247, 247, 247);
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        bgColor = QColor(38, 38, 38);
+    }
+
+    QPainterPath pp;
+    pp.addRoundedRect(rectangle, 8, 8);
+    painter.fillPath(pp, bgColor);
+    QLabel::paintEvent(e);
+}
+
+void PreviousLabel::hideEvent(QHideEvent *event)
+{
+    move(0, 0);
+    headerView_->setFixedHeight(36);
+    QLabel::hideEvent(event);
+    headerView_->update();
+}
+
+void PreviousLabel::showEvent(QShowEvent *event)
+{
+    move(0, 36);
+    headerView_->setFixedHeight(72);
+    QLabel::showEvent(event);
+    headerView_->update();
+}
+
+void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit doubleClickedSignal();
+    QLabel::mouseDoubleClickEvent(event);
+}
+
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)
-    : DHeaderView(orientation, parent)
+    : DHeaderView(orientation, parent), gotoPreviousLabel_( new PreviousLabel("     .. " + tr("Back"), this))
 {
     viewport()->setAutoFillBackground(false);
     setSectionsClickable(true);
     setHighlightSections(true);
     setFrameShape(DHeaderView::NoFrame);
 
+    gotoPreviousLabel_->setFixedHeight(36);
+    gotoPreviousLabel_->hide();
+    DFontSizeManager::instance()->bind(gotoPreviousLabel_, DFontSizeManager::T6, QFont::Weight::Medium);
 }
 
 void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
@@ -65,9 +145,9 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     // title
-    QRect contentRect(rect.x(), rect.y(), rect.width(), rect.height() - m_spacing);
+    QRect contentRect(rect.x(), rect.y(), rect.width(), 36 - m_spacing);
     QRect hSpacingRect(rect.x(), contentRect.height(), rect.width(),
-                       rect.height() - contentRect.height());
+                       36 - contentRect.height());
 
     QBrush contentBrush(palette.color(cg, DPalette::Base));
     // horizontal spacing
@@ -75,7 +155,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin, m_spacing,
-                        rect.height() - kSpacingMargin * 2);
+                        36 - kSpacingMargin * 2);
     QBrush clearBrush(palette.color(cg, DPalette::Window));
 
 //    painter->fillRect(hSpacingRect, clearBrush);
@@ -92,7 +172,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     //    int align = model()->headerData(logicalIndex, orientation(),
     //    Qt::TextAlignmentRole).toInt();
-    int align = Qt::AlignLeft | Qt::AlignVCenter;
+    static int align = Qt::AlignLeft | Qt::AlignVCenter;
     QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     pFont.setWeight(QFont::Weight::Medium);
     painter->setFont(pFont);
@@ -100,11 +180,11 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
         QRect col0Rect = textRect;
         col0Rect.setX(textRect.x() + margin - 2);
         painter->drawText(col0Rect, static_cast<int>(align), title);
-    } else if(logicalIndex == 3){
-        QRect col3Rect = textRect;
-        col3Rect.setX(textRect.x() + 20);
-        painter->drawText(col3Rect, static_cast<int>(align), title);
-    }else {
+    }
+    else if(logicalIndex == 3){
+        painter->drawText(textRect, static_cast<int>(Qt::AlignRight | Qt::AlignVCenter), title);
+    }
+    else {
         painter->drawText(textRect, static_cast<int>(align), title);
     }
 
@@ -124,41 +204,49 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     painter->restore();
 }
 
+void LogViewHeaderView::resizeEvent(QResizeEvent *event)
+{
+    gotoPreviousLabel_->setFixedWidth(event->size().width());
+    DHeaderView::resizeEvent(event);
+}
+
 void LogViewHeaderView::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(viewport());
-    painter.save();
+//    QPainter painter(viewport());
+//    painter.save();
 
-    QWidget *wnd = DApplication::activeWindow();
-    DPalette::ColorGroup cg;
-    if (!wnd) {
-        cg = DPalette::Inactive;
-    } else {
-        cg = DPalette::Active;
-    }
+//    QWidget *wnd = DApplication::activeWindow();
+//    DPalette::ColorGroup cg;
+//    if (!wnd) {
+//        cg = DPalette::Inactive;
+//    } else {
+//        cg = DPalette::Active;
+//    }
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-    DPalette palette = dAppHelper->applicationPalette();
+//    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+//    DPalette palette = dAppHelper->applicationPalette();
 
-    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+//    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
 
-    QBrush bgBrush(palette.color(cg, DPalette::Base));
+//    QBrush bgBrush(palette.color(cg, DPalette::Base));
 
-    QStyleOptionHeader option;
-    initStyleOption(&option);
-    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+//    QStyleOptionHeader option;
+//    initStyleOption(&option);
+//    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
 
-    QRect rect = viewport()->rect();
-    QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
-    QRectF subRect(rect.x(), rect.y() + rect.height(), rect.width(), rect.height());
-    QPainterPath clipPath, subPath;
-    clipPath.addRoundedRect(clipRect, radius, radius);
-    subPath.addRect(subRect);
-    clipPath = clipPath.subtracted(subPath);
+//    QRect rect = viewport()->rect();
+//    rect.setHeight(36);
+//    QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
+//    QRectF subRect(rect.x(), rect.y() + rect.height(), rect.width(), rect.height());
+//    QPainterPath clipPath, subPath;
+//    clipPath.addRoundedRect(clipRect, radius, radius);
+//    subPath.addRect(subRect);
+//    clipPath = clipPath.subtracted(subPath);
 
-    painter.fillPath(clipPath, bgBrush);
+//    painter.fillPath(clipPath, bgBrush);
 
-    painter.restore();
+//    painter.restore();
+
     DHeaderView::paintEvent(event);
 }
 
@@ -167,12 +255,3 @@ QSize LogViewHeaderView::sizeHint() const
     QSize size = sectionSizeFromContents(0);
     return QSize(size.width(), size.height() + m_spacing);
 }
-
-//QStyleOptionViewItem LogViewHeaderView::viewOptions() const
-//{
-//    auto styleOptViewItem = DHeaderView::viewOptions();
-//    styleOptViewItem.state |= QStyle::State_Active;
-
-//    return styleOptViewItem;
-//}
-

@@ -23,15 +23,12 @@
 
 #include <QFileInfo>
 #include <QLineEdit>
-#include <QTableView>
+#include <DTableView>
 #include <DLabel>
 #include <QItemDelegate>
-
 #include <QPainter>
 #include "myfilesystemmodel.h"
-
 #include <DScrollBar>
-
 #include <QStandardItemModel>
 #include <dfiledragserver.h>
 #include <dfiledrag.h>
@@ -58,6 +55,8 @@ enum EXTRACT_TYPE {
     EXTRACT_TEMP,
 };
 
+class LogViewHeaderView;
+
 class MyScrollBar: public DScrollBar
 {
     Q_OBJECT
@@ -71,24 +70,11 @@ signals:
     void ScrollBarHideEvent(QHideEvent *event);
 };
 
-class MyLabel: public QLabel
-{
-    Q_OBJECT
-public:
-    MyLabel(QWidget *parent = nullptr);
-    void paintEvent(QPaintEvent *e) override;
-protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
-signals:
-    void labelDoubleClickEvent(QMouseEvent *event);
-};
 
 class FirstRowDelegate : public QItemDelegate
 {
     Q_OBJECT
-
 public:
-
     FirstRowDelegate(QObject *parent =nullptr);
     void setPathIndex(int *index);
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -113,9 +99,9 @@ class MyTableView: public DTableView
     Q_OBJECT
 public:
     MyTableView(QWidget *parent = nullptr);
+    void setPreviousButtonVisible(bool visible);
 
 protected:
-    void paintEvent(QPaintEvent *e) override;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
@@ -130,10 +116,12 @@ private:
     DFileDragServer *s = nullptr;
     QString m_path;
 
+public:
+    LogViewHeaderView* header_;
 };
 
 
-class fileViewer : public QWidget
+class fileViewer : public DWidget
 {
     Q_OBJECT
 public:
@@ -162,7 +150,7 @@ protected:
 protected slots:
     void slotCompressRowDoubleClicked(const QModelIndex index);
     void slotDecompressRowDoubleClicked(const QModelIndex index);
-    void slotCompressRePreviousDoubleClicked(QMouseEvent *event);
+    void slotCompressRePreviousDoubleClicked();
     void ScrollBarShowEvent(QShowEvent *event);
     void ScrollBarHideEvent(QHideEvent *event);
     void showRightMenu(const QPoint &pos);
@@ -188,7 +176,7 @@ private:
     ArchiveModel *m_decompressmodel;
     ArchiveSortFilterModel *m_sortmodel;
     FirstRowDelegate *pdelegate;
-    MyLabel *plabel;
+    //MyLabel *plabel;
     QModelIndex m_indexmode;
     MyScrollBar *pScrollbar;
     QFileInfoList m_curfilelist;
@@ -197,8 +185,6 @@ private:
 
     PAGE_TYPE m_pagetype;
     MimeTypeDisplayManager *m_mimetype;
-
-
 };
 
 #endif // FILEVIWER_H

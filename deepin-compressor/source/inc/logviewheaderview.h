@@ -19,17 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SYSTEM_SERVICE_TABLE_HEADER_VIEW_H
-#define SYSTEM_SERVICE_TABLE_HEADER_VIEW_H
+#pragma once
 
+#include <DLabel>
 #include <DHeaderView>
-#include <DStyle>
-#include <DFontSizeManager>
 
-DWIDGET_USE_NAMESPACE
+class LogViewHeaderView;
 
-class LogViewHeaderView : public DHeaderView
+class MyLabel: public Dtk::Widget::DLabel
 {
+    Q_OBJECT
+public:
+    MyLabel(QWidget *parent = nullptr);
+    void paintEvent(QPaintEvent *e) override;
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+signals:
+    void labelDoubleClickEvent(QMouseEvent *event);
+};
+
+class PreviousLabel: public Dtk::Widget::DLabel
+{
+    Q_OBJECT
+public:
+    PreviousLabel(const QString &text, LogViewHeaderView *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *e) override;
+    void hideEvent(QHideEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+
+signals:
+    void doubleClickedSignal();
+
+private:
+    LogViewHeaderView* headerView_;
+};
+
+class LogViewHeaderView : public Dtk::Widget::DHeaderView
+{
+    Q_OBJECT
 public:
     LogViewHeaderView(Qt::Orientation orientation, QWidget *parent = nullptr);
 
@@ -44,10 +74,12 @@ protected:
                               int logicalIndex) const override;
 
 private:
-    //QStyleOptionViewItem viewOptions() const override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     int m_spacing {1};
+
+public:
+    PreviousLabel* gotoPreviousLabel_;
 };
 
-#endif  // SYSTEM_SERVICE_TABLE_HEADER_VIEW_H

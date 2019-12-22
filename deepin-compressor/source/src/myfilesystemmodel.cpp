@@ -69,16 +69,16 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
     if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
         if (ppathindex && *ppathindex > 0) {
-            m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight * 2);
+            //m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
             emit sigShowLabel();
-        } else {
+        } /*else {
             m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
-        }
+        }*/
     }
 
-    if (0 != index.row()) {
-        m_tableview->setRowHeight(index.row(), MyFileSystemDefine::gTableHeight);
-    }
+//    if (0 != index.row()) {
+//        m_tableview->setRowHeight(index.row(), MyFileSystemDefine::gTableHeight);
+//    }
 
     if (index.isValid()) {
         QFileInfo file = fileInfo(index);
