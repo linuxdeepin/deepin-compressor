@@ -43,7 +43,6 @@ class UnCompressPage : public DWidget
 
 public:
     UnCompressPage(QWidget *parent = nullptr);
-    ~UnCompressPage();
 
     void setModel(ArchiveSortFilterModel *model);
     QString getDecompressPath();

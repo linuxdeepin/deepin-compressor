@@ -102,8 +102,8 @@ public:
     void setPreviousButtonVisible(bool visible);
 
 protected:
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
 
 signals:
     void sigdragLeave(QString path);

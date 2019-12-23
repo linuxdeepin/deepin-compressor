@@ -36,7 +36,7 @@ class CompressPage : public DWidget
 
 public:
     CompressPage(QWidget *parent = nullptr);
-    ~CompressPage();
+
     QStringList getCompressFilelist();
     void showDialog();
     int showReplaceDialog(QString name);

@@ -158,16 +158,16 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::InitUI()
 {
-    m_UnCompressPage = new UnCompressPage;
-    m_CompressPage = new CompressPage;
-    m_CompressSetting = new CompressSetting;
-    m_Progess = new Progress;
-    m_CompressSuccess = new Compressor_Success;
-    m_CompressFail = new Compressor_Fail;
-    m_encryptionpage = new EncryptionPage;
-    m_progressdialog = new ProgressDialog;
-    m_settingsDialog = new SettingDialog;
-    m_encodingpage = new EncodingPage;
+    m_UnCompressPage = new UnCompressPage(this);
+    m_CompressPage = new CompressPage(this);
+    m_CompressSetting = new CompressSetting(this);
+    m_Progess = new Progress(this);
+    m_CompressSuccess = new Compressor_Success(this);
+    m_CompressFail = new Compressor_Fail(this);
+    m_encryptionpage = new EncryptionPage(this);
+    m_progressdialog = new ProgressDialog(this);
+    m_settingsDialog = new SettingDialog(this);
+    m_encodingpage = new EncodingPage(this);
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
                                QSettings::IniFormat);
 

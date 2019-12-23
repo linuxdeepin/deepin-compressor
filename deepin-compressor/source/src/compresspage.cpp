@@ -78,14 +78,7 @@ CompressPage::CompressPage(QWidget *parent)
 
     setBackgroundRole(DPalette::Base);
     m_fileviewer->setAutoFillBackground(true);
-
 }
-
-CompressPage::~CompressPage()
-{
-
-}
-
 
 
 void CompressPage::onNextPress()

@@ -76,11 +76,6 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigextractfiles, this, &UnCompressPage::onextractfilesSlot);
 }
 
-UnCompressPage::~UnCompressPage()
-{
-
-}
-
 void UnCompressPage::oneCompressPress()
 {
     emit sigDecompressPress(m_pathstr);

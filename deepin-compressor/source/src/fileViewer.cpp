@@ -221,6 +221,10 @@ MyTableView::MyTableView(QWidget *parent)
     };
     changeTheme();
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, changeTheme);
+
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
 }
 
 void MyTableView::setPreviousButtonVisible(bool visible)
@@ -231,25 +235,42 @@ void MyTableView::setPreviousButtonVisible(bool visible)
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::MouseButton::LeftButton) {
+    if (e->button() == Qt::MouseButton::LeftButton)
+    {
         dragpos = e->pos();
     }
-    QTableView::mousePressEvent(e);
+    DTableView::mousePressEvent(e);
 }
 
 void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!(e->buttons() & Qt::MouseButton::LeftButton) || s) {
+    QModelIndexList lst = selectedIndexes();
+
+    if(lst.size() < 0)
+    {
+        return;
+    }
+
+    if (!(e->buttons() & Qt::MouseButton::LeftButton) || s)
+    {
         return;
     }
     if ((e->pos() - dragpos).manhattanLength() < QApplication::startDragDistance()) {
         return;
     }
 
-    s = new DFileDragServer();
+    s = new DFileDragServer(this);
     DFileDrag *drag = new DFileDrag(this, s);
     QMimeData *m = new QMimeData();
-    m->setText("your stuff here");
+    //m->setText("your stuff here");
+
+    QVariant value = lst[0].data(Qt::DecorationRole);
+
+    if (value.isValid() && value.type() == QVariant::Pixmap )
+    {
+         drag->setPixmap(qvariant_cast<QPixmap>(value));
+    }
+
     drag->setMimeData(m);
 
 //    connect(drag, &DFileDrag::targetUrlChanged, [drag] {
@@ -258,14 +279,19 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 //    });
 
     connect(drag, &DFileDrag::targetUrlChanged, this, &MyTableView::slotDragpath);
-    drag->exec();
+    Qt::DropAction result = drag->exec(Qt::CopyAction);
 
 
     s->setProgress(100);
     s->deleteLater();
     s = nullptr;
     qDebug() << "sigdragLeave";
-    emit sigdragLeave(m_path);
+
+    if(result == Qt::DropAction::CopyAction)
+    {
+        emit sigdragLeave(m_path);
+    }
+
     m_path.clear();
 }
 
@@ -274,6 +300,7 @@ void MyTableView::slotDragpath(QUrl url)
     m_path = url.toLocalFile();
     qDebug() << m_path;
 }
+
 
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : DWidget(parent), m_pagetype(type)
@@ -478,6 +505,8 @@ void fileViewer::resizeEvent(QResizeEvent */*size*/)
 
 void fileViewer::keyPressEvent(QKeyEvent *event)
 {
+    DWidget::keyPressEvent(event);
+
     if (!event) {
         return;
     }
