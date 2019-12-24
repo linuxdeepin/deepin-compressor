@@ -52,22 +52,19 @@ void TypeLabel::mousePressEvent(QMouseEvent *event)
 CompressSetting::CompressSetting(QWidget *parent)
     : DWidget(parent)
 {
-    m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
-    InitUI();
-    InitConnection();
 }
 
 void CompressSetting::InitUI()
 {
-    m_nextbutton = new DPushButton(tr("Compress"));
+    m_nextbutton = new DPushButton(tr("Compress"), this);
     m_nextbutton->setFixedSize(340, 36);
 
-    QWidget *leftwidget = new QWidget(this);
+    DWidget *leftwidget = new DWidget(this);
     QHBoxLayout *typelayout = new QHBoxLayout;
     QHBoxLayout *layout = new QHBoxLayout;
     m_pixmaplabel = new DLabel(this);
 
-    m_compresstype = new TypeLabel();
+    m_compresstype = new TypeLabel(this);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
@@ -111,7 +108,7 @@ void CompressSetting::InitUI()
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
-    m_savepath = new DFileChooserEdit();
+    m_savepath = new DFileChooserEdit(this);
     m_savepath->setFileMode(DFileDialog::Directory);
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setMinimumSize(260, 36);
@@ -122,7 +119,7 @@ void CompressSetting::InitUI()
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
     filelayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
 
-    DLabel *moresetlabel = new DLabel(tr("Advanced Options"));
+    DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
     moresetlabel->setForegroundRole(DPalette::WindowText);
     m_moresetbutton = new DSwitchButton();
     m_moresetlayout = new QHBoxLayout();
@@ -170,13 +167,11 @@ void CompressSetting::InitUI()
     DWidget *m_rightwidget = new DWidget(this);
     m_rightwidget->setLayout(m_fileLayout);
 
-    QScrollArea *m_scroll = new QScrollArea();
+    QScrollArea *m_scroll = new QScrollArea(this);
     m_scroll->setWidget(m_rightwidget);
     m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scroll->setFrameShape(QFrame::NoFrame);
-    m_scroll->setWidgetResizable(true);
-
-
+    //m_scroll->setWidgetResizable(true);
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
     infoLayout->addStretch();
@@ -200,7 +195,6 @@ void CompressSetting::InitUI()
 }
 void CompressSetting::InitConnection()
 {
-
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
@@ -368,6 +362,13 @@ void CompressSetting::setTypeImage(QString type)
 
 void CompressSetting::setDefaultPath(QString path)
 {
+    if(m_nextbutton == nullptr)
+    {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        InitUI();
+        InitConnection();
+    }
+
     m_savepath->setText(path);
     QUrl dir(path);
     m_savepath->setDirectoryUrl(dir);
@@ -375,6 +376,13 @@ void CompressSetting::setDefaultPath(QString path)
 
 void CompressSetting::setDefaultName(QString name)
 {
+    if(m_nextbutton == nullptr)
+    {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        InitUI();
+        InitConnection();
+    }
+
     onAdvanceButtonClicked(m_moresetbutton->isChecked());
     m_filename->setText(name);
     QLineEdit *qfilename = m_filename->lineEdit();
@@ -418,7 +426,7 @@ bool CompressSetting::checkfilename(QString str)
     }
 
     black_list.clear();
-    black_list = {'/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']'};
+    black_list = {'/', '\t', '\b', '@', '#', '$', '%', '^', '&'};/*, '*', '(', ')', '[', ']'*/
     foreach (QChar black_char, black_list) {
         if (str.contains(black_char)) {
             return false;
@@ -428,6 +436,40 @@ bool CompressSetting::checkfilename(QString str)
     return true;
 }
 
+void CompressSetting::showEvent(QShowEvent *event)
+{
+    if(m_nextbutton == nullptr)
+    {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        InitUI();
+        InitConnection();
+    }
+
+    DWidget::showEvent(event);
+}
+
+
+void CompressSetting::keyPressEvent(QKeyEvent *event)
+{
+    if (!event) {
+        return;
+    }
+    if (event->key() == Qt::Key_F2) {
+
+        QLineEdit *qfilename = m_filename->lineEdit();
+        QLineEdit *qpath = m_savepath->lineEdit();
+        QLineEdit *qpassword = m_password->lineEdit();
+        if (qfilename->hasFocus()) {
+            qfilename->selectAll();
+        } else if (qpath->hasFocus()) {
+            qpath->selectAll();
+        } else if (qpassword->hasFocus()) {
+            qpassword->selectAll();
+        } else if (m_splitnumedit->hasFocus()) {
+            m_splitnumedit->selectAll();
+        }
+    }
+}
 
 void CompressSetting::setFilepath(QStringList pathlist)
 {
@@ -497,29 +539,6 @@ void CompressSetting::onSplitValueChanged(double /*value*/)
 //    }
 }
 
-void CompressSetting::keyPressEvent(QKeyEvent *event)
-{
-    if (!event) {
-        return;
-    }
-    if (event->key() == Qt::Key_F2) {
-
-        QLineEdit *qfilename = m_filename->lineEdit();
-        QLineEdit *qpath = m_savepath->lineEdit();
-        QLineEdit *qpassword = m_password->lineEdit();
-        if (qfilename->hasFocus()) {
-            qfilename->selectAll();
-        } else if (qpath->hasFocus()) {
-            qpath->selectAll();
-        } else if (qpassword->hasFocus()) {
-            qpassword->selectAll();
-        } else if (m_splitnumedit->hasFocus()) {
-            m_splitnumedit->selectAll();
-        }
-    }
-
-
-}
 
 void CompressSetting::onRetrunPressed()
 {

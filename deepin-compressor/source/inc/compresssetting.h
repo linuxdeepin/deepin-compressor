@@ -57,8 +57,6 @@ class CompressSetting : public DWidget
 public:
     CompressSetting(QWidget *parent = nullptr);
 
-    void keyPressEvent(QKeyEvent *event) override;
-
     void InitUI();
     void InitConnection();
 
@@ -70,35 +68,8 @@ public:
     bool checkfilename(QString str);
 
 private:
-    DPushButton *m_nextbutton;
-    QPixmap m_compressicon;
-    TypeLabel *m_compresstype;
-    DLineEdit *m_filename;
-    DFileChooserEdit *m_savepath;
-    DLabel *m_pixmaplabel;
-    TypeLabel *m_clicklabel;
-    TypeLabel *typepixmap;
-//    Lib_Edit_Button* m_pathbutton;
-    QVBoxLayout *m_fileLayout;
-
-    QHBoxLayout *m_moresetlayout;
-    DSwitchButton *m_moresetbutton;
-    DPasswordEdit *m_password;
-    QHBoxLayout *m_file_secretlayout;
-    DSwitchButton *m_file_secret;
-    QHBoxLayout *m_splitlayout;
-    DDoubleSpinBox *m_splitnumedit;
-    DPushButton *m_plusbutton;
-    DPushButton *m_minusbutton;
-    DLabel *m_encryptedlabel;
-    DCheckBox *m_splitcompress;
-    DLabel *m_encryptedfilelistlabel;
-    DMenu *m_typemenu;
-
-    PluginManager m_pluginManger;
-    QStringList m_supportedMimeTypes;
-    QStringList m_pathlist;
-
+    void showEvent(QShowEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 signals:
     void sigCompressPressed(QMap<QString, QString> &Args);
@@ -112,6 +83,36 @@ public slots:
     void showRightMenu(QMouseEvent *e);
 
     void onRetrunPressed();
+
+private:
+    DPushButton *m_nextbutton = nullptr;
+    QPixmap m_compressicon;
+    TypeLabel *m_compresstype = nullptr;
+    DLineEdit *m_filename = nullptr;
+    DFileChooserEdit *m_savepath = nullptr;
+    DLabel *m_pixmaplabel = nullptr;
+    TypeLabel *m_clicklabel = nullptr;
+    TypeLabel *typepixmap = nullptr;
+//    Lib_Edit_Button* m_pathbutton;
+    QVBoxLayout *m_fileLayout = nullptr;
+
+    QHBoxLayout *m_moresetlayout = nullptr;
+    DSwitchButton *m_moresetbutton = nullptr;
+    DPasswordEdit *m_password = nullptr;
+    QHBoxLayout *m_file_secretlayout = nullptr;
+    DSwitchButton *m_file_secret = nullptr;
+    QHBoxLayout *m_splitlayout = nullptr;
+    DDoubleSpinBox *m_splitnumedit = nullptr;
+    DPushButton *m_plusbutton = nullptr;
+    DPushButton *m_minusbutton = nullptr;
+    DLabel *m_encryptedlabel = nullptr;
+    DCheckBox *m_splitcompress = nullptr;
+    DLabel *m_encryptedfilelistlabel = nullptr;
+    DMenu *m_typemenu = nullptr;
+
+    PluginManager m_pluginManger;
+    QStringList m_supportedMimeTypes;
+    QStringList m_pathlist;
 };
 
 #endif // COMPRESSSETTING_H

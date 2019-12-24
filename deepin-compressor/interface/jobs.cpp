@@ -270,9 +270,15 @@ void LoadJob::doWork()
 {
     emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
     connectToArchiveInterfaceSignals();
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
 
-    bool ret = archiveInterface()->list(m_isbatch);
+    bool ret = false;
+
+    if( archiveInterface() )
+    {
+        connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
+
+        ret = archiveInterface()->list(m_isbatch);
+    }
 
     if (!archiveInterface()->waitForFinishedSignal()) {
         // onFinished() needs to be called after onNewEntry(), because the former reads members set in the latter.

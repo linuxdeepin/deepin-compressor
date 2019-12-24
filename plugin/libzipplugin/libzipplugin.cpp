@@ -226,7 +226,12 @@ QString  LibzipPlugin::trans2uft8(const char *str)
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
-    } else if ("UTF-8" != codec_name) {
+    }
+    else if( "windows-1252" == codec_name)
+    {
+        return str;
+    }
+    else if ("UTF-8" != codec_name) {
         QTextCodec *codec = QTextCodec::codecForName(m_codecname);
         m_codecstr = m_codecname;
         return codec->toUnicode(str);

@@ -301,7 +301,7 @@ void MainWindow::customMessageHandler(const QString &msg)
 
 QMenu *MainWindow::createSettingsMenu()
 {
-    QMenu *menu = new QMenu;
+    QMenu *menu = new QMenu(this);
 
     m_openAction = menu->addAction(tr("Open"));
     connect(m_openAction, &QAction::triggered, this, [this] {
@@ -331,10 +331,15 @@ QMenu *MainWindow::createSettingsMenu()
         onSelected(dialog.selectedFiles());
     });
 
+    //menu->insertAction();
+
     QAction *settingsAction = menu->addAction(tr("Settings"));
     connect(settingsAction, &QAction::triggered, this, [this] {
         m_settingsDialog->exec();
     });
+
+    menu->addSeparator();
+
     return menu;
 }
 
@@ -921,12 +926,11 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     if (m_settingsDialog->isAutoCreatDir()) {
         const QString detectedSubfolder = m_model->archive()->subfolderName();
         qDebug() << "Detected subfolder" << detectedSubfolder;
-
         if (m_model->archive()->hasMultipleTopLevelEntries()) {
             if (!userDestination.endsWith(QDir::separator())) {
                 userDestination.append(QDir::separator());
             }
-            destinationDirectory = userDestination + detectedSubfolder;
+            destinationDirectory =  userDestination+ detectedSubfolder;
             QDir(userDestination).mkdir(detectedSubfolder);
         } else {
             destinationDirectory = userDestination;
@@ -935,8 +939,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         destinationDirectory = userDestination;
     }
 
-
     qDebug() << "destinationDirectory:" << destinationDirectory;
+    //m_CompressSuccess->setCompressFullPath(destinationDirectory+"/"+detectedSubfolder);
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
 
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)),
