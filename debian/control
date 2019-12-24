@@ -12,4 +12,4 @@ Package: deepin-compressor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: <Archive Manager is a software tool that provides common functions for Extracting files and compressing files>
- <Support 7z、jar、tar、tar.bz2、tar.gz、tar.lz、tar.lzm、tar.lzo、tar.Z、zip...>
+ <Support 7z,jar,tar,tar.bz2,tar.gz,tar.lz,tar.lzm,tar.lzo,tar.Z,zip...>
