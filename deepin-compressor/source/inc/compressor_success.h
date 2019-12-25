@@ -37,7 +37,8 @@ public:
     void setstringinfo(QString str);
     void setCompressPath(QString path);
     QString getPath();
-    void setCompressFullPath(QString path);
+    void setCompressFullPath(const QString& path);
+    void setCompressNewFullPath(const QString& path);
 
 private:
     DPushButton *m_showfilebutton;
@@ -47,6 +48,7 @@ private:
     QString m_stringinfo;
     QString m_path;
     QString m_fullpath;
+    QString newCreatePath_;
 public slots:
     void showfiledirSlot();
 

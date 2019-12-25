@@ -546,6 +546,10 @@ void MainWindow::refreshPage()
         if (m_settingsDialog->isAutoOpen()) {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
         }
+        if(m_isrightmenu)
+        {
+            m_CompressSuccess->showfiledirSlot();
+        }
         break;
     case PAGE_UNZIP_FAIL:
         m_mainLayout->setCurrentIndex(6);
@@ -932,6 +936,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
             }
             destinationDirectory =  userDestination+ detectedSubfolder;
             QDir(userDestination).mkdir(detectedSubfolder);
+            m_CompressSuccess->setCompressNewFullPath(destinationDirectory);
         } else {
             destinationDirectory = userDestination;
         }
