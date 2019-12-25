@@ -39,6 +39,7 @@ void customMessageHandler(const QString &msg)
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream ts(&outFile);
     ts << txt << endl;
+    outFile.close();
 }
 
 int main(int argc, char *argv[])

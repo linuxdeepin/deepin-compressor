@@ -34,6 +34,7 @@
 #include <QTextCodec>
 #include <KEncodingProber>
 #include <QRegularExpression>
+#include "mimetypes.h"
 
 Utils::Utils(QObject *parent)
     : QObject(parent)
@@ -43,8 +44,6 @@ Utils::Utils(QObject *parent)
 Utils::~Utils()
 {
 }
-
-
 
 QString Utils::getConfigPath()
 {

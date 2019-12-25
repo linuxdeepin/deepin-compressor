@@ -32,6 +32,7 @@
 #include <utils.h>
 #include "DPalette"
 #include "DFontSizeManager"
+#include "mimetypes.h"
 
 DWIDGET_USE_NAMESPACE
 

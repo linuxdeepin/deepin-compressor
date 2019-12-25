@@ -35,6 +35,7 @@
 #include "kprocess.h"
 #include "logviewheaderview.h"
 #include <QApplication>
+#include "mimetypes.h"
 
 MyScrollBar::MyScrollBar(QWidget *parent)
     : DScrollBar(parent)
@@ -246,7 +247,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
     QModelIndexList lst = selectedIndexes();
 
-    if(lst.size() < 0)
+    if(lst.size() < 1)
     {
         return;
     }
@@ -345,7 +346,7 @@ void fileViewer::InitUI()
     pTableViewFile->verticalHeader()->setVisible(false);
     pTableViewFile->horizontalHeader()->setHighlightSections(false);  //防止表头塌陷
     pTableViewFile->setSortingEnabled(true);
-    pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
+    //pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setIconSize(QSize(24, 24));
 
     //QHeaderView *headerview = pTableViewFile->horizontalHeader();
@@ -392,6 +393,14 @@ void fileViewer::InitUI()
 
 void fileViewer::refreshTableview()
 {
+    if( false == curFileListModified)
+    {
+        pTableViewFile->setModel(firstmodel);
+        return;
+    }
+
+    curFileListModified = false;
+
     MyFileItem *item = nullptr;
     firstmodel->clear();
 
@@ -545,6 +554,8 @@ void fileViewer::DeleteCompressFile()
         filelist.append(fileinfo.filePath());
     }
 
+    curFileListModified = true;
+
     emit sigFileRemoved(filelist);
 }
 
@@ -555,6 +566,7 @@ int fileViewer::getPathIndex()
 
 void fileViewer::setFileList(const QStringList &files)
 {
+    curFileListModified = true;
 
     if (files.count() > m_curfilelist.count()) {
         m_fileaddindex.clear();

@@ -71,6 +71,7 @@ public:
 
     QVariant response() const;
 
+    int execDialog();
 protected:
     Query();
     virtual ~Query() {}

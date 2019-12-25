@@ -27,7 +27,6 @@
 #include <DPushButton>
 #include <DLineEdit>
 #include "DLabel"
-#include "jobs.h"
 #include "lib_edit_button.h"
 #include <DCommandLinkButton>
 #include <DPalette>

@@ -23,7 +23,7 @@
 #define UTILS_H
 
 #include <QObject>
-#include "mimetypes.h"
+
 
 class Utils : public QObject
 {

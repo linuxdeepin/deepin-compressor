@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <utils.h>
 #include "DFontSizeManager"
+#include "mimetypes.h"
 
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)

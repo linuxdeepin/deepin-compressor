@@ -180,6 +180,7 @@ private:
     QModelIndex m_indexmode;
     MyScrollBar *pScrollbar;
     QFileInfoList m_curfilelist;
+    bool curFileListModified = true;
     QList<int> m_fileaddindex;
     DMenu *m_pRightMenu = nullptr;
 

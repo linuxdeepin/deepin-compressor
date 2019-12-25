@@ -19,8 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "queries.h"
-
-
 #include <QApplication>
 #include <QDir>
 #include <QMessageBox>
@@ -65,6 +63,12 @@ QVariant Query::response() const
     return m_data.value(QStringLiteral("response"));
 }
 
+int Query::execDialog()
+{
+    //todo 20191125
+    return 0;
+}
+
 void Query::waitForResponse()
 {
     QMutexLocker locker(&m_responseMutex);
@@ -99,11 +103,11 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
-    DDialog *dialog = new DDialog;
+    DDialog *dialog = new DDialog( QApplication::activeWindow() );
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(dialog);
     strlabel->setFixedHeight(20);
     strlabel->setForegroundRole(DPalette::WindowText);
 //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -111,7 +115,7 @@ void OverwriteQuery::execute()
 //    strlabel->setFont(font);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(file.fileName());
-    DLabel *strlabel2 = new DLabel;
+    DLabel *strlabel2 = new DLabel(dialog);
     strlabel2->setFixedHeight(20);
     strlabel2->setForegroundRole(DPalette::TextWarning);
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -121,7 +125,7 @@ void OverwriteQuery::execute()
     dialog->addButton(QObject::tr("Skip"));
     dialog->addButton(QObject::tr("Replace"));
 
-    DCheckBox *checkbox = new DCheckBox;
+    DCheckBox *checkbox = new DCheckBox(dialog);
     checkbox->setText(QObject::tr("Apply to all"));
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
@@ -130,7 +134,7 @@ void OverwriteQuery::execute()
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
@@ -232,22 +236,21 @@ void PasswordNeededQuery::execute()
 //    setResponse(notCancelled && !password.isEmpty());
 
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
-    DDialog *dialog = new DDialog;
+    DDialog *dialog = new DDialog(QApplication::activeWindow());
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(dialog);
     strlabel->setFixedHeight(20);
     strlabel->setForegroundRole(DPalette::WindowText);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(QObject::tr("Encrypted file, please enter the password"));
 
-    DPasswordEdit* passwordedit = new DPasswordEdit;
+    DPasswordEdit* passwordedit = new DPasswordEdit(dialog);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("OK"));
-
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -256,7 +259,7 @@ void PasswordNeededQuery::execute()
     mainlayout->addWidget(passwordedit, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
@@ -300,18 +303,18 @@ void WrongPasswordQuery::execute()
 
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
-    DDialog *dialog = new DDialog;
+    DDialog *dialog = new DDialog(QApplication::activeWindow());
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(dialog);
     strlabel->setFixedHeight(20);
     strlabel->setForegroundRole(DPalette::TextTitle);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(file.fileName());
 
-    DLabel *strlabel2 = new DLabel;
+    DLabel *strlabel2 = new DLabel(dialog);
     strlabel2->setFixedHeight(20);
     strlabel2->setForegroundRole(DPalette::TextWarning);
 
@@ -327,7 +330,7 @@ void WrongPasswordQuery::execute()
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(10);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
