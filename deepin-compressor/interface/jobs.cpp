@@ -144,7 +144,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::finished, this, &Job::onFinished);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename);
-
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::updateDestFileSignal, this, &Job::onUpdateDestFile);
 
     auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
     if (readWriteInterface) {
@@ -224,6 +224,11 @@ void Job::onUserQuery(Query *query)
     }
 
     emit userQuery(query);
+}
+
+void Job::onUpdateDestFile(QString dstFile)
+{
+    emit updateDestFile(dstFile);
 }
 
 bool Job::doKill()
@@ -690,8 +695,7 @@ void AddJob::doWork()
     const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
     emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
 
-    ReadWriteArchiveInterface *m_writeInterface =
-        (ReadWriteArchiveInterface *)(archiveInterface());
+    ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
 
     Q_ASSERT(m_writeInterface);
 

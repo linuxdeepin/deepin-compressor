@@ -652,6 +652,11 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 break;
             }
 
+            if( i == 0 )
+            {
+                emit updateDestFileSignal (destinationDirectory + "/" + QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))));
+            }
+
             if (!extractEntry(archive,
                               QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))),
                               QString(),

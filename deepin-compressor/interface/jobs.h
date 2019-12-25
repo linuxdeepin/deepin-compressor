@@ -67,6 +67,7 @@ protected Q_SLOTS:
     virtual void onEntryRemoved(const QString &path);
     virtual void onFinished(bool result);
     virtual void onUserQuery(Query *query);
+    void onUpdateDestFile(QString dstFile);
 
 Q_SIGNALS:
     void entryRemoved(const QString &entry);
@@ -74,7 +75,7 @@ Q_SIGNALS:
     void userQuery(Query *);
     void sigWrongPassword();
     void sigCancelled();
-
+    void updateDestFile(QString dstFile);
 
 private:
     Archive *m_archive;

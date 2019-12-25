@@ -19,3 +19,7 @@ sudo apt-get install deepin-compressor
 - cd build
 - qmake ..
 - make
+
+Caution:
+sudo cp plugin/*/*.so /usr/lib/deepin-compressor/plugins
+sudo cp plugin/*/*/*.so /usr/lib/deepin-compressor/plugins

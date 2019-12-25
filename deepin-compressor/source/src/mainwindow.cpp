@@ -940,7 +940,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     }
 
     qDebug() << "destinationDirectory:" << destinationDirectory;
-    //m_CompressSuccess->setCompressFullPath(destinationDirectory+"/"+detectedSubfolder);
+
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
 
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)),
@@ -955,6 +955,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(m_encryptionjob, &ExtractJob::sigCancelled,
             this, &MainWindow::slotquitApp);
+    connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
 
     m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
@@ -1570,6 +1571,11 @@ void MainWindow::slotquitApp()
 
     emit sigquitApp();
 }
+
+ void MainWindow::onUpdateDestFile(QString destFile)
+ {
+     m_CompressSuccess->setCompressFullPath(destFile);
+ }
 
 void MainWindow::onTitleButtonPressed()
 {

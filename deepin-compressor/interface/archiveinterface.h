@@ -86,6 +86,7 @@ Q_SIGNALS:
     void encryptionMethodFound(const QString &method);
     void sigExtractNeedPassword();
     void userQuery(Query *query);
+    void updateDestFileSignal(QString destFile);
 
 protected:
     void setWaitForFinishedSignal(bool value);

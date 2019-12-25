@@ -26,6 +26,7 @@ INCLUDEPATH += $$PWD/../../../deepin-compressor/source/inc/ \
                 $$PWD/../../../deepin-compressor/interface/
 
 SOURCES += \
+    ../../common/common.cpp \
         readonlylibarchiveplugin.cpp \
     ../libarchiveplugin.cpp \
     ../../../deepin-compressor/interface/options.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
     ../../../deepin-compressor/interface/kpluginloader.cpp
 
 HEADERS += \
+        ../../common/common.h \
         readonlylibarchiveplugin.h \
         readonlylibarchiveplugin_global.h \ 
     ../libarchiveplugin.h \

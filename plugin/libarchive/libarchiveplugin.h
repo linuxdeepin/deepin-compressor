@@ -26,7 +26,6 @@ public:
     bool addComment(const QString &comment) override;
     bool testArchive() override;
     bool hasBatchExtractionProgress() const override;
-    QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
 
 protected:
     struct ArchiveReadCustomDeleter {

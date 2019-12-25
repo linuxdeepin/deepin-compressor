@@ -12,6 +12,7 @@
 
 #include <QRegularExpression>
 #include <archive_entry.h>
+#include "../common/common.h"
 
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
@@ -139,13 +140,8 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
     struct archive_entry *aentry;
     int result = ARCHIVE_RETRY;
 
-    bool firstEntry = true;
-    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
-
-        if (firstEntry) {
-            firstEntry = false;
-        }
-
+    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK)
+    {
         if (!m_emitNoEntries) {
             emitEntryFromArchiveEntry(aentry);
         }
@@ -286,10 +282,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         }
 
         // entryName is the name inside the archive, full path
-        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
-        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
-        QString utf8path = codecutf8->fromUnicode(nameunicode);
+//        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
+//        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+//        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
+        QString utf8path = trans2uft8(archive_entry_pathname(entry));
         QString entryName = QDir::fromNativeSeparators(utf8path);
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
@@ -308,6 +304,11 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         // TODO: find out what to do here!!
         if (entryName.startsWith(QLatin1Char('/'))) {
             return false;
+        }
+
+        if(0 == extractedEntriesCount)
+        {
+            emit updateDestFileSignal(destinationDirectory + "/" + entryName);
         }
 
         // Should the entry be extracted?
@@ -480,11 +481,10 @@ bool LibarchivePlugin::initializeReader()
 void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
 {
     auto e = new Archive::Entry();
-
-    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
-    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
-    QString utf8path = codecutf8->fromUnicode(nameunicode);
+//    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
+//    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+//    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
+    QString utf8path = trans2uft8(archive_entry_pathname(aentry));
 
     e->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
 
@@ -619,169 +619,3 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
     }
     return QString();
 }
-
-QByteArray LibarchivePlugin::detectEncode(const QByteArray &data, const QString &fileName)
-{
-    // Return local encoding if nothing in file.
-    if (data.isEmpty()) {
-        return QTextCodec::codecForLocale()->name();
-    }
-
-    if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
-        return c->name();
-    }
-
-    QMimeDatabase mime_database;
-    const QMimeType &mime_type = fileName.isEmpty() ? mime_database.mimeTypeForData(data) : mime_database.mimeTypeForFileNameAndData(fileName, data);
-    const QString &mimetype_name = mime_type.name();
-    KEncodingProber::ProberType proberType = KEncodingProber::Universal;
-
-    if (mimetype_name == QStringLiteral("application/xml")
-            || mimetype_name == QStringLiteral("text/html")
-            || mimetype_name == QStringLiteral("application/xhtml+xml")) {
-        const QString &_data = QString::fromLatin1(data);
-        QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
-
-        pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
-        const QString &charset = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                               QRegularExpression::DontCheckSubjectStringMatchOption).captured("charset");
-
-        if (!charset.isEmpty()) {
-            return charset.toLatin1();
-        }
-
-        pattern.setPattern("<\\bmeta\\s+http-equiv=\"Content-Language\"\\s+content=\"(?'language'[a-zA-Z-]+)\"");
-
-        const QString &language = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                                QRegularExpression::DontCheckSubjectStringMatchOption).captured("language");
-
-        if (!language.isEmpty()) {
-            QLocale l(language);
-
-            switch (l.script()) {
-            case QLocale::ArabicScript:
-                proberType = KEncodingProber::Arabic;
-                break;
-            case QLocale::SimplifiedChineseScript:
-                proberType = KEncodingProber::ChineseSimplified;
-                break;
-            case QLocale::TraditionalChineseScript:
-                proberType = KEncodingProber::ChineseTraditional;
-                break;
-            case QLocale::CyrillicScript:
-                proberType = KEncodingProber::Cyrillic;
-                break;
-            case QLocale::GreekScript:
-                proberType = KEncodingProber::Greek;
-                break;
-            case QLocale::HebrewScript:
-                proberType = KEncodingProber::Hebrew;
-                break;
-            case QLocale::JapaneseScript:
-                proberType = KEncodingProber::Japanese;
-                break;
-            case QLocale::KoreanScript:
-                proberType = KEncodingProber::Korean;
-                break;
-            case QLocale::ThaiScript:
-                proberType = KEncodingProber::Thai;
-                break;
-            default:
-                break;
-            }
-        }
-    } else if (mimetype_name == "text/x-python") {
-        QRegularExpression pattern("^#coding\\s*:\\s*(?'coding'\\S+)$");
-        QTextStream stream(data);
-
-        pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
-        stream.setCodec("latin1");
-
-        while (!stream.atEnd()) {
-            const QString &_data = stream.readLine();
-            const QString &coding = pattern.match(_data, 0).captured("coding");
-
-            if (!coding.isEmpty()) {
-                return coding.toLatin1();
-            }
-        }
-    }
-
-    // for CJK
-    const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
-        {KEncodingProber::ChineseSimplified, QLocale::China},
-        {KEncodingProber::ChineseTraditional, QLocale::China},
-        {KEncodingProber::Japanese, QLocale::Japan},
-        {KEncodingProber::Korean, QLocale::NorthKorea},
-        {KEncodingProber::Cyrillic, QLocale::Russia},
-        {KEncodingProber::Greek, QLocale::Greece},
-        {proberType, QLocale::system().country()}
-    };
-
-    KEncodingProber prober(proberType);
-    prober.feed(data);
-    float pre_confidence = prober.confidence();
-    QByteArray pre_encoding = prober.encoding();
-
-    QTextCodec *def_codec = QTextCodec::codecForLocale();
-    QByteArray encoding;
-    float confidence = 0;
-
-    for (auto i : fallback_list) {
-        prober.setProberType(i.first);
-        prober.feed(data);
-
-        float prober_confidence = prober.confidence();
-        QByteArray prober_encoding = prober.encoding();
-
-        if (i.first != proberType && qFuzzyIsNull(prober_confidence)) {
-            prober_confidence = pre_confidence;
-            prober_encoding = pre_encoding;
-        }
-
-    confidence:
-        if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
-            if (def_codec == codec)
-                def_codec = nullptr;
-
-            float c = codecConfidenceForData(codec, data, i.second);
-
-            if (prober_confidence > 0.5) {
-                c = c / 2 + prober_confidence / 2;
-            } else {
-                c = c / 3 * 2 + prober_confidence / 3;
-            }
-
-            if (c > confidence) {
-                confidence = c;
-                encoding = prober_encoding;
-            }
-
-            if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
-                // test Big5
-                c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, i.second);
-
-                if (c > 0.5 && c > confidence) {
-                    confidence = c;
-                    encoding = "Big5";
-                }
-            }
-        }
-
-        if (i.first != proberType) {
-            // 使用 proberType 类型探测出的结果结合此国家再次做编码检查
-            i.first = proberType;
-            prober_confidence = pre_confidence;
-            prober_encoding = pre_encoding;
-            goto confidence;
-        }
-    }
-
-    if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
-        return def_codec->name();
-    }
-
-
-    return encoding;
-}
-
