@@ -89,6 +89,11 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QS
     m_extractedFiles = files;
     m_extractDestDir = destinationDirectory;
 
+    if(extractDst7z_.isEmpty() == false)
+    {
+        updateDestFileSignal( m_extractDestDir + "/" + extractDst7z_ );
+        extractDst7z_.clear();
+    }
 
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint() && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
@@ -997,6 +1002,32 @@ bool CliInterface::handleLine(const QString &line)
             setCorrupt(true);
             // Special case: corrupt is not a "fatal" error so we return true here.
             return true;
+        }
+
+        static bool fisrtPath = false;
+        if(line.contains("----------"))
+        {
+            fisrtPath = true;
+        }
+
+        if( line.startsWith("Path =") )
+        {
+            if(fisrtPath )
+            {
+                fisrtPath = false;
+                QString folder = line;
+                extractDst7z_ = folder.remove("Path = ");
+            }
+            else if( extractDst7z_.isEmpty() == false)
+            {
+                 QString folder = line;
+                 folder.remove("Path = ");
+
+                if( folder.startsWith( extractDst7z_ + (extractDst7z_.endsWith("/") ? "":"/") ) == false )
+                {
+                    extractDst7z_.clear();
+                }
+            }
         }
 
         return readListLine(line);

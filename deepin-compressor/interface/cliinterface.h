@@ -214,6 +214,7 @@ private:
     bool m_isbatchlist=false;
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
+    QString extractDst7z_;
 
 protected Q_SLOTS:
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);

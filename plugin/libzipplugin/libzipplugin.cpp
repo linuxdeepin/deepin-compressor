@@ -647,6 +647,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     m_skipAll = false; // Whether to skip all files
     if (extractAll) {
         // We extract all entries.
+        QString extractDst;
         for (qlonglong i = 0; i < nofEntries; i++) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
@@ -654,7 +655,14 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             if( i == 0 )
             {
-                emit updateDestFileSignal (destinationDirectory + "/" + QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))));
+                extractDst = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            }
+            else if( extractDst.isEmpty() == false )
+            {
+                if( QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))).startsWith( extractDst + (extractDst.endsWith("/") ? "":"/") ) == false )
+                {
+                    extractDst.clear();
+                }
             }
 
             if (!extractEntry(archive,
@@ -665,9 +673,16 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                               removeRootNode)) {
                 return false;
             }
+
             emit progress(float(i + 1) / nofEntries);
             emit progress_filename(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
         }
+
+        if(extractDst.isEmpty() == false)
+        {
+            emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
+        }
+
     } else {
         // We extract only the entries in files.
         qulonglong i = 0;

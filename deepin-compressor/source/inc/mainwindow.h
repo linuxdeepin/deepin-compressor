@@ -104,6 +104,7 @@ public:
     void WatcherFile(const QString &files);
     void customMessageHandler(const QString &msg);
     QString renameCompress(QString &filename, QString fixedMimeType);
+    static QString getLoadFile();
     qint64 getDiskFreeSpace();
     qint64 getMediaFreeSpace();
 
@@ -157,7 +158,7 @@ private:
     ArchiveSortFilterModel *m_filterModel;
     QString m_decompressfilename;
     QString m_decompressfilepath;
-    QString m_loadfile;
+    static QString m_loadfile;
 
     void setCompressDefaultPath();
     void setQLabelText(QLabel *label, const QString &text);
@@ -191,9 +192,9 @@ private:
 
     DIconButton *m_titlebutton;
 
-    ExtractJob *m_encryptionjob;
+    ExtractJob *m_encryptionjob = nullptr;
     LoadJob *m_loadjob;
-    CreateJob *m_createJob;
+    CreateJob *m_createJob = nullptr;
     EncryptionType m_encryptiontype;
     bool m_isrightmenu;
     WorkState m_workstatus;

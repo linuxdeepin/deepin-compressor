@@ -111,6 +111,7 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent), gotoPreviousLabel_( new PreviousLabel("     .. " + tr("Back"), this))
 {
+    setFixedHeight(36);
     viewport()->setAutoFillBackground(false);
     setSectionsClickable(true);
     setHighlightSections(true);

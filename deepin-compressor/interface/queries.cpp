@@ -32,8 +32,22 @@
 #include <QImageReader>
 #include <QDebug>
 #include <DPasswordEdit>
+#include <QMainWindow>
 
 DWIDGET_USE_NAMESPACE
+
+QWidget* getMainWindow()
+{
+    foreach(QWidget* w, QApplication::allWidgets())
+    {
+        if( qobject_cast<QMainWindow*>(w) )
+        {
+            return w;
+        }
+    }
+
+    return nullptr;
+}
 
 static QPixmap renderSVG(const QString &filePath, const QSize &size)
 {
@@ -103,7 +117,7 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
-    DDialog *dialog = new DDialog( QApplication::activeWindow() );
+    DDialog *dialog = new DDialog( getMainWindow() );
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -236,7 +250,7 @@ void PasswordNeededQuery::execute()
 //    setResponse(notCancelled && !password.isEmpty());
 
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
-    DDialog *dialog = new DDialog(QApplication::activeWindow());
+    DDialog *dialog = new DDialog( getMainWindow() );
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -303,7 +317,7 @@ void WrongPasswordQuery::execute()
 
     qDebug()<<m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
-    DDialog *dialog = new DDialog(QApplication::activeWindow());
+    DDialog *dialog = new DDialog( getMainWindow() );
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 

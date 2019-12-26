@@ -94,14 +94,12 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             QString rstr = r.toString();
             lstr = lstr.remove(QRegExp("\\s"));
             rstr = rstr.remove(QRegExp("\\s"));
-            return QString::compare(l.toString(), r.toString(), Qt::CaseInsensitive);
+            return lstr < rstr;
         }
         break;
     }
     default:
         break;
-
-
     }
 
     return QStandardItem::operator<(other);

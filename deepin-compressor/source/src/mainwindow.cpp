@@ -43,6 +43,8 @@
 #include <DFileWatcher>
 #include <QStackedLayout>
 
+QString MainWindow::m_loadfile;
+
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
@@ -82,6 +84,11 @@ qint64 MainWindow::getMediaFreeSpace()
     }
 
     return 0;
+}
+
+QString MainWindow::getLoadFile()
+{
+    return m_loadfile;
 }
 
 qint64 MainWindow::getDiskFreeSpace()
@@ -964,7 +971,6 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
     m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
-
 }
 
 void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
@@ -1579,7 +1585,7 @@ void MainWindow::slotquitApp()
 
  void MainWindow::onUpdateDestFile(QString destFile)
  {
-     m_CompressSuccess->setCompressFullPath(destFile);
+     m_CompressSuccess->setCompressFullPath( destFile);
  }
 
 void MainWindow::onTitleButtonPressed()

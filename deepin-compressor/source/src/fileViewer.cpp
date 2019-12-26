@@ -36,6 +36,11 @@
 #include "logviewheaderview.h"
 #include <QApplication>
 #include "mimetypes.h"
+#include "mainwindow.h"
+
+const QString rootPathUnique = "_&_&_&_";
+const QString zipPathUnique = "_&_&_";
+
 
 MyScrollBar::MyScrollBar(QWidget *parent)
     : DScrollBar(parent)
@@ -320,7 +325,9 @@ void fileViewer::InitUI()
 
     pTableViewFile = new MyTableView(this);
 
+
     connect(pTableViewFile->header_->gotoPreviousLabel_, SIGNAL(doubleClickedSignal()), this, SLOT(slotCompressRePreviousDoubleClicked()));
+    connect(pTableViewFile->header_, &QHeaderView::sortIndicatorChanged, this, &fileViewer::onSortIndicatorChanged);
 
     pTableViewFile->verticalHeader()->setDefaultSectionSize(MyFileSystemDefine::gTableHeight);
     pdelegate = new FirstRowDelegate();
@@ -396,6 +403,7 @@ void fileViewer::refreshTableview()
     if( false == curFileListModified)
     {
         pTableViewFile->setModel(firstmodel);
+        restoreHeaderSort(rootPathUnique);
         return;
     }
 
@@ -463,14 +471,25 @@ void fileViewer::refreshTableview()
     }
 
     pTableViewFile->setModel(firstmodel);
+    restoreHeaderSort(rootPathUnique);
     resizecolumn();
 
-    foreach (int row, m_fileaddindex) {
-        pTableViewFile->selectRow(row);
-    }
+//    foreach (int row, m_fileaddindex) {
+//        pTableViewFile->selectRow(row);
+//    }
 }
 
-
+void fileViewer::restoreHeaderSort(const QString& currentPath)
+{
+    if(sortCache_.contains(currentPath))
+    {
+        pTableViewFile->header_->setSortIndicator( sortCache_[currentPath].sortRole, sortCache_[currentPath].sortOrder );
+    }
+    else
+    {
+         pTableViewFile->header_->setSortIndicator( -1, Qt::SortOrder::AscendingOrder );
+    }
+}
 
 void fileViewer::InitConnection()
 {
@@ -587,31 +606,37 @@ void fileViewer::setFileList(const QStringList &files)
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
 
-    if (PAGE_COMPRESS == m_pagetype) {
+    if (PAGE_COMPRESS == m_pagetype)
+    {
         if (m_pathindex > 1) {
             m_pathindex--;
             m_indexmode = pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
             qDebug() << pModel->fileInfo(m_indexmode).path();
+            restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
         } else {
             m_pathindex--;
             refreshTableview();
             pTableViewFile->setPreviousButtonVisible(false);
         }
-    } else {
+    }
+    else
+    {
         m_pathindex--;
         if (0 == m_pathindex) {
             pTableViewFile->setRootIndex(QModelIndex());
             pTableViewFile->setPreviousButtonVisible(false);
+            restoreHeaderSort(rootPathUnique);
             //pTableViewFile->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         } else {
 //            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
 //            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
             m_indexmode = m_decompressmodel->parent(m_indexmode);
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_indexmode));
+            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_indexmode);
+            restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
         }
     }
-
     emit  sigpathindexChanged();
 }
 
@@ -619,6 +644,58 @@ void fileViewer::showPlable()
 {
     pTableViewFile->horizontalHeader()->show();
     pTableViewFile->setPreviousButtonVisible(true);
+}
+
+void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
+{
+    if(m_pathindex == 0)
+    {
+        SortInfo info;
+        info.sortOrder = order;
+        info.sortRole = logicalIndex;
+        sortCache_[rootPathUnique] = info;
+        return;
+    }
+
+    QAbstractItemModel* model = pTableViewFile->model();
+
+    MyFileSystemModel* fileModel = qobject_cast<MyFileSystemModel*>(model);
+    if(fileModel)
+    {
+        SortInfo info;
+        info.sortOrder = order;
+        info.sortRole = logicalIndex;
+        QString rootPath = fileModel->rootPath();
+        sortCache_[fileModel->rootPath()] = info;
+        return;
+    }
+
+    QStandardItemModel* standModel = qobject_cast<QStandardItemModel*>(model);
+
+    if(standModel)
+    {
+        SortInfo info;
+        info.sortOrder = order;
+        info.sortRole = logicalIndex;
+        sortCache_[rootPathUnique] = info;
+        return;
+    }
+
+     ArchiveSortFilterModel* archiveModel = qobject_cast<ArchiveSortFilterModel*>(model);
+
+     if(archiveModel)
+     {
+         Archive::Entry *item = static_cast<Archive::Entry *>(m_indexmode.internalPointer());
+         if(item)
+         {
+             SortInfo info;
+             info.sortOrder = order;
+             info.sortRole = logicalIndex;
+             QString rootPath = zipPathUnique + MainWindow::getLoadFile() + "/" + item->fullPath();
+             sortCache_[rootPath] = info;
+             return;
+         }
+     }
 }
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
@@ -646,6 +723,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 pModel->setPathIndex(&m_pathindex);
                 pTableViewFile->setModel(pModel);
                 m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
+                restoreHeaderSort(pModel->rootPath());
                 pTableViewFile->setRootIndex(m_indexmode);
                 m_pathindex++;
 
@@ -671,6 +749,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
+            restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
             m_pathindex++;
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
@@ -685,6 +764,8 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             cmdprocess->start();
         }
     }
+
+    //
 
     emit sigpathindexChanged();
 }
@@ -701,6 +782,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 m_pathindex++;
                 m_indexmode = sourceindex;
                 Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+                restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
                 if(0 == entry->entries().count())
                 {
                     showPlable();
@@ -716,6 +798,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             m_pathindex++;
             m_indexmode = sourceindex;
             Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+            restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
             if(0 == entry->entries().count())
             {
                 showPlable();

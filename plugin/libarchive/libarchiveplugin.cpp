@@ -261,6 +261,8 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
     const QStringList fullPaths = entryFullPaths(files);
     QStringList remainingFiles = entryFullPaths(files);
 
+    QString extractDst;
+
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
 
@@ -308,7 +310,14 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
         if(0 == extractedEntriesCount)
         {
-            emit updateDestFileSignal(destinationDirectory + "/" + entryName);
+            extractDst = entryName;
+        }
+        else if( extractDst.isEmpty() == false )
+        {
+            if( entryName.startsWith( extractDst + (extractDst.endsWith("/") ? "":"/") ) == false )
+            {
+                extractDst.clear();
+            }
         }
 
         // Should the entry be extracted?
@@ -447,6 +456,11 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             // Archive entry not among selected files, skip it.
             archive_read_data_skip(m_archiveReader.data());
         }
+    }
+
+    if(extractDst.isEmpty() == false)
+    {
+        emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
     }
 
     slotRestoreWorkingDir();

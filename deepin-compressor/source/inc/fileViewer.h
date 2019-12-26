@@ -120,6 +120,12 @@ public:
     LogViewHeaderView* header_;
 };
 
+struct SortInfo
+{
+   Qt::SortOrder sortOrder;
+   int sortRole;
+};
+
 
 class fileViewer : public DWidget
 {
@@ -143,6 +149,8 @@ public:
 
 public slots:
     void showPlable();
+    void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
+
 protected:
     void resizecolumn();
     void resizeEvent(QResizeEvent *size) override;
@@ -164,6 +172,7 @@ signals:
 
 private:
     void refreshTableview();
+    void restoreHeaderSort(const QString& currentPath);
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
@@ -186,6 +195,8 @@ private:
 
     PAGE_TYPE m_pagetype;
     MimeTypeDisplayManager *m_mimetype;
+
+    QMap<QString, SortInfo> sortCache_;
 };
 
 #endif // FILEVIWER_H
