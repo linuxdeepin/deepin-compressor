@@ -107,15 +107,15 @@ void SettingDialog::initUI()
         m_comboboxoption = qobject_cast<DSettingsOption *>(obj);
         if (m_comboboxoption)
         {
-            QWidget *widget = new QWidget();
+            DWidget *widget = new DWidget(this);
             QHBoxLayout *layout = new QHBoxLayout();
 
-            DLabel *label = new DLabel;
+            DLabel *label = new DLabel(widget);
             label->setForegroundRole(DPalette::WindowText);
             label->setText(tr("Extract archives to") + ":");
 
-            DComboBox *combobox = new DComboBox;
-            combobox->setFixedWidth(300);
+            DComboBox *combobox = new DComboBox(widget);
+            combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;
             list << tr("Current directory") << tr("Desktop") << tr("Other directory");
@@ -321,7 +321,7 @@ void SettingDialog::cancelpressed()
 void SettingDialog::startcmd(QString &mimetype, bool state)
 {
     if (!m_process) {
-        m_process = new KProcess;
+        m_process = new KProcess(this);
     }
 
     QString programPath = QStandardPaths::findExecutable("xdg-mime");

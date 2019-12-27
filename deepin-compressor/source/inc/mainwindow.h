@@ -172,7 +172,7 @@ private:
     QPixmap m_logoicon;
     QFrame *m_titleFrame;
     DLabel *m_titlelabel;
-    QWidget *m_mainWidget;
+    DWidget *m_mainWidget;
     QStackedLayout *m_mainLayout;
     HomePage *m_homePage;
     UnCompressPage *m_UnCompressPage;
@@ -183,7 +183,7 @@ private:
     Compressor_Fail *m_CompressFail;
     EncryptionPage *m_encryptionpage;
     ProgressDialog *m_progressdialog;
-    SettingDialog *m_settingsDialog;
+    SettingDialog *m_settingsDialog = nullptr;
     EncodingPage *m_encodingpage;
     QSettings *m_settings;
     Page_ID m_pageid;

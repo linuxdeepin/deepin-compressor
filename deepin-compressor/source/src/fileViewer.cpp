@@ -37,6 +37,7 @@
 #include <QApplication>
 #include "mimetypes.h"
 #include "mainwindow.h"
+#include <QIcon>
 
 const QString rootPathUnique = "_&_&_&_";
 const QString zipPathUnique = "_&_&_";
@@ -276,9 +277,16 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     QVariant value = lst[0].data(Qt::DecorationRole);
 
-    if (value.isValid() && value.type() == QVariant::Pixmap )
+    if (value.isValid() )
     {
-         drag->setPixmap(qvariant_cast<QPixmap>(value));
+        if(value.type() == QVariant::Pixmap)
+        {
+            drag->setPixmap(qvariant_cast<QPixmap>(value));
+        }
+        else if(value.type() == QVariant::Icon)
+        {
+            drag->setPixmap( (qvariant_cast<QIcon>(value)).pixmap(24,24) );
+        }
     }
 
     drag->setMimeData(m);

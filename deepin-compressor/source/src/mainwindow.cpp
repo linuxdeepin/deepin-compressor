@@ -54,9 +54,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_model = new ArchiveModel(this);
     m_filterModel = new ArchiveSortFilterModel(this);
 
-    m_mainWidget = new QWidget;
+    m_mainWidget = new DWidget(this);
     m_mainLayout = new QStackedLayout(m_mainWidget);
-    m_homePage = new HomePage;
+    m_homePage = new HomePage(this);
     m_mainLayout->addWidget(m_homePage);
     m_homePage->setAutoFillBackground(true);
 
@@ -356,14 +356,14 @@ void MainWindow::initTitleBar()
     titlebar()->setFixedHeight(50);
 
     QIcon icon = QIcon::fromTheme("deepin-compressor");
-    m_logo = new DLabel("");
+    m_logo = new DLabel("", this);
     m_logo->setPixmap(icon.pixmap(QSize(30, 30)));
 
     m_titlebutton = new DIconButton(DStyle::StandardPixmap::SP_IncreaseElement, this);
     m_titlebutton->setFixedSize(36, 36);
     m_titlebutton->setVisible(false);
 
-    m_titleFrame = new QFrame;
+    m_titleFrame = new QFrame(this);
     m_titleFrame->setObjectName("TitleBar");
     QHBoxLayout *leftLayout = new QHBoxLayout;
     leftLayout->addSpacing(6);
@@ -372,12 +372,12 @@ void MainWindow::initTitleBar()
     leftLayout->addWidget(m_titlebutton);
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
-    QFrame *left_frame = new QFrame();
+    QFrame *left_frame = new QFrame(this);
     left_frame->setFixedWidth(10 + 6 + 36 + 30);
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
-    m_titlelabel = new DLabel("");
+    m_titlelabel = new DLabel(this);
     m_titlelabel->setMinimumSize(200, TITLE_FIXED_HEIGHT);
     m_titlelabel->setAlignment(Qt::AlignCenter);
 
@@ -466,8 +466,6 @@ void MainWindow::dragMoveEvent(QDragMoveEvent *event)
 {
     event->accept();
 }
-
-
 
 void MainWindow::setEnable()
 {

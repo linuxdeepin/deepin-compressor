@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
     app.setProductName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a software tool that provides common functions for Extracting files and compressing files"));
-//    app.setApplicationDescription(QString("%1\n%2\n").arg(QObject::tr("归档管理器是一款提供对文件解压、")).arg(QObject::tr("压缩常用功能的软件工具。")));
     DApplicationSettings settings(&app);
 
     DLogManager::registerConsoleAppender();
