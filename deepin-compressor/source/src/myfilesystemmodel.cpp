@@ -90,9 +90,9 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             return pa;
         }
         case Qt::TextAlignmentRole:
-            if (3 == index.column()) {
+            /*if (3 == index.column()) {
                 return QVariant(Qt::AlignRight | Qt::AlignVCenter);
-            } else {
+            } else */{
                 return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
             }
         case Qt::FontRole:
@@ -121,10 +121,10 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             }
             case 2: {
                 QMimeType mimetype = determineMimeType(file.filePath());
-                return " " + m_mimetype->displayName(mimetype.name());
+                return m_mimetype->displayName(mimetype.name());
             }
             case 1: {
-                return " " + QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
+                return QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
             }
             case 0:{
                 return "  "+ file.fileName();

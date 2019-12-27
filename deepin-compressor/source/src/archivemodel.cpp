@@ -115,11 +115,11 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             }
             return QVariant();
         case Qt::TextAlignmentRole:
-            if (m_showColumns.at(index.column()) == Size) {
-                return QVariant(Qt::AlignRight | Qt::AlignVCenter);
-            } else {
+            //if (m_showColumns.at(index.column()) == Size) {
+                //return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            //} else {
                 return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-            }
+            //}
         case Qt::TextColorRole:{
             DPalette pa;
             pa.setBrush(DPalette::WindowText,pa.color(DPalette::WindowText));

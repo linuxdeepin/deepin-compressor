@@ -76,3 +76,6 @@ unix {
     INSTALLS += target
 }
 
+DISTFILES += \
+    kerfuffle_clirar.json
+

@@ -82,6 +82,9 @@ unix {
     INSTALLS += target
 }
 
+DISTFILES += \
+    kerfuffle_libarchive_readonly.json
+
 
 
 

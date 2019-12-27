@@ -83,3 +83,6 @@ unix {
 
 #EXAMPLE_FILES = kerfuffle_cli7z.json
 
+DISTFILES += \
+    kerfuffle_cli7z.json
+

@@ -89,15 +89,15 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
 void PreviousLabel::hideEvent(QHideEvent *event)
 {
     move(0, 0);
-    headerView_->setFixedHeight(36);
+    headerView_->setFixedHeight(38);
     QLabel::hideEvent(event);
     headerView_->update();
 }
 
 void PreviousLabel::showEvent(QShowEvent *event)
 {
-    move(0, 36);
-    headerView_->setFixedHeight(72);
+    move(0, 38);
+    headerView_->setFixedHeight(74);
     QLabel::showEvent(event);
     headerView_->update();
 }
@@ -111,7 +111,7 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent), gotoPreviousLabel_( new PreviousLabel("     .. " + tr("Back"), this))
 {
-    setFixedHeight(36);
+    setFixedHeight(38);
     viewport()->setAutoFillBackground(false);
     setSectionsClickable(true);
     setHighlightSections(true);
@@ -147,28 +147,28 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
 
     // title
     QRect contentRect(rect.x(), rect.y(), rect.width(), 36 - m_spacing);
-    QRect hSpacingRect(rect.x(), contentRect.height(), rect.width(),
-                       36 - contentRect.height());
+    QRect hSpacingRect(rect.x(), contentRect.height() - 1, rect.width(),
+                       36 - contentRect.height() - 2);
 
     QBrush contentBrush(palette.color(cg, DPalette::Base));
     // horizontal spacing
     QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
-    QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin, m_spacing,
-                        36 - kSpacingMargin * 2);
+    QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin+ 2, m_spacing,
+                        36 - kSpacingMargin * 2 - 6);
     QBrush clearBrush(palette.color(cg, DPalette::Window));
 
-//    painter->fillRect(hSpacingRect, clearBrush);
-//    painter->fillRect(hSpacingRect, hSpacingBrush);
+    painter->fillRect(hSpacingRect, clearBrush);
+    painter->fillRect(hSpacingRect, hSpacingBrush);
 
-//    if (visualIndex(logicalIndex) > 0) {
-//        painter->fillRect(vSpacingRect, clearBrush);
-//        painter->fillRect(vSpacingRect, vSpacingBrush);
-//    }
+    if (visualIndex(logicalIndex) > 0) {
+        painter->fillRect(vSpacingRect, clearBrush);
+        painter->fillRect(vSpacingRect, vSpacingBrush);
+    }
 
     // TODO: dropdown icon (8x5)
-    QRect textRect(contentRect.x() + 2, contentRect.y(), contentRect.width() - margin * 3,
+    QRect textRect(contentRect.x() + 6, contentRect.y(), contentRect.width() - 23,
                    contentRect.height());
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     //    int align = model()->headerData(logicalIndex, orientation(),
@@ -179,12 +179,12 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     painter->setFont(pFont);
     if (logicalIndex == 0) {
         QRect col0Rect = textRect;
-        col0Rect.setX(textRect.x() + margin - 2);
+        col0Rect.setX(textRect.x()+2);
         painter->drawText(col0Rect, static_cast<int>(align), title);
     }
-    else if(logicalIndex == 3){
-        painter->drawText(textRect, static_cast<int>(Qt::AlignRight | Qt::AlignVCenter), title);
-    }
+//    else if(logicalIndex == 3){
+//        painter->drawText(textRect, static_cast<int>(Qt::AlignRight | Qt::AlignVCenter), title);
+//    }
     else {
         painter->drawText(textRect, static_cast<int>(align), title);
     }
@@ -192,7 +192,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     // sort indicator
     if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {
         // TODO: arrow size (8x5)
-        QRect sortIndicator(textRect.x() + textRect.width() + margin,
+        QRect sortIndicator(textRect.x() + textRect.width() - ((logicalIndex == 0) ? 0: 1),
                             textRect.y() + (textRect.height() - 5) / 2, 8, 8);
         option.rect = sortIndicator;
         if (sortIndicatorOrder() == Qt::DescendingOrder) {

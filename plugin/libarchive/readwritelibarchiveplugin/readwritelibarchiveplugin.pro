@@ -81,3 +81,6 @@ unix {
     target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }
+
+DISTFILES += \
+    kerfuffle_libarchive.json

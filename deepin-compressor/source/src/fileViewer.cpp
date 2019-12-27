@@ -154,7 +154,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QRect displayRect;
     displayRect.setX(decorationRect.x() + decorationRect.width());
     displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x());
-    QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width());
+    QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width() - 6);
 
     // do the layout
     doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
@@ -165,6 +165,10 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         decorationRect.setX(decorationRect.x() + 8);
         decorationRect.setWidth(decorationRect.width() + 8);
         displayRect.setX(displayRect.x() + 8);
+    }
+    else
+    {
+        displayRect.setX(displayRect.x() + 6);
     }
 
     // draw the item
@@ -452,10 +456,10 @@ void fileViewer::refreshTableview()
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
         item->setFont(font);
-        item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex, 3, item);
         QMimeType mimetype = determineMimeType(fileinfo.filePath());
-        item = new MyFileItem(" " + m_mimetype->displayName(mimetype.name()));
+        item = new MyFileItem(m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
@@ -519,8 +523,8 @@ void fileViewer::resizecolumn()
 {
     qDebug() << pTableViewFile->width();
     pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 13 / 29);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 9 / 29);
-    pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 3 / 29);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 8 / 29);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 4 / 29);
     pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 4 / 29);
 }
 
@@ -723,10 +727,9 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 pModel->setPathIndex(&m_pathindex);
                 pTableViewFile->setModel(pModel);
                 m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
+                m_pathindex++;
                 restoreHeaderSort(pModel->rootPath());
                 pTableViewFile->setRootIndex(m_indexmode);
-                m_pathindex++;
-
 
 
                 QDir dir(m_curfilelist.at(row).filePath());
@@ -749,9 +752,9 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
+            m_pathindex++;
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
-            m_pathindex++;
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
 
             KProcess *cmdprocess = new KProcess;
