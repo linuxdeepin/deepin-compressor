@@ -1274,7 +1274,7 @@ void MainWindow::creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, Q
 }
 
 
-QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
+void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {
     QString localname = filename;
     int num = 2;
@@ -1282,7 +1282,6 @@ QString MainWindow::renameCompress(QString &filename, QString fixedMimeType)
         filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0" + QString::number(num) + ")" + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
         num++;
     }
-    return filename;
 }
 
 QStringList MainWindow::CheckAllFiles(QString path)
@@ -1394,7 +1393,6 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     QString filename = Args[QStringLiteral("localFilePath")] + QDir::separator() + Args[QStringLiteral("filename")];
     m_decompressfilename = Args[QStringLiteral("filename")];
     m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
-    m_CompressSuccess->setCompressFullPath(filename);
 
     if (filename.isEmpty()) {
         qDebug() << "filename.isEmpty()";
@@ -1402,6 +1400,7 @@ void MainWindow::creatArchive(QMap<QString, QString> &Args)
     }
 
     renameCompress(filename, fixedMimeType);
+    m_CompressSuccess->setCompressFullPath(filename);
     qDebug() << filename;
 
 
