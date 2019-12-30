@@ -11,6 +11,9 @@ Depends: libarchive13 (>= 3.2.1), libc6 (>= 2.14), libdisomaster, libdtkcore5 (>
 Build-Depends: debhelper (>= 11), libgsettings-qt-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libarchive-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qt5-default, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, qtmultimedia5-dev
 Standards-Version: 4.1.3
 
+### Third Party Code
+[KDE ark](https://github.com/kde/ark)
+
 #### Installation
 sudo apt-get install deepin-compressor
 

@@ -227,7 +227,7 @@ QString  LibzipPlugin::trans2uft8(const char *str)
         m_codecstr = codec_name;
         return codec->toUnicode(str);
     }
-    else if( "windows-1252" == codec_name)
+    else if( "windows-1252" == codec_name || "IBM855" == codec_name)
     {
         return str;
     }

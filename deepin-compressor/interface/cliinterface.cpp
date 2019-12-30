@@ -792,7 +792,7 @@ void CliInterface::readStdout(bool handleAll)
 
     bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
 
-    if (m_process->program().at(0).contains("7z") && !wrongPasswordMessage) {
+    if (m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l" && !wrongPasswordMessage ) {
         handleAll = true;//7z output has no \n
     }
 
@@ -1114,6 +1114,11 @@ bool CliInterface::handleFileExistsMessage(const QString &line)
 
 bool CliInterface::doKill()
 {
+    if ( m_extractTempDir && m_extractTempDir->isValid())
+    {
+        m_extractTempDir->remove();
+    }
+
     if (m_process) {
         killProcess(false);
         return true;
