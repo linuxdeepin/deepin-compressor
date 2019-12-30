@@ -32,7 +32,7 @@ MyFileSystemModel::MyFileSystemModel(QObject *parent)
 {
     m_mimetype = new MimeTypeDisplayManager;
     m_showreprevious = false;
-    setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+    setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
 }
 
 void MyFileSystemModel::setPathIndex(int *index)
