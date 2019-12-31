@@ -268,7 +268,6 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         emit finished(false);
         return false;
     }
-    qDebug() << "Executing" << programPath << arguments << "within directory" << QDir::currentPath();
 
     m_process = new KProcess;
 //    m_process->setPtyChannels(KPtyProcess::StdinChannel);//TODO_DS
@@ -510,7 +509,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
 
                     } else if (query.responseCancelled()) {
                         emit cancelled();
-                        emit finished(false);
+                        emit finished(true);
                         return false;
                     }
 
@@ -1216,13 +1215,13 @@ void CliInterface::onEntry(Archive::Entry *archiveEntry)
 
 bool CliInterface::isPasswordPrompt(const QString &line)
 {
-    Q_UNUSED(line);
+    Q_UNUSED(line)
     return false;
 }
 
 bool CliInterface::isWrongPasswordMsg(const QString &line)
 {
-    Q_UNUSED(line);
+    Q_UNUSED(line)
     return false;
 }
 
