@@ -256,6 +256,11 @@ void MyTableView::mousePressEvent(QMouseEvent *e)
 
 void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
+    if(dragEnabled() == false)
+    {
+        return;
+    }
+
     QModelIndexList lst = selectedIndexes();
 
     if(lst.size() < 1)
@@ -330,6 +335,11 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     m_mimetype = new MimeTypeDisplayManager(this);
     InitUI();
     InitConnection();
+
+    if(PAGE_COMPRESS == type)
+    {
+        pTableViewFile->setDragEnabled(false);
+    }
 }
 
 void fileViewer::InitUI()

@@ -1034,7 +1034,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
     qDebug() << percent;
     if ((Encryption_SingleExtract == m_encryptiontype))
     {
-        if ((percent <= 100) && (percent >= 0) && (WorkProcess == m_workstatus)) {
+        if ((percent < 100) && (percent >= 0) && (WorkProcess == m_workstatus)) {
             if (!m_progressdialog->isshown()) {
                 m_pageid = PAGE_UNZIP;
                 refreshPage();
@@ -1047,7 +1047,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
     {
         m_Progess->setprogress(percent);
     }
-    else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent <= 100) && (percent >= 0))
+    else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent >= 0))
     {
         /*if (!m_progressTransFlag) {
             if (0 == m_timerId) {
@@ -1067,7 +1067,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
             refreshPage();
         }
     }
-    else if ((PAGE_ZIPSET == m_pageid) && (percent <= 100) && (percent >= 0))
+    else if ((PAGE_ZIPSET == m_pageid) && (percent < 100) && (percent >= 0))
     {
         m_pageid = PAGE_ZIPPROGRESS;
         m_Progess->settype(COMPRESSING);
