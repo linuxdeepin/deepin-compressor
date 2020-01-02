@@ -40,6 +40,7 @@ public:
     QString getPath();
     void setCompressFullPath(const QString& path);
     void setCompressNewFullPath(const QString& path);
+    void clear();
 
 private:
     DPushButton *m_showfilebutton;

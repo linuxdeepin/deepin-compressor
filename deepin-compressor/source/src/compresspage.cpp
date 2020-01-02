@@ -40,9 +40,8 @@ DWIDGET_USE_NAMESPACE
 CompressPage::CompressPage(QWidget *parent)
     : DWidget(parent)
 {
-
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
-    m_nextbutton = new DPushButton(tr("Next"));
+    m_nextbutton = new DPushButton(tr("Next"), this);
     m_nextbutton->setFixedSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
@@ -109,7 +108,7 @@ void CompressPage::showDialog()
 
     DPalette pa;
 
-    DLabel *strlabel = new DLabel(this);
+    DLabel *strlabel = new DLabel(dialog);
     strlabel->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
@@ -118,7 +117,7 @@ void CompressPage::showDialog()
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    DWidget *widget = new DWidget(this);
+    DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
@@ -147,12 +146,11 @@ int CompressPage::showReplaceDialog(QString name)
 
 void CompressPage::onAddfileSlot()
 {
-
     if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
     }
-    DFileDialog dialog;
+    DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setAllowMixedSelection(true);

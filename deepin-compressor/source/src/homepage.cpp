@@ -36,7 +36,7 @@ HomePage::HomePage(QWidget *parent)
     : DWidget(parent),
       m_layout(new QVBoxLayout(this)),
       m_iconLabel(new DLabel(this)),
-      m_tipsLabel(new DLabel(tr("Drag file or folder here"))),
+      m_tipsLabel(new DLabel(tr("Drag file or folder here"), this)),
       m_splitLine(new DLabel(this)),
       m_chooseBtn(new DCommandLinkButton(tr("Select File"), this )),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
@@ -114,7 +114,7 @@ void HomePage::spinnerStop()
 
 void HomePage::onChooseBtnClicked()
 {
-    DFileDialog dialog;
+    DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setAllowMixedSelection(true);

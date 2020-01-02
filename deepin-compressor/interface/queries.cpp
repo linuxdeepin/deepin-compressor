@@ -172,7 +172,7 @@ void OverwriteQuery::execute()
         }
     }
 
-    QApplication::restoreOverrideCursor();
+    //QApplication::restoreOverrideCursor();
 }
 
 bool OverwriteQuery::responseCancelled()

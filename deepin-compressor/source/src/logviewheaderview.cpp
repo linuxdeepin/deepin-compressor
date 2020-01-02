@@ -74,10 +74,27 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
 
     QColor bgColor;
-    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
-        bgColor = QColor(247, 247, 247);
-    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        bgColor = QColor(38, 38, 38);
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType())
+    {
+        if(focusIn_)
+        {
+            bgColor = QColor(212, 212, 212);
+        }
+        else
+        {
+            bgColor = QColor(247, 247, 247);
+        }
+    }
+    else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
+    {
+        if(focusIn_)
+        {
+            bgColor = QColor(44, 44, 44);
+        }
+        else
+        {
+            bgColor = QColor(38, 38, 38);
+        }
     }
 
     QPainterPath pp;
@@ -106,6 +123,20 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {
     emit doubleClickedSignal();
     QLabel::mouseDoubleClickEvent(event);
+}
+
+void PreviousLabel::enterEvent(QEvent *event)
+{
+    focusIn_ = true;
+    DLabel::enterEvent(event);
+    update();
+}
+
+void PreviousLabel::leaveEvent(QEvent *event)
+{
+    focusIn_ = false;
+    DLabel::leaveEvent(event);
+    update();
 }
 
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)

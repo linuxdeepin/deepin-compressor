@@ -103,7 +103,7 @@ void CompressSetting::InitUI()
     setTypeImage("zip");
 
     QFormLayout *filelayout = new QFormLayout();
-    m_filename = new DLineEdit();
+    m_filename = new DLineEdit(this);
     m_filename->setMinimumSize(260, 36);
     m_filename->setText(tr("New Archive"));
     QLineEdit *qfilename = m_filename->lineEdit();
@@ -122,7 +122,7 @@ void CompressSetting::InitUI()
 
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
     moresetlabel->setForegroundRole(DPalette::WindowText);
-    m_moresetbutton = new DSwitchButton();
+    m_moresetbutton = new DSwitchButton(this);
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
@@ -132,8 +132,8 @@ void CompressSetting::InitUI()
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
     m_password->setMinimumSize(260, 36);
-    m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"));
-    m_file_secret = new DSwitchButton();
+    m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"), this);
+    m_file_secret = new DSwitchButton(this);
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);

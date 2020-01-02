@@ -233,6 +233,8 @@ void Archive::onEncryptionMethodFound(const QString &method)
     methods.sort();
 
     setProperty("encryptionMethods", methods);
+
+    //setProperty("isPasswordProtected", true);
 }
 
 Archive::~Archive()

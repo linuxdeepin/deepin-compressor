@@ -40,20 +40,20 @@ Progress::Progress(QWidget *parent)
 void Progress::InitUI()
 {
 //    m_compressicon = Utils::renderSVG(":/images/Compression Packet.svg", QSize(128, 128));
-    m_pixmaplabel = new DLabel();
-    m_filenamelabel = new DLabel();
+    m_pixmaplabel = new DLabel(this);
+    m_filenamelabel = new DLabel(this);
     m_filenamelabel->setText(m_filename);
     DFontSizeManager::instance()->bind(m_filenamelabel, DFontSizeManager::T5, QFont::DemiBold);
     m_filenamelabel->setForegroundRole(DPalette::ToolTipText);
 
-    m_progressbar = new DProgressBar();
+    m_progressbar = new DProgressBar(this);
     m_progressbar->setRange(0, 100);
     m_progressbar->setFixedSize(240, 8);
     m_progressbar->setValue(0);
     m_progressbar->setOrientation(Qt::Horizontal);  //水平方向
     m_progressbar->setAlignment(Qt::AlignVCenter);
     m_progressbar->setTextVisible(false);
-    m_shadow = new DLabel();
+    m_shadow = new DLabel(this);
     m_shadow->setFixedSize(8, 1);
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 4);
@@ -61,14 +61,14 @@ void Progress::InitUI()
     effect->setBlurRadius(6);
     m_shadow->setGraphicsEffect(effect);
 
-    m_progressfilelabel = new DLabel();
+    m_progressfilelabel = new DLabel(this);
     m_progressfilelabel->setMaximumWidth(520);
     m_progressfilelabel->setForegroundRole(DPalette::TextTips);
 //    m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_progressfilelabel, DFontSizeManager::T8);
     m_progressfilelabel->setText(tr("Being calculated..."));
 
-    m_cancelbutton = new DPushButton();
+    m_cancelbutton = new DPushButton(this);
     m_cancelbutton->setFixedSize(340, 36);
     m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
@@ -102,12 +102,12 @@ int Progress::showConfirmDialog()
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     DPalette pa, pa2;
-    DLabel *strlabel = new DLabel;
+    DLabel *strlabel = new DLabel(dialog);
     strlabel->setFixedHeight(20);
     strlabel->setForegroundRole(DPalette::WindowText);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    DLabel *strlabel2 = new DLabel;
+    DLabel *strlabel2 = new DLabel(dialog);
     strlabel2->setFixedHeight(18);
     strlabel2->setForegroundRole(DPalette::WindowText);
 
@@ -143,7 +143,7 @@ int Progress::showConfirmDialog()
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 
-    DWidget *widget = new DWidget;
+    DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);

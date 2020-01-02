@@ -157,7 +157,7 @@ void Job::onCancelled()
 {
     qDebug() << "Cancelled emitted";
     setError(KJob::KilledJobError);
-    emit sigCancelled();
+    //emit sigCancelled();
 }
 
 void Job::onError(const QString &message, const QString &details)
@@ -205,15 +205,21 @@ void Job::onEntryRemoved(const QString &path)
 void Job::onFinished(bool result)
 {
     qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
-
-    if ((archive() && !archive()->isValid())  || (!result)) {
+    if( m_archiveInterface && m_archiveInterface->isUserCancel() )
+    {
+        setError(KJob::KilledJobError);
+    }
+    else if ((archive() && !archive()->isValid())  || false == result )
+    {
         setError(KJob::UserDefinedError);
-    } else {
+    }
+    else
+    {
         setError(KJob::NoError);
     }
 
-
-    if (!d->isInterruptionRequested()) {
+    if (!d->isInterruptionRequested())
+    {
         emitResult();
     }
 }
@@ -537,6 +543,8 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
 
 void ExtractJob::doWork()
 {
+    percent( this, 0);
+
     QString desc;
     if (m_entries.count() == 0) {
         desc = tr("Extracting all files");

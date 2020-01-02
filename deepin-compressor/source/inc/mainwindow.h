@@ -20,8 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <DMainWindow>
 #include <QSettings>
@@ -110,7 +109,6 @@ public:
     qint64 getMediaFreeSpace();
 
 
-
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
     void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
@@ -155,7 +153,7 @@ signals:
 
 private:
     Archive *m_archive_manager;
-    ArchiveModel         *m_model;
+    ArchiveModel         *m_model = nullptr;
     ArchiveSortFilterModel *m_filterModel;
     QString m_decompressfilename;
     QString m_decompressfilepath;
@@ -191,17 +189,18 @@ private:
 
     QVector<Archive::Entry *> m_extractSimpleFiles;
 
-    DIconButton *m_titlebutton;
+    DIconButton *m_titlebutton = nullptr;
 
     ExtractJob *m_encryptionjob = nullptr;
-    LoadJob *m_loadjob;
+    LoadJob *m_loadjob = nullptr;
     CreateJob *m_createJob = nullptr;
-    EncryptionType m_encryptiontype;
-    bool m_isrightmenu;
-    WorkState m_workstatus;
+    EncryptionType m_encryptiontype = Encryption_NULL;
+    bool m_isrightmenu = false;
+    WorkState m_workstatus = WorkNone;
 
     int m_timerId = 0;
-    bool m_progressTransFlag = false;
+	bool m_progressTransFlag = false;
+    //bool m_progressTransFlag = false;
     QAction *m_openAction;
 
     QStringList m_compressDirFiles;
@@ -210,5 +209,3 @@ private:
     int m_startTimer = 0;
     int m_watchTimer = 0;
 };
-
-#endif

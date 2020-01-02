@@ -73,6 +73,8 @@ public:
 
     virtual bool isLocked() const;
 
+    virtual bool isUserCancel() const;
+
 Q_SIGNALS:
 
     void cancelled();
@@ -110,6 +112,9 @@ private:
     bool m_isCorrupt;
     bool m_isMultiVolume;
     bool m_isWrongPassword;
+
+protected:
+    bool userCancel = false;
 
 private Q_SLOTS:
     void onEntry(Archive::Entry *archiveEntry);

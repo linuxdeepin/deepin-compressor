@@ -49,9 +49,6 @@ QString MainWindow::m_loadfile;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
-    m_encryptionjob = nullptr;
-    m_encryptiontype = Encryption_NULL;
-    m_isrightmenu = false;
     m_model = new ArchiveModel(this);
     m_filterModel = new ArchiveSortFilterModel(this);
 
@@ -102,23 +99,38 @@ qint64 MainWindow::getDiskFreeSpace()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (4 == m_mainLayout->currentIndex()) { //now is progress page
-        if (1 != m_Progess->showConfirmDialog()) {
+    if ( PAGE_ZIPPROGRESS == m_mainLayout->currentIndex() )
+    {
+        if (1 != m_Progess->showConfirmDialog())
+        {
             event->ignore();
             return;
         }
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
-    } else if (7 == m_mainLayout->currentIndex()) {
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
-    }
 
-    event->accept();
-    slotquitApp();
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        event->accept();
+        onCancelCompressPressed();
+    }
+    else if (7 == m_mainLayout->currentIndex()) {
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        event->accept();
+        slotquitApp();
+    }
+    else
+    {
+        event->accept();
+        slotquitApp();
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    if (m_timerId == event->timerId()) {
+    /*if (m_timerId == event->timerId()) {
+        m_progressTransFlag = true;
+        killTimer(m_timerId);
+        m_timerId = 0;
+    } else */
+	if (m_timerId == event->timerId()) {
         m_progressTransFlag = true;
         killTimer(m_timerId);
         m_timerId = 0;
@@ -228,8 +240,6 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcut6.insert("name", tr("Display shortcuts"));
     shortcut6.insert("value", "Ctrl+Shift+?");
 
-
-
     QJsonArray shortcutArray;
     shortcutArray.append(shortcut1);
     shortcutArray.append(shortcut2);
@@ -288,7 +298,7 @@ void MainWindow::InitConnection()
         QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
         shortcutString << param1 << param2;
 
-        QProcess *shortcutViewProcess = new QProcess();
+        QProcess *shortcutViewProcess = new QProcess(this);
         shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
         connect(shortcutViewProcess, SIGNAL(finished(int)),
@@ -489,66 +499,89 @@ void MainWindow::setDisable()
 
 void MainWindow::refreshPage()
 {
-    m_openAction->setEnabled(false);
-    setAcceptDrops(false);
-    m_titlebutton->setVisible(false);
-    switch (m_pageid) {
+//    m_openAction->setEnabled(false);
+//    setAcceptDrops(false);
+//    m_titlebutton->setVisible(false);
+    switch (m_pageid)
+    {
     case PAGE_HOME:
         m_openAction->setEnabled(true);
-        m_mainLayout->setCurrentIndex(0);
-        setQLabelText(m_titlelabel, "");
         setAcceptDrops(true);
+        m_titlebutton->setVisible(false);
+        setQLabelText(m_titlelabel, "");
+        m_mainLayout->setCurrentIndex(0);
         break;
     case PAGE_UNZIP:
-        m_mainLayout->setCurrentIndex(1);
-//        m_titlelabel->setText(m_decompressfilename);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
+        m_mainLayout->setCurrentIndex(1);
         break;
     case PAGE_ZIP:
-        m_openAction->setEnabled(true);
-        m_mainLayout->setCurrentIndex(2);
         setQLabelText(m_titlelabel, tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
+        m_openAction->setEnabled(true);
         m_titlebutton->setVisible(true);
         setAcceptDrops(true);
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
+        m_mainLayout->setCurrentIndex(2);
         break;
     case PAGE_ZIPSET:
-        m_mainLayout->setCurrentIndex(3);
         setQLabelText(m_titlelabel, tr("New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
         m_titlebutton->setVisible(true);
+        m_mainLayout->setCurrentIndex(3);
         break;
     case PAGE_ZIPPROGRESS:
         if(0 != m_watchTimer){
             killTimer(m_watchTimer);
-            m_watchTimer =0;
+            m_watchTimer = 0;
         }
-        m_mainLayout->setCurrentIndex(4);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, tr("Compressing..."));
         m_Progess->setFilename(m_decompressfilename);
+        m_mainLayout->setCurrentIndex(4);
         break;
     case PAGE_UNZIPPROGRESS:
-        m_mainLayout->setCurrentIndex(4);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, tr("Extracting..."));
         m_Progess->setFilename(m_decompressfilename);
+        m_mainLayout->setCurrentIndex(4);
         break;
     case PAGE_ZIP_SUCCESS:
-        m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setstringinfo(tr("Compression successful!"));
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(true);
+        m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_ZIP_FAIL:
-        m_mainLayout->setCurrentIndex(6);
         setQLabelText(m_titlelabel, "");
         m_CompressFail->setFailStr(tr("Sorry, Compression failed!"));
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(true);
+        m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_UNZIP_SUCCESS:
-        m_mainLayout->setCurrentIndex(5);
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
         m_CompressSuccess->setstringinfo(tr("Extraction successful!"));
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(true);
         if (m_settingsDialog->isAutoOpen()) {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
         }
@@ -556,23 +589,30 @@ void MainWindow::refreshPage()
         {
             m_CompressSuccess->showfiledirSlot();
         }
+        m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_UNZIP_FAIL:
-        m_mainLayout->setCurrentIndex(6);
+        m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         setQLabelText(m_titlelabel, "");
         m_CompressFail->setFailStr(tr("Sorry, Extraction failed!"));
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(true);
+        m_mainLayout->setCurrentIndex(6);
         break;
-    case  PAGE_ENCRYPTION:
-        m_mainLayout->setCurrentIndex(7);
+    case  PAGE_ENCRYPTION:  
         setQLabelText(m_titlelabel, m_decompressfilename);
+        m_openAction->setEnabled(false);
+        setAcceptDrops(false);
+        m_titlebutton->setVisible(false);
         if (m_progressdialog->isshown()) {
             m_progressdialog->reject();
         }
+        m_mainLayout->setCurrentIndex(7);
         break;
     default:
         break;
     }
-
 }
 
 void MainWindow::onSelected(const QStringList &files)
@@ -614,7 +654,7 @@ void MainWindow::onSelected(const QStringList &files)
             if (1 == mode) {
                 emit sigZipSelectedFiles(files);
             } else if (2 == mode) {
-                KProcess *cmdprocess = new KProcess;
+                KProcess *cmdprocess = new KProcess(this);
                 QStringList arguments;
 
                 QString programPath = QStandardPaths::findExecutable("deepin-compressor");
@@ -913,10 +953,16 @@ void MainWindow::WatcherFile(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 {
-    m_progressTransFlag = false;
+    //m_progressTransFlag = false;
+	m_progressTransFlag = false;
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
     if (!m_model) {
+        return;
+    }
+
+    if (nullptr == m_model->archive())
+    {
         return;
     }
 
@@ -968,15 +1014,27 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
             this, &MainWindow::slotquitApp);
     connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
 
-    m_encryptionjob->start();
     m_decompressfilepath = destinationDirectory;
+
+    /*if(m_model->archive()->property("isPasswordProtected").toBool() == true)
+    {
+        if (PAGE_ENCRYPTION != m_pageid)
+        {
+            m_pageid = PAGE_ENCRYPTION;
+            refreshPage();
+        }
+        return;
+    }*/
+
+    m_encryptionjob->start();
 }
 
 void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
 {
     qDebug() << percent;
-    if ((Encryption_SingleExtract == m_encryptiontype)) {
-        if ((percent < 100) && (percent > 0) && (WorkProcess == m_workstatus)) {
+    if ((Encryption_SingleExtract == m_encryptiontype))
+    {
+        if ((percent <= 100) && (percent >= 0) && (WorkProcess == m_workstatus)) {
             if (!m_progressdialog->isshown()) {
                 m_pageid = PAGE_UNZIP;
                 refreshPage();
@@ -984,19 +1042,33 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
             }
             m_progressdialog->setProcess(percent);
         }
-    } else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) {
+    }
+    else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid)
+    {
         m_Progess->setprogress(percent);
-    } else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent > 0)) {
-        if (!m_progressTransFlag) {
+    }
+    else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent <= 100) && (percent >= 0))
+    {
+        /*if (!m_progressTransFlag) {
             if (0 == m_timerId) {
                 m_timerId = startTimer(800);
             }
-        } else {
+        } else*/
+		if (!m_progressTransFlag) 
+		{
+            if (0 == m_timerId)
+            {
+                m_timerId = startTimer(800);
+            }
+        }
+		else {
             m_pageid = PAGE_UNZIPPROGRESS;
             m_Progess->settype(DECOMPRESSING);
             refreshPage();
         }
-    } else if ((PAGE_ZIPSET == m_pageid) && (percent < 100) && (percent > 0)) {
+    }
+    else if ((PAGE_ZIPSET == m_pageid) && (percent <= 100) && (percent >= 0))
+    {
         m_pageid = PAGE_ZIPPROGRESS;
         m_Progess->settype(COMPRESSING);
         refreshPage();
@@ -1072,7 +1144,13 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_progressdialog->setFinished(m_decompressfilepath);
         m_pageid = PAGE_UNZIP;
         refreshPage();
-    } else {
+    }
+//    else if( job->error() && job->error() == KJob::KilledJobError )
+//    {
+//        m_pageid = PAGE_UNZIP;
+//        refreshPage();
+//    }
+    else {
         m_pageid = PAGE_UNZIP_SUCCESS;
         refreshPage();
     }
@@ -1088,7 +1166,8 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
-    m_progressTransFlag = false;
+    //m_progressTransFlag = false;
+	m_progressTransFlag = false;
     if (Encryption_Load == m_encryptiontype) {
         LoadPassword(password);
     } else if (Encryption_Extract == m_encryptiontype) {
@@ -1488,7 +1567,8 @@ void MainWindow::slotCompressFinished(KJob *job)
 
 void MainWindow::slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path)
 {
-    m_progressTransFlag = false;
+    //m_progressTransFlag = false;
+	m_progressTransFlag = false;
     m_workstatus = WorkProcess;
     if (path == DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles") {
         m_encryptiontype = Encryption_TempExtract;
@@ -1595,6 +1675,18 @@ void MainWindow::onTitleButtonPressed()
     case PAGE_ZIPSET:
         emit sigZipReturn();
         m_pageid = PAGE_ZIP;
+        refreshPage();
+        break;
+    case PAGE_ZIP_SUCCESS:
+    case PAGE_ZIP_FAIL:
+        m_CompressSuccess->clear();
+        m_pageid = PAGE_ZIP;
+        refreshPage();
+        break;
+    case PAGE_UNZIP_SUCCESS:
+    case PAGE_UNZIP_FAIL:
+        m_CompressSuccess->clear();
+        m_pageid = PAGE_UNZIP;
         refreshPage();
         break;
     default:

@@ -162,7 +162,7 @@ void SettingDialog::initUI()
                 } else if (tr("Other directory") == combobox->currentText())
                 {
                     combobox->setEditable(true);
-                    DFileDialog dialog;
+                    DFileDialog dialog(this);
                     dialog.setAcceptMode(DFileDialog::AcceptOpen);
                     dialog.setFileMode(DFileDialog::Directory);
                     dialog.setDirectory(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));

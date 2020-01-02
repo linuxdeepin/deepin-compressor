@@ -91,7 +91,7 @@ void UnCompressPage::setModel(ArchiveSortFilterModel *model)
 
 void UnCompressPage::onPathButoonClicked()
 {
-    DFileDialog dialog;
+    DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::Directory);
     dialog.setWindowTitle(tr("Find directory"));
@@ -129,7 +129,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
 
     qDebug()<<fileList;
     if (EXTRACT_TO == type) {
-        DFileDialog dialog;
+        DFileDialog dialog(this);
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
         dialog.setFileMode(DFileDialog::Directory);
         dialog.setDirectory(m_pathstr);

@@ -49,12 +49,16 @@ protected:
     void hideEvent(QHideEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 
 signals:
     void doubleClickedSignal();
 
 private:
     LogViewHeaderView* headerView_;
+
+    bool focusIn_ = false;
 };
 
 class LogViewHeaderView : public Dtk::Widget::DHeaderView

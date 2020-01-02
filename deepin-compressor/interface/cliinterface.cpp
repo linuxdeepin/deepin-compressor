@@ -401,8 +401,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {
         if (password().isEmpty()) {
-            qDebug() << "Extraction failed, the file is broken";
-            emit error(tr("Extraction failed. the file is broken"));
+//            qDebug() << "Extraction failed, the file is broken";
+//            emit error(tr("Extraction failed. the file is broken"));
         } else {
             qDebug() << "Extraction failed, the file is broken";
             emit error(tr("Extraction failed. the file is broken"));
@@ -792,7 +792,7 @@ void CliInterface::readStdout(bool handleAll)
 
     bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
 
-    if (m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l" && !wrongPasswordMessage ) {
+    if ( (m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPasswordMessage ) {
         handleAll = true;//7z output has no \n
     }
 
@@ -1096,6 +1096,7 @@ bool CliInterface::handleFileExistsMessage(const QString &line)
     } else if (query.responseAutoSkip()) {
         responseToProcess = choices.at(3);
     } else if (query.responseCancelled()) {
+        userCancel = true;
         emit cancelled();
         if (choices.count() < 5) { // If the program has no way to cancel the extraction, we resort to killing it
             return doKill();

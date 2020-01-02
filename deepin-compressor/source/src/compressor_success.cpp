@@ -44,9 +44,7 @@ void Compressor_Success::InitUI()
     m_pixmaplabel->setPixmap(m_compressicon);
 
     m_stringinfolabel = new DLabel(this);
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-//    font.setWeight(QFont::DemiBold);
-//    m_stringinfolabel->setFont(font);
+
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
@@ -70,13 +68,13 @@ void Compressor_Success::InitConnection()
 {
     connect(m_showfilebutton, &DPushButton::clicked, this, &Compressor_Success::showfiledirSlot);
 
-    auto changeTheme = [this]() {
-        DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
-        pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
-        m_stringinfolabel->setPalette(pa);
-    };
+//    auto changeTheme = [this]() {
+//        DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
+//        pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
+//        m_stringinfolabel->setPalette(pa);
+//    };
 
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
+//    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
 
 void Compressor_Success::showfiledirSlot()
@@ -94,7 +92,7 @@ void Compressor_Success::showfiledirSlot()
         DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
     }
 
-    emit sigQuitApp();
+    //emit sigQuitApp();
 }
 
 void Compressor_Success::setstringinfo(QString str)
@@ -122,6 +120,12 @@ void Compressor_Success::setCompressFullPath(const QString& path)
 void Compressor_Success::setCompressNewFullPath(const QString& path)
 {
     newCreatePath_ = path;
+}
+
+void Compressor_Success::clear()
+{
+    setCompressFullPath("");
+    setCompressNewFullPath("");
 }
 
 
