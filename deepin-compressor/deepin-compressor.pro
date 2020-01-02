@@ -163,7 +163,10 @@ CONFIG(release, debug|release) {
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
 icon_files.files = $$PWD/icons/deepin/builtin/icons/deepin-compressor.svg
 
-INSTALLS += target desktop icon_files desktopcontext
+mime_file.path = /usr/share/mime/packages
+mime_file.files = $$PWD/mimetype/*.xml
+
+INSTALLS += target desktop icon_files desktopcontext mime_file
 
 DISTFILES += \
     ../README.md \
