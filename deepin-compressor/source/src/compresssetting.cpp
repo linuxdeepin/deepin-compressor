@@ -127,18 +127,22 @@ void CompressSetting::InitUI()
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
     m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":");
+    m_encryptedlabel->setToolTip( tr("Support zip, 7z type Only") );
+
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
     m_password = new DPasswordEdit();
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
     m_password->setMinimumSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"), this);
+    m_encryptedfilelistlabel->setToolTip( tr("Support 7z type Only") );
     m_file_secret = new DSwitchButton(this);
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
     m_splitcompress = new DCheckBox(tr("Split to volumes") + ":", this);
     m_splitcompress->setEnabled(false);
+    m_splitcompress->setToolTip( tr("Support 7z type Only") );
     m_splitnumedit = new DDoubleSpinBox(this);
     m_splitnumedit->setMinimumSize(260, 36);
     m_splitnumedit->setSuffix("MB");

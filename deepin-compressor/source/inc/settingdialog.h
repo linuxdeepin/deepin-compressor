@@ -19,25 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SETTINGDIALOG_H
-#define SETTINGDIALOG_H
 
+#pragma once
 
-#include <DDialog>
 #include <DSettingsDialog>
-#include <DStandardPaths>
-#include <QDir>
 #include <DSettings>
-#include <DTableView>
 #include <DSettingsOption>
-#include "kprocess.h"
-#include <DSettingsWidgetFactory>
-#include <DPushButton>
-#include <DApplicationHelper>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+class KProcess;
 
 class SettingDialog: public DSettingsDialog
 {
@@ -73,4 +65,3 @@ private:
     DSettingsOption *m_comboboxoption;
 };
 
-#endif // SETTINGDIALOG_H

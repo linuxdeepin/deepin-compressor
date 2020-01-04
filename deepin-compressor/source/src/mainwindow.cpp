@@ -43,6 +43,8 @@
 #include "jobs.h"
 #include <DFileWatcher>
 #include <QStackedLayout>
+#include "kprocess.h"
+#include <DStandardPaths>
 
 QString MainWindow::m_loadfile;
 

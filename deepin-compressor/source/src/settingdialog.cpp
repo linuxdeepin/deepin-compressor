@@ -29,8 +29,14 @@
 #include <DLabel>
 #include <QMessageBox>
 #include <DPalette>
+#include <DSettingsWidgetFactory>
+#include "DPushButton"
+#include "DApplicationHelper"
+#include "kprocess.h"
+#include <DStandardPaths>
 
 DGUI_USE_NAMESPACE
+
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
 {
@@ -85,8 +91,8 @@ void SettingDialog::initUI()
         {
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
-            QPushButton *button1 = new DPushButton(tr("Select All"));
-            QPushButton *button2 = new DPushButton(tr("Clear All"));
+            DPushButton *button1 = new DPushButton(tr("Select All"));
+            DPushButton *button2 = new DPushButton(tr("Clear All"));
             button1->setFixedSize(100, 36);
             button2->setFixedSize(100, 36);
             layout->addStretch();
@@ -192,8 +198,7 @@ void SettingDialog::initUI()
                 {
                     m_curpath = combobox->currentText();
                     QDir dir(m_curpath);
-                    DPalette plt;
-                    plt = DApplicationHelper::instance()->palette(combobox);
+                    DPalette plt = DApplicationHelper::instance()->palette(combobox);
 
                     if (!dir.exists()) {
 
@@ -234,7 +239,7 @@ void SettingDialog::initUI()
     // 通过DSettings对象构建设置界面
     updateSettings(m_settings);
 
-    moveToCenter();
+    //moveToCenter();
 }
 
 void SettingDialog::initConnect()
@@ -304,16 +309,15 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
     }
 }
 
-
 void SettingDialog::selectpressed()
 {
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, true);
     }
 }
+
 void SettingDialog::cancelpressed()
 {
-
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, false);
     }
@@ -321,14 +325,15 @@ void SettingDialog::cancelpressed()
 
 void SettingDialog::startcmd(QString &mimetype, bool state)
 {
-    if (!m_process) {
-        m_process = new KProcess(this);
-    }
-
     QString programPath = QStandardPaths::findExecutable("xdg-mime");
     if (programPath.isEmpty()) {
         qDebug() << "error can't find xdg-mime";
         return;
+    }
+
+    if ( nullptr == m_process)
+    {
+        m_process = new KProcess(this);
     }
 
     QStringList arguments;

@@ -27,6 +27,7 @@
 #include <DDialog>
 #include <QGraphicsDropShadowEffect>
 #include "DFontSizeManager"
+#include "utils.h"
 
 Progress::Progress(QWidget *parent)
     : QWidget(parent)
@@ -95,6 +96,45 @@ void Progress::InitConnection()
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
+void Progress::setprogress(uint percent)
+{
+    m_progressbar->setValue(percent);
+}
+
+void Progress::setFilename(QString filename)
+{
+    QFileInfo fileinfo(filename);
+    setTypeImage(fileinfo.completeSuffix());
+    m_filenamelabel->setText(filename);
+}
+
+void Progress::setTypeImage(QString type)
+{
+    QFileIconProvider provider;
+    QIcon icon = provider.icon(QFileInfo("temp."+type));
+    m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
+}
+
+void Progress::setProgressFilename(QString filename)
+{
+    if(filename.isEmpty())
+    {
+        return;
+    }
+
+    QFontMetrics elideFont(m_progressfilelabel->font());
+    if (m_type == COMPRESSING) {
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
+    } else {
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+    }
+}
+
+void Progress::settype(COMPRESS_TYPE type)
+{
+    m_type = type;
+}
+
 int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog(this);
@@ -113,29 +153,23 @@ int Progress::showConfirmDialog()
 
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
 
-    if (m_type == COMPRESSING) {
+    if (m_type == COMPRESSING)
+    {
         strlabel->setText(tr("Stop compressing! "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
-
-        dialog->addButton(tr("Cancel"));
-        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
-        QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-        effect->setOffset(0, 4);
-        effect->setColor(QColor(0, 145, 255, 76));
-        effect->setBlurRadius(4);
-        dialog->getButton(1)->setGraphicsEffect(effect);
-
-    } else {
+    } else
+    {
         strlabel->setText(tr("Stop extracting! "));
         strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
-        dialog->addButton(tr("Cancel"));
-        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
-        QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-        effect->setOffset(0, 4);
-        effect->setColor(QColor(0, 145, 255, 76));
-        effect->setBlurRadius(4);
-        dialog->getButton(1)->setGraphicsEffect(effect);
     }
+
+    dialog->addButton(tr("Cancel"));
+    dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(dialog);
+    effect->setOffset(0, 4);
+    effect->setColor(QColor(0, 145, 255, 76));
+    effect->setBlurRadius(4);
+    dialog->getButton(1)->setGraphicsEffect(effect);
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -149,51 +183,14 @@ int Progress::showConfirmDialog()
     dialog->addContent(widget);
     int res = dialog->exec();
     delete dialog;
+
     return res;
 }
 
 void Progress::cancelbuttonPressedSlot()
 {
-    if (1 == showConfirmDialog()) {
+    if (1 == showConfirmDialog())
+    {
         emit sigCancelPressed(m_type);
     }
-}
-
-void Progress::setprogress(uint percent)
-{
-    m_progressbar->setValue(percent);
-}
-
-void Progress::setFilename(QString filename)
-{
-    QFileInfo fileinfo(filename);
-    setTypeImage(fileinfo.completeSuffix());
-    m_filenamelabel->setText(filename);
-}
-
-void Progress::setTypeImage(QString type)
-{
-    QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp."+type));
-
-    m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
-}
-
-void Progress::setProgressFilename(QString filename)
-{
-    if(filename.isEmpty())
-    {
-        return;
-    }
-    QFontMetrics elideFont(m_progressfilelabel->font());
-    if (m_type == COMPRESSING) {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
-    } else {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
-    }
-}
-
-void Progress::settype(COMPRESS_TYPE type)
-{
-    m_type = type;
 }

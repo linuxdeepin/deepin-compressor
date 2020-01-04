@@ -23,13 +23,9 @@
 #define PROGRESS_H
 
 #include <DWidget>
-#include <DFileDialog>
 #include <DPushButton>
 #include <DLabel>
-#include "utils.h"
 #include <DProgressBar>
-#include <DPalette>
-#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -45,6 +41,7 @@ public:
     Progress(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
+
     void setprogress(uint percent);
     void setFilename(QString filename);
     void setProgressFilename(QString filename);
@@ -52,6 +49,13 @@ public:
     void setTypeImage(QString type);
 
     int showConfirmDialog();
+
+signals:
+    void  sigCancelPressed(int compressType);
+
+public slots:
+    void cancelbuttonPressedSlot();
+
 private:
     DPushButton *m_cancelbutton;
     QPixmap m_compressicon;
@@ -64,11 +68,6 @@ private:
 
     QString m_filename;
     COMPRESS_TYPE m_type;
-signals:
-    void  sigCancelPressed(int compressType);
-
-public slots:
-    void cancelbuttonPressedSlot();
 };
 
 #endif // PROGRESS_H
