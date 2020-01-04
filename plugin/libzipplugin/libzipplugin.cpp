@@ -217,7 +217,7 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
 QString  LibzipPlugin::trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
-    qDebug() << codec_name;
+    //qDebug() << codec_name;
     if ("" == m_codecname) {
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
@@ -798,7 +798,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     // Get statistic for entry. Used to get entry size and mtime.
     zip_stat_t statBuffer;
     QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
-    qDebug() << m_codecstr;
+    //qDebug() << m_codecstr;
     QByteArray  name = codec->fromUnicode(entry.toLocal8Bit());
 
 

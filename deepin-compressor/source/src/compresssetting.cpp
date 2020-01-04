@@ -194,6 +194,7 @@ void CompressSetting::InitUI()
 
     setBackgroundRole(DPalette::Base);
 }
+
 void CompressSetting::InitConnection()
 {
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
@@ -260,7 +261,7 @@ void CompressSetting::onNextButoonClicked()
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
-
+        delete dialog;
         return;
     } else if (m_savepath->text().remove(" ") == "") {
         DDialog *dialog = new DDialog(this);
@@ -270,6 +271,7 @@ void CompressSetting::onNextButoonClicked()
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
+        delete dialog;
         return;
     } else if (!dir.exists()) {
         DDialog *dialog = new DDialog(this);
@@ -279,6 +281,7 @@ void CompressSetting::onNextButoonClicked()
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
+        delete dialog;
         return;
     }
     QMap<QString, QString> m_openArgs;

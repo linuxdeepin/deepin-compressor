@@ -11,5 +11,5 @@ Homepage: www.deepin.org
 Package: deepin-compressor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, p7zip, deepin-shortcut-viewer
-Description: Archive Manager is a software tool that provides common functions for Extracting files and compressing files
+Description: Archive Manager is a fast and lightweight application for creating and extracting archives.
  Support 7z,jar,tar,tar.bz2,tar.gz,tar.lz,tar.lzm,tar.lzo,tar.Z,zip...

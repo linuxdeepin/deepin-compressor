@@ -124,7 +124,7 @@ private slots:
     void onRightMenuSelected(const QStringList &);
     void onCompressNext();
     void onCompressPressed(QMap<QString, QString> &Args);
-    void onCancelCompressPressed();
+    void onCancelCompressPressed(int compressType);
     void onTitleButtonPressed();
     void onCompressAddfileSlot(bool status);
 
@@ -141,6 +141,7 @@ private slots:
     void slotFailRetry();
     void slotBatchExtractFileChanged(const QString& name);
     void slotBatchExtractError(const QString& name);
+    void slotClearTempfile();
     void slotquitApp();
     void onUpdateDestFile(QString destFile);
 
@@ -199,7 +200,6 @@ private:
     WorkState m_workstatus = WorkNone;
 
     int m_timerId = 0;
-	bool m_progressTransFlag = false;
     //bool m_progressTransFlag = false;
     QAction *m_openAction;
 

@@ -1,7 +1,7 @@
 ## deepin-compressor
-Archive Manager is a software tool that provides common functions for Extracting files and compressing files.
+Archive Manager is a fast and lightweight application for creating and extracting archives.
 
-归档管理器是一款快速、轻巧的解压缩软件，提供对文件解压缩的常用功能。
+归档管理器是一款提供对文件解压、压缩常用功能的软件工具。
 
 #### Core
 The GUI is based on [DTK](https://github.com/linuxdeepin/dtkwidget), Qt (Supported >= 5.12).

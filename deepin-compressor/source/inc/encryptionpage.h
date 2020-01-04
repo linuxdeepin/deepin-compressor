@@ -21,6 +21,7 @@
  */
 #ifndef ENCRYPTIONPAGE_H
 #define ENCRYPTIONPAGE_H
+
 #include <DWidget>
 #include <DPushButton>
 #include <DLabel>
@@ -36,21 +37,21 @@ public:
     void InitUI();
     void InitConnection();
 
-
+    void setPassowrdFocus();
 private:
-    QPixmap m_encrypticon;
-    DLabel *m_pixmaplabel;
-    DLabel *m_stringinfolabel;
-    DPushButton *m_nextbutton;
-    DPasswordEdit *m_password;
+signals:
+    void sigExtractPassword(QString password);
 
-    bool m_inputflag;
 public slots:
     void nextbuttonClicked();
     void wrongPassWordSlot();
+    void onPasswordChanged();
 
-signals:
-    void sigExtractPassword(QString password);
+private:
+    DPushButton *m_nextbutton = nullptr;
+    DPasswordEdit *m_password= nullptr;
+
+    bool m_inputflag = false;
 };
 
 #endif // ENCRYPTIONPAGE_H

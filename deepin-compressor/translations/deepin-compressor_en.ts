@@ -499,7 +499,7 @@
     </message>
     <message>
         <location filename="../main.cpp" line="63"/>
-        <source>Archive Manager is a software tool that provides common functions for Extracting files and compressing files</source>
+        <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>Archive Manager is a fast and lightweight application for creating and extracting archives.</translation>
     </message>
 </context>

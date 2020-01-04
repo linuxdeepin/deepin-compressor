@@ -46,6 +46,7 @@ public:
     bool isshown();
     void clearprocess();
 
+protected:
     void closeEvent(QCloseEvent *) override;
 
 signals:
@@ -63,8 +64,10 @@ private:
     DLabel *m_filelable;
     DProgressBar *m_circleprogress;
 
+public:
     ExtractPauseDialog *m_extractdialog;
 
+private:
     DTitlebar *m_titlebar;
 
 };

@@ -264,10 +264,10 @@ void KJob::setTotalAmount(Unit unit, qulonglong amount)
 void KJob::setPercent(unsigned long percentage)
 {
     Q_D(KJob);
-    if (d->percentage != percentage) {
+    //if (d->percentage != percentage) {
         d->percentage = percentage;
         emit percent(this, percentage);
-    }
+    //}
 }
 
 void KJob::setPercentFilename(const QString &filename)

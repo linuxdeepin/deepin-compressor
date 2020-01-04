@@ -40,8 +40,6 @@ ExtractPauseDialog::ExtractPauseDialog(QWidget *parent):
 
 void ExtractPauseDialog::initUI()
 {
-
-
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     setIcon(pixmap);
 
@@ -84,7 +82,6 @@ void ExtractPauseDialog::initUI()
     addContent(widget);
 
 //    moveToCenter();
-
 }
 
 void ExtractPauseDialog::initConnect()

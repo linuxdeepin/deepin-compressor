@@ -93,6 +93,8 @@ void CompressPage::onNextPress()
         dialog->addSpacing(15);
 
         dialog->exec();
+
+        delete dialog;
     } else {
         emit sigNextPress();
     }
@@ -124,6 +126,7 @@ void CompressPage::showDialog()
 
     dialog->moveToCenter();
     dialog->exec();
+    delete dialog;
     return;
 }
 
@@ -141,7 +144,10 @@ int CompressPage::showReplaceDialog(QString name)
 
     dialog->moveToCenter();
 
-    return dialog->exec();
+    int res = dialog->exec();
+    delete dialog;
+
+    return res;
 }
 
 void CompressPage::onAddfileSlot()

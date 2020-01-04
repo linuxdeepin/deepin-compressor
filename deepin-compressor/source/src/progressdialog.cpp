@@ -36,7 +36,7 @@ ProgressDialog::ProgressDialog(QWidget *parent):
 void ProgressDialog::initUI()
 {
 
-    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint & ~Qt::Dialog) | Qt::Window);
+    setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint /*& ~Qt::Dialog*/) | Qt::Window);
     setFixedWidth(m_defaultWidth);
 
     m_titlebar = new DTitlebar(this);
@@ -133,13 +133,15 @@ void ProgressDialog::setFinished(const QString &path)
         m_circleprogress->setValue(100);
         m_filelable->setText(tr("Extraction completed") + ":" + tr("Extracted to") + path);
         m_extractdialog->reject();
-        reject();
+        //reject();
+		hide();
         emit extractSuccess();
     }
 }
 
 void ProgressDialog::showdialog()
 {
+    //show();
     exec();
 }
 

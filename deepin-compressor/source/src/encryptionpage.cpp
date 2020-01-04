@@ -28,24 +28,24 @@
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)
 {
-    m_inputflag = false;
     InitUI();
     InitConnection();
 }
 
 void EncryptionPage::InitUI()
 {
-    m_encrypticon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_lock_128px.svg", QSize(128, 128));
-    m_pixmaplabel = new DLabel(this);
-    m_pixmaplabel->setPixmap(m_encrypticon);
-    m_stringinfolabel = new DLabel(this);
+    QPixmap m_encrypticon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_lock_128px.svg", QSize(128, 128));
+    DLabel* pixmaplabel = new DLabel(this);
+    pixmaplabel->setPixmap(m_encrypticon);
+    DLabel* stringinfolabel = new DLabel(this);
 
-    DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
-    m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
-    m_stringinfolabel->setText(tr("Encrypted file, please enter the password"));
+    DFontSizeManager::instance()->bind(stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
+    stringinfolabel->setForegroundRole(DPalette::ToolTipText);
+    stringinfolabel->setText(tr("Encrypted file, please enter the password"));
     m_nextbutton = new DPushButton(this);
     m_nextbutton->setFixedSize(340, 36);
     m_nextbutton->setText(tr("Next"));
+    m_nextbutton->setDisabled(true);
     m_password = new DPasswordEdit(this);
     m_password->setFixedSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
@@ -53,9 +53,9 @@ void EncryptionPage::InitUI()
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(4);
-    mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(33);
     mainlayout->addWidget(m_password, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
@@ -68,7 +68,13 @@ void EncryptionPage::InitUI()
 
 void EncryptionPage::InitConnection()
 {
+    connect(m_password, &DPasswordEdit::textChanged, this, &EncryptionPage::onPasswordChanged);
     connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
+}
+
+void EncryptionPage::setPassowrdFocus()
+{
+    m_password->setFocus(Qt::OtherFocusReason);
 }
 
 void EncryptionPage::nextbuttonClicked()
@@ -84,5 +90,16 @@ void EncryptionPage::wrongPassWordSlot()
         m_password->setAlert(true);
         m_password->showAlertMessage(tr("Wrong Password"));
     }
+}
 
+void EncryptionPage::onPasswordChanged()
+{
+    if(m_password->text().isEmpty())
+    {
+        m_nextbutton->setDisabled(true);
+    }
+    else
+    {
+        m_nextbutton->setEnabled(true);
+    }
 }

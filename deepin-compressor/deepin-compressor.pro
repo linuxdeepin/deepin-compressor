@@ -16,7 +16,7 @@ PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp  disomaster
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
-INCLUDEPATH += $$PWD/source/inc/ \
+INCLUDEPATH +=  $$PWD/source/inc/ \
                 $$PWD/interface/
 
 # Input

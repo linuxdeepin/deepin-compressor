@@ -118,7 +118,7 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
-    DDialog *dialog = new DDialog( getMainWindow() );
+    DDialog* dialog = new DDialog( getMainWindow() );
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -172,6 +172,7 @@ void OverwriteQuery::execute()
         }
     }
 
+    delete dialog;
     //QApplication::restoreOverrideCursor();
 }
 
@@ -285,14 +286,13 @@ void PasswordNeededQuery::execute()
 
     m_data[QStringLiteral("password")] = passwordedit->text();
 
+    delete dialog;
+
     if (-1 == mode) {
         setResponse(Result_Cancel);
     } else {
         setResponse(Result_Skip);
     }
-
-
-    delete dialog;
 }
 
 QString PasswordNeededQuery::password()
@@ -351,11 +351,9 @@ void WrongPasswordQuery::execute()
     dialog->addContent(widget);
 
     dialog->exec();
+    delete dialog;
 
     setResponse(Result_Cancel);
-
-
-    delete dialog;
 }
 
 QString WrongPasswordQuery::password()

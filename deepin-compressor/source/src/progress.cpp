@@ -147,13 +147,15 @@ int Progress::showConfirmDialog()
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
-    return dialog->exec();
+    int res = dialog->exec();
+    delete dialog;
+    return res;
 }
 
 void Progress::cancelbuttonPressedSlot()
 {
     if (1 == showConfirmDialog()) {
-        emit sigCancelPressed();
+        emit sigCancelPressed(m_type);
     }
 }
 

@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
     app.setProductName(DApplication::translate("Main", "Archive Manager"));
-    app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a software tool that provides common functions for Extracting files and compressing files"));
+    app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
     DApplicationSettings settings(&app);
 
     DLogManager::registerConsoleAppender();

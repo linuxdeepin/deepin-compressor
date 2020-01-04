@@ -518,8 +518,8 @@
     </message>
     <message>
         <location filename="../main.cpp" line="63"/>
-        <source>Archive Manager is a software tool that provides common functions for Extracting files and compressing files</source>
-        <translation>归档管理器是一款快速、轻巧的解压缩软件，提供对文件解压缩的常用功能</translation>
+        <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
+        <translation>归档管理器是一款提供对文件解压、压缩常用功能的软件工具。</translation>
     </message>
 </context>
 <context>

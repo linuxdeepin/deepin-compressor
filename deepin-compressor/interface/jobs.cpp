@@ -157,7 +157,7 @@ void Job::onCancelled()
 {
     qDebug() << "Cancelled emitted";
     setError(KJob::KilledJobError);
-    //emit sigCancelled();
+    emit sigCancelled();
 }
 
 void Job::onError(const QString &message, const QString &details)
@@ -569,7 +569,8 @@ void ExtractJob::doWork()
 
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 
-    if (!archiveInterface()->waitForFinishedSignal()) {
+    if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/ )
+    {
         onFinished(ret);
     }
 }

@@ -82,7 +82,6 @@ void UnCompressPage::oneCompressPress()
     emit sigDecompressPress(m_pathstr);
 }
 
-
 void UnCompressPage::setModel(ArchiveSortFilterModel *model)
 {
     m_model = model;

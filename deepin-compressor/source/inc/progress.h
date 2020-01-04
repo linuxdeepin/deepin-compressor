@@ -65,7 +65,7 @@ private:
     QString m_filename;
     COMPRESS_TYPE m_type;
 signals:
-    void  sigCancelPressed();
+    void  sigCancelPressed(int compressType);
 
 public slots:
     void cancelbuttonPressedSlot();
