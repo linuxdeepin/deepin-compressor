@@ -154,4 +154,3 @@ bool ProgressDialog::isshown()
 {
     return this->isVisible() || m_extractdialog->isVisible();
 }
-

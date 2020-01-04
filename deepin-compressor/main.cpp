@@ -21,7 +21,7 @@
  */
 
 #include "mainwindow.h"
-#include <DApplication>
+#include "compressorapplication.h"
 #include <DWidgetUtil>
 #include <QCommandLineParser>
 #include <DLog>
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     // init Dtk application's attrubites.
-    DApplication app(argc, argv);
+    CompressorApplication app(argc, argv);
 
     app.loadTranslator();
     app.setOrganizationName("deepin");
@@ -75,6 +75,8 @@ int main(int argc, char *argv[])
 
     // init modules.
     MainWindow w;
+    app.setMainWindow(&w);
+
     w.setFixedSize(620, 465);
     w.setWindowIcon(QIcon::fromTheme("deepin-compressor"));
 //    w.show();

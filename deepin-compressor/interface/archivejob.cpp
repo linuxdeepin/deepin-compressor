@@ -28,10 +28,11 @@
 #include <QMap>
 #include <QMetaType>
 #include <QTimer>
+#include <climits>
 
 KJobPrivate::KJobPrivate()
     : q_ptr(nullptr), error(KJob::NoError),
-      progressUnit(KJob::Bytes), percentage(0),
+      progressUnit(KJob::Bytes), percentage(ULONG_MAX),
       speedTimer(nullptr), eventLoop(nullptr),
       capabilities(KJob::NoCapabilities),
       suspended(false), isAutoDelete(true), isFinished(false)
@@ -264,10 +265,10 @@ void KJob::setTotalAmount(Unit unit, qulonglong amount)
 void KJob::setPercent(unsigned long percentage)
 {
     Q_D(KJob);
-    //if (d->percentage != percentage) {
+    if (d->percentage != percentage) {
         d->percentage = percentage;
         emit percent(this, percentage);
-    //}
+    }
 }
 
 void KJob::setPercentFilename(const QString &filename)

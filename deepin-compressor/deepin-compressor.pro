@@ -21,6 +21,7 @@ INCLUDEPATH +=  $$PWD/source/inc/ \
 
 # Input
 HEADERS +=  \
+    source/inc/compressorapplication.h \
     source/inc/homepage.h \
     source/inc/logviewheaderview.h \
     source/inc/mainwindow.h \

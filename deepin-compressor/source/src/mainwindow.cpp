@@ -84,6 +84,35 @@ qint64 MainWindow::getMediaFreeSpace()
     return 0;
 }
 
+
+bool MainWindow::applicationQuit()
+{
+    if ( PAGE_ZIPPROGRESS == m_mainLayout->currentIndex() )
+    {
+        if (1 != m_Progess->showConfirmDialog())
+        {
+            return false;
+        }
+
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+
+        if (m_encryptionjob) {
+            m_encryptionjob->Killjob();
+            m_encryptionjob = nullptr;
+        }
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        if (m_createJob) {
+            m_createJob->kill();
+            m_createJob = nullptr;
+        }
+    }
+    else if (7 == m_mainLayout->currentIndex()) {
+        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+    }
+
+    return true;
+}
+
 QString MainWindow::getLoadFile()
 {
     return m_loadfile;
@@ -615,7 +644,8 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
         if (m_progressdialog->isshown()) {
-            m_progressdialog->hide();
+            //m_progressdialog->reject();
+			m_progressdialog->hide();
             m_progressdialog->m_extractdialog->reject();
         }
 //        m_progressdialog->reject();
@@ -1122,7 +1152,8 @@ void MainWindow::slotExtractionDone(KJob *job)
         //do noting:wrong password
     } else if (job->error() && job->error() != KJob::KilledJobError) {
         if (m_progressdialog->isshown()) {
-            m_progressdialog->hide();
+			m_progressdialog->hide();
+            //m_progressdialog->reject();
         }
         if (m_pathstore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {

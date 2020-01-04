@@ -543,7 +543,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
 
 void ExtractJob::doWork()
 {
-    percent( this, 0);
+    //percent( this, 0);
 
     QString desc;
     if (m_entries.count() == 0) {

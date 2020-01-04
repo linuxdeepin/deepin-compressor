@@ -83,10 +83,10 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             int column = m_showColumns.at(index.column());
             switch (column) {
             case FullPath:
-                return "  " + entry->name();
+                return entry->name();
             case Type: {
                 QMimeType mimetype = determineMimeType(entry->fullPath());
-                return " " + m_mimetype->displayName(mimetype.name());
+                return m_mimetype->displayName(mimetype.name());
             }
             case Size:
                 if (entry->isDir()) {
@@ -101,7 +101,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();
-                return " " + QLocale().toString(timeStamp, tr("yyyy/MM/dd hh:mm:ss"));
+                return QLocale().toString(timeStamp, tr("yyyy/MM/dd hh:mm:ss"));
             }
 
             default:

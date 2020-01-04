@@ -108,6 +108,7 @@ public:
     qint64 getDiskFreeSpace();
     qint64 getMediaFreeSpace();
 
+    bool applicationQuit();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;
@@ -116,7 +117,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-
     void setEnable();
     void setDisable();
     void refreshPage();
