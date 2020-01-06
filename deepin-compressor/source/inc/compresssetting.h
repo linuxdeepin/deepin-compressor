@@ -84,6 +84,7 @@ public slots:
     void showRightMenu(QMouseEvent *e);
 
     void onRetrunPressed();
+    void onThemeChanged();
 
 private:
     DPushButton *m_nextbutton = nullptr;

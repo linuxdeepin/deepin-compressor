@@ -55,7 +55,7 @@ void Compressor_Fail::InitUI()
     DFontSizeManager::instance()->bind(m_stringdetaillabel, DFontSizeManager::T8);
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new DPushButton(this);
-    m_retrybutton->setFixedSize(340, 36);
+    m_retrybutton->setMinimumSize(340, 36);
     m_retrybutton->setText(tr("Retry"));
     m_retrybutton->setFocusPolicy(Qt::ClickFocus);
 
@@ -65,8 +65,15 @@ void Compressor_Fail::InitUI()
     mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringdetaillabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_retrybutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addSpacing(10);
+
+    QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
+    buttonHBoxLayout->addStretch(1);
+    buttonHBoxLayout->addWidget(m_retrybutton, 2);
+    buttonHBoxLayout->addStretch(1);
+
+    mainlayout->addLayout(buttonHBoxLayout);
+
+    mainlayout->setContentsMargins(12, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
 }

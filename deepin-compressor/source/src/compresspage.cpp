@@ -42,15 +42,15 @@ CompressPage::CompressPage(QWidget *parent)
 {
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
     m_nextbutton = new DPushButton(tr("Next"), this);
-    m_nextbutton->setFixedSize(340, 36);
+    m_nextbutton->setMinimumSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
-    buttonlayout->addStretch();
-    buttonlayout->addWidget(m_nextbutton);
-    buttonlayout->addStretch();
+    buttonlayout->addStretch(1);
+    buttonlayout->addWidget(m_nextbutton, 2);
+    buttonlayout->addStretch(1);
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);

@@ -44,6 +44,8 @@ public:
     void spinnerStart();
     void spinnerStop();
 
+    void resizeEvent(QResizeEvent *event) override;
+
 signals:
     void fileSelected(const QStringList files) const;
 

@@ -43,11 +43,11 @@ void EncryptionPage::InitUI()
     stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
     m_nextbutton = new DPushButton(this);
-    m_nextbutton->setFixedSize(340, 36);
+    m_nextbutton->setMinimumSize(340, 36);
     m_nextbutton->setText(tr("Next"));
     m_nextbutton->setDisabled(true);
     m_password = new DPasswordEdit(this);
-    m_password->setFixedSize(340, 36);
+    m_password->setMinimumSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Please enter password to extract"));
 
@@ -57,13 +57,25 @@ void EncryptionPage::InitUI()
     mainlayout->addSpacing(4);
     mainlayout->addWidget(stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(33);
-    mainlayout->addWidget(m_password, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    QHBoxLayout *passwordHBoxLayout = new QHBoxLayout;
+    passwordHBoxLayout->addStretch(1);
+    passwordHBoxLayout->addWidget(m_password, 2);
+    passwordHBoxLayout->addStretch(1);
+
+    mainlayout->addLayout(passwordHBoxLayout);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_nextbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addSpacing(10);
+
+    QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
+    buttonHBoxLayout->addStretch(1);
+    buttonHBoxLayout->addWidget(m_nextbutton, 2);
+    buttonHBoxLayout->addStretch(1);
+
+    mainlayout->addLayout(buttonHBoxLayout);
+
+    mainlayout->setContentsMargins(12, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
-
 }
 
 void EncryptionPage::InitConnection()

@@ -86,6 +86,7 @@ class MainWindow : public DMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
     void closeEvent(QCloseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
@@ -109,6 +110,10 @@ public:
     qint64 getMediaFreeSpace();
 
     bool applicationQuit();
+
+private:
+    void saveWindowState();
+    void loadWindowState();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *) Q_DECL_OVERRIDE;

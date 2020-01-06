@@ -62,13 +62,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     // init window flags.
     setWindowTitle(tr("Archive manager"));
-    setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+    //setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
 
     initTitleBar();
 
     m_startTimer = startTimer(500);
+
+    loadWindowState();
+}
+
+MainWindow::~MainWindow()
+{
+    saveWindowState();
 }
 
 qint64 MainWindow::getMediaFreeSpace()
@@ -113,6 +120,25 @@ bool MainWindow::applicationQuit()
     }
 
     return true;
+}
+
+void MainWindow::saveWindowState()
+{
+    QSettings settings(objectName());
+    settings.setValue("geometry", saveGeometry());
+}
+
+void MainWindow::loadWindowState()
+{
+    QSettings settings(objectName());
+    const QByteArray geometry = settings.value("geometry").toByteArray();
+    if(!geometry.isEmpty()){
+        restoreGeometry(geometry);
+    }
+    else
+    {
+        resize(620, 465);
+    }
 }
 
 QString MainWindow::getLoadFile()

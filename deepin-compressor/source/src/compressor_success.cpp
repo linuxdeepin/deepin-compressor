@@ -49,7 +49,7 @@ void Compressor_Success::InitUI()
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new DPushButton(this);
-    m_showfilebutton->setFixedSize(340, 36);
+    m_showfilebutton->setMinimumSize(340, 36);
     m_showfilebutton->setText(tr("View"));
     m_showfilebutton->setFocusPolicy(Qt::ClickFocus);
 
@@ -58,8 +58,15 @@ void Compressor_Success::InitUI()
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_showfilebutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addSpacing(10);
+
+    QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
+    buttonHBoxLayout->addStretch(1);
+    buttonHBoxLayout->addWidget(m_showfilebutton, 2);
+    buttonHBoxLayout->addStretch(1);
+
+    mainlayout->addLayout(buttonHBoxLayout);
+
+    mainlayout->setContentsMargins(12, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
 }

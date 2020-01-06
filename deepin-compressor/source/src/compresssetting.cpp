@@ -57,10 +57,7 @@ CompressSetting::CompressSetting(QWidget *parent)
 
 void CompressSetting::InitUI()
 {
-    m_nextbutton = new DPushButton(tr("Compress"), this);
-    m_nextbutton->setFixedSize(340, 36);
-
-    DWidget *leftwidget = new DWidget(this);
+    //DWidget *leftwidget = new DWidget(this);
     QHBoxLayout *typelayout = new QHBoxLayout;
     QHBoxLayout *layout = new QHBoxLayout;
     m_pixmaplabel = new DLabel(this);
@@ -96,7 +93,7 @@ void CompressSetting::InitUI()
     layout->addWidget(m_clicklabel,0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     m_typemenu = new DMenu(this);
-    m_typemenu->setFixedWidth(162);
+    m_typemenu->setMinimumWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
@@ -126,16 +123,17 @@ void CompressSetting::InitUI()
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
-    m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":");
+    m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":", this);
     m_encryptedlabel->setToolTip( tr("Support zip, 7z type Only") );
 
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
-    m_password = new DPasswordEdit();
+    m_password = new DPasswordEdit(this);
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
     m_password->setMinimumSize(260, 36);
     m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"), this);
     m_encryptedfilelistlabel->setToolTip( tr("Support 7z type Only") );
+    m_encryptedfilelistlabel->setEnabled(false);
     m_file_secret = new DSwitchButton(this);
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
@@ -157,7 +155,7 @@ void CompressSetting::InitUI()
     typeLayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typeLayout->addLayout(layout);
     typeLayout->addStretch();
-    leftwidget->setLayout(typeLayout);
+    //leftwidget->setLayout(typeLayout);
 
     m_fileLayout = new QVBoxLayout;
     m_fileLayout->addLayout(filelayout);
@@ -174,22 +172,33 @@ void CompressSetting::InitUI()
 
     QScrollArea *m_scroll = new QScrollArea(this);
     m_scroll->setWidget(m_rightwidget);
-    m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scroll->setFrameShape(QFrame::NoFrame);
-    //m_scroll->setWidgetResizable(true);
+    m_scroll->setWidgetResizable(true);
+    m_scroll->setMinimumHeight(345);
 
     QHBoxLayout *infoLayout = new QHBoxLayout();
     infoLayout->addStretch();
-    infoLayout->addWidget(leftwidget);
+    infoLayout->addLayout(typeLayout, 8);
     infoLayout->addStretch();
-    infoLayout->addWidget(m_scroll);
+    infoLayout->addWidget(m_scroll, 10);
     infoLayout->addStretch();
+    infoLayout->setContentsMargins(0, 0, 50, 0);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(infoLayout);
     mainLayout->addStretch();
-    mainLayout->addWidget(m_nextbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainLayout->setContentsMargins(20, 6, 20, 20);
+
+    m_nextbutton = new DPushButton(tr("Compress"), this);
+    m_nextbutton->setMinimumSize(340, 36);
+    QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
+    buttonHBoxLayout->addStretch(1);
+    buttonHBoxLayout->addWidget(m_nextbutton, 2);
+    buttonHBoxLayout->addStretch(1);
+
+    mainLayout->addLayout(buttonHBoxLayout);
+
+    mainLayout->setContentsMargins(12, 6, 20, 20);
 
 
     m_splitnumedit->setEnabled(false);
@@ -205,28 +214,15 @@ void CompressSetting::InitConnection()
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
-    connect(m_savepath, &DFileChooserEdit::textChanged, this, [ = ] {
-        QDir dir(m_savepath->text());
-        DPalette plt;
-        plt = DApplicationHelper::instance()->palette(m_savepath->lineEdit());
 
-        if (!dir.exists())
-        {
-            plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSetting::onThemeChanged );
+    connect(m_savepath, &DFileChooserEdit::textChanged, this, &CompressSetting::onThemeChanged );
 
-        } else
-        {
-            plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
-        }
-
-        m_savepath->lineEdit()->setPalette(plt);
-    });
     connect(m_filename, &DLineEdit::textChanged, this, [ = ] {
         DPalette plt;
         plt = DApplicationHelper::instance()->palette(m_filename);
 
-
-        if (!checkfilename(m_filename->text()))
+        if ( false == checkfilename(m_filename->text()) )
         {
             plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
 
@@ -237,6 +233,7 @@ void CompressSetting::InitConnection()
 
         m_filename->setPalette(plt);
     });
+
     connect(typepixmap, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_compresstype, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_clicklabel, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
@@ -294,6 +291,7 @@ void CompressSetting::onNextButoonClicked()
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (m_compresstype->text().contains(QMimeDatabase().mimeTypeForName(type).preferredSuffix())) {
             fixedMimeType = type;
+            break;
         }
     }
 
@@ -504,12 +502,16 @@ void CompressSetting::ontypeChanged(QAction *action)
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }
+        m_encryptedlabel->setEnabled(true);
         m_password->setEnabled(true);
+        m_encryptedfilelistlabel->setEnabled(true);
         m_file_secret->setEnabled(true);
         m_splitcompress->setEnabled(true);
     } else if (action->text().contains("zip")) {
         m_splitnumedit->setEnabled(false);
+        m_encryptedlabel->setEnabled(true);
         m_password->setEnabled(true);
+        m_encryptedfilelistlabel->setEnabled(false);
         m_file_secret->setEnabled(false);
         m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
@@ -518,7 +520,9 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitnumedit->setValue(0.0);
     } else {
         m_splitnumedit->setEnabled(false);
+        m_encryptedlabel->setEnabled(false);
         m_password->setEnabled(false);
+        m_encryptedfilelistlabel->setEnabled(false);
         m_file_secret->setEnabled(false);
         m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
@@ -551,4 +555,21 @@ void CompressSetting::onSplitValueChanged(double /*value*/)
 void CompressSetting::onRetrunPressed()
 {
 
+}
+
+void CompressSetting::onThemeChanged()
+{
+    DPalette plt;
+    plt = DApplicationHelper::instance()->palette(m_filename);
+
+    if ( false == checkfilename(m_filename->text()) )
+    {
+        plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+
+    } else
+    {
+        plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
+    }
+
+    m_filename->setPalette(plt);
 }

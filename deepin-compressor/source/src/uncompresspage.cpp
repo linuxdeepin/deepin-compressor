@@ -38,7 +38,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
     m_nextbutton = new DPushButton(tr("Extract"), this);
-    m_nextbutton->setFixedSize(340, 36);
+    m_nextbutton->setMinimumSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
@@ -48,14 +48,14 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     DFontSizeManager::instance()->bind(m_extractpath, DFontSizeManager::T8);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
-    buttonlayout->addStretch();
-    buttonlayout->addWidget(m_nextbutton);
-    buttonlayout->addStretch();
+    buttonlayout->addStretch(1);
+    buttonlayout->addWidget(m_nextbutton, 2);
+    buttonlayout->addStretch(1);
 
     QHBoxLayout *pathlayout = new QHBoxLayout;
-    pathlayout->addStretch();
-    pathlayout->addWidget(m_extractpath);
-    pathlayout->addStretch();
+    pathlayout->addStretch(1);
+    pathlayout->addWidget(m_extractpath, 2, Qt::AlignCenter);
+    pathlayout->addStretch(1);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 

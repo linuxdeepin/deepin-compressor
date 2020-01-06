@@ -70,7 +70,7 @@ void Progress::InitUI()
     m_progressfilelabel->setText(tr("Being calculated..."));
 
     m_cancelbutton = new DPushButton(this);
-    m_cancelbutton->setFixedSize(340, 36);
+    m_cancelbutton->setMinimumSize(340, 36);
     m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
@@ -85,8 +85,14 @@ void Progress::InitUI()
     mainlayout->addSpacing(5);
     mainlayout->addWidget(m_progressfilelabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-    mainlayout->addWidget(m_cancelbutton, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addSpacing(10);
+
+    QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
+    buttonHBoxLayout->addStretch(1);
+    buttonHBoxLayout->addWidget(m_cancelbutton, 2);
+    buttonHBoxLayout->addStretch(1);
+
+    mainlayout->addLayout(buttonHBoxLayout);
+    mainlayout->setContentsMargins(12, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
 }

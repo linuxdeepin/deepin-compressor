@@ -77,7 +77,10 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
-    w.setFixedSize(620, 465);
+    w.setMinimumSize(620, 465);
+
+    //w.resize(620, 465);
+
     w.setWindowIcon(QIcon::fromTheme("deepin-compressor"));
 //    w.show();
 

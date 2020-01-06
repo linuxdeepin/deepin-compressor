@@ -112,6 +112,12 @@ void HomePage::spinnerStop()
     m_chooseBtn->setEnabled(true);
 }
 
+void HomePage::resizeEvent(QResizeEvent *event)
+{
+    m_spinner->move(width()/2-20, height()/2-5);
+    QWidget::resizeEvent(event);
+}
+
 void HomePage::onChooseBtnClicked()
 {
     DFileDialog dialog(this);
