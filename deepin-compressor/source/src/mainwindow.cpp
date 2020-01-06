@@ -454,7 +454,8 @@ void MainWindow::initTitleBar()
     left_frame->setLayout(leftLayout);
 
     m_titlelabel = new DLabel(this);
-    m_titlelabel->setMinimumSize(200, TITLE_FIXED_HEIGHT);
+    m_titlelabel->setMinimumSize(315, TITLE_FIXED_HEIGHT);
+    //m_titlelabel->setMinimumHeight(TITLE_FIXED_HEIGHT);
     m_titlelabel->setAlignment(Qt::AlignCenter);
 
     DFontSizeManager::instance()->bind(m_titlelabel, DFontSizeManager::T6, QFont::Medium);
@@ -464,7 +465,7 @@ void MainWindow::initTitleBar()
     QHBoxLayout *titlemainLayout = new QHBoxLayout;
     titlemainLayout->setContentsMargins(0, 0, 0, 0);
     titlemainLayout->addWidget(left_frame);
-    titlemainLayout->addSpacing(50);
+    titlemainLayout->addSpacing(5);
     titlemainLayout->addWidget(m_titlelabel, 0, Qt::AlignCenter);
 
     m_titleFrame->setLayout(titlemainLayout);
