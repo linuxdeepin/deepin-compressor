@@ -330,6 +330,7 @@ void MainWindow::InitConnection()
 {
     // connect the signals to the slot function.
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
+    connect(m_CompressPage, &CompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
     connect(m_CompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
@@ -1766,6 +1767,12 @@ void MainWindow::slotquitApp()
  void MainWindow::onUpdateDestFile(QString destFile)
  {
      m_CompressSuccess->setCompressFullPath( destFile);
+ }
+
+ void MainWindow::onCompressPageFilelistIsEmpty()
+ {
+     m_pageid = PAGE_HOME;
+     refreshPage();
  }
 
 void MainWindow::onTitleButtonPressed()

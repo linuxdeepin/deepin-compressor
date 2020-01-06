@@ -55,6 +55,7 @@ public slots:
 signals:
     void sigselectedFiles(const QStringList &files);
     void sigiscanaddfile(bool status);
+    void sigFilelistIsEmpty();
 
 private:
 

@@ -25,14 +25,6 @@
         <translation>项</translation>
     </message>
     <message>
-        <source>yyyy年MM月dd日 hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyyyearMMmonthddday hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy年MM月dd日 hh:mm:ss</translation>
@@ -56,10 +48,6 @@
         <location filename="../source/src/archivemodel.cpp" line="176"/>
         <source>Time modified</source>
         <translation>修改时间</translation>
-    </message>
-    <message>
-        <source>Modify</source>
-        <translation type="vanished">修改时间</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="178"/>
@@ -139,134 +127,86 @@
 <context>
     <name>CompressSetting</name>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="60"/>
+        <location filename="../source/src/compresssetting.cpp" line="192"/>
         <source>Compress</source>
         <translation>压缩</translation>
     </message>
     <message>
-        <source>New archive</source>
-        <translation type="vanished">新建归档文件</translation>
-    </message>
-    <message>
-        <source>File Name</source>
-        <translation type="vanished">文件名</translation>
-    </message>
-    <message>
-        <source>Save To</source>
-        <translation type="vanished">保存到</translation>
-    </message>
-    <message>
-        <location filename="../source/src/compresssetting.cpp" line="123"/>
+        <location filename="../source/src/compresssetting.cpp" line="120"/>
         <source>Advanced Options</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <source>Encrypted File</source>
-        <translation type="vanished">加密文件</translation>
-    </message>
-    <message>
-        <source>Please enter the password</source>
-        <translation type="vanished">请输入密码</translation>
-    </message>
-    <message>
-        <source>Encrypted File List</source>
-        <translation type="vanished">加密文件列表</translation>
-    </message>
-    <message>
-        <source>Volume Compression</source>
-        <translation type="vanished">分卷压缩</translation>
-    </message>
-    <message>
-        <location filename="../source/src/compresssetting.cpp" line="108"/>
+        <location filename="../source/src/compresssetting.cpp" line="105"/>
         <source>New Archive</source>
         <translation>新归档文件</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="117"/>
+        <location filename="../source/src/compresssetting.cpp" line="114"/>
         <source>Name</source>
         <translation>文件名</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="118"/>
+        <location filename="../source/src/compresssetting.cpp" line="115"/>
         <source>Save to</source>
         <translation>保存到</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="129"/>
+        <location filename="../source/src/compresssetting.cpp" line="126"/>
         <source>Encrypt the archive</source>
         <translation>加密文件</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="130"/>
+        <location filename="../source/src/compresssetting.cpp" line="127"/>
         <source>Support zip, 7z type Only</source>
         <translation>仅支持zip, 7z格式</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="134"/>
+        <location filename="../source/src/compresssetting.cpp" line="132"/>
         <source>Password</source>
         <translation>请输入密码</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="136"/>
+        <location filename="../source/src/compresssetting.cpp" line="134"/>
         <source>Encrypt the file list too</source>
         <translation>加密文件列表</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="137"/>
-        <location filename="../source/src/compresssetting.cpp" line="144"/>
+        <location filename="../source/src/compresssetting.cpp" line="135"/>
+        <location filename="../source/src/compresssetting.cpp" line="143"/>
         <source>Support 7z type Only</source>
         <translation>仅支持7z格式</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="142"/>
+        <location filename="../source/src/compresssetting.cpp" line="141"/>
         <source>Split to volumes</source>
         <translation>分卷压缩</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="263"/>
+        <location filename="../source/src/compresssetting.cpp" line="261"/>
         <source>The file name is error, please retry!</source>
         <translation>文件名输入错误，请重新输入!</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="265"/>
-        <location filename="../source/src/compresssetting.cpp" line="275"/>
-        <location filename="../source/src/compresssetting.cpp" line="285"/>
+        <location filename="../source/src/compresssetting.cpp" line="263"/>
+        <location filename="../source/src/compresssetting.cpp" line="273"/>
+        <location filename="../source/src/compresssetting.cpp" line="283"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="273"/>
+        <location filename="../source/src/compresssetting.cpp" line="271"/>
         <source>Please enter the path!</source>
         <translation>请输入保存路径!</translation>
     </message>
     <message>
-        <source>Please enter the save path!</source>
-        <translation type="vanished">请输入保存路径!</translation>
-    </message>
-    <message>
-        <location filename="../source/src/compresssetting.cpp" line="283"/>
+        <location filename="../source/src/compresssetting.cpp" line="281"/>
         <source>The path does not exist, please retry!</source>
         <translation>路径不存在,请重新输入!</translation>
-    </message>
-    <message>
-        <source>Only Sruport 7z type</source>
-        <translation type="vanished">仅支持7z格式</translation>
-    </message>
-    <message>
-        <source>Only Sruport zip, 7z type</source>
-        <translation type="vanished">仅支持zip,7z格式</translation>
     </message>
 </context>
 <context>
     <name>Compressor_Fail</name>
-    <message>
-        <source>Sorry, the extraction failed!</source>
-        <translation type="vanished">抱歉,解压失败!</translation>
-    </message>
-    <message>
-        <source>Compressed file is corrupt</source>
-        <translation type="vanished">压缩文件已损坏</translation>
-    </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="33"/>
         <source>Sorry,Extraction failed!</source>
@@ -278,10 +218,6 @@
         <translation>文件损坏，无法解压</translation>
     </message>
     <message>
-        <source>The file is corrupt</source>
-        <translation type="vanished">文件损坏，无法解压</translation>
-    </message>
-    <message>
         <location filename="../source/src/compressor_fail.cpp" line="59"/>
         <source>Retry</source>
         <translation>重 试</translation>
@@ -289,14 +225,6 @@
 </context>
 <context>
     <name>Compressor_Success</name>
-    <message>
-        <source>Compressed successfully!</source>
-        <translation type="vanished">压缩成功!</translation>
-    </message>
-    <message>
-        <source>show files</source>
-        <translation type="vanished">查看文件</translation>
-    </message>
     <message>
         <location filename="../source/src/compressor_success.cpp" line="35"/>
         <source>Compression successful!</source>
@@ -343,14 +271,6 @@
 <context>
     <name>EncodingPage</name>
     <message>
-        <source>File name encoding</source>
-        <translation type="vanished">文件名编码</translation>
-    </message>
-    <message>
-        <source>Please provide a filename encoding to extract this document</source>
-        <translation type="vanished">请选择文件名编码以解压此文档</translation>
-    </message>
-    <message>
         <location filename="../source/src/encodingpage.cpp" line="63"/>
         <source>Filename Encoding</source>
         <translation>文件名编码</translation>
@@ -370,17 +290,9 @@
         <source>Select Character Encoding</source>
         <translation>选择语言编码</translation>
     </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">确定</translation>
-    </message>
 </context>
 <context>
     <name>EncryptionPage</name>
-    <message>
-        <source>This file is encrypted, please enter the password</source>
-        <translation type="vanished">此文件已加密,请输入解压密码</translation>
-    </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="44"/>
         <source>Encrypted file, please enter the password</source>
@@ -397,7 +309,7 @@
         <translation>请输入密码以解压</translation>
     </message>
     <message>
-        <location filename="../source/src/encryptionpage.cpp" line="91"/>
+        <location filename="../source/src/encryptionpage.cpp" line="103"/>
         <source>Wrong Password</source>
         <translation>密码错误</translation>
     </message>
@@ -451,33 +363,9 @@
         <source>Continue extracting</source>
         <translation>继续提取</translation>
     </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">停止提取</translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation type="vanished">继续提取</translation>
-    </message>
 </context>
 <context>
     <name>HomePage</name>
-    <message>
-        <source>Drag files or folders to this</source>
-        <translation type="vanished">拖拽文件(夹)到此</translation>
-    </message>
-    <message>
-        <source>Select the file</source>
-        <translation type="vanished">选择文件</translation>
-    </message>
-    <message>
-        <source>Drag files(folders) here</source>
-        <translation type="vanished">拖拽文件(夹)到此</translation>
-    </message>
-    <message>
-        <source>Select files</source>
-        <translation type="vanished">选择文件</translation>
-    </message>
     <message>
         <location filename="../source/src/homepage.cpp" line="39"/>
         <source>Drag file or folder here</source>
@@ -534,10 +422,6 @@
 <context>
     <name>Main</name>
     <message>
-        <source>Archive manager</source>
-        <translation type="vanished">归档管理器</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="61"/>
         <source>Archive Manager</source>
         <translation>归档管理器</translation>
@@ -545,11 +429,7 @@
     <message>
         <location filename="../main.cpp" line="62"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Archive Manager is a software tool that provides common functions for Extracting files and compressing files</source>
-        <translation type="vanished">归档管理器是一款快速、轻巧的解压缩软件，提供对文件解压缩的常用功能</translation>
+        <translation>归档管理器是一款提供对文件解压、压缩常用功能的软件工具。</translation>
     </message>
 </context>
 <context>
@@ -564,7 +444,7 @@
         <translation type="obsolete">已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="193"/>
+        <location filename="../source/src/mainwindow.cpp" line="219"/>
         <source>%1</source>
         <translation></translation>
     </message>
@@ -573,232 +453,168 @@
         <translation type="obsolete">已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="193"/>
+        <location filename="../source/src/mainwindow.cpp" line="219"/>
         <source> has changed and may be renamed, moved or deleted, please re-import the file.</source>
         <translation>已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="259"/>
+        <location filename="../source/src/mainwindow.cpp" line="285"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="263"/>
+        <location filename="../source/src/mainwindow.cpp" line="289"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="267"/>
+        <location filename="../source/src/mainwindow.cpp" line="293"/>
         <source>Select the file</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="271"/>
+        <location filename="../source/src/mainwindow.cpp" line="297"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <source>Extraction successful</source>
-        <translation type="vanished">提取成功</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="325"/>
+        <location filename="../source/src/mainwindow.cpp" line="352"/>
         <source>Extraction task completed</source>
         <translation>提取任务已完成</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="393"/>
+        <location filename="../source/src/mainwindow.cpp" line="420"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="562"/>
+        <location filename="../source/src/mainwindow.cpp" line="590"/>
         <source>Create New Archive</source>
         <translation>新建归档文件</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="572"/>
+        <location filename="../source/src/mainwindow.cpp" line="600"/>
         <source>New Archive</source>
         <translation>新建归档文件</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="587"/>
+        <location filename="../source/src/mainwindow.cpp" line="615"/>
         <source>Compressing...</source>
         <translation>正在压缩...</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="595"/>
+        <location filename="../source/src/mainwindow.cpp" line="623"/>
         <source>Extracting...</source>
         <translation>正在解压...</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="601"/>
+        <location filename="../source/src/mainwindow.cpp" line="629"/>
         <source>Compression successful!</source>
         <translation>压缩成功！</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="610"/>
+        <location filename="../source/src/mainwindow.cpp" line="638"/>
         <source>Sorry, Compression failed!</source>
         <translation>抱歉,压缩失败!</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="620"/>
+        <location filename="../source/src/mainwindow.cpp" line="648"/>
         <source>Extraction successful!</source>
         <translation>解压成功！</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="637"/>
+        <location filename="../source/src/mainwindow.cpp" line="665"/>
         <source>Sorry, Extraction failed!</source>
         <translation>抱歉,解压失败!</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="687"/>
+        <location filename="../source/src/mainwindow.cpp" line="715"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>添加压缩文件到目录或在新窗口中打开该文件？</translation>
     </message>
     <message>
-        <source>Show shortcut preview</source>
-        <translation type="vanished">显示快捷键预览</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="275"/>
+        <location filename="../source/src/mainwindow.cpp" line="301"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="279"/>
+        <location filename="../source/src/mainwindow.cpp" line="305"/>
         <source>Display shortcuts</source>
         <translation>显示快捷键预览</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="291"/>
+        <location filename="../source/src/mainwindow.cpp" line="317"/>
         <source>hot key</source>
         <translation>快捷键</translation>
     </message>
     <message>
-        <source>Successful extraction</source>
-        <translation type="vanished">提取成功</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="363"/>
+        <location filename="../source/src/mainwindow.cpp" line="390"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <source>Setting</source>
-        <translation type="vanished">设置</translation>
-    </message>
-    <message>
-        <source>Create New archive</source>
-        <translation type="vanished">新建归档文件</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="1317"/>
+        <location filename="../source/src/mainwindow.cpp" line="1345"/>
         <source>New archive</source>
         <translation>新建归档文件</translation>
     </message>
     <message>
-        <source>Compressing</source>
-        <translation type="vanished">正在压缩</translation>
-    </message>
-    <message>
-        <source>Extracting</source>
-        <translation type="vanished">正在解压</translation>
-    </message>
-    <message>
-        <source>Successful compression!</source>
-        <translation type="vanished">压缩成功!</translation>
-    </message>
-    <message>
-        <source>Sorry, the compression failed!</source>
-        <translation type="vanished">抱歉,压缩失败!</translation>
-    </message>
-    <message>
-        <source>Successful extraction!</source>
-        <translation type="vanished">解压成功！</translation>
-    </message>
-    <message>
-        <source>Sorry, the extraction failed!</source>
-        <translation type="vanished">抱歉,解压失败!</translation>
-    </message>
-    <message>
-        <source>Add a compressed file to a directory or open it in a new window?</source>
-        <translation type="vanished">添加压缩文件到目录或在新窗口中打开该文件？</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="688"/>
+        <location filename="../source/src/mainwindow.cpp" line="716"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="689"/>
+        <location filename="../source/src/mainwindow.cpp" line="717"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="690"/>
+        <location filename="../source/src/mainwindow.cpp" line="718"/>
         <source>Open in new window</source>
         <translation>在新窗口中打开</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="808"/>
+        <location filename="../source/src/mainwindow.cpp" line="836"/>
         <source>Find directory</source>
         <translation>查找目录</translation>
     </message>
     <message>
-        <source>Compressed file is corrupt!</source>
-        <translation type="vanished">文件损坏，无法解压</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="985"/>
+        <location filename="../source/src/mainwindow.cpp" line="1013"/>
         <source>The current compressed file has changed and may be renamed, moved or deleted, please re-import the file.</source>
         <translation>当前压缩文件已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="194"/>
-        <location filename="../source/src/mainwindow.cpp" line="986"/>
+        <location filename="../source/src/mainwindow.cpp" line="220"/>
+        <location filename="../source/src/mainwindow.cpp" line="1014"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
     <message>
-        <source>The current compressed file has been moved or deleted</source>
-        <translation type="vanished">当前压缩文件已经被移动或删除</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="1140"/>
+        <location filename="../source/src/mainwindow.cpp" line="1168"/>
         <source>Wrong password!</source>
         <translation>密码错误！</translation>
     </message>
     <message>
-        <source>No space left, please clean and retry</source>
-        <translation type="vanished">空间不足,请清理后重试</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="884"/>
-        <location filename="../source/src/mainwindow.cpp" line="904"/>
-        <location filename="../source/src/mainwindow.cpp" line="935"/>
-        <location filename="../source/src/mainwindow.cpp" line="1164"/>
-        <location filename="../source/src/mainwindow.cpp" line="1170"/>
+        <location filename="../source/src/mainwindow.cpp" line="912"/>
+        <location filename="../source/src/mainwindow.cpp" line="932"/>
+        <location filename="../source/src/mainwindow.cpp" line="963"/>
+        <location filename="../source/src/mainwindow.cpp" line="1192"/>
+        <location filename="../source/src/mainwindow.cpp" line="1198"/>
         <source>Damaged file, unable to extract</source>
         <translation>文件损坏，无法解压</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1162"/>
-        <location filename="../source/src/mainwindow.cpp" line="1168"/>
-        <location filename="../source/src/mainwindow.cpp" line="1593"/>
-        <location filename="../source/src/mainwindow.cpp" line="1599"/>
+        <location filename="../source/src/mainwindow.cpp" line="1190"/>
+        <location filename="../source/src/mainwindow.cpp" line="1196"/>
+        <location filename="../source/src/mainwindow.cpp" line="1621"/>
+        <location filename="../source/src/mainwindow.cpp" line="1627"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>空间不足,请清理后重试</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1595"/>
-        <location filename="../source/src/mainwindow.cpp" line="1601"/>
+        <location filename="../source/src/mainwindow.cpp" line="1623"/>
+        <location filename="../source/src/mainwindow.cpp" line="1629"/>
         <source>Damaged file</source>
         <translation>原始文件已损坏</translation>
-    </message>
-    <message>
-        <source>The original file is corrupt!</source>
-        <translation type="vanished">原始文件已损坏!</translation>
     </message>
 </context>
 <context>
@@ -893,10 +709,6 @@
         <translation>修改时间</translation>
     </message>
     <message>
-        <source>Modify</source>
-        <translation type="vanished">修改时间</translation>
-    </message>
-    <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="62"/>
         <source>Unnamed column</source>
         <comment>??</comment>
@@ -912,14 +724,6 @@
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy年MM月dd日 hh:mm:ss</translation>
     </message>
-    <message>
-        <source>yyyyyearMMmonthddday hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyy年MM月dd日 hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
 </context>
 <context>
     <name>Progress</name>
@@ -930,114 +734,42 @@
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="74"/>
-        <location filename="../source/src/progress.cpp" line="166"/>
+        <location filename="../source/src/progress.cpp" line="172"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="158"/>
+        <location filename="../source/src/progress.cpp" line="164"/>
         <source>Stop compressing! </source>
         <translation>停止压缩!</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="159"/>
+        <location filename="../source/src/progress.cpp" line="165"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>您确定要停止压缩文件吗？</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="167"/>
+        <location filename="../source/src/progress.cpp" line="173"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="163"/>
+        <location filename="../source/src/progress.cpp" line="169"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>您确定要停止解压文件吗？</translation>
     </message>
     <message>
-        <source>Compressing...</source>
-        <translation type="vanished">正在压缩...</translation>
-    </message>
-    <message>
-        <source>Extracting...</source>
-        <translation type="vanished">正在解压...</translation>
-    </message>
-    <message>
-        <source>Stop compressing</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Continue compressing</source>
-        <translation type="vanished">确定</translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="162"/>
+        <location filename="../source/src/progress.cpp" line="168"/>
         <source>Stop extracting! </source>
         <translation>停止解压!</translation>
     </message>
     <message>
-        <source>Stop extracting</source>
-        <translation type="vanished">取消</translation>
-    </message>
-    <message>
-        <source>Continue extracting</source>
-        <translation type="vanished">确定</translation>
-    </message>
-    <message>
-        <source>Stop Stop extracting</source>
-        <translation type="vanished">停止提取</translation>
-    </message>
-    <message>
-        <source>Continue Stop extracting</source>
-        <translation type="vanished">继续提取</translation>
-    </message>
-    <message>
-        <source>Stop compression! </source>
-        <translation type="vanished">停止压缩!</translation>
-    </message>
-    <message>
-        <source>There is currently a compression task in progress</source>
-        <translation type="vanished">您确定要停止压缩文件吗？</translation>
-    </message>
-    <message>
-        <source>Stop compression</source>
-        <translation type="vanished">停止压缩</translation>
-    </message>
-    <message>
-        <source>Continue compression</source>
-        <translation type="vanished">继续压缩</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">停止压缩</translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation type="vanished">继续压缩</translation>
-    </message>
-    <message>
-        <source>Stop extraction! </source>
-        <translation type="vanished">停止解压!</translation>
-    </message>
-    <message>
-        <source>There is currently a extraction task in progress</source>
-        <translation type="vanished">您确定要停止解压文件吗？</translation>
-    </message>
-    <message>
-        <source>Stop extraction</source>
-        <translation type="vanished">停止解压</translation>
-    </message>
-    <message>
-        <source>Continue extraction</source>
-        <translation type="vanished">继续解压</translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="127"/>
+        <location filename="../source/src/progress.cpp" line="133"/>
         <source>Compressing</source>
         <translation>正在压缩</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="129"/>
+        <location filename="../source/src/progress.cpp" line="135"/>
         <source>Extracting</source>
         <translation>正在解压</translation>
     </message>
@@ -1118,17 +850,9 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>The file already exists. How to deal with it?</source>
-        <translation type="vanished">文件已存在，是否替换？</translation>
-    </message>
-    <message>
         <location filename="../interface/queries.cpp" line="140"/>
         <source>Skip</source>
         <translation>跳过</translation>
-    </message>
-    <message>
-        <source>Override</source>
-        <translation type="vanished">替换</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="139"/>
@@ -1151,17 +875,9 @@
         <translation>此文件已加密,请输入解压密码</translation>
     </message>
     <message>
-        <source>This file is encrypted, please enter the password</source>
-        <translation type="vanished">此文件已加密,请输入解压密码</translation>
-    </message>
-    <message>
         <location filename="../interface/queries.cpp" line="337"/>
         <source>Wrong password!</source>
         <translation>密码错误！</translation>
-    </message>
-    <message>
-        <source>Please add files in the root directory!</source>
-        <translation type="vanished">请在根目录添加文件!</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="269"/>
@@ -1169,10 +885,6 @@
         <location filename="../source/src/compresspage.cpp" line="118"/>
         <source>OK</source>
         <translation>确定</translation>
-    </message>
-    <message>
-        <source>Already exist, replaced?</source>
-        <translation type="vanished">已存在,是否替换?</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="117"/>
@@ -1195,17 +907,9 @@
         <translation>确定</translation>
     </message>
     <message>
-        <source>Name,Size,Type,Modify</source>
-        <translation type="vanished">名称,大小,类型,修改时间</translation>
-    </message>
-    <message>
         <location filename="../source/src/fileViewer.cpp" line="438"/>
         <source>Name</source>
         <translation>名称</translation>
-    </message>
-    <message>
-        <source>Modify</source>
-        <translation type="vanished">修改时间</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="365"/>
@@ -1242,14 +946,6 @@
         <translation>有1个任务正在进行</translation>
     </message>
     <message>
-        <source>setting</source>
-        <translation type="vanished">设置</translation>
-    </message>
-    <message>
-        <source>Setting</source>
-        <translation type="vanished">设置</translation>
-    </message>
-    <message>
         <location filename="../source/src/settings_translation.cpp" line="5"/>
         <source>General</source>
         <translation>设置</translation>
@@ -1279,55 +975,19 @@
         <source>File Type</source>
         <translation>文件类型</translation>
     </message>
-    <message>
-        <source>Create folder automatically</source>
-        <translation type="vanished">自动创建文件夹</translation>
-    </message>
-    <message>
-        <source>Corresponding folder is automatically opened</source>
-        <translation type="vanished">当解压完成后自动打开对应的文件夹</translation>
-    </message>
-    <message>
-        <source>File association</source>
-        <translation type="vanished">关联文件</translation>
-    </message>
-    <message>
-        <source>File type</source>
-        <translation type="vanished">文件类型</translation>
-    </message>
 </context>
 <context>
     <name>SettingDialog</name>
-    <message>
-        <source>select all</source>
-        <translation type="vanished">全选</translation>
-    </message>
-    <message>
-        <source>Cancel all selection</source>
-        <translation type="vanished">取消全选</translation>
-    </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="94"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <source>Unselect All</source>
-        <translation type="vanished">取消全选</translation>
-    </message>
-    <message>
-        <source>Default extraction location</source>
-        <translation type="vanished">默认解压位置</translation>
-    </message>
-    <message>
         <location filename="../source/src/settingdialog.cpp" line="128"/>
         <location filename="../source/src/settingdialog.cpp" line="158"/>
         <source>Current directory</source>
         <translation>当前目录</translation>
-    </message>
-    <message>
-        <source>desktop</source>
-        <translation type="vanished">桌面</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="95"/>
@@ -1384,10 +1044,6 @@
 <context>
     <name>UnCompressPage</name>
     <message>
-        <source>Extracted</source>
-        <translation type="vanished">解压</translation>
-    </message>
-    <message>
         <location filename="../source/src/uncompresspage.cpp" line="40"/>
         <source>Extract</source>
         <translation>解压</translation>
@@ -1398,10 +1054,6 @@
         <location filename="../source/src/uncompresspage.cpp" line="115"/>
         <source>Extract to:</source>
         <translation>解压到:</translation>
-    </message>
-    <message>
-        <source>Extracted to</source>
-        <translation type="vanished">解压到</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
@@ -1417,18 +1069,6 @@
         <translation>文件浏览器</translation>
     </message>
     <message>
-        <source>Back to previous</source>
-        <translation type="vanished">返回上一级</translation>
-    </message>
-    <message>
-        <source>Extract files</source>
-        <translation type="vanished">提取文件</translation>
-    </message>
-    <message>
-        <source>Extract files here</source>
-        <translation type="vanished">提取文件到当前文件夹</translation>
-    </message>
-    <message>
         <location filename="../source/src/fileViewer.cpp" line="403"/>
         <location filename="../source/src/fileViewer.cpp" line="868"/>
         <source>Extract</source>
@@ -1442,33 +1082,17 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Delete</source>
-        <translation>删除</translation>
+        <translation type="unfinished">删除</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="471"/>
         <source>Item</source>
-        <translation>项</translation>
+        <translation type="unfinished">项</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="487"/>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
-        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyy!MM@dd# hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyyyearMMmonddday hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyyyearMMmonthddday hh:mm:ss</source>
-        <translation type="vanished">yyyy年MM月dd日 hh:mm:ss</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>yyyy年MM月dd日 hh:mm:ss</source>

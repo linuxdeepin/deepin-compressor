@@ -149,6 +149,7 @@ private slots:
     void slotClearTempfile();
     void slotquitApp();
     void onUpdateDestFile(QString destFile);
+    void onCompressPageFilelistIsEmpty();
 
 signals:
     void sigquitApp();
