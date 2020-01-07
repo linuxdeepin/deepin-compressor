@@ -894,7 +894,7 @@ bool CliInterface::handleLine(const QString &line)
     } else if (m_process && m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
-            int percentage = line.midRef(pos - 2, 2).toInt();
+            int percentage = line.midRef(pos - 3, 3).toInt();
 
             QStringRef strfilename;
             int count = line.indexOf("+");

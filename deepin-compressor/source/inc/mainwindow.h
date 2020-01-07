@@ -86,7 +86,7 @@ class MainWindow : public DMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     void closeEvent(QCloseEvent *event) override;
     void timerEvent(QTimerEvent *event) override;

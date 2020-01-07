@@ -139,6 +139,8 @@ void MainWindow::loadWindowState()
     {
         resize(620, 465);
     }
+
+    setMinimumSize(620, 465);
 }
 
 QString MainWindow::getLoadFile()

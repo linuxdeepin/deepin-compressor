@@ -28,9 +28,6 @@
 #include "utils.h"
 #include <DApplicationSettings>
 
-DWIDGET_USE_NAMESPACE
-DCORE_USE_NAMESPACE
-
 void customMessageHandler(const QString &msg)
 {
     QString txt;
@@ -77,14 +74,19 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
-    w.setMinimumSize(620, 465);
+    QIcon appIcon = QIcon::fromTheme("deepin-compressor111");
 
-    //w.resize(620, 465);
+    if(appIcon.isNull())
+    {
+        appIcon = QIcon(":/icons/deepin/builtin/icons/deepin-compressor.svg");
+    }
 
-    w.setWindowIcon(QIcon::fromTheme("deepin-compressor"));
-//    w.show();
+    app.setProductIcon(appIcon);
+    app.setWindowIcon(appIcon);
+    //w.titlebar()->setIcon(appIcon);
 
-    if (app.setSingleInstance("deepin-compressor")) {
+    if (app.setSingleInstance("deepin-compressor"))
+    {
         Dtk::Widget::moveToCenter(&w);
     }
 
