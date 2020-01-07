@@ -3,13 +3,14 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-compressor.deepin-compressor]
+[deepin-archive-manager.deepin-archive-manager]
 file_filter = deepin-compressor/translations/deepin-compressor_<lang>.ts
-source_file = deepin-compressor/translations/deepin-compressor.ts
+source_file = deepin-compressor/translations/deepin-compressor_en.ts
 source_lang = en
 type = QT
 
-[deepin-compressor.desktop]
+
+[deepin-archive-manager.deepin-archive-manager-desktop-ts]
 file_filter = deepin-compressor/translations/desktop/desktop_<lang>.ts
 source_file = deepin-compressor/translations/desktop/desktop.ts
 source_lang = en
