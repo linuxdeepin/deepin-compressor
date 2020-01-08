@@ -299,9 +299,9 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcut4.insert("name", tr("Delete"));
     shortcut4.insert("value", "Delete");
 
-    QJsonObject shortcut5;
-    shortcut5.insert("name", tr("Rename"));
-    shortcut5.insert("value", "F2");
+//    QJsonObject shortcut5;
+//    shortcut5.insert("name", tr("Rename"));
+//    shortcut5.insert("value", "F2");
 
     QJsonObject shortcut6;
     shortcut6.insert("name", tr("Display shortcuts"));
@@ -312,7 +312,7 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcutArray.append(shortcut2);
     shortcutArray.append(shortcut3);
     shortcutArray.append(shortcut4);
-    shortcutArray.append(shortcut5);
+    //shortcutArray.append(shortcut5);
     shortcutArray.append(shortcut6);
 
     QJsonObject shortcut_group;
@@ -655,10 +655,14 @@ void MainWindow::refreshPage()
         if (m_settingsDialog->isAutoOpen()) {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
         }
+
         if(m_isrightmenu)
         {
             m_CompressSuccess->showfiledirSlot();
+            slotquitApp();
+            return;
         }
+
         m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_UNZIP_FAIL:
