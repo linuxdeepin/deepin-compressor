@@ -693,18 +693,28 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 }
             }
 
+            emit progress_filename(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+
+            FileProgressInfo pi;
+
+            if(nofEntries < 5)
+            {
+                pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+                pi.fileProgressProportion = float(1.0)/float(nofEntries);
+                pi.fileProgressStart = pi.fileProgressProportion*float(i);
+            }
+
             if (!extractEntry(archive,
                               QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))),
                               QString(),
                               destinationDirectory,
                               options.preservePaths(),
-                              removeRootNode)) {
+                              removeRootNode, pi)) {
                 zip_close(archive);
                 return false;
             }
 
             emit progress(float(i + 1) / nofEntries);
-            emit progress_filename(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
         }
 
         if(extractDst.isEmpty() == false)
@@ -719,17 +729,40 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
+
+//            std::function<void(LibzipPlugin*, double)> notifyProgressFunc = nullptr;
+
+//            if( nofEntries < 5 )
+//            {
+//                notifyProgressFunc = [this](double progress)
+//                {
+//                    this->emit progress(float(++i) / nofEntries);
+//                    emit progress_filename(e->name());
+//                };
+//            }
+            FileProgressInfo pi;
+
+            emit progress_filename(e->name());
+
+            if(nofEntries < 5)
+            {
+                pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+                pi.fileProgressProportion = float(1.0)/float(nofEntries);
+                pi.fileProgressStart = pi.fileProgressProportion*float(i);
+            }
+
             if (!extractEntry(archive,
                               e->fullPath(),
                               e->rootNode,
                               destinationDirectory,
                               options.preservePaths(),
-                              removeRootNode)) {
+                              removeRootNode, pi))
+            {
                 zip_close(archive);
                 return false;
             }
+
             emit progress(float(++i) / nofEntries);
-            emit progress_filename(e->name());
         }
     }
 
@@ -737,7 +770,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     return true;
 }
 
-bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode/*, bool& extract*/)
+bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo& pi)
 {
     //extract = false;
 
@@ -915,6 +948,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         // Write archive entry to file. We use a read/write buffer of 1000 chars.
         qulonglong sum = 0;
         char buf[1000];
+
+        int writeSize = 0;
         while (sum != statBuffer.size) {
             const auto readBytes = zip_fread(zipFile, buf, 1000);
             if (readBytes < 0) {
@@ -929,6 +964,14 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             }
 
             sum += readBytes;
+            writeSize += readBytes;
+
+            if(pi.fileProgressProportion > 0 && writeSize > statBuffer.size / 5 )
+            {
+                pi.fileProgressStart += pi.fileProgressProportion*0.2;
+                emit progress( pi.fileProgressStart);
+                writeSize = 0;
+            }
         }
 
         const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);

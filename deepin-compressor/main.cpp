@@ -28,18 +28,6 @@
 #include "utils.h"
 #include <DApplicationSettings>
 
-void customMessageHandler(const QString &msg)
-{
-    QString txt;
-    txt = msg;
-
-    QFile outFile("/home/deepin/debug.log");
-    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
-    outFile.close();
-}
-
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

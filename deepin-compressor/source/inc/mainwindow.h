@@ -103,7 +103,6 @@ public:
     void ExtractSinglePassword(QString password);
     void LoadPassword(QString password);
     void WatcherFile(const QString &files);
-    void customMessageHandler(const QString &msg);
     void renameCompress(QString &filename, QString fixedMimeType);
     static QString getLoadFile();
     qint64 getDiskFreeSpace();

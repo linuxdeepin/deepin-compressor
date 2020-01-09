@@ -357,7 +357,7 @@ void MainWindow::InitConnection()
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, [this] {
-        QRect rect = window()->geometry();
+        const QRect& rect = window()->geometry();
         QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
         QStringList shortcutString;
         QJsonObject json = creatShorcutJson();
@@ -372,17 +372,6 @@ void MainWindow::InitConnection()
         connect(shortcutViewProcess, SIGNAL(finished(int)),
                 shortcutViewProcess, SLOT(deleteLater()));
     });
-}
-
-void MainWindow::customMessageHandler(const QString &msg)
-{
-    QString txt;
-    txt = msg;
-
-    QFile outFile("/home/deepin/debug.log");
-    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
 }
 
 QMenu *MainWindow::createSettingsMenu()
@@ -516,25 +505,30 @@ void MainWindow::dropEvent(QDropEvent *e)
 {
     auto *const mime = e->mimeData();
 
-    if (!mime->hasUrls())
+    if ( false == mime->hasUrls())
+    {
         return e->ignore();
+    }
 
     e->accept();
 
     // find font files.
     QStringList fileList;
-    for (const auto &url : mime->urls()) {
-        if (!url.isLocalFile()) {
+    for (const auto &url : mime->urls())
+    {
+        if (!url.isLocalFile())
+        {
             continue;
         }
 
-        const QString localPath = url.toLocalFile();
-        const QFileInfo info(localPath);
-
-        fileList << localPath;
+        fileList << url.toLocalFile();
+        //const QFileInfo info(localPath);
         qDebug() << fileList;
+    }
 
-
+    if(fileList.size() == 0)
+    {
+        return;
     }
 
     m_homePage->setIconPixmap(false);
@@ -924,7 +918,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         QString filepath = files.at(0);
         filepath = filepath.left(filepath.length() - 3) + "001";
         QFileInfo fileinfo(filepath);
-        customMessageHandler(filepath);
+
         if (fileinfo.exists()) {
             m_decompressfilename = fileinfo.fileName();
             if ("" != m_settingsDialog->getCurExtractPath()) {
@@ -996,16 +990,18 @@ void MainWindow::loadArchive(const QString &files)
     m_encryptiontype = Encryption_Load;
     m_loadjob = dynamic_cast<LoadJob *>(m_model->loadArchive(files, "", m_model));
 
-    connect(m_loadjob, &LoadJob::sigLodJobPassword,
-            this, &MainWindow::SlotNeedPassword);
-    connect(m_loadjob, &LoadJob::sigWrongPassword,
-            this, &MainWindow::SlotNeedPassword);
-
-    if (m_loadjob) {
-        m_loadjob->start();
-        m_homePage->spinnerStart();
+    if(m_loadjob == nullptr)
+    {
+        return;
     }
+
+    connect(m_loadjob, &LoadJob::sigLodJobPassword, this, &MainWindow::SlotNeedPassword);
+    connect(m_loadjob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
+
+    m_loadjob->start();
+    m_homePage->spinnerStart();
 }
+
 void MainWindow::WatcherFile(const QString &files)
 {
     DFileWatcher *m_fileManager = new DFileWatcher(files, this);
@@ -1039,7 +1035,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     //m_progressTransFlag = false;
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
-    if (!m_model) {
+    if ( nullptr == m_model)
+    {
         return;
     }
 
@@ -1048,7 +1045,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         return;
     }
 
-    if (m_encryptionjob) {
+    if (m_encryptionjob)
+    {
         m_encryptionjob = nullptr;
     }
 
@@ -1155,11 +1153,11 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
 
 void MainWindow::SlotProgressFile(KJob */*job*/, const QString &filename)
 {
-    if (Encryption_SingleExtract == m_encryptiontype && PAGE_UNZIP == m_pageid) {
+    //if (Encryption_SingleExtract == m_encryptiontype && PAGE_UNZIP == m_pageid) {
         m_progressdialog->setCurrentFile(filename);
-    } else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) {
+    //} else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) {
         m_Progess->setProgressFilename(filename);
-    }
+    //}
 }
 
 void MainWindow::slotBatchExtractFileChanged(const QString &name)
@@ -1509,7 +1507,7 @@ bool clearTempFiles(const QString &temp_path)
 void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
 {
     if (newfiles.count() <= oldfiles.count()) {
-        qDebug() << "Nofile to delete";
+        qDebug() << "No file to delete";
         return;
     }
 
@@ -1708,28 +1706,39 @@ void MainWindow::slotKillExtractJob()
 
 void MainWindow::slotFailRetry()
 {
-    if (PAGE_ZIP_FAIL == m_pageid) {
+    if (PAGE_ZIP_FAIL == m_pageid)
+    {
         m_pageid = PAGE_ZIPSET;
         refreshPage();
-    } else if (Encryption_Load == m_encryptiontype) {
+    }
+    else if (Encryption_Load == m_encryptiontype)
+    {
         m_pageid = PAGE_HOME;
         refreshPage();
         loadArchive(m_loadfile);
-    } else if (Encryption_Extract == m_encryptiontype) {
+    }
+    else if (Encryption_Extract == m_encryptiontype)
+    {
         slotextractSelectedFilesTo(m_UnCompressPage->getDecompressPath());
-    } else if (Encryption_SingleExtract == m_encryptiontype) {
+    }
+    else if (Encryption_SingleExtract == m_encryptiontype)
+    {
 
     }
 }
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
-    if (m_encryptionjob) {
+    if (m_encryptionjob)
+    {
         m_encryptionjob->Killjob();
         m_encryptionjob = nullptr;
     }
+
     deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
-    if (m_createJob) {
+
+    if (m_createJob)
+    {
         m_createJob->kill();
         m_createJob = nullptr;
     }

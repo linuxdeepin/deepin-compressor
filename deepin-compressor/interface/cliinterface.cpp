@@ -868,7 +868,7 @@ bool CliInterface::handleLine(const QString &line)
         //read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
-            int percentage = line.midRef(pos - 2, 2).toInt();
+            int percentage = line.midRef(pos - 3, 3).toInt();
             emit progress(float(percentage) / 100);
 
             if (line.contains("Extracting")) {
@@ -905,9 +905,13 @@ bool CliInterface::handleLine(const QString &line)
                 strfilename = line.midRef(count + 2);
             }
 
-            if (!strfilename.toString().contains("Wrong password")) {
-                emit progress(float(percentage) / 100);
-                emit progress_filename(strfilename.toString());
+            if (!strfilename.toString().contains("Wrong password"))
+            {
+                if(percentage > 0)
+                {
+                    emit progress(float(percentage) / 100);
+                    emit progress_filename(strfilename.toString());
+                }
             }
 
         }
@@ -1210,7 +1214,7 @@ void CliInterface::onEntry(Archive::Entry *archiveEntry)
             emit progress(float(m_listedSize) / float(m_archiveSizeOnDisk));
         } else {
             // In case summed compressed size exceeds archive size on disk.
-            emit progress(1);
+            emit progress(1.0);
         }
     }
 }

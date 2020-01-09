@@ -289,7 +289,9 @@ void CompressSetting::onNextButoonClicked()
     const QString password = m_password->text();
     QString fixedMimeType;
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-        if (m_compresstype->text().contains(QMimeDatabase().mimeTypeForName(type).preferredSuffix())) {
+//        QString txt = m_compresstype->text();
+//        QString preferredSuf = QMimeDatabase().mimeTypeForName(type).preferredSuffix();
+        if ( 0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(m_compresstype->text(), Qt::CaseSensitive) ) {
             fixedMimeType = type;
             break;
         }

@@ -7,6 +7,12 @@
 #include <zip.h>
 #include "kpluginfactory.h"
 
+struct FileProgressInfo
+{
+    float fileProgressProportion = 0.0;
+    float fileProgressStart;
+    QString fileName;
+};
 
 class LibzipPluginFactory : public KPluginFactory
 {
@@ -38,7 +44,7 @@ public:
     bool testArchive() override;
 
 private:
-    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode/*, bool& extract*/);
+    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo& pi );
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
