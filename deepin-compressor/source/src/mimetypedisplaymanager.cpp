@@ -48,9 +48,9 @@ void MimeTypeDisplayManager::initData()
     m_displayNames[FileType::Videos] = tr("Video");
     m_displayNames[FileType::Audios] = tr("Audio");
     m_displayNames[FileType::Images] = tr("Image");
-    m_displayNames[FileType::Archives] = tr("Compressed file");
+    m_displayNames[FileType::Archives] = tr("Archive");
     m_displayNames[FileType::Documents] = tr("Document");
-    m_displayNames[FileType::Executable] = tr("Executable program");
+    m_displayNames[FileType::Executable] = tr("Executable");
     m_displayNames[FileType::Backups] = tr("Backup file");
     m_displayNames[FileType::Unknown] = tr("Unknown");
 

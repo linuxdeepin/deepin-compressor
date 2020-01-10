@@ -102,7 +102,7 @@ void CompressSetting::InitUI()
     QFormLayout *filelayout = new QFormLayout();
     m_filename = new DLineEdit(this);
     m_filename->setMinimumSize(260, 36);
-    m_filename->setText(tr("New Archive"));
+    m_filename->setText(tr("Create New Archive"));
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
@@ -124,7 +124,7 @@ void CompressSetting::InitUI()
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
     m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":", this);
-    m_encryptedlabel->setToolTip( tr("Support zip, 7z type Only") );
+    m_encryptedlabel->setToolTip( tr("Support zip, 7z type Only"));
 
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
     m_password = new DPasswordEdit(this);
@@ -258,7 +258,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
-        dialog->setMessage(tr("The file name is error, please retry!"));
+        dialog->setMessage(tr("The file name is error, please retry"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
@@ -268,7 +268,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
-        dialog->setMessage(tr("Please enter the path!"));
+        dialog->setMessage(tr("Please enter the path"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();
@@ -278,7 +278,7 @@ void CompressSetting::onNextButoonClicked()
         DDialog *dialog = new DDialog(this);
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
-        dialog->setMessage(tr("The path does not exist, please retry!"));
+        dialog->setMessage(tr("The path does not exist, please retry"));
         dialog->addSpacing(15);
         dialog->addButton(tr("OK"));
         dialog->exec();

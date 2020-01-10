@@ -32,7 +32,7 @@
 Compressor_Success::Compressor_Success(QWidget *parent)
     : DWidget(parent)
 {
-    m_stringinfo = tr("Compression successful!");
+    m_stringinfo = tr("Compression successful");
     InitUI();
     InitConnection();
 }

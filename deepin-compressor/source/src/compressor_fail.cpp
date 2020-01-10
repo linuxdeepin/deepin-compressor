@@ -30,7 +30,7 @@
 Compressor_Fail::Compressor_Fail(QWidget *parent)
     : DWidget(parent)
 {
-    m_stringinfo = tr("Sorry,Extraction failed!");
+    m_stringinfo = tr("Extraction failed");
     m_stringdetail = tr("Damaged file, unable to extract");
     InitUI();
     InitConnection();

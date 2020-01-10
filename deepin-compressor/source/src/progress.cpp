@@ -67,7 +67,7 @@ void Progress::InitUI()
     m_progressfilelabel->setForegroundRole(DPalette::TextTips);
 //    m_progressfilelabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_progressfilelabel, DFontSizeManager::T8);
-    m_progressfilelabel->setText(tr("Being calculated..."));
+    m_progressfilelabel->setText(tr("Calculating..."));
 
     m_cancelbutton = new DPushButton(this);
     m_cancelbutton->setMinimumSize(340, 36);
@@ -161,11 +161,11 @@ int Progress::showConfirmDialog()
 
     if (m_type == COMPRESSING)
     {
-        strlabel->setText(tr("Stop compressing! "));
+        //strlabel->setText(tr("Stop compressing "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
     } else
     {
-        strlabel->setText(tr("Stop extracting! "));
+        //strlabel->setText(tr("Stop extracting "));
         strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
     }
 
@@ -179,7 +179,7 @@ int Progress::showConfirmDialog()
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    //mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 

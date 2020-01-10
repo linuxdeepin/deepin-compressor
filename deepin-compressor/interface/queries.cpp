@@ -334,7 +334,7 @@ void WrongPasswordQuery::execute()
     strlabel2->setForegroundRole(DPalette::TextWarning);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
-    strlabel2->setText(QObject::tr("Wrong password!"));
+    strlabel2->setText(QObject::tr("Wrong password"));
 
     dialog->addButton(QObject::tr("OK"));
 

@@ -49,7 +49,7 @@ void EncryptionPage::InitUI()
     m_password = new DPasswordEdit(this);
     m_password->setMinimumSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
-    edit->setPlaceholderText(tr("Please enter password to extract"));
+    edit->setPlaceholderText(tr("Password"));
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();

@@ -50,7 +50,7 @@ void ExtractPauseDialog::initUI()
     strlabel->setForegroundRole(DPalette::WindowText);
 
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(tr("Stop extracting!"));
+    strlabel->setText(tr("Stop extracting"));
     DLabel *strlabel2 = new DLabel(this);
     strlabel2->setFixedHeight(20);
     strlabel2->setForegroundRole(DPalette::TextTips);
@@ -60,10 +60,10 @@ void ExtractPauseDialog::initUI()
 //    strlabel2->setFont(font);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::DemiBold);
 
-    strlabel2->setText(tr("There is currently a extraction tasks in progress"));
+    strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
 
-    addButton(tr("Stop extracting"));
-    addButton(tr("Continue extracting"), true, ButtonRecommend);
+    addButton(tr("Cancel"));
+    addButton(tr("Confirm"), true, ButtonRecommend);
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     effect->setOffset(0, 4);
     effect->setColor(QColor(0, 145, 255, 76));
@@ -72,7 +72,7 @@ void ExtractPauseDialog::initUI()
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    //mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(15);
 

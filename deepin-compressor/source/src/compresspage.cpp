@@ -88,7 +88,7 @@ void CompressPage::onNextPress()
 
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
-        dialog->setMessage(tr("Please add files!"));
+        dialog->setMessage(tr("Please add files"));
         dialog->addButton(tr("OK"));
         dialog->addSpacing(15);
 
@@ -114,7 +114,7 @@ void CompressPage::showDialog()
     strlabel->setForegroundRole(DPalette::WindowText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
-    strlabel->setText(QObject::tr("Please add files to the top-level directory!"));
+    strlabel->setText(QObject::tr("Please add files to the top-level directory"));
     dialog->addButton(QObject::tr("OK"));
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -136,8 +136,8 @@ int CompressPage::showReplaceDialog(QString name)
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
     dialog->setIcon(pixmap);
-
-    dialog->setMessage("“" + name + "”" + QObject::tr("already exists, are you sure you want to replace it?"));
+    //dialog->setMessage("“" + name + "”" + QObject::tr("already exists, are you sure you want to replace it?"));
+    dialog->setMessage("“" + name + "”" + QObject::tr("already exists.") + "\n" + QObject::tr("Do you want to replace it?"));
     dialog->addSpacing(15);
     dialog->addButton(QObject::tr("Cancel"));
     dialog->addButton(QObject::tr("Confirm"));

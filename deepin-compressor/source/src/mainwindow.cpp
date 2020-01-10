@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_homePage->setAutoFillBackground(true);
 
     // init window flags.
-    setWindowTitle(tr("Archive manager"));
+    setWindowTitle(tr("Archive Manager"));
     //setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
     setCentralWidget(m_mainWidget);
     setAcceptDrops(true);
@@ -316,7 +316,7 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcutArray.append(shortcut6);
 
     QJsonObject shortcut_group;
-    shortcut_group.insert("groupName", tr("hot key"));
+    shortcut_group.insert("groupName", tr("Shortcuts"));
     shortcut_group.insert("groupItems", shortcutArray);
 
     QJsonArray shortcutArrayall;
@@ -378,7 +378,7 @@ QMenu *MainWindow::createSettingsMenu()
 {
     QMenu *menu = new QMenu();
 
-    m_openAction = menu->addAction(tr("Open"));
+    m_openAction = menu->addAction(tr("Open file"));
     connect(m_openAction, &QAction::triggered, this, [this] {
         DFileDialog dialog(this);
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -464,6 +464,8 @@ void MainWindow::initTitleBar()
     m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
     titlebar()->setContentsMargins(0, 0, 0, 0);
     titlebar()->setCustomWidget(m_titleFrame, false);
+
+   //m_titlelabel->setText( tr("%1 task(s) in progress").arg(1) );
 }
 
 void MainWindow::setQLabelText(QLabel *label, const QString &text)
@@ -593,7 +595,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(2);
         break;
     case PAGE_ZIPSET:
-        setQLabelText(m_titlelabel, tr("New Archive"));
+        setQLabelText(m_titlelabel, tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -608,7 +610,7 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, tr("Compressing..."));
+        setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
         break;
@@ -616,13 +618,13 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, tr("Extracting..."));
+        setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
         break;
     case PAGE_ZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
-        m_CompressSuccess->setstringinfo(tr("Compression successful!"));
+        m_CompressSuccess->setstringinfo(tr("Compression successful"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -631,7 +633,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_ZIP_FAIL:
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("Sorry, Compression failed!"));
+        m_CompressFail->setFailStr(tr("Compression failed"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -641,7 +643,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("Extraction successful!"));
+        m_CompressSuccess->setstringinfo(tr("Extraction successful"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -662,7 +664,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_FAIL:
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         setQLabelText(m_titlelabel, "");
-        m_CompressFail->setFailStr(tr("Sorry, Extraction failed!"));
+        m_CompressFail->setFailStr(tr("Extraction failed"));
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(true);
@@ -1169,7 +1171,7 @@ void MainWindow::slotBatchExtractFileChanged(const QString &name)
 void MainWindow::slotBatchExtractError(const QString &name)
 {
     qDebug() << name;
-    m_CompressFail->setFailStrDetail(name + ":" + tr("Wrong password!"));
+    m_CompressFail->setFailStrDetail(name + ":" + + " " + tr("Wrong password"));
     m_pageid = PAGE_UNZIP_FAIL;
     refreshPage();
 }

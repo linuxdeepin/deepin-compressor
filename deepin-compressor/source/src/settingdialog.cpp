@@ -256,7 +256,7 @@ void SettingDialog::done(int status)
 
     if (!dir.exists()) {
         QMessageBox box;
-        box.setText(tr("The default extraction path does not exist, please retry!"));
+        box.setText(tr("The default extraction path does not exist, please retry"));
         box.exec();
         return;
     }

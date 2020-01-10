@@ -123,7 +123,8 @@ SOURCES +=  \
 
 RESOURCES += deepin-compressor.qrc
 RESOURCES += config.qrc
-TRANSLATIONS += translations/deepin-compressor.ts
+TRANSLATIONS += translations/deepin-compressor.ts_en\
+                translations/deepin-compressor_zh_CN.ts
 
 isEmpty(BINDIR):BINDIR=/usr/bin
 isEmpty(APPDIR):APPDIR=/usr/share/applications

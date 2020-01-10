@@ -318,7 +318,7 @@ bool CliPlugin::isPasswordPrompt(const QString &line)
 
 bool CliPlugin::isWrongPasswordMsg(const QString &line)
 {
-    return line.endsWith(QLatin1String("incorrect password"));
+    return line.endsWith(QLatin1String("Wrong password"));
 }
 
 bool CliPlugin::isCorruptArchiveMsg(const QString &line)

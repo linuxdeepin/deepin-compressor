@@ -994,7 +994,7 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         if (isWrongPasswordMsg(line)) {
-            qDebug() << "Wrong password!";
+            qDebug() << "Wrong password";
             setPassword(QString());
             setWrongPassword(true);
             emit error("wrongpassword");

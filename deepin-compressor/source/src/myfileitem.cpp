@@ -51,15 +51,15 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             QString lstr = l.toString();
             QString rstr = r.toString();
 
-            if (lstr.contains(QObject::tr("Item")) && !rstr.contains(QObject::tr("Item"))) {
+            if (lstr.contains(QObject::tr("item(s)")) && !rstr.contains(QObject::tr("item(s)"))) {
                 return true;
-            } else if (!lstr.contains(QObject::tr("Item")) && rstr.contains(QObject::tr("Item"))) {
+            } else if (!lstr.contains(QObject::tr("item(s)")) && rstr.contains(QObject::tr("item(s)"))) {
                 return false;
-            } else if (lstr.contains(QObject::tr("Item")) && rstr.contains(QObject::tr("Item"))) {
+            } else if (lstr.contains(QObject::tr("item(s)")) && rstr.contains(QObject::tr("item(s)"))) {
                 lstr = lstr.remove(QRegExp("\\s"));
-                lstr = lstr.remove(QObject::tr("Item"));
+                lstr = lstr.remove(QObject::tr("item(s)"));
                 rstr = rstr.remove(QRegExp("\\s"));
-                rstr = rstr.remove(QObject::tr("Item"));
+                rstr = rstr.remove(QObject::tr("item(s)"));
                 return lstr.toInt() < rstr.toInt();
             }
             lstr = l.toString().simplified();

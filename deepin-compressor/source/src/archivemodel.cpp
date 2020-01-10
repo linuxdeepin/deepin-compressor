@@ -93,7 +93,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    return QString::number(dirs + files) + " " + tr("Item") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
