@@ -186,7 +186,7 @@ void CompressSetting::InitUI()
     infoLayout->setContentsMargins(0, 0, 50, 0);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addLayout(infoLayout);
+    mainLayout->addLayout(infoLayout, 10);
     mainLayout->addStretch();
 
     m_nextbutton = new DPushButton(tr("Compress"), this);
@@ -212,7 +212,6 @@ void CompressSetting::InitConnection()
 {
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
-    connect(m_splitnumedit, SIGNAL(valueChanged(double)), this, SLOT(onSplitValueChanged(double)));
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
 
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSetting::onThemeChanged );
@@ -254,44 +253,32 @@ void CompressSetting::onNextButoonClicked()
 {
     QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
-    if (!checkfilename(name)) {
-        DDialog *dialog = new DDialog(this);
-        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIcon(pixmap);
-        dialog->setMessage(tr("The file name is error, please retry"));
-        dialog->addSpacing(15);
-        dialog->addButton(tr("OK"));
-        dialog->exec();
-        delete dialog;
-        return;
-    } else if (m_savepath->text().remove(" ") == "") {
-        DDialog *dialog = new DDialog(this);
-        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIcon(pixmap);
-        dialog->setMessage(tr("Please enter the path"));
-        dialog->addSpacing(15);
-        dialog->addButton(tr("OK"));
-        dialog->exec();
-        delete dialog;
-        return;
-    } else if (!dir.exists()) {
-        DDialog *dialog = new DDialog(this);
-        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIcon(pixmap);
-        dialog->setMessage(tr("The path does not exist, please retry"));
-        dialog->addSpacing(15);
-        dialog->addButton(tr("OK"));
-        dialog->exec();
-        delete dialog;
+    if (!checkfilename(name))
+    {
+        showWarningDialog(tr("The file name is error, please retry"));
         return;
     }
+
+    if ( (m_savepath->text().remove(" ")).isEmpty() )
+    {
+        showWarningDialog(tr("Please enter the path"));
+        return;
+    }
+
+    if (false == dir.exists())
+    {
+        showWarningDialog(tr("The path does not exist, please retry"));
+        return;
+    }
+
     QMap<QString, QString> m_openArgs;
     const QString password = m_password->text();
     QString fixedMimeType;
-    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-//        QString txt = m_compresstype->text();
-//        QString preferredSuf = QMimeDatabase().mimeTypeForName(type).preferredSuffix();
-        if ( 0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(m_compresstype->text(), Qt::CaseSensitive) ) {
+
+    for (const QString &type : qAsConst(m_supportedMimeTypes))
+    {
+        if ( 0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(m_compresstype->text(), Qt::CaseInsensitive) )
+        {
             fixedMimeType = type;
             break;
         }
@@ -459,21 +446,27 @@ void CompressSetting::showEvent(QShowEvent *event)
 
 void CompressSetting::keyPressEvent(QKeyEvent *event)
 {
-    if (!event) {
+    if ( nullptr == event)
+    {
         return;
     }
-    if (event->key() == Qt::Key_F2) {
 
+    if (event->key() == Qt::Key_F2)
+    {
         QLineEdit *qfilename = m_filename->lineEdit();
         QLineEdit *qpath = m_savepath->lineEdit();
         QLineEdit *qpassword = m_password->lineEdit();
-        if (qfilename->hasFocus()) {
+        if (qfilename->hasFocus())
+        {
             qfilename->selectAll();
-        } else if (qpath->hasFocus()) {
+        } else if (qpath->hasFocus())
+        {
             qpath->selectAll();
-        } else if (qpassword->hasFocus()) {
+        } else if (qpassword->hasFocus())
+        {
             qpassword->selectAll();
-        } else if (m_splitnumedit->hasFocus()) {
+        } else if (m_splitnumedit->hasFocus())
+        {
             m_splitnumedit->selectAll();
         }
     }
@@ -534,31 +527,6 @@ void CompressSetting::ontypeChanged(QAction *action)
     }
 }
 
-void CompressSetting::onSplitValueChanged(double /*value*/)
-{
-//    int filesize = 0;
-//    foreach(QString path, m_pathlist)
-//    {
-//        filesize += dirFileSize(path);
-//    }
-
-//    if(filesize < 1024*1024*5)
-//    {
-//        m_splitnumedit->setEnabled(false);
-//        m_splitnumedit->setValue(double(filesize)/(1024*1024));
-//    }
-//    else if(value < 5.0){
-//        m_splitnumedit->setValue(5.0);
-//        m_splitnumedit->setRange(5.0, double(filesize)/(1024*1024));
-//    }
-}
-
-
-void CompressSetting::onRetrunPressed()
-{
-
-}
-
 void CompressSetting::onThemeChanged()
 {
     DPalette plt;
@@ -574,4 +542,18 @@ void CompressSetting::onThemeChanged()
     }
 
     m_filename->setPalette(plt);
+}
+
+int CompressSetting::showWarningDialog(const QString& msg)
+{
+    DDialog *dialog = new DDialog(this);
+    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
+    dialog->setIcon(pixmap);
+    dialog->setMessage(msg);
+    dialog->addSpacing(15);
+    dialog->addButton(tr("OK"));
+    int res = dialog->exec();
+    delete dialog;
+
+    return res;
 }

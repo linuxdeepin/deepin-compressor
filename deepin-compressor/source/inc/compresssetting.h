@@ -79,12 +79,13 @@ public slots:
     void onNextButoonClicked();
     void onAdvanceButtonClicked(bool status);
     void ontypeChanged(QAction *action);
-    void onSplitValueChanged(double value);
     void onSplitChanged(int status);
     void showRightMenu(QMouseEvent *e);
 
-    void onRetrunPressed();
     void onThemeChanged();
+
+private:
+    int showWarningDialog(const QString& msg);
 
 private:
     DPushButton *m_nextbutton = nullptr;

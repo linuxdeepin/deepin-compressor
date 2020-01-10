@@ -109,6 +109,11 @@ bool CliPlugin::readListLine(const QString &line)
         return false;
     }
 
+    if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
+        emit error(tr("Listing the archive failed."));
+        return false;
+    }
+
     const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
     QRegularExpressionMatch matchVersion;
 

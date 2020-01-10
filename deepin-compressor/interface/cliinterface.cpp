@@ -339,7 +339,8 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit progress(1.0);
             emit finished(true);
         }
-    } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
+    } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode))
+    {
         qDebug() << "wrong password";
         emit error(tr("wrong password"));
         setPassword(QString());
@@ -997,7 +998,7 @@ bool CliInterface::handleLine(const QString &line)
             qDebug() << "Wrong password";
             setPassword(QString());
             setWrongPassword(true);
-            emit error("wrongpassword");
+            emit error("wrong password");
             return false;
         }
 

@@ -336,7 +336,6 @@ void MainWindow::InitConnection()
     connect(m_CompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
-    connect(this, &MainWindow::sigZipReturn, m_CompressSetting, &CompressSetting::onRetrunPressed);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
@@ -351,7 +350,7 @@ void MainWindow::InitConnection()
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [ = ] {
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-        this->sendMessage(icon, tr("Extraction task completed"));
+        this->sendMessage(icon, tr("Extraction completed"));
     });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
@@ -696,9 +695,13 @@ void MainWindow::onSelected(const QStringList &files)
         if (0 == m_CompressPage->getCompressFilelist().count()) {
             QString filename;
             filename = files.at(0);
-            if (filename.contains(".7z.")) {
-                filename = filename.left(filename.length() - 3) + "001";
-            }
+
+//            if (filename.contains(".7z.")) {
+//                filename = filename.left(filename.length() - 3) + "001";
+//            }
+
+            transSplitFileName(filename);
+
             QFileInfo fileinfo(filename);
             m_decompressfilename = fileinfo.fileName();
             if ("" != m_settingsDialog->getCurExtractPath()) {
@@ -897,10 +900,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         setCompressDefaultPath();
         refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_split")) {
-        if (files.at(0).contains(".7z.")) {
+        if (files.at(0).contains(".7z."))
+        {
             QString filepath = files.at(0);
-            filepath = filepath.left(filepath.length() - 3) + "001";
+
+            transSplitFileName(filepath);
+
             QFileInfo fileinfo(filepath);
+
             if (fileinfo.exists()) {
                 m_isrightmenu = true;
                 QFileInfo fileinfo(files.at(0));
@@ -938,9 +945,13 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.count() == 1 && Utils::isCompressed_file(files.at(0))) {
         QString filename;
         filename = files.at(0);
-        if (filename.contains(".7z.")) {
-            filename = filename.left(filename.length() - 3) + "001";
-        }
+
+//        if (filename.contains(".7z.")) {
+//            filename = filename.left(filename.length() - 3) + "001";
+//        }
+
+        transSplitFileName(filename);
+
         QFileInfo fileinfo(filename);
         m_decompressfilename = fileinfo.fileName();
         if ("" != m_settingsDialog->getCurExtractPath()) {
@@ -986,11 +997,15 @@ void MainWindow::slotLoadingFinished(KJob *job)
 
 void MainWindow::loadArchive(const QString &files)
 {
-    WatcherFile(files);
+    QString transFile = files;
+    transSplitFileName(transFile);
+
+    WatcherFile(transFile);
+
     m_workstatus = WorkProcess;
     m_loadfile = files;
     m_encryptiontype = Encryption_Load;
-    m_loadjob = dynamic_cast<LoadJob *>(m_model->loadArchive(files, "", m_model));
+    m_loadjob = dynamic_cast<LoadJob *>(m_model->loadArchive(transFile, "", m_model));
 
     if(m_loadjob == nullptr)
     {
@@ -1116,7 +1131,8 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
     qDebug() << percent;
     if ((Encryption_SingleExtract == m_encryptiontype))
     {
-        if ((percent < 100) && (percent >= 0) && (WorkProcess == m_workstatus)) {
+        if ( percent < 100 && WorkProcess == m_workstatus )
+        {
             if (!m_progressdialog->isshown()) {
                 if( m_pageid != PAGE_UNZIP )
                 {
@@ -1132,7 +1148,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
     {
         m_Progess->setprogress(percent);
     }
-    else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && (percent >= 0) && m_encryptionjob )
+    else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && m_encryptionjob )
     {
         /*if (!m_progressTransFlag) {
             if (0 == m_timerId) {
@@ -1145,7 +1161,7 @@ void MainWindow::SlotProgress(KJob */*job*/, unsigned long percent)
             refreshPage();
         }
     }
-    else if ((PAGE_ZIPSET == m_pageid) && (percent < 100) && (percent >= 0))
+    else if ((PAGE_ZIPSET == m_pageid) && (percent < 100) )
     {
         m_pageid = PAGE_ZIPPROGRESS;
         m_Progess->settype(COMPRESSING);
@@ -1434,6 +1450,22 @@ void MainWindow::creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, Q
     batchJob->start();
 }
 
+void MainWindow::transSplitFileName(QString& fileName) // *.7z.003 -> *.7z.001
+{
+    QRegExp reg("^([\\s\\S]*7z.)([0-9]{3})$");
+
+    if(reg.exactMatch(fileName) == false)
+    {
+        return;
+    }
+
+    QFileInfo fi(reg.cap(1) + "001");
+
+    if(fi.exists() == true)
+    {
+        fileName = reg.cap(1) + "001";
+    }
+}
 
 void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {

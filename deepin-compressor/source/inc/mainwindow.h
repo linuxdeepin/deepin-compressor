@@ -99,6 +99,8 @@ public:
     void creatArchive(QMap<QString, QString> &Args);
     void creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, QStringList> &filetoadd);
 
+    void transSplitFileName(QString& fileName); // *.7z.003 -> *.7z.001
+
     void ExtractPassword(QString password);
     void ExtractSinglePassword(QString password);
     void LoadPassword(QString password);
