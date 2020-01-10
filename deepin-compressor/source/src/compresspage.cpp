@@ -136,8 +136,7 @@ int CompressPage::showReplaceDialog(QString name)
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
     dialog->setIcon(pixmap);
-    //dialog->setMessage("“" + name + "”" + QObject::tr("already exists, are you sure you want to replace it?"));
-    dialog->setMessage("“" + name + "”" + QObject::tr("already exists.") + "\n" + QObject::tr("Do you want to replace it?"));
+    dialog->setMessage("“" + name + "”" + tr("already exists.") + "\n" + tr("Do you want to replace it?"));
     dialog->addSpacing(15);
     dialog->addButton(QObject::tr("Cancel"));
     dialog->addButton(QObject::tr("Confirm"));
