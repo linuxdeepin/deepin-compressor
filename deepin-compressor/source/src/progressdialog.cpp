@@ -35,7 +35,6 @@ ProgressDialog::ProgressDialog(QWidget *parent):
 
 void ProgressDialog::initUI()
 {
-
     setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint /*& ~Qt::Dialog*/) | Qt::Window);
     setFixedWidth(m_defaultWidth);
 
@@ -57,7 +56,7 @@ void ProgressDialog::initUI()
     m_filelable = new DLabel(this);
     DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
     m_filelable->setForegroundRole(DPalette::TextTips);
-    m_tasklable->setText(tr("Task") + ":");
+    m_tasklable->setText(tr("Task") + ": ");
     m_filelable->setText(tr("Extracting") + ":");
 
     m_circleprogress = new  DProgressBar(this);

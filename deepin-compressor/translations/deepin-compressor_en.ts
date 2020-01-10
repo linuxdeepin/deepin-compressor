@@ -441,16 +441,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="221"/>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="221"/>
-        <source> has changed and may be renamed, moved or deleted, please re-import the file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../source/src/mainwindow.cpp" line="287"/>
         <source>Close</source>
         <translation>Close</translation>
@@ -528,8 +518,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Extraction completed</source>
-        <translation type="obsolete">Extraction completed</translation>
+        <location filename="../source/src/mainwindow.cpp" line="221"/>
+        <source>&quot;%1&quot; has changed and may be renamed, moved or deleted, please re-import the file.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="612"/>
@@ -751,29 +742,29 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="48"/>
+        <location filename="../source/src/progressdialog.cpp" line="47"/>
         <source>%1 task(s) in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="60"/>
-        <location filename="../source/src/progressdialog.cpp" line="112"/>
+        <location filename="../source/src/progressdialog.cpp" line="59"/>
+        <location filename="../source/src/progressdialog.cpp" line="111"/>
         <source>Task</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="61"/>
-        <location filename="../source/src/progressdialog.cpp" line="118"/>
+        <location filename="../source/src/progressdialog.cpp" line="60"/>
+        <location filename="../source/src/progressdialog.cpp" line="117"/>
         <source>Extracting</source>
         <translation>Extracting</translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="134"/>
+        <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extraction successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="134"/>
+        <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extract to</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1058,10 +1049,6 @@
         <location filename="../source/src/fileViewer.cpp" line="468"/>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
         <translation>yyyy/MM/dd  hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyy!MM@dd# hh:mm:ss</source>
-        <translation type="obsolete">yyyy/MM/dd  hh:mm:ss</translation>
     </message>
 </context>
 </TS>

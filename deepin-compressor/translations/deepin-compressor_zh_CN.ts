@@ -120,12 +120,12 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="139"/>
         <source>already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>已经存在.</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="139"/>
         <source>Do you want to replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>是否替换?</translation>
     </message>
 </context>
 <context>
@@ -437,24 +437,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <source>The “%1” has changed and may be renamed, moved or deleted, please re-import the file.</source>
-        <translation type="obsolete">已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="221"/>
-        <source>%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>has changed and may be renamed, moved or deleted, please re-import the file.</source>
-        <translation type="obsolete">已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
-    </message>
-    <message>
-        <location filename="../source/src/mainwindow.cpp" line="221"/>
-        <source> has changed and may be renamed, moved or deleted, please re-import the file.</source>
-        <translation>已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
-    </message>
-    <message>
         <location filename="../source/src/mainwindow.cpp" line="287"/>
         <source>Close</source>
         <translation>关闭</translation>
@@ -498,13 +480,13 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="626"/>
         <source>Compression successful</source>
-        <translation>压缩成功！</translation>
+        <translation>压缩成功</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="353"/>
         <location filename="../source/src/mainwindow.cpp" line="645"/>
         <source>Extraction successful</source>
-        <translation>解压成功！</translation>
+        <translation>解压成功</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="720"/>
@@ -532,6 +514,11 @@
         <translation>归档管理器</translation>
     </message>
     <message>
+        <location filename="../source/src/mainwindow.cpp" line="221"/>
+        <source>&quot;%1&quot; has changed and may be renamed, moved or deleted, please re-import the file.</source>
+        <translation>&quot;%1&quot;已经发生变化，可能被重命名，移动或删除，请重新导入文件。</translation>
+    </message>
+    <message>
         <location filename="../source/src/mainwindow.cpp" line="612"/>
         <source>Compressing</source>
         <translation>正在压缩</translation>
@@ -549,7 +536,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="666"/>
         <source>Extraction failed</source>
-        <translation type="unfinished">解压失败</translation>
+        <translation>解压失败</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="722"/>
@@ -580,7 +567,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1190"/>
         <source>Wrong password</source>
-        <translation>密码错误！</translation>
+        <translation>密码错误</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="921"/>
@@ -750,29 +737,29 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="48"/>
+        <location filename="../source/src/progressdialog.cpp" line="47"/>
         <source>%1 task(s) in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>有%1个任务正在进行</translation>
+    </message>
+    <message>
+        <location filename="../source/src/progressdialog.cpp" line="59"/>
+        <location filename="../source/src/progressdialog.cpp" line="111"/>
+        <source>Task</source>
+        <translation>任务</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="60"/>
-        <location filename="../source/src/progressdialog.cpp" line="112"/>
-        <source>Task</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/progressdialog.cpp" line="61"/>
-        <location filename="../source/src/progressdialog.cpp" line="118"/>
+        <location filename="../source/src/progressdialog.cpp" line="117"/>
         <source>Extracting</source>
         <translation>正在提取</translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="134"/>
+        <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extraction successful</source>
-        <translation>解压成功！</translation>
+        <translation>解压成功</translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="134"/>
+        <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extract to</source>
         <translation>解压到</translation>
     </message>
@@ -855,7 +842,7 @@
     <message>
         <location filename="../interface/queries.cpp" line="337"/>
         <source>Wrong password</source>
-        <translation>密码错误！</translation>
+        <translation>密码错误</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="269"/>
@@ -977,7 +964,7 @@
     <message>
         <location filename="../source/src/settingdialog.cpp" line="257"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>默认解压路径不存在，请重新输入！</translation>
+        <translation>默认解压路径不存在，请重新输入</translation>
     </message>
 </context>
 <context>
@@ -1056,10 +1043,6 @@
         <location filename="../source/src/fileViewer.cpp" line="468"/>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
         <translation>yyyy/MM/dd/ hh:mm:ss</translation>
-    </message>
-    <message>
-        <source>yyyy年MM月dd日 hh:mm:ss</source>
-        <translation type="obsolete">yyyy年MM月dd日 hh:mm:ss</translation>
     </message>
 </context>
 </TS>

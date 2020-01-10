@@ -218,7 +218,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->setFixedWidth(440);
                 QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(icon);
-                dialog->setMessage(QChar('\"') + tr("%1").arg(filein.fileName() + QChar('\"') +tr(" has changed and may be renamed, moved or deleted, please re-import the file.")));
+                dialog->setMessage(tr("\"%1\" has changed and may be renamed, moved or deleted, please re-import the file.").arg(filein.fileName()));
                 dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
                 QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
                 effect->setOffset(0, 4);
