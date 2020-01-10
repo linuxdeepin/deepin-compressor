@@ -43,24 +43,6 @@
 const QString rootPathUnique = "_&_&_&_";
 const QString zipPathUnique = "_&_&_";
 
-
-MyScrollBar::MyScrollBar(QWidget *parent)
-    : DScrollBar(parent)
-{
-
-}
-
-void MyScrollBar::showEvent(QShowEvent *event)
-{
-    emit ScrollBarShowEvent(event);
-}
-
-void MyScrollBar::hideEvent(QHideEvent *event)
-{
-    emit ScrollBarHideEvent(event);
-}
-
-
 FirstRowDelegate::FirstRowDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
@@ -154,9 +136,9 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
     QFontMetrics fm(opt.font);
     QRect displayRect;
-    displayRect.setX(decorationRect.x() + decorationRect.width());
-    displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x());
-    QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width() - 6);
+    displayRect.setX(decorationRect.x() + decorationRect.width() );
+    displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x() );
+    QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width() - 18);
 
     // do the layout
     doLayout(opt, &checkRect, &decorationRect, &displayRect, false);
@@ -166,7 +148,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //        displayRect.setWidth(displayRect.width() - 10);
         decorationRect.setX(decorationRect.x() + 8);
         decorationRect.setWidth(decorationRect.width() + 8);
-        displayRect.setX(displayRect.x() + 8);
+        displayRect.setX(displayRect.x() + 16);
     }
     else
     {
@@ -216,7 +198,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
 
 MyTableView::MyTableView(QWidget *parent)
-    : QTableView(parent)
+    : DTableView(parent)
 {
     setMinimumSize(580, 300);
     header_ = new LogViewHeaderView(Qt::Horizontal, this);
@@ -231,6 +213,7 @@ MyTableView::MyTableView(QWidget *parent)
         setPalette(pa);
         //update();
     };
+
     changeTheme();
     connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, changeTheme);
 
@@ -362,11 +345,9 @@ void fileViewer::InitUI()
     pModel = new MyFileSystemModel(this);
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
-    QStringList labels = QObject::trUtf8("Name,Size,Type,Time modified").simplified().split(",");
+    QStringList labels = QString("Name,Size,Type,Time modified").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
-    pScrollbar = new MyScrollBar();
-    pTableViewFile->setVerticalScrollBar(pScrollbar);
     pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pTableViewFile->horizontalHeader()->setStretchLastSection(true);
     pTableViewFile->setShowGrid(false);
@@ -386,7 +367,7 @@ void fileViewer::InitUI()
 //    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
 //    headerview->setPalette(pa);
     pTableViewFile->setFrameShape(DTableView::NoFrame);
-    pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    pTableViewFile->setSelectionMode(  QAbstractItemView::ExtendedSelection );
 //    plabel->setText("     .. " + tr("Back"));
 //    DFontSizeManager::instance()->bind(plabel, DFontSizeManager::T6, QFont::Weight::Medium);
 ////    plabel->setAutoFillBackground(true);
@@ -451,7 +432,7 @@ void fileViewer::refreshTableview()
     int rowindex = 0;
     QFileIconProvider icon_provider;
     foreach (QFileInfo fileinfo, m_curfilelist) {
-        item = new MyFileItem(icon_provider.icon(fileinfo), "  " + fileinfo.fileName());
+        item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
 
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -531,10 +512,7 @@ void fileViewer::InitConnection()
             connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
         }
     }
-    //connect(plabel, SIGNAL(labelDoubleClickEvent(QMouseEvent *)), this, SLOT(slotCompressRePreviousDoubleClicked(QMouseEvent *)));
 
-    connect(pScrollbar, SIGNAL(ScrollBarShowEvent(QShowEvent *)), this, SLOT(ScrollBarShowEvent(QShowEvent *)));
-    connect(pScrollbar, SIGNAL(ScrollBarHideEvent(QHideEvent *)), this, SLOT(ScrollBarHideEvent(QHideEvent *)));
     connect(pModel, &MyFileSystemModel::sigShowLabel, this, &fileViewer::showPlable);
 }
 
@@ -623,12 +601,22 @@ void fileViewer::setFileList(const QStringList &files)
         QFile file(filepath);
         m_curfilelist.append(file);
     }
+
     refreshTableview();
+}
+
+void fileViewer::setSelectFiles(const QStringList &files)
+{
+    QAbstractItemModel* model = pTableViewFile->model();
+
+    for(int i = 0; i < model->rowCount(); ++ i)
+    {
+        pTableViewFile->selectRow(0);
+    }
 }
 
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
-
     if (PAGE_COMPRESS == m_pagetype)
     {
         if (m_pathindex > 1) {
@@ -830,15 +818,6 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
         }
     }
-}
-
-void fileViewer::ScrollBarShowEvent(QShowEvent */*event*/)
-{
-    //plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
-}
-void fileViewer::ScrollBarHideEvent(QHideEvent */*event*/)
-{
-    //plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 1920, pTableViewFile->horizontalHeader()->height());
 }
 
 void fileViewer::showRightMenu(const QPoint &pos)

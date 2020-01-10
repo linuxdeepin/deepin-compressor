@@ -84,8 +84,6 @@ SettingDialog::SettingDialog(QWidget *parent):
 
 void SettingDialog::initUI()
 {
-
-
     this->widgetFactory()->registerWidget("custom-button", [this](QObject * obj) -> QWidget* {
         if (/*DSettingsOption *option = */qobject_cast<DSettingsOption *>(obj))
         {

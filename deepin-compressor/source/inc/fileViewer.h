@@ -58,20 +58,6 @@ enum EXTRACT_TYPE {
 
 class LogViewHeaderView;
 
-class MyScrollBar: public DScrollBar
-{
-    Q_OBJECT
-public:
-    MyScrollBar(QWidget *parent = nullptr);
-protected:
-    void hideEvent(QHideEvent *) override;
-    void showEvent(QShowEvent *) override;
-signals:
-    void ScrollBarShowEvent(QShowEvent *event);
-    void ScrollBarHideEvent(QHideEvent *event);
-};
-
-
 class FirstRowDelegate : public QItemDelegate
 {
     Q_OBJECT
@@ -139,6 +125,7 @@ public:
 
     int getPathIndex();
     void setFileList(const QStringList &files);
+    void setSelectFiles(const QStringList &files);
     void setDecompressModel(ArchiveSortFilterModel *model);
 
     QVector<Archive::Entry *> filesAndRootNodesForIndexes(const QModelIndexList &list) const;
@@ -160,8 +147,7 @@ protected slots:
     void slotCompressRowDoubleClicked(const QModelIndex index);
     void slotDecompressRowDoubleClicked(const QModelIndex index);
     void slotCompressRePreviousDoubleClicked();
-    void ScrollBarShowEvent(QShowEvent *event);
-    void ScrollBarHideEvent(QHideEvent *event);
+
     void showRightMenu(const QPoint &pos);
     void onRightMenuClicked(QAction *action);
     void slotDragLeave(QString path);
@@ -188,7 +174,6 @@ private:
     FirstRowDelegate *pdelegate;
     //MyLabel *plabel;
     QModelIndex m_indexmode;
-    MyScrollBar *pScrollbar;
     QFileInfoList m_curfilelist;
     bool curFileListModified = true;
     QList<int> m_fileaddindex;

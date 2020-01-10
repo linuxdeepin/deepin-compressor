@@ -175,7 +175,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
         case Timestamp:
             return tr("Time modified");
         default:
-            return tr("Unnamed column", "??");
+            return "-";
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);

@@ -59,7 +59,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
         case 1:
             return tr("Time modified");
         default:
-            return tr("Unnamed column", "??");
+            return "-";
         }
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
@@ -128,7 +128,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 return QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
             }
             case 0:{
-                return "  "+ file.fileName();
+                return file.fileName();
             }
             }
         }

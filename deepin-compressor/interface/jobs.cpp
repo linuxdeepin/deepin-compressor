@@ -137,19 +137,19 @@ void Job::start()
 
 void Job::connectToArchiveInterfaceSignals()
 {
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &Job::onCancelled);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::error, this, &Job::onError);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &Job::onEntry);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &Job::onProgress);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::info, this, &Job::onInfo);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::finished, this, &Job::onFinished);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::updateDestFileSignal, this, &Job::onUpdateDestFile);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &Job::onCancelled, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::error, this, &Job::onError, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &Job::onEntry, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &Job::onProgress, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::info, this, &Job::onInfo, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::finished, this, &Job::onFinished, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::updateDestFileSignal, this, &Job::onUpdateDestFile, Qt::ConnectionType::UniqueConnection);
 
     auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
     if (readWriteInterface) {
-        connect(readWriteInterface, &ReadWriteArchiveInterface::entryRemoved, this, &Job::onEntryRemoved);
+        connect(readWriteInterface, &ReadWriteArchiveInterface::entryRemoved, this, &Job::onEntryRemoved, Qt::ConnectionType::UniqueConnection);
     }
 }
 
@@ -165,7 +165,7 @@ void Job::onError(const QString &message, const QString &details)
     Q_UNUSED(details)
 
     qDebug() << "Error emitted:" << message;
-    if (message.contains(QLatin1String("wrongpassword"))) {
+    if (message.contains(QLatin1String("wrong password"))) {
         emit sigWrongPassword();
     } else if (message.contains("Listing the archive failed")) {
         setError(KJob::LoadError);
