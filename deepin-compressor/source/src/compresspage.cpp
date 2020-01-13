@@ -204,7 +204,10 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
     }
 
     m_filelist.append(inputlist);
+
     m_fileviewer->setFileList(m_filelist);
+
+    m_fileviewer->setSelectFiles(inputlist);
 }
 
 void CompressPage::onRefreshFilelist(const QStringList &filelist)

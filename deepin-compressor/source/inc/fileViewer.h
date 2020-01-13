@@ -168,7 +168,10 @@ private:
 
     int m_pathindex;
     MyFileSystemModel *pModel;
-    QStandardItemModel *firstmodel;
+
+    QStandardItemModel* firstmodel;
+    QItemSelectionModel* firstSelectionModel = nullptr;
+
     ArchiveModel *m_decompressmodel;
     ArchiveSortFilterModel *m_sortmodel;
     FirstRowDelegate *pdelegate;

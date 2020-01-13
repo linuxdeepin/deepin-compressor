@@ -994,7 +994,6 @@ void MainWindow::slotLoadingFinished(KJob *job)
     }
 }
 
-
 void MainWindow::loadArchive(const QString &files)
 {
     QString transFile = files;
@@ -1011,6 +1010,8 @@ void MainWindow::loadArchive(const QString &files)
     {
         return;
     }
+
+    m_Progess->settype(DECOMPRESSING);
 
     connect(m_loadjob, &LoadJob::sigLodJobPassword, this, &MainWindow::SlotNeedPassword);
     connect(m_loadjob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
@@ -1351,22 +1352,30 @@ void MainWindow::setCompressDefaultPath()
     QString path;
     QStringList fileslist = m_CompressPage->getCompressFilelist();
     m_CompressSetting->setFilepath(fileslist);
+
     QFileInfo fileinfobase(fileslist.at(0));
+
+    QString savePath = fileinfobase.path();
+
     for (int loop = 1; loop < fileslist.count(); loop++) {
         QFileInfo fileinfo(fileslist.at(loop));
-        if (fileinfo.path() != fileinfobase.path()) {
-            m_CompressSetting->setDefaultPath(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-            return;
+        if (fileinfo.path() != fileinfobase.path())
+        {
+            savePath =QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+            break;
         }
     }
 
-    m_CompressSetting->setDefaultPath(fileinfobase.path());
-    if (1 == fileslist.count()) {
-        m_CompressSetting->setDefaultName(fileinfobase.baseName());
-    } else {
-        m_CompressSetting->setDefaultName(tr("New archive"));
-    }
+    m_CompressSetting->setDefaultPath( savePath );
 
+    if (1 == fileslist.count())
+    {
+        m_CompressSetting->setDefaultName( fileinfobase.baseName() );
+    }
+    else
+    {
+        m_CompressSetting->setDefaultName( tr("New archive") );
+    }
 }
 
 void MainWindow::onCompressNext()
@@ -1452,7 +1461,7 @@ void MainWindow::creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, Q
 
 void MainWindow::transSplitFileName(QString& fileName) // *.7z.003 -> *.7z.001
 {
-    QRegExp reg("^([\\s\\S]*7z.)([0-9]{3})$");
+    QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
 
     if(reg.exactMatch(fileName) == false)
     {

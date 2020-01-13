@@ -64,6 +64,9 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QPainterPath path;
     QPainterPath clipPath;
     QRect rect = option.rect;
+    rect.setY(rect.y()+1);
+    rect.setHeight(rect.height()-1);
+
     if (index.column() == 0) {
         rect.setX(rect.x());  // left margin
         QPainterPath rectPath, roundedPath;
@@ -175,7 +178,8 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
             pFont.setWeight(QFont::Weight::Medium);
             painter->setFont(pFont);
         }
-        else {
+        else
+        {
             QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T7);
             pFont.setWeight(QFont::Weight::Normal);
             painter->setFont(pFont);
@@ -342,6 +346,8 @@ void fileViewer::InitUI()
 //    plabel = new MyLabel(pTableViewFile);
 //    plabel->setFixedSize(580, 36);
     firstmodel = new QStandardItemModel();
+    firstSelectionModel = new QItemSelectionModel(firstmodel);
+
     pModel = new MyFileSystemModel(this);
     pModel->setNameFilterDisables(false);
     pModel->setTableView(pTableViewFile);
@@ -407,6 +413,8 @@ void fileViewer::refreshTableview()
     if( false == curFileListModified)
     {
         pTableViewFile->setModel(firstmodel);
+        pTableViewFile->setSelectionModel(firstSelectionModel);
+
         restoreHeaderSort(rootPathUnique);
         return;
     }
@@ -475,6 +483,10 @@ void fileViewer::refreshTableview()
     }
 
     pTableViewFile->setModel(firstmodel);
+
+    firstSelectionModel->clear();
+    pTableViewFile->setSelectionModel(firstSelectionModel);
+
     restoreHeaderSort(rootPathUnique);
     resizecolumn();
 
@@ -607,12 +619,37 @@ void fileViewer::setFileList(const QStringList &files)
 
 void fileViewer::setSelectFiles(const QStringList &files)
 {
-    QAbstractItemModel* model = pTableViewFile->model();
+    QItemSelection selection;
 
-    for(int i = 0; i < model->rowCount(); ++ i)
+    foreach(auto file, files)
     {
-        pTableViewFile->selectRow(0);
+        for(int i = 0; i < firstmodel->rowCount(); ++i)
+        {
+            QStandardItem* item = firstmodel->item(i);
+            if(item == nullptr)
+            {
+                return;
+            }
+
+            QString itemStr = item->text();
+
+            if( itemStr != QFileInfo(file).fileName())
+            {
+                continue;
+            }
+
+            QModelIndex index = firstmodel->index(i, 0);
+
+            QItemSelectionRange selectionRange(index, firstmodel->index(i, firstmodel->columnCount() -1));
+            if ( false == selection.contains(index) )
+            {
+                selection.push_back(selectionRange);
+                break;
+            }
+        }
     }
+
+    firstSelectionModel->select(selection, QItemSelectionModel::Select);
 }
 
 void fileViewer::slotCompressRePreviousDoubleClicked()

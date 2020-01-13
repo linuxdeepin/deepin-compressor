@@ -949,6 +949,11 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         qulonglong sum = 0;
         char buf[1000];
 
+        if(pi.fileProgressProportion > 0  )
+        {
+            emit progress( pi.fileProgressStart + pi.fileProgressProportion * 0.01 );
+        }
+
         int writeSize = 0;
         while (sum != statBuffer.size) {
             const auto readBytes = zip_fread(zipFile, buf, 1000);
