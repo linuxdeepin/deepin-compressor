@@ -279,7 +279,8 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     QString programPath = QStandardPaths::findExecutable(programName);
     if (programPath.isEmpty())
     {
-        emit error(tr("@info", "Failed to locate program <filename>%1</filename> on disk."));
+        //emit error(tr("@info", "Failed to locate program <filename>%1</filename> on disk."));
+        emit error( "@info Failed to locate program <filename>%1</filename> on disk." );
         emit finished(false);
         return false;
     }
@@ -372,7 +373,8 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode))
     {
         qDebug() << "wrong password";
-        emit error(tr("wrong password"));
+        //emit error(tr("wrong password"));
+        emit error( "wrong password" );
         setPassword(QString());
         return;
     }
@@ -414,13 +416,16 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
             if (password().isEmpty())
             {
                 qDebug() << "Extraction aborted, destination folder might not have enough space.";
-                emit error(tr("Extraction failed. Make sure that enough space is available."));
+                //emit error(tr("Extraction failed. Make sure that enough space is available."));
+                emit error(("Extraction failed. Make sure that enough space is available."));
             }
             else
             {
                 qDebug() << "Extraction aborted, either the password is wrong or the destination folder doesn't have "
                             "enough space.";
-                emit error(tr("Extraction failed. Make sure you provided the correct password and that enough space is "
+                //emit error(tr("Extraction failed. Make sure you provided the correct password and that enough space is "
+                //              "available."));
+                emit error(("Extraction failed. Make sure you provided the correct password and that enough space is "
                               "available."));
                 setPassword(QString());
             }
@@ -433,7 +438,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         {
             if (!moveToDestination(QDir::current(), QDir(m_extractDestDir), m_extractionOptions.preservePaths()))
             {
-                emit error(tr("Could not move the extracted file to the destination directory."));
+                //emit error(tr("Could not move the extracted file to the destination directory."));
+                emit error( "Could not move the extracted file to the destination directory." );
                 cleanUpExtracting();
                 emit finished(false);
                 return;
@@ -453,7 +459,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         else
         {
             qDebug() << "Extraction failed, the file is broken";
-            emit error(tr("Extraction failed. the file is broken"));
+            //emit error(tr("Extraction failed. the file is broken"));
+            emit error( "Extraction failed. the file is broken" );
             setPassword(QString());
         }
         cleanUpExtracting();
@@ -463,7 +470,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     else if (m_exitCode == 9)
     {
         qDebug() << "wrong password";
-        emit error(tr("wrong password"));
+        //emit error(tr("wrong password"));
+        emit error( "wrong password" );
         setPassword(QString());
         return;
     }
@@ -603,7 +611,8 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
             if (!QFile(absSourceEntry.absoluteFilePath()).rename(absDestEntry.absoluteFilePath()))
             {
                 qDebug() << "Failed to move file" << absSourceEntry.filePath() << "to final destination.";
-                emit error(tr("Could not move the extracted file to the destination directory."));
+                //emit error(tr("Could not move the extracted file to the destination directory."));
+                emit error( "Could not move the extracted file to the destination directory." );
                 emit finished(false);
                 return false;
             }
@@ -1077,7 +1086,8 @@ bool CliInterface::handleLine(const QString &line)
         if (isDiskFullMsg(line))
         {
             qDebug() << "Found disk full message:" << line;
-            emit error(tr("@info", "Extraction failed because the disk is full."));
+            //emit error(tr("@info", "Extraction failed because the disk is full."));
+            emit error(("@info", "Extraction failed because the disk is full."));
             return false;
         }
 

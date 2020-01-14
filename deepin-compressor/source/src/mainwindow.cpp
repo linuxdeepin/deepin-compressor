@@ -231,9 +231,8 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->setFixedWidth(440);
                 QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(icon);
-                dialog->setMessage(
-                    tr("\"%1\" was changed on the disk, please import it again.").arg(filein.fileName()));
-                dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+                dialog->setMessage(tr("%1 was changed on the disk, please import it again.").arg(filein.fileName()));
+                dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
                 QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
                 effect->setOffset(0, 4);
                 effect->setColor(QColor(0, 145, 255, 76));
@@ -1095,7 +1094,7 @@ void MainWindow::WatcherFile(const QString &files)
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);
         dialog->setMessage(tr("The archive was changed on the disk, please import it again."));
-        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+        dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0, 4);
         effect->setColor(QColor(0, 145, 255, 76));
@@ -1474,7 +1473,7 @@ void MainWindow::setCompressDefaultPath()
     }
     else
     {
-        m_CompressSetting->setDefaultName(tr("New archive"));
+        m_CompressSetting->setDefaultName(tr("Create New Archive"));
     }
 }
 

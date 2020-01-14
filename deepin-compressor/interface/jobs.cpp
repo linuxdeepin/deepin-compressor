@@ -103,11 +103,13 @@ QString Job::errorString() const
 
     if (archive()) {
         if (archive()->error() == NoPlugin) {
-            return tr("No suitable plugin found.");
+            //return tr("No suitable plugin found.");
+            return ("No suitable plugin found.");
         }
 
         if (archive()->error() == FailedPlugin) {
-            return tr("Failed to load a suitable plugin.");
+            //return tr("Failed to load a suitable plugin.");
+            return ("Failed to load a suitable plugin.");
         }
     }
 
@@ -280,7 +282,8 @@ LoadJob::LoadJob(ReadOnlyArchiveInterface *interface, bool isbatch)
 
 void LoadJob::doWork()
 {
-    emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, ("Loading archive"), qMakePair( QString("Archive"), archiveInterface()->filename()));
     connectToArchiveInterfaceSignals();
 
     bool ret = false;
@@ -547,11 +550,15 @@ void ExtractJob::doWork()
 
     QString desc;
     if (m_entries.count() == 0) {
-        desc = tr("Extracting all files");
+        //desc = tr("Extracting all files");
+        desc = ("Extracting all files");
     } else {
-        desc = tr("Extracting one file", "Extracting %1 files", m_entries.count());
+        //desc = tr("Extracting one file", "Extracting %1 files", m_entries.count());
+        desc = QString("Extracting %1 files").arg( m_entries.count() );
     }
-    emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()), qMakePair(tr("extraction folder", "Destination"), m_destinationDir));
+
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()), qMakePair(tr("extraction folder", "Destination"), m_destinationDir));
+    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()), qMakePair( QString("extraction folder Destination"), m_destinationDir));
 
     QFileInfo destDirInfo(m_destinationDir);
     if (destDirInfo.isDir() && (!destDirInfo.isWritable() || !destDirInfo.isExecutable())) {
@@ -629,7 +636,8 @@ QTemporaryDir *TempExtractJob::tempDir() const
 void TempExtractJob::doWork()
 {
     // pass 1 to i18np on purpose so this translation may properly be reused.
-    emit description(this, tr("Extracting one file", "Extracting %1 files", 1));
+    //emit description(this, tr("Extracting one file", "Extracting %1 files", 1));
+    emit description(this, "Extracting one file" );
 
     connectToArchiveInterfaceSignals();
 
@@ -702,8 +710,10 @@ void AddJob::doWork()
 
     qDebug() << "Going to add" << totalCount << "entries, counted in" << timer.elapsed() << "ms";
 
-    const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
-    emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
+    const QString desc = QString("Compressing %1 files").arg( totalCount );
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
 
@@ -755,8 +765,10 @@ void MoveJob::doWork()
 {
     qDebug() << "Going to move" << m_entries.count() << "file(s)";
 
-    QString desc = tr("Moving a file", "Moving %1 files", m_entries.count());
-    emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //QString desc = tr("Moving a file", "Moving %1 files", m_entries.count());
+    QString desc = QString("Moving %1 files").arg( m_entries.count() );
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -793,8 +805,10 @@ void CopyJob::doWork()
 {
     qDebug() << "Going to copy" << m_entries.count() << "file(s)";
 
-    QString desc = tr("Copying a file", "Copying %1 files", m_entries.count());
-    emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //QString desc = tr("Copying a file", "Copying %1 files", m_entries.count());
+    QString desc = QString("Copying %1 files").arg(m_entries.count());
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -825,8 +839,10 @@ DeleteJob::DeleteJob(const QVector<Archive::Entry *> &entries, ReadWriteArchiveI
 
 void DeleteJob::doWork()
 {
-    QString desc = tr("Deleting a file from the archive", "Deleting %1 files", m_entries.count());
-    emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //QString desc = tr("Deleting a file from the archive", "Deleting %1 files", m_entries.count());
+    QString desc = QString("Deleting %1 files").arg( m_entries.count() );
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -849,7 +865,8 @@ CommentJob::CommentJob(const QString &comment, ReadWriteArchiveInterface *interf
 
 void CommentJob::doWork()
 {
-    emit description(this, tr("Adding comment"));
+    //emit description(this, tr("Adding comment"));
+    emit description(this, "Adding comment");
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -874,7 +891,8 @@ void TestJob::doWork()
 {
     qDebug() << "Job started";
 
-    emit description(this, tr("Testing archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
+    //emit description(this, tr("Testing archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, ("Testing archive"), qMakePair( QString("Archive"), archiveInterface()->filename()));
 
     connectToArchiveInterfaceSignals();
     connect(archiveInterface(), &ReadOnlyArchiveInterface::testSuccess, this, &TestJob::onTestSuccess);

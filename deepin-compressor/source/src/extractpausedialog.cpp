@@ -45,12 +45,12 @@ void ExtractPauseDialog::initUI()
 
     DPalette pa;
 
-    DLabel *strlabel = new DLabel(this);
-    strlabel->setFixedHeight(20);
-    strlabel->setForegroundRole(DPalette::WindowText);
+//    DLabel *strlabel = new DLabel(this);
+//    strlabel->setFixedHeight(20);
+//    strlabel->setForegroundRole(DPalette::WindowText);
 
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(tr("Stop extracting"));
+//    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+//    strlabel->setText(tr("Stop extracting"));
     DLabel *strlabel2 = new DLabel(this);
     strlabel2->setFixedHeight(20);
     strlabel2->setForegroundRole(DPalette::TextTips);

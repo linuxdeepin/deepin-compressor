@@ -119,7 +119,8 @@ KPluginFactory *KPluginLoader::factory()
 
     if (factory == nullptr) {
         delete obj;
-        d->errorString = tr("The library %1 does not offer a KPluginFactory.").arg(d->name);
+        //d->errorString = tr("The library %1 does not offer a KPluginFactory.").arg(d->name);
+        d->errorString = QString("The library %1 does not offer a KPluginFactory.").arg(d->name);
     }
 
     return factory;

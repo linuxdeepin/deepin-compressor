@@ -316,7 +316,7 @@ void MyTableView::slotDragpath(QUrl url)
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : DWidget(parent), m_pagetype(type)
 {
-    setWindowTitle(tr("File Viewer"));
+    //setWindowTitle(tr("File Viewer"));
     setMinimumSize(580, 300);
     m_pathindex = 0;
     m_mimetype = new MimeTypeDisplayManager(this);
@@ -457,9 +457,9 @@ void fileViewer::refreshTableview()
             QDir dir(fileinfo.filePath());
 //            QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(QDir::NoDotDot));
 
-            item = new MyFileItem(QString::number(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) + " " + tr("Item") +  "    ");
+            item = new MyFileItem(QString::number(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) + " " + tr("item(s)"));
         } else {
-            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1) +  "    ");
+            item = new MyFileItem( Utils::humanReadableSize(fileinfo.size(), 1) );
         }
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
@@ -473,7 +473,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Normal);
         item->setFont(font);
         firstmodel->setItem(rowindex, 2, item);
-        item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd/ hh:mm:ss")));
+        item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd hh:mm:ss")));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
@@ -531,10 +531,10 @@ void fileViewer::InitConnection()
 void fileViewer::resizecolumn()
 {
     qDebug() << pTableViewFile->width();
-    pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 13 / 29);
-    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 8 / 29);
-    pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 4 / 29);
-    pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 4 / 29);
+    pTableViewFile->setColumnWidth(0, pTableViewFile->width() * 25 / 58);
+    pTableViewFile->setColumnWidth(1, pTableViewFile->width() * 17 / 58);
+    pTableViewFile->setColumnWidth(2, pTableViewFile->width() * 8 / 58);
+    pTableViewFile->setColumnWidth(3, pTableViewFile->width() * 8 / 58);
 }
 
 void fileViewer::resizeEvent(QResizeEvent */*size*/)

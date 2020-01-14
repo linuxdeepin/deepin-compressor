@@ -114,10 +114,10 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                     QDir dir(file.filePath());
                     QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files));
 
-                    return QString::number(fileInfo->count()) + " " + tr("Item") +  "    ";
+                    return QString::number(fileInfo->count()) + " " + tr("item(s)");
                 } else {
 
-                    return Utils::humanReadableSize(file.size(), 1) +  "    ";
+                    return Utils::humanReadableSize(file.size(), 1);
                 }
             }
             case 2: {
