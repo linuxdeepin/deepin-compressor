@@ -1002,7 +1002,13 @@ bool CliInterface::handleLine(const QString &line)
             return false;
         }
 
-        if (isCorruptArchiveMsg(line)) {
+        if (isCorruptArchiveMsg(line))
+        {
+            if(isWrongPassword())
+            {
+                return true;
+            }
+
             qDebug() << "Archive corrupt";
             setCorrupt(true);
             // Special case: corrupt is not a "fatal" error so we return true here.
