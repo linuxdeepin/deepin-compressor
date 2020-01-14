@@ -58,8 +58,8 @@
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
-        <source>already exists.</source>
-        <translation>already exists.</translation>
+        <source>%1 already exists.</source>
+        <translation>%1 already exists.</translation>
     </message>
 </context>
 <context>
