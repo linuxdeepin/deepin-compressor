@@ -23,22 +23,21 @@
 #include "compresspage.h"
 #include "utils.h"
 
+#include "DFileDialog"
+#include "fileViewer.h"
+#include <DDialog>
+#include <DRecentManager>
 #include <QApplication>
-#include <QVBoxLayout>
-#include <QProcess>
-#include <QTimer>
 #include <QDebug>
 #include <QFile>
-#include <DRecentManager>
+#include <QProcess>
 #include <QShortcut>
-#include <DDialog>
-#include "fileViewer.h"
-#include "DFileDialog"
+#include <QTimer>
+#include <QVBoxLayout>
 
 DWIDGET_USE_NAMESPACE
 
-CompressPage::CompressPage(QWidget *parent)
-    : DWidget(parent)
+CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 {
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
     m_nextbutton = new DPushButton(tr("Next"), this);
@@ -52,7 +51,6 @@ CompressPage::CompressPage(QWidget *parent)
     buttonlayout->addWidget(m_nextbutton, 2);
     buttonlayout->addStretch(1);
 
-
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     mainLayout->addLayout(contentLayout);
@@ -62,10 +60,10 @@ CompressPage::CompressPage(QWidget *parent)
     mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setContentsMargins(12, 1, 20, 20);
 
-    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"),
-                               QSettings::IniFormat);
+    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat);
     // initalize the configuration file.
-    if (m_settings->value("dir").toString().isEmpty()) {
+    if (m_settings->value("dir").toString().isEmpty())
+    {
         m_settings->setValue("dir", "");
     }
 
@@ -80,10 +78,10 @@ CompressPage::CompressPage(QWidget *parent)
     m_fileviewer->setAutoFillBackground(true);
 }
 
-
 void CompressPage::onNextPress()
 {
-    if (m_filelist.isEmpty()) {
+    if (m_filelist.isEmpty())
+    {
         DDialog *dialog = new DDialog(this);
 
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
@@ -95,10 +93,11 @@ void CompressPage::onNextPress()
         dialog->exec();
 
         delete dialog;
-    } else {
+    }
+    else
+    {
         emit sigNextPress();
     }
-
 }
 
 void CompressPage::showDialog()
@@ -151,7 +150,8 @@ int CompressPage::showReplaceDialog(QString name)
 
 void CompressPage::onAddfileSlot()
 {
-    if (0 != m_fileviewer->getPathIndex()) {
+    if (0 != m_fileviewer->getPathIndex())
+    {
         showDialog();
         return;
     }
@@ -161,7 +161,8 @@ void CompressPage::onAddfileSlot()
     dialog.setAllowMixedSelection(true);
 
     QString historyDir = m_settings->value("dir").toString();
-    if (historyDir.isEmpty()) {
+    if (historyDir.isEmpty())
+    {
         historyDir = QDir::homePath();
     }
     dialog.setDirectory(historyDir);
@@ -173,7 +174,8 @@ void CompressPage::onAddfileSlot()
     qDebug() << dialog.directoryUrl().toLocalFile();
 
     // if click cancel button or close button.
-    if (mode != QDialog::Accepted) {
+    if (mode != QDialog::Accepted)
+    {
         return;
     }
 
@@ -182,21 +184,28 @@ void CompressPage::onAddfileSlot()
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
 {
-    if (0 != m_fileviewer->getPathIndex()) {
+    if (0 != m_fileviewer->getPathIndex())
+    {
         showDialog();
         return;
     }
 
     QStringList inputlist = files;
-    foreach (QString m_path, m_filelist) {
-        foreach (QString path, files) {
+    foreach (QString m_path, m_filelist)
+    {
+        foreach (QString path, files)
+        {
             QFileInfo mfile(m_path);
             QFileInfo file(path);
-            if (file.fileName() == mfile.fileName()) {
+            if (file.fileName() == mfile.fileName())
+            {
                 int mode = showReplaceDialog(file.fileName());
-                if (0 == mode) {
+                if (0 == mode)
+                {
                     inputlist.removeOne(path);
-                } else {
+                }
+                else
+                {
                     m_filelist.removeOne(m_path);
                 }
             }
@@ -215,7 +224,7 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
     m_filelist = filelist;
     m_fileviewer->setFileList(m_filelist);
 
-    if(m_filelist.size() == 0)
+    if (m_filelist.size() == 0)
     {
         emit sigFilelistIsEmpty();
     }
@@ -223,20 +232,17 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
 
 void CompressPage::onPathIndexChanged()
 {
-    if (m_fileviewer->getPathIndex() > 0) {
+    if (m_fileviewer->getPathIndex() > 0)
+    {
         emit sigiscanaddfile(false);
-    } else {
+    }
+    else
+    {
         emit sigiscanaddfile(true);
     }
 }
-
 
 QStringList CompressPage::getCompressFilelist()
 {
     return m_filelist;
 }
-
-
-
-
-
