@@ -100,7 +100,7 @@ void EncryptionPage::wrongPassWordSlot()
     if (m_inputflag) {
         qDebug() << "wrongPassWordSlot";
         m_password->setAlert(true);
-        m_password->showAlertMessage(tr("Wrong Password"));
+        m_password->showAlertMessage(tr("Wrong password"));
     }
 }
 

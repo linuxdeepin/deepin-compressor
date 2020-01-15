@@ -192,7 +192,7 @@
     <message>
         <location filename="../source/src/encodingpage.cpp" line="81"/>
         <source>Select Character Encoding</source>
-        <translation>Select Character Encodin</translation>
+        <translation>Select Character Encoding</translation>
     </message>
 </context>
 <context>
@@ -214,8 +214,12 @@
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="103"/>
+        <source>Wrong password</source>
+        <translation type="unfinished">Wrong password</translation>
+    </message>
+    <message>
         <source>Wrong Password</source>
-        <translation>Wrong Password</translation>
+        <translation type="vanished">Wrong Password</translation>
     </message>
 </context>
 <context>

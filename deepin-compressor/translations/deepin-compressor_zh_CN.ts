@@ -214,7 +214,7 @@
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="103"/>
-        <source>Wrong Password</source>
+        <source>Wrong password</source>
         <translation>密码错误</translation>
     </message>
 </context>
