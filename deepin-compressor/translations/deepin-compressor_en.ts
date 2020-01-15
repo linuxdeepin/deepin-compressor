@@ -217,10 +217,6 @@
         <source>Wrong password</source>
         <translation type="unfinished">Wrong password</translation>
     </message>
-    <message>
-        <source>Wrong Password</source>
-        <translation type="vanished">Wrong Password</translation>
-    </message>
 </context>
 <context>
     <name>ExtractPauseDialog</name>
@@ -277,135 +273,135 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="302"/>
+        <location filename="../source/src/mainwindow.cpp" line="301"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="306"/>
+        <location filename="../source/src/mainwindow.cpp" line="305"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="310"/>
+        <location filename="../source/src/mainwindow.cpp" line="309"/>
         <source>Select the file</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="314"/>
+        <location filename="../source/src/mainwindow.cpp" line="313"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="334"/>
+        <location filename="../source/src/mainwindow.cpp" line="333"/>
         <source>Shortcuts</source>
         <translation>Shortcuts</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="394"/>
+        <location filename="../source/src/mainwindow.cpp" line="393"/>
         <source>Open file</source>
         <translation>Open file</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="424"/>
+        <location filename="../source/src/mainwindow.cpp" line="423"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="601"/>
-        <location filename="../source/src/mainwindow.cpp" line="611"/>
-        <location filename="../source/src/mainwindow.cpp" line="1476"/>
+        <location filename="../source/src/mainwindow.cpp" line="600"/>
+        <location filename="../source/src/mainwindow.cpp" line="610"/>
+        <location filename="../source/src/mainwindow.cpp" line="1484"/>
         <source>Create New Archive</source>
         <translation>Create New Archive</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="641"/>
+        <location filename="../source/src/mainwindow.cpp" line="640"/>
         <source>Compression successful</source>
         <translation>Compression successful</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="368"/>
-        <location filename="../source/src/mainwindow.cpp" line="660"/>
+        <location filename="../source/src/mainwindow.cpp" line="367"/>
+        <location filename="../source/src/mainwindow.cpp" line="659"/>
         <source>Extraction successful</source>
         <translation>Extraction successful</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="234"/>
+        <location filename="../source/src/mainwindow.cpp" line="233"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 was changed on the disk, please import it again.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="743"/>
+        <location filename="../source/src/mainwindow.cpp" line="742"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Do you want to add the archive to the list or open it in new window?</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="322"/>
+        <location filename="../source/src/mainwindow.cpp" line="321"/>
         <source>Display shortcuts</source>
         <translation>Display shortcuts</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="744"/>
+        <location filename="../source/src/mainwindow.cpp" line="743"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="63"/>
+        <location filename="../source/src/mainwindow.cpp" line="62"/>
         <source>Archive Manager</source>
         <translation>Archive Manager</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="235"/>
-        <location filename="../source/src/mainwindow.cpp" line="1097"/>
+        <location filename="../source/src/mainwindow.cpp" line="234"/>
+        <location filename="../source/src/mainwindow.cpp" line="1102"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="627"/>
+        <location filename="../source/src/mainwindow.cpp" line="626"/>
         <source>Compressing</source>
         <translation>Compressing</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="635"/>
+        <location filename="../source/src/mainwindow.cpp" line="634"/>
         <source>Extracting</source>
         <translation>Extracting</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="650"/>
+        <location filename="../source/src/mainwindow.cpp" line="649"/>
         <source>Compression failed</source>
         <translation>Compression failed</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="682"/>
+        <location filename="../source/src/mainwindow.cpp" line="681"/>
         <source>Extraction failed</source>
         <translation>Extraction failed</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="745"/>
+        <location filename="../source/src/mainwindow.cpp" line="744"/>
         <source>Add</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="746"/>
+        <location filename="../source/src/mainwindow.cpp" line="745"/>
         <source>Open in new window</source>
         <translation>Open in new window</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="882"/>
+        <location filename="../source/src/mainwindow.cpp" line="881"/>
         <source>Find directory</source>
         <translation>Find directory</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1260"/>
+        <location filename="../source/src/mainwindow.cpp" line="1268"/>
         <source>Wrong password</source>
         <translation>Wrong password</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="966"/>
-        <location filename="../source/src/mainwindow.cpp" line="994"/>
-        <location filename="../source/src/mainwindow.cpp" line="1037"/>
-        <location filename="../source/src/mainwindow.cpp" line="1293"/>
-        <location filename="../source/src/mainwindow.cpp" line="1304"/>
+        <location filename="../source/src/mainwindow.cpp" line="965"/>
+        <location filename="../source/src/mainwindow.cpp" line="993"/>
+        <location filename="../source/src/mainwindow.cpp" line="1036"/>
+        <location filename="../source/src/mainwindow.cpp" line="1301"/>
+        <location filename="../source/src/mainwindow.cpp" line="1312"/>
         <source>Damaged file, unable to extract</source>
         <translation>Damaged file, unable to extract</translation>
     </message>
@@ -414,21 +410,21 @@
         <translation type="obsolete">&quot;%1&quot; was changed on the disk, please import it again.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1096"/>
+        <location filename="../source/src/mainwindow.cpp" line="1101"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>The archive was changed on the disk, please import it again.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1289"/>
-        <location filename="../source/src/mainwindow.cpp" line="1300"/>
-        <location filename="../source/src/mainwindow.cpp" line="1795"/>
-        <location filename="../source/src/mainwindow.cpp" line="1806"/>
+        <location filename="../source/src/mainwindow.cpp" line="1297"/>
+        <location filename="../source/src/mainwindow.cpp" line="1308"/>
+        <location filename="../source/src/mainwindow.cpp" line="1803"/>
+        <location filename="../source/src/mainwindow.cpp" line="1814"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Insufficient space, please clear and retry</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1799"/>
-        <location filename="../source/src/mainwindow.cpp" line="1810"/>
+        <location filename="../source/src/mainwindow.cpp" line="1807"/>
+        <location filename="../source/src/mainwindow.cpp" line="1818"/>
         <source>Damaged file</source>
         <translation>Damaged file</translation>
     </message>
@@ -813,10 +809,6 @@
 </context>
 <context>
     <name>fileViewer</name>
-    <message>
-        <source>File Viewer</source>
-        <translation type="vanished">File Viewer</translation>
-    </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="390"/>
         <location filename="../source/src/fileViewer.cpp" line="884"/>
