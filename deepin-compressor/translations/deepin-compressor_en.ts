@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -215,7 +213,7 @@
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="103"/>
         <source>Wrong password</source>
-        <translation type="unfinished">Wrong password</translation>
+        <translation>Wrong password</translation>
     </message>
 </context>
 <context>
@@ -407,7 +405,7 @@
     </message>
     <message>
         <source>&quot;%1&quot; was changed on the disk, please import it again.</source>
-        <translation type="obsolete">&quot;%1&quot; was changed on the disk, please import it again.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1101"/>
@@ -833,7 +831,7 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="476"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation type="unfinished">yyyy/MM/dd hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

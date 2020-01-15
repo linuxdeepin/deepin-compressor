@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="170"/>
@@ -49,17 +47,17 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="90"/>
         <source>OK</source>
-        <translation>确 定</translation>
-    </message>
-    <message>
-        <location filename="../source/src/compresspage.cpp" line="138"/>
-        <source>%1 already exists.</source>
-        <translation>%1 已存在.</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>Do you want to replace it?</source>
-        <translation>是否替换?</translation>
+        <translation>您是否要替换？</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresspage.cpp" line="138"/>
+        <source>%1 already exists.</source>
+        <translation>已存在。</translation>
     </message>
 </context>
 <context>
@@ -67,7 +65,7 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="190"/>
         <source>Compress</source>
-        <translation>压 缩</translation>
+        <translation>压缩</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="118"/>
@@ -95,12 +93,6 @@
         <translation>加密文件</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="133"/>
-        <location filename="../source/src/compresssetting.cpp" line="141"/>
-        <source>Support 7z type only</source>
-        <translation>仅支持7z格式</translation>
-    </message>
-    <message>
         <location filename="../source/src/compresssetting.cpp" line="125"/>
         <source>Support zip, 7z type only</source>
         <translation>仅支持zip, 7z格式</translation>
@@ -116,6 +108,12 @@
         <translation>加密文件列表</translation>
     </message>
     <message>
+        <location filename="../source/src/compresssetting.cpp" line="133"/>
+        <location filename="../source/src/compresssetting.cpp" line="141"/>
+        <source>Support 7z type only</source>
+        <translation>仅支持7z格式</translation>
+    </message>
+    <message>
         <location filename="../source/src/compresssetting.cpp" line="139"/>
         <source>Split to volumes</source>
         <translation>分卷压缩</translation>
@@ -123,7 +121,7 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="578"/>
         <source>OK</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="260"/>
@@ -156,7 +154,7 @@
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="59"/>
         <source>Retry</source>
-        <translation>重 试</translation>
+        <translation>重试</translation>
     </message>
 </context>
 <context>
@@ -187,7 +185,7 @@
     <message>
         <location filename="../source/src/encodingpage.cpp" line="80"/>
         <source>Cancel</source>
-        <translation>取 消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="81"/>
@@ -200,7 +198,7 @@
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="44"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>此文件已加密,请输入解压密码</translation>
+        <translation>此文件已加密，请输入解压密码</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="47"/>
@@ -228,12 +226,12 @@
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="65"/>
         <source>Cancel</source>
-        <translation>取 消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="66"/>
         <source>Confirm</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
 </context>
 <context>
@@ -241,7 +239,7 @@
     <message>
         <location filename="../source/src/homepage.cpp" line="39"/>
         <source>Drag file or folder here</source>
-        <translation>拖拽文件(夹)到此</translation>
+        <translation>拖拽文件（夹）到此</translation>
     </message>
     <message>
         <location filename="../source/src/homepage.cpp" line="41"/>
@@ -267,7 +265,7 @@
     <message>
         <location filename="../main.cpp" line="47"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>归档管理器是一款提供对文件解压、压缩常用功能的软件工具。</translation>
+        <translation>归档管理器是一款快速、轻巧的解压缩软件，提供对文件解压缩的常用功能。</translation>
     </message>
 </context>
 <context>
@@ -326,6 +324,11 @@
         <translation>解压成功</translation>
     </message>
     <message>
+        <location filename="../source/src/mainwindow.cpp" line="233"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>“%1”已经发生变化，请重新导入文件。</translation>
+    </message>
+    <message>
         <location filename="../source/src/mainwindow.cpp" line="742"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>添加压缩文件到目录或在新窗口中打开该文件？</translation>
@@ -333,12 +336,12 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="321"/>
         <source>Display shortcuts</source>
-        <translation>显示快捷键预览</translation>
+        <translation>显示快捷键</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="743"/>
         <source>Cancel</source>
-        <translation>取 消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="62"/>
@@ -349,7 +352,7 @@
         <location filename="../source/src/mainwindow.cpp" line="234"/>
         <location filename="../source/src/mainwindow.cpp" line="1102"/>
         <source>OK</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="626"/>
@@ -359,7 +362,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="634"/>
         <source>Extracting</source>
-        <translation>正在解压</translation>
+        <translation>正在提取</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="649"/>
@@ -374,7 +377,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="744"/>
         <source>Add</source>
-        <translation>添 加</translation>
+        <translation>添加</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="745"/>
@@ -384,7 +387,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="881"/>
         <source>Find directory</source>
-        <translation>查找目录</translation>
+        <translation>解压到目录</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1268"/>
@@ -401,9 +404,8 @@
         <translation>文件损坏，无法解压</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="233"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1在磁盘上发生变动,请重新导入。</translation>
+        <source>&quot;%1&quot; was changed on the disk, please import it again.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1101"/>
@@ -416,7 +418,7 @@
         <location filename="../source/src/mainwindow.cpp" line="1803"/>
         <location filename="../source/src/mainwindow.cpp" line="1814"/>
         <source>Insufficient space, please clear and retry</source>
-        <translation>空间不足,请清理后重试</translation>
+        <translation>空间不足，请清理后重试</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1807"/>
@@ -508,7 +510,7 @@
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="128"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>yyyy年MM月dd日 hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -517,7 +519,7 @@
         <location filename="../source/src/progress.cpp" line="74"/>
         <location filename="../source/src/progress.cpp" line="172"/>
         <source>Cancel</source>
-        <translation>取 消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="70"/>
@@ -532,7 +534,7 @@
     <message>
         <location filename="../source/src/progress.cpp" line="173"/>
         <source>Confirm</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="169"/>
@@ -547,7 +549,7 @@
     <message>
         <location filename="../source/src/progress.cpp" line="135"/>
         <source>Extracting</source>
-        <translation>正在解压</translation>
+        <translation>正在提取</translation>
     </message>
 </context>
 <context>
@@ -561,7 +563,7 @@
         <location filename="../source/src/progressdialog.cpp" line="59"/>
         <location filename="../source/src/progressdialog.cpp" line="111"/>
         <source>Task</source>
-        <translation>任务</translation>
+        <translation>当前任务</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="60"/>
@@ -633,7 +635,7 @@
     <message>
         <location filename="../interface/queries.cpp" line="140"/>
         <source>Skip</source>
-        <translation>跳 过</translation>
+        <translation>跳过</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="139"/>
@@ -643,7 +645,7 @@
     <message>
         <location filename="../interface/queries.cpp" line="141"/>
         <source>Replace</source>
-        <translation>替 换</translation>
+        <translation>替换</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="144"/>
@@ -653,7 +655,7 @@
     <message>
         <location filename="../interface/queries.cpp" line="264"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>此文件已加密,请输入解压密码</translation>
+        <translation>此文件已加密，请输入解压密码</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="337"/>
@@ -665,7 +667,7 @@
         <location filename="../interface/queries.cpp" line="339"/>
         <location filename="../source/src/compresspage.cpp" line="117"/>
         <source>OK</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="116"/>
@@ -675,12 +677,12 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>取 消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="141"/>
         <source>Confirm</source>
-        <translation>确 定</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="427"/>
@@ -747,7 +749,7 @@
     <message>
         <location filename="../source/src/settingdialog.cpp" line="92"/>
         <source>Select All</source>
-        <translation>全 选</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="126"/>
@@ -788,19 +790,19 @@
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="40"/>
         <source>Extract</source>
-        <translation>解 压</translation>
+        <translation>解压</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="46"/>
         <location filename="../source/src/uncompresspage.cpp" line="108"/>
         <location filename="../source/src/uncompresspage.cpp" line="115"/>
         <source>Extract to:</source>
-        <translation>解压到:</translation>
+        <translation>解压到：</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
         <source>Find directory</source>
-        <translation>查找目录</translation>
+        <translation>解压到目录</translation>
     </message>
 </context>
 <context>
@@ -809,12 +811,12 @@
         <location filename="../source/src/fileViewer.cpp" line="390"/>
         <location filename="../source/src/fileViewer.cpp" line="884"/>
         <source>Extract</source>
-        <translation>提取文件</translation>
+        <translation>解压</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="391"/>
         <source>Extract here</source>
-        <translation>提取文件到当前文件夹</translation>
+        <translation>解压到当前文件夹</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="399"/>
@@ -829,7 +831,11 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="476"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation type="unfinished">yyyy年MM月dd日 hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
+    </message>
+    <message>
+        <source>yyyy/MM/dd/ hh:mm:ss</source>
+        <translation type="vanished">yyyy/MM/dd  hh:mm:ss</translation>
     </message>
 </context>
 </TS>
