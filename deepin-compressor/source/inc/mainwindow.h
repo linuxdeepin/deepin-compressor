@@ -43,7 +43,7 @@
 #include "archivesortfiltermodel.h"
 #include "batchextract.h"
 #include "batchcompress.h"
-
+#include <DFileWatcher>
 
 #define TITLE_FIXED_HEIGHT 50
 
@@ -215,4 +215,6 @@ private:
     bool m_initflag = false;
     int m_startTimer = 0;
     int m_watchTimer = 0;
+
+    DFileWatcher* m_fileManager = nullptr;
 };

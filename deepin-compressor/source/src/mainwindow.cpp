@@ -42,7 +42,6 @@
 //#include "archivejob.h"
 #include "jobs.h"
 #include "kprocess.h"
-#include <DFileWatcher>
 #include <DStandardPaths>
 #include <QStackedLayout>
 
@@ -1085,7 +1084,13 @@ void MainWindow::loadArchive(const QString &files)
 
 void MainWindow::WatcherFile(const QString &files)
 {
-    DFileWatcher *m_fileManager = new DFileWatcher(files, this);
+    if(m_fileManager)
+    {
+        delete m_fileManager;
+        m_fileManager = nullptr;
+    }
+
+    m_fileManager = new DFileWatcher(files, this);
     m_fileManager->startWatcher();
     qDebug() << m_fileManager->startWatcher() << "=" << files;
     connect(m_fileManager, &DFileWatcher::fileMoved, this, [=]() {  //监控压缩包，重命名时提示
@@ -1103,6 +1108,9 @@ void MainWindow::WatcherFile(const QString &files)
         dialog->getButton(0)->setGraphicsEffect(effect);
         dialog->exec();
         delete dialog;
+
+        delete m_fileManager;
+        m_fileManager = nullptr;
 
         m_pageid = PAGE_HOME;
         this->refreshPage();
