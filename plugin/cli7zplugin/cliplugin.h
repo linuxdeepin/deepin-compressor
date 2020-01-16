@@ -26,6 +26,7 @@ public:
     ~CliPlugin() override;
 
     void resetParsing() override;
+    bool isPasswordList();
     bool readListLine(const QString &line) override;
     bool readExtractLine(const QString &line) override;
     bool readDeleteLine(const QString &line) override;

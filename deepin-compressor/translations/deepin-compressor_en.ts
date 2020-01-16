@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -402,10 +404,6 @@
         <location filename="../source/src/mainwindow.cpp" line="1312"/>
         <source>Damaged file, unable to extract</source>
         <translation>Damaged file, unable to extract</translation>
-    </message>
-    <message>
-        <source>&quot;%1&quot; was changed on the disk, please import it again.</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1101"/>

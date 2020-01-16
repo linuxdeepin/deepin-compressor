@@ -1403,6 +1403,7 @@ void MainWindow::ExtractSinglePassword(QString password)
                 SIGNAL(percentfilename(KJob *, const QString &)),
                 this,
                 SLOT(SlotProgressFile(KJob *, const QString &)));
+        connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
 
         m_encryptionjob->start();
     }
@@ -1434,6 +1435,7 @@ void MainWindow::ExtractPassword(QString password)
                 this,
                 SLOT(SlotProgressFile(KJob *, const QString &)));
         connect(m_encryptionjob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
+        connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
 
         m_encryptionjob->start();
     }

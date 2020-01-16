@@ -2,7 +2,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QRegularExpression>
-
+#include "kprocess.h"
 
 //K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_cli7z.json")
 
@@ -98,6 +98,21 @@ void CliPlugin::fixDirectoryFullName()
     }
 }
 
+bool CliPlugin::isPasswordList()
+{
+    QStringList programLst = m_process->program();
+
+    foreach(auto str, programLst )
+    {
+        if(str.startsWith("-p"))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool CliPlugin::readListLine(const QString &line)
 {
     static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+
@@ -105,11 +120,23 @@ bool CliPlugin::readListLine(const QString &line)
     static const QLatin1String entryInfoDelimiter("----------");
 
     if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
+        //  7z l -slt -p123 1G压缩文件.7z.001
+        //  Open ERROR: Can not open the file as [7z] archive means password error
+        if(isPasswordList())
+        {
+            return true;
+        }
         emit error(tr("Listing the archive failed."));
         return false;
     }
 
     if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
+        //  7z l -slt -p123 1G压缩文件.7z.001
+        //  Open ERROR: Can not open the file as [7z] archive means password error
+        if(isPasswordList())
+        {
+            return true;
+        }
         emit error(tr("Listing the archive failed."));
         return false;
     }
