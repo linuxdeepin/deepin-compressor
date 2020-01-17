@@ -1064,7 +1064,7 @@ void MainWindow::loadArchive(const QString &files)
     WatcherFile(transFile);
 
     m_workstatus = WorkProcess;
-    m_loadfile = files;
+    m_loadfile = transFile;
     m_encryptiontype = Encryption_Load;
     m_loadjob = dynamic_cast< LoadJob * >(m_model->loadArchive(transFile, "", m_model));
 
