@@ -310,7 +310,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="600"/>
         <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1484"/>
+        <location filename="../source/src/mainwindow.cpp" line="1486"/>
         <source>Create New Archive</source>
         <translation>Create New Archive</translation>
     </message>
@@ -413,14 +413,14 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1297"/>
         <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1803"/>
-        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1805"/>
+        <location filename="../source/src/mainwindow.cpp" line="1816"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Insufficient space, please clear and retry</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1807"/>
-        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1809"/>
+        <location filename="../source/src/mainwindow.cpp" line="1820"/>
         <source>Damaged file</source>
         <translation>Damaged file</translation>
     </message>
@@ -683,22 +683,22 @@
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="427"/>
+        <location filename="../source/src/fileViewer.cpp" line="409"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="430"/>
+        <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Time modified</source>
         <translation>Time modified</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="433"/>
+        <location filename="../source/src/fileViewer.cpp" line="415"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="436"/>
+        <location filename="../source/src/fileViewer.cpp" line="418"/>
         <source>Size</source>
         <translation>Size</translation>
     </message>
@@ -806,30 +806,43 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="390"/>
-        <location filename="../source/src/fileViewer.cpp" line="884"/>
+        <location filename="../source/src/fileViewer.cpp" line="373"/>
+        <location filename="../source/src/fileViewer.cpp" line="645"/>
+        <location filename="../source/src/fileViewer.cpp" line="845"/>
         <source>Extract</source>
         <translation>Extract</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="391"/>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <location filename="../source/src/fileViewer.cpp" line="646"/>
         <source>Extract here</source>
         <translation>Extract here</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="399"/>
+        <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="460"/>
+        <location filename="../source/src/fileViewer.cpp" line="442"/>
         <source>item(s)</source>
         <translation>item(s)</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="476"/>
+        <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy/MM/dd hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="789"/>
+        <source>Extract</source>
+        <comment>slotDecompressRowDoubleClicked</comment>
+        <translation>Extract</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="790"/>
+        <source>Extract to current directory</source>
+        <translation>Extract to current directory</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

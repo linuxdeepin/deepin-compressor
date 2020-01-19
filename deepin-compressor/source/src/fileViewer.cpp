@@ -64,8 +64,8 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QPainterPath path;
     QPainterPath clipPath;
     QRect rect = option.rect;
-    rect.setY(rect.y()+1);
-    rect.setHeight(rect.height()-1);
+    rect.setY(rect.y() + 1);
+    rect.setHeight(rect.height() - 1);
 
     if (index.column() == 0) {
         rect.setX(rect.x());  // left margin
@@ -89,13 +89,11 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
-    if(ppathindex && *ppathindex > 0)
-    {
+    if (ppathindex && *ppathindex > 0) {
         if (row % 2) {
             painter->fillPath(path, palette.alternateBase());
         }
-    }
-    else {
+    } else {
         if (!(row % 2)) {
             painter->fillPath(path, palette.alternateBase());
         }
@@ -120,11 +118,11 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //            QIcon icon = qvariant_cast<QIcon>(value);
 //            decorationRect = QRect(QPoint(10, 0), pixmap.size());
             icon = qvariant_cast<QIcon>(value);
-            decorationRect = QRect(QPoint(0, 0), QSize(24,24));
+            decorationRect = QRect(QPoint(0, 0), QSize(24, 24));
         } else {
 //            decorationRect = QRect(QPoint(10, 0), pixmap.size());
             icon = QIcon(pixmap);
-            decorationRect = QRect(QPoint(0, 0), QSize(24,24));
+            decorationRect = QRect(QPoint(0, 0), QSize(24, 24));
         }
     } else {
         decorationRect = QRect();
@@ -139,8 +137,8 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
     QFontMetrics fm(opt.font);
     QRect displayRect;
-    displayRect.setX(decorationRect.x() + decorationRect.width() );
-    displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x() );
+    displayRect.setX(decorationRect.x() + decorationRect.width());
+    displayRect.setWidth(opt.rect.width() - decorationRect.width() - decorationRect.x());
     QString text = fm.elidedText(index.data(Qt::DisplayRole).toString(), opt.textElideMode, displayRect.width() - 18);
 
     // do the layout
@@ -152,9 +150,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         decorationRect.setX(decorationRect.x() + 8);
         decorationRect.setWidth(decorationRect.width() + 8);
         displayRect.setX(displayRect.x() + 16);
-    }
-    else
-    {
+    } else {
         displayRect.setX(displayRect.x() + 6);
     }
 
@@ -172,14 +168,11 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->setPen(option.palette.color(cg, QPalette::Text));
     }
     if (text.isEmpty() == false) {
-        if(index.column() == 0)
-        {
+        if (index.column() == 0) {
             QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
             pFont.setWeight(QFont::Weight::Medium);
             painter->setFont(pFont);
-        }
-        else
-        {
+        } else {
             QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T7);
             pFont.setWeight(QFont::Weight::Normal);
             painter->setFont(pFont);
@@ -234,8 +227,7 @@ void MyTableView::setPreviousButtonVisible(bool visible)
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::MouseButton::LeftButton)
-    {
+    if (e->button() == Qt::MouseButton::LeftButton) {
         dragpos = e->pos();
     }
     DTableView::mousePressEvent(e);
@@ -243,20 +235,17 @@ void MyTableView::mousePressEvent(QMouseEvent *e)
 
 void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
-    if(dragEnabled() == false)
-    {
+    if (dragEnabled() == false) {
         return;
     }
 
     QModelIndexList lst = selectedIndexes();
 
-    if(lst.size() < 1)
-    {
+    if (lst.size() < 1) {
         return;
     }
 
-    if (!(e->buttons() & Qt::MouseButton::LeftButton) || s)
-    {
+    if (!(e->buttons() & Qt::MouseButton::LeftButton) || s) {
         return;
     }
     if ((e->pos() - dragpos).manhattanLength() < QApplication::startDragDistance()) {
@@ -270,15 +259,11 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     QVariant value = lst[0].data(Qt::DecorationRole);
 
-    if (value.isValid() )
-    {
-        if(value.type() == QVariant::Pixmap)
-        {
+    if (value.isValid()) {
+        if (value.type() == QVariant::Pixmap) {
             drag->setPixmap(qvariant_cast<QPixmap>(value));
-        }
-        else if(value.type() == QVariant::Icon)
-        {
-            drag->setPixmap( (qvariant_cast<QIcon>(value)).pixmap(24,24) );
+        } else if (value.type() == QVariant::Icon) {
+            drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
         }
     }
 
@@ -298,8 +283,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     s = nullptr;
     qDebug() << "sigdragLeave";
 
-    if(result == Qt::DropAction::CopyAction)
-    {
+    if (result == Qt::DropAction::CopyAction) {
         emit sigdragLeave(m_path);
     }
 
@@ -323,8 +307,7 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     InitUI();
     InitConnection();
 
-    if(PAGE_COMPRESS == type)
-    {
+    if (PAGE_COMPRESS == type) {
         pTableViewFile->setDragEnabled(false);
     }
 }
@@ -373,7 +356,7 @@ void fileViewer::InitUI()
 //    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
 //    headerview->setPalette(pa);
     pTableViewFile->setFrameShape(DTableView::NoFrame);
-    pTableViewFile->setSelectionMode(  QAbstractItemView::ExtendedSelection );
+    pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 //    plabel->setText("     .. " + tr("Back"));
 //    DFontSizeManager::instance()->bind(plabel, DFontSizeManager::T6, QFont::Weight::Medium);
 ////    plabel->setAutoFillBackground(true);
@@ -392,7 +375,7 @@ void fileViewer::InitUI()
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
-    if(PAGE_COMPRESS == m_pagetype){
+    if (PAGE_COMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setFixedWidth(200);
@@ -410,8 +393,7 @@ void fileViewer::InitUI()
 
 void fileViewer::refreshTableview()
 {
-    if( false == curFileListModified)
-    {
+    if (false == curFileListModified) {
         pTableViewFile->setModel(firstmodel);
         pTableViewFile->setSelectionModel(firstSelectionModel);
 
@@ -459,7 +441,7 @@ void fileViewer::refreshTableview()
 
             item = new MyFileItem(QString::number(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) + " " + tr("item(s)"));
         } else {
-            item = new MyFileItem( Utils::humanReadableSize(fileinfo.size(), 1) );
+            item = new MyFileItem(Utils::humanReadableSize(fileinfo.size(), 1));
         }
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
         font.setWeight(QFont::Normal);
@@ -495,15 +477,12 @@ void fileViewer::refreshTableview()
 //    }
 }
 
-void fileViewer::restoreHeaderSort(const QString& currentPath)
+void fileViewer::restoreHeaderSort(const QString &currentPath)
 {
-    if(sortCache_.contains(currentPath))
-    {
-        pTableViewFile->header_->setSortIndicator( sortCache_[currentPath].sortRole, sortCache_[currentPath].sortOrder );
-    }
-    else
-    {
-         pTableViewFile->header_->setSortIndicator( -1, Qt::SortOrder::AscendingOrder );
+    if (sortCache_.contains(currentPath)) {
+        pTableViewFile->header_->setSortIndicator(sortCache_[currentPath].sortRole, sortCache_[currentPath].sortOrder);
+    } else {
+        pTableViewFile->header_->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
     }
 }
 
@@ -568,10 +547,8 @@ void fileViewer::DeleteCompressFile()
     }
 
     QStringList filelist;
-    foreach (unsigned int index, selectlist)
-    {
-        if(m_curfilelist.size() > index )
-        {
+    foreach (unsigned int index, selectlist) {
+        if (m_curfilelist.size() > index) {
             m_curfilelist.replace(index, QFileInfo(""));
         }
     }
@@ -621,28 +598,23 @@ void fileViewer::setSelectFiles(const QStringList &files)
 {
     QItemSelection selection;
 
-    foreach(auto file, files)
-    {
-        for(int i = 0; i < firstmodel->rowCount(); ++i)
-        {
-            QStandardItem* item = firstmodel->item(i);
-            if(item == nullptr)
-            {
+    foreach (auto file, files) {
+        for (int i = 0; i < firstmodel->rowCount(); ++i) {
+            QStandardItem *item = firstmodel->item(i);
+            if (item == nullptr) {
                 return;
             }
 
             QString itemStr = item->text();
 
-            if( itemStr != QFileInfo(file).fileName())
-            {
+            if (itemStr != QFileInfo(file).fileName()) {
                 continue;
             }
 
             QModelIndex index = firstmodel->index(i, 0);
 
-            QItemSelectionRange selectionRange(index, firstmodel->index(i, firstmodel->columnCount() -1));
-            if ( false == selection.contains(index) )
-            {
+            QItemSelectionRange selectionRange(index, firstmodel->index(i, firstmodel->columnCount() - 1));
+            if (false == selection.contains(index)) {
                 selection.push_back(selectionRange);
                 break;
             }
@@ -654,8 +626,7 @@ void fileViewer::setSelectFiles(const QStringList &files)
 
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
-    if (PAGE_COMPRESS == m_pagetype)
-    {
+    if (PAGE_COMPRESS == m_pagetype) {
         if (m_pathindex > 1) {
             m_pathindex--;
             m_indexmode = pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
@@ -667,11 +638,12 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
             refreshTableview();
             pTableViewFile->setPreviousButtonVisible(false);
         }
-    }
-    else
-    {
+    } else {
         m_pathindex--;
         if (0 == m_pathindex) {
+            m_pRightMenu->clear();
+            m_pRightMenu->addAction(tr("Extract"));
+            m_pRightMenu->addAction(tr("Extract here"));
             pTableViewFile->setRootIndex(QModelIndex());
             pTableViewFile->setPreviousButtonVisible(false);
             restoreHeaderSort(rootPathUnique);
@@ -681,7 +653,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
 //            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
             m_indexmode = m_decompressmodel->parent(m_indexmode);
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_indexmode));
-            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_indexmode);
+            Archive::Entry *entry = m_decompressmodel->entryForIndex(m_indexmode);
             restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
         }
     }
@@ -696,8 +668,7 @@ void fileViewer::showPlable()
 
 void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 {
-    if(m_pathindex == 0)
-    {
+    if (m_pathindex == 0) {
         SortInfo info;
         info.sortOrder = order;
         info.sortRole = logicalIndex;
@@ -705,11 +676,10 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
         return;
     }
 
-    QAbstractItemModel* model = pTableViewFile->model();
+    QAbstractItemModel *model = pTableViewFile->model();
 
-    MyFileSystemModel* fileModel = qobject_cast<MyFileSystemModel*>(model);
-    if(fileModel)
-    {
+    MyFileSystemModel *fileModel = qobject_cast<MyFileSystemModel *>(model);
+    if (fileModel) {
         SortInfo info;
         info.sortOrder = order;
         info.sortRole = logicalIndex;
@@ -718,10 +688,9 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
         return;
     }
 
-    QStandardItemModel* standModel = qobject_cast<QStandardItemModel*>(model);
+    QStandardItemModel *standModel = qobject_cast<QStandardItemModel *>(model);
 
-    if(standModel)
-    {
+    if (standModel) {
         SortInfo info;
         info.sortOrder = order;
         info.sortRole = logicalIndex;
@@ -729,21 +698,19 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
         return;
     }
 
-     ArchiveSortFilterModel* archiveModel = qobject_cast<ArchiveSortFilterModel*>(model);
+    ArchiveSortFilterModel *archiveModel = qobject_cast<ArchiveSortFilterModel *>(model);
 
-     if(archiveModel)
-     {
-         Archive::Entry *item = static_cast<Archive::Entry *>(m_indexmode.internalPointer());
-         if(item)
-         {
-             SortInfo info;
-             info.sortOrder = order;
-             info.sortRole = logicalIndex;
-             QString rootPath = zipPathUnique + MainWindow::getLoadFile() + "/" + item->fullPath();
-             sortCache_[rootPath] = info;
-             return;
-         }
-     }
+    if (archiveModel) {
+        Archive::Entry *item = static_cast<Archive::Entry *>(m_indexmode.internalPointer());
+        if (item) {
+            SortInfo info;
+            info.sortOrder = order;
+            info.sortRole = logicalIndex;
+            QString rootPath = zipPathUnique + MainWindow::getLoadFile() + "/" + item->fullPath();
+            sortCache_[rootPath] = info;
+            return;
+        }
+    }
 }
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
@@ -752,19 +719,16 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
 
-            QStandardItem* item = firstmodel->itemFromIndex(index);
+            QStandardItem *item = firstmodel->itemFromIndex(index);
             QString itemText = item->text().trimmed();
             int row = 0;
-            foreach(QFileInfo file, m_curfilelist)
-            {
-                if(file.fileName() == itemText)
-                {
+            foreach (QFileInfo file, m_curfilelist) {
+                if (file.fileName() == itemText) {
                     break;
                 }
                 row++;
             }
-            if(row >= m_curfilelist.count())
-            {
+            if (row >= m_curfilelist.count()) {
                 row = 0;
             }
             if (m_curfilelist.at(row).isDir()) {
@@ -777,9 +741,8 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 
 
                 QDir dir(m_curfilelist.at(row).filePath());
-                qDebug()<<dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-                if(0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count())
-                {
+                qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
                     showPlable();
                 }
 
@@ -822,21 +785,22 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
     if (index.isValid()) {
         qDebug() << m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index));
         if (0 == m_pathindex) {
+            m_pRightMenu->clear();
+            m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
+            m_pRightMenu->addAction(tr("Extract to current directory"));
             if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
                 m_decompressmodel->setPathIndex(&m_pathindex);
                 QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
                 pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
                 m_pathindex++;
                 m_indexmode = sourceindex;
-                Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+                Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
                 restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
-                if(0 == entry->entries().count())
-                {
+                if (0 == entry->entries().count()) {
                     showPlable();
                 }
 //
-            }
-            else {
+            } else {
                 emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
             }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
@@ -844,14 +808,12 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(sourceindex));
             m_pathindex++;
             m_indexmode = sourceindex;
-            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+            Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
             restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
-            if(0 == entry->entries().count())
-            {
+            if (0 == entry->entries().count()) {
                 showPlable();
             }
-        }
-        else {
+        } else {
             emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
         }
     }
@@ -862,10 +824,9 @@ void fileViewer::showRightMenu(const QPoint &pos)
     if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
-    if(m_pagetype == PAGE_COMPRESS && m_pathindex > 0)
-    {
+    if (m_pagetype == PAGE_COMPRESS && m_pathindex > 0) {
         //DoNothing
-    }else {
+    } else {
         m_pRightMenu->popup(QCursor::pos());
     }
 }

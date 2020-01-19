@@ -310,7 +310,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="600"/>
         <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1484"/>
+        <location filename="../source/src/mainwindow.cpp" line="1486"/>
         <source>Create New Archive</source>
         <translation>新建归档文件</translation>
     </message>
@@ -413,14 +413,14 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1297"/>
         <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1803"/>
-        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1805"/>
+        <location filename="../source/src/mainwindow.cpp" line="1816"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>空间不足，请清理后重试</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1807"/>
-        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1809"/>
+        <location filename="../source/src/mainwindow.cpp" line="1820"/>
         <source>Damaged file</source>
         <translation>原始文件已损坏</translation>
     </message>
@@ -683,22 +683,22 @@
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="427"/>
+        <location filename="../source/src/fileViewer.cpp" line="409"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="430"/>
+        <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Time modified</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="433"/>
+        <location filename="../source/src/fileViewer.cpp" line="415"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="436"/>
+        <location filename="../source/src/fileViewer.cpp" line="418"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
@@ -806,30 +806,43 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="390"/>
-        <location filename="../source/src/fileViewer.cpp" line="884"/>
+        <location filename="../source/src/fileViewer.cpp" line="373"/>
+        <location filename="../source/src/fileViewer.cpp" line="645"/>
+        <location filename="../source/src/fileViewer.cpp" line="845"/>
         <source>Extract</source>
         <translation>解压</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="391"/>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <location filename="../source/src/fileViewer.cpp" line="646"/>
         <source>Extract here</source>
         <translation>解压到当前文件夹</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="399"/>
+        <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="460"/>
+        <location filename="../source/src/fileViewer.cpp" line="442"/>
         <source>item(s)</source>
         <translation>项</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="476"/>
+        <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy/MM/dd hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="789"/>
+        <source>Extract</source>
+        <comment>slotDecompressRowDoubleClicked</comment>
+        <translation>提取</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="790"/>
+        <source>Extract to current directory</source>
+        <translation>提取到当前文件夹</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
