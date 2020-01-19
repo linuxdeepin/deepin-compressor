@@ -219,6 +219,12 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     QByteArray codec_name = detectEncode(str);
     //qDebug() << codec_name;
     if ("" == m_codecname) {
+
+        if( "windows-1252" == codec_name || "IBM855" == codec_name)
+        {
+            return str;
+        }
+
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
@@ -229,6 +235,7 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     }
     else if( "windows-1252" == codec_name || "IBM855" == codec_name)
     {
+        m_codecstr = codec_name;
         return str;
     }
     else if ("UTF-8" != codec_name) {
@@ -830,10 +837,19 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
     // Get statistic for entry. Used to get entry size and mtime.
     zip_stat_t statBuffer;
+
+    QByteArray  name;
+
     QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
     //qDebug() << m_codecstr;
-    QByteArray  name = codec->fromUnicode(entry.toLocal8Bit());
-
+    if(codec)
+    {
+        name = codec->fromUnicode(entry.toLocal8Bit());
+    }
+    else
+    {
+        name = entry.toLocal8Bit();
+    }
 
     if (zip_stat(archive, name.constData(), 0, &statBuffer) != 0) {
         if (isDirectory && zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOENT) {

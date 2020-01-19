@@ -115,6 +115,11 @@ void UnCompressPage::setdefaultpath(QString path)
     m_extractpath->setText(tr("Extract to:") + m_pathstr);
 }
 
+int UnCompressPage::getFileCount()
+{
+    return m_fileviewer->getFileCount();
+}
+
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;

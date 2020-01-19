@@ -126,6 +126,7 @@ public:
     int getPathIndex();
     void setFileList(const QStringList &files);
     void setSelectFiles(const QStringList &files);
+    int getFileCount();
     void setDecompressModel(ArchiveSortFilterModel *model);
 
     QVector<Archive::Entry *> filesAndRootNodesForIndexes(const QModelIndexList &list) const;

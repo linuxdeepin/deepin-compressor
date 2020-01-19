@@ -47,6 +47,7 @@ public:
     void setModel(ArchiveSortFilterModel *model);
     QString getDecompressPath();
     void setdefaultpath(QString path);
+    int getFileCount();
 
 
 signals:

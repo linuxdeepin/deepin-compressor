@@ -123,7 +123,7 @@ void CompressPage::showDialog()
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
 
-    dialog->moveToCenter();
+    //dialog->moveToCenter();
     dialog->exec();
     delete dialog;
     return;
@@ -140,7 +140,7 @@ int CompressPage::showReplaceDialog(QString name)
     dialog->addButton(QObject::tr("Cancel"));
     dialog->addButton(QObject::tr("Confirm"));
 
-    dialog->moveToCenter();
+    //dialog->moveToCenter();
 
     int res = dialog->exec();
     delete dialog;

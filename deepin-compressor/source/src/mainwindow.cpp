@@ -1030,6 +1030,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
 void MainWindow::slotLoadingFinished(KJob *job)
 {
+    m_homePage->spinnerStop();
     m_workstatus = WorkNone;
     if (job->error())
     {
@@ -1044,7 +1045,6 @@ void MainWindow::slotLoadingFinished(KJob *job)
     m_filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_UnCompressPage->setModel(m_filterModel);
 
-    m_homePage->spinnerStop();
     if (!m_isrightmenu)
     {
         m_pageid = PAGE_UNZIP;
@@ -2002,7 +2002,16 @@ void MainWindow::onTitleButtonPressed()
     case PAGE_UNZIP_SUCCESS:
     case PAGE_UNZIP_FAIL:
         m_CompressSuccess->clear();
-        m_pageid = PAGE_UNZIP;
+
+        if(m_UnCompressPage->getFileCount() < 1)
+        {
+            m_pageid = PAGE_HOME;
+        }
+        else
+        {
+            m_pageid = PAGE_UNZIP;
+        }
+
         refreshPage();
         break;
     default:

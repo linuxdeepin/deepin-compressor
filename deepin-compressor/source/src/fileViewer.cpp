@@ -624,6 +624,11 @@ void fileViewer::setSelectFiles(const QStringList &files)
     firstSelectionModel->select(selection, QItemSelectionModel::Select);
 }
 
+int fileViewer::getFileCount()
+{
+    return m_curfilelist.size();
+}
+
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
     if (PAGE_COMPRESS == m_pagetype) {
