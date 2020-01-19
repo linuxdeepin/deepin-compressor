@@ -44,7 +44,7 @@ void ProgressDialog::initUI()
     m_titlebar->setMenuVisible(false);
     m_titlebar->setIcon(QIcon::fromTheme("deepin-compressor"));
     m_titlebar->setFixedWidth(m_defaultWidth);
-    m_titlebar->setTitle( tr("%1 task(s) in progress").arg(1) );
+    m_titlebar->setTitle(tr("%1 task(s) in progress").arg(1));
     m_titlebar->setBackgroundTransparent(true);
 
     QVBoxLayout *contentlayout = new QVBoxLayout;
@@ -88,7 +88,7 @@ void ProgressDialog::initConnect()
 void ProgressDialog::slotextractpress(int index)
 {
     qDebug() << index;
-    if (0 == index) {
+    if (1 == index) {
         emit stopExtract();
     } else {
         exec();
@@ -133,7 +133,7 @@ void ProgressDialog::setFinished(const QString &path)
         m_filelable->setText(tr("Extraction successful") + ":" + tr("Extract to") + path);
         m_extractdialog->reject();
         //reject();
-		hide();
+        hide();
         emit extractSuccess();
     }
 }

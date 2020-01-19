@@ -310,7 +310,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="600"/>
         <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1484"/>
+        <location filename="../source/src/mainwindow.cpp" line="1486"/>
         <source>Create New Archive</source>
         <translation>Luo uusi arkisto</translation>
     </message>
@@ -413,14 +413,14 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1297"/>
         <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1803"/>
-        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1805"/>
+        <location filename="../source/src/mainwindow.cpp" line="1816"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Tila ei riitä, tee tilaa ja yritä uudelleen</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1807"/>
-        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1809"/>
+        <location filename="../source/src/mainwindow.cpp" line="1820"/>
         <source>Damaged file</source>
         <translation>Vaurioitunut tiedosto</translation>
     </message>
@@ -683,22 +683,22 @@
         <translation>Vahvista</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="427"/>
+        <location filename="../source/src/fileViewer.cpp" line="409"/>
         <source>Name</source>
         <translation>Nimi</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="430"/>
+        <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Time modified</source>
         <translation>Aikaa muutettu</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="433"/>
+        <location filename="../source/src/fileViewer.cpp" line="415"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="436"/>
+        <location filename="../source/src/fileViewer.cpp" line="418"/>
         <source>Size</source>
         <translation>Koko</translation>
     </message>
@@ -806,30 +806,43 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="390"/>
-        <location filename="../source/src/fileViewer.cpp" line="884"/>
+        <location filename="../source/src/fileViewer.cpp" line="373"/>
+        <location filename="../source/src/fileViewer.cpp" line="645"/>
+        <location filename="../source/src/fileViewer.cpp" line="845"/>
         <source>Extract</source>
         <translation>Pura</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="391"/>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <location filename="../source/src/fileViewer.cpp" line="646"/>
         <source>Extract here</source>
         <translation>Pura tänne</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="399"/>
+        <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="460"/>
+        <location filename="../source/src/fileViewer.cpp" line="442"/>
         <source>item(s)</source>
         <translation>kohdetta(s)</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="476"/>
+        <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>dd/MM/yyyy hh:mm:ss</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="789"/>
+        <source>Extract</source>
+        <comment>slotDecompressRowDoubleClicked</comment>
+        <translation type="unfinished">Pura</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="790"/>
+        <source>Extract to current directory</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
