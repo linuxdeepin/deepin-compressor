@@ -6,6 +6,9 @@
 
 QT       -= gui
 QT += dtkwidget
+
+QT += KArchive
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = bz2plugin
 TEMPLATE = lib
@@ -23,8 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += $$PWD/../../../deepin-compressor/source/inc/ \
-                $$PWD/../../../deepin-compressor/interface/
+INCLUDEPATH +=  $$PWD/../../../deepin-compressor/source/inc/ \
+                $$PWD/../../../deepin-compressor/interface/ \
+                /usr/include/KF5/KArchive
 SOURCES += \
         bz2plugin.cpp \
     ../singlefileplugin.cpp \

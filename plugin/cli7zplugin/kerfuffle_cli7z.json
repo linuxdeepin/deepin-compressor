@@ -36,9 +36,8 @@
         "Id": "kerfuffle_cli7z",
         "MimeTypes": [
             "application/x-7z-compressed",
-    "application/zip",
-    "application/x-cd-image",
-    "application/zip"
+    		"application/x-cd-image",
+                "application/zip"
         ],
         "Name": "P7zip plugin",
         "Name[ca@valencia]": "Connector del P7zip",

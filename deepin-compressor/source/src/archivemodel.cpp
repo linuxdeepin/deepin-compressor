@@ -368,11 +368,11 @@ bool ArchiveModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
 //}
 
 // For a rationale, see bugs #194241, #241967 and #355839
-QString ArchiveModel::cleanFileName(const QString &fileName)
+QString ArchiveModel::cleanFileName(const QString& fileName)
 {
     // Skip entries with filename "/" or "//" or "."
     // "." is present in ISO files.
-    QRegularExpression pattern(QStringLiteral("/+|\\."));
+    static QRegularExpression pattern(QStringLiteral("/+|\\."));
     QRegularExpressionMatch match;
     if (fileName.contains(pattern, &match) && match.captured() == fileName) {
         qDebug() << "Skipping entry with filename" << fileName;

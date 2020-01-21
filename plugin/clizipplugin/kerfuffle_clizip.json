@@ -36,7 +36,7 @@
         "Id": "kerfuffle_clizip",
         "MimeTypes": [
             "application/x-java-archive",
-    "application/zip"
+            "application/zip"
         ],
         "Name": "Info-zip plugin",
         "Name[ca@valencia]": "Connector de l'Info-zip",

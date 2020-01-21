@@ -237,6 +237,17 @@ void CompressSetting::InitConnection()
     connect(m_typemenu, &DMenu::triggered, this, &CompressSetting::ontypeChanged);
 }
 
+void CompressSetting::initWidget()
+{
+    if (m_nextbutton == nullptr)
+    {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+
+        InitUI();
+        InitConnection();
+    }
+}
+
 void CompressSetting::showRightMenu(QMouseEvent * /*e*/)
 {
     QPoint pos;
@@ -363,12 +374,7 @@ void CompressSetting::setTypeImage(QString type)
 
 void CompressSetting::setDefaultPath(QString path)
 {
-    if (m_nextbutton == nullptr)
-    {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
-        InitUI();
-        InitConnection();
-    }
+    initWidget();
 
     m_savepath->setText(path);
     QUrl dir(path);
@@ -377,12 +383,7 @@ void CompressSetting::setDefaultPath(QString path)
 
 void CompressSetting::setDefaultName(QString name)
 {
-    if (m_nextbutton == nullptr)
-    {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
-        InitUI();
-        InitConnection();
-    }
+    initWidget();
 
     onAdvanceButtonClicked(m_moresetbutton->isChecked());
     m_filename->setText(name);
@@ -446,12 +447,7 @@ bool CompressSetting::checkfilename(QString str)
 
 void CompressSetting::showEvent(QShowEvent *event)
 {
-    if (m_nextbutton == nullptr)
-    {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
-        InitUI();
-        InitConnection();
-    }
+    initWidget();
 
     DWidget::showEvent(event);
 }

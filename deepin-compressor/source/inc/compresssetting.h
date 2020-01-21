@@ -60,6 +60,7 @@ public:
 
     void InitUI();
     void InitConnection();
+    void initWidget();
 
     void setTypeImage(QString type);
     void setDefaultPath(QString path);
