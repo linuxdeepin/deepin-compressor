@@ -121,22 +121,22 @@
         <translation>Suddividi in volumi</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="578"/>
+        <location filename="../source/src/compresssetting.cpp" line="574"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="260"/>
+        <location filename="../source/src/compresssetting.cpp" line="271"/>
         <source>Please enter the path</source>
         <translation>Inserisci il percorso</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="254"/>
+        <location filename="../source/src/compresssetting.cpp" line="265"/>
         <source>Invalid file name</source>
         <translation>Nome file non valido</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="266"/>
+        <location filename="../source/src/compresssetting.cpp" line="277"/>
         <source>The path does not exist, please retry</source>
         <translation>Il percorso non esiste, riprova</translation>
     </message>
@@ -400,7 +400,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="965"/>
         <location filename="../source/src/mainwindow.cpp" line="993"/>
-        <location filename="../source/src/mainwindow.cpp" line="1036"/>
+        <location filename="../source/src/mainwindow.cpp" line="1037"/>
         <location filename="../source/src/mainwindow.cpp" line="1301"/>
         <location filename="../source/src/mainwindow.cpp" line="1312"/>
         <source>Damaged file, unable to extract</source>
@@ -808,14 +808,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <name>fileViewer</name>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="373"/>
-        <location filename="../source/src/fileViewer.cpp" line="645"/>
-        <location filename="../source/src/fileViewer.cpp" line="845"/>
+        <location filename="../source/src/fileViewer.cpp" line="650"/>
+        <location filename="../source/src/fileViewer.cpp" line="850"/>
         <source>Extract</source>
         <translation>Estrai</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="374"/>
-        <location filename="../source/src/fileViewer.cpp" line="646"/>
+        <location filename="../source/src/fileViewer.cpp" line="651"/>
         <source>Extract here</source>
         <translation>Estrai qui</translation>
     </message>
@@ -835,13 +835,13 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="789"/>
+        <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation type="unfinished">Estrai</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="790"/>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
         <source>Extract to current directory</source>
         <translation type="unfinished"></translation>
     </message>
