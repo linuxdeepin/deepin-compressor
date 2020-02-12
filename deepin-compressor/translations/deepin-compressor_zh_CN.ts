@@ -59,7 +59,7 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>%1 already exists.</source>
-        <translation>已存在。</translation>
+        <translation>%1 已存在。</translation>
     </message>
 </context>
 <context>
@@ -364,7 +364,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="634"/>
         <source>Extracting</source>
-        <translation>正在提取</translation>
+        <translation>正在解压</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="649"/>
@@ -547,7 +547,7 @@
     <message>
         <location filename="../source/src/progress.cpp" line="135"/>
         <source>Extracting</source>
-        <translation>正在提取</translation>
+        <translation>正在解压</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@
         <location filename="../source/src/progressdialog.cpp" line="60"/>
         <location filename="../source/src/progressdialog.cpp" line="117"/>
         <source>Extracting</source>
-        <translation>正在提取</translation>
+        <translation>正在解压</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
@@ -819,6 +819,11 @@
         <translation>解压到当前文件夹</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>提取到当前文件夹</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>删除</translation>
@@ -838,11 +843,6 @@
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>提取</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation>提取到当前文件夹</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

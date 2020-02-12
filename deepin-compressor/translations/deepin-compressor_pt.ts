@@ -11,7 +11,7 @@
     <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd//MM/aaaa hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="170"/>
@@ -97,7 +97,7 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="125"/>
         <source>Support zip, 7z type only</source>
-        <translation>Apenas suporta o tipo zip, 7z</translation>
+        <translation>Apenas suporta o tipo zip e 7z</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="130"/>
@@ -508,7 +508,7 @@
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="128"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd//MM/aaaa hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -819,6 +819,11 @@
         <translation>Extrair aqui</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Extrair para o directório atual</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
@@ -831,22 +836,17 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd//MM/aaaa hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Extrair</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrair</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
-        <translation type="vanished">dd//MM/aaaa hh:mm:ss</translation>
+        <translation type="vanished">yyyy/MM/dd  hh:mm:ss</translation>
     </message>
 </context>
 </TS>

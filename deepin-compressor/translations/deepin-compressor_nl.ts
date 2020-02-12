@@ -577,7 +577,7 @@
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extract to</source>
-        <translation>Uitpakken naar</translation>
+        <translation>Uitpakken in</translation>
     </message>
 </context>
 <context>
@@ -795,7 +795,7 @@
         <location filename="../source/src/uncompresspage.cpp" line="108"/>
         <location filename="../source/src/uncompresspage.cpp" line="115"/>
         <source>Extract to:</source>
-        <translation>Uitpakken naar:</translation>
+        <translation>Uitpakken in:</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
@@ -819,6 +819,11 @@
         <translation>Hier uitpakken</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Uitpakken in huidige map</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
@@ -837,12 +842,7 @@
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Uitpakken</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Uitpakken</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

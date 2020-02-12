@@ -11,7 +11,7 @@
     <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>yyyy/AA/gg ss:ss:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="170"/>
@@ -819,6 +819,11 @@
         <translation>Buraya çıkart</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Mevcut dizine çıkart</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Sil</translation>
@@ -837,12 +842,7 @@
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Çıkart</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkart</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

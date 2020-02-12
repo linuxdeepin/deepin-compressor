@@ -819,6 +819,11 @@
         <translation>Extrair aqui</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Extrair no diretório atual</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Excluir</translation>
@@ -837,12 +842,7 @@
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Extrair</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrair</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

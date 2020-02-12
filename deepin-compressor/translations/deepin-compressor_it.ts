@@ -192,7 +192,7 @@
     <message>
         <location filename="../source/src/encodingpage.cpp" line="81"/>
         <source>Select Character Encoding</source>
-        <translation>Seleziona Codifica caratteri</translation>
+        <translation>Seleziona  la codifica dei caratteri</translation>
     </message>
 </context>
 <context>
@@ -820,6 +820,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Estrai qui</translation>
     </message>
     <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Estrai nella cartella corrente</translation>
+    </message>
+    <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
         <translation>Elimina</translation>
@@ -838,12 +843,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Estrai</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Estrai</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>

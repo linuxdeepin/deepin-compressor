@@ -49,7 +49,7 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="90"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
@@ -77,7 +77,7 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="103"/>
         <source>Create New Archive</source>
-        <translation>Crear nuevo Archivo</translation>
+        <translation>Crear nuevo archivo</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="112"/>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="62"/>
         <source>Archive Manager</source>
-        <translation>Administrador de Archivos</translation>
+        <translation>Administrador de archivos</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
@@ -389,7 +389,7 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="881"/>
         <source>Find directory</source>
-        <translation>Buscar directorio</translation>
+        <translation>Buscar carpeta</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1268"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="46"/>
         <source>Directory</source>
-        <translation>Directorio</translation>
+        <translation>Carpeta</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="47"/>
@@ -670,7 +670,7 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="116"/>
         <source>Please add files to the top-level directory</source>
-        <translation>Agregue archivos al directorio de nivel superior</translation>
+        <translation>Agregue archivos a la carpeta de nivel superior</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="140"/>
@@ -753,7 +753,7 @@
         <location filename="../source/src/settingdialog.cpp" line="126"/>
         <location filename="../source/src/settingdialog.cpp" line="156"/>
         <source>Current directory</source>
-        <translation>Directorio actual</translation>
+        <translation>Carpeta actual</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="93"/>
@@ -769,7 +769,7 @@
         <location filename="../source/src/settingdialog.cpp" line="126"/>
         <location filename="../source/src/settingdialog.cpp" line="166"/>
         <source>Other directory</source>
-        <translation>Otro directoriio</translation>
+        <translation>Otro carpeta</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="126"/>
@@ -800,7 +800,7 @@
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
         <source>Find directory</source>
-        <translation>Buscar directori</translation>
+        <translation>Buscar carpeta</translation>
     </message>
 </context>
 <context>
@@ -817,6 +817,11 @@
         <location filename="../source/src/fileViewer.cpp" line="651"/>
         <source>Extract here</source>
         <translation>Extraer aquí</translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <source>Extract to current directory</source>
+        <translation>Extraer a la carpeta actual</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
@@ -837,12 +842,7 @@
         <location filename="../source/src/fileViewer.cpp" line="794"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation type="unfinished">Extraer</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
-        <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraer</translation>
     </message>
     <message>
         <source>yyyy/MM/dd/ hh:mm:ss</source>
