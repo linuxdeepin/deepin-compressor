@@ -215,6 +215,10 @@ void Job::onFinished(bool result)
     {
         setError(KJob::UserDefinedError);
     }
+    else if(m_archiveInterface && m_archiveInterface->isAnyFileExtracted() == false)
+    {
+        setError(KJob::UserSkiped);
+    }
     else
     {
         setError(KJob::NoError);

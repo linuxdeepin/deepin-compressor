@@ -583,6 +583,13 @@ void MainWindow::refreshPage()
     switch (m_pageid)
     {
     case PAGE_HOME:
+
+        if(m_fileManager)
+        {
+            delete m_fileManager;
+            m_fileManager = nullptr;
+        }
+
         m_openAction->setEnabled(true);
         setAcceptDrops(true);
         m_titlebutton->setVisible(false);
@@ -656,7 +663,7 @@ void MainWindow::refreshPage()
     case PAGE_UNZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
-        m_CompressSuccess->setstringinfo(tr("Extraction successful"));
+        //m_CompressSuccess->setstringinfo(tr("Extraction successful"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -1279,39 +1286,33 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_encryptionjob = nullptr;
     }
 
-    if ((PAGE_ENCRYPTION == m_pageid) && (job->error() && job->error() != KJob::KilledJobError))
+    int errorCode = job->error();
+
+    if ((PAGE_ENCRYPTION == m_pageid) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) )
     {
         // do noting:wrong password
     }
-    else if (job->error() && job->error() != KJob::KilledJobError)
+    else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped))
     {
         if (m_progressdialog->isshown())
         {
             m_progressdialog->hide();
             // m_progressdialog->reject();
         }
-        if (m_pathstore.left(6) == "/media")
+
+        if (m_pathstore.left(6) == "/media" && getMediaFreeSpace() <= 50)
         {
-            if (getMediaFreeSpace() <= 50)
-            {
-                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
-            }
-            else
-            {
-                m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
-            }
+            m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
+        }
+        else if (getDiskFreeSpace() <= 50)
+        {
+            m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
         }
         else
         {
-            if (getDiskFreeSpace() <= 50)
-            {
-                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
-            }
-            else
-            {
-                m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
-            }
+            m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
         }
+
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
@@ -1345,6 +1346,14 @@ void MainWindow::slotExtractionDone(KJob *job)
     else
     {
         m_pageid = PAGE_UNZIP_SUCCESS;
+        if(errorCode == KJob::UserSkiped)
+        {
+            m_CompressSuccess->setstringinfo(tr("Skipped all files"));
+        }
+        else
+        {
+            m_CompressSuccess->setstringinfo(tr("Extraction successful"));
+        }
         refreshPage();
     }
 }
@@ -2012,7 +2021,7 @@ void MainWindow::onTitleButtonPressed()
             m_pageid = PAGE_UNZIP;
         }
 
-        refreshPage();
+       refreshPage();
         break;
     default:
         break;

@@ -308,20 +308,20 @@
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="600"/>
-        <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1486"/>
+        <location filename="../source/src/mainwindow.cpp" line="607"/>
+        <location filename="../source/src/mainwindow.cpp" line="617"/>
+        <location filename="../source/src/mainwindow.cpp" line="1495"/>
         <source>Create New Archive</source>
         <translation>Luo uusi arkisto</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="640"/>
+        <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compression successful</source>
         <translation>Pakkaus onnistunut</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="367"/>
-        <location filename="../source/src/mainwindow.cpp" line="659"/>
+        <location filename="../source/src/mainwindow.cpp" line="1355"/>
         <source>Extraction successful</source>
         <translation>Purkaminen onnistui</translation>
     </message>
@@ -331,7 +331,7 @@
         <translation>%1 on muuttunut levyllä, tuo se uudelleen.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="742"/>
+        <location filename="../source/src/mainwindow.cpp" line="749"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Haluatko lisätä arkiston luetteloon vai avata se uudessa ikkunassa?</translation>
     </message>
@@ -341,7 +341,7 @@
         <translation>Näytä kuvakkeet</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="743"/>
+        <location filename="../source/src/mainwindow.cpp" line="750"/>
         <source>Cancel</source>
         <translation>Peru</translation>
     </message>
@@ -352,75 +352,79 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1102"/>
+        <location filename="../source/src/mainwindow.cpp" line="1109"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="626"/>
+        <location filename="../source/src/mainwindow.cpp" line="633"/>
         <source>Compressing</source>
         <translation>Pakataan</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="634"/>
+        <location filename="../source/src/mainwindow.cpp" line="641"/>
         <source>Extracting</source>
         <translation>Purkaminen</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="649"/>
+        <location filename="../source/src/mainwindow.cpp" line="656"/>
         <source>Compression failed</source>
         <translation>Pakkaus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="681"/>
+        <location filename="../source/src/mainwindow.cpp" line="688"/>
         <source>Extraction failed</source>
         <translation>Purku epäonnistui</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="744"/>
+        <location filename="../source/src/mainwindow.cpp" line="751"/>
         <source>Add</source>
         <translation>Lisää</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="745"/>
+        <location filename="../source/src/mainwindow.cpp" line="752"/>
         <source>Open in new window</source>
         <translation>Avaa uudessa ikkunassa</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="881"/>
+        <location filename="../source/src/mainwindow.cpp" line="888"/>
         <source>Find directory</source>
         <translation>Etsi hakemisto</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1268"/>
+        <location filename="../source/src/mainwindow.cpp" line="1275"/>
         <source>Wrong password</source>
         <translation>Väärä salasana</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="965"/>
-        <location filename="../source/src/mainwindow.cpp" line="993"/>
-        <location filename="../source/src/mainwindow.cpp" line="1037"/>
-        <location filename="../source/src/mainwindow.cpp" line="1301"/>
-        <location filename="../source/src/mainwindow.cpp" line="1312"/>
+        <location filename="../source/src/mainwindow.cpp" line="972"/>
+        <location filename="../source/src/mainwindow.cpp" line="1000"/>
+        <location filename="../source/src/mainwindow.cpp" line="1044"/>
+        <location filename="../source/src/mainwindow.cpp" line="1313"/>
         <source>Damaged file, unable to extract</source>
         <translation>Vaurioitunut tiedosto, ei voi purkaa</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1101"/>
+        <location filename="../source/src/mainwindow.cpp" line="1108"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Paketti on muuttunut levyllä, tuo se uudelleen.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1297"/>
-        <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1805"/>
-        <location filename="../source/src/mainwindow.cpp" line="1816"/>
+        <location filename="../source/src/mainwindow.cpp" line="1305"/>
+        <location filename="../source/src/mainwindow.cpp" line="1309"/>
+        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1825"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Tila ei riitä, tee tilaa ja yritä uudelleen</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1809"/>
-        <location filename="../source/src/mainwindow.cpp" line="1820"/>
+        <location filename="../source/src/mainwindow.cpp" line="1351"/>
+        <source>Skipped all files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1829"/>
         <source>Damaged file</source>
         <translation>Vaurioitunut tiedosto</translation>
     </message>

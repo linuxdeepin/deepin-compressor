@@ -47,6 +47,8 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     Q_UNUSED(files)
     Q_UNUSED(options)
 
+    bAnyFileExtracted = false;
+
     QString outputFileName = destinationDirectory;
     if (!destinationDirectory.endsWith(QLatin1Char('/'))) {
         outputFileName += QLatin1Char('/');
@@ -99,6 +101,8 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     }
 
     delete device;
+
+    bAnyFileExtracted = true;
 
     return true;
 }

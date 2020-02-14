@@ -167,6 +167,7 @@ public:
     virtual bool isLocked() const;
 
     virtual bool isUserCancel() const;
+    bool isAnyFileExtracted() const;
 
 Q_SIGNALS:
 
@@ -221,6 +222,7 @@ private:
 
 protected:
     bool userCancel = false;
+    bool bAnyFileExtracted = true; // 判断是否有文件被解压出来（可能由于文件已经存在被用户取消解压或跳过）
 
 private Q_SLOTS:
     void onEntry(Archive::Entry *archiveEntry);
@@ -270,7 +272,7 @@ protected:
     OperationMode m_operationMode = NoOperation;
 
 private Q_SLOTS:
-    void onEntryRemoved(const QString &path);
+    void onEntryRemoved(const QString &path);   
 };
 
 

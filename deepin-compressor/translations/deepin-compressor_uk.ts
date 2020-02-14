@@ -308,20 +308,20 @@
         <translation>Параметри</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="600"/>
-        <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1486"/>
+        <location filename="../source/src/mainwindow.cpp" line="607"/>
+        <location filename="../source/src/mainwindow.cpp" line="617"/>
+        <location filename="../source/src/mainwindow.cpp" line="1495"/>
         <source>Create New Archive</source>
         <translation>Створити архів</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="640"/>
+        <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compression successful</source>
         <translation>Успішне стискання</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="367"/>
-        <location filename="../source/src/mainwindow.cpp" line="659"/>
+        <location filename="../source/src/mainwindow.cpp" line="1355"/>
         <source>Extraction successful</source>
         <translation>Успішне видобування</translation>
     </message>
@@ -331,7 +331,7 @@
         <translation>%1 було змінено на диску. Будь ласка, імпортуйте його знову.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="742"/>
+        <location filename="../source/src/mainwindow.cpp" line="749"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Хочете додати архів до списку чи відкрити його у новому вікні?</translation>
     </message>
@@ -341,7 +341,7 @@
         <translation>Показати клавіатурні скорочення</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="743"/>
+        <location filename="../source/src/mainwindow.cpp" line="750"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -352,75 +352,79 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1102"/>
+        <location filename="../source/src/mainwindow.cpp" line="1109"/>
         <source>OK</source>
         <translation>Гаразд</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="626"/>
+        <location filename="../source/src/mainwindow.cpp" line="633"/>
         <source>Compressing</source>
         <translation>Стискання</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="634"/>
+        <location filename="../source/src/mainwindow.cpp" line="641"/>
         <source>Extracting</source>
         <translation>Видобування</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="649"/>
+        <location filename="../source/src/mainwindow.cpp" line="656"/>
         <source>Compression failed</source>
         <translation>Помилка під час стискання</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="681"/>
+        <location filename="../source/src/mainwindow.cpp" line="688"/>
         <source>Extraction failed</source>
         <translation>Помилка під час розпаковування</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="744"/>
+        <location filename="../source/src/mainwindow.cpp" line="751"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="745"/>
+        <location filename="../source/src/mainwindow.cpp" line="752"/>
         <source>Open in new window</source>
         <translation>Відкрити у новому вікні</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="881"/>
+        <location filename="../source/src/mainwindow.cpp" line="888"/>
         <source>Find directory</source>
         <translation>Знайти каталог</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1268"/>
+        <location filename="../source/src/mainwindow.cpp" line="1275"/>
         <source>Wrong password</source>
         <translation>Помилковий пароль</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="965"/>
-        <location filename="../source/src/mainwindow.cpp" line="993"/>
-        <location filename="../source/src/mainwindow.cpp" line="1037"/>
-        <location filename="../source/src/mainwindow.cpp" line="1301"/>
-        <location filename="../source/src/mainwindow.cpp" line="1312"/>
+        <location filename="../source/src/mainwindow.cpp" line="972"/>
+        <location filename="../source/src/mainwindow.cpp" line="1000"/>
+        <location filename="../source/src/mainwindow.cpp" line="1044"/>
+        <location filename="../source/src/mainwindow.cpp" line="1313"/>
         <source>Damaged file, unable to extract</source>
         <translation>Пошкоджений файл, неможливо видобути</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1101"/>
+        <location filename="../source/src/mainwindow.cpp" line="1108"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Архів було змінено на диску. Будь ласка, імпортуйте його знову.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1297"/>
-        <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1805"/>
-        <location filename="../source/src/mainwindow.cpp" line="1816"/>
+        <location filename="../source/src/mainwindow.cpp" line="1305"/>
+        <location filename="../source/src/mainwindow.cpp" line="1309"/>
+        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1825"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Недостатньо місця. Будь ласка, звільніть місце і повторіть спробу</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1809"/>
-        <location filename="../source/src/mainwindow.cpp" line="1820"/>
+        <location filename="../source/src/mainwindow.cpp" line="1351"/>
+        <source>Skipped all files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1829"/>
         <source>Damaged file</source>
         <translation>Пошкоджений файл</translation>
     </message>

@@ -654,6 +654,8 @@ bool LibzipPlugin::doKill()
 
 bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+    bAnyFileExtracted = false;
+
     const bool extractAll = files.isEmpty();
     const bool removeRootNode = options.isDragAndDropEnabled();
     m_extractionOptions = options;
@@ -833,6 +835,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             emit error(tr("Failed to create directory: %1"));
             return false;
         }
+        bAnyFileExtracted = true;
     }
 
     // Get statistic for entry. Used to get entry size and mtime.
@@ -1022,6 +1025,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         file.close();
         //extract = true;
+        bAnyFileExtracted = true;
     }
 
     // Set mtime for entry.

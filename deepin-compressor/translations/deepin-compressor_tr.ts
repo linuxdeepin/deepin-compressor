@@ -308,20 +308,20 @@
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="600"/>
-        <location filename="../source/src/mainwindow.cpp" line="610"/>
-        <location filename="../source/src/mainwindow.cpp" line="1486"/>
+        <location filename="../source/src/mainwindow.cpp" line="607"/>
+        <location filename="../source/src/mainwindow.cpp" line="617"/>
+        <location filename="../source/src/mainwindow.cpp" line="1495"/>
         <source>Create New Archive</source>
         <translation>Yeni Arşiv Oluştur</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="640"/>
+        <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compression successful</source>
         <translation>Sıkıştırma başarılı</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="367"/>
-        <location filename="../source/src/mainwindow.cpp" line="659"/>
+        <location filename="../source/src/mainwindow.cpp" line="1355"/>
         <source>Extraction successful</source>
         <translation>Çıkarma başarılı</translation>
     </message>
@@ -331,7 +331,7 @@
         <translation>%1 diskte değiştirildi, lütfen tekrar içe aktarın.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="742"/>
+        <location filename="../source/src/mainwindow.cpp" line="749"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Arşivi listeye eklemek mi yoksa yeni pencerede mi açmak istiyorsunuz?</translation>
     </message>
@@ -341,7 +341,7 @@
         <translation>Kısayolları göster</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="743"/>
+        <location filename="../source/src/mainwindow.cpp" line="750"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
@@ -352,75 +352,79 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1102"/>
+        <location filename="../source/src/mainwindow.cpp" line="1109"/>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="626"/>
+        <location filename="../source/src/mainwindow.cpp" line="633"/>
         <source>Compressing</source>
         <translation>Sıkıştırılıyor</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="634"/>
+        <location filename="../source/src/mainwindow.cpp" line="641"/>
         <source>Extracting</source>
         <translation>Çıkarılıyor</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="649"/>
+        <location filename="../source/src/mainwindow.cpp" line="656"/>
         <source>Compression failed</source>
         <translation>Sıkıştırma başarısız</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="681"/>
+        <location filename="../source/src/mainwindow.cpp" line="688"/>
         <source>Extraction failed</source>
         <translation>Çıkarma başarısız</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="744"/>
+        <location filename="../source/src/mainwindow.cpp" line="751"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="745"/>
+        <location filename="../source/src/mainwindow.cpp" line="752"/>
         <source>Open in new window</source>
         <translation>Yeni pencerede aç</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="881"/>
+        <location filename="../source/src/mainwindow.cpp" line="888"/>
         <source>Find directory</source>
         <translation>Dizin bul</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1268"/>
+        <location filename="../source/src/mainwindow.cpp" line="1275"/>
         <source>Wrong password</source>
         <translation>Yanlış parola</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="965"/>
-        <location filename="../source/src/mainwindow.cpp" line="993"/>
-        <location filename="../source/src/mainwindow.cpp" line="1037"/>
-        <location filename="../source/src/mainwindow.cpp" line="1301"/>
-        <location filename="../source/src/mainwindow.cpp" line="1312"/>
+        <location filename="../source/src/mainwindow.cpp" line="972"/>
+        <location filename="../source/src/mainwindow.cpp" line="1000"/>
+        <location filename="../source/src/mainwindow.cpp" line="1044"/>
+        <location filename="../source/src/mainwindow.cpp" line="1313"/>
         <source>Damaged file, unable to extract</source>
         <translation>Bozuk dosya, çıkarılamıyor</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1101"/>
+        <location filename="../source/src/mainwindow.cpp" line="1108"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arşiv diskte değiştirildi, lütfen tekrar içe aktarın.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1297"/>
-        <location filename="../source/src/mainwindow.cpp" line="1308"/>
-        <location filename="../source/src/mainwindow.cpp" line="1805"/>
-        <location filename="../source/src/mainwindow.cpp" line="1816"/>
+        <location filename="../source/src/mainwindow.cpp" line="1305"/>
+        <location filename="../source/src/mainwindow.cpp" line="1309"/>
+        <location filename="../source/src/mainwindow.cpp" line="1814"/>
+        <location filename="../source/src/mainwindow.cpp" line="1825"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Yetersiz alan, lütfen temizleyin ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1809"/>
-        <location filename="../source/src/mainwindow.cpp" line="1820"/>
+        <location filename="../source/src/mainwindow.cpp" line="1351"/>
+        <source>Skipped all files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="1818"/>
+        <location filename="../source/src/mainwindow.cpp" line="1829"/>
         <source>Damaged file</source>
         <translation>Bozuk dosya</translation>
     </message>

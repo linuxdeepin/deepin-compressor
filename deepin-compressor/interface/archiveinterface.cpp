@@ -267,6 +267,11 @@ bool ReadOnlyArchiveInterface::isUserCancel() const
     return userCancel;
 }
 
+bool ReadOnlyArchiveInterface::isAnyFileExtracted() const
+{
+    return bAnyFileExtracted;
+}
+
 bool ReadWriteArchiveInterface::isReadOnly() const
 {
     if (isLocked()) {

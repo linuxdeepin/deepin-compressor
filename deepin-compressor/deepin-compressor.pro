@@ -173,5 +173,4 @@ DISTFILES += \
     ../README.md \
     ../debian/control \
     ../debian/rules \
-    translations/deepin-compressor_en.ts \
-    translations/deepin-compressor_zh_CN.ts
+    translations/*.ts

@@ -81,6 +81,7 @@ public:
         KilledJobError = 1,
         LoadError = 2,
         /*** Subclasses should define error codes starting at this value */
+        UserSkiped = 3,
         UserDefinedError = 100
     };
 
