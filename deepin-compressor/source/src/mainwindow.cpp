@@ -1762,6 +1762,15 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     {
         Archive::Entry *entry = new Archive::Entry();
         entry->setFullPath(file);
+
+
+
+        QFileInfo fi(file);
+        if(fi.isDir())
+        {
+            entry->setIsDirectory(true);
+        }
+
         all_entries.append(entry);
     }
 

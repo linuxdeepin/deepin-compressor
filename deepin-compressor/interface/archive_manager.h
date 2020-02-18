@@ -152,7 +152,7 @@ private:
     static Archive *create(const QString &fileName, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, const QString &fixedMimeType, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
-    static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent= nullptr);
+    static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent= nullptr, int entrySize = 2);
     ReadOnlyArchiveInterface *m_iface;
     bool m_isReadOnly;
     bool m_isSingleFolder;

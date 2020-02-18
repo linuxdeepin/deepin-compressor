@@ -97,9 +97,9 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType)
     return plugins;
 }
 
-QVector<Plugin *> PluginManager::preferredWritePluginsFor(const QMimeType &mimeType) const
+QVector<Plugin *> PluginManager::preferredWritePluginsFor(const QMimeType &mimeType, int entrySize) const
 {
-    return preferredPluginsFor(mimeType, true);
+    return preferredPluginsFor(mimeType, true, entrySize);
 }
 
 Plugin *PluginManager::preferredPluginFor(const QMimeType &mimeType)
@@ -181,6 +181,9 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 
     supported.remove(QStringLiteral("application/x-cd-image"));
 
+    supported.remove(QStringLiteral("application/vnd.rar"));
+    supported.remove(QStringLiteral("application/x-rar"));
+
     if (mode == SortByComment) {
         return sortByComment(supported);
     }
@@ -238,13 +241,30 @@ void PluginManager::loadPlugins()
     }
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const
+QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite, int entrySize) const
 {
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
     std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
         return p1->priority() > p2->priority();
     });
+
+//arm64 use libzip for comptess *.zip cause libzip is better under huawei
+#ifdef __arm64__
+    if( entrySize == 1 && readWrite &&  mimeType.name() == QString("application/zip"))
+    {
+        foreach(Plugin* plugin, preferredPlugins)
+        {
+            if(plugin->metaData().name().contains("7zip"))
+            {
+                preferredPlugins.removeOne(plugin);
+                break;
+            }
+        }
+    }
+#else
+    Q_UNUSED(entrySize)
+#endif
 
     if((!readWrite) &&  mimeType.name() == QString("application/zip"))
     {
