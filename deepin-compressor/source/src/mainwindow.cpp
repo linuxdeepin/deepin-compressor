@@ -362,9 +362,9 @@ void MainWindow::InitConnection()
     connect(m_progressdialog, &ProgressDialog::stopExtract, this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
-    connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [=] {
+    connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [=](QString msg) {
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-        this->sendMessage(icon, tr("Extraction successful"));
+        this->sendMessage(icon, msg);
     });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
@@ -1334,7 +1334,15 @@ void MainWindow::slotExtractionDone(KJob *job)
     }
     else if (Encryption_SingleExtract == m_encryptiontype)
     {
-        m_progressdialog->setFinished(m_decompressfilepath);
+        if(errorCode == KJob::UserSkiped)
+        {
+            m_progressdialog->setMsg(tr("Skipped all files"));
+        }
+        else
+        {
+            m_progressdialog->setFinished(m_decompressfilepath);
+        }
+
         m_pageid = PAGE_UNZIP;
         refreshPage();
     }

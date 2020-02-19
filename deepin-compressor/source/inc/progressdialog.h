@@ -42,6 +42,7 @@ public:
     void setCurrentFile(const QString &file);
     void setProcess(unsigned long  value);
     void setFinished(const QString &path);
+    void setMsg(const QString& msg);
     void showdialog();
     bool isshown();
     void clearprocess();
@@ -51,7 +52,7 @@ protected:
 
 signals:
     void stopExtract();
-    void extractSuccess();
+    void extractSuccess(QString msg);
 
 public slots:
     void slotextractpress(int index);

@@ -97,7 +97,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
-                    return Utils::humanReadableSize(entry->property("size").toInt(), 1) +  "    ";
+                    return Utils::humanReadableSize(entry->property("size").toInt(), 1);
                 }
             case Timestamp: {
                 const QDateTime timeStamp = entry->property("timestamp").toDateTime();

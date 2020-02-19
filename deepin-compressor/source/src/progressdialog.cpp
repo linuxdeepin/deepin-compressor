@@ -134,7 +134,20 @@ void ProgressDialog::setFinished(const QString &path)
         m_extractdialog->reject();
         //reject();
         hide();
-        emit extractSuccess();
+        emit extractSuccess(tr("Extraction successful"));
+    }
+}
+
+void ProgressDialog::setMsg(const QString& msg)
+{
+    if (100 != m_circleprogress->value()) {
+        setWindowTitle(tr(""));
+        m_circleprogress->setValue(100);
+        m_filelable->setText(msg);
+        m_extractdialog->reject();
+        //reject();
+        hide();
+        emit extractSuccess(msg);
     }
 }
 

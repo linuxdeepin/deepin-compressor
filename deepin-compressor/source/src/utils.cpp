@@ -116,6 +116,11 @@ bool Utils::isCompressed_file(const QString &filePath)
 
 QString Utils::humanReadableSize(const qint64 &size, int precision)
 {
+    if(size == 0)
+    {
+        return "-";
+    }
+
     double sizeAsDouble = size;
     static QStringList measures;
     if (measures.isEmpty())
