@@ -412,8 +412,8 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1305"/>
         <location filename="../source/src/mainwindow.cpp" line="1309"/>
-        <location filename="../source/src/mainwindow.cpp" line="1814"/>
-        <location filename="../source/src/mainwindow.cpp" line="1825"/>
+        <location filename="../source/src/mainwindow.cpp" line="1823"/>
+        <location filename="../source/src/mainwindow.cpp" line="1834"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>空间不足，请清理后重试</translation>
     </message>
@@ -423,8 +423,8 @@
         <translation>跳过所有文件</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1818"/>
-        <location filename="../source/src/mainwindow.cpp" line="1829"/>
+        <location filename="../source/src/mainwindow.cpp" line="1827"/>
+        <location filename="../source/src/mainwindow.cpp" line="1838"/>
         <source>Damaged file</source>
         <translation>原始文件已损坏</translation>
     </message>
@@ -810,20 +810,16 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="373"/>
-        <location filename="../source/src/fileViewer.cpp" line="650"/>
-        <location filename="../source/src/fileViewer.cpp" line="850"/>
+        <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
         <translation>解压</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="374"/>
-        <location filename="../source/src/fileViewer.cpp" line="651"/>
         <source>Extract here</source>
-        <translation>解压到当前文件夹</translation>
+        <translation type="vanished">解压到当前文件夹</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
         <source>Extract to current directory</source>
         <translation>提取到当前文件夹</translation>
     </message>
@@ -843,7 +839,7 @@
         <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="794"/>
+        <location filename="../source/src/fileViewer.cpp" line="373"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>提取</translation>

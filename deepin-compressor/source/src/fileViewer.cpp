@@ -370,8 +370,8 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setFixedWidth(200);
-        m_pRightMenu->addAction(tr("Extract"));
-        m_pRightMenu->addAction(tr("Extract here"));
+        m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
+        m_pRightMenu->addAction(tr("Extract to current directory"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
@@ -646,9 +646,6 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
     } else {
         m_pathindex--;
         if (0 == m_pathindex) {
-            m_pRightMenu->clear();
-            m_pRightMenu->addAction(tr("Extract"));
-            m_pRightMenu->addAction(tr("Extract here"));
             pTableViewFile->setRootIndex(QModelIndex());
             pTableViewFile->setPreviousButtonVisible(false);
             restoreHeaderSort(rootPathUnique);
@@ -790,9 +787,6 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
     if (index.isValid()) {
         qDebug() << m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index));
         if (0 == m_pathindex) {
-            m_pRightMenu->clear();
-            m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
-            m_pRightMenu->addAction(tr("Extract to current directory"));
             if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
                 m_decompressmodel->setPathIndex(&m_pathindex);
                 QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));

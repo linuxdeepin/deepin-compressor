@@ -412,8 +412,8 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1305"/>
         <location filename="../source/src/mainwindow.cpp" line="1309"/>
-        <location filename="../source/src/mainwindow.cpp" line="1814"/>
-        <location filename="../source/src/mainwindow.cpp" line="1825"/>
+        <location filename="../source/src/mainwindow.cpp" line="1823"/>
+        <location filename="../source/src/mainwindow.cpp" line="1834"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Nedostatek místa. Uprázdněte, prosím, místo a zkuste to znovu</translation>
     </message>
@@ -423,8 +423,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1818"/>
-        <location filename="../source/src/mainwindow.cpp" line="1829"/>
+        <location filename="../source/src/mainwindow.cpp" line="1827"/>
+        <location filename="../source/src/mainwindow.cpp" line="1838"/>
         <source>Damaged file</source>
         <translation>Poškozený soubor</translation>
     </message>
@@ -810,20 +810,16 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="373"/>
-        <location filename="../source/src/fileViewer.cpp" line="650"/>
-        <location filename="../source/src/fileViewer.cpp" line="850"/>
+        <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
         <translation>Rozbalit</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="374"/>
-        <location filename="../source/src/fileViewer.cpp" line="651"/>
         <source>Extract here</source>
-        <translation>Rozbalit zde</translation>
+        <translation type="vanished">Rozbalit zde</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="795"/>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
         <source>Extract to current directory</source>
         <translation>Rozbalit do nynějšího adresáře</translation>
     </message>
@@ -843,7 +839,7 @@
         <translation>rrrr/MM/dd hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="794"/>
+        <location filename="../source/src/fileViewer.cpp" line="373"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Rozbalit</translation>
