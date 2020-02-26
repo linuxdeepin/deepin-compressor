@@ -61,7 +61,7 @@ private:
      *
      * @return bool indicating whether the operation was successful.
      */
-    bool writeFile(const QString &relativeName, const QString &destination);
+    bool writeFile(const QString &relativeName, const QString &destination,  const FileProgressInfo& info, bool partialprogress = false );
 
     QSaveFile m_tempFile;
     ArchiveWrite m_archiveWriter;

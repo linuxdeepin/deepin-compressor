@@ -49,6 +49,7 @@ public:
     void setTypeImage(QString type);
 
     int showConfirmDialog();
+    void resetProgress();
 
 signals:
     void  sigCancelPressed(int compressType);

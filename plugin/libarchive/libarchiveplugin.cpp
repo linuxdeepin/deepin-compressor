@@ -547,8 +547,9 @@ int LibarchivePlugin::extractionFlags() const
     return result;
 }
 
-void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo& info, bool partialprogress)
 {
+    m_currentExtractedFilesSize = 0;
     char buff[10240];
     QFile file(filename);
 
@@ -556,17 +557,29 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, b
         return;
     }
 
+    static int pastProgress = -1;
+
+    pastProgress = -1;
+
+    float fileSize = static_cast<float>(file.size());
+
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
+            file.close();
             return;
         }
 
         if (partialprogress) {
             m_currentExtractedFilesSize += readBytes;
-            emit progress(float(m_currentExtractedFilesSize) / m_extractedFilesSize);
-            emit progress_filename(file.fileName());
+            float currentProgress = ( static_cast<float>(m_currentExtractedFilesSize) / fileSize)*info.fileProgressProportion + info.fileProgressStart;
+            if( static_cast<int>(100*currentProgress) != pastProgress)
+            {
+                emit progress( currentProgress );
+                pastProgress = static_cast<int>(100*currentProgress);
+            }
+            //emit progress_filename(file.fileName());
         }
 
         readBytes = file.read(buff, sizeof(buff));

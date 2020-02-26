@@ -174,7 +174,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
         if (m_encryptionjob)
         {
-            m_encryptionjob->Killjob();
+            m_encryptionjob->deleteLater();
             m_encryptionjob = nullptr;
         }
         deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
@@ -589,7 +589,7 @@ void MainWindow::refreshPage()
             delete m_fileManager;
             m_fileManager = nullptr;
         }
-
+        m_Progess->resetProgress();
         m_openAction->setEnabled(true);
         setAcceptDrops(true);
         m_titlebutton->setVisible(false);
@@ -597,6 +597,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(0);
         break;
     case PAGE_UNZIP:
+        m_Progess->resetProgress();
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
@@ -604,6 +605,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(1);
         break;
     case PAGE_ZIP:
+        m_Progess->resetProgress();
         setQLabelText(m_titlelabel, tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_openAction->setEnabled(true);
@@ -1803,9 +1805,9 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
         m_createJob->enableEncryption(password, enableHeaderEncryption.compare("true") ? false : true);
     }
 
-    connect(m_createJob, &KJob::result, this, &MainWindow::slotCompressFinished);
-    connect(m_createJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
-    connect(m_createJob, &CreateJob::percentfilename, this, &MainWindow::SlotProgressFile);
+    connect(m_createJob, &KJob::result, this, &MainWindow::slotCompressFinished, Qt::ConnectionType::UniqueConnection);
+    connect(m_createJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
+    connect(m_createJob, &CreateJob::percentfilename, this, &MainWindow::SlotProgressFile, Qt::ConnectionType::UniqueConnection);
 
     m_pageid = PAGE_ZIPPROGRESS;
     m_Progess->settype(COMPRESSING);
@@ -1822,7 +1824,7 @@ void MainWindow::slotCompressFinished(KJob *job)
 {
     qDebug() << "job finished" << job->error();
     m_workstatus = WorkNone;
-    if (job->error() && job->error() != KJob::KilledJobError)
+    if (job->error() && (job->error() != KJob::KilledJobError ) )
     {
         if (m_pathstore.left(6) == "/media")
         {
@@ -1855,7 +1857,7 @@ void MainWindow::slotCompressFinished(KJob *job)
 
     if (m_createJob)
     {
-        m_createJob->kill();
+        m_createJob->deleteLater();
         m_createJob = nullptr;
     }
 }
@@ -1956,7 +1958,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
 
     if (m_createJob)
     {
-        m_createJob->kill();
+        m_createJob->deleteLater();
         m_createJob = nullptr;
     }
 

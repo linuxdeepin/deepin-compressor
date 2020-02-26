@@ -44,7 +44,7 @@ public:
     QVector<Plugin *> availableWritePlugins() const;
     QVector<Plugin *> enabledPlugins() const;
     QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType);
-    QVector<Plugin *> preferredWritePluginsFor(const QMimeType &mimeType, int entrySize = 0) const;
+    QVector<Plugin *> preferredWritePluginsFor(const QMimeType &mimeType) const;
     Plugin *preferredPluginFor(const QMimeType &mimeType);
     Plugin *preferredWritePluginFor(const QMimeType &mimeType) const;
     QStringList supportedMimeTypes(MimeSortingMode mode = Unsorted) const;
@@ -55,7 +55,7 @@ public:
 private:
 
     void loadPlugins();
-    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite, int entrySize = 0) const;
+    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const;
     static QStringList sortByComment(const QSet<QString> &mimeTypes);
     static bool libarchiveHasLzo();
 

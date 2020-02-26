@@ -7,6 +7,13 @@
 
 #include <QScopedPointer>
 
+struct FileProgressInfo
+{
+    float fileProgressProportion = 0.0;
+    float fileProgressStart;
+    float totalFileSize;
+};
+
 class LibarchivePlugin : public ReadWriteArchiveInterface
 {
     Q_OBJECT
@@ -51,8 +58,8 @@ protected:
 
     bool initializeReader();
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
-    void copyData(const QString &filename, struct archive *dest, bool partialprogress = true);
-    void copyData(const QString &filename, struct archive *source, struct archive *dest, bool partialprogress = true);
+    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo& info, bool partialprogress = true);
+    void copyData(const QString &filename, struct archive *source, struct archive *dest,  bool partialprogress = true);
 
     ArchiveRead m_archiveReader;
     ArchiveRead m_archiveReadDisk;
@@ -65,7 +72,7 @@ private:
     QString convertCompressionName(const QString &method);
 
     int m_cachedArchiveEntryCount;
-    qlonglong m_currentExtractedFilesSize;
+    qlonglong m_currentExtractedFilesSize = 0;
     bool m_emitNoEntries;
     qlonglong m_extractedFilesSize;
     QVector<Archive::Entry *> m_emittedEntries;

@@ -31,7 +31,6 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 
 bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
-
     const bool creatingNewFile = !QFileInfo::exists(filename());
     const uint totalCount = m_numberOfEntries + numberOfEntriesToAdd;
 
@@ -47,6 +46,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
 
     // First write the new files.
     uint addedEntries = 0;
+    bool partialprogress  = totalCount < 6;
     // Recreate destination directory structure.
     const QString destinationPath = (destination == nullptr)
                                     ? QString()
@@ -57,13 +57,28 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
             break;
         }
 
-        if (!writeFile(selectedFile->fullPath(), destinationPath)) {
+        emit progress_filename(selectedFile->fullPath());
+
+        FileProgressInfo info;
+
+        if( partialprogress )
+        {
+            info.fileProgressStart = static_cast<float>(addedEntries)/(static_cast<float>(totalCount));
+            info.fileProgressProportion = 1.0 / (static_cast<float>(totalCount));
+            //info.totalFileSize = (float)(archive_entry_size(selectedFile));
+        }
+
+        if (!writeFile(selectedFile->fullPath(), destinationPath, info, partialprogress )) {
             finish(false);
             return false;
         }
+
         addedEntries++;
-        emit progress(float(addedEntries) / float(totalCount));
-        emit progress_filename(selectedFile->fullPath());
+
+        if(partialprogress == false)
+        {
+            emit progress(float(addedEntries) / float(totalCount));
+        }
 
         // For directories, write all subfiles/folders.
         const QString &fullPath = selectedFile->fullPath();
@@ -76,6 +91,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
             while (!QThread::currentThread()->isInterruptionRequested() && it.hasNext()) {
                 QString path = it.next();
 
+                emit progress_filename(it.filePath());
+
                 if ((it.fileName() == QLatin1String("..")) ||
                         (it.fileName() == QLatin1String("."))) {
                     continue;
@@ -87,13 +104,25 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                     path.append(QLatin1Char('/'));
                 }
 
-                if (!writeFile(path, destinationPath)) {
+                FileProgressInfo info;
+
+                if( partialprogress )
+                {
+                    info.fileProgressStart = 1.0;
+                    info.fileProgressProportion = 1.0 / (static_cast<float>(partialprogress));
+                }
+
+                if (!writeFile(path, destinationPath, info, totalCount < 6 )) {
                     finish(false);
                     return false;
                 }
+
                 addedEntries++;
-                emit progress(float(addedEntries) / float(totalCount));
-                emit progress_filename(it.filePath());
+
+                if(partialprogress == false)
+                {
+                    emit progress(float(addedEntries) / float(totalCount));
+                }
             }
         }
 
@@ -203,8 +232,18 @@ bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, con
         return false;
     }
 
+    QString mimeTypeName = mimetype().name();
+
     // pax_restricted is the libarchive default, let's go with that.
-    archive_write_set_format_pax_restricted(m_archiveWriter.data());
+    if(mimeTypeName == "application/zip")
+    {
+        archive_write_set_format_zip (m_archiveWriter.data());
+    }
+    else
+    {
+        archive_write_set_format_pax_restricted(m_archiveWriter.data());
+    }
+
 
     if (creatingNewFile) {
         if (!initializeNewFileWriterFilters(options)) {
@@ -281,7 +320,7 @@ bool ReadWriteLibarchivePlugin::initializeWriterFilters()
 
 bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const CompressionOptions &options)
 {
-    int ret;
+    int ret = ARCHIVE_OK;
     bool requiresExecutable = false;
     if (filename().right(2).toUpper() == QLatin1String("GZ")) {
         ret = archive_write_add_filter_gzip(m_archiveWriter.data());
@@ -305,7 +344,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
         ret = archive_write_add_filter_lz4(m_archiveWriter.data());
     } else if (filename().right(3).toUpper() == QLatin1String("TAR")) {
         ret = archive_write_add_filter_none(m_archiveWriter.data());
-    } else {
+    } else if (filename().right(3).toUpper() == QLatin1String("GZIP")) {
         ret = archive_write_add_filter_gzip(m_archiveWriter.data());
     }
 
@@ -318,7 +357,16 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
 
     // Set compression level if passed in CompressionOptions.
     if (options.isCompressionLevelSet()) {
-        ret = archive_write_set_filter_option(m_archiveWriter.data(), nullptr, "compression-level", QString::number(options.compressionLevel()).toUtf8().constData());
+        if (filename().right(3).toUpper() == QLatin1String("ZIP") )
+        {
+            ret = archive_write_set_options(m_archiveWriter.data(), QString("compression-level=" + QString::number(options.compressionLevel())).toUtf8().constData());
+        }
+        else
+        {
+            ret = archive_write_set_filter_option( m_archiveWriter.data(), nullptr, "compression-level", QString::number(options.compressionLevel()).toUtf8().constData() );
+        }
+
+
         if (ret != ARCHIVE_OK) {
             emit error(tr("@info", "Could not set the compression level."));
             return false;
@@ -446,7 +494,7 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
 
 // TODO: if we merge this with copyData(), we can pass more data
 //       such as an fd to archive_read_disk_entry_from_file()
-bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QString &destination)
+bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QString &destination, const FileProgressInfo& info, bool partialprogress )
 {
     const QString absoluteFilename = QFileInfo(relativeName).absoluteFilePath();
     const QString destinationFilename = destination + relativeName;
@@ -468,7 +516,7 @@ bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QSt
     if (returnCode == ARCHIVE_OK) {
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
-        copyData(absoluteFilename, m_archiveWriter.data(), false);
+        copyData(absoluteFilename, m_archiveWriter.data(), info, partialprogress );
     } else {
 
         emit error(tr("@info Error in a message box",

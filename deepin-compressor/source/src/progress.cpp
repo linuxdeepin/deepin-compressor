@@ -105,6 +105,7 @@ void Progress::InitConnection()
 void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
+    m_progressbar->update();
 }
 
 void Progress::setFilename(QString filename)
@@ -191,6 +192,11 @@ int Progress::showConfirmDialog()
     delete dialog;
 
     return res;
+}
+
+void Progress::resetProgress()
+{
+    m_progressfilelabel->setText(tr("Calculating..."));
 }
 
 void Progress::cancelbuttonPressedSlot()

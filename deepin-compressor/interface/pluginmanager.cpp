@@ -97,9 +97,9 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType)
     return plugins;
 }
 
-QVector<Plugin *> PluginManager::preferredWritePluginsFor(const QMimeType &mimeType, int entrySize) const
+QVector<Plugin *> PluginManager::preferredWritePluginsFor(const QMimeType &mimeType) const
 {
-    return preferredPluginsFor(mimeType, true, entrySize);
+    return preferredPluginsFor(mimeType, true);
 }
 
 Plugin *PluginManager::preferredPluginFor(const QMimeType &mimeType)
@@ -241,30 +241,48 @@ void PluginManager::loadPlugins()
     }
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite, int entrySize) const
+QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const
 {
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
-    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
+    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [&mimeType, &readWrite](Plugin * p1, Plugin * p2) {
+    #ifdef __arm64__
+        if( readWrite &&  mimeType.name() == QString("application/zip"))
+        {
+            QString p1n = p1->metaData().name();
+            QString p2n = p2->metaData().name();
+            if(p1->metaData().name().contains("Libarchive"))
+            {
+                return true;
+            }
+
+            if(p2->metaData().name().contains("Libarchive"))
+            {
+                return false;
+            }
+        }
+    #endif
+
         return p1->priority() > p2->priority();
     });
 
+
 //arm64 use libzip for comptess *.zip cause libzip is better under huawei
-#ifdef __arm64__
-    if( entrySize == 1 && readWrite &&  mimeType.name() == QString("application/zip"))
-    {
-        foreach(Plugin* plugin, preferredPlugins)
-        {
-            if(plugin->metaData().name().contains("7zip"))
-            {
-                preferredPlugins.removeOne(plugin);
-                break;
-            }
-        }
-    }
-#else
-    Q_UNUSED(entrySize)
-#endif
+//#ifdef __arm64__
+//    if( entrySize == 1 && readWrite &&  mimeType.name() == QString("application/zip"))
+//    {
+//        foreach(Plugin* plugin, preferredPlugins)
+//        {
+//            if(plugin->metaData().name().contains("7zip"))
+//            {
+//                preferredPlugins.removeOne(plugin);
+//                break;
+//            }
+//        }
+//    }
+//#else
+//    Q_UNUSED(entrySize)
+//#endif
 
     if((!readWrite) &&  mimeType.name() == QString("application/zip"))
     {

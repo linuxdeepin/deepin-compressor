@@ -67,7 +67,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent, int entrySize)
+Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent)
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
@@ -81,7 +81,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     QVector<Plugin *> offers;
     if(write)
     {
-        offers = pluginManager.preferredWritePluginsFor(mimeType, entrySize);
+        offers = pluginManager.preferredWritePluginsFor(mimeType);
     }
     else {
         offers = pluginManager.preferredPluginsFor(mimeType);
@@ -140,13 +140,7 @@ BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &d
 
 CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent)
 {
-    int entrySize = 0;
-    if(entries.size() == 1 && entries.at(0)->isDir() == false)
-    {
-        entrySize = 1;
-    }
-
-    auto archive = create(fileName, mimeType, true, parent, entrySize);
+    auto archive = create(fileName, mimeType, true, parent);
     auto createJob = new CreateJob(archive, entries, options);
 
     return createJob;
