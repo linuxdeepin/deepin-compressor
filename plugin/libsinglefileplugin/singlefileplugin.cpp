@@ -130,7 +130,7 @@ QString LibSingleFileInterface::overwriteFileName(QString& filename)
         emit userQuery(&query);
         query.waitForResponse();
 
-        if ((query.responseCancelled()) || (query.responseSkip())) {
+        if ((query.responseCancelled()) || (query.responseSkip()) || (query.responseAutoSkip())) {
             return QString();
         } else if (query.responseOverwrite() || query.responseOverwriteAll())
         {
