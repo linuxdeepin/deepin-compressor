@@ -37,7 +37,8 @@
         "MimeTypes": [
             "application/x-7z-compressed",
     		"application/x-cd-image",
-                "application/zip"
+                "application/zip",
+                "application/x-tar"
         ],
         "Name": "P7zip plugin",
         "Name[ca@valencia]": "Connector del P7zip",

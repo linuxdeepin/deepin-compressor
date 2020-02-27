@@ -108,8 +108,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
 
                 if( partialprogress )
                 {
-                    info.fileProgressStart = 1.0;
-                    info.fileProgressProportion = 1.0 / (static_cast<float>(partialprogress));
+                    info.fileProgressStart = static_cast<float>(addedEntries)/(static_cast<float>(totalCount));
+                    info.fileProgressProportion = 1.0 / (static_cast<float>(totalCount));
                 }
 
                 if (!writeFile(path, destinationPath, info, totalCount < 6 )) {
