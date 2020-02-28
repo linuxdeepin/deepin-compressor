@@ -51,6 +51,10 @@ public:
     int showConfirmDialog();
     void resetProgress();
 
+    //add
+    void setspeed(double speed);
+    void setresttime(int resttime);
+
 signals:
     void  sigCancelPressed(int compressType);
 
@@ -69,6 +73,19 @@ private:
 
     QString m_filename;
     COMPRESS_TYPE m_type;
+
+    //add
+    QLabel *m_speedlabel;
+    QLabel *m_resttimelabel;
+
+    double m_speed;
+    int m_resttime;
+
+    bool isStart = false;
+
+    QString hh;
+    QString mm;
+    QString ss;
 };
 
 #endif // PROGRESS_H
