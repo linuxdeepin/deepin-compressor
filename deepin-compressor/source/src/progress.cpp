@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <DDialog>
+#include <QDateTime>
 #include <QGraphicsDropShadowEffect>
 #include "DFontSizeManager"
 #include "utils.h"
@@ -74,6 +75,23 @@ void Progress::InitUI()
     m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
+    //add speed and time label
+    m_speedlabel = new QLabel;
+    m_speedlabel->setText(tr("Speed") + ":" + tr("Calculating..."));
+    DFontSizeManager::instance()->bind(m_speedlabel, DFontSizeManager::T8);
+
+    m_resttimelabel = new QLabel;
+    m_resttimelabel->setText(tr("The rest time") + "+" + tr("Calculating..."));
+    DFontSizeManager::instance()->bind(m_resttimelabel, DFontSizeManager::T8);
+
+    QHBoxLayout *m_layout = new QHBoxLayout;
+    m_layout->addStretch();
+    m_layout->addWidget(m_speedlabel);
+    m_layout->addSpacing(15);
+    m_layout->addWidget(m_resttimelabel);
+    m_layout->addStretch();
+
+
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -84,6 +102,10 @@ void Progress::InitUI()
     mainlayout->addWidget(m_shadow, 0, Qt::AlignLeft | Qt::AlignTop);
     mainlayout->addSpacing(5);
     mainlayout->addWidget(m_progressfilelabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    //mainlayout->addStretch();
+    mainlayout->addSpacing(5);
+
+    mainlayout->addLayout(m_layout);
     mainlayout->addStretch();
 
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
@@ -106,6 +128,30 @@ void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
     m_progressbar->update();
+    isStart = true;
+}
+
+//add speed and time
+void Progress::setspeed(double speed)
+{
+    m_speed = speed;
+}
+
+void Progress::setresttime(int resttime)
+{
+    m_resttime = resttime;
+    int hour = m_resttime / 3600;
+    int minute = (m_resttime - hour *3600) / 60;
+    int seconds = m_resttime - hour * 3600 - minute * 60;
+
+    hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
+    mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
+    ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
+
+//    qDebug() << "hh" << hh << "  " << hour;
+//    qDebug() << "mm" << mm << "  " << min;
+//    qDebug() << "ss" << ss << "  " << sec;
+
 }
 
 void Progress::setFilename(QString filename)
@@ -132,8 +178,29 @@ void Progress::setProgressFilename(QString filename)
     QFontMetrics elideFont(m_progressfilelabel->font());
     if (m_type == COMPRESSING) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
+
+        //add update speed and time label
+        if (isStart)
+        {
+            if (m_speed > 1024) {
+                m_speedlabel->setText(tr("Compression speed") + ":" + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            } else {
+                m_speedlabel->setText(tr("Compression speed") + ":" + QString::number(m_speed, 'f', 2) + "KB/S");
+            }
+            m_resttimelabel->setText(tr("The rest time") + ":" + hh + ":" + mm + ":" + ss);
+        }
+
     } else {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        if (isStart)
+        {
+            if (m_speed > 1024) {
+                m_speedlabel->setText(tr("Decompression speed") + ":" + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            } else {
+                m_speedlabel->setText(tr("Decompression speed") + ":" + QString::number(m_speed, 'f', 2) + "KB/S");
+            }
+            m_resttimelabel->setText(tr("The rest time") + ":" + hh + ":" + mm + ":" + ss);
+        }
     }
 }
 

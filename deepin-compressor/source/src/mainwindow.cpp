@@ -603,6 +603,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
+        m_timer.start();
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
@@ -614,6 +615,7 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
+        m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
@@ -714,8 +716,42 @@ void MainWindow::refreshPage()
     }
 }
 
+//add
+quint64 MainWindow::caltotalsize(const QString &path)
+{
+    QDir dir(path);
+    quint64 size = 0;
+    //dir.entryInfoList(QDir::Files)返回文件信息
+    foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
+    {
+        //计算文件大小
+        size += fileInfo.size();
+    }
+    //dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
+    foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        //若存在子目录，则递归调用dirFileSize()函数
+        size += caltotalsize(path + QDir::separator() + subDir);
+    }
+
+    //qDebug() << size;
+    return size;
+}
+
 void MainWindow::onSelected(const QStringList &files)
 {
+    //add
+    QFileInfo fileInfo(files.at(0));
+    if (fileInfo.isFile())
+    {
+        m_size += fileInfo.size();
+    }
+    else if (fileInfo.isDir())
+    {
+        m_size += caltotalsize(files.at(0));
+    }
+    qDebug() << "m_size" << m_size;
+
     if (files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
         if (0 == m_CompressPage->getCompressFilelist().count())
@@ -1214,6 +1250,32 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
+    //add calculate speed and the rest time
+    if (percent != lastpercent && percent > lastpercent)
+    {
+        double m_time = m_timer.elapsed();
+        qDebug() << "time  " << m_timer.elapsed();
+        double m_speed = 0;
+        int m_resttime = 0;
+
+        //qDebug() << "m_size" << m_size;
+
+        double compresssize = (m_size / 1024.0) * ((percent - lastpercent) / 100.0);
+        m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / (m_time / 1000);
+
+        double restsize = (m_size / 1024.0) - compresssize;
+        //double restsize = (m_size / 1024.0) * ((100 - percent) / 100);
+        m_resttime = restsize / m_speed;
+
+//        qDebug() << "m_speed" << m_speed;
+//        qDebug() << "m_resttime" << m_resttime;
+        m_Progess->setspeed(m_speed);
+        m_Progess->setresttime(m_resttime);
+
+        lastpercent = percent;
+        m_timer.restart();
+    }
+
     qDebug() << percent;
     if ((Encryption_SingleExtract == m_encryptiontype))
     {

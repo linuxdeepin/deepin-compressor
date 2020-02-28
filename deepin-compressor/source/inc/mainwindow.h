@@ -44,6 +44,8 @@
 #include "batchextract.h"
 #include "batchcompress.h"
 #include <DFileWatcher>
+#include <QElapsedTimer>
+
 
 #define TITLE_FIXED_HEIGHT 50
 
@@ -217,4 +219,28 @@ private:
     int m_watchTimer = 0;
 
     DFileWatcher* m_fileManager = nullptr;
+
+    //add
+private:
+    quint64 caltotalsize(const QString &path);
+
+    quint64 m_size = 0;
+    unsigned long lastpercent = 0;
+
+    QElapsedTimer m_timer;
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
