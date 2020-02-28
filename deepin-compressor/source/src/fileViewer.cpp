@@ -841,7 +841,7 @@ void fileViewer::slotDragLeave(QString path)
 
 void fileViewer::onRightMenuClicked(QAction *action)
 {
-    if (action->text() == tr("Extract")) {
+    if (action->text() == tr("Extract") || action->text() == tr("Extract", "slotDecompressRowDoubleClicked") ) {
         emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
     } else {
         emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
