@@ -25,7 +25,6 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <DDialog>
-#include <QDateTime>
 #include <QGraphicsDropShadowEffect>
 #include "DFontSizeManager"
 #include "utils.h"
@@ -77,11 +76,11 @@ void Progress::InitUI()
 
     //add speed and time label
     m_speedlabel = new QLabel;
-    m_speedlabel->setText(tr("Speed") + ":" + tr("Calculating..."));
+    m_speedlabel->setText(tr("Speed") + ": " + tr("Calculating..."));
     DFontSizeManager::instance()->bind(m_speedlabel, DFontSizeManager::T8);
 
     m_resttimelabel = new QLabel;
-    m_resttimelabel->setText(tr("The rest time") + "+" + tr("Calculating..."));
+    m_resttimelabel->setText(tr("The rest time") + ": " + tr("Calculating..."));
     DFontSizeManager::instance()->bind(m_resttimelabel, DFontSizeManager::T8);
 
     QHBoxLayout *m_layout = new QHBoxLayout;
@@ -137,7 +136,7 @@ void Progress::setspeed(double speed)
     m_speed = speed;
 }
 
-void Progress::setresttime(int resttime)
+void Progress::setresttime(double resttime)
 {
     m_resttime = resttime;
     int hour = m_resttime / 3600;
@@ -147,11 +146,6 @@ void Progress::setresttime(int resttime)
     hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
     mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
     ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
-
-//    qDebug() << "hh" << hh << "  " << hour;
-//    qDebug() << "mm" << mm << "  " << min;
-//    qDebug() << "ss" << ss << "  " << sec;
-
 }
 
 void Progress::setFilename(QString filename)
@@ -182,25 +176,30 @@ void Progress::setProgressFilename(QString filename)
         //add update speed and time label
         if (isStart)
         {
-            if (m_speed > 1024) {
-                m_speedlabel->setText(tr("Compression speed") + ":" + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            if (m_speed < 1024) {
+                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
+                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
             } else {
-                m_speedlabel->setText(tr("Compression speed") + ":" + QString::number(m_speed, 'f', 2) + "KB/S");
+                m_speedlabel->setText(tr("Compression speed") + ": " + ">300MB/S");
             }
-            m_resttimelabel->setText(tr("The rest time") + ":" + hh + ":" + mm + ":" + ss);
+            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
         }
 
     } else {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
         if (isStart)
         {
-            if (m_speed > 1024) {
-                m_speedlabel->setText(tr("Decompression speed") + ":" + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            if (m_speed < 1024) {
+                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
+                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
             } else {
-                m_speedlabel->setText(tr("Decompression speed") + ":" + QString::number(m_speed, 'f', 2) + "KB/S");
+                m_speedlabel->setText(tr("Decompression speed") + ": " + ">300MB/S");
             }
-            m_resttimelabel->setText(tr("The rest time") + ":" + hh + ":" + mm + ":" + ss);
+            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
         }
+
     }
 }
 

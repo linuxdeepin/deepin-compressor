@@ -53,7 +53,7 @@ public:
 
     //add
     void setspeed(double speed);
-    void setresttime(int resttime);
+    void setresttime(double resttime);
 
 signals:
     void  sigCancelPressed(int compressType);
@@ -79,7 +79,7 @@ private:
     QLabel *m_resttimelabel;
 
     double m_speed;
-    int m_resttime;
+    double m_resttime;
 
     bool isStart = false;
 

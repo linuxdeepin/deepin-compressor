@@ -534,26 +534,26 @@
     <message>
         <location filename="../source/src/progress.cpp" line="80"/>
         <source>Speed</source>
-        <translation type="unfinished">Speed</translation>
+        <translation>Speed</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="84"/>
         <location filename="../source/src/progress.cpp" line="195"/>
         <location filename="../source/src/progress.cpp" line="212"/>
         <source>The rest time</source>
-        <translation type="unfinished">The rest time</translation>
+        <translation>The rest time</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="188"/>
         <location filename="../source/src/progress.cpp" line="193"/>
         <source>Compression speed</source>
-        <translation type="unfinished">Compression speed</translation>
+        <translation>Compression speed</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="205"/>
         <location filename="../source/src/progress.cpp" line="210"/>
         <source>Decompression speed</source>
-        <translation type="unfinished">Decompression speed</translation>
+        <translation>Decompression speed</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="243"/>
