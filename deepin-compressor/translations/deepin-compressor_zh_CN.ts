@@ -534,26 +534,26 @@
     <message>
         <location filename="../source/src/progress.cpp" line="80"/>
         <source>Speed</source>
-        <translation type="unfinished">速度</translation>
+        <translation>速度</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="84"/>
         <location filename="../source/src/progress.cpp" line="195"/>
         <location filename="../source/src/progress.cpp" line="212"/>
         <source>The rest time</source>
-        <translation type="unfinished">剩余时间</translation>
+        <translation>剩余时间</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="188"/>
         <location filename="../source/src/progress.cpp" line="193"/>
         <source>Compression speed</source>
-        <translation type="unfinished">压缩速度</translation>
+        <translation>压缩速度</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="205"/>
         <location filename="../source/src/progress.cpp" line="210"/>
         <source>Decompression speed</source>
-        <translation type="unfinished">提取速度</translation>
+        <translation>解压速度</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="243"/>

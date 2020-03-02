@@ -721,20 +721,16 @@ quint64 MainWindow::caltotalsize(const QString &path)
 {
     QDir dir(path);
     quint64 size = 0;
-    //dir.entryInfoList(QDir::Files)返回文件信息
+
     foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
     {
-        //计算文件大小
         size += fileInfo.size();
     }
-    //dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
     foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        //若存在子目录，则递归调用dirFileSize()函数
         size += caltotalsize(path + QDir::separator() + subDir);
     }
 
-    //qDebug() << size;
     return size;
 }
 
@@ -750,7 +746,6 @@ void MainWindow::onSelected(const QStringList &files)
     {
         m_size += caltotalsize(files.at(0));
     }
-    qDebug() << "m_size" << m_size;
 
     if (files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
@@ -839,6 +834,17 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         InitUI();
         InitConnection();
         m_initflag = true;
+    }
+
+    //add
+    QFileInfo fileInfo(files.at(0));
+    if (fileInfo.isFile())
+    {
+        m_size += fileInfo.size();
+    }
+    else if (fileInfo.isDir())
+    {
+        m_size += caltotalsize(files.at(0));
     }
 
     if (files.last() == QStringLiteral("extract_here"))
@@ -1254,25 +1260,25 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
     if (percent != lastpercent && percent > lastpercent)
     {
         double m_time = m_timer.elapsed();
-        qDebug() << "time  " << m_timer.elapsed();
+
         double m_speed = 0;
-        int m_resttime = 0;
+        double m_resttime = 0;
 
-        //qDebug() << "m_size" << m_size;
+        m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / m_time * 1000;
 
-        double compresssize = (m_size / 1024.0) * ((percent - lastpercent) / 100.0);
-        m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / (m_time / 1000);
+        double restsize = (m_size / 1024.0) * (100 - percent) / 100;
 
-        double restsize = (m_size / 1024.0) - compresssize;
-        //double restsize = (m_size / 1024.0) * ((100 - percent) / 100);
         m_resttime = restsize / m_speed;
 
-//        qDebug() << "m_speed" << m_speed;
-//        qDebug() << "m_resttime" << m_resttime;
+        qDebug() << "restsize" << restsize;
+        qDebug() << "m_speed" << m_speed;
+        qDebug() << "m_resttime" << m_resttime;
+
         m_Progess->setspeed(m_speed);
         m_Progess->setresttime(m_resttime);
 
         lastpercent = percent;
+
         m_timer.restart();
     }
 
