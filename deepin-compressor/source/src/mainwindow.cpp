@@ -603,7 +603,6 @@ void MainWindow::refreshPage()
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
-        m_timer.start();
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
@@ -615,7 +614,6 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
-        m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
@@ -637,6 +635,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
+        m_timer.start();
         break;
     case PAGE_UNZIPPROGRESS:
         m_openAction->setEnabled(false);
@@ -645,6 +644,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
+        m_timer.start();
         break;
     case PAGE_ZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
@@ -1257,14 +1257,18 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
     //add calculate speed and the rest time
-    if (percent != lastpercent && percent > lastpercent)
+    if (percent > lastpercent)
     {
-        double m_time = m_timer.elapsed();
+        timer = m_timer.elapsed();
+        m_time += timer;
+
+        qDebug() << "m_time" << m_time;
 
         double m_speed = 0;
         double m_resttime = 0;
 
-        m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / m_time * 1000;
+        //m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / m_time * 1000;
+        m_speed = ((m_size / 1024.0) * (percent / 100.0)) / m_time * 1000;
 
         double restsize = (m_size / 1024.0) * (100 - percent) / 100;
 
@@ -1277,12 +1281,12 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         m_Progess->setspeed(m_speed);
         m_Progess->setresttime(m_resttime);
 
-        lastpercent = percent;
+        lastpercent = percent;;
 
         m_timer.restart();
     }
 
-    qDebug() << percent;
+    qDebug() << "percent" << percent;
     if ((Encryption_SingleExtract == m_encryptiontype))
     {
         if (percent < 100 && WorkProcess == m_workstatus)
@@ -2016,6 +2020,11 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
+    //add
+    m_time = 0;
+    lastpercent = 0;
+    m_timer.elapsed();
+
     if (m_encryptionjob)
     {
         m_encryptionjob->Killjob();

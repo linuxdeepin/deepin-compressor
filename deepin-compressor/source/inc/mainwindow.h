@@ -229,6 +229,9 @@ private:
 
     QElapsedTimer m_timer;
 
+    double timer = 0;
+    double m_time = 0;
+    double m_lastresttime = 0;
 };
 
 
