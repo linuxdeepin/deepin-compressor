@@ -127,7 +127,6 @@ void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
     m_progressbar->update();
-    isStart = true;
 }
 
 //add speed and time
@@ -146,6 +145,38 @@ void Progress::setresttime(double resttime)
     hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
     mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
     ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
+
+    isStart = true;
+    displayspeedandtime(isStart);
+}
+
+void Progress::displayspeedandtime(bool isStart)
+{
+    if (isStart) {
+        //add update speed and time label
+        if (m_type == COMPRESSING)
+        {
+            if (m_speed < 1024) {
+                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
+                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            } else {
+                m_speedlabel->setText(tr("Compression speed") + ": " + ">300MB/S");
+            }
+            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
+        }
+        else
+        {
+            if (m_speed < 1024) {
+                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
+                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+            } else {
+                m_speedlabel->setText(tr("Decompression speed") + ": " + ">300MB/S");
+            }
+            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
+        }
+    }
 }
 
 void Progress::setFilename(QString filename)
@@ -173,33 +204,8 @@ void Progress::setProgressFilename(QString filename)
     if (m_type == COMPRESSING) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
 
-        //add update speed and time label
-        if (isStart)
-        {
-            if (m_speed < 1024) {
-                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
-            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
-                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
-            } else {
-                m_speedlabel->setText(tr("Compression speed") + ": " + ">300MB/S");
-            }
-            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
-        }
-
     } else {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
-        if (isStart)
-        {
-            if (m_speed < 1024) {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
-            } else if (m_speed > 1024 && m_speed < 1024 * 300) {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
-            } else {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + ">300MB/S");
-            }
-            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
-        }
-
     }
 }
 
@@ -267,6 +273,8 @@ void Progress::resetProgress()
 
 void Progress::cancelbuttonPressedSlot()
 {
+    isStart = false;
+
     if (1 == showConfirmDialog())
     {
         emit sigCancelPressed(m_type);

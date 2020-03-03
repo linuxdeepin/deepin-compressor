@@ -54,6 +54,7 @@ public:
     //add
     void setspeed(double speed);
     void setresttime(double resttime);
+    void displayspeedandtime(bool isStart);
 
 signals:
     void  sigCancelPressed(int compressType);
