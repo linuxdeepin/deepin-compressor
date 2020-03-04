@@ -76,11 +76,11 @@ void Progress::InitUI()
 
     //add speed and time label
     m_speedlabel = new QLabel;
-    m_speedlabel->setText(tr("Speed") + ": " + tr("Calculating..."));
+    //m_speedlabel->setText(tr("Speed") + ": " + tr("Calculating..."));
     DFontSizeManager::instance()->bind(m_speedlabel, DFontSizeManager::T8);
 
     m_resttimelabel = new QLabel;
-    m_resttimelabel->setText(tr("The rest time") + ": " + tr("Calculating..."));
+    //m_resttimelabel->setText(tr("The rest time") + ": " + tr("Calculating..."));
     DFontSizeManager::instance()->bind(m_resttimelabel, DFontSizeManager::T8);
 
     QHBoxLayout *m_layout = new QHBoxLayout;
@@ -123,6 +123,20 @@ void Progress::InitConnection()
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
+void Progress::setLabelText(COMPRESS_TYPE type)
+{
+    if (type == COMPRESSING)
+    {
+        m_speedlabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
+        m_resttimelabel->setText(tr("Time left") + ": " + tr("Calculating..."));
+    }
+    else if (type == DECOMPRESSING)
+    {
+        m_speedlabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
+        m_resttimelabel->setText(tr("Time left") + ": " + tr("Calculating..."));
+    }
+}
+
 void Progress::setprogress(uint percent)
 {
     m_progressbar->setValue(percent);
@@ -157,24 +171,24 @@ void Progress::displayspeedandtime(bool isStart)
         if (m_type == COMPRESSING)
         {
             if (m_speed < 1024) {
-                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+                m_speedlabel->setText(tr("Speed", "compress") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
             } else if (m_speed > 1024 && m_speed < 1024 * 300) {
-                m_speedlabel->setText(tr("Compression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+                m_speedlabel->setText(tr("Speed", "compress") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
             } else {
-                m_speedlabel->setText(tr("Compression speed") + ": " + ">300MB/S");
+                m_speedlabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
             }
-            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
+            m_resttimelabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
         }
         else
         {
             if (m_speed < 1024) {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
+                m_speedlabel->setText(tr("Speed", "uncompress") + ": " + QString::number(m_speed, 'f', 2) + "KB/S");
             } else if (m_speed > 1024 && m_speed < 1024 * 300) {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
+                m_speedlabel->setText(tr("Speed", "uncompress") + ": " + QString::number((m_speed / 1024), 'f', 2) + "MB/S");
             } else {
-                m_speedlabel->setText(tr("Decompression speed") + ": " + ">300MB/S");
+                m_speedlabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
             }
-            m_resttimelabel->setText(tr("The rest time") + ": " + hh + ":" + mm + ":" + ss);
+            m_resttimelabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
         }
     }
 }

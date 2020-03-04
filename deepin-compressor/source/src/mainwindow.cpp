@@ -598,6 +598,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_Progess->resetProgress();
+        m_Progess->setLabelText(DECOMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
@@ -615,15 +616,17 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
-        m_timer.start();
+        //m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
+        m_Progess->setLabelText(COMPRESSING);
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(true);
         m_mainLayout->setCurrentIndex(3);
+        m_timer.start();
         break;
     case PAGE_ZIPPROGRESS:
         if (0 != m_watchTimer)
@@ -831,6 +834,13 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
+    if (!m_initflag)
+    {
+        InitUI();
+        InitConnection();
+        m_initflag = true;
+    }
+
     //add
     QFileInfo fileInfo(files.at(0));
     if (fileInfo.isFile())
@@ -840,13 +850,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     else if (fileInfo.isDir())
     {
         m_size += caltotalsize(files.at(0));
-    }
-
-    if (!m_initflag)
-    {
-        InitUI();
-        InitConnection();
-        m_initflag = true;
     }
 
     if (files.last() == QStringLiteral("extract_here"))
@@ -2023,6 +2026,7 @@ void MainWindow::slotFailRetry()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     //add
+    timer = 0;
     m_time = 0;
     lastpercent = 0;
     m_timer.elapsed();

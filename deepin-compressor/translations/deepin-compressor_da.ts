@@ -308,19 +308,19 @@
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="609"/>
-        <location filename="../source/src/mainwindow.cpp" line="619"/>
-        <location filename="../source/src/mainwindow.cpp" line="1577"/>
+        <location filename="../source/src/mainwindow.cpp" line="612"/>
+        <location filename="../source/src/mainwindow.cpp" line="623"/>
+        <location filename="../source/src/mainwindow.cpp" line="1581"/>
         <source>Create New Archive</source>
         <translation>Opret nyt arkiv</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="651"/>
+        <location filename="../source/src/mainwindow.cpp" line="655"/>
         <source>Compression successful</source>
         <translation>Komprimering lykkedes</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1437"/>
+        <location filename="../source/src/mainwindow.cpp" line="1441"/>
         <source>Extraction successful</source>
         <translation>Udpakning lykkedes</translation>
     </message>
@@ -330,7 +330,7 @@
         <translation>%1 blev ændret på disken — importér den venligst igen.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="782"/>
+        <location filename="../source/src/mainwindow.cpp" line="786"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Vil du tilføje arkivet til listen eller åbne det i et nyt vindue?</translation>
     </message>
@@ -340,7 +340,7 @@
         <translation>Vis genveje</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="783"/>
+        <location filename="../source/src/mainwindow.cpp" line="787"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -351,80 +351,80 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1153"/>
+        <location filename="../source/src/mainwindow.cpp" line="1157"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="635"/>
+        <location filename="../source/src/mainwindow.cpp" line="639"/>
         <source>Compressing</source>
         <translation>Komprimerer</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="644"/>
+        <location filename="../source/src/mainwindow.cpp" line="648"/>
         <source>Extracting</source>
         <translation>Udpakker</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="660"/>
+        <location filename="../source/src/mainwindow.cpp" line="664"/>
         <source>Compression failed</source>
         <translation>Komprimering mislykkedes</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="692"/>
+        <location filename="../source/src/mainwindow.cpp" line="696"/>
         <source>Extraction failed</source>
         <translation>Udpakning mislykkedes</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="784"/>
+        <location filename="../source/src/mainwindow.cpp" line="788"/>
         <source>Add</source>
         <translation>Tilføj</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="785"/>
+        <location filename="../source/src/mainwindow.cpp" line="789"/>
         <source>Open in new window</source>
         <translation>Åbn i nyt vindue</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="932"/>
+        <location filename="../source/src/mainwindow.cpp" line="936"/>
         <source>Find directory</source>
         <translation>Find mappe</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1349"/>
+        <location filename="../source/src/mainwindow.cpp" line="1353"/>
         <source>Wrong password</source>
         <translation>Forkert adgangskode</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1016"/>
-        <location filename="../source/src/mainwindow.cpp" line="1044"/>
-        <location filename="../source/src/mainwindow.cpp" line="1088"/>
-        <location filename="../source/src/mainwindow.cpp" line="1387"/>
+        <location filename="../source/src/mainwindow.cpp" line="1020"/>
+        <location filename="../source/src/mainwindow.cpp" line="1048"/>
+        <location filename="../source/src/mainwindow.cpp" line="1092"/>
+        <location filename="../source/src/mainwindow.cpp" line="1391"/>
         <source>Damaged file, unable to extract</source>
         <translation>Beskadiget fil — kan ikke udpakke</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1152"/>
+        <location filename="../source/src/mainwindow.cpp" line="1156"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arkivet blev ændret på disken — importér det venligst igen.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1379"/>
         <location filename="../source/src/mainwindow.cpp" line="1383"/>
-        <location filename="../source/src/mainwindow.cpp" line="1905"/>
-        <location filename="../source/src/mainwindow.cpp" line="1916"/>
+        <location filename="../source/src/mainwindow.cpp" line="1387"/>
+        <location filename="../source/src/mainwindow.cpp" line="1909"/>
+        <location filename="../source/src/mainwindow.cpp" line="1920"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Utilstrækkelig plads — ryd venligst og prøv igen</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1413"/>
-        <location filename="../source/src/mainwindow.cpp" line="1433"/>
+        <location filename="../source/src/mainwindow.cpp" line="1417"/>
+        <location filename="../source/src/mainwindow.cpp" line="1437"/>
         <source>Skipped all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1909"/>
-        <location filename="../source/src/mainwindow.cpp" line="1920"/>
+        <location filename="../source/src/mainwindow.cpp" line="1913"/>
+        <location filename="../source/src/mainwindow.cpp" line="1924"/>
         <source>Damaged file</source>
         <translation>Beskadiget fil</translation>
     </message>
@@ -519,66 +519,68 @@
     <name>Progress</name>
     <message>
         <location filename="../source/src/progress.cpp" line="74"/>
-        <location filename="../source/src/progress.cpp" line="245"/>
+        <location filename="../source/src/progress.cpp" line="259"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="70"/>
-        <location filename="../source/src/progress.cpp" line="79"/>
-        <location filename="../source/src/progress.cpp" line="83"/>
-        <location filename="../source/src/progress.cpp" line="271"/>
+        <location filename="../source/src/progress.cpp" line="130"/>
+        <location filename="../source/src/progress.cpp" line="131"/>
+        <location filename="../source/src/progress.cpp" line="135"/>
+        <location filename="../source/src/progress.cpp" line="136"/>
+        <location filename="../source/src/progress.cpp" line="285"/>
         <source>Calculating...</source>
         <translation>Udregner ...</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="79"/>
-        <source>Speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="83"/>
-        <location filename="../source/src/progress.cpp" line="166"/>
-        <location filename="../source/src/progress.cpp" line="177"/>
-        <source>The rest time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="160"/>
-        <location filename="../source/src/progress.cpp" line="162"/>
-        <location filename="../source/src/progress.cpp" line="164"/>
-        <source>Compression speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="171"/>
-        <location filename="../source/src/progress.cpp" line="173"/>
-        <location filename="../source/src/progress.cpp" line="175"/>
-        <source>Decompression speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/progress.cpp" line="238"/>
+        <location filename="../source/src/progress.cpp" line="252"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Er du sikker på, at du vil stoppe komprimeringen?</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="246"/>
+        <location filename="../source/src/progress.cpp" line="260"/>
         <source>Confirm</source>
         <translation>Bekræft</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="242"/>
+        <location filename="../source/src/progress.cpp" line="256"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>Er du sikker på, at du vil stoppe udpakningen?</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="205"/>
+        <location filename="../source/src/progress.cpp" line="130"/>
+        <location filename="../source/src/progress.cpp" line="174"/>
+        <location filename="../source/src/progress.cpp" line="176"/>
+        <location filename="../source/src/progress.cpp" line="178"/>
+        <source>Speed</source>
+        <comment>compress</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="131"/>
+        <location filename="../source/src/progress.cpp" line="136"/>
+        <location filename="../source/src/progress.cpp" line="180"/>
+        <location filename="../source/src/progress.cpp" line="191"/>
+        <source>Time left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="135"/>
+        <location filename="../source/src/progress.cpp" line="185"/>
+        <location filename="../source/src/progress.cpp" line="187"/>
+        <location filename="../source/src/progress.cpp" line="189"/>
+        <source>Speed</source>
+        <comment>uncompress</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="219"/>
         <source>Compressing</source>
         <translation>Komprimerer</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="208"/>
+        <location filename="../source/src/progress.cpp" line="222"/>
         <source>Extracting</source>
         <translation>Udpakker</translation>
     </message>
