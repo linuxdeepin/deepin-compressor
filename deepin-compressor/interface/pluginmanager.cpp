@@ -282,7 +282,7 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 //    Q_UNUSED(entrySize)
 //#endif
 
-    if( (!readWrite) &&  (mimeType.name() == QString("application/zip") || mimeType.name() == QString("application/x-tar")) )
+    if( (!readWrite) &&  (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/) )
     {
         foreach(Plugin* plugin, preferredPlugins)
         {

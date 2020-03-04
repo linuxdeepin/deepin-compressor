@@ -27,3 +27,6 @@ sudo apt-get install deepin-compressor
 Caution:
 sudo cp BUILD_PATH/plugin/*/*.so /usr/lib/deepin-compressor/plugins
 sudo cp BUILD_PATH/plugin/*/*/*.so /usr/lib/deepin-compressor/plugins
+
+## [Wiki](http://gitlab01.archermind.com/amt_SY/compressor/wikis/home)
+
