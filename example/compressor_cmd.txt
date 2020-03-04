@@ -39,3 +39,8 @@
 	
 测试结果：
 工具 文件名 文件大小 耗时 压缩率
+
+mimetype Avatar.zip 查看文件mimetype
+file -i Avatar.zip  查看文件类型
+
+7z l -slt 1.tar   7z获取文件列表
