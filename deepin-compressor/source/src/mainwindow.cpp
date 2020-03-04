@@ -603,6 +603,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
+        m_timer.start();
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
@@ -614,6 +615,7 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
+        m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
@@ -635,7 +637,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
-        m_timer.start();
+        //m_timer.start();
         break;
     case PAGE_UNZIPPROGRESS:
         m_openAction->setEnabled(false);
@@ -644,7 +646,7 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
-        m_timer.start();
+        //m_timer.start();
         break;
     case PAGE_ZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
@@ -829,13 +831,6 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-    if (!m_initflag)
-    {
-        InitUI();
-        InitConnection();
-        m_initflag = true;
-    }
-
     //add
     QFileInfo fileInfo(files.at(0));
     if (fileInfo.isFile())
@@ -845,6 +840,13 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     else if (fileInfo.isDir())
     {
         m_size += caltotalsize(files.at(0));
+    }
+
+    if (!m_initflag)
+    {
+        InitUI();
+        InitConnection();
+        m_initflag = true;
     }
 
     if (files.last() == QStringLiteral("extract_here"))
@@ -1257,7 +1259,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
     //add calculate speed and the rest time
-    if (percent > lastpercent)
+    if (percent != lastpercent && percent > lastpercent)
     {
         timer = m_timer.elapsed();
         m_time += timer;
@@ -1281,7 +1283,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         m_Progess->setspeed(m_speed);
         m_Progess->setresttime(m_resttime);
 
-        lastpercent = percent;;
+        lastpercent = percent;
 
         m_timer.restart();
     }
