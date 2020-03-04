@@ -56,6 +56,8 @@ public:
     void setresttime(double resttime);
     void displayspeedandtime(bool isStart);
 
+    void setLabelText(COMPRESS_TYPE type);
+
 signals:
     void  sigCancelPressed(int compressType);
 
