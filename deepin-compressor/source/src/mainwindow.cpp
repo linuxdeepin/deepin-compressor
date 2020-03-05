@@ -580,6 +580,9 @@ void MainWindow::refreshPage()
     //    setAcceptDrops(false);
     //    m_titlebutton->setVisible(false);
     qDebug() << m_pageid;
+
+    m_encryptionpage->resetPage();
+
     switch (m_pageid)
     {
     case PAGE_HOME:
@@ -1187,8 +1190,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
-    connect(
-        m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(m_encryptionjob,
             SIGNAL(percentfilename(KJob *, const QString &)),
