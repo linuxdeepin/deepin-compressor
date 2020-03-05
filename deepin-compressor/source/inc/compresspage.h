@@ -57,6 +57,8 @@ signals:
     void sigiscanaddfile(bool status);
     void sigFilelistIsEmpty();
 
+    void sigRefreshFileList(const QStringList &files);
+
 private:
 
     fileViewer *m_fileviewer;

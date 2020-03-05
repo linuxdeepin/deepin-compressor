@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -348,6 +349,7 @@ void MainWindow::InitConnection()
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
     connect(m_CompressPage, &CompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
     connect(m_CompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
+    connect(m_CompressPage, &CompressPage::sigRefreshFileList, this, &MainWindow::slotCalDeleteRefreshTotalFileSize);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
@@ -598,7 +600,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_Progess->resetProgress();
-        m_Progess->setLabelText(DECOMPRESSING);
+        m_Progess->setSpeedAndTimeText(DECOMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
@@ -620,7 +622,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
-        m_Progess->setLabelText(COMPRESSING);
+        m_Progess->setSpeedAndTimeText(COMPRESSING);
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -721,8 +723,40 @@ void MainWindow::refreshPage()
     }
 }
 
-//add
-quint64 MainWindow::caltotalsize(const QString &path)
+//add calculate size of selected files
+void MainWindow::calSelectedTotalFileSize(const QStringList &files)
+{
+
+    foreach(QFileInfo fileInfo, files)
+    {
+        if (fileInfo.isFile())
+        {
+            selectedTotalFileSize += fileInfo.size();
+        }
+        else if (fileInfo.isDir())
+        {
+            selectedTotalFileSize += calFileSize(fileInfo.filePath());
+        }
+    }
+}
+
+void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
+{
+    selectedTotalFileSize = 0;
+    foreach(QFileInfo fileInfo, files)
+    {
+        if (fileInfo.isFile())
+        {
+            selectedTotalFileSize += fileInfo.size();
+        }
+        else if (fileInfo.isDir())
+        {
+            selectedTotalFileSize += calFileSize(fileInfo.filePath());
+        }
+    }
+}
+
+quint64 MainWindow::calFileSize(const QString &path)
 {
     QDir dir(path);
     quint64 size = 0;
@@ -733,7 +767,7 @@ quint64 MainWindow::caltotalsize(const QString &path)
     }
     foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        size += caltotalsize(path + QDir::separator() + subDir);
+        size += calFileSize(path + QDir::separator() + subDir);
     }
 
     return size;
@@ -741,16 +775,7 @@ quint64 MainWindow::caltotalsize(const QString &path)
 
 void MainWindow::onSelected(const QStringList &files)
 {
-    //add
-    QFileInfo fileInfo(files.at(0));
-    if (fileInfo.isFile())
-    {
-        m_size += fileInfo.size();
-    }
-    else if (fileInfo.isDir())
-    {
-        m_size += caltotalsize(files.at(0));
-    }
+    calSelectedTotalFileSize(files);
 
     if (files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
@@ -841,16 +866,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_initflag = true;
     }
 
-    //add
-    QFileInfo fileInfo(files.at(0));
-    if (fileInfo.isFile())
-    {
-        m_size += fileInfo.size();
-    }
-    else if (fileInfo.isDir())
-    {
-        m_size += caltotalsize(files.at(0));
-    }
+    calSelectedTotalFileSize(files);
 
     if (files.last() == QStringLiteral("extract_here"))
     {
@@ -1259,36 +1275,28 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     m_encryptionjob->start();
 }
 
+void MainWindow::calSpeedAndTime(unsigned long compressPercent)
+{
+    compressTime += m_timer.elapsed();
+
+    double m_compressSpeed = ((selectedTotalFileSize / 1024.0) * (compressPercent / 100.0)) / compressTime * 1000;
+    double m_sizeLeft = (selectedTotalFileSize / 1024.0) * (100 - compressPercent) / 100;
+    qint64 m_timeLeft = m_sizeLeft / m_compressSpeed;
+
+    qDebug() << "m_sizeLeft" << m_sizeLeft;
+    qDebug() << "m_compressSpeed" << m_compressSpeed;
+    qDebug() << "m_timeLeft" << m_timeLeft;
+
+    m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
+    m_timer.restart();
+}
+
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
-    //add calculate speed and the rest time
-    if (percent != lastpercent && percent > lastpercent)
+    if (percent > lastPercent)
     {
-        timer = m_timer.elapsed();
-        m_time += timer;
-
-        qDebug() << "m_time" << m_time;
-
-        double m_speed = 0;
-        double m_resttime = 0;
-
-        //m_speed = ((m_size / 1024.0) * ((percent - lastpercent) / 100.0)) / m_time * 1000;
-        m_speed = ((m_size / 1024.0) * (percent / 100.0)) / m_time * 1000;
-
-        double restsize = (m_size / 1024.0) * (100 - percent) / 100;
-
-        m_resttime = restsize / m_speed;
-
-        qDebug() << "restsize" << restsize;
-        qDebug() << "m_speed" << m_speed;
-        qDebug() << "m_resttime" << m_resttime;
-
-        m_Progess->setspeed(m_speed);
-        m_Progess->setresttime(m_resttime);
-
-        lastpercent = percent;
-
-        m_timer.restart();
+        calSpeedAndTime(percent);
+        lastPercent = percent;
     }
 
     qDebug() << "percent" << percent;
@@ -2026,9 +2034,8 @@ void MainWindow::slotFailRetry()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     //add
-    timer = 0;
-    m_time = 0;
-    lastpercent = 0;
+    lastPercent = 0;
+    compressTime = 0;
     m_timer.elapsed();
 
     if (m_encryptionjob)

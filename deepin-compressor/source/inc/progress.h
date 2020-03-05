@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
 #include <DPushButton>
 #include <DLabel>
 #include <DProgressBar>
+#include <QElapsedTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -51,12 +53,11 @@ public:
     int showConfirmDialog();
     void resetProgress();
 
-    //add
-    void setspeed(double speed);
-    void setresttime(double resttime);
-    void displayspeedandtime(bool isStart);
+    void timerEvent(QTimerEvent *event) override;
+    void setSpeedAndTime(double speed, qint64 timeLeft);
+    void displaySpeedAndTime(double speed, qint64 timeLeft);
 
-    void setLabelText(COMPRESS_TYPE type);
+    void setSpeedAndTimeText(COMPRESS_TYPE type);
 
 signals:
     void  sigCancelPressed(int compressType);
@@ -78,17 +79,13 @@ private:
     COMPRESS_TYPE m_type;
 
     //add
-    QLabel *m_speedlabel;
-    QLabel *m_resttimelabel;
+    DLabel *m_speedlabel = nullptr;
+    DLabel *m_resttimelabel = nullptr;
 
-    double m_speed;
-    double m_resttime;
-
-    bool isStart = false;
-
-    QString hh;
-    QString mm;
-    QString ss;
+    qint64 lastTimeLeft = 0;
+    double m_speed = 0;
+    int m_startTimer = 0;
+    bool reciveSpeedAndTime = false;
 };
 
 #endif // PROGRESS_H
