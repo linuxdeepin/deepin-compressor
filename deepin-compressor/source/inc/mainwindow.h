@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,6 +155,8 @@ private slots:
     void onUpdateDestFile(QString destFile);
     void onCompressPageFilelistIsEmpty();
 
+    void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
+
 signals:
     void sigquitApp();
     void sigZipAddFile();
@@ -222,18 +225,15 @@ private:
 
     DFileWatcher* m_fileManager = nullptr;
 
-    //add
 private:
-    quint64 caltotalsize(const QString &path);
-
-    quint64 m_size = 0;
-    unsigned long lastpercent = 0;
+    void calSelectedTotalFileSize(const QStringList &files);
+    quint64 calFileSize(const QString &path);
+    void calSpeedAndTime(unsigned long compressPercent);
 
     QElapsedTimer m_timer;
-
-    double timer = 0;
-    double m_time = 0;
-    double m_lastresttime = 0;
+    unsigned long lastPercent = 0;
+    quint64 selectedTotalFileSize = 0;
+    qint64 compressTime = 0;
 };
 
 
