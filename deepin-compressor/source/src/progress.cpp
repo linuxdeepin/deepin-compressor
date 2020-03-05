@@ -29,8 +29,8 @@
 #include "DFontSizeManager"
 #include "utils.h"
 
-Progress::Progress(QWidget *parent)
-    : QWidget(parent)
+Progress::Progress(DWidget *parent)
+    : DWidget(parent)
 {
     m_filename = "新建归档文件.rar";
     m_progressfile = "设计图111.jpg";

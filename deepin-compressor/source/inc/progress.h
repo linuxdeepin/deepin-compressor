@@ -38,7 +38,7 @@ class Progress: public DWidget
 {
     Q_OBJECT
 public:
-    Progress(QWidget *parent = nullptr);
+    Progress(DWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
 
