@@ -55,7 +55,7 @@ private:
     DCommandLinkButton *commandLinkBackButton = nullptr;
 
 signals:
-    void backButtonClicked();
+    void sigBackButtonClicked();
 
 public slots:
     void showfiledirSlot();

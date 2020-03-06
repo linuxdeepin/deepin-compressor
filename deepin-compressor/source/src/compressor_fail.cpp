@@ -59,6 +59,12 @@ void Compressor_Fail::InitUI()
     m_retrybutton->setText(tr("Retry"));
     m_retrybutton->setFocusPolicy(Qt::ClickFocus);
 
+    commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
+    QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
+    commandLinkButtonLayout->addStretch();
+    commandLinkButtonLayout->addWidget(commandLinkBackButton);
+    commandLinkButtonLayout->addStretch();
+
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -72,6 +78,7 @@ void Compressor_Fail::InitUI()
     buttonHBoxLayout->addStretch(1);
 
     mainlayout->addLayout(buttonHBoxLayout);
+    mainlayout->addLayout(commandLinkButtonLayout);
 
     mainlayout->setContentsMargins(12, 6, 20, 20);
 
@@ -81,6 +88,7 @@ void Compressor_Fail::InitUI()
 void Compressor_Fail::InitConnection()
 {
     connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::sigFailRetry);
+    connect(commandLinkBackButton, &DCommandLinkButton::clicked, this, &Compressor_Fail::commandLinkBackButtonClicked);
 //    auto changeTheme = [this]() {
 //        DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
 //        pa.setBrush(DPalette::Text, pa.color(DPalette::TextTitle));
@@ -104,4 +112,9 @@ void Compressor_Fail::setFailStrDetail(const QString &str)
 {
     m_stringdetail = str;
     m_stringdetaillabel->setText(m_stringdetail);
+}
+
+void Compressor_Fail::commandLinkBackButtonClicked()
+{
+    emit sigBackButtonClickedOnFail();
 }

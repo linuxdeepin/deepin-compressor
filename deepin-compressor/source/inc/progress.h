@@ -27,7 +27,7 @@
 #include <DPushButton>
 #include <DLabel>
 #include <DProgressBar>
-#include <QElapsedTimer>
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +44,7 @@ public:
     void InitUI();
     void InitConnection();
 
-    void setprogress(uint percent);
+    void setprogress(int percent);
     void setFilename(QString filename);
     void setProgressFilename(QString filename);
     void settype(COMPRESS_TYPE type);
@@ -53,17 +53,18 @@ public:
     int showConfirmDialog();
     void resetProgress();
 
-    void timerEvent(QTimerEvent *event) override;
     void setSpeedAndTime(double speed, qint64 timeLeft);
     void displaySpeedAndTime(double speed, qint64 timeLeft);
 
     void setSpeedAndTimeText(COMPRESS_TYPE type);
+
 
 signals:
     void  sigCancelPressed(int compressType);
 
 public slots:
     void cancelbuttonPressedSlot();
+    void slotChangeTimeLeft();
 
 private:
     DPushButton *m_cancelbutton;
@@ -79,13 +80,12 @@ private:
     COMPRESS_TYPE m_type;
 
     //add
-    DLabel *m_speedlabel = nullptr;
-    DLabel *m_resttimelabel = nullptr;
+    DLabel *m_speedLabel = nullptr;
+    DLabel *m_restTimeLabel = nullptr;
 
+    QTimer *m_timer;
     qint64 lastTimeLeft = 0;
     double m_speed = 0;
-    int m_startTimer = 0;
-    bool reciveSpeedAndTime = false;
 };
 
 #endif // PROGRESS_H

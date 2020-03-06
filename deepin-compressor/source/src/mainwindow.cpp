@@ -355,7 +355,7 @@ void MainWindow::InitConnection()
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
-    connect(m_CompressSuccess, &Compressor_Success::backButtonClicked, this, &MainWindow::slotBackButtonClicked);
+    connect(m_CompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished, this, &MainWindow::slotLoadingFinished);
@@ -364,6 +364,7 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles, this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract, this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
+    connect(m_CompressFail, &Compressor_Fail::sigBackButtonClickedOnFail, this, &MainWindow::slotBackButtonClicked);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [=](QString msg) {
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
@@ -667,7 +668,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_UNZIP_SUCCESS:
@@ -698,7 +699,7 @@ void MainWindow::refreshPage()
         m_CompressFail->setFailStr(tr("Extraction failed"));
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_ENCRYPTION:
@@ -758,9 +759,12 @@ void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
 void MainWindow::slotBackButtonClicked()
 {
     stopCalPercentAndTime();
-
     m_CompressSuccess->clear();
-    m_CompressPage->deleteFiles();
+
+    if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
+    {
+        m_CompressPage->clearFiles();
+    }
 
     m_pageid = PAGE_HOME;
     refreshPage();
