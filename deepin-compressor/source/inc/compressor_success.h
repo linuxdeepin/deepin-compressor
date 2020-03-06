@@ -25,6 +25,7 @@
 #include <DWidget>
 #include <DPushButton>
 #include <DLabel>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -51,8 +52,14 @@ private:
     QString m_path;
     QString m_fullpath;
     QString newCreatePath_;
+    DCommandLinkButton *commandLinkBackButton = nullptr;
+
+signals:
+    void backButtonClicked();
+
 public slots:
     void showfiledirSlot();
+    void commandLinkBackButtonClicked();
 
 signals:
     void sigQuitApp();

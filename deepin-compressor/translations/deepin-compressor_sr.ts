@@ -171,6 +171,11 @@
         <source>View</source>
         <translation>Прикажи</translation>
     </message>
+    <message>
+        <location filename="../source/src/compressor_success.cpp" line="56"/>
+        <source>Back</source>
+        <translation type="unfinished">Назад</translation>
+    </message>
 </context>
 <context>
     <name>EncodingPage</name>
@@ -273,158 +278,158 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="301"/>
+        <location filename="../source/src/mainwindow.cpp" line="302"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="305"/>
+        <location filename="../source/src/mainwindow.cpp" line="306"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="309"/>
+        <location filename="../source/src/mainwindow.cpp" line="310"/>
         <source>Select the file</source>
         <translation>Отвори</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="313"/>
+        <location filename="../source/src/mainwindow.cpp" line="314"/>
         <source>Delete</source>
         <translation>Обриши</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="333"/>
+        <location filename="../source/src/mainwindow.cpp" line="334"/>
         <source>Shortcuts</source>
         <translation>Пречице</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="393"/>
+        <location filename="../source/src/mainwindow.cpp" line="396"/>
         <source>Open file</source>
         <translation>Отвори датотеку</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="423"/>
+        <location filename="../source/src/mainwindow.cpp" line="426"/>
         <source>Settings</source>
         <translation>Подешавања</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="612"/>
-        <location filename="../source/src/mainwindow.cpp" line="623"/>
-        <location filename="../source/src/mainwindow.cpp" line="1581"/>
+        <location filename="../source/src/mainwindow.cpp" line="614"/>
+        <location filename="../source/src/mainwindow.cpp" line="625"/>
+        <location filename="../source/src/mainwindow.cpp" line="1607"/>
         <source>Create New Archive</source>
         <translation>Направи нову архиву</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="655"/>
+        <location filename="../source/src/mainwindow.cpp" line="657"/>
         <source>Compression successful</source>
         <translation>Успешно запаковано</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1441"/>
+        <location filename="../source/src/mainwindow.cpp" line="1467"/>
         <source>Extraction successful</source>
         <translation>Успешно распаковано</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="233"/>
+        <location filename="../source/src/mainwindow.cpp" line="234"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 је измењено на диску, поново увезите.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="786"/>
+        <location filename="../source/src/mainwindow.cpp" line="822"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Желите ли да додате архиву на спиисак или да је отворите у новом прозору?</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="321"/>
+        <location filename="../source/src/mainwindow.cpp" line="322"/>
         <source>Display shortcuts</source>
         <translation>Прикажи пречице</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="787"/>
+        <location filename="../source/src/mainwindow.cpp" line="823"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="62"/>
+        <location filename="../source/src/mainwindow.cpp" line="63"/>
         <source>Archive Manager</source>
         <translation>Архиватор</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1157"/>
+        <location filename="../source/src/mainwindow.cpp" line="235"/>
+        <location filename="../source/src/mainwindow.cpp" line="1184"/>
         <source>OK</source>
         <translation>У реду</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="639"/>
+        <location filename="../source/src/mainwindow.cpp" line="643"/>
         <source>Compressing</source>
         <translation>Запакивање</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="648"/>
+        <location filename="../source/src/mainwindow.cpp" line="651"/>
         <source>Extracting</source>
         <translation>Распакивање</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="664"/>
+        <location filename="../source/src/mainwindow.cpp" line="666"/>
         <source>Compression failed</source>
         <translation>Неуспешно запакивање</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="696"/>
+        <location filename="../source/src/mainwindow.cpp" line="698"/>
         <source>Extraction failed</source>
         <translation>Неуспешно распакивање</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="788"/>
+        <location filename="../source/src/mainwindow.cpp" line="824"/>
         <source>Add</source>
         <translation>Додај</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="789"/>
+        <location filename="../source/src/mainwindow.cpp" line="825"/>
         <source>Open in new window</source>
         <translation>Отвори у новом прозору</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="936"/>
+        <location filename="../source/src/mainwindow.cpp" line="963"/>
         <source>Find directory</source>
         <translation>Нађи директоријум</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1353"/>
+        <location filename="../source/src/mainwindow.cpp" line="1379"/>
         <source>Wrong password</source>
         <translation>Погрешна лозинка</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1020"/>
-        <location filename="../source/src/mainwindow.cpp" line="1048"/>
-        <location filename="../source/src/mainwindow.cpp" line="1092"/>
-        <location filename="../source/src/mainwindow.cpp" line="1391"/>
+        <location filename="../source/src/mainwindow.cpp" line="1047"/>
+        <location filename="../source/src/mainwindow.cpp" line="1075"/>
+        <location filename="../source/src/mainwindow.cpp" line="1119"/>
+        <location filename="../source/src/mainwindow.cpp" line="1417"/>
         <source>Damaged file, unable to extract</source>
         <translation>Оштећена датотека, немогуће распаковати</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1156"/>
+        <location filename="../source/src/mainwindow.cpp" line="1183"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Архива је измењена на диску, молимо увезите поново.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1383"/>
-        <location filename="../source/src/mainwindow.cpp" line="1387"/>
-        <location filename="../source/src/mainwindow.cpp" line="1909"/>
-        <location filename="../source/src/mainwindow.cpp" line="1920"/>
+        <location filename="../source/src/mainwindow.cpp" line="1409"/>
+        <location filename="../source/src/mainwindow.cpp" line="1413"/>
+        <location filename="../source/src/mainwindow.cpp" line="1935"/>
+        <location filename="../source/src/mainwindow.cpp" line="1946"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Недовољно простора, ослободите и поново покушајте</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1417"/>
-        <location filename="../source/src/mainwindow.cpp" line="1437"/>
+        <location filename="../source/src/mainwindow.cpp" line="1443"/>
+        <location filename="../source/src/mainwindow.cpp" line="1463"/>
         <source>Skipped all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1913"/>
-        <location filename="../source/src/mainwindow.cpp" line="1924"/>
+        <location filename="../source/src/mainwindow.cpp" line="1939"/>
+        <location filename="../source/src/mainwindow.cpp" line="1950"/>
         <source>Damaged file</source>
         <translation>Оштећена датотека</translation>
     </message>
@@ -518,69 +523,66 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../source/src/progress.cpp" line="74"/>
-        <location filename="../source/src/progress.cpp" line="259"/>
+        <location filename="../source/src/progress.cpp" line="77"/>
+        <location filename="../source/src/progress.cpp" line="273"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="70"/>
+        <location filename="../source/src/progress.cpp" line="73"/>
         <location filename="../source/src/progress.cpp" line="130"/>
-        <location filename="../source/src/progress.cpp" line="131"/>
-        <location filename="../source/src/progress.cpp" line="135"/>
+        <location filename="../source/src/progress.cpp" line="134"/>
         <location filename="../source/src/progress.cpp" line="136"/>
-        <location filename="../source/src/progress.cpp" line="285"/>
+        <location filename="../source/src/progress.cpp" line="299"/>
         <source>Calculating...</source>
         <translation>Рачунање...</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="252"/>
+        <location filename="../source/src/progress.cpp" line="266"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Заиста желите да зауставите запакивање?</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="260"/>
+        <location filename="../source/src/progress.cpp" line="274"/>
         <source>Confirm</source>
         <translation>Потврди</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="256"/>
+        <location filename="../source/src/progress.cpp" line="270"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>Заиста желите да зауставите распакивање?</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="130"/>
-        <location filename="../source/src/progress.cpp" line="174"/>
-        <location filename="../source/src/progress.cpp" line="176"/>
-        <location filename="../source/src/progress.cpp" line="178"/>
+        <location filename="../source/src/progress.cpp" line="189"/>
+        <location filename="../source/src/progress.cpp" line="191"/>
+        <location filename="../source/src/progress.cpp" line="193"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="131"/>
         <location filename="../source/src/progress.cpp" line="136"/>
-        <location filename="../source/src/progress.cpp" line="180"/>
-        <location filename="../source/src/progress.cpp" line="191"/>
+        <location filename="../source/src/progress.cpp" line="206"/>
         <source>Time left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="135"/>
-        <location filename="../source/src/progress.cpp" line="185"/>
-        <location filename="../source/src/progress.cpp" line="187"/>
-        <location filename="../source/src/progress.cpp" line="189"/>
+        <location filename="../source/src/progress.cpp" line="134"/>
+        <location filename="../source/src/progress.cpp" line="199"/>
+        <location filename="../source/src/progress.cpp" line="201"/>
+        <location filename="../source/src/progress.cpp" line="203"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="219"/>
+        <location filename="../source/src/progress.cpp" line="233"/>
         <source>Compressing</source>
         <translation>Запакивање</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="222"/>
+        <location filename="../source/src/progress.cpp" line="236"/>
         <source>Extracting</source>
         <translation>Распакивање</translation>
     </message>

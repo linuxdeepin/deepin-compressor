@@ -355,6 +355,7 @@ void MainWindow::InitConnection()
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
+    connect(m_CompressSuccess, &Compressor_Success::backButtonClicked, this, &MainWindow::slotBackButtonClicked);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished, this, &MainWindow::slotLoadingFinished);
@@ -642,7 +643,6 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
-        //m_timer.start();
         break;
     case PAGE_UNZIPPROGRESS:
         m_openAction->setEnabled(false);
@@ -651,7 +651,6 @@ void MainWindow::refreshPage()
         setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
-        //m_timer.start();
         break;
     case PAGE_ZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
@@ -659,7 +658,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_ZIP_FAIL:
@@ -678,7 +677,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         if (m_settingsDialog->isAutoOpen())
         {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
@@ -754,6 +753,17 @@ void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
             selectedTotalFileSize += calFileSize(fileInfo.filePath());
         }
     }
+}
+
+void MainWindow::slotBackButtonClicked()
+{
+    stopCalPercentAndTime();
+
+    m_CompressSuccess->clear();
+    m_CompressPage->deleteFiles();
+
+    m_pageid = PAGE_HOME;
+    refreshPage();
 }
 
 quint64 MainWindow::calFileSize(const QString &path)
@@ -1289,6 +1299,13 @@ void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 
     m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
     m_timer.restart();
+}
+
+void MainWindow::stopCalPercentAndTime()
+{
+    lastPercent = 0;
+    compressTime = 0;
+    m_timer.elapsed();
 }
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
@@ -2033,10 +2050,7 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
-    //add
-    lastPercent = 0;
-    compressTime = 0;
-    m_timer.elapsed();
+    stopCalPercentAndTime();
 
     if (m_encryptionjob)
     {
