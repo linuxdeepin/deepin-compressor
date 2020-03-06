@@ -53,6 +53,12 @@ void Compressor_Success::InitUI()
     m_showfilebutton->setText(tr("View"));
     m_showfilebutton->setFocusPolicy(Qt::ClickFocus);
 
+    commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
+    QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
+    commandLinkButtonLayout->addStretch();
+    commandLinkButtonLayout->addWidget(commandLinkBackButton);
+    commandLinkButtonLayout->addStretch();
+
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -65,6 +71,7 @@ void Compressor_Success::InitUI()
     buttonHBoxLayout->addStretch(1);
 
     mainlayout->addLayout(buttonHBoxLayout);
+    mainlayout->addLayout(commandLinkButtonLayout);
 
     mainlayout->setContentsMargins(12, 6, 20, 20);
 
@@ -74,6 +81,7 @@ void Compressor_Success::InitUI()
 void Compressor_Success::InitConnection()
 {
     connect(m_showfilebutton, &DPushButton::clicked, this, &Compressor_Success::showfiledirSlot);
+    connect(commandLinkBackButton, &DCommandLinkButton::clicked, this, &Compressor_Success::commandLinkBackButtonClicked);
 
 //    auto changeTheme = [this]() {
 //        DPalette pa = DApplicationHelper::instance()->palette(m_stringinfolabel);
@@ -100,6 +108,11 @@ void Compressor_Success::showfiledirSlot()
     }
 
     //emit sigQuitApp();
+}
+
+void Compressor_Success::commandLinkBackButtonClicked()
+{
+    emit backButtonClicked();
 }
 
 void Compressor_Success::setstringinfo(QString str)
