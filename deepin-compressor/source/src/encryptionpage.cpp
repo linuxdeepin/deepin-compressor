@@ -89,6 +89,13 @@ void EncryptionPage::setPassowrdFocus()
     m_password->setFocus(Qt::OtherFocusReason);
 }
 
+void EncryptionPage::resetPage()
+{
+    m_inputflag = false;
+    m_password->clear();
+    m_password->setAlert(false);
+}
+
 void EncryptionPage::nextbuttonClicked()
 {
     m_inputflag = true;

@@ -301,6 +301,16 @@ bool CliPlugin::readListLine(const QString &line)
             }
             m_currentArchiveEntry = nullptr;
         }
+        else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType)
+        {
+            m_isFirstInformationEntry = true;
+            if (!m_currentArchiveEntry->fullPath().isEmpty() ) {
+                emit entry(m_currentArchiveEntry);
+            } else {
+                delete m_currentArchiveEntry;
+            }
+            m_currentArchiveEntry = nullptr;
+        }
         break;
     }
 

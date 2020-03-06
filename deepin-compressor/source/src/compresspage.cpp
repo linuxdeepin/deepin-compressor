@@ -193,9 +193,9 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
     QStringList inputlist = files;
     foreach (QString m_path, m_filelist)
     {
+        QFileInfo mfile(m_path);
         foreach (QString path, files)
         {
-            QFileInfo mfile(m_path);
             QFileInfo file(path);
             if (file.fileName() == mfile.fileName())
             {

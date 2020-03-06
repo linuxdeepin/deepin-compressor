@@ -38,6 +38,7 @@ public:
     void InitConnection();
 
     void setPassowrdFocus();
+    void resetPage();
 private:
 signals:
     void sigExtractPassword(QString password);

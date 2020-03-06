@@ -178,7 +178,7 @@ private:
     QJsonObject creatShorcutJson();
 
     QStringList CheckAllFiles(QString path);
-    void deleteCompressFile(QStringList oldfiles, QStringList newfiles);
+    void deleteCompressFile(/*QStringList oldfiles, QStringList newfiles*/);
 
 private:
     DLabel *m_logo;
@@ -216,7 +216,9 @@ private:
     //bool m_progressTransFlag = false;
     QAction *m_openAction;
 
-    QStringList m_compressDirFiles;
+    //QStringList m_compressDirFiles;
+    QString createCompressFile_;
+
     QString m_pathstore;
     bool m_initflag = false;
     int m_startTimer = 0;

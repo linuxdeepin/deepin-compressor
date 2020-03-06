@@ -103,14 +103,14 @@ bool MainWindow::applicationQuit()
             return false;
         }
 
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
 
         if (m_encryptionjob)
         {
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
         if (m_createJob)
         {
             m_createJob->kill();
@@ -119,7 +119,7 @@ bool MainWindow::applicationQuit()
     }
     else if (7 == m_mainLayout->currentIndex())
     {
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
     }
 
     return true;
@@ -170,7 +170,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             return;
         }
 
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
         event->accept();
 
         if (m_encryptionjob)
@@ -178,7 +178,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             m_encryptionjob->deleteLater();
             m_encryptionjob = nullptr;
         }
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
         if (m_createJob)
         {
             m_createJob->kill();
@@ -189,7 +189,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     else if (7 == m_mainLayout->currentIndex())
     {
-        deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
         event->accept();
         slotquitApp();
     }
@@ -584,6 +584,9 @@ void MainWindow::refreshPage()
     //    setAcceptDrops(false);
     //    m_titlebutton->setVisible(false);
     qDebug() << m_pageid;
+
+    m_encryptionpage->resetPage();
+
     switch (m_pageid)
     {
     case PAGE_HOME:
@@ -1232,7 +1235,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     QString destinationDirectory;
 
     m_pathstore = userDestination;
-    m_compressDirFiles = CheckAllFiles(m_pathstore);
+    //m_compressDirFiles = CheckAllFiles(m_pathstore);
 
     if (m_settingsDialog->isAutoCreatDir())
     {
@@ -1264,8 +1267,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
-    connect(
-        m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(m_encryptionjob,
             SIGNAL(percentfilename(KJob *, const QString &)),
@@ -1696,7 +1698,7 @@ void MainWindow::creatBatchArchive(QMap< QString, QString > &Args, QMap< QString
     m_CompressSuccess->setCompressFullPath(Args[QStringLiteral("localFilePath")] + QDir::separator()
                                            + Args[QStringLiteral("filename")]);
     m_pathstore = Args[QStringLiteral("localFilePath")];
-    m_compressDirFiles = CheckAllFiles(m_pathstore);
+    //m_compressDirFiles = CheckAllFiles(m_pathstore);
 
     m_pageid = PAGE_ZIPPROGRESS;
     m_Progess->settype(COMPRESSING);
@@ -1796,53 +1798,58 @@ bool clearTempFiles(const QString &temp_path)
     return ret;
 }
 
-void MainWindow::deleteCompressFile(QStringList oldfiles, QStringList newfiles)
+void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles*/)
 {
-    if (newfiles.count() <= oldfiles.count())
+    QFile fi(createCompressFile_);
+    if(fi.exists())
     {
-        qDebug() << "No file to delete";
-        return;
+        fi.remove();
     }
+//    if (newfiles.count() <= oldfiles.count())
+//    {
+//        qDebug() << "No file to delete";
+//        return;
+//    }
 
-    QStringList deletefile;
-    foreach (QString newpath, newfiles)
-    {
-        int count = 0;
-        foreach (QString oldpath, oldfiles)
-        {
-            if (oldpath == newpath)
-            {
-                break;
-            }
-            count++;
-        }
-        if (count == oldfiles.count())
-        {
-            deletefile << newpath;
-        }
-    }
+//    QStringList deletefile;
+//    foreach (QString newpath, newfiles)
+//    {
+//        int count = 0;
+//        foreach (QString oldpath, oldfiles)
+//        {
+//            if (oldpath == newpath)
+//            {
+//                break;
+//            }
+//            count++;
+//        }
+//        if (count == oldfiles.count())
+//        {
+//            deletefile << newpath;
+//        }
+//    }
 
-    foreach (QString path, deletefile)
-    {
-        QFileInfo fileInfo(path);
-        if (fileInfo.isFile() || fileInfo.isSymLink())
-        {
-            QFile::setPermissions(path, QFile::WriteOwner);
-            if (!QFile::remove(path))
-            {
-                qDebug() << "delete error!!!!!!!!!";
-            }
-        }
-        else if (fileInfo.isDir())
-        {
-            clearTempFiles(path);
-            qDebug() << "delete ok!!!!!!!!!!!!!!";
-            if (fileInfo.exists())
-            {
-                clearTempFiles(path);
-            }
-        }
-    }
+//    foreach (QString path, deletefile)
+//    {
+//        QFileInfo fileInfo(path);
+//        if (fileInfo.isFile() || fileInfo.isSymLink())
+//        {
+//            QFile::setPermissions(path, QFile::WriteOwner);
+//            if (!QFile::remove(path))
+//            {
+//                qDebug() << "delete error!!!!!!!!!";
+//            }
+//        }
+//        else if (fileInfo.isDir())
+//        {
+//            clearTempFiles(path);
+//            qDebug() << "delete ok!!!!!!!!!!!!!!";
+//            if (fileInfo.exists())
+//            {
+//                clearTempFiles(path);
+//            }
+//        }
+//    }
 }
 
 void MainWindow::creatArchive(QMap< QString, QString > &Args)
@@ -1851,20 +1858,20 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
     const QString password = Args[QStringLiteral("encryptionPassword")];
     const QString enableHeaderEncryption = Args[QStringLiteral("encryptHeader")];
-    QString filename = Args[QStringLiteral("localFilePath")] + QDir::separator() + Args[QStringLiteral("filename")];
+    createCompressFile_ = Args[QStringLiteral("localFilePath")] + QDir::separator() + Args[QStringLiteral("filename")];
     m_decompressfilename = Args[QStringLiteral("filename")];
     m_CompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
 
-    if (filename.isEmpty())
+    if (createCompressFile_.isEmpty())
     {
         qDebug() << "filename.isEmpty()";
         return;
     }
 
-    renameCompress(filename, fixedMimeType);
-    m_decompressfilename = QFileInfo(filename).fileName();
-    m_CompressSuccess->setCompressFullPath(filename);
-    qDebug() << filename;
+    renameCompress(createCompressFile_, fixedMimeType);
+    m_decompressfilename = QFileInfo(createCompressFile_).fileName();
+    m_CompressSuccess->setCompressFullPath(createCompressFile_);
+    qDebug() << createCompressFile_;
 
     CompressionOptions options;
     options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
@@ -1904,7 +1911,7 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-    m_createJob = Archive::create(filename, fixedMimeType, all_entries, options, this);
+    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty())
     {
@@ -1920,7 +1927,7 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     refreshPage();
 
     m_pathstore = Args[QStringLiteral("localFilePath")];
-    m_compressDirFiles = CheckAllFiles(m_pathstore);
+    //m_compressDirFiles = CheckAllFiles(m_pathstore);
 
     m_createJob->start();
     m_workstatus = WorkProcess;
@@ -1958,6 +1965,8 @@ void MainWindow::slotCompressFinished(KJob *job)
         refreshPage();
         return;
     }
+
+    createCompressFile_.clear();
     m_pageid = PAGE_ZIP_SUCCESS;
     refreshPage();
 
@@ -1998,7 +2007,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     m_extractSimpleFiles = fileList;
     const QString destinationDirectory = path;
 
-    m_compressDirFiles = CheckAllFiles(path);
+    //m_compressDirFiles = CheckAllFiles(path);
     qDebug() << "destinationDirectory:" << destinationDirectory;
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
 
@@ -2027,7 +2036,7 @@ void MainWindow::slotKillExtractJob()
         m_encryptionjob->Killjob();
         m_encryptionjob = nullptr;
     }
-    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_decompressfilepath));
+    //deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_decompressfilepath));
 }
 
 void MainWindow::slotFailRetry()
@@ -2062,7 +2071,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
         m_encryptionjob = nullptr;
     }
 
-    deleteCompressFile(m_compressDirFiles, CheckAllFiles(m_pathstore));
+    deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
 
     if (m_createJob)
     {
