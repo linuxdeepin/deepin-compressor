@@ -244,13 +244,9 @@ void CompressPage::onPathIndexChanged()
     }
 }
 
-void CompressPage::deleteFiles()
+void CompressPage::clearFiles()
 {
     m_filelist.clear();
-//    foreach(QString path, m_filelist)
-//    {
-//        m_filelist.removeOne(path);
-//    }
 }
 
 QStringList CompressPage::getCompressFilelist()

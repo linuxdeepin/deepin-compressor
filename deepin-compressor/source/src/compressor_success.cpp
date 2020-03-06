@@ -112,7 +112,7 @@ void Compressor_Success::showfiledirSlot()
 
 void Compressor_Success::commandLinkBackButtonClicked()
 {
-    emit backButtonClicked();
+    emit sigBackButtonClicked();
 }
 
 void Compressor_Success::setstringinfo(QString str)
