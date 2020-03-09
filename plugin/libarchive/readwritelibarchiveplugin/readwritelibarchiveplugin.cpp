@@ -373,6 +373,13 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
         }
     }
 
+    if ( false == password().isEmpty())
+    {
+        archive_write_set_options(m_archiveWriter.data(), "encryption=aes256");
+        archive_write_set_passphrase( m_archiveWriter.data(), password().toUtf8().constData() );
+    }
+
+
     return true;
 }
 
