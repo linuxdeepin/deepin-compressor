@@ -26,6 +26,7 @@
 #include <DWidget>
 #include <DPushButton>
 #include <DLabel>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -50,8 +51,14 @@ private:
     DLabel *m_stringdetaillabel;
     QString m_stringdetail;
 
+    DCommandLinkButton *commandLinkBackButton = nullptr;
+
 signals:
+    void sigBackButtonClickedOnFail();
     void sigFailRetry();
+
+public slots:
+    void commandLinkBackButtonClicked();
 
 };
 

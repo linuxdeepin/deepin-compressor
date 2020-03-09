@@ -52,10 +52,14 @@ public slots:
     void onRefreshFilelist(const QStringList &filelist);
     void onPathIndexChanged();
 
+    void clearFiles();
+
 signals:
     void sigselectedFiles(const QStringList &files);
     void sigiscanaddfile(bool status);
     void sigFilelistIsEmpty();
+
+    void sigRefreshFileList(const QStringList &files);
 
 private:
 

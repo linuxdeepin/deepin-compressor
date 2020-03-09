@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +45,8 @@
 #include "batchextract.h"
 #include "batchcompress.h"
 #include <DFileWatcher>
+#include <QElapsedTimer>
+
 
 #define TITLE_FIXED_HEIGHT 50
 
@@ -152,6 +155,9 @@ private slots:
     void onUpdateDestFile(QString destFile);
     void onCompressPageFilelistIsEmpty();
 
+    void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
+    void slotBackButtonClicked();
+
 signals:
     void sigquitApp();
     void sigZipAddFile();
@@ -219,4 +225,29 @@ private:
     int m_watchTimer = 0;
 
     DFileWatcher* m_fileManager = nullptr;
+
+private:
+    void calSelectedTotalFileSize(const QStringList &files);
+    quint64 calFileSize(const QString &path);
+    void calSpeedAndTime(unsigned long compressPercent);
+    void stopCalPercentAndTime();
+
+    QElapsedTimer m_timer;
+    unsigned long lastPercent = 0;
+    quint64 selectedTotalFileSize = 0;
+    qint64 compressTime = 0;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -224,6 +224,8 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
     m_filelist = filelist;
     m_fileviewer->setFileList(m_filelist);
 
+    emit sigRefreshFileList(m_filelist);
+
     if (m_filelist.size() == 0)
     {
         emit sigFilelistIsEmpty();
@@ -240,6 +242,11 @@ void CompressPage::onPathIndexChanged()
     {
         emit sigiscanaddfile(true);
     }
+}
+
+void CompressPage::clearFiles()
+{
+    m_filelist.clear();
 }
 
 QStringList CompressPage::getCompressFilelist()

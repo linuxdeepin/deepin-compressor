@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 #include <QGraphicsDropShadowEffect>
 #include "DFontSizeManager"
 #include "utils.h"
+#include <QTimerEvent>
 
 Progress::Progress(DWidget *parent)
     : DWidget(parent)
@@ -36,6 +38,9 @@ Progress::Progress(DWidget *parent)
     m_progressfile = "设计图111.jpg";
     InitUI();
     InitConnection();
+    m_timer = new QTimer(this);
+    m_timer->setInterval(1000);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotChangeTimeLeft()));
 }
 
 void Progress::InitUI()
@@ -74,6 +79,20 @@ void Progress::InitUI()
     m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
+    //add speed and time label
+    m_speedLabel = new DLabel(this);
+    DFontSizeManager::instance()->bind(m_speedLabel, DFontSizeManager::T8);
+
+    m_restTimeLabel = new DLabel(this);
+    DFontSizeManager::instance()->bind(m_restTimeLabel, DFontSizeManager::T8);
+
+    QHBoxLayout *m_layout = new QHBoxLayout;
+    m_layout->addStretch();
+    m_layout->addWidget(m_speedLabel);
+    m_layout->addSpacing(15);
+    m_layout->addWidget(m_restTimeLabel);
+    m_layout->addStretch();
+
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -84,6 +103,10 @@ void Progress::InitUI()
     mainlayout->addWidget(m_shadow, 0, Qt::AlignLeft | Qt::AlignTop);
     mainlayout->addSpacing(5);
     mainlayout->addWidget(m_progressfilelabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    //mainlayout->addStretch();
+    mainlayout->addSpacing(5);
+
+    mainlayout->addLayout(m_layout);
     mainlayout->addStretch();
 
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
@@ -102,10 +125,84 @@ void Progress::InitConnection()
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
-void Progress::setprogress(uint percent)
+void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
+{
+    if (type == COMPRESSING)
+    {
+        m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
+    }
+    else if (type == DECOMPRESSING)
+    {
+        m_speedLabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
+    }
+    m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
+}
+
+void Progress::slotChangeTimeLeft()
+{
+    if (lastTimeLeft < 2)
+    {
+        m_timer->stop();
+    }
+
+    lastTimeLeft--;
+    displaySpeedAndTime(m_speed, lastTimeLeft);
+}
+
+void Progress::setprogress(int percent)
 {
     m_progressbar->setValue(percent);
     m_progressbar->update();
+}
+
+void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
+{
+    m_speed = speed;
+    lastTimeLeft = timeLeft;
+    displaySpeedAndTime(speed, timeLeft);
+
+    if (lastTimeLeft > 2)
+    {
+        m_timer->start();
+    }
+    else
+    {
+        m_timer ->stop();
+    }
+}
+
+void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
+{
+    qint64 hour = timeLeft / 3600;
+    qint64 minute = (timeLeft - hour *3600) / 60;
+    qint64 seconds = timeLeft - hour * 3600 - minute * 60;
+
+    QString hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
+    QString mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
+    QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
+
+    //add update speed and time label
+    if (m_type == COMPRESSING)
+    {
+        if (speed < 1024) {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+        } else if (speed > 1024 && speed < 1024 * 300) {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+        }
+    }
+    else
+    {
+        if (speed < 1024) {
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+        } else if (speed > 1024 && speed < 1024 * 300) {
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
+        }
+    }
+    m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
 void Progress::setFilename(QString filename)
@@ -132,6 +229,7 @@ void Progress::setProgressFilename(QString filename)
     QFontMetrics elideFont(m_progressfilelabel->font());
     if (m_type == COMPRESSING) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
+
     } else {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
     }
@@ -201,8 +299,11 @@ void Progress::resetProgress()
 
 void Progress::cancelbuttonPressedSlot()
 {
-    if (1 == showConfirmDialog())
+    if (DDialog::Accepted == showConfirmDialog())
     {
+        m_timer->stop();
+        m_speed = 0;
+        lastTimeLeft = 0;
         emit sigCancelPressed(m_type);
     }
 }

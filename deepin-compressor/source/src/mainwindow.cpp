@@ -5,6 +5,7 @@
  *
  * Maintainer: dongsen <dongsen@deepin.com>
  *             AaronZhang <ya.zhang@archermind.com>
+ *             chenglu <chenglu@uniontech.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -348,11 +349,13 @@ void MainWindow::InitConnection()
     connect(m_homePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
     connect(m_CompressPage, &CompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
     connect(m_CompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
+    connect(m_CompressPage, &CompressPage::sigRefreshFileList, this, &MainWindow::slotCalDeleteRefreshTotalFileSize);
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
+    connect(m_CompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);
     connect(m_titlebutton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_CompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_model, &ArchiveModel::loadingFinished, this, &MainWindow::slotLoadingFinished);
@@ -361,6 +364,7 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles, this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract, this, &MainWindow::slotKillExtractJob);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
+    connect(m_CompressFail, &Compressor_Fail::sigBackButtonClickedOnFail, this, &MainWindow::slotBackButtonClicked);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [=](QString msg) {
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
@@ -601,11 +605,13 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_Progess->resetProgress();
+        m_Progess->setSpeedAndTimeText(DECOMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
+        m_timer.start();
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
@@ -617,14 +623,17 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
+        //m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
+        m_Progess->setSpeedAndTimeText(COMPRESSING);
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(true);
         m_mainLayout->setCurrentIndex(3);
+        m_timer.start();
         break;
     case PAGE_ZIPPROGRESS:
         if (0 != m_watchTimer)
@@ -653,7 +662,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_ZIP_FAIL:
@@ -662,7 +671,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_UNZIP_SUCCESS:
@@ -672,7 +681,7 @@ void MainWindow::refreshPage()
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         if (m_settingsDialog->isAutoOpen())
         {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
@@ -693,7 +702,7 @@ void MainWindow::refreshPage()
         m_CompressFail->setFailStr(tr("Extraction failed"));
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
-        m_titlebutton->setVisible(true);
+        m_titlebutton->setVisible(false);
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_ENCRYPTION:
@@ -717,8 +726,74 @@ void MainWindow::refreshPage()
     }
 }
 
+//add calculate size of selected files
+void MainWindow::calSelectedTotalFileSize(const QStringList &files)
+{
+
+    foreach(QFileInfo fileInfo, files)
+    {
+        if (fileInfo.isFile())
+        {
+            selectedTotalFileSize += fileInfo.size();
+        }
+        else if (fileInfo.isDir())
+        {
+            selectedTotalFileSize += calFileSize(fileInfo.filePath());
+        }
+    }
+}
+
+void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
+{
+    selectedTotalFileSize = 0;
+    foreach(QFileInfo fileInfo, files)
+    {
+        if (fileInfo.isFile())
+        {
+            selectedTotalFileSize += fileInfo.size();
+        }
+        else if (fileInfo.isDir())
+        {
+            selectedTotalFileSize += calFileSize(fileInfo.filePath());
+        }
+    }
+}
+
+void MainWindow::slotBackButtonClicked()
+{
+    stopCalPercentAndTime();
+    m_CompressSuccess->clear();
+
+    if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
+    {
+        m_CompressPage->clearFiles();
+    }
+
+    m_pageid = PAGE_HOME;
+    refreshPage();
+}
+
+quint64 MainWindow::calFileSize(const QString &path)
+{
+    QDir dir(path);
+    quint64 size = 0;
+
+    foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
+    {
+        size += fileInfo.size();
+    }
+    foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        size += calFileSize(path + QDir::separator() + subDir);
+    }
+
+    return size;
+}
+
 void MainWindow::onSelected(const QStringList &files)
 {
+    calSelectedTotalFileSize(files);
+
     if (files.count() == 1 && Utils::isCompressed_file(files.at(0)))
     {
         if (0 == m_CompressPage->getCompressFilelist().count())
@@ -807,6 +882,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         InitConnection();
         m_initflag = true;
     }
+
+    calSelectedTotalFileSize(files);
 
     if (files.last() == QStringLiteral("extract_here"))
     {
@@ -1214,9 +1291,38 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     m_encryptionjob->start();
 }
 
+void MainWindow::calSpeedAndTime(unsigned long compressPercent)
+{
+    compressTime += m_timer.elapsed();
+
+    double m_compressSpeed = ((selectedTotalFileSize / 1024.0) * (compressPercent / 100.0)) / compressTime * 1000;
+    double m_sizeLeft = (selectedTotalFileSize / 1024.0) * (100 - compressPercent) / 100;
+    qint64 m_timeLeft = m_sizeLeft / m_compressSpeed;
+
+    qDebug() << "m_sizeLeft" << m_sizeLeft;
+    qDebug() << "m_compressSpeed" << m_compressSpeed;
+    qDebug() << "m_timeLeft" << m_timeLeft;
+
+    m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
+    m_timer.restart();
+}
+
+void MainWindow::stopCalPercentAndTime()
+{
+    lastPercent = 0;
+    compressTime = 0;
+    m_timer.elapsed();
+}
+
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
-    qDebug() << percent;
+    if (percent > lastPercent)
+    {
+        calSpeedAndTime(percent);
+        lastPercent = percent;
+    }
+
+    qDebug() << "percent" << percent;
     if ((Encryption_SingleExtract == m_encryptiontype))
     {
         if (percent < 100 && WorkProcess == m_workstatus)
@@ -1957,6 +2063,8 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
+    stopCalPercentAndTime();
+
     if (m_encryptionjob)
     {
         m_encryptionjob->Killjob();
