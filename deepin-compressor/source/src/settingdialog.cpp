@@ -34,6 +34,7 @@
 #include "DApplicationHelper"
 #include "kprocess.h"
 #include <DStandardPaths>
+#include <DSuggestButton>
 
 DGUI_USE_NAMESPACE
 
@@ -91,17 +92,22 @@ void SettingDialog::initUI()
             QHBoxLayout *layout = new QHBoxLayout();
             DPushButton *button1 = new DPushButton(tr("Select All"));
             DPushButton *button2 = new DPushButton(tr("Clear All"));
-            button1->setFixedSize(100, 36);
-            button2->setFixedSize(100, 36);
+            DSuggestButton *button3 = new DSuggestButton(tr("Recommended"));
+            button1->setFixedSize(153, 36);
+            button2->setFixedSize(153, 36);
+            button3->setFixedSize(153, 36);
             layout->addStretch();
             layout->addWidget(button1);
             layout->addStretch();
             layout->addWidget(button2);
             layout->addStretch();
+            layout->addWidget(button3);
+            layout->addStretch();
             buttonwidget->setLayout(layout);
 
             connect(button1, &QPushButton::clicked, this, &SettingDialog::selectpressed);
             connect(button2, &QPushButton::clicked, this, &SettingDialog::cancelpressed);
+            connect(button3, &QPushButton::clicked, this, &SettingDialog::recommandedPressed);
             return buttonwidget;
         }
 
@@ -318,6 +324,13 @@ void SettingDialog::cancelpressed()
 {
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, false);
+    }
+}
+
+void SettingDialog::recommandedPressed()
+{
+    foreach (QString key, m_associtionlist) {
+        m_settings->setOption(key, true);
     }
 }
 

@@ -776,7 +776,7 @@ void MainWindow::slotBackButtonClicked()
 quint64 MainWindow::calFileSize(const QString &path)
 {
     QDir dir(path);
-    quint64 size = 0;
+    qint64 size = 0;
 
     foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
     {
@@ -1446,7 +1446,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     {
         if(errorCode == KJob::UserSkiped)
         {
-            m_progressdialog->setMsg(tr("Skipped all files"));
+            m_progressdialog->setMsg(tr("Skip all files"));
         }
         else
         {
@@ -1466,7 +1466,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_pageid = PAGE_UNZIP_SUCCESS;
         if(errorCode == KJob::UserSkiped)
         {
-            m_CompressSuccess->setstringinfo(tr("Skipped all files"));
+            m_CompressSuccess->setstringinfo(tr("Skip all files"));
         }
         else
         {

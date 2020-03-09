@@ -234,7 +234,7 @@ private:
 
     QElapsedTimer m_timer;
     unsigned long lastPercent = 0;
-    quint64 selectedTotalFileSize = 0;
+    qint64 selectedTotalFileSize = 0;
     qint64 compressTime = 0;
 };
 

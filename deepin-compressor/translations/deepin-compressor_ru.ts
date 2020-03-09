@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es">
+<TS version="2.1" language="ru">
 <context>
     <name>ArchiveModel</name>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="96"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>dd.MM.yyyy hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="170"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="172"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="174"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="176"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>Время изменения</translation>
     </message>
 </context>
 <context>
@@ -39,27 +39,27 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="43"/>
         <source>Next</source>
-        <translation>Siguiente</translation>
+        <translation>Следующий</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="89"/>
         <source>Please add files</source>
-        <translation>Por favor agregue archivos</translation>
+        <translation>Пожалуйста, добавьте файлы</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="90"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>Do you want to replace it?</source>
-        <translation>¿Desea reemplazarlo?</translation>
+        <translation>Вы хотите заменить его?</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>%1 already exists.</source>
-        <translation>%1 ya existe.</translation>
+        <translation>%1 уже существует.</translation>
     </message>
 </context>
 <context>
@@ -67,78 +67,78 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="190"/>
         <source>Compress</source>
-        <translation>Comprimir</translation>
+        <translation>Сжать</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="118"/>
         <source>Advanced Options</source>
-        <translation>Opciones avanzadas</translation>
+        <translation>Дополнительные Параметры</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="103"/>
         <source>Create New Archive</source>
-        <translation>Crear nuevo archivo</translation>
+        <translation>Создать Новый Архив</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="112"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="113"/>
         <source>Save to</source>
-        <translation>Guardar en</translation>
+        <translation>Сохранить в</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="124"/>
         <source>Encrypt the archive</source>
-        <translation>Cifrar el archivo</translation>
+        <translation>Зашифровать архив</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="125"/>
         <source>Support zip, 7z type only</source>
-        <translation>Soporte zip, solo tipo 7z</translation>
+        <translation>Поддержка только zip, 7z форматов</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="130"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="132"/>
         <source>Encrypt the file list too</source>
-        <translation>Cifrar la lista de archivo también</translation>
+        <translation>Зашифровать список файлов тоже</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="133"/>
         <location filename="../source/src/compresssetting.cpp" line="141"/>
         <source>Support 7z type only</source>
-        <translation>Soporte solo de tipo 7z</translation>
+        <translation>Поддержка только 7z формата</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="139"/>
         <source>Split to volumes</source>
-        <translation>Dividir en volúmenes</translation>
+        <translation>Разделить на тома</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="574"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="271"/>
         <source>Please enter the path</source>
-        <translation>Por favor ingrese la ruta</translation>
+        <translation>Пожалуйста, введите путь</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="265"/>
         <source>Invalid file name</source>
-        <translation>Nombre de archivo inválido</translation>
+        <translation>Неверное имя файла</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="277"/>
         <source>The path does not exist, please retry</source>
-        <translation>La ruta no existe, por favor vuelva a intentarlo</translation>
+        <translation>Путь не существует, пожалуйста, повторите попытку</translation>
     </message>
 </context>
 <context>
@@ -146,22 +146,22 @@
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="33"/>
         <source>Extraction failed</source>
-        <translation>Extracción fallida</translation>
+        <translation>Извлечение не удалось</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="34"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Archivo dañado, no se puede extraer</translation>
+        <translation>Поврежденный файл, невозможно извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="59"/>
         <source>Retry</source>
-        <translation>Vuelve a intentarlo</translation>
+        <translation>Повторить</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="62"/>
         <source>Back</source>
-        <translation type="unfinished">Atrás</translation>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
@@ -169,17 +169,17 @@
     <message>
         <location filename="../source/src/compressor_success.cpp" line="35"/>
         <source>Compression successful</source>
-        <translation>Compresión exitosa</translation>
+        <translation>Сжатие успешно завершено!</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_success.cpp" line="53"/>
         <source>View</source>
-        <translation>Mirar</translation>
+        <translation>Просмотр</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_success.cpp" line="56"/>
         <source>Back</source>
-        <translation type="unfinished">Atrás</translation>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
@@ -187,22 +187,22 @@
     <message>
         <location filename="../source/src/encodingpage.cpp" line="63"/>
         <source>Filename Encoding</source>
-        <translation>Codificación de nombre de archivo</translation>
+        <translation>Кодировка Имени файла</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="76"/>
         <source>Select an encoding to continue</source>
-        <translation>Seleccione una codificación para continuar</translation>
+        <translation>Выберите кодировку, чтобы продолжить</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="80"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="81"/>
         <source>Select Character Encoding</source>
-        <translation>Seleccione la codificación de caracteres</translation>
+        <translation>Выберите Кодировку Символов</translation>
     </message>
 </context>
 <context>
@@ -210,22 +210,22 @@
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="44"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Archivo cifrado, por favor ingrese la contraseña</translation>
+        <translation>Зашифрованный файл, пожалуйста, введите пароль</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="47"/>
         <source>Next</source>
-        <translation>Siguiente</translation>
+        <translation>Следующий</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="52"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="110"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>Неправильный пароль</translation>
     </message>
 </context>
 <context>
@@ -233,17 +233,17 @@
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="63"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>¿Está seguro que desea detener la extracción?</translation>
+        <translation>Вы уверены, что хотите остановить извлечение?</translation>
     </message>
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="65"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="66"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Подтвердить</translation>
     </message>
 </context>
 <context>
@@ -251,12 +251,12 @@
     <message>
         <location filename="../source/src/homepage.cpp" line="39"/>
         <source>Drag file or folder here</source>
-        <translation>Arrastre archivo o carpeta aqui</translation>
+        <translation>Перетащите сюда файл или папку</translation>
     </message>
     <message>
         <location filename="../source/src/homepage.cpp" line="41"/>
         <source>Select File</source>
-        <translation>Seleccionar archivo</translation>
+        <translation>Выберите файл</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../source/src/logviewheaderview.cpp" line="143"/>
         <source>Back</source>
-        <translation>Atrás</translation>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
@@ -272,12 +272,12 @@
     <message>
         <location filename="../main.cpp" line="46"/>
         <source>Archive Manager</source>
-        <translation>Administrador de Archivos</translation>
+        <translation>Менеджер Архивов</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="47"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>Administrador de Archivos es una ligera y rápida aplicación para crear y extraer archivos.</translation>
+        <translation>Менеджер Архивов - это быстрое и легкое приложение для создания и извлечения архивов.</translation>
     </message>
 </context>
 <context>
@@ -285,49 +285,49 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="302"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="306"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>Помощь</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="310"/>
         <source>Select the file</source>
-        <translation>Abrir</translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="314"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="334"/>
         <source>Shortcuts</source>
-        <translation>Atajos</translation>
+        <translation>Горячие клавиши</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="397"/>
         <source>Open file</source>
-        <translation>Abrir archivo</translation>
+        <translation>Открыть файл</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="427"/>
         <source>Settings</source>
-        <translation>Ajustes</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="618"/>
         <location filename="../source/src/mainwindow.cpp" line="629"/>
         <location filename="../source/src/mainwindow.cpp" line="1613"/>
         <source>Create New Archive</source>
-        <translation>Crear nuevo fichero</translation>
+        <translation>Создать Новый Архив</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="661"/>
         <source>Compression successful</source>
-        <translation>Compresión exitosa</translation>
+        <translation>Сжатие успешно завершено!</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1449"/>
@@ -338,78 +338,78 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1473"/>
         <source>Extraction successful</source>
-        <translation>Extracción exitosa</translation>
+        <translation>Извлечение успешно завершено</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
         <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 fué cambiado en el disco, por favor vuelva a importarlo.</translation>
+        <translation>%1 был изменен на диске, пожалуйста, импортируйте его снова.</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="829"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation>¿Desea añadir el archivo a la lista o abrirlo en una nueva ventana?</translation>
+        <translation>Хотите добавить архив в список или открыть его в новом окне?</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="322"/>
         <source>Display shortcuts</source>
-        <translation>Mostrar atajos</translation>
+        <translation>Показать комбинации клавиш</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="830"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="63"/>
         <source>Archive Manager</source>
-        <translation>Administrador de archivos</translation>
+        <translation>Менеджер Архивов</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="235"/>
         <location filename="../source/src/mainwindow.cpp" line="1191"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compressing</source>
-        <translation>Comprimiendo</translation>
+        <translation>Сжатие</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="655"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>Извлечение</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="670"/>
         <source>Compression failed</source>
-        <translation>Compresión fallida</translation>
+        <translation>Сжатие не удалось</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="702"/>
         <source>Extraction failed</source>
-        <translation>Extracción fallida</translation>
+        <translation>Извлечение не удалось</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="831"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="832"/>
         <source>Open in new window</source>
-        <translation>Abrir en una nueva ventana</translation>
+        <translation>Открыть в новом окне</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="970"/>
         <source>Find directory</source>
-        <translation>Buscar carpeta</translation>
+        <translation>Найти каталог</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1385"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>Неправильный пароль</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1054"/>
@@ -417,12 +417,12 @@
         <location filename="../source/src/mainwindow.cpp" line="1126"/>
         <location filename="../source/src/mainwindow.cpp" line="1423"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Archivo dañado, no se puede extraer</translation>
+        <translation>Поврежденный файл, невозможно извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1190"/>
         <source>The archive was changed on the disk, please import it again.</source>
-        <translation>El fichero fué cambiado en el disco, por favor vuelva a intentarlo.</translation>
+        <translation>Архив был изменен на диске, пожалуйста, импортируйте его снова.</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1415"/>
@@ -430,13 +430,13 @@
         <location filename="../source/src/mainwindow.cpp" line="1946"/>
         <location filename="../source/src/mainwindow.cpp" line="1957"/>
         <source>Insufficient space, please clear and retry</source>
-        <translation>Espacio insuficiente, por favor vacie y vuelva a intentarlo</translation>
+        <translation>Недостаточно места, пожалуйста, очистите и повторите попытку</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1950"/>
         <location filename="../source/src/mainwindow.cpp" line="1961"/>
         <source>Damaged file</source>
-        <translation>Archivo dañado</translation>
+        <translation>Поврежденный файл</translation>
     </message>
 </context>
 <context>
@@ -444,52 +444,52 @@
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="46"/>
         <source>Directory</source>
-        <translation>Carpeta</translation>
+        <translation>Каталог</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="47"/>
         <source>Application</source>
-        <translation>Aplicación</translation>
+        <translation>Приложение</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="48"/>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>Видео</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="49"/>
         <source>Audio</source>
-        <translation>Audio</translation>
+        <translation>Звук</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="50"/>
         <source>Image</source>
-        <translation>Imagen</translation>
+        <translation>Изображение</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="51"/>
         <source>Archive</source>
-        <translation>Archivo</translation>
+        <translation>Архив</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="53"/>
         <source>Executable</source>
-        <translation>Ejecutable</translation>
+        <translation>Исполнимый файл</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="52"/>
         <source>Document</source>
-        <translation>Documento</translation>
+        <translation>Документ</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="54"/>
         <source>Backup file</source>
-        <translation>Archivo de respaldo</translation>
+        <translation>Файл резервной копии</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="55"/>
         <source>Unknown</source>
-        <translation>Desconocido</translation>
+        <translation>Неизвестный</translation>
     </message>
 </context>
 <context>
@@ -497,32 +497,32 @@
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="54"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="56"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="58"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="60"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>Время изменения</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="117"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="128"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>dd.MM.yyyy hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -531,7 +531,7 @@
         <location filename="../source/src/progress.cpp" line="79"/>
         <location filename="../source/src/progress.cpp" line="271"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="75"/>
@@ -540,22 +540,22 @@
         <location filename="../source/src/progress.cpp" line="138"/>
         <location filename="../source/src/progress.cpp" line="297"/>
         <source>Calculating...</source>
-        <translation>Calculando...</translation>
+        <translation>Вычисляем...</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="264"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation>¿Está seguro que desea detener la compresión?</translation>
+        <translation>Вы уверены, что хотите остановить сжатие?</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="272"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Подтвердить</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="268"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>¿Está seguro que desea detener la extracción?</translation>
+        <translation>Вы уверены, что хотите остановить извлечение?</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="132"/>
@@ -584,12 +584,12 @@
     <message>
         <location filename="../source/src/progress.cpp" line="231"/>
         <source>Compressing</source>
-        <translation>Comprimiendo</translation>
+        <translation>Сжатие</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="234"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>Извлечение</translation>
     </message>
 </context>
 <context>
@@ -597,30 +597,30 @@
     <message>
         <location filename="../source/src/progressdialog.cpp" line="47"/>
         <source>%1 task(s) in progress</source>
-        <translation>%1 tarea(s) en progreso</translation>
+        <translation>%1 задач(и) выполняется</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="59"/>
         <location filename="../source/src/progressdialog.cpp" line="111"/>
         <source>Task</source>
-        <translation>Tarea</translation>
+        <translation>Задача</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="60"/>
         <location filename="../source/src/progressdialog.cpp" line="117"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>Извлечение</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
         <location filename="../source/src/progressdialog.cpp" line="137"/>
         <source>Extraction successful</source>
-        <translation>Extracción exitosa</translation>
+        <translation>Извлечение успешно завершено</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extract to</source>
-        <translation>Extraer en</translation>
+        <translation>Извлечь в</translation>
     </message>
 </context>
 <context>
@@ -628,47 +628,47 @@
     <message>
         <location filename="../source/src/utils.cpp" line="127"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Б</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="128"/>
         <source>KB</source>
-        <translation>KB</translation>
+        <translation>КБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="129"/>
         <source>MB</source>
-        <translation>MB</translation>
+        <translation>МБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="130"/>
         <source>GB</source>
-        <translation>GB</translation>
+        <translation>ГБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="131"/>
         <source>TB</source>
-        <translation>TB</translation>
+        <translation>ТБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="132"/>
         <source>PB</source>
-        <translation>PB</translation>
+        <translation>ПБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="133"/>
         <source>EB</source>
-        <translation>EB</translation>
+        <translation>ЭБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="134"/>
         <source>ZB</source>
-        <translation>ZB</translation>
+        <translation>ЗБ</translation>
     </message>
     <message>
         <location filename="../source/src/utils.cpp" line="135"/>
         <source>YB</source>
-        <translation>YB</translation>
+        <translation>ЙБ</translation>
     </message>
 </context>
 <context>
@@ -676,104 +676,104 @@
     <message>
         <location filename="../interface/queries.cpp" line="140"/>
         <source>Skip</source>
-        <translation>Omitir</translation>
+        <translation>Пропустить</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="139"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>¿Otro archivo con el mismo nombre ya exite, desea remplazarlo?</translation>
+        <translation>Другой файл с таким именем уже существует, заменить его?</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="141"/>
         <source>Replace</source>
-        <translation>Reemplazar</translation>
+        <translation>Заменить</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="144"/>
         <source>Apply to all</source>
-        <translation>Aplicar a todos</translation>
+        <translation>Применить ко всем</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="264"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Archivo cifrado, por favor ingrese la contraseña</translation>
+        <translation>Зашифрованный файл, пожалуйста, введите пароль</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="337"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>Неправильный пароль</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="269"/>
         <location filename="../interface/queries.cpp" line="339"/>
         <location filename="../source/src/compresspage.cpp" line="117"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="116"/>
         <source>Please add files to the top-level directory</source>
-        <translation>Agregue archivos a la carpeta de nivel superior</translation>
+        <translation>Пожалуйста, добавьте файлы в каталог уровнем выше</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="141"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Подтвердить</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="409"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>Время изменения</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="415"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="418"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="5"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>Общая</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="6"/>
         <source>Extraction</source>
-        <translation>Extracción</translation>
+        <translation>Извлечение</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>Crear automáticamente una carpeta para múltiples archivos extraidos</translation>
+        <translation>Автоматическое создание папки для нескольких извлеченных файлов</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when complete</source>
-        <translation>Mostrar archivos extraidos cuando se complete</translation>
+        <translation>Показать извлеченные файлы после завершения</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="9"/>
         <source>Files Associated</source>
-        <translation>Archivos asociados</translation>
+        <translation>Связанные Файлы</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="10"/>
         <source>File Type</source>
-        <translation>Tipo de archivo</translation>
+        <translation>Тип Файла</translation>
     </message>
     <message>
         <location filename="../source/src/myfileitem.cpp" line="54"/>
@@ -782,7 +782,7 @@
         <location filename="../source/src/myfileitem.cpp" line="60"/>
         <location filename="../source/src/myfileitem.cpp" line="62"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -790,18 +790,7 @@
     <message>
         <location filename="../source/src/settingdialog.cpp" line="93"/>
         <source>Select All</source>
-        <translation>Seleccionar todos</translation>
-    </message>
-    <message>
-        <location filename="../source/src/settingdialog.cpp" line="132"/>
-        <location filename="../source/src/settingdialog.cpp" line="162"/>
-        <source>Current directory</source>
-        <translation>Carpeta actual</translation>
-    </message>
-    <message>
-        <location filename="../source/src/settingdialog.cpp" line="94"/>
-        <source>Clear All</source>
-        <translation>Limpiar todos</translation>
+        <translation>Выбрать Всё</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="95"/>
@@ -809,26 +798,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../source/src/settingdialog.cpp" line="132"/>
+        <location filename="../source/src/settingdialog.cpp" line="162"/>
+        <source>Current directory</source>
+        <translation>Текущий каталог</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settingdialog.cpp" line="94"/>
+        <source>Clear All</source>
+        <translation>Очистить Всё</translation>
+    </message>
+    <message>
         <location filename="../source/src/settingdialog.cpp" line="126"/>
         <source>Extract archives to</source>
-        <translation>Extraer ficheros en</translation>
+        <translation>Извлечь архивы в</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="132"/>
         <location filename="../source/src/settingdialog.cpp" line="172"/>
         <source>Other directory</source>
-        <translation>Otro carpeta</translation>
+        <translation>Другой каталог</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="132"/>
         <location filename="../source/src/settingdialog.cpp" line="167"/>
         <source>Desktop</source>
-        <translation>Escritorio</translation>
+        <translation>Рабочий стол</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="263"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>La ruta de extracción por defecto no existe, por favor vuelva a intentarlo</translation>
+        <translation>Путь извлечения по умолчанию не существует, пожалуйста, повторите попытку</translation>
     </message>
 </context>
 <context>
@@ -836,19 +836,19 @@
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="40"/>
         <source>Extract</source>
-        <translation>Extraer</translation>
+        <translation>Извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="46"/>
         <location filename="../source/src/uncompresspage.cpp" line="108"/>
         <location filename="../source/src/uncompresspage.cpp" line="115"/>
         <source>Extract to:</source>
-        <translation>Extraer en:</translation>
+        <translation>Извлечь в:</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
         <source>Find directory</source>
-        <translation>Buscar carpeta</translation>
+        <translation>Найти каталог</translation>
     </message>
 </context>
 <context>
@@ -856,42 +856,34 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
-        <translation>Extraer</translation>
-    </message>
-    <message>
-        <source>Extract here</source>
-        <translation type="vanished">Extraer aquí</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="374"/>
-        <source>Extract to current directory</source>
-        <translation>Extraer a la carpeta actual</translation>
+        <translation>Извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="442"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>dd.MM.yyyy hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="373"/>
         <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation>Extraer</translation>
+        <translation>Извлечь</translation>
     </message>
     <message>
-        <source>yyyy/MM/dd/ hh:mm:ss</source>
-        <translation type="vanished">dd/MM/yyyy hh:mm:ss</translation>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <source>Extract to current directory</source>
+        <translation>Извлечь в текущий каталог</translation>
     </message>
 </context>
 </TS>

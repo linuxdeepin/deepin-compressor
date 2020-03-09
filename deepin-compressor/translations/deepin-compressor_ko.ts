@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es">
+<TS version="2.1" language="ko">
 <context>
     <name>ArchiveModel</name>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="96"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation>항목(들)</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="104"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="170"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="172"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>크기</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="174"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>유형</translation>
     </message>
     <message>
         <location filename="../source/src/archivemodel.cpp" line="176"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>시간 수정됨</translation>
     </message>
 </context>
 <context>
@@ -39,27 +39,27 @@
     <message>
         <location filename="../source/src/compresspage.cpp" line="43"/>
         <source>Next</source>
-        <translation>Siguiente</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="89"/>
         <source>Please add files</source>
-        <translation>Por favor agregue archivos</translation>
+        <translation>파일을 추가하십시오</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="90"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>Do you want to replace it?</source>
-        <translation>¿Desea reemplazarlo?</translation>
+        <translation>교체하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="138"/>
         <source>%1 already exists.</source>
-        <translation>%1 ya existe.</translation>
+        <translation>%1이 이미 있습니다.</translation>
     </message>
 </context>
 <context>
@@ -67,78 +67,78 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="190"/>
         <source>Compress</source>
-        <translation>Comprimir</translation>
+        <translation>압축</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="118"/>
         <source>Advanced Options</source>
-        <translation>Opciones avanzadas</translation>
+        <translation>고급 옵션</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="103"/>
         <source>Create New Archive</source>
-        <translation>Crear nuevo archivo</translation>
+        <translation>새 압축파일 만들기</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="112"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="113"/>
         <source>Save to</source>
-        <translation>Guardar en</translation>
+        <translation>저장 위치</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="124"/>
         <source>Encrypt the archive</source>
-        <translation>Cifrar el archivo</translation>
+        <translation>압축파일 암호화</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="125"/>
         <source>Support zip, 7z type only</source>
-        <translation>Soporte zip, solo tipo 7z</translation>
+        <translation>zip, 7z 유형만 지원</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="130"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="132"/>
         <source>Encrypt the file list too</source>
-        <translation>Cifrar la lista de archivo también</translation>
+        <translation>파일 목록도 암호화</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="133"/>
         <location filename="../source/src/compresssetting.cpp" line="141"/>
         <source>Support 7z type only</source>
-        <translation>Soporte solo de tipo 7z</translation>
+        <translation>7z 유형만 지원</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="139"/>
         <source>Split to volumes</source>
-        <translation>Dividir en volúmenes</translation>
+        <translation>볼륨으로 분할</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="574"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="271"/>
         <source>Please enter the path</source>
-        <translation>Por favor ingrese la ruta</translation>
+        <translation>경로를 입력하십시오</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="265"/>
         <source>Invalid file name</source>
-        <translation>Nombre de archivo inválido</translation>
+        <translation>잘못된 파일 이름</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="277"/>
         <source>The path does not exist, please retry</source>
-        <translation>La ruta no existe, por favor vuelva a intentarlo</translation>
+        <translation>경로가 존재하지 않으므로 다시 시도하십시오</translation>
     </message>
 </context>
 <context>
@@ -146,22 +146,22 @@
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="33"/>
         <source>Extraction failed</source>
-        <translation>Extracción fallida</translation>
+        <translation>추출 실패함</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="34"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Archivo dañado, no se puede extraer</translation>
+        <translation>손상된 파일, 추출할 수 없음</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="59"/>
         <source>Retry</source>
-        <translation>Vuelve a intentarlo</translation>
+        <translation>재시도</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_fail.cpp" line="62"/>
         <source>Back</source>
-        <translation type="unfinished">Atrás</translation>
+        <translation>뒤로</translation>
     </message>
 </context>
 <context>
@@ -169,17 +169,17 @@
     <message>
         <location filename="../source/src/compressor_success.cpp" line="35"/>
         <source>Compression successful</source>
-        <translation>Compresión exitosa</translation>
+        <translation>압축 성공</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_success.cpp" line="53"/>
         <source>View</source>
-        <translation>Mirar</translation>
+        <translation>보기</translation>
     </message>
     <message>
         <location filename="../source/src/compressor_success.cpp" line="56"/>
         <source>Back</source>
-        <translation type="unfinished">Atrás</translation>
+        <translation>뒤로</translation>
     </message>
 </context>
 <context>
@@ -187,22 +187,22 @@
     <message>
         <location filename="../source/src/encodingpage.cpp" line="63"/>
         <source>Filename Encoding</source>
-        <translation>Codificación de nombre de archivo</translation>
+        <translation>파일 이름 인코딩</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="76"/>
         <source>Select an encoding to continue</source>
-        <translation>Seleccione una codificación para continuar</translation>
+        <translation>계속할 인코딩 선택</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="80"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../source/src/encodingpage.cpp" line="81"/>
         <source>Select Character Encoding</source>
-        <translation>Seleccione la codificación de caracteres</translation>
+        <translation>문자 인코딩 선택</translation>
     </message>
 </context>
 <context>
@@ -210,22 +210,22 @@
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="44"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Archivo cifrado, por favor ingrese la contraseña</translation>
+        <translation>암호화된 파일, 비밀번호를 입력하십시오</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="47"/>
         <source>Next</source>
-        <translation>Siguiente</translation>
+        <translation>다음</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="52"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <location filename="../source/src/encryptionpage.cpp" line="110"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>잘못된 비밀번호</translation>
     </message>
 </context>
 <context>
@@ -233,17 +233,17 @@
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="63"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>¿Está seguro que desea detener la extracción?</translation>
+        <translation>추출을 중지하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="65"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../source/src/extractpausedialog.cpp" line="66"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>확인</translation>
     </message>
 </context>
 <context>
@@ -251,12 +251,12 @@
     <message>
         <location filename="../source/src/homepage.cpp" line="39"/>
         <source>Drag file or folder here</source>
-        <translation>Arrastre archivo o carpeta aqui</translation>
+        <translation>파일 또는 폴더를 여기로 끌어다 놓기</translation>
     </message>
     <message>
         <location filename="../source/src/homepage.cpp" line="41"/>
         <source>Select File</source>
-        <translation>Seleccionar archivo</translation>
+        <translation>파일 선택</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../source/src/logviewheaderview.cpp" line="143"/>
         <source>Back</source>
-        <translation>Atrás</translation>
+        <translation>뒤로</translation>
     </message>
 </context>
 <context>
@@ -272,12 +272,12 @@
     <message>
         <location filename="../main.cpp" line="46"/>
         <source>Archive Manager</source>
-        <translation>Administrador de Archivos</translation>
+        <translation>압축파일 관리자</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="47"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>Administrador de Archivos es una ligera y rápida aplicación para crear y extraer archivos.</translation>
+        <translation>압축파일 관리자는 압축파일을 만들고, 추출하기 위한 빠르고 가벼운 응용 프로그램입니다.</translation>
     </message>
 </context>
 <context>
@@ -285,49 +285,49 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="302"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>닫기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="306"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>도움말</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="310"/>
         <source>Select the file</source>
-        <translation>Abrir</translation>
+        <translation>열기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="314"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>삭제</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="334"/>
         <source>Shortcuts</source>
-        <translation>Atajos</translation>
+        <translation>단축키</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="397"/>
         <source>Open file</source>
-        <translation>Abrir archivo</translation>
+        <translation>파일 열기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="427"/>
         <source>Settings</source>
-        <translation>Ajustes</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="618"/>
         <location filename="../source/src/mainwindow.cpp" line="629"/>
         <location filename="../source/src/mainwindow.cpp" line="1613"/>
         <source>Create New Archive</source>
-        <translation>Crear nuevo fichero</translation>
+        <translation>새 압축파일 만들기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="661"/>
         <source>Compression successful</source>
-        <translation>Compresión exitosa</translation>
+        <translation>압축 성공</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1449"/>
@@ -338,78 +338,78 @@
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1473"/>
         <source>Extraction successful</source>
-        <translation>Extracción exitosa</translation>
+        <translation>추출 성공</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="234"/>
         <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 fué cambiado en el disco, por favor vuelva a importarlo.</translation>
+        <translation>디스크에서 %1이 변경되었으므로 다시 가져오십시오.</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="829"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation>¿Desea añadir el archivo a la lista o abrirlo en una nueva ventana?</translation>
+        <translation>목록에 압축파일을 추가하거나 새 창에서 열시겠습니까?</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="322"/>
         <source>Display shortcuts</source>
-        <translation>Mostrar atajos</translation>
+        <translation>단축키 표시</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="830"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="63"/>
         <source>Archive Manager</source>
-        <translation>Administrador de archivos</translation>
+        <translation>압축파일 관리자</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="235"/>
         <location filename="../source/src/mainwindow.cpp" line="1191"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compressing</source>
-        <translation>Comprimiendo</translation>
+        <translation>압축중</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="655"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>추출중</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="670"/>
         <source>Compression failed</source>
-        <translation>Compresión fallida</translation>
+        <translation>압축 실패함</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="702"/>
         <source>Extraction failed</source>
-        <translation>Extracción fallida</translation>
+        <translation>추출 실패함</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="831"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>추가</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="832"/>
         <source>Open in new window</source>
-        <translation>Abrir en una nueva ventana</translation>
+        <translation>새 창에서 열기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="970"/>
         <source>Find directory</source>
-        <translation>Buscar carpeta</translation>
+        <translation>디렉토리 찾기</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1385"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>잘못된 비밀번호</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1054"/>
@@ -417,12 +417,12 @@
         <location filename="../source/src/mainwindow.cpp" line="1126"/>
         <location filename="../source/src/mainwindow.cpp" line="1423"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Archivo dañado, no se puede extraer</translation>
+        <translation>손상된 파일, 추출할 수 없음</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1190"/>
         <source>The archive was changed on the disk, please import it again.</source>
-        <translation>El fichero fué cambiado en el disco, por favor vuelva a intentarlo.</translation>
+        <translation>압축파일이 디스크에서 변경되었습니다. 다시 가져오십시오.</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1415"/>
@@ -430,13 +430,13 @@
         <location filename="../source/src/mainwindow.cpp" line="1946"/>
         <location filename="../source/src/mainwindow.cpp" line="1957"/>
         <source>Insufficient space, please clear and retry</source>
-        <translation>Espacio insuficiente, por favor vacie y vuelva a intentarlo</translation>
+        <translation>공간이 부족합니다. 지우고 다시 시도하십시오</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1950"/>
         <location filename="../source/src/mainwindow.cpp" line="1961"/>
         <source>Damaged file</source>
-        <translation>Archivo dañado</translation>
+        <translation>손상된 파일</translation>
     </message>
 </context>
 <context>
@@ -444,52 +444,52 @@
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="46"/>
         <source>Directory</source>
-        <translation>Carpeta</translation>
+        <translation>디렉토리</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="47"/>
         <source>Application</source>
-        <translation>Aplicación</translation>
+        <translation>응용프로그램</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="48"/>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>비디오</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="49"/>
         <source>Audio</source>
-        <translation>Audio</translation>
+        <translation>오디오</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="50"/>
         <source>Image</source>
-        <translation>Imagen</translation>
+        <translation>이미지</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="51"/>
         <source>Archive</source>
-        <translation>Archivo</translation>
+        <translation>압축파일</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="53"/>
         <source>Executable</source>
-        <translation>Ejecutable</translation>
+        <translation>실행 가능</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="52"/>
         <source>Document</source>
-        <translation>Documento</translation>
+        <translation>문서</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="54"/>
         <source>Backup file</source>
-        <translation>Archivo de respaldo</translation>
+        <translation>백업 파일</translation>
     </message>
     <message>
         <location filename="../source/src/mimetypedisplaymanager.cpp" line="55"/>
         <source>Unknown</source>
-        <translation>Desconocido</translation>
+        <translation>알 수 없음</translation>
     </message>
 </context>
 <context>
@@ -497,32 +497,32 @@
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="54"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="56"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>크기</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="58"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>유형</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="60"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>시간 수정됨</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="117"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation>항목(들)</translation>
     </message>
     <message>
         <location filename="../source/src/myfilesystemmodel.cpp" line="128"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -531,7 +531,7 @@
         <location filename="../source/src/progress.cpp" line="79"/>
         <location filename="../source/src/progress.cpp" line="271"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="75"/>
@@ -540,22 +540,22 @@
         <location filename="../source/src/progress.cpp" line="138"/>
         <location filename="../source/src/progress.cpp" line="297"/>
         <source>Calculating...</source>
-        <translation>Calculando...</translation>
+        <translation>계산 중...</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="264"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation>¿Está seguro que desea detener la compresión?</translation>
+        <translation>압축을 중지하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="272"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="268"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>¿Está seguro que desea detener la extracción?</translation>
+        <translation>추출을 중지하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="132"/>
@@ -584,12 +584,12 @@
     <message>
         <location filename="../source/src/progress.cpp" line="231"/>
         <source>Compressing</source>
-        <translation>Comprimiendo</translation>
+        <translation>압축중</translation>
     </message>
     <message>
         <location filename="../source/src/progress.cpp" line="234"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>추출중</translation>
     </message>
 </context>
 <context>
@@ -597,30 +597,30 @@
     <message>
         <location filename="../source/src/progressdialog.cpp" line="47"/>
         <source>%1 task(s) in progress</source>
-        <translation>%1 tarea(s) en progreso</translation>
+        <translation>진행 중인 작업 %1개</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="59"/>
         <location filename="../source/src/progressdialog.cpp" line="111"/>
         <source>Task</source>
-        <translation>Tarea</translation>
+        <translation>작업</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="60"/>
         <location filename="../source/src/progressdialog.cpp" line="117"/>
         <source>Extracting</source>
-        <translation>Extrayendo</translation>
+        <translation>추출중</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
         <location filename="../source/src/progressdialog.cpp" line="137"/>
         <source>Extraction successful</source>
-        <translation>Extracción exitosa</translation>
+        <translation>추출 성공</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="133"/>
         <source>Extract to</source>
-        <translation>Extraer en</translation>
+        <translation>추출 위치</translation>
     </message>
 </context>
 <context>
@@ -676,104 +676,104 @@
     <message>
         <location filename="../interface/queries.cpp" line="140"/>
         <source>Skip</source>
-        <translation>Omitir</translation>
+        <translation>건너뛰기</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="139"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>¿Otro archivo con el mismo nombre ya exite, desea remplazarlo?</translation>
+        <translation>동일한 이름의 다른 파일이 이미 존재합니다, 교체 하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="141"/>
         <source>Replace</source>
-        <translation>Reemplazar</translation>
+        <translation>교체</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="144"/>
         <source>Apply to all</source>
-        <translation>Aplicar a todos</translation>
+        <translation>모두 적용</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="264"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Archivo cifrado, por favor ingrese la contraseña</translation>
+        <translation>암호화된 파일, 비밀번호를 입력하십시오</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="337"/>
         <source>Wrong password</source>
-        <translation>Contraseña incorrecta</translation>
+        <translation>잘못된 비밀번호</translation>
     </message>
     <message>
         <location filename="../interface/queries.cpp" line="269"/>
         <location filename="../interface/queries.cpp" line="339"/>
         <location filename="../source/src/compresspage.cpp" line="117"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="116"/>
         <source>Please add files to the top-level directory</source>
-        <translation>Agregue archivos a la carpeta de nivel superior</translation>
+        <translation>최상위 디렉토리에 파일을 추가하십시오</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="140"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../source/src/compresspage.cpp" line="141"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="409"/>
         <source>Name</source>
-        <translation>Nombre</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="412"/>
         <source>Time modified</source>
-        <translation>Fecha de modificación</translation>
+        <translation>수정된 시간</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="415"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation>유형</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="418"/>
         <source>Size</source>
-        <translation>Tamaño</translation>
+        <translation>크기</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="5"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="6"/>
         <source>Extraction</source>
-        <translation>Extracción</translation>
+        <translation>추출</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>Crear automáticamente una carpeta para múltiples archivos extraidos</translation>
+        <translation>추출된 여러 파일에 대한 폴더 자동 생성</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when complete</source>
-        <translation>Mostrar archivos extraidos cuando se complete</translation>
+        <translation>완료 시 추출된 파일 표시</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="9"/>
         <source>Files Associated</source>
-        <translation>Archivos asociados</translation>
+        <translation>연결된 파일</translation>
     </message>
     <message>
         <location filename="../source/src/settings_translation.cpp" line="10"/>
         <source>File Type</source>
-        <translation>Tipo de archivo</translation>
+        <translation>파일 유형</translation>
     </message>
     <message>
         <location filename="../source/src/myfileitem.cpp" line="54"/>
@@ -782,7 +782,7 @@
         <location filename="../source/src/myfileitem.cpp" line="60"/>
         <location filename="../source/src/myfileitem.cpp" line="62"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation>항목(들)</translation>
     </message>
 </context>
 <context>
@@ -790,18 +790,7 @@
     <message>
         <location filename="../source/src/settingdialog.cpp" line="93"/>
         <source>Select All</source>
-        <translation>Seleccionar todos</translation>
-    </message>
-    <message>
-        <location filename="../source/src/settingdialog.cpp" line="132"/>
-        <location filename="../source/src/settingdialog.cpp" line="162"/>
-        <source>Current directory</source>
-        <translation>Carpeta actual</translation>
-    </message>
-    <message>
-        <location filename="../source/src/settingdialog.cpp" line="94"/>
-        <source>Clear All</source>
-        <translation>Limpiar todos</translation>
+        <translation>모두 선택</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="95"/>
@@ -809,26 +798,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../source/src/settingdialog.cpp" line="132"/>
+        <location filename="../source/src/settingdialog.cpp" line="162"/>
+        <source>Current directory</source>
+        <translation>현재 디렉토리</translation>
+    </message>
+    <message>
+        <location filename="../source/src/settingdialog.cpp" line="94"/>
+        <source>Clear All</source>
+        <translation>모두 지우기</translation>
+    </message>
+    <message>
         <location filename="../source/src/settingdialog.cpp" line="126"/>
         <source>Extract archives to</source>
-        <translation>Extraer ficheros en</translation>
+        <translation>압축파일 추출 위치</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="132"/>
         <location filename="../source/src/settingdialog.cpp" line="172"/>
         <source>Other directory</source>
-        <translation>Otro carpeta</translation>
+        <translation>다른 디렉토리</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="132"/>
         <location filename="../source/src/settingdialog.cpp" line="167"/>
         <source>Desktop</source>
-        <translation>Escritorio</translation>
+        <translation>바탕화면</translation>
     </message>
     <message>
         <location filename="../source/src/settingdialog.cpp" line="263"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>La ruta de extracción por defecto no existe, por favor vuelva a intentarlo</translation>
+        <translation>기본 추출 경로가 없으면 다시 시도하십시오</translation>
     </message>
 </context>
 <context>
@@ -836,19 +836,19 @@
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="40"/>
         <source>Extract</source>
-        <translation>Extraer</translation>
+        <translation>압축풀기</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="46"/>
         <location filename="../source/src/uncompresspage.cpp" line="108"/>
         <location filename="../source/src/uncompresspage.cpp" line="115"/>
         <source>Extract to:</source>
-        <translation>Extraer en:</translation>
+        <translation>압축풀 위치:</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="96"/>
         <source>Find directory</source>
-        <translation>Buscar carpeta</translation>
+        <translation>디렉토리 찾기</translation>
     </message>
 </context>
 <context>
@@ -856,42 +856,34 @@
     <message>
         <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
-        <translation>Extraer</translation>
-    </message>
-    <message>
-        <source>Extract here</source>
-        <translation type="vanished">Extraer aquí</translation>
-    </message>
-    <message>
-        <location filename="../source/src/fileViewer.cpp" line="374"/>
-        <source>Extract to current directory</source>
-        <translation>Extraer a la carpeta actual</translation>
+        <translation>압축풀기</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="382"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>삭제</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="442"/>
         <source>item(s)</source>
-        <translation>elemento(s)</translation>
+        <translation>항목(들)</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="458"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
-        <translation>dd/MM/yyyy hh:mm:ss</translation>
+        <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="373"/>
         <location filename="../source/src/fileViewer.cpp" line="844"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
-        <translation>Extraer</translation>
+        <translation>압축풀기</translation>
     </message>
     <message>
-        <source>yyyy/MM/dd/ hh:mm:ss</source>
-        <translation type="vanished">dd/MM/yyyy hh:mm:ss</translation>
+        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <source>Extract to current directory</source>
+        <translation>현재 디렉토리로 추출</translation>
     </message>
 </context>
 </TS>

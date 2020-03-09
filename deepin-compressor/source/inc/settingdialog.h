@@ -49,6 +49,7 @@ public slots:
     void settingsChanged(const QString &key, const QVariant &value);
     void selectpressed();
     void cancelpressed();
+    void recommandedPressed();
     virtual void done(int status) override;
 
 signals:
