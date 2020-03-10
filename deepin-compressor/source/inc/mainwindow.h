@@ -228,7 +228,7 @@ private:
 
 private:
     void calSelectedTotalFileSize(const QStringList &files);
-    quint64 calFileSize(const QString &path);
+    qint64 calFileSize(const QString &path);
     void calSpeedAndTime(unsigned long compressPercent);
     void stopCalPercentAndTime();
 

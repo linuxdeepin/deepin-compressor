@@ -726,12 +726,6 @@ void MainWindow::refreshPage()
     }
 }
 
-void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
-{
-    selectedTotalFileSize = 0;
-    calSelectedTotalFileSize(files);
-}
-
 //add calculate size of selected files
 void MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
@@ -748,21 +742,7 @@ void MainWindow::calSelectedTotalFileSize(const QStringList &files)
     }
 }
 
-void MainWindow::slotBackButtonClicked()
-{
-    stopCalPercentAndTime();
-    m_CompressSuccess->clear();
-
-    if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
-    {
-        m_CompressPage->clearFiles();
-    }
-
-    m_pageid = PAGE_HOME;
-    refreshPage();
-}
-
-quint64 MainWindow::calFileSize(const QString &path)
+qint64 MainWindow::calFileSize(const QString &path)
 {
     QDir dir(path);
     qint64 size = 0;
@@ -777,6 +757,29 @@ quint64 MainWindow::calFileSize(const QString &path)
     }
 
     return size;
+}
+
+void MainWindow::calSpeedAndTime(unsigned long compressPercent)
+{
+    compressTime += m_timer.elapsed();
+
+    double m_compressSpeed = ((selectedTotalFileSize / 1024.0) * (compressPercent / 100.0)) / compressTime * 1000;
+    double m_sizeLeft = (selectedTotalFileSize / 1024.0) * (100 - compressPercent) / 100;
+    qint64 m_timeLeft = (qint64)(m_sizeLeft / m_compressSpeed);
+
+    qDebug() << "m_sizeLeft" << m_sizeLeft;
+    qDebug() << "m_compressSpeed" << m_compressSpeed;
+    qDebug() << "m_timeLeft" << m_timeLeft;
+
+    m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
+    m_timer.restart();
+}
+
+void MainWindow::stopCalPercentAndTime()
+{
+    lastPercent = 0;
+    compressTime = 0;
+    m_timer.elapsed();
 }
 
 void MainWindow::onSelected(const QStringList &files)
@@ -1278,29 +1281,6 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     }*/
 
     m_encryptionjob->start();
-}
-
-void MainWindow::calSpeedAndTime(unsigned long compressPercent)
-{
-    compressTime += m_timer.elapsed();
-
-    double m_compressSpeed = ((selectedTotalFileSize / 1024.0) * (compressPercent / 100.0)) / compressTime * 1000;
-    double m_sizeLeft = (selectedTotalFileSize / 1024.0) * (100 - compressPercent) / 100;
-    qint64 m_timeLeft = m_sizeLeft / m_compressSpeed;
-
-    qDebug() << "m_sizeLeft" << m_sizeLeft;
-    qDebug() << "m_compressSpeed" << m_compressSpeed;
-    qDebug() << "m_timeLeft" << m_timeLeft;
-
-    m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
-    m_timer.restart();
-}
-
-void MainWindow::stopCalPercentAndTime()
-{
-    lastPercent = 0;
-    compressTime = 0;
-    m_timer.elapsed();
 }
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
@@ -2114,6 +2094,27 @@ void MainWindow::onCompressPageFilelistIsEmpty()
     m_pageid = PAGE_HOME;
     refreshPage();
 }
+
+void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
+{
+    selectedTotalFileSize = 0;
+    calSelectedTotalFileSize(files);
+}
+
+void MainWindow::slotBackButtonClicked()
+{
+    stopCalPercentAndTime();
+    m_CompressSuccess->clear();
+
+    if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
+    {
+        m_CompressPage->clearFiles();
+    }
+
+    m_pageid = PAGE_HOME;
+    refreshPage();
+}
+
 
 void MainWindow::onTitleButtonPressed()
 {
