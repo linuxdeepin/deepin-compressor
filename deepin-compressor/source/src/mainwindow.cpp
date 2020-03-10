@@ -726,26 +726,15 @@ void MainWindow::refreshPage()
     }
 }
 
-//add calculate size of selected files
-void MainWindow::calSelectedTotalFileSize(const QStringList &files)
-{
-
-    foreach(QFileInfo fileInfo, files)
-    {
-        if (fileInfo.isFile())
-        {
-            selectedTotalFileSize += fileInfo.size();
-        }
-        else if (fileInfo.isDir())
-        {
-            selectedTotalFileSize += calFileSize(fileInfo.filePath());
-        }
-    }
-}
-
 void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
 {
     selectedTotalFileSize = 0;
+    calSelectedTotalFileSize(files);
+}
+
+//add calculate size of selected files
+void MainWindow::calSelectedTotalFileSize(const QStringList &files)
+{
     foreach(QFileInfo fileInfo, files)
     {
         if (fileInfo.isFile())

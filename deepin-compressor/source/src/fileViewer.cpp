@@ -741,7 +741,6 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 restoreHeaderSort(pModel->rootPath());
                 pTableViewFile->setRootIndex(m_indexmode);
 
-
                 QDir dir(m_curfilelist.at(row).filePath());
                 qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
                 if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
