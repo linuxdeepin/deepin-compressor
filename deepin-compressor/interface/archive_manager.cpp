@@ -67,7 +67,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent)
+Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent, bool useLibArchive)
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
@@ -82,6 +82,22 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     if(write)
     {
         offers = pluginManager.preferredWritePluginsFor(mimeType);
+
+        if( useLibArchive == true && mimeType.name() == "application/zip")
+        {
+            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
+                if( p1->metaData().name().contains("Libarchive") )
+                {
+                    return true;
+                }
+                if( p2->metaData().name().contains("Libarchive") )
+                {
+                    return false;
+                }
+
+                return p1->priority() > p2->priority();
+            });
+        }
     }
     else {
         offers = pluginManager.preferredPluginsFor(mimeType);
@@ -138,9 +154,9 @@ BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &d
     return batchJob;
 }
 
-CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent)
+CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent, bool useLibArchive)
 {
-    auto archive = create(fileName, mimeType, true, parent);
+    auto archive = create(fileName, mimeType, true, parent, useLibArchive);
     auto createJob = new CreateJob(archive, entries, options);
 
     return createJob;

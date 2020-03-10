@@ -156,6 +156,7 @@ private slots:
     void onCompressPageFilelistIsEmpty();
 
     void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
+    void resetMainwindow();
     void slotBackButtonClicked();
 
 signals:
@@ -236,6 +237,10 @@ private:
     unsigned long lastPercent = 0;
     qint64 selectedTotalFileSize = 0;
     qint64 compressTime = 0;
+
+#ifdef __aarch64__
+    qint64 maxFileSize_ = 0;
+#endif
 };
 
 

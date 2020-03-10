@@ -729,15 +729,26 @@ void MainWindow::refreshPage()
 //add calculate size of selected files
 void MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
-    foreach(QFileInfo fileInfo, files)
+    foreach(QString file, files)
     {
-        if (fileInfo.isFile())
+        QFileInfo fi(file);
+
+        if(fi.isFile())
         {
-            selectedTotalFileSize += fileInfo.size();
+            qint64 curFileSize = fi.size();
+
+            #ifdef __aarch64__
+            if(maxFileSize_ < curFileSize)
+            {
+                maxFileSize_ = curFileSize;
+            }
+            #endif
+
+            selectedTotalFileSize += curFileSize;
         }
-        else if (fileInfo.isDir())
+        else if(fi.isDir())
         {
-            selectedTotalFileSize += calFileSize(fileInfo.filePath());
+            selectedTotalFileSize += calFileSize(file);
         }
     }
 }
@@ -749,8 +760,18 @@ qint64 MainWindow::calFileSize(const QString &path)
 
     foreach(QFileInfo fileInfo, dir.entryInfoList(QDir::Files))
     {
-        size += fileInfo.size();
+        qint64 curFileSize = fileInfo.size();
+
+        #ifdef __aarch64__
+        if(maxFileSize_ < curFileSize)
+        {
+            maxFileSize_ = curFileSize;
+        }
+        #endif
+
+        size += curFileSize;
     }
+
     foreach(QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         size += calFileSize(path + QDir::separator() + subDir);
@@ -1880,7 +1901,12 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this);
+#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
+    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
+    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6 );
+#else
+    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
+#endif
 
     if (!password.isEmpty())
     {
@@ -2097,12 +2123,25 @@ void MainWindow::onCompressPageFilelistIsEmpty()
 
 void MainWindow::slotCalDeleteRefreshTotalFileSize(const QStringList &files)
 {
-    selectedTotalFileSize = 0;
+    resetMainwindow();
+
     calSelectedTotalFileSize(files);
+}
+
+void MainWindow::resetMainwindow()
+{
+    selectedTotalFileSize = 0;
+    lastPercent = 0;
+
+#ifdef __aarch64__
+    maxFileSize_ = 0;
+#endif
 }
 
 void MainWindow::slotBackButtonClicked()
 {
+    resetMainwindow();
+
     stopCalPercentAndTime();
     m_CompressSuccess->clear();
 
