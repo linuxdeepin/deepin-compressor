@@ -781,6 +781,7 @@ qint64 MainWindow::calFileSize(const QString &path)
 
 void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 {
+//    qDebug() << "size" << selectedTotalFileSize;
     compressTime += m_timer.elapsed();
     qDebug() << "compresstime" << compressTime;
 
@@ -791,6 +792,11 @@ void MainWindow::calSpeedAndTime(unsigned long compressPercent)
     qDebug() << "m_sizeLeft" << m_sizeLeft;
     qDebug() << "m_compressSpeed" << m_compressSpeed;
     qDebug() << "m_timeLeft" << m_timeLeft;
+
+//    if (lastPercent != 100 && m_timeLeft == 0)
+//    {
+//        m_timeLeft = 1;
+//    }
 
     m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
     m_timer.restart();

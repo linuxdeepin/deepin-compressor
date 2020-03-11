@@ -369,7 +369,7 @@ void fileViewer::InitUI()
     if (PAGE_UNCOMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
-        m_pRightMenu->setFixedWidth(200);
+        m_pRightMenu->setMinimumWidth(202);
         m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
         m_pRightMenu->addAction(tr("Extract to current directory"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
@@ -378,7 +378,7 @@ void fileViewer::InitUI()
     if (PAGE_COMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
-        m_pRightMenu->setFixedWidth(200);
+        m_pRightMenu->setMinimumWidth(202);
         m_pRightMenu->addAction(tr("Delete"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
