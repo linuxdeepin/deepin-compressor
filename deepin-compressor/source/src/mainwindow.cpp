@@ -605,13 +605,11 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:
         m_Progess->resetProgress();
-        m_Progess->setSpeedAndTimeText(DECOMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
-        m_timer.start();
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
@@ -623,17 +621,14 @@ void MainWindow::refreshPage()
         m_watchTimer = startTimer(1000);
         m_CompressPage->onPathIndexChanged();
         m_mainLayout->setCurrentIndex(2);
-        //m_timer.start();
         break;
     case PAGE_ZIPSET:
         setQLabelText(m_titlelabel, tr("Create New Archive"));
-        m_Progess->setSpeedAndTimeText(COMPRESSING);
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(true);
         m_mainLayout->setCurrentIndex(3);
-        m_timer.start();
         break;
     case PAGE_ZIPPROGRESS:
         if (0 != m_watchTimer)
@@ -641,20 +636,24 @@ void MainWindow::refreshPage()
             killTimer(m_watchTimer);
             m_watchTimer = 0;
         }
+        m_Progess->setSpeedAndTimeText(COMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
+        m_timer.start();
         break;
     case PAGE_UNZIPPROGRESS:
+        m_Progess->setSpeedAndTimeText(DECOMPRESSING);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
         setQLabelText(m_titlelabel, tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
+        m_timer.start();
         break;
     case PAGE_ZIP_SUCCESS:
         setQLabelText(m_titlelabel, "");
@@ -783,6 +782,7 @@ qint64 MainWindow::calFileSize(const QString &path)
 void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 {
     compressTime += m_timer.elapsed();
+    qDebug() << "compresstime" << compressTime;
 
     double m_compressSpeed = ((selectedTotalFileSize / 1024.0) * (compressPercent / 100.0)) / compressTime * 1000;
     double m_sizeLeft = (selectedTotalFileSize / 1024.0) * (100 - compressPercent) / 100;
@@ -1221,6 +1221,8 @@ void MainWindow::WatcherFile(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 {
+    m_pageid = PAGE_UNZIPPROGRESS;
+    refreshPage();
     m_progressdialog->setProcess(0);
     m_Progess->setprogress(0);
     // m_progressTransFlag = false;

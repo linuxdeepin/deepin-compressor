@@ -143,6 +143,7 @@ void Progress::slotChangeTimeLeft()
     if (lastTimeLeft < 2)
     {
         m_timer->stop();
+        return;
     }
 
     lastTimeLeft--;
