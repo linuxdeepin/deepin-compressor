@@ -370,6 +370,7 @@ void MainWindow::InitConnection()
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
         this->sendMessage(icon, msg);
     });
+    connect(m_progressdialog, &ProgressDialog::extractSuccess, this, &MainWindow::slotStopCalPercentAndTime);
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
     openkey->setContext(Qt::ApplicationShortcut);
@@ -781,7 +782,7 @@ qint64 MainWindow::calFileSize(const QString &path)
 
 void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 {
-//    qDebug() << "size" << selectedTotalFileSize;
+    qDebug() << "size" << selectedTotalFileSize;
     compressTime += m_timer.elapsed();
     qDebug() << "compresstime" << compressTime;
 
@@ -800,13 +801,6 @@ void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 
     m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
     m_timer.restart();
-}
-
-void MainWindow::stopCalPercentAndTime()
-{
-    lastPercent = 0;
-    compressTime = 0;
-    m_timer.elapsed();
 }
 
 void MainWindow::onSelected(const QStringList &files)
@@ -2066,7 +2060,7 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
-    stopCalPercentAndTime();
+    slotStopCalPercentAndTime();
 
     if (m_encryptionjob)
     {
@@ -2150,7 +2144,7 @@ void MainWindow::slotBackButtonClicked()
 {
     resetMainwindow();
 
-    stopCalPercentAndTime();
+    slotStopCalPercentAndTime();
     m_CompressSuccess->clear();
 
     if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
@@ -2162,6 +2156,12 @@ void MainWindow::slotBackButtonClicked()
     refreshPage();
 }
 
+void MainWindow::slotStopCalPercentAndTime()
+{
+    lastPercent = 0;
+    compressTime = 0;
+    m_timer.elapsed();
+}
 
 void MainWindow::onTitleButtonPressed()
 {

@@ -93,9 +93,9 @@ void SettingDialog::initUI()
             DPushButton *button1 = new DPushButton(tr("Select All"));
             DPushButton *button2 = new DPushButton(tr("Clear All"));
             DSuggestButton *button3 = new DSuggestButton(tr("Recommended"));
-            button1->setFixedSize(153, 36);
-            button2->setFixedSize(153, 36);
-            button3->setFixedSize(153, 36);
+            button1->setMinimumSize(153, 36);
+            button2->setMinimumSize(153, 36);
+            button3->setMinimumSize(153, 36);
             layout->addStretch();
             layout->addWidget(button1);
             layout->addStretch();

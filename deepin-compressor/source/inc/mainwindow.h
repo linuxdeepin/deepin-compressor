@@ -158,6 +158,7 @@ private slots:
     void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
     void resetMainwindow();
     void slotBackButtonClicked();
+    void slotStopCalPercentAndTime();
 
 signals:
     void sigquitApp();
@@ -231,7 +232,6 @@ private:
     void calSelectedTotalFileSize(const QStringList &files);
     qint64 calFileSize(const QString &path);
     void calSpeedAndTime(unsigned long compressPercent);
-    void stopCalPercentAndTime();
 
     QElapsedTimer m_timer;
     unsigned long lastPercent = 0;
