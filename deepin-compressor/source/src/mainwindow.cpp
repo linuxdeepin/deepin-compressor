@@ -363,7 +363,7 @@ void MainWindow::InitConnection()
     connect(m_encryptionpage, &EncryptionPage::sigExtractPassword, this, &MainWindow::SlotExtractPassword);
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles, this, &MainWindow::slotExtractSimpleFiles);
     connect(m_progressdialog, &ProgressDialog::stopExtract, this, &MainWindow::slotKillExtractJob);
-    connect(m_progressdialog, &ProgressDialog::sigStopCalPercentAndTime, this, &MainWindow::slotStopCalPercentAndTime);
+    connect(m_progressdialog, &ProgressDialog::sigResetPercentAndTime, this, &MainWindow::slotResetPercentAndTime);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
     connect(m_CompressFail, &Compressor_Fail::sigBackButtonClickedOnFail, this, &MainWindow::slotBackButtonClicked);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
@@ -2060,7 +2060,7 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {
-    slotStopCalPercentAndTime();
+    slotResetPercentAndTime();
 
     if (m_encryptionjob)
     {
@@ -2144,7 +2144,7 @@ void MainWindow::slotBackButtonClicked()
 {
     resetMainwindow();
 
-    slotStopCalPercentAndTime();
+    slotResetPercentAndTime();
     m_CompressSuccess->clear();
 
     if(m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS)
@@ -2156,7 +2156,7 @@ void MainWindow::slotBackButtonClicked()
     refreshPage();
 }
 
-void MainWindow::slotStopCalPercentAndTime()
+void MainWindow::slotResetPercentAndTime()
 {
     lastPercent = 0;
     compressTime = 0;

@@ -53,6 +53,7 @@ protected:
 signals:
     void stopExtract();
     void extractSuccess(QString msg);
+    void sigResetPercentAndTime();
 
 public slots:
     void slotextractpress(int index);

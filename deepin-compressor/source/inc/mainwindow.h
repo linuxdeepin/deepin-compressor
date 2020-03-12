@@ -158,7 +158,7 @@ private slots:
     void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
     void resetMainwindow();
     void slotBackButtonClicked();
-    void slotStopCalPercentAndTime();
+    void slotResetPercentAndTime();
 
 signals:
     void sigquitApp();

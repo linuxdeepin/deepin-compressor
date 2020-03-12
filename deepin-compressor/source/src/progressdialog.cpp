@@ -90,7 +90,7 @@ void ProgressDialog::slotextractpress(int index)
     qDebug() << index;
     if (1 == index) {
         emit stopExtract();
-        emit sigStopCalPercentAndTime();
+        emit sigResetPercentAndTime();
     } else {
         exec();
     }
@@ -136,7 +136,7 @@ void ProgressDialog::setFinished(const QString &path)
         //reject();
         hide();
         emit extractSuccess(tr("Extraction successful"));
-        emit sigStopCalPercentAndTime();
+        emit sigResetPercentAndTime();
     }
 }
 
