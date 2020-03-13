@@ -212,6 +212,12 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             }
             filteredPlugins << plugin;
         }
+        else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
+            if(mimeType.name() == QString("application/x-java-archive") && plugin->metaData().pluginId() == QString("kerfuffle_clizip"))
+            {
+                filteredPlugins << plugin;
+            }
+        }
     }
     qDebug()<<filteredPlugins.count();
     return filteredPlugins;
@@ -263,7 +269,6 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 
         return p1->priority() > p2->priority();
     });
-
 
 //arm64 use libzip for comptess *.zip cause libzip is better under huawei
 //#ifdef __arm64__
