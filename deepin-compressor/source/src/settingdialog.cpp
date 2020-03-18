@@ -71,6 +71,33 @@ SettingDialog::SettingDialog(QWidget *parent):
                      << "file_association.file_association_type.x-iso9660-appimage"
                      << "file_association.file_association_type.x-source-rpm";
 
+    m_recommendedList << "file_association.file_association_type.x-7z-compressed"
+                      << "file_association.file_association_type.x-archive"
+                      << "file_association.file_association_type.x-bcpio"
+                      << "file_association.file_association_type.x-bzip"
+                      << "file_association.file_association_type.x-cpio"
+                      << "file_association.file_association_type.x-cpio-compressed"
+                      << "file_association.file_association_type.vnd.debian.binary-package"
+                      << "file_association.file_association_type.gzip"
+                      << "file_association.file_association_type.x-java-archive"
+                      << "file_association.file_association_type.x-lzma"
+                      << "file_association.file_association_type.vnd.ms-cab-compressed"
+                      << "file_association.file_association_type.vnd.rar"
+                      << "file_association.file_association_type.x-rpm"
+                      << "file_association.file_association_type.x-sv4cpio"
+                      << "file_association.file_association_type.x-sv4crc"
+                      << "file_association.file_association_type.x-tar"
+                      << "file_association.file_association_type.x-bzip-compressed-tar"
+                      << "file_association.file_association_type.x-compressed-tar"
+                      << "file_association.file_association_type.x-lzip-compressed-tar"
+                      << "file_association.file_association_type.x-lzma-compressed-tar"
+                      << "file_association.file_association_type.x-tzo"
+                      << "file_association.file_association_type.x-xz-compressed-tar"
+                      << "file_association.file_association_type.x-tarz"
+                      << "file_association.file_association_type.x-xar"
+                      << "file_association.file_association_type.x-xz"
+                      << "file_association.file_association_type.zip";
+
     m_valuelist.clear();
 
     initUI();
@@ -153,8 +180,7 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(this, &SettingDialog::sigReset, this, [=]
-            {
+            connect(this, &SettingDialog::sigReset, this, [ = ] {
                 combobox->setCurrentIndex(0);
             });
 
@@ -307,8 +333,7 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
         if (index > -1) {
             m_valuelisttemp.replace(index, value.toBool());
         }
-    }
-    else if (key.contains("default_path")&&value.toString() == "") {
+    } else if (key.contains("default_path") && value.toString() == "") {
         emit sigReset();
     }
 }
@@ -330,6 +355,9 @@ void SettingDialog::cancelpressed()
 void SettingDialog::recommandedPressed()
 {
     foreach (QString key, m_associtionlist) {
+        m_settings->setOption(key, false);
+    }
+    foreach (QString key, m_recommendedList) {
         m_settings->setOption(key, true);
     }
 }
@@ -342,8 +370,7 @@ void SettingDialog::startcmd(QString &mimetype, bool state)
         return;
     }
 
-    if ( nullptr == m_process)
-    {
+    if ( nullptr == m_process) {
         m_process = new KProcess(this);
     }
 

@@ -58,6 +58,7 @@ private:
     DSettings *m_settings;
     KProcess *m_process = nullptr;
     QStringList m_associtionlist;
+    QStringList m_recommendedList;
     QList<bool> m_valuelist;
     QList<bool> m_valuelisttemp;
     QString m_curpath;
