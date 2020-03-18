@@ -251,22 +251,7 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 {
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
-    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [&mimeType, &readWrite](Plugin * p1, Plugin * p2) {
-    #ifdef __aarch64__
-        if( readWrite && mimeType.name() == QString("application/zip") )
-        {
-            if( p1->metaData().name().contains("Libarchive") )
-            {
-                return true;
-            }
-
-            if( p2->metaData().name().contains("Libarchive") )
-            {
-                return false;
-            }
-        }
-    #endif
-
+    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
         return p1->priority() > p2->priority();
     });
 
