@@ -48,6 +48,7 @@ public:
     QString getDecompressPath();
     void setdefaultpath(QString path);
     int getFileCount();
+    int showWarningDialog(const QString &msg);
 
 
 signals:

@@ -140,8 +140,7 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
     struct archive_entry *aentry;
     int result = ARCHIVE_RETRY;
 
-    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK)
-    {
+    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
         if (!m_emitNoEntries) {
             emitEntryFromArchiveEntry(aentry);
         }
@@ -275,7 +274,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
         // Retry with renamed entry, fire an overwrite query again
         // if the new entry also exists.
-    retry:
+retry:
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry));
         // Skip directories if not preserving paths.
         if (!preservePaths && entryIsDir) {
@@ -308,14 +307,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             return false;
         }
 
-        if(0 == extractedEntriesCount)
-        {
+        if (0 == extractedEntriesCount) {
             extractDst = entryName;
-        }
-        else if( extractDst.isEmpty() == false )
-        {
-            if( entryName.startsWith( extractDst + (extractDst.endsWith("/") ? "":"/") ) == false )
-            {
+        } else if ( extractDst.isEmpty() == false ) {
+            if ( entryName.startsWith( extractDst + (extractDst.endsWith("/") ? "" : "/") ) == false ) {
                 extractDst.clear();
             }
         }
@@ -458,8 +453,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         }
     }
 
-    if(extractDst.isEmpty() == false)
-    {
+    if (extractDst.isEmpty() == false) {
         emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
     }
 
@@ -547,7 +541,7 @@ int LibarchivePlugin::extractionFlags() const
     return result;
 }
 
-void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo& info, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool partialprogress)
 {
     m_currentExtractedFilesSize = 0;
     char buff[10240];
@@ -573,11 +567,10 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
 
         if (partialprogress) {
             m_currentExtractedFilesSize += readBytes;
-            float currentProgress = ( static_cast<float>(m_currentExtractedFilesSize) / fileSize)*info.fileProgressProportion + info.fileProgressStart;
-            if( static_cast<int>(100*currentProgress) != pastProgress)
-            {
+            float currentProgress = ( static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;
+            if ( static_cast<int>(100 * currentProgress) != pastProgress) {
                 emit progress( currentProgress );
-                pastProgress = static_cast<int>(100*currentProgress);
+                pastProgress = static_cast<int>(100 * currentProgress);
             }
             //emit progress_filename(file.fileName());
         }

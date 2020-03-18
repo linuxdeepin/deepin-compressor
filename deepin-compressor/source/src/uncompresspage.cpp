@@ -28,6 +28,8 @@
 #include <QFile>
 #include <QUrl>
 #include <DStandardPaths>
+#include <DMessageManager>
+#include <DDialog>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -79,7 +81,15 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
 void UnCompressPage::oneCompressPress()
 {
-    emit sigDecompressPress(m_pathstr);
+    QFileInfo m_fileDestinationPath(m_pathstr);
+    bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
+
+    if (!m_permission) {
+        showWarningDialog(tr("The path has no permission, please retry"));
+        return;
+    } else {
+        emit sigDecompressPress(m_pathstr);
+    }
 }
 
 void UnCompressPage::setModel(ArchiveSortFilterModel *model)
@@ -120,6 +130,20 @@ int UnCompressPage::getFileCount()
     return m_fileviewer->getFileCount();
 }
 
+int UnCompressPage::showWarningDialog(const QString &msg)
+{
+    DDialog *dialog = new DDialog(this);
+    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
+    dialog->setIcon(pixmap);
+    dialog->setMessage(msg);
+    dialog->addSpacing(15);
+    dialog->addButton(tr("OK"));
+    int res = dialog->exec();
+    delete dialog;
+
+    return res;
+}
+
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;
@@ -131,7 +155,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         return;
     }
 
-    qDebug()<<fileList;
+    qDebug() << fileList;
     if (EXTRACT_TO == type) {
         DFileDialog dialog(this);
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -153,11 +177,10 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     } else if (EXTRACT_TEMP == type) {
         QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
         QDir dir(tmppath);
-        if(!dir.exists())
-        {
+        if (!dir.exists()) {
             dir.mkdir(tmppath);
         }
-        emit sigextractfiles(fileList,tmppath);
+        emit sigextractfiles(fileList, tmppath);
     } else {
         emit sigextractfiles(fileList, m_pathstr);
     }
