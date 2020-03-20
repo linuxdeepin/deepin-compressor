@@ -121,17 +121,22 @@
         <translation>Suddividi in volumi</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="277"/>
-        <source>The file has no permission, please retry</source>
+        <location filename="../source/src/compresssetting.cpp" line="297"/>
+        <source>You do not have permission to compress %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="284"/>
-        <source>The path has no permission, please retry</source>
+        <location filename="../source/src/compresssetting.cpp" line="279"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation type="unfinished">%1 è stata modificata sul Disco, importala nuovamente.</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="304"/>
+        <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="542"/>
+        <location filename="../source/src/compresssetting.cpp" line="562"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -319,35 +324,35 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Scorciatoie</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="370"/>
+        <location filename="../source/src/mainwindow.cpp" line="371"/>
         <source>Open file</source>
         <translation>Apri file</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="400"/>
+        <location filename="../source/src/mainwindow.cpp" line="401"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="579"/>
-        <location filename="../source/src/mainwindow.cpp" line="589"/>
-        <location filename="../source/src/mainwindow.cpp" line="1440"/>
+        <location filename="../source/src/mainwindow.cpp" line="580"/>
+        <location filename="../source/src/mainwindow.cpp" line="590"/>
+        <location filename="../source/src/mainwindow.cpp" line="1441"/>
         <source>Create New Archive</source>
         <translation>Crea nuovo Archivio</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="622"/>
+        <location filename="../source/src/mainwindow.cpp" line="623"/>
         <source>Compression successful</source>
         <translation>Compressione riuscita</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1297"/>
-        <location filename="../source/src/mainwindow.cpp" line="1314"/>
+        <location filename="../source/src/mainwindow.cpp" line="1298"/>
+        <location filename="../source/src/mainwindow.cpp" line="1315"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1316"/>
+        <location filename="../source/src/mainwindow.cpp" line="1317"/>
         <source>Extraction successful</source>
         <translation>Estrazione riuscita</translation>
     </message>
@@ -357,7 +362,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>%1 è stata modificata sul Disco, importala nuovamente.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="785"/>
+        <location filename="../source/src/mainwindow.cpp" line="786"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Desideri aggiungere un archivio alla lista oppure aprirlo in una nuova finestra?</translation>
     </message>
@@ -367,7 +372,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Visualizza scorciatoie</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="786"/>
+        <location filename="../source/src/mainwindow.cpp" line="787"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
@@ -378,74 +383,74 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="210"/>
-        <location filename="../source/src/mainwindow.cpp" line="1095"/>
+        <location filename="../source/src/mainwindow.cpp" line="1096"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="605"/>
+        <location filename="../source/src/mainwindow.cpp" line="606"/>
         <source>Compressing</source>
         <translation>Compressione in corso</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="615"/>
+        <location filename="../source/src/mainwindow.cpp" line="616"/>
         <source>Extracting</source>
         <translation>Estrazione in corso</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="631"/>
+        <location filename="../source/src/mainwindow.cpp" line="632"/>
         <source>Compression failed</source>
         <translation>Compressione fallita</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="661"/>
+        <location filename="../source/src/mainwindow.cpp" line="662"/>
         <source>Extraction failed</source>
         <translation>Estrazione fallita</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="787"/>
+        <location filename="../source/src/mainwindow.cpp" line="788"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="788"/>
+        <location filename="../source/src/mainwindow.cpp" line="789"/>
         <source>Open in new window</source>
         <translation>Apri in una nuova finestra</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="905"/>
+        <location filename="../source/src/mainwindow.cpp" line="906"/>
         <source>Find directory</source>
         <translation>Trova percorso</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1247"/>
+        <location filename="../source/src/mainwindow.cpp" line="1248"/>
         <source>Wrong password</source>
         <translation>Password errata</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="979"/>
-        <location filename="../source/src/mainwindow.cpp" line="999"/>
-        <location filename="../source/src/mainwindow.cpp" line="1035"/>
-        <location filename="../source/src/mainwindow.cpp" line="1275"/>
+        <location filename="../source/src/mainwindow.cpp" line="980"/>
+        <location filename="../source/src/mainwindow.cpp" line="1000"/>
+        <location filename="../source/src/mainwindow.cpp" line="1036"/>
+        <location filename="../source/src/mainwindow.cpp" line="1276"/>
         <source>Damaged file, unable to extract</source>
         <translation>File danneggiato, impossibile procedere con l&apos;estrazione</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1094"/>
+        <location filename="../source/src/mainwindow.cpp" line="1095"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>L&apos;archivio è stato modificato sul Disco, importalo nuovamente.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1271"/>
-        <location filename="../source/src/mainwindow.cpp" line="1273"/>
-        <location filename="../source/src/mainwindow.cpp" line="1752"/>
-        <location filename="../source/src/mainwindow.cpp" line="1758"/>
+        <location filename="../source/src/mainwindow.cpp" line="1272"/>
+        <location filename="../source/src/mainwindow.cpp" line="1274"/>
+        <location filename="../source/src/mainwindow.cpp" line="1753"/>
+        <location filename="../source/src/mainwindow.cpp" line="1759"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Spazio insufficiente, libera spazio e riprova</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1754"/>
-        <location filename="../source/src/mainwindow.cpp" line="1760"/>
+        <location filename="../source/src/mainwindow.cpp" line="1755"/>
+        <location filename="../source/src/mainwindow.cpp" line="1761"/>
         <source>Damaged file</source>
         <translation>File danneggiato</translation>
     </message>
@@ -858,7 +863,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="88"/>
-        <source>The path has no permission, please retry</source>
+        <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

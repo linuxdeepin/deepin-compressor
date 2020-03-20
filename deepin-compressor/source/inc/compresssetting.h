@@ -75,6 +75,7 @@ private:
 
 signals:
     void sigCompressPressed(QMap<QString, QString> &Args);
+    void sigFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
 
 public slots:
     void onNextButoonClicked();
@@ -86,7 +87,7 @@ public slots:
     void onThemeChanged();
 
 private:
-    int showWarningDialog(const QString& msg);
+    int showWarningDialog(const QString &msg, int index = 0);
 
 private:
     DPushButton *m_nextbutton = nullptr;
@@ -117,6 +118,7 @@ private:
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
     QStringList m_pathlist;
+    bool fileReadable = true;
 };
 
 #endif // COMPRESSSETTING_H

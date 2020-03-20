@@ -85,7 +85,7 @@ void UnCompressPage::oneCompressPress()
     bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
 
     if (!m_permission) {
-        showWarningDialog(tr("The path has no permission, please retry"));
+        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         return;
     } else {
         emit sigDecompressPress(m_pathstr);

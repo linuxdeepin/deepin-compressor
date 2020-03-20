@@ -121,17 +121,22 @@
         <translation>볼륨으로 분할</translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="277"/>
-        <source>The file has no permission, please retry</source>
+        <location filename="../source/src/compresssetting.cpp" line="297"/>
+        <source>You do not have permission to compress %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="284"/>
-        <source>The path has no permission, please retry</source>
+        <location filename="../source/src/compresssetting.cpp" line="279"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation type="unfinished">디스크에서 %1이 변경되었으므로 다시 가져오십시오.</translation>
+    </message>
+    <message>
+        <location filename="../source/src/compresssetting.cpp" line="304"/>
+        <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="542"/>
+        <location filename="../source/src/compresssetting.cpp" line="562"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
@@ -318,35 +323,35 @@
         <translation>단축키</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="370"/>
+        <location filename="../source/src/mainwindow.cpp" line="371"/>
         <source>Open file</source>
         <translation>파일 열기</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="400"/>
+        <location filename="../source/src/mainwindow.cpp" line="401"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="579"/>
-        <location filename="../source/src/mainwindow.cpp" line="589"/>
-        <location filename="../source/src/mainwindow.cpp" line="1440"/>
+        <location filename="../source/src/mainwindow.cpp" line="580"/>
+        <location filename="../source/src/mainwindow.cpp" line="590"/>
+        <location filename="../source/src/mainwindow.cpp" line="1441"/>
         <source>Create New Archive</source>
         <translation>새 압축파일 만들기</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="622"/>
+        <location filename="../source/src/mainwindow.cpp" line="623"/>
         <source>Compression successful</source>
         <translation>압축 성공</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1297"/>
-        <location filename="../source/src/mainwindow.cpp" line="1314"/>
+        <location filename="../source/src/mainwindow.cpp" line="1298"/>
+        <location filename="../source/src/mainwindow.cpp" line="1315"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1316"/>
+        <location filename="../source/src/mainwindow.cpp" line="1317"/>
         <source>Extraction successful</source>
         <translation>추출 성공</translation>
     </message>
@@ -356,7 +361,7 @@
         <translation>디스크에서 %1이 변경되었으므로 다시 가져오십시오.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="785"/>
+        <location filename="../source/src/mainwindow.cpp" line="786"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>목록에 압축파일을 추가하거나 새 창에서 열시겠습니까?</translation>
     </message>
@@ -366,7 +371,7 @@
         <translation>단축키 표시</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="786"/>
+        <location filename="../source/src/mainwindow.cpp" line="787"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
@@ -377,74 +382,74 @@
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="210"/>
-        <location filename="../source/src/mainwindow.cpp" line="1095"/>
+        <location filename="../source/src/mainwindow.cpp" line="1096"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="605"/>
+        <location filename="../source/src/mainwindow.cpp" line="606"/>
         <source>Compressing</source>
         <translation>압축중</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="615"/>
+        <location filename="../source/src/mainwindow.cpp" line="616"/>
         <source>Extracting</source>
         <translation>추출중</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="631"/>
+        <location filename="../source/src/mainwindow.cpp" line="632"/>
         <source>Compression failed</source>
         <translation>압축 실패함</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="661"/>
+        <location filename="../source/src/mainwindow.cpp" line="662"/>
         <source>Extraction failed</source>
         <translation>추출 실패함</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="787"/>
+        <location filename="../source/src/mainwindow.cpp" line="788"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="788"/>
+        <location filename="../source/src/mainwindow.cpp" line="789"/>
         <source>Open in new window</source>
         <translation>새 창에서 열기</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="905"/>
+        <location filename="../source/src/mainwindow.cpp" line="906"/>
         <source>Find directory</source>
         <translation>디렉토리 찾기</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1247"/>
+        <location filename="../source/src/mainwindow.cpp" line="1248"/>
         <source>Wrong password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="979"/>
-        <location filename="../source/src/mainwindow.cpp" line="999"/>
-        <location filename="../source/src/mainwindow.cpp" line="1035"/>
-        <location filename="../source/src/mainwindow.cpp" line="1275"/>
+        <location filename="../source/src/mainwindow.cpp" line="980"/>
+        <location filename="../source/src/mainwindow.cpp" line="1000"/>
+        <location filename="../source/src/mainwindow.cpp" line="1036"/>
+        <location filename="../source/src/mainwindow.cpp" line="1276"/>
         <source>Damaged file, unable to extract</source>
         <translation>손상된 파일, 추출할 수 없음</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1094"/>
+        <location filename="../source/src/mainwindow.cpp" line="1095"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>압축파일이 디스크에서 변경되었습니다. 다시 가져오십시오.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1271"/>
-        <location filename="../source/src/mainwindow.cpp" line="1273"/>
-        <location filename="../source/src/mainwindow.cpp" line="1752"/>
-        <location filename="../source/src/mainwindow.cpp" line="1758"/>
+        <location filename="../source/src/mainwindow.cpp" line="1272"/>
+        <location filename="../source/src/mainwindow.cpp" line="1274"/>
+        <location filename="../source/src/mainwindow.cpp" line="1753"/>
+        <location filename="../source/src/mainwindow.cpp" line="1759"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>공간이 부족합니다. 지우고 다시 시도하십시오</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1754"/>
-        <location filename="../source/src/mainwindow.cpp" line="1760"/>
+        <location filename="../source/src/mainwindow.cpp" line="1755"/>
+        <location filename="../source/src/mainwindow.cpp" line="1761"/>
         <source>Damaged file</source>
         <translation>손상된 파일</translation>
     </message>
@@ -857,7 +862,7 @@
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="88"/>
-        <source>The path has no permission, please retry</source>
+        <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

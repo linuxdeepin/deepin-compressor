@@ -272,16 +272,36 @@ void CompressSetting::onNextButoonClicked()
         return;
     }
 
-    foreach (QFileInfo m_fileName, m_pathlist) {
+    for (int i = 0; i < m_pathlist.count(); i++) {
+        QFileInfo m_fileName(m_pathlist.at(i));
+        if (!m_fileName.exists()) {
+            fileReadable = false;
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
+            return;
+        } /*else if (m_fileName.isDir() && m_fileName.exists()) {
+            QString dirFilePath = checkDirFileExit(m_fileName.path());
+            qDebug() << "dirfilepath is : " << dirFilePath;
+            if (!fileReadable) {
+                QFileInfo file(dirFilePath);
+                showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(file.fileName()));
+                return;
+            }
+            QDir dir(m_fileName.path());
+            foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
+                qDebug() << "file is :" << fileInfo.fileName();
+            }
+        }*/
+
         if (!m_fileName.isReadable()) {
-            showWarningDialog(tr("The file has no permission, please retry"));
+            fileReadable = false;
+            showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
             return;
         }
     }
 
     QFileInfo m_fileDestinationPath(m_savepath->text());
     if (!(m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable())) {
-        showWarningDialog(tr("The path has no permission, please retry"));
+        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         return;
     }
 
@@ -532,7 +552,7 @@ void CompressSetting::onThemeChanged()
     m_filename->setPalette(plt);
 }
 
-int CompressSetting::showWarningDialog(const QString &msg)
+int CompressSetting::showWarningDialog(const QString &msg, int index)
 {
     DDialog *dialog = new DDialog(this);
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
@@ -542,6 +562,13 @@ int CompressSetting::showWarningDialog(const QString &msg)
     dialog->addButton(tr("OK"));
     int res = dialog->exec();
     delete dialog;
+
+    if (!fileReadable) {
+        //emit sigFileUnreadable(m_pathlist, index);
+        emit sigFileUnreadable(m_pathlist, index);
+    }
+
+    fileReadable = true;
 
     return res;
 }

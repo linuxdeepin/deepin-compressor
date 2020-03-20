@@ -102,10 +102,8 @@ bool CliPlugin::isPasswordList()
 {
     QStringList programLst = m_process->program();
 
-    foreach(auto str, programLst )
-    {
-        if(str.startsWith("-p"))
-        {
+    foreach (auto str, programLst ) {
+        if (str.startsWith("-p")) {
             return true;
         }
     }
@@ -122,8 +120,7 @@ bool CliPlugin::readListLine(const QString &line)
     if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
         //  7z l -slt -p123 1G压缩文件.7z.001
         //  Open ERROR: Can not open the file as [7z] archive means password error
-        if(isPasswordList())
-        {
+        if (isPasswordList()) {
             return true;
         }
         emit error(tr("Listing the archive failed."));
@@ -133,8 +130,7 @@ bool CliPlugin::readListLine(const QString &line)
     if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
         //  7z l -slt -p123 1G压缩文件.7z.001
         //  Open ERROR: Can not open the file as [7z] archive means password error
-        if(isPasswordList())
-        {
+        if (isPasswordList()) {
             return true;
         }
         emit error(tr("Listing the archive failed."));
@@ -186,7 +182,7 @@ bool CliPlugin::readListLine(const QString &line)
                 m_archiveType = ArchiveTypeRar;
             } else if (type == QLatin1String("Split")) {
                 setMultiVolume(true);
-            }else if (type == QLatin1String("Udf")) {
+            } else if (type == QLatin1String("Udf")) {
                 m_archiveType = ArchiveTypeUdf;
             } else {
                 // Should not happen
@@ -300,9 +296,7 @@ bool CliPlugin::readListLine(const QString &line)
                 delete m_currentArchiveEntry;
             }
             m_currentArchiveEntry = nullptr;
-        }
-        else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType)
-        {
+        } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
             if (!m_currentArchiveEntry->fullPath().isEmpty() ) {
                 emit entry(m_currentArchiveEntry);

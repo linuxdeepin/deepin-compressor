@@ -325,6 +325,7 @@ void MainWindow::InitConnection()
     connect(m_CompressPage, &CompressPage::sigNextPress, this, &MainWindow::onCompressNext);
     connect(this, &MainWindow::sigZipAddFile, m_CompressPage, &CompressPage::onAddfileSlot);
     connect(m_CompressSetting, &CompressSetting::sigCompressPressed, this, &MainWindow::onCompressPressed);
+    connect(m_CompressSetting, &CompressSetting::sigFileUnreadable, this, &MainWindow::slotFileUnreadable);
     connect(m_Progess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_CompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
     connect(m_CompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);
@@ -1943,6 +1944,20 @@ void MainWindow::slotResetPercentAndTime()
     lastPercent = 0;
     compressTime = 0;
     m_timer.elapsed();
+}
+
+void MainWindow::slotFileUnreadable(QStringList &pathList, int fileIndex)
+{
+    pathList.removeAt(fileIndex);
+    if (m_pageid != PAGE_ZIP) {
+        m_pageid = PAGE_ZIP;
+        refreshPage();
+    }
+    m_CompressPage->onRefreshFilelist(pathList);
+    if (pathList.isEmpty()) {
+        m_pageid = PAGE_HOME;
+        refreshPage();
+    }
 }
 
 void MainWindow::onTitleButtonPressed()

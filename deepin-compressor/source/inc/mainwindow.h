@@ -102,7 +102,7 @@ public:
     void creatArchive(QMap<QString, QString> &Args);
     void creatBatchArchive(QMap<QString, QString> &Args, QMap<QString, QStringList> &filetoadd);
 
-    void transSplitFileName(QString& fileName); // *.7z.003 -> *.7z.001
+    void transSplitFileName(QString &fileName); // *.7z.003 -> *.7z.001
 
     void ExtractPassword(QString password);
     void ExtractSinglePassword(QString password);
@@ -148,8 +148,8 @@ private slots:
     void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path);
     void slotKillExtractJob();
     void slotFailRetry();
-    void slotBatchExtractFileChanged(const QString& name);
-    void slotBatchExtractError(const QString& name);
+    void slotBatchExtractFileChanged(const QString &name);
+    void slotBatchExtractError(const QString &name);
     void slotClearTempfile();
     void slotquitApp();
     void onUpdateDestFile(QString destFile);
@@ -159,6 +159,7 @@ private slots:
     void resetMainwindow();
     void slotBackButtonClicked();
     void slotResetPercentAndTime();
+    void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
 
 signals:
     void sigquitApp();
@@ -226,7 +227,7 @@ private:
     int m_startTimer = 0;
     int m_watchTimer = 0;
 
-    DFileWatcher* m_fileManager = nullptr;
+    DFileWatcher *m_fileManager = nullptr;
 
 private:
     void calSelectedTotalFileSize(const QStringList &files);
