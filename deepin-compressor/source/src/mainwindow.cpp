@@ -1093,13 +1093,13 @@ void MainWindow::WatcherFile(const QString &files)
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);
         dialog->setMessage(tr("The archive was changed on the disk, please import it again."));
-        dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
+        dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
         QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
         effect->setOffset(0, 4);
         effect->setColor(QColor(0, 145, 255, 76));
         effect->setBlurRadius(4);
         dialog->getButton(0)->setFixedWidth(340);
-        dialog->getButton(0)->setGraphicsEffect(effect);
+//        dialog->getButton(0)->setGraphicsEffect(effect);
         dialog->exec();
         delete dialog;
 
