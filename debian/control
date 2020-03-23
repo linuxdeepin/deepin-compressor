@@ -10,5 +10,5 @@ Homepage: www.deepin.org
 #Vcs-Git: https://salsa.debian.org/debian/compressor.git
 Package: deepin-compressor
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, p7zip, deepin-shortcut-viewer, unar[i386 amd64], rar[i386 amd64], unrar[i386 amd64]
+Depends: ${shlibs:Depends}, ${misc:Depends}, p7zip-full, deepin-shortcut-viewer, unar[i386 amd64], rar[i386 amd64], unrar[i386 amd64]
 Description: Archive Manager is a fast and lightweight application for creating and extracting archives.

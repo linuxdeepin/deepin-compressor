@@ -10,7 +10,7 @@ Build-Depends:
 debhelper (>= 11), libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qt5-default, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev
 
 Execute Depends:
-${shlibs:Depends}, ${misc:Depends}, p7zip, deepin-shortcut-viewer, unar[i386 amd64], rar[i386 amd64], unrar[i386 amd64]
+${shlibs:Depends}, ${misc:Depends}, p7zip-full, deepin-shortcut-viewer, unar[i386 amd64], rar[i386 amd64], unrar[i386 amd64]
 
 ### Third Party Code
 [KDE ark](https://github.com/kde/ark)
