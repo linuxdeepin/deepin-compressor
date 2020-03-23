@@ -39,8 +39,8 @@ public:
     void setstringinfo(QString str);
     void setCompressPath(QString path);
     QString getPath();
-    void setCompressFullPath(const QString& path);
-    void setCompressNewFullPath(const QString& path);
+    void setCompressFullPath(const QString &path);
+    void setCompressNewFullPath(const QString &path);
     void clear();
 
 private:

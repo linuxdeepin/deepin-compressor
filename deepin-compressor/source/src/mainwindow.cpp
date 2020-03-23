@@ -1300,6 +1300,8 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_progressdialog->setFinished(m_decompressfilepath);
         }
 
+        DDesktopServices::showFileItem(QUrl(m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString(), QUrl::TolerantMode));
+
         m_pageid = PAGE_UNZIP;
         refreshPage();
     }

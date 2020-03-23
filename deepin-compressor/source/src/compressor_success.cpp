@@ -94,16 +94,12 @@ void Compressor_Success::InitConnection()
 
 void Compressor_Success::showfiledirSlot()
 {
-    qDebug()<<m_path;
-    if( newCreatePath_.isEmpty() == false)
-    {
+    qDebug() << m_path;
+    if ( newCreatePath_.isEmpty() == false) {
         DDesktopServices::showFolder(QUrl(newCreatePath_, QUrl::TolerantMode));
-    }
-    else if(m_fullpath.isEmpty())
-    {
+    } else if (m_fullpath.isEmpty()) {
         DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
-    }
-    else {
+    } else {
         DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
     }
 
@@ -122,7 +118,7 @@ void Compressor_Success::setstringinfo(QString str)
 
 void Compressor_Success::setCompressPath(QString path)
 {
-    qDebug()<<path;
+    qDebug() << path;
     m_path = path;
 }
 
@@ -131,13 +127,13 @@ QString Compressor_Success::getPath()
     return m_path;
 }
 
-void Compressor_Success::setCompressFullPath(const QString& path)
+void Compressor_Success::setCompressFullPath(const QString &path)
 {
-    qDebug()<<path;
+    qDebug() << path;
     m_fullpath = path;
 }
 
-void Compressor_Success::setCompressNewFullPath(const QString& path)
+void Compressor_Success::setCompressNewFullPath(const QString &path)
 {
     newCreatePath_ = path;
 }
