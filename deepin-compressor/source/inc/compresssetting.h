@@ -68,6 +68,7 @@ public:
     void setFilepath(QStringList pathlist);
     quint64 dirFileSize(const QString &path);
     bool checkfilename(QString str);
+    bool checkFilePermission(const QString &path);
 
 private:
     void showEvent(QShowEvent *event) override;
@@ -118,7 +119,7 @@ private:
     PluginManager m_pluginManger;
     QStringList m_supportedMimeTypes;
     QStringList m_pathlist;
-    bool fileReadable = true;
+    bool filePermission = true;
 };
 
 #endif // COMPRESSSETTING_H

@@ -1616,47 +1616,36 @@ void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles
     if (fi.exists()) {
         fi.remove();
     }
-//    if (newfiles.count() <= oldfiles.count())
-//    {
+//    if (newfiles.count() <= oldfiles.count()) {
 //        qDebug() << "No file to delete";
 //        return;
 //    }
 
 //    QStringList deletefile;
-//    foreach (QString newpath, newfiles)
-//    {
+//    foreach (QString newpath, newfiles) {
 //        int count = 0;
-//        foreach (QString oldpath, oldfiles)
-//        {
-//            if (oldpath == newpath)
-//            {
+//        foreach (QString oldpath, oldfiles) {
+//            if (oldpath == newpath) {
 //                break;
 //            }
 //            count++;
 //        }
-//        if (count == oldfiles.count())
-//        {
+//        if (count == oldfiles.count()) {
 //            deletefile << newpath;
 //        }
 //    }
 
-//    foreach (QString path, deletefile)
-//    {
+//    foreach (QString path, deletefile) {
 //        QFileInfo fileInfo(path);
-//        if (fileInfo.isFile() || fileInfo.isSymLink())
-//        {
+//        if (fileInfo.isFile() || fileInfo.isSymLink()) {
 //            QFile::setPermissions(path, QFile::WriteOwner);
-//            if (!QFile::remove(path))
-//            {
+//            if (!QFile::remove(path)) {
 //                qDebug() << "delete error!!!!!!!!!";
 //            }
-//        }
-//        else if (fileInfo.isDir())
-//        {
+//        } else if (fileInfo.isDir()) {
 //            clearTempFiles(path);
 //            qDebug() << "delete ok!!!!!!!!!!!!!!";
-//            if (fileInfo.exists())
-//            {
+//            if (fileInfo.exists()) {
 //                clearTempFiles(path);
 //            }
 //        }

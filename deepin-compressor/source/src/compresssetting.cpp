@@ -275,7 +275,7 @@ void CompressSetting::onNextButoonClicked()
     for (int i = 0; i < m_pathlist.count(); i++) {
         QFileInfo m_fileName(m_pathlist.at(i));
         if (!m_fileName.exists()) {
-            fileReadable = false;
+            filePermission = false;
             showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
             return;
         } /*else if (m_fileName.isDir() && m_fileName.exists()) {
@@ -291,11 +291,24 @@ void CompressSetting::onNextButoonClicked()
                 qDebug() << "file is :" << fileInfo.fileName();
             }
         }*/
-
-        if (!m_fileName.isReadable()) {
-            fileReadable = false;
-            showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
-            return;
+        if (m_fileName.isFile()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            }
+        } else if (m_fileName.isDir()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            } else {
+                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
+                if (!filePermission) {
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                    return;
+                }
+            }
         }
     }
 
@@ -454,6 +467,26 @@ bool CompressSetting::checkfilename(QString str)
     return true;
 }
 
+bool CompressSetting::checkFilePermission(const QString &path)
+{
+    bool filePermissionFlag = true;
+    QDir dir(path);
+    QFileInfo fileInfo;
+
+    foreach (fileInfo, dir.entryInfoList()) {
+        if (!fileInfo.isReadable()) {
+            filePermissionFlag = false;
+            return filePermissionFlag;
+        }
+    }
+
+    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        filePermissionFlag = checkFilePermission(path + QDir::separator() + subDir);
+    }
+
+    return filePermissionFlag;
+}
+
 void CompressSetting::showEvent(QShowEvent *event)
 {
     initWidget();
@@ -563,12 +596,12 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
     int res = dialog->exec();
     delete dialog;
 
-    if (!fileReadable) {
+    if (!filePermission) {
         //emit sigFileUnreadable(m_pathlist, index);
         emit sigFileUnreadable(m_pathlist, index);
     }
 
-    fileReadable = true;
+    filePermission = true;
 
     return res;
 }
