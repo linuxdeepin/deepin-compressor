@@ -202,11 +202,26 @@ void MainWindow::timerEvent(QTimerEvent *event)
         for (int i = 0; i < filelist.count(); i++) {
             QFileInfo filein(filelist.at(i));
             if (!filein.exists()) {
+//                DDialog *dialog = new DDialog(this);
+//                dialog->setFixedWidth(440);
+//                QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+//                dialog->setIcon(icon);
+//                dialog->setMessage(tr("%1 was changed on the disk, please import it again.").arg(filein.fileName()));
+//                dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
+//                QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+//                effect->setOffset(0, 4);
+//                effect->setColor(QColor(0, 145, 255, 76));
+//                effect->setBlurRadius(4);
+//                dialog->getButton(0)->setFixedWidth(340);
+//                dialog->getButton(0)->setGraphicsEffect(effect);
+//                dialog->exec();
+
+                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(filein.fileName());
                 DDialog *dialog = new DDialog(this);
+                QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+                dialog->setIcon(pixmap);
+                dialog->addSpacing(32);
                 dialog->setFixedWidth(440);
-                QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-                dialog->setIcon(icon);
-                dialog->setMessage(tr("%1 was changed on the disk, please import it again.").arg(filein.fileName()));
                 dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
                 QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
                 effect->setOffset(0, 4);
@@ -214,7 +229,17 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 effect->setBlurRadius(4);
                 dialog->getButton(0)->setFixedWidth(340);
                 dialog->getButton(0)->setGraphicsEffect(effect);
+
+                DLabel *pLblContent = new DLabel(strTips, dialog);
+                pLblContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+                DPalette pa;
+                pa = DApplicationHelper::instance()->palette(pLblContent);
+                pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+                DFontSizeManager::instance()->bind(pLblContent, DFontSizeManager::T6, QFont::Medium);
+                pLblContent->setMinimumWidth(this->width());
+                pLblContent->move(dialog->width() / 2 - pLblContent->width() / 2, 48);
                 dialog->exec();
+
                 filelist.removeAt(i);
                 if (m_pageid != PAGE_ZIP) {
                     m_pageid = PAGE_ZIP;

@@ -588,11 +588,19 @@ void CompressSetting::onThemeChanged()
 int CompressSetting::showWarningDialog(const QString &msg, int index)
 {
     DDialog *dialog = new DDialog(this);
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
+    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-    dialog->setMessage(msg);
-    dialog->addSpacing(15);
+    dialog->addSpacing(32);
     dialog->addButton(tr("OK"));
+    dialog->setMinimumSize(380, 140);
+    DLabel *pContent = new DLabel(msg, dialog);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    pContent->setMinimumWidth(this->width());
+    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
     int res = dialog->exec();
     delete dialog;
 
