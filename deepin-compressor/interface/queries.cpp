@@ -103,6 +103,7 @@ OverwriteQuery::OverwriteQuery(const QString &filename) :
 {
     m_data[QStringLiteral("filename")] = filename;
 }
+
 void OverwriteQuery::colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF)
 {
     DPalette palette = DApplicationHelper::instance()->palette(widget);
@@ -120,6 +121,7 @@ void OverwriteQuery::colorTypeChange(QWidget *widget, DPalette::ColorType ct, do
     palette.setColor(DPalette::Foreground, color);
     DApplicationHelper::instance()->setPalette(widget, palette);
 }
+
 void OverwriteQuery::execute()
 {
 
@@ -133,17 +135,19 @@ void OverwriteQuery::execute()
     QFileInfo file(path);
 
     DDialog *dialog = new DDialog(getMainWindow());
-    dialog->setFixedSize(QSize(380, 190));
+    dialog->setMinimumSize(QSize(380, 190));
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel;
     strlabel->setMinimumSize(QSize(280, 20));
+    strlabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
     strlabel->setText(file.fileName());
 
     DLabel *strlabel2 = new DLabel;
     strlabel2->setMinimumSize(QSize(154, 20));
+    strlabel2->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
     strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
 
