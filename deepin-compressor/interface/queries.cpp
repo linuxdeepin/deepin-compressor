@@ -35,7 +35,7 @@
 #include <DPasswordEdit>
 #include <QMainWindow>
 
-DWIDGET_USE_NAMESPACE
+
 
 QWidget* getMainWindow()
 {
@@ -72,7 +72,23 @@ static QPixmap renderSVG(const QString &filePath, const QSize &size)
 Query::Query()
 {
 }
+void Query::colorChange(QWidget *widget,DPalette::ColorRole ct, double alphaF)
+{
+    DPalette palette = DApplicationHelper::instance()->palette(widget);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground,color);
+    DApplicationHelper::instance()->setPalette(widget, palette);
+}
 
+void Query::colorChange(QWidget *widget,DPalette::ColorType ct, double alphaF)
+{
+    DPalette palette = DApplicationHelper::instance()->palette(widget);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground,color);
+    DApplicationHelper::instance()->setPalette(widget, palette);
+}
 QVariant Query::response() const
 {
     return m_data.value(QStringLiteral("response"));
@@ -122,33 +138,54 @@ void OverwriteQuery::execute()
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedHeight(20);
-    strlabel->setForegroundRole(DPalette::WindowText);
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    font.setWeight(QFont::Medium);
-//    strlabel->setFont(font);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    DLabel *strlabel = new DLabel;
+    strlabel->setMinimumSize(QSize(280,20));
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
     strlabel->setText(file.fileName());
-    DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedHeight(20);
-    strlabel2->setForegroundRole(DPalette::TextWarning);
-//    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    strlabel2->setFont(font);
+
+    DLabel *strlabel2 = new DLabel;
+    strlabel2->setMinimumSize(QSize(154,20));
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
     strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
+
     dialog->addButton(QObject::tr("Skip"));
     dialog->addButton(QObject::tr("Replace"));
 
-    DCheckBox *checkbox = new DCheckBox(dialog);
-    checkbox->setText(QObject::tr("Apply to all"));
+    DCheckBox *checkbox = new DCheckBox;
+    checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
+
+    DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
+    checkLabel->setMinimumSize(QSize(98,20));
+    DFontSizeManager::instance()->bind(checkLabel, DFontSizeManager::T6, QFont::Medium);
+
+
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        this->colorChange(strlabel,DPalette::ToolTipText,0.7);
+        this->colorChange(strlabel2,DPalette::ToolTipText,1);
+        this->colorChange(checkLabel,DPalette::Text,1);
+        this->colorChange(checkbox,DPalette::ToolTipText,0.7);
+    }
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        this->colorChange(strlabel,DPalette::TextLively,0.7);
+        this->colorChange(strlabel2,DPalette::TextLively,1);
+        this->colorChange(checkLabel,DPalette::Text,1);
+        this->colorChange(checkbox,DPalette::TextLively,0.7);
+    }
+
+    QHBoxLayout *checkLayout = new QHBoxLayout;
+    checkLayout->addStretch();
+    checkLayout->addWidget(checkbox);
+    checkLayout->addWidget(checkLabel);
+    checkLayout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
+//    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addLayout(checkLayout);
+//    mainlayout->SetFixedSize(QSize());
     DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
