@@ -110,8 +110,8 @@ public:
     void setMultiMode(bool enableMultiMode);
     bool multiMode();
 
-    void colorChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
-    void colorChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
+    void colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
+    void colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
 private:
     bool m_noRenameMode;
     bool m_multiMode;

@@ -103,7 +103,7 @@ OverwriteQuery::OverwriteQuery(const QString &filename) :
 {
     m_data[QStringLiteral("filename")] = filename;
 }
-void OverwriteQuery::colorChange(QWidget *widget, DPalette::ColorRole ct, double alphaF)
+void OverwriteQuery::colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF)
 {
     DPalette palette = DApplicationHelper::instance()->palette(widget);
     QColor color = palette.color(ct);
@@ -112,7 +112,7 @@ void OverwriteQuery::colorChange(QWidget *widget, DPalette::ColorRole ct, double
     DApplicationHelper::instance()->setPalette(widget, palette);
 }
 
-void OverwriteQuery::colorChange(QWidget *widget, DPalette::ColorType ct, double alphaF)
+void OverwriteQuery::colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF)
 {
     DPalette palette = DApplicationHelper::instance()->palette(widget);
     QColor color = palette.color(ct);
@@ -133,6 +133,7 @@ void OverwriteQuery::execute()
     QFileInfo file(path);
 
     DDialog *dialog = new DDialog(getMainWindow());
+    dialog->setFixedSize(QSize(380, 190));
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -158,16 +159,16 @@ void OverwriteQuery::execute()
 
 
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
-        this->colorChange(strlabel, DPalette::ToolTipText, 0.7);
-        this->colorChange(strlabel2, DPalette::ToolTipText, 1);
-        this->colorChange(checkLabel, DPalette::Text, 1);
-        this->colorChange(checkbox, DPalette::ToolTipText, 0.7);
+        colorRoleChange(strlabel, DPalette::ToolTipText, 0.7);
+        colorRoleChange(strlabel2, DPalette::ToolTipText, 1);
+        colorRoleChange(checkLabel, DPalette::Text, 1);
+        colorRoleChange(checkbox, DPalette::ToolTipText, 0.7);
     }
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        this->colorChange(strlabel, DPalette::TextLively, 0.7);
-        this->colorChange(strlabel2, DPalette::TextLively, 1);
-        this->colorChange(checkLabel, DPalette::Text, 1);
-        this->colorChange(checkbox, DPalette::TextLively, 0.7);
+        colorTypeChange(strlabel, DPalette::TextLively, 0.7);
+        colorTypeChange(strlabel2, DPalette::TextLively, 1);
+        colorRoleChange(checkLabel, DPalette::Text, 1);
+        colorTypeChange(checkbox, DPalette::TextLively, 0.7);
     }
 
     QHBoxLayout *checkLayout = new QHBoxLayout;
