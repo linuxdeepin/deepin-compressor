@@ -37,12 +37,10 @@
 
 
 
-QWidget* getMainWindow()
+QWidget *getMainWindow()
 {
-    foreach(QWidget* w, QApplication::allWidgets())
-    {
-        if( qobject_cast<QMainWindow*>(w) )
-        {
+    foreach (QWidget *w, QApplication::allWidgets()) {
+        if (qobject_cast<QMainWindow *>(w)) {
             return w;
         }
     }
@@ -72,23 +70,7 @@ static QPixmap renderSVG(const QString &filePath, const QSize &size)
 Query::Query()
 {
 }
-void Query::colorChange(QWidget *widget,DPalette::ColorRole ct, double alphaF)
-{
-    DPalette palette = DApplicationHelper::instance()->palette(widget);
-    QColor color = palette.color(ct);
-    color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground,color);
-    DApplicationHelper::instance()->setPalette(widget, palette);
-}
 
-void Query::colorChange(QWidget *widget,DPalette::ColorType ct, double alphaF)
-{
-    DPalette palette = DApplicationHelper::instance()->palette(widget);
-    QColor color = palette.color(ct);
-    color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground,color);
-    DApplicationHelper::instance()->setPalette(widget, palette);
-}
 QVariant Query::response() const
 {
     return m_data.value(QStringLiteral("response"));
@@ -121,7 +103,23 @@ OverwriteQuery::OverwriteQuery(const QString &filename) :
 {
     m_data[QStringLiteral("filename")] = filename;
 }
+void OverwriteQuery::colorChange(QWidget *widget, DPalette::ColorRole ct, double alphaF)
+{
+    DPalette palette = DApplicationHelper::instance()->palette(widget);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(widget, palette);
+}
 
+void OverwriteQuery::colorChange(QWidget *widget, DPalette::ColorType ct, double alphaF)
+{
+    DPalette palette = DApplicationHelper::instance()->palette(widget);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(widget, palette);
+}
 void OverwriteQuery::execute()
 {
 
@@ -134,17 +132,17 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
-    DDialog* dialog = new DDialog( getMainWindow() );
+    DDialog *dialog = new DDialog(getMainWindow());
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(280,20));
+    strlabel->setMinimumSize(QSize(280, 20));
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
     strlabel->setText(file.fileName());
 
     DLabel *strlabel2 = new DLabel;
-    strlabel2->setMinimumSize(QSize(154,20));
+    strlabel2->setMinimumSize(QSize(154, 20));
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
     strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
 
@@ -155,21 +153,21 @@ void OverwriteQuery::execute()
     checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
-    checkLabel->setMinimumSize(QSize(98,20));
+    checkLabel->setMinimumSize(QSize(98, 20));
     DFontSizeManager::instance()->bind(checkLabel, DFontSizeManager::T6, QFont::Medium);
 
 
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
-        this->colorChange(strlabel,DPalette::ToolTipText,0.7);
-        this->colorChange(strlabel2,DPalette::ToolTipText,1);
-        this->colorChange(checkLabel,DPalette::Text,1);
-        this->colorChange(checkbox,DPalette::ToolTipText,0.7);
+        this->colorChange(strlabel, DPalette::ToolTipText, 0.7);
+        this->colorChange(strlabel2, DPalette::ToolTipText, 1);
+        this->colorChange(checkLabel, DPalette::Text, 1);
+        this->colorChange(checkbox, DPalette::ToolTipText, 0.7);
     }
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        this->colorChange(strlabel,DPalette::TextLively,0.7);
-        this->colorChange(strlabel2,DPalette::TextLively,1);
-        this->colorChange(checkLabel,DPalette::Text,1);
-        this->colorChange(checkbox,DPalette::TextLively,0.7);
+        this->colorChange(strlabel, DPalette::TextLively, 0.7);
+        this->colorChange(strlabel2, DPalette::TextLively, 1);
+        this->colorChange(checkLabel, DPalette::Text, 1);
+        this->colorChange(checkbox, DPalette::TextLively, 0.7);
     }
 
     QHBoxLayout *checkLayout = new QHBoxLayout;
@@ -288,8 +286,8 @@ void PasswordNeededQuery::execute()
 //    m_data[QStringLiteral("password")] = password;
 //    setResponse(notCancelled && !password.isEmpty());
 
-    qDebug()<<m_data[QStringLiteral("archiveFilename")];
-    DDialog *dialog = new DDialog( getMainWindow() );
+    qDebug() << m_data[QStringLiteral("archiveFilename")];
+    DDialog *dialog = new DDialog(getMainWindow());
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -300,7 +298,7 @@ void PasswordNeededQuery::execute()
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(QObject::tr("Encrypted file, please enter the password"));
 
-    DPasswordEdit* passwordedit = new DPasswordEdit(dialog);
+    DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("OK"));
@@ -353,9 +351,9 @@ void WrongPasswordQuery::execute()
     // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
     // at the moment (#231974)
 
-    qDebug()<<m_data[QStringLiteral("archiveFilename")];
+    qDebug() << m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
-    DDialog *dialog = new DDialog( getMainWindow() );
+    DDialog *dialog = new DDialog(getMainWindow());
     QPixmap pixmap = renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 

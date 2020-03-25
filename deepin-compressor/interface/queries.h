@@ -72,8 +72,6 @@ public:
     virtual void execute() = 0;
     void waitForResponse();
     void setResponse(const QVariant &response);
-    void colorChange(QWidget *widget,DPalette::ColorRole ct, double alphaF);
-    void colorChange(QWidget *widget,DPalette::ColorType ct, double alphaF);
     QVariant response() const;
 
     int execDialog();
@@ -111,6 +109,9 @@ public:
     bool noRenameMode();
     void setMultiMode(bool enableMultiMode);
     bool multiMode();
+
+    void colorChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
+    void colorChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
 private:
     bool m_noRenameMode;
     bool m_multiMode;
