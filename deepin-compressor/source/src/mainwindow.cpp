@@ -1308,8 +1308,26 @@ void MainWindow::slotExtractionDone(KJob *job)
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
         QString programPath = QStandardPaths::findExecutable("xdg-open");
-        arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                  + QDir::separator() + m_extractSimpleFiles.at(0)->name();
+        /*for (int i = 0; i < m_extractSimpleFiles.count(); i++)*/ {
+            QFileInfo file = m_extractSimpleFiles.at(0)->name();
+            if (file.fileName().contains("%") && file.fileName().contains(".png")) {
+                QProcess p;
+                QString tempFileName = QString("%1.png").arg(openTempFileLink);
+                openTempFileLink++;
+                QString commandCreate = "ln";
+                QStringList args;
+                args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                            + QDir::separator() + m_extractSimpleFiles.at(0)->name());
+                args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                            + QDir::separator() + tempFileName);
+                arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                          + QDir::separator() + tempFileName;
+                p.execute(commandCreate, args);
+            } else {
+                arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                          + QDir::separator() + m_extractSimpleFiles.at(0)->name();
+            }
+        }
         qDebug() << arguments;
         cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
         cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
@@ -1676,7 +1694,7 @@ void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles
 //                clearTempFiles(path);
 //            }
 //        }
-//    }
+    //    }
 }
 
 void MainWindow::creatArchive(QMap< QString, QString > &Args)
@@ -1901,6 +1919,7 @@ void MainWindow::slotClearTempfile()
 
 void MainWindow::slotquitApp()
 {
+    openTempFileLink = 0;
     QProcess p;
     QString command = "rm";
     QStringList args;

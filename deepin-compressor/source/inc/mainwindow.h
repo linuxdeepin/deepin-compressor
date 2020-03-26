@@ -228,6 +228,7 @@ private:
     int m_watchTimer = 0;
 
     DFileWatcher *m_fileManager = nullptr;
+    int openTempFileLink = 0;
 
 private:
     void calSelectedTotalFileSize(const QStringList &files);
