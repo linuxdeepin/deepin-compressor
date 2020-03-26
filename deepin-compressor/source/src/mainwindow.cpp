@@ -215,8 +215,8 @@ void MainWindow::timerEvent(QTimerEvent *event)
 //                dialog->getButton(0)->setFixedWidth(340);
 //                dialog->getButton(0)->setGraphicsEffect(effect);
 //                dialog->exec();
-
-                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(filein.fileName());
+                QString displayName = Utils::toShortString(filein.fileName());
+                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
                 DDialog *dialog = new DDialog(this);
                 QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(pixmap);

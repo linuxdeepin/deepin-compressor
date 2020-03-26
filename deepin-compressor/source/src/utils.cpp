@@ -116,8 +116,7 @@ bool Utils::isCompressed_file(const QString &filePath)
 
 QString Utils::humanReadableSize(const qint64 &size, int precision)
 {
-    if(size == 0)
-    {
+    if (size == 0) {
         return "-";
     }
 
@@ -383,7 +382,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
             prober_encoding = pre_encoding;
         }
 
-    confidence:
+confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;
@@ -426,4 +425,13 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     }
 
     return encoding;
+}
+
+QString Utils::toShortString(QString strSrc, int limitCounts, int left)
+{
+    left = (left >= limitCounts || left <= 0) ? limitCounts / 2 : left;
+    int right = limitCounts - left;
+    QString displayName = "";
+    displayName = strSrc.length() > limitCounts ? strSrc.left(left) + "..." + strSrc.right(right) : strSrc;
+    return displayName;
 }

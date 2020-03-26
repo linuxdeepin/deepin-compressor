@@ -41,7 +41,7 @@ public:
     static QString humanReadableSize(const qint64 &size, int precision);
     static qint64 humanReadableToSize(const QString &size);
     static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-
+    static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
 };
 
 #endif

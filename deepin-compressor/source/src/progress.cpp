@@ -127,12 +127,9 @@ void Progress::InitConnection()
 
 void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
 {
-    if (type == COMPRESSING)
-    {
+    if (type == COMPRESSING) {
         m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
-    }
-    else if (type == DECOMPRESSING)
-    {
+    } else if (type == DECOMPRESSING) {
         m_speedLabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
     }
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
@@ -140,8 +137,7 @@ void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
 
 void Progress::slotChangeTimeLeft()
 {
-    if (lastTimeLeft < 2)
-    {
+    if (lastTimeLeft < 2) {
         m_timer->stop();
         return;
     }
@@ -162,12 +158,9 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
     lastTimeLeft = timeLeft;
     displaySpeedAndTime(speed, timeLeft);
 
-    if (lastTimeLeft > 2)
-    {
+    if (lastTimeLeft > 2) {
         m_timer->start();
-    }
-    else
-    {
+    } else {
         m_timer ->stop();
     }
 }
@@ -175,7 +168,7 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
 void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
 {
     qint64 hour = timeLeft / 3600;
-    qint64 minute = (timeLeft - hour *3600) / 60;
+    qint64 minute = (timeLeft - hour * 3600) / 60;
     qint64 seconds = timeLeft - hour * 3600 - minute * 60;
 
     QString hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
@@ -183,8 +176,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
 
     //add update speed and time label
-    if (m_type == COMPRESSING)
-    {
+    if (m_type == COMPRESSING) {
         if (speed < 1024) {
             m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
         } else if (speed > 1024 && speed < 1024 * 300) {
@@ -192,9 +184,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
         } else {
             m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
         }
-    }
-    else
-    {
+    } else {
         if (speed < 1024) {
             m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
         } else if (speed > 1024 && speed < 1024 * 300) {
@@ -210,20 +200,20 @@ void Progress::setFilename(QString filename)
 {
     QFileInfo fileinfo(filename);
     setTypeImage(fileinfo.completeSuffix());
-    m_filenamelabel->setText(filename);
+    QString displayName = Utils::toShortString(filename);
+    m_filenamelabel->setText(displayName);
 }
 
 void Progress::setTypeImage(QString type)
 {
     QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp."+type));
+    QIcon icon = provider.icon(QFileInfo("temp." + type));
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 
 void Progress::setProgressFilename(QString filename)
 {
-    if(filename.isEmpty())
-    {
+    if (filename.isEmpty()) {
         return;
     }
 
@@ -259,12 +249,10 @@ int Progress::showConfirmDialog()
 
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
 
-    if (m_type == COMPRESSING)
-    {
+    if (m_type == COMPRESSING) {
         //strlabel->setText(tr("Stop compressing "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
-    } else
-    {
+    } else {
         //strlabel->setText(tr("Stop extracting "));
         strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
     }
@@ -300,8 +288,7 @@ void Progress::resetProgress()
 
 void Progress::cancelbuttonPressedSlot()
 {
-    if (DDialog::Accepted == showConfirmDialog())
-    {
+    if (DDialog::Accepted == showConfirmDialog()) {
         m_timer->stop();
         m_speed = 0;
         lastTimeLeft = 0;

@@ -143,7 +143,13 @@ void OverwriteQuery::execute()
     strlabel->setMinimumSize(QSize(280, 20));
     strlabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
-    strlabel->setText(file.fileName());
+
+    int limitCounts = 16;
+    int left = 8, right = 8;
+    QString fileName = file.fileName();
+    QString displayName = "";
+    displayName = fileName.length() > limitCounts ? fileName.left(left) + "..." + fileName.right(right) : fileName;
+    strlabel->setText(displayName);
 
     DLabel *strlabel2 = new DLabel;
     strlabel2->setMinimumSize(QSize(154, 20));

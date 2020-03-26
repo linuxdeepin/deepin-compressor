@@ -34,6 +34,7 @@
 #include <QShortcut>
 #include <QTimer>
 #include <QVBoxLayout>
+#include "sublabel.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -62,8 +63,7 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat);
     // initalize the configuration file.
-    if (m_settings->value("dir").toString().isEmpty())
-    {
+    if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
     }
 
@@ -80,8 +80,7 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 
 void CompressPage::onNextPress()
 {
-    if (m_filelist.isEmpty())
-    {
+    if (m_filelist.isEmpty()) {
         DDialog *dialog = new DDialog(this);
 
         QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
@@ -93,9 +92,7 @@ void CompressPage::onNextPress()
         dialog->exec();
 
         delete dialog;
-    }
-    else
-    {
+    } else {
         emit sigNextPress();
     }
 }
@@ -135,7 +132,8 @@ int CompressPage::showReplaceDialog(QString name)
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
     dialog->setIcon(pixmap);
-    dialog->setMessage(tr("%1 already exists.").arg(name) + "\n" + tr("Do you want to replace it?"));
+    QString displayName = Utils::toShortString(name);
+    dialog->setMessage(tr("%1 already exists.").arg(displayName) + "\n" + tr("Do you want to replace it?"));
     dialog->addSpacing(15);
     dialog->addButton(QObject::tr("Cancel"));
     dialog->addButton(QObject::tr("Confirm"));
@@ -150,8 +148,7 @@ int CompressPage::showReplaceDialog(QString name)
 
 void CompressPage::onAddfileSlot()
 {
-    if (0 != m_fileviewer->getPathIndex())
-    {
+    if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
     }
@@ -161,8 +158,7 @@ void CompressPage::onAddfileSlot()
     dialog.setAllowMixedSelection(true);
 
     QString historyDir = m_settings->value("dir").toString();
-    if (historyDir.isEmpty())
-    {
+    if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
     dialog.setDirectory(historyDir);
@@ -174,8 +170,7 @@ void CompressPage::onAddfileSlot()
     qDebug() << dialog.directoryUrl().toLocalFile();
 
     // if click cancel button or close button.
-    if (mode != QDialog::Accepted)
-    {
+    if (mode != QDialog::Accepted) {
         return;
     }
 
@@ -184,28 +179,21 @@ void CompressPage::onAddfileSlot()
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
 {
-    if (0 != m_fileviewer->getPathIndex())
-    {
+    if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
     }
 
     QStringList inputlist = files;
-    foreach (QString m_path, m_filelist)
-    {
+    foreach (QString m_path, m_filelist) {
         QFileInfo mfile(m_path);
-        foreach (QString path, files)
-        {
+        foreach (QString path, files) {
             QFileInfo file(path);
-            if (file.fileName() == mfile.fileName())
-            {
+            if (file.fileName() == mfile.fileName()) {
                 int mode = showReplaceDialog(file.fileName());
-                if (0 == mode)
-                {
+                if (0 == mode) {
                     inputlist.removeOne(path);
-                }
-                else
-                {
+                } else {
                     m_filelist.removeOne(m_path);
                 }
             }
@@ -226,20 +214,16 @@ void CompressPage::onRefreshFilelist(const QStringList &filelist)
 
     emit sigRefreshFileList(m_filelist);
 
-    if (m_filelist.size() == 0)
-    {
+    if (m_filelist.size() == 0) {
         emit sigFilelistIsEmpty();
     }
 }
 
 void CompressPage::onPathIndexChanged()
 {
-    if (m_fileviewer->getPathIndex() > 0)
-    {
+    if (m_fileviewer->getPathIndex() > 0) {
         emit sigiscanaddfile(false);
-    }
-    else
-    {
+    } else {
         emit sigiscanaddfile(true);
     }
 }
