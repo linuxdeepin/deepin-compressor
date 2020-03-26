@@ -34,7 +34,6 @@
 #include <QShortcut>
 #include <QTimer>
 #include <QVBoxLayout>
-#include "sublabel.h"
 
 DWIDGET_USE_NAMESPACE
 
