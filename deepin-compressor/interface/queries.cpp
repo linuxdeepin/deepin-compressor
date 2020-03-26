@@ -183,8 +183,8 @@ void OverwriteQuery::execute()
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
 //    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addLayout(checkLayout);
