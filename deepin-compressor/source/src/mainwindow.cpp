@@ -222,13 +222,13 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog->setIcon(pixmap);
                 dialog->addSpacing(32);
                 dialog->setFixedWidth(440);
-                dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
-                QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-                effect->setOffset(0, 4);
-                effect->setColor(QColor(0, 145, 255, 76));
-                effect->setBlurRadius(4);
+                dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+//                QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+//                effect->setOffset(0, 4);
+//                effect->setColor(QColor(0, 145, 255, 76));
+//                effect->setBlurRadius(4);
                 dialog->getButton(0)->setFixedWidth(340);
-                dialog->getButton(0)->setGraphicsEffect(effect);
+//                dialog->getButton(0)->setGraphicsEffect(effect);
 
                 DLabel *pLblContent = new DLabel(strTips, dialog);
                 pLblContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
