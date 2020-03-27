@@ -34,7 +34,7 @@
 #include <QShortcut>
 #include <QTimer>
 #include <QVBoxLayout>
-
+#include "queries.h"
 DWIDGET_USE_NAMESPACE
 
 CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
@@ -127,22 +127,9 @@ void CompressPage::showDialog()
 
 int CompressPage::showReplaceDialog(QString name)
 {
-    DDialog *dialog = new DDialog(this);
-
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-    dialog->setIcon(pixmap);
-    QString displayName = Utils::toShortString(name);
-    dialog->setMessage(tr("%1 already exists.").arg(displayName) + "\n" + tr("Do you want to replace it?"));
-    dialog->addSpacing(15);
-    dialog->addButton(QObject::tr("Cancel"));
-    dialog->addButton(QObject::tr("Confirm"));
-
-    //dialog->moveToCenter();
-
-    int res = dialog->exec();
-    delete dialog;
-
-    return res;
+    OverwriteQuery query(name);
+    query.execute();
+    return query.getExecuteReturn();
 }
 
 void CompressPage::onAddfileSlot()
@@ -189,7 +176,7 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
         foreach (QString path, files) {
             QFileInfo file(path);
             if (file.fileName() == mfile.fileName()) {
-                int mode = showReplaceDialog(file.fileName());
+                int mode = showReplaceDialog(path);
                 if (0 == mode) {
                     inputlist.removeOne(path);
                 } else {

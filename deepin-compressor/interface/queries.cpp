@@ -158,7 +158,7 @@ void OverwriteQuery::execute()
     strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
 
     dialog->addButton(QObject::tr("Skip"));
-    dialog->addButton(QObject::tr("Replace"));
+    dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
 
     DCheckBox *checkbox = new DCheckBox;
     checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
@@ -201,7 +201,7 @@ void OverwriteQuery::execute()
     dialog->addContent(widget);
 
     const int mode = dialog->exec();
-
+    ret = mode;
     if (-1 == mode) {
         setResponse(Result_Cancel);
     } else if (0 == mode) {
@@ -221,7 +221,10 @@ void OverwriteQuery::execute()
     delete dialog;
     //QApplication::restoreOverrideCursor();
 }
-
+int OverwriteQuery::getExecuteReturn()
+{
+    return ret;
+}
 bool OverwriteQuery::responseCancelled()
 {
     return m_data.value(QStringLiteral("response")).toInt() == R_CANCEL;
