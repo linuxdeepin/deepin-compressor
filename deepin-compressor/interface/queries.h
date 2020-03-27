@@ -97,6 +97,7 @@ class  OverwriteQuery : public Query
 public:
     explicit OverwriteQuery(const QString &filename);
     void execute() override;
+    int  getExecuteReturn();
     bool responseCancelled();
     bool responseOverwriteAll();
     bool responseOverwrite();
@@ -115,6 +116,7 @@ public:
 private:
     bool m_noRenameMode;
     bool m_multiMode;
+    int ret;
 };
 
 /* **************************************
@@ -169,7 +171,5 @@ public:
 private:
     QCheckBox m_chkDontAskAgain;
 };
-
-
 
 #endif /* ifndef QUERIES_H */
