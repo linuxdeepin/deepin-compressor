@@ -99,15 +99,29 @@ SettingDialog::SettingDialog(QWidget *parent):
                       << "file_association.file_association_type.zip";
 
     m_valuelist.clear();
-
+    readFromConfbf();//fill m_data;
     initUI();
     initConnect();
 
-    foreach (QString key, m_associtionlist) {
-        m_valuelist.append(m_settings->value(key).toBool());
-
+    if(m_data.isEmpty() == true)
+    {
+        foreach (QString key, m_associtionlist) {
+            m_valuelist.append(m_settings->value(key).toBool());
+        }
     }
+    else
+    {
+        foreach (QString key, m_associtionlist) {
+            m_valuelist.append(m_data[key].toBool());//set value from m_data
+        }
+    }
+
     m_valuelisttemp = m_valuelist;
+
+    foreach (QString key, m_associtionlist) {
+        m_settings->setOption(key,m_data[key].toBool());//update dsetting from m_data
+    }
+
 }
 
 void SettingDialog::initUI()
@@ -255,7 +269,7 @@ void SettingDialog::initUI()
     });
 
     const QString confDir = DStandardPaths::writableLocation(
-                                QStandardPaths::AppConfigLocation);
+                                QStandardPaths::AppDataLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
     // 创建设置项存储后端
@@ -304,6 +318,54 @@ void SettingDialog::done(int status)
         loop++;
     }
     m_valuelist = m_valuelisttemp;
+    writeToConfbf();
+}
+
+void SettingDialog::readFromConfbf()
+{
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
+    QFile file(confPath);
+    bool readStatus = file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    if(readStatus == true){
+        QByteArray t = file.readAll();
+        if(t.length()>0){
+            m_data.clear();
+            QStringList lines = QString(t).split("\n");
+            int count = lines.count();
+            for(int i= 0;i<count;i++){
+                QStringList column = lines[i].split(":");
+                if(column.length()>1){
+                    m_data.insert(column[0],column[1]);
+                }
+
+            }
+        }
+    }else{
+        m_data.clear();
+    }
+
+
+    file.close();
+}
+
+void SettingDialog::writeToConfbf()
+{
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
+
+    QFile file(confPath);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QMap<QString,QVariant>::iterator it = m_data.begin();
+    while(it != m_data.end()){
+        it.key();
+        QString content = it.key()+":"+it.value().toString()+"\n";
+        file.write(content.toUtf8());
+        it++;
+    }
+
+    file.close();
 }
 
 
@@ -326,8 +388,8 @@ bool SettingDialog::isAutoOpen()
 
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
-    qDebug() << key << value;
-
+//    qDebug() << key << value;
+    m_data[key] = value;
     if (key.contains("file_association_type")) {
         int index = m_associtionlist.indexOf(key);
         if (index > -1) {
@@ -342,6 +404,7 @@ void SettingDialog::selectpressed()
 {
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, true);
+        m_data[key] = QVariant(true);
     }
 }
 
@@ -349,16 +412,25 @@ void SettingDialog::cancelpressed()
 {
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, false);
+        m_data[key] = QVariant(false);
     }
 }
 
 void SettingDialog::recommandedPressed()
 {
+    QMap<QString,QVariant>::iterator it = m_data.begin();
+    while(it != m_data.end()){
+        it.value() = QVariant(false);
+        it++;
+    }
+
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, false);
     }
+
     foreach (QString key, m_recommendedList) {
         m_settings->setOption(key, true);
+        m_data[key] = QVariant(true);
     }
 }
 

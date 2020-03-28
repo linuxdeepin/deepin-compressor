@@ -45,6 +45,9 @@ public:
 
     void startcmd(QString &mimetype, bool state);
 
+private:
+    void writeToConfbf();//write to disk from m_data;
+    void readFromConfbf();//read data from disk and store in m_data;
 public slots:
     void settingsChanged(const QString &key, const QVariant &value);
     void selectpressed();
@@ -65,5 +68,7 @@ private:
     int m_index_last;
 
     DSettingsOption *m_comboboxoption;
+    QMap<QString,QVariant> m_data;//keep entire data in memory
+
 };
 
