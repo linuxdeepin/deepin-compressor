@@ -1751,12 +1751,13 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
-    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6 );
-#else
+//#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
+//    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
+//    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6 );
+//#else
+//    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
+//#endif
     m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
-#endif
 
     if (!password.isEmpty()) {
         m_createJob->enableEncryption(password, enableHeaderEncryption.compare("true") ? false : true);
