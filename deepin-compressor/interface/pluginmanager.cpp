@@ -205,21 +205,18 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 }
             }
         } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            qDebug()<<plugin->metaData().pluginId()<<m_filesize<<mimeType.name();
-            if(mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296)//4294967296(4GB)
-            {
+            qDebug() << plugin->metaData().pluginId() << m_filesize << mimeType.name();
+            if (mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
                 continue;//when iso is more than 4G,it is udf,use 7z to extract
             }
             filteredPlugins << plugin;
-        }
-        else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            if(mimeType.name() == QString("application/x-java-archive") && plugin->metaData().pluginId() == QString("kerfuffle_clizip"))
-            {
+        } else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
+            if (mimeType.name() == QString("application/x-java-archive") && plugin->metaData().pluginId() == QString("kerfuffle_clizip")) {
                 filteredPlugins << plugin;
             }
         }
     }
-    qDebug()<<filteredPlugins.count();
+    qDebug() << filteredPlugins.count();
     return filteredPlugins;
 }
 
@@ -272,17 +269,14 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 //    Q_UNUSED(entrySize)
 //#endif
 
-//    if( (!readWrite) &&  (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/) )
-//    {
-//        foreach(Plugin* plugin, preferredPlugins)
-//        {
-//            if(plugin->metaData().name().contains("7zip"))
-//            {
-//                preferredPlugins.removeOne(plugin);
-//                break;
-//            }
-//        }
-//    }
+    if ( (!readWrite) &&  (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/) ) {
+        foreach (Plugin *plugin, preferredPlugins) {
+            if (plugin->metaData().name().contains("7zip")) {
+                preferredPlugins.removeOne(plugin);
+                break;
+            }
+        }
+    }
 
     return preferredPlugins;
 }
@@ -319,7 +313,8 @@ bool PluginManager::libarchiveHasLzo()
         }
 
         return QString();
-    }();
+    }
+    ();
 
     // Step 2: process the libarchive plugin dependencies to figure out the absolute libarchive path.
     QProcess dependencyTool;
