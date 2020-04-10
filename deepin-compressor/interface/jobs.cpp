@@ -555,7 +555,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
 
 void ExtractJob::slotExtractPsdRight()
 {
-    emit sigExtractPsdRightCanExtract();
+//    emit sigExtractPsdRightCanExtract();
 }
 
 void ExtractJob::slotExtractJobPassword()
@@ -567,7 +567,12 @@ void ExtractJob::slotReextract()
 {
     if(this->m_destinationDir != this->archiveInterface()->extractUserPath)
     {
-        emit sigExtractPsdRightCanExtract();
+//        emit sigExtractPsdRightCanExtract();
+//        ReadOnlyArchiveInterface::EXTRACTSTATUS extractStatus = this->archiveInterface()->extractStatus;
+        this->resetUserDestPath();
+        QString psd = this->archiveInterface()->password();
+//        m_decompressfilepath = this->destinationDirectory();
+        this->start();
     }
     else
     {

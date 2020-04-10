@@ -1136,19 +1136,19 @@ void MainWindow::WatcherFile(const QString &files)
     });
 }
 
-bool isDirExist(QString fullPath)
-{
-    QDir dir(fullPath);
-    if(dir.exists())
-    {
-      return true;
-    }
-    else
-    {
-       bool ok = dir.mkpath(fullPath);//创建多级目录
-       return ok;
-    }
-}
+//bool isDirExist(QString fullPath)
+//{
+//    QDir dir(fullPath);
+//    if(dir.exists())
+//    {
+//      return true;
+//    }
+//    else
+//    {
+//       bool ok = dir.mkpath(fullPath);//创建多级目录
+//       return ok;
+//    }
+//}
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 {
@@ -1198,22 +1198,21 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         destinationDirectory = userDestination;
     }
 
-    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
+//    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+//    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
 
-    QDir Dir(tempPath);
-    if(Dir.isEmpty())
-    {
-        qDebug()<< "temp dir" << tempPath << "is empty";
-        isDirExist(tempPath);
-    }
-//    const QString tempPath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-//                                    + QDir::separator()+"tempExtractAAA";
+//    QDir Dir(tempPath);
+//    if(Dir.isEmpty())
+//    {
+//        qDebug()<< "temp dir" << tempPath << "is empty";
+//        isDirExist(tempPath);
+//    }
 
-    qDebug() << "tempPath:" << tempPath;
 
-    m_encryptionjob = m_model->extractFiles(files, tempPath, options);
-    m_encryptionjob->setUserDestPath(destinationDirectory);
+//    qDebug() << "tempPath:" << tempPath;
+
+    m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
+//    m_encryptionjob->setUserDestPath(destinationDirectory);
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
@@ -1227,7 +1226,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     connect(m_encryptionjob, &ExtractJob::sigExtractPsdRightCanExtract,this,&MainWindow::slotExtractPsdRightCanExtract);
 
 
-    m_decompressfilepath = tempPath;
+    m_decompressfilepath = destinationDirectory;
 
     /*if(m_model->archive()->property("isPasswordProtected").toBool() == true)
     {

@@ -27,7 +27,7 @@
 #include <DLog>
 #include "utils.h"
 #include <DApplicationSettings>
-
+#include <QMessageBox>
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     }
 
     QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
+
     // handle command line parser.
     if (!fileList.isEmpty()) {
         QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));

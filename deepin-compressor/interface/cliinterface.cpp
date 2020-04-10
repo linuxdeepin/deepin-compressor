@@ -453,7 +453,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
                 m_process = nullptr;
             }
 
-            emit sigExtractPsdRight();
+//            emit sigExtractPsdRight();
+            emit sigReextract();
 
             return;
         }
