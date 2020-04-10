@@ -44,6 +44,15 @@ class  ReadOnlyArchiveInterface: public QObject
 {
     Q_OBJECT
 public:
+    enum EXTRACTSTATUS{
+            NEED,
+            NOTCHECKED,
+            RIGHT,
+            WRONG,
+            NONEED,
+            COMPLETED//密码正确且解压完成
+    };
+
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadOnlyArchiveInterface() override;
 
@@ -169,6 +178,9 @@ public:
     virtual bool isUserCancel() const;
     bool isAnyFileExtracted() const;
 
+    EXTRACTSTATUS extractStatus = EXTRACTSTATUS::NOTCHECKED;
+    QString extractUserPath;
+
 Q_SIGNALS:
 
     /**
@@ -187,6 +199,11 @@ Q_SIGNALS:
     void compressionMethodFound(const QString &method);
     void encryptionMethodFound(const QString &method);
     void sigExtractNeedPassword();
+
+    void sigExtractPsdRight();//extract password is right signal
+    void sigExtractMoveFiles();//moveFiles from temp path to user path
+    void sigReextract();
+
 	/**
      * Emitted when @p query needs to be executed on the GUI thread.
      */

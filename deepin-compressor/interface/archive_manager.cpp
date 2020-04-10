@@ -513,6 +513,7 @@ ExtractJob *Archive::extractFiles(const QVector<Archive::Entry *> &files, const 
     }
 
     ExtractJob *newJob = new ExtractJob(files, destinationDir, newOptions, m_iface);
+    Archive * p  = newJob->archive();
     return newJob;
 }
 

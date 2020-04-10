@@ -160,7 +160,7 @@ private slots:
     void slotBackButtonClicked();
     void slotResetPercentAndTime();
     void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
-
+    void slotExtractPsdRightCanExtract();
 signals:
     void sigquitApp();
     void sigZipAddFile();

@@ -44,6 +44,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
     connect(this, &ReadOnlyArchiveInterface::entry, this, &ReadOnlyArchiveInterface::onEntry);
 
     m_metaData = args.at(1).value<KPluginMetaData>();
+    this->extractStatus = EXTRACTSTATUS::NOTCHECKED;
 }
 
 ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()

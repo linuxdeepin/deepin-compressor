@@ -35,6 +35,9 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <DStandardPaths>
+#include "extractlinesanalyze.h"
+DCORE_USE_NAMESPACE
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
@@ -45,11 +48,19 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWrit
         qRegisterMetaType< QProcess::ExitStatus >("QProcess::ExitStatus");
     }
     m_cliProps = new CliProperties(this, m_metaData, mimetype());
+//    pExtractAnalyze = new ExtractPsdAnalyze();
+//    pTest = new ExtractAnalyze7Z();
+    pHelper = new ExtractAnalyzeHelper();
 }
 
 CliInterface::~CliInterface()
 {
     Q_ASSERT(!m_process);
+    if(this->pHelper != nullptr)
+    {
+        delete this->pHelper;
+        pHelper = nullptr;
+    }
 }
 
 void CliInterface::setListEmptyLines(bool emptyLines)
@@ -71,9 +82,10 @@ bool CliInterface::list(bool isbatch)
     // To compute progress.
     m_archiveSizeOnDisk = static_cast< qulonglong >(QFileInfo(filename()).size());
     connect(this, &ReadOnlyArchiveInterface::entry, this, &CliInterface::onEntry);
+    QString psd = password();
     if ((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password())) {
         // qprocess can't read all the output string,so set wrong password to detect if need password
-        setPassword("temp");
+        // setPassword("temp");//this may be doesn't work,so annotation it
     }
 
     return runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(filename(), password()));
@@ -90,21 +102,36 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
     m_extractDestDir = destinationDirectory;
 
     if (extractDst7z_.isEmpty() == false) {
-        updateDestFileSignal(m_extractDestDir + "/" + extractDst7z_);
+//        updateDestFileSignal(m_extractDestDir + "/" + extractDst7z_);
         extractDst7z_.clear();
     }
 
-    if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint()
-            && password().isEmpty()) {
+    bool b1 = !m_cliProps->property("passwordSwitch").toStringList().isEmpty();
+    bool b2 = options.encryptedArchiveHint();
+    bool b3 = password().isEmpty();
+    if (b1 && b2 && b3)
+    {
         qDebug() << "Password hint enabled, querying user";
         if (m_extractionOptions.isBatchExtract()) {
             if (!passwordQuery()) {
                 return false;
             }
-        } else {
-            emit sigExtractNeedPassword();
-            return false;
         }
+        else
+        {
+            if(this->extractStatus != ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT)
+            {
+                this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NEED;
+                emit sigExtractNeedPassword();
+                return false;
+            }
+        }
+    }
+    else if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED)
+    { //no need extract password
+//        this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NONEED;
+//        emit sigExtractPsdRight();
+//        return false;
     }
 
     QUrl destDir = QUrl(destinationDirectory);
@@ -126,7 +153,17 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
         destDir = QUrl(m_extractTempDir->path());
         QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
     }
+    if(this->m_operationMode == Extract){
+        this->removeExtractTempFiles();
+//        this->pTest->reset();
+        if(this->pHelper!= nullptr)
+        {
+            delete this->pHelper;
+            this->pHelper = nullptr;
+        }
+        this->pHelper = new ExtractAnalyzeHelper();
 
+    }
     return runProcess(
                m_cliProps->property("extractProgram").toString(),
                m_cliProps->extractArgs(filename(), extractFilesList(files), options.preservePaths(), password()));
@@ -253,6 +290,41 @@ bool CliInterface::testArchive()
     return runProcess(m_cliProps->property("testProgram").toString(), m_cliProps->testArgs(filename(), password()));
 }
 
+bool isDirExist1(QString fullPath)
+{
+    //如果路径不存在，则创建
+    QDir* dir = new QDir();
+    if(!dir->exists(fullPath)){
+        return dir->mkpath(fullPath);
+    }else{
+        return true;
+    }
+    delete dir;
+    dir = nullptr;
+}
+
+void CliInterface::removeExtractTempFiles()
+{
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
+//    const QString tempPath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+//                                    + QDir::separator()+"tempExtractAAA";
+
+
+    isDirExist1(tempPath);
+    QDir dir(tempPath);
+
+    // The 3rd parameter is the QDir filter parameter, which means to collect all files and directories without "." and ".." directory.
+    // Because you just need to traverse the first layer, fill the 4th parameter QDirIterator: : NoIteratorFlags
+    QDirIterator DirsIterator(tempPath, QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot, QDirIterator::NoIteratorFlags);
+    while(DirsIterator.hasNext())
+    {
+        if (!dir.remove(DirsIterator.next())) // if false then it is a directory
+        {
+            QDir(DirsIterator.filePath()).removeRecursively(); // Deletes the directory itself and all files and directories in it
+        }
+    }
+}
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
     Q_ASSERT(!m_process);
@@ -278,6 +350,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
 
     if (m_operationMode == Extract) {
         // Extraction jobs need a dedicated post-processing function.
+
         connect(m_process,
                 QOverload< int, QProcess::ExitStatus >::of(&QProcess::finished),
                 this,
@@ -357,7 +430,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     m_exitCode = exitCode;
     qDebug() << "Extraction process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
-
+//    if(exitStatus == QProcess::ExitStatus::NormalExit){
+//        this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::notChecked;//重置状态
+//    }
     if (m_process) {
         // Handle all the remaining data in the process.
         readStdout(true);
@@ -365,6 +440,61 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         delete m_process;
         m_process = nullptr;
     }
+
+    if(exitStatus == QProcess::ExitStatus::CrashExit)
+    {
+        qDebug()<<"CrashExit!!!!";
+        if(this->pHelper->getPsdStatus() == 2){
+            if (m_process) {
+                // Handle all the remaining data in the process.
+                readStdout(true);
+
+                delete m_process;
+                m_process = nullptr;
+            }
+
+            emit sigExtractPsdRight();
+
+            return;
+        }
+    }
+    else if(exitStatus == QProcess::ExitStatus::NormalExit)
+    {
+//        if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT)
+//        {
+//            if(this->pExtractAnalyze->isRightPsdNow() == 2)
+//            {
+////                //密码正确，但是需要判断解压的路径是否正确
+////                qDebug()<<"";
+////                emit sigExtractPsdRight();
+//                emit sigTest();
+//            }
+//        }
+//        else
+//        {
+//            this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED;//重置状态
+//        }
+        if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::WRONG)//密码是错的
+        {
+            this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED;//重置状态
+        }
+        else if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT)//密码正确，但是解压路径错误
+        {
+            if(this->m_extractDestDir != this->extractUserPath)//说明解压的路径不对
+            {
+                emit sigReextract();
+                return;
+            }
+            else
+            {
+//                this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED;//重置状态
+                this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::COMPLETED;
+            }
+        }
+
+
+    }
+
 
     // Don't emit finished() if the job was killed quietly.
     if (m_abortingOperation) {
@@ -842,6 +972,9 @@ void CliInterface::readStdout(bool handleAll)
         if (!line.isEmpty() || (m_listEmptyLines && m_operationMode == List)) {
             if (!handleLine(QString::fromLocal8Bit(line))) {
                 killProcess();
+//                // 调用方法
+//                SleeperThread::msleep(150);
+
                 return;
             }
         }
@@ -866,7 +999,9 @@ bool CliInterface::handleLine(const QString &line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
-    if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
+
+    if((m_operationMode == Add) && m_cliProps->property("captureProgress").toBool())
+    {
         // read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
@@ -881,6 +1016,26 @@ bool CliInterface::handleLine(const QString &line)
             return true;
         }
     }
+    else if((m_operationMode == Extract) && m_cliProps->property("captureProgress").toBool())
+    {
+        // read the percentage
+        int pos = line.indexOf(QLatin1Char('%'));
+        if (pos > 1) {
+            if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT)
+            {
+                int percentage = line.midRef(pos - 3, 3).toInt();
+                emit progress(float(percentage) / 100);
+
+                if (line.contains("Extracting")) {
+                    QStringRef strfilename = line.midRef(12, pos - 24);
+                    emit progress_filename(strfilename.toString());
+                }
+                return true;
+            }
+        }
+    }
+
+
 
     if ((m_operationMode == Extract || m_operationMode == Add) && m_process
             && (m_process->program().at(0).contains("zip"))) {
@@ -910,8 +1065,25 @@ bool CliInterface::handleLine(const QString &line)
 
             if (!strfilename.toString().contains("Wrong password")) {
                 if (percentage > 0) {
-                    emit progress(float(percentage) / 100);
-                    emit progress_filename(strfilename.toString());
+                    if(m_operationMode == Extract)
+                    {
+                        if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT)
+                        {
+                            emit progress(double(percentage) / 100);
+                            emit progress_filename(strfilename.toString());
+                        }
+                        else
+                        {
+                            emit progress(double(0) / 100);
+                            emit progress_filename(strfilename.toString());
+                        }
+                    }
+                    else
+                    {
+                        emit progress(double(percentage) / 100);
+                        emit progress_filename(strfilename.toString());
+                    }
+
                 }
             }
         }
@@ -944,12 +1116,26 @@ bool CliInterface::handleLine(const QString &line)
             emit error(("@info", "Extraction failed because the disk is full."));
             return false;
         }
+        qDebug()<<"#######"<<line;
+        if(this->extractStatus != ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT){
+//            pTest->analyseLine(line);
+            this->pHelper->checkLine(line);
+//            int status = pTest->isRightPsdNow();
+            int status = this->pHelper->getPsdStatus();
+            if(status == 1){
+                qDebug()<<"错误密码";
+                this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::WRONG;
+                setPassword(QString());
+                if (m_extractionOptions.isBatchExtract()) {
 
-        if (isWrongPasswordMsg(line)) {
-            setPassword(QString());
-            if (m_extractionOptions.isBatchExtract()) {
-            } else {
-                emit sigExtractNeedPassword();
+                }
+                else {
+                    emit sigExtractNeedPassword();
+                    return false;
+                }
+            }else if(status == 2){
+                qDebug()<<"正确密码";
+                this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT;
                 return false;
             }
         }

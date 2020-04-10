@@ -315,7 +315,9 @@ void LoadJob::onFinished(bool result)
         archive()->setProperty("isSingleFolder", isSingleFolderArchive());
         const auto name = subfolderName().isEmpty() ? archive()->completeBaseName() : subfolderName();
         archive()->setProperty("subfolderName", name);
-        if (isPasswordProtected()) {
+        bool isPsdProtected = isPasswordProtected();//need password
+        if (isPsdProtected) {
+            QString psd = archive()->password();
             archive()->setProperty("encryptionType",  archive()->password().isEmpty() ? Archive::Encrypted : Archive::HeaderEncrypted);
         }
     }
@@ -345,7 +347,8 @@ bool LoadJob::isSingleFolderArchive() const
 void LoadJob::onNewEntry(const Archive::Entry *entry)
 {
     m_extractedFilesSize += entry->property("size").toLongLong();
-    m_isPasswordProtected |= entry->property("isPasswordProtected").toBool();
+    bool hasPsd = entry->property("isPasswordProtected").toBool();
+    m_isPasswordProtected |= hasPsd;
 
     if (entry->isDir()) {
         m_dirCount++;
@@ -545,7 +548,32 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     , m_options(options)
 {
     qDebug() << "ExtractJob job instance";
-    connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
+    connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::slotExtractJobPassword, Qt::QueuedConnection);
+    connect(interface,&ReadOnlyArchiveInterface::sigExtractPsdRight,this,&ExtractJob::slotExtractPsdRight, Qt::QueuedConnection);
+    connect(interface,&ReadOnlyArchiveInterface::sigReextract,this,&ExtractJob::slotReextract,Qt::QueuedConnection);
+}
+
+void ExtractJob::slotExtractPsdRight()
+{
+    emit sigExtractPsdRightCanExtract();
+}
+
+void ExtractJob::slotExtractJobPassword()
+{
+    emit sigExtractJobPassword();
+}
+
+void ExtractJob::slotReextract()
+{
+    if(this->m_destinationDir != this->archiveInterface()->extractUserPath)
+    {
+        emit sigExtractPsdRightCanExtract();
+    }
+    else
+    {
+
+    }
+//    this->m_destinationDir = this->pathUserDest;
 }
 
 void ExtractJob::doWork()
