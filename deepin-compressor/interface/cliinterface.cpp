@@ -306,9 +306,7 @@ bool isDirExist1(QString fullPath)
 void CliInterface::removeExtractTempFiles()
 {
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
-//    const QString tempPath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-//                                    + QDir::separator()+"tempExtractAAA";
+    const QString tempPath = confDir + QDir::separator() + "extracttemp";
 
 
     isDirExist1(tempPath);

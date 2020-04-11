@@ -1198,21 +1198,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         destinationDirectory = userDestination;
     }
 
-//    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-//    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
-
-//    QDir Dir(tempPath);
-//    if(Dir.isEmpty())
-//    {
-//        qDebug()<< "temp dir" << tempPath << "is empty";
-//        isDirExist(tempPath);
-//    }
-
-
-//    qDebug() << "tempPath:" << tempPath;
-
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
-//    m_encryptionjob->setUserDestPath(destinationDirectory);
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);

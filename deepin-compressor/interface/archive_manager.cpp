@@ -529,7 +529,7 @@ ExtractJob *Archive::extractFiles(const QVector<Archive::Entry *> &files, const 
     }
 
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString tempPath = confDir + QDir::separator() + "tempExtractAAA";
+    const QString tempPath = confDir + QDir::separator() + "extracttemp";
 
     QDir Dir(tempPath);
     if(Dir.isEmpty())

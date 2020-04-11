@@ -27,7 +27,7 @@
 #include <DLog>
 #include "utils.h"
 #include <DApplicationSettings>
-#include <QMessageBox>
+
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
