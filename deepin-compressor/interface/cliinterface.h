@@ -35,8 +35,6 @@ class KProcess;
 class QDir;
 class QTemporaryDir;
 class QTemporaryFile;
-class ExtractAnalyze7Z;
-class ExtractAnalyzeHelper;
 
 
 class  CliInterface : public ReadWriteArchiveInterface
@@ -96,8 +94,6 @@ public:
     QString multiVolumeName() const override;
 
     CliProperties *cliProperties() const;
-
-    ExtractAnalyzeHelper* getExtractAnalyzeHelper() const;
 
 protected:
 
@@ -198,7 +194,6 @@ private:
     void restoreWorkingDirExtraction();
 
     void finishCopying(bool result);
-    void removeExtractTempFiles();
 
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
@@ -221,8 +216,6 @@ private:
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
     QString extractDst7z_;
-
-    ExtractAnalyzeHelper* pHelper;
 
 protected Q_SLOTS:
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);

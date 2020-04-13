@@ -1136,20 +1136,6 @@ void MainWindow::WatcherFile(const QString &files)
     });
 }
 
-//bool isDirExist(QString fullPath)
-//{
-//    QDir dir(fullPath);
-//    if(dir.exists())
-//    {
-//      return true;
-//    }
-//    else
-//    {
-//       bool ok = dir.mkpath(fullPath);//创建多级目录
-//       return ok;
-//    }
-//}
-
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 {
     m_pageid = PAGE_UNZIPPROGRESS;
@@ -1168,7 +1154,6 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     }
 
     if (m_encryptionjob) {
-        delete m_encryptionjob;
         m_encryptionjob = nullptr;
     }
 
@@ -1197,8 +1182,11 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     } else {
         destinationDirectory = userDestination;
     }
-    qDebug()<<destinationDirectory;
+
+    qDebug() << "destinationDirectory:" << destinationDirectory;
+
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
+
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
@@ -1209,8 +1197,6 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
             SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(m_encryptionjob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
     connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
-    connect(m_encryptionjob, &ExtractJob::sigExtractPsdRightCanExtract,this,&MainWindow::slotExtractPsdRightCanExtract);
-
 
     m_decompressfilepath = destinationDirectory;
 
@@ -1223,20 +1209,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         }
         return;
     }*/
-    m_encryptionjob->archiveInterface()->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED;
-    m_encryptionjob->start();
-}
 
-void MainWindow::slotExtractPsdRightCanExtract()
-{
-    if(this->m_encryptionjob != nullptr){
-//        if(m_encryptionjob->archiveInterface()->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::noNeed ||
-        ReadOnlyArchiveInterface::EXTRACTSTATUS extractStatus = m_encryptionjob->archiveInterface()->extractStatus;
-        this->m_encryptionjob->resetUserDestPath();
-        QString psd = this->m_encryptionjob->archiveInterface()->password();
-        m_decompressfilepath = this->m_encryptionjob->destinationDirectory();
-        this->m_encryptionjob->start();
-    }
+    m_encryptionjob->start();
 }
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
@@ -1305,22 +1279,8 @@ void MainWindow::slotExtractionDone(KJob *job)
 {
     m_workstatus = WorkNone;
     if (m_encryptionjob) {
-        if(this->m_encryptionjob->archiveInterface()->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::WRONG
-         ||this->m_encryptionjob->archiveInterface()->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::NOTCHECKED)
-        {
-            m_encryptionjob->deleteLater();
-            m_encryptionjob = nullptr;
-            return;
-        }
-        else
-        {
-            if(this->m_encryptionjob->isExtractPathUserPath() == false)
-            {
-                return;
-            }
-            m_encryptionjob->deleteLater();
-            m_encryptionjob = nullptr;
-        }
+        m_encryptionjob->deleteLater();
+        m_encryptionjob = nullptr;
     }
 
     int errorCode = job->error();
@@ -1482,10 +1442,9 @@ void MainWindow::ExtractPassword(QString password)
                 SLOT(SlotProgressFile(KJob *, const QString &)));
         connect(m_encryptionjob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
         connect(m_encryptionjob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
-        connect(m_encryptionjob, &ExtractJob::sigExtractPsdRightCanExtract,this,&MainWindow::slotExtractPsdRightCanExtract);
+
         m_encryptionjob->start();
     }
-    qDebug()<<"m_pageid:"<<m_pageid;
 }
 void MainWindow::LoadPassword(QString password)
 {
@@ -1873,7 +1832,6 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     }
 
     if (m_encryptionjob) {
-        delete m_encryptionjob;
         m_encryptionjob = nullptr;
     }
 
@@ -1931,11 +1889,8 @@ void MainWindow::slotFailRetry()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
-    m_model->archive()->subfolderName();
+
     if (m_encryptionjob) {
-//        m_encryptionjob->cancelAndRemove(m_encryptionjob->archiveInterface()->extractUserPath,m_model->archive()->subfolderName());
-        m_encryptionjob->archiveInterface()->extractTopFolderName = m_model->archive()->subfolderName();
-        m_encryptionjob->archiveInterface()->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::CANCELED;
         m_encryptionjob->Killjob();
         m_encryptionjob = nullptr;
     }

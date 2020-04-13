@@ -315,9 +315,7 @@ void LoadJob::onFinished(bool result)
         archive()->setProperty("isSingleFolder", isSingleFolderArchive());
         const auto name = subfolderName().isEmpty() ? archive()->completeBaseName() : subfolderName();
         archive()->setProperty("subfolderName", name);
-        bool isPsdProtected = isPasswordProtected();//need password
-        if (isPsdProtected) {
-            QString psd = archive()->password();
+        if (isPasswordProtected()) {
             archive()->setProperty("encryptionType",  archive()->password().isEmpty() ? Archive::Encrypted : Archive::HeaderEncrypted);
         }
     }
@@ -347,8 +345,7 @@ bool LoadJob::isSingleFolderArchive() const
 void LoadJob::onNewEntry(const Archive::Entry *entry)
 {
     m_extractedFilesSize += entry->property("size").toLongLong();
-    bool hasPsd = entry->property("isPasswordProtected").toBool();
-    m_isPasswordProtected |= hasPsd;
+    m_isPasswordProtected |= entry->property("isPasswordProtected").toBool();
 
     if (entry->isDir()) {
         m_dirCount++;
@@ -548,37 +545,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     , m_options(options)
 {
     qDebug() << "ExtractJob job instance";
-    connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::slotExtractJobPassword, Qt::QueuedConnection);
-    connect(interface,&ReadOnlyArchiveInterface::sigExtractPsdRight,this,&ExtractJob::slotExtractPsdRight, Qt::QueuedConnection);
-    connect(interface,&ReadOnlyArchiveInterface::sigReextract,this,&ExtractJob::slotReextract,Qt::QueuedConnection);
-}
-
-void ExtractJob::slotExtractPsdRight()
-{
-//    emit sigExtractPsdRightCanExtract();
-}
-
-void ExtractJob::slotExtractJobPassword()
-{
-    emit sigExtractJobPassword();
-}
-
-void ExtractJob::slotReextract()
-{
-    if(this->m_destinationDir != this->archiveInterface()->extractUserPath)
-    {
-//        emit sigExtractPsdRightCanExtract();
-//        ReadOnlyArchiveInterface::EXTRACTSTATUS extractStatus = this->archiveInterface()->extractStatus;
-        this->resetUserDestPath();
-        QString psd = this->archiveInterface()->password();
-//        m_decompressfilepath = this->destinationDirectory();
-        this->start();
-    }
-    else
-    {
-
-    }
-//    this->m_destinationDir = this->pathUserDest;
+    connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
 }
 
 void ExtractJob::doWork()

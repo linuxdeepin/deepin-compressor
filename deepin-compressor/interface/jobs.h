@@ -197,43 +197,21 @@ public:
 
     QString destinationDirectory() const;
     ExtractionOptions extractionOptions() const;
-    void setUserDestPath(QString path)
-    {
-        this->archiveInterface()->extractUserPath = path;
-    }
-
-    void resetUserDestPath()
-    {
-        if(this->archiveInterface()->extractUserPath == ""){
-            return;
-        }
-        this->m_destinationDir = this->archiveInterface()->extractUserPath;
-    }
-
-    bool isExtractPathUserPath()
-    {
-        return (this->m_destinationDir == this->archiveInterface()->extractUserPath);
-    }
 
 public Q_SLOTS:
     void doWork() override;
-    void slotReextract();
+
 public:
     bool Killjob();
 
 signals:
     void sigExtractJobPassword();
 
-    void sigExtractPsdRightCanExtract();
-public slots:
-    void slotExtractPsdRight();
-    void slotExtractJobPassword();
 private:
 
     QVector<Archive::Entry *> m_entries;
     QString m_destinationDir;
     ExtractionOptions m_options;
-
 };
 
 

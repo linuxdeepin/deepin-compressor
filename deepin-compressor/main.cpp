@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
     }
 
     QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
-
     // handle command line parser.
     if (!fileList.isEmpty()) {
         QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));

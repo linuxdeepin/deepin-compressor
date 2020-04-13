@@ -27,10 +27,8 @@
 
 #include <QMimeDatabase>
 #include <QRegularExpression>
-#include <DStandardPaths>
 #include "kpluginloader.h"
 #include "kpluginfactory.h"
-DCORE_USE_NAMESPACE
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -503,20 +501,6 @@ CopyJob *Archive::copyFiles(const QVector<Archive::Entry *> &files, Archive::Ent
     return newJob;
 }
 
-bool isDirExist(QString fullPath)
-{
-    QDir dir(fullPath);
-    if(dir.exists())
-    {
-      return true;
-    }
-    else
-    {
-       bool ok = dir.mkpath(fullPath);//创建多级目录
-       return ok;
-    }
-}
-
 ExtractJob *Archive::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options)
 {
     if (!isValid()) {
@@ -528,23 +512,7 @@ ExtractJob *Archive::extractFiles(const QVector<Archive::Entry *> &files, const 
         newOptions.setEncryptedArchiveHint(true);
     }
 
-    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString tempPath = confDir + QDir::separator() + "extracttemp";
-
-    QDir Dir(tempPath);
-    if(Dir.isEmpty())
-    {
-        qDebug()<< "temp dir" << tempPath << "is empty";
-        isDirExist(tempPath);
-    }
-
-
-    qDebug() << "tempPath:" << tempPath;
-
-    ExtractJob *newJob = new ExtractJob(files, tempPath, newOptions, m_iface);
-
-    newJob->setUserDestPath(destinationDir);
-
+    ExtractJob *newJob = new ExtractJob(files, destinationDir, newOptions, m_iface);
     return newJob;
 }
 

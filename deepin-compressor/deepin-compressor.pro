@@ -70,9 +70,7 @@ HEADERS +=  \
     source/inc/archivesortfiltermodel.h \
     source/inc/batchextract.h \
     interface/batchjobs.h \
-    source/inc/batchcompress.h \
-    interface/extractlinesanalyze.h \
-    interface/extractres.h
+    source/inc/batchcompress.h
 
 
 
