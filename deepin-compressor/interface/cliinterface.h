@@ -97,6 +97,8 @@ public:
 
     CliProperties *cliProperties() const;
 
+    ExtractAnalyzeHelper* getExtractAnalyzeHelper() const;
+
 protected:
 
     bool setAddedFiles();
@@ -219,7 +221,7 @@ private:
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
     QString extractDst7z_;
-//    ExtractAnalyze7Z* pTest;
+
     ExtractAnalyzeHelper* pHelper;
 
 protected Q_SLOTS:

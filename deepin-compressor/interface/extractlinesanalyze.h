@@ -24,6 +24,17 @@ public:
     int id;
 };
 
+struct ExtractInfo
+{
+public:
+    ExtractInfo(QString str,bool b):type(str),bReplaceTip(b)
+    {
+
+    }
+    QString type = "";
+    bool bReplaceTip = false;
+};
+
 /**
  * @brief 解压分析工具基类
  */
@@ -34,7 +45,7 @@ public:
 
     ExtractAnalyzeBase()
     {
-
+       pInfo = new ExtractInfo("",false);
     }
 
     virtual ~ExtractAnalyzeBase()
@@ -49,21 +60,49 @@ public:
 
     void setToolName(QString toolName)
     {
-        this->type = toolName;
+        if(this->pInfo != nullptr)
+        {
+            this->pInfo->type = toolName;
+        }
+
     }
 
     QString getToolName()
     {
-        return this->type;
+        return this->pInfo->type;
     }
 
     int getPsdStatus()
     {
-        if(this->type != nullptr && this->type != "")
+        if(this->pInfo->type != nullptr && this->pInfo->type != "")
         {
             return this->isRightPsdNow();
         }
+        return 0;
+    }
 
+//    virtual void checkIfReplace(QString line) = 0;
+    void checkIfReplace(QString line)
+    {
+        if(this->pInfo->bReplaceTip == false && line.startsWith(EXTRACT_REPLACE_TIP) == true)
+        {
+            this->pInfo->bReplaceTip = true;
+            printf(">>>>>>>>>>>>>>>>>>>>>>>>Would you like to replace the existing file<<<<<<<<<<<<<<<<<<<<<<<<\n");
+        }
+    }
+
+    bool ifReplace()
+    {
+        return this->pInfo->bReplaceTip;
+    }
+
+    void clear()
+    {
+        if(pInfo != nullptr)
+        {
+            delete pInfo;
+            pInfo = nullptr;
+        }
     }
 
 protected:
@@ -80,8 +119,9 @@ protected:
      */
     virtual int isRightPsdNow() = 0;
 
+
 private:
-    QString type = "";
+    ExtractInfo* pInfo;
 };
 
 
@@ -94,51 +134,50 @@ public:
     {
         this->setToolName(EXTRACT_TOOL_7Z);
 
-        this->map_Lines = new QMap<QString,LineID>();
-        this->map_Lines->insert(GlobalStrTable[IDS_PHYSICSIZE],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_WRONGPSDERROR],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_EVERYTHINGISOK],0);
+        map_Lines = new QMap<QString,LineID>();
+        map_Lines->insert(GlobalStrTable[IDS_PHYSICSIZE],0);
+        map_Lines->insert(GlobalStrTable[IDS_WRONGPSDERROR],0);
+        map_Lines->insert(GlobalStrTable[IDS_EVERYTHINGISOK],0);
+
     }
 
     ~ExtractAnalyze7Z() override
     {
         this->setToolName("");
         this->clear();
-    };
-
-    void reset()
-    {
-        this->clear();
-        this->map_Lines = new QMap<QString,LineID>();
-        this->map_Lines->insert(GlobalStrTable[IDS_PHYSICSIZE],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_WRONGPSDERROR],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_EVERYTHINGISOK],0);
+        if(map_Lines != nullptr)
+        {
+            map_Lines->clear();
+            this->setToolName("");
+            delete map_Lines;
+            map_Lines = nullptr;
+        }
     }
 
 protected:
 
     void checkWrongPsd(QString line) override
     {
-        if((*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
         {
             if(line.contains(GlobalStrTable[IDS_EVERYTHINGISOK]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has = true;//密码正确
+                (*map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has = true;//密码正确
                 return;
             }
             if(line.contains(GlobalStrTable[IDS_WRONGPSDERROR]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has = true;
+                (*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has = true;
             }
             else
             {
-                if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
+                if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
                 {
 
                 }
                 else
                 {
-                    (*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id++;
+                    (*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id++;
                 }
             }
         }
@@ -146,7 +185,7 @@ protected:
         {
             if(line.contains(GlobalStrTable[IDS_PHYSICSIZE]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has = true;
+                (*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has = true;
             }
         }
     }
@@ -160,20 +199,20 @@ protected:
      */
     int isRightPsdNow() override
     {
-        if((*this->map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has == true)
         {
             return 2;
         }
 
-        if((*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
         {
-            if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has == true)
+            if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has == true)
             {
                 return 1;
             }
             else
             {
-                if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
+                if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
                 {
                     return 2;
                 }
@@ -186,21 +225,6 @@ protected:
         else
         {
             return 0;
-        }
-    }
-
-
-
-
-private:
-    void clear()
-    {
-        if(map_Lines != nullptr)
-        {
-            map_Lines->clear();
-            this->setToolName("");
-            delete map_Lines;
-            map_Lines = nullptr;
         }
     }
 
@@ -217,41 +241,54 @@ public:
     {
         this->setToolName(EXTRACT_TOOL_ZIP);
 
-        this->map_Lines = new QMap<QString,LineID>();
-        this->map_Lines->insert(GlobalStrTable[IDS_PHYSICSIZE],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_WRONGPSDERROR],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_EVERYTHINGISOK],0);
+        map_Lines = new QMap<QString,LineID>();
+        map_Lines->insert(GlobalStrTable[IDS_PHYSICSIZE],0);
+        map_Lines->insert(GlobalStrTable[IDS_WRONGPSDERROR],0);
+        map_Lines->insert(GlobalStrTable[IDS_EVERYTHINGISOK],0);
+
     }
 
     ~ExtractAnalyzeZip() override
     {
         this->setToolName("");
         this->clear();
+        if(map_Lines != nullptr)
+        {
+            if(map_Lines->isEmpty() == false)
+            {
+               map_Lines->clear();
+            }
+
+            this->setToolName("");
+            delete map_Lines;
+            map_Lines = nullptr;
+        }
     }
+
 
 protected:
     void checkWrongPsd(QString line) override
     {
-        if((*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
         {
             if(line.contains(GlobalStrTable[IDS_EVERYTHINGISOK]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has = true;//密码正确
+                (*map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has = true;//密码正确
                 return;
             }
             if(line.contains(GlobalStrTable[IDS_WRONGPSDERROR]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has = true;
+                (*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has = true;
             }
             else
             {
-                if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
+                if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
                 {
 
                 }
                 else
                 {
-                    (*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id++;
+                    (*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id++;
                 }
             }
         }
@@ -259,7 +296,7 @@ protected:
         {
             if(line.contains(GlobalStrTable[IDS_PHYSICSIZE]) == true)
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has = true;
+                (*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has = true;
             }
         }
     }
@@ -273,20 +310,20 @@ protected:
      */
     int isRightPsdNow() override
     {
-        if((*this->map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_EVERYTHINGISOK]].has == true)
         {
             return 2;
         }
 
-        if((*this->map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_PHYSICSIZE]].has == true)
         {
-            if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has == true)
+            if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].has == true)
             {
                 return 1;
             }
             else
             {
-                if((*this->map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
+                if((*map_Lines)[GlobalStrTable[IDS_WRONGPSDERROR]].id > MAXLINE_AFTER_PHYSICALSIZE)
                 {
                     return 2;
                 }
@@ -303,10 +340,28 @@ protected:
     }
 
 
-
 private:
-    void clear()
+    QMap<QString,LineID> *map_Lines;
+
+};
+
+class ExtractAnalyzeRar : public ExtractAnalyzeBase
+{
+public:
+    ExtractAnalyzeRar()
     {
+        this->setToolName(EXTRACT_TOOL_RAR);
+
+        map_Lines = new QMap<QString,LineID>();
+        map_Lines->insert(GlobalStrTable[IDS_RAR_ERRORPSD],0);
+        map_Lines->insert(GlobalStrTable[IDS_RAR_ALLOK],0);
+
+    }
+
+    ~ExtractAnalyzeRar() override
+    {
+        this->setToolName("");
+        this->clear();
         if(map_Lines != nullptr)
         {
             if(map_Lines->isEmpty() == false)
@@ -320,28 +375,6 @@ private:
         }
     }
 
-private:
-    QMap<QString,LineID> *map_Lines;
-
-};
-
-class ExtractAnalyzeRar : public ExtractAnalyzeBase
-{
-public:
-    ExtractAnalyzeRar()
-    {
-        this->setToolName(EXTRACT_TOOL_RAR);
-
-        this->map_Lines = new QMap<QString,LineID>();
-        this->map_Lines->insert(GlobalStrTable[IDS_RAR_ERRORPSD],0);
-        this->map_Lines->insert(GlobalStrTable[IDS_RAR_ALLOK],0);
-    }
-
-    ~ExtractAnalyzeRar() override
-    {
-        this->setToolName("");
-        this->clear();
-    }
 
 protected:
 
@@ -356,11 +389,11 @@ protected:
     {
         if(line.contains(GlobalStrTable[IDS_RAR_ALLOK]) == true)
         {
-            (*this->map_Lines)[GlobalStrTable[IDS_RAR_ALLOK]].has = true;//此时密码一定正确
+            (*map_Lines)[GlobalStrTable[IDS_RAR_ALLOK]].has = true;//此时密码一定正确
             return;
         }
 
-        if((*this->map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has == true)
         {   //此时一定是密码错误
             return;
         }
@@ -370,29 +403,29 @@ protected:
                     || line.contains(GlobalStrTable[IDS_RAR_WRONGPSD]) == true)
             {
                 //此时一定是密码错误
-                (*this->map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has = true;
+                (*map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has = true;
                 return;
             }
             else
             {
-                (*this->map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].id++;
+                (*map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].id++;
             }
         }
     }
 
     int isRightPsdNow() override
     {
-        if((*this->map_Lines)[GlobalStrTable[IDS_RAR_ALLOK]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_RAR_ALLOK]].has == true)
         {
             return 2;
         }
-        if((*this->map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has == true)
+        if((*map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].has == true)
         {
             return 1;
         }
         else
         {
-            if((*this->map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].id >MAXLINE_RAR_CHECK)
+            if((*map_Lines)[GlobalStrTable[IDS_RAR_ERRORPSD]].id >MAXLINE_RAR_CHECK)
             {
                 return 2;
             }
@@ -403,21 +436,7 @@ protected:
         }
     }
 
-private:
-    void clear()
-    {
-        if(map_Lines != nullptr)
-        {
-            if(map_Lines->isEmpty() == false)
-            {
-               map_Lines->clear();
-            }
 
-            this->setToolName("");
-            delete map_Lines;
-            map_Lines = nullptr;
-        }
-    }
 private:
 
     QMap<QString,LineID> *map_Lines;
@@ -471,7 +490,7 @@ public:
         }
     }
 
-    void checkLine(QString line)
+    void checkLine(const QString& line)
     {
         if(extractAnalyzeTool == nullptr)
         {
@@ -493,6 +512,40 @@ public:
         {
             extractAnalyzeTool->analyseLine(line);
         }
+    }
+
+    void checkIfReplace(const QString& line)
+    {
+        if(extractAnalyzeTool == nullptr)
+        {
+            if(line.contains(GlobalStrTable[IDS_ISRAR]))
+            {
+                extractAnalyzeTool = new ExtractAnalyzeRar();
+            }
+            else if(line.contains(GlobalStrTable[IDS_IS7Z]))
+            {
+                extractAnalyzeTool = new ExtractAnalyze7Z();
+            }
+            else if(line.contains(GlobalStrTable[IDS_ISZIP]))
+            {
+                extractAnalyzeTool = new ExtractAnalyzeZip();
+            }
+        }
+
+        if(extractAnalyzeTool != nullptr)
+        {
+            extractAnalyzeTool->checkIfReplace(line);
+        }
+
+    }
+
+    bool ifReplace()
+    {
+        if(extractAnalyzeTool != nullptr)
+        {
+            return extractAnalyzeTool->ifReplace();
+        }
+        return false;
     }
 
     /**

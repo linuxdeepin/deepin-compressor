@@ -422,6 +422,18 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     }
 }
 
+void clearPath(QString path)
+{
+    QProcess p;
+    QString command = "rm";
+    QStringList args;
+    args.append("-fr");
+    args.append(path);
+    p.execute(command, args);
+    p.waitForFinished();
+}
+
+
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_ASSERT(m_operationMode == Extract);
@@ -437,6 +449,21 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
         delete m_process;
         m_process = nullptr;
+    }
+
+    if(this->extractStatus == ReadOnlyArchiveInterface::EXTRACTSTATUS::CANCELED)
+    {
+        if(this->extractTopFolderName != "")
+        {
+            QString absolutePath = this->extractUserPath+"/"+this->extractTopFolderName;
+            QDir dir(absolutePath);
+            if(dir.exists() == true){
+                if(this->pHelper->ifReplace() == false){//here,you can remove extract files.
+//                    qDebug()<<"-------------------------移除解压文件----------："<<absolutePath;
+                    clearPath(absolutePath);
+                }
+            }
+        }
     }
 
     if(exitStatus == QProcess::ExitStatus::CrashExit)
@@ -1137,6 +1164,8 @@ bool CliInterface::handleLine(const QString &line)
                 this->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::RIGHT;
                 return false;
             }
+        }else{
+            this->pHelper->checkIfReplace(line);
         }
 
         if (handleFileExistsMessage(line)) {
@@ -1430,4 +1459,9 @@ bool CliInterface::isFileExistsFileName(const QString &line)
 {
     Q_UNUSED(line);
     return false;
+}
+
+ExtractAnalyzeHelper* CliInterface::getExtractAnalyzeHelper()const
+{
+    return this->pHelper;
 }

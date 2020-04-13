@@ -50,7 +50,9 @@ public:
             RIGHT,
             WRONG,
             NONEED,
-            COMPLETED//密码正确且解压完成
+            COMPLETED,//密码正确且解压完成
+            CANCELED//取消解压
+
     };
 
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
@@ -178,8 +180,10 @@ public:
     virtual bool isUserCancel() const;
     bool isAnyFileExtracted() const;
 
+public:
     EXTRACTSTATUS extractStatus = EXTRACTSTATUS::NOTCHECKED;
     QString extractUserPath;
+    QString extractTopFolderName;
 
 Q_SIGNALS:
 
@@ -201,9 +205,8 @@ Q_SIGNALS:
     void sigExtractNeedPassword();
 
     void sigExtractPsdRight();//extract password is right signal
-    void sigExtractMoveFiles();//moveFiles from temp path to user path
     void sigReextract();
-
+    void sigExtractRemoveFilesFromUserPath();//remove files in user path when cancel the extract operation
 	/**
      * Emitted when @p query needs to be executed on the GUI thread.
      */
@@ -285,7 +288,7 @@ public:
 Q_SIGNALS:
     void entryRemoved(const QString &path);
 
-protected:
+public:
     OperationMode m_operationMode = NoOperation;
 
 private Q_SLOTS:

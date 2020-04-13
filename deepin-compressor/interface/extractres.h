@@ -20,6 +20,8 @@
 #define IDS_RAR_WRONGPSD 1106
 #define IDS_RAR_ALLOK 1107
 
+//#define IDS_REPLACETIP 1108     //Would you like to replace the existing file
+
 #define QS(cstr) QString(cstr)
 
 static const QMap<unsigned int,QString> GlobalStrTable = {
@@ -32,7 +34,8 @@ static const QMap<unsigned int,QString> GlobalStrTable = {
     { IDS_EVERYTHINGISOK,QS("Everything is Ok") },
     { IDS_RAR_ERRORPSD, QS("password is incorrect")},
     { IDS_RAR_WRONGPSD, QS("wrong password")},
-    { IDS_RAR_ALLOK, QS("All OK")}
+    { IDS_RAR_ALLOK, QS("All OK")},
+//    { IDS_REPLACETIP, QS("Would you like to replace the existing file")}
 };
 
 
@@ -43,6 +46,8 @@ static const QMap<unsigned int,QString> GlobalStrTable = {
 #define EXTRACT_TOOL_RAR "toolRar"
 #define EXTRACT_TOOL_ZIP "toolZip"
 
+
+#define EXTRACT_REPLACE_TIP "Would you like to replace the existing file"
 
 
 #endif // EXTRACTRES_H

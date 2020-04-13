@@ -1197,7 +1197,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     } else {
         destinationDirectory = userDestination;
     }
-
+    qDebug()<<destinationDirectory;
     m_encryptionjob = m_model->extractFiles(files, destinationDirectory, options);
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
@@ -1931,8 +1931,11 @@ void MainWindow::slotFailRetry()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
-
+    m_model->archive()->subfolderName();
     if (m_encryptionjob) {
+//        m_encryptionjob->cancelAndRemove(m_encryptionjob->archiveInterface()->extractUserPath,m_model->archive()->subfolderName());
+        m_encryptionjob->archiveInterface()->extractTopFolderName = m_model->archive()->subfolderName();
+        m_encryptionjob->archiveInterface()->extractStatus = ReadOnlyArchiveInterface::EXTRACTSTATUS::CANCELED;
         m_encryptionjob->Killjob();
         m_encryptionjob = nullptr;
     }
