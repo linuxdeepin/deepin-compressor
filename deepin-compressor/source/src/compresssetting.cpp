@@ -390,6 +390,7 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(false);
         m_splitcompress->setVisible(false);
         m_splitnumedit->setVisible(false);
+        m_password->setText("");
     }
 }
 

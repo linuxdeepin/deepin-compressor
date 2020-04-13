@@ -210,11 +210,11 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 continue;//when iso is more than 4G,it is udf,use 7z to extract
             }
             filteredPlugins << plugin;
-        } else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
+        } /*else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
             if (mimeType.name() == QString("application/x-java-archive") && plugin->metaData().pluginId() == QString("kerfuffle_clizip")) {
                 filteredPlugins << plugin;
             }
-        }
+        }*/
     }
     qDebug() << filteredPlugins.count();
     return filteredPlugins;
@@ -269,7 +269,7 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 //    Q_UNUSED(entrySize)
 //#endif
 
-    if ( (!readWrite) &&  (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/) ) {
+    if ((!readWrite) && (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/)) {
         foreach (Plugin *plugin, preferredPlugins) {
             if (plugin->metaData().name().contains("7zip")) {
                 preferredPlugins.removeOne(plugin);
