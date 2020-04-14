@@ -207,25 +207,17 @@ void Job::onEntryRemoved(const QString &path)
 void Job::onFinished(bool result)
 {
     qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
-    if( m_archiveInterface && m_archiveInterface->isUserCancel() )
-    {
+    if (m_archiveInterface && m_archiveInterface->isUserCancel()) {
         setError(KJob::KilledJobError);
-    }
-    else if ((archive() && !archive()->isValid())  || false == result )
-    {
+    } else if ((archive() && !archive()->isValid())  || false == result) {
         setError(KJob::UserDefinedError);
-    }
-    else if(m_archiveInterface && m_archiveInterface->isAnyFileExtracted() == false)
-    {
+    } else if (m_archiveInterface && m_archiveInterface->isAnyFileExtracted() == false) {
         setError(KJob::UserSkiped);
-    }
-    else
-    {
+    } else {
         setError(KJob::NoError);
     }
 
-    if (!d->isInterruptionRequested())
-    {
+    if (!d->isInterruptionRequested()) {
         emitResult();
     }
 }
@@ -287,13 +279,12 @@ LoadJob::LoadJob(ReadOnlyArchiveInterface *interface, bool isbatch)
 void LoadJob::doWork()
 {
     //emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, ("Loading archive"), qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, ("Loading archive"), qMakePair(QString("Archive"), archiveInterface()->filename()));
     connectToArchiveInterfaceSignals();
 
     bool ret = false;
 
-    if( archiveInterface() )
-    {
+    if (archiveInterface()) {
         connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
 
         ret = archiveInterface()->list(m_isbatch);
@@ -395,9 +386,9 @@ void BatchExtractJob::doWork()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &BatchExtractJob::onCancelled);
 
 //    if (archiveInterface()->hasBatchExtractionProgress()) {
-        // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
-        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
-        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &BatchExtractJob::slotExtractFilenameProgress);
+    // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &BatchExtractJob::slotExtractFilenameProgress);
 //    }
 
     // Forward LoadJob's signals.
@@ -420,7 +411,7 @@ void BatchExtractJob::slotLoadingProgress(double progress)
     // Progress from LoadJob counts only for 50% of the BatchExtractJob's duration.
 
     m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
-    qDebug()<<m_lastPercentage;
+    qDebug() << m_lastPercentage;
     setPercent(m_lastPercentage);
 }
 
@@ -432,7 +423,7 @@ void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
 void BatchExtractJob::slotExtractProgress(double progress)
 {
     // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
-    qDebug()<<m_lastPercentage + static_cast<unsigned long>(progress);
+    qDebug() << m_lastPercentage + static_cast<unsigned long>(progress);
     setPercent(m_lastPercentage + static_cast<unsigned long>(progress));
 }
 
@@ -457,9 +448,9 @@ void BatchExtractJob::slotLoadingFinished(KJob *job)
         connect(m_extractJob, &KJob::result, this, &BatchExtractJob::emitResult);
         connect(m_extractJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
 //        if (archiveInterface()->hasBatchExtractionProgress()) {
-            // The LoadJob is done, change slot and start setting the percentage from m_lastPercentage on.
-            disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
-            connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
+        // The LoadJob is done, change slot and start setting the percentage from m_lastPercentage on.
+        disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
+        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
 //        }
         m_step = Extracting;
         m_extractJob->start();
@@ -558,11 +549,11 @@ void ExtractJob::doWork()
         desc = ("Extracting all files");
     } else {
         //desc = tr("Extracting one file", "Extracting %1 files", m_entries.count());
-        desc = QString("Extracting %1 files").arg( m_entries.count() );
+        desc = QString("Extracting %1 files").arg(m_entries.count());
     }
 
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()), qMakePair(tr("extraction folder", "Destination"), m_destinationDir));
-    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()), qMakePair( QString("extraction folder Destination"), m_destinationDir));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()), qMakePair(QString("extraction folder Destination"), m_destinationDir));
 
     QFileInfo destDirInfo(m_destinationDir);
     if (destDirInfo.isDir() && (!destDirInfo.isWritable() || !destDirInfo.isExecutable())) {
@@ -580,8 +571,7 @@ void ExtractJob::doWork()
 
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 
-    if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/ )
-    {
+    if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
         onFinished(ret);
     }
 }
@@ -641,7 +631,7 @@ void TempExtractJob::doWork()
 {
     // pass 1 to i18np on purpose so this translation may properly be reused.
     //emit description(this, tr("Extracting one file", "Extracting %1 files", 1));
-    emit description(this, "Extracting one file" );
+    emit description(this, "Extracting one file");
 
     connectToArchiveInterfaceSignals();
 
@@ -715,9 +705,9 @@ void AddJob::doWork()
     qDebug() << "Going to add" << totalCount << "entries, counted in" << timer.elapsed() << "ms";
 
     //const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
-    const QString desc = QString("Compressing %1 files").arg( totalCount );
+    const QString desc = QString("Compressing %1 files").arg(totalCount);
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
 
@@ -726,7 +716,7 @@ void AddJob::doWork()
 
     // The file paths must be relative to GlobalWorkDir.
     for (Archive::Entry *entry : qAsConst(m_entries)) {
-        qDebug()<<entry->fullPath();
+        qDebug() << entry->fullPath();
 
         const QString &fullPath = entry->fullPath();
         QString relativePath = workDir.relativeFilePath(fullPath);
@@ -770,9 +760,9 @@ void MoveJob::doWork()
     qDebug() << "Going to move" << m_entries.count() << "file(s)";
 
     //QString desc = tr("Moving a file", "Moving %1 files", m_entries.count());
-    QString desc = QString("Moving %1 files").arg( m_entries.count() );
+    QString desc = QString("Moving %1 files").arg(m_entries.count());
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -812,7 +802,7 @@ void CopyJob::doWork()
     //QString desc = tr("Copying a file", "Copying %1 files", m_entries.count());
     QString desc = QString("Copying %1 files").arg(m_entries.count());
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -844,9 +834,9 @@ DeleteJob::DeleteJob(const QVector<Archive::Entry *> &entries, ReadWriteArchiveI
 void DeleteJob::doWork()
 {
     //QString desc = tr("Deleting a file from the archive", "Deleting %1 files", m_entries.count());
-    QString desc = QString("Deleting %1 files").arg( m_entries.count() );
+    QString desc = QString("Deleting %1 files").arg(m_entries.count());
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, desc, qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
         qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
@@ -896,7 +886,7 @@ void TestJob::doWork()
     qDebug() << "Job started";
 
     //emit description(this, tr("Testing archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, ("Testing archive"), qMakePair( QString("Archive"), archiveInterface()->filename()));
+    emit description(this, ("Testing archive"), qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     connectToArchiveInterfaceSignals();
     connect(archiveInterface(), &ReadOnlyArchiveInterface::testSuccess, this, &TestJob::onTestSuccess);

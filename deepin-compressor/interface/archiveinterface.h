@@ -74,7 +74,7 @@ public:
     virtual bool isReadOnly() const;
 
     virtual bool open();
-	/**
+    /**
      * List archive contents.
      * This runs the process of reading archive contents.
      * When subclassing, you can block as long as you need (unless you called setWaitForFinishedSignal(true)).
@@ -95,7 +95,7 @@ public:
      * @note If returning false, make sure to emit the error() signal beforewards to notify
      * the user of the error condition.
      */
-    virtual bool extractFiles(const QVector<Archive::Entry*> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
+    virtual bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
 
     /**
      * @return Whether the plugins do NOT run the functions in their own thread.
@@ -116,14 +116,14 @@ public:
     /**
      * Returns the list of filenames retrieved from the list of entries.
      */
-    static QStringList entryFullPaths(const QVector<Archive::Entry*> &entries, PathFormat format = WithTrailingSlash);
+    static QStringList entryFullPaths(const QVector<Archive::Entry *> &entries, PathFormat format = WithTrailingSlash);
 
     /**
      * Returns the list of the entries, excluding their children.
      *
      * This method relies on entries paths so doesn't require parents to be set.
      */
-    static QVector<Archive::Entry*> entriesWithoutChildren(const QVector<Archive::Entry*> &entries);
+    static QVector<Archive::Entry *> entriesWithoutChildren(const QVector<Archive::Entry *> &entries);
 
     /**
      * Returns the string list of entry paths, which will be a result of adding/moving/copying entries.
@@ -187,7 +187,7 @@ Q_SIGNALS:
     void compressionMethodFound(const QString &method);
     void encryptionMethodFound(const QString &method);
     void sigExtractNeedPassword();
-	/**
+    /**
      * Emitted when @p query needs to be executed on the GUI thread.
      */
     void userQuery(Query *query);
@@ -259,10 +259,10 @@ public:
      * @note If returning false, make sure to emit the error() signal beforewards to notify
      * the user of the error condition.
      */
-    virtual bool addFiles(const QVector<Archive::Entry*> &files, const Archive::Entry *destination, const CompressionOptions& options, uint numberOfEntriesToAdd = 0) = 0;
-    virtual bool moveFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options) = 0;
-    virtual bool copyFiles(const QVector<Archive::Entry*> &files, Archive::Entry *destination, const CompressionOptions& options) = 0;
-    virtual bool deleteFiles(const QVector<Archive::Entry*> &files) = 0;
+    virtual bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) = 0;
+    virtual bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) = 0;
+    virtual bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) = 0;
+    virtual bool deleteFiles(const QVector<Archive::Entry *> &files) = 0;
     virtual bool addComment(const QString &comment) = 0;
 
 Q_SIGNALS:
@@ -272,7 +272,7 @@ protected:
     OperationMode m_operationMode = NoOperation;
 
 private Q_SLOTS:
-    void onEntryRemoved(const QString &path);   
+    void onEntryRemoved(const QString &path);
 };
 
 

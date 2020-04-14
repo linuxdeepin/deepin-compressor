@@ -7,8 +7,7 @@
 #include <zip.h>
 #include "kpluginfactory.h"
 
-struct FileProgressInfo
-{
+struct FileProgressInfo {
     float fileProgressProportion = 0.0;
     float fileProgressStart;
     QString fileName;
@@ -44,7 +43,7 @@ public:
     bool testArchive() override;
 
 private:
-    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo& pi );
+    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
@@ -63,6 +62,8 @@ private:
     QByteArray m_codecstr;
     QByteArray m_codecname;
     ExtractionOptions m_extractionOptions;
+
+    bool isWrongPassword = false;
 };
 
 #endif // LIBZIPPLUGIN_H

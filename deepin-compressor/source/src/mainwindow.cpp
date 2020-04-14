@@ -1285,7 +1285,7 @@ void MainWindow::slotExtractionDone(KJob *job)
 
     int errorCode = job->error();
 
-    if ((PAGE_ENCRYPTION == m_pageid) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) ) {
+    if ((PAGE_ENCRYPTION == m_pageid) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped))) {
         // do noting:wrong password
     } else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) {
         if (m_progressdialog->isshown()) {
@@ -1757,7 +1757,7 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
 //#else
 //    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
 //#endif
-    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
+    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty()) {
         m_createJob->enableEncryption(password, enableHeaderEncryption.compare("true") ? false : true);
@@ -1782,7 +1782,7 @@ void MainWindow::slotCompressFinished(KJob *job)
 {
     qDebug() << "job finished" << job->error();
     m_workstatus = WorkNone;
-    if (job->error() && (job->error() != KJob::KilledJobError ) ) {
+    if (job->error() && (job->error() != KJob::KilledJobError)) {
         if (m_pathstore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {
                 m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));

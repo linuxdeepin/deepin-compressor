@@ -220,8 +220,7 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     //qDebug() << codec_name;
     if ("" == m_codecname) {
 
-        if( "windows-1252" == codec_name || "IBM855" == codec_name)
-        {
+        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
             return str;
         }
 
@@ -232,13 +231,10 @@ QString  LibzipPlugin::trans2uft8(const char *str)
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
-    }
-    else if( "windows-1252" == codec_name || "IBM855" == codec_name)
-    {
+    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
         m_codecstr = codec_name;
         return str;
-    }
-    else if ("UTF-8" != codec_name) {
+    } else if ("UTF-8" != codec_name) {
         QTextCodec *codec = QTextCodec::codecForName(m_codecname);
         m_codecstr = m_codecname;
         return codec->toUnicode(str);
@@ -654,6 +650,7 @@ bool LibzipPlugin::doKill()
 
 bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+
     bAnyFileExtracted = false;
 
     const bool extractAll = files.isEmpty();
@@ -690,14 +687,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 break;
             }
 
-            if( i == 0 )
-            {
+            if (i == 0) {
                 extractDst = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
-            }
-            else if( extractDst.isEmpty() == false )
-            {
-                if( QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))).startsWith( extractDst + (extractDst.endsWith("/") ? "":"/") ) == false )
-                {
+            } else if (extractDst.isEmpty() == false) {
+                if (QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))).startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
                     extractDst.clear();
                 }
             }
@@ -706,11 +699,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             FileProgressInfo pi;
 
-            if(nofEntries < 5)
-            {
+            if (nofEntries < 5) {
                 pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-                pi.fileProgressProportion = float(1.0)/float(nofEntries);
-                pi.fileProgressStart = pi.fileProgressProportion*float(i);
+                pi.fileProgressProportion = float(1.0) / float(nofEntries);
+                pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
 
             if (!extractEntry(archive,
@@ -726,8 +718,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             emit progress(float(i + 1) / nofEntries);
         }
 
-        if(extractDst.isEmpty() == false)
-        {
+        if (extractDst.isEmpty() == false) {
             emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
         }
 
@@ -753,11 +744,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             emit progress_filename(e->name());
 
-            if(nofEntries < 5)
-            {
+            if (nofEntries < 5) {
                 pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-                pi.fileProgressProportion = float(1.0)/float(nofEntries);
-                pi.fileProgressStart = pi.fileProgressProportion*float(i);
+                pi.fileProgressProportion = float(1.0) / float(nofEntries);
+                pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
 
             if (!extractEntry(archive,
@@ -765,8 +755,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                               e->rootNode,
                               destinationDirectory,
                               options.preservePaths(),
-                              removeRootNode, pi))
-            {
+                              removeRootNode, pi)) {
                 zip_close(archive);
                 return false;
             }
@@ -779,7 +768,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     return true;
 }
 
-bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo& pi)
+bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi)
 {
     //extract = false;
 
@@ -828,8 +817,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     }
 
     // Create parent directories for files. For directories create them.
-    if(QDir().exists(QFileInfo(destination).path()) == false)
-    {
+    if (QDir().exists(QFileInfo(destination).path()) == false) {
         //extract = true;
         if (!QDir().mkpath(QFileInfo(destination).path())) {
             emit error(tr("Failed to create directory: %1"));
@@ -845,12 +833,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
     QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
     //qDebug() << m_codecstr;
-    if(codec)
-    {
+    if (codec) {
         name = codec->fromUnicode(entry.toLocal8Bit());
-    }
-    else
-    {
+    } else {
         name = entry.toLocal8Bit();
     }
 
@@ -904,11 +889,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
                        zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-                if(zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD)
-                {
+                if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
 
-                    if(m_extractionOptions.isBatchExtract())
-                    {
+                    if (m_extractionOptions.isBatchExtract()) {
                         PasswordNeededQuery query(filename());
                         emit userQuery(&query);
                         query.waitForResponse();
@@ -924,32 +907,24 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                         if (zip_set_default_password(archive, password().toUtf8().constData())) {
                         }
 
-                    }
-                    else {
+                    } else {
                         emit sigExtractNeedPassword();
                         setPassword(QString());
                         zip_set_default_password(archive, password().toUtf8().constData());
                         return false;
                     }
-                }
-                else if(zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD)
-                {
-                    if(m_extractionOptions.isBatchExtract())
-                    {
+                } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+                    if (m_extractionOptions.isBatchExtract()) {
                         setPassword(QString());
                         emit cancelled();
                         return false;
-                    }
-                    else {
+                    } else {
                         emit sigExtractNeedPassword();
                     }
                     setPassword(QString());
                     zip_set_default_password(archive, password().toUtf8().constData());
                     return false;
                 }
-
-
-
             } else {
                 emit error(tr("Failed to open '%1':<nl/>%2"));
                 return false;
@@ -968,9 +943,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         qulonglong sum = 0;
         char buf[1000];
 
-        if(pi.fileProgressProportion > 0  )
-        {
-            emit progress( pi.fileProgressStart + pi.fileProgressProportion * 0.01 );
+        if (pi.fileProgressProportion > 0) {
+            emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
         }
 
         int writeSize = 0;
@@ -990,10 +964,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             sum += readBytes;
             writeSize += readBytes;
 
-            if(pi.fileProgressProportion > 0 && writeSize > statBuffer.size / 5 )
-            {
-                pi.fileProgressStart += pi.fileProgressProportion*0.2;
-                emit progress( pi.fileProgressStart);
+            if (pi.fileProgressProportion > 0 && writeSize > statBuffer.size / 5) {
+                pi.fileProgressStart += pi.fileProgressProportion * 0.2;
+                emit progress(pi.fileProgressStart);
                 writeSize = 0;
             }
         }

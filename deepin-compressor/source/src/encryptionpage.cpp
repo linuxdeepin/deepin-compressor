@@ -35,9 +35,9 @@ EncryptionPage::EncryptionPage(QWidget *parent)
 void EncryptionPage::InitUI()
 {
     QPixmap m_encrypticon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_lock_128px.svg", QSize(128, 128));
-    DLabel* pixmaplabel = new DLabel(this);
+    DLabel *pixmaplabel = new DLabel(this);
     pixmaplabel->setPixmap(m_encrypticon);
-    DLabel* stringinfolabel = new DLabel(this);
+    DLabel *stringinfolabel = new DLabel(this);
 
     DFontSizeManager::instance()->bind(stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     stringinfolabel->setForegroundRole(DPalette::ToolTipText);
@@ -91,7 +91,7 @@ void EncryptionPage::setPassowrdFocus()
 
 void EncryptionPage::resetPage()
 {
-    m_inputflag = false;
+    //m_inputflag = false;
     m_password->clear();
     m_password->setAlert(false);
 }
@@ -113,12 +113,9 @@ void EncryptionPage::wrongPassWordSlot()
 
 void EncryptionPage::onPasswordChanged()
 {
-    if(m_password->text().isEmpty())
-    {
+    if (m_password->text().isEmpty()) {
         m_nextbutton->setDisabled(true);
-    }
-    else
-    {
+    } else {
         m_nextbutton->setEnabled(true);
     }
 }
