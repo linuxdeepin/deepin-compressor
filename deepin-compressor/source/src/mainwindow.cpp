@@ -1310,9 +1310,10 @@ void MainWindow::slotExtractionDone(KJob *job)
         QString programPath = QStandardPaths::findExecutable("xdg-open");
         /*for (int i = 0; i < m_extractSimpleFiles.count(); i++)*/ {
             QFileInfo file = m_extractSimpleFiles.at(0)->name();
-            if (file.fileName().contains("%") && file.fileName().contains(".png")) {
+            if (file.fileName().contains("%")/* && file.fileName().contains(".png")*/) {
                 QProcess p;
-                QString tempFileName = QString("%1.png").arg(openTempFileLink);
+//                QString tempFileName = QString("%1.png").arg(openTempFileLink);
+                QString tempFileName = QString("%1").arg(openTempFileLink) + "." + file.suffix();
                 openTempFileLink++;
                 QString commandCreate = "ln";
                 QStringList args;
