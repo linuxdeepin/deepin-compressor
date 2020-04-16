@@ -361,6 +361,41 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs[QStringLiteral("filename")] =
         m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
 
+    //check if folderName valid
+    QString unvalidStr = "";
+    foreach (QString file, m_pathlist) {
+        QString globalWorkDir = file;
+        if (globalWorkDir.right(1) == QLatin1String("/")) {
+            globalWorkDir.chop(1);
+        }
+        QFileInfo fileInfo(globalWorkDir);
+        globalWorkDir = fileInfo.dir().absolutePath();
+        if(fileInfo.baseName().left(1) == "@")
+        {
+
+            unvalidStr = fileInfo.baseName();
+        }
+
+    }
+    const QString fixedType = m_openArgs[QStringLiteral("fixedMimeType")];
+    if(unvalidStr != "")
+    {
+        QSet<QString> special= {"application/x-7z-compressed","application/zip","application/x-java-archive","application/x-tar"};
+        if(special.contains(fixedType) == true)
+        {
+            int limitCounts = 16;
+            int left = 8, right = 8;
+            QString displayName = "";
+            displayName = unvalidStr.length() > limitCounts ? unvalidStr.left(left) + "..." + unvalidStr.right(right) : unvalidStr;
+            QString strTips = tr("%1 :unvalid name,can't start with '@'.").arg(displayName);
+            showWarningDialog(strTips);
+            special.clear();
+            return;
+        }
+    }
+    //check end
+
+
     emit sigCompressPressed(m_openArgs);
 
     m_openArgs.remove(QStringLiteral("createNewArchive"));
