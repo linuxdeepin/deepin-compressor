@@ -138,7 +138,7 @@
     <message>
         <location filename="../source/src/compresssetting.cpp" line="390"/>
         <source>%1 :unvalid name,can&apos;t start with &apos;@&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>“%1”以‘@’开头，文件名无效</translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="630"/>
