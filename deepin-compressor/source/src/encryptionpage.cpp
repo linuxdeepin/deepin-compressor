@@ -91,7 +91,7 @@ void EncryptionPage::setPassowrdFocus()
 
 void EncryptionPage::resetPage()
 {
-    //m_inputflag = false;
+    m_inputflag = false;
     m_password->clear();
     m_password->setAlert(false);
 }
