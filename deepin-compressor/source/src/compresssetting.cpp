@@ -370,19 +370,16 @@ void CompressSetting::onNextButoonClicked()
         }
         QFileInfo fileInfo(globalWorkDir);
         globalWorkDir = fileInfo.dir().absolutePath();
-        if(fileInfo.baseName().left(1) == "@")
-        {
+        if (fileInfo.baseName().left(1) == "@") {
 
             unvalidStr = fileInfo.baseName();
         }
 
     }
     const QString fixedType = m_openArgs[QStringLiteral("fixedMimeType")];
-    if(unvalidStr != "")
-    {
-        QSet<QString> special= {"application/x-7z-compressed","application/zip","application/x-java-archive","application/x-tar"};
-        if(special.contains(fixedType) == true)
-        {
+    if (unvalidStr != "") {
+        QSet<QString> special = {"application/x-7z-compressed", "application/zip", "application/x-java-archive", "application/x-tar"};
+        if (special.contains(fixedType) == true) {
             int limitCounts = 16;
             int left = 8, right = 8;
             QString displayName = "";
@@ -426,6 +423,9 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_splitcompress->setVisible(false);
         m_splitnumedit->setVisible(false);
         m_password->setText("");
+        m_file_secret->setChecked(false);
+        m_splitcompress->setChecked(false);
+        m_splitnumedit->setValue(0);
     }
 }
 
@@ -591,7 +591,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
         m_splitcompress->setChecked(false);
-        m_splitnumedit->setRange(0.0, 5.0);
+        //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
     } else {
         m_splitnumedit->setEnabled(false);
@@ -602,7 +602,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_file_secret->setChecked(false);
         m_splitcompress->setEnabled(false);
         m_splitcompress->setChecked(false);
-        m_splitnumedit->setRange(0.0, 5.0);
+        //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
     }
 }

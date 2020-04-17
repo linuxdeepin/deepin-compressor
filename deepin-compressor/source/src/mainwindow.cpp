@@ -1889,12 +1889,10 @@ void MainWindow::slotFailRetry()
 
 void MainWindow::slotStopSpinner()
 {
-    if(pEventloop != nullptr)
-    {
+    if (pEventloop != nullptr) {
         pEventloop->quit();
     }
-    if(m_spinner!= nullptr)
-    {
+    if (m_spinner != nullptr) {
         m_spinner->stop();
         m_spinner->hide();
     }
@@ -1907,22 +1905,21 @@ void MainWindow::onCancelCompressPressed(int compressType)
 
     if (m_encryptionjob) {
         //append the spiner animation to the eventloop, so can play the spinner animation
-        if(pEventloop == nullptr)
-        {
+        if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_Progess);
         }
-        if(pEventloop->isRunning() == false){
+        if (pEventloop->isRunning() == false) {
             connect(m_encryptionjob, &ExtractJob::sigExtractJobFinished, this, &MainWindow::slotStopSpinner);
             m_spinner = new DSpinner(this->m_Progess);
             m_spinner->setFixedSize(40, 40);
-            m_spinner->move(this->m_Progess->width()/2 - 20, this->m_Progess->height()/2-20);
+            m_spinner->move(this->m_Progess->width() / 2 - 20, this->m_Progess->height() / 2 - 20);
             m_spinner->hide();
             m_spinner->start();
             m_spinner->show();
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
             pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
-        }else{
+        } else {
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
