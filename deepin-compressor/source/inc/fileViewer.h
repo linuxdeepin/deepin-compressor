@@ -62,7 +62,7 @@ class FirstRowDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    FirstRowDelegate(QObject *parent =nullptr);
+    FirstRowDelegate(QObject *parent = nullptr);
     void setPathIndex(int *index);
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual void drawFocus(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
@@ -104,13 +104,12 @@ private:
     QString m_path;
 
 public:
-    LogViewHeaderView* header_;
+    LogViewHeaderView *header_;
 };
 
-struct SortInfo
-{
-   Qt::SortOrder sortOrder;
-   int sortRole;
+struct SortInfo {
+    Qt::SortOrder sortOrder;
+    int sortRole;
 };
 
 
@@ -134,7 +133,7 @@ public:
     QModelIndexList addChildren(const QModelIndexList &list) const;
 
     void startDrag(Qt::DropActions supportedActions);
-    void DeleteCompressFile();
+    void deleteCompressFile();
 
 public slots:
     void showPlable();
@@ -160,7 +159,7 @@ signals:
 
 private:
     void refreshTableview();
-    void restoreHeaderSort(const QString& currentPath);
+    void restoreHeaderSort(const QString &currentPath);
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
@@ -170,8 +169,8 @@ private:
     int m_pathindex;
     MyFileSystemModel *pModel;
 
-    QStandardItemModel* firstmodel;
-    QItemSelectionModel* firstSelectionModel = nullptr;
+    QStandardItemModel *firstmodel;
+    QItemSelectionModel *firstSelectionModel = nullptr;
 
     ArchiveModel *m_decompressmodel;
     ArchiveSortFilterModel *m_sortmodel;
@@ -179,6 +178,10 @@ private:
     //MyLabel *plabel;
     QModelIndex m_indexmode;
     QFileInfoList m_curfilelist;
+
+//    QFileInfoList m_parentFileList;
+//    QDir m_parentDir;
+
     bool curFileListModified = true;
     QList<int> m_fileaddindex;
     DMenu *m_pRightMenu = nullptr;

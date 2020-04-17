@@ -370,6 +370,10 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
+        m_pRightMenu->addAction(tr("Open"));
+//        DMenu *openWith = new DMenu(tr("Open with"));
+//        openWith->addAction(tr("Select default program"));
+//        m_pRightMenu->addMenu(openWith);
         m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
         m_pRightMenu->addAction(tr("Extract to current directory"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
@@ -379,6 +383,10 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
+        m_pRightMenu->addAction(tr("Open"));
+//        DMenu *openWith = new DMenu(tr("Open with"));
+//        openWith->addAction(tr("Select default program"));
+//        m_pRightMenu->addMenu(openWith);
         m_pRightMenu->addAction(tr("Delete"));
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
@@ -400,6 +408,7 @@ void fileViewer::refreshTableview()
         restoreHeaderSort(rootPathUnique);
         return;
     }
+
 
     curFileListModified = false;
 
@@ -490,20 +499,16 @@ void fileViewer::InitConnection()
 {
     // connect the signals to the slot function.
     if (PAGE_COMPRESS == m_pagetype) {
-        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
-        if (m_pRightMenu) {
-            connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
-            connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::DeleteCompressFile);
-        }
-    } else {
-        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
-        connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
-        connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
-        if (m_pRightMenu) {
-            connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
-        }
+        connect(pTableViewFile, &MyTableView::doubleClicked, this, &fileViewer::slotCompressRowDoubleClicked);
     }
-
+    if (PAGE_UNCOMPRESS == m_pagetype) {
+        connect(pTableViewFile, &MyTableView::doubleClicked, this, &fileViewer::slotDecompressRowDoubleClicked);
+    }
+    connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+//        connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
+    if (m_pRightMenu) {
+        connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
+    }
     connect(pModel, &MyFileSystemModel::sigShowLabel, this, &fileViewer::showPlable);
 }
 
@@ -530,24 +535,31 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     if (!event) {
         return;
     }
-    if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
-        DeleteCompressFile();
+    if (event->key() == Qt::Key_Delete) {
+        deleteCompressFile();
     }
+//    if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
+//        deleteCompressFile();
+//    }
 }
 
-void fileViewer::DeleteCompressFile()
+void fileViewer::deleteCompressFile()
 {
+
+
+    int row = pModel->rowCount();
     QItemSelectionModel *selections =  pTableViewFile->selectionModel();
     QModelIndexList selected = selections->selectedIndexes();
 
-    QSet<unsigned int>  selectlist;
+    QSet< int>  selectlist;
+
 
     foreach (QModelIndex index, selected) {
         selectlist.insert(index.row());
     }
 
-    QStringList filelist;
-    foreach (unsigned int index, selectlist) {
+
+    foreach (int index, selectlist) {
         if (m_curfilelist.size() > index) {
             m_curfilelist.replace(index, QFileInfo(""));
         }
@@ -559,12 +571,12 @@ void fileViewer::DeleteCompressFile()
         }
     }
 
+    QStringList filelist;
     foreach (QFileInfo fileinfo, m_curfilelist) {
         filelist.append(fileinfo.filePath());
     }
 
     curFileListModified = true;
-
     emit sigFileRemoved(filelist);
 }
 
@@ -631,11 +643,31 @@ int fileViewer::getFileCount()
 
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
+    /*
+    if (PAGE_COMPRESS == m_pagetype) {
+        if (m_pathindex > 1) {
+            if (m_curfilelist.size())
+                m_curfilelist = QFileInfo(m_curfilelist.at(0).path()).dir().entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+            else {
+                m_curfilelist = m_parentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+            }
+        } else {
+            pTableViewFile->setPreviousButtonVisible(false);
+            m_curfilelist = m_parentFileList;
+        }
+
+        curFileListModified = true;
+        m_pathindex--;
+        showPlable();
+        refreshTableview();
+
+    }
+    */
+
     if (PAGE_COMPRESS == m_pagetype) {
         if (m_pathindex > 1) {
             m_pathindex--;
             m_indexmode = pModel->setRootPath(pModel->fileInfo(m_indexmode).path());
-            qDebug() << pModel->fileInfo(m_indexmode).path();
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
         } else {
@@ -643,6 +675,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
             refreshTableview();
             pTableViewFile->setPreviousButtonVisible(false);
         }
+        qDebug() << pModel->fileInfo(m_indexmode).path() << m_indexmode.data();
     } else {
         m_pathindex--;
         if (0 == m_pathindex) {
@@ -651,8 +684,8 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
             restoreHeaderSort(rootPathUnique);
             //pTableViewFile->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         } else {
-//            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
-//            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+            //            pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
+            //            Archive::Entry* entry = m_decompressmodel->entryForIndex(m_sortmodel->mapFromSource(m_decompressmodel->parent(m_indexmode)));
             m_indexmode = m_decompressmodel->parent(m_indexmode);
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_indexmode));
             Archive::Entry *entry = m_decompressmodel->entryForIndex(m_indexmode);
@@ -717,67 +750,123 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
-    QModelIndex curindex = pTableViewFile->currentIndex();
-    if (curindex.isValid()) {
+    /*
+        if (m_pathindex == 0)m_parentFileList = m_curfilelist;
+        QModelIndex curindex = pTableViewFile->currentIndex();
+        if (m_curfilelist.at(curindex.row()).isDir()) {
+            m_parentDir = m_curfilelist.at(curindex.row()).dir();
+            QDir dir(m_curfilelist.at(curindex.row()).filePath());
+            QFileInfoList entryInfoList = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+            m_curfilelist = entryInfoList;
+            curFileListModified = true;
+            //        restoreHeaderSort(pModel->rootPath());
+            m_pathindex++;
+            showPlable();
+            refreshTableview();
+
+        } else {
+            KProcess *cmdprocess = new KProcess;
+            QStringList arguments;
+            QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
+            arguments << m_curfilelist.at(curindex.row()).filePath();
+            cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+            cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+            cmdprocess->setProgram(programPath, arguments);
+            cmdprocess->start();
+        }*/
+
+
+    if (index.isValid()) {
+        QFileInfo currentFile;
         if (0 == m_pathindex) {
+            currentFile = m_curfilelist.at(index.row());
+        } else {
+            currentFile = pModel->fileInfo(index);
+        }
 
-            QStandardItem *item = firstmodel->itemFromIndex(index);
-            QString itemText = item->text().trimmed();
-            int row = 0;
-            foreach (QFileInfo file, m_curfilelist) {
-                if (file.fileName() == itemText) {
-                    break;
-                }
-                row++;
-            }
-            if (row >= m_curfilelist.count()) {
-                row = 0;
-            }
-            if (m_curfilelist.at(row).isDir()) {
-                pModel->setPathIndex(&m_pathindex);
-                pTableViewFile->setModel(pModel);
-                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
-                m_pathindex++;
-                restoreHeaderSort(pModel->rootPath());
-                pTableViewFile->setRootIndex(m_indexmode);
-
-                QDir dir(m_curfilelist.at(row).filePath());
-                qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-                    showPlable();
-                }
-
-                resizecolumn();
-            } else {
-                KProcess *cmdprocess = new KProcess;
-                QStringList arguments;
-                QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
-                arguments << m_curfilelist.at(row).filePath();
-                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                cmdprocess->setProgram(programPath, arguments);
-                cmdprocess->start();
-            }
-        } else if (pModel && pModel->fileInfo(curindex).isDir()) {
-            m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
+        if (currentFile.isDir()) {
+            pModel->setPathIndex(&m_pathindex);
+            pTableViewFile->setModel(pModel);
+            m_indexmode = pModel->setRootPath(currentFile.filePath());
             m_pathindex++;
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
-        } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
-
+            showPlable();
+            resizecolumn();
+        } else {
             KProcess *cmdprocess = new KProcess;
             QStringList arguments;
-            QString programPath = QStandardPaths::findExecutable("xdg-open");
-            arguments << pModel->fileInfo(curindex).filePath();
+            QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
+            arguments << m_curfilelist.at(index.row()).filePath();
             cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
             cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
             cmdprocess->setProgram(programPath, arguments);
             cmdprocess->start();
         }
+
     }
+    /*
+        QModelIndex curindex = pTableViewFile->currentIndex();
+        if (curindex.isValid()) {
+            if (0 == m_pathindex) {
 
-    //
+                QStandardItem *item = firstmodel->itemFromIndex(index);
+                QString itemText = item->text().trimmed();
+                int row = 0;
+                foreach (QFileInfo file, m_curfilelist) {
+                    if (file.fileName() == itemText) {
+                        break;
+                    }
+                    row++;
+                }
+                if (row >= m_curfilelist.count()) {
+                    row = 0;
+                }
+                if (m_curfilelist.at(curindex.row()).isDir()) {
+                    pModel->setPathIndex(&m_pathindex);
+                    pTableViewFile->setModel(pModel);
+                    m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
+                    m_pathindex++;
+                    restoreHeaderSort(pModel->rootPath());
+                    pTableViewFile->setRootIndex(m_indexmode);
 
+                    QDir dir(m_curfilelist.at(curindex.row()).filePath());
+                    //                qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+                    if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
+                        showPlable();
+                    }
+
+                    resizecolumn();
+                } else {
+                    KProcess *cmdprocess = new KProcess;
+                    QStringList arguments;
+                    QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
+                    arguments << m_curfilelist.at(row).filePath();
+                    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+                    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                    cmdprocess->setProgram(programPath, arguments);
+                    cmdprocess->start();
+                }
+            } else if (pModel && pModel->fileInfo(curindex).isDir()) {
+                m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
+                m_pathindex++;
+                restoreHeaderSort(pModel->rootPath());
+                pTableViewFile->setRootIndex(m_indexmode);
+            } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
+
+                KProcess *cmdprocess = new KProcess;
+                QStringList arguments;
+                QString programPath = QStandardPaths::findExecutable("xdg-open");
+                arguments << pModel->fileInfo(curindex).filePath();
+                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+                cmdprocess->setProgram(programPath, arguments);
+                cmdprocess->start();
+            }
+        }
+
+
+    */
     emit sigpathindexChanged();
 }
 
@@ -797,7 +886,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 if (0 == entry->entries().count()) {
                     showPlable();
                 }
-//
+
             } else {
                 emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
             }
@@ -822,11 +911,12 @@ void fileViewer::showRightMenu(const QPoint &pos)
     if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
-    if (m_pagetype == PAGE_COMPRESS && m_pathindex > 0) {
-        //DoNothing
-    } else {
-        m_pRightMenu->popup(QCursor::pos());
-    }
+//    if (m_pagetype == PAGE_COMPRESS && m_pathindex > 0) {
+//        //DoNothing
+//    } else {
+//        m_pRightMenu->popup(QCursor::pos());
+//    }
+    m_pRightMenu->popup(QCursor::pos());
 }
 
 void fileViewer::slotDragLeave(QString path)
@@ -840,10 +930,27 @@ void fileViewer::slotDragLeave(QString path)
 
 void fileViewer::onRightMenuClicked(QAction *action)
 {
-    if (action->text() == tr("Extract") || action->text() == tr("Extract", "slotDecompressRowDoubleClicked") ) {
-        emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
-    } else {
-        emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
+    if (PAGE_COMPRESS == m_pagetype) {
+        if (action->text() == tr("Open")) {
+            slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
+        }
+
+        if (action->text() == tr("Delete")) {
+//            deleteCompressFile();
+        }
+
+    }
+
+    if (PAGE_UNCOMPRESS == m_pagetype) {
+        if (action->text() == tr("Extract") || action->text() == tr("Extract", "slotDecompressRowDoubleClicked")) {
+            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
+        }
+        if (action->text() == tr("Extract to current directory")) {
+            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
+        }
+        if (action->text() == tr("Open")) {
+            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
+        }
     }
 }
 
@@ -934,9 +1041,21 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
 {
     QMimeData *mimeData = new QMimeData;
-    connect(mimeData, SIGNAL(dataRequested(QString)),
-            this, SLOT(createData(QString)), Qt::DirectConnection);
+    connect(mimeData, SIGNAL(dataRequested(QString)), this, SLOT(createData(QString)), Qt::DirectConnection);
     QDrag *drag = new QDrag(this);
+    foreach (QFileInfo file, m_curfilelist) {
+        if (file.path() == "") {
+            m_curfilelist.removeOne(file);
+        }
+    }
+
+
+    QStringList filelist;
+    foreach (QFileInfo fileinfo, m_curfilelist) {
+        filelist.append(fileinfo.filePath());
+    }
+    curFileListModified = true;
+    emit sigFileRemoved(filelist);
     drag->setMimeData(mimeData);
     drag->exec(Qt::CopyAction);
 }
