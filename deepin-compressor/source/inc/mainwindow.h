@@ -160,6 +160,7 @@ private slots:
     void slotBackButtonClicked();
     void slotResetPercentAndTime();
     void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
+    void slotStopSpinner();
 
 signals:
     void sigquitApp();
@@ -229,6 +230,8 @@ private:
 
     DFileWatcher *m_fileManager = nullptr;
     int openTempFileLink = 0;
+    QEventLoop* pEventloop = nullptr;
+    DSpinner* m_spinner = nullptr;
 
 private:
     void calSelectedTotalFileSize(const QStringList &files);

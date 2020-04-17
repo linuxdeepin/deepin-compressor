@@ -573,6 +573,7 @@ void ExtractJob::doWork()
 
     if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
         onFinished(ret);
+        emit sigExtractJobFinished();
     }
 }
 

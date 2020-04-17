@@ -206,7 +206,7 @@ public:
 
 signals:
     void sigExtractJobPassword();
-
+    void sigExtractJobFinished();
 private:
 
     QVector<Archive::Entry *> m_entries;

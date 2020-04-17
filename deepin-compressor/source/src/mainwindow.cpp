@@ -1887,13 +1887,45 @@ void MainWindow::slotFailRetry()
     }
 }
 
+void MainWindow::slotStopSpinner()
+{
+    if(pEventloop != nullptr)
+    {
+        pEventloop->quit();
+    }
+    if(m_spinner!= nullptr)
+    {
+        m_spinner->stop();
+        m_spinner->hide();
+    }
+    disconnect(m_encryptionjob, &ExtractJob::sigExtractJobFinished, this, &MainWindow::slotStopSpinner);
+}
+
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
 
     if (m_encryptionjob) {
-        m_encryptionjob->Killjob();
-        m_encryptionjob = nullptr;
+        //append the spiner animation to the eventloop, so can play the spinner animation
+        if(pEventloop == nullptr)
+        {
+            pEventloop = new QEventLoop(this->m_Progess);
+        }
+        if(pEventloop->isRunning() == false){
+            connect(m_encryptionjob, &ExtractJob::sigExtractJobFinished, this, &MainWindow::slotStopSpinner);
+            m_spinner = new DSpinner(this->m_Progess);
+            m_spinner->setFixedSize(40, 40);
+            m_spinner->move(this->m_Progess->width()/2 - 20, this->m_Progess->height()/2-20);
+            m_spinner->hide();
+            m_spinner->start();
+            m_spinner->show();
+            m_encryptionjob->Killjob();
+            m_encryptionjob = nullptr;
+            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
+        }else{
+            m_encryptionjob->Killjob();
+            m_encryptionjob = nullptr;
+        }
     }
 
     deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
