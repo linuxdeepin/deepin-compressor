@@ -23,6 +23,7 @@ BatchJobs::BatchJobs(QObject *parent)
 
 BatchJobs::~BatchJobs()
 {
+    clearSubjobs();
 }
 
 bool BatchJobs::addSubjob(KJob *job)

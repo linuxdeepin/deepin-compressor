@@ -1540,7 +1540,7 @@ void MainWindow::onCompressPressed(QMap< QString, QString > &Args)
 
 void MainWindow::creatBatchArchive(QMap< QString, QString > &Args, QMap< QString, QStringList > &filetoadd)
 {
-    BatchCompress *batchJob = new BatchCompress();
+    batchJob = new BatchCompress();
     batchJob->setCompressArgs(Args);
 
     for (QString &key : filetoadd.keys()) {
@@ -1927,12 +1927,14 @@ void MainWindow::onCancelCompressPressed(int compressType)
 
     deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
 
-    if (m_createJob) {
-        m_createJob->deleteLater();
-        m_createJob = nullptr;
-    }
-
     if (compressType == COMPRESSING) {
+        if (m_createJob) {
+            m_createJob->deleteLater();
+            m_createJob = nullptr;
+        }else if(batchJob!= nullptr){
+//            batchJob->doKill();
+            batchJob->kill();
+        }
         m_pageid = PAGE_ZIP;
     } else if (compressType == DECOMPRESSING) {
         m_pageid = PAGE_UNZIP;

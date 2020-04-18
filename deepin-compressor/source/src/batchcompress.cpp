@@ -32,22 +32,42 @@
 BatchCompress::BatchCompress(QObject *parent):BatchJobs(parent)
 {
     setCapabilities(KJob::Killable);
-
+    if(m_Args!= nullptr){
+        delete m_Args;
+        m_Args = nullptr;
+    }
+    m_Args = new QMap<QString,QString>();
 //    connect(this, &KJob::result, this, &BatchExtract::showFailedFiles);
 }
 
-void BatchCompress::setCompressArgs(const QMap<QString, QString> &Args)
+void BatchCompress::setCompressArgs(QMap<QString, QString> Args)
 {
-    m_Args = Args;
+//    if(m_Args!= nullptr){
+//        m_Args->clear();
+//        delete m_Args;
+//        m_Args = nullptr;
+//    }
+    m_Args = new QMap<QString,QString>();
+
+    if(m_Args->count()>0){
+        m_Args->clear();
+    }
+
+    QMap<QString,QString>::iterator it = Args.begin();
+    while(it != Args.end()){
+        m_Args->insert(it.key(),it.value());
+        it++;
+    }
 }
 
 void BatchCompress::addCompress(const QStringList &files)
 {
+    Q_ASSERT(m_Args);
     const QStringList filesToAdd = files;
-    const QString fixedMimeType = m_Args[QStringLiteral("fixedMimeType")];
-    const QString password = m_Args[QStringLiteral("encryptionPassword")];
-    const QString enableHeaderEncryption = m_Args[QStringLiteral("encryptHeader")];
-    QString filename = m_Args[QStringLiteral("localFilePath")] + QDir::separator() + m_Args[QStringLiteral("filename")];
+    const QString fixedMimeType = (*m_Args)[QStringLiteral("fixedMimeType")];
+    const QString password = (*m_Args)[QStringLiteral("encryptionPassword")];
+    const QString enableHeaderEncryption = (*m_Args)[QStringLiteral("encryptHeader")];
+    QString filename = (*m_Args)[QStringLiteral("localFilePath")] + QDir::separator() + (*m_Args)[QStringLiteral("filename")];
 
     if (filename.isEmpty()) {
         qDebug() << "filename.isEmpty()";
@@ -63,9 +83,9 @@ void BatchCompress::addCompress(const QStringList &files)
 
 
     CompressionOptions options;
-    options.setCompressionLevel(m_Args[QStringLiteral("compressionLevel")].toInt());
-    options.setEncryptionMethod(m_Args[QStringLiteral("encryptionMethod")]);
-    options.setVolumeSize(m_Args[QStringLiteral("volumeSize")].toULongLong());
+    options.setCompressionLevel((*m_Args)[QStringLiteral("compressionLevel")].toInt());
+    options.setEncryptionMethod((*m_Args)[QStringLiteral("encryptionMethod")]);
+    options.setVolumeSize((*m_Args)[QStringLiteral("volumeSize")].toULongLong());
 
 
     QVector<Archive::Entry *> all_entries;
@@ -101,8 +121,8 @@ void BatchCompress::addCompress(const QStringList &files)
     connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
 
-
-
+//    connect(job, &KJob::result, this, &BatchCompress::SlotCreateJobFinished);
+//    connect(job, &KJob::result, this, &BatchCompress::SlotCreateJobFinished, Qt::ConnectionType::UniqueConnection);
 
 }
 
@@ -111,13 +131,30 @@ void BatchCompress::SlotProgressFile(KJob *job, const QString &name)
     emit batchFilenameProgress(job, name);
 }
 
+void BatchCompress::clearSubjobs()
+{
+    Q_FOREACH (KJob *job, subjobs()) {
+        job->setParent(nullptr);
+        disconnect(job, &KJob::result, this, &BatchJobs::slotResult);
+        disconnect(job, &KJob::infoMessage, this, &BatchJobs::slotInfoMessage);
+        disconnect(job, SIGNAL(percent(KJob *, ulong)),this, SLOT(forwardProgress(KJob *, ulong)));
+        disconnect(job, SIGNAL(percentfilename(KJob *, const QString &)),this, SLOT(SlotProgressFile(KJob *, const QString &)));
+    }
+    BatchJobs::clearSubjobs();
+}
+
 bool BatchCompress::doKill()
 {
     if (subjobs().isEmpty()) {
         return false;
     }
-
-    return subjobs().first()->kill();
+    KJob* pCurJob = subjobs().first();
+    this->clearSubjobs();
+    if(pCurJob){
+        return pCurJob->kill();
+    }else{
+        return false;
+    }
 }
 
 
@@ -135,6 +172,8 @@ void BatchCompress::slotStartJob()
         return;
     }
 
+    //Firstly,clear subjobs
+    this->clearSubjobs();
     for (const auto &url : qAsConst(m_inputs)) {
         addCompress(url);
     }
@@ -153,12 +192,12 @@ void BatchCompress::slotResult(KJob *job)
     if (job->error()) {
         qDebug() << "There was en error:" << job->error() << ", errorText:" << job->errorString();
 
-        QString curfile = m_fileNames[subjobs().at(0)].first;
-        qDebug() << "Fail curfilename"<<curfile;
-        QFileInfo file(curfile);
-//        while (hasSubjobs()) {
-//            removeSubjob(job);
-//        }
+//        QString curfile = m_fileNames[subjobs().at(0)].first;
+//        qDebug() << "Fail curfilename"<<curfile;
+//        QFileInfo file(curfile);
+        while (hasSubjobs()) {
+            removeSubjob(job);
+        }
         removeSubjob(job);
 
         return;
@@ -172,10 +211,10 @@ void BatchCompress::slotResult(KJob *job)
     } else {
         qDebug() << "Starting the next job";
         subjobs().at(0)->start();
-        QString curfile = m_fileNames[subjobs().at(0)].first;
-        qDebug() << "Send curfilename"<<curfile;
-        QFileInfo file(curfile);
-        emit sendCurFile(file.fileName());
+//        QString curfile = m_fileNames[subjobs().at(0)].first;
+//        qDebug() << "Send curfilename"<<curfile;
+//        QFileInfo file(curfile);
+//        emit sendCurFile(file.fileName());
     }
 }
 
@@ -196,5 +235,37 @@ void BatchCompress::addInput(const QStringList &files)
     m_inputs.append(files);
 }
 
+void BatchCompress::SlotCreateJobFinished(KJob* job)
+{
+    qDebug() << "job finished" << job->error();
+
+    if (job->error() && (job->error() != KJob::KilledJobError)) {
+//        if (m_pathstore.left(6) == "/media") {
+//            if (getMediaFreeSpace() <= 50) {
+//                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
+//            } else {
+//                m_CompressFail->setFailStrDetail(tr("Damaged file"));
+//            }
+//        } else {
+//            if (getDiskFreeSpace() <= 50) {
+//                m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
+//            } else {
+//                m_CompressFail->setFailStrDetail(tr("Damaged file"));
+//            }
+//        }
+//        m_pageid = PAGE_ZIP_FAIL;
+//        refreshPage();
+//        return;
+    }
+
+//    createCompressFile_.clear();
+//    m_pageid = PAGE_ZIP_SUCCESS;
+//    refreshPage();
+
+    if (job) {
+        job->deleteLater();
+        job = nullptr;
+    }
+}
 
 

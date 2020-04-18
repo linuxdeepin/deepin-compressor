@@ -209,6 +209,7 @@ private:
 
     DIconButton *m_titlebutton = nullptr;
 
+    BatchCompress *batchJob = nullptr;
     ExtractJob *m_encryptionjob = nullptr;
     LoadJob *m_loadjob = nullptr;
     CreateJob *m_createJob = nullptr;

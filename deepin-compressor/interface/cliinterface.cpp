@@ -49,7 +49,11 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWrit
 
 CliInterface::~CliInterface()
 {
-    Q_ASSERT(!m_process);
+//    Q_ASSERT(!m_process);
+    if(m_process != nullptr){
+        m_process->kill();
+        m_process->waitForFinished(1);
+    }
 }
 
 void CliInterface::setListEmptyLines(bool emptyLines)

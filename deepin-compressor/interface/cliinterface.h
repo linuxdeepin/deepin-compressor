@@ -212,7 +212,7 @@ private:
     QVector<Archive::Entry *> m_extractedFiles;
     qulonglong m_archiveSizeOnDisk = 0;
     qulonglong m_listedSize = 0;
-    bool m_isbatchlist=false;
+    bool m_isbatchlist = false;
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
     QString extractDst7z_;

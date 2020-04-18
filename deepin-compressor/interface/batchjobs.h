@@ -21,7 +21,7 @@ class BatchJobs : public KJob
     Q_OBJECT
 public:
     explicit BatchJobs(QObject *parent = nullptr);
-    ~BatchJobs();
+    virtual ~BatchJobs();
 
 protected:
     virtual bool addSubjob(KJob *job);
@@ -30,7 +30,7 @@ protected:
     const QList<KJob *> &subjobs() const;
     void clearSubjobs();
 
-protected Q_SLOTS:
+public Q_SLOTS:
     virtual void slotResult(KJob *job);
     virtual void slotInfoMessage(KJob *job, const QString &plain, const QString &rich);
 
