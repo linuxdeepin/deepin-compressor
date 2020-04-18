@@ -13,7 +13,6 @@ public:
     explicit BatchCompress(QObject *parent = nullptr);
     ~BatchCompress()override
     {
-        printf("\n^^^^^^^^^^^^^^6\n");
         m_initialJobCount = 0;
         m_inputs.clear();
         if(m_Args){
