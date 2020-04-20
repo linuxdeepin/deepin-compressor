@@ -370,7 +370,7 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
-        m_pRightMenu->addAction(tr("Open"));
+//        m_pRightMenu->addAction(tr("Open"));
 //        DMenu *openWith = new DMenu(tr("Open with"));
 //        openWith->addAction(tr("Select default program"));
 //        m_pRightMenu->addMenu(openWith);
@@ -383,7 +383,7 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
-        m_pRightMenu->addAction(tr("Open"));
+//        m_pRightMenu->addAction(tr("Open"));
 //        DMenu *openWith = new DMenu(tr("Open with"));
 //        openWith->addAction(tr("Select default program"));
 //        m_pRightMenu->addMenu(openWith);
