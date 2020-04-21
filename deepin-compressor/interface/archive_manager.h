@@ -104,6 +104,7 @@ public:
     int numberOfVolumes() const;
     EncryptionType encryptionType() const;
     QString password() const;
+    void resetPsd();
     uint numberOfEntries() const;
     qulonglong unpackedSize() const;
     qulonglong packedSize() const;

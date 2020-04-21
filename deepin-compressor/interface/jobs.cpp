@@ -177,6 +177,7 @@ void Job::onError(const QString &message, const QString &details)
     }
     setError(KJob::UserDefinedError);
     setErrorText(message);
+    emit sigExtractSpinnerFinished();
 }
 
 void Job::onEntry(Archive::Entry *entry)
@@ -216,7 +217,6 @@ void Job::onFinished(bool result)
     } else {
         setError(KJob::NoError);
     }
-
     if (!d->isInterruptionRequested()) {
         emitResult();
     }
@@ -309,6 +309,7 @@ void LoadJob::onFinished(bool result)
         if (isPasswordProtected()) {
             archive()->setProperty("encryptionType",  archive()->password().isEmpty() ? Archive::Encrypted : Archive::HeaderEncrypted);
         }
+        archive()->resetPsd();
     }
 
     Job::onFinished(result);
@@ -573,8 +574,13 @@ void ExtractJob::doWork()
 
     if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
         onFinished(ret);
-        emit sigExtractJobFinished();
+//        emit sigExtractJobFinished();
     }
+}
+
+void ExtractJob::onFinished(bool result){
+    emit sigExtractSpinnerFinished();
+    Job::onFinished(result);
 }
 
 bool ExtractJob::Killjob()

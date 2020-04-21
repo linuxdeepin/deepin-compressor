@@ -391,6 +391,10 @@ QString Archive::password() const
     return m_iface->password();
 }
 
+void Archive::resetPsd(){
+    m_iface->setPassword("");
+}
+
 uint Archive::numberOfEntries() const
 {
     if (!isValid()) {

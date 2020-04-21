@@ -438,6 +438,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     if(this->extractPsdStatus == Reextract){
         this->extractFF(m_extractedFiles,this->pAnalyseHelp->getDestDir(),m_extractionOptions);
         qDebug()<<"重新解压";
+        return;
     }
 
     if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {

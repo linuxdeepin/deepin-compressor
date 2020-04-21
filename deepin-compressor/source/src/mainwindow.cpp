@@ -1943,7 +1943,7 @@ void MainWindow::slotStopSpinner()
         m_spinner->stop();
         m_spinner->hide();
     }
-    disconnect(m_encryptionjob, &ExtractJob::sigExtractJobFinished, this, &MainWindow::slotStopSpinner);
+    disconnect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
 }
 
 void MainWindow::onCancelCompressPressed(int compressType)
@@ -1956,7 +1956,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
             pEventloop = new QEventLoop(this->m_Progess);
         }
         if (pEventloop->isRunning() == false) {
-            connect(m_encryptionjob, &ExtractJob::sigExtractJobFinished, this, &MainWindow::slotStopSpinner);
+            connect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
             m_spinner = new DSpinner(this->m_Progess);
             m_spinner->setFixedSize(40, 40);
             m_spinner->move(this->m_Progess->width() / 2 - 20, this->m_Progess->height() / 2 - 20);

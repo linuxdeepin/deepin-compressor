@@ -54,16 +54,32 @@ public:
      * @return 1:psd right;  2:psd wrong;  0:psd not checked;
      */
     int isRightPsd();
-private:
-    void clean(){
-
-    }
 
 private:
     QMap<ENUMLINEINFO,LineInfo*>* pMapInfo;
     int lineCount = 0;
 };
 
+
+class AnalyseTool7Z:public AnalyseTool{
+    explicit AnalyseTool7Z();
+
+    ~AnalyseTool7Z()override;
+
+    void mark(ENUMLINEINFO id,QString line,bool read)override;
+
+    void analyseLine(const QString &line)override;
+
+    /**
+     * @brief isRightPsd
+     * @return 1:psd right;  2:psd wrong;  0:psd not checked;
+     */
+    int isRightPsd();
+
+private:
+    QMap<ENUMLINEINFO,LineInfo*>* pMapInfo;
+    int lineCount = 0;
+};
 
 class AnalyseHelp{
 public:
