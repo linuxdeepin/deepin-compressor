@@ -382,9 +382,10 @@ void CompressSetting::onNextButoonClicked()
         if (special.contains(fixedType) == true) {
             int limitCounts = 16;
             int left = 8, right = 8;
-            QString displayName = "";
-            displayName = unvalidStr.length() > limitCounts ? unvalidStr.left(left) + "..." + unvalidStr.right(right) : unvalidStr;
-            QString strTips = tr("%1 :unvalid name,can't start with '@'.").arg(displayName);
+//            QString displayName = "";
+//            displayName = unvalidStr.length() > limitCounts ? unvalidStr.left(left) + "..." + unvalidStr.right(right) : unvalidStr;
+//            QString strTips = tr("%1 :unvalid name,can't start with '@'.").arg(displayName);
+            QString strTips = tr("Files that begin with '@' cannot be compressed");
             showWarningDialog(strTips);
             special.clear();
             return;

@@ -126,6 +126,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../source/src/compresssetting.cpp" line="388"/>
+        <source>Files that begin with &apos;@&apos; cannot be compressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../source/src/compresssetting.cpp" line="279"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation type="unfinished">%1 a été modifié sur le disque, veuillez l&apos;importer à nouveau.</translation>
@@ -136,12 +141,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="387"/>
-        <source>%1 :unvalid name,can&apos;t start with &apos;@&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../source/src/compresssetting.cpp" line="630"/>
+        <location filename="../source/src/compresssetting.cpp" line="631"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -787,22 +787,22 @@
         <translation type="vanished">Confirmer</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="435"/>
+        <location filename="../source/src/fileViewer.cpp" line="428"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="438"/>
+        <location filename="../source/src/fileViewer.cpp" line="431"/>
         <source>Time modified</source>
         <translation>Heure modifiée</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="441"/>
+        <location filename="../source/src/fileViewer.cpp" line="434"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="444"/>
+        <location filename="../source/src/fileViewer.cpp" line="437"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
@@ -928,7 +928,7 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="1004"/>
+        <location filename="../source/src/fileViewer.cpp" line="1002"/>
         <source>Extract</source>
         <translation>Extraire</translation>
     </message>
@@ -937,49 +937,50 @@
         <translation type="vanished">Extraire ici</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="384"/>
-        <location filename="../source/src/fileViewer.cpp" line="1006"/>
+        <location filename="../source/src/fileViewer.cpp" line="380"/>
+        <location filename="../source/src/fileViewer.cpp" line="1004"/>
         <source>Extract to current directory</source>
         <translation>Extraire dans le répertoire courant</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="385"/>
-        <location filename="../source/src/fileViewer.cpp" line="403"/>
-        <location filename="../source/src/fileViewer.cpp" line="1008"/>
-        <location filename="../source/src/fileViewer.cpp" line="1012"/>
+        <location filename="../source/src/fileViewer.cpp" line="381"/>
+        <location filename="../source/src/fileViewer.cpp" line="396"/>
+        <location filename="../source/src/fileViewer.cpp" line="1006"/>
+        <location filename="../source/src/fileViewer.cpp" line="1010"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="387"/>
-        <location filename="../source/src/fileViewer.cpp" line="405"/>
+        <location filename="../source/src/fileViewer.cpp" line="383"/>
+        <location filename="../source/src/fileViewer.cpp" line="398"/>
         <source>Open style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="402"/>
+        <location filename="../source/src/fileViewer.cpp" line="394"/>
+        <location filename="../source/src/fileViewer.cpp" line="1013"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="468"/>
+        <location filename="../source/src/fileViewer.cpp" line="461"/>
         <source>item(s)</source>
         <translation>élément(s)</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="484"/>
+        <location filename="../source/src/fileViewer.cpp" line="477"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>aaaa/MM/jj hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="520"/>
-        <location filename="../source/src/fileViewer.cpp" line="1024"/>
+        <location filename="../source/src/fileViewer.cpp" line="513"/>
+        <location filename="../source/src/fileViewer.cpp" line="1025"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="383"/>
-        <location filename="../source/src/fileViewer.cpp" line="1004"/>
+        <location filename="../source/src/fileViewer.cpp" line="379"/>
+        <location filename="../source/src/fileViewer.cpp" line="1002"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Extraire</translation>

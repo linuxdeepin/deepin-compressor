@@ -376,10 +376,6 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
-//        m_pRightMenu->addAction(tr("Open"));
-//        DMenu *openWith = new DMenu(tr("Open with"));
-//        openWith->addAction(tr("Select default program"));
-//        m_pRightMenu->addMenu(openWith);
         m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
         m_pRightMenu->addAction(tr("Extract to current directory"));
         m_pRightMenu->addAction(tr("Open"));
@@ -395,11 +391,8 @@ void fileViewer::InitUI()
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu();
         m_pRightMenu->setMinimumWidth(202);
-//        m_pRightMenu->addAction(tr("Open"));
-//        DMenu *openWith = new DMenu(tr("Open with"));
-//        openWith->addAction(tr("Select default program"));
-//        m_pRightMenu->addMenu(openWith);
-        m_pRightMenu->addAction(tr("Delete"));
+        deleteAction = new QAction(tr("Delete"));
+        m_pRightMenu->addAction(deleteAction);
         m_pRightMenu->addAction(tr("Open"));
 
         openWithDialogMenu = new  DMenu(tr("Open style"));
@@ -661,12 +654,12 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     if (!event) {
         return;
     }
-    if (event->key() == Qt::Key_Delete) {
-        deleteCompressFile();
-    }
-//    if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
+//    if (event->key() == Qt::Key_Delete) {
 //        deleteCompressFile();
 //    }
+    if (event->key() == Qt::Key_Delete && 0 == m_pathindex) {
+        deleteCompressFile();
+    }
 }
 
 void fileViewer::deleteCompressFile()
@@ -878,6 +871,7 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
+
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
@@ -982,7 +976,11 @@ void fileViewer::showRightMenu(const QPoint &pos)
     if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
-
+    if (m_pagetype == PAGE_COMPRESS && m_pathindex > 0) {
+        m_pRightMenu->removeAction(deleteAction);
+    } else {
+        m_pRightMenu->addAction(deleteAction);
+    }
     m_pRightMenu->popup(QCursor::pos());
     openWithDialogMenu->clear();
     updateAction(pTableViewFile->indexAt(pos).data().toString());
@@ -1011,6 +1009,9 @@ void fileViewer::onRightMenuClicked(QAction *action)
     } else {
         if (action->text() == tr("Open")) {
             slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
+        }
+        if (action->text() == tr("Delete")) {
+            deleteCompressFile();
         }
     }
 

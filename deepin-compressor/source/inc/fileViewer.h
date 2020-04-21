@@ -212,6 +212,7 @@ private:
     MimeTypeDisplayManager *m_mimetype;
 
     QMap<QString, SortInfo> sortCache_;
+    QAction *deleteAction;
 };
 
 #endif // FILEVIWER_H
