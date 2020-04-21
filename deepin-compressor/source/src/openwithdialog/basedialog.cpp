@@ -42,9 +42,7 @@ BaseDialog::BaseDialog(QWidget *parent) : DAbstractDialog(parent)
 
 BaseDialog::~BaseDialog()
 {
-
 }
-
 
 void BaseDialog::setTitle(const QString &title)
 {

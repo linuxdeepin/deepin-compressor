@@ -242,7 +242,6 @@ QByteArray MimeAppsWorker::readData(const QString &path)
     return content;
 }
 
-
 MimesAppsManager::MimesAppsManager(QObject *parent): QObject(parent)
 {
     m_mimeAppsWorker = new MimeAppsWorker;
@@ -270,7 +269,6 @@ QString MimesAppsManager::getMimeTypeByFileName(const QString &fileName)
     QMimeType mimeType = db.mimeTypeForFile(fileName);
     return mimeType.name();
 }
-
 
 QString MimesAppsManager::getDefaultAppByFileName(const QString &fileName)
 {
@@ -388,8 +386,6 @@ bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const 
     return true;
 }
 
-
-
 QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
 {
     QStringList recommendApps;
@@ -472,8 +468,6 @@ QStringList MimesAppsManager::getRecommendedAppsByGio(const QString &mimeType)
     g_list_free(recomendAppInfoList);
     return recommendApps;
 }
-
-
 
 QStringList MimesAppsManager::getApplicationsFolders()
 {

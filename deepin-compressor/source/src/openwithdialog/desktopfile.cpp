@@ -72,7 +72,6 @@ DesktopFile::DesktopFile(const QString &fileName)
         m_genericName = m_name;
     }
 
-
     if (desktop.contains("NoDisplay")) {
         m_noDisplay = desktop.value("NoDisplay", settings.value("NoDisplay").toBool()).toBool();
     }
@@ -94,19 +93,16 @@ DesktopFile::DesktopFile(const QString &fileName)
         m_categories.removeFirst();
     }
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getFileName() const
 {
     return m_fileName;
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getPureFileName() const
 {
     return m_fileName.split("/").last().remove(".desktop");
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getName() const
 {
@@ -125,19 +121,16 @@ QString DesktopFile::getDisplayName() const
     }
     return m_localName.isEmpty() ? m_name : m_localName;
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getExec() const
 {
     return m_exec;
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getIcon() const
 {
     return m_icon;
 }
-//---------------------------------------------------------------------------
 
 QString DesktopFile::getType() const
 {
@@ -159,16 +152,12 @@ bool DesktopFile::getNoShow() const
     return m_noDisplay || m_hidden;
 }
 
-//---------------------------------------------------------------------------
-
 QStringList DesktopFile::getCategories() const
 {
     return m_categories;
 }
-//---------------------------------------------------------------------------
 
 QStringList DesktopFile::getMimeType() const
 {
     return m_mimeType;
 }
-//---------------------------------------------------------------------------

@@ -41,8 +41,6 @@ Properties::Properties(const QString &fileName, const QString &group)
     }
 }
 
-//---------------------------------------------------------------------------
-
 /**
  * @brief Creates properties
  * @param other properies
@@ -51,8 +49,6 @@ Properties::Properties(const Properties &other)
 {
     this->data = other.data;
 }
-//---------------------------------------------------------------------------
-
 
 /**
  * @brief Loads property file
@@ -110,7 +106,6 @@ bool Properties::load(const QString &fileName, const QString &group)
 
     return true;
 }
-//---------------------------------------------------------------------------
 
 /**
  * @brief Saves properties to file
@@ -142,7 +137,6 @@ bool Properties::save(const QString &fileName, const QString &group)
     file.close();
     return true;
 }
-//---------------------------------------------------------------------------
 
 /**
  * @brief Returns true if property with given key is present in properties
@@ -153,7 +147,6 @@ bool Properties::contains(const QString &key) const
 {
     return data.contains(key);
 }
-//---------------------------------------------------------------------------
 
 /**
  * @brief Returns value
@@ -165,7 +158,6 @@ QVariant Properties::value(const QString &key, const QVariant &defaultValue)
 {
     return data.value(key, defaultValue);
 }
-//---------------------------------------------------------------------------
 
 /**
  * @brief Sets value to properties
@@ -179,7 +171,6 @@ void Properties::set(const QString &key, const QVariant &value)
     }
     data.insert(key, value);
 }
-//---------------------------------------------------------------------------
 
 /**
  * @brief Returns keys (names of properties)
@@ -190,4 +181,3 @@ QStringList Properties::getKeys() const
 {
     return data.keys();
 }
-//---------------------------------------------------------------------------

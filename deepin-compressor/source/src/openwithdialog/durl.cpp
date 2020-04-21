@@ -70,15 +70,12 @@ DUrl::DUrl(const QUrl &copy)
     updateVirtualPath();
 }
 
-
 DUrl::DUrl(const DUrl &other)
     : QUrl{other},
       m_virtualPath{other.m_virtualPath}
-
 {
     //###copy constructor
 }
-
 
 DUrl::DUrl(DUrl &&other)
     : QUrl{ std::move(other) },
@@ -86,7 +83,6 @@ DUrl::DUrl(DUrl &&other)
 {
     //###move constructor
 }
-
 
 //###copy operator=
 DUrl &DUrl::operator=(const DUrl &other)
@@ -96,7 +92,6 @@ DUrl &DUrl::operator=(const DUrl &other)
 
     return *this;
 }
-
 
 //###move operator=
 DUrl &DUrl::operator=(DUrl &&other)
@@ -125,7 +120,6 @@ QDataStream &DUrl::operator>>(QDataStream &in)
     this->m_virtualPath = virtualPath;
     return in;
 }
-
 
 DUrl::DUrl(const QString &url, QUrl::ParsingMode mode)
     : QUrl(url, mode)
@@ -230,7 +224,6 @@ bool DUrl::isSFTPFile() const
 {
     return scheme() == SFTP_SCHEME;
 }
-
 
 ///###: Judge whether current the scheme of current url is equal to TAG_SCHEME.
 bool DUrl::isTaggedFile() const
