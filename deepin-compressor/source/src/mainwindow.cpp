@@ -363,7 +363,7 @@ void MainWindow::InitConnection()
     connect(m_UnCompressPage, &UnCompressPage::sigDecompressPress, this, &MainWindow::slotextractSelectedFilesTo);
     connect(m_encryptionpage, &EncryptionPage::sigExtractPassword, this, &MainWindow::SlotExtractPassword);
     connect(m_UnCompressPage, &UnCompressPage::sigextractfiles, this, &MainWindow::slotExtractSimpleFiles);
-    connect(m_UnCompressPage, &UnCompressPage::sigOpenExtractFile,this,&MainWindow::slotExtractSimpleFilesOpen);
+    connect(m_UnCompressPage, &UnCompressPage::sigOpenExtractFile, this, &MainWindow::slotExtractSimpleFilesOpen);
     connect(m_progressdialog, &ProgressDialog::stopExtract, this, &MainWindow::slotKillExtractJob);
     connect(m_progressdialog, &ProgressDialog::sigResetPercentAndTime, this, &MainWindow::slotResetPercentAndTime);
     connect(m_CompressFail, &Compressor_Fail::sigFailRetry, this, &MainWindow::slotFailRetry);
@@ -1289,36 +1289,27 @@ void MainWindow::slotExtractionDone(KJob *job)
     int errorCode = job->error();
 
 
-
-    if ((PAGE_ENCRYPTION == m_pageid) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) )   {
+    if ((PAGE_ENCRYPTION == m_pageid) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)))   {
 
         // do noting:wrong password
-    }
-    else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped))
-    {
-        if (m_progressdialog->isshown())
-        {
+    } else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) {
+        if (m_progressdialog->isshown()) {
             m_progressdialog->hide();
             // m_progressdialog->reject();
         }
 
-        if (m_pathstore.left(6) == "/media" && getMediaFreeSpace() <= 50)
-        {
+        if (m_pathstore.left(6) == "/media" && getMediaFreeSpace() <= 50) {
             m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
-        } else if (getDiskFreeSpace() <= 50)
-        {
+        } else if (getDiskFreeSpace() <= 50) {
             m_CompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
-        } else
-        {
+        } else {
             m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
         }
 
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();
         return;
-    }
-    else if (Encryption_TempExtract == m_encryptiontype )
-    {
+    } else if (Encryption_TempExtract == m_encryptiontype) {
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
         QString programPath = QStandardPaths::findExecutable("xdg-open");
@@ -1326,8 +1317,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         {
             QFileInfo file = m_extractSimpleFiles.at(0)->name();
 
-            if (file.fileName().contains("%") && file.fileName().contains(".png"))
-            {
+            if (file.fileName().contains("%") && file.fileName().contains(".png")) {
 
                 QProcess p;
 //                QString tempFileName = QString("%1.png").arg(openTempFileLink);
@@ -1342,9 +1332,7 @@ void MainWindow::slotExtractionDone(KJob *job)
                 arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
                           + QDir::separator() + tempFileName;
                 p.execute(commandCreate, args);
-            }
-            else
-            {
+            } else {
                 arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
                           + QDir::separator() + m_extractSimpleFiles.at(0)->name();
             }
@@ -1356,16 +1344,11 @@ void MainWindow::slotExtractionDone(KJob *job)
         cmdprocess->start();
         m_pageid = PAGE_UNZIP;
         refreshPage();
-    }
-    else if (Encryption_SingleExtract == m_encryptiontype)
-    {
-        if (errorCode == KJob::UserSkiped)
-        {
+    } else if (Encryption_SingleExtract == m_encryptiontype) {
+        if (errorCode == KJob::UserSkiped) {
             m_isrightmenu = false;
             m_progressdialog->setMsg(tr("Skip all files"));
-        }
-        else
-        {
+        } else {
             m_progressdialog->setFinished(m_decompressfilepath);
         }
 
@@ -1387,16 +1370,12 @@ void MainWindow::slotExtractionDone(KJob *job)
 //        refreshPage();
 
 //    }
-    else if (Encryption_TempExtract_Open_Choose == m_encryptiontype)
-    {
+    else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
         QString ppp = program;
-        if(program != tr("Choose default programma"))
-        {
-            OpenWithDialog::chooseOpen(program,QString(DEFAUTL_PATH) +m_extractSimpleFiles.at(0)->property("name").toString() );
-        }
-        else
-        {
-            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(DEFAUTL_PATH) + m_extractSimpleFiles.at(0)->property("name").toString()),this);
+        if (program != tr("Choose default programma")) {
+            OpenWithDialog::chooseOpen(program, QString(DEFAUTL_PATH) + m_extractSimpleFiles.at(0)->property("name").toString());
+        } else {
+            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(DEFAUTL_PATH) + m_extractSimpleFiles.at(0)->property("name").toString()), this);
             dia->exec();
         }
 
@@ -1405,8 +1384,7 @@ void MainWindow::slotExtractionDone(KJob *job)
 
     }
 
-    else
-    {
+    else {
         m_pageid = PAGE_UNZIP_SUCCESS;
         if (errorCode == KJob::UserSkiped) {
             m_isrightmenu = false;
@@ -1875,16 +1853,11 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     // m_progressTransFlag = false;
     m_workstatus = WorkProcess;
 
-    if ( type == EXTRACT_TEMP )
-    {
+    if (type == EXTRACT_TEMP) {
         m_encryptiontype = Encryption_TempExtract;
-    }
-    else if ( type == EXTRACT_TEMP_CHOOSE_OPEN )
-    {
+    } else if (type == EXTRACT_TEMP_CHOOSE_OPEN) {
         m_encryptiontype =  Encryption_TempExtract_Open_Choose;
-    }
-    else
-    {
+    } else {
         m_encryptiontype = Encryption_SingleExtract;
     }
     m_progressdialog->clearprocess();
@@ -1926,14 +1899,13 @@ void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fil
 {
     QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
     QDir dir(tmppath);
-    if (!dir.exists())
-    {
+    if (!dir.exists()) {
         dir.mkdir(tmppath);
     }
 
     program = programma;
 
-    slotExtractSimpleFiles(fileList,tmppath,EXTRACT_TEMP_CHOOSE_OPEN);
+    slotExtractSimpleFiles(fileList, tmppath, EXTRACT_TEMP_CHOOSE_OPEN);
 
 }
 
@@ -2006,7 +1978,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
         if (m_createJob) {
             m_createJob->deleteLater();
             m_createJob = nullptr;
-        }else if(batchJob!= nullptr){
+        } else if (batchJob != nullptr) {
 //            batchJob->doKill();
             batchJob->kill();
         }
@@ -2133,7 +2105,6 @@ void MainWindow::onTitleButtonPressed()
         } else {
             m_pageid = PAGE_UNZIP;
         }
-
         refreshPage();
         break;
     default:

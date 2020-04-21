@@ -73,7 +73,6 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
     setBackgroundRole(DPalette::Base);
 
-
     connect(m_nextbutton, &DPushButton::clicked, this, &UnCompressPage::oneCompressPress);
     connect(m_extractpath, &DPushButton::clicked, this, &UnCompressPage::onPathButoonClicked);
     connect(m_fileviewer, &fileViewer::sigextractfiles, this, &UnCompressPage::onextractfilesSlot);
@@ -147,7 +146,7 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
     pContent->setMinimumWidth(this->width());
-    pContent->move(dialog->width() / 2 - pContent->width() / 2, dialog->height() / 2 - pContent->height() / 2 - 10 );
+    pContent->move(dialog->width() / 2 - pContent->width() / 2, dialog->height() / 2 - pContent->height() / 2 - 10);
     int res = dialog->exec();
     delete dialog;
 
@@ -165,8 +164,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         return;
     }
 
-    if (EXTRACT_TO == type)
-    {
+    if (EXTRACT_TO == type) {
         DFileDialog dialog(this);
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
         dialog.setFileMode(DFileDialog::Directory);
@@ -182,35 +180,27 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         QString curpath = pathlist.at(0).toLocalFile();
 
         emit sigextractfiles(fileList, curpath, type);
-    }
-    else if (EXTRACT_DRAG == type)
-    {
+    } else if (EXTRACT_DRAG == type) {
         emit sigextractfiles(fileList, path, type);
-    }
-    else if (EXTRACT_TEMP == type)
-    {
+    } else if (EXTRACT_TEMP == type) {
         QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
         QDir dir(tmppath);
-        if (!dir.exists())
-        {
+        if (!dir.exists()) {
             dir.mkdir(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
-    }
-    else if(EXTRACT_TEMP_CHOOSE_OPEN == type)
-    {
+    } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
         QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
         QDir dir(tmppath);
-        if (!dir.exists())
-        {
+        if (!dir.exists()) {
             dir.mkdir(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
     }
 }
 
-void UnCompressPage::onextractfilesOpenSlot(const QVector<Archive::Entry *> &fileList, const QString& programma)
+void UnCompressPage::onextractfilesOpenSlot(const QVector<Archive::Entry *> &fileList, const QString &programma)
 {
-    emit sigOpenExtractFile(fileList,programma);
+    emit sigOpenExtractFile(fileList, programma);
 }
 
