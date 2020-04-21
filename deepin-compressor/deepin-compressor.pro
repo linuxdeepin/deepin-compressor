@@ -12,7 +12,7 @@ TEMPLATE = app
 TARGET = deepin-compressor
 
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp  disomaster  dtkwidget dtkgui udisks2-qt5 disomaster gio-qt libcrypto Qt5Xdg      
+PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0  disomaster  dtkwidget dtkgui udisks2-qt5 disomaster
 
 DEFINES += QT_MESSAGELOGCONTEXT
 #DEFINES += __aarch64__
