@@ -62,6 +62,7 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
         }
     }
 
+
     return result;
 }
 

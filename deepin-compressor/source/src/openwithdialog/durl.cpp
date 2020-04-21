@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QUrlQuery>
 
+
 QRegularExpression DUrl::burn_rxp = QRegularExpression("^(.*?)/(" BURN_SEG_ONDISC "|" BURN_SEG_STAGING ")(.*)$");
 
 static inline QString parseDecodedComponent(const QString &data)
@@ -289,7 +290,7 @@ DUrl DUrl::searchedFileUrl() const
 ///###: so I get the true path from fregment of Uri.
 QString DUrl::taggedLocalFilePath() const noexcept
 {
-    if(this->isTaggedFile()){
+    if (this->isTaggedFile()) {
         QString localFilePath{ this->QUrl::fragment(FullyDecoded) };
 
         return localFilePath;
@@ -300,7 +301,7 @@ QString DUrl::taggedLocalFilePath() const noexcept
 
 QString DUrl::tagName() const noexcept
 {
-    if(this->isTaggedFile()){
+    if (this->isTaggedFile()) {
         QUrlQuery qq(query());
         return qq.hasQueryItem("tagname") ? qq.queryItemValue("tagname") : QUrl::fileName();
         //return this->fileName();
@@ -409,7 +410,7 @@ void DUrl::setSearchedFileUrl(const DUrl &url)
 
 
 ///###: the real path of file was puted in fragment field of Uri.
-void DUrl::setTaggedFileUrl(const QString& localFilePath) noexcept
+void DUrl::setTaggedFileUrl(const QString &localFilePath) noexcept
 {
     if (this->isTaggedFile()) {
         this->QUrl::setFragment(localFilePath, QUrl::DecodedMode);
@@ -559,14 +560,14 @@ DUrl DUrl::fromAVFSFile(const QString &filePath)
 }
 
 
-DUrl DUrl::fromUserTaggedFile(const QString& tag_name, const QString& localFilePath)noexcept
+DUrl DUrl::fromUserTaggedFile(const QString &tag_name, const QString &localFilePath)noexcept
 {
     DUrl uri{};
     uri.setScheme(TAG_SCHEME);
     uri.setPath(QString{"/"} + tag_name);
-    uri.setQuery("tagname="+tag_name);
+    uri.setQuery("tagname=" + tag_name);
 
-    if(!localFilePath.isEmpty()){
+    if (!localFilePath.isEmpty()) {
         uri.setFragment(localFilePath);
     }
 

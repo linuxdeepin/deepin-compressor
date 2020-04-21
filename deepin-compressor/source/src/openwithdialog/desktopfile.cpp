@@ -32,7 +32,8 @@
  * @brief Loads desktop file
  * @param fileName
  */
-DesktopFile::DesktopFile(const QString &fileName) {
+DesktopFile::DesktopFile(const QString &fileName)
+{
 
     // Store file name
     m_fileName = fileName;
@@ -49,32 +50,33 @@ DesktopFile::DesktopFile(const QString &fileName) {
     m_name = desktop.value("Name", settings.value("Name")).toString();
     m_genericName = desktop.value("GenericName", settings.value("GenericName")).toString();
 
-    if(desktop.contains("X-Deepin-AppID")){
+    if (desktop.contains("X-Deepin-AppID")) {
         m_deepinId = desktop.value("X-Deepin-AppID", settings.value("X-Deepin-AppID")).toString();
     }
 
-    if(desktop.contains("X-Deepin-Vendor")){
+    if (desktop.contains("X-Deepin-Vendor")) {
         m_deepinVendor = desktop.value("X-Deepin-Vendor", settings.value("X-Deepin-Vendor")).toString();
     }
 
     QString nLocalKey = QString("Name[%1]").arg(QLocale::system().name());
-    if (desktop.contains(nLocalKey)){
+    if (desktop.contains(nLocalKey)) {
         m_localName = desktop.value(nLocalKey, m_name).toString();
-    }else{
+    } else {
         m_localName = m_name;
     }
 
     QString gnlocalKey = QString("GenericName[%1]").arg(QLocale::system().name());
-    if (desktop.contains(gnlocalKey)){
+    if (desktop.contains(gnlocalKey)) {
         m_genericName = desktop.value(gnlocalKey, m_name).toString();
-    }else{
+    } else {
         m_genericName = m_name;
     }
 
-    if(desktop.contains("NoDisplay")){
+
+    if (desktop.contains("NoDisplay")) {
         m_noDisplay = desktop.value("NoDisplay", settings.value("NoDisplay").toBool()).toBool();
     }
-    if(desktop.contains("Hidden")){
+    if (desktop.contains("Hidden")) {
         m_hidden = desktop.value("Hidden", settings.value("Hidden").toBool()).toBool();
     }
 
@@ -94,21 +96,25 @@ DesktopFile::DesktopFile(const QString &fileName) {
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getFileName() const {
+QString DesktopFile::getFileName() const
+{
     return m_fileName;
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getPureFileName() const {
+QString DesktopFile::getPureFileName() const
+{
     return m_fileName.split("/").last().remove(".desktop");
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getName() const {
+QString DesktopFile::getName() const
+{
     return m_name;
 }
 
-QString DesktopFile::getLocalName() const {
+QString DesktopFile::getLocalName() const
+{
     return m_localName;
 }
 
@@ -121,17 +127,20 @@ QString DesktopFile::getDisplayName() const
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getExec() const {
+QString DesktopFile::getExec() const
+{
     return m_exec;
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getIcon() const {
+QString DesktopFile::getIcon() const
+{
     return m_icon;
 }
 //---------------------------------------------------------------------------
 
-QString DesktopFile::getType() const {
+QString DesktopFile::getType() const
+{
     return m_type;
 }
 
@@ -152,12 +161,14 @@ bool DesktopFile::getNoShow() const
 
 //---------------------------------------------------------------------------
 
-QStringList DesktopFile::getCategories() const {
+QStringList DesktopFile::getCategories() const
+{
     return m_categories;
 }
 //---------------------------------------------------------------------------
 
-QStringList DesktopFile::getMimeType() const {
+QStringList DesktopFile::getMimeType() const
+{
     return m_mimeType;
 }
 //---------------------------------------------------------------------------

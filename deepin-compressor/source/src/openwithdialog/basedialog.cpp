@@ -45,6 +45,7 @@ BaseDialog::~BaseDialog()
 
 }
 
+
 void BaseDialog::setTitle(const QString &title)
 {
     m_titlebar->setTitle(title);

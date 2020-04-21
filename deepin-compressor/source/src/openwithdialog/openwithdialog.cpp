@@ -188,51 +188,49 @@ OpenWithDialog::OpenWithDialog(const DUrl &url, QWidget *parent) :
 {
     m_url = url;
     setWindowFlags(windowFlags()
-                           &~ Qt::WindowMaximizeButtonHint
-                           &~ Qt::WindowMinimizeButtonHint
-                           &~ Qt::WindowSystemMenuHint);
-        initUI();
-        initConnect();
-        initData();
+                   & ~ Qt::WindowMaximizeButtonHint
+                   & ~ Qt::WindowMinimizeButtonHint
+                   & ~ Qt::WindowSystemMenuHint);
+    initUI();
+    initConnect();
+    initData();
 }
 
-QList<QAction*> OpenWithDialog::addMenuOpenAction(const QString &fileName)
+QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName)
 {
     mimeAppsManager->initMimeTypeApps();
     DMimeDatabase db;
-    QMimeType mimeType= db.mimeTypeForFile(fileName);
+    QMimeType mimeType = db.mimeTypeForFile(fileName);
     const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(mimeType);
 
-    QList<QAction*> listAction;
 
-    for (int i = 0; i < recommendApps.count(); ++i)
-    {
+    QList<QAction *> listAction;
+
+    for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 
         QAction *action = new QAction;
         action->setIcon(QIcon::fromTheme(desktop_info.getIcon()));
-        action->setText( desktop_info.getDisplayName() );
+        action->setText(desktop_info.getDisplayName());
         listAction << action;
     }
 
     return listAction;
 }
 
-void OpenWithDialog::chooseOpen(const QString &programma,const QString& fileName)
+void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileName)
 {
     mimeAppsManager->initMimeTypeApps();
     DMimeDatabase db;
-    QMimeType mimeType= db.mimeTypeForFile(fileName);
+    QMimeType mimeType = db.mimeTypeForFile(fileName);
     const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(mimeType);
 
     QString openFileName;
 
-    for (int i = 0; i < recommendApps.count(); i++)
-    {
+    for (int i = 0; i < recommendApps.count(); i++) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 
-        if( desktop_info.getDisplayName() == programma )
-        {
+        if (desktop_info.getDisplayName() == programma) {
             openFileName = desktop_info.getFileName();
             break;
         }
@@ -285,7 +283,7 @@ void OpenWithDialog::initUI()
     m_cancelButton = new QPushButton(tr("Cancel"));
     m_chooseButton = new QPushButton(tr("Confirm"));
 
-    QVBoxLayout* content_layout = new QVBoxLayout;
+    QVBoxLayout *content_layout = new QVBoxLayout;
     content_layout->setContentsMargins(10, 0, 10, 0);
     content_layout->addWidget(new OpenWithDialogListSparerItem(tr("Recommended Applications"), this));
     content_layout->addLayout(m_recommandLayout);
@@ -295,7 +293,7 @@ void OpenWithDialog::initUI()
 
     content_widget->setLayout(content_layout);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout;
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(m_openFileChooseButton);
     buttonLayout->addStretch();
     buttonLayout->addWidget(m_setToDefaultCheckBox);
@@ -304,7 +302,7 @@ void OpenWithDialog::initUI()
     buttonLayout->addWidget(m_chooseButton);
     buttonLayout->setContentsMargins(10, 0, 10, 0);
 
-    QVBoxLayout *main_layout= new QVBoxLayout(this);
+    QVBoxLayout *main_layout = new QVBoxLayout(this);
     QVBoxLayout *bottom_layout = new QVBoxLayout;
 
     bottom_layout->addWidget(new DHorizontalLine(this));
@@ -327,7 +325,7 @@ void OpenWithDialog::initConnect()
 void OpenWithDialog::initData()
 {
 //    const DAbstractFileInfoPointer &file_info = DFileService::instance()->createFileInfo(this, m_url);
-      QString mineTypeStr(m_url.path());
+    QString mineTypeStr(m_url.path());
 
 
 
@@ -339,62 +337,62 @@ void OpenWithDialog::initData()
 //    if (file_info->isDesktopFile())
 //        m_setToDefaultCheckBox->hide();
 
-      DMimeDatabase db;
-      m_mimeType = db.mimeTypeForFile(mineTypeStr);
-      mimeAppsManager->initMimeTypeApps();
+    DMimeDatabase db;
+    m_mimeType = db.mimeTypeForFile(mineTypeStr);
+    mimeAppsManager->initMimeTypeApps();
 
-      const QString &default_app = mimeAppsManager->getDefaultAppByMimeType(m_mimeType);
-      const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType);
+    const QString &default_app = mimeAppsManager->getDefaultAppByMimeType(m_mimeType);
+    const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType);
 
-      for (int i = 0; i < recommendApps.count(); ++i) {
-          const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
+    for (int i = 0; i < recommendApps.count(); ++i) {
+        const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 
-          OpenWithDialogListItem *item = createItem(QIcon::fromTheme(desktop_info.getIcon()), desktop_info.getDisplayName(), recommendApps.at(i));
-          m_recommandLayout->addWidget(item);
+        OpenWithDialogListItem *item = createItem(QIcon::fromTheme(desktop_info.getIcon()), desktop_info.getDisplayName(), recommendApps.at(i));
+        m_recommandLayout->addWidget(item);
 
-          if (!default_app.isEmpty() && recommendApps.at(i).endsWith(default_app))
-              checkItem(item);
-      }
+        if (!default_app.isEmpty() && recommendApps.at(i).endsWith(default_app))
+            checkItem(item);
+    }
 
-      QList<DesktopFile> other_app_list;
+    QList<DesktopFile> other_app_list;
 
-      foreach (const QString& f, mimeAppsManager->DesktopObjs.keys()) {
-          //        //filter recommend apps , no show apps and no mime support apps
-          const DesktopFile& app = mimeAppsManager->DesktopObjs.value(f);
-          if(recommendApps.contains(f))
-              continue;
+    foreach (const QString &f, mimeAppsManager->DesktopObjs.keys()) {
+        //        //filter recommend apps , no show apps and no mime support apps
+        const DesktopFile &app = mimeAppsManager->DesktopObjs.value(f);
+        if (recommendApps.contains(f))
+            continue;
 
-          if(mimeAppsManager->DesktopObjs.value(f).getNoShow())
-              continue;
+        if (mimeAppsManager->DesktopObjs.value(f).getNoShow())
+            continue;
 
-          if(mimeAppsManager->DesktopObjs.value(f).getMimeType().isEmpty())
-              continue;
+        if (mimeAppsManager->DesktopObjs.value(f).getMimeType().isEmpty())
+            continue;
 
-          bool isSameDesktop = false;
-          foreach (const DesktopFile& otherApp, other_app_list) {
-              if(otherApp.getExec() == app.getExec() && otherApp.getLocalName() == app.getLocalName())
-                  isSameDesktop = true;
-          }
+        bool isSameDesktop = false;
+        foreach (const DesktopFile &otherApp, other_app_list) {
+            if (otherApp.getExec() == app.getExec() && otherApp.getLocalName() == app.getLocalName())
+                isSameDesktop = true;
+        }
 
-          Properties desktop_info(f, "Desktop Entry");
+        Properties desktop_info(f, "Desktop Entry");
 
-          const QString &custom_open_desktop = desktop_info.value("X-DDE-File-Manager-Custom-Open").toString();
+        const QString &custom_open_desktop = desktop_info.value("X-DDE-File-Manager-Custom-Open").toString();
 
-          //        // Filter self own desktop files for opening other types of files
-          if (!custom_open_desktop.isEmpty() && custom_open_desktop != m_mimeType.name())
-              continue;
+        //        // Filter self own desktop files for opening other types of files
+        if (!custom_open_desktop.isEmpty() && custom_open_desktop != m_mimeType.name())
+            continue;
 
-          if (isSameDesktop)
-              continue;
+        if (isSameDesktop)
+            continue;
 
-          other_app_list << mimeAppsManager->DesktopObjs.value(f);
-          QString iconName = other_app_list.last().getIcon();
-          OpenWithDialogListItem *item = createItem(QIcon::fromTheme(iconName), other_app_list.last().getDisplayName(), f);
-          m_otherLayout->addWidget(item);
+        other_app_list << mimeAppsManager->DesktopObjs.value(f);
+        QString iconName = other_app_list.last().getIcon();
+        OpenWithDialogListItem *item = createItem(QIcon::fromTheme(iconName), other_app_list.last().getDisplayName(), f);
+        m_otherLayout->addWidget(item);
 
-          if (!default_app.isEmpty() && f.endsWith(default_app))
-              checkItem(item);
-      }
+        if (!default_app.isEmpty() && f.endsWith(default_app))
+            checkItem(item);
+    }
 }
 
 void OpenWithDialog::checkItem(OpenWithDialogListItem *item)
@@ -419,7 +417,7 @@ void OpenWithDialog::useOtherApplication()
     target_desktop_file_name = target_desktop_file_name.arg(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).arg(qApp->applicationName()).arg(m_mimeType.name().replace("/", "-"));
 
     if (file_path.endsWith(".desktop")) {
-        for (const OpenWithDialog *w : m_recommandLayout->parentWidget()->findChildren<OpenWithDialog*>()) {
+        for (const OpenWithDialog *w : m_recommandLayout->parentWidget()->findChildren<OpenWithDialog *>()) {
             if (w->property("app").toString() == file_path)
                 return;
         }
@@ -488,8 +486,7 @@ void OpenWithDialog::openFileByApp()
 
     const QString &app = m_checkedItem->property("app").toString();
 
-    if (m_setToDefaultCheckBox->isChecked())
-    {
+    if (m_setToDefaultCheckBox->isChecked()) {
         mimeAppsManager->setDefautlAppForTypeByGio(m_mimeType.name(), app);
     }
 
@@ -544,8 +541,8 @@ bool OpenWithDialog::eventFilter(QObject *obj, QEvent *event)
 
     if (event->type() == QEvent::MouseButtonPress) {
 
-        if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
-            if (OpenWithDialogListItem *item = qobject_cast<OpenWithDialogListItem*>(obj))
+        if (static_cast<QMouseEvent *>(event)->button() == Qt::LeftButton) {
+            if (OpenWithDialogListItem *item = qobject_cast<OpenWithDialogListItem *>(obj))
                 checkItem(item);
 
             return true;
