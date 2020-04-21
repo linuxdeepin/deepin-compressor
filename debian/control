@@ -2,7 +2,39 @@ Source: deepin-compressor
 Section: devel
 Priority: optional
 Maintainer: packages <packages@deepin.com>
-Build-Depends: debhelper (>= 11), libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qt5-default, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev
+Build-Depends: debhelper (>= 11), libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qt5-default, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev, pkg-config, qt5-qmake, qtbase5-private-dev, libjemalloc-dev, libqt5svg5-dev, libmagic-dev, libpolkit-agent-1-dev, libpolkit-qt5-1-dev, qtmultimedia5-dev,
+ libffmpegthumbnailer-dev,libtag1-dev, libdtkgui-dev, libxcb1-dev,
+ libxcb1-dev,
+ x11proto-core-dev,
+ libx11-dev,
+ libglib2.0-dev,
+ dde-dock-dev(>=4.8.4.1),
+ libxcb-ewmh-dev,
+ libxcb-shape0-dev,
+ libdframeworkdbus-dev,
+ libxcb-util0-dev,
+ qtdeclarative5-dev,
+ deepin-gettext-tools,
+ libkf5codecs-dev,
+ libdtkcore-dev,
+ libdtkcore5-bin,
+ libdmr-dev,
+ dh-systemd,
+ deepin-anything-dev[i386 amd64],
+ deepin-anything-server-dev[i386 amd64],
+ libudisks2-qt5-dev,
+ libxrender-dev,
+ libmtdev-dev,
+ libfontconfig1-dev,
+ libfreetype6-dev,
+ libegl1-mesa-dev,
+ libglibmm-2.4-dev,
+ libgio-qt-dev,
+ libdisomaster-dev,
+ libssl-dev,
+ libmediainfo-dev,
+ libqt5xdg-dev
+
 
 Standards-Version: 4.1.3
 Homepage: www.deepin.org
