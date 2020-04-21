@@ -976,10 +976,12 @@ void fileViewer::showRightMenu(const QPoint &pos)
     if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
-    if (m_pagetype == PAGE_COMPRESS && m_pathindex > 0) {
-        m_pRightMenu->removeAction(deleteAction);
-    } else {
-        m_pRightMenu->addAction(deleteAction);
+    if (m_pagetype == PAGE_COMPRESS) {
+        if (m_pathindex > 0) {
+            m_pRightMenu->removeAction(deleteAction);
+        } else {
+            m_pRightMenu->addAction(deleteAction);
+        }
     }
     m_pRightMenu->popup(QCursor::pos());
     openWithDialogMenu->clear();
