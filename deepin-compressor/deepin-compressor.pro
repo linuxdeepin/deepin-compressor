@@ -12,7 +12,7 @@ TEMPLATE = app
 TARGET = deepin-compressor
 
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp  disomaster
+PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0 poppler-cpp  disomaster  dtkwidget dtkgui udisks2-qt5 disomaster gio-qt libcrypto Qt5Xdg      
 
 DEFINES += QT_MESSAGELOGCONTEXT
 #DEFINES += __aarch64__
@@ -70,7 +70,16 @@ HEADERS +=  \
     source/inc/archivesortfiltermodel.h \
     source/inc/batchextract.h \
     interface/batchjobs.h \
-    source/inc/batchcompress.h
+    source/inc/batchcompress.h \
+    source/inc/openwithdialog/basedialog.h \
+    source/inc/openwithdialog/desktopfile.h \
+    source/inc/openwithdialog/dfmstandardpaths.h \
+    source/inc/openwithdialog/dmimedatabase.h \
+    source/inc/openwithdialog/durl.h \
+    source/inc/openwithdialog/mimesappsmanager.h \
+    source/inc/openwithdialog/openwithdialog.h \
+    source/inc/openwithdialog/properties.h \
+    source/inc/openwithdialog/singleton.h
 
 
 
@@ -119,7 +128,15 @@ SOURCES +=  \
     interface/batchjobs.cpp \
     source/src/settings_translation.cpp \
     source/src/logviewheaderview.cpp \
-    source/src/batchcompress.cpp
+    source/src/batchcompress.cpp \
+    source/src/openwithdialog/basedialog.cpp \
+    source/src/openwithdialog/desktopfile.cpp \
+    source/src/openwithdialog/dfmstandardpaths.cpp \
+    source/src/openwithdialog/dmimedatabase.cpp \
+    source/src/openwithdialog/durl.cpp \
+    source/src/openwithdialog/mimesappsmanager.cpp \
+    source/src/openwithdialog/openwithdialog.cpp \
+    source/src/openwithdialog/properties.cpp
 
 
 RESOURCES += deepin-compressor.qrc

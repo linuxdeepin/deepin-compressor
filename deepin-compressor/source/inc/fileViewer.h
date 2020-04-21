@@ -41,6 +41,8 @@
 #include <DFontSizeManager>
 #include <QUrl>
 
+#include "openwithdialog/openwithdialog.h"
+
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
@@ -54,6 +56,8 @@ enum EXTRACT_TYPE {
     EXTRACT_TO,
     EXTRACT_DRAG,
     EXTRACT_TEMP,
+    EXTRACT_TEMP_OPEN,
+    EXTRACT_TEMP_CHOOSE_OPEN
 };
 
 class LogViewHeaderView;
@@ -113,6 +117,7 @@ struct SortInfo {
 };
 
 
+class MimesAppsManager;
 class fileViewer : public DWidget
 {
     Q_OBJECT
@@ -133,7 +138,11 @@ public:
     QModelIndexList addChildren(const QModelIndexList &list) const;
 
     void startDrag(Qt::DropActions supportedActions);
+
     void deleteCompressFile();
+
+
+
 
 public slots:
     void showPlable();
@@ -148,18 +157,30 @@ protected slots:
     void slotDecompressRowDoubleClicked(const QModelIndex index);
     void slotCompressRePreviousDoubleClicked();
 
+
     void showRightMenu(const QPoint &pos);
     void onRightMenuClicked(QAction *action);
+    void onRightMenuOpenWithClicked(QAction *action);
     void slotDragLeave(QString path);
+
+
 
 signals:
     void sigFileRemoved(const QStringList &filelist);
-    void sigextractfiles(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path = nullptr);
+    void sigextractfiles(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path = "");
     void sigpathindexChanged();
+    void sigOpenWith(QVector<Archive::Entry *> fileList,const QString& programma);
 
 private:
     void refreshTableview();
-    void restoreHeaderSort(const QString &currentPath);
+
+    void restoreHeaderSort(const QString& currentPath);
+
+    void updateAction(const QString& fileType);
+
+    void openWithDialog(const QModelIndex& index);
+    void openWithDialog(const QModelIndex& index,const QString& programma);
+
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
@@ -185,6 +206,7 @@ private:
     bool curFileListModified = true;
     QList<int> m_fileaddindex;
     DMenu *m_pRightMenu = nullptr;
+    DMenu *openWithDialogMenu  = nullptr;
 
     PAGE_TYPE m_pagetype;
     MimeTypeDisplayManager *m_mimetype;

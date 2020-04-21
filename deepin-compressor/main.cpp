@@ -27,6 +27,7 @@
 #include <DLog>
 #include "utils.h"
 #include <DApplicationSettings>
+#include "openwithdialog/openwithdialog.h"
 
 int main(int argc, char *argv[])
 {
@@ -64,8 +65,7 @@ int main(int argc, char *argv[])
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
-    if(appIcon.isNull())
-    {
+    if (appIcon.isNull()) {
         appIcon = QIcon(":/icons/deepin/builtin/icons/deepin-compressor.svg");
     }
 
@@ -73,8 +73,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(appIcon);
     //w.titlebar()->setIcon(appIcon);
 
-    if (app.setSingleInstance("deepin-compressor"))
-    {
+    if (app.setSingleInstance("deepin-compressor")) {
         Dtk::Widget::moveToCenter(&w);
     }
 
@@ -90,8 +89,7 @@ int main(int argc, char *argv[])
     }
 
     QStringList multilist;
-    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi"))))
-    {
+    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
         multilist.append(newfilelist.at(0));
         multilist.append(newfilelist.last().remove("_multi"));
         newfilelist = multilist;
@@ -104,6 +102,7 @@ int main(int argc, char *argv[])
     }
 
     w.show();
+
 
     return app.exec();
 }

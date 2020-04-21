@@ -136,12 +136,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/compresssetting.cpp" line="390"/>
         <source>%1 :unvalid name,can&apos;t start with &apos;@&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/compresssetting.cpp" line="630"/>
+=======
+        <location filename="../source/src/compresssetting.cpp" line="595"/>
+>>>>>>> Stashed changes
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
@@ -290,12 +294,12 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../main.cpp" line="46"/>
+        <location filename="../main.cpp" line="47"/>
         <source>Archive Manager</source>
         <translation>Gestor d&apos;arxius</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="47"/>
+        <location filename="../main.cpp" line="48"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>El Gestor d&apos;arxius és una aplicació lleugera i ràpida per crear i descomprimir arxius.</translation>
     </message>
@@ -303,158 +307,286 @@
 <context>
     <name>MainWindow</name>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="299"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="302"/>
+>>>>>>> Stashed changes
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="303"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="306"/>
+>>>>>>> Stashed changes
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="307"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="310"/>
+>>>>>>> Stashed changes
         <source>Select the file</source>
         <translation>Obre</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="311"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="314"/>
+>>>>>>> Stashed changes
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="331"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="334"/>
+>>>>>>> Stashed changes
         <source>Shortcuts</source>
         <translation>Dreceres</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="396"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="400"/>
+>>>>>>> Stashed changes
         <source>Open file</source>
         <translation>Obre el fitxer</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="426"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="430"/>
+>>>>>>> Stashed changes
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="605"/>
         <location filename="../source/src/mainwindow.cpp" line="615"/>
         <location filename="../source/src/mainwindow.cpp" line="1486"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="609"/>
+        <location filename="../source/src/mainwindow.cpp" line="619"/>
+        <location filename="../source/src/mainwindow.cpp" line="1534"/>
+>>>>>>> Stashed changes
         <source>Create New Archive</source>
         <translation>Crea un nou fitxer</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="648"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="652"/>
+>>>>>>> Stashed changes
         <source>Compression successful</source>
         <translation>Compressió correcta</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1341"/>
         <location filename="../source/src/mainwindow.cpp" line="1360"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1360"/>
+        <location filename="../source/src/mainwindow.cpp" line="1408"/>
+>>>>>>> Stashed changes
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1362"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1388"/>
+        <source>Choose default programma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="1410"/>
+>>>>>>> Stashed changes
         <source>Extraction successful</source>
         <translation>Extracció correcta</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="219"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="222"/>
+>>>>>>> Stashed changes
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="811"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="815"/>
+>>>>>>> Stashed changes
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Voleu afegir el fitxer a la llista o obrir-lo en una finestra nova?</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="319"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="322"/>
+>>>>>>> Stashed changes
         <source>Display shortcuts</source>
         <translation>Mostra les dreceres</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="812"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="816"/>
+>>>>>>> Stashed changes
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="63"/>
+        <location filename="../source/src/mainwindow.cpp" line="66"/>
         <source>Archive Manager</source>
         <translation>Gestor d&apos;arxius</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="225"/>
         <location filename="../source/src/mainwindow.cpp" line="1121"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="228"/>
+        <location filename="../source/src/mainwindow.cpp" line="1125"/>
+>>>>>>> Stashed changes
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="631"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="635"/>
+>>>>>>> Stashed changes
         <source>Compressing</source>
         <translation>Es comprimeix</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="641"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="645"/>
+>>>>>>> Stashed changes
         <source>Extracting</source>
         <translation>S&apos;extreu</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="657"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="661"/>
+>>>>>>> Stashed changes
         <source>Compression failed</source>
         <translation>La compressió ha fallat.</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="687"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="691"/>
+>>>>>>> Stashed changes
         <source>Extraction failed</source>
         <translation>L&apos;extracció ha fallat.</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="813"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="817"/>
+>>>>>>> Stashed changes
         <source>Add</source>
         <translation>Afegeix</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="814"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="818"/>
+>>>>>>> Stashed changes
         <source>Open in new window</source>
         <translation>Obre en finestra nova</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="931"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="935"/>
+>>>>>>> Stashed changes
         <source>Find directory</source>
         <translation>Troba un directori</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1273"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1276"/>
+>>>>>>> Stashed changes
         <source>Wrong password</source>
         <translation>Contrasenya incorrecta</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1005"/>
         <location filename="../source/src/mainwindow.cpp" line="1025"/>
         <location filename="../source/src/mainwindow.cpp" line="1061"/>
         <location filename="../source/src/mainwindow.cpp" line="1301"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1009"/>
+        <location filename="../source/src/mainwindow.cpp" line="1029"/>
+        <location filename="../source/src/mainwindow.cpp" line="1065"/>
+        <location filename="../source/src/mainwindow.cpp" line="1311"/>
+>>>>>>> Stashed changes
         <source>Damaged file, unable to extract</source>
         <translation>Fitxer malmès, no es pot extreure</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1120"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1124"/>
+>>>>>>> Stashed changes
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>L&apos;arxiu ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1297"/>
         <location filename="../source/src/mainwindow.cpp" line="1299"/>
         <location filename="../source/src/mainwindow.cpp" line="1788"/>
         <location filename="../source/src/mainwindow.cpp" line="1794"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1305"/>
+        <location filename="../source/src/mainwindow.cpp" line="1308"/>
+        <location filename="../source/src/mainwindow.cpp" line="1836"/>
+        <location filename="../source/src/mainwindow.cpp" line="1842"/>
+>>>>>>> Stashed changes
         <source>Insufficient space, please clear and retry</source>
         <translation>No hi ha prou espai. Si us plau, feu neteja i torneu-ho a provar.</translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="../source/src/mainwindow.cpp" line="1790"/>
         <location filename="../source/src/mainwindow.cpp" line="1796"/>
+=======
+        <location filename="../source/src/mainwindow.cpp" line="1838"/>
+        <location filename="../source/src/mainwindow.cpp" line="1844"/>
+>>>>>>> Stashed changes
         <source>Damaged file</source>
         <translation>Fitxer malmès</translation>
     </message>
@@ -543,6 +675,44 @@
         <location filename="../source/src/myfilesystemmodel.cpp" line="128"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>dd/MM/yyyy hh:mm:ss</translation>
+    </message>
+</context>
+<context>
+    <name>OpenWithDialog</name>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="263"/>
+        <source>Open with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="282"/>
+        <source>Add other programs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="283"/>
+        <source>Set as default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="285"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel·la</translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="286"/>
+        <source>Confirm</source>
+        <translation type="unfinished">Confirma</translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="290"/>
+        <source>Recommended Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/openwithdialog/openwithdialog.cpp" line="292"/>
+        <source>Other Applications</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -744,22 +914,22 @@
         <translation type="vanished">Confirma</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="409"/>
+        <location filename="../source/src/fileViewer.cpp" line="426"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="412"/>
+        <location filename="../source/src/fileViewer.cpp" line="429"/>
         <source>Time modified</source>
         <translation>Modificat</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="415"/>
+        <location filename="../source/src/fileViewer.cpp" line="432"/>
         <source>Type</source>
         <translation>Tipus</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="418"/>
+        <location filename="../source/src/fileViewer.cpp" line="435"/>
         <source>Size</source>
         <translation>Mida</translation>
     </message>
@@ -861,23 +1031,23 @@
     </message>
     <message>
         <location filename="../source/src/uncompresspage.cpp" line="48"/>
-        <location filename="../source/src/uncompresspage.cpp" line="118"/>
-        <location filename="../source/src/uncompresspage.cpp" line="125"/>
+        <location filename="../source/src/uncompresspage.cpp" line="119"/>
+        <location filename="../source/src/uncompresspage.cpp" line="126"/>
         <source>Extract to:</source>
         <translation>Extreu a:</translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="88"/>
+        <location filename="../source/src/uncompresspage.cpp" line="89"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="106"/>
+        <location filename="../source/src/uncompresspage.cpp" line="107"/>
         <source>Find directory</source>
         <translation>Troba un directori</translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="140"/>
+        <location filename="../source/src/uncompresspage.cpp" line="141"/>
         <source>OK</source>
         <translation type="unfinished">D&apos;acord</translation>
     </message>
@@ -885,7 +1055,7 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="843"/>
+        <location filename="../source/src/fileViewer.cpp" line="1019"/>
         <source>Extract</source>
         <translation>Extreu</translation>
     </message>
@@ -894,28 +1064,49 @@
         <translation type="vanished">Extreu aquí</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="374"/>
+        <location filename="../source/src/fileViewer.cpp" line="380"/>
+        <location filename="../source/src/fileViewer.cpp" line="1023"/>
         <source>Extract to current directory</source>
         <translation>Extreu-ho al directori actual</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="382"/>
+        <location filename="../source/src/fileViewer.cpp" line="381"/>
+        <location filename="../source/src/fileViewer.cpp" line="395"/>
+        <location filename="../source/src/fileViewer.cpp" line="1027"/>
+        <location filename="../source/src/fileViewer.cpp" line="1034"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="383"/>
+        <location filename="../source/src/fileViewer.cpp" line="397"/>
+        <source>Open style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="394"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="442"/>
+        <location filename="../source/src/fileViewer.cpp" line="460"/>
         <source>item(s)</source>
         <translation>element/s</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="458"/>
+        <location filename="../source/src/fileViewer.cpp" line="478"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>dd/MM/yyyy hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="373"/>
-        <location filename="../source/src/fileViewer.cpp" line="843"/>
+        <location filename="../source/src/fileViewer.cpp" line="514"/>
+        <location filename="../source/src/fileViewer.cpp" line="1050"/>
+        <source>Choose default programma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/fileViewer.cpp" line="379"/>
+        <location filename="../source/src/fileViewer.cpp" line="1019"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Extreu</translation>

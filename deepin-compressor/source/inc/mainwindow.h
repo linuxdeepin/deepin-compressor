@@ -73,7 +73,10 @@ enum EncryptionType {
     Encryption_Extract,
     Encryption_SingleExtract,
     Encryption_ExtractHere,
-    Encryption_TempExtract
+    Encryption_TempExtract,
+    Encryption_TempExtract_Open,
+    Encryption_TempExtract_Open_Choose
+
 };
 
 enum WorkState {
@@ -145,7 +148,8 @@ private slots:
     void SlotNeedPassword();
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);
-    void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path);
+    void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path, EXTRACT_TYPE type);
+    void slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList,const QString & programma);
     void slotKillExtractJob();
     void slotFailRetry();
     void slotBatchExtractFileChanged(const QString &name);
@@ -243,6 +247,7 @@ private:
     unsigned long lastPercent = 0;
     qint64 selectedTotalFileSize = 0;
     qint64 compressTime = 0;
+    QString program;
 
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
