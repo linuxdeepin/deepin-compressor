@@ -169,6 +169,9 @@ public:
     virtual bool isUserCancel() const;
     bool isAnyFileExtracted() const;
 
+public:
+    QString extractTopFolderName;
+
 Q_SIGNALS:
 
     /**
@@ -245,6 +248,13 @@ public:
         Test
     };
 
+    enum ExtractPsdStatus{
+        NotChecked,
+        Reextract,
+        Checked,
+        Completed
+    };
+
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadWriteArchiveInterface() override;
 
@@ -264,6 +274,9 @@ public:
     virtual bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) = 0;
     virtual bool deleteFiles(const QVector<Archive::Entry *> &files) = 0;
     virtual bool addComment(const QString &comment) = 0;
+
+public:
+    ExtractPsdStatus extractPsdStatus;
 
 Q_SIGNALS:
     void entryRemoved(const QString &path);

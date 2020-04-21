@@ -46,7 +46,8 @@ SOURCES += \
     ../../../deepin-compressor/interface/kprocess.cpp \
     ../../../deepin-compressor/interface/kpluginloader.cpp \
     ../../../deepin-compressor/interface/plugin.cpp \
-    ../../../deepin-compressor/interface/kpluginfactory.cpp
+    ../../../deepin-compressor/interface/kpluginfactory.cpp \
+    ../../../deepin-compressor/interface/analysepsdtool.cpp
 
 HEADERS += \
         ../../common/common.h \
@@ -75,7 +76,8 @@ HEADERS += \
     ../../../deepin-compressor/interface/kprocess.h \
     ../../../deepin-compressor/interface/cliproperties.h \
     ../../../deepin-compressor/interface/kpluginmetadata.h \
-    ../../../deepin-compressor/interface/jobs.h
+    ../../../deepin-compressor/interface/jobs.h \
+    ../../../deepin-compressor/interface/analysepsdtool.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

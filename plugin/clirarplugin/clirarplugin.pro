@@ -42,7 +42,8 @@ SOURCES += \
     ../../deepin-compressor/interface/kpluginmetadata.cpp \
     ../../deepin-compressor/interface/cliinterface.cpp \
     ../../deepin-compressor/interface/archiveformat.cpp \
-    ../../deepin-compressor/interface/kprocess.cpp
+    ../../deepin-compressor/interface/kprocess.cpp \
+    ../../deepin-compressor/interface/analysepsdtool.cpp
 
 HEADERS += \
         cliplugin.h \
@@ -69,7 +70,8 @@ HEADERS += \
     ../../deepin-compressor/interface/mimetypes.h \
     ../../deepin-compressor/interface/archivejob.h \
     ../../deepin-compressor/interface/kprocess_p.h \
-    ../../deepin-compressor/interface/kprocess.h
+    ../../deepin-compressor/interface/kprocess.h \
+    ../../deepin-compressor/interface/analysepsdtool.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

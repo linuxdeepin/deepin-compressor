@@ -79,7 +79,8 @@ HEADERS +=  \
     source/inc/openwithdialog/mimesappsmanager.h \
     source/inc/openwithdialog/openwithdialog.h \
     source/inc/openwithdialog/properties.h \
-    source/inc/openwithdialog/singleton.h
+    source/inc/openwithdialog/singleton.h \
+    interface/analysepsdtool.h
 
 
 
@@ -136,7 +137,8 @@ SOURCES +=  \
     source/src/openwithdialog/durl.cpp \
     source/src/openwithdialog/mimesappsmanager.cpp \
     source/src/openwithdialog/openwithdialog.cpp \
-    source/src/openwithdialog/properties.cpp
+    source/src/openwithdialog/properties.cpp \
+    interface/analysepsdtool.cpp
 
 
 RESOURCES += deepin-compressor.qrc

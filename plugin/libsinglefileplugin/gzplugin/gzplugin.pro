@@ -49,7 +49,8 @@ SOURCES += \
     ../../../deepin-compressor/interface/cliproperties.cpp \
     ../../../deepin-compressor/interface/archiveformat.cpp \
     ../../../deepin-compressor/interface/archiveentry.cpp \
-    ../../../deepin-compressor/interface/plugin.cpp
+    ../../../deepin-compressor/interface/plugin.cpp \
+    ../../../deepin-compressor/interface/analysepsdtool.cpp
 
 HEADERS += \
         gzplugin.h \
@@ -77,7 +78,8 @@ HEADERS += \
     ../../../deepin-compressor/interface/kpluginfactory.h \
     ../../../deepin-compressor/interface/jobs.h \
     ../../../deepin-compressor/interface/archiveformat.h \
-    ../../../deepin-compressor/interface/kcoreaddons_export.h
+    ../../../deepin-compressor/interface/kcoreaddons_export.h \
+    ../../../deepin-compressor/interface/analysepsdtool.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

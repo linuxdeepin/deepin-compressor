@@ -35,7 +35,7 @@ class KProcess;
 class QDir;
 class QTemporaryDir;
 class QTemporaryFile;
-
+class AnalyseHelp;
 
 class  CliInterface : public ReadWriteArchiveInterface
 {
@@ -49,6 +49,7 @@ public:
 
     bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
+    bool extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options);
     bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
     bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
     bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
@@ -194,6 +195,8 @@ private:
     void restoreWorkingDirExtraction();
 
     void finishCopying(bool result);
+    void emitProgress(float progress);
+    void emitFileName(QString name);
 
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
@@ -216,6 +219,8 @@ private:
     int m_curfilenumber = 0;
     int m_allfilenumber = 0;
     QString extractDst7z_;
+
+    AnalyseHelp* pAnalyseHelp = nullptr;
 
 protected Q_SLOTS:
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);

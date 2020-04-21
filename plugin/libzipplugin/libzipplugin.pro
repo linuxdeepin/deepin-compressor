@@ -43,7 +43,8 @@ SOURCES += \
     ../../deepin-compressor/interface/pluginmanager.cpp \
     ../../deepin-compressor/interface/options.cpp \
     ../../deepin-compressor/interface/archivejob.cpp \
-    ../../deepin-compressor/interface/archiveinterface.cpp
+    ../../deepin-compressor/interface/archiveinterface.cpp \
+    ../../deepin-compressor/interface/analysepsdtool.cpp
 
 HEADERS += \
         libzipplugin.h \
@@ -70,7 +71,8 @@ HEADERS += \
     ../../deepin-compressor/interface/kprocess_p.h \
     ../../deepin-compressor/interface/archive_manager.h \
     ../../deepin-compressor/interface/archivejob.h \
-    ../../deepin-compressor/interface/kpluginfactory_p.h
+    ../../deepin-compressor/interface/kpluginfactory_p.h \
+    ../../deepin-compressor/interface/analysepsdtool.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins
