@@ -46,6 +46,7 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWrit
         qRegisterMetaType< QProcess::ExitStatus >("QProcess::ExitStatus");
     }
     m_cliProps = new CliProperties(this, m_metaData, mimetype());
+    pAnalyseHelp = new AnalyseHelp();
 }
 
 CliInterface::~CliInterface()
@@ -108,7 +109,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     QString destPath = "";
     destPath = pAnalyseHelp->getPath();
     if(this->extractPsdStatus != NotChecked){
-        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
+//        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
     }
 
     m_extractDestDir = destPath;
@@ -435,9 +436,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         }
     }
 
-    if(this->extractPsdStatus == Reextract){
+    if(this->extractPsdStatus == NoneedAnalyse ||  this->extractPsdStatus ==Reextract){
         this->extractFF(m_extractedFiles,this->pAnalyseHelp->getPath(),m_extractionOptions);
-//        qDebug()<<"重新解压";
+//        qDebug()<<"可以解压";
         return;
     }
 
@@ -915,12 +916,10 @@ bool CliInterface::handleLine(const QString &line)
     //       shown by each CLI application is subject to a lot of variation.
 
     qDebug() << "#####" << line;
-    if(pAnalyseHelp != nullptr){
-        pAnalyseHelp->analyseLine(line);
-        if(pAnalyseHelp->isNotKnown() == true){
-            this->extractPsdStatus = Reextract;
-            return false;
-        }
+    pAnalyseHelp->analyseLine(line);
+    if(pAnalyseHelp->ifNotBind() == true){
+        this->extractPsdStatus = NoneedAnalyse;
+        return false;
     }
 
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
@@ -1009,9 +1008,7 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         if (handleFileExistsMessage(line)) {
-            if(pAnalyseHelp != nullptr){
-                pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::REPLACE, line, true);
-            }
+            pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::REPLACE, line, true);
             return true;
         }
 
@@ -1020,21 +1017,16 @@ bool CliInterface::handleLine(const QString &line)
             if (m_extractionOptions.isBatchExtract()) {
             } else {
                 qDebug() << "$$$$$WrongPassword";
-                if(pAnalyseHelp != nullptr){
-                    pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::WRONGPSD, line, true);
-                }
-
+                pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::WRONGPSD, line, true);
                 emit sigExtractNeedPassword();
                 return false;
             }
         }
 
-        if(pAnalyseHelp != nullptr){
-            if(pAnalyseHelp->isRightPsd() == 1){
-                qDebug() << "%%%%%%RightPassword";
-                this->extractPsdStatus = Reextract;
-                return false;
-            }
+        if(pAnalyseHelp->isRightPsd() == 1){
+            qDebug() << "%%%%%%RightPassword";
+            this->extractPsdStatus = Reextract;
+            return false;
         }
 
         return readExtractLine(line);

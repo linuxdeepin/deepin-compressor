@@ -4,8 +4,9 @@
 #include <QMap>
 
 enum ExtractPsdStatus{
-    NotChecked,
-    Reextract,
+    NotChecked,     //需要先分析
+    Reextract,      //可以解压
+    NoneedAnalyse,  //不需要AnalyseTool分析的
     Checked,
     Completed,
     Canceled
@@ -90,9 +91,18 @@ private:
     int lineCount = 0;
 };
 
+// some info can help analyse lines
+struct AnalyseInfo{
+    QString destUserPath = "";
+    QString destSubFolderName = "";
+    QString tempPath = "";
+    int step = 0;
+    ExtractPsdStatus curStatus;
+};
+
 class AnalyseHelp{
 public:
-    explicit AnalyseHelp(ExtractPsdStatus status,QString destPath,QString subFolderName);
+    explicit AnalyseHelp(ExtractPsdStatus status = NoneedAnalyse,QString destPath = "",QString subFolderName = "");
 
     ~AnalyseHelp();
 
@@ -101,14 +111,12 @@ public:
     // mark something for record
     void mark(AnalyseTool::ENUMLINEINFO id,QString line,bool read);
 
-    LineInfo* getLineInfo(AnalyseTool::ENUMLINEINFO id);
-
     bool hasReplace();
 
-    bool isNotKnown();
+    bool ifNotBind();
     /**
      * @brief isRightPsd
-     * @return 1:psd right;  2:psd wrong;  0:psd not checked;
+     * @return 1:psd right;  2:psd wrong;  0:psd not checked;  3:default(不需要AnalyseHelp分析判断的）;
      */
     int isRightPsd();
 
@@ -119,15 +127,14 @@ public:
     QString getPath();
 
     bool isNeedRemoveTemp();
+
 private:
     void init();
+    LineInfo* getLineInfo(AnalyseTool::ENUMLINEINFO id);
+    void bind(const QString& line);
 private:
     AnalyseTool* pTool = nullptr;
-    QString destUserPath = "";
-    QString destSubFolderName = "";
-    QString tempPath = "";
-    int lineCount = 0;
-    ExtractPsdStatus curStatus;
+    AnalyseInfo* pInfo = nullptr;
 };
 
 
