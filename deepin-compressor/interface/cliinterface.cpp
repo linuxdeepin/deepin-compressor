@@ -906,15 +906,11 @@ bool CliInterface::setAddedFiles()
 }
 
 void CliInterface::emitProgress(float value){
-    if(this->pAnalyseHelp == nullptr){
-        emit progress(value);
-    }
+    emit progress(value);
 }
 
 void CliInterface::emitFileName(QString name){
-    if(this->pAnalyseHelp == nullptr){
-        emit progress_filename(name);
-    }
+    emit progress_filename(name);
 }
 
 bool CliInterface::handleLine(const QString &line)
@@ -935,12 +931,12 @@ bool CliInterface::handleLine(const QString &line)
         qDebug()<<"####"<<line;
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
-//            emit progress(float(percentage) / 100);
-            emitProgress(float(percentage) / 100);
+            emit progress(float(percentage) / 100);
+//            emitProgress(float(percentage) / 100);
             if (line.contains("Extracting")) {
                 QStringRef strfilename = line.midRef(12, pos - 24);
-//                emit progress_filename(strfilename.toString());
-                emitFileName(strfilename.toString());
+                emit progress_filename(strfilename.toString());
+//                emitFileName(strfilename.toString());
             }
 
             return true;
@@ -954,11 +950,11 @@ bool CliInterface::handleLine(const QString &line)
         if (pos > 1 && line.length() > 17) {
 
             m_curfilenumber++;
-//            emit progress(float(m_curfilenumber) / m_allfilenumber);
-            emitProgress(float(m_curfilenumber) / m_allfilenumber);
+            emit progress(float(m_curfilenumber) / m_allfilenumber);
+//            emitProgress(float(m_curfilenumber) / m_allfilenumber);
             QStringRef strfilename = line.midRef(pos + 2, line.length() - 24);
-//            emit progress_filename(strfilename.toString());
-            emitFileName(strfilename.toString());
+            emit progress_filename(strfilename.toString());
+//            emitFileName(strfilename.toString());
             return true;
         }
     } else if (m_process && m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
@@ -977,10 +973,10 @@ bool CliInterface::handleLine(const QString &line)
 
             if (!strfilename.toString().contains("Wrong password")) {
                 if (percentage > 0) {
-//                    emit progress(float(percentage) / 100);
-                    emitProgress(float(percentage) / 100);
-//                    emit progress_filename(strfilename.toString());
-                    emitFileName(strfilename.toString());
+                    emit progress(float(percentage) / 100);
+//                    emitProgress(float(percentage) / 100);
+                    emit progress_filename(strfilename.toString());
+//                    emitFileName(strfilename.toString());
                 }
             }
         }
