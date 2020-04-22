@@ -106,11 +106,19 @@ bool isDirExist(QString fullPath)
     }
 }
 
-AnalyseHelp::AnalyseHelp(QString destinationPath,QString subFolderName)
+AnalyseHelp::AnalyseHelp(ExtractPsdStatus status,QString destinationPath,QString subFolderName)
 {
     lineCount = 0;
-    destPath = destinationPath;
+    curStatus = status;
+    destUserPath = destinationPath;
     destSubFolderName = subFolderName;
+    if(curStatus == ExtractPsdStatus::NotChecked){//because not checked ,so analyse it.
+        this->init();
+    }
+}
+
+void AnalyseHelp::init()
+{
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     tempPath = confDir + QDir::separator() + "tempExtractAAA";
     this->clearPath(tempPath);
@@ -138,14 +146,18 @@ QString AnalyseHelp::getDestionFolderPath()
     if(destSubFolderName == ""){
         return "";
     }
-    if(destPath == ""){
+    if(destUserPath == ""){
         return "";
     }
-    return destPath+"/"+destSubFolderName;
+    return destUserPath+"/"+destSubFolderName;
 }
 
-QString AnalyseHelp::getTempPath(){
-    return this->tempPath;
+QString AnalyseHelp::getPath(){
+    if(this->curStatus == NotChecked){
+        return this->tempPath;
+    }else{
+        return this->destUserPath;
+    }
 }
 
 AnalyseHelp::~AnalyseHelp(){
@@ -159,6 +171,7 @@ void AnalyseHelp::analyseLine(const QString& line){
     if(pTool == nullptr){
         if(line.left(5) == "UNRAR"){
             pTool = new AnalyseToolRar4();
+            this->lineCount++;
         }
     }else{
         int pos = line.indexOf(QLatin1Char('%'));
@@ -168,18 +181,19 @@ void AnalyseHelp::analyseLine(const QString& line){
                 pTool->analyseLine(line);
             }
         }
+        this->lineCount++;
     }
-    this->lineCount++;
+
 }
 
-void AnalyseHelp::mark(ENUMLINEINFO id,QString line,bool read)
+void AnalyseHelp::mark(AnalyseTool::ENUMLINEINFO id,QString line,bool read)
 {
     if(pTool != nullptr){
         pTool->mark(id,line,read);
     }
 }
 
-LineInfo* AnalyseHelp::getLineInfo(ENUMLINEINFO id){
+LineInfo* AnalyseHelp::getLineInfo(AnalyseTool::ENUMLINEINFO id){
     if(pTool != nullptr){
         return pTool->getLineInfo(id);
     }else{
@@ -187,16 +201,8 @@ LineInfo* AnalyseHelp::getLineInfo(ENUMLINEINFO id){
     }
 }
 
-void AnalyseHelp::setDestDir(const QString &path){
-    this->destPath = path;
-}
-
-QString AnalyseHelp::getDestDir(){
-    return this->destPath;
-}
-
 bool AnalyseHelp::hasReplace(){
-    LineInfo *pLineInfoRep = this->getLineInfo(ENUMLINEINFO::REPLACE);
+    LineInfo *pLineInfoRep = this->getLineInfo(AnalyseTool::ENUMLINEINFO::REPLACE);
     if (pLineInfoRep != nullptr) {
         return pLineInfoRep->read;
     }else{
@@ -218,7 +224,7 @@ bool AnalyseHelp::isNotKnown(){
 
 bool AnalyseHelp::isNeedRemoveTemp(){
     if(this->hasReplace() == false){//tips replace;
-        LineInfo* p = this->getLineInfo(ENUMLINEINFO::WRONGPSD);
+        LineInfo* p = this->getLineInfo(AnalyseTool::ENUMLINEINFO::WRONGPSD);
         if(p != nullptr && p->read == true){
             return true;//psd is right
         }else{

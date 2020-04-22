@@ -37,6 +37,7 @@
 #include <QString>
 #include <QVariantList>
 #include "kpluginmetadata.h"
+#include "analysepsdtool.h"
 
 class Query;
 
@@ -246,13 +247,6 @@ public:
         Delete,
         Comment,
         Test
-    };
-
-    enum ExtractPsdStatus{
-        NotChecked,
-        Reextract,
-        Checked,
-        Completed
     };
 
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);

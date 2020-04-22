@@ -90,27 +90,27 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
     qDebug() << "destination directory:" << destinationDirectory;
     this->extractPsdStatus = NotChecked;
 
+    m_operationMode = Extract;
+    m_extractionOptions = options;
+    m_extractedFiles = files;
+    if (pAnalyseHelp != nullptr) {
+        delete pAnalyseHelp;
+        pAnalyseHelp = nullptr;
+    }
+
+    pAnalyseHelp = new AnalyseHelp(this->extractPsdStatus,destinationDirectory,this->extractTopFolderName);
 
     this->extractFF(files,destinationDirectory,options);
 }
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
-    m_operationMode = Extract;
-    m_extractionOptions = options;
-    m_extractedFiles = files;
     QString destPath = "";
-    if (pAnalyseHelp != nullptr) {
-        delete pAnalyseHelp;
-        pAnalyseHelp = nullptr;
+    destPath = pAnalyseHelp->getPath();
+    if(this->extractPsdStatus != NotChecked){
+        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
     }
-    if(this->extractPsdStatus == NotChecked){
-        pAnalyseHelp = new AnalyseHelp(destinationDirectory,this->extractTopFolderName);
-        destPath = pAnalyseHelp->getTempPath();
-    }else{
-        destPath = destinationDirectory;
-        this->extractPsdStatus = Checked;
-    }
+
     m_extractDestDir = destPath;
     qDebug()<<m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
@@ -436,8 +436,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if(this->extractPsdStatus == Reextract){
-        this->extractFF(m_extractedFiles,this->pAnalyseHelp->getDestDir(),m_extractionOptions);
-        qDebug()<<"重新解压";
+        this->extractFF(m_extractedFiles,this->pAnalyseHelp->getPath(),m_extractionOptions);
+//        qDebug()<<"重新解压";
         return;
     }
 
@@ -1010,7 +1010,7 @@ bool CliInterface::handleLine(const QString &line)
 
         if (handleFileExistsMessage(line)) {
             if(pAnalyseHelp != nullptr){
-                pAnalyseHelp->mark(ENUMLINEINFO::REPLACE, line, true);
+                pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::REPLACE, line, true);
             }
             return true;
         }
@@ -1021,7 +1021,7 @@ bool CliInterface::handleLine(const QString &line)
             } else {
                 qDebug() << "$$$$$WrongPassword";
                 if(pAnalyseHelp != nullptr){
-                    pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
+                    pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::WRONGPSD, line, true);
                 }
 
                 emit sigExtractNeedPassword();

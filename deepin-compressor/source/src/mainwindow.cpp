@@ -1955,6 +1955,8 @@ void MainWindow::onCancelCompressPressed(int compressType)
         if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_Progess);
         }
+        ReadWriteArchiveInterface* pTool =  dynamic_cast<ReadWriteArchiveInterface*>(m_encryptionjob->archiveInterface());
+        pTool->extractPsdStatus = ExtractPsdStatus::Canceled;
         if (pEventloop->isRunning() == false) {
             connect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
             m_spinner = new DSpinner(this->m_Progess);

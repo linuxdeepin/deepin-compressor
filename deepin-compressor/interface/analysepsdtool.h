@@ -3,11 +3,14 @@
 
 #include <QMap>
 
-enum ENUMLINEINFO{
-    RIGHTPSD,
-    WRONGPSD,
-    REPLACE
+enum ExtractPsdStatus{
+    NotChecked,
+    Reextract,
+    Checked,
+    Completed,
+    Canceled
 };
+
 
 #define VALIDLINE 0
 #define EXTRACT_REPLACE_TIP "Would you like to replace the existing file"
@@ -21,6 +24,12 @@ typedef struct lineInfo{
 
 class AnalyseTool{
 public:
+    enum ENUMLINEINFO{
+        RIGHTPSD,
+        WRONGPSD,
+        REPLACE
+    };
+
     AnalyseTool();
 
     virtual ~AnalyseTool() {
@@ -83,20 +92,16 @@ private:
 
 class AnalyseHelp{
 public:
-    explicit AnalyseHelp(QString destPath,QString subFolderName);
+    explicit AnalyseHelp(ExtractPsdStatus status,QString destPath,QString subFolderName);
 
     ~AnalyseHelp();
 
     void analyseLine(const QString& line);
 
     // mark something for record
-    void mark(ENUMLINEINFO id,QString line,bool read);
+    void mark(AnalyseTool::ENUMLINEINFO id,QString line,bool read);
 
-    LineInfo* getLineInfo(ENUMLINEINFO id);
-
-    void setDestDir(const QString& path);
-
-    QString getDestDir();
+    LineInfo* getLineInfo(AnalyseTool::ENUMLINEINFO id);
 
     bool hasReplace();
 
@@ -111,15 +116,18 @@ public:
 
     QString getDestionFolderPath();
 
-    QString getTempPath();
+    QString getPath();
 
     bool isNeedRemoveTemp();
 private:
+    void init();
+private:
     AnalyseTool* pTool = nullptr;
-    QString destPath = "";
+    QString destUserPath = "";
     QString destSubFolderName = "";
     QString tempPath = "";
     int lineCount = 0;
+    ExtractPsdStatus curStatus;
 };
 
 
