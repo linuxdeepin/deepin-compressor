@@ -128,6 +128,7 @@ public:
 
     bool isNeedRemoveTemp();
 
+    void setStatus(ExtractPsdStatus status);
 private:
     void init();
     LineInfo* getLineInfo(AnalyseTool::ENUMLINEINFO id);

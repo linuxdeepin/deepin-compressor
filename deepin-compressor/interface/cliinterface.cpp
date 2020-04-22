@@ -110,6 +110,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     destPath = pAnalyseHelp->getPath();
     if(this->extractPsdStatus != NotChecked){
         this->extractPsdStatus = Checked;//set status checked, so extract only one time.
+        pAnalyseHelp->setStatus(Checked);
     }
 
     m_extractDestDir = destPath;

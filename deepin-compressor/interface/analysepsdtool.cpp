@@ -260,6 +260,10 @@ bool AnalyseHelp::isNeedRemoveTemp(){
     }
 }
 
+void AnalyseHelp::setStatus(ExtractPsdStatus status){
+    this->pInfo->curStatus = status;
+}
+
 int AnalyseHelp::isRightPsd(){
     if(pInfo->curStatus != NotChecked){
         return 3;
