@@ -106,12 +106,13 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
-    QString destPath = "";
-    destPath = pAnalyseHelp->getPath();
+
     if(this->extractPsdStatus != NotChecked){
         this->extractPsdStatus = Checked;//set status checked, so extract only one time.
         pAnalyseHelp->setStatus(Checked);
     }
+    QString destPath = "";
+    destPath = pAnalyseHelp->getPath();
 
     m_extractDestDir = destPath;
     qDebug()<<m_extractDestDir;
