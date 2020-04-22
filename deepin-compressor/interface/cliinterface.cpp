@@ -109,7 +109,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     QString destPath = "";
     destPath = pAnalyseHelp->getPath();
     if(this->extractPsdStatus != NotChecked){
-//        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
+        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
     }
 
     m_extractDestDir = destPath;
@@ -285,6 +285,11 @@ bool CliInterface::testArchive()
 
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
+    if(m_process != nullptr){
+        m_process->kill();
+        m_process->waitForFinished(1);
+    }
+
     Q_ASSERT(!m_process);
 
     QString programPath = QStandardPaths::findExecutable(programName);
