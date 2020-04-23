@@ -451,14 +451,17 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if(this->extractPsdStatus == Reextract){
-        this->extractFF(m_extractedFiles,this->pAnalyseHelp->getDestDir(),m_extractionOptions);
-        qDebug()<<"==========直接解压文件";
-        return;
+        qDebug()<<this->destDirName;
+        if(this->pAnalyseHelp!= nullptr){
+            this->extractFF(m_extractedFiles,this->pAnalyseHelp->getDestDir(),m_extractionOptions);
+//            qDebug()<<"==========直接解压文件";
+            return;
+        }
     }else if(this->extractPsdStatus == Checked){
 
     }else if(this->extractPsdStatus == Canceled){
         if(ifReplaceTip == false){
-            qDebug()<<"==========删除临时文件";
+//            qDebug()<<"==========删除临时文件";
             if(this->m_extractDestDir == "" || this->destDirName == ""){
 
             }else{
@@ -945,7 +948,7 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-    qDebug() << "#####" << line;
+//    qDebug() << "#####" << line;
     if(pAnalyseHelp != nullptr){
         pAnalyseHelp->analyseLine(line);
         if(pAnalyseHelp->isNotKnown() == true){
@@ -954,10 +957,18 @@ bool CliInterface::handleLine(const QString &line)
         }
     }
 
+    if(pAnalyseHelp != nullptr){
+        if(pAnalyseHelp->isRightPsd() == 1){
+            qDebug() << "%%%%%%RightPassword";
+            this->extractPsdStatus = Reextract;
+            return false;
+        }
+    }
+
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         // read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
-        qDebug()<<"####"<<line;
+//        qDebug()<<"####"<<line;
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
 //            emit progress(float(percentage) / 100);
@@ -1040,9 +1051,6 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         if (handleFileExistsMessage(line)) {
-//            if(pAnalyseHelp != nullptr){
-//                pAnalyseHelp->mark(ENUMLINEINFO::REPLACE, line, true);
-//            }
             ifReplaceTip = true;
             return true;
         }
@@ -1057,14 +1065,6 @@ bool CliInterface::handleLine(const QString &line)
                 }
 
                 emit sigExtractNeedPassword();
-                return false;
-            }
-        }
-
-        if(pAnalyseHelp != nullptr){
-            if(pAnalyseHelp->isRightPsd() == 1){
-                qDebug() << "%%%%%%RightPassword";
-                this->extractPsdStatus = Reextract;
                 return false;
             }
         }

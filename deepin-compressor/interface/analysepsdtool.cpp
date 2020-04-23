@@ -56,17 +56,23 @@ void AnalyseToolRar4::analyseLine(const QString &line)
 //    }
     lineCount++;
 
-    if(lineCount>VALIDLINE){
-        if((*pMapInfo)[WRONGPSD]->read == false){
-            (*pMapInfo)[RIGHTPSD]->line = line;
-            (*pMapInfo)[RIGHTPSD]->read = true;
-        }
-    }else{
-        if(line.contains(ALLOK) == true){
-            (*pMapInfo)[RIGHTPSD]->line = line;
-            (*pMapInfo)[RIGHTPSD]->read = true;
-        }
+    if(line.startsWith("Extracting") == true && line.endsWith("OK ")){
+        (*pMapInfo)[RIGHTPSD]->line = line;
+        (*pMapInfo)[RIGHTPSD]->read = true;
+        return;
+    }else if(line.contains(ALLOK) == true){
+        (*pMapInfo)[RIGHTPSD]->line = line;
+        (*pMapInfo)[RIGHTPSD]->read = true;
     }
+
+//    if(lineCount>VALIDLINE){
+//        if((*pMapInfo)[WRONGPSD]->read == false){
+//            (*pMapInfo)[RIGHTPSD]->line = line;
+//            (*pMapInfo)[RIGHTPSD]->read = true;
+//        }
+//    }else{
+
+//    }
 }
 
 LineInfo *AnalyseToolRar4::getLineInfo(ENUMLINEINFO id)
@@ -76,19 +82,15 @@ LineInfo *AnalyseToolRar4::getLineInfo(ENUMLINEINFO id)
 
 int AnalyseToolRar4::isRightPsd(){
     if(pMapInfo->contains(RIGHTPSD) == true){
-        if(lineCount <= VALIDLINE){
-            if((*pMapInfo)[RIGHTPSD]->read == true){
-                return 1;
-            }else if ((*pMapInfo)[WRONGPSD]->read == true){
-                return 2;
-            }else{
-                return 0;
-            }
-        }else{
+        if((*pMapInfo)[RIGHTPSD]->read == true){
             return 1;
+        }else if ((*pMapInfo)[WRONGPSD]->read == true){
+            return 2;
+        }else{
+            return 0;
         }
     }else{
-        return 1;
+        return 0;
     }
 }
 
@@ -166,7 +168,7 @@ void AnalyseHelp::analyseLine(const QString& line){
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
-            if(percentage>0){
+            if(percentage>=0){
                 pTool->analyseLine(line);
             }
         }

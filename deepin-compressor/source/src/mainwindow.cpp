@@ -1158,6 +1158,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     }
 
     if (m_encryptionjob) {
+        m_encryptionjob->deleteLater();
         m_encryptionjob = nullptr;
     }
 

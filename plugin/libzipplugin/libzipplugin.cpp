@@ -845,7 +845,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     } else {
         name = entry.toLocal8Bit();
     }
-
+    //Upon successful completion 0 is returned. Otherwise, -1 is returned and the error information in archive is set to indicate the error.
     if (zip_stat(archive, name.constData(), 0, &statBuffer) != 0) {
         if (isDirectory && zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOENT) {
             return true;

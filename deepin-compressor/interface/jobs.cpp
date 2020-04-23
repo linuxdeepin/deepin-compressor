@@ -569,7 +569,7 @@ void ExtractJob::doWork()
 //             << m_entries
 //             << "Destination dir:" << m_destinationDir
 //             << "Options:" << m_options;
-
+    ReadOnlyArchiveInterface* pTool = archiveInterface();
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 
     if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
