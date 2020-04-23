@@ -485,16 +485,17 @@ bool CompressSetting::checkfilename(QString str)
     }
 
     QList< QChar > black_list;
-    black_list << '+';
-    black_list << '-';
-    black_list << '.';
-    black_list << ',';
+    black_list << '/';
+//    black_list << '-';
+//    black_list << '.';
+//    black_list << ',';
     if (black_list.contains(str.at(0))) {
         return false;
     }
-
+//----------------:;39;“\][=-~!*()；//command : #
     black_list.clear();
-    black_list = { '/', '\t', '\b', '@', '#', '$', '%', '^', '&' }; /*, '*', '(', ')', '[', ']'*/
+    black_list = {'/'};
+//    black_list = { '/', '\t', '\b', '@', '#', '$', '%', '^', '&' }; /*, '*', '(', ')', '[', ']'*/
     foreach (QChar black_char, black_list) {
         if (str.contains(black_char)) {
             return false;
