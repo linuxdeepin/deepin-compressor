@@ -46,7 +46,6 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWrit
         qRegisterMetaType< QProcess::ExitStatus >("QProcess::ExitStatus");
     }
     m_cliProps = new CliProperties(this, m_metaData, mimetype());
-    pAnalyseHelp = new AnalyseHelp();
 }
 
 CliInterface::~CliInterface()
@@ -89,43 +88,19 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
                                 const ExtractionOptions &options)
 {
     qDebug() << "destination directory:" << destinationDirectory;
-    this->extractPsdStatus = NotChecked;
 
     m_operationMode = Extract;
     m_extractionOptions = options;
     m_extractedFiles = files;
-    if (pAnalyseHelp != nullptr) {
-        delete pAnalyseHelp;
-        pAnalyseHelp = nullptr;
-    }
+    m_extractDestDir = destinationDirectory;
 
-    pAnalyseHelp = new AnalyseHelp(this->extractPsdStatus,destinationDirectory,this->extractTopFolderName);
-
-    this->extractFF(files,destinationDirectory,options);
-}
-
-bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
-{
-
-    if(this->extractPsdStatus != NotChecked){
-        this->extractPsdStatus = Checked;//set status checked, so extract only one time.
-        pAnalyseHelp->setStatus(Checked);
-    }
-    QString destPath = "";
-    destPath = pAnalyseHelp->getPath();
-
-    m_extractDestDir = destPath;
-    qDebug()<<m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
         updateDestFileSignal(m_extractDestDir + "/" + extractDst7z_);
         extractDst7z_.clear();
     }
 
-
-    bool b2 = options.encryptedArchiveHint();
-    QString psdd = password();
-    if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && b2
-            && psdd.isEmpty()) {
+    if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && options.encryptedArchiveHint()
+            && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
         if (m_extractionOptions.isBatchExtract()) {
             if (!passwordQuery()) {
@@ -137,7 +112,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
-    QUrl destDir = QUrl(destPath);
+    QUrl destDir = QUrl(destinationDirectory);
     m_oldWorkingDirExtraction = QDir::currentPath();
     QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
 
@@ -156,8 +131,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         destDir = QUrl(m_extractTempDir->path());
         QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
     }
-
-
 
     return runProcess(
                m_cliProps->property("extractProgram").toString(),
@@ -287,11 +260,6 @@ bool CliInterface::testArchive()
 
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
-    if(m_process != nullptr){
-        m_process->kill();
-        m_process->waitForFinished(1);
-    }
-
     Q_ASSERT(!m_process);
 
     QString programPath = QStandardPaths::findExecutable(programName);
@@ -441,12 +409,6 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
             cleanUpExtracting();
         }
-    }
-
-    if(this->extractPsdStatus == NoneedAnalyse ||  this->extractPsdStatus ==Reextract){
-        this->extractFF(m_extractedFiles,this->pAnalyseHelp->getPath(),m_extractionOptions);
-//        qDebug()<<"可以解压";
-        return;
     }
 
     if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {
@@ -905,38 +867,20 @@ bool CliInterface::setAddedFiles()
     return true;
 }
 
-void CliInterface::emitProgress(float value){
-    emit progress(value);
-}
-
-void CliInterface::emitFileName(QString name){
-    emit progress_filename(name);
-}
-
 bool CliInterface::handleLine(const QString &line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
-
-    qDebug() << "#####" << line;
-    pAnalyseHelp->analyseLine(line);
-    if(pAnalyseHelp->ifNotBind() == true){
-        this->extractPsdStatus = NoneedAnalyse;
-        return false;
-    }
-
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         // read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
-        qDebug()<<"####"<<line;
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
             emit progress(float(percentage) / 100);
-//            emitProgress(float(percentage) / 100);
+
             if (line.contains("Extracting")) {
                 QStringRef strfilename = line.midRef(12, pos - 24);
                 emit progress_filename(strfilename.toString());
-//                emitFileName(strfilename.toString());
             }
 
             return true;
@@ -951,10 +895,8 @@ bool CliInterface::handleLine(const QString &line)
 
             m_curfilenumber++;
             emit progress(float(m_curfilenumber) / m_allfilenumber);
-//            emitProgress(float(m_curfilenumber) / m_allfilenumber);
             QStringRef strfilename = line.midRef(pos + 2, line.length() - 24);
             emit progress_filename(strfilename.toString());
-//            emitFileName(strfilename.toString());
             return true;
         }
     } else if (m_process && m_process->program().at(0).contains("7z") && !isWrongPasswordMsg(line)) {
@@ -974,9 +916,7 @@ bool CliInterface::handleLine(const QString &line)
             if (!strfilename.toString().contains("Wrong password")) {
                 if (percentage > 0) {
                     emit progress(float(percentage) / 100);
-//                    emitProgress(float(percentage) / 100);
                     emit progress_filename(strfilename.toString());
-//                    emitFileName(strfilename.toString());
                 }
             }
         }
@@ -1010,26 +950,17 @@ bool CliInterface::handleLine(const QString &line)
             return false;
         }
 
-        if (handleFileExistsMessage(line)) {
-            pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::REPLACE, line, true);
-            return true;
-        }
-
         if (isWrongPasswordMsg(line)) {
             setPassword(QString());
             if (m_extractionOptions.isBatchExtract()) {
             } else {
-                qDebug() << "$$$$$WrongPassword";
-                pAnalyseHelp->mark(AnalyseTool::ENUMLINEINFO::WRONGPSD, line, true);
                 emit sigExtractNeedPassword();
                 return false;
             }
         }
 
-        if(pAnalyseHelp->isRightPsd() == 1){
-            qDebug() << "%%%%%%RightPassword";
-            this->extractPsdStatus = Reextract;
-            return false;
+        if (handleFileExistsMessage(line)) {
+            return true;
         }
 
         return readExtractLine(line);
