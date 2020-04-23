@@ -37,7 +37,6 @@
 #include <QString>
 #include <QVariantList>
 #include "kpluginmetadata.h"
-#include "analysepsdtool.h"
 
 class Query;
 
@@ -45,6 +44,15 @@ class  ReadOnlyArchiveInterface: public QObject
 {
     Q_OBJECT
 public:
+    enum ExtractPsdStatus{
+        Default,
+        NotChecked,
+        Reextract,
+        Checked,
+        Completed,
+        Canceled
+    };
+
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadOnlyArchiveInterface() override;
 
@@ -172,7 +180,9 @@ public:
 
 public:
     QString extractTopFolderName;
-
+    QString destDirName;        //取消解压，需要该变量
+    bool ifReplaceTip = false;  //是否有替换提示
+    ExtractPsdStatus extractPsdStatus = ReadOnlyArchiveInterface::Default;
 Q_SIGNALS:
 
     /**
@@ -269,8 +279,7 @@ public:
     virtual bool deleteFiles(const QVector<Archive::Entry *> &files) = 0;
     virtual bool addComment(const QString &comment) = 0;
 
-public:
-    ExtractPsdStatus extractPsdStatus;
+    static void clearPath(QString path);
 
 Q_SIGNALS:
     void entryRemoved(const QString &path);

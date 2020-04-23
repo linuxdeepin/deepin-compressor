@@ -101,34 +101,26 @@ bool isDirExist(QString fullPath)
     }
     else
     {
-       bool ok = dir.mkpath(fullPath);//Create multiple levels of directories
+       bool ok = dir.mkpath(fullPath);//创建多级目录
        return ok;
     }
 }
 
-AnalyseHelp::AnalyseHelp(ExtractPsdStatus status,QString destinationPath,QString subFolderName)
+AnalyseHelp::AnalyseHelp(QString destinationPath,QString subFolderName)
 {
-    pInfo = new AnalyseInfo();
-    pInfo->step = 0;
-    pInfo->curStatus = status;
-    pInfo->destUserPath = destinationPath;
-    pInfo->destSubFolderName = subFolderName;
-    if(pInfo->curStatus == ExtractPsdStatus::NotChecked){//because not checked ,so analyse it.
-        this->init();
-    }
-}
-
-void AnalyseHelp::init()
-{
+    lineCount = 0;
+    destPath = destinationPath;
+    destSubFolderName = subFolderName;
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    pInfo->tempPath = confDir + QDir::separator() + "tempExtractAAA";
-    this->clearPath(pInfo->tempPath);
-    QDir Dir(pInfo->tempPath);
+    tempPath = confDir + QDir::separator() + "tempExtractAAA";
+    this->clearPath(tempPath);
+    QDir Dir(tempPath);
     if(Dir.isEmpty())
     {
-        printf("\ntemp dir %s is empty",pInfo->tempPath.toUtf8().data());
-        isDirExist(pInfo->tempPath);
+        printf("\ntemp dir %s is empty",tempPath.toUtf8().data());
+        isDirExist(tempPath);
     }
+    this->replaceTip = false;
 }
 
 void AnalyseHelp::clearPath(QString path)
@@ -144,47 +136,32 @@ void AnalyseHelp::clearPath(QString path)
 
 QString AnalyseHelp::getDestionFolderPath()
 {
-    if(pInfo->destSubFolderName == ""){
+    if(destSubFolderName == ""){
         return "";
     }
-    if(pInfo->destUserPath == ""){
+    if(destPath == ""){
         return "";
     }
-    return pInfo->destUserPath+"/"+pInfo->destSubFolderName;
+    return destPath+"/"+destSubFolderName;
 }
 
-QString AnalyseHelp::getPath(){
-    if(pInfo->curStatus == NotChecked){ //not checked,so we use temppath;
-        return pInfo->tempPath;
-    }else{
-        return pInfo->destUserPath;     //checked, so we use destUserPath;
-    }
+QString AnalyseHelp::getTempPath(){
+    return this->tempPath;
 }
 
 AnalyseHelp::~AnalyseHelp(){
-    this->clearPath(pInfo->tempPath);
+    this->clearPath(tempPath);
     delete pTool;
     pTool = nullptr;
-    pInfo->step = 0;
-    delete pInfo;
-    pInfo = nullptr;
-}
-
-void AnalyseHelp::bind(const QString& line){
-    if(line.left(5) == "UNRAR"){
-        pTool = new AnalyseToolRar4();
-        pInfo->step++;
-    }
+    lineCount = 0;
+    this->replaceTip = false;
 }
 
 void AnalyseHelp::analyseLine(const QString& line){
-    if(pInfo->curStatus != NotChecked){
-        return;
-    }
-
-    //anlyse begin
     if(pTool == nullptr){
-        bind(line);
+        if(line.left(5) == "UNRAR"){
+            pTool = new AnalyseToolRar4();
+        }
     }else{
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
@@ -193,24 +170,19 @@ void AnalyseHelp::analyseLine(const QString& line){
                 pTool->analyseLine(line);
             }
         }
-        pInfo->step++;
     }
-    //analyse end
+    this->lineCount++;
+
 }
 
-void AnalyseHelp::mark(AnalyseTool::ENUMLINEINFO id,QString line,bool read)
+void AnalyseHelp::mark(ENUMLINEINFO id,QString line,bool read)
 {
-    if(pInfo->curStatus != NotChecked){
-        return;
-    }
-    //mark begin
     if(pTool != nullptr){
         pTool->mark(id,line,read);
     }
-    //mark end
 }
 
-LineInfo* AnalyseHelp::getLineInfo(AnalyseTool::ENUMLINEINFO id){
+LineInfo* AnalyseHelp::getLineInfo(ENUMLINEINFO id){
     if(pTool != nullptr){
         return pTool->getLineInfo(id);
     }else{
@@ -218,8 +190,16 @@ LineInfo* AnalyseHelp::getLineInfo(AnalyseTool::ENUMLINEINFO id){
     }
 }
 
+void AnalyseHelp::setDestDir(const QString &path){
+    this->destPath = path;
+}
+
+QString AnalyseHelp::getDestDir(){
+    return this->destPath;
+}
+
 bool AnalyseHelp::hasReplace(){
-    LineInfo *pLineInfoRep = this->getLineInfo(AnalyseTool::ENUMLINEINFO::REPLACE);
+    LineInfo *pLineInfoRep = this->getLineInfo(ENUMLINEINFO::REPLACE);
     if (pLineInfoRep != nullptr) {
         return pLineInfoRep->read;
     }else{
@@ -227,16 +207,8 @@ bool AnalyseHelp::hasReplace(){
     }
 }
 
-bool AnalyseHelp::ifNotBind(){
-    if(pInfo->curStatus != NotChecked){
-        return false;
-    }
-
-    //if bind
-    if(pTool == nullptr){
-        return false;
-    }
-    if(pInfo->step>=1){
+bool AnalyseHelp::isNotKnown(){
+    if(lineCount>=1){
         if(pTool == nullptr){
             return true;
         }else{
@@ -249,7 +221,7 @@ bool AnalyseHelp::ifNotBind(){
 
 bool AnalyseHelp::isNeedRemoveTemp(){
     if(this->hasReplace() == false){//tips replace;
-        LineInfo* p = this->getLineInfo(AnalyseTool::ENUMLINEINFO::WRONGPSD);
+        LineInfo* p = this->getLineInfo(ENUMLINEINFO::WRONGPSD);
         if(p != nullptr && p->read == true){
             return true;//psd is right
         }else{
@@ -260,14 +232,13 @@ bool AnalyseHelp::isNeedRemoveTemp(){
     }
 }
 
-void AnalyseHelp::setStatus(ExtractPsdStatus status){
-    this->pInfo->curStatus = status;
+void AnalyseHelp::checkReplaceTip(const QString &line){
+    if(line.contains(EXTRACT_REPLACE_TIP) == true){
+        this->replaceTip = true;
+    }
 }
 
 int AnalyseHelp::isRightPsd(){
-    if(pInfo->curStatus != NotChecked){
-        return 3;
-    }
     if(this->pTool != nullptr){
         return this->pTool->isRightPsd();
     }else{

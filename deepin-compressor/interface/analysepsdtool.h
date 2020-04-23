@@ -3,15 +3,11 @@
 
 #include <QMap>
 
-enum ExtractPsdStatus{
-    NotChecked,     //需要先分析
-    Reextract,      //可以解压
-    NoneedAnalyse,  //不需要AnalyseTool分析的
-    Checked,
-    Completed,
-    Canceled
+enum ENUMLINEINFO{
+    RIGHTPSD,
+    WRONGPSD,
+    REPLACE
 };
-
 
 #define VALIDLINE 0
 #define EXTRACT_REPLACE_TIP "Would you like to replace the existing file"
@@ -25,12 +21,6 @@ typedef struct lineInfo{
 
 class AnalyseTool{
 public:
-    enum ENUMLINEINFO{
-        RIGHTPSD,
-        WRONGPSD,
-        REPLACE
-    };
-
     AnalyseTool();
 
     virtual ~AnalyseTool() {
@@ -91,32 +81,29 @@ private:
     int lineCount = 0;
 };
 
-// some info can help analyse lines
-struct AnalyseInfo{
-    QString destUserPath = "";
-    QString destSubFolderName = "";
-    QString tempPath = "";
-    int step = 0;
-    ExtractPsdStatus curStatus;
-};
-
 class AnalyseHelp{
 public:
-    explicit AnalyseHelp(ExtractPsdStatus status = NoneedAnalyse,QString destPath = "",QString subFolderName = "");
+    explicit AnalyseHelp(QString destPath,QString subFolderName);
 
     ~AnalyseHelp();
 
     void analyseLine(const QString& line);
 
     // mark something for record
-    void mark(AnalyseTool::ENUMLINEINFO id,QString line,bool read);
+    void mark(ENUMLINEINFO id,QString line,bool read);
+
+    LineInfo* getLineInfo(ENUMLINEINFO id);
+
+    void setDestDir(const QString& path);
+
+    QString getDestDir();
 
     bool hasReplace();
 
-    bool ifNotBind();
+    bool isNotKnown();
     /**
      * @brief isRightPsd
-     * @return 1:psd right;  2:psd wrong;  0:psd not checked;  3:default(不需要AnalyseHelp分析判断的）;
+     * @return 1:psd right;  2:psd wrong;  0:psd not checked;
      */
     int isRightPsd();
 
@@ -124,18 +111,18 @@ public:
 
     QString getDestionFolderPath();
 
-    QString getPath();
+    QString getTempPath();
 
     bool isNeedRemoveTemp();
 
-    void setStatus(ExtractPsdStatus status);
-private:
-    void init();
-    LineInfo* getLineInfo(AnalyseTool::ENUMLINEINFO id);
-    void bind(const QString& line);
+    void checkReplaceTip(const QString &line);
 private:
     AnalyseTool* pTool = nullptr;
-    AnalyseInfo* pInfo = nullptr;
+    QString destPath = "";
+    QString destSubFolderName = "";
+    QString tempPath = "";
+    int lineCount = 0;
+    bool replaceTip = false;
 };
 
 

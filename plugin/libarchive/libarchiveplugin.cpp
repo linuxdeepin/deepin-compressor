@@ -241,9 +241,11 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         totalEntriesCount = files.size();
     }
 
+    this->extractPsdStatus = ReadOnlyArchiveInterface::Default;
+    ifReplaceTip = false;
     m_oldWorkingDir = QDir::currentPath();
     QDir::setCurrent(destinationDirectory);
-
+    m_extractDestDir = destinationDirectory;
     // Initialize variables.
     const bool preservePaths = options.preservePaths();
     const bool removeRootNode = options.isDragAndDropEnabled();
@@ -309,6 +311,7 @@ retry:
 
         if (0 == extractedEntriesCount) {
             extractDst = entryName;
+            destDirName = entryName;
         } else if ( extractDst.isEmpty() == false ) {
             if ( entryName.startsWith( extractDst + (extractDst.endsWith("/") ? "" : "/") ) == false ) {
                 extractDst.clear();
@@ -393,6 +396,7 @@ retry:
 
             // If there is an already existing directory.
             if (entryIsDir && entryFI.exists()) {
+                this->ifReplaceTip = true;
                 if (entryFI.isWritable()) {
                 } else {
                     archive_entry_clear(entry);
@@ -400,7 +404,8 @@ retry:
                     continue;
                 }
             }
-
+//            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
+            this->extractPsdStatus;
             // Write the entry header and check return value.
             const int returnCode = archive_write_header(writer.data(), entry);
             switch (returnCode) {
@@ -611,6 +616,24 @@ void LibarchivePlugin::slotRestoreWorkingDir()
     if (!QDir::setCurrent(m_oldWorkingDir)) {
     } else {
         m_oldWorkingDir.clear();
+    }
+
+    if(this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled){
+        qDebug()<<"=====点击了取消";
+        if(this->ifReplaceTip == true){
+            return;
+        }
+        if(this->m_extractDestDir == "" || this->destDirName == ""){
+            return;
+        }else{
+            QString fullPath = m_extractDestDir + "/" + destDirName;
+            QFileInfo fileInfo(fullPath);
+            if(fileInfo.exists())
+            {
+                 ReadWriteArchiveInterface::clearPath(fullPath);
+            }
+        }
+
     }
 }
 

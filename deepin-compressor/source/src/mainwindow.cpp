@@ -1213,7 +1213,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
         }
         return;
     }*/
-
+    m_encryptionjob->archiveInterface()->destDirName = "";
     m_encryptionjob->start();
 }
 
@@ -1955,12 +1955,16 @@ void MainWindow::onCancelCompressPressed(int compressType)
         if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_Progess);
         }
-        ReadWriteArchiveInterface* pTool =  dynamic_cast<ReadWriteArchiveInterface*>(m_encryptionjob->archiveInterface());
-        pTool->extractPsdStatus = ExtractPsdStatus::Canceled;
+//        QString name = m_model->archive()->completeBaseName();
+        m_model->archive()->subfolderName();
+//        m_encryptionjob->archiveInterface()->extractTopFolderName = m_model->archive()->subfolderName();
+        m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
         if (pEventloop->isRunning() == false) {
             connect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
-            m_spinner = new DSpinner(this->m_Progess);
-            m_spinner->setFixedSize(40, 40);
+            if(m_spinner == nullptr){
+                m_spinner = new DSpinner(this->m_Progess);
+                m_spinner->setFixedSize(40, 40);
+            }
             m_spinner->move(this->m_Progess->width() / 2 - 20, this->m_Progess->height() / 2 - 20);
             m_spinner->hide();
             m_spinner->start();

@@ -77,6 +77,7 @@ private:
     qlonglong m_extractedFilesSize;
     QVector<Archive::Entry *> m_emittedEntries;
     QString m_oldWorkingDir;
+    QString m_extractDestDir;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

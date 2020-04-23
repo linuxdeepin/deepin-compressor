@@ -24,6 +24,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QProcess>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
@@ -303,4 +304,13 @@ void ReadWriteArchiveInterface::onEntryRemoved(const QString &path)
     m_numberOfEntries--;
 }
 
-
+void ReadWriteArchiveInterface::clearPath(QString path)
+{
+    QProcess p;
+    QString command = "rm";
+    QStringList args;
+    args.append("-fr");
+    args.append(path);
+    p.execute(command, args);
+    p.waitForFinished();
+}
