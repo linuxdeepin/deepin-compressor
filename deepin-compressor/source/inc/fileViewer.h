@@ -140,9 +140,7 @@ public:
     void startDrag(Qt::DropActions supportedActions);
 
     void deleteCompressFile();
-
-
-
+    void resetTempFile();
 
 public slots:
     void showPlable();
@@ -169,19 +167,20 @@ signals:
     void sigFileRemoved(const QStringList &filelist);
     void sigextractfiles(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path = "");
     void sigpathindexChanged();
-    void sigOpenWith(QVector<Archive::Entry *> fileList,const QString& programma);
+    void sigOpenWith(QVector<Archive::Entry *> fileList, const QString &programma);
 
 private:
     void refreshTableview();
 
-    void restoreHeaderSort(const QString& currentPath);
+    void restoreHeaderSort(const QString &currentPath);
 
-    void updateAction(const QString& fileType);
+    void updateAction(const QString &fileType);
 
-    void openWithDialog(const QModelIndex& index);
-    void openWithDialog(const QModelIndex& index,const QString& programma);
+    void openWithDialog(const QModelIndex &index);
+    void openWithDialog(const QModelIndex &index, const QString &programma);
 
     void keyPressEvent(QKeyEvent *event) override;
+    void openTempFile(QString path);
 
 private:
     QLineEdit *pLineEditDir;
@@ -213,6 +212,9 @@ private:
 
     QMap<QString, SortInfo> sortCache_;
     QAction *deleteAction;
+
+    int openFileTempLink = 0;
+
 };
 
 #endif // FILEVIWER_H

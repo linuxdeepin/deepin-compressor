@@ -93,6 +93,7 @@ void CompressPage::onNextPress()
         delete dialog;
     } else {
         emit sigNextPress();
+        m_fileviewer->resetTempFile();
     }
 }
 

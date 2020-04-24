@@ -1318,7 +1318,8 @@ void MainWindow::slotExtractionDone(KJob *job)
         {
             QFileInfo file = m_extractSimpleFiles.at(0)->name();
 
-            if (file.fileName().contains("%") && file.fileName().contains(".png")) {
+
+            if (file.fileName().contains("%")/* && file.fileName().contains(".png")*/) {
 
                 QProcess p;
 //                QString tempFileName = QString("%1.png").arg(openTempFileLink);
@@ -1962,7 +1963,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
         m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
         if (pEventloop->isRunning() == false) {
             connect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
-            if(m_spinner == nullptr){
+            if (m_spinner == nullptr) {
                 m_spinner = new DSpinner(this->m_Progess);
                 m_spinner->setFixedSize(40, 40);
             }
@@ -1999,6 +2000,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
 
 void MainWindow::slotClearTempfile()
 {
+    openTempFileLink = 0;
     QProcess p;
     QString command = "rm";
     QStringList args;

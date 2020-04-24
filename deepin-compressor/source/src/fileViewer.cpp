@@ -33,6 +33,7 @@
 #include <QDrag>
 #include <QApplication>
 #include <QIcon>
+#include <DStandardPaths>
 
 
 #include "fileViewer.h"
@@ -662,21 +663,58 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void fileViewer::openTempFile(QString path)
+{
+    QFileInfo file(path);
+    KProcess *cmdprocess = new KProcess;
+    QStringList arguments;
+    QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
+    if (file.fileName().contains("%")) {
+        QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+        QDir dir(tmppath);
+        if (!dir.exists()) {
+            dir.mkdir(tmppath);
+        }
+
+        QProcess p;
+        QFileInfo tempFile(path);
+        QString openTempFile = QString("%1").arg(openFileTempLink) + "." + file.suffix();
+        openFileTempLink++;
+        QString commandCreate = "ln";
+        QStringList args;
+        args.append(path);
+        args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                    + QDir::separator() + openTempFile);
+        arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+                  + QDir::separator() + openTempFile;
+        p.execute(commandCreate, args);
+    } else {
+        arguments << path;
+    }
+
+//                arguments << m_curfilelist.at(row).filePath();
+    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    cmdprocess->setProgram(programPath, arguments);
+    cmdprocess->start();
+}
+
+void fileViewer::resetTempFile()
+{
+    openFileTempLink = 0;
+}
+
 void fileViewer::deleteCompressFile()
 {
-
-
     int row = pModel->rowCount();
     QItemSelectionModel *selections =  pTableViewFile->selectionModel();
     QModelIndexList selected = selections->selectedIndexes();
 
     QSet< int>  selectlist;
 
-
     foreach (QModelIndex index, selected) {
         selectlist.insert(index.row());
     }
-
 
     foreach (int index, selectlist) {
         if (m_curfilelist.size() > index) {
@@ -871,7 +909,6 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
-
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
@@ -904,14 +941,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 
                 resizecolumn();
             } else {
-                KProcess *cmdprocess = new KProcess;
-                QStringList arguments;
-                QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
-                arguments << m_curfilelist.at(row).filePath();
-                cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-                cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-                cmdprocess->setProgram(programPath, arguments);
-                cmdprocess->start();
+                openTempFile(m_curfilelist.at(row).filePath());
             }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
@@ -919,7 +949,6 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
-
             KProcess *cmdprocess = new KProcess;
             QStringList arguments;
             QString programPath = QStandardPaths::findExecutable("xdg-open");
@@ -930,7 +959,6 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             cmdprocess->start();
 
         }
-
 
         emit sigpathindexChanged();
     }
@@ -1035,7 +1063,6 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
 
 }
 
-
 QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
 {
     Q_ASSERT(m_sortmodel);
@@ -1056,7 +1083,6 @@ QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
 
     return ret;
 }
-
 
 QVector<Archive::Entry *> fileViewer::filesForIndexes(const QModelIndexList &list) const
 {
@@ -1102,7 +1128,6 @@ QVector<Archive::Entry *> fileViewer::filesAndRootNodesForIndexes(const QModelIn
     return fileList;
 }
 
-
 void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 {
     m_pathindex = 0;
@@ -1116,7 +1141,6 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 
     pTableViewFile->setModel(model);
     resizecolumn();
-
 }
 
 void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
