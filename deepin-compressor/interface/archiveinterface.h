@@ -49,6 +49,7 @@ public:
         NotChecked,
         Reextract,
         Checked,
+        WrongPsd,
         Completed,
         Canceled
     };

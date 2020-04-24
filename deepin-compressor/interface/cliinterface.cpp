@@ -102,6 +102,10 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+    if(this->extractPsdStatus == ReadOnlyArchiveInterface::WrongPsd){
+        return false;
+    }
+
     if (pAnalyseHelp != nullptr) {
         delete pAnalyseHelp;
         pAnalyseHelp = nullptr;
@@ -948,7 +952,7 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-//    qDebug() << "#####" << line;
+    qDebug() << "#####" << line;
     if(pAnalyseHelp != nullptr){
         pAnalyseHelp->analyseLine(line);
         if(pAnalyseHelp->isNotKnown() == true){
@@ -1059,12 +1063,15 @@ bool CliInterface::handleLine(const QString &line)
             setPassword(QString());
             if (m_extractionOptions.isBatchExtract()) {
             } else {
-                qDebug() << "$$$$$WrongPassword";
-                if(pAnalyseHelp != nullptr){
-                    pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
+                if(this->extractPsdStatus != ReadOnlyArchiveInterface::WrongPsd){
+                    if(pAnalyseHelp != nullptr){
+                        pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
+                    }
+                    this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
+                    qDebug() << "$$$$$WrongPassword";
+                    emit sigExtractNeedPassword();
                 }
 
-                emit sigExtractNeedPassword();
                 return false;
             }
         }

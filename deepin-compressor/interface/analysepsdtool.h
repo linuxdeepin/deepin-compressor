@@ -6,12 +6,14 @@
 enum ENUMLINEINFO{
     RIGHTPSD,
     WRONGPSD,
-    REPLACE
 };
 
 #define VALIDLINE 0
 #define EXTRACT_REPLACE_TIP "Would you like to replace the existing file"
 #define ALLOK "All OK"
+#define DoubleBBBB "\b\b\b\b    \b\b\b\b"
+#define EVERYOK "Everything is Ok"
+#define WRONGPSD7Z ". Wrong password? "
 
 typedef struct lineInfo{
     lineInfo(QString l,bool b);
@@ -62,6 +64,7 @@ private:
 
 
 class AnalyseTool7Z:public AnalyseTool{
+public:
     explicit AnalyseTool7Z();
 
     ~AnalyseTool7Z()override;
@@ -69,6 +72,8 @@ class AnalyseTool7Z:public AnalyseTool{
     void mark(ENUMLINEINFO id,QString line,bool read)override;
 
     void analyseLine(const QString &line)override;
+
+    LineInfo* getLineInfo(ENUMLINEINFO id)override;
 
     /**
      * @brief isRightPsd
@@ -98,8 +103,6 @@ public:
 
     QString getDestDir();
 
-    bool hasReplace();
-
     bool isNotKnown();
     /**
      * @brief isRightPsd
@@ -113,9 +116,9 @@ public:
 
     QString getTempPath();
 
-    bool isNeedRemoveTemp();
-
     void checkReplaceTip(const QString &line);
+private:
+    void resetTempDir();
 private:
     AnalyseTool* pTool = nullptr;
     QString destPath = "";

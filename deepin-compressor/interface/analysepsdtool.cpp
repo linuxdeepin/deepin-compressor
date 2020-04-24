@@ -17,6 +17,7 @@ AnalyseTool::AnalyseTool()
 
 }
 
+//AnalyseToolRar4 begin
 AnalyseToolRar4::~AnalyseToolRar4()
 {
     QMap<ENUMLINEINFO, LineInfo *>::iterator it = pMapInfo->begin();
@@ -33,14 +34,13 @@ AnalyseToolRar4::AnalyseToolRar4()
 {
     pMapInfo = new QMap<ENUMLINEINFO, LineInfo *>();
     pMapInfo->insert(WRONGPSD, new LineInfo("", false));
-    pMapInfo->insert(REPLACE, new LineInfo("", false));
-    pMapInfo->insert(RIGHTPSD,new LineInfo("",false));
+    pMapInfo->insert(RIGHTPSD, new LineInfo("", false));
     lineCount = 0;
 }
 
 void AnalyseToolRar4::mark(ENUMLINEINFO id, QString line, bool read)
 {
-    if(pMapInfo->contains(id) == true){
+    if (pMapInfo->contains(id) == true) {
         (*pMapInfo)[id]->line = line;
         (*pMapInfo)[id]->read = read;
     }
@@ -48,31 +48,21 @@ void AnalyseToolRar4::mark(ENUMLINEINFO id, QString line, bool read)
 
 void AnalyseToolRar4::analyseLine(const QString &line)
 {
-//    if ((*pMapInfo)[REPLACE]->read == false) {
-//        if (line.contains(EXTRACT_REPLACE_TIP) == true) {
-//            (*pMapInfo)[REPLACE]->line = line;
-//            (*pMapInfo)[REPLACE]->read = true;
-//        }
-//    }
-    lineCount++;
-
-    if(line.startsWith("Extracting") == true && line.endsWith("OK ")){
-        (*pMapInfo)[RIGHTPSD]->line = line;
-        (*pMapInfo)[RIGHTPSD]->read = true;
-        return;
-    }else if(line.contains(ALLOK) == true){
-        (*pMapInfo)[RIGHTPSD]->line = line;
-        (*pMapInfo)[RIGHTPSD]->read = true;
+    int pos = line.indexOf(QLatin1Char('%'));
+    if (pos > 1) {
+        int percentage = line.midRef(pos - 3, 3).toInt();
+        if (percentage >= 0) {
+            lineCount++;
+            if (line.startsWith("Extracting") == true && line.endsWith("OK ")) {
+                (*pMapInfo)[RIGHTPSD]->line = line;
+                (*pMapInfo)[RIGHTPSD]->read = true;
+                return;
+            } else if (line.contains(ALLOK) == true) {
+                (*pMapInfo)[RIGHTPSD]->line = line;
+                (*pMapInfo)[RIGHTPSD]->read = true;
+            }
+        }
     }
-
-//    if(lineCount>VALIDLINE){
-//        if((*pMapInfo)[WRONGPSD]->read == false){
-//            (*pMapInfo)[RIGHTPSD]->line = line;
-//            (*pMapInfo)[RIGHTPSD]->read = true;
-//        }
-//    }else{
-
-//    }
 }
 
 LineInfo *AnalyseToolRar4::getLineInfo(ENUMLINEINFO id)
@@ -80,48 +70,127 @@ LineInfo *AnalyseToolRar4::getLineInfo(ENUMLINEINFO id)
     return (*pMapInfo)[id];
 }
 
-int AnalyseToolRar4::isRightPsd(){
-    if(pMapInfo->contains(RIGHTPSD) == true){
-        if((*pMapInfo)[RIGHTPSD]->read == true){
+int AnalyseToolRar4::isRightPsd()
+{
+    if (pMapInfo->contains(RIGHTPSD) == true) {
+        if ((*pMapInfo)[RIGHTPSD]->read == true) {
             return 1;
-        }else if ((*pMapInfo)[WRONGPSD]->read == true){
+        } else if ((*pMapInfo)[WRONGPSD]->read == true) {
             return 2;
-        }else{
+        } else {
             return 0;
         }
-    }else{
+    } else {
         return 0;
     }
 }
+//AnalyseToolRar4 end
+
+//AnalyseTool7Z begin
+AnalyseTool7Z::~AnalyseTool7Z()
+{
+    QMap<ENUMLINEINFO, LineInfo *>::iterator it = pMapInfo->begin();
+    while (it != pMapInfo->end()) {
+        delete it.value();
+        it.value() = nullptr;
+        it++;
+    }
+    pMapInfo->clear();
+    lineCount = 0;
+}
+
+AnalyseTool7Z::AnalyseTool7Z()
+{
+    pMapInfo = new QMap<ENUMLINEINFO, LineInfo *>();
+    pMapInfo->insert(WRONGPSD, new LineInfo("", false));
+    pMapInfo->insert(RIGHTPSD, new LineInfo("", false));
+    lineCount = 0;
+}
+
+void AnalyseTool7Z::mark(ENUMLINEINFO id, QString line, bool read)
+{
+    if (pMapInfo->contains(id) == true) {
+        (*pMapInfo)[id]->line = line;
+        (*pMapInfo)[id]->read = read;
+    }
+}
+
+void AnalyseTool7Z::analyseLine(const QString &line)
+{
+    lineCount++;
+    if (line.contains(DoubleBBBB)) {
+
+        if (line.contains(WRONGPSD7Z)) {
+            (*pMapInfo)[WRONGPSD]->line = line;
+            (*pMapInfo)[WRONGPSD]->read = true;
+        } else if (line.right(16) == EVERYOK) {             //right psd
+            (*pMapInfo)[RIGHTPSD]->line = line;
+            (*pMapInfo)[RIGHTPSD]->read = true;
+            return;
+        } else if (line.length() > 24) {                         //right psd
+            int pos = line.indexOf(QLatin1Char('%'));
+            if (pos > 1) {
+                int percentage = line.midRef(pos - 3, 3).toInt();
+                if(percentage<=100){
+                    (*pMapInfo)[RIGHTPSD]->line = line;
+                    (*pMapInfo)[RIGHTPSD]->read = true;
+                }
+            }
+        }
+    }
+}
+
+LineInfo *AnalyseTool7Z::getLineInfo(ENUMLINEINFO id)
+{
+    return (*pMapInfo)[id];
+}
+
+int AnalyseTool7Z::isRightPsd()
+{
+    if (pMapInfo->contains(RIGHTPSD) == true) {
+        if ((*pMapInfo)[RIGHTPSD]->read == true) {
+            return 1;
+        } else if ((*pMapInfo)[WRONGPSD]->read == true) {
+            return 2;
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+}
+//AnalyseTool7Z end
+
 
 bool isDirExist(QString fullPath)
 {
     QDir dir(fullPath);
-    if(dir.exists())
-    {
-      return true;
-    }
-    else
-    {
-       bool ok = dir.mkpath(fullPath);//创建多级目录
-       return ok;
+    if (dir.exists()) {
+        return true;
+    } else {
+        bool ok = dir.mkpath(fullPath);//创建多级目录
+        return ok;
     }
 }
 
-AnalyseHelp::AnalyseHelp(QString destinationPath,QString subFolderName)
+void AnalyseHelp::resetTempDir()
 {
-    lineCount = 0;
-    destPath = destinationPath;
-    destSubFolderName = subFolderName;
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     tempPath = confDir + QDir::separator() + "tempExtractAAA";
     this->clearPath(tempPath);
     QDir Dir(tempPath);
-    if(Dir.isEmpty())
-    {
-        printf("\ntemp dir %s is empty",tempPath.toUtf8().data());
+    if (Dir.isEmpty()) {
+        printf("\ntemp dir %s is empty", tempPath.toUtf8().data());
         isDirExist(tempPath);
     }
+}
+
+AnalyseHelp::AnalyseHelp(QString destinationPath, QString subFolderName)
+{
+    lineCount = 0;
+    destPath = destinationPath;
+    destSubFolderName = subFolderName;
+    this->resetTempDir();
     this->replaceTip = false;
 }
 
@@ -138,20 +207,22 @@ void AnalyseHelp::clearPath(QString path)
 
 QString AnalyseHelp::getDestionFolderPath()
 {
-    if(destSubFolderName == ""){
+    if (destSubFolderName == "") {
         return "";
     }
-    if(destPath == ""){
+    if (destPath == "") {
         return "";
     }
-    return destPath+"/"+destSubFolderName;
+    return destPath + "/" + destSubFolderName;
 }
 
-QString AnalyseHelp::getTempPath(){
+QString AnalyseHelp::getTempPath()
+{
     return this->tempPath;
 }
 
-AnalyseHelp::~AnalyseHelp(){
+AnalyseHelp::~AnalyseHelp()
+{
     this->clearPath(tempPath);
     delete pTool;
     pTool = nullptr;
@@ -159,94 +230,92 @@ AnalyseHelp::~AnalyseHelp(){
     this->replaceTip = false;
 }
 
-void AnalyseHelp::analyseLine(const QString& line){
-    if(pTool == nullptr){
-        if(line.left(5) == "UNRAR"){
+void AnalyseHelp::analyseLine(const QString &line)
+{
+    if (pTool == nullptr) {
+        if (line.left(5) == "UNRAR") {
             pTool = new AnalyseToolRar4();
+        } else if (line.left(5) == "7-Zip") {
+            pTool = new AnalyseTool7Z();
         }
-    }else{
-        int pos = line.indexOf(QLatin1Char('%'));
-        if (pos > 1) {
-            int percentage = line.midRef(pos - 3, 3).toInt();
-            if(percentage>=0){
-                pTool->analyseLine(line);
-            }
-        }
+    } else {
+//        int pos = line.indexOf(QLatin1Char('%'));
+//        if (pos > 1) {
+//            int percentage = line.midRef(pos - 3, 3).toInt();
+//            if(percentage>=0){
+        pTool->analyseLine(line);
+//            }
+//        }
     }
     this->lineCount++;
 
 }
 
-void AnalyseHelp::mark(ENUMLINEINFO id,QString line,bool read)
+void AnalyseHelp::mark(ENUMLINEINFO id, QString line, bool read)
 {
-    if(pTool != nullptr){
-        pTool->mark(id,line,read);
+    if (pTool != nullptr) {
+        pTool->mark(id, line, read);
     }
 }
 
-LineInfo* AnalyseHelp::getLineInfo(ENUMLINEINFO id){
-    if(pTool != nullptr){
+LineInfo *AnalyseHelp::getLineInfo(ENUMLINEINFO id)
+{
+    if (pTool != nullptr) {
         return pTool->getLineInfo(id);
-    }else{
+    } else {
         return nullptr;
     }
 }
 
-void AnalyseHelp::setDestDir(const QString &path){
+
+void AnalyseHelp::setDestDir(const QString &path)
+{
     this->destPath = path;
 }
 
-QString AnalyseHelp::getDestDir(){
+QString AnalyseHelp::getDestDir()
+{
     return this->destPath;
 }
 
-bool AnalyseHelp::hasReplace(){
-    LineInfo *pLineInfoRep = this->getLineInfo(ENUMLINEINFO::REPLACE);
-    if (pLineInfoRep != nullptr) {
-        return pLineInfoRep->read;
-    }else{
-        return false;
-    }
-}
-
-bool AnalyseHelp::isNotKnown(){
-    if(lineCount>=1){
-        if(pTool == nullptr){
+bool AnalyseHelp::isNotKnown()
+{
+    if (lineCount >= 1) {
+        if (pTool == nullptr) {
             return true;
-        }else{
+        } else {
             return false;
         }
-    }else{
+    } else {
         return false;
     }
 }
 
-bool AnalyseHelp::isNeedRemoveTemp(){
-    if(this->hasReplace() == false){//tips replace;
-        LineInfo* p = this->getLineInfo(ENUMLINEINFO::WRONGPSD);
-        if(p != nullptr && p->read == true){
-            return true;//psd is right
-        }else{
-            return false;//psd is wrong
-        }
-    }else{
-        return false;
-    }
-}
-
-void AnalyseHelp::checkReplaceTip(const QString &line){
-    if(line.contains(EXTRACT_REPLACE_TIP) == true){
+void AnalyseHelp::checkReplaceTip(const QString &line)
+{
+    if (line.contains(EXTRACT_REPLACE_TIP) == true) {
         this->replaceTip = true;
     }
 }
 
-int AnalyseHelp::isRightPsd(){
-    if(this->pTool != nullptr){
+int AnalyseHelp::isRightPsd()
+{
+    if (this->pTool != nullptr) {
         return this->pTool->isRightPsd();
-    }else{
+    } else {
         return 0;//not known archive ,so return 0
     }
 
 }
 
 
+///////密码正确
+//"\b\b\b\b    \b\b\b\bEverything is Ok"
+//"\b\b\b\b    \b\b\b\b 66% 59 - 压缩小文件/深度_压缩工具_20191226/标注/index.html"
+//"\b\b\b\b    \b\b\b\b 93% 49 - 压缩小文件/深度_压缩工具_201 . w/page-1-导入-新2.png"
+//"\b\b\b\b    \b\b\b\b  0% 132 - 装机常用软件/EasyConnect_x64.deb"
+///////密码错误
+//"\b\b\b\b    \b\b\b\b"
+//"\b\b\b\b    \b\b\b\bERROR: Data Error in encrypted file. Wrong password? : imp/importantinfo.txt"
+//"\b\b\b\b    \b\b\b\bERROR: Data Error in encrypted file. Wrong password? : 压缩小文件/Deepin 压力测试方法_张成忠.docx"
+//"\b\b\b\b    \b\b\b\bERROR: Data Error in encrypted file. Wrong password? : 压缩小文件/内存泄漏测试方法.docx"
