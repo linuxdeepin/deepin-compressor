@@ -307,9 +307,11 @@ void LoadJob::onFinished(bool result)
         const auto name = subfolderName().isEmpty() ? archive()->completeBaseName() : subfolderName();
         archive()->setProperty("subfolderName", name);
         if (isPasswordProtected()) {
-            archive()->setProperty("encryptionType",  archive()->password().isEmpty() ? Archive::Encrypted : Archive::HeaderEncrypted);
+            QString psd = archive()->password();
+            QVariant et = archive()->password().isEmpty() ? Archive::Encrypted : Archive::HeaderEncrypted;
+            archive()->setProperty("encryptionType",  et);
         }
-        archive()->resetPsd();
+//        archive()->resetPsd();
     }
 
     Job::onFinished(result);

@@ -708,6 +708,17 @@ ExtractJob *ArchiveModel::extractFile(Archive::Entry *file, const QString &desti
 ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options) const
 {
     Q_ASSERT(m_archive);
+    QString psd = m_archive->password();
+    if(m_archive->encryptionType() == Archive::Unencrypted){//没有加密的
+
+    }else{
+        //是否启用头部加密,如果启用头部加密，当前用户肯定已经输入正确密码；所以要记录密码，并且将加密状态设置为Archive::Encrypted
+        //如果不是头部加密，那就是文件加密了，所以需要将密码设置空字符串，同样加密状态设置为Archive::Encrypted.
+        bool headerEncrypted = m_archive->encryptionType() == Archive::HeaderEncrypted;
+        psd = headerEncrypted?psd:"";
+        m_archive->encrypt(psd,headerEncrypted);
+    }
+
     ExtractJob *newJob = m_archive->extractFiles(files, destinationDir, options);
     connect(newJob, &ExtractJob::userQuery, this, &ArchiveModel::slotUserQuery);
     return newJob;

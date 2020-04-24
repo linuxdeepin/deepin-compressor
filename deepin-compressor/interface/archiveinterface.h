@@ -50,6 +50,8 @@ public:
         Reextract,
         Checked,
         WrongPsd,
+        RightPsd,
+        NoPsd,
         Completed,
         Canceled
     };

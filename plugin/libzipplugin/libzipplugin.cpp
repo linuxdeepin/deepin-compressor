@@ -21,6 +21,7 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include "queries.h"
+#include "analysepsdtool.h"
 
 //K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
 
@@ -653,6 +654,15 @@ bool LibzipPlugin::doKill()
 
 bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+    this->extractPsdStatus = ReadOnlyArchiveInterface::NotChecked;
+    if(options.encryptedArchiveHint() == true){
+        if(password().isEmpty() == true){
+            emit sigExtractNeedPassword();//tip user input psd
+            return false;
+        }
+    }else{
+        this->extractPsdStatus = ReadOnlyArchiveInterface::RightPsd;//no need psd,so we can set status rightpsd
+    }
 
     bAnyFileExtracted = false;
 
@@ -717,8 +727,9 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 zip_close(archive);
                 return false;
             }
-
-            emit progress(float(i + 1) / nofEntries);
+            if(this->extractPsdStatus == ReadOnlyArchiveInterface::RightPsd){
+                emit progress(float(i + 1) / nofEntries);
+            }
         }
 
         if (extractDst.isEmpty() == false) {
@@ -804,12 +815,13 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
     // Store parent mtime.
     QString parentDir;
+    QFileInfo fileInfo = QFileInfo(destination);
     if (isDirectory) {
-        QDir pDir = QFileInfo(destination).dir();
+        QDir pDir = fileInfo.dir();
         pDir.cdUp();
         parentDir = pDir.path();
     } else {
-        parentDir = QFileInfo(destination).path();
+        parentDir = fileInfo.path();
     }
     // For top-level items, don't restore parent dir mtime.
     const bool restoreParentMtime = (parentDir + QDir::separator() != destDirCorrected);
@@ -820,9 +832,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     }
 
     // Create parent directories for files. For directories create them.
-    if (QDir().exists(QFileInfo(destination).path()) == false) {
+    if (QDir().exists(fileInfo.path()) == false) {
         //extract = true;
-        if (!QDir().mkpath(QFileInfo(destination).path())) {
+        if (!QDir().mkpath(fileInfo.path())) {
             emit error(tr("Failed to create directory: %1"));
             return false;
         }
@@ -857,7 +869,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         // Handle existing destination files.
         QString renamedEntry = entry;
-        while (!m_overwriteAll && QFileInfo::exists(destination)) {
+        while (!m_overwriteAll && QFileInfo::exists(destination) && this->extractPsdStatus == ReadOnlyArchiveInterface::RightPsd) {
             if (m_skipAll) {
                 return true;
             } else {
@@ -893,6 +905,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         while (!zipFile) {
             zipFile = zip_fopen(archive, name.constData(), 0);
             if (zipFile) {
+                this->extractPsdStatus = ReadOnlyArchiveInterface::RightPsd;
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
                        zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
@@ -926,9 +939,10 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                         emit cancelled();
                         return false;
                     } else {
+                        this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
                         emit sigExtractNeedPassword();
                     }
-                    setPassword(QString());
+//                    setPassword(QString());
                     zip_set_default_password(archive, password().toUtf8().constData());
                     return false;
                 }
