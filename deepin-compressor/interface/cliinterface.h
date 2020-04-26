@@ -95,7 +95,7 @@ public:
     QString multiVolumeName() const override;
 
     CliProperties *cliProperties() const;
-
+    virtual void cleanIfCanceled()override;
 protected:
 
     bool setAddedFiles();

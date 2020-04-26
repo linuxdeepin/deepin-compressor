@@ -181,6 +181,13 @@ public:
     virtual bool isUserCancel() const;
     bool isAnyFileExtracted() const;
 
+    /**
+     * @brief cleanIfCanceled
+     *
+     * Derived classes can overwrite this method for clean tempfiles if user canceled extract job and there is no overwrite query.
+     */
+    virtual void cleanIfCanceled() = 0;
+
 public:
     QString extractTopFolderName;
     QString destDirName;        //取消解压，需要该变量

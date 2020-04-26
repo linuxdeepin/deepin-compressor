@@ -23,8 +23,9 @@
 #define CLIPROPERTIES_H
 
 #include "archiveinterface.h"
+#include <QVariant>
 
-
+typedef QHash<QString, QVariant> Hash;
 
 class  CliProperties: public QObject
 {
@@ -50,8 +51,8 @@ class  CliProperties: public QObject
     Q_PROPERTY(QStringList passwordSwitch MEMBER m_passwordSwitch)
     Q_PROPERTY(QStringList passwordSwitchHeaderEnc MEMBER m_passwordSwitchHeaderEnc)
     Q_PROPERTY(QString compressionLevelSwitch MEMBER m_compressionLevelSwitch)
-    Q_PROPERTY(QHash<QString, QVariant> compressionMethodSwitch MEMBER m_compressionMethodSwitch)
-    Q_PROPERTY(QHash<QString, QVariant> encryptionMethodSwitch MEMBER m_encryptionMethodSwitch)
+    Q_PROPERTY(Hash compressionMethodSwitch MEMBER m_compressionMethodSwitch)
+    Q_PROPERTY(Hash encryptionMethodSwitch MEMBER m_encryptionMethodSwitch)
     Q_PROPERTY(QString multiVolumeSwitch MEMBER m_multiVolumeSwitch)
 
     Q_PROPERTY(QStringList testPassedPatterns MEMBER m_testPassedPatterns)

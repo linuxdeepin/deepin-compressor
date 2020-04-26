@@ -400,6 +400,11 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     }
 }
 
+void CliInterface::cleanIfCanceled()
+{
+
+}
+
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_ASSERT(m_operationMode == Extract);
@@ -964,7 +969,7 @@ bool CliInterface::handleLine(const QString &line)
 
     if(pAnalyseHelp != nullptr){
         if(pAnalyseHelp->isRightPsd() == 1){
-            qDebug() << "%%%%%%RightPassword";
+//            qDebug() << "%%%%%%RightPassword";
             this->extractPsdStatus = Reextract;
             return false;
         }
@@ -1069,7 +1074,7 @@ bool CliInterface::handleLine(const QString &line)
                         pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
                     }
                     this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
-                    qDebug() << "$$$$$WrongPassword";
+//                    qDebug() << "$$$$$WrongPassword";
                     emit sigExtractNeedPassword();
                 }
 

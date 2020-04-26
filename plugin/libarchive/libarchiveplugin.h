@@ -33,7 +33,7 @@ public:
     bool addComment(const QString &comment) override;
     bool testArchive() override;
     bool hasBatchExtractionProgress() const override;
-
+    virtual void cleanIfCanceled()override;
 protected:
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)

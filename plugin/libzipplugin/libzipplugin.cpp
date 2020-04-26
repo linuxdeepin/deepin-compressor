@@ -654,14 +654,16 @@ bool LibzipPlugin::doKill()
 bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
     this->extractPsdStatus = ReadOnlyArchiveInterface::NotChecked;
-    if(options.encryptedArchiveHint() == true){
-        if(password().isEmpty() == true){
-            emit sigExtractNeedPassword();//tip user input psd
-            return false;
-        }
-    }else{
-        this->extractPsdStatus = ReadOnlyArchiveInterface::RightPsd;//no need psd,so we can set status rightpsd
-    }
+//    if(options.encryptedArchiveHint() == true){
+//        if(password().isEmpty() == true){
+//            emit sigExtractNeedPassword();//tip user input psd
+//            return false;
+//        }
+//    }
+    //reset member variable ifReplace;
+    ifReplaceTip = false;
+    m_extractDestDir = destinationDirectory;
+    destDirName = extractTopFolderName;
 
     bAnyFileExtracted = false;
 
@@ -700,13 +702,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         }
         const bool isDirectory = entry.endsWith(QDir::separator());
         if (isDirectory) {
-            //如果是目录，则结束当前内循环
             continue;
         } else {
-            //执行判断有无密码
-            //如果不需要输入密码，则直接结束内循环，break，执行解压操作
-            //如果需要输入密码，则调用信号，如果密码输入正确，则结束内循环,break，执行解压操作
-
             if ("windows-1252" == m_codecstr || "IBM855" == m_codecstr) {
                 m_codecstr = "GB18030";
             }
@@ -721,7 +718,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 name = entry.toLocal8Bit();
             }
             zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
-            //如果zipFile返回值不是0,说明正常打开archive，此时结束内循环，执行解压。否则，判断为什么打开失败
+            //if zipFile return not 0,it sees normal，so break，then done extract; else，check why failed.
             if (zipFile) {
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
@@ -763,7 +760,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
         }
     }
-//密码检查结束，如果密码正确或者不需要密码，发送信号，显示进度条界面
+    //psd checked over,if psd right or no need psd,emit signal to show progress view.
     emit sigExtractPwdCheckDown();
     // Extract entries.
     m_overwriteAll = false; // Whether to overwrite all files
@@ -793,9 +790,12 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 pi.fileProgressProportion = float(1.0) / float(nofEntries);
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
-
+            QString entryName = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            if(i == 0){
+                destDirName = entryName;
+            }
             if (!extractEntry(archive,
-                              QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))),
+                              entryName,
                               QString(),
                               destinationDirectory,
                               options.preservePaths(),
@@ -839,8 +839,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
 
+            QString entryName = e->fullPath();
+
             if (!extractEntry(archive,
-                              e->fullPath(),
+                              entryName,
                               e->rootNode,
                               destinationDirectory,
                               options.preservePaths(),
@@ -951,6 +953,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 OverwriteQuery query(renamedEntry);
                 emit userQuery(&query);
                 query.waitForResponse();
+                ifReplaceTip = true;
 
                 if (query.responseCancelled()) {
                     userCancel = true;
@@ -1471,6 +1474,26 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
 
 
     return encoding;
+}
+
+void LibzipPlugin::cleanIfCanceled()
+{
+    if(this->ifReplaceTip == false){
+        if(this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled){
+//            qDebug()<<"可以删除解压文件夹";
+//            qDebug()<<"$$$"<<this->destDirName;
+//            qDebug()<<"$$$"<<this->m_extractDestDir;
+            if(this->destDirName == "" || this->m_extractDestDir == ""){
+                return;
+            }
+            QString fullPath = m_extractDestDir+QDir::separator()+this->destDirName;
+            QFileInfo fileInfo(fullPath);
+            if(fileInfo.exists())
+            {
+                 ReadWriteArchiveInterface::clearPath(fullPath);
+            }
+        }
+    }
 }
 
 

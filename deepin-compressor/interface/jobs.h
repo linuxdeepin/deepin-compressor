@@ -208,6 +208,9 @@ signals:
     void sigExtractJobPassword();
     void sigExtractJobFinished();
     void sigExtractJobPwdCheckDown();
+
+private:
+    void cleanIfCanceled();
 private:
 
     QVector<Archive::Entry *> m_entries;

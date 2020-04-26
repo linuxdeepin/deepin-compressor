@@ -581,7 +581,14 @@ void ExtractJob::doWork()
     }
 }
 
-void ExtractJob::onFinished(bool result){
+void ExtractJob::cleanIfCanceled()
+{
+    this->archiveInterface()->waitForFinishedSignal();
+}
+
+void ExtractJob::onFinished(bool result)
+{
+    this->archiveInterface()->cleanIfCanceled();
     emit sigExtractSpinnerFinished();
     Job::onFinished(result);
 }

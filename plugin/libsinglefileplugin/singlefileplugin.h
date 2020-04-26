@@ -15,7 +15,7 @@ public:
     bool list(bool isbatch = false) ;
     bool testArchive() ;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
-
+    void cleanIfCanceled()override;
 protected:
     const QString uncompressedFileName() const;
     QString overwriteFileName(QString &filename);

@@ -169,3 +169,7 @@ bool LibSingleFileInterface::testArchive()
     return false;
 }
 
+void LibSingleFileInterface::cleanIfCanceled()
+{
+
+}

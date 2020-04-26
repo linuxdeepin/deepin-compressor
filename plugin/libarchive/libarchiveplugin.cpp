@@ -662,3 +662,8 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
     }
     return QString();
 }
+
+void LibarchivePlugin::cleanIfCanceled()
+{
+
+}
