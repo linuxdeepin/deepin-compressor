@@ -1142,11 +1142,11 @@ void MainWindow::WatcherFile(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 {
-    m_pageid = PAGE_UNZIPPROGRESS;
-    refreshPage();
-    m_progressdialog->setProcess(0);
-    m_Progess->setprogress(0);
-    // m_progressTransFlag = false;
+//    m_pageid = PAGE_UNZIPPROGRESS;
+//    refreshPage();
+//    m_progressdialog->setProcess(0);
+//    m_Progess->setprogress(0);
+
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
     if (nullptr == m_model) {
@@ -1196,6 +1196,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
+    //
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     connect(m_encryptionjob,
             SIGNAL(percentfilename(KJob *, const QString &)),
             this,
@@ -1398,6 +1400,15 @@ void MainWindow::slotExtractionDone(KJob *job)
     }
 }
 
+void MainWindow::slotShowPageUnzipProgress()
+{
+    m_pageid = PAGE_UNZIPPROGRESS;
+    refreshPage();
+    m_progressdialog->setProcess(0);
+    m_Progess->setprogress(0);
+
+}
+
 void MainWindow::SlotNeedPassword()
 {
     if (PAGE_ENCRYPTION != m_pageid) {
@@ -1436,6 +1447,8 @@ void MainWindow::ExtractSinglePassword(QString password)
         m_encryptionjob->archiveInterface()->setPassword(password);
         connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
+        //
+        connect(m_encryptionjob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword);
         connect(
             m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
@@ -1466,6 +1479,8 @@ void MainWindow::ExtractPassword(QString password)
         m_encryptionjob->archiveInterface()->setPassword(password);
         connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
+        //
+        connect(m_encryptionjob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
         connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword);
         connect(
             m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
@@ -1882,6 +1897,8 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
+    //
+    connect(m_encryptionjob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     connect(
         m_encryptionjob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     connect(m_encryptionjob, &ExtractJob::sigExtractJobPassword, m_encryptionpage, &EncryptionPage::wrongPassWordSlot);
@@ -1947,6 +1964,7 @@ void MainWindow::slotStopSpinner()
     }
     disconnect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
 }
+
 
 void MainWindow::onCancelCompressPressed(int compressType)
 {

@@ -688,7 +688,84 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     // Get number of archive entries.
     const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : files.size();
+    //check password
+    for (qlonglong i = 0; i < nofEntries; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        QString entry;
+        if (extractAll) {
+            entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+        } else {
+            entry = files.at(i)->fullPath();
+        }
+        const bool isDirectory = entry.endsWith(QDir::separator());
+        if (isDirectory) {
+            //如果是目录，则结束当前内循环
+            continue;
+        } else {
+            //执行判断有无密码
+            //如果不需要输入密码，则直接结束内循环，break，执行解压操作
+            //如果需要输入密码，则调用信号，如果密码输入正确，则结束内循环,break，执行解压操作
 
+            if ("windows-1252" == m_codecstr || "IBM855" == m_codecstr) {
+                m_codecstr = "GB18030";
+            }
+
+            QByteArray  name;
+
+            QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
+            //qDebug() << m_codecstr;
+            if (codec) {
+                name = codec->fromUnicode(entry.toLocal8Bit());
+            } else {
+                name = entry.toLocal8Bit();
+            }
+            zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
+            //如果zipFile返回值不是0,说明正常打开archive，此时结束内循环，执行解压。否则，判断为什么打开失败
+            if (zipFile) {
+                break;
+            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
+                if (m_extractionOptions.isBatchExtract()) {
+                    PasswordNeededQuery query(filename());
+                    emit userQuery(&query);
+                    query.waitForResponse();
+                    if (query.responseCancelled()) {
+                        setPassword(QString());
+                        emit cancelled();
+                        return false;
+                    }
+                    setPassword(query.password());
+                    if (zip_set_default_password(archive, password().toUtf8().constData())) {
+                    }
+
+                } else {
+                    emit sigExtractNeedPassword();
+                    setPassword(QString());
+                    zip_set_default_password(archive, password().toUtf8().constData());
+                    return false;
+                }
+
+            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+                if (m_extractionOptions.isBatchExtract()) {
+                    setPassword(QString());
+                    emit cancelled();
+                    return false;
+                } else {
+                    emit sigExtractNeedPassword();
+                }
+                setPassword(QString());
+                zip_set_default_password(archive, password().toUtf8().constData());
+                return false;
+            } else {
+                emit error(tr("Failed to open '%1':<nl/>%2"));
+                return false;
+            }
+
+        }
+    }
+//密码检查结束，如果密码正确或者不需要密码，发送信号，显示进度条界面
+    emit sigExtractPwdCheckDown();
     // Extract entries.
     m_overwriteAll = false; // Whether to overwrite all files
     m_skipAll = false; // Whether to skip all files
@@ -727,9 +804,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 zip_close(archive);
                 return false;
             }
-            if(this->extractPsdStatus == ReadOnlyArchiveInterface::RightPsd){
-                emit progress(float(i + 1) / nofEntries);
-            }
+
+            emit progress(float(i + 1) / nofEntries);
         }
 
         if (extractDst.isEmpty() == false) {
@@ -857,7 +933,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     } else {
         name = entry.toLocal8Bit();
     }
-    //Upon successful completion 0 is returned. Otherwise, -1 is returned and the error information in archive is set to indicate the error.
+
     if (zip_stat(archive, name.constData(), 0, &statBuffer) != 0) {
         if (isDirectory && zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOENT) {
             return true;
@@ -869,7 +945,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         // Handle existing destination files.
         QString renamedEntry = entry;
-        while (!m_overwriteAll && QFileInfo::exists(destination) && this->extractPsdStatus == ReadOnlyArchiveInterface::RightPsd) {
+        while (!m_overwriteAll && QFileInfo::exists(destination)) {
             if (m_skipAll) {
                 return true;
             } else {
@@ -900,57 +976,55 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         }
 
         // Handle password-protected files.
-        zip_file *zipFile = nullptr;
+//        zip_file *zipFile = nullptr;
 
-        while (!zipFile) {
-            zipFile = zip_fopen(archive, name.constData(), 0);
-            if (zipFile) {
-                this->extractPsdStatus = ReadOnlyArchiveInterface::RightPsd;
-                break;
-            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
-                       zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-                if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
+//        while (!zipFile) {
+//            zipFile = zip_fopen(archive, name.constData(), 0);
+//            if (zipFile) {
+//                break;
+//            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD ||
+//                       zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+//                if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
 
-                    if (m_extractionOptions.isBatchExtract()) {
-                        PasswordNeededQuery query(filename());
-                        emit userQuery(&query);
-                        query.waitForResponse();
+//                    if (m_extractionOptions.isBatchExtract()) {
+//                        PasswordNeededQuery query(filename());
+//                        emit userQuery(&query);
+//                        query.waitForResponse();
 
-                        if (query.responseCancelled()) {
-                            setPassword(QString());
-                            emit cancelled();
-                            return false;
-                        }
+//                        if (query.responseCancelled()) {
+//                            setPassword(QString());
+//                            emit cancelled();
+//                            return false;
+//                        }
 
-                        setPassword(query.password());
+//                        setPassword(query.password());
 
-                        if (zip_set_default_password(archive, password().toUtf8().constData())) {
-                        }
+//                        if (zip_set_default_password(archive, password().toUtf8().constData())) {
+//                        }
 
-                    } else {
-                        emit sigExtractNeedPassword();
-                        setPassword(QString());
-                        zip_set_default_password(archive, password().toUtf8().constData());
-                        return false;
-                    }
-                } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-                    if (m_extractionOptions.isBatchExtract()) {
-                        setPassword(QString());
-                        emit cancelled();
-                        return false;
-                    } else {
-                        this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
-                        emit sigExtractNeedPassword();
-                    }
+//                    } else {
+//                        emit sigExtractNeedPassword();
+//                        setPassword(QString());
+//                        zip_set_default_password(archive, password().toUtf8().constData());
+//                        return false;
+//                    }
+//                } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+//                    if (m_extractionOptions.isBatchExtract()) {
+//                        setPassword(QString());
+//                        emit cancelled();
+//                        return false;
+//                    } else {
+//                        emit sigExtractNeedPassword();
+//                    }
 //                    setPassword(QString());
-                    zip_set_default_password(archive, password().toUtf8().constData());
-                    return false;
-                }
-            } else {
-                emit error(tr("Failed to open '%1':<nl/>%2"));
-                return false;
-            }
-        }
+//                    zip_set_default_password(archive, password().toUtf8().constData());
+//                    return false;
+//                }
+//            } else {
+//                emit error(tr("Failed to open '%1':<nl/>%2"));
+//                return false;
+//            }
+//        }
 
         QFile file(destination);
         if (!file.open(QIODevice::WriteOnly)) {
@@ -968,6 +1042,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
         }
 
+        zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
         int writeSize = 0;
         while (sum != statBuffer.size) {
             const auto readBytes = zip_fread(zipFile, buf, 1000);

@@ -540,6 +540,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
 {
     qDebug() << "ExtractJob job instance";
     connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
+    connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::sigExtractJobPwdCheckDown, Qt::QueuedConnection);
 }
 
 void ExtractJob::doWork()

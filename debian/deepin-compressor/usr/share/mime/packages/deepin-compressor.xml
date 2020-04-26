@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="application/x-7z-compressed">
+		<comment>Compressed 7z</comment>
+		<generic-icon name="deepin-compressor"/>
+		<glob pattern="*.7z.*" weight="80"/>
+	</mime-type>
+</mime-info>
+

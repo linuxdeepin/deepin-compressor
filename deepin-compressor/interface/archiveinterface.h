@@ -204,6 +204,7 @@ Q_SIGNALS:
     void compressionMethodFound(const QString &method);
     void encryptionMethodFound(const QString &method);
     void sigExtractNeedPassword();
+    void sigExtractPwdCheckDown();
     /**
      * Emitted when @p query needs to be executed on the GUI thread.
      */

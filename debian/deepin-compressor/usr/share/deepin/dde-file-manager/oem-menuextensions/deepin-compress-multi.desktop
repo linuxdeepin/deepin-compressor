@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/deepin-compressor  %U compress
+GenericName=Compress
+Name=Compress
+MimeType=*
+GenericName[zh_CN]=压缩
+GenericName[en]=Compress
+Name[zh_CN]=压缩
+Name[en]=Compress
+X-DFM-MenuTypes=MultiFileDirs
+X-DFM-SupportSchemes=file

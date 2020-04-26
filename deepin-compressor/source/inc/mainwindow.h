@@ -142,6 +142,7 @@ private slots:
 
     void slotLoadingFinished(KJob *job);
     void slotExtractionDone(KJob *job);
+    void slotShowPageUnzipProgress();
     void slotextractSelectedFilesTo(const QString &localPath);
     void SlotProgress(KJob *job, unsigned long percent);
     void SlotProgressFile(KJob *job, const QString &filename);
