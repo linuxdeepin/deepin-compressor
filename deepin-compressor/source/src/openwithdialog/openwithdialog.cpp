@@ -511,7 +511,7 @@ void OpenWithDialog::openFileByApp()
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
 
-
+    close();
 
 
 
