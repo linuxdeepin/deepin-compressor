@@ -21,7 +21,6 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include "queries.h"
-#include "analysepsdtool.h"
 
 //K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
 

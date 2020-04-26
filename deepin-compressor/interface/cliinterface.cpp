@@ -123,6 +123,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }else{
         destPath = destinationDirectory;
         this->extractPsdStatus = Checked;
+        emit sigExtractPwdCheckDown();
     }
     m_extractDestDir = destinationDirectory;
     m_extractDestDir = destPath;

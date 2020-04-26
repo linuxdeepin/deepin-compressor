@@ -7,7 +7,6 @@
 #include <zip.h>
 #include "kpluginfactory.h"
 
-class AnalyseHelp;
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0;
@@ -64,7 +63,6 @@ private:
     QByteArray m_codecstr;
     QByteArray m_codecname;
     ExtractionOptions m_extractionOptions;
-    AnalyseHelp* pHelp;
     bool isWrongPassword = false;
 };
 
