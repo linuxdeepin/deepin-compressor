@@ -493,7 +493,8 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
 //       such as an fd to archive_read_disk_entry_from_file()
 bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QString &destination, const FileProgressInfo &info, bool partialprogress)
 {
-    const QString absoluteFilename = QFileInfo(relativeName).absoluteFilePath();
+    QFileInfo fileInfo(relativeName);
+    const QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
     const QString destinationFilename = destination + relativeName;
 
     // #253059: Even if we use archive_read_disk_entry_from_file,
