@@ -710,7 +710,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             QByteArray  name;
 
-            QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
+            QTextCodec *codec = QTextCodec::codecForName(m_codecname);
             //qDebug() << m_codecstr;
             if (codec) {
                 name = codec->fromUnicode(entry.toLocal8Bit());

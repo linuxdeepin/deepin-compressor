@@ -981,7 +981,13 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 }
 
             } else {
-                emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
+                QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
+                QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+                QFile tempFile(fileName);
+                if (tempFile.exists()) {
+                    tempFile.remove();
+                }
+                emit sigextractfiles(fileList, EXTRACT_TEMP);
             }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
             QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
@@ -994,7 +1000,13 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 showPlable();
             }
         } else {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
+            QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
+            QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+            QFile tempFile(fileName);
+            if (tempFile.exists()) {
+                tempFile.remove();
+            }
+            emit sigextractfiles(fileList, EXTRACT_TEMP);
         }
     }
 }
