@@ -318,6 +318,11 @@ void CompressSetting::onNextButoonClicked()
         return;
     }
 
+    if ((((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10) && m_compresstype->text().contains("7z") && m_splitcompress->isChecked()) {
+        showWarningDialog(tr("Too many volumes, please change and retry"));
+        return;
+    }
+
     QMap< QString, QString > m_openArgs;
     const QString password = m_password->text();
     QString fixedMimeType;
@@ -525,6 +530,16 @@ bool CompressSetting::checkFilePermission(const QString &path)
     return filePermissionFlag;
 }
 
+void CompressSetting::getSelectedFileSize(qint64 size)
+{
+    m_getFileSize = size;
+}
+
+void CompressSetting::clickTitleBtnResetAdvancedOptions()
+{
+    m_moresetbutton->setChecked(false);
+}
+
 void CompressSetting::showEvent(QShowEvent *event)
 {
     initWidget();
@@ -563,6 +578,9 @@ void CompressSetting::onSplitChanged(int /*status*/)
 {
     if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) {
         m_splitnumedit->setEnabled(true);
+        if ((m_getFileSize / 1024 / 1024) > 1) {
+            m_splitnumedit->setValue(m_getFileSize / 1024 / 1024 / 2 + 1);
+        }
     } else {
         m_splitnumedit->setEnabled(false);
     }

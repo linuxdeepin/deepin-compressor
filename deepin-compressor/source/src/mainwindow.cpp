@@ -734,6 +734,7 @@ void MainWindow::calSelectedTotalFileSize(const QStringList &files)
             selectedTotalFileSize += calFileSize(file);
         }
     }
+    m_CompressSetting->getSelectedFileSize(selectedTotalFileSize);
 }
 
 qint64 MainWindow::calFileSize(const QString &path)
@@ -2079,6 +2080,8 @@ void MainWindow::slotBackButtonClicked()
 
     if (m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS) {
         m_CompressPage->clearFiles();
+        m_Progess->setprogress(0);
+        m_progressdialog->setProcess(0);
     }
 
     m_pageid = PAGE_HOME;
@@ -2114,6 +2117,7 @@ void MainWindow::onTitleButtonPressed()
         break;
     case PAGE_ZIPSET:
         emit sigZipReturn();
+        m_CompressSetting->clickTitleBtnResetAdvancedOptions();
         m_pageid = PAGE_ZIP;
         refreshPage();
         break;

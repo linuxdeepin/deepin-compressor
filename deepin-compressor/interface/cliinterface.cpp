@@ -959,7 +959,7 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-    qDebug() << "#####" << line;
+    //qDebug() << "#####" << line;
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
         if (pAnalyseHelp->isNotKnown() == true) {
