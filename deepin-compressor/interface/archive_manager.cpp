@@ -41,8 +41,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
-    if(fileinfo.suffix() == QString("iso"))
-    {
+    if (fileinfo.suffix() == QString("iso")) {
         pluginManager.setFileSize(fileinfo.size());
     }
 
@@ -71,35 +70,29 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
-    if(fileinfo.suffix() == QString("iso"))
-    {
+    if (fileinfo.suffix() == QString("iso")) {
         pluginManager.setFileSize(fileinfo.size());
     }
 
     const QMimeType mimeType = fixedMimeType.isEmpty() ? determineMimeType(fileName) : QMimeDatabase().mimeTypeForName(fixedMimeType);
 
     QVector<Plugin *> offers;
-    if(write)
-    {
+    if (write) {
         offers = pluginManager.preferredWritePluginsFor(mimeType);
 
-        if( useLibArchive == true && mimeType.name() == "application/zip")
-        {
+        if (useLibArchive == true && mimeType.name() == "application/zip") {
             std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
-                if( p1->metaData().name().contains("Libarchive") )
-                {
+                if (p1->metaData().name().contains("Libarchive")) {
                     return true;
                 }
-                if( p2->metaData().name().contains("Libarchive") )
-                {
+                if (p2->metaData().name().contains("Libarchive")) {
                     return false;
                 }
 
                 return p1->priority() > p2->priority();
             });
         }
-    }
-    else {
+    } else {
         offers = pluginManager.preferredPluginsFor(mimeType);
     }
 
@@ -391,7 +384,8 @@ QString Archive::password() const
     return m_iface->password();
 }
 
-void Archive::resetPsd(){
+void Archive::resetPsd()
+{
     m_iface->setPassword("");
 }
 

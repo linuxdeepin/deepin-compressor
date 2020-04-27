@@ -103,14 +103,11 @@ SettingDialog::SettingDialog(QWidget *parent):
     initUI();
     initConnect();
 
-    if(m_data.isEmpty() == true)
-    {
+    if (m_data.isEmpty() == true) {
         foreach (QString key, m_associtionlist) {
             m_valuelist.append(m_settings->value(key).toBool());
         }
-    }
-    else
-    {
+    } else {
         foreach (QString key, m_associtionlist) {
             m_valuelist.append(m_data[key].toBool());//set value from m_data
         }
@@ -119,7 +116,7 @@ SettingDialog::SettingDialog(QWidget *parent):
     m_valuelisttemp = m_valuelist;
 
     foreach (QString key, m_associtionlist) {
-        m_settings->setOption(key,m_data[key].toBool());//update dsetting from m_data
+        m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
     }
 
 }
@@ -328,21 +325,21 @@ void SettingDialog::readFromConfbf()
     QFile file(confPath);
     bool readStatus = file.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    if(readStatus == true){
+    if (readStatus == true) {
         QByteArray t = file.readAll();
-        if(t.length()>0){
+        if (t.length() > 0) {
             m_data.clear();
             QStringList lines = QString(t).split("\n");
             int count = lines.count();
-            for(int i= 0;i<count;i++){
+            for (int i = 0; i < count; i++) {
                 QStringList column = lines[i].split(":");
-                if(column.length()>1){
-                    m_data.insert(column[0],column[1]);
+                if (column.length() > 1) {
+                    m_data.insert(column[0], column[1]);
                 }
 
             }
         }
-    }else{
+    } else {
         m_data.clear();
     }
 
@@ -357,10 +354,10 @@ void SettingDialog::writeToConfbf()
 
     QFile file(confPath);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QMap<QString,QVariant>::iterator it = m_data.begin();
-    while(it != m_data.end()){
+    QMap<QString, QVariant>::iterator it = m_data.begin();
+    while (it != m_data.end()) {
         it.key();
-        QString content = it.key()+":"+it.value().toString()+"\n";
+        QString content = it.key() + ":" + it.value().toString() + "\n";
         file.write(content.toUtf8());
         it++;
     }
@@ -418,8 +415,8 @@ void SettingDialog::cancelpressed()
 
 void SettingDialog::recommandedPressed()
 {
-    QMap<QString,QVariant>::iterator it = m_data.begin();
-    while(it != m_data.end()){
+    QMap<QString, QVariant>::iterator it = m_data.begin();
+    while (it != m_data.end()) {
         it.value() = QVariant(false);
         it++;
     }
@@ -442,7 +439,7 @@ void SettingDialog::startcmd(QString &mimetype, bool state)
         return;
     }
 
-    if ( nullptr == m_process) {
+    if (nullptr == m_process) {
         m_process = new KProcess(this);
     }
 

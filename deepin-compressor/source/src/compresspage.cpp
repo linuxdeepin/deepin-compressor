@@ -35,6 +35,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include "queries.h"
+
 DWIDGET_USE_NAMESPACE
 
 CompressPage::CompressPage(QWidget *parent) : DWidget(parent)

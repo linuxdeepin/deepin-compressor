@@ -34,7 +34,6 @@
  */
 DesktopFile::DesktopFile(const QString &fileName)
 {
-
     // Store file name
     m_fileName = fileName;
 

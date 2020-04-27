@@ -62,7 +62,7 @@ void MyLabel::mouseDoubleClickEvent(QMouseEvent *event)
     emit labelDoubleClickEvent(event);
 }
 
-PreviousLabel::PreviousLabel(const QString &text, LogViewHeaderView *parent ): DLabel(text, parent),headerView_(parent)
+PreviousLabel::PreviousLabel(const QString &text, LogViewHeaderView *parent): DLabel(text, parent), headerView_(parent)
 {
 
 }
@@ -74,25 +74,16 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
 
     QColor bgColor;
-    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType())
-    {
-        if(focusIn_)
-        {
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        if (focusIn_) {
             bgColor = QColor(212, 212, 212);
-        }
-        else
-        {
+        } else {
             bgColor = QColor(247, 247, 247);
         }
-    }
-    else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
-    {
-        if(focusIn_)
-        {
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        if (focusIn_) {
             bgColor = QColor(44, 44, 44);
-        }
-        else
-        {
+        } else {
             bgColor = QColor(38, 38, 38);
         }
     }
@@ -140,7 +131,7 @@ void PreviousLabel::leaveEvent(QEvent *event)
 }
 
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)
-    : DHeaderView(orientation, parent), gotoPreviousLabel_( new PreviousLabel("     .. " + tr("Back"), this))
+    : DHeaderView(orientation, parent), gotoPreviousLabel_(new PreviousLabel("     .. " + tr("Back"), this))
 {
     setFixedHeight(38);
     viewport()->setAutoFillBackground(false);
@@ -186,7 +177,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     QBrush hSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
-    QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin+ 2, m_spacing,
+    QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin + 2, m_spacing,
                         36 - kSpacingMargin * 2 - 6);
     QBrush clearBrush(palette.color(cg, DPalette::Window));
 
@@ -210,7 +201,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     painter->setFont(pFont);
     if (logicalIndex == 0) {
         QRect col0Rect = textRect;
-        col0Rect.setX(textRect.x()+2);
+        col0Rect.setX(textRect.x() + 2);
         painter->drawText(col0Rect, static_cast<int>(align), title);
     }
 //    else if(logicalIndex == 3){
@@ -223,7 +214,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     // sort indicator
     if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {
         // TODO: arrow size (8x5)
-        QRect sortIndicator(textRect.x() + textRect.width() - ((logicalIndex == 0) ? 0: 1),
+        QRect sortIndicator(textRect.x() + textRect.width() - ((logicalIndex == 0) ? 0 : 1),
                             textRect.y() + (textRect.height() - 5) / 2, 8, 8);
         option.rect = sortIndicator;
         if (sortIndicatorOrder() == Qt::DescendingOrder) {

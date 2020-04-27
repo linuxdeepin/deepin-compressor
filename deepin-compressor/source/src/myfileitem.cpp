@@ -41,69 +41,69 @@ bool MyFileItem::operator<(const QStandardItem &other) const
 {
     const QVariant l = data(Qt::DisplayRole), r = other.data(Qt::DisplayRole);
     switch (column()) {
-        case 3: {
-            if (column() == other.column()) {
-                QString lstr = l.toString();
-                QString rstr = r.toString();
+    case 3: {
+        if (column() == other.column()) {
+            QString lstr = l.toString();
+            QString rstr = r.toString();
 
-                if (lstr.contains(QObject::tr("item(s)")) &&
+            if (lstr.contains(QObject::tr("item(s)")) &&
                     !rstr.contains(QObject::tr("item(s)"))) {
-                    return true;
-                } else if (!lstr.contains(QObject::tr("item(s)")) &&
-                           rstr.contains(QObject::tr("item(s)"))) {
-                    return false;
-                } else if (lstr.contains(QObject::tr("item(s)")) &&
-                           rstr.contains(QObject::tr("item(s)"))) {
-                    lstr = lstr.remove(QRegExp("\\s"));
-                    lstr = lstr.remove(QObject::tr("item(s)"));
-                    rstr = rstr.remove(QRegExp("\\s"));
-                    rstr = rstr.remove(QObject::tr("item(s)"));
-                    return lstr.toInt() < rstr.toInt();
-                }
-                lstr = l.toString().simplified();
-                rstr = r.toString().simplified();
-
-                qint64 lint = Utils::humanReadableToSize(lstr);
-                qint64 rint = Utils::humanReadableToSize(rstr);
-                return lint < rint;
-            }
-            break;
-        }
-        case 1: {
-            if (column() == other.column()) {
-                QString lstr = l.toString();
-                QString rstr = r.toString();
-                lstr = lstr.remove(4, 1);
-                lstr = lstr.remove(6, 1);
-                lstr = lstr.remove(8, 1);
-                rstr = rstr.remove(4, 1);
-                rstr = rstr.remove(6, 1);
-                rstr = rstr.remove(8, 1);
-                //            QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMdd hh:mm:ss");
-                //            //delete by Airy
-
-                //            QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMdd hh:mm:ss");
-                //            //delete by Airy
-
-                QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMddhh:mm:ss");  // add by Airy
-
-                QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMddhh:mm:ss");  // add by Airy
-                return !rdate.operator<(ldate);
-            }
-            break;
-        }
-        case 0: {
-            if (column() == other.column()) {
-                QString lstr = l.toString();
-                QString rstr = r.toString();
+                return true;
+            } else if (!lstr.contains(QObject::tr("item(s)")) &&
+                       rstr.contains(QObject::tr("item(s)"))) {
+                return false;
+            } else if (lstr.contains(QObject::tr("item(s)")) &&
+                       rstr.contains(QObject::tr("item(s)"))) {
                 lstr = lstr.remove(QRegExp("\\s"));
+                lstr = lstr.remove(QObject::tr("item(s)"));
                 rstr = rstr.remove(QRegExp("\\s"));
-                return lstr < rstr;
+                rstr = rstr.remove(QObject::tr("item(s)"));
+                return lstr.toInt() < rstr.toInt();
             }
-            break;
+            lstr = l.toString().simplified();
+            rstr = r.toString().simplified();
+
+            qint64 lint = Utils::humanReadableToSize(lstr);
+            qint64 rint = Utils::humanReadableToSize(rstr);
+            return lint < rint;
         }
-        default:
-            break;
+        break;
+    }
+    case 1: {
+        if (column() == other.column()) {
+            QString lstr = l.toString();
+            QString rstr = r.toString();
+            lstr = lstr.remove(4, 1);
+            lstr = lstr.remove(6, 1);
+            lstr = lstr.remove(8, 1);
+            rstr = rstr.remove(4, 1);
+            rstr = rstr.remove(6, 1);
+            rstr = rstr.remove(8, 1);
+            //            QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMdd hh:mm:ss");
+            //            //delete by Airy
+
+            //            QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMdd hh:mm:ss");
+            //            //delete by Airy
+
+            QDateTime ldate = QDateTime::fromString(lstr, "yyyyMMddhh:mm:ss");  // add by Airy
+
+            QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMddhh:mm:ss");  // add by Airy
+            return !rdate.operator < (ldate);
+        }
+        break;
+    }
+    case 0: {
+        if (column() == other.column()) {
+            QString lstr = l.toString();
+            QString rstr = r.toString();
+            lstr = lstr.remove(QRegExp("\\s"));
+            rstr = rstr.remove(QRegExp("\\s"));
+            return lstr < rstr;
+        }
+        break;
+    }
+    default:
+        break;
     }
 
     return QStandardItem::operator<(other);

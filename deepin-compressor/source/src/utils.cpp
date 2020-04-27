@@ -104,7 +104,7 @@ bool Utils::isCompressed_file(const QString &filePath)
     qDebug() << file.suffix();
     if (true == ret) {
         if (file.suffix() == "pptx" || file.suffix() == "ppt" || file.suffix() == "xls" ||
-                file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx") {
+                file.suffix() == "xlsx" || file.suffix() == "doc" || file.suffix() == "docx"/* || file.suffix() == "xmind"*/) {
             ret = false;
         }
     } else if (filePath.contains(".7z.")) {
@@ -382,7 +382,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;

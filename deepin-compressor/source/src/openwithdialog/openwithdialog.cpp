@@ -48,7 +48,6 @@
 #include <QResizeEvent>
 #include <QMimeDatabase>
 
-
 #include "openwithdialog/properties.h"
 
 class OpenWithDialogListItem : public QWidget

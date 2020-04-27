@@ -29,14 +29,14 @@
 #include <QMimeDatabase>
 #include <QTimer>
 
-BatchCompress::BatchCompress(QObject *parent):BatchJobs(parent)
+BatchCompress::BatchCompress(QObject *parent): BatchJobs(parent)
 {
     setCapabilities(KJob::Killable);
-    if(m_Args!= nullptr){
+    if (m_Args != nullptr) {
         delete m_Args;
         m_Args = nullptr;
     }
-    m_Args = new QMap<QString,QString>();
+    m_Args = new QMap<QString, QString>();
 //    connect(this, &KJob::result, this, &BatchExtract::showFailedFiles);
 }
 
@@ -47,15 +47,15 @@ void BatchCompress::setCompressArgs(QMap<QString, QString> Args)
 //        delete m_Args;
 //        m_Args = nullptr;
 //    }
-    m_Args = new QMap<QString,QString>();
+    m_Args = new QMap<QString, QString>();
 
-    if(m_Args->count()>0){
+    if (m_Args->count() > 0) {
         m_Args->clear();
     }
 
-    QMap<QString,QString>::iterator it = Args.begin();
-    while(it != Args.end()){
-        m_Args->insert(it.key(),it.value());
+    QMap<QString, QString>::iterator it = Args.begin();
+    while (it != Args.end()) {
+        m_Args->insert(it.key(), it.value());
         it++;
     }
 }
@@ -137,8 +137,8 @@ void BatchCompress::clearSubjobs()
         job->setParent(nullptr);
         disconnect(job, &KJob::result, this, &BatchJobs::slotResult);
         disconnect(job, &KJob::infoMessage, this, &BatchJobs::slotInfoMessage);
-        disconnect(job, SIGNAL(percent(KJob *, ulong)),this, SLOT(forwardProgress(KJob *, ulong)));
-        disconnect(job, SIGNAL(percentfilename(KJob *, const QString &)),this, SLOT(SlotProgressFile(KJob *, const QString &)));
+        disconnect(job, SIGNAL(percent(KJob *, ulong)), this, SLOT(forwardProgress(KJob *, ulong)));
+        disconnect(job, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
     }
     BatchJobs::clearSubjobs();
 }
@@ -148,17 +148,14 @@ bool BatchCompress::doKill()
     if (subjobs().isEmpty()) {
         return false;
     }
-    KJob* pCurJob = subjobs().first();
+    KJob *pCurJob = subjobs().first();
     this->clearSubjobs();
-    if(pCurJob){
+    if (pCurJob) {
         return pCurJob->kill();
-    }else{
+    } else {
         return false;
     }
 }
-
-
-
 
 void BatchCompress::start()
 {
@@ -185,7 +182,6 @@ void BatchCompress::slotStartJob()
 
     subjobs().at(0)->start();
 }
-
 
 void BatchCompress::slotResult(KJob *job)
 {
@@ -221,7 +217,7 @@ void BatchCompress::slotResult(KJob *job)
 void BatchCompress::forwardProgress(KJob *job, unsigned long percent)
 {
     Q_UNUSED(job)
-    qDebug() << percent;
+    //qDebug() << percent;
     auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
     auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
 
@@ -235,7 +231,7 @@ void BatchCompress::addInput(const QStringList &files)
     m_inputs.append(files);
 }
 
-void BatchCompress::SlotCreateJobFinished(KJob* job)
+void BatchCompress::SlotCreateJobFinished(KJob *job)
 {
     qDebug() << "job finished" << job->error();
 
@@ -267,5 +263,3 @@ void BatchCompress::SlotCreateJobFinished(KJob* job)
         job = nullptr;
     }
 }
-
-

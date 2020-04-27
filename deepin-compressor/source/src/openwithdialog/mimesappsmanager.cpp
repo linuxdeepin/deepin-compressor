@@ -32,8 +32,6 @@
 #include "openwithdialog/dfmstandardpaths.h"
 #include "openwithdialog/durl.h"
 
-
-
 #include <QDir>
 #include <QSettings>
 #include <QMimeType>

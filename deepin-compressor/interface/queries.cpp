@@ -36,7 +36,6 @@
 #include <QMainWindow>
 
 
-
 QWidget *getMainWindow()
 {
     foreach (QWidget *w, QApplication::allWidgets()) {

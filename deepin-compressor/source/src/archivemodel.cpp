@@ -62,7 +62,7 @@ ArchiveModel::ArchiveModel(QObject *parent)
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const
 {
-    if ((1 == index.row() || 0 == index.row())&& 0 == index.column()) {
+    if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
         if (m_ppathindex && *m_ppathindex > 0) {
             //m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight * 2);
             emit sigShowLabel();
@@ -112,18 +112,18 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             if (index.column() == 0) {
                 const Archive::Entry *e = static_cast<Archive::Entry *>(index.internalPointer());
                 QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
-                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(24,24,mode);
+                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(24, 24, mode);
             }
             return QVariant();
         case Qt::TextAlignmentRole:
             //if (m_showColumns.at(index.column()) == Size) {
-                //return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            //return QVariant(Qt::AlignRight | Qt::AlignVCenter);
             //} else {
-                return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-            //}
-        case Qt::TextColorRole:{
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+        //}
+        case Qt::TextColorRole: {
             DPalette pa;
-            pa.setBrush(DPalette::WindowText,pa.color(DPalette::WindowText));
+            pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
             return pa;
         }
         case Qt::FontRole:
@@ -368,7 +368,7 @@ bool ArchiveModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
 //}
 
 // For a rationale, see bugs #194241, #241967 and #355839
-QString ArchiveModel::cleanFileName(const QString& fileName)
+QString ArchiveModel::cleanFileName(const QString &fileName)
 {
     // Skip entries with filename "/" or "//" or "."
     // "." is present in ISO files.
@@ -655,8 +655,8 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     QMimeDatabase db;
     QIcon icon;
     entry->isDir()
-    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24,24)
-             : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24,24);
+    ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
+             : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
 //    qDebug()<<icon;
     m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon);
 }
@@ -709,14 +709,14 @@ ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, c
 {
     Q_ASSERT(m_archive);
     QString psd = m_archive->password();
-    if(m_archive->encryptionType() == Archive::Unencrypted){//没有加密的
+    if (m_archive->encryptionType() == Archive::Unencrypted) { //没有加密的
 
-    }else{
+    } else {
         //是否启用头部加密,如果启用头部加密，当前用户肯定已经输入正确密码；所以要记录密码，并且将加密状态设置为Archive::Encrypted
         //如果不是头部加密，那就是文件加密了，所以需要将密码设置空字符串，同样加密状态设置为Archive::Encrypted.
         bool headerEncrypted = m_archive->encryptionType() == Archive::HeaderEncrypted;
-        psd = headerEncrypted?psd:"";
-        m_archive->encrypt(psd,headerEncrypted);
+        psd = headerEncrypted ? psd : "";
+        m_archive->encrypt(psd, headerEncrypted);
     }
 
     ExtractJob *newJob = m_archive->extractFiles(files, destinationDir, options);

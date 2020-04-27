@@ -131,7 +131,7 @@ void AnalyseTool7Z::analyseLine(const QString &line)
             int pos = line.indexOf(QLatin1Char('%'));
             if (pos > 1) {
                 int percentage = line.midRef(pos - 3, 3).toInt();
-                if(percentage<=100){
+                if (percentage <= 100) {
                     (*pMapInfo)[RIGHTPSD]->line = line;
                     (*pMapInfo)[RIGHTPSD]->read = true;
                 }

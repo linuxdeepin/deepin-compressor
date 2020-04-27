@@ -34,7 +34,6 @@ QStringList MimeTypeDisplayManager::ImageMimeTypes;
 QStringList MimeTypeDisplayManager::ExecutableMimeTypes;
 QStringList MimeTypeDisplayManager::BackupMimeTypes;
 
-
 MimeTypeDisplayManager::MimeTypeDisplayManager(QObject *parent) : QObject(parent)
 {
     initData();

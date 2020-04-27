@@ -95,7 +95,7 @@ void Compressor_Success::InitConnection()
 void Compressor_Success::showfiledirSlot()
 {
     qDebug() << m_path;
-    if ( newCreatePath_.isEmpty() == false) {
+    if (newCreatePath_.isEmpty() == false) {
         DDesktopServices::showFolder(QUrl(newCreatePath_, QUrl::TolerantMode));
     } else if (m_fullpath.isEmpty()) {
         DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));

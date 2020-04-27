@@ -21,13 +21,12 @@
  */
 #include "archiveformat.h"
 
-
 #include <QJsonArray>
-
 
 
 ArchiveFormat::ArchiveFormat()
 {
+
 }
 
 ArchiveFormat::ArchiveFormat(const QMimeType &mimeType,

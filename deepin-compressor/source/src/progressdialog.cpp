@@ -140,7 +140,7 @@ void ProgressDialog::setFinished(const QString &path)
     }
 }
 
-void ProgressDialog::setMsg(const QString& msg)
+void ProgressDialog::setMsg(const QString &msg)
 {
     if (100 != m_circleprogress->value()) {
         setWindowTitle(tr(""));

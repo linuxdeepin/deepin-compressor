@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 #include <QMap>
 
+
 QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
 {
     switch (type) {

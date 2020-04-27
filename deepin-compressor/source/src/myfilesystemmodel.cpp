@@ -85,17 +85,17 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     if (index.isValid()) {
         QFileInfo file = fileInfo(index);
         switch (role) {
-        case Qt::TextColorRole:{
+        case Qt::TextColorRole: {
             DPalette pa;
-            pa.setBrush(DPalette::WindowText,pa.color(DPalette::WindowText));
+            pa.setBrush(DPalette::WindowText, pa.color(DPalette::WindowText));
             return pa;
         }
         case Qt::TextAlignmentRole:
             /*if (3 == index.column()) {
                 return QVariant(Qt::AlignRight | Qt::AlignVCenter);
-            } else */{
-                return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
-            }
+        } else */{
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+        }
         case Qt::FontRole:
             if (0 == index.column()) {
                 QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -127,7 +127,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             case 1: {
                 return QLocale().toString(lastModified(index), tr("yyyy/MM/dd hh:mm:ss"));
             }
-            case 0:{
+            case 0: {
                 return file.fileName();
             }
             }

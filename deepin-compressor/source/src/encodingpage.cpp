@@ -121,7 +121,7 @@ void EncodingPage::setFilename(QString filename)
 void EncodingPage::setTypeImage(QString type)
 {
     QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp."+type));
+    QIcon icon = provider.icon(QFileInfo("temp." + type));
 
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }

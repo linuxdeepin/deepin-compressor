@@ -35,7 +35,6 @@
 #include <QIcon>
 #include <DStandardPaths>
 
-
 #include "fileViewer.h"
 #include "utils.h"
 #include "myfileitem.h"

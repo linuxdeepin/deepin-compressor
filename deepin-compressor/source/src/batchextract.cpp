@@ -61,9 +61,8 @@ void BatchExtract::addExtraction(const QUrl &url)
     connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(job, &BatchExtractJob::signeedpassword,
-            this, [=]
-    {
-        qDebug()<<"need password";
+    this, [ = ] {
+        qDebug() << "need password";
     });
 }
 
@@ -133,7 +132,7 @@ void BatchExtract::slotResult(KJob *job)
         qDebug() << "There was en error:" << job->error() << ", errorText:" << job->errorString();
 
         QString curfile = m_fileNames[subjobs().at(0)].first;
-        qDebug() << "Fail curfilename"<<curfile;
+        qDebug() << "Fail curfilename" << curfile;
         QFileInfo file(curfile);
 //        while (hasSubjobs()) {
 //            removeSubjob(job);
@@ -153,7 +152,7 @@ void BatchExtract::slotResult(KJob *job)
         qDebug() << "Starting the next job";
         subjobs().at(0)->start();
         QString curfile = m_fileNames[subjobs().at(0)].first;
-        qDebug() << "Send curfilename"<<curfile;
+        qDebug() << "Send curfilename" << curfile;
         QFileInfo file(curfile);
         emit sendCurFile(file.fileName());
     }
@@ -193,7 +192,7 @@ bool BatchExtract::preservePaths() const
 
 QString BatchExtract::destinationFolder() const
 {
-    qDebug()<<m_destinationFolder;
+    qDebug() << m_destinationFolder;
     if (m_destinationFolder.isEmpty()) {
         return QDir::currentPath();
     } else {

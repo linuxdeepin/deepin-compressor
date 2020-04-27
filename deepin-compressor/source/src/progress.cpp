@@ -38,9 +38,13 @@ Progress::Progress(DWidget *parent)
     m_progressfile = "设计图111.jpg";
     InitUI();
     InitConnection();
-    m_timer = new QTimer(this);
-    m_timer->setInterval(1000);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotChangeTimeLeft()));
+    m_timerTime = new QTimer(this);
+    m_timerTime->setInterval(1000);
+    connect(m_timerTime, &QTimer::timeout, this, &Progress::slotChangeTimeLeft);
+
+//    m_timerProgress = new QTimer(this);
+//    m_timerProgress->setInterval(1000);
+//    connect(m_timerProgress, &QTimer::timeout, this, &Progress::setTempProgress);
 }
 
 void Progress::InitUI()
@@ -135,10 +139,22 @@ void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
 }
 
+void Progress::setTempProgress()
+{
+//    if (m_percent >= 99) {
+//        m_timerProgress->stop();
+//        return;
+//    }
+
+//    m_percent += 0.3;
+//    setprogress(m_percent);
+//    qDebug() << "临时百分比" << m_percent;
+}
+
 void Progress::slotChangeTimeLeft()
 {
     if (lastTimeLeft < 2) {
-        m_timer->stop();
+        m_timerTime->stop();
         return;
     }
 
@@ -146,10 +162,16 @@ void Progress::slotChangeTimeLeft()
     displaySpeedAndTime(m_speed, lastTimeLeft);
 }
 
-void Progress::setprogress(int percent)
+void Progress::setprogress(double percent)
 {
     m_progressbar->setValue(percent);
     m_progressbar->update();
+    m_percent = percent;
+//    if (m_percent < 100) {
+//        m_timerProgress->start();
+//    } else {
+//        m_timerProgress->stop();
+//    }
 }
 
 void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
@@ -159,9 +181,9 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
     displaySpeedAndTime(speed, timeLeft);
 
     if (lastTimeLeft > 2) {
-        m_timer->start();
+        m_timerTime->start();
     } else {
-        m_timer ->stop();
+        m_timerTime->stop();
     }
 }
 
@@ -289,7 +311,8 @@ void Progress::resetProgress()
 void Progress::cancelbuttonPressedSlot()
 {
     if (DDialog::Accepted == showConfirmDialog()) {
-        m_timer->stop();
+        m_timerTime->stop();
+//        m_timerProgress->stop();
         m_speed = 0;
         lastTimeLeft = 0;
         emit sigCancelPressed(m_type);

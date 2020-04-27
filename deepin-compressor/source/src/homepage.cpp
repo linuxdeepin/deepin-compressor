@@ -38,7 +38,7 @@ HomePage::HomePage(QWidget *parent)
       m_iconLabel(new DLabel(this)),
       m_tipsLabel(new DLabel(tr("Drag file or folder here"), this)),
       m_splitLine(new DLabel(this)),
-      m_chooseBtn(new DCommandLinkButton(tr("Select File"), this )),
+      m_chooseBtn(new DCommandLinkButton(tr("Select File"), this)),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
 {
     m_unloadPixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
@@ -114,7 +114,7 @@ void HomePage::spinnerStop()
 
 void HomePage::resizeEvent(QResizeEvent *event)
 {
-    m_spinner->move(width()/2-20, height()/2-5);
+    m_spinner->move(width() / 2 - 20, height() / 2 - 5);
     QWidget::resizeEvent(event);
 }
 

@@ -44,7 +44,7 @@ public:
     void InitUI();
     void InitConnection();
 
-    void setprogress(int percent);
+    void setprogress(double percent);
     void setFilename(QString filename);
     void setProgressFilename(QString filename);
     void settype(COMPRESS_TYPE type);
@@ -55,9 +55,9 @@ public:
 
     void setSpeedAndTime(double speed, qint64 timeLeft);
     void displaySpeedAndTime(double speed, qint64 timeLeft);
-
     void setSpeedAndTimeText(COMPRESS_TYPE type);
 
+    void setTempProgress();
 
 signals:
     void  sigCancelPressed(int compressType);
@@ -83,9 +83,11 @@ private:
     DLabel *m_speedLabel = nullptr;
     DLabel *m_restTimeLabel = nullptr;
 
-    QTimer *m_timer;
+    QTimer *m_timerTime;
+//    QTimer *m_timerProgress;
     qint64 lastTimeLeft = 0;
     double m_speed = 0;
+    double m_percent = 0;
 };
 
 #endif // PROGRESS_H

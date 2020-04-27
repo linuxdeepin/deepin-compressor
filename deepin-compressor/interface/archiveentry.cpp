@@ -38,6 +38,7 @@ Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &r
 
 Archive::Entry::~Entry()
 {
+
 }
 
 void Archive::Entry::copyMetaData(const Archive::Entry *sourceEntry)
