@@ -25,6 +25,7 @@
 #include <DSettingsDialog>
 #include <DSettings>
 #include <DSettingsOption>
+#include <DStandardPaths>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -68,7 +69,7 @@ private:
     int m_index_last;
 
     DSettingsOption *m_comboboxoption;
-    QMap<QString,QVariant> m_data;//keep entire data in memory
+    QMap<QString, QVariant> m_data; //keep entire data in memory
 
 };
 

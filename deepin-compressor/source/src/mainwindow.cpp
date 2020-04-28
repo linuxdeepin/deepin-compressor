@@ -1530,7 +1530,12 @@ void MainWindow::setCompressDefaultPath()
     m_CompressSetting->setDefaultPath(savePath);
 
     if (1 == fileslist.count()) {
-        m_CompressSetting->setDefaultName(fileinfobase.baseName());
+        if (fileinfobase.isDir()) {
+            m_CompressSetting->setDefaultName(fileinfobase.fileName());
+        } else {
+            m_CompressSetting->setDefaultName(fileinfobase.completeBaseName());
+        }
+//        m_CompressSetting->setDefaultName(fileinfobase.baseName());
     } else {
         m_CompressSetting->setDefaultName(tr("Create New Archive"));
     }

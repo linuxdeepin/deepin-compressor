@@ -146,7 +146,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="645"/>
+        <location filename="../source/src/compresssetting.cpp" line="650"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -694,47 +694,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../source/src/utils.cpp" line="126"/>
+        <location filename="../source/src/utils.cpp" line="174"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="127"/>
+        <location filename="../source/src/utils.cpp" line="175"/>
         <source>KB</source>
         <translation>КБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="128"/>
+        <location filename="../source/src/utils.cpp" line="176"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="129"/>
+        <location filename="../source/src/utils.cpp" line="177"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="130"/>
+        <location filename="../source/src/utils.cpp" line="178"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="131"/>
+        <location filename="../source/src/utils.cpp" line="179"/>
         <source>PB</source>
         <translation>ПБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="132"/>
+        <location filename="../source/src/utils.cpp" line="180"/>
         <source>EB</source>
         <translation>ЭБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="133"/>
+        <location filename="../source/src/utils.cpp" line="181"/>
         <source>ZB</source>
         <translation>ЗБ</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="134"/>
+        <location filename="../source/src/utils.cpp" line="182"/>
         <source>YB</source>
         <translation>ЙБ</translation>
     </message>
@@ -931,23 +931,31 @@
     </message>
 </context>
 <context>
+    <name>Utils</name>
+    <message>
+        <location filename="../source/src/utils.cpp" line="107"/>
+        <source>解析json文件错误！</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="1031"/>
+        <location filename="../source/src/fileViewer.cpp" line="1043"/>
         <source>Extract</source>
         <translation>Извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="394"/>
-        <location filename="../source/src/fileViewer.cpp" line="1042"/>
+        <location filename="../source/src/fileViewer.cpp" line="1054"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="381"/>
         <location filename="../source/src/fileViewer.cpp" line="396"/>
-        <location filename="../source/src/fileViewer.cpp" line="1035"/>
-        <location filename="../source/src/fileViewer.cpp" line="1039"/>
+        <location filename="../source/src/fileViewer.cpp" line="1047"/>
+        <location filename="../source/src/fileViewer.cpp" line="1051"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -969,20 +977,20 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="513"/>
-        <location filename="../source/src/fileViewer.cpp" line="1054"/>
+        <location filename="../source/src/fileViewer.cpp" line="1066"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="379"/>
-        <location filename="../source/src/fileViewer.cpp" line="1031"/>
+        <location filename="../source/src/fileViewer.cpp" line="1043"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Извлечь</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="380"/>
-        <location filename="../source/src/fileViewer.cpp" line="1033"/>
+        <location filename="../source/src/fileViewer.cpp" line="1045"/>
         <source>Extract to current directory</source>
         <translation>Извлечь в текущий каталог</translation>
     </message>

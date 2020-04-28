@@ -146,7 +146,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/compresssetting.cpp" line="645"/>
+        <location filename="../source/src/compresssetting.cpp" line="650"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -695,47 +695,47 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../source/src/utils.cpp" line="126"/>
+        <location filename="../source/src/utils.cpp" line="174"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="127"/>
+        <location filename="../source/src/utils.cpp" line="175"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="128"/>
+        <location filename="../source/src/utils.cpp" line="176"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="129"/>
+        <location filename="../source/src/utils.cpp" line="177"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="130"/>
+        <location filename="../source/src/utils.cpp" line="178"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="131"/>
+        <location filename="../source/src/utils.cpp" line="179"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="132"/>
+        <location filename="../source/src/utils.cpp" line="180"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="133"/>
+        <location filename="../source/src/utils.cpp" line="181"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="134"/>
+        <location filename="../source/src/utils.cpp" line="182"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
@@ -932,9 +932,17 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>Utils</name>
+    <message>
+        <location filename="../source/src/utils.cpp" line="107"/>
+        <source>解析json文件错误！</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="1031"/>
+        <location filename="../source/src/fileViewer.cpp" line="1043"/>
         <source>Extract</source>
         <translation>Estrai</translation>
     </message>
@@ -944,15 +952,15 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="380"/>
-        <location filename="../source/src/fileViewer.cpp" line="1033"/>
+        <location filename="../source/src/fileViewer.cpp" line="1045"/>
         <source>Extract to current directory</source>
         <translation>Estrai nella cartella corrente</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="381"/>
         <location filename="../source/src/fileViewer.cpp" line="396"/>
-        <location filename="../source/src/fileViewer.cpp" line="1035"/>
-        <location filename="../source/src/fileViewer.cpp" line="1039"/>
+        <location filename="../source/src/fileViewer.cpp" line="1047"/>
+        <location filename="../source/src/fileViewer.cpp" line="1051"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -964,7 +972,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="394"/>
-        <location filename="../source/src/fileViewer.cpp" line="1042"/>
+        <location filename="../source/src/fileViewer.cpp" line="1054"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -980,13 +988,13 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="513"/>
-        <location filename="../source/src/fileViewer.cpp" line="1054"/>
+        <location filename="../source/src/fileViewer.cpp" line="1066"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="379"/>
-        <location filename="../source/src/fileViewer.cpp" line="1031"/>
+        <location filename="../source/src/fileViewer.cpp" line="1043"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Estrai</translation>
