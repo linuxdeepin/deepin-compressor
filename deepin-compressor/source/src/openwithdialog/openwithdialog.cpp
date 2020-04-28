@@ -239,13 +239,46 @@ void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileNam
 
     KProcess *cmdprocess = new KProcess;
     QStringList arguments;
-    arguments << fileName;
+    arguments << includePercentFile(fileName);
     QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
     cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
 
+}
+
+QString OpenWithDialog::includePercentFile(const QString &file)
+{
+    int openTempFileLink = 0;
+    QFileInfo fileInfo(file);
+
+    if (fileInfo.fileName().contains("%")) {
+        QString tempFloder = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+
+        QDir dir(tempFloder);
+        if (!dir.exists()) {
+            dir.mkdir(tempFloder);
+        }
+
+        QProcess p;
+
+        QString tempFileName = QString("%1").arg(openTempFileLink)  + "." + fileInfo.suffix();
+        openTempFileLink++;
+        QString commandCreate = "ln";
+
+        QStringList args;
+        args.append(file);
+
+        QString  linkFile = tempFloder + QDir::separator() + tempFileName;
+        args.append(linkFile);
+
+        p.execute(commandCreate, args);
+
+        return linkFile;
+    } else {
+        return file;
+    }
 }
 
 OpenWithDialog::~OpenWithDialog()
@@ -504,7 +537,7 @@ void OpenWithDialog::openFileByApp()
     KProcess *cmdprocess = new KProcess;
     QStringList arguments;
     QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
-    arguments << m_url.path();
+    arguments << includePercentFile(m_url.path());
     cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
