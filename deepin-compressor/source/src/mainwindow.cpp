@@ -1970,9 +1970,7 @@ void MainWindow::slotStopSpinner()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
-
     if (m_encryptionjob) {
-        m_encryptionjob->Killjob();
         //append the spiner animation to the eventloop, so can play the spinner animation
         if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_Progess);
@@ -1991,7 +1989,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
             m_spinner->hide();
             m_spinner->start();
             m_spinner->show();
-//            m_encryptionjob->Killjob();
+            m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
             pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
         } else {
