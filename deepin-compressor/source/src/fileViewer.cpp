@@ -981,7 +981,13 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 }
 
             } else {
-                emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
+                QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
+                QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+                QFile tempFile(fileName);
+                if (tempFile.exists()) {
+                    tempFile.remove();
+                }
+                emit sigextractfiles(fileList, EXTRACT_TEMP);
             }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
             QModelIndex sourceindex = m_decompressmodel->createNoncolumnIndex(m_sortmodel->mapToSource(index));
@@ -994,7 +1000,13 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 showPlable();
             }
         } else {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TEMP);
+            QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
+            QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+            QFile tempFile(fileName);
+            if (tempFile.exists()) {
+                tempFile.remove();
+            }
+            emit sigextractfiles(fileList, EXTRACT_TEMP);
         }
     }
 }
@@ -1027,11 +1039,13 @@ void fileViewer::slotDragLeave(QString path)
 void fileViewer::onRightMenuClicked(QAction *action)
 {
     if (PAGE_UNCOMPRESS == m_pagetype) {
-
+        QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
         if (action->text() == tr("Extract") || action->text() == tr("Extract", "slotDecompressRowDoubleClicked")) {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
+            emit sigextractfiles(fileList, EXTRACT_TO);
         } else if (action->text() == tr("Extract to current directory")) {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
+//            QString nam = fileList.at(0)->name();
+//            qDebug() << fileList.at(0)->fullPath();
+            emit sigextractfiles(fileList, EXTRACT_HEAR);
         } else if (action->text() == tr("Open")) {
             slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
         }

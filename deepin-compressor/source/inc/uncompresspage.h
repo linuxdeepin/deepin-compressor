@@ -49,19 +49,20 @@ public:
     void setdefaultpath(QString path);
     int getFileCount();
     int showWarningDialog(const QString &msg);
+    EXTRACT_TYPE getExtractType();
 
 
 signals:
     void sigDecompressPress(const QString &localPath);
-    void sigextractfiles(QVector<Archive::Entry *>, QString path,EXTRACT_TYPE type);
-    void sigOpenExtractFile(const QVector<Archive::Entry *> &fileList,const QString& programma);
+    void sigextractfiles(QVector<Archive::Entry *>, QString path, EXTRACT_TYPE type);
+    void sigOpenExtractFile(const QVector<Archive::Entry *> &fileList, const QString &programma);
 
 
 public slots:
     void oneCompressPress();
     void onPathButoonClicked();
     void onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path);
-    void onextractfilesOpenSlot(const QVector<Archive::Entry *> &fileList,const QString& programma);
+    void onextractfilesOpenSlot(const QVector<Archive::Entry *> &fileList, const QString &programma);
 
 
 private:
@@ -73,8 +74,8 @@ private:
     DLabel *m_pixmaplabel;
     Lib_Edit_Button *m_pathbutton;
     QString m_pathstr;
-
     ArchiveSortFilterModel *m_model;
+    EXTRACT_TYPE extractType;
 
 };
 #endif

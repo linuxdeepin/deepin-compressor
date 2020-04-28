@@ -153,6 +153,11 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     return res;
 }
 
+EXTRACT_TYPE UnCompressPage::getExtractType()
+{
+    return extractType;
+}
+
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;
@@ -163,6 +168,8 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     if (fileList.count() == 0) {
         return;
     }
+    // get extract type
+    extractType = type;
 
     if (EXTRACT_TO == type) {
         DFileDialog dialog(this);

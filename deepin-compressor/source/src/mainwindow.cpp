@@ -801,7 +801,7 @@ void MainWindow::onSelected(const QStringList &files)
 
             QFileInfo fileinfo(filename);
             m_decompressfilename = fileinfo.fileName();
-            if ("" != m_settingsDialog->getCurExtractPath()) {
+            if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
                 m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
             } else {
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -914,7 +914,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         } else {
             m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -924,7 +924,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("extract_multi")) {
         QString defaultpath;
         QFileInfo fileinfo(files.at(0));
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             defaultpath = m_settingsDialog->getCurExtractPath();
         } else {
             defaultpath = fileinfo.path();
@@ -1019,7 +1019,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         if (fileinfo.exists()) {
             m_decompressfilename = fileinfo.fileName();
-            if ("" != m_settingsDialog->getCurExtractPath()) {
+            if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
                 m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
             } else {
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -1043,7 +1043,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         QFileInfo fileinfo(filename);
         m_decompressfilename = fileinfo.fileName();
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         } else {
             m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -1800,13 +1800,13 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-//#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-//    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
-//    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6 );
-//#else
-//    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this );
-//#endif
+#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
+    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
+    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6);
+#else
     m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this);
+#endif
+//    m_createJob = Archive::create(createCompressFile_, fixedMimeType, all_entries, options, this);
 
     if (!password.isEmpty()) {
         m_createJob->enableEncryption(password, enableHeaderEncryption.compare("true") ? false : true);
@@ -1972,6 +1972,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
     slotResetPercentAndTime();
 
     if (m_encryptionjob) {
+        m_encryptionjob->Killjob();
         //append the spiner animation to the eventloop, so can play the spinner animation
         if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_Progess);
@@ -1990,7 +1991,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
             m_spinner->hide();
             m_spinner->start();
             m_spinner->show();
-            m_encryptionjob->Killjob();
+//            m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
             pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
         } else {
