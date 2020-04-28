@@ -801,7 +801,7 @@ void MainWindow::onSelected(const QStringList &files)
 
             QFileInfo fileinfo(filename);
             m_decompressfilename = fileinfo.fileName();
-            if ("" != m_settingsDialog->getCurExtractPath()) {
+            if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
                 m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
             } else {
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -914,7 +914,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         } else {
             m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -924,7 +924,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("extract_multi")) {
         QString defaultpath;
         QFileInfo fileinfo(files.at(0));
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             defaultpath = m_settingsDialog->getCurExtractPath();
         } else {
             defaultpath = fileinfo.path();
@@ -1019,7 +1019,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         if (fileinfo.exists()) {
             m_decompressfilename = fileinfo.fileName();
-            if ("" != m_settingsDialog->getCurExtractPath()) {
+            if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
                 m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
             } else {
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
@@ -1043,7 +1043,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         QFileInfo fileinfo(filename);
         m_decompressfilename = fileinfo.fileName();
-        if ("" != m_settingsDialog->getCurExtractPath()) {
+        if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         } else {
             m_UnCompressPage->setdefaultpath(fileinfo.path());

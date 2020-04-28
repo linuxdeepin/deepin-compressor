@@ -1039,11 +1039,13 @@ void fileViewer::slotDragLeave(QString path)
 void fileViewer::onRightMenuClicked(QAction *action)
 {
     if (PAGE_UNCOMPRESS == m_pagetype) {
-
+        QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
         if (action->text() == tr("Extract") || action->text() == tr("Extract", "slotDecompressRowDoubleClicked")) {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_TO);
+            emit sigextractfiles(fileList, EXTRACT_TO);
         } else if (action->text() == tr("Extract to current directory")) {
-            emit sigextractfiles(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), EXTRACT_HEAR);
+//            QString nam = fileList.at(0)->name();
+//            qDebug() << fileList.at(0)->fullPath();
+            emit sigextractfiles(fileList, EXTRACT_HEAR);
         } else if (action->text() == tr("Open")) {
             slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
         }
