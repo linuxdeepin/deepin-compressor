@@ -140,6 +140,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
 
 
     bool b2 = options.encryptedArchiveHint();
+    //get user input password
     QString psdd = password();
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && b2
             && psdd.isEmpty()) {

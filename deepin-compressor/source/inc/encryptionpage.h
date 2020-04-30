@@ -50,9 +50,10 @@ public slots:
 
 private:
     DPushButton *m_nextbutton = nullptr;
-    DPasswordEdit *m_password= nullptr;
+    DPasswordEdit *m_password = nullptr;
 
     bool m_inputflag = false;
+    bool pwdCheckDown = true;
 };
 
 #endif // ENCRYPTIONPAGE_H

@@ -698,6 +698,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         if (extractAll) {
             entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
         } else {
+            trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
             entry = files.at(i)->fullPath();
         }
         const bool isDirectory = entry.endsWith(QDir::separator());
@@ -710,7 +711,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             QByteArray  name;
 
-            QTextCodec *codec = QTextCodec::codecForName(m_codecname);
+            QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
             //qDebug() << m_codecstr;
             if (codec) {
                 name = codec->fromUnicode(entry.toLocal8Bit());
@@ -791,7 +792,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
             QString entryName = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
-            if(i == 0){
+            if (i == 0) {
                 destDirName = entryName;
             }
             if (!extractEntry(archive,
@@ -1478,19 +1479,18 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
 
 void LibzipPlugin::cleanIfCanceled()
 {
-    if(this->ifReplaceTip == false){
-        if(this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled){
+    if (this->ifReplaceTip == false) {
+        if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
 //            qDebug()<<"可以删除解压文件夹";
 //            qDebug()<<"$$$"<<this->destDirName;
 //            qDebug()<<"$$$"<<this->m_extractDestDir;
-            if(this->destDirName == "" || this->m_extractDestDir == ""){
+            if (this->destDirName == "" || this->m_extractDestDir == "") {
                 return;
             }
-            QString fullPath = m_extractDestDir+QDir::separator()+this->destDirName;
+            QString fullPath = m_extractDestDir + QDir::separator() + this->destDirName;
             QFileInfo fileInfo(fullPath);
-            if(fileInfo.exists())
-            {
-                 ReadWriteArchiveInterface::clearPath(fullPath);
+            if (fileInfo.exists()) {
+                ReadWriteArchiveInterface::clearPath(fullPath);
             }
         }
     }
