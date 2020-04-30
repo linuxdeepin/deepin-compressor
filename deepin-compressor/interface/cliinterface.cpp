@@ -127,7 +127,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }
     m_extractDestDir = destinationDirectory;
     m_extractDestDir = destPath;
-    qDebug() << m_extractDestDir;
+//    qDebug() << m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
         destDirName = extractDst7z_;
         updateDestFileSignal(m_extractDestDir + "/" + extractDst7z_);
@@ -1152,8 +1152,16 @@ bool CliInterface::handleLine(const QString &line)
             }
         }
 
+        if (line.startsWith("        Name: ")) {
+            QString folder = line;
+            extractDst7z_ = folder.remove("        Name: ");
+        }
+
+
         return readListLine(line);
+
     }
+
 
     if (m_operationMode == Delete) {
         return readDeleteLine(line);
