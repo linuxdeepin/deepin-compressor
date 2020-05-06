@@ -1530,8 +1530,13 @@ void MainWindow::setCompressDefaultPath()
     m_CompressSetting->setDefaultPath(savePath);
 
     if (1 == fileslist.count()) {
-//        QString name = fileinfobase.completeBaseName();
-        m_CompressSetting->setDefaultName(fileinfobase.completeBaseName());
+        if (fileinfobase.isDir()) {
+            m_CompressSetting->setDefaultName(fileinfobase.fileName());
+        } else {
+            m_CompressSetting->setDefaultName(fileinfobase.completeBaseName());
+        }
+
+//        m_CompressSetting->setDefaultName(fileinfobase.completeBaseName());
     } else {
         m_CompressSetting->setDefaultName(tr("Create New Archive"));
     }
@@ -1636,7 +1641,7 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {
     QString localname = filename;
     int num = 2;
-    while (QFileInfo::exists(filename)) {
+    while (QFileInfo::exists(filename)/* || QFileInfo::exists(filename + "." + "001")*/) {
         filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
                    + QString::number(num) + ")" + "."
                    + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
