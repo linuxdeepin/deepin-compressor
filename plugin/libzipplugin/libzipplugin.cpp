@@ -1030,10 +1030,14 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 //        }
 
         QFile file1(destination);
+        bool isExists = file1.exists();
         QFileDevice::Permissions pOldPermission =  file1.permissions();
+
         if (pOldPermission.testFlag(QFileDevice::WriteOwner) == false) {
             bool status = file1.setPermissions(pOldPermission | QFileDevice::WriteOwner);//set permission include writeowner.
         }
+
+
 
         QFile file(destination);
         if (file.open(QIODevice::WriteOnly) == false) {
@@ -1102,7 +1106,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         }
 
         file.close();
-        file.setPermissions(pOldPermission);//reset old permission
+        if (isExists == true) {
+            file.setPermissions(pOldPermission);//reset old permission
+        }
         //extract = true;
         bAnyFileExtracted = true;
     }
