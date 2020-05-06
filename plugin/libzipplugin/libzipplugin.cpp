@@ -1058,6 +1058,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
         int writeSize = 0;
         while (sum != statBuffer.size) {
+            if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
+                break;
+            }
             const auto readBytes = zip_fread(zipFile, buf, 1000);
             if (readBytes < 0) {
                 emit error(tr("Failed to read data for entry: %1"));
