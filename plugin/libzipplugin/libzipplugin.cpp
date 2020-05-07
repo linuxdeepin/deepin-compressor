@@ -1037,8 +1037,6 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             bool status = file1.setPermissions(pOldPermission | QFileDevice::WriteOwner);//set permission include writeowner.
         }
 
-
-
         QFile file(destination);
         if (file.open(QIODevice::WriteOnly) == false) {
             emit error(tr("Failed to open file for writing: %1"));

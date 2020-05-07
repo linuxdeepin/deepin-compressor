@@ -99,7 +99,7 @@ bool Utils::isCompressed_file(const QString &filePath)
     if (readStatus == true) {
         if (fileValue.contains(file.suffix()) && !file.isDir()) {
             ret = true;
-        } else if (file.completeSuffix().contains(".7z.")) {
+        } else if (file.filePath().contains(".7z.")) {
             ret = true;
         } else if (file.suffix().contains("iso")) {
             ret = true;
