@@ -125,7 +125,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         this->extractPsdStatus = Checked;
         emit sigExtractPwdCheckDown();
     }
-    m_extractDestDir = destinationDirectory;
+    qDebug() << "####destpath：" << destPath;
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
@@ -139,10 +139,19 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }
 
 
-    bool b2 = options.encryptedArchiveHint();
+    bool ifNeedPsd = options.encryptedArchiveHint();
+    if (ifNeedPsd == false) {
+        //don't need psd
+        this->extractPsdStatus = ReadOnlyArchiveInterface::Reextract;
+        if (this->pAnalyseHelp != nullptr) {
+            return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+        }
+    }
+
+
     //get user input password
     QString psdd = password();
-    if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && b2
+    if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && ifNeedPsd
             && psdd.isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
         if (m_extractionOptions.isBatchExtract()) {

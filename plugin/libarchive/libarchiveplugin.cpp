@@ -276,7 +276,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
         // Retry with renamed entry, fire an overwrite query again
         // if the new entry also exists.
-retry:
+    retry:
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry));
         // Skip directories if not preserving paths.
         if (!preservePaths && entryIsDir) {
@@ -312,8 +312,8 @@ retry:
         if (0 == extractedEntriesCount) {
             extractDst = entryName;
             destDirName = entryName;
-        } else if ( extractDst.isEmpty() == false ) {
-            if ( entryName.startsWith( extractDst + (extractDst.endsWith("/") ? "" : "/") ) == false ) {
+        } else if (extractDst.isEmpty() == false) {
+            if (entryName.startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
                 extractDst.clear();
             }
         }
@@ -572,9 +572,9 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
 
         if (partialprogress) {
             m_currentExtractedFilesSize += readBytes;
-            float currentProgress = ( static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;
-            if ( static_cast<int>(100 * currentProgress) != pastProgress) {
-                emit progress( currentProgress );
+            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;
+            if (static_cast<int>(100 * currentProgress) != pastProgress) {
+                emit progress(currentProgress);
                 pastProgress = static_cast<int>(100 * currentProgress);
             }
             //emit progress_filename(file.fileName());
@@ -618,19 +618,18 @@ void LibarchivePlugin::slotRestoreWorkingDir()
         m_oldWorkingDir.clear();
     }
 
-    if(this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled){
-        qDebug()<<"=====点击了取消";
-        if(this->ifReplaceTip == true){
+    if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
+        qDebug() << "=====点击了取消";
+        if (this->ifReplaceTip == true) {
             return;
         }
-        if(this->m_extractDestDir == "" || this->destDirName == ""){
+        if (this->m_extractDestDir == "" || this->destDirName == "") {
             return;
-        }else{
+        } else {
             QString fullPath = m_extractDestDir + "/" + destDirName;
             QFileInfo fileInfo(fullPath);
-            if(fileInfo.exists())
-            {
-                 ReadWriteArchiveInterface::clearPath(fullPath);
+            if (fileInfo.exists()) {
+                ReadWriteArchiveInterface::clearPath(fullPath);
             }
         }
 
