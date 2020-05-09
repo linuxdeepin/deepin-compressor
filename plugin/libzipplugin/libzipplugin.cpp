@@ -754,10 +754,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 setPassword(QString());
                 zip_set_default_password(archive, password().toUtf8().constData());
                 return false;
-            } else {
+            } /*else {
                 emit error(tr("Failed to open '%1':<nl/>%2"));
                 return false;
-            }
+            }*/
 
         }
     }
@@ -835,7 +835,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             emit progress_filename(e->name());
 
             if (nofEntries < 5) {
-                pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+                pi.fileName = trans2uft8(zip_get_name(archive, e->row(), ZIP_FL_ENC_RAW));
                 pi.fileProgressProportion = float(1.0) / float(nofEntries);
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
