@@ -1644,11 +1644,62 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {
     QString localname = filename;
     int num = 2;
-    while (QFileInfo::exists(filename)/* || QFileInfo::exists(filename + "." + "001")*/) {
-        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
-                   + QString::number(num) + ")" + "."
-                   + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
-        num++;
+
+    if (m_CompressSetting->onSplitChecked()) {   // 7z分卷压缩
+        QFileInfo file(filename);
+        bool isFirstFileExist = false;
+        bool isOtherFileExist = false;
+
+        // 以文件名为1.7z.001验证
+        // 过滤 该路径下 1*.7z.*的文件
+        QStringList nameFilters;
+        nameFilters << file.baseName() + "*.7z.*";
+        QDir dir(file.path());
+        QStringList files = dir.entryList(nameFilters, QDir::Files | QDir::Dirs | QDir::Readable, QDir::Name);
+
+        //  循环判断 files列表 1.7z文件是否存在
+        foreach (QFileInfo firstFile, files) {
+            if (firstFile.baseName() == file.baseName()) {
+                isFirstFileExist = true;
+                break;
+            } else {
+                continue;
+            }
+        }
+
+        if (isFirstFileExist) {  // 1.7z文件已存在  文件名为1(2).7z ...
+            for (int newCount = 2; newCount < files.count(); newCount++) {
+                int count = 0;
+                for (int i = 0; i < files.count(); i++) {
+                    if (files.at(i).contains(file.baseName() + "(0" + QString::number(newCount) + ").7z.")) {
+                        filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
+                                   + QString::number(newCount + 1) + ")" + "."
+                                   + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+
+                        isOtherFileExist = true;
+                        break;
+                    } else {
+                        count++;
+                        continue;
+                    }
+                }
+
+                if (isOtherFileExist) {
+                    isOtherFileExist = false;
+                    continue;
+                }
+                if (files.count() == count) {
+                    break;
+                }
+            }
+        }
+    } else {
+        while (QFileInfo::exists(filename)) {
+            filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
+                       + QString::number(num) + ")" + "."
+                       + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+            num++;
+        }
     }
 }
 

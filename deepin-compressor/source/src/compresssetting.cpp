@@ -385,8 +385,8 @@ void CompressSetting::onNextButoonClicked()
     if (unvalidStr != "") {
         QSet<QString> special = {"application/x-7z-compressed", "application/zip", "application/x-java-archive", "application/x-tar"};
         if (special.contains(fixedType) == true) {
-            int limitCounts = 16;
-            int left = 8, right = 8;
+//            int limitCounts = 16;
+//            int left = 8, right = 8;
 //            QString displayName = "";
 //            displayName = unvalidStr.length() > limitCounts ? unvalidStr.left(left) + "..." + unvalidStr.right(right) : unvalidStr;
 //            QString strTips = tr("%1 :unvalid name,can't start with '@'.").arg(displayName);
@@ -432,6 +432,7 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setChecked(false);
         m_splitcompress->setChecked(false);
         m_splitnumedit->setValue(0);
+        isSplitChecked = false;
     }
 }
 
@@ -582,6 +583,7 @@ void CompressSetting::onSplitChanged(int /*status*/)
         if ((m_getFileSize / 1024 / 1024) > 1) {
             m_splitnumedit->setValue(m_getFileSize / 1024 / 1024 / 2 + 1);
         }
+        isSplitChecked = true;
     } else {
         m_splitnumedit->setEnabled(false);
     }
@@ -618,6 +620,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitcompress->setChecked(false);
         //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
+        isSplitChecked = false;
     } else {
         m_splitnumedit->setEnabled(false);
         m_encryptedlabel->setEnabled(false);
@@ -629,6 +632,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitcompress->setChecked(false);
         //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
+        isSplitChecked = false;
     }
 }
 
@@ -644,6 +648,11 @@ void CompressSetting::onThemeChanged()
     }
 
     m_filename->setPalette(plt);
+}
+
+bool CompressSetting::onSplitChecked()
+{
+    return isSplitChecked;
 }
 
 int CompressSetting::showWarningDialog(const QString &msg, int index)

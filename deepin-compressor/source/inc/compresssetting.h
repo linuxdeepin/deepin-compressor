@@ -88,6 +88,7 @@ public slots:
     void showRightMenu(QMouseEvent *e);
 
     void onThemeChanged();
+    bool onSplitChecked();
 
 private:
     int showWarningDialog(const QString &msg, int index = 0);
@@ -123,6 +124,7 @@ private:
     QStringList m_pathlist;
     bool filePermission = true;
     qint64 m_getFileSize;
+    bool isSplitChecked = false;
 };
 
 #endif // COMPRESSSETTING_H
