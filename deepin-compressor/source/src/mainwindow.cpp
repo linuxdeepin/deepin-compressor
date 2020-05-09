@@ -2046,7 +2046,6 @@ void MainWindow::slotStopSpinner()
     disconnect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
 }
 
-
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();

@@ -90,7 +90,7 @@ bool Utils::isCompressed_file(const QString &filePath)
     qDebug() << file.suffix();
 
     QString confDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
+    QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
     QFile confFile(confPath);
     bool readStatus = confFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString fileValue = confFile.readAll();
