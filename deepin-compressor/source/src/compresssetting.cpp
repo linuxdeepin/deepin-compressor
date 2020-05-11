@@ -364,7 +364,7 @@ void CompressSetting::onNextButoonClicked()
 
     m_openArgs[QStringLiteral("localFilePath")] = m_savepath->text();
     m_openArgs[QStringLiteral("filename")] =
-        m_filename->text()/* + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()*/;
+        m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
 
     //check if folderName valid
     QString unvalidStr = "";
@@ -458,7 +458,7 @@ void CompressSetting::setDefaultName(QString name)
     initWidget();
 
     onAdvanceButtonClicked(m_moresetbutton->isChecked());
-    name = name + "." + m_compresstype->text();
+//    name = name + "." + m_compresstype->text();
     m_filename->setText(name);
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->selectAll();
@@ -592,13 +592,13 @@ void CompressSetting::onSplitChanged(int /*status*/)
 void CompressSetting::ontypeChanged(QAction *action)
 {
     qDebug() << action->text();
-    int substrindex = m_filename->text().lastIndexOf('.' + m_compresstype->text());
+//    int substrindex = m_filename->text().lastIndexOf('.' + m_compresstype->text());
     setTypeImage(action->text());
     m_compresstype->setText(action->text());
 
     //update m_filename
-    QString nanme = m_filename->text().left(substrindex);
-    setDefaultName(m_filename->text().left(substrindex));
+//    QString nanme = m_filename->text().left(substrindex);
+//    setDefaultName(m_filename->text().left(substrindex));
 
     if (action->text().contains("7z")) {
         if (m_splitcompress->isChecked()) {
