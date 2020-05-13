@@ -39,7 +39,8 @@
     		"application/x-cd-image",
                 "application/zip",
                 "application/x-tar",
-            "application/x-java-archive"
+            "application/x-java-archive",
+            "application/x-tzo"
         ],
         "Name": "P7zip plugin",
         "Name[ca@valencia]": "Connector del P7zip",

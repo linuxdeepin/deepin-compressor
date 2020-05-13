@@ -105,6 +105,8 @@ bool Utils::isCompressed_file(const QString &filePath)
             ret = true;
         } else if (file.suffix().contains("lzo")) {
             ret = true;
+        } else if (file.suffix().contains("jar")) {
+            ret = true;
         } else {
             ret = false;
         }

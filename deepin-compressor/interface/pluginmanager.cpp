@@ -209,12 +209,12 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             if (mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
                 continue;//when iso is more than 4G,it is udf,use 7z to extract
             }
-            filteredPlugins << plugin;
-        } /*else if (!plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            if (mimeType.name() == QString("application/x-java-archive") && plugin->metaData().pluginId() == QString("kerfuffle_clizip")) {
+            if (mimeType.name() == QString("application/x-tzo") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z")) {
                 filteredPlugins << plugin;
+                continue;
             }
-        }*/
+            filteredPlugins << plugin;
+        }
     }
     qDebug() << filteredPlugins.count();
     return filteredPlugins;
