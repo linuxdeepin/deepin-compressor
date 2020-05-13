@@ -103,12 +103,14 @@ bool MainWindow::applicationQuit()
         }
 
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-
+        deleteDecompressFile();
         if (m_encryptionjob) {
+            m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
+        deleteDecompressFile();
         if (m_createJob) {
             m_createJob->kill();
             m_createJob = nullptr;
@@ -161,13 +163,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
+        deleteDecompressFile();
         event->accept();
-
         if (m_encryptionjob) {
-            m_encryptionjob->deleteLater();
+            m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
+            m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
+
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
+        deleteDecompressFile();
         if (m_createJob) {
             m_createJob->kill();
             m_createJob = nullptr;
@@ -1826,6 +1831,20 @@ void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles
     //    }
 }
 
+//解压取消时删除临时文件
+void MainWindow::deleteDecompressFile()
+{
+//    qDebug() << "deleteDecompressFile" << m_decompressfilepath << m_decompressfilename;
+
+    if (!m_decompressfilepath.isEmpty() && m_UnCompressPage->getDeFileCount() > 1) { //需判断是否空字符串，同时判断被解压文件里是否有多个一级文件（夹），只有一个一级文件（夹）时，在取消解压缩时就被删除了
+        QDir fi(m_decompressfilepath);  //若m_decompressfilepath为空字符串，则使用（"."）构造目录
+        qDebug() << fi.exists();
+        if (fi.exists()) {
+            fi.removeRecursively(); //删除解压后的文件夹
+        }
+    }
+}
+
 void MainWindow::creatArchive(QMap< QString, QString > &Args)
 {
     const QStringList filesToAdd = m_CompressPage->getCompressFilelist();
@@ -2078,6 +2097,7 @@ void MainWindow::onCancelCompressPressed(int compressType)
     }
 
     deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
+    deleteDecompressFile();
 
     if (compressType == COMPRESSING) {
         if (m_createJob) {

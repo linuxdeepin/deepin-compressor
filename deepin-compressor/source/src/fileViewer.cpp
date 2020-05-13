@@ -797,6 +797,11 @@ int fileViewer::getFileCount()
     return m_curfilelist.size();
 }
 
+int fileViewer::getDeFileCount()
+{
+    return pTableViewFile->model()->rowCount();
+}
+
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
     /*

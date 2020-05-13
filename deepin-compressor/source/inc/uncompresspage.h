@@ -48,6 +48,7 @@ public:
     QString getDecompressPath();
     void setdefaultpath(QString path);
     int getFileCount();
+    int getDeFileCount();
     int showWarningDialog(const QString &msg);
     EXTRACT_TYPE getExtractType();
 

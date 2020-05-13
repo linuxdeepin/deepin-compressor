@@ -150,7 +150,7 @@ private slots:
     void SlotExtractPassword(QString password);
     void slotCompressFinished(KJob *job);
     void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path, EXTRACT_TYPE type);
-    void slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList,const QString & programma);
+    void slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList, const QString &programma);
     void slotKillExtractJob();
     void slotFailRetry();
     void slotBatchExtractFileChanged(const QString &name);
@@ -188,6 +188,7 @@ private:
 
     QStringList CheckAllFiles(QString path);
     void deleteCompressFile(/*QStringList oldfiles, QStringList newfiles*/);
+    void deleteDecompressFile();
 
 private:
     DLabel *m_logo;
@@ -236,8 +237,8 @@ private:
 
     DFileWatcher *m_fileManager = nullptr;
     int openTempFileLink = 0;
-    QEventLoop* pEventloop = nullptr;
-    DSpinner* m_spinner = nullptr;
+    QEventLoop *pEventloop = nullptr;
+    DSpinner *m_spinner = nullptr;
 
 private:
     void calSelectedTotalFileSize(const QStringList &files);

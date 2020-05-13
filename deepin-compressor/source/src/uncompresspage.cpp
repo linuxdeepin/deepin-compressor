@@ -130,6 +130,12 @@ int UnCompressPage::getFileCount()
     return m_fileviewer->getFileCount();
 }
 
+//获取被解压文件里一级文件(夹)个数
+int UnCompressPage::getDeFileCount()
+{
+    return m_fileviewer->getDeFileCount();
+}
+
 int UnCompressPage::showWarningDialog(const QString &msg)
 {
     DDialog *dialog = new DDialog(this);
