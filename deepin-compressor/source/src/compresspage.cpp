@@ -61,7 +61,7 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
     mainLayout->setStretchFactor(buttonlayout, 1);
     mainLayout->setContentsMargins(12, 1, 20, 20);
 
-    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat);
+    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
     // initalize the configuration file.
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");

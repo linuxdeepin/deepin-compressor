@@ -31,7 +31,7 @@
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)
 {
-    m_mimetype = new MimeTypeDisplayManager;
+    m_mimetype = new MimeTypeDisplayManager(this);
     m_showreprevious = false;
     setFilter(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
 }

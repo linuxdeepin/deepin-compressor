@@ -277,7 +277,7 @@ void MainWindow::InitUI()
     m_progressdialog = new ProgressDialog(this);
     m_settingsDialog = new SettingDialog(this);
     m_encodingpage = new EncodingPage(this);
-    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat);
+    m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
 
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
@@ -1853,7 +1853,7 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     QVector< Archive::Entry * > all_entries;
 
     foreach (QString file, filesToAdd) {
-        Archive::Entry *entry = new Archive::Entry();
+        Archive::Entry *entry = new Archive::Entry(this);
         entry->setFullPath(file);
 
 

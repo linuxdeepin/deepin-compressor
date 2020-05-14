@@ -270,7 +270,7 @@ void SettingDialog::initUI()
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
     // 创建设置项存储后端
-    auto backend = new QSettingBackend(confPath);
+    auto backend = new QSettingBackend(confPath, this);
 
     // 通过json文件创建DSettings对象
     m_settings = DSettings::fromJsonFile(":/data/deepin-compressor.json");
