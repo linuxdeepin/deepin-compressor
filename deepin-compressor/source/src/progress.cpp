@@ -30,6 +30,7 @@
 #include "DFontSizeManager"
 #include "utils.h"
 #include <QTimerEvent>
+#include "mainwindow.h"
 
 Progress::Progress(DWidget *parent)
     : DWidget(parent)
@@ -297,6 +298,7 @@ int Progress::showConfirmDialog()
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
+    dialog->move(mapToGlobal(this->geometry().topLeft()).x() + this->width() / 2  - dialog->width() / 2,  mapToGlobal(this->geometry().topLeft()).y() - TITLE_FIXED_HEIGHT + this->height() / 2  - dialog->height() / 2); //dialog move to center
     int res = dialog->exec();
     delete dialog;
 
