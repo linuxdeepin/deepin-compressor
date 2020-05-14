@@ -44,7 +44,8 @@ SOURCES += \
     ../../deepin-compressor/interface/options.cpp \
     ../../deepin-compressor/interface/archivejob.cpp \
     ../../deepin-compressor/interface/archiveinterface.cpp \
-    ../../deepin-compressor/interface/analysepsdtool.cpp
+    ../../deepin-compressor/interface/analysepsdtool.cpp \
+    detectencoding.cpp
 
 HEADERS += \
         libzipplugin.h \
@@ -72,7 +73,8 @@ HEADERS += \
     ../../deepin-compressor/interface/archive_manager.h \
     ../../deepin-compressor/interface/archivejob.h \
     ../../deepin-compressor/interface/kpluginfactory_p.h \
-    ../../deepin-compressor/interface/analysepsdtool.h
+    ../../deepin-compressor/interface/analysepsdtool.h \
+    detectencoding.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins
