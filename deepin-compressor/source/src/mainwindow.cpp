@@ -109,8 +109,7 @@ bool MainWindow::applicationQuit()
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
-        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-        deleteDecompressFile();
+
         if (m_createJob) {
             m_createJob->kill();
             m_createJob = nullptr;
@@ -165,14 +164,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
         deleteDecompressFile();
         event->accept();
+
         if (m_encryptionjob) {
             m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
 
-        deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-        deleteDecompressFile();
+        //deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
+        //deleteDecompressFile();
         if (m_createJob) {
             m_createJob->kill();
             m_createJob = nullptr;
@@ -196,6 +196,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     } else */
+
     if (m_startTimer == event->timerId()) {
         if (!m_initflag) {
             InitUI();
@@ -1364,11 +1365,14 @@ void MainWindow::slotExtractionDone(KJob *job)
         } else {
             m_progressdialog->setFinished(m_decompressfilepath);
         }
-
-        DDesktopServices::showFileItem(QUrl(m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString(), QUrl::TolerantMode));
-
         m_pageid = PAGE_UNZIP;
         refreshPage();
+//        QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
+//        QFileInfo fileinfo(fullpath);
+//        if (fileinfo.exists()) {
+//            DDesktopServices::showFileItem(fullpath);
+//        }
+
     }
     //    else if( job->error() && job->error() == KJob::KilledJobError )
     //    {

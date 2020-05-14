@@ -16,6 +16,7 @@ public:
     bool testArchive() ;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
     void cleanIfCanceled()override;
+    void watchFileList(QStringList *strList)override;
 protected:
     const QString uncompressedFileName() const;
     QString overwriteFileName(QString &filename);

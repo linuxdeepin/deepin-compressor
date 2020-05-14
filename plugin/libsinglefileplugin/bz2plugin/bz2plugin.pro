@@ -50,7 +50,8 @@ SOURCES += \
     ../../../deepin-compressor/interface/options.cpp \
     ../../../deepin-compressor/interface/kpluginfactory.cpp \
     ../../../deepin-compressor/interface/kpluginmetadata.cpp \
-    ../../../deepin-compressor/interface/analysepsdtool.cpp
+    ../../../deepin-compressor/interface/analysepsdtool.cpp \
+    ../../../deepin-compressor/interface/filewatcher.cpp
 
 HEADERS += \
         bz2plugin.h \
@@ -79,7 +80,9 @@ HEADERS += \
     ../../../deepin-compressor/interface/archivejob.h \
     ../../../deepin-compressor/interface/cliproperties.h \
     ../../../deepin-compressor/interface/archiveentry.h \
-    ../../../deepin-compressor/interface/analysepsdtool.h
+    ../../../deepin-compressor/interface/analysepsdtool.h \
+    ../../../deepin-compressor/interface/archivejob_p.h \
+    ../../../deepin-compressor/interface/filewatcher.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

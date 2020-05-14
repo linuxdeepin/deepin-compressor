@@ -84,7 +84,7 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     device->open(QIODevice::ReadOnly);
 
     qint64 bytesRead;
-    QByteArray dataChunk(1024*16, '\0');   // 16Kb
+    QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
 
     while (true) {
         bytesRead = device->read(dataChunk.data(), dataChunk.size());
@@ -119,7 +119,7 @@ bool LibSingleFileInterface::list(bool /*isbatch*/)
     return true;
 }
 
-QString LibSingleFileInterface::overwriteFileName(QString& filename)
+QString LibSingleFileInterface::overwriteFileName(QString &filename)
 {
     QString newFileName(filename);
 
@@ -132,8 +132,7 @@ QString LibSingleFileInterface::overwriteFileName(QString& filename)
 
         if ((query.responseCancelled()) || (query.responseSkip()) || (query.responseAutoSkip())) {
             return QString();
-        } else if (query.responseOverwrite() || query.responseOverwriteAll())
-        {
+        } else if (query.responseOverwrite() || query.responseOverwriteAll()) {
             break;
         } else if (query.responseRename()) {
             newFileName = query.newFilename();
@@ -161,7 +160,7 @@ const QString LibSingleFileInterface::uncompressedFileName() const
         }
     }
 
-    return uncompressedName + QStringLiteral( ".uncompressed" );
+    return uncompressedName + QStringLiteral(".uncompressed");
 }
 
 bool LibSingleFileInterface::testArchive()
@@ -170,6 +169,11 @@ bool LibSingleFileInterface::testArchive()
 }
 
 void LibSingleFileInterface::cleanIfCanceled()
+{
+
+}
+
+void LibSingleFileInterface::watchFileList(QStringList *strList)
 {
 
 }

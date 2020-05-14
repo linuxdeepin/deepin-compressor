@@ -576,8 +576,8 @@ void ExtractJob::doWork()
     bool ret = archiveInterface()->extractFiles(m_entries, m_destinationDir, m_options);
 
     if (!archiveInterface()->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
-        onFinished(ret);
-//        emit sigExtractJobFinished();
+//        onFinished(ret);
+        emit archiveInterface()->finished(ret);
     }
 }
 
@@ -730,12 +730,13 @@ void AddJob::doWork()
 
     Q_ASSERT(m_writeInterface);
 
-
+    QStringList *fileListWathed = new QStringList();
     // The file paths must be relative to GlobalWorkDir.
     for (Archive::Entry *entry : qAsConst(m_entries)) {
         qDebug() << entry->fullPath();
 
         const QString &fullPath = entry->fullPath();
+        fileListWathed->append(fullPath);
         QString relativePath = workDir.relativeFilePath(fullPath);
 
         if (fullPath.endsWith(QLatin1Char('/'))) {
@@ -746,10 +747,15 @@ void AddJob::doWork()
     }
 
     connectToArchiveInterfaceSignals();
+    m_writeInterface->watchFileList(fileListWathed);
     bool ret = m_writeInterface->addFiles(m_entries, m_destination, m_options, totalCount);
 
     if (!archiveInterface()->waitForFinishedSignal()) {
         onFinished(ret);
+    }
+    if (fileListWathed != nullptr) {
+        fileListWathed->clear();
+        delete fileListWathed;
     }
 }
 

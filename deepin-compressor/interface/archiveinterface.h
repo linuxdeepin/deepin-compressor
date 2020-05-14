@@ -38,13 +38,15 @@
 #include <QVariantList>
 #include "kpluginmetadata.h"
 
+#define TIMER_TIMEOUT 1000
+
 class Query;
 
 class  ReadOnlyArchiveInterface: public QObject
 {
     Q_OBJECT
 public:
-    enum ExtractPsdStatus{
+    enum ExtractPsdStatus {
         Default,
         NotChecked,
         Reextract,
@@ -187,7 +189,18 @@ public:
      * Derived classes can overwrite this method for clean tempfiles if user canceled extract job and there is no overwrite query.
      */
     virtual void cleanIfCanceled() = 0;
-
+    /**
+     * the timer can check if source files changed in the disk between compressing;
+     * should be called one time if the compress begin;
+     * @brief timerStart:derived class need override
+     */
+//    virtual void timerStart() = 0;
+    /**
+     * the timer should be killed if the compress finished
+     * @brief timerEnd:derived class need override
+     */
+//    virtual void timerEnd() = 0;
+    virtual void watchFileList(QStringList *strList) = 0;
 public:
     QString extractTopFolderName;
     QString destDirName;        //取消解压，需要该变量
@@ -291,7 +304,7 @@ public:
     virtual bool addComment(const QString &comment) = 0;
 
     static void clearPath(QString path);
-
+    virtual void watchFileList(QStringList *strList)override;
 Q_SIGNALS:
     void entryRemoved(const QString &path);
 

@@ -147,6 +147,7 @@ ReadWriteArchiveInterface::ReadWriteArchiveInterface(QObject *parent, const QVar
 
 ReadWriteArchiveInterface::~ReadWriteArchiveInterface()
 {
+
 }
 
 bool ReadOnlyArchiveInterface::waitForFinishedSignal()
@@ -313,4 +314,9 @@ void ReadWriteArchiveInterface::clearPath(QString path)
     args.append(path);
     p.execute(command, args);
     p.waitForFinished();
+}
+
+void ReadWriteArchiveInterface::watchFileList(QStringList *strList)
+{
+
 }

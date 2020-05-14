@@ -25,7 +25,7 @@
 #include "archiveinterface.h"
 #include "archiveentry.h"
 #include "cliproperties.h"
-
+//#include "filewatcher.h"
 #include <QProcess>
 #include <QRegularExpression>
 
@@ -36,6 +36,7 @@ class QDir;
 class QTemporaryDir;
 class QTemporaryFile;
 class AnalyseHelp;
+class FileWatcher;
 
 class  CliInterface : public ReadWriteArchiveInterface
 {
@@ -96,6 +97,7 @@ public:
 
     CliProperties *cliProperties() const;
     virtual void cleanIfCanceled()override;
+    virtual void watchFileList(QStringList *strList)override;
 protected:
 
     bool setAddedFiles();
@@ -131,6 +133,11 @@ protected:
 
     void cleanUp();
 
+protected Q_SLOTS:
+    virtual void readStdout(bool handleAll = false);
+    virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+protected:
     CliProperties *m_cliProps = nullptr;
     QString m_oldWorkingDirExtraction; // Used ONLY by extraction jobs.
     QString m_oldWorkingDir; // Used by copy and move jobs.
@@ -147,11 +154,8 @@ protected:
 
     bool m_abortingOperation = false;
 
-protected Q_SLOTS:
-    virtual void readStdout(bool handleAll = false);
-
 private:
-
+    void init();
     bool handleFileExistsMessage(const QString &filename);
 
     /**
@@ -200,6 +204,10 @@ private:
 
     bool extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options);
 
+    void watchDestFilesBegin();
+    void watchDestFilesEnd();
+private:
+
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
     QHash<int, QList<QRegularExpression> > m_patternCache;
@@ -222,16 +230,18 @@ private:
     int m_allfilenumber = 0;
     QString extractDst7z_;
 
-    AnalyseHelp* pAnalyseHelp = nullptr;
-
-protected Q_SLOTS:
-    virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    AnalyseHelp *pAnalyseHelp = nullptr;
+    FileWatcher *pFileWatcherdd = nullptr;
 
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void continueCopying(bool result);
     void onEntry(Archive::Entry *archiveEntry);
-
+    /**
+     *  if files changed between compressing,then recived signal.
+     *  @brief slotFilesWatchedChanged
+     */
+    void slotFilesWatchedChanged(QString fileChanged);
 
 };
 

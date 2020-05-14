@@ -34,6 +34,7 @@ public:
     bool testArchive() override;
     bool hasBatchExtractionProgress() const override;
     virtual void cleanIfCanceled()override;
+    virtual void watchFileList(QStringList *strList)override;
 protected:
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)
@@ -58,7 +59,7 @@ protected:
 
     bool initializeReader();
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
-    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo& info, bool partialprogress = true);
+    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool partialprogress = true);
     void copyData(const QString &filename, struct archive *source, struct archive *dest,  bool partialprogress = true);
 
     ArchiveRead m_archiveReader;

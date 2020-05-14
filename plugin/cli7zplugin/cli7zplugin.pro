@@ -48,7 +48,8 @@ SOURCES += \
     ../../deepin-compressor/interface/cliproperties.cpp \
     ../../deepin-compressor/interface/kpluginloader.cpp \
     ../../deepin-compressor/interface/plugin.cpp \
-    ../../deepin-compressor/interface/analysepsdtool.cpp
+    ../../deepin-compressor/interface/analysepsdtool.cpp \
+    ../../deepin-compressor/interface/filewatcher.cpp
 
 HEADERS += \
         cliplugin.h \
@@ -76,7 +77,8 @@ HEADERS += \
     ../../deepin-compressor/interface/kprocess.h \
     ../../deepin-compressor/interface/kexportplugin.h \
     ../../deepin-compressor/interface/plugin.h \
-    ../../deepin-compressor/interface/analysepsdtool.h
+    ../../deepin-compressor/interface/analysepsdtool.h \
+    ../../deepin-compressor/interface/filewatcher.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

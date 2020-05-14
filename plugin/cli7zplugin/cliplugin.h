@@ -36,6 +36,7 @@ public:
     bool isDiskFullMsg(const QString &line) override;
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
+    void watchFileList(QStringList *strList)override;
 
 private:
     enum ArchiveType {
@@ -64,6 +65,7 @@ private:
     int m_linesComment;
     Archive::Entry *m_currentArchiveEntry;
     bool m_isFirstInformationEntry;
+
 };
 
 

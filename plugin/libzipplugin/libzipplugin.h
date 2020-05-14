@@ -42,6 +42,7 @@ public:
     bool addComment(const QString &comment) override;
     bool testArchive() override;
     void cleanIfCanceled()override;
+    void watchFileList(QStringList *strList)override;
 private:
     bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);

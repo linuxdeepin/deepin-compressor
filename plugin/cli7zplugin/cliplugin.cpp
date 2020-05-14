@@ -30,8 +30,6 @@ CliPlugin::~CliPlugin()
 {
 }
 
-
-
 void CliPlugin::resetParsing()
 {
     m_parseState = ParseStateTitle;
@@ -102,7 +100,7 @@ bool CliPlugin::isPasswordList()
 {
     QStringList programLst = m_process->program();
 
-    foreach (auto str, programLst ) {
+    foreach (auto str, programLst) {
         if (str.startsWith("-p")) {
             return true;
         }
@@ -298,7 +296,7 @@ bool CliPlugin::readListLine(const QString &line)
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
-            if (!m_currentArchiveEntry->fullPath().isEmpty() ) {
+            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
                 emit entry(m_currentArchiveEntry);
             } else {
                 delete m_currentArchiveEntry;
@@ -400,5 +398,12 @@ bool CliPlugin::isFileExistsFileName(const QString &line)
     return (line.startsWith(QLatin1String("file ./")) ||
             line.startsWith(QLatin1String("  Path:     ./")));
 }
+
+void CliPlugin::watchFileList(QStringList *strList)
+{
+    CliInterface::watchFileList(strList);
+}
+
+
 
 //#include "moc_cliplugin.cpp"

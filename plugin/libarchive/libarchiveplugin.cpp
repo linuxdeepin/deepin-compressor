@@ -666,3 +666,10 @@ void LibarchivePlugin::cleanIfCanceled()
 {
 
 }
+
+void LibarchivePlugin::watchFileList(QStringList *strList)
+{
+
+}
+
+

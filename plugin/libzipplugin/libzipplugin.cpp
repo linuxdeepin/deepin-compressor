@@ -1045,9 +1045,10 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         QDataStream out(&file);
 
-        // Write archive entry to file. We use a read/write buffer of 1000 chars.
+        // Write archive entry to file. We use a read/write buffer of 1024 chars.
+        int kb = 1024;
         qulonglong sum = 0;
-        char buf[1000];
+        char buf[kb];
 
         if (pi.fileProgressProportion > 0) {
             emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
@@ -1059,7 +1060,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
                 break;
             }
-            const auto readBytes = zip_fread(zipFile, buf, 1000);
+            const auto readBytes = zip_fread(zipFile, buf, kb);
             if (readBytes < 0) {
                 emit error(tr("Failed to read data for entry: %1"));
                 file.close();
@@ -1508,6 +1509,11 @@ void LibzipPlugin::cleanIfCanceled()
             }
         }
     }
+}
+
+void LibzipPlugin::watchFileList(QStringList *strList)
+{
+
 }
 
 

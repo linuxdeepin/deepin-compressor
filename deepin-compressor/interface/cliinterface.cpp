@@ -36,6 +36,7 @@
 #include <QTemporaryFile>
 #include <QUrl>
 #include "analysepsdtool.h"
+#include "filewatcher.h"
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
@@ -61,6 +62,16 @@ CliInterface::~CliInterface()
         delete pAnalyseHelp;
         pAnalyseHelp = nullptr;
     }
+
+    if (pFileWatcherdd != nullptr) {
+        this->watchDestFilesEnd();
+        delete pFileWatcherdd;
+        pFileWatcherdd = nullptr;
+    }
+}
+
+void CliInterface::init()
+{
 }
 
 void CliInterface::setListEmptyLines(bool emptyLines)
@@ -250,15 +261,20 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
         }
     }
 
-    return runProcess(m_cliProps->property("addProgram").toString(),
-                      m_cliProps->addArgs(filename(),
-                                          entryFullPaths(filesToPass, NoTrailingSlash),
-                                          password(),
-                                          isHeaderEncryptionEnabled(),
-                                          options.compressionLevel(),
-                                          options.compressionMethod(),
-                                          options.encryptionMethod(),
-                                          options.volumeSize()));
+
+    bool ret = runProcess(m_cliProps->property("addProgram").toString(),
+                          m_cliProps->addArgs(filename(),
+                                              entryFullPaths(filesToPass, NoTrailingSlash),
+                                              password(),
+                                              isHeaderEncryptionEnabled(),
+                                              options.compressionLevel(),
+                                              options.compressionMethod(),
+                                              options.encryptionMethod(),
+                                              options.volumeSize()));
+    if (ret == true) {
+        this->watchDestFilesBegin();
+    }
+    return ret;
 }
 
 bool CliInterface::moveFiles(const QVector< Archive::Entry * > &files, Archive::Entry *destination,
@@ -413,6 +429,40 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 void CliInterface::cleanIfCanceled()
 {
 
+}
+
+void CliInterface::watchDestFilesBegin()
+{
+    if (this->pFileWatcherdd == nullptr) {
+        this->pFileWatcherdd = new FileWatcher(this);
+    }
+    connect(this->pFileWatcherdd, &FileWatcher::sigFileChanged, this, &CliInterface::slotFilesWatchedChanged);
+    this->pFileWatcherdd->beginWork();
+}
+
+void CliInterface::watchDestFilesEnd()
+{
+    if (this->pFileWatcherdd != nullptr) {
+        this->pFileWatcherdd->finishWork();
+    }
+}
+
+void CliInterface::watchFileList(QStringList *strList)
+{
+    qDebug() << "%%%%%%%待监控的文件：" << *strList;
+    if (this->pFileWatcherdd == nullptr) {
+        this->pFileWatcherdd = new FileWatcher(this);
+    }
+    this->pFileWatcherdd->watch(strList);
+}
+
+void CliInterface::slotFilesWatchedChanged(QString fileChanged)
+{
+    this->watchDestFilesEnd();
+    emit cancelled();
+    emit finished(false);
+
+    killProcess();
 }
 
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -969,7 +1019,13 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-    //qDebug() << "#####" << line;
+    qDebug() << "#####" << line;
+//    if (line == QString("没有那个文件或目录") || line == QString("No such file or directory")) {
+//        emit cancelled();
+//        emit finished(false);
+//        return false;
+//    }
+
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
         if (pAnalyseHelp->isNotKnown() == true) {
