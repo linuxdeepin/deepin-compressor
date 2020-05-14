@@ -328,12 +328,12 @@ void fileViewer::InitUI()
     connect(pTableViewFile->header_, &QHeaderView::sortIndicatorChanged, this, &fileViewer::onSortIndicatorChanged);
 
     pTableViewFile->verticalHeader()->setDefaultSectionSize(MyFileSystemDefine::gTableHeight);
-    pdelegate = new FirstRowDelegate();
+    pdelegate = new FirstRowDelegate(this);
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
 //    plabel = new MyLabel(pTableViewFile);
 //    plabel->setFixedSize(580, 36);
-    firstmodel = new QStandardItemModel();
+    firstmodel = new QStandardItemModel(this);
     firstSelectionModel = new QItemSelectionModel(firstmodel);
 
     pModel = new MyFileSystemModel(this);
@@ -374,13 +374,13 @@ void fileViewer::InitUI()
 
     if (PAGE_UNCOMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
-        m_pRightMenu = new DMenu();
+        m_pRightMenu = new DMenu(this);
         m_pRightMenu->setMinimumWidth(202);
         m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
         m_pRightMenu->addAction(tr("Extract to current directory"));
         m_pRightMenu->addAction(tr("Open"));
 
-        openWithDialogMenu = new  DMenu(tr("Open style"));
+        openWithDialogMenu = new  DMenu(tr("Open style"), this);
         m_pRightMenu->addMenu(openWithDialogMenu);
 
 
@@ -389,15 +389,13 @@ void fileViewer::InitUI()
     }
     if (PAGE_COMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
-        m_pRightMenu = new DMenu();
+        m_pRightMenu = new DMenu(this);
         m_pRightMenu->setMinimumWidth(202);
-        deleteAction = new QAction(tr("Delete"));
+        deleteAction = new QAction(tr("Delete"), this);
         m_pRightMenu->addAction(deleteAction);
         m_pRightMenu->addAction(tr("Open"));
 
-        openWithDialogMenu = new  DMenu(tr("Open style"));
-        m_pRightMenu->addMenu(openWithDialogMenu);
-
+        openWithDialogMenu = new  DMenu(tr("Open style"), this);
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }

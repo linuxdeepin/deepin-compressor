@@ -49,7 +49,7 @@ ArchiveModel::ArchiveModel(QObject *parent)
 {
     initRootEntry();
 
-    m_mimetype = new MimeTypeDisplayManager;
+    m_mimetype = new MimeTypeDisplayManager(this);
     // Mappings between column indexes and entry properties.
     m_propertiesMap = {
         { FullPath, "fullPath" },
