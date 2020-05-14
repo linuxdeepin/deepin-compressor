@@ -340,6 +340,8 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
     if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
+    } else if ("application/zip" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 4:Standard
     } else {
         m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
     }
