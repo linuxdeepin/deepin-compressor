@@ -191,10 +191,7 @@ private:
     void deleteDecompressFile();
 
 private:
-    DLabel *m_logo;
     QPixmap m_logoicon;
-    QFrame *m_titleFrame;
-    DLabel *m_titlelabel;
     DWidget *m_mainWidget;
     QStackedLayout *m_mainLayout;
     HomePage *m_homePage;

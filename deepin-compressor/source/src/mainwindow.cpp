@@ -444,50 +444,25 @@ void MainWindow::initTitleBar()
 {
     titlebar()->setMenu(createSettingsMenu());
     titlebar()->setFixedHeight(50);
+    titlebar()->setTitle("");
 
     QIcon icon = QIcon::fromTheme("deepin-compressor");
-    m_logo = new DLabel("", this);
-    m_logo->setPixmap(icon.pixmap(QSize(30, 30)));
+    titlebar()->setIcon(icon);
 
-    m_titlebutton = new DIconButton(DStyle::StandardPixmap::SP_IncreaseElement, this);
-    m_titlebutton->setFixedSize(36, 36);
+    m_titlebutton = new DIconButton(DStyle::SP_IncreaseElement, this);
+    m_titlebutton->setFixedSize(38, 38);
     m_titlebutton->setVisible(false);
-
-    m_titleFrame = new QFrame(this);
-    m_titleFrame->setObjectName("TitleBar");
     QHBoxLayout *leftLayout = new QHBoxLayout;
-    leftLayout->addSpacing(6);
-    leftLayout->addWidget(m_logo);
     leftLayout->addSpacing(6);
     leftLayout->addWidget(m_titlebutton);
     leftLayout->setContentsMargins(0, 0, 0, 0);
-
     QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(10 + 6 + 36 + 30);
+    left_frame->setFixedWidth(6 + 38);
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
+    titlebar()->addWidget(left_frame, Qt::AlignLeft);
 
-    m_titlelabel = new DLabel(this);
-    m_titlelabel->setMinimumSize(315, TITLE_FIXED_HEIGHT);
-    // m_titlelabel->setMinimumHeight(TITLE_FIXED_HEIGHT);
-    m_titlelabel->setAlignment(Qt::AlignCenter);
-
-    DFontSizeManager::instance()->bind(m_titlelabel, DFontSizeManager::T6, QFont::Medium);
-
-    m_titlelabel->setForegroundRole(DPalette::WindowText);
-
-    QHBoxLayout *titlemainLayout = new QHBoxLayout;
-    titlemainLayout->setContentsMargins(0, 0, 0, 0);
-    titlemainLayout->addWidget(left_frame);
-    titlemainLayout->addSpacing(5);
-    titlemainLayout->addWidget(m_titlelabel, 0, Qt::AlignCenter);
-
-    m_titleFrame->setLayout(titlemainLayout);
-    m_titleFrame->setFixedHeight(TITLE_FIXED_HEIGHT);
     titlebar()->setContentsMargins(0, 0, 0, 0);
-    titlebar()->setCustomWidget(m_titleFrame, false);
-
-    // m_titlelabel->setText( tr("%1 task(s) in progress").arg(1) );
 }
 
 void MainWindow::setQLabelText(QLabel *label, const QString &text)
@@ -598,7 +573,7 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(true);
         setAcceptDrops(true);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, "");
+        titlebar()->setTitle("");
         m_mainLayout->setCurrentIndex(0);
         break;
     case PAGE_UNZIP:
@@ -606,12 +581,12 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, m_decompressfilename);
+        titlebar()->setTitle(m_decompressfilename);
         m_mainLayout->setCurrentIndex(1);
         break;
     case PAGE_ZIP:
         m_Progess->resetProgress();
-        setQLabelText(m_titlelabel, tr("Create New Archive"));
+        titlebar()->setTitle(tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_IncreaseElement);
         m_openAction->setEnabled(true);
         m_titlebutton->setVisible(true);
@@ -621,7 +596,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(2);
         break;
     case PAGE_ZIPSET:
-        setQLabelText(m_titlelabel, tr("Create New Archive"));
+        titlebar()->setTitle(tr("Create New Archive"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -637,7 +612,7 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, tr("Compressing"));
+        titlebar()->setTitle(tr("Compressing"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
         m_timer.start();
@@ -647,13 +622,13 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        setQLabelText(m_titlelabel, tr("Extracting"));
+        titlebar()->setTitle(tr("Extracting"));
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
         m_timer.start();
         break;
     case PAGE_ZIP_SUCCESS:
-        setQLabelText(m_titlelabel, "");
+        titlebar()->setTitle("");
         m_CompressSuccess->setstringinfo(tr("Compression successful"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
@@ -662,7 +637,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(5);
         break;
     case PAGE_ZIP_FAIL:
-        setQLabelText(m_titlelabel, "");
+        titlebar()->setTitle("");
         m_CompressFail->setFailStr(tr("Compression failed"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
         m_openAction->setEnabled(false);
@@ -671,7 +646,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_UNZIP_SUCCESS:
-        setQLabelText(m_titlelabel, "");
+        titlebar()->setTitle("");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
         //m_CompressSuccess->setstringinfo(tr("Extraction successful"));
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
@@ -695,7 +670,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP_FAIL:
         m_titlebutton->setIcon(DStyle::StandardPixmap::SP_ArrowLeave);
-        setQLabelText(m_titlelabel, "");
+        titlebar()->setTitle("");
         m_CompressFail->setFailStr(tr("Extraction failed"));
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
@@ -703,7 +678,7 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_ENCRYPTION:
-        setQLabelText(m_titlelabel, m_decompressfilename);
+        titlebar()->setTitle(m_decompressfilename);
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
