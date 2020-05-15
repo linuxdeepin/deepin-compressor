@@ -216,56 +216,56 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
 
 QString  LibzipPlugin::trans2uft8(const char *str)
 {
-    QString code = "";
-    QString codemine = "";
-    QString type = "";
-    file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
-    QTextCodec *codec = QTextCodec::codecForName(QByteArray(codemine.toStdString().c_str(), sizeof(codemine)));
-    if (/*"us-ascii" == codemine ||*/ "iso-8859-1" == codemine) {
-        QTextCodec *codec = QTextCodec::codecForName("GBK");
-        m_codecstr = m_codecname;
-        return codec->toUnicode(str);
-    } else {
-        m_codecstr = "UTF-8";
-        return QString(str);
-    }
-
-//    QByteArray codec_name = detectEncode(str);
-//    //qDebug() << codec_name;
-//    if ("" == m_codecname) {
-
-//        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
-//            return str;
-//        }
-
-//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-//        m_codecstr = codec_name;
-//        return codec->toUnicode(str);
-//    } else if ("gb18030" == codec_name) {
-//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-//        m_codecstr = codec_name;
-//        return codec->toUnicode(str);
-//    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
-//        QString code = "";
-//        QString codemine = "";
-//        QString type = "";
-//        file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
-//        if (("utf-8" == codemine || "us-ascii" == codemine)) {
-//            m_codecstr = "UTF-8";
-//            return QString(str);
-//        } else {
-//            QTextCodec *codec = QTextCodec::codecForName("GBK");
-//            m_codecstr = m_codecname;
-//            return codec->toUnicode(str);
-//        }
-//    } else if ("UTF-8" != codec_name) {
-//        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
+//    QString code = "";
+//    QString codemine = "";
+//    QString type = "";
+//    file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
+//    QTextCodec *codec = QTextCodec::codecForName(QByteArray(codemine.toStdString().c_str(), sizeof(codemine)));
+//    if (/*"us-ascii" == codemine ||*/ "iso-8859-1" == codemine) {
+//        QTextCodec *codec = QTextCodec::codecForName("GBK");
 //        m_codecstr = m_codecname;
 //        return codec->toUnicode(str);
 //    } else {
 //        m_codecstr = "UTF-8";
 //        return QString(str);
 //    }
+
+    QByteArray codec_name = detectEncode(str);
+    //qDebug() << codec_name;
+    if ("" == m_codecname) {
+
+        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+            return str;
+        }
+
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+        m_codecstr = codec_name;
+        return codec->toUnicode(str);
+    } else if ("gb18030" == codec_name) {
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+        m_codecstr = codec_name;
+        return codec->toUnicode(str);
+    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+        QString code = "";
+        QString codemine = "";
+        QString type = "";
+        file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
+        if (("utf-8" == codemine || "us-ascii" == codemine)) {
+            m_codecstr = "UTF-8";
+            return QString(str);
+        } else {
+            QTextCodec *codec = QTextCodec::codecForName("GBK");
+            m_codecstr = m_codecname;
+            return codec->toUnicode(str);
+        }
+    } else if ("UTF-8" != codec_name) {
+        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
+        m_codecstr = m_codecname;
+        return codec->toUnicode(str);
+    } else {
+        m_codecstr = "UTF-8";
+        return QString(str);
+    }
 }
 
 bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
