@@ -261,16 +261,16 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
         }
     }
 
-
-    bool ret = runProcess(m_cliProps->property("addProgram").toString(),
-                          m_cliProps->addArgs(filename(),
-                                              entryFullPaths(filesToPass, NoTrailingSlash),
-                                              password(),
-                                              isHeaderEncryptionEnabled(),
-                                              options.compressionLevel(),
-                                              options.compressionMethod(),
-                                              options.encryptionMethod(),
-                                              options.volumeSize()));
+    QStringList arguments = m_cliProps->addArgs(filename(),
+                                                entryFullPaths(filesToPass, NoTrailingSlash),
+                                                password(),
+                                                isHeaderEncryptionEnabled(),
+                                                options.compressionLevel(),
+                                                options.compressionMethod(),
+                                                options.encryptionMethod(),
+                                                options.volumeSize());
+    arguments.removeOne("-l");//beaucse -l will failed if files contains softLink which links parent folder.
+    bool ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
     if (ret == true) {
         this->watchDestFilesBegin();
     }

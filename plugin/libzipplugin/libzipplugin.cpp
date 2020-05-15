@@ -147,7 +147,8 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     zip_error_t err;
 
     // Open archive.
-    zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_RDONLY, &errcode);
+    QString fileName = filename();
+    zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
         emit error(tr("Failed to open archive: %1"));
