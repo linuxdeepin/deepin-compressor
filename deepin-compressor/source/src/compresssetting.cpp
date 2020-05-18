@@ -663,9 +663,8 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);
-    dialog->setFixedWidth(440);
+    dialog->setMinimumSize(380, 140);
     dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
-    dialog->getButton(0)->setFixedWidth(340);
     DLabel *pContent = new DLabel(msg, dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
