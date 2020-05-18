@@ -276,7 +276,7 @@ void CompressSetting::onNextButoonClicked()
         QFileInfo m_fileName(m_pathlist.at(i));
         if (!m_fileName.exists()) {
             filePermission = false;
-            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(Utils::toShortString(m_fileName.fileName())));
             return;
         } /*else if (m_fileName.isDir() && m_fileName.exists()) {
             QString dirFilePath = checkDirFileExit(m_fileName.path());
@@ -294,18 +294,18 @@ void CompressSetting::onNextButoonClicked()
         if (m_fileName.isFile()) {
             if (!m_fileName.isReadable()) {
                 filePermission = false;
-                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
                 return;
             }
         } else if (m_fileName.isDir()) {
             if (!m_fileName.isReadable()) {
                 filePermission = false;
-                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
                 return;
             } else {
                 filePermission = checkFilePermission(m_fileName.absoluteFilePath());
                 if (!filePermission) {
-                    showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
                     return;
                 }
             }
@@ -663,8 +663,9 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);
-    dialog->addButton(tr("OK"));
-    dialog->setMinimumSize(380, 140);
+    dialog->setFixedWidth(440);
+    dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+    dialog->getButton(0)->setFixedWidth(340);
     DLabel *pContent = new DLabel(msg, dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
