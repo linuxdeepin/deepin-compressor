@@ -100,6 +100,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
 {
     if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
         accept();
+        m_extractdialog->move(this->geometry().topLeft()); //解决提取时取消提示框不居中显示
         m_extractdialog->exec();
     }
 
