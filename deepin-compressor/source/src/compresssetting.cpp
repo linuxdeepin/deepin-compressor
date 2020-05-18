@@ -368,6 +368,17 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs[QStringLiteral("filename")] =
         m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
 
+    //check exist file
+    QFileInfo eFile(m_savepath->text() + QDir::separator() + m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix());
+    if (eFile.exists()) {
+        if (existSameFileName() == true) {
+            QFile file(eFile.filePath());
+            file.remove();
+        } else {
+            return;
+        }
+    }
+
     //check if folderName valid
     QString unvalidStr = "";
     foreach (QString file, m_pathlist) {
@@ -684,4 +695,38 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
     filePermission = true;
 
     return res;
+}
+
+bool CompressSetting::existSameFileName()
+{
+    DDialog *dialog = new DDialog(this);
+    dialog->setMinimumSize(QSize(380, 190));
+    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog->setIcon(pixmap);
+
+    DLabel *strlabel = new DLabel(dialog);
+    strlabel->setMinimumSize(QSize(154, 20));
+    strlabel->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    strlabel->setText(tr("The file name under this path already exists, replace it?"));
+
+    dialog->addButton(tr("Cancel"));
+    dialog->addButton(tr("Replace"), true, DDialog::ButtonWarning);
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    DWidget *widget = new DWidget(dialog);
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    const int mode = dialog->exec();
+
+    if (mode == QDialog::Accepted) {
+        return true;
+    } else {
+        return false;
+    }
 }

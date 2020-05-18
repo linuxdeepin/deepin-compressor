@@ -92,6 +92,7 @@ public slots:
 
 private:
     int showWarningDialog(const QString &msg, int index = 0);
+    bool existSameFileName();
 
 private:
     DPushButton *m_nextbutton = nullptr;
