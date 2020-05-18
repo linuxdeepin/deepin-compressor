@@ -103,12 +103,15 @@ bool MainWindow::applicationQuit()
         }
 
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-        deleteDecompressFile();
+//        deleteDecompressFile();
+        QString destDirName;
         if (m_encryptionjob) {
             m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
+            destDirName = m_encryptionjob->archiveInterface()->destDirName;
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
+        deleteDecompressFile(destDirName);
 
         if (m_createJob) {
             m_createJob->kill();
@@ -162,17 +165,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-        deleteDecompressFile();
+//        deleteDecompressFile();
+        QString destDirName;
         event->accept();
 
         if (m_encryptionjob) {
             m_encryptionjob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
+            destDirName = m_encryptionjob->archiveInterface()->destDirName;
             m_encryptionjob->Killjob();
             m_encryptionjob = nullptr;
         }
 
         //deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_pathstore)*/);
-        //deleteDecompressFile();
+        deleteDecompressFile(destDirName);
         if (m_createJob) {
             m_createJob->kill();
             m_createJob = nullptr;
@@ -1811,15 +1816,31 @@ void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles
 }
 
 //解压取消时删除临时文件
-void MainWindow::deleteDecompressFile()
+void MainWindow::deleteDecompressFile(QString destDirName)
 {
-//    qDebug() << "deleteDecompressFile" << m_decompressfilepath << m_decompressfilename;
+//    qDebug() << "deleteDecompressFile" << m_decompressfilepath << m_decompressfilename << m_UnCompressPage->getDeFileCount() << m_model->archive()->isSingleFile() << m_model->archive()->isSingleFolder();
 
-    if (!m_decompressfilepath.isEmpty() && m_UnCompressPage->getDeFileCount() > 1) { //需判断是否空字符串，同时判断被解压文件里是否有多个一级文件（夹），只有一个一级文件（夹）时，在取消解压缩时就被删除了
-        QDir fi(m_decompressfilepath);  //若m_decompressfilepath为空字符串，则使用（"."）构造目录
-        qDebug() << fi.exists();
-        if (fi.exists()) {
-            fi.removeRecursively(); //删除解压后的文件夹
+    if (!m_decompressfilepath.isEmpty()) {
+        if (m_UnCompressPage->getDeFileCount() > 1) {
+            QDir fi(m_decompressfilepath);  //若m_decompressfilepath为空字符串，则使用（"."）构造目录
+//            qDebug() << fi.exists();
+            if (fi.exists()) {
+                fi.removeRecursively();
+            }
+        } else if (m_UnCompressPage->getDeFileCount() == 1) {
+            if (!m_model->archive()->isSingleFile()) { //单个文件还是多个
+                QDir fi(m_decompressfilepath + QDir::separator() + m_model->archive()->subfolderName());
+//                qDebug() << fi.dirName() << fi.exists();
+                if (fi.exists()) {
+                    fi.removeRecursively();
+                }
+            } else {
+                QFile fi(m_decompressfilepath + QDir::separator() + destDirName);
+//                qDebug() << fi.fileName() << fi.exists();
+                if (fi.exists()) {
+                    fi.remove();
+                }
+            }
         }
     }
 }
