@@ -90,26 +90,7 @@ void ReadOnlyArchiveInterface::setHeaderEncryptionEnabled(bool enabled)
 
 QString ReadOnlyArchiveInterface::password() const
 {
-    int nCount = m_password.count();
-    bool b = false;
-    for (int i = 0 ; i < nCount ; i++) {
-        QChar cha = m_password.at(i);
-        ushort uni = cha.unicode();
-        if (uni >= 0x4E00 && uni <= 0x9FA5) {
-            b = true;
-            break;
-        }
-    }
-
-    if (b) {        // Chinese password   utf-8 -> us-ascii
-        QTextCodec *codec = QTextCodec::codecForName("us-ascii");
-        QString strUnicode = codec->toUnicode(m_password.toLocal8Bit().data());
-
-        QByteArray gb_bytes = codec->fromUnicode(strUnicode);
-        return QString(gb_bytes);
-    } else {
-        return m_password;
-    }
+    return m_password;
 }
 
 bool ReadOnlyArchiveInterface::doKill()

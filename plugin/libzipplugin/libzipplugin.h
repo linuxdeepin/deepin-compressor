@@ -54,6 +54,8 @@ private:
     void detectAllfile(zip_t *archive, int num);
     QString  trans2uft8(const char *str);
 
+    const char *passwordUnicode(const QString &strPassword);
+
     QVector<Archive::Entry *> m_emittedEntries;
     bool m_overwriteAll;
     bool m_skipAll;

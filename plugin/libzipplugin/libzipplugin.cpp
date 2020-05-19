@@ -269,6 +269,40 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     }
 }
 
+const char *LibzipPlugin::passwordUnicode(const QString &strPassword)
+{
+    if (filename().endsWith(".zip")) {
+        int nCount = strPassword.count();
+        bool b = false;
+        for (int i = 0 ; i < nCount ; i++) {
+            QChar cha = strPassword.at(i);
+            ushort uni = cha.unicode();
+            if (uni >= 0x4E00 && uni <= 0x9FA5) {
+                b = true;
+                break;
+            }
+        }
+
+        // chinese
+        if (b) {
+            QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
+            QTextCodec *gbk = QTextCodec::codecForName("GBK");
+
+            //utf8 -> gbk
+            //1. utf8 -> unicode
+            QString strUnicode = utf8->toUnicode(strPassword.toUtf8().data());
+            //2. unicode -> gbk, 得到QByteArray
+            QByteArray gb_bytes = gbk->fromUnicode(strUnicode);
+            return gb_bytes.data(); //获取其char *
+        } else {
+            return strPassword.toUtf8().constData();
+        }
+    } else {
+        return strPassword.toUtf8().constData();
+    }
+
+}
+
 bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
     Q_UNUSED(numberOfEntriesToAdd)
@@ -706,7 +740,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     // Set password if known.
     if (!password().isEmpty()) {
-        zip_set_default_password(archive, password().toUtf8().constData());
+        zip_set_default_password(archive, passwordUnicode(password()));
     }
 
     // Get number of archive entries.
@@ -755,13 +789,13 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                         return false;
                     }
                     setPassword(query.password());
-                    if (zip_set_default_password(archive, password().toUtf8().constData())) {
+                    if (zip_set_default_password(archive, passwordUnicode(password()))) {
                     }
 
                 } else {
                     emit sigExtractNeedPassword();
                     setPassword(QString());
-                    zip_set_default_password(archive, password().toUtf8().constData());
+                    zip_set_default_password(archive, passwordUnicode(password()));
                     return false;
                 }
 
@@ -774,7 +808,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                     emit sigExtractNeedPassword();
                 }
                 setPassword(QString());
-                zip_set_default_password(archive, password().toUtf8().constData());
+                zip_set_default_password(archive, passwordUnicode(password()));
                 return false;
             } /*else {
                 emit error(tr("Failed to open '%1':<nl/>%2"));
