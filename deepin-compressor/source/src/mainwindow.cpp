@@ -1354,21 +1354,7 @@ void MainWindow::slotExtractionDone(KJob *job)
                 DDesktopServices::showFileItem(fullpath);
             }
         }
-    }
-    //    else if( job->error() && job->error() == KJob::KilledJobError )
-    //    {
-    //        m_pageid = PAGE_UNZIP;
-    //        refreshPage();
-    //    }
-//    else if (Encryption_TempExtract_Open == m_encryptiontype)
-//    {
-
-
-//        m_pageid = PAGE_UNZIP;
-//        refreshPage();
-
-//    }
-    else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
+    } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
         QString ppp = program;
         if (program != tr("Choose default programma")) {
             OpenWithDialog::chooseOpen(program, QString(DEFAUTL_PATH) + m_extractSimpleFiles.at(0)->property("name").toString());
@@ -1379,9 +1365,7 @@ void MainWindow::slotExtractionDone(KJob *job)
 
         m_pageid = PAGE_UNZIP;
         refreshPage();
-    }
-
-    else {
+    } else {
         m_pageid = PAGE_UNZIP_SUCCESS;
         if (errorCode == KJob::UserSkiped) {
             m_isrightmenu = false;
