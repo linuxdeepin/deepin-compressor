@@ -1379,7 +1379,7 @@ void MainWindow::slotExtractionDone(KJob *job)
 
 void MainWindow::slotShowPageUnzipProgress()
 {
-    if (m_encryptiontype != Encryption_SingleExtract) {
+    if (m_encryptiontype != Encryption_SingleExtract || m_encryptiontype != Encryption_DRAG) {
         m_pageid = PAGE_UNZIPPROGRESS;
         refreshPage();
         m_progressdialog->setProcess(0);
