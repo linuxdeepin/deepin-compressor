@@ -125,7 +125,6 @@ void ProgressDialog::setProcess(unsigned long  value)
     if (100 != m_circleprogress->value()) {
         m_circleprogress->setValue(value);
     }
-
 }
 
 void ProgressDialog::setFinished(const QString &path)

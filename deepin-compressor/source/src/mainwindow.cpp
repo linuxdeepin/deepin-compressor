@@ -1346,12 +1346,14 @@ void MainWindow::slotExtractionDone(KJob *job)
         }
         m_pageid = PAGE_UNZIP;
         refreshPage();
-//        QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
-//        QFileInfo fileinfo(fullpath);
-//        if (fileinfo.exists()) {
-//            DDesktopServices::showFileItem(fullpath);
-//        }
 
+        if (m_encryptiontype != Encryption_DRAG) {
+            QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
+            QFileInfo fileinfo(fullpath);
+            if (fileinfo.exists()) {
+                DDesktopServices::showFileItem(fullpath);
+            }
+        }
     }
     //    else if( job->error() && job->error() == KJob::KilledJobError )
     //    {
@@ -1377,7 +1379,6 @@ void MainWindow::slotExtractionDone(KJob *job)
 
         m_pageid = PAGE_UNZIP;
         refreshPage();
-
     }
 
     else {
@@ -1973,6 +1974,8 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         m_encryptiontype = Encryption_TempExtract;
     } else if (type == EXTRACT_TEMP_CHOOSE_OPEN) {
         m_encryptiontype =  Encryption_TempExtract_Open_Choose;
+    } else if (type == EXTRACT_DRAG) {
+        m_encryptiontype =  Encryption_DRAG;
     } else {
         m_encryptiontype = Encryption_SingleExtract;
     }

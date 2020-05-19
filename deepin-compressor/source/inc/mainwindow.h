@@ -75,8 +75,8 @@ enum EncryptionType {
     Encryption_ExtractHere,
     Encryption_TempExtract,
     Encryption_TempExtract_Open,
-    Encryption_TempExtract_Open_Choose
-
+    Encryption_TempExtract_Open_Choose,
+    Encryption_DRAG
 };
 
 enum WorkState {
