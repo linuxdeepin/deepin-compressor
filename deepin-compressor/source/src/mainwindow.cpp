@@ -1217,7 +1217,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
     }
 
     qDebug() << "percent" << percent;
-    if ((Encryption_SingleExtract == m_encryptiontype)) {
+    if (Encryption_SingleExtract == m_encryptiontype || Encryption_DRAG == m_encryptiontype) {
         if (percent < 100 && WorkProcess == m_workstatus) {
             if (!m_progressdialog->isshown()) {
                 if (m_pageid != PAGE_UNZIP) {
@@ -1337,7 +1337,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         cmdprocess->start();
         m_pageid = PAGE_UNZIP;
         refreshPage();
-    } else if (Encryption_SingleExtract == m_encryptiontype) {
+    } else if (Encryption_SingleExtract == m_encryptiontype || m_encryptiontype == Encryption_DRAG) {
         if (errorCode == KJob::UserSkiped) {
             m_isrightmenu = false;
             m_progressdialog->setMsg(tr("Skip all files"));
