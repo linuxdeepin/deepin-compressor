@@ -323,85 +323,85 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="308"/>
+        <location filename="../source/src/mainwindow.cpp" line="313"/>
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="312"/>
+        <location filename="../source/src/mainwindow.cpp" line="317"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="316"/>
+        <location filename="../source/src/mainwindow.cpp" line="321"/>
         <source>Select the file</source>
         <translation>Obre</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="320"/>
+        <location filename="../source/src/mainwindow.cpp" line="325"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="340"/>
+        <location filename="../source/src/mainwindow.cpp" line="345"/>
         <source>Shortcuts</source>
         <translation>Dreceres</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="406"/>
+        <location filename="../source/src/mainwindow.cpp" line="411"/>
         <source>Open file</source>
         <translation>Obre el fitxer</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="436"/>
+        <location filename="../source/src/mainwindow.cpp" line="441"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="590"/>
-        <location filename="../source/src/mainwindow.cpp" line="600"/>
-        <location filename="../source/src/mainwindow.cpp" line="1528"/>
+        <location filename="../source/src/mainwindow.cpp" line="595"/>
+        <location filename="../source/src/mainwindow.cpp" line="605"/>
+        <location filename="../source/src/mainwindow.cpp" line="1517"/>
         <source>Create New Archive</source>
         <translation>Crea un nou fitxer</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="633"/>
+        <location filename="../source/src/mainwindow.cpp" line="638"/>
         <source>Compression successful</source>
         <translation>Compressió correcta</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1339"/>
-        <location filename="../source/src/mainwindow.cpp" line="1383"/>
+        <location filename="../source/src/mainwindow.cpp" line="1343"/>
+        <location filename="../source/src/mainwindow.cpp" line="1372"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1367"/>
+        <location filename="../source/src/mainwindow.cpp" line="1359"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1385"/>
+        <location filename="../source/src/mainwindow.cpp" line="1374"/>
         <source>Extraction successful</source>
         <translation>Extracció correcta</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="228"/>
+        <location filename="../source/src/mainwindow.cpp" line="233"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="800"/>
+        <location filename="../source/src/mainwindow.cpp" line="804"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Voleu afegir el fitxer a la llista o obrir-lo en una finestra nova?</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="328"/>
+        <location filename="../source/src/mainwindow.cpp" line="333"/>
         <source>Display shortcuts</source>
         <translation>Mostra les dreceres</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="801"/>
+        <location filename="../source/src/mainwindow.cpp" line="805"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -411,75 +411,75 @@
         <translation>Gestor d&apos;arxius</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="234"/>
-        <location filename="../source/src/mainwindow.cpp" line="1110"/>
+        <location filename="../source/src/mainwindow.cpp" line="239"/>
+        <location filename="../source/src/mainwindow.cpp" line="1114"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="616"/>
+        <location filename="../source/src/mainwindow.cpp" line="621"/>
         <source>Compressing</source>
         <translation>Es comprimeix</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="626"/>
+        <location filename="../source/src/mainwindow.cpp" line="631"/>
         <source>Extracting</source>
         <translation>S&apos;extreu</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="642"/>
+        <location filename="../source/src/mainwindow.cpp" line="647"/>
         <source>Compression failed</source>
         <translation>La compressió ha fallat.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="675"/>
+        <location filename="../source/src/mainwindow.cpp" line="680"/>
         <source>Extraction failed</source>
         <translation>L&apos;extracció ha fallat.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="802"/>
+        <location filename="../source/src/mainwindow.cpp" line="806"/>
         <source>Add</source>
         <translation>Afegeix</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="803"/>
+        <location filename="../source/src/mainwindow.cpp" line="807"/>
         <source>Open in new window</source>
         <translation>Obre en finestra nova</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="920"/>
+        <location filename="../source/src/mainwindow.cpp" line="924"/>
         <source>Find directory</source>
         <translation>Troba un directori</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1264"/>
+        <location filename="../source/src/mainwindow.cpp" line="1268"/>
         <source>Wrong password</source>
         <translation>Contrasenya incorrecta</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="994"/>
-        <location filename="../source/src/mainwindow.cpp" line="1014"/>
-        <location filename="../source/src/mainwindow.cpp" line="1050"/>
-        <location filename="../source/src/mainwindow.cpp" line="1294"/>
+        <location filename="../source/src/mainwindow.cpp" line="998"/>
+        <location filename="../source/src/mainwindow.cpp" line="1018"/>
+        <location filename="../source/src/mainwindow.cpp" line="1054"/>
+        <location filename="../source/src/mainwindow.cpp" line="1298"/>
         <source>Damaged file, unable to extract</source>
         <translation>Fitxer malmès, no es pot extreure</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1109"/>
+        <location filename="../source/src/mainwindow.cpp" line="1113"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>L&apos;arxiu ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1290"/>
-        <location filename="../source/src/mainwindow.cpp" line="1292"/>
-        <location filename="../source/src/mainwindow.cpp" line="1915"/>
-        <location filename="../source/src/mainwindow.cpp" line="1921"/>
+        <location filename="../source/src/mainwindow.cpp" line="1294"/>
+        <location filename="../source/src/mainwindow.cpp" line="1296"/>
+        <location filename="../source/src/mainwindow.cpp" line="1920"/>
+        <location filename="../source/src/mainwindow.cpp" line="1926"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>No hi ha prou espai. Si us plau, feu neteja i torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1917"/>
-        <location filename="../source/src/mainwindow.cpp" line="1923"/>
+        <location filename="../source/src/mainwindow.cpp" line="1922"/>
+        <location filename="../source/src/mainwindow.cpp" line="1928"/>
         <source>Damaged file</source>
         <translation>Fitxer malmès</translation>
     </message>
@@ -678,19 +678,19 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="47"/>
+        <location filename="../source/src/progressdialog.cpp" line="48"/>
         <source>%1 task(s) in progress</source>
         <translation>%1 tasca/ques en curs</translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="59"/>
-        <location filename="../source/src/progressdialog.cpp" line="113"/>
+        <location filename="../source/src/progressdialog.cpp" line="60"/>
+        <location filename="../source/src/progressdialog.cpp" line="114"/>
         <source>Task</source>
         <translation>Tasca</translation>
     </message>
     <message>
-        <location filename="../source/src/progressdialog.cpp" line="60"/>
-        <location filename="../source/src/progressdialog.cpp" line="119"/>
+        <location filename="../source/src/progressdialog.cpp" line="61"/>
+        <location filename="../source/src/progressdialog.cpp" line="120"/>
         <source>Extracting</source>
         <translation>S&apos;extreu</translation>
     </message>
