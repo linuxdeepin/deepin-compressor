@@ -220,7 +220,9 @@ void BatchCompress::forwardProgress(KJob *job, unsigned long percent)
     //qDebug() << percent;
     auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
     auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
-
+    if (percent >= 100) {
+        percent = 100;
+    }
     emit batchProgress(job, jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
 }
 
