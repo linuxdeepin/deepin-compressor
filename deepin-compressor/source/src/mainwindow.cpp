@@ -764,10 +764,9 @@ void MainWindow::calSpeedAndTime(unsigned long compressPercent)
     qDebug() << "m_compressSpeed" << m_compressSpeed;
     qDebug() << "m_timeLeft" << m_timeLeft;
 
-//    if (lastPercent != 100 && m_timeLeft == 0)
-//    {
-//        m_timeLeft = 1;
-//    }
+    if (lastPercent != 100 && m_timeLeft == 0) {
+        m_timeLeft = 1;
+    }
 
     m_Progess->setSpeedAndTime(m_compressSpeed, m_timeLeft);
     m_timer.restart();
