@@ -37,6 +37,7 @@ void ProgressDialog::initUI()
 {
     setWindowFlags((windowFlags() & ~ Qt::WindowSystemMenuHint /*& ~Qt::Dialog*/) | Qt::Window);
     setFixedWidth(m_defaultWidth);
+    setMinimumHeight(m_defaultHeight);
 
     m_titlebar = new DTitlebar(this);
     m_titlebar->setFixedHeight(50);
