@@ -1379,11 +1379,12 @@ void MainWindow::slotExtractionDone(KJob *job)
 
 void MainWindow::slotShowPageUnzipProgress()
 {
-    m_pageid = PAGE_UNZIPPROGRESS;
-    refreshPage();
-    m_progressdialog->setProcess(0);
-    m_Progess->setprogress(0);
-
+    if (m_encryptiontype != Encryption_SingleExtract) {
+        m_pageid = PAGE_UNZIPPROGRESS;
+        refreshPage();
+        m_progressdialog->setProcess(0);
+        m_Progess->setprogress(0);
+    }
 }
 
 void MainWindow::SlotNeedPassword()
