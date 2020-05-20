@@ -268,7 +268,7 @@ int Progress::showConfirmDialog()
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     DLabel *strlabel2 = new DLabel(dialog);
     strlabel2->setFixedHeight(18);
-    strlabel2->setForegroundRole(DPalette::WindowText);
+    strlabel2->setForegroundRole(DPalette::ToolTipText);
 
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
 
