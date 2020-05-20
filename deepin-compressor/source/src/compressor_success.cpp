@@ -51,7 +51,7 @@ void Compressor_Success::InitUI()
     m_showfilebutton = new DPushButton(this);
     m_showfilebutton->setMinimumSize(340, 36);
     m_showfilebutton->setText(tr("View"));
-    m_showfilebutton->setFocusPolicy(Qt::ClickFocus);
+    m_showfilebutton->setFocusPolicy(Qt::NoFocus);
 
     commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;

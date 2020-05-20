@@ -30,6 +30,7 @@
 #include <DStandardPaths>
 #include <DMessageManager>
 #include <DDialog>
+#include <QFontMetrics>
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -45,8 +46,9 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
-    m_extractpath = new DCommandLinkButton(tr("Extract to:") + " ~/Desktop");
+    m_extractpath = new DCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
 //    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
+//    m_extractpath->setMinimumSize(129, 18);
     DFontSizeManager::instance()->bind(m_extractpath, DFontSizeManager::T8);
 
     QHBoxLayout *buttonlayout = new QHBoxLayout;
@@ -114,12 +116,19 @@ void UnCompressPage::onPathButoonClicked()
 
     QList<QUrl> pathlist = dialog.selectedUrls();
 
-    QString curpath = pathlist.at(0).toLocalFile();
-    m_extractpath->setText(tr("Extract to:") + curpath);
+    const QString curpath = pathlist.at(0).toLocalFile();
+//    m_extractpath->setText(tr("Extract to:") + curpath);
+    QFontMetrics fontMetrics(this->font());
+    int fontSize = fontMetrics.width(curpath);//获取之前设置的字符串的像素大小
+    QString str = curpath;
+    if (fontSize > this->width()) {
+        str = fontMetrics.elidedText(curpath, Qt::ElideMiddle, this->width());//返回一个带有省略号的字符串
+    }
+    m_extractpath->setText(tr("Extract to:") + str);
     m_pathstr = curpath;
 }
 
-void UnCompressPage::setdefaultpath(QString path)
+void UnCompressPage::setdefaultpath(const QString path)
 {
     m_pathstr = path;
     m_extractpath->setText(tr("Extract to:") + m_pathstr);

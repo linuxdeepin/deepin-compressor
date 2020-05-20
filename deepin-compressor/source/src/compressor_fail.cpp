@@ -57,7 +57,7 @@ void Compressor_Fail::InitUI()
     m_retrybutton = new DPushButton(this);
     m_retrybutton->setMinimumSize(340, 36);
     m_retrybutton->setText(tr("Retry"));
-    m_retrybutton->setFocusPolicy(Qt::ClickFocus);
+    m_retrybutton->setFocusPolicy(Qt::NoFocus);
 
     commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;

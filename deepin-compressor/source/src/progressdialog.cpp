@@ -136,7 +136,7 @@ void ProgressDialog::setFinished(const QString &path)
         m_extractdialog->reject();
         //reject();
         hide();
-        emit extractSuccess(tr("Extraction successful"));
+        emit extractSuccess(tr("Extraction successful", "progressdialog"));
         emit sigResetPercentAndTime();
     }
 }

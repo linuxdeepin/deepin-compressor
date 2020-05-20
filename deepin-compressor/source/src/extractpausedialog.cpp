@@ -53,7 +53,7 @@ void ExtractPauseDialog::initUI()
 //    strlabel->setText(tr("Stop extracting"));
     DLabel *strlabel2 = new DLabel(this);
     strlabel2->setFixedHeight(20);
-    strlabel2->setForegroundRole(DPalette::TextTips);
+    strlabel2->setForegroundRole(DPalette::ToolTipText);
 
 //    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
 //    font.setWeight(QFont::DemiBold);

@@ -361,7 +361,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="595"/>
         <location filename="../source/src/mainwindow.cpp" line="605"/>
-        <location filename="../source/src/mainwindow.cpp" line="1517"/>
+        <location filename="../source/src/mainwindow.cpp" line="1518"/>
         <source>Create New Archive</source>
         <translation>Crea nuovo Archivio</translation>
     </message>
@@ -473,14 +473,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="1294"/>
         <location filename="../source/src/mainwindow.cpp" line="1296"/>
-        <location filename="../source/src/mainwindow.cpp" line="1920"/>
-        <location filename="../source/src/mainwindow.cpp" line="1926"/>
+        <location filename="../source/src/mainwindow.cpp" line="1921"/>
+        <location filename="../source/src/mainwindow.cpp" line="1927"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Spazio insufficiente, libera spazio e riprova</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1922"/>
-        <location filename="../source/src/mainwindow.cpp" line="1928"/>
+        <location filename="../source/src/mainwindow.cpp" line="1923"/>
+        <location filename="../source/src/mainwindow.cpp" line="1929"/>
         <source>Damaged file</source>
         <translation>File danneggiato</translation>
     </message>
@@ -697,7 +697,6 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../source/src/progressdialog.cpp" line="135"/>
-        <location filename="../source/src/progressdialog.cpp" line="139"/>
         <source>Extraction successful</source>
         <translation>Estrazione riuscita</translation>
     </message>
@@ -706,51 +705,57 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <source>Extract to</source>
         <translation>Estrai in</translation>
     </message>
+    <message>
+        <location filename="../source/src/progressdialog.cpp" line="139"/>
+        <source>Extraction successful</source>
+        <comment>progressdialog</comment>
+        <translation type="unfinished">Estrazione riuscita</translation>
+    </message>
 </context>
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../source/src/utils.cpp" line="151"/>
+        <location filename="../source/src/utils.cpp" line="153"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="152"/>
+        <location filename="../source/src/utils.cpp" line="154"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="153"/>
+        <location filename="../source/src/utils.cpp" line="155"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="154"/>
+        <location filename="../source/src/utils.cpp" line="156"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="155"/>
+        <location filename="../source/src/utils.cpp" line="157"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="156"/>
+        <location filename="../source/src/utils.cpp" line="158"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="157"/>
+        <location filename="../source/src/utils.cpp" line="159"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="158"/>
+        <location filename="../source/src/utils.cpp" line="160"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="159"/>
+        <location filename="../source/src/utils.cpp" line="161"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>

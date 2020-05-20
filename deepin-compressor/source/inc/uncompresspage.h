@@ -46,7 +46,7 @@ public:
 
     void setModel(ArchiveSortFilterModel *model);
     QString getDecompressPath();
-    void setdefaultpath(QString path);
+    void setdefaultpath(const QString path);
     int getFileCount();
     int getDeFileCount();
     int showWarningDialog(const QString &msg);
