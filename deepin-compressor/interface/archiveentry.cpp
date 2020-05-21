@@ -98,7 +98,7 @@ void Archive::Entry::removeEntryAt(int index)
 
     QMap<QString, int>::iterator iter = m_mapIndex.begin();
     while (iter != m_mapIndex.end()) {
-        if (iter.value() == index) {
+        if (iter.value() > index) {
             iter.value() -= 1;
         }
         iter++;
