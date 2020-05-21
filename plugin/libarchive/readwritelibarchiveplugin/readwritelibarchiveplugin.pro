@@ -48,7 +48,8 @@ SOURCES += \
     ../../../deepin-compressor/interface/plugin.cpp \
     ../../../deepin-compressor/interface/kpluginfactory.cpp \
     ../../../deepin-compressor/interface/analysepsdtool.cpp \
-    ../../../deepin-compressor/interface/filewatcher.cpp
+    ../../../deepin-compressor/interface/filewatcher.cpp \
+    ../../common/detectencoding.cpp
 
 HEADERS += \
         ../../common/common.h \
@@ -79,7 +80,8 @@ HEADERS += \
     ../../../deepin-compressor/interface/kpluginmetadata.h \
     ../../../deepin-compressor/interface/jobs.h \
     ../../../deepin-compressor/interface/analysepsdtool.h \
-    ../../../deepin-compressor/interface/filewatcher.h
+    ../../../deepin-compressor/interface/filewatcher.h \
+    ../../common/detectencoding.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

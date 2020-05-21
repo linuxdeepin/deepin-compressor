@@ -5,6 +5,7 @@
 #include <QRegularExpression>
 #include <QLocale>
 #include <QTextStream>
+#include "detectencoding.h"
 
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
@@ -94,27 +95,64 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
 QString trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
+    //qDebug() << codec_name;
+    /*if ("" == m_codecname) {
 
-    if ("gb18030" == codec_name)
-    {
+        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+            return str;
+        }
+
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
+        m_codecstr = codec_name;
         return codec->toUnicode(str);
-    }
-    if( "windows-1252" == codec_name)
-    {
-        return str;
-    }
-
-    if ("UTF-8" != codec_name)
-    {
+    } else */if ("gb18030" == codec_name) {
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
-        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-
-        QString nameunicode = codec->toUnicode(str);
-        return codecutf8->fromUnicode(nameunicode);
+//        m_codecstr = codec_name;
+        return codec->toUnicode(str);
+    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+        QString code = "";
+        QString codemine = "";
+        QString type = "";
+        file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
+        if (("utf-8" == codemine || "us-ascii" == codemine)) {
+//            m_codecstr = "UTF-8";
+            return QString(str);
+        } else {
+            QTextCodec *codec = QTextCodec::codecForName("GBK");
+//            m_codecstr = m_codecname;
+            return codec->toUnicode(str);
+        }
+    }/* else if ("UTF-8" != codec_name) {
+        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
+        m_codecstr = m_codecname;
+        return codec->toUnicode(str);
+    } */else {
+//        m_codecstr = "UTF-8";
+        return QString(str);
     }
 
-    return QString(str);
+//    QByteArray codec_name = detectEncode(str);
+
+//    if ("gb18030" == codec_name)
+//    {
+//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+//        return codec->toUnicode(str);
+//    }
+//    if( "windows-1252" == codec_name)
+//    {
+//        return str;
+//    }
+
+//    if ("UTF-8" != codec_name)
+//    {
+//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+//        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+
+//        QString nameunicode = codec->toUnicode(str);
+//        return codecutf8->fromUnicode(nameunicode);
+//    }
+
+//    return QString(str);
 }
 
 QByteArray detectEncode(const QByteArray &data, const QString &fileName)
