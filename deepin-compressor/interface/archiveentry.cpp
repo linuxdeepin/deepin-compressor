@@ -34,6 +34,7 @@ Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &r
 {
     if (!fullPath.isEmpty())
         setFullPath(fullPath);
+    m_iIndex = 0;
 }
 
 Archive::Entry::~Entry()
@@ -83,6 +84,8 @@ void Archive::Entry::appendEntry(Entry *entry)
 {
     Q_ASSERT(isDir());
     m_entries.append(entry);
+    m_mapIndex[entry->name()] = m_iIndex;
+    m_iIndex++;
 }
 
 void Archive::Entry::removeEntryAt(int index)
@@ -90,6 +93,16 @@ void Archive::Entry::removeEntryAt(int index)
     Q_ASSERT(isDir());
     Q_ASSERT(index < m_entries.count());
     m_entries.remove(index);
+    m_mapIndex.remove(m_entries[index]->name());
+    m_iIndex--;
+
+    QMap<QString, int>::iterator iter = m_mapIndex.begin();
+    while (iter != m_mapIndex.end()) {
+        if (iter.value() == index) {
+            iter.value() -= 1;
+        }
+        iter++;
+    }
 }
 
 Archive::Entry *Archive::Entry::getParent() const
@@ -143,11 +156,16 @@ int Archive::Entry::row() const
 
 Archive::Entry *Archive::Entry::find(const QString &name) const
 {
-    for (Entry *entry : qAsConst(m_entries)) {
-        if (entry && (entry->name() == name)) {
-            return entry;
-        }
+//    for (Entry *entry : qAsConst(m_entries)) {
+//        if (entry && (entry->name() == name)) {
+//            return entry;
+//        }
+//    }
+
+    if (m_mapIndex.contains(name) && m_mapIndex[name] < m_entries.count()) {
+        return m_entries[m_mapIndex[name]];
     }
+
     return nullptr;
 }
 

@@ -86,6 +86,8 @@ public:
 
 private:
     QVector<Entry *> m_entries;
+    QMap<QString, int> m_mapIndex;
+    int m_iIndex;
     QString         m_name;
     Entry           *m_parent;
 
