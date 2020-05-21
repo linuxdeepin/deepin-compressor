@@ -412,8 +412,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             case ARCHIVE_OK:
                 // If the whole archive is extracted and the total filesize is
                 // available, we use partial progress.
-//                copyData(entryName, m_archiveReader.data(), writer.data(), (extractAll && m_extractedFilesSize));
-                copyData(entryName, m_archiveReader.data(), writer.data(), true);
+                copyData(entryName, m_archiveReader.data(), writer.data(), (extractAll && m_extractedFilesSize));
                 break;
 
             case ARCHIVE_FAILED:
@@ -598,7 +597,7 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *source,
             return;
         }
 
-        if (partialprogress) {
+        /*if (partialprogress)*/ {
             m_currentExtractedFilesSize += readBytes;
             emit progress(float(m_currentExtractedFilesSize) / m_extractedFilesSize);
             emit progress_filename(filename);
