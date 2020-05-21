@@ -150,8 +150,10 @@ QString MainWindow::getLoadFile()
 
 qint64 MainWindow::getDiskFreeSpace()
 {
-    QStorageInfo storage = QStorageInfo::root();
+//    QStorageInfo storage = QStorageInfo::root();
+    QStorageInfo storage(m_pathstore);
     storage.refresh();
+//    qDebug() << storage.name() << storage.bytesTotal() / 1024 / 1024 << "MB";
     qDebug() << "availableSize:" << storage.bytesAvailable() / 1024 / 1024 << "MB";
     return storage.bytesAvailable() / 1024 / 1024;
 }
