@@ -2014,7 +2014,6 @@ void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fil
     program = programma;
 
     slotExtractSimpleFiles(fileList, tmppath, EXTRACT_TEMP_CHOOSE_OPEN);
-
 }
 
 void MainWindow::slotKillExtractJob()

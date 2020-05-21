@@ -509,7 +509,6 @@ void fileViewer::updateAction(const QString &fileType)
 
     openWithDialogMenu->addActions(listAction);
     openWithDialogMenu->addAction(new QAction(tr("Choose default programma")));
-
 }
 
 void fileViewer::openWithDialog(const QModelIndex &index)
@@ -547,7 +546,6 @@ void fileViewer::openWithDialog(const QModelIndex &index)
             } else {
                 OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
                 openDialog->exec();
-
             }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
@@ -555,11 +553,8 @@ void fileViewer::openWithDialog(const QModelIndex &index)
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
-
             OpenWithDialog *openDialog = new OpenWithDialog(DUrl(pModel->fileInfo(curindex).filePath()), this);
             openDialog->exec();
-
-
         }
     }
 
@@ -959,7 +954,6 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
             cmdprocess->setProgram(programPath, arguments);
             cmdprocess->start();
-
         }
 
         emit sigpathindexChanged();
@@ -982,7 +976,6 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 if (0 == entry->entries().count()) {
                     showPlable();
                 }
-
             } else {
                 QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
                 QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
@@ -1060,23 +1053,25 @@ void fileViewer::onRightMenuClicked(QAction *action)
             deleteCompressFile();
         }
     }
-
 }
 
 void fileViewer::onRightMenuOpenWithClicked(QAction *action)
 {
     if (PAGE_UNCOMPRESS == m_pagetype) {
+        QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
+        QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+        QFile tempFile(fileName);
+        if (tempFile.exists()) {
+            tempFile.remove();
+        }
         emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());
     } else {
         if (action->text() != tr("Choose default programma")) {
             openWithDialog(pTableViewFile->currentIndex(), action->text());
-
         } else {
             openWithDialog(pTableViewFile->currentIndex());
         }
-
     }
-
 }
 
 QModelIndexList fileViewer::addChildren(const QModelIndexList &list) const
