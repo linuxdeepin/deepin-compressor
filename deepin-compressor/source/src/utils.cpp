@@ -107,6 +107,8 @@ bool Utils::isCompressed_file(const QString &filePath)
             ret = true;
         } else if (file.completeSuffix().endsWith("tar.bz2")) {  //.tar.bz2
             ret = true;
+        } else if (file.completeSuffix().endsWith("tar.Z")) {  //.tar.bz2
+            ret = true;
         } else if (file.suffix().endsWith("jar")) {  //.jar
             ret = true;
         } else {
