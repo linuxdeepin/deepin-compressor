@@ -38,7 +38,6 @@
             "application/x-7z-compressed",
     		"application/x-cd-image",
                 "application/zip",
-                "application/x-tar",
             "application/x-java-archive",
             "application/x-tzo"
         ],
