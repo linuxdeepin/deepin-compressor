@@ -734,6 +734,19 @@ int fileViewer::getPathIndex()
     return m_pathindex;
 }
 
+/*
+*Summary: Return to the primary directory. For example, delete the source files when the secondary directory is opened.
+*Parameters: void
+*Return: void
+*/
+void fileViewer::setRootPathIndex()
+{
+    m_pathindex = 0;
+    refreshTableview();
+    pTableViewFile->setPreviousButtonVisible(false);
+    emit  sigpathindexChanged();
+}
+
 void fileViewer::setFileList(const QStringList &files)
 {
     curFileListModified = true;

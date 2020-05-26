@@ -51,6 +51,7 @@ public:
     int getDeFileCount();
     int showWarningDialog(const QString &msg);
     EXTRACT_TYPE getExtractType();
+    void setRootPathIndex();
 
 
 signals:

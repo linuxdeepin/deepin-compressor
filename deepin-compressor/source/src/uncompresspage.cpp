@@ -173,6 +173,11 @@ EXTRACT_TYPE UnCompressPage::getExtractType()
     return extractType;
 }
 
+void UnCompressPage::setRootPathIndex()
+{
+    m_fileviewer->setRootPathIndex();
+}
+
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;

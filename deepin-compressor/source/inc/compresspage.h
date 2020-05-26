@@ -41,6 +41,7 @@ public:
     QStringList getCompressFilelist();
     void showDialog();
     int showReplaceDialog(QString name);
+    void setRootPathIndex();
 
 signals:
     void sigNextPress();

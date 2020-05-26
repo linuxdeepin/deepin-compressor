@@ -264,6 +264,10 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 m_CompressPage->onRefreshFilelist(filelist);
                 if (filelist.isEmpty()) {
                     m_pageid = PAGE_HOME;
+                    m_CompressPage->setRootPathIndex();
+                    refreshPage();
+                } else {
+                    m_CompressPage->setRootPathIndex();
                     refreshPage();
                 }
                 delete dialog;
@@ -847,6 +851,7 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
+    qDebug() << "chendu";
     if (!m_initflag) {
         InitUI();
         InitConnection();
@@ -1127,6 +1132,7 @@ void MainWindow::WatcherFile(const QString &files)
         m_fileManager = nullptr;
 
         m_pageid = PAGE_HOME;
+        m_UnCompressPage->setRootPathIndex();
         this->refreshPage();
     });
 }

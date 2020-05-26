@@ -134,6 +134,11 @@ int CompressPage::showReplaceDialog(QString name)
     return query.getExecuteReturn();
 }
 
+void CompressPage::setRootPathIndex()
+{
+    m_fileviewer->setRootPathIndex();
+}
+
 void CompressPage::onAddfileSlot()
 {
     if (0 != m_fileviewer->getPathIndex()) {
