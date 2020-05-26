@@ -32,7 +32,6 @@
 
 class Query;
 
-
 /**
  * Meta data related to one entry in a compressed archive.
  *

@@ -38,8 +38,6 @@
 #include <QVariantList>
 #include "kpluginmetadata.h"
 
-#define TIMER_TIMEOUT 1000
-
 class Query;
 
 class  ReadOnlyArchiveInterface: public QObject

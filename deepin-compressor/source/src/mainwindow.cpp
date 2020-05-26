@@ -1077,6 +1077,11 @@ void MainWindow::slotLoadingFinished(KJob *job)
     }
 }
 
+bool MainWindow::isWorkProcess()
+{
+    return m_workstatus == WorkProcess;
+}
+
 void MainWindow::loadArchive(const QString &files)
 {
     QString transFile = files;
@@ -1099,7 +1104,7 @@ void MainWindow::loadArchive(const QString &files)
     connect(m_loadjob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
 
     m_loadjob->start();
-    m_homePage->spinnerStart();
+    m_homePage->spinnerStart(this, &MainWindow::isWorkProcess);
 }
 
 void MainWindow::WatcherFile(const QString &files)

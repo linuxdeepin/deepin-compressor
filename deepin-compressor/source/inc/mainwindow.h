@@ -117,7 +117,7 @@ public:
     qint64 getMediaFreeSpace();
 
     bool applicationQuit();
-
+    bool isWorkProcess();
 private:
     void saveWindowState();
     void loadWindowState();

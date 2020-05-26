@@ -29,8 +29,54 @@
 #include <QShortcut>
 #include "DFontSizeManager"
 #include "DGuiApplicationHelper"
+#include "mainwindow.h"
+
+#define TIMER_TIMEOUT   (800)
 
 DGUI_USE_NAMESPACE
+
+SpinnerWatcher::SpinnerWatcher(QObject *parent)
+    : QObject(parent)
+{
+}
+
+SpinnerWatcher::~SpinnerWatcher()
+{
+    this->finishWork();
+}
+
+void SpinnerWatcher::beginWork()
+{
+    m_nTimerID = this->startTimer(TIMER_TIMEOUT);
+}
+
+void SpinnerWatcher::finishWork()
+{
+    killTimer(m_nTimerID);
+    qDebug() << "finishWork";
+}
+
+void SpinnerWatcher::bindFunction(MainWindow *pWnd, pMember_callback callback)
+{
+    this->pCaller = pWnd;
+    this->callback = callback;
+}
+
+void SpinnerWatcher::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_nTimerID) {
+        MainWindow *p = dynamic_cast<MainWindow *>(this->pCaller);
+        bool result = (p->*callback)();
+        if (result == true) {
+//            qDebug() << "condition ok, then handle time out";
+            emit sigBindFuncDone(result);
+        } else {
+//            qDebug() << "condition not ok";
+        }
+        this->finishWork();//stop timer work
+    }
+}
+
 
 HomePage::HomePage(QWidget *parent)
     : DWidget(parent),
@@ -87,6 +133,9 @@ HomePage::HomePage(QWidget *parent)
                      this, &HomePage::themeChanged);
 
     setBackgroundRole(DPalette::Background);
+
+    m_pWatcher = new SpinnerWatcher();
+    connect(this->m_pWatcher, &SpinnerWatcher::sigBindFuncDone, this, &HomePage::slotSpinnerStart);
 }
 
 void HomePage::setIconPixmap(bool isLoaded)
@@ -98,15 +147,26 @@ void HomePage::setIconPixmap(bool isLoaded)
     }
 }
 
-void HomePage::spinnerStart()
+void HomePage::slotSpinnerStart(bool result)
 {
-    m_spinner->show();
-    m_spinner->start();
-    m_chooseBtn->setEnabled(false);
+    if (result == true) {
+        m_spinner->show();
+        m_spinner->start();
+        m_chooseBtn->setEnabled(false);
+    }
+}
+
+void HomePage::spinnerStart(MainWindow *pWnd, pMember_callback func)
+{
+    if (func != nullptr && pWnd != nullptr) {
+        this->m_pWatcher->bindFunction(pWnd, func);
+        this->m_pWatcher->beginWork();
+    }
 }
 
 void HomePage::spinnerStop()
 {
+    this->m_pWatcher->finishWork();
     m_spinner->hide();
     m_spinner->stop();
     m_chooseBtn->setEnabled(true);
