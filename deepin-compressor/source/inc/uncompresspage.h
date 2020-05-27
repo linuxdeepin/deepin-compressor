@@ -52,6 +52,7 @@ public:
     int showWarningDialog(const QString &msg);
     EXTRACT_TYPE getExtractType();
     void setRootPathIndex();
+    void getMainWindowWidth(int windowWidth);
 
 private:
     QString getAndDisplayPath(QString path);
@@ -80,6 +81,8 @@ private:
     QString m_pathstr;
     ArchiveSortFilterModel *m_model;
     EXTRACT_TYPE extractType;
+
+    int m_width;
 
 };
 #endif

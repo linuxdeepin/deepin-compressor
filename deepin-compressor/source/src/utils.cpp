@@ -98,7 +98,11 @@ bool Utils::isCompressed_file(const QString &filePath)
 
     if (readStatus == true) {
         if (fileValue.contains(file.suffix()) && !file.isDir()) {
-            ret = true;
+            if (file.suffix() == "deb") {  //.deb
+                ret = false;
+            } else {
+                ret = true;
+            }
         } else if (file.filePath().contains(".7z.")) {  //7z分卷
             ret = true;
         } else if (file.suffix().endsWith("iso")) {  //.iso

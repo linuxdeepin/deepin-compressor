@@ -785,6 +785,7 @@ void MainWindow::calSpeedAndTime(unsigned long compressPercent)
 
 void MainWindow::onSelected(const QStringList &files)
 {
+    m_UnCompressPage->getMainWindowWidth(this->width());
     calSelectedTotalFileSize(files);
 
     if (files.count() == 1 && Utils::isCompressed_file(files.at(0))) {
@@ -863,6 +864,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_initflag = true;
     }
 
+    m_UnCompressPage->getMainWindowWidth(this->width());
     calSelectedTotalFileSize(files);
 
     if (files.last() == QStringLiteral("extract_here")) {
