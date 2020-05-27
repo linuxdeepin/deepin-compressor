@@ -678,7 +678,7 @@ void MainWindow::refreshPage()
             slotquitApp();
             return;
         } else {
-            if (m_settingsDialog->isAutoOpen()) {
+            if (m_settingsDialog->isAutoOpen() && m_encryptiontype != Encryption_NULL) {
                 DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
             }
         }
@@ -2017,6 +2017,8 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         this->m_pWatcher = new TimerWatcher();
         connect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, m_encryptionjob, &ExtractJob::slotWorkTimeOut);
     }
+
+    this->m_encryptionjob->resetTimeOut();
     this->m_pWatcher->bindFunction(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
     this->m_pWatcher->beginWork(100);
 

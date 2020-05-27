@@ -543,7 +543,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     connect(interface, &ReadOnlyArchiveInterface::progress, this, &ExtractJob::onProgress, Qt::ConnectionType::UniqueConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress_filename, this, &ExtractJob::onProgressFilename, Qt::ConnectionType::UniqueConnection);
 
-    m_bTimeout = false;
+    // m_bTimeout = false;
 }
 
 void ExtractJob::doWork()
@@ -611,6 +611,11 @@ void ExtractJob::slotExtractJobPwdCheckDown()
 bool ExtractJob::Killjob()
 {
     return kill();
+}
+
+void ExtractJob::resetTimeOut()
+{
+    m_bTimeout = false;
 }
 
 void ExtractJob::onProgress(double value)

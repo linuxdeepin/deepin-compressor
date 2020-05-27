@@ -199,6 +199,9 @@ public:
     ExtractionOptions extractionOptions() const;
     bool Killjob();
 
+
+    void resetTimeOut();
+
 public Q_SLOTS:
     void doWork() override;
     void onFinished(bool result)override;
@@ -217,7 +220,7 @@ private:
     QVector<Archive::Entry *> m_entries;
     QString m_destinationDir;
     ExtractionOptions m_options;
-    bool m_bTimeout;//if work time out,if greater than 700ms,emit the progress info.
+    bool m_bTimeout = true;//if work time out,if greater than 700ms,emit the progress info.
 };
 
 
