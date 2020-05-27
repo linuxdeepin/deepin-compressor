@@ -79,6 +79,8 @@ public:
     void setAlwaysUseTempDir(bool alwaysUseTempDir);
     bool isBatchExtract();
     void setBatchExtract(bool status);
+    bool isAutoCreatDir() const;
+    void setAutoCreatDir(bool bAutoCreatDir);
 
 private:
 
@@ -86,6 +88,7 @@ private:
     bool m_dragAndDrop = false;
     bool m_alwaysUseTempDir = false;
     bool m_isBatch = false;
+    bool m_isAutoCreatDir = true;
 };
 
 QDebug  operator<<(QDebug d, const CompressionOptions &options);

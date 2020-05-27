@@ -245,7 +245,11 @@ void Progress::setProgressFilename(QString filename)
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
 
     } else {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        if (m_openType) {
+            m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));
+        } else {
+            m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        }
     }
 }
 
@@ -254,30 +258,46 @@ void Progress::settype(COMPRESS_TYPE type)
     m_type = type;
 }
 
+void Progress::setopentype(bool type)
+{
+    m_openType = type;
+}
+
 int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog(this);
 
     QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-    DPalette pa, pa2;
-    DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedHeight(20);
-    strlabel->setForegroundRole(DPalette::WindowText);
+//    DPalette pa, pa2;
+//    DLabel *strlabel = new DLabel(dialog);
+//    strlabel->setFixedHeight(20);
+//    strlabel->setForegroundRole(DPalette::WindowText);
+//    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedHeight(18);
-    strlabel2->setForegroundRole(DPalette::ToolTipText);
 
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
+    strlabel2->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(strlabel2);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
+
+//    strlabel2->setFixedHeight(18);
+//    strlabel2->setForegroundRole(DPalette::ToolTipText);
+
+//    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
 
     if (m_type == COMPRESSING) {
         //strlabel->setText(tr("Stop compressing "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
     } else {
         //strlabel->setText(tr("Stop extracting "));
-        strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+        if (m_openType) {
+            strlabel2->setText(tr("Are you sure you want to stop open the file?"));
+        } else {
+            strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+        }
     }
 
     dialog->addButton(tr("Cancel"));

@@ -28,6 +28,7 @@
 #include "DLabel"
 #include "QAbstractButton"
 #include "DWidget"
+#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,13 +53,14 @@ void ExtractPauseDialog::initUI()
 //    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 //    strlabel->setText(tr("Stop extracting"));
     DLabel *strlabel2 = new DLabel(this);
-    strlabel2->setFixedHeight(20);
-    strlabel2->setForegroundRole(DPalette::ToolTipText);
+    strlabel2->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    pa = DApplicationHelper::instance()->palette(strlabel2);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
 
-//    font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-//    font.setWeight(QFont::DemiBold);
-//    strlabel2->setFont(font);
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::DemiBold);
+//    strlabel2->setFixedHeight(20);
+//    strlabel2->setForegroundRole(DPalette::ToolTipText);
+//    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::DemiBold);
 
     strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
 

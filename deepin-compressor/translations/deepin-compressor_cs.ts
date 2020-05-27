@@ -323,85 +323,90 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="313"/>
+        <location filename="../source/src/mainwindow.cpp" line="319"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="317"/>
+        <location filename="../source/src/mainwindow.cpp" line="323"/>
         <source>Help</source>
         <translation>Nápověda</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="321"/>
+        <location filename="../source/src/mainwindow.cpp" line="327"/>
         <source>Select the file</source>
         <translation>Otevřít</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="325"/>
+        <location filename="../source/src/mainwindow.cpp" line="331"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="345"/>
+        <location filename="../source/src/mainwindow.cpp" line="351"/>
         <source>Shortcuts</source>
         <translation>Klávesové zkratky</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="411"/>
+        <location filename="../source/src/mainwindow.cpp" line="417"/>
         <source>Open file</source>
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="441"/>
+        <location filename="../source/src/mainwindow.cpp" line="447"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="595"/>
-        <location filename="../source/src/mainwindow.cpp" line="605"/>
-        <location filename="../source/src/mainwindow.cpp" line="1518"/>
+        <location filename="../source/src/mainwindow.cpp" line="601"/>
+        <location filename="../source/src/mainwindow.cpp" line="611"/>
+        <location filename="../source/src/mainwindow.cpp" line="1530"/>
         <source>Create New Archive</source>
         <translation>Vytvořit nový archiv</translation>
     </message>
     <message>
         <location filename="../source/src/mainwindow.cpp" line="638"/>
+        <source>Opening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/mainwindow.cpp" line="648"/>
         <source>Compression successful</source>
         <translation>Zabalení úspěšné</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1343"/>
-        <location filename="../source/src/mainwindow.cpp" line="1372"/>
+        <location filename="../source/src/mainwindow.cpp" line="1355"/>
+        <location filename="../source/src/mainwindow.cpp" line="1384"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1359"/>
+        <location filename="../source/src/mainwindow.cpp" line="1371"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1374"/>
+        <location filename="../source/src/mainwindow.cpp" line="1386"/>
         <source>Extraction successful</source>
         <translation>Rozbalení úspěšné</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="233"/>
+        <location filename="../source/src/mainwindow.cpp" line="235"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 byl změněn na disku. Zaveďte jej, prosím, znovu.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="804"/>
+        <location filename="../source/src/mainwindow.cpp" line="814"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Chcete archiv přidat do seznamu nebo jej otevřít v novém okně?</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="333"/>
+        <location filename="../source/src/mainwindow.cpp" line="339"/>
         <source>Display shortcuts</source>
         <translation>Zobrazit klávesové zkratky</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="805"/>
+        <location filename="../source/src/mainwindow.cpp" line="815"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -411,75 +416,75 @@
         <translation>Správce archivů</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="239"/>
-        <location filename="../source/src/mainwindow.cpp" line="1114"/>
+        <location filename="../source/src/mainwindow.cpp" line="241"/>
+        <location filename="../source/src/mainwindow.cpp" line="1125"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="621"/>
+        <location filename="../source/src/mainwindow.cpp" line="627"/>
         <source>Compressing</source>
         <translation>Zabaluje se</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="631"/>
+        <location filename="../source/src/mainwindow.cpp" line="640"/>
         <source>Extracting</source>
         <translation>Rozbaluje se</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="647"/>
+        <location filename="../source/src/mainwindow.cpp" line="657"/>
         <source>Compression failed</source>
         <translation>Zabalení selhalo</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="680"/>
+        <location filename="../source/src/mainwindow.cpp" line="690"/>
         <source>Extraction failed</source>
         <translation>Rozbalení selhalo</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="806"/>
+        <location filename="../source/src/mainwindow.cpp" line="816"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="807"/>
+        <location filename="../source/src/mainwindow.cpp" line="817"/>
         <source>Open in new window</source>
         <translation>Otevřít v novém okně</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="924"/>
+        <location filename="../source/src/mainwindow.cpp" line="935"/>
         <source>Find directory</source>
         <translation>Najít adresář</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1268"/>
+        <location filename="../source/src/mainwindow.cpp" line="1280"/>
         <source>Wrong password</source>
         <translation>Špatné heslo</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="998"/>
-        <location filename="../source/src/mainwindow.cpp" line="1018"/>
-        <location filename="../source/src/mainwindow.cpp" line="1054"/>
-        <location filename="../source/src/mainwindow.cpp" line="1298"/>
+        <location filename="../source/src/mainwindow.cpp" line="1009"/>
+        <location filename="../source/src/mainwindow.cpp" line="1029"/>
+        <location filename="../source/src/mainwindow.cpp" line="1065"/>
+        <location filename="../source/src/mainwindow.cpp" line="1310"/>
         <source>Damaged file, unable to extract</source>
         <translation>Poškozený soubor. Nelze rozbalit</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1113"/>
+        <location filename="../source/src/mainwindow.cpp" line="1124"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Archiv byl změněn na disku. Zaveďte jej, prosím, znovu.</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1294"/>
-        <location filename="../source/src/mainwindow.cpp" line="1296"/>
-        <location filename="../source/src/mainwindow.cpp" line="1921"/>
-        <location filename="../source/src/mainwindow.cpp" line="1927"/>
+        <location filename="../source/src/mainwindow.cpp" line="1306"/>
+        <location filename="../source/src/mainwindow.cpp" line="1308"/>
+        <location filename="../source/src/mainwindow.cpp" line="1933"/>
+        <location filename="../source/src/mainwindow.cpp" line="1939"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Nedostatek místa. Uprázdněte, prosím, místo a zkuste to znovu</translation>
     </message>
     <message>
-        <location filename="../source/src/mainwindow.cpp" line="1923"/>
-        <location filename="../source/src/mainwindow.cpp" line="1929"/>
+        <location filename="../source/src/mainwindow.cpp" line="1935"/>
+        <location filename="../source/src/mainwindow.cpp" line="1941"/>
         <source>Damaged file</source>
         <translation>Poškozený soubor</translation>
     </message>
@@ -612,7 +617,7 @@
     <name>Progress</name>
     <message>
         <location filename="../source/src/progress.cpp" line="84"/>
-        <location filename="../source/src/progress.cpp" line="283"/>
+        <location filename="../source/src/progress.cpp" line="296"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -621,22 +626,32 @@
         <location filename="../source/src/progress.cpp" line="136"/>
         <location filename="../source/src/progress.cpp" line="138"/>
         <location filename="../source/src/progress.cpp" line="140"/>
-        <location filename="../source/src/progress.cpp" line="310"/>
+        <location filename="../source/src/progress.cpp" line="323"/>
         <source>Calculating...</source>
         <translation>Počítá se...</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="277"/>
+        <location filename="../source/src/progress.cpp" line="249"/>
+        <source>Opening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="286"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Opravdu chcete zastavit zabalení?</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="284"/>
+        <location filename="../source/src/progress.cpp" line="290"/>
+        <source>Are you sure you want to stop open the file?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../source/src/progress.cpp" line="297"/>
         <source>Confirm</source>
         <translation>Potvrdit</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="280"/>
+        <location filename="../source/src/progress.cpp" line="292"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>Opravdu chcete zastavit rozbalení?</translation>
     </message>
@@ -670,7 +685,7 @@
         <translation>Zabaluje se</translation>
     </message>
     <message>
-        <location filename="../source/src/progress.cpp" line="248"/>
+        <location filename="../source/src/progress.cpp" line="251"/>
         <source>Extracting</source>
         <translation>Rozbaluje se</translation>
     </message>
@@ -714,47 +729,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../source/src/utils.cpp" line="153"/>
+        <location filename="../source/src/utils.cpp" line="155"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="154"/>
+        <location filename="../source/src/utils.cpp" line="156"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="155"/>
+        <location filename="../source/src/utils.cpp" line="157"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="156"/>
+        <location filename="../source/src/utils.cpp" line="158"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="157"/>
+        <location filename="../source/src/utils.cpp" line="159"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="158"/>
+        <location filename="../source/src/utils.cpp" line="160"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="159"/>
+        <location filename="../source/src/utils.cpp" line="161"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="160"/>
+        <location filename="../source/src/utils.cpp" line="162"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../source/src/utils.cpp" line="161"/>
+        <location filename="../source/src/utils.cpp" line="163"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
@@ -923,29 +938,29 @@
 <context>
     <name>UnCompressPage</name>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="42"/>
+        <location filename="../source/src/uncompresspage.cpp" line="43"/>
         <source>Extract</source>
         <translation>Rozbalit</translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="48"/>
-        <location filename="../source/src/uncompresspage.cpp" line="118"/>
-        <location filename="../source/src/uncompresspage.cpp" line="125"/>
+        <location filename="../source/src/uncompresspage.cpp" line="49"/>
+        <location filename="../source/src/uncompresspage.cpp" line="127"/>
+        <location filename="../source/src/uncompresspage.cpp" line="134"/>
         <source>Extract to:</source>
         <translation>Rozbalit do:</translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="88"/>
+        <location filename="../source/src/uncompresspage.cpp" line="90"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="106"/>
+        <location filename="../source/src/uncompresspage.cpp" line="108"/>
         <source>Find directory</source>
         <translation>Najít adresář</translation>
     </message>
     <message>
-        <location filename="../source/src/uncompresspage.cpp" line="146"/>
+        <location filename="../source/src/uncompresspage.cpp" line="155"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
@@ -953,7 +968,7 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../source/src/fileViewer.cpp" line="1046"/>
+        <location filename="../source/src/fileViewer.cpp" line="1052"/>
         <source>Extract</source>
         <translation>Rozbalit</translation>
     </message>
@@ -963,15 +978,15 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="380"/>
-        <location filename="../source/src/fileViewer.cpp" line="1048"/>
+        <location filename="../source/src/fileViewer.cpp" line="1054"/>
         <source>Extract to current directory</source>
         <translation>Rozbalit do nynějšího adresáře</translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="381"/>
         <location filename="../source/src/fileViewer.cpp" line="396"/>
-        <location filename="../source/src/fileViewer.cpp" line="1052"/>
-        <location filename="../source/src/fileViewer.cpp" line="1056"/>
+        <location filename="../source/src/fileViewer.cpp" line="1058"/>
+        <location filename="../source/src/fileViewer.cpp" line="1062"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -983,7 +998,7 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="394"/>
-        <location filename="../source/src/fileViewer.cpp" line="1059"/>
+        <location filename="../source/src/fileViewer.cpp" line="1065"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
@@ -999,13 +1014,13 @@
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="511"/>
-        <location filename="../source/src/fileViewer.cpp" line="1071"/>
+        <location filename="../source/src/fileViewer.cpp" line="1082"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../source/src/fileViewer.cpp" line="379"/>
-        <location filename="../source/src/fileViewer.cpp" line="1046"/>
+        <location filename="../source/src/fileViewer.cpp" line="1052"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Rozbalit</translation>

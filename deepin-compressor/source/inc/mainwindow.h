@@ -237,7 +237,10 @@ private:
     int openTempFileLink = 0;
     QEventLoop *pEventloop = nullptr;
     DSpinner *m_spinner = nullptr;
+
     TimerWatcher *m_pWatcher = nullptr;
+    bool m_openType = false; //false解压 true打开
+
 private:
     void calSelectedTotalFileSize(const QStringList &files);
     qint64 calFileSize(const QString &path);

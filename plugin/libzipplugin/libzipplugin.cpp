@@ -129,6 +129,8 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     , m_skipAll(false)
     , m_listAfterAdd(false)
 {
+    connect(this, &ReadOnlyArchiveInterface::error, this, &LibzipPlugin::slotRestoreWorkingDir);
+    connect(this, &ReadOnlyArchiveInterface::cancelled, this, &LibzipPlugin::slotRestoreWorkingDir);
 }
 
 LibzipPlugin::~LibzipPlugin()
@@ -1085,6 +1087,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 //            }
 //        }
 
+
+        m_extractFile = destination;
+
         QFile file1(destination);
         bool isExists = file1.exists();
         QFileDevice::Permissions pOldPermission =  file1.permissions();
@@ -1092,6 +1097,18 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         if (pOldPermission.testFlag(QFileDevice::WriteOwner) == false) {
             bool status = file1.setPermissions(pOldPermission | QFileDevice::WriteOwner);//set permission include writeowner.
         }
+
+        if (!m_extractionOptions.isAutoCreatDir()) {
+            // QFileInfo extractileInfo(destination);
+            QDir dir;
+            if (!dir.exists(m_extractDestDir + "/.extractCache")) {
+                qDebug() << dir.mkdir(m_extractDestDir + "/.extractCache");
+            }
+            qDebug() << QFile::rename(fileInfo.absoluteFilePath(), m_extractDestDir + "/.extractCache/" + fileInfo.fileName());
+
+        }
+
+
 
         QFile file(destination);
         if (file.open(QIODevice::WriteOnly) == false) {
@@ -1137,6 +1154,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
                 writeSize = 0;
             }
         }
+
+        slotRestoreWorkingDir();
 
         const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
         if (index == -1) {
@@ -1550,6 +1569,7 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
 
 void LibzipPlugin::cleanIfCanceled()
 {
+    qDebug() << "cleanIfCanceled";
     if (this->ifReplaceTip == false) {
         if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
 //            qDebug()<<"可以删除解压文件夹";
@@ -1565,11 +1585,42 @@ void LibzipPlugin::cleanIfCanceled()
             }
         }
     }
+
+    QDir dir;
+    dir.setPath(m_extractDestDir + "/.extractCache");
+    if (dir.exists()) {
+        qDebug() << dir.removeRecursively();
+    }
 }
 
 void LibzipPlugin::watchFileList(QStringList *strList)
 {
 
+}
+
+void LibzipPlugin::slotRestoreWorkingDir()
+{
+    if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
+        qDebug() << "=====点击了取消";
+
+        if (this->ifReplaceTip == true) {
+
+            if (!m_extractionOptions.isAutoCreatDir()) {
+
+                QFileInfo fileInfo(m_extractFile);
+                QString strFileName = fileInfo.fileName();
+                QDir dir;
+
+                qDebug() << QFile::remove(m_extractFile);
+                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
+                qDebug() << dir.exists(m_extractDestDir + "/.extractCache");
+                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
+                qDebug() << m_extractDestDir + "/.extractCache/" + fileInfo.fileName();
+                qDebug() << m_extractDestDir + "/" + fileInfo.fileName();
+                qDebug() << QFile::rename(m_extractDestDir + "/.extractCache/" + strFileName, m_extractDestDir + "/" + strFileName);
+            }
+        }
+    }
 }
 
 

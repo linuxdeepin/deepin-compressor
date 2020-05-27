@@ -43,6 +43,10 @@ public:
     bool testArchive() override;
     void cleanIfCanceled()override;
     void watchFileList(QStringList *strList)override;
+
+private Q_SLOTS:
+    void slotRestoreWorkingDir();
+
 private:
     bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
@@ -67,6 +71,9 @@ private:
     ExtractionOptions m_extractionOptions;
     bool isWrongPassword = false;
     QString m_extractDestDir;
+
+
+    QString m_extractFile;
 };
 
 #endif // LIBZIPPLUGIN_H

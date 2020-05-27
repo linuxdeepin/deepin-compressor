@@ -53,6 +53,8 @@ public:
     EXTRACT_TYPE getExtractType();
     void setRootPathIndex();
 
+private:
+    QString getAndDisplayPath(QString path);
 
 signals:
     void sigDecompressPress(const QString &localPath);

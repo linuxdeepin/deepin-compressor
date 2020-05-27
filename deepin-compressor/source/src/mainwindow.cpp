@@ -635,7 +635,11 @@ void MainWindow::refreshPage()
         m_openAction->setEnabled(false);
         setAcceptDrops(false);
         m_titlebutton->setVisible(false);
-        titlebar()->setTitle(tr("Extracting"));
+        if (m_openType) {
+            titlebar()->setTitle(tr("Opening"));
+        } else {
+            titlebar()->setTitle(tr("Extracting"));
+        }
         m_Progess->setFilename(m_decompressfilename);
         m_mainLayout->setCurrentIndex(4);
         m_timer.start();
@@ -1174,6 +1178,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     m_pathstore = userDestination;
     //m_compressDirFiles = CheckAllFiles(m_pathstore);
 
+    options.setAutoCreatDir(m_settingsDialog->isAutoCreatDir());
     if (m_settingsDialog->isAutoCreatDir()) {
         const QString detectedSubfolder = m_model->archive()->subfolderName();
         qDebug() << "Detected subfolder" << detectedSubfolder;
@@ -1825,11 +1830,13 @@ void MainWindow::deleteDecompressFile(QString destDirName)
 {
 //    qDebug() << "deleteDecompressFile" << m_decompressfilepath << m_decompressfilename << m_UnCompressPage->getDeFileCount() << m_model->archive()->isSingleFile() << m_model->archive()->isSingleFolder();
 
+    bool bAutoCreatDir = m_settingsDialog->isAutoCreatDir();
+
     if (!m_decompressfilepath.isEmpty()) {
         if (m_UnCompressPage->getDeFileCount() > 1) {
             QDir fi(m_decompressfilepath);  //若m_decompressfilepath为空字符串，则使用（"."）构造目录
 //            qDebug() << fi.exists();
-            if (fi.exists()) {
+            if (fi.exists() && bAutoCreatDir) {
                 fi.removeRecursively();
             }
         } else if (m_UnCompressPage->getDeFileCount() == 1) {
@@ -1977,8 +1984,12 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     if (type == EXTRACT_TEMP) {
         m_encryptiontype = Encryption_TempExtract;
+        m_openType = true;
+        m_Progess->setopentype(m_openType);
     } else if (type == EXTRACT_TEMP_CHOOSE_OPEN) {
         m_encryptiontype =  Encryption_TempExtract_Open_Choose;
+        m_openType = true;
+        m_Progess->setopentype(m_openType);
     } else if (type == EXTRACT_DRAG) {
         m_encryptiontype =  Encryption_DRAG;
     } else {
@@ -2043,6 +2054,7 @@ void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fil
 
 void MainWindow::slotKillExtractJob()
 {
+//    m_openType = false;
     m_workstatus = WorkNone;
     if (m_encryptionjob) {
         m_encryptionjob->Killjob();
@@ -2086,6 +2098,7 @@ void MainWindow::slotWorkTimeOut()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
+    m_encryptiontype = Encryption_NULL;
     if (m_encryptionjob) {
         //append the spiner animation to the eventloop, so can play the spinner animation
         if (pEventloop == nullptr) {
@@ -2209,6 +2222,8 @@ void MainWindow::slotBackButtonClicked()
 
 void MainWindow::slotResetPercentAndTime()
 {
+    m_openType = false;
+    m_Progess->setopentype(m_openType);
     lastPercent = 0;
     compressTime = 0;
     m_timer.elapsed();
