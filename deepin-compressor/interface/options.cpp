@@ -66,6 +66,16 @@ void ExtractionOptions::setBatchExtract(bool status)
     m_isBatch = status;
 }
 
+bool ExtractionOptions::isAutoCreatDir() const
+{
+    return m_isAutoCreatDir;
+}
+
+void ExtractionOptions::setAutoCreatDir(bool bAutoCreatDir)
+{
+    m_isAutoCreatDir = bAutoCreatDir;
+}
+
 bool ExtractionOptions::isBatchExtract()
 {
     return m_isBatch;

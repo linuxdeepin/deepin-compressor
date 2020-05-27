@@ -1177,6 +1177,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
     m_pathstore = userDestination;
     //m_compressDirFiles = CheckAllFiles(m_pathstore);
 
+    options.setAutoCreatDir(m_settingsDialog->isAutoCreatDir());
     if (m_settingsDialog->isAutoCreatDir()) {
         const QString detectedSubfolder = m_model->archive()->subfolderName();
         qDebug() << "Detected subfolder" << detectedSubfolder;
@@ -1822,11 +1823,13 @@ void MainWindow::deleteDecompressFile(QString destDirName)
 {
 //    qDebug() << "deleteDecompressFile" << m_decompressfilepath << m_decompressfilename << m_UnCompressPage->getDeFileCount() << m_model->archive()->isSingleFile() << m_model->archive()->isSingleFolder();
 
+    bool bAutoCreatDir = m_settingsDialog->isAutoCreatDir();
+
     if (!m_decompressfilepath.isEmpty()) {
         if (m_UnCompressPage->getDeFileCount() > 1) {
             QDir fi(m_decompressfilepath);  //若m_decompressfilepath为空字符串，则使用（"."）构造目录
 //            qDebug() << fi.exists();
-            if (fi.exists()) {
+            if (fi.exists() && bAutoCreatDir) {
                 fi.removeRecursively();
             }
         } else if (m_UnCompressPage->getDeFileCount() == 1) {
