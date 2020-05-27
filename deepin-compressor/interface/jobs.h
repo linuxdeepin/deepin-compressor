@@ -197,13 +197,15 @@ public:
 
     QString destinationDirectory() const;
     ExtractionOptions extractionOptions() const;
+    bool Killjob();
 
 public Q_SLOTS:
     void doWork() override;
     void onFinished(bool result)override;
-public:
-    bool Killjob();
-
+    void slotWorkTimeOut(bool isWorkProcess);
+    void slotExtractJobPwdCheckDown();
+    void onProgress(double progress)override;
+    void onProgressFilename(const QString &filename)override;
 signals:
     void sigExtractJobPassword();
     void sigExtractJobFinished();
@@ -212,10 +214,10 @@ signals:
 private:
     void cleanIfCanceled();
 private:
-
     QVector<Archive::Entry *> m_entries;
     QString m_destinationDir;
     ExtractionOptions m_options;
+    bool m_bTimeout;//if work time out,if greater than 700ms,emit the progress info.
 };
 
 

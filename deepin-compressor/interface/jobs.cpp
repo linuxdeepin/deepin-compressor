@@ -22,7 +22,6 @@
 #include "jobs.h"
 #include "archiveentry.h"
 
-
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
@@ -540,7 +539,11 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
 {
     qDebug() << "ExtractJob job instance";
     connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
-    connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::sigExtractJobPwdCheckDown, Qt::QueuedConnection);
+    connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::slotExtractJobPwdCheckDown, Qt::QueuedConnection);
+    connect(interface, &ReadOnlyArchiveInterface::progress, this, &ExtractJob::onProgress, Qt::ConnectionType::UniqueConnection);
+    connect(interface, &ReadOnlyArchiveInterface::progress_filename, this, &ExtractJob::onProgressFilename, Qt::ConnectionType::UniqueConnection);
+
+    m_bTimeout = false;
 }
 
 void ExtractJob::doWork()
@@ -593,9 +596,35 @@ void ExtractJob::onFinished(bool result)
     Job::onFinished(result);
 }
 
+void ExtractJob::slotWorkTimeOut(bool isWorkProcess)
+{
+    m_bTimeout = isWorkProcess;
+}
+
+void ExtractJob::slotExtractJobPwdCheckDown()
+{
+    if (m_bTimeout) {
+        emit sigExtractJobPwdCheckDown();
+    }
+}
+
 bool ExtractJob::Killjob()
 {
     return kill();
+}
+
+void ExtractJob::onProgress(double value)
+{
+    if (this->m_bTimeout) {
+        setPercent(static_cast<unsigned long>(100.0 * value));
+    }
+}
+
+void ExtractJob::onProgressFilename(const QString &filename)
+{
+    if (this->m_bTimeout) {
+        setPercentFilename(filename);
+    }
 }
 
 QString ExtractJob::destinationDirectory() const

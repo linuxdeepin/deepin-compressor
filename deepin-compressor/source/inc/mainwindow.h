@@ -85,6 +85,7 @@ enum WorkState {
 };
 
 class QStackedLayout;
+class TimerWatcher;
 
 class MainWindow : public DMainWindow
 {
@@ -166,7 +167,7 @@ private slots:
     void slotResetPercentAndTime();
     void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
     void slotStopSpinner();
-
+    void slotWorkTimeOut();
 signals:
     void sigquitApp();
     void sigZipAddFile();
@@ -236,7 +237,7 @@ private:
     int openTempFileLink = 0;
     QEventLoop *pEventloop = nullptr;
     DSpinner *m_spinner = nullptr;
-
+    TimerWatcher *m_pWatcher = nullptr;
 private:
     void calSelectedTotalFileSize(const QStringList &files);
     qint64 calFileSize(const QString &path);

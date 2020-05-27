@@ -3,7 +3,7 @@
 #include <QTimerEvent>
 #include <QFileInfo>
 
-#define TIMER_TIMEOUT   (1000)
+
 
 FileWatcher::FileWatcher(QObject *parent)
     : QObject(parent)
@@ -22,7 +22,7 @@ FileWatcher::~FileWatcher()
 
 void FileWatcher::beginWork()
 {
-    m_nTimerID = this->startTimer(TIMER_TIMEOUT);
+    m_nTimerID = this->startTimer(MS_FILEWATCHER);
 }
 
 void FileWatcher::finishWork()
@@ -59,3 +59,49 @@ void FileWatcher::handleTimeout()
         }
     }
 }
+
+
+
+TimerWatcher::TimerWatcher(QObject *parent)
+    : QObject(parent)
+{
+}
+
+TimerWatcher::~TimerWatcher()
+{
+    this->finishWork();
+}
+
+void TimerWatcher::beginWork(int ms)
+{
+    m_nTimerID = this->startTimer(ms);
+}
+
+void TimerWatcher::finishWork()
+{
+    killTimer(m_nTimerID);
+    qDebug() << "finishWork";
+}
+
+void TimerWatcher::bindFunction(QObject *pWnd, pMember_callback callback)
+{
+    this->pCaller = pWnd;
+    this->callback = callback;
+}
+
+void TimerWatcher::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_nTimerID) {
+        if (this->pCaller == nullptr || this->callback == nullptr) {
+            return;
+        }
+        bool result = (this->pCaller->*callback)();
+        if (result == true) {
+            emit sigBindFuncDone(result);
+        } else {
+            qDebug() << "condition not ok";
+        }
+        this->finishWork();//stop timer work
+    }
+}
+

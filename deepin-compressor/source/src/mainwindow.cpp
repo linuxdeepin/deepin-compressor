@@ -45,6 +45,7 @@
 #include "kprocess.h"
 #include <DStandardPaths>
 #include <QStackedLayout>
+#include "filewatcher.h"
 
 #define DEFAUTL_PATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"+ QDir::separator()
 
@@ -1104,7 +1105,7 @@ void MainWindow::loadArchive(const QString &files)
     connect(m_loadjob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
 
     m_loadjob->start();
-    m_homePage->spinnerStart(this, &MainWindow::isWorkProcess);
+    m_homePage->spinnerStart(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
 }
 
 void MainWindow::WatcherFile(const QString &files)
@@ -1289,6 +1290,12 @@ void MainWindow::slotExtractionDone(KJob *job)
     if (m_encryptionjob) {
         m_encryptionjob->deleteLater();
         m_encryptionjob = nullptr;
+        if (this->m_pWatcher != nullptr) {
+            this->m_pWatcher->finishWork();
+            disconnect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, m_encryptionjob, &ExtractJob::slotWorkTimeOut);
+            delete this->m_pWatcher;
+            this->m_pWatcher = nullptr;
+        }
     }
 
     int errorCode = job->error();
@@ -1995,6 +2002,13 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
 
+    if (this->m_pWatcher == nullptr) {
+        this->m_pWatcher = new TimerWatcher();
+        connect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, m_encryptionjob, &ExtractJob::slotWorkTimeOut);
+    }
+    this->m_pWatcher->bindFunction(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
+    this->m_pWatcher->beginWork(100);
+
     connect(m_encryptionjob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(m_encryptionjob, &KJob::result, this, &MainWindow::slotExtractionDone);
     //
@@ -2062,6 +2076,11 @@ void MainWindow::slotStopSpinner()
         m_spinner->hide();
     }
     disconnect(m_encryptionjob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
+}
+
+void MainWindow::slotWorkTimeOut()
+{
+    qDebug() << "slotWorkTimeOut";
 }
 
 void MainWindow::onCancelCompressPressed(int compressType)
