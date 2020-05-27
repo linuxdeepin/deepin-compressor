@@ -237,6 +237,8 @@ private:
     QEventLoop *pEventloop = nullptr;
     DSpinner *m_spinner = nullptr;
 
+    bool m_openType = false; //false解压 true打开
+
 private:
     void calSelectedTotalFileSize(const QStringList &files);
     qint64 calFileSize(const QString &path);

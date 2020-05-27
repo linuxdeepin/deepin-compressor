@@ -245,13 +245,22 @@ void Progress::setProgressFilename(QString filename)
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
 
     } else {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        if (m_openType) {
+            m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));
+        } else {
+            m_progressfilelabel->setText(elideFont.elidedText(tr("Extracting") + ": " + filename, Qt::ElideMiddle, 520));
+        }
     }
 }
 
 void Progress::settype(COMPRESS_TYPE type)
 {
     m_type = type;
+}
+
+void Progress::setopentype(bool type)
+{
+    m_openType = type;
 }
 
 int Progress::showConfirmDialog()
@@ -284,7 +293,11 @@ int Progress::showConfirmDialog()
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
     } else {
         //strlabel->setText(tr("Stop extracting "));
-        strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+        if (m_openType) {
+            strlabel2->setText(tr("Are you sure you want to stop open the file?"));
+        } else {
+            strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+        }
     }
 
     dialog->addButton(tr("Cancel"));

@@ -48,6 +48,7 @@ public:
     void setFilename(QString filename);
     void setProgressFilename(QString filename);
     void settype(COMPRESS_TYPE type);
+    void setopentype(bool type);
     void setTypeImage(QString type);
 
     int showConfirmDialog();
@@ -88,6 +89,7 @@ private:
     qint64 lastTimeLeft = 0;
     double m_speed = 0;
     double m_percent = 0;
+    bool m_openType = false;
 };
 
 #endif // PROGRESS_H
