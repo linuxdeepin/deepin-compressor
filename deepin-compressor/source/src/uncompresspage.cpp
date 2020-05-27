@@ -116,22 +116,20 @@ void UnCompressPage::onPathButoonClicked()
 
     QList<QUrl> pathlist = dialog.selectedUrls();
 
-    const QString curpath = pathlist.at(0).toLocalFile();
-//    m_extractpath->setText(tr("Extract to:") + curpath);
-    QFontMetrics fontMetrics(this->font());
-    int fontSize = fontMetrics.width(curpath);//获取之前设置的字符串的像素大小
-    QString str = curpath;
-    if (fontSize > this->width()) {
-        str = fontMetrics.elidedText(curpath, Qt::ElideMiddle, this->width());//返回一个带有省略号的字符串
-    }
+    QString str = pathlist.at(0).toLocalFile();
+    str = getAndDisplayPath(str);
+
     m_extractpath->setText(tr("Extract to:") + str);
-    m_pathstr = curpath;
+    m_pathstr = str;
 }
 
 void UnCompressPage::setdefaultpath(const QString path)
 {
     m_pathstr = path;
-    m_extractpath->setText(tr("Extract to:") + m_pathstr);
+    QString str = path;
+    str = getAndDisplayPath(str);
+
+    m_extractpath->setText(tr("Extract to:") + str);
 }
 
 int UnCompressPage::getFileCount()
@@ -176,6 +174,18 @@ EXTRACT_TYPE UnCompressPage::getExtractType()
 void UnCompressPage::setRootPathIndex()
 {
     m_fileviewer->setRootPathIndex();
+}
+
+QString UnCompressPage::getAndDisplayPath(QString path)
+{
+    const QString curpath = path;
+    QFontMetrics fontMetrics(this->font());
+    int fontSize = fontMetrics.width(curpath);//获取之前设置的字符串的像素大小
+    QString pathStr = curpath;
+    if (fontSize > parentWidget()->width()) {
+        pathStr = fontMetrics.elidedText(path, Qt::ElideMiddle, parentWidget()->width());//返回一个带有省略号的字符串
+    }
+    return pathStr;
 }
 
 QString UnCompressPage::getDecompressPath()
