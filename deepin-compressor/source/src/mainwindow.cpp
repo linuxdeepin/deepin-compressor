@@ -390,6 +390,9 @@ void MainWindow::InitConnection()
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [ = ](QString msg) {
         QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
         this->sendMessage(icon, msg);
+        if (m_settingsDialog->isAutoOpen()) {
+            DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
+        }
     });
 
     auto openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this);
