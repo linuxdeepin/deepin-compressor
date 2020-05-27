@@ -82,7 +82,7 @@ void Progress::InitUI()
     m_cancelbutton = new DPushButton(this);
     m_cancelbutton->setMinimumSize(340, 36);
     m_cancelbutton->setText(tr("Cancel"));
-    m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
+    m_cancelbutton->setFocusPolicy(Qt::NoFocus);
 
     //add speed and time label
     m_speedLabel = new DLabel(this);
