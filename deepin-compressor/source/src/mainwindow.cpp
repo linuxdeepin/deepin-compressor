@@ -2105,6 +2105,7 @@ void MainWindow::slotWorkTimeOut()
 void MainWindow::onCancelCompressPressed(int compressType)
 {
     slotResetPercentAndTime();
+    m_isrightmenu = false;
     m_encryptiontype = Encryption_NULL;
     if (m_encryptionjob) {
         //append the spiner animation to the eventloop, so can play the spinner animation
