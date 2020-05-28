@@ -396,6 +396,7 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("Open"));
 
         openWithDialogMenu = new  DMenu(tr("Open style"), this);
+        m_pRightMenu->addMenu(openWithDialogMenu);
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
