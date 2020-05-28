@@ -1238,8 +1238,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         calSpeedAndTime(percent);
         lastPercent = percent;
     }
-
-    qDebug() << "percent" << percent;
+    qDebug()  << "percent" << percent << lastPercent;
     if (Encryption_SingleExtract == m_encryptiontype || Encryption_DRAG == m_encryptiontype) {
         if (percent < 100 && WorkProcess == m_workstatus) {
             if (!m_progressdialog->isshown()) {
@@ -1252,7 +1251,9 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
             m_progressdialog->setProcess(percent);
         }
     } else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) {
-        m_Progess->setprogress(percent);
+        if (percent >= lastPercent) {
+            m_Progess->setprogress(percent);
+        }
     } else if ((PAGE_UNZIP == m_pageid || PAGE_ENCRYPTION == m_pageid) && (percent < 100) && m_encryptionjob) {
         /*if (!m_progressTransFlag) {
             if (0 == m_timerId) {
