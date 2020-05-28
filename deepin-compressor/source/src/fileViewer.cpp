@@ -1029,14 +1029,19 @@ void fileViewer::showRightMenu(const QPoint &pos)
     }
 
     openWithDialogMenu->clear();
-    QModelIndex currentparent = pTableViewFile->model()->parent(pTableViewFile->currentIndex());
-//    qDebug() << pTableViewFile->rowAt(pos.y()) << pTableViewFile->columnAt(pos.x()) << pTableViewFile->currentIndex() << pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent).data();
-    QModelIndex selectIndex = pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent);
-    QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
-    if (selectEntry.at(0)->isDir()) {
-        updateAction(selectIndex.data().toString() + QDir::separator()); //如果是文件夹，添加'/'
+
+    if (m_pagetype == PAGE_COMPRESS) {
+        updateAction(pTableViewFile->indexAt(pos).data().toString());
     } else {
-        updateAction(selectIndex.data().toString());
+        QModelIndex currentparent = pTableViewFile->model()->parent(pTableViewFile->currentIndex());
+        //    qDebug() << pTableViewFile->rowAt(pos.y()) << pTableViewFile->columnAt(pos.x()) << pTableViewFile->currentIndex() << pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent).data();
+        QModelIndex selectIndex = pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent);
+        QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
+        if (selectEntry.at(0)->isDir()) {
+            updateAction(selectIndex.data().toString() + QDir::separator()); //如果是文件夹，添加'/'
+        } else {
+            updateAction(selectIndex.data().toString());
+        }
     }
 
     m_pRightMenu->popup(QCursor::pos());
