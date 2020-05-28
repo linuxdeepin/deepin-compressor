@@ -876,9 +876,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
         loadArchive(files.at(0));
-        m_pageid = PAGE_UNZIPPROGRESS;
-        m_Progess->settype(DECOMPRESSING);
-        refreshPage();
+//        m_pageid = PAGE_UNZIPPROGRESS;
+//        m_Progess->settype(DECOMPRESSING);
+//        refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
         QStringList pathlist = files;
         pathlist.removeLast();
@@ -886,9 +886,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
         m_decompressfilepath = fileinfo.path();
-        m_pageid = PAGE_UNZIPPROGRESS;
-        m_Progess->settype(DECOMPRESSING);
-        refreshPage();
+//        m_pageid = PAGE_UNZIPPROGRESS;
+//        m_Progess->settype(DECOMPRESSING);
+//        refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
         batchJob->setAutoSubfolder(true);
@@ -957,9 +957,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_decompressfilename = fileinfo.fileName();
         m_UnCompressPage->setdefaultpath(curpath);
         m_decompressfilepath = curpath;
-        m_pageid = PAGE_UNZIPPROGRESS;
-        m_Progess->settype(DECOMPRESSING);
-        refreshPage();
+//        m_pageid = PAGE_UNZIPPROGRESS;
+//        m_Progess->settype(DECOMPRESSING);
+//        refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
         batchJob->setAutoSubfolder(true);
@@ -1008,9 +1008,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 m_decompressfilename = fileinfo.fileName();
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
                 loadArchive(filepath);
-                m_pageid = PAGE_UNZIPPROGRESS;
-                m_Progess->settype(DECOMPRESSING);
-                refreshPage();
+//                m_pageid = PAGE_UNZIPPROGRESS;
+//                m_Progess->settype(DECOMPRESSING);
+//                refreshPage();
             } else {
                 m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
                 m_pageid = PAGE_UNZIP_FAIL;
