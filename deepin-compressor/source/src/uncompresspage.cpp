@@ -117,10 +117,10 @@ void UnCompressPage::onPathButoonClicked()
     QList<QUrl> pathlist = dialog.selectedUrls();
 
     QString str = pathlist.at(0).toLocalFile();
-    str = getAndDisplayPath(str);
-
-    m_extractpath->setText(tr("Extract to:") + str);
     m_pathstr = str;
+
+    str = getAndDisplayPath(str);
+    m_extractpath->setText(tr("Extract to:") + str);
 }
 
 void UnCompressPage::setdefaultpath(const QString path)

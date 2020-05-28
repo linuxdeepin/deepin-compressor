@@ -446,10 +446,6 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Medium);
         item->setFont(font);
 
-//        DPalette pal ;
-//        pal.setBrush(DPalette::WindowText,pal.color(DPalette::WindowText));
-
-
         firstmodel->setItem(rowindex, 0, item);
         if (fileinfo.isDir()) {
 //            item = new MyFileItem("-");
