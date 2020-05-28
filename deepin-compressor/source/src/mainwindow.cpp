@@ -1380,7 +1380,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
             QFileInfo fileinfo(fullpath);
             if (fileinfo.exists()) {
-                DDesktopServices::showFileItem(fullpath);
+                DDesktopServices::showFolder(fullpath);
             }
         }
     } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
@@ -1426,6 +1426,7 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
+    m_progressdialog->clearprocess();
     // m_progressTransFlag = false;
     if (Encryption_Load == m_encryptiontype) {
         LoadPassword(password);
