@@ -202,7 +202,6 @@ QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName)
     QMimeType mimeType = db.mimeTypeForFile(fileName);
     const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(mimeType);
 
-
     QList<QAction *> listAction;
 
     for (int i = 0; i < recommendApps.count(); ++i) {

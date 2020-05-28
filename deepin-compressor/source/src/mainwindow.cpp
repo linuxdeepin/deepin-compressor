@@ -860,7 +860,6 @@ void MainWindow::onSelected(const QStringList &files)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-    qDebug() << "chendu";
     if (!m_initflag) {
         InitUI();
         InitConnection();
