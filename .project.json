@@ -1,0 +1,6 @@
+{
+       "type": "homebrew",
+       "3rdparty": ["./plugin"],
+       "ignore": ["./example", "./debian"],
+       "license": ["GPLv3"]
+}

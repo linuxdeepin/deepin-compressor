@@ -6,7 +6,7 @@ mode = developer
 [deepin-archive-manager.deepin-archive-manager]
 file_filter = deepin-compressor/translations/deepin-compressor_<lang>.ts
 source_file = deepin-compressor/translations/deepin-compressor_en.ts
-source_lang = en
+source_lang = en_US
 type = QT
 
 
