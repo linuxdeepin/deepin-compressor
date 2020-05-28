@@ -1986,6 +1986,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     m_Progess->setprogress(0);
     // m_progressTransFlag = false;
     m_workstatus = WorkProcess;
+    m_pathstore = path;
 
     if (type == EXTRACT_TEMP) {
         m_encryptiontype = Encryption_TempExtract;
