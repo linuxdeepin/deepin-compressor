@@ -1,13 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/deepin/builtin/dark/icons/split_line_dark.svg</file>
-        <file>icons/deepin/builtin/light/icons/split_line.svg</file>
-        <file>icons/deepin/builtin/icons/compress_fail_128px.svg</file>
-        <file>icons/deepin/builtin/icons/compress_folder_128px.svg</file>
-        <file>icons/deepin/builtin/icons/compress_lock_128px.svg</file>
-        <file>icons/deepin/builtin/icons/compress_success_30px.svg</file>
-        <file>icons/deepin/builtin/icons/compress_success_128px.svg</file>
-        <file>icons/deepin/builtin/icons/compress_warning_32px.svg</file>
-        <file>icons/deepin/builtin/icons/deepin-compressor.svg</file>
+        <file>assets/icons/deepin/builtin/dark/icons/split_line_dark.svg</file>
+        <file>assets/icons/deepin/builtin/light/icons/split_line.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_fail_128px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_folder_128px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_lock_128px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_success_30px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_success_128px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_warning_32px.svg</file>
+        <file>assets/icons/deepin/builtin/icons/deepin-compressor.svg</file>
     </qresource>
 </RCC>

@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
     if (appIcon.isNull()) {
-        appIcon = QIcon(":/icons/deepin/builtin/icons/deepin-compressor.svg");
+        appIcon = QIcon(":assets/icons/deepin/builtin/icons/deepin-compressor.svg");
     }
 
     app.setProductIcon(appIcon);

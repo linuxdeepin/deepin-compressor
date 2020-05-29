@@ -83,7 +83,7 @@ void CompressPage::onNextPress()
     if (m_filelist.isEmpty()) {
         DDialog *dialog = new DDialog(this);
 
-        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
+        QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
         dialog->setMessage(tr("Please add files"));
         dialog->addButton(tr("OK"));
@@ -102,7 +102,7 @@ void CompressPage::showDialog()
 {
     DDialog *dialog = new DDialog(this);
 
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(48, 48));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(48, 48));
     dialog->setIcon(pixmap);
 
     DPalette pa;

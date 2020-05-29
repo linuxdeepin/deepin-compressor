@@ -4,4 +4,4 @@ SUBDIRS += \
     deepin-compressor \
     3rdparty
 
-deepin-compressor.depends = plugin
+deepin-compressor.depends = 3rdparty

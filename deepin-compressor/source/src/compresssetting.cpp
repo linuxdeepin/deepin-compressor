@@ -671,7 +671,7 @@ bool CompressSetting::onSplitChecked()
 int CompressSetting::showWarningDialog(const QString &msg, int index)
 {
     DDialog *dialog = new DDialog(this);
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);
     dialog->setMinimumSize(380, 140);
@@ -701,7 +701,7 @@ bool CompressSetting::existSameFileName()
 {
     DDialog *dialog = new DDialog(this);
     dialog->setMinimumSize(QSize(380, 190));
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel(dialog);

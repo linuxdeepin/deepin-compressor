@@ -150,7 +150,7 @@ int UnCompressPage::getDeFileCount()
 int UnCompressPage::showWarningDialog(const QString &msg)
 {
     DDialog *dialog = new DDialog(this);
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 //    dialog->setMessage(msg);
     dialog->addSpacing(32);

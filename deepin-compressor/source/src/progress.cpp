@@ -267,7 +267,7 @@ int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog(this);
 
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 //    DPalette pa, pa2;
 //    DLabel *strlabel = new DLabel(dialog);

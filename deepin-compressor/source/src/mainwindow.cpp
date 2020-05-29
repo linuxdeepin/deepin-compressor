@@ -221,7 +221,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
             if (!filein.exists()) {
 //                DDialog *dialog = new DDialog(this);
 //                dialog->setFixedWidth(440);
-//                QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+//                QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
 //                dialog->setIcon(icon);
 //                dialog->setMessage(tr("%1 was changed on the disk, please import it again.").arg(filein.fileName()));
 //                dialog->addButton(tr("OK"), true, DDialog::ButtonRecommend);
@@ -235,7 +235,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 QString displayName = Utils::toShortString(filein.fileName());
                 QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
                 DDialog *dialog = new DDialog(this);
-                QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+                QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
                 dialog->setIcon(pixmap);
                 dialog->addSpacing(32);
                 dialog->setMinimumSize(380, 140);
@@ -388,7 +388,7 @@ void MainWindow::InitConnection()
     connect(m_CompressFail, &Compressor_Fail::sigBackButtonClickedOnFail, this, &MainWindow::slotBackButtonClicked);
     connect(m_CompressPage, &CompressPage::sigiscanaddfile, this, &MainWindow::onCompressAddfileSlot);
     connect(m_progressdialog, &ProgressDialog::extractSuccess, this, [ = ](QString msg) {
-        QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+        QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
         this->sendMessage(icon, msg);
         if (m_settingsDialog->isAutoOpen()) {
             DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
@@ -1129,7 +1129,7 @@ void MainWindow::WatcherFile(const QString &files)
     connect(m_fileManager, &DFileWatcher::fileMoved, this, [ = ]() { //监控压缩包，重命名时提示
         DDialog *dialog = new DDialog(this);
         dialog->setFixedWidth(440);
-        QIcon icon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+        QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);
         dialog->setMessage(tr("The archive was changed on the disk, please import it again."));
         dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);

@@ -273,7 +273,7 @@ void SettingDialog::initUI()
     auto backend = new QSettingBackend(confPath, this);
 
     // 通过json文件创建DSettings对象
-    m_settings = DSettings::fromJsonFile(":/data/deepin-compressor.json");
+    m_settings = DSettings::fromJsonFile(":assets/data/deepin-compressor.json");
     // 设置DSettings存储后端
     m_settings->setBackend(backend);
 

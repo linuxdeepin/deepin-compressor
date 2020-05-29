@@ -41,7 +41,7 @@ ExtractPauseDialog::ExtractPauseDialog(QWidget *parent):
 
 void ExtractPauseDialog::initUI()
 {
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     setIcon(pixmap);
 
     DPalette pa;

@@ -38,7 +38,7 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
 
 void Compressor_Fail::InitUI()
 {
-    m_compressicon = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(128, 128));
+    m_compressicon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel(this);
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel(this);
