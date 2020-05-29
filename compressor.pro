@@ -2,6 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     deepin-compressor \
-    plugin
+    3rdparty
 
 deepin-compressor.depends = plugin
