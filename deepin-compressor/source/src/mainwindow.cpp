@@ -391,7 +391,13 @@ void MainWindow::InitConnection()
         QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
         this->sendMessage(icon, msg);
         if (m_settingsDialog->isAutoOpen()) {
-            DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
+            //DDesktopServices::showFileItem(QUrl(m_decompressfilepath, QUrl::TolerantMode));
+            QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
+            qDebug() << fullpath;
+            QFileInfo fileinfo(fullpath);
+            if (fileinfo.exists()) {
+                DDesktopServices::showFileItem(fullpath);
+            }
         }
     });
 
@@ -1386,7 +1392,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
             QFileInfo fileinfo(fullpath);
             if (fileinfo.exists()) {
-                DDesktopServices::showFolder(fullpath);
+                //DDesktopServices::showFolder(fullpath);
             }
         }
     } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
@@ -1456,6 +1462,7 @@ void MainWindow::ExtractSinglePassword(QString password)
     } else {
         // second or more  time to extract
         ExtractionOptions options;
+        options.setDragAndDropEnabled(true);
 
         m_encryptionjob = m_model->extractFiles(m_extractSimpleFiles, m_decompressfilepath, options);
         m_encryptionjob->archiveInterface()->setPassword(password);
@@ -1487,6 +1494,7 @@ void MainWindow::ExtractPassword(QString password)
     } else {
         // second or more  time to extract
         ExtractionOptions options;
+
         QVector< Archive::Entry * > files;
 
         m_encryptionjob = m_model->extractFiles(files, m_decompressfilepath, options);
