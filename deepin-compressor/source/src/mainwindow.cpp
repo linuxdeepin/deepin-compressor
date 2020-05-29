@@ -1158,6 +1158,11 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 //    m_progressdialog->setProcess(0);
 //    m_Progess->setprogress(0);
 
+    //if (m_isrightmenu) {
+    lastPercent = 0;
+    m_progressdialog->setProcess(lastPercent);
+    //}
+
     m_workstatus = WorkProcess;
     m_encryptiontype = Encryption_Extract;
     if (nullptr == m_model) {
@@ -2157,6 +2162,8 @@ void MainWindow::onCancelCompressPressed(int compressType)
     }
     refreshPage();
     // emit sigquitApp();
+    slotResetPercentAndTime();
+    m_Progess->setprogress(lastPercent);
 }
 
 void MainWindow::slotClearTempfile()
