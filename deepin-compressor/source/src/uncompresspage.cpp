@@ -47,6 +47,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     contentLayout->addWidget(m_fileviewer);
 
     m_extractpath = new DCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
+    m_extractpath->setToolTip(m_pathstr);
 //    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 //    m_extractpath->setMinimumSize(129, 18);
     DFontSizeManager::instance()->bind(m_extractpath, DFontSizeManager::T8);
@@ -118,6 +119,7 @@ void UnCompressPage::onPathButoonClicked()
 
     QString str = pathlist.at(0).toLocalFile();
     m_pathstr = str;
+    m_extractpath->setToolTip(m_pathstr);
 
     str = getAndDisplayPath(str);
     m_extractpath->setText(tr("Extract to:") + str);
@@ -126,6 +128,7 @@ void UnCompressPage::onPathButoonClicked()
 void UnCompressPage::setdefaultpath(const QString path)
 {
     m_pathstr = path;
+    m_extractpath->setToolTip(m_pathstr);
 
     QString str = path;
     str = getAndDisplayPath(str);
@@ -180,6 +183,13 @@ void UnCompressPage::setRootPathIndex()
 void UnCompressPage::getMainWindowWidth(int windowWidth)
 {
     m_width = windowWidth;
+}
+
+void UnCompressPage::resizeEvent(QResizeEvent *event)
+{
+    getMainWindowWidth(width());
+    setdefaultpath(m_pathstr);
+    QWidget::resizeEvent(event);
 }
 
 QString UnCompressPage::getAndDisplayPath(QString path)

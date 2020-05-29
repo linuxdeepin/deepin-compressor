@@ -54,6 +54,8 @@ public:
     void setRootPathIndex();
     void getMainWindowWidth(int windowWidth);
 
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     QString getAndDisplayPath(QString path);
 
