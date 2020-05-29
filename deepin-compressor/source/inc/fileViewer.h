@@ -177,7 +177,7 @@ private:
     void restoreHeaderSort(const QString &currentPath);
 
     void updateAction(const QString &fileType);
-
+    void updateAction(bool isdirectory, const QString &fileType);
     void openWithDialog(const QModelIndex &index);
     void openWithDialog(const QModelIndex &index, const QString &programma);
 

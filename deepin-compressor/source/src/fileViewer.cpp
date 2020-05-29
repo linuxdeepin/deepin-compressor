@@ -508,6 +508,15 @@ void fileViewer::updateAction(const QString &fileType)
     openWithDialogMenu->addAction(new QAction(tr("Choose default programma")));
 }
 
+void fileViewer::updateAction(bool isdirectory, const QString &fileType)
+{
+    if (isdirectory) {
+        updateAction(fileType + QDir::separator());
+    } else {
+        updateAction(fileType);
+    }
+}
+
 void fileViewer::openWithDialog(const QModelIndex &index)
 {
     QModelIndex curindex = pTableViewFile->currentIndex();
@@ -1018,7 +1027,8 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 }
 void fileViewer::showRightMenu(const QPoint &pos)
 {
-    if (!pTableViewFile->indexAt(pos).isValid()) {
+    QModelIndex curindex = pTableViewFile->currentIndex();
+    if (!pTableViewFile->indexAt(pos).isValid() || !curindex.isValid()) {
         return;
     }
     if (m_pagetype == PAGE_COMPRESS) {
@@ -1032,16 +1042,33 @@ void fileViewer::showRightMenu(const QPoint &pos)
     openWithDialogMenu->clear();
 
     if (m_pagetype == PAGE_COMPRESS) {
-        updateAction(pTableViewFile->indexAt(pos).data().toString());
-    } else {
-        QModelIndex currentparent = pTableViewFile->model()->parent(pTableViewFile->currentIndex());
-        //    qDebug() << pTableViewFile->rowAt(pos.y()) << pTableViewFile->columnAt(pos.x()) << pTableViewFile->currentIndex() << pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent).data();
-        QModelIndex selectIndex = pTableViewFile->model()->index(pTableViewFile->currentIndex().row(), 0, currentparent);
-        QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
-        if (selectEntry.at(0)->isDir()) {
-            updateAction(selectIndex.data().toString() + QDir::separator()); //如果是文件夹，添加'/'
+        if (0 == m_pathindex) {
+            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0);
+            if (m_curfilelist.isEmpty()) {
+                return;
+            }
+            QString selectStr = selectIndex.data().toString();
+            int atindex = -1;
+            for (auto it : m_curfilelist) {
+                ++atindex;
+                if (selectStr == it.fileName()) {
+                    break;
+                }
+            }
+            updateAction(m_curfilelist.at(atindex).isDir(), selectStr);
         } else {
-            updateAction(selectIndex.data().toString());
+            QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
+            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
+//            qDebug() << pTableViewFile->indexAt(pos).data().toString() << m_curfilelist << pModel->fileInfo(curindex);
+            updateAction(pModel && pModel->fileInfo(curindex).isDir(), selectIndex.data().toString());
+        }
+    } else {
+        QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
+//        qDebug() << pTableViewFile->rowAt(pos.y()) << pTableViewFile->columnAt(pos.x()) << curindex << pTableViewFile->model()->index(curindex.row(), 0, currentparent).data() << currentparent.isValid();
+        QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
+        QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
+        if (!selectEntry.isEmpty()) {
+            updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
         }
     }
 
