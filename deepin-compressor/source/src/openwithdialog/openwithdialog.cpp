@@ -185,6 +185,7 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
 OpenWithDialog::OpenWithDialog(const DUrl &url, QWidget *parent) :
     BaseDialog(parent)
 {
+    m_showType = OpenApp;
     m_url = url;
     setWindowFlags(windowFlags()
                    & ~ Qt::WindowMaximizeButtonHint
@@ -278,6 +279,16 @@ QString OpenWithDialog::includePercentFile(const QString &file)
     } else {
         return file;
     }
+}
+
+void OpenWithDialog::SetShowType(ShowType type)
+{
+    m_showType = type;
+}
+
+QString OpenWithDialog::AppDisplayName()
+{
+    return m_strAppDisplayName;
 }
 
 OpenWithDialog::~OpenWithDialog()
@@ -514,6 +525,12 @@ void OpenWithDialog::openFileByApp()
 {
     if (!m_checkedItem)
         return;
+
+    if (m_showType == SelApp) {
+        m_strAppDisplayName = m_checkedItem->text();
+        close();
+        return;
+    }
 
     const QString &app = m_checkedItem->property("app").toString();
 

@@ -50,6 +50,11 @@ class QScrollArea;
 class QCheckBox;
 QT_END_NAMESPACE
 
+enum ShowType {
+    SelApp = 0,
+    OpenApp
+};
+
 class OpenWithDialogListItem;
 class OpenWithDialog : public BaseDialog
 {
@@ -60,6 +65,9 @@ public:
     static QList<QAction *> addMenuOpenAction(const QString &fileName);
     static void chooseOpen(const QString &programma, const QString &fileName);
     static QString includePercentFile(const QString &file);
+
+    void SetShowType(ShowType type);
+    QString AppDisplayName();
 
     ~OpenWithDialog() override;
 
@@ -90,6 +98,9 @@ private:
     QMimeType m_mimeType;
 
     OpenWithDialogListItem *m_checkedItem = nullptr;
+
+    ShowType m_showType;
+    QString m_strAppDisplayName;
 };
 
 #endif // OPENWITHDIALOG_H

@@ -1115,7 +1115,28 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
         if (tempFile.exists()) {
             tempFile.remove();
         }
-        emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());
+        /*emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());*/
+        if (action->text() == tr("Choose default programma")) {
+
+            QModelIndex curindex = pTableViewFile->currentIndex();
+            QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
+            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
+//            QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
+//            if (!selectEntry.isEmpty()) {
+//                updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
+//            }
+
+            OpenWithDialog *openDialog = new OpenWithDialog(DUrl(selectIndex.data().toString()), this);
+            openDialog->SetShowType(SelApp);
+            openDialog->exec();
+            QString strAppDisplayName = openDialog->AppDisplayName();
+            if (!strAppDisplayName.isEmpty()) {
+                emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), strAppDisplayName);
+            }
+
+        } else {
+            emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());
+        }
     } else {
         if (action->text() != tr("Choose default programma")) {
             openWithDialog(pTableViewFile->currentIndex(), action->text());

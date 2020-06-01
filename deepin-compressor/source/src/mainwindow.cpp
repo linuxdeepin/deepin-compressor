@@ -2029,6 +2029,11 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     //m_compressDirFiles = CheckAllFiles(path);
 
+
+    if (fileList.count() > 0) {
+        m_Progess->setProgressFilename(fileList[0]->name());
+    }
+
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
 
     if (this->m_pWatcher == nullptr) {
@@ -2068,7 +2073,7 @@ void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fil
     }
 
     program = programma;
-
+    lastPercent = 0;
     slotExtractSimpleFiles(fileList, tmppath, EXTRACT_TEMP_CHOOSE_OPEN);
 }
 
