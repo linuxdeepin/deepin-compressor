@@ -361,7 +361,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="611"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="621"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1560"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1563"/>
         <source>Create New Archive</source>
         <translation>Crea nuovo Archivio</translation>
     </message>
@@ -376,18 +376,23 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Compressione riuscita</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1384"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1413"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1342"/>
+        <source>Filename is too long, unable to extract</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1387"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1416"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1400"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1403"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1415"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1418"/>
         <source>Extraction successful</source>
         <translation>Estrazione riuscita</translation>
     </message>
@@ -478,14 +483,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1335"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1337"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1965"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1971"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1968"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1974"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Spazio insufficiente, libera spazio e riprova</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1967"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1973"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1970"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1976"/>
         <source>Damaged file</source>
         <translation>File danneggiato</translation>
     </message>

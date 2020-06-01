@@ -180,7 +180,7 @@ void AnalyseHelp::resetTempDir()
     this->clearPath(tempPath);
     QDir Dir(tempPath);
     if (Dir.isEmpty()) {
-        printf("\ntemp dir %s is empty", tempPath.toUtf8().data());
+        printf("temp dir %s is empty\n", tempPath.toUtf8().data());
         isDirExist(tempPath);
     }
 }

@@ -1338,6 +1338,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         } else {
             m_CompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
         }
+        if (KJob::UserFilenameLong == errorCode) {
+            m_CompressFail->setFailStrDetail(tr("Filename is too long, unable to extract"));
+        }
 
         m_pageid = PAGE_UNZIP_FAIL;
         refreshPage();

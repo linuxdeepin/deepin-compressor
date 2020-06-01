@@ -1108,8 +1108,16 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         }
 
-
-
+        QString strtmp = destination;
+        if (strtmp.endsWith(QDir::separator())) {
+            strtmp.chop(1);
+        }
+        int i = strtmp.lastIndexOf(QDir::separator());
+        qDebug() << strtmp.mid(i + 1) << strtmp.mid(i + 1).toUtf8().length() << strtmp.mid(i + 1).length();
+        if (strtmp.mid(i + 1).toUtf8().length() > NAME_MAX) { //Is the file name too long
+            emit error("Filename is too long");
+            return false;
+        }
         QFile file(destination);
         if (file.open(QIODevice::WriteOnly) == false) {
             emit error(tr("Failed to open file for writing: %1"));

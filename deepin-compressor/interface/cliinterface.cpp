@@ -35,6 +35,7 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <linux/limits.h>
 #include "analysepsdtool.h"
 #include "filewatcher.h"
 
@@ -548,6 +549,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         if (password().isEmpty()) {
             //            qDebug() << "Extraction failed, the file is broken";
             //            emit error(tr("Extraction failed. the file is broken"));
+            if (destDirName.toUtf8().length() > NAME_MAX) { //Is the file name too long
+                emit error("Filename is too long");
+            }
         } else {
             qDebug() << "Extraction failed, the file is broken";
             //emit error(tr("Extraction failed. the file is broken"));
