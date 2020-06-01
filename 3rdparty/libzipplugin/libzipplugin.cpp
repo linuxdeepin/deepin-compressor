@@ -962,7 +962,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     // For top-level items, don't restore parent dir mtime.
     const bool restoreParentMtime = (parentDir + QDir::separator() != destDirCorrected);
 
-    time_t parent_mtime;
+    time_t parent_mtime = time_t();
     if (restoreParentMtime) {
         parent_mtime = QFileInfo(parentDir).lastModified().toMSecsSinceEpoch() / 1000;
     }
@@ -1199,7 +1199,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     }
 
     // Set mtime for entry.
-    utimbuf times;
+    utimbuf times = utimbuf();
     times.modtime = statBuffer.mtime;
     if (utime(destination.toUtf8().constData(), &times) != 0) {
     }

@@ -505,7 +505,7 @@ void fileViewer::updateAction(const QString &fileType)
     QList<QAction *> listAction =  OpenWithDialog::addMenuOpenAction(fileType);
 
     openWithDialogMenu->addActions(listAction);
-    openWithDialogMenu->addAction(new QAction(tr("Choose default programma")));
+    openWithDialogMenu->addAction(new QAction(tr("Choose default programma"), openWithDialogMenu));
 }
 
 void fileViewer::updateAction(bool isdirectory, const QString &fileType)

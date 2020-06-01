@@ -90,7 +90,7 @@ HomePage::HomePage(QWidget *parent)
 
     setBackgroundRole(DPalette::Background);
 
-    m_pWatcher = new TimerWatcher();
+    m_pWatcher = new TimerWatcher(this);
     connect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, this, &HomePage::slotSpinnerStart);
 }
 
