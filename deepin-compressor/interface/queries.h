@@ -113,10 +113,14 @@ public:
 
     void colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
     void colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
+
+    bool applyAll();
+
 private:
     bool m_noRenameMode;
     bool m_multiMode;
     int ret;
+    bool m_bApplyAll;
 };
 
 /* **************************************

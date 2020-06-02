@@ -121,6 +121,11 @@ void OverwriteQuery::colorTypeChange(QWidget *widget, DPalette::ColorType ct, do
     DApplicationHelper::instance()->setPalette(widget, palette);
 }
 
+bool OverwriteQuery::applyAll()
+{
+    return m_bApplyAll;
+}
+
 void OverwriteQuery::execute()
 {
 
@@ -216,6 +221,8 @@ void OverwriteQuery::execute()
             setResponse(Result_Overwrite);
         }
     }
+
+    m_bApplyAll = checkbox->isChecked();
 
     delete dialog;
     //QApplication::restoreOverrideCursor();
