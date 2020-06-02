@@ -657,6 +657,9 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     entry->isDir()
     ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
              : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
+    if (icon.isNull()) {
+        icon = QIcon::fromTheme("empty").pixmap(24, 24);
+    }
 //    qDebug()<<icon;
     m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon);
 }

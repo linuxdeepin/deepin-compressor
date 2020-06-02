@@ -438,9 +438,16 @@ void fileViewer::refreshTableview()
     firstmodel->setHorizontalHeaderItem(3, item);
 
     int rowindex = 0;
-    QFileIconProvider icon_provider;
     foreach (QFileInfo fileinfo, m_curfilelist) {
-        item = new MyFileItem(icon_provider.icon(fileinfo), fileinfo.fileName());
+        QMimeDatabase db;
+        QIcon icon;
+        fileinfo.isDir() ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
+                                  : icon = QIcon::fromTheme(db.mimeTypeForFile(fileinfo.fileName()).iconName()).pixmap(24, 24);
+        //qDebug() << db.mimeTypeForFile(fileinfo.fileName()).iconName();
+        if (icon.isNull()) {
+            icon = QIcon::fromTheme("empty").pixmap(24, 24);
+        }
+        item = new MyFileItem(icon, fileinfo.fileName());
 
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -462,7 +469,7 @@ void fileViewer::refreshTableview()
         item->setFont(font);
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex, 3, item);
-        QMimeType mimetype = determineMimeType(fileinfo.filePath());
+        QMimeType mimetype = determineMimeType(fileinfo.fileName());
         item = new MyFileItem(m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);
