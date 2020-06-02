@@ -36,7 +36,7 @@
         "Id": "kerfuffle_cliunarchiver",
         "MimeTypes": [
             "application/vnd.rar",
-    "application/x-rar"
+            "application/x-rar"
         ],
         "Name": "The Unarchiver plugin",
         "Name[ca@valencia]": "Connector de l'Unarchiver",

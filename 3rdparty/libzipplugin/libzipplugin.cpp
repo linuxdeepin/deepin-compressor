@@ -237,7 +237,11 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     //qDebug() << codec_name;
     if ("" == m_codecname) {
 
-        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+        if (codec_name.isEmpty()) {
+            return str;
+        }
+        if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
+                || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)) {
             return str;
         }
 
@@ -248,7 +252,8 @@ QString  LibzipPlugin::trans2uft8(const char *str)
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;
         return codec->toUnicode(str);
-    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+    } else if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
+               || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)) {
         QString code = "";
         QString codemine = "";
         QString type = "";
@@ -261,7 +266,7 @@ QString  LibzipPlugin::trans2uft8(const char *str)
             m_codecstr = m_codecname;
             return codec->toUnicode(str);
         }
-    } else if ("UTF-8" != codec_name) {
+    } else if (!((QString)codec_name).contains("UTF", Qt::CaseInsensitive)) {
         QTextCodec *codec = QTextCodec::codecForName(m_codecname);
         m_codecstr = m_codecname;
         return codec->toUnicode(str);
@@ -763,8 +768,9 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         if (isDirectory) {
             continue;
         } else {
-            if ("windows-1252" == m_codecstr || "IBM855" == m_codecstr) {
-                m_codecstr = "GB18030";
+            if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
+                    || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)) {
+                m_codecstr = "GBK";
             }
 
             QByteArray  name;
@@ -980,8 +986,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     // Get statistic for entry. Used to get entry size and mtime.
     zip_stat_t statBuffer;
 
-    if ("windows-1252" == m_codecstr || "IBM855" == m_codecstr) {
-        m_codecstr = "GB18030";
+    if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
+            || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive))  {
+        m_codecstr = "GBK";
     }
 
     QByteArray  name;

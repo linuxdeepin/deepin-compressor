@@ -136,6 +136,10 @@ void OverwriteQuery::execute()
         path.remove("file://");
     }
 
+    if (path.contains("file:")) {
+        path.remove("file:");
+    }
+
     QFileInfo file(path);
 
     DDialog *dialog = new DDialog(getMainWindow());
