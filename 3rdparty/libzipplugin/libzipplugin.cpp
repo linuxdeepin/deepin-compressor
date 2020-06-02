@@ -276,6 +276,8 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     }
 }
 
+
+
 const char *LibzipPlugin::passwordUnicode(const QString &strPassword)
 {
     if (filename().endsWith(".zip")) {
@@ -1097,14 +1099,6 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
 
         m_extractFile = destination;
 
-        QFile file1(destination);
-        bool isExists = file1.exists();
-        QFileDevice::Permissions pOldPermission =  file1.permissions();
-
-        if (pOldPermission.testFlag(QFileDevice::WriteOwner) == false) {
-            bool status = file1.setPermissions(pOldPermission | QFileDevice::WriteOwner);//set permission include writeowner.
-        }
-
         if (!m_extractionOptions.isAutoCreatDir()) {
             // QFileInfo extractileInfo(destination);
             QDir dir;
@@ -1120,12 +1114,14 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
             strtmp.chop(1);
         }
         int i = strtmp.lastIndexOf(QDir::separator());
-        qDebug() << strtmp.mid(i + 1) << strtmp.mid(i + 1).toUtf8().length() << strtmp.mid(i + 1).length();
         if (strtmp.mid(i + 1).toUtf8().length() > NAME_MAX) { //Is the file name too long
             emit error("Filename is too long");
             return false;
         }
         QFile file(destination);
+        if (file.exists() && !file.isWritable()) {
+            file.setPermissions(QFileDevice::WriteUser);
+        }
         if (file.open(QIODevice::WriteOnly) == false) {
             emit error(tr("Failed to open file for writing: %1"));
             return false;
@@ -1198,9 +1194,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         }
 
         file.close();
-        if (isExists == true) {
-            file.setPermissions(pOldPermission);//reset old permission
-        }
+        file.setPermissions(getPermissions(attributes >> 16));
         //extract = true;
         bAnyFileExtracted = true;
     }
@@ -1415,6 +1409,42 @@ QString LibzipPlugin::permissionsToString(const mode_t &perm)
         modeval.append(QLatin1Char('-'));
     }
     return modeval;
+}
+
+QFileDevice::Permissions LibzipPlugin::getPermissions(const mode_t &perm)
+{
+    QFileDevice::Permissions pers = QFileDevice::Permissions();
+    if (perm & S_IRUSR) {
+        pers |= QFileDevice::ReadUser;
+    }
+    if (perm & S_IWUSR) {
+        pers |= QFileDevice::WriteUser;
+    }
+    if (perm & S_IXUSR) {
+        pers |= QFileDevice::ExeUser;
+    }
+
+    if (perm & S_IRGRP) {
+        pers |= QFileDevice::ReadGroup;
+    }
+    if (perm & S_IWGRP) {
+        pers |= QFileDevice::WriteGroup;
+    }
+    if (perm & S_IXGRP) {
+        pers |= QFileDevice::ExeGroup;
+    }
+
+    if (perm & S_IROTH) {
+        pers |= QFileDevice::ReadOther;
+    }
+    if (perm & S_IWOTH) {
+        pers |= QFileDevice::WriteOther;
+    }
+    if (perm & S_IXOTH) {
+        pers |= QFileDevice::ExeOther;
+    }
+
+    return pers;
 }
 
 QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fileName)
