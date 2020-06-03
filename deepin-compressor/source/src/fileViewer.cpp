@@ -948,15 +948,15 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             if (row >= m_curfilelist.count()) {
                 row = 0;
             }
-            if (m_curfilelist.at(curindex.row()).isDir()) {
+            if (m_curfilelist.at(row).isDir()) {
                 pModel->setPathIndex(&m_pathindex);
                 pTableViewFile->setModel(pModel);
-                m_indexmode = pModel->setRootPath(m_curfilelist.at(curindex.row()).filePath());
+                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
                 m_pathindex++;
                 restoreHeaderSort(pModel->rootPath());
                 pTableViewFile->setRootIndex(m_indexmode);
 
-                QDir dir(m_curfilelist.at(curindex.row()).filePath());
+                QDir dir(m_curfilelist.at(row).filePath());
                 //                qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
                 if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
                     showPlable();
