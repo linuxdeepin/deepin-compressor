@@ -615,7 +615,7 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     if (entry) {
         entry->copyMetaData(receivedEntry);
         entry->setProperty("fullPath", entryFileName);
-        insertEntry(receivedEntry, behaviour);
+        insertEntry(entry, behaviour);
     } else {
         receivedEntry->setParent(parent);
         insertEntry(receivedEntry, behaviour);

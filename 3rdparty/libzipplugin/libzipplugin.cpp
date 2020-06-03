@@ -21,7 +21,7 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include "queries.h"
-#include <ChardetDetector/chardet.h>
+#include <chardet.h>
 //K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
 
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)

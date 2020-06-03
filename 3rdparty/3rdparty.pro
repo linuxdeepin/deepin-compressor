@@ -7,6 +7,5 @@ SUBDIRS += \
     clizipplugin \
     libarchive \
     libsinglefileplugin \
-    libzipplugin \
-    ChardetDetector
+    libzipplugin
 
