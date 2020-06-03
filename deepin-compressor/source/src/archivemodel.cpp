@@ -596,15 +596,15 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     }
 
     // Skip already created entries.
-    Archive::Entry *existing = m_rootEntry->findByPath(entryFileName.split(QLatin1Char('/')));
-    if (existing) {
-        existing->setProperty("fullPath", entryFileName);
-        // Multi-volume files are repeated at least in RAR archives.
-        // In that case, we need to sum the compressed size for each volume
-        qulonglong currentCompressedSize = existing->property("compressedSize").toULongLong();
-        existing->setProperty("compressedSize", currentCompressedSize + receivedEntry->property("compressedSize").toULongLong());
-        return;
-    }
+    // Archive::Entry *existing = m_rootEntry->findByPath(entryFileName.split(QLatin1Char('/')));
+    // if (existing) {
+    //     existing->setProperty("fullPath", entryFileName);
+    //     // Multi-volume files are repeated at least in RAR archives.
+    //     // In that case, we need to sum the compressed size for each volume
+    //     qulonglong currentCompressedSize = existing->property("compressedSize").toULongLong();
+    //     existing->setProperty("compressedSize", currentCompressedSize + receivedEntry->property("compressedSize").toULongLong());
+    //     return;
+    // }
 
     // Find parent entry, creating missing directory Archive::Entry's in the process.
     Archive::Entry *parent = parentFor(receivedEntry, behaviour);
@@ -615,6 +615,7 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     if (entry) {
         entry->copyMetaData(receivedEntry);
         entry->setProperty("fullPath", entryFileName);
+        insertEntry(receivedEntry, behaviour);
     } else {
         receivedEntry->setParent(parent);
         insertEntry(receivedEntry, behaviour);
