@@ -21,7 +21,7 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include "queries.h"
-
+#include <ChardetDetector/chardet.h>
 //K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
 
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
@@ -1449,6 +1449,15 @@ QFileDevice::Permissions LibzipPlugin::getPermissions(const mode_t &perm)
 
 QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fileName)
 {
+
+    QString detectedResult;
+    float chardetconfidence = 0;
+    ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
+    if (detectedResult.contains("UTF-8", Qt::CaseInsensitive)) {
+        m_codecstr = "UTF-8";
+        return  m_codecstr;
+    }
+
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {
         return QTextCodec::codecForLocale()->name();
@@ -1670,4 +1679,42 @@ void LibzipPlugin::slotRestoreWorkingDir()
 
 
 
-//#include "libzipplugin.moc"
+int LibzipPlugin::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
+{
+    DetectObj *obj = detect_obj_init();
+
+    if (obj == nullptr) {
+        qDebug() << "Memory Allocation failed\n";
+        return CHARDET_MEM_ALLOCATED_FAIL;
+    }
+
+#ifndef CHARDET_BINARY_SAFE
+    // before 1.0.5. This API is deprecated on 1.0.5
+    switch (detect(str, &obj))
+#else
+    // from 1.0.5
+    switch (detect_r(str, strlen(str), &obj))
+#endif
+    {
+    case CHARDET_OUT_OF_MEMORY :
+        qDebug() << "On handle processing, occured out of memory\n";
+        detect_obj_free(&obj);
+        return CHARDET_OUT_OF_MEMORY;
+    case CHARDET_NULL_OBJECT :
+        qDebug() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+        return CHARDET_NULL_OBJECT;
+    }
+
+#ifndef CHARDET_BOM_CHECK
+    qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+#else
+    // from 1.0.6 support return whether exists BOM
+    qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+#endif
+
+    encoding = obj->encoding;
+    confidence = obj->confidence;
+    detect_obj_free(&obj);
+
+    return CHARDET_SUCCESS ;
+}

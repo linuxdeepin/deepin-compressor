@@ -45,6 +45,7 @@ public:
     void cleanIfCanceled()override;
     void watchFileList(QStringList *strList)override;
 
+    int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 
