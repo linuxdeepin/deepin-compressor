@@ -296,6 +296,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             entryName.remove(0, 2);
         }
 
+        if (entryName.isEmpty()) {
+            continue;
+        }
+
         // Static libraries (*.a) contain the two entries "/" and "//".
         // We just skip these to allow extracting this archive type.
         if (entryName == QLatin1String("/") || entryName == QLatin1String("//")) {
