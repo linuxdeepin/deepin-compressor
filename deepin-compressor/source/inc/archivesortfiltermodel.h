@@ -25,6 +25,7 @@
 
 #include <QSortFilterProxyModel>
 
+class MimeTypeDisplayManager;
 class ArchiveSortFilterModel: public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -33,6 +34,9 @@ public:
     explicit ArchiveSortFilterModel(QObject *parent = nullptr);
 
     bool lessThan(const QModelIndex &leftIndex, const QModelIndex &rightIndex) const override;
+
+private:
+    MimeTypeDisplayManager *m_mimetype;
 };
 
 #endif // ARCHIVESORTFILTERMODEL_H
