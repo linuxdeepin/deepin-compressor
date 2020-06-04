@@ -1414,6 +1414,12 @@ QString LibzipPlugin::permissionsToString(const mode_t &perm)
 QFileDevice::Permissions LibzipPlugin::getPermissions(const mode_t &perm)
 {
     QFileDevice::Permissions pers = QFileDevice::Permissions();
+
+    if (perm == 0) {
+        pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
+        return pers;
+    }
+
     if (perm & S_IRUSR) {
         pers |= QFileDevice::ReadUser;
     }
