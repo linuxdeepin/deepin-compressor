@@ -28,6 +28,8 @@
 #include "DFontSizeManager"
 #include "mimetypes.h"
 
+#include <QMimeDatabase>
+
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
     : QFileSystemModel(parent)
 {
@@ -121,7 +123,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 }
             }
             case 2: {
-                QMimeType mimetype = determineMimeType(file.filePath());
+                QMimeType mimetype = determineMimeType(file.fileName());
                 return m_mimetype->displayName(mimetype.name());
             }
             case 1: {
@@ -132,6 +134,19 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             }
             }
         }
+        case Qt::DecorationRole:
+            if (index.column() == 0) {
+                QMimeDatabase db;
+                QIcon icon;
+                file.isDir() ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
+                                      : icon = QIcon::fromTheme(db.mimeTypeForFile(file.fileName()).iconName()).pixmap(24, 24);
+                //qDebug() << db.mimeTypeForFile(fileinfo.fileName()).iconName();
+                if (icon.isNull()) {
+                    icon = QIcon::fromTheme("empty").pixmap(24, 24);
+                }
+                return icon;
+            }
+            return QVariant();
         }
     }
     return QFileSystemModel::data(index, role);

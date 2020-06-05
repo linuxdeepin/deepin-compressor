@@ -85,7 +85,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             case FullPath:
                 return entry->name();
             case Type: {
-                QMimeType mimetype = determineMimeType(entry->fullPath());
+                QMimeType mimetype = determineMimeType(entry->name());
                 return m_mimetype->displayName(mimetype.name());
             }
             case Size:
