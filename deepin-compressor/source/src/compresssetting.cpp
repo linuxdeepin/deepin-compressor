@@ -593,8 +593,10 @@ void CompressSetting::onSplitChanged(int /*status*/)
 {
     if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) {
         m_splitnumedit->setEnabled(true);
-        if ((m_getFileSize / 1024 / 1024) > 1) {
-            m_splitnumedit->setValue(m_getFileSize / 1024 / 1024 / 2 + 1);
+        if ((m_getFileSize / 1024 / 1024) >= 1) { //1M以上的文件
+            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0 + 0.1);
+        } else if ((m_getFileSize / 1024) > 102 && (m_getFileSize / 1024) <= 1024) { //0.1M－1M的文件
+            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0);
         }
         isSplitChecked = true;
     } else {
