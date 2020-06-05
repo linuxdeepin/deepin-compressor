@@ -1005,10 +1005,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             } else {
                 QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
                 QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
-                QFile tempFile(fileName);
-                if (tempFile.exists()) {
-                    tempFile.remove();
-                }
+                Utils::checkAndDeleteDir(fileName);
                 emit sigextractfiles(fileList, EXTRACT_TEMP);
             }
         } else if (m_decompressmodel->isentryDir(m_sortmodel->mapToSource(index))) {
@@ -1024,10 +1021,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
         } else {
             QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
             QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
-            QFile tempFile(fileName);
-            if (tempFile.exists()) {
-                tempFile.remove();
-            }
+            Utils::checkAndDeleteDir(fileName);
             emit sigextractfiles(fileList, EXTRACT_TEMP);
         }
     }
@@ -1118,10 +1112,8 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
     if (PAGE_UNCOMPRESS == m_pagetype) {
         QVector<Archive::Entry *> fileList = filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows()));
         QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
-        QFile tempFile(fileName);
-        if (tempFile.exists()) {
-            tempFile.remove();
-        }
+
+        Utils::checkAndDeleteDir(fileName);
         /*emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());*/
         if (action->text() == tr("Choose default programma")) {
 

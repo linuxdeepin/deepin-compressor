@@ -42,6 +42,9 @@ public:
     static qint64 humanReadableToSize(const QString &size);
     static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
     static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
+    static bool checkAndDeleteDir(const QString &iFilePath);
+    static bool deleteDir(const QString &iFilePath);
+
 };
 
 #endif
