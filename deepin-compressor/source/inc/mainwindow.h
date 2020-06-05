@@ -44,6 +44,7 @@
 #include "archivesortfiltermodel.h"
 #include "batchextract.h"
 #include "batchcompress.h"
+#include "openloadingpage.h"
 #include <DFileWatcher>
 #include <QElapsedTimer>
 
@@ -64,7 +65,8 @@ enum Page_ID {
     PAGE_UNZIP_SUCCESS,
     PAGE_UNZIP_FAIL,
     PAGE_ENCRYPTION,
-    PAGE_MAX
+    PAGE_MAX,
+    PAGE_LOADING
 };
 
 enum EncryptionType {
@@ -205,6 +207,7 @@ private:
     EncryptionPage *m_encryptionpage;
     ProgressDialog *m_progressdialog;
     SettingDialog *m_settingsDialog = nullptr;
+    OpenLoadingPage *m_pOpenLoadingPage;
     EncodingPage *m_encodingpage;
     QSettings *m_settings;
     Page_ID m_pageid;

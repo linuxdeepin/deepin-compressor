@@ -290,6 +290,7 @@ void MainWindow::InitUI()
     m_settingsDialog = new SettingDialog(this);
     m_encodingpage = new EncodingPage(this);
     m_settings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
+    m_pOpenLoadingPage = new OpenLoadingPage(this);
 
     if (m_settings->value("dir").toString().isEmpty()) {
         m_settings->setValue("dir", "");
@@ -304,6 +305,7 @@ void MainWindow::InitUI()
     m_mainLayout->addWidget(m_CompressFail);
     m_mainLayout->addWidget(m_encryptionpage);
     m_mainLayout->addWidget(m_encodingpage);
+    m_mainLayout->addWidget(m_pOpenLoadingPage);
     m_UnCompressPage->setAutoFillBackground(true);
     m_CompressPage->setAutoFillBackground(true);
     m_CompressSetting->setAutoFillBackground(true);
@@ -718,6 +720,10 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(7);
         m_encryptionpage->setPassowrdFocus();
         break;
+    case PAGE_LOADING:
+        m_mainLayout->setCurrentIndex(9);
+        m_pOpenLoadingPage->start();
+        break;
     default:
         break;
     }
@@ -1120,6 +1126,9 @@ void MainWindow::loadArchive(const QString &files)
 
     m_loadjob->start();
     m_homePage->spinnerStart(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
+
+    m_pageid = PAGE_LOADING;
+    refreshPage();
 }
 
 void MainWindow::WatcherFile(const QString &files)
@@ -1261,6 +1270,10 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
             }
             m_progressdialog->setProcess(percent);
         }
+    } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype || Encryption_TempExtract == m_encryptiontype) {
+        m_pageid = PAGE_LOADING;
+        m_Progess->settype(DECOMPRESSING);
+        refreshPage();
     } else if (PAGE_ZIPPROGRESS == m_pageid || PAGE_UNZIPPROGRESS == m_pageid) {
         if (percent >= lastPercent) {
             m_Progess->setprogress(percent);
@@ -1346,6 +1359,8 @@ void MainWindow::slotExtractionDone(KJob *job)
         refreshPage();
         return;
     } else if (Encryption_TempExtract == m_encryptiontype) {
+
+        m_pOpenLoadingPage->stop();
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
         QString programPath = QStandardPaths::findExecutable("xdg-open");
@@ -1399,6 +1414,8 @@ void MainWindow::slotExtractionDone(KJob *job)
             }
         }
     } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {
+
+        m_pOpenLoadingPage->stop();
         QString ppp = program;
         if (program != tr("Choose default programma")) {
             OpenWithDialog::chooseOpen(program, QString(DEFAUTL_PATH) + m_extractSimpleFiles.at(0)->property("name").toString());

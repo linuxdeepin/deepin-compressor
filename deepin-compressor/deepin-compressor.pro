@@ -81,7 +81,8 @@ HEADERS +=  \
     source/inc/openwithdialog/openwithdialog.h \
     source/inc/openwithdialog/properties.h \
     source/inc/openwithdialog/singleton.h \
-    interface/filewatcher.h
+    interface/filewatcher.h \
+    source/inc/openloadingpage.h
 
 
 
@@ -141,7 +142,8 @@ SOURCES +=  \
     source/src/openwithdialog/mimesappsmanager.cpp \
     source/src/openwithdialog/openwithdialog.cpp \
     source/src/openwithdialog/properties.cpp \
-    interface/filewatcher.cpp
+    interface/filewatcher.cpp \
+    source/src/openloadingpage.cpp
 
 
 RESOURCES += deepin-compressor.qrc
