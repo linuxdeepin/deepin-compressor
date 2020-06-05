@@ -253,7 +253,8 @@ QString  LibzipPlugin::trans2uft8(const char *str)
         m_codecstr = codec_name;
         return codec->toUnicode(str);
     } else if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
-               || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)) {
+               || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)
+               || ((QString)codec_name).contains("iso", Qt::CaseInsensitive)) {
         QString code = "";
         QString codemine = "";
         QString type = "";
