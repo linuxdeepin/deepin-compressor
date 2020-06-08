@@ -365,7 +365,7 @@ void fileViewer::InitUI()
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
 //    plabel->setText("     .. " + tr("Back"));
 //    DFontSizeManager::instance()->bind(plabel, DFontSizeManager::T6, QFont::Weight::Medium);
-////    plabel->setAutoFillBackground(true);
+// //    plabel->setAutoFillBackground(true);
 //    plabel->hide();
 
 //    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);

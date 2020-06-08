@@ -133,9 +133,14 @@
         <translation>分卷数量过多，请重试</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="406"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="407"/>
         <source>Files that begin with &apos;@&apos; cannot be compressed</source>
         <translation>不能压缩以“@”开头的文件</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="603"/>
+        <source>Total file size: %1</source>
+        <translation>文件大小：</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="678"/>
@@ -577,7 +582,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="49"/>
         <source>Loading, please wait...</source>
-        <translation type="unfinished">加载中，请稍后…</translation>
+        <translation>加载中，请稍后…</translation>
     </message>
 </context>
 <context>
@@ -824,22 +829,22 @@
         <translation>请在根目录添加文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="427"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="428"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="430"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="431"/>
         <source>Time modified</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="433"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="434"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="436"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="437"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
@@ -965,56 +970,56 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1097"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1092"/>
         <source>Extract</source>
         <translation>解压</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="380"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1099"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="381"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1094"/>
         <source>Extract to current directory</source>
         <translation>提取到当前文件夹</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="394"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1110"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="395"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1105"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="381"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="396"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1103"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1107"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="382"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="397"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1098"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1102"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="383"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="398"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="384"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="399"/>
         <source>Open style</source>
         <translation>打开方式</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="515"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1126"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1148"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="516"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1119"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1141"/>
         <source>Choose default programma</source>
         <translation>选择默认程序</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="463"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="464"/>
         <source>item(s)</source>
         <translation>项</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="479"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="480"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="379"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1097"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="380"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1092"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>提取</translation>
