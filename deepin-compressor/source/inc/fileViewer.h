@@ -156,7 +156,7 @@ protected slots:
     void slotCompressRowDoubleClicked(const QModelIndex index);
     void slotDecompressRowDoubleClicked(const QModelIndex index);
     void slotCompressRePreviousDoubleClicked();
-
+    int showWarningDialog(const QString &msg);
 
     void showRightMenu(const QPoint &pos);
     void onRightMenuClicked(QAction *action);

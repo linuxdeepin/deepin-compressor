@@ -717,30 +717,41 @@ void fileViewer::deleteCompressFile()
     QModelIndexList selected = selections->selectedIndexes();
 
     QSet< int>  selectlist;
-
+    QFileInfo fileinfo ;
     foreach (QModelIndex index, selected) {
-        selectlist.insert(index.row());
+        fileinfo = pModel->fileInfo(qAsConst(index));
+        break;
     }
-
-    foreach (int index, selectlist) {
-        if (m_curfilelist.size() > index) {
-            m_curfilelist.replace(index, QFileInfo(""));
+    if (m_pathindex > 0) {
+        int isDelete = showWarningDialog(tr("Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?"));
+        if (isDelete == 1) {
+            Utils::checkAndDeleteDir(fileinfo.filePath());
         }
-    }
-
-    foreach (QFileInfo file, m_curfilelist) {
-        if (file.path() == "") {
-            m_curfilelist.removeOne(file);
+    } else  {
+        foreach (QModelIndex index, selected) {
+            selectlist.insert(index.row());
         }
-    }
 
-    QStringList filelist;
-    foreach (QFileInfo fileinfo, m_curfilelist) {
-        filelist.append(fileinfo.filePath());
-    }
+        foreach (int index, selectlist) {
+            if (m_curfilelist.size() > index) {
+                m_curfilelist.replace(index, QFileInfo(""));
+            }
+        }
 
-    curFileListModified = true;
-    emit sigFileRemoved(filelist);
+        foreach (QFileInfo file, m_curfilelist) {
+            if (file.path() == "") {
+                m_curfilelist.removeOne(file);
+            }
+        }
+
+        QStringList filelist;
+        foreach (QFileInfo fileinfo, m_curfilelist) {
+            filelist.append(fileinfo.filePath());
+        }
+
+        curFileListModified = true;
+        emit sigFileRemoved(filelist);
+    }
 }
 
 int fileViewer::getPathIndex()
@@ -874,6 +885,41 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
         }
     }
     emit  sigpathindexChanged();
+}
+
+int fileViewer::showWarningDialog(const QString &msg)
+{
+    DDialog *dialog = new DDialog(this);
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setIcon(pixmap);
+    dialog->setMinimumSize(380, 140);
+    dialog->addButton(tr("Cancel"));
+    dialog->addButton(tr("Confirm"), true, DDialog::ButtonWarning);
+    DLabel *pContent = new DLabel(msg, dialog);
+
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    // pContent->setMinimumWidth(this->width());
+    // pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    //mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pContent, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(15);
+
+
+    DWidget *widget = new DWidget(dialog);
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+    int res = dialog->exec();
+    delete dialog;
+
+
+    return res;
 }
 
 
@@ -1034,11 +1080,7 @@ void fileViewer::showRightMenu(const QPoint &pos)
         return;
     }
     if (m_pagetype == PAGE_COMPRESS) {
-        if (m_pathindex > 0) {
-            m_pRightMenu->removeAction(deleteAction);
-        } else {
-            m_pRightMenu->addAction(deleteAction);
-        }
+        m_pRightMenu->addAction(deleteAction);
     }
 
     openWithDialogMenu->clear();

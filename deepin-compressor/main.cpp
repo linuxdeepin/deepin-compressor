@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
-    if (!w.checkSettings(argv[1])) {
+    if (argc >= 2 && (!w.checkSettings(argv[1]))) {
         return  app.exec();
     }
 
