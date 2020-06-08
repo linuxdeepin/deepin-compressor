@@ -121,6 +121,7 @@ public:
 
     bool applicationQuit();
     bool isWorkProcess();
+    bool checkSettings(QString file);
 private:
     void saveWindowState();
     void loadWindowState();
@@ -249,6 +250,10 @@ private:
     qint64 calFileSize(const QString &path);
     void calSpeedAndTime(unsigned long compressPercent);
 
+    QString getDefaultApp(QString mimetype);
+    void setDefaultApp(QString mimetype, QString desktop);
+    int promptDialog();
+
     QElapsedTimer m_timer;
     unsigned long lastPercent = 0;
     qint64 selectedTotalFileSize = 0;
@@ -258,6 +263,7 @@ private:
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif
+
 };
 
 

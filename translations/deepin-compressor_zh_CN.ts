@@ -382,6 +382,11 @@
         <translation>选择默认程序</translation>
     </message>
     <message>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2433"/>
+        <source>Please set the file association type</source>
+        <translation>请设置文件关联类型</translation>
+    </message>
+    <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1402"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1433"/>
         <source>Skip all files</source>
@@ -580,7 +585,7 @@
 <context>
     <name>OpenLoadingPage</name>
     <message>
-        <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="49"/>
+        <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="51"/>
         <source>Loading, please wait...</source>
         <translation>加载中，请稍后…</translation>
     </message>

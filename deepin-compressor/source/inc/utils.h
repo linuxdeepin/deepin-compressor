@@ -44,7 +44,9 @@ public:
     static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
     static bool checkAndDeleteDir(const QString &iFilePath);
     static bool deleteDir(const QString &iFilePath);
-
+    static QString readConf();
+    static bool existMimeType(QString mimetype);
+    static QString judgeFileMime(QString file);
 };
 
 #endif

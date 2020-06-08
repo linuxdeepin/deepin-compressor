@@ -63,6 +63,10 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
+    if (!w.checkSettings(argv[1])) {
+        return  app.exec();
+    }
+
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
     if (appIcon.isNull()) {

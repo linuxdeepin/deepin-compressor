@@ -682,7 +682,7 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
-    pContent->setMinimumWidth(this->width());
+    pContent->setMinimumSize(293, 20/*this->width()*/);
     pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
     int res = dialog->exec();
     delete dialog;

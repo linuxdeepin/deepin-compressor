@@ -2339,3 +2339,73 @@ void MainWindow::onCompressAddfileSlot(bool status)
         //        setAcceptDrops(true);
     }
 }
+
+bool MainWindow::checkSettings(QString file)
+{
+    QString fileMime = Utils::judgeFileMime(file);
+    bool hasSetting = true;
+
+    bool existMime = Utils::existMimeType(fileMime);
+    if (existMime) {
+        QString defaultCompress = getDefaultApp(fileMime);
+
+        if (defaultCompress.startsWith("dde-open.desktop")) {
+            setDefaultApp(fileMime, "deepin-compressor.desktop");
+        }
+    } else {
+        QString defaultCompress = getDefaultApp(fileMime);
+        if (defaultCompress.startsWith("deepin-compressor.desktop")) {
+            setDefaultApp(fileMime, "dde-open.desktop");
+        }
+
+        int re = promptDialog();
+        if (re != 1) {
+            hasSetting = false;
+        }
+    }
+
+    return hasSetting;
+}
+
+QString MainWindow::getDefaultApp(QString mimetype)
+{
+    QString outInfo;
+    QProcess p;
+    QString command3 = "xdg-mime query default %1";
+    p.start(command3.arg("application/" + mimetype));
+    p.waitForFinished();
+    outInfo = QString::fromLocal8Bit(p.readAllStandardOutput());
+
+    return  outInfo;
+}
+
+void MainWindow::setDefaultApp(QString mimetype, QString desktop)
+{
+    QProcess p;
+    QString command3 = "xdg-mime default %1 %2";
+    p.start(command3.arg(desktop).arg("application/" + mimetype));
+    p.waitForFinished();
+}
+
+int MainWindow::promptDialog()
+{
+    DDialog *dialog = new DDialog(this);
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setIcon(pixmap);
+    dialog->addSpacing(32);
+    dialog->setMinimumSize(380, 140);
+    dialog->addButton("OK", true, DDialog::ButtonNormal);
+//    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
+    DLabel *pContent = new DLabel(tr("Please set the file association type"), dialog);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    pContent->setMinimumSize(293, 20/*dialog->width()*/);
+    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
+    int res = dialog->exec();
+
+    delete dialog;
+    return res;
+}

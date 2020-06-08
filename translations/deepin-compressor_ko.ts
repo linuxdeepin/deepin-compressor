@@ -401,6 +401,11 @@
         <translation>추출 성공</translation>
     </message>
     <message>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2433"/>
+        <source>Please set the file association type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="236"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>디스크에서 %1이 변경되었으므로 다시 가져오십시오.</translation>
@@ -588,7 +593,7 @@
 <context>
     <name>OpenLoadingPage</name>
     <message>
-        <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="49"/>
+        <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="51"/>
         <source>Loading, please wait...</source>
         <translation type="unfinished"></translation>
     </message>

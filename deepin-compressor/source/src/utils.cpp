@@ -81,44 +81,19 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
 bool Utils::isCompressed_file(const QString &filePath)
 {
-    QMimeType mimetype = determineMimeType(filePath);
-    qDebug() << mimetype.name();
-    QString filetype = mimetype.name();
-    bool ret = true;
-
-    QFileInfo file(filePath);
-    qDebug() << file.suffix();
-
-    QString confDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
-    QFile confFile(confPath);
-    bool readStatus = confFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString fileValue = confFile.readAll();
-    confFile.close();
-
-    if (readStatus == true) {
-        if (fileValue.contains(file.suffix()) && !file.isDir()) {
-            if (file.suffix() == "deb") {  //.deb
-                ret = false;
-            } else {
-                ret = true;
-            }
-        } else if (file.filePath().contains(".7z.")) {  //7z分卷
-            ret = true;
-        } else if (file.suffix().endsWith("iso")) {  //.iso
-            ret = true;
-        } else if (file.completeSuffix().endsWith("tar.lzo")) {  //.tar.lzo
-            ret = true;
-        } else if (file.completeSuffix().endsWith("tar.bz2")) {  //.tar.bz2
-            ret = true;
-        } else if (file.completeSuffix().endsWith("tar.Z")) {  //.tar.bz2
-            ret = true;
-        } else if (file.suffix().endsWith("jar")) {  //.jar
-            ret = true;
-        } else {
-            ret = false;
-        }
+    QString mime = judgeFileMime(filePath);
+    bool ret = false;
+    if (mime.size() > 0) {
+        ret = existMimeType(mime);
+    } else {
+        ret = false;
     }
+
+    if (filePath.endsWith(".deb")) {
+        ret = false;
+    }
+
+    return ret;
 
 //    if (filetype.compare("application/x-7z-compressedr") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")
 //            && filetype.compare("application/x-java-archive") && filetype.compare("application/x-cd-image")
@@ -144,7 +119,7 @@ bool Utils::isCompressed_file(const QString &filePath)
 //        ret = true;
 //    }
 //    qDebug() << ret;
-    return ret;
+//    return ret;
 }
 
 QString Utils::humanReadableSize(const qint64 &size, int precision)
@@ -517,4 +492,105 @@ bool Utils::deleteDir(const QString &iFilePath)
 
     return !error;
 
+}
+
+QString Utils::readConf()
+{
+    QString confPath = "/home/lx777/.local/share/deepin/deepin-compressor/deepin-compressor.confbf";
+    QFile confFile(confPath);
+    QString confValue;
+    bool readStatus = confFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    if (readStatus) {
+        confValue = confFile.readAll();
+        confFile.close();
+    }
+
+    return confValue;
+}
+
+bool Utils::existMimeType(QString mimetype)
+{
+    QString conf = readConf();
+    QStringList confList = conf.split("\n", QString::SkipEmptyParts);
+
+    bool exist = false;
+    for (int i = 0; i < confList.count(); i++) {
+        if (confList.at(i).contains("." + mimetype)) {
+            if (confList.at(i).contains("true")) {
+                exist = true;
+                break;
+            } else {
+                exist = false;
+                continue;
+            }
+        }
+    }
+
+    return exist;
+}
+
+QString Utils::judgeFileMime(QString file)
+{
+    QString type;
+    if (file.endsWith(".7z") || file.contains(".7z.0")) {
+        type = "x-7z-compressed";
+    } else if (file.endsWith(".cpio.gz")) {
+        type = "x-cpio-compressed";
+    } else if (file.endsWith(".tar.bz2")) {
+        type = "x-bzip-compressed-tar";
+    } else if (file.endsWith(".tar.gz")) {
+        type = "x-compressed-tar";
+    } else if (file.endsWith(".tar.lz")) {
+        type = "x-lzip-compressed-tar";
+    } else if (file.endsWith(".tar.lzma")) {
+        type = "x-lzma-compressed-tar";
+    } else if (file.endsWith(".tar.lzo")) {
+        type = "x-tzo";
+    } else if (file.endsWith(".tar.xz")) {
+        type = "x-xz-compressed-tar";
+    } else if (file.endsWith(".tar.Z")) {
+        type = "x-tarz";
+    } else if (file.endsWith(".src.rpm")) {
+        type = "x-source-rpm";
+    } else if (file.endsWith(".ar")) {
+        type = "x-archive";
+    } else if (file.endsWith(".bcpio")) {
+        type = "x-bcpio";
+    } else if (file.endsWith(".bz2")) {
+        type = "x-bzip";
+    } else if (file.endsWith(".cpio")) {
+        type = "x-cpio";
+    } else if (file.endsWith(".deb")) {
+        type = "vnd.debian.binary-package";
+    } else if (file.endsWith(".gz")) {
+        type = "gzip";
+    } else if (file.endsWith(".jar")) {
+        type = "x-java-archive";
+    } else if (file.endsWith(".lzma")) {
+        type = "x-lzma";
+    } else if (file.endsWith(".cab")) {
+        type = "vnd.ms-cab-compressed";
+    } else if (file.endsWith(".rar")) {
+        type = "vnd.rar";
+    } else if (file.endsWith(".rpm")) {
+        type = "x-rpm";
+    } else if (file.endsWith(".sv4cpio")) {
+        type = "x-sv4cpio";
+    } else if (file.endsWith(".sc4crc")) {
+        type = "x-sc4crc";
+    } else if (file.endsWith(".tar")) {
+        type = "x-tar";
+    } else if (file.endsWith(".xar")) {
+        type = "x-xar";
+    } else if (file.endsWith(".xz")) {
+        type = "x-xz";
+    } else if (file.endsWith(".zip")) {
+        type = "zip";
+    } else if (file.endsWith("iso")) {
+        type = "x-cd-image";
+    } else if (file.endsWith(".appimage")) {
+        type = "x-iso9660-appimage";
+    }
+
+    return type;
 }
