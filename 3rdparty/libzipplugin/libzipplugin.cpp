@@ -990,7 +990,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
     zip_stat_t statBuffer;
 
     if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
-            || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive))  {
+            || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)
+            || ((QString)m_codecstr).contains("iso", Qt::CaseInsensitive))  {
         m_codecstr = "GBK";
     }
 
