@@ -24,6 +24,8 @@
 #include <DLabel>
 #include <DHeaderView>
 
+#define SCROLLMARGIN 10
+
 class LogViewHeaderView;
 
 class MyLabel: public Dtk::Widget::DLabel

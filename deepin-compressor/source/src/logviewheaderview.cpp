@@ -96,7 +96,7 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
 
 void PreviousLabel::hideEvent(QHideEvent *event)
 {
-    move(0, 0);
+    move(SCROLLMARGIN, 0);
     headerView_->setFixedHeight(38);
     QLabel::hideEvent(event);
     headerView_->update();
@@ -104,7 +104,7 @@ void PreviousLabel::hideEvent(QHideEvent *event)
 
 void PreviousLabel::showEvent(QShowEvent *event)
 {
-    move(0, 38);
+    move(SCROLLMARGIN, 38);
     headerView_->setFixedHeight(74);
     QLabel::showEvent(event);
     headerView_->update();
@@ -229,7 +229,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
 
 void LogViewHeaderView::resizeEvent(QResizeEvent *event)
 {
-    gotoPreviousLabel_->setFixedWidth(event->size().width());
+    gotoPreviousLabel_->setFixedWidth(event->size().width() - 2 * SCROLLMARGIN);
     DHeaderView::resizeEvent(event);
 }
 
