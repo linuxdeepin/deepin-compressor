@@ -1159,7 +1159,7 @@ void MainWindow::WatcherFile(const QString &files)
         effect->setColor(QColor(0, 145, 255, 76));
         effect->setBlurRadius(4);
         dialog->getButton(0)->setFixedWidth(340);
-//        dialog->getButton(0)->setGraphicsEffect(effect);
+        //        dialog->getButton(0)->setGraphicsEffect(effect);
         dialog->exec();
         delete dialog;
 
@@ -1170,6 +1170,7 @@ void MainWindow::WatcherFile(const QString &files)
         m_UnCompressPage->setRootPathIndex();
         this->refreshPage();
     });
+
 }
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
@@ -2401,20 +2402,28 @@ int MainWindow::promptDialog()
     DDialog *dialog = new DDialog(this);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-    dialog->addSpacing(32);
     dialog->setMinimumSize(380, 140);
-    dialog->addButton("OK", true, DDialog::ButtonNormal);
+    dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
     dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
-    DLabel *pContent = new DLabel(tr("Please set the file association type"), dialog);
+    DLabel *pContent = new DLabel(tr("Please open the Archive Manager and set the file association type"), dialog);
+
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
-    pContent->setMinimumSize(293, 20/*dialog->width()*/);
-    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
-    int res = dialog->exec();
+    pContent->setMinimumSize(293, 20);
 
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(pContent, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(15);
+
+    DWidget *widget = new DWidget(dialog);
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+    int res = dialog->exec();
     delete dialog;
+
     return res;
 }

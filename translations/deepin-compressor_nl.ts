@@ -328,178 +328,179 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="322"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="323"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="326"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="327"/>
         <source>Help</source>
         <translation>Hulp</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="330"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="331"/>
         <source>Select the file</source>
         <translation>Openen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="334"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="335"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="354"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="355"/>
         <source>Shortcuts</source>
         <translation>Sneltoetsen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="429"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="430"/>
         <source>Open file</source>
         <translation>Bestand openen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="459"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="460"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="613"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="623"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1580"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="614"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="624"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1587"/>
         <source>Create New Archive</source>
         <translation>Archief samenstellen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="650"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="651"/>
         <source>Opening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="660"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="661"/>
         <source>Compression successful</source>
         <translation>Inpakken voltooid</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1355"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1362"/>
         <source>Filename is too long, unable to extract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1402"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1433"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1409"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1440"/>
         <source>Skip all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1420"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1427"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1435"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1442"/>
         <source>Extraction successful</source>
         <translation>Uitpakken voltooid</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2399"/>
-        <source>Please set the file association type</source>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2408"/>
+        <source>Please open the Archive Manager and set the file association type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="236"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="237"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 is inmiddels aangepast. Open het bestand opnieuw.</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="831"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="837"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Wil je het archief toevoegen aan de lijst of openen in een nieuw venster?</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="342"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="343"/>
         <source>Display shortcuts</source>
         <translation>Sneltoetsen tonen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="832"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="838"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="67"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="68"/>
         <source>Archive Manager</source>
         <translation>Archiefbeheer</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="242"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1150"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="243"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1156"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2406"/>
         <source>OK</source>
         <translation>Oké</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="639"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="640"/>
         <source>Compressing</source>
         <translation>Bezig met inpakken</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="652"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="653"/>
         <source>Extracting</source>
         <translation>Bezig met uitpakken</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="669"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="670"/>
         <source>Compression failed</source>
         <translation>Het inpakken is mislukt</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="702"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="708"/>
         <source>Extraction failed</source>
         <translation>Het uitpakken is mislukt</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="833"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="839"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="834"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="840"/>
         <source>Open in new window</source>
         <translation>Openen in nieuw venster</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="952"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="958"/>
         <source>Find directory</source>
         <translation>Map zoeken</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1316"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1323"/>
         <source>Wrong password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1026"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1046"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1082"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1352"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1032"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1052"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1088"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1359"/>
         <source>Damaged file, unable to extract</source>
         <translation>Uitpakken mislukt: bestand is beschadigd.</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1149"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1155"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Het archief is inmiddels aangepast. Open het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1348"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1350"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1985"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1991"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1355"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1357"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1992"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1998"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>Onvoldoende ruimte. Maak ruimte vrij en probeer het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1987"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1993"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1994"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2000"/>
         <source>Damaged file</source>
         <translation>Beschadigd bestand</translation>
     </message>
@@ -752,47 +753,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="134"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="137"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="135"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="138"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="136"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="139"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="137"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="140"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="138"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="141"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="139"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="142"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="140"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="143"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="141"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="144"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="142"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="145"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
@@ -850,22 +851,22 @@
         <translation type="vanished">Ja</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="428"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="423"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="431"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="426"/>
         <source>Time modified</source>
         <translation>Aangepast op</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="434"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="429"/>
         <source>Type</source>
         <translation>Soort</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="437"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="432"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
@@ -991,7 +992,7 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1134"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
         <source>Extract</source>
         <translation>Uitpakken</translation>
     </message>
@@ -1000,66 +1001,66 @@
         <translation type="vanished">Hier uitpakken</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="381"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1136"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="377"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1126"/>
         <source>Extract to current directory</source>
         <translation>Uitpakken in huidige map</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="382"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="397"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1140"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1144"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="378"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="393"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1130"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1134"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="384"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="399"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="380"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="395"/>
         <source>Open style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="395"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1147"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="391"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1137"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="464"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="459"/>
         <source>item(s)</source>
         <translation>item(s)</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="480"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="475"/>
         <source>yyyy/MM/dd hh:mm:ss</source>
         <translation>yyyy/MM/dd hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="516"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1161"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1183"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="511"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1151"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1173"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="726"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="720"/>
         <source>Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="896"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="889"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuleren</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="897"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="890"/>
         <source>Confirm</source>
         <translation type="unfinished">Ja</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="380"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1134"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="376"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Uitpakken</translation>
