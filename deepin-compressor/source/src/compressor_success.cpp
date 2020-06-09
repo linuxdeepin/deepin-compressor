@@ -100,7 +100,12 @@ void Compressor_Success::showfiledirSlot()
     } else if (m_fullpath.isEmpty()) {
         DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
     } else {
-        DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
+        QFileInfo fileInfo(m_fullpath);
+        if (fileInfo.isDir()) {
+            DDesktopServices::showFolder(QUrl(m_fullpath, QUrl::TolerantMode));
+        } else if (fileInfo.isFile()) {
+            DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
+        }
     }
 
     //emit sigQuitApp();

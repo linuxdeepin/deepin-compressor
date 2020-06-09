@@ -696,7 +696,7 @@ void MainWindow::refreshPage()
             return;
         } else {
             if (m_settingsDialog->isAutoOpen() && m_encryptiontype != Encryption_NULL) {
-                DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
+                m_CompressSuccess->showfiledirSlot();
             }
         }
 
