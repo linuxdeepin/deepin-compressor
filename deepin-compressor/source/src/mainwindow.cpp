@@ -675,6 +675,11 @@ void MainWindow::refreshPage()
         m_mainLayout->setCurrentIndex(6);
         break;
     case PAGE_UNZIP_SUCCESS:
+        if (m_fileManager) {
+            m_fileManager->stopWatcher();
+            delete m_fileManager;
+            m_fileManager = nullptr;
+        }
         titlebar()->setTitle("");
         m_CompressSuccess->setCompressPath(m_decompressfilepath);
         //m_CompressSuccess->setstringinfo(tr("Extraction successful"));
