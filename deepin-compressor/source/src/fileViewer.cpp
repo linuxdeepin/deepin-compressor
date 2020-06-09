@@ -717,12 +717,13 @@ void fileViewer::deleteCompressFile()
     QModelIndexList selected = selections->selectedIndexes();
 
     QSet< int>  selectlist;
-    QFileInfo fileinfo ;
-    foreach (QModelIndex index, selected) {
-        fileinfo = pModel->fileInfo(qAsConst(index));
-        break;
-    }
+
     if (m_pathindex > 0) {
+        QFileInfo fileinfo ;
+        foreach (QModelIndex index, selected) {
+            fileinfo = pModel->fileInfo(qAsConst(index));
+            break;
+        }
         int isDelete = showWarningDialog(tr("Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?"));
         if (isDelete == 1) {
             Utils::checkAndDeleteDir(fileinfo.filePath());
