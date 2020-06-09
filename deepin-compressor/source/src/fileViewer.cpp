@@ -199,7 +199,6 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //    return QItemDelegate::paint(painter, option, index);
 }
 
-
 MyTableView::MyTableView(QWidget *parent)
     : DTableView(parent)
 {
@@ -302,7 +301,6 @@ void MyTableView::slotDragpath(QUrl url)
     qDebug() << m_path;
 }
 
-
 fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
     : DWidget(parent), m_pagetype(type)
 {
@@ -323,7 +321,6 @@ void fileViewer::InitUI()
     QHBoxLayout *mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView(this);
-
 
     connect(pTableViewFile->header_->gotoPreviousLabel_, SIGNAL(doubleClickedSignal()), this, SLOT(slotCompressRePreviousDoubleClicked()));
     connect(pTableViewFile->header_, &QHeaderView::sortIndicatorChanged, this, &fileViewer::onSortIndicatorChanged);
@@ -372,7 +369,6 @@ void fileViewer::InitUI()
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
 
-
     if (PAGE_UNCOMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu(this);
@@ -418,7 +414,6 @@ void fileViewer::refreshTableview()
         restoreHeaderSort(rootPathUnique);
         return;
     }
-
 
     curFileListModified = false;
 
@@ -622,7 +617,6 @@ void fileViewer::openWithDialog(const QModelIndex &index, const QString &program
 
 }
 
-
 void fileViewer::InitConnection()
 {
     // connect the signals to the slot function.
@@ -652,7 +646,6 @@ void fileViewer::resizeEvent(QResizeEvent */*size*/)
 {
     resizecolumn();
 }
-
 
 void fileViewer::keyPressEvent(QKeyEvent *event)
 {
@@ -712,7 +705,7 @@ void fileViewer::resetTempFile()
 
 void fileViewer::deleteCompressFile()
 {
-    int row = pModel->rowCount();
+//    int row = pModel->rowCount();
     QItemSelectionModel *selections =  pTableViewFile->selectionModel();
     QModelIndexList selected = selections->selectedIndexes();
 
@@ -783,7 +776,6 @@ void fileViewer::setFileList(const QStringList &files)
             m_fileaddindex.append(files.count() - 1 + i);
         }
     }
-
 
     m_curfilelist.clear();
     foreach (QString filepath, files) {
@@ -919,11 +911,8 @@ int fileViewer::showWarningDialog(const QString &msg)
     int res = dialog->exec();
     delete dialog;
 
-
     return res;
 }
-
-
 
 void fileViewer::showPlable()
 {

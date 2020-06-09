@@ -36,6 +36,9 @@
 #include <KEncodingProber>
 #include <QRegularExpression>
 #include "mimetypes.h"
+#include <DStandardPaths>
+
+DCORE_USE_NAMESPACE
 
 Utils::Utils(QObject *parent)
     : QObject(parent)
@@ -496,14 +499,15 @@ bool Utils::deleteDir(const QString &iFilePath)
 
 QString Utils::readConf()
 {
-    QString confPath = "/home/lx777/.local/share/deepin/deepin-compressor/deepin-compressor.confbf";
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
     QString confValue;
     bool readStatus = confFile.open(QIODevice::ReadOnly | QIODevice::Text);
     if (readStatus) {
         confValue = confFile.readAll();
-        confFile.close();
     }
+    confFile.close();
 
     return confValue;
 }

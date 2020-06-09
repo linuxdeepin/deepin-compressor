@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     app.setMainWindow(&w);
 
     if (argc >= 2 && (!w.checkSettings(argv[1]))) {
-        return  app.exec();
+        return  0;
     }
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");

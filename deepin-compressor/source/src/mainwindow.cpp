@@ -46,6 +46,7 @@
 #include <DStandardPaths>
 #include <QStackedLayout>
 #include "filewatcher.h"
+#include <QScreen>
 
 #define DEFAUTL_PATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"+ QDir::separator()
 
@@ -2389,13 +2390,16 @@ void MainWindow::setDefaultApp(QString mimetype, QString desktop)
 
 int MainWindow::promptDialog()
 {
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenRect =  screen->availableVirtualGeometry();
+
     DDialog *dialog = new DDialog(this);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);
     dialog->setMinimumSize(380, 140);
     dialog->addButton("OK", true, DDialog::ButtonNormal);
-//    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
+    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
     DLabel *pContent = new DLabel(tr("Please set the file association type"), dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
