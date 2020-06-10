@@ -973,7 +973,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
 
-            QStandardItem *item = firstmodel->itemFromIndex(index);
+            QStandardItem *item = firstmodel->itemFromIndex(index.siblingAtColumn(0));
             QString itemText = item->text().trimmed();
             int row = 0;
             foreach (QFileInfo file, m_curfilelist) {
