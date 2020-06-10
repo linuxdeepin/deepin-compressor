@@ -525,7 +525,7 @@ void fileViewer::openWithDialog(const QModelIndex &index)
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
-            QStandardItem *item = firstmodel->itemFromIndex(index);
+            QStandardItem *item = firstmodel->itemFromIndex(index.siblingAtColumn(0));
             QString itemText = item->text().trimmed();
             int row = 0;
             foreach (QFileInfo file, m_curfilelist) {
@@ -537,25 +537,27 @@ void fileViewer::openWithDialog(const QModelIndex &index)
             if (row >= m_curfilelist.count()) {
                 row = 0;
             }
-            if (m_curfilelist.at(row).isDir()) {
-                pModel->setPathIndex(&m_pathindex);
-                pTableViewFile->setModel(pModel);
-                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
-                m_pathindex++;
-                restoreHeaderSort(pModel->rootPath());
-                pTableViewFile->setRootIndex(m_indexmode);
+            OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
+            openDialog->exec();
+//            if (m_curfilelist.at(row).isDir()) {
+//                pModel->setPathIndex(&m_pathindex);
+//                pTableViewFile->setModel(pModel);
+//                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
+//                m_pathindex++;
+//                restoreHeaderSort(pModel->rootPath());
+//                pTableViewFile->setRootIndex(m_indexmode);
 
-                QDir dir(m_curfilelist.at(row).filePath());
+//                QDir dir(m_curfilelist.at(row).filePath());
 
-                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-                    showPlable();
-                }
+//                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
+//                    showPlable();
+//                }
 
-                resizecolumn();
-            } else {
-                OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
-                openDialog->exec();
-            }
+//                resizecolumn();
+//            } else {
+//                OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
+//                openDialog->exec();
+//            }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             m_pathindex++;
@@ -574,7 +576,7 @@ void fileViewer::openWithDialog(const QModelIndex &index, const QString &program
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
-            QStandardItem *item = firstmodel->itemFromIndex(index);
+            QStandardItem *item = firstmodel->itemFromIndex(index.siblingAtColumn(0));
             QString itemText = item->text().trimmed();
             int row = 0;
             foreach (QFileInfo file, m_curfilelist) {
@@ -586,25 +588,26 @@ void fileViewer::openWithDialog(const QModelIndex &index, const QString &program
             if (row >= m_curfilelist.count()) {
                 row = 0;
             }
-            if (m_curfilelist.at(row).isDir()) {
-                pModel->setPathIndex(&m_pathindex);
-                pTableViewFile->setModel(pModel);
-                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
-                m_pathindex++;
-                restoreHeaderSort(pModel->rootPath());
-                pTableViewFile->setRootIndex(m_indexmode);
+            OpenWithDialog::chooseOpen(programma, m_curfilelist.at(row).filePath());
+//            if (m_curfilelist.at(row).isDir()) {
+//                pModel->setPathIndex(&m_pathindex);
+//                pTableViewFile->setModel(pModel);
+//                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
+//                m_pathindex++;
+//                restoreHeaderSort(pModel->rootPath());
+//                pTableViewFile->setRootIndex(m_indexmode);
 
-                QDir dir(m_curfilelist.at(row).filePath());
+//                QDir dir(m_curfilelist.at(row).filePath());
 
-                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-                    showPlable();
-                }
+//                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
+//                    showPlable();
+//                }
 
-                resizecolumn();
-            } else {
-                OpenWithDialog::chooseOpen(programma, m_curfilelist.at(row).filePath());
+//                resizecolumn();
+//            } else {
+//                OpenWithDialog::chooseOpen(programma, m_curfilelist.at(row).filePath());
 
-            }
+//            }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             m_pathindex++;
