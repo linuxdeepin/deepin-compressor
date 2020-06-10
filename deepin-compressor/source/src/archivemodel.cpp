@@ -640,7 +640,9 @@ void ArchiveModel::slotLoadingFinished(KJob *job)
 
     emit loadingFinished(job);
 
-    m_tableview->sortByColumn(0, Qt::AscendingOrder);
+    if (m_showColumns.size() > 0) {
+        m_tableview->sortByColumn(0, Qt::AscendingOrder);
+    }
 }
 
 void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
