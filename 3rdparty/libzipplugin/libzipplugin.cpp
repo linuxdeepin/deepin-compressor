@@ -163,7 +163,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     // Get number of archive entries.
     const auto nofEntries = zip_get_num_entries(archive, 0);
 
-    detectAllfile(archive, nofEntries);
+    //detectAllfile(archive, nofEntries);
     // Loop through all archive entries.
     for (int i = 0; i < nofEntries; i++) {
 
@@ -235,7 +235,7 @@ QString  LibzipPlugin::trans2uft8(const char *str)
 
     QByteArray codec_name = detectEncode(str);
     //qDebug() << codec_name;
-    if ("" == m_codecname) {
+    if ("" == codec_name) {
 
         if (codec_name.isEmpty()) {
             return str;
@@ -264,12 +264,12 @@ QString  LibzipPlugin::trans2uft8(const char *str)
             return QString(str);
         } else {
             QTextCodec *codec = QTextCodec::codecForName("GBK");
-            m_codecstr = m_codecname;
+            m_codecstr = codec_name;
             return codec->toUnicode(str);
         }
     } else if (!((QString)codec_name).contains("UTF", Qt::CaseInsensitive)) {
-        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
-        m_codecstr = m_codecname;
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+        m_codecstr = codec_name;
         return codec->toUnicode(str);
     } else {
         m_codecstr = "UTF-8";
@@ -841,24 +841,27 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 break;
             }
 
+            QString strfileNameTemp = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+            //QString strfileNameTemp = zip_get_name(archive, i, ZIP_FL_ENC_RAW);
+
             if (i == 0) {
-                extractDst = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+                extractDst = QDir::fromNativeSeparators(strfileNameTemp);
             } else if (extractDst.isEmpty() == false) {
-                if (QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW))).startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
+                if (QDir::fromNativeSeparators(strfileNameTemp).startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
                     extractDst.clear();
                 }
             }
 
-            emit progress_filename(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            emit progress_filename(strfileNameTemp);
 
             FileProgressInfo pi;
 
             if (nofEntries < 5) {
-                pi.fileName = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+                pi.fileName = strfileNameTemp;
                 pi.fileProgressProportion = float(1.0) / float(nofEntries);
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
-            QString entryName = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            QString entryName = QDir::fromNativeSeparators(strfileNameTemp);
             if (i == 0) {
                 destDirName = entryName;
             }
