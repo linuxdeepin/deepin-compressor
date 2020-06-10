@@ -38,6 +38,8 @@
 #include <QTemporaryFile>
 #include <qevent.h>
 
+#include <QRegExp>
+
 TypeLabel::TypeLabel(QWidget *parent) : DLabel(parent)
 {
 }
@@ -348,6 +350,12 @@ void CompressSetting::onNextButoonClicked()
         m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
     } else if ("application/zip" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 4:Standard
+
+        if (password.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+            showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));
+            return;
+        }
+
     } else {
         m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
     }

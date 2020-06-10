@@ -63,125 +63,130 @@
 <context>
     <name>CompressSetting</name>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="189"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="191"/>
         <source>Compress</source>
         <translation>Стиснути</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="117"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="119"/>
         <source>Advanced Options</source>
         <translation>Додаткові параметри</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="102"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="104"/>
         <source>Create New Archive</source>
         <translation>Створити архів</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="111"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="113"/>
         <source>Name</source>
         <translation>Назва</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="112"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="114"/>
         <source>Save to</source>
         <translation>Зберегти до</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="125"/>
         <source>Encrypt the archive</source>
         <translation>Зашифрувати архів</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="124"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="126"/>
         <source>Support zip, 7z type only</source>
         <translation>Передбачено підтримку лише типів zip, 7z</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="129"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="131"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="131"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="133"/>
         <source>Encrypt the file list too</source>
         <translation>Зашифрувати список файлів</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="132"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="140"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="134"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="142"/>
         <source>Support 7z type only</source>
         <translation>Передбачено підтримку лише типу 7z</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="138"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="140"/>
         <source>Split to volumes</source>
         <translation>Поділити на томи</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="297"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="303"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="308"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="304"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="310"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="315"/>
         <source>You do not have permission to compress %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="322"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="329"/>
         <source>Too many volumes, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="407"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="355"/>
+        <source>The zip format does not support Chinese characters as compressed passwords</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="420"/>
         <source>Files that begin with &apos;@&apos; cannot be compressed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="603"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="616"/>
         <source>Total file size: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="711"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="728"/>
         <source>The file name under this path already exists, replace it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="713"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="730"/>
         <source>Cancel</source>
         <translation type="unfinished">Скасувати</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="714"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="731"/>
         <source>Replace</source>
         <translation type="unfinished">Замінити</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="279"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="286"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation type="unfinished">%1 було змінено на диску. Будь ласка, імпортуйте його знову.</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="317"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="324"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="678"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="695"/>
         <source>OK</source>
         <translation>Гаразд</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="266"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="273"/>
         <source>Please enter the path</source>
         <translation>Будь ласка, вкажіть шлях</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="261"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="268"/>
         <source>Invalid file name</source>
         <translation>Некоректна назва файла</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="271"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="278"/>
         <source>The path does not exist, please retry</source>
         <translation>Шляху не існує. Будь ласка, повторіть спробу</translation>
     </message>
@@ -753,47 +758,47 @@
 <context>
     <name>QInstaller</name>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="137"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="167"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="138"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="168"/>
         <source>KB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="139"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="169"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="140"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="170"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="141"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="171"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="142"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="172"/>
         <source>PB</source>
         <translation>ПБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="143"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="173"/>
         <source>EB</source>
         <translation>ЕБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="144"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="174"/>
         <source>ZB</source>
         <translation>ЗБ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/utils.cpp" line="145"/>
+        <location filename="../deepin-compressor/source/src/utils.cpp" line="175"/>
         <source>YB</source>
         <translation>ЙБ</translation>
     </message>
@@ -916,45 +921,45 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="131"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="132"/>
         <source>Select All</source>
         <translation>Позначити все</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="170"/>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="199"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="171"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="200"/>
         <source>Current directory</source>
         <translation>Поточний каталог</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="132"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="133"/>
         <source>Clear All</source>
         <translation>Спорожнити все</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="133"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="134"/>
         <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="164"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="165"/>
         <source>Extract archives to</source>
         <translation>Місце видобування архівів</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="170"/>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="209"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="171"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="210"/>
         <source>Other directory</source>
         <translation>Інший каталог</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="170"/>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="204"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="171"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="205"/>
         <source>Desktop</source>
         <translation>Стільниця</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="300"/>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="301"/>
         <source>The default extraction path does not exist, please retry</source>
         <translation>Типового шляху для видобування не існує. Будь ласка, повторіть спробу</translation>
     </message>
