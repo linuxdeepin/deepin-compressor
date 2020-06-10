@@ -218,15 +218,20 @@ void CompressSetting::InitConnection()
         DPalette plt;
         plt = DApplicationHelper::instance()->palette(m_filename);
 
-        if (false == checkfilename(m_filename->text()))
+        if (!m_filename->text().isEmpty())
         {
-            plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+            if (false == checkfilename(m_filename->text())) {
+                plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+            } else {
+                plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
+            }
         } else
         {
             plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
         }
 
         m_filename->setPalette(plt);
+
     });
 
     connect(typepixmap, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
@@ -654,8 +659,12 @@ void CompressSetting::onThemeChanged()
     DPalette plt;
     plt = DApplicationHelper::instance()->palette(m_filename);
 
-    if (false == checkfilename(m_filename->text())) {
-        plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+    if (!m_filename->text().isEmpty()) {
+        if (false == checkfilename(m_filename->text())) {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
+        } else {
+            plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
+        }
     } else {
         plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
     }
