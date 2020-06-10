@@ -47,6 +47,9 @@ public:
     static QString readConf();
     static bool existMimeType(QString mimetype);
     static QString judgeFileMime(QString file);
+
+private:
+    static QStringList m_associtionlist;
 };
 
 #endif

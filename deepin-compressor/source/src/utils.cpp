@@ -40,6 +40,36 @@
 
 DCORE_USE_NAMESPACE
 
+QStringList Utils::m_associtionlist = QStringList() << "file_association.file_association_type.x-7z-compressed"
+                                      << "file_association.file_association_type.x-archive"
+                                      << "file_association.file_association_type.x-bcpio"
+                                      << "file_association.file_association_type.x-bzip"
+                                      << "file_association.file_association_type.x-cpio"
+                                      << "file_association.file_association_type.x-cpio-compressed"
+                                      << "file_association.file_association_type.vnd.debian.binary-package"
+                                      << "file_association.file_association_type.gzip"
+                                      << "file_association.file_association_type.x-java-archive"
+                                      << "file_association.file_association_type.x-lzma"
+                                      << "file_association.file_association_type.vnd.ms-cab-compressed"
+                                      << "file_association.file_association_type.vnd.rar"
+                                      << "file_association.file_association_type.x-rpm"
+                                      << "file_association.file_association_type.x-sv4cpio"
+                                      << "file_association.file_association_type.x-sv4crc"
+                                      << "file_association.file_association_type.x-tar"
+                                      << "file_association.file_association_type.x-bzip-compressed-tar"
+                                      << "file_association.file_association_type.x-compressed-tar"
+                                      << "file_association.file_association_type.x-lzip-compressed-tar"
+                                      << "file_association.file_association_type.x-lzma-compressed-tar"
+                                      << "file_association.file_association_type.x-tzo"
+                                      << "file_association.file_association_type.x-xz-compressed-tar"
+                                      << "file_association.file_association_type.x-tarz"
+                                      << "file_association.file_association_type.x-xar"
+                                      << "file_association.file_association_type.x-xz"
+                                      << "file_association.file_association_type.zip"
+                                      << "file_association.file_association_type.x-cd-image"
+                                      << "file_association.file_association_type.x-iso9660-appimage"
+                                      << "file_association.file_association_type.x-source-rpm";
+
 Utils::Utils(QObject *parent)
     : QObject(parent)
 {
@@ -502,6 +532,19 @@ QString Utils::readConf()
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
+
+    // default settings
+    if (!confFile.exists()) {
+        confFile.open(QIODevice::WriteOnly | QIODevice::Text);
+
+        foreach (QString key, m_associtionlist) {
+            QString content = key + ":" + "true" + "\n";
+            confFile.write(content.toUtf8());
+        }
+
+        confFile.close();
+    }
+
     QString confValue;
     bool readStatus = confFile.open(QIODevice::ReadOnly | QIODevice::Text);
     if (readStatus) {
