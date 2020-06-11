@@ -302,7 +302,6 @@ void SettingDialog::done(int status)
         box.exec();
         return;
     }
-//    writeToConfbf();
 
     QDialog::done(status);
 

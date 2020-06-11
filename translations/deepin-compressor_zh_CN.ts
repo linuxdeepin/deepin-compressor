@@ -145,7 +145,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="616"/>
         <source>Total file size: %1</source>
-        <translation>文件大小：</translation>
+        <translation>文件大小：%1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="695"/>
@@ -981,27 +981,27 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1127"/>
         <source>Extract</source>
         <translation>解压</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="377"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1126"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1129"/>
         <source>Extract to current directory</source>
         <translation>提取到当前文件夹</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="391"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1137"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1140"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="378"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="393"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1130"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1134"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1133"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1137"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
@@ -1013,23 +1013,23 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="511"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1151"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1173"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1154"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1176"/>
         <source>Choose default programma</source>
         <translation>选择默认程序</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="720"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="723"/>
         <source>Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?</source>
         <translation>您当前的操作将永久删除此文件，请提前备份!您确定要删除吗?</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="889"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="892"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="890"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="893"/>
         <source>Confirm</source>
         <translation type="unfinished">确定</translation>
     </message>
@@ -1045,7 +1045,7 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="376"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1127"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>提取</translation>

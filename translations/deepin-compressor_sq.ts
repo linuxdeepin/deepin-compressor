@@ -997,21 +997,21 @@
 <context>
     <name>fileViewer</name>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1127"/>
         <source>Extract</source>
         <translation>Përftoji</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="391"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1137"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1140"/>
         <source>Delete</source>
         <translation>Fshije</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="378"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="393"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1130"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1134"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1133"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1137"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1033,36 +1033,36 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="511"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1151"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1173"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1154"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1176"/>
         <source>Choose default programma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="720"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="723"/>
         <source>Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="889"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="892"/>
         <source>Cancel</source>
         <translation type="unfinished">Anuloje</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="890"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="893"/>
         <source>Confirm</source>
         <translation type="unfinished">Ripohojeni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="376"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1127"/>
         <source>Extract</source>
         <comment>slotDecompressRowDoubleClicked</comment>
         <translation>Përftoji</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="377"/>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1126"/>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1129"/>
         <source>Extract to current directory</source>
         <translation>Përftoji te drejtoria e tanishme</translation>
     </message>
