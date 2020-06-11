@@ -157,7 +157,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         decorationRect.setWidth(decorationRect.width() + SCROLLMARGIN + 8);
         displayRect.setX(displayRect.x() + SCROLLMARGIN + 16);
     } else {
-        displayRect.setX(displayRect.x() + SCROLLMARGIN + 6);
+        displayRect.setX(displayRect.x() /*+ SCROLLMARGIN*/ + 6);
     }
 
     // draw the item

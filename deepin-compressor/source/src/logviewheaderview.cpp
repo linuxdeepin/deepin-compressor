@@ -201,7 +201,8 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     painter->setFont(pFont);
     if (logicalIndex == 0) {
         QRect col0Rect = textRect;
-        col0Rect.setX(textRect.x() + 2);
+        col0Rect.setX(textRect.x() + 4 + SCROLLMARGIN);
+        col0Rect.setWidth(col0Rect.width() + SCROLLMARGIN);
         painter->drawText(col0Rect, static_cast<int>(align), title);
     }
 //    else if(logicalIndex == 3){
