@@ -28,6 +28,7 @@
 #include "utils.h"
 #include <DApplicationSettings>
 #include "openwithdialog/openwithdialog.h"
+#include <DDesktopServices>
 
 int main(int argc, char *argv[])
 {

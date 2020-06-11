@@ -691,7 +691,8 @@ void MainWindow::refreshPage()
 //            DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
 //        }
         if (m_isrightmenu) {
-            m_CompressSuccess->showfiledirSlot();
+            m_CompressSuccess->showfiledirSlot(false);
+//            DDesktopServices::showFolder(m_decompressfilepath);
             slotquitApp();
             return;
         } else {
@@ -1417,7 +1418,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             QString fullpath = m_decompressfilepath + "/" + m_extractSimpleFiles.at(0)->property("name").toString();
             QFileInfo fileinfo(fullpath);
             if (fileinfo.exists()) {
-                //DDesktopServices::showFolder(fullpath);
+//                DDesktopServices::showFolder(fullpath);
             }
         }
     } else if (Encryption_TempExtract_Open_Choose == m_encryptiontype) {

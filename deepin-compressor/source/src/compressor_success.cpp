@@ -92,19 +92,35 @@ void Compressor_Success::InitConnection()
 //    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
 
-void Compressor_Success::showfiledirSlot()
+void Compressor_Success::showfiledirSlot(bool iIsUrl)
 {
     qDebug() << m_path;
     if (newCreatePath_.isEmpty() == false) {
-        DDesktopServices::showFolder(QUrl(newCreatePath_, QUrl::TolerantMode));
+        if (iIsUrl) {
+            DDesktopServices::showFolder(QUrl(newCreatePath_, QUrl::TolerantMode));
+        } else {
+            DDesktopServices::showFolder(newCreatePath_);
+        }
     } else if (m_fullpath.isEmpty()) {
-        DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
+        if (iIsUrl) {
+            DDesktopServices::showFolder(QUrl(m_path, QUrl::TolerantMode));
+        } else {
+            DDesktopServices::showFolder(m_path);
+        }
     } else {
         QFileInfo fileInfo(m_fullpath);
         if (fileInfo.isDir()) {
-            DDesktopServices::showFolder(QUrl(m_fullpath, QUrl::TolerantMode));
+            if (iIsUrl) {
+                DDesktopServices::showFolder(QUrl(m_fullpath, QUrl::TolerantMode));
+            } else {
+                DDesktopServices::showFolder(m_fullpath);
+            }
         } else if (fileInfo.isFile()) {
-            DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
+            if (iIsUrl) {
+                DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
+            } else {
+                DDesktopServices::showFileItem(m_fullpath);
+            }
         }
     }
 

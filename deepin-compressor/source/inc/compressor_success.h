@@ -58,7 +58,7 @@ signals:
     void sigBackButtonClicked();
 
 public slots:
-    void showfiledirSlot();
+    void showfiledirSlot(bool iIsUrl = true);
     void commandLinkBackButtonClicked();
 
 signals:
