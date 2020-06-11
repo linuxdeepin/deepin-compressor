@@ -497,6 +497,7 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     auto e = new Archive::Entry();
 
     if (statBuffer.valid & ZIP_STAT_NAME) {
+        // e->setFullPath(statBuffer.name);
         e->setFullPath(trans2uft8(statBuffer.name));
     }
 
@@ -1460,15 +1461,39 @@ QFileDevice::Permissions LibzipPlugin::getPermissions(const mode_t &perm)
 
 QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fileName)
 {
+//    QString trabsferVal;
+//    QString detected;
+//    char *target = new char[sizeof(data) * 2];
+//    ICU_DetectTextEncoding(data, sizeof(data), detected);
+//    m_codecstr = detected.toLatin1();
+//    qDebug() << "ICU编码：" << detected;
+//    if (detected.contains("UTF-8", Qt::CaseInsensitive)) {
+//        m_codecstr = "UTF-8";
+
+//    }
 
     QString detectedResult;
     float chardetconfidence = 0;
     ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
-    if (detectedResult.contains("UTF-8", Qt::CaseInsensitive)) {
+    qDebug() << "chardet编码：" << detectedResult;
+    m_codecstr = detectedResult.toLatin1();
+    if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
         m_codecstr = "UTF-8";
         return  m_codecstr;
+    } else {
+        if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
+                || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)
+                || ((QString)m_codecstr).contains("gb18030", Qt::CaseInsensitive)  || ((QString)m_codecstr).contains("iso", Qt::CaseInsensitive)) {
+            return  m_codecstr;
+        } else {
+            m_codecstr = textCodecDetect(data, fileName);
+        }
     }
+    return  m_codecstr;
+}
 
+QByteArray LibzipPlugin::textCodecDetect(const QByteArray &data, const QString &fileName)
+{
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {
         return QTextCodec::codecForLocale()->name();
@@ -1628,7 +1653,7 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
         return def_codec->name();
     }
 
-
+    qDebug() << "QCodecs编码：" << encoding;
     return encoding;
 }
 

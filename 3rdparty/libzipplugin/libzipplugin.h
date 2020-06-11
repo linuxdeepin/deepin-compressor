@@ -58,6 +58,7 @@ private:
     QFileDevice::Permissions getPermissions(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
     QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
     void detectAllfile(zip_t *archive, int num);
     QString  trans2uft8(const char *str);
 
