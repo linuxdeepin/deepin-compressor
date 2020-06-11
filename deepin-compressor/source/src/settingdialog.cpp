@@ -302,6 +302,7 @@ void SettingDialog::done(int status)
         box.exec();
         return;
     }
+//    writeToConfbf();
 
     QDialog::done(status);
 
@@ -316,7 +317,7 @@ void SettingDialog::done(int status)
         loop++;
     }
     m_valuelist = m_valuelisttemp;
-    writeToConfbf();
+//    writeToConfbf();
 }
 
 void SettingDialog::readFromConfbf()
@@ -404,6 +405,8 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
     } else if (key.contains("default_path") && value.toString() == "") {
         emit sigReset();
     }
+    writeToConfbf();
+
 }
 
 void SettingDialog::selectpressed()
