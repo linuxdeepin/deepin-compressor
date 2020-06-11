@@ -483,10 +483,12 @@ bool Utils::checkAndDeleteDir(const QString &iFilePath)
 
     if (tempFileInfo.isDir()) {
         deleteDir(iFilePath);
+        return true;
     } else if (tempFileInfo.isFile()) {
         QFile deleteFile(iFilePath);
         return  deleteFile.remove();
     }
+    return false;
 }
 
 bool Utils::deleteDir(const QString &iFilePath)
