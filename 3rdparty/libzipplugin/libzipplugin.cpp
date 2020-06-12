@@ -1203,6 +1203,19 @@ bool LibzipPlugin::extractEntry(zip_t *archive, const QString &entry, const QStr
         file.setPermissions(getPermissions(attributes >> 16));
         //extract = true;
         bAnyFileExtracted = true;
+    } else {
+        const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
+        if (index == -1) {
+            emit error(tr("Failed to locate entry: %1"));
+            return false;
+        }
+        zip_uint8_t opsys;
+        zip_uint32_t attributes;
+        if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
+            emit error(tr("Failed to read metadata for entry: %1"));
+            return false;
+        }
+        QFile::setPermissions(destination, getPermissions(attributes >> 16));
     }
 
     // Set mtime for entry.
