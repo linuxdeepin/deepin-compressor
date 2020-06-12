@@ -80,6 +80,10 @@ public:
 
     bool operator==(const Archive::Entry &right) const;
 
+    // 压缩包索引
+    void setCompressIndex(int iIndex);
+    int compressIndex();
+
 public:
     QString rootNode;
     bool compressedSizeIsSet;
@@ -106,6 +110,8 @@ private:
     QDateTime m_timestamp;
     bool m_isDirectory;
     bool m_isPasswordProtected;
+
+    int m_iCompressIndex;
 };
 
 QDebug  operator<<(QDebug d, const Archive::Entry &entry);

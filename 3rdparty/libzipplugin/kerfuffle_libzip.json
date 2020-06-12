@@ -35,7 +35,8 @@
         "Description[zh_TW]": "對 zip 壓縮檔格式的完整支援",
         "Id": "kerfuffle_libzip",
         "MimeTypes": [
-            "application/zip"
+            "application/zip",
+            "application/octet-stream"
         ],
         "Name": "Libzip plugin",
         "Name[ca@valencia]": "Connector del Libzip",

@@ -5,6 +5,7 @@
 
 
 #include <zip.h>
+#include <minizip/unzip.h>
 #include "kpluginfactory.h"
 
 
@@ -49,7 +50,7 @@ private Q_SLOTS:
     void slotRestoreWorkingDir();
 
 private:
-    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
+    bool extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
@@ -61,6 +62,12 @@ private:
     QString  trans2uft8(const char *str);
 
     const char *passwordUnicode(const QString &strPassword);
+
+    /*user minizip*/
+    bool minizip_list(bool isbatch = false);
+    bool minizip_emitEntryForIndex(unzFile zipfile);
+    bool minizip_extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options);
+    bool minizip_extractEntry(unzFile zipfile, unz_file_info file_info, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
 
     QVector<Archive::Entry *> m_emittedEntries;
     bool m_overwriteAll;

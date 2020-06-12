@@ -126,6 +126,10 @@ bool Utils::isCompressed_file(const QString &filePath)
         ret = false;
     }
 
+    if (filePath.endsWith(".crx")) {
+        ret = true;
+    }
+
     return ret;
 
 //    if (filetype.compare("application/x-7z-compressedr") && filetype.compare("application/zip") && filetype.compare("application/vnd.rar") && filetype.compare("application/x-rar")

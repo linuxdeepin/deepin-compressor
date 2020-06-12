@@ -207,6 +207,16 @@ bool Archive::Entry::operator==(const Archive::Entry &right) const
     return m_fullPath == right.m_fullPath;
 }
 
+void Archive::Entry::setCompressIndex(int iIndex)
+{
+    m_iCompressIndex = iIndex;
+}
+
+int Archive::Entry::compressIndex()
+{
+    return m_iCompressIndex;
+}
+
 QDebug operator<<(QDebug d, const Archive::Entry &entry)
 {
     d.nospace() << "Entry(" << entry.property("fullPath");
