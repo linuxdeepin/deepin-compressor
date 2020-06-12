@@ -1417,48 +1417,6 @@ QString LibzipPlugin::permissionsToString(const mode_t &perm)
     return modeval;
 }
 
-QFileDevice::Permissions LibzipPlugin::getPermissions(const mode_t &perm)
-{
-    QFileDevice::Permissions pers = QFileDevice::Permissions();
-
-    if (perm == 0) {
-        pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
-        return pers;
-    }
-
-    if (perm & S_IRUSR) {
-        pers |= QFileDevice::ReadUser;
-    }
-    if (perm & S_IWUSR) {
-        pers |= QFileDevice::WriteUser;
-    }
-    if (perm & S_IXUSR) {
-        pers |= QFileDevice::ExeUser;
-    }
-
-    if (perm & S_IRGRP) {
-        pers |= QFileDevice::ReadGroup;
-    }
-    if (perm & S_IWGRP) {
-        pers |= QFileDevice::WriteGroup;
-    }
-    if (perm & S_IXGRP) {
-        pers |= QFileDevice::ExeGroup;
-    }
-
-    if (perm & S_IROTH) {
-        pers |= QFileDevice::ReadOther;
-    }
-    if (perm & S_IWOTH) {
-        pers |= QFileDevice::WriteOther;
-    }
-    if (perm & S_IXOTH) {
-        pers |= QFileDevice::ExeOther;
-    }
-
-    return pers;
-}
-
 QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fileName)
 {
 //    QString trabsferVal;

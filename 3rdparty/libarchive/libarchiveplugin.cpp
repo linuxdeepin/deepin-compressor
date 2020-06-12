@@ -417,6 +417,8 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                 // If the whole archive is extracted and the total filesize is
                 // available, we use partial progress.
                 copyData(entryName, m_archiveReader.data(), writer.data(), (extractAll && m_extractedFilesSize));
+                // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
+                QFile::setPermissions(destinationDirectory + QDir::separator() + entryName, getPermissions(archive_entry_perm(entry)));
                 break;
 
             case ARCHIVE_FAILED:

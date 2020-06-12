@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QTextCodec>
+#include <sys/stat.h>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
@@ -243,6 +244,48 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
     }
 
     return paths;
+}
+
+QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &perm)
+{
+    QFileDevice::Permissions pers = QFileDevice::Permissions();
+
+    if (perm == 0) {
+        pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
+        return pers;
+    }
+
+    if (perm & S_IRUSR) {
+        pers |= QFileDevice::ReadUser;
+    }
+    if (perm & S_IWUSR) {
+        pers |= QFileDevice::WriteUser;
+    }
+    if (perm & S_IXUSR) {
+        pers |= QFileDevice::ExeUser;
+    }
+
+    if (perm & S_IRGRP) {
+        pers |= QFileDevice::ReadGroup;
+    }
+    if (perm & S_IWGRP) {
+        pers |= QFileDevice::WriteGroup;
+    }
+    if (perm & S_IXGRP) {
+        pers |= QFileDevice::ExeGroup;
+    }
+
+    if (perm & S_IROTH) {
+        pers |= QFileDevice::ReadOther;
+    }
+    if (perm & S_IWOTH) {
+        pers |= QFileDevice::WriteOther;
+    }
+    if (perm & S_IXOTH) {
+        pers |= QFileDevice::ExeOther;
+    }
+
+    return pers;
 }
 
 bool ReadOnlyArchiveInterface::isHeaderEncryptionEnabled() const

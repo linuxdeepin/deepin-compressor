@@ -6,7 +6,6 @@
 
 #include <zip.h>
 #include "kpluginfactory.h"
-#include <QFileDevice>
 
 
 struct FileProgressInfo {
@@ -55,7 +54,6 @@ private:
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
     QString permissionsToString(const mode_t &perm);
-    QFileDevice::Permissions getPermissions(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
     QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
     QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
