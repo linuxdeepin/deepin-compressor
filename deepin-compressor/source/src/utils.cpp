@@ -635,7 +635,7 @@ QString Utils::judgeFileMime(QString file)
         type = "x-xz";
     } else if (file.endsWith(".zip")) {
         type = "zip";
-    } else if (file.endsWith("iso")) {
+    } else if (file.endsWith(".iso")) {
         type = "x-cd-image";
     } else if (file.endsWith(".appimage")) {
         type = "x-iso9660-appimage";
