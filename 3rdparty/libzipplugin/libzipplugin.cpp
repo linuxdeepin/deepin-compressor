@@ -1144,6 +1144,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
         }
         QFile file(destination);
         if (file.exists() && !file.isWritable()) {
+            file.remove();
+            file.setFileName(destination);
             file.setPermissions(QFileDevice::WriteUser);
         }
         if (file.open(QIODevice::WriteOnly) == false) {
