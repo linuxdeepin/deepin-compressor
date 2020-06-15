@@ -377,13 +377,15 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     m_exitCode = exitCode;
     qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
-    if (m_process) {
-        // handle all the remaining data in the process
-        readStdout(true);
+//    if (m_process) {
+//        // handle all the remaining data in the process
+//        readStdout(true);
 
-        delete m_process;
-        m_process = nullptr;
-    }
+//        delete m_process;
+//        m_process = nullptr;
+//    }
+
+    deleteProcess();
 
     // #193908 - #222392
     // Don't emit finished() if the job was killed quietly.
@@ -457,7 +459,7 @@ void CliInterface::watchFileList(QStringList *strList)
     this->pFileWatcherdd->watch(strList);
 }
 
-void CliInterface::slotFilesWatchedChanged(QString fileChanged)
+void CliInterface::slotFilesWatchedChanged(QString /*fileChanged*/)
 {
     this->watchDestFilesEnd();
     emit cancelled();
@@ -903,6 +905,18 @@ void CliInterface::cleanUp()
     m_tempAddDir.reset();
 }
 
+void CliInterface::deleteProcess()
+{
+    if (m_process) {
+        //handle all the remaining data in the process
+        readStdout(true);
+
+        delete m_process;
+        m_process = nullptr;
+    }
+
+}
+
 void CliInterface::readStdout(bool handleAll)
 {
     // when hacking this function, please remember the following:
@@ -1127,7 +1141,7 @@ bool CliInterface::handleLine(const QString &line)
         if (isDiskFullMsg(line)) {
             qDebug() << "Found disk full message:" << line;
             //emit error(tr("@info", "Extraction failed because the disk is full."));
-            emit error(("@info", "Extraction failed because the disk is full."));
+            emit error("@info", "Extraction failed because the disk is full.");
             return false;
         }
 

@@ -1025,7 +1025,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
         return false;
     }
 
-    qDebug() << trans2uft8(zip_get_name(archive, index, ZIP_FL_ENC_RAW)) << "*********************" << entry;
+//    qDebug() << trans2uft8(zip_get_name(archive, index, ZIP_FL_ENC_RAW)) << "*********************" << entry;
 
 //    if (zip_stat(archive, name.constData(), 0, &statBuffer) != 0) {
 //        if (isDirectory && zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOENT) {
@@ -1163,7 +1163,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
         }
 
         zip_file *zipFile = zip_fopen_index(archive, index, 0);
-        int writeSize = 0;
+        zip_int64_t writeSize = 0;
         while (sum != statBuffer.size) {
             if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
                 break;
@@ -1183,7 +1183,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
             sum += readBytes;
             writeSize += readBytes;
 
-            if (pi.fileProgressProportion > 0 && writeSize > statBuffer.size / 5) {
+            if (pi.fileProgressProportion > 0 && writeSize > statBuffer.size * 0.2/* / 5*/) {
                 pi.fileProgressStart += pi.fileProgressProportion * 0.2;
                 emit progress(pi.fileProgressStart);
                 writeSize = 0;
@@ -1677,7 +1677,7 @@ void LibzipPlugin::cleanIfCanceled()
     }
 }
 
-void LibzipPlugin::watchFileList(QStringList *strList)
+void LibzipPlugin::watchFileList(QStringList */*strList*/)
 {
 
 }
@@ -1766,9 +1766,6 @@ bool LibzipPlugin::minizip_list(bool /*isbatch*/)
         emit error(tr("could not read file global info"));
         unzClose(zipfile);
     }
-
-    // Buffer to hold data read from the zip file.
-    char read_buffer[ READ_SIZE ];
 
     // Loop to extract all files
     uLong i;
@@ -1871,8 +1868,6 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
         unzClose(zipfile);
     }
 
-    // Buffer to hold data read from the zip file.
-    char read_buffer[ READ_SIZE ];
 
     // Loop to extract files
     qlonglong nofEntries = extractAll ? global_info.number_entry : files.size();
@@ -1882,7 +1877,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
 
     if (extractAll) {
         // Loop to extract all files
-        uLong i;
+        qlonglong i;
         QString extractDst;
         for (i = 0; i < nofEntries; ++i) {
 
@@ -1942,7 +1937,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
             emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
         }
     } else {
-        qulonglong i = 0;
+        qlonglong i = 0;
         QVector<Archive::Entry *> vecFiles;         // 不包括文件夹
         for (Archive::Entry *e : files) {
             if (!e->fullPath().endsWith(QDir::separator())) {
@@ -1989,7 +1984,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
             emit progress(float(i + 1) / nofEntries);
 
             // Go the the next entry listed in the zip file.
-            if ((++i) < vecFiles.count()) {
+            if ((++i) < nofEntries) {
 //                QString strFileName = files[i]->fullPath();
 //                if (files[i]->fullPath().endsWith(QDir::separator()))
 //                    strFileName.chop(1);
@@ -2053,12 +2048,12 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
         parentDir = fileInfo.path();
     }
     // For top-level items, don't restore parent dir mtime.
-    const bool restoreParentMtime = (parentDir + QDir::separator() != destDirCorrected);
+//    const bool restoreParentMtime = (parentDir + QDir::separator() != destDirCorrected);
 
-    time_t parent_mtime = time_t();
-    if (restoreParentMtime) {
-        parent_mtime = QFileInfo(parentDir).lastModified().toMSecsSinceEpoch() / 1000;
-    }
+//    time_t parent_mtime = time_t();
+//    if (restoreParentMtime) {
+//        parent_mtime = QFileInfo(parentDir).lastModified().toMSecsSinceEpoch() / 1000;
+//    }
 
     // Create parent directories for files. For directories create them.
     if (QDir().exists(fileInfo.path()) == false) {
@@ -2069,22 +2064,6 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
         }
         bAnyFileExtracted = true;
     }
-
-//    if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
-//            || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)
-//            || ((QString)m_codecstr).contains("iso", Qt::CaseInsensitive))  {
-//        m_codecstr = "GBK";
-//    }
-
-//    QByteArray  name;
-
-//    QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
-//    //qDebug() << m_codecstr;
-//    if (codec) {
-//        name = codec->fromUnicode(entry.toLocal8Bit());
-//    } else {
-//        name = entry.toLocal8Bit();
-//    }
 
     if (!isDirectory) {
 
@@ -2189,7 +2168,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
             sum += readBytes;
             writeSize += readBytes;
 
-            if (pi.fileProgressProportion > 0 && writeSize > file_info.uncompressed_size / 5) {
+            if (pi.fileProgressProportion > 0 && writeSize > file_info.uncompressed_size * 0.2/*/ 5*/) {
                 pi.fileProgressStart += pi.fileProgressProportion * 0.2;
                 emit progress(pi.fileProgressStart);
                 writeSize = 0;

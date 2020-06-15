@@ -165,7 +165,7 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
 
     QStyleOptionHeader option;
     initStyleOption(&option);
-    int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
+    /*int margin = */style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
     // title
     QRect contentRect(rect.x(), rect.y(), rect.width(), 36 - m_spacing);

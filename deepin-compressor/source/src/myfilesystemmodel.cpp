@@ -132,6 +132,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
             case 0: {
                 return file.fileName();
             }
+            default:
+                return "";
             }
         }
         case Qt::DecorationRole:

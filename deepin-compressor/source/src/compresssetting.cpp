@@ -349,7 +349,7 @@ void CompressSetting::onNextButoonClicked()
     if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
     } else if ("application/zip" == fixedMimeType) {
-        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 4:Standard
+        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 5:Standard
 
         if (password.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
             showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));

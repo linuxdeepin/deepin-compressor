@@ -132,6 +132,7 @@ protected:
     bool passwordQuery();
 
     void cleanUp();
+    void deleteProcess();
 
 protected Q_SLOTS:
     virtual void readStdout(bool handleAll = false);

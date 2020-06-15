@@ -173,7 +173,7 @@ void LibSingleFileInterface::cleanIfCanceled()
 
 }
 
-void LibSingleFileInterface::watchFileList(QStringList *strList)
+void LibSingleFileInterface::watchFileList(QStringList */*strList*/)
 {
 
 }

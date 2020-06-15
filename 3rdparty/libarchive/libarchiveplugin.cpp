@@ -14,7 +14,7 @@
 #include <archive_entry.h>
 #include "../common/common.h"
 
-static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+/*static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
     qreal hep_count = 0;
     int non_base_latin_count = 0;
@@ -97,7 +97,7 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     c -= qreal(unidentification_count) / non_base_latin_count;
 
     return qMax(0.0f, c);
-}
+}*/
 
 LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -409,7 +409,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                 }
             }
 //            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
-            this->extractPsdStatus;
+            //this->extractPsdStatus;
             // Write the entry header and check return value.
             const int returnCode = archive_write_header(writer.data(), entry);
             switch (returnCode) {
@@ -592,7 +592,7 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
     file.close();
 }
 
-void LibarchivePlugin::copyData(const QString &filename, struct archive *source, struct archive *dest, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *source, struct archive *dest, bool /*partialprogress*/)
 {
     char buff[10240];
 
@@ -673,7 +673,7 @@ void LibarchivePlugin::cleanIfCanceled()
 
 }
 
-void LibarchivePlugin::watchFileList(QStringList *strList)
+void LibarchivePlugin::watchFileList(QStringList */*strList*/)
 {
 
 }
