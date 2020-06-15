@@ -697,7 +697,7 @@ void MainWindow::refreshPage()
             return;
         } else {
             if (m_settingsDialog->isAutoOpen() && m_encryptiontype != Encryption_NULL) {
-                m_CompressSuccess->showfiledirSlot();
+                m_CompressSuccess->showfiledirSlot(false);
             }
         }
 
