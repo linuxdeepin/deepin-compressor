@@ -2355,7 +2355,13 @@ bool MainWindow::checkSettings(QString file)
     QString fileMime = Utils::judgeFileMime(file);
     bool hasSetting = true;
 
-    bool existMime = Utils::existMimeType(fileMime);
+    bool existMime;
+    if (fileMime.size() == 0) {
+        existMime = true;
+    } else {
+        existMime = Utils::existMimeType(fileMime);
+    }
+
     if (existMime) {
         QString defaultCompress = getDefaultApp(fileMime);
 

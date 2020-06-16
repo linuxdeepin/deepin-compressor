@@ -587,7 +587,7 @@ bool Utils::existMimeType(QString mimetype)
 
 QString Utils::judgeFileMime(QString file)
 {
-    QString type;
+    QString type = "";
     if (file.endsWith(".7z") || file.contains(".7z.0")) {
         type = "x-7z-compressed";
     } else if (file.endsWith(".cpio.gz")) {
