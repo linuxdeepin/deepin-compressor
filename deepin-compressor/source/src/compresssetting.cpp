@@ -203,6 +203,8 @@ void CompressSetting::InitUI()
     m_password->setEnabled(true);
     m_file_secret->setEnabled(false);
 
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
+
     setBackgroundRole(DPalette::Base);
 }
 
@@ -211,6 +213,7 @@ void CompressSetting::InitConnection()
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressSetting::onNextButoonClicked);
     connect(m_moresetbutton, &DSwitchButton::toggled, this, &CompressSetting::onAdvanceButtonClicked);
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
+    connect(m_password, &DPasswordEdit::echoModeChanged, this, &CompressSetting::slotEchoModeChanged);
 
     connect(
         DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSetting::onThemeChanged);
@@ -684,6 +687,12 @@ void CompressSetting::onThemeChanged()
 bool CompressSetting::onSplitChecked()
 {
     return isSplitChecked;
+}
+
+void CompressSetting::slotEchoModeChanged(bool echoOn)
+{
+    qDebug() << echoOn;
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
 }
 
 int CompressSetting::showWarningDialog(const QString &msg, int index)

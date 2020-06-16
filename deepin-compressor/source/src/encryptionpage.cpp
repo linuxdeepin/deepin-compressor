@@ -76,12 +76,15 @@ void EncryptionPage::InitUI()
     mainlayout->setContentsMargins(12, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
+
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
 }
 
 void EncryptionPage::InitConnection()
 {
     connect(m_password, &DPasswordEdit::textChanged, this, &EncryptionPage::onPasswordChanged);
     connect(m_nextbutton, &DPushButton::clicked, this, &EncryptionPage::nextbuttonClicked);
+    connect(m_password, &DPasswordEdit::echoModeChanged, this, &EncryptionPage::slotEchoModeChanged);
 }
 
 void EncryptionPage::setPassowrdFocus()
@@ -125,4 +128,10 @@ void EncryptionPage::onPasswordChanged()
     } else {
         m_nextbutton->setEnabled(true);
     }
+}
+
+void EncryptionPage::slotEchoModeChanged(bool echoOn)
+{
+    qDebug() << echoOn;
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
 }

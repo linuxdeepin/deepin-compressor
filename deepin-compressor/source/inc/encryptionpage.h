@@ -48,6 +48,8 @@ public slots:
     void wrongPassWordSlot();
     void onPasswordChanged();
 
+    void slotEchoModeChanged(bool echoOn);
+
 private:
     DPushButton *m_nextbutton = nullptr;
     DPasswordEdit *m_password = nullptr;

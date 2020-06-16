@@ -90,6 +90,8 @@ public slots:
     void onThemeChanged();
     bool onSplitChecked();
 
+    void slotEchoModeChanged(bool echoOn);
+
 private:
     int showWarningDialog(const QString &msg, int index = 0);
     bool existSameFileName();
