@@ -566,9 +566,12 @@ bool Utils::existMimeType(QString mimetype)
     QString conf = readConf();
     QStringList confList = conf.split("\n", QString::SkipEmptyParts);
 
+    for (int i = 0; i < confList.count(); i++) {
+        qDebug() << confList.at(i);
+    }
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
-        if (confList.at(i).contains("." + mimetype)) {
+        if (confList.at(i).contains("." + mimetype + ":")) {
             if (confList.at(i).contains("true")) {
                 exist = true;
                 break;
