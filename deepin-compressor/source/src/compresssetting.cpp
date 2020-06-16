@@ -361,7 +361,7 @@ void CompressSetting::onNextButoonClicked()
     }
 
     qDebug() << m_splitnumedit->value();
-    if (m_splitnumedit->value() > 0) {
+    if (m_splitnumedit->value() > 0 && m_splitcompress->isChecked()) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
     //    if (!dialog.data()->compressionMethod().isEmpty()) {
@@ -617,6 +617,7 @@ void CompressSetting::onSplitChanged(int /*status*/)
         isSplitChecked = true;
     } else {
         m_splitnumedit->setEnabled(false);
+        m_splitnumedit->clear();
     }
 }
 
