@@ -691,7 +691,9 @@ void MainWindow::refreshPage()
 //            DDesktopServices::showFolder(QUrl(m_decompressfilepath, QUrl::TolerantMode));
 //        }
         if (m_isrightmenu) {
-            m_CompressSuccess->showfiledirSlot(false);
+            if (m_settingsDialog->isAutoOpen()) {
+                m_CompressSuccess->showfiledirSlot(false);
+            }
 //            DDesktopServices::showFolder(m_decompressfilepath);
             slotquitApp();
             return;
