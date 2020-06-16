@@ -46,6 +46,7 @@ public:
     void watchFileList(QStringList *strList)override;
 
     int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
+    
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 
@@ -62,6 +63,7 @@ private:
     QString  trans2uft8(const char *str);
 
     const char *passwordUnicode(const QString &strPassword);
+    bool verifyPassword(); //验证密码是否通过
 
     /*user minizip*/
     bool minizip_list(bool isbatch = false);

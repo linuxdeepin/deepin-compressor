@@ -77,6 +77,7 @@ public:
 
     bool isMultiVolume() const;
     int numberOfVolumes() const;
+    bool m_isckeckpsd = true; //验证密码
 
     /**
      * Returns whether the file can only be read.

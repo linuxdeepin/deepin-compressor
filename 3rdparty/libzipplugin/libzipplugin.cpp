@@ -146,6 +146,10 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list(bool /*isbatch*/)
 {
+        if (!verifyPassword()) {
+        return false;
+    }
+
     m_numberOfEntries = 0;
 
     int errcode = 0;
@@ -1749,6 +1753,116 @@ int LibzipPlugin::ChartDet_DetectingTextCoding(const char *str, QString &encodin
     detect_obj_free(&obj);
 
     return CHARDET_SUCCESS ;
+}
+
+bool LibzipPlugin::verifyPassword()
+{
+    m_isckeckpsd = false;
+    int errcode = 0;
+    zip_error_t err;
+
+    // Open archive.
+    QString fileName = filename();
+    zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);
+    zip_error_init_with_code(&err, errcode);
+    if (!archive) {
+        emit error(tr("Failed to open archive: %1"));
+        return false;
+    }
+
+    // Set password if known.
+    if (!password().isEmpty()) {
+        zip_set_default_password(archive, passwordUnicode(password()));
+    }
+    // Get number of archive entries.
+    //    const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : files.size();
+    //    zip_set_default_password(archive, passwordUnicode(QString("12")));
+    //    QString entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, 0, ZIP_FL_ENC_RAW)));
+    //    QByteArray  name;
+    //    QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
+    //    //qDebug() << m_codecstr;
+    //    if (codec) {
+    //        name = codec->fromUnicode(entry.toLocal8Bit());
+    //    } else {
+    //        name = entry.toLocal8Bit();
+    //    }
+    //    qDebug() << name.constData();
+
+    // Get number of archive entries.
+    const qint64 nofEntries = zip_get_num_entries(archive, 0);
+    //check password
+    for (qlonglong i = 0; i < nofEntries; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        QString entry;
+        entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+        const bool isDirectory = entry.endsWith(QDir::separator());
+        if (isDirectory) {
+            continue;
+        } else {
+            if ("windows-1252" == m_codecstr || "IBM855" == m_codecstr) {
+                m_codecstr = "GB18030";
+            }
+
+            QByteArray  name;
+            QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
+
+            if (codec) {
+                name = codec->fromUnicode(entry.toLocal8Bit());
+            } else {
+                name = entry.toLocal8Bit();
+            }
+
+            zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
+            if (zipFile) {
+                break;
+            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
+                if (m_extractionOptions.isBatchExtract()) {
+                    PasswordNeededQuery query(filename());
+                    emit userQuery(&query);
+                    query.waitForResponse();
+                    if (query.responseCancelled()) {
+                        setPassword(QString());
+                        emit cancelled();
+                        zip_close(archive);
+                        return false;
+                    }
+                    setPassword(query.password());
+                    if (zip_set_default_password(archive, passwordUnicode(password()))) {
+                    }
+
+                } else {
+                    emit sigExtractNeedPassword();
+                    setPassword(QString());
+                    zip_set_default_password(archive, passwordUnicode(password()));
+                    zip_close(archive);
+                    return false;
+                }
+
+            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+                qDebug() << zip_get_error(archive)->str << zip_get_error(archive)->zip_err << zip_get_error(archive)->sys_err;
+                emit error("wrong password");
+                if (m_extractionOptions.isBatchExtract()) {
+                    setPassword(QString());
+                    zip_close(archive);
+                    emit cancelled();
+                    return false;
+                } else {
+                    emit sigExtractNeedPassword();
+                }
+                setPassword(QString());
+                zip_set_default_password(archive, passwordUnicode(password()));
+                zip_close(archive);
+                return false;
+            }
+        }
+    }
+    //    //psd checked over,if psd right or no need psd,emit signal to show progress view.
+    //    emit sigExtractPwdCheckDown();
+    m_isckeckpsd = true;
+    zip_close(archive);
+    return true;
 }
 
 bool LibzipPlugin::minizip_list(bool /*isbatch*/)
