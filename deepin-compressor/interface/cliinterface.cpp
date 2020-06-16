@@ -418,10 +418,10 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit finished(true);
         }
     } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
-        qDebug() << "wrong password";
-        //emit error(tr("wrong password"));
-        emit error("wrong password");
-        setPassword(QString());
+        if (m_isPasswordPrompt || password().size() > 0) {
+            emit error("wrong password");
+            setPassword(QString());
+        }
         return;
     } else {
         emit progress(1.0);
@@ -1172,6 +1172,7 @@ bool CliInterface::handleLine(const QString &line)
 
     if (m_operationMode == List) {
         if (isPasswordPrompt(line)) {
+            m_isPasswordPrompt = true;
             qDebug() << "Found a password prompt" << m_isbatchlist;
 
             if (m_isbatchlist) {
