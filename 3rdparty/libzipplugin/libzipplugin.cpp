@@ -146,7 +146,7 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list(bool /*isbatch*/)
 {
-        if (!verifyPassword()) {
+    if (!verifyPassword()) {
         return false;
     }
 
@@ -784,7 +784,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             continue;
         } else {
             if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
-                    || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)) {
+                    || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)
+                    || ((QString)m_codecstr).contains("iso", Qt::CaseInsensitive)) {
                 m_codecstr = "GBK";
             }
 
