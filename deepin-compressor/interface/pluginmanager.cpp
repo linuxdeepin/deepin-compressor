@@ -183,6 +183,7 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 
     supported.remove(QStringLiteral("application/vnd.rar"));
     supported.remove(QStringLiteral("application/x-rar"));
+    supported.remove(QStringLiteral("application/octet-stream"));
 
     if (mode == SortByComment) {
         return sortByComment(supported);
