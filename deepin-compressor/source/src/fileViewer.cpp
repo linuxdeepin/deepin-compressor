@@ -866,7 +866,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
         qDebug() << pModel->fileInfo(m_indexmode).path() << m_indexmode.data();
     } else {
         m_pathindex--;
-        if (0 == m_pathindex) {
+        if (0 >= m_pathindex) {
             pTableViewFile->setRootIndex(QModelIndex());
             pTableViewFile->setPreviousButtonVisible(false);
             restoreHeaderSort(rootPathUnique);
@@ -877,7 +877,9 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
             m_indexmode = m_decompressmodel->parent(m_indexmode);
             pTableViewFile->setRootIndex(m_sortmodel->mapFromSource(m_indexmode));
             Archive::Entry *entry = m_decompressmodel->entryForIndex(m_indexmode);
-            restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
+            if (entry) {
+                restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
+            }
         }
     }
     emit  sigpathindexChanged();
