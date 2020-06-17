@@ -146,10 +146,6 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list(bool /*isbatch*/)
 {
-    if (!verifyPassword()) {
-        return false;
-    }
-
     m_numberOfEntries = 0;
 
     int errcode = 0;
@@ -163,6 +159,10 @@ bool LibzipPlugin::list(bool /*isbatch*/)
         //emit error(tr("Failed to open archive: %1"));
         //return false;
         return minizip_list();
+    }
+
+    if (!verifyPassword()) {
+        return false;
     }
 
     // Fetch archive comment.
@@ -1842,7 +1842,7 @@ bool LibzipPlugin::verifyPassword()
                 }
 
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-                qDebug() << zip_get_error(archive)->str << zip_get_error(archive)->zip_err << zip_get_error(archive)->sys_err;
+//                qDebug() << zip_get_error(archive)->str << zip_get_error(archive)->zip_err << zip_get_error(archive)->sys_err;
                 emit error("wrong password");
                 if (m_extractionOptions.isBatchExtract()) {
                     setPassword(QString());
