@@ -1150,6 +1150,7 @@ void MainWindow::WatcherFile(const QString &files)
     m_fileManager = new DFileWatcher(files, this);
     m_fileManager->startWatcher();
     qDebug() << m_fileManager->startWatcher() << "=" << files;
+    m_UnCompressPage->setRootPathIndex(); //解决解压后再次打开压缩包出现返回上一级
     connect(m_fileManager, &DFileWatcher::fileMoved, this, [ = ]() { //监控压缩包，重命名时提示
         DDialog *dialog = new DDialog(this);
         dialog->setFixedWidth(440);
