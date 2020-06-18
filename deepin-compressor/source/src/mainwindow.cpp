@@ -399,7 +399,11 @@ void MainWindow::InitConnection()
             qDebug() << fullpath;
             QFileInfo fileinfo(fullpath);
             if (fileinfo.exists()) {
-                DDesktopServices::showFileItem(fullpath);
+                if (fileinfo.isDir()) {
+                    DDesktopServices::showFolder(fullpath);
+                } else if (fileinfo.isFile()) {
+                    DDesktopServices::showFileItem(fullpath);
+                }
             }
         }
     });
