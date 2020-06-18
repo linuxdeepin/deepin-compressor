@@ -297,7 +297,7 @@ void LoadJob::doWork()
         ret = archiveInterface()->list(m_isbatch);
     }
 
-if (!archiveInterface()->waitForFinishedSignal() && archiveInterface()->m_isckeckpsd) {
+    if (!archiveInterface()->waitForFinishedSignal()) {
         // onFinished() needs to be called after onNewEntry(), because the former reads members set in the latter.
         // So we need to put it in the event queue, just like the single-thread case does by emitting finished().
         QTimer::singleShot(0, this, [ = ]() {
@@ -589,7 +589,7 @@ void ExtractJob::doWork()
     }
     bool ret = pTool->extractFiles(m_entries, m_destinationDir, m_options);
 
-    if (!pTool->waitForFinishedSignal() /*&& archiveInterface()->isUserCancel() == false*/) {
+    if (!pTool->waitForFinishedSignal() && pTool->m_isckeckpsd/*&& archiveInterface()->isUserCancel() == false*/) {
 //        onFinished(ret);
         emit pTool->finished(ret);
     }
