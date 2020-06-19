@@ -214,6 +214,8 @@ void Job::onFinished(bool result)
     qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
     if (m_archiveInterface && m_archiveInterface->isUserCancel()) {
         setError(KJob::KilledJobError);
+    } else if (m_archiveInterface && !m_archiveInterface->isCheckPsw()) {
+        setError(KJob::NopasswordError); //阻止解压zip加密包出现解压失败界面再出现输入密码界面
     } else if ((archive() && !archive()->isValid())  || false == result) {
         if (KJob::UserFilenameLong == error()) {
         } else {
@@ -589,7 +591,7 @@ void ExtractJob::doWork()
     }
     bool ret = pTool->extractFiles(m_entries, m_destinationDir, m_options);
 
-    if (!pTool->waitForFinishedSignal() && pTool->m_isckeckpsd/*&& archiveInterface()->isUserCancel() == false*/) {
+    if (!pTool->waitForFinishedSignal()/*&& archiveInterface()->isUserCancel() == false*/) {
 //        onFinished(ret);
         emit pTool->finished(ret);
     }

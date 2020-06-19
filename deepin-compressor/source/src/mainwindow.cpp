@@ -1371,6 +1371,10 @@ void MainWindow::slotExtractionDone(KJob *job)
         }
 
         m_pageid = PAGE_UNZIP_FAIL;
+        if (KJob::NopasswordError == errorCode) {
+            m_pageid = PAGE_ENCRYPTION;
+        }
+
         refreshPage();
         return;
     } else if (Encryption_TempExtract == m_encryptiontype) {
@@ -1892,7 +1896,7 @@ void MainWindow::deleteDecompressFile(QString destDirName)
                 fi.removeRecursively();
             }
         } else if (m_UnCompressPage->getDeFileCount() == 1) {
-            if (!m_model->archive()->isSingleFile()) { //单个文件还是多个
+            if (!m_model->archive()->isSingleFile()) { //单个文件还是文件夹
                 QDir fi(m_decompressfilepath + QDir::separator() + m_model->archive()->subfolderName());
 //                qDebug() << fi.dirName() << fi.exists();
                 if (fi.exists()) {

@@ -84,6 +84,9 @@ public:
         UserSkiped = 3,
         /*** File name is too long error */
         UserFilenameLong = 4,
+        /***Have not entered the password***/
+        NopasswordError,
+
         UserDefinedError = 100
     };
 

@@ -77,7 +77,6 @@ public:
 
     bool isMultiVolume() const;
     int numberOfVolumes() const;
-    bool m_isckeckpsd = true;
 
     /**
      * Returns whether the file can only be read.
@@ -184,6 +183,7 @@ public:
     virtual bool isLocked() const;
 
     virtual bool isUserCancel() const;
+    virtual bool isCheckPsw() const;
     bool isAnyFileExtracted() const;
 
     /**
@@ -264,6 +264,7 @@ private:
 protected:
     bool userCancel = false;
     bool bAnyFileExtracted = true; // 判断是否有文件被解压出来（可能由于文件已经存在被用户取消解压或跳过）
+    bool m_isckeckpsd = true;
 
 private Q_SLOTS:
     void onEntry(Archive::Entry *archiveEntry);
