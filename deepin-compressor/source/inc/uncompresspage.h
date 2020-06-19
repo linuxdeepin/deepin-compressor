@@ -82,7 +82,7 @@ private:
     Lib_Edit_Button *m_pathbutton;
     QString m_pathstr;
     ArchiveSortFilterModel *m_model;
-    EXTRACT_TYPE extractType;
+    EXTRACT_TYPE extractType = EXTRACT_TO;
 
     int m_width;
 
