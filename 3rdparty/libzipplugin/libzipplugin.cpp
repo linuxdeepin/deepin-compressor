@@ -801,6 +801,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
             //if zipFile return not 0,it sees normal，so break，then done extract; else，check why failed.
             if (zipFile) {
+                zip_fclose(zipFile);
                 break;
             } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
                 m_isckeckpsd = false; //阻止解压zip加密包出现解压失败界面再出现输入密码界面
@@ -1182,11 +1183,13 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
             if (readBytes < 0) {
                 emit error(tr("Failed to read data for entry: %1"));
                 file.close();
+                zip_fclose(zipFile);
                 return false;
             }
             if (out.writeRawData(buf, readBytes) != readBytes) {
                 emit error(tr("Failed to write data for entry: %1"));
                 file.close();
+                zip_fclose(zipFile);
                 return false;
             }
 
@@ -1231,6 +1234,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
         file.setPermissions(getPermissions(attributes >> 16));
         //extract = true;
         bAnyFileExtracted = true;
+
+        zip_fclose(zipFile);
+
     } else {
         //const auto index1 = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
         if (index == -1) {
@@ -1479,7 +1485,7 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
     QString detectedResult;
     float chardetconfidence = 0;
     ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
-   qDebug() << "chardet编码：" << detectedResult;
+    //qDebug() << "chardet编码：" << detectedResult;
     m_codecstr = detectedResult.toLatin1();
     if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
         m_codecstr = "UTF-8";
@@ -1724,7 +1730,7 @@ int LibzipPlugin::ChartDet_DetectingTextCoding(const char *str, QString &encodin
     DetectObj *obj = detect_obj_init();
 
     if (obj == nullptr) {
-        qDebug() << "Memory Allocation failed\n";
+        //qDebug() << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
 
@@ -1746,7 +1752,7 @@ int LibzipPlugin::ChartDet_DetectingTextCoding(const char *str, QString &encodin
     }
 
 #ifndef CHARDET_BOM_CHECK
-    qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+    //qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
 #else
     // from 1.0.6 support return whether exists BOM
     qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
