@@ -64,8 +64,31 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
-    if (argc >= 2 && (!w.checkSettings(argv[1]))) {
-        return  0;
+//    if (argc >= 2 && (!w.checkSettings(argv[1]))) {
+//        return  0;
+//    }
+    QString str = argv[argc - 1];
+
+    if (argc >= 2) {
+        if (argc >= 3) {
+            if (str != "extract_here" && str != "extract_here_multi" && str != "extract"
+                    && str != "extract_multi" && str != "compress" && str != "extract_here_split"
+                    && str != "extract_split") {
+                for (int i = 1; i < argc; i++) {
+                    QProcess p;
+                    QString command = "xdg-open";
+                    QStringList args;
+                    args.append(argv[i]);
+                    p.start(command, args);
+                    p.waitForFinished();
+                }
+                return 0;
+            }
+        }
+
+        if (!w.checkSettings(argv[1])) {
+            return 0;
+        }
     }
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
