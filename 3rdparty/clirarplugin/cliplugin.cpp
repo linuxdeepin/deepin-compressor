@@ -238,7 +238,9 @@ void CliPlugin::handleUnrar5Entry()
     compressionRatio.chop(1); // Remove the '%'
     e->setProperty("ratio", compressionRatio);
 
-    e->setProperty("timestamp", QDateTime::fromString(m_unrar5Details.value(QStringLiteral("mtime")), QStringLiteral("yyyy-MM-dd HH:mm:ss,zzz")));
+    QString dateTime = m_unrar5Details.value(QStringLiteral("mtime"));
+    QDateTime ts = QDateTime::fromString(dateTime.left((dateTime.length() - 10)), QStringLiteral("yyyy-MM-dd HH:mm:ss"));
+    e->setProperty("timestamp", ts);
 
     bool isDirectory = (m_unrar5Details.value(QStringLiteral("type")) == QLatin1String("Directory"));
     e->setProperty("isDirectory", isDirectory);
