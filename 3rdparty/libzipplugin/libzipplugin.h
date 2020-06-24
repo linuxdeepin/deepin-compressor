@@ -62,7 +62,7 @@ private:
     void detectAllfile(zip_t *archive, int num);
     QString  trans2uft8(const char *str);
 
-    const char *passwordUnicode(const QString &strPassword);
+    const char *passwordUnicode(const QString &strPassword, int iIndex);
 
     /*user minizip*/
     bool minizip_list(bool isbatch = false);
@@ -82,6 +82,8 @@ private:
     bool isWrongPassword = false;
     QString m_extractDestDir;
     QString m_extractFile;
+
+    QStringList m_listCodecs;
 };
 
 #endif // LIBZIPPLUGIN_H

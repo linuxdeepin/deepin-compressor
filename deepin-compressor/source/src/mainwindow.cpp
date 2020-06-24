@@ -2030,9 +2030,13 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QString path, EXTRACT_TYPE type)
 {
     m_timer.start();
-    QStringList m_tempFileList;
-    m_tempFileList.insert(0, path);
-    calSelectedTotalFileSize(m_tempFileList);
+//    QStringList m_tempFileList;
+//    m_tempFileList.insert(0, path);
+//    calSelectedTotalFileSize(m_tempFileList);
+    resetMainwindow();
+    foreach (Archive::Entry *p, fileList) {
+        selectedTotalFileSize += p->property("size").toLongLong();
+    }
     m_progressdialog->setProcess(0);
     m_Progess->setprogress(0);
     // m_progressTransFlag = false;

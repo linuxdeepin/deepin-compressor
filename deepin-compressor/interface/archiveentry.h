@@ -111,7 +111,7 @@ private:
     bool m_isDirectory;
     bool m_isPasswordProtected;
 
-    int m_iCompressIndex;
+    int m_iCompressIndex =  0;
 };
 
 QDebug  operator<<(QDebug d, const Archive::Entry &entry);
