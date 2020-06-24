@@ -51,6 +51,8 @@ void EncryptionPage::InitUI()
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
 
+    m_password->setFocusPolicy(Qt::StrongFocus);
+
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
     mainlayout->addWidget(pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
