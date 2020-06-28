@@ -1487,7 +1487,7 @@ void MainWindow::SlotExtractPassword(QString password)
         LoadPassword(password);
     } else if (Encryption_Extract == m_encryptiontype) {
         ExtractPassword(password);
-    } else if (Encryption_SingleExtract == m_encryptiontype || Encryption_TempExtract == m_encryptiontype || Encryption_TempExtract_Open_Choose == m_encryptiontype) {
+    } else if (Encryption_SingleExtract == m_encryptiontype || Encryption_TempExtract == m_encryptiontype || Encryption_TempExtract_Open_Choose == m_encryptiontype || Encryption_DRAG == m_encryptiontype) {
         ExtractSinglePassword(password);
     }
 }
