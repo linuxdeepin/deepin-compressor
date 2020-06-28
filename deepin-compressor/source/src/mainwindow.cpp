@@ -1459,7 +1459,11 @@ void MainWindow::slotExtractionDone(KJob *job)
 
 void MainWindow::slotShowPageUnzipProgress()
 {
-    if (m_encryptiontype != Encryption_SingleExtract && m_encryptiontype != Encryption_DRAG) {
+    if (Encryption_TempExtract_Open_Choose == m_encryptiontype || Encryption_TempExtract == m_encryptiontype) {
+        m_pageid = PAGE_LOADING;
+        m_Progess->settype(DECOMPRESSING);
+        refreshPage();
+    } else if (m_encryptiontype != Encryption_SingleExtract && m_encryptiontype != Encryption_DRAG) {
         m_pageid = PAGE_UNZIPPROGRESS;
         refreshPage();
     }
