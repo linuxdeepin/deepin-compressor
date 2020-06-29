@@ -536,6 +536,10 @@ bool Utils::deleteDir(const QString &iFilePath)
 QString Utils::readConf()
 {
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir dir;
+    if (!dir.exists(confDir + QDir::separator())) {
+        dir.mkpath(confDir + QDir::separator());
+    }
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
 

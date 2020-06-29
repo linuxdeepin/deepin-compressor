@@ -99,9 +99,9 @@ SettingDialog::SettingDialog(QWidget *parent):
                       << "file_association.file_association_type.zip";
 
     m_valuelist.clear();
-    readFromConfbf();//fill m_data;
     initUI();
     initConnect();
+    readFromConfbf();//fill m_data;
 
     if (m_data.isEmpty() == true) {
         foreach (QString key, m_associtionlist) {
@@ -322,6 +322,10 @@ void SettingDialog::done(int status)
 void SettingDialog::readFromConfbf()
 {
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir dir;
+    if (!dir.exists(confDir + QDir::separator())) {
+        dir.mkpath(confDir + QDir::separator());
+    }
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile file(confPath);
 
@@ -361,6 +365,10 @@ void SettingDialog::readFromConfbf()
 void SettingDialog::writeToConfbf()
 {
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir dir;
+    if (!dir.exists(confDir + QDir::separator())) {
+        dir.mkpath(confDir + QDir::separator());
+    }
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
 
     QFile file(confPath);
