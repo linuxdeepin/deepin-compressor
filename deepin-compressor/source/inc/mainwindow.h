@@ -260,6 +260,8 @@ private:
     qint64 compressTime = 0;
     QString program;
 
+    QString m_strArchivePath;       // The path of the compressed package
+
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

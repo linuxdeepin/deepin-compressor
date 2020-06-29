@@ -844,7 +844,9 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 iCodecIndex++;
                 if (iCodecIndex == m_listCodecs.size()) {
                     return false;
-                } 
+                } else {
+                    i--;
+                }
                 zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
                 bPasswordRight = false;
 
