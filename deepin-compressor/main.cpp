@@ -64,16 +64,13 @@ int main(int argc, char *argv[])
     MainWindow w;
     app.setMainWindow(&w);
 
-//    if (argc >= 2 && (!w.checkSettings(argv[1]))) {
-//        return  0;
-//    }
-    QString str = argv[argc - 1];
+    QString lastStr = argv[argc - 1];
 
     if (argc >= 2) {
         if (argc >= 3) {
-            if (str != "extract_here" && str != "extract_here_multi" && str != "extract"
-                    && str != "extract_multi" && str != "compress" && str != "extract_here_split"
-                    && str != "extract_split") {
+            if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
+                    && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
+                    && lastStr != "extract_split_multi") {
                 for (int i = 1; i < argc; i++) {
                     QProcess p;
                     QString command = "xdg-open";
