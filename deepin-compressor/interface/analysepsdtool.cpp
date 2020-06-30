@@ -137,6 +137,10 @@ void AnalyseTool7Z::analyseLine(const QString &line)
                 }
             }
         }
+    } else if (line.left(16) == EVERYOK) {             //right psd
+        (*pMapInfo)[RIGHTPSD]->line = line;
+        (*pMapInfo)[RIGHTPSD]->read = true;
+        return;
     }
 }
 
