@@ -2291,6 +2291,7 @@ void MainWindow::slotBackButtonClicked()
     resetMainwindow();
 
     slotResetPercentAndTime();
+    m_encryptionpage->resetPage();
     m_CompressSuccess->clear();
 
     if (m_pageid == PAGE_ZIP_SUCCESS || m_pageid == PAGE_UNZIP_SUCCESS) {
