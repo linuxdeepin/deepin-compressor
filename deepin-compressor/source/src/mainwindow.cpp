@@ -531,8 +531,6 @@ void MainWindow::dragLeaveEvent(QDragLeaveEvent *e)
 
 void MainWindow::dropEvent(QDropEvent *e)
 {
-    m_strArchivePath.clear();
-
     auto *const mime = e->mimeData();
 
     if (false == mime->hasUrls()) {
@@ -837,7 +835,6 @@ void MainWindow::onSelected(const QStringList &files)
                 m_UnCompressPage->setdefaultpath(fileinfo.path());
             }
 
-            m_strArchivePath = fileinfo.absolutePath();
             loadArchive(filename);
         } else {
             DDialog *dialog = new DDialog(this);
@@ -901,7 +898,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_isrightmenu = true;
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        m_strArchivePath = fileinfo.absolutePath();
         m_UnCompressPage->setdefaultpath(fileinfo.path());
         loadArchive(files.at(0));
 //        m_pageid = PAGE_UNZIPPROGRESS;
@@ -947,7 +943,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_decompressfilename = fileinfo.fileName();
-        m_strArchivePath = fileinfo.absolutePath();
         if ("" != m_settingsDialog->getCurExtractPath() && m_UnCompressPage->getExtractType() != EXTRACT_HEAR) {
             m_UnCompressPage->setdefaultpath(m_settingsDialog->getCurExtractPath());
         } else {
@@ -2064,7 +2059,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         m_encryptiontype =  Encryption_DRAG;
     } else if (type == EXTRACT_HEAR) {
         m_encryptiontype = Encryption_SingleExtract;
-        m_pathstore = m_strArchivePath;
+        m_pathstore = QFileInfo(m_model->archive()->fileName()).absolutePath();
     } else {
         m_encryptiontype = Encryption_SingleExtract;
     }
