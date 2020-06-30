@@ -6,9 +6,9 @@
 #include <archive.h>
 
 #include <QScopedPointer>
+#include <QProcess>
 
-struct FileProgressInfo
-{
+struct FileProgressInfo {
     float fileProgressProportion = 0.0;
     float fileProgressStart;
     float totalFileSize;
@@ -71,6 +71,8 @@ private Q_SLOTS:
 private:
     int extractionFlags() const;
     QString convertCompressionName(const QString &method);
+    bool list_New(bool isbatch = false);
+    void deleteTempTarPkg(const QStringList &tars);
 
     int m_cachedArchiveEntryCount;
     qlonglong m_currentExtractedFilesSize = 0;
@@ -79,6 +81,7 @@ private:
     QVector<Archive::Entry *> m_emittedEntries;
     QString m_oldWorkingDir;
     QString m_extractDestDir;
+    QStringList m_tars;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

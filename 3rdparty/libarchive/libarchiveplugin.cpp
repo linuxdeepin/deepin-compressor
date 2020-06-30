@@ -1,17 +1,20 @@
 #include "libarchiveplugin.h"
 #include "queries.h"
 
-//#include <KLocalizedString>
-
 #include <QThread>
 #include <QFileInfo>
 #include <QDir>
 #include <QTextCodec>
 #include <QMimeDatabase>
+#include <QRegularExpression>
+#include <QStandardPaths>
+
 #include <KEncodingProber>
 
-#include <QRegularExpression>
 #include <archive_entry.h>
+#include <kprocess.h>
+
+
 #include "../common/common.h"
 
 /*static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
@@ -118,46 +121,34 @@ LibarchivePlugin::~LibarchivePlugin()
         // Entries might be passed to pending slots, so we just schedule their deletion.
         e->deleteLater();
     }
+
+    deleteTempTarPkg(m_tars);
 }
 
 bool LibarchivePlugin::list(bool /*isbatch*/)
 {
+    QFileInfo fInfo(filename());
+    QString fileName = fInfo.fileName();
+    if (fileName.endsWith("tar.bz2") || fileName.endsWith("tar.lzma") || fileName.endsWith("tar.Z")) {
+        QString fileName = fInfo.fileName();
+        QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QString tempFileName = tempFilePath + QDir::separator() + fileName.left(fileName.size() - fInfo.suffix().size() - 1);
 
-    if (!initializeReader()) {
-        return false;
-    }
+        QString commandLine = QString("%1%2%3%4").arg("7z x ").arg(filename()).arg(" -aoa -o").arg(tempFilePath);
 
-    QString compMethod = convertCompressionName(QString::fromUtf8(archive_filter_name(m_archiveReader.data(), 0)));
-    if (!compMethod.isEmpty()) {
-        emit compressionMethodFound(compMethod);
-    }
-
-    m_cachedArchiveEntryCount = 0;
-    m_extractedFilesSize = 0;
-    m_numberOfEntries = 0;
-    auto compressedArchiveSize = QFileInfo(filename()).size();
-
-    struct archive_entry *aentry;
-    int result = ARCHIVE_RETRY;
-
-    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
-        if (!m_emitNoEntries) {
-            emitEntryFromArchiveEntry(aentry);
+        QProcess cmd;
+        cmd.start(commandLine);
+        if (cmd.waitForFinished(-1)) {
+            setFileName(tempFileName);
+            if (!m_tars.contains(tempFileName)) {
+                m_tars.push_back(tempFileName);
+            }
+            return list_New();
         }
-
-        m_extractedFilesSize += (qlonglong)archive_entry_size(aentry);
-
-        emit progress(float(archive_filter_bytes(m_archiveReader.data(), -1)) / float(compressedArchiveSize));
-
-        m_cachedArchiveEntryCount++;
-        archive_read_data_skip(m_archiveReader.data());
-    }
-
-    if (result != ARCHIVE_EOF) {
         return false;
+    } else {
+        return list_New();
     }
-
-    return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
 }
 
 bool LibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
@@ -625,7 +616,6 @@ void LibarchivePlugin::slotRestoreWorkingDir()
     }
 
     if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
-        qDebug() << "=====点击了取消";
         if (this->ifReplaceTip == true) {
             return;
         }
@@ -666,6 +656,60 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
         return QStringLiteral("Zstandard");
     }
     return QString();
+}
+
+bool LibarchivePlugin::list_New(bool /*isbatch*/)
+{
+    if (!initializeReader()) {
+        return false;
+    }
+
+    QString compMethod = convertCompressionName(QString::fromUtf8(archive_filter_name(m_archiveReader.data(), 0)));
+    if (!compMethod.isEmpty()) {
+        emit compressionMethodFound(compMethod);
+    }
+
+    m_cachedArchiveEntryCount = 0;
+    m_extractedFilesSize = 0;
+    m_numberOfEntries = 0;
+    auto compressedArchiveSize = QFileInfo(filename()).size();
+
+    struct archive_entry *aentry;
+    int result = ARCHIVE_RETRY;
+
+    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
+        if (!m_emitNoEntries) {
+            emitEntryFromArchiveEntry(aentry);
+        }
+
+        m_extractedFilesSize += (qlonglong)archive_entry_size(aentry);
+
+        emit progress(float(archive_filter_bytes(m_archiveReader.data(), -1)) / float(compressedArchiveSize));
+
+        m_cachedArchiveEntryCount++;
+        archive_read_data_skip(m_archiveReader.data());
+    }
+
+    if (result != ARCHIVE_EOF) {
+        return false;
+    }
+
+    return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
+}
+
+void LibarchivePlugin::deleteTempTarPkg(const QStringList &tars)
+{
+    if (tars.size() > 0) {
+        Q_FOREACH (const QString &tar, tars) {
+            QProcess p;
+            QString command = "rm";
+            QStringList args;
+            args.append("-fr");
+            args.append(tar);
+            p.execute(command, args);
+            p.waitForFinished(-1);
+        }
+    }
 }
 
 void LibarchivePlugin::cleanIfCanceled()

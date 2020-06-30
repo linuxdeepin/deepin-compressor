@@ -64,6 +64,11 @@ QString ReadOnlyArchiveInterface::filename() const
     return m_filename;
 }
 
+void ReadOnlyArchiveInterface::setFileName(const QString &name)
+{
+    m_filename = name;
+}
+
 QString ReadOnlyArchiveInterface::comment() const
 {
     return m_comment;

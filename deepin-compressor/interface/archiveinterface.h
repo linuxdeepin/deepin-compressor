@@ -64,6 +64,7 @@ public:
      * Returns the filename of the archive currently being handled.
      */
     QString filename() const;
+    void setFileName(const QString &name);
 
     /**
      * Returns the comment of the archive.
