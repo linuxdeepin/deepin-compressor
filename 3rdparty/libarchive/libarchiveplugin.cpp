@@ -127,6 +127,8 @@ LibarchivePlugin::~LibarchivePlugin()
 
 bool LibarchivePlugin::list(bool /*isbatch*/)
 {
+    strOldFileName = filename();
+
     QFileInfo fInfo(filename());
     QString fileName = fInfo.fileName();
     if (fileName.endsWith("tar.bz2") || fileName.endsWith("tar.lzma") || fileName.endsWith("tar.Z")) {
@@ -134,10 +136,12 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
         QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
         QString tempFileName = tempFilePath + QDir::separator() + fileName.left(fileName.size() - fInfo.suffix().size() - 1);
 
-        QString commandLine = QString("%1%2%3%4").arg("7z x ").arg(filename()).arg(" -aoa -o").arg(tempFilePath);
+        //QString commandLine = QString("%1%2%3%4").arg("7z x ").arg(filename()).arg(" -aoa -o").arg(tempFilePath);
+        QStringList listArgs;
+        listArgs << "x" << filename() << "-aoa" << "-o" + tempFilePath;
 
         QProcess cmd;
-        cmd.start(commandLine);
+        cmd.start("/usr/bin/7z", listArgs);
         if (cmd.waitForFinished(-1)) {
             setFileName(tempFileName);
             if (!m_tars.contains(tempFileName)) {
@@ -694,6 +698,7 @@ bool LibarchivePlugin::list_New(bool /*isbatch*/)
         return false;
     }
 
+    setFileName(strOldFileName);
     return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
 }
 

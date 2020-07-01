@@ -82,6 +82,8 @@ private:
     QString m_oldWorkingDir;
     QString m_extractDestDir;
     QStringList m_tars;
+
+    QString strOldFileName;
 };
 
 #endif // LIBARCHIVEPLUGIN_H
