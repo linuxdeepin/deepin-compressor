@@ -46,6 +46,7 @@ ArchiveModel::ArchiveModel(QObject *parent)
     , m_numberOfFiles(0)
     , m_numberOfFolders(0)
     , m_fileEntryListed(false)
+    , m_plugin(nullptr)
 {
     initRootEntry();
 
@@ -93,7 +94,8 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    //return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
@@ -157,7 +159,7 @@ Qt::ItemFlags ArchiveModel::flags(const QModelIndex &index) const
 QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
 {
     if (role == Qt::DisplayRole) {
-        if (section >= m_showColumns.size()) {
+        if (section >= m_showColumns.size() || section < 0) {
             qDebug() << "WEIRD: showColumns.size = " << m_showColumns.size()
                      << " and section = " << section;
             return QVariant();
@@ -615,9 +617,9 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     if (entry) {
         entry->copyMetaData(receivedEntry);
         entry->setProperty("fullPath", entryFileName);
-        if (!entry->isDir()) {
-            insertEntry(entry, behaviour);
-        }
+        /*      if (!entry->isDir()) {
+                  insertEntry(entry, behaviour);
+              } */
     } else {
         receivedEntry->setParent(parent);
         insertEntry(receivedEntry, behaviour);
@@ -642,6 +644,20 @@ void ArchiveModel::slotLoadingFinished(KJob *job)
 
     if (m_showColumns.size() > 0) {
         m_tableview->sortByColumn(0, Qt::AscendingOrder);
+    }
+
+    //refresh entry file count
+    for (int i = 0 ; i < rowCount(); ++i) {
+        QModelIndex  mIndex = index(i, 0);
+        Archive::Entry *pEntry = entryForIndex(mIndex);
+        if (pEntry && pEntry->isDir()) {
+            qlonglong sizeVal = pEntry->property("size").value<qulonglong>();
+            if (!sizeVal) {
+                if (ReadOnlyArchiveInterface *pInterface = getPlugin()) {
+                    pInterface->RefreshEntryFileCount(pEntry);
+                }
+            }
+        }
     }
 }
 
@@ -703,6 +719,9 @@ KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QO
     connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
     connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
     connect(loadJob, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+
+    setPlugin(loadJob->archiveInterface());
+    connect(loadJob->archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &ArchiveModel::slotListEntry);
 
     emit loadingStarted();
 
@@ -918,6 +937,11 @@ const QHash<QString, QIcon> ArchiveModel::entryIcons() const
     return m_entryIcons;
 }
 
+ReadOnlyArchiveInterface *ArchiveModel::getPlugin()
+{
+    return  m_plugin;
+}
+
 void ArchiveModel::slotCleanupEmptyDirs()
 {
     QList<QPersistentModelIndex> queue;
@@ -987,6 +1011,11 @@ void ArchiveModel::traverseAndCountDirNode(Archive::Entry *dir)
             m_uncompressedSize += entry->property("size").toULongLong();
         }
     }
+}
+
+void ArchiveModel::setPlugin(ReadOnlyArchiveInterface *interface)
+{
+    m_plugin = interface;
 }
 
 qulonglong ArchiveModel::numberOfFiles() const

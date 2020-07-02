@@ -140,8 +140,9 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
         QStringList listArgs;
         listArgs << "x" << filename() << "-aoa" << "-o" + tempFilePath;
 
+        QString strProgram = QStandardPaths::findExecutable("7z");
         QProcess cmd;
-        cmd.start("/usr/bin/7z", listArgs);
+        cmd.start(strProgram, listArgs);
         if (cmd.waitForFinished(-1)) {
             setFileName(tempFileName);
             if (!m_tars.contains(tempFileName)) {

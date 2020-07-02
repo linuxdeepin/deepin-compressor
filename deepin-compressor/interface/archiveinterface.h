@@ -205,6 +205,19 @@ public:
      */
 //    virtual void timerEnd() = 0;
     virtual void watchFileList(QStringList *strList) = 0;
+
+    /**
+     * show the package first level entry
+     * @brief the input param is entry full path
+     */
+    virtual void showEntryListFirstLevel(const QString &directory) {}
+
+    /**
+     * current directory entry file count
+     * @brief the input param is entry file
+     */
+    virtual void RefreshEntryFileCount(Archive::Entry *file) {}
+
 public:
     QString extractTopFolderName;
     QString destDirName;        //取消解压，需要该变量
@@ -310,6 +323,7 @@ public:
 
     static void clearPath(QString path);
     virtual void watchFileList(QStringList *strList)override;
+
 Q_SIGNALS:
     void entryRemoved(const QString &path);
 

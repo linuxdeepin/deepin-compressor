@@ -42,7 +42,8 @@
 #include "logviewheaderview.h"
 #include "mimetypes.h"
 #include "mainwindow.h"
-#include "openwithdialog/openwithdialog.h"
+#include "archiveinterface.h"
+
 
 
 const QString rootPathUnique = "_&_&_&_";
@@ -701,6 +702,14 @@ void fileViewer::openTempFile(QString path)
     cmdprocess->start();
 }
 
+void fileViewer::combineEntryDirectory(Archive::Entry *entry, QString &pathstr)
+{
+    if (!entry || entry->name().isEmpty()) return;
+    QString tempPathStr = QString("%1%2").arg(entry->name()).arg("/");
+    pathstr = tempPathStr + pathstr;
+    combineEntryDirectory(entry->getParent(), pathstr);
+}
+
 void fileViewer::resetTempFile()
 {
     openFileTempLink = 0;
@@ -1040,6 +1049,16 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 m_pathindex++;
                 m_indexmode = sourceindex;
                 Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+
+                if (!entry) {
+                    return;
+                }
+                QString pathstr = "";
+                combineEntryDirectory(entry, pathstr);
+                if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
+                    pinterface->showEntryListFirstLevel(pathstr);
+                }
+
                 restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
                 if (0 == entry->entries().count()) {
                     showPlable();
@@ -1056,6 +1075,16 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             m_pathindex++;
             m_indexmode = sourceindex;
             Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+
+            if (!entry) {
+                return;
+            }
+            QString pathstr = "";
+            combineEntryDirectory(entry, pathstr);
+            if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
+                pinterface->showEntryListFirstLevel(pathstr);
+            }
+
             restoreHeaderSort(zipPathUnique + MainWindow::getLoadFile() + "/" + entry->fullPath());
             if (0 == entry->entries().count()) {
                 showPlable();
