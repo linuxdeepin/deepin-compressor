@@ -88,7 +88,11 @@ void UnCompressPage::oneCompressPress()
     bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
 
     if (!m_permission) {
-        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
+        if (!m_fileDestinationPath.exists()) {
+            showWarningDialog(tr("The default extraction path does not exist, please retry"));
+        } else {
+            showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
+        }
         return;
     } else {
         emit sigDecompressPress(m_pathstr);
@@ -153,7 +157,7 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 //    dialog->setMessage(msg);
-    dialog->addSpacing(32);
+//    dialog->addSpacing(32);
     dialog->addButton(tr("OK"));
     dialog->setMinimumSize(380, 140);
     DLabel *pContent = new DLabel(msg, dialog);
@@ -162,8 +166,18 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
-    pContent->setMinimumWidth(this->width());
-    pContent->move(dialog->width() / 2 - pContent->width() / 2, dialog->height() / 2 - pContent->height() / 2 - 10);
+//    pContent->setMinimumWidth(this->width());
+//    pContent->move(dialog->width() / 2 - pContent->width() / 2, dialog->height() / 2 - pContent->height() / 2 - 10);
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(pContent, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(15);
+
+    DWidget *widget = new DWidget(dialog);
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
     int res = dialog->exec();
     delete dialog;
 

@@ -63,7 +63,6 @@ int main(int argc, char *argv[])
     // init modules.
     MainWindow w;
     app.setMainWindow(&w);
-    w.showNormal();
 
     QString lastStr = argv[argc - 1];
 
@@ -126,6 +125,7 @@ int main(int argc, char *argv[])
         QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
     }
 
+    w.showNormal();
     w.show();
 
 
