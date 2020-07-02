@@ -2441,8 +2441,8 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
                 folderAppendStr += fileDirs[i] + "/";
                 setEntryData(statBuffer, index, folderAppendStr);
                 m_listMap.insert(folderAppendStr, qMakePair(statBuffer, index));
-                ++index;
             }
+            ++index;
             m_DirRecord = name;
         } else if (name.count("/") == 0) {
             setEntryData(statBuffer, index, name);
@@ -2466,8 +2466,8 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
                 }
 
                 m_listMap.insert(folderAppendStr, qMakePair(statBuffer, index));
-                ++index;
             }
+            ++index;
         }
     } else {
         if (name.left(m_DirRecord.size()) == m_DirRecord) {
