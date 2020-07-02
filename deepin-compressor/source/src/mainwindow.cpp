@@ -2038,9 +2038,24 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 //    m_tempFileList.insert(0, path);
 //    calSelectedTotalFileSize(m_tempFileList);
     resetMainwindow();
-    foreach (Archive::Entry *p, fileList) {
-        selectedTotalFileSize += p->property("size").toLongLong();
+
+    if (m_model->archive()->fileName().endsWith(".zip")) {
+        if (ReadOnlyArchiveInterface *pinterface = m_model->getPlugin()) {
+            if (pinterface->isAllEntry()) {
+                foreach (Archive::Entry *p, fileList) {
+                    selectedTotalFileSize += p->property("size").toLongLong();
+                }
+            } else {
+                selectedTotalFileSize = pinterface->extractSize(fileList);
+            }
+        }
+    } else {
+        foreach (Archive::Entry *p, fileList) {
+            selectedTotalFileSize += p->property("size").toLongLong();
+        }
     }
+
+
     m_progressdialog->setProcess(0);
     m_Progess->setprogress(0);
     // m_progressTransFlag = false;
@@ -2085,6 +2100,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     }
 
     m_encryptionjob = m_model->extractFiles(fileList, destinationDirectory, options);
+    //m_model->getPlugin();
 
     if (this->m_pWatcher == nullptr) {
         this->m_pWatcher = new TimerWatcher();

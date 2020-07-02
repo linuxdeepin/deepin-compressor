@@ -205,10 +205,36 @@ public:
      */
 //    virtual void timerEnd() = 0;
     virtual void watchFileList(QStringList *strList) = 0;
+
+    /**
+     * show the package first level entry
+     * @brief the input param is entry full path
+     */
+    virtual void showEntryListFirstLevel(const QString &/*directory*/) {}
+
+    /**
+     * current directory entry file count
+     * @brief the input param is entry file
+     */
+    virtual void RefreshEntryFileCount(Archive::Entry */*file*/) {}
+
+    /**
+     * Determine if partial extraction passes all Entry
+     *
+     */
+    virtual bool isAllEntry() {return m_bAllEntry;}
+
+    /**
+     * Get unzip size
+     *
+     */
+    virtual qint64 extractSize(const QVector<Archive::Entry *> &/*files*/) {return 0;}
+
 public:
     QString extractTopFolderName;
     QString destDirName;        //取消解压，需要该变量
     bool ifReplaceTip = false;  //是否有替换提示
+    bool m_bAllEntry = true;           // 是否传递 所有entry
     ExtractPsdStatus extractPsdStatus = ReadOnlyArchiveInterface::Default;
 Q_SIGNALS:
 

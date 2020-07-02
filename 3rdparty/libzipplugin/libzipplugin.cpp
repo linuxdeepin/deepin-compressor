@@ -155,9 +155,11 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     QString fileName = filename();
     zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);
     zip_error_init_with_code(&err, errcode);
+    m_bAllEntry = false;
     if (!archive) {
         //emit error(tr("Failed to open archive: %1"));
         //return false;
+        m_bAllEntry = true;
         return minizip_list();
     }
 
@@ -505,101 +507,11 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         return false;
     }
 
-    auto e = new Archive::Entry();
-
-    e->setCompressIndex(index);
-
-    if (statBuffer.valid & ZIP_STAT_NAME) {
-        // e->setFullPath(statBuffer.name);
-        e->setFullPath(trans2uft8(statBuffer.name));
+    QString name = trans2uft8(statBuffer.name);
+    setEntryVal(statBuffer, m_indexCount, name, m_DirRecord);
+    if (m_listMap.find(name) == m_listMap.end()) {
+        m_listMap.insert(name, qMakePair(statBuffer, index));
     }
-
-    if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {
-        e->setProperty("isDirectory", true);
-    }
-
-    if (statBuffer.valid & ZIP_STAT_MTIME) {
-        e->setProperty("timestamp", QDateTime::fromTime_t(statBuffer.mtime));
-    }
-    if (statBuffer.valid & ZIP_STAT_SIZE) {
-        e->setProperty("size", (qulonglong)statBuffer.size);
-    }
-    if (statBuffer.valid & ZIP_STAT_COMP_SIZE) {
-        e->setProperty("compressedSize", (qlonglong)statBuffer.comp_size);
-    }
-    if (statBuffer.valid & ZIP_STAT_CRC) {
-        if (!e->isDir()) {
-            e->setProperty("CRC", QString::number((qulonglong)statBuffer.crc, 16).toUpper());
-        }
-    }
-    if (statBuffer.valid & ZIP_STAT_COMP_METHOD) {
-        switch (statBuffer.comp_method) {
-        case ZIP_CM_STORE:
-            e->setProperty("method", QStringLiteral("Store"));
-            emit compressionMethodFound(QStringLiteral("Store"));
-            break;
-        case ZIP_CM_DEFLATE:
-            e->setProperty("method", QStringLiteral("Deflate"));
-            emit compressionMethodFound(QStringLiteral("Deflate"));
-            break;
-        case ZIP_CM_DEFLATE64:
-            e->setProperty("method", QStringLiteral("Deflate64"));
-            emit compressionMethodFound(QStringLiteral("Deflate64"));
-            break;
-        case ZIP_CM_BZIP2:
-            e->setProperty("method", QStringLiteral("BZip2"));
-            emit compressionMethodFound(QStringLiteral("BZip2"));
-            break;
-        case ZIP_CM_LZMA:
-            e->setProperty("method", QStringLiteral("LZMA"));
-            emit compressionMethodFound(QStringLiteral("LZMA"));
-            break;
-        case ZIP_CM_XZ:
-            e->setProperty("method", QStringLiteral("XZ"));
-            emit compressionMethodFound(QStringLiteral("XZ"));
-            break;
-        }
-    }
-    if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
-        if (statBuffer.encryption_method != ZIP_EM_NONE) {
-            e->setProperty("isPasswordProtected", true);
-            switch (statBuffer.encryption_method) {
-            case ZIP_EM_TRAD_PKWARE:
-                emit encryptionMethodFound(QStringLiteral("ZipCrypto"));
-                break;
-            case ZIP_EM_AES_128:
-                emit encryptionMethodFound(QStringLiteral("AES128"));
-                break;
-            case ZIP_EM_AES_192:
-                emit encryptionMethodFound(QStringLiteral("AES192"));
-                break;
-            case ZIP_EM_AES_256:
-                emit encryptionMethodFound(QStringLiteral("AES256"));
-                break;
-            }
-        }
-    }
-
-    // Read external attributes, which contains the file permissions.
-    zip_uint8_t opsys;
-    zip_uint32_t attributes;
-    if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-        emit error(tr("Failed to read metadata for entry: %1"));
-        return false;
-    }
-
-    // Set permissions.
-    switch (opsys) {
-    case ZIP_OPSYS_UNIX:
-        // Unix permissions are stored in the leftmost 16 bits of the external file attribute.
-        e->setProperty("permissions", permissionsToString(attributes >> 16));
-        break;
-    default:    // TODO: non-UNIX.
-        break;
-    }
-
-    emit entry(e);
-    m_emittedEntries << e;
 
     return true;
 }
@@ -773,8 +685,31 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
     }
 
+
+    /*********************************************/
+//    QString strRootNode;
+//    QList<int > listIndex;
+//    for (Archive::Entry *e : files) {
+//        QString strPath = e->fullPath();
+//        strRootNode = e->rootNode;
+//        auto iter = m_listMap.find(strPath);
+//        for (; iter != m_listMap.end();) {
+//            if (!iter.key().startsWith(strPath)) {
+//                break;
+//            } else {
+//                int iIndex = iter.value().second;
+//                if (!listIndex.contains(iIndex))
+//                    listIndex << iIndex;
+//                ++iter;
+//            }
+//        }
+//    }
+
+//    qSort(listIndex.begin(), listIndex.end());
+
+
     // Get number of archive entries.
-    const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : files.size();
+    const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : m_listExtractIndex.size();
     //check password
 
     bool bPasswordRight = false;
@@ -790,9 +725,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 iIndex = i;
                 entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
             } else {
-                trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-                iIndex = files[i]->compressIndex();
-                entry = files.at(i)->fullPath();
+                iIndex = m_listExtractIndex[i];
+                entry = trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
             }
 
             const bool isDirectory = entry.endsWith(QDir::separator());
@@ -860,82 +794,6 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         return false;
     }
 
-//    for (qlonglong i = 0; i < nofEntries; i++) {
-//        if (QThread::currentThread()->isInterruptionRequested()) {
-//            break;
-//        }
-//        QString entry;
-//        if (extractAll) {
-//            entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
-//        } else {
-//            trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
-//            entry = files.at(i)->fullPath();
-//        }
-//        const bool isDirectory = entry.endsWith(QDir::separator());
-//        if (isDirectory) {
-//            continue;
-//        } else {
-//            if (((QString)m_codecstr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("IBM", Qt::CaseInsensitive)
-//                    || ((QString)m_codecstr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecstr).contains("Big5", Qt::CaseInsensitive)
-//                    || ((QString)m_codecstr).contains("iso", Qt::CaseInsensitive)) {
-//                m_codecstr = "GBK";
-//            }
-
-//            QByteArray  name;
-
-//            QTextCodec *codec = QTextCodec::codecForName(m_codecstr);
-//            //qDebug() << m_codecstr;
-//            if (codec) {
-//                name = codec->fromUnicode(entry.toLocal8Bit());
-//            } else {
-//                name = entry.toLocal8Bit();
-//            }
-//            zip_file *zipFile = zip_fopen(archive, name.constData(), 0);
-//            //if zipFile return not 0,it sees normal，so break，then done extract; else，check why failed.
-//            if (zipFile) {
-//                zip_fclose(zipFile);
-//                break;
-//            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
-//                m_isckeckpsd = false; //阻止解压zip加密包出现解压失败界面再出现输入密码界面
-//                if (m_extractionOptions.isBatchExtract()) {
-//                    PasswordNeededQuery query(filename());
-//                    emit userQuery(&query);
-//                    query.waitForResponse();
-//                    if (query.responseCancelled()) {
-//                        setPassword(QString());
-//                        emit cancelled();
-//                        return false;
-//                    }
-//                    setPassword(query.password());
-//                    if (zip_set_default_password(archive, passwordUnicode(password(), 0))) {
-//                    }
-
-//                } else {
-//                    emit sigExtractNeedPassword();
-//                    setPassword(QString());
-//                    zip_set_default_password(archive, passwordUnicode(password(), 0));
-//                    return false;
-//                }
-
-//            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-//                m_isckeckpsd = true;
-//                if (m_extractionOptions.isBatchExtract()) {
-//                    setPassword(QString());
-//                    emit cancelled();
-//                    return false;
-//                } else {
-//                    emit sigExtractNeedPassword();
-//                }
-//                setPassword(QString());
-//                zip_set_default_password(archive, passwordUnicode(password(), 0));
-//                return false;
-//            } /*else {
-//                emit error(tr("Failed to open '%1':<nl/>%2"));
-//                return false;
-//            }*/
-
-//        }
-//    }
 //psd checked over,if psd right or no need psd,emit signal to show progress view.
     emit sigExtractPwdCheckDown();
     m_isckeckpsd = true;
@@ -995,37 +853,30 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     } else {
         // We extract only the entries in files.
         qulonglong i = 0;
-        for (Archive::Entry *e : files) {
+        for (int index : m_listExtractIndex) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
 
-//            std::function<void(LibzipPlugin*, double)> notifyProgressFunc = nullptr;
-
-//            if( nofEntries < 5 )
-//            {
-//                notifyProgressFunc = [this](double progress)
-//                {
-//                    this->emit progress(float(++i) / nofEntries);
-//                    emit progress_filename(e->name());
-//                };
-//            }
             FileProgressInfo pi;
 
-            emit progress_filename(e->name());
+            QString strFilePath = trans2uft8(zip_get_name(archive, index, ZIP_FL_ENC_RAW));
+            const QStringList pieces = strFilePath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+            QString strName = pieces.isEmpty() ? QString() : pieces.last();
+            emit progress_filename(strName);
 
             if (nofEntries < 5) {
-                pi.fileName = trans2uft8(zip_get_name(archive, e->compressIndex(), ZIP_FL_ENC_RAW));
+                pi.fileName = strFilePath;
                 pi.fileProgressProportion = float(1.0) / float(nofEntries);
                 pi.fileProgressStart = pi.fileProgressProportion * float(i);
             }
 
-            QString entryName = e->fullPath();
+            //QString entryName = strFilePath;
 
             if (!extractEntry(archive,
-                              e->compressIndex(),
-                              entryName,
-                              e->rootNode,
+                              index,
+                              strFilePath,
+                              m_strRootNode,
                               destinationDirectory,
                               options.preservePaths(),
                               removeRootNode, pi)) {
@@ -1039,6 +890,190 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     zip_close(archive);
     return true;
+
+
+
+
+//    // Get number of archive entries.
+//    const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : files.size();
+//    //check password
+
+//    bool bPasswordRight = false;
+//    while (!bPasswordRight) {
+//        for (qlonglong i = 0; i < nofEntries; i++) {
+//            if (QThread::currentThread()->isInterruptionRequested()) {
+//                break;
+//            }
+
+//            QString entry;
+//            int iIndex;
+//            if (extractAll) {
+//                iIndex = i;
+//                entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+//            } else {
+//                trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+//                iIndex = files[i]->compressIndex();
+//                entry = files.at(i)->fullPath();
+//            }
+
+//            const bool isDirectory = entry.endsWith(QDir::separator());
+//            if (isDirectory) {
+
+//                if (i == nofEntries - 1) {
+//                    bPasswordRight = true;
+//                    break;
+//                }
+//                continue;
+//            }
+
+//            zip_file *zipFile = zip_fopen_index(archive, iIndex, 0);
+//            if (zipFile) {
+//                zip_fclose(zipFile);
+//                bPasswordRight = true;
+//                break;
+//            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
+//                m_isckeckpsd = false; //阻止解压zip加密包出现解压失败界面再出现输入密码界面
+//                if (m_extractionOptions.isBatchExtract()) {
+//                    PasswordNeededQuery query(filename());
+//                    emit userQuery(&query);
+//                    query.waitForResponse();
+//                    if (query.responseCancelled()) {
+//                        setPassword(QString());
+//                        emit cancelled();
+//                        return false;
+//                    }
+//                    //setPassword(query.password());
+//                    if (zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex))) {
+//                    }
+
+//                } else {
+//                    emit sigExtractNeedPassword();
+//                    //setPassword(QString());
+//                    zip_set_default_password(archive,  passwordUnicode(password(), iCodecIndex));
+//                    return false;
+//                }
+//            } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
+//                m_isckeckpsd = true;
+//                if (m_extractionOptions.isBatchExtract()) {
+//                    setPassword(QString());
+//                    emit cancelled();
+//                    return false;
+//                } else {
+//                    emit sigExtractNeedPassword();
+//                }
+//                //setPassword(QString());
+//                iCodecIndex++;
+//                if (iCodecIndex == m_listCodecs.size()) {
+//                    return false;
+//                } else {
+//                    i--;
+//                }
+//                zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
+//                bPasswordRight = false;
+
+//                break;
+//            }
+
+//        }
+//    }
+
+//    if (!bPasswordRight) {
+//        return false;
+//    }
+
+//psd checked over,if psd right or no need psd,emit signal to show progress view.
+//    emit sigExtractPwdCheckDown();
+//    m_isckeckpsd = true;
+// Extract entries.
+//    m_overwriteAll = false; // Whether to overwrite all files
+//    m_skipAll = false; // Whether to skip all files
+//    if (extractAll) {
+//        // We extract all entries.
+//        QString extractDst;
+//        for (qlonglong i = 0; i < nofEntries; i++) {
+//            if (QThread::currentThread()->isInterruptionRequested()) {
+//                break;
+//            }
+
+//            QString strfileNameTemp = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+//            //QString strfileNameTemp = zip_get_name(archive, i, ZIP_FL_ENC_RAW);
+
+//            if (i == 0) {
+//                extractDst = QDir::fromNativeSeparators(strfileNameTemp);
+//            } else if (extractDst.isEmpty() == false) {
+//                if (QDir::fromNativeSeparators(strfileNameTemp).startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
+//                    extractDst.clear();
+//                }
+//            }
+
+//            emit progress_filename(strfileNameTemp);
+
+//            FileProgressInfo pi;
+
+//            if (nofEntries < 5) {
+//                pi.fileName = strfileNameTemp;
+//                pi.fileProgressProportion = float(1.0) / float(nofEntries);
+//                pi.fileProgressStart = pi.fileProgressProportion * float(i);
+//            }
+//            QString entryName = QDir::fromNativeSeparators(strfileNameTemp);
+//            if (i == 0) {
+//                destDirName = entryName;
+//            }
+//            if (!extractEntry(archive,
+//                              i,
+//                              entryName,
+//                              QString(),
+//                              destinationDirectory,
+//                              options.preservePaths(),
+//                              removeRootNode, pi)) {
+//                zip_close(archive);
+//                return false;
+//            }
+
+//            emit progress(float(i + 1) / nofEntries);
+//        }
+
+//        if (extractDst.isEmpty() == false) {
+//            emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
+//        }
+
+//    } else {
+//        // We extract only the entries in files.
+//        qulonglong i = 0;
+//        for (Archive::Entry *e : files) {
+//            if (QThread::currentThread()->isInterruptionRequested()) {
+//                break;
+//            }
+
+//            FileProgressInfo pi;
+
+//            emit progress_filename(e->name());
+
+//            if (nofEntries < 5) {
+//                pi.fileName = trans2uft8(zip_get_name(archive, e->compressIndex(), ZIP_FL_ENC_RAW));
+//                pi.fileProgressProportion = float(1.0) / float(nofEntries);
+//                pi.fileProgressStart = pi.fileProgressProportion * float(i);
+//            }
+
+//            QString entryName = e->fullPath();
+
+//            if (!extractEntry(archive,
+//                              e->compressIndex(),
+//                              entryName,
+//                              e->rootNode,
+//                              destinationDirectory,
+//                              options.preservePaths(),
+//                              removeRootNode, pi)) {
+//                zip_close(archive);
+//                return false;
+//            }
+
+//            emit progress(float(++i) / nofEntries);
+//        }
+//    }
+
+//    zip_close(archive);
+//    return true;
 }
 
 bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi)
@@ -1348,8 +1383,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, int index, const QString &entry,
         }
         mode_t value = attributes >> 16;
         QFileDevice::Permissions per = getPermissions(value);
-        if (value == 0)
-            per = per | QFileDevice::ExeUser | QFileDevice::ExeOther | QFileDevice::ExeGroup;
+        //if (value == 0)
+        per = per | QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser ;
         QFile::setPermissions(destination, per);
     }
 
@@ -1862,6 +1897,78 @@ int LibzipPlugin::ChartDet_DetectingTextCoding(const char *str, QString &encodin
     return CHARDET_SUCCESS ;
 }
 
+void LibzipPlugin::showEntryListFirstLevel(const QString &directory)
+{
+    if (directory.isEmpty()) return;
+    auto iter = m_listMap.find(directory);
+    for (; iter != m_listMap.end() ;) {
+        if (iter.key().left(directory.size()) != directory) {
+            break;
+        } else {
+            QString chopStr = iter.key().right(iter.key().size() - directory.size());
+            if (!chopStr.isEmpty()) {
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value().first, iter.value().second, iter.key());
+                    RefreshEntryFileCount(fileEntry);
+                    emit entry(fileEntry);
+                    m_emittedEntries << fileEntry;
+                }
+            }
+            ++iter;
+        }
+    }
+}
+
+void LibzipPlugin::RefreshEntryFileCount(Archive::Entry *file)
+{
+    if (!file || !file->isDir()) return;
+    qulonglong count = 0;
+    auto iter = m_listMap.find(file->fullPath());
+    for (; iter != m_listMap.end();) {
+        if (!iter.key().startsWith(file->fullPath())) {
+            break;
+        } else {
+            if (iter.key().size() > file->fullPath().size()) {
+                QString chopStr = iter.key().right(iter.key().size() - file->fullPath().size());
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    ++count;
+                }
+            }
+            ++iter;
+        }
+        file->setProperty("size", count);
+    }
+}
+
+qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
+{
+    m_listExtractIndex.clear();
+    qint64 qExtractSize = 0;
+    for (Archive::Entry *e : files) {
+        QString strPath = e->fullPath();
+        m_strRootNode = e->rootNode;
+        auto iter = m_listMap.find(strPath);
+        for (; iter != m_listMap.end();) {
+            if (!iter.key().startsWith(strPath)) {
+                break;
+            } else {
+                if (!iter.key().endsWith("/"))
+                    qExtractSize += iter.value().first.size;
+
+                int iIndex = iter.value().second;
+                if (!m_listExtractIndex.contains(iIndex))
+                    m_listExtractIndex << iIndex;
+                ++iter;
+            }
+        }
+    }
+
+    std::sort(m_listExtractIndex.begin(), m_listExtractIndex.end());
+
+    return qExtractSize;
+
+}
+
 bool LibzipPlugin::minizip_list(bool /*isbatch*/)
 {
     QString fileName = filename();
@@ -2298,4 +2405,233 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
     return true;
 
 
+}
+
+Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile)
+{
+    auto e = new Archive::Entry();
+
+    e->setCompressIndex(index);
+
+
+    if (statBuffer.valid & ZIP_STAT_NAME) {
+        // e->setFullPath(statBuffer.name);
+        e->setFullPath(name);
+    }
+
+    if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {
+        e->setProperty("isDirectory", true);
+    }
+
+    if (statBuffer.valid & ZIP_STAT_MTIME) {
+        e->setProperty("timestamp", QDateTime::fromTime_t(statBuffer.mtime));
+    }
+    if (statBuffer.valid & ZIP_STAT_SIZE) {
+        if (!isMutilFolderFile) {
+            e->setProperty("size", (qulonglong)statBuffer.size);
+        } else {
+            e->setProperty("size", 0);
+        }
+    }
+    if (statBuffer.valid & ZIP_STAT_COMP_SIZE) {
+        e->setProperty("compressedSize", (qlonglong)statBuffer.comp_size);
+    }
+    if (statBuffer.valid & ZIP_STAT_CRC) {
+        if (!e->isDir()) {
+            e->setProperty("CRC", QString::number((qulonglong)statBuffer.crc, 16).toUpper());
+        }
+    }
+    if (statBuffer.valid & ZIP_STAT_COMP_METHOD) {
+        switch (statBuffer.comp_method) {
+        case ZIP_CM_STORE:
+            e->setProperty("method", QStringLiteral("Store"));
+            emit compressionMethodFound(QStringLiteral("Store"));
+            break;
+        case ZIP_CM_DEFLATE:
+            e->setProperty("method", QStringLiteral("Deflate"));
+            emit compressionMethodFound(QStringLiteral("Deflate"));
+            break;
+        case ZIP_CM_DEFLATE64:
+            e->setProperty("method", QStringLiteral("Deflate64"));
+            emit compressionMethodFound(QStringLiteral("Deflate64"));
+            break;
+        case ZIP_CM_BZIP2:
+            e->setProperty("method", QStringLiteral("BZip2"));
+            emit compressionMethodFound(QStringLiteral("BZip2"));
+            break;
+        case ZIP_CM_LZMA:
+            e->setProperty("method", QStringLiteral("LZMA"));
+            emit compressionMethodFound(QStringLiteral("LZMA"));
+            break;
+        case ZIP_CM_XZ:
+            e->setProperty("method", QStringLiteral("XZ"));
+            emit compressionMethodFound(QStringLiteral("XZ"));
+            break;
+        }
+    }
+    if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
+        if (statBuffer.encryption_method != ZIP_EM_NONE) {
+            e->setProperty("isPasswordProtected", true);
+            switch (statBuffer.encryption_method) {
+            case ZIP_EM_TRAD_PKWARE:
+                emit encryptionMethodFound(QStringLiteral("ZipCrypto"));
+                break;
+            case ZIP_EM_AES_128:
+                emit encryptionMethodFound(QStringLiteral("AES128"));
+                break;
+            case ZIP_EM_AES_192:
+                emit encryptionMethodFound(QStringLiteral("AES192"));
+                break;
+            case ZIP_EM_AES_256:
+                emit encryptionMethodFound(QStringLiteral("AES256"));
+                break;
+            }
+        }
+    }
+
+    emit entry(e);
+    m_emittedEntries << e;
+    return e;
+}
+
+Archive::Entry *LibzipPlugin::setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name)
+{
+    auto e = new Archive::Entry();
+
+    e->setCompressIndex(index);
+
+
+    if (statBuffer.valid & ZIP_STAT_NAME) {
+        // e->setFullPath(statBuffer.name);
+        e->setFullPath(name);
+    }
+
+    if (e->fullPath(PathFormat::WithTrailingSlash).endsWith(QDir::separator())) {
+        e->setProperty("isDirectory", true);
+    }
+
+    if (statBuffer.valid & ZIP_STAT_MTIME) {
+        e->setProperty("timestamp", QDateTime::fromTime_t(statBuffer.mtime));
+    }
+    if (statBuffer.valid & ZIP_STAT_SIZE) {
+        e->setProperty("size", (qulonglong)statBuffer.size);
+    }
+    if (statBuffer.valid & ZIP_STAT_COMP_SIZE) {
+        e->setProperty("compressedSize", (qlonglong)statBuffer.comp_size);
+    }
+    if (statBuffer.valid & ZIP_STAT_CRC) {
+        if (!e->isDir()) {
+            e->setProperty("CRC", QString::number((qulonglong)statBuffer.crc, 16).toUpper());
+        }
+    }
+    if (statBuffer.valid & ZIP_STAT_COMP_METHOD) {
+        switch (statBuffer.comp_method) {
+        case ZIP_CM_STORE:
+            e->setProperty("method", QStringLiteral("Store"));
+            emit compressionMethodFound(QStringLiteral("Store"));
+            break;
+        case ZIP_CM_DEFLATE:
+            e->setProperty("method", QStringLiteral("Deflate"));
+            emit compressionMethodFound(QStringLiteral("Deflate"));
+            break;
+        case ZIP_CM_DEFLATE64:
+            e->setProperty("method", QStringLiteral("Deflate64"));
+            emit compressionMethodFound(QStringLiteral("Deflate64"));
+            break;
+        case ZIP_CM_BZIP2:
+            e->setProperty("method", QStringLiteral("BZip2"));
+            emit compressionMethodFound(QStringLiteral("BZip2"));
+            break;
+        case ZIP_CM_LZMA:
+            e->setProperty("method", QStringLiteral("LZMA"));
+            emit compressionMethodFound(QStringLiteral("LZMA"));
+            break;
+        case ZIP_CM_XZ:
+            e->setProperty("method", QStringLiteral("XZ"));
+            emit compressionMethodFound(QStringLiteral("XZ"));
+            break;
+        }
+    }
+    if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
+        if (statBuffer.encryption_method != ZIP_EM_NONE) {
+            e->setProperty("isPasswordProtected", true);
+            switch (statBuffer.encryption_method) {
+            case ZIP_EM_TRAD_PKWARE:
+                emit encryptionMethodFound(QStringLiteral("ZipCrypto"));
+                break;
+            case ZIP_EM_AES_128:
+                emit encryptionMethodFound(QStringLiteral("AES128"));
+                break;
+            case ZIP_EM_AES_192:
+                emit encryptionMethodFound(QStringLiteral("AES192"));
+                break;
+            case ZIP_EM_AES_256:
+                emit encryptionMethodFound(QStringLiteral("AES256"));
+                break;
+            }
+        }
+    }
+    return e;
+}
+
+void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord)
+{
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+            setEntryData(statBuffer, index, name);
+            m_SigDirRecord = name;
+            ++index;
+            // m_DirRecord = name;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+                setEntryData(statBuffer, index, name);
+                ++index;
+                return;
+            }
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+                setEntryData(statBuffer, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, qMakePair(statBuffer, 0));
+            }
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+            setEntryData(statBuffer, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+                    setEntryData(statBuffer, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, qMakePair(statBuffer, 0));
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                    //setEntryData(statBuffer, index, folderAppendStr, false);
+                }
+
+            }
+            ++index;
+        }
+    } else {
+//        if (name.left(m_DirRecord.size()) == m_DirRecord) {
+//            setEntryData(statBuffer, index, name);
+//            ++index;
+//        } else {
+//            m_DirRecord = "";
+//            setEntryVal(statBuffer, index, name, m_DirRecord);
+//        }
+        m_DirRecord = "";
+        setEntryVal(statBuffer, index, name, m_DirRecord);
+    }
 }

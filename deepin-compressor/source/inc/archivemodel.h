@@ -119,6 +119,8 @@ public:
     QMap<QString, Archive::Entry *> filesToMove;
     QMap<QString, Archive::Entry *> filesToCopy;
 
+    ReadOnlyArchiveInterface *getPlugin();
+
 Q_SIGNALS:
     void loadingStarted();
     void loadingFinished(KJob *);
@@ -164,6 +166,7 @@ private:
     void newEntry(Archive::Entry *receivedEntry, InsertBehaviour behaviour);
 
     void traverseAndCountDirNode(Archive::Entry *dir);
+    void setPlugin(ReadOnlyArchiveInterface *interface);
 
     QList<int> m_showColumns;
     QScopedPointer<Archive> m_archive;
@@ -184,5 +187,6 @@ private:
     int *m_ppathindex;
     QTableView *m_tableview;
     MimeTypeDisplayManager *m_mimetype;
+    ReadOnlyArchiveInterface *m_plugin;
 };
 #endif // ARCHIVEMODEL_H

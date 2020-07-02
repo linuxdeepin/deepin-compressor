@@ -184,6 +184,10 @@ private:
     void keyPressEvent(QKeyEvent *event) override;
     void openTempFile(QString path);
 
+    void combineEntryDirectory(Archive::Entry *entry, QString &pathstr);
+
+    QVector<Archive::Entry *> getSelEntries();
+
 private:
     QLineEdit *pLineEditDir;
     MyTableView *pTableViewFile;
