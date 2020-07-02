@@ -47,9 +47,6 @@ public:
 
     int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 
-    virtual void showEntryListFirstLevel(const QString &directory) override;
-    virtual void RefreshEntryFileCount(Archive::Entry *file) override;
-
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 
@@ -73,10 +70,6 @@ private:
     bool minizip_extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options);
     bool minizip_extractEntry(unzFile zipfile, unz_file_info file_info, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
 
-    Archive::Entry *setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile = false);
-    Archive::Entry *setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name);
-    void setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
-
     QVector<Archive::Entry *> m_emittedEntries;
     bool m_overwriteAll;
     bool m_skipAll;
@@ -91,10 +84,6 @@ private:
     QString m_extractFile;
 
     QStringList m_listCodecs;
-    QMap<QString, QPair<zip_stat_t, qlonglong>> m_listMap;
-    QString m_DirRecord;
-    QString m_SigDirRecord;
-    int m_indexCount = 0;
 };
 
 #endif // LIBZIPPLUGIN_H
