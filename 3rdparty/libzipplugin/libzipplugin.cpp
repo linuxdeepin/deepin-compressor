@@ -1952,12 +1952,15 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
             if (!iter.key().startsWith(strPath)) {
                 break;
             } else {
-                if (!iter.key().endsWith("/"))
+                if (!iter.key().endsWith("/")) {
                     qExtractSize += iter.value().first.size;
 
-                int iIndex = iter.value().second;
-                if (!m_listExtractIndex.contains(iIndex))
-                    m_listExtractIndex << iIndex;
+                    int iIndex = iter.value().second;
+                    if (iIndex >= 0) {
+                        m_listExtractIndex << iIndex;
+                    }
+                }
+
                 ++iter;
             }
         }
@@ -2594,7 +2597,7 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
             for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
                 folderAppendStr += fileDirs[i] + "/";
                 setEntryData(statBuffer, index, folderAppendStr);
-                m_listMap.insert(folderAppendStr, qMakePair(statBuffer, 0));
+                m_listMap.insert(folderAppendStr, qMakePair(statBuffer, -1));
             }
             ++index;
             m_DirRecord = name;
@@ -2614,7 +2617,7 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
                 if (i < fileDirs.size() - 1) {
                     folderAppendStr.append(fileDirs[i]).append("/");
                     setEntryData(statBuffer, index, folderAppendStr, true);
-                    m_listMap.insert(folderAppendStr, qMakePair(statBuffer, 0));
+                    m_listMap.insert(folderAppendStr, qMakePair(statBuffer, -1));
                 } else {
                     folderAppendStr.append(fileDirs[i]);
                     //setEntryData(statBuffer, index, folderAppendStr, false);
