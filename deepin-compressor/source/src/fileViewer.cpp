@@ -445,6 +445,7 @@ void fileViewer::refreshTableview()
             icon = QIcon::fromTheme("empty").pixmap(24, 24);
         }
         item = new MyFileItem(icon, fileinfo.fileName());
+        item->setData(QVariant::fromValue(fileinfo), Qt::UserRole);
 
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
@@ -745,11 +746,12 @@ void fileViewer::deleteCompressFile()
 {
 //    int row = pModel->rowCount();
     QItemSelectionModel *selections =  pTableViewFile->selectionModel();
-    QModelIndexList selected = selections->selectedIndexes();
-
-    QSet< int>  selectlist;
+    QModelIndexList selected;
 
     if (m_pathindex > 0) {
+        QModelIndexList selected = selections->selectedIndexes();
+
+        QList< QFileInfo>  selectlist;
         QFileInfo fileinfo ;
         foreach (QModelIndex index, selected) {
             fileinfo = pModel->fileInfo(qAsConst(index));
@@ -760,20 +762,19 @@ void fileViewer::deleteCompressFile()
             Utils::checkAndDeleteDir(fileinfo.filePath());
         }
     } else  {
+        selected = selections->selectedRows(0);
+        QList<QFileInfo> listFIleInfo;
+
         foreach (QModelIndex index, selected) {
-            selectlist.insert(index.row());
+            listFIleInfo << index.data(Qt::UserRole).value<QFileInfo>();
         }
 
-        foreach (int index, selectlist) {
-            if (m_curfilelist.size() > index) {
-                m_curfilelist.replace(index, QFileInfo(""));
-            }
-        }
 
-        foreach (QFileInfo file, m_curfilelist) {
-            if (file.path() == "") {
-                m_curfilelist.removeOne(file);
+        foreach (QFileInfo info, listFIleInfo) {
+            if (m_curfilelist.contains(info)) {
+                m_curfilelist.removeOne(info);
             }
+
         }
 
         QStringList filelist;
