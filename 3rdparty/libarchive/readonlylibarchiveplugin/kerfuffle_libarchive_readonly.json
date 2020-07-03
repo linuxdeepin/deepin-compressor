@@ -36,7 +36,6 @@
         "Id": "kerfuffle_libarchive_readonly",
         "MimeTypes": [
             "application/x-deb",
-    "application/x-cd-image",
     "application/x-bcpio",
     "application/x-cpio",
     "application/x-cpio-compressed",

@@ -182,6 +182,8 @@ bool CliPlugin::readListLine(const QString &line)
                 setMultiVolume(true);
             } else if (type == QLatin1String("Udf")) {
                 m_archiveType = ArchiveTypeUdf;
+            } else if (type == QLatin1String("Iso")) {
+                m_archiveType = ArchiveTypeIso;
             } else {
                 // Should not happen
                 return false;
@@ -237,7 +239,15 @@ bool CliPlugin::readListLine(const QString &line)
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(),
                                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")));
-
+            if (ArchiveTypeIso == m_archiveType) {
+                m_isFirstInformationEntry = true;
+                if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+                    emit entry(m_currentArchiveEntry);
+                } else {
+                    delete m_currentArchiveEntry;
+                }
+                m_currentArchiveEntry = nullptr;
+            }
         } else if (line.startsWith(QLatin1String("Folder = "))) {
             const QString isDirectoryStr = line.mid(9).trimmed();
             Q_ASSERT(isDirectoryStr == QStringLiteral("+") || isDirectoryStr == QStringLiteral("-"));

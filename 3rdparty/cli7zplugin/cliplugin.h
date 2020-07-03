@@ -47,7 +47,8 @@ private:
         ArchiveTypeTar,
         ArchiveTypeZip,
         ArchiveTypeRar,
-        ArchiveTypeUdf
+        ArchiveTypeUdf,
+        ArchiveTypeIso
     } m_archiveType;
 
     enum ParseState {

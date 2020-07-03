@@ -41,6 +41,7 @@
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
+    // qDebug() << __FUNCTION__;
     // because this interface uses the event loop
     setWaitForFinishedSignal(true);
 
@@ -347,6 +348,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     m_process->setProgram(programPath, arguments);
+    // qDebug() << programPath << arguments;
 
     connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         readStdout();
@@ -941,6 +943,11 @@ void CliInterface::readStdout(bool handleAll)
     m_stdOutData += dd;
 
     QList< QByteArray > lines = m_stdOutData.split('\n');
+    // for (const QByteArray &line : qAsConst(lines)) {
+    //     if (List == m_operationMode) {
+    //         qDebug() << line;
+    //     }
+    // }
 
     // The reason for this check is that archivers often do not end
     // queries (such as file exists, wrong password) on a new line, but
