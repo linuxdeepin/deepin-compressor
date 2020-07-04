@@ -39,9 +39,9 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         Q_ASSERT(!password.isEmpty());
     }
     if (isTar7z) {
-        QVector<QString> strold = {" ", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "[", "]", "{", "}", "<", ">"};
-        QVector<QString> strnew = {"\\ ", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}", "\\<", "\\>"};
-//        注意字符转译
+        QVector<QString> strold = {" ", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "[", "]", "{", "}", "<", ">", "+", "-", ";"};
+        QVector<QString> strnew = {"\\ ", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}", "\\<", "\\>", "\\+", "\\-", "\\;"};
+//        注意字符转译，待优化
 //        QStringList arguments1 = {"-c", "tar -cf - 2\\ git.doc | 7z a -si 2\\ git.tar.7z"};
         QStringList args;
         args << "-c";

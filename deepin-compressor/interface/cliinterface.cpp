@@ -1149,7 +1149,7 @@ bool CliInterface::handleLine(const QString &line)
             qint64 percentage = line.midRef(pos1 + bstrLength, pos2 - (pos1 + bstrLength)).toLongLong();
 
             if (percentage > 0) {
-                qDebug() << percentage << m_filesSize << float(percentage) / m_filesSize;
+//                qDebug() << percentage << m_filesSize << float(percentage) / m_filesSize;
                 emitProgress(float(percentage) / m_filesSize);
             }
         }
