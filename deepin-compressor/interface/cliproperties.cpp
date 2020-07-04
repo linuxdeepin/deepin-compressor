@@ -31,39 +31,88 @@ CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, c
 {
 }
 
-QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, ulong volumeSize)
+QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, ulong volumeSize, bool isTar7z)
 {
+    const QString oneSpace = " "; //一个空格
+
     if (!encryptionMethod.isEmpty()) {
         Q_ASSERT(!password.isEmpty());
     }
+    if (isTar7z) {
+        QVector<QString> strold = {" ", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "[", "]", "{", "}", "<", ">"};
+        QVector<QString> strnew = {"\\ ", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}", "\\<", "\\>"};
+//        注意字符转译
+//        QStringList arguments1 = {"-c", "tar -cf - 2\\ git.doc | 7z a -si 2\\ git.tar.7z"};
+        QStringList args;
+        args << "-c";
 
-    QStringList args;
-    for (const QString &s : qAsConst(m_addSwitch)) {
-        args << s;
-    }
-    if (!password.isEmpty()) {
-        args << substitutePasswordSwitch(password, headerEncryption);
-    }
-    if (compressionLevel > -1) {
-        args << substituteCompressionLevelSwitch(compressionLevel);
-    }
-    if (!compressionMethod.isEmpty()) {
-        args << substituteCompressionMethodSwitch(compressionMethod);
-    }
-    if (!encryptionMethod.isEmpty()) {
-        args << substituteEncryptionMethodSwitch(encryptionMethod);
-    }
-    if (volumeSize > 0) {
-        args << substituteMultiVolumeSwitch(volumeSize);
-    }
-    if (!m_progressarg.isEmpty()) {
-        args << m_progressarg;
-    }
-    args << archive;
-    args << files;
+        QString tmp;
+        tmp += "tar -cf - ";
+        for (QString file : files) {
+            for (int n = 0; n < strold.length(); ++n) {
+                file.replace(strold[n], strnew[n]);
+            }
+            tmp += file + oneSpace;
+        }
+        tmp += "| 7z a -si ";
+        if (!password.isEmpty()) {
+            for (QString &val : substitutePasswordSwitch(password, headerEncryption)) {
+                tmp += val + oneSpace;
+            }
+        }
+        if (compressionLevel > -1) {
+            tmp += substituteCompressionLevelSwitch(compressionLevel) + oneSpace;
+        }
+        if (!compressionMethod.isEmpty()) {
+            tmp += substituteCompressionMethodSwitch(compressionMethod) + oneSpace;
+        }
+        if (!encryptionMethod.isEmpty()) {
+            tmp += substituteEncryptionMethodSwitch(encryptionMethod) + oneSpace;
+        }
+        if (volumeSize > 0) {
+            tmp += substituteMultiVolumeSwitch(volumeSize) + oneSpace;
+        }
+        if (!m_progressarg.isEmpty()) {
+            tmp += m_progressarg + oneSpace;
+        }
+        QString tmparchive = archive;
+        for (int n = 0; n < strold.length(); ++n) {
+            tmparchive.replace(strold[n], strnew[n]);
+        }
+        tmp += tmparchive;
+        args << tmp;
+        return args;
+    } else {
+        QStringList args;
+        for (const QString &s : qAsConst(m_addSwitch)) {
+            args << s;
+        }
 
-    args.removeAll(QString());
-    return args;
+        if (!password.isEmpty()) {
+            args << substitutePasswordSwitch(password, headerEncryption);
+        }
+        if (compressionLevel > -1) {
+            args << substituteCompressionLevelSwitch(compressionLevel);
+        }
+        if (!compressionMethod.isEmpty()) {
+            args << substituteCompressionMethodSwitch(compressionMethod);
+        }
+        if (!encryptionMethod.isEmpty()) {
+            args << substituteEncryptionMethodSwitch(encryptionMethod);
+        }
+        if (volumeSize > 0) {
+            args << substituteMultiVolumeSwitch(volumeSize);
+        }
+        if (!m_progressarg.isEmpty()) {
+            args << m_progressarg;
+        }
+        args << archive;
+        args << files;
+
+        args.removeAll(QString());
+        return args;
+    }
+
 }
 
 QStringList CliProperties::commentArgs(const QString &archive, const QString &commentfile)

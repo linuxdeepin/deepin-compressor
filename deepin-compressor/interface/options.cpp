@@ -141,6 +141,29 @@ void CompressionOptions::setGlobalWorkDir(const QString &workDir)
     m_globalWorkDir = workDir;
 }
 
+bool CompressionOptions::isTar7z() const
+{
+    return m_isTar7z;
+}
+
+void CompressionOptions::setIsTar7z(bool bTar7z)
+{
+    m_isTar7z = bTar7z;
+}
+
+qint64 CompressionOptions::getfilesSize() const
+{
+    return m_filesSize;
+}
+
+void CompressionOptions::setFilesSize(const qint64 &filesSize)
+{
+    m_filesSize = filesSize / 1024 / 1024;
+    if (m_filesSize < 1) {
+        m_filesSize = 1;
+    }
+}
+
 QDebug operator<<(QDebug d, const CompressionOptions &options)
 {
     d.nospace() << "(encryption hint: " << options.encryptedArchiveHint();

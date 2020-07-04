@@ -96,6 +96,7 @@ void CompressSetting::InitUI()
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
     }
+    m_typemenu->addAction("tar.7z");
     setTypeImage("zip");
 
     QFormLayout *filelayout = new QFormLayout();
@@ -337,11 +338,22 @@ void CompressSetting::onNextButoonClicked()
     QMap< QString, QString > m_openArgs;
     const QString password = m_password->text();
     QString fixedMimeType;
+    QString tmpCompresstype = m_compresstype->text();
+    QString strTar7z;
+    if (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) {
+        tmpCompresstype = "7z";
+        strTar7z = ".tar";
+        m_openArgs[QStringLiteral("createtar7z")] = QString("true");
+        m_openArgs[QStringLiteral("selectFilesSize")] = QString::number(m_getFileSize);
+    }
+//    QString tmpCompresstype = (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) ? QString("7z") : m_compresstype->text();
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-        if (0
-                == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(m_compresstype->text(),
-                                                                                   Qt::CaseInsensitive)) {
+        if (
+            qDebug() << QMimeDatabase().mimeTypeForName(type).preferredSuffix() << tmpCompresstype;
+            0
+            == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(tmpCompresstype,
+                                                                               Qt::CaseInsensitive)) {
             fixedMimeType = type;
             break;
         }
@@ -383,10 +395,10 @@ void CompressSetting::onNextButoonClicked()
 
     m_openArgs[QStringLiteral("localFilePath")] = m_savepath->text();
     m_openArgs[QStringLiteral("filename")] =
-        m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+        m_filename->text() + strTar7z + "."  + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
 
     //check exist file
-    QFileInfo eFile(m_savepath->text() + QDir::separator() + m_filename->text() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix());
+    QFileInfo eFile(m_savepath->text() + QDir::separator() + m_filename->text() + strTar7z + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix());
     if (eFile.exists()) {
         if (existSameFileName() == true) {
             QFile file(eFile.filePath());
@@ -438,6 +450,8 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs.remove(QStringLiteral("encryptHeader"));
     m_openArgs.remove(QStringLiteral("localFilePath"));
     m_openArgs.remove(QStringLiteral("filename"));
+    m_openArgs.remove(QStringLiteral("createtar7z"));
+    m_openArgs.remove(QStringLiteral("selectFilesSize"));
 }
 
 void CompressSetting::onAdvanceButtonClicked(bool status)
@@ -630,7 +644,8 @@ void CompressSetting::ontypeChanged(QAction *action)
     setTypeImage(action->text());
     m_compresstype->setText(action->text());
 
-    if (action->text().contains("7z")) {
+    //tar.7z暂不支持加密
+    if (action->text().contains("7z") && !action->text().contains("tar.7z")) {
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }

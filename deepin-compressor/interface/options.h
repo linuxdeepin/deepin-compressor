@@ -59,7 +59,15 @@ public:
 
     void setGlobalWorkDir(const QString &workDir);
 
+    bool isTar7z() const;
+    void setIsTar7z(bool bTar7z);
+
+    qint64 getfilesSize() const;
+    void setFilesSize(const qint64 &filesSize);
+
 private:
+    bool m_isTar7z = false;
+    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
     int m_compressionLevel = -1;
     ulong m_volumeSize = 0;
     QString m_compressionMethod;

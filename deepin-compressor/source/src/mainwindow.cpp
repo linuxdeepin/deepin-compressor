@@ -1942,6 +1942,8 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     //    options.setCompressionMethod(Args[QStringLiteral("compressionMethod")]);
     options.setEncryptionMethod(Args[QStringLiteral("encryptionMethod")]);
     options.setVolumeSize(Args[QStringLiteral("volumeSize")].toULongLong());
+    options.setIsTar7z(0 == Args[QStringLiteral("createtar7z")].compare("true"));
+    options.setFilesSize(Args[QStringLiteral("selectFilesSize")].toLongLong());
 
     QVector< Archive::Entry * > all_entries;
 

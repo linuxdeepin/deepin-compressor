@@ -154,6 +154,7 @@ protected:
 
 
     bool m_abortingOperation = false;
+    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
 
 private:
     void init();

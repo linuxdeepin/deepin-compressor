@@ -73,7 +73,8 @@ public:
                         int compressionLevel,
                         const QString &compressionMethod,
                         const QString &encryptionMethod,
-                        ulong volumeSize);
+                        ulong volumeSize,
+                        bool isTar7z);
     QStringList commentArgs(const QString &archive, const QString &commentfile);
     QStringList deleteArgs(const QString &archive, const QVector<Archive::Entry *> &files, const QString &password);
     QStringList extractArgs(const QString &archive, const QStringList &files, bool preservePaths, const QString &password);

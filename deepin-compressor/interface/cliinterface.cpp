@@ -270,9 +270,19 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
                                                 options.compressionLevel(),
                                                 options.compressionMethod(),
                                                 options.encryptionMethod(),
-                                                options.volumeSize());
+                                                options.volumeSize(),
+                                                options.isTar7z());
     arguments.removeOne("-l");//beaucse -l will failed if files contains softLink which links parent folder.
-    bool ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+    bool ret = false;
+    //tar.7z： Different compression commands
+    if (options.isTar7z()) {
+        m_filesSize = options.getfilesSize();
+        QString strProgram = QStandardPaths::findExecutable("bash");
+        ret = runProcess(strProgram, arguments);
+    } else {
+        ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+    }
+
     if (ret == true) {
         this->watchDestFilesBegin();
     }
@@ -961,8 +971,13 @@ void CliInterface::readStdout(bool handleAll)
 
     bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
 
-    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPasswordMessage) {
-        handleAll = true;  // 7z output has no \n
+    if (m_process->program().length() > 2) {
+        if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPasswordMessage) {
+            handleAll = true;  // 7z output has no \n
+        }
+        if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !wrongPasswordMessage) {
+            handleAll = true;  // compress .tar.7z output has no \n
+        }
     }
 
     bool foundErrorMessage = (wrongPasswordMessage || isDiskFullMsg(QLatin1String(lines.last()))
@@ -1120,6 +1135,22 @@ bool CliInterface::handleLine(const QString &line)
 //                    emit progress_filename(strfilename.toString());
                     emitFileName(strfilename.toString());
                 }
+            }
+        }
+    } else if (m_process && m_process->program().at(0).contains("bash") && !isWrongPasswordMsg(line)) {
+//      压缩tar.7z输出:  \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                  \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b306M 1 + [Content]
+        int pos = line.lastIndexOf(" + [Content]");
+        if (pos > 1) {
+            const QString bstr = "\b\b\b\b\b\b";
+            const int bstrLength = bstr.length();
+
+            int pos2 = line.lastIndexOf("M ");
+            int pos1 = line.lastIndexOf(bstr, pos2);
+            qint64 percentage = line.midRef(pos1 + bstrLength, pos2 - (pos1 + bstrLength)).toLongLong();
+
+            if (percentage > 0) {
+                qDebug() << percentage << m_filesSize << float(percentage) / m_filesSize;
+                emitProgress(float(percentage) / m_filesSize);
             }
         }
     }
