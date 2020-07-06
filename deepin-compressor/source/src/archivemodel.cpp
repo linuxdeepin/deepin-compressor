@@ -94,8 +94,12 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    //return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
-                    return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
+                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")) {
+                        return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
+                    } else {
+                        return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                    }
+
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {

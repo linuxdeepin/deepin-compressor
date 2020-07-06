@@ -2041,7 +2041,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 //    calSelectedTotalFileSize(m_tempFileList);
     resetMainwindow();
 
-    if (m_model->archive()->fileName().endsWith(".zip")) {
+    if (m_model->archive()->fileName().endsWith(".zip") || m_model->archive()->fileName().endsWith(".jar")) {
         if (ReadOnlyArchiveInterface *pinterface = m_model->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 foreach (Archive::Entry *p, fileList) {
