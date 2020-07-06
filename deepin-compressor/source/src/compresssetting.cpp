@@ -94,9 +94,14 @@ void CompressSetting::InitUI()
     m_typemenu = new DMenu(this);
     m_typemenu->setMinimumWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-        m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
+        if (QMimeDatabase().mimeTypeForName(type).preferredSuffix() == "zip") {
+            m_typemenu->addAction("tar.7z");
+            break;
+        } else {
+            m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
+        }
     }
-    m_typemenu->addAction("tar.7z");
+    m_typemenu->addAction("zip");
     setTypeImage("zip");
 
     QFormLayout *filelayout = new QFormLayout();
