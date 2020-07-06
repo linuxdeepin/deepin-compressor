@@ -1146,11 +1146,15 @@ bool CliInterface::handleLine(const QString &line)
 
             int pos2 = line.lastIndexOf("M ");
             int pos1 = line.lastIndexOf(bstr, pos2);
-            qint64 percentage = line.midRef(pos1 + bstrLength, pos2 - (pos1 + bstrLength)).toLongLong();
-
+            qint64 compressedSize = line.midRef(pos1 + bstrLength, pos2 - (pos1 + bstrLength)).toLongLong();
+            float percentage = compressedSize / float(m_filesSize);
             if (percentage > 0) {
-//                qDebug() << percentage << m_filesSize << float(percentage) / m_filesSize;
-                emitProgress(float(percentage) / m_filesSize);
+//                qDebug() << compressedSize << m_filesSize << percentage;
+                if (percentage > 1) {
+                    emitProgress(0.999);
+                } else {
+                    emitProgress(percentage);
+                }
             }
         }
     }
