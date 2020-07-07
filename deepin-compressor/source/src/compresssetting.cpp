@@ -650,7 +650,7 @@ void CompressSetting::ontypeChanged(QAction *action)
     m_compresstype->setText(action->text());
 
     //tar.7z暂不支持加密
-    if (action->text().contains("7z") && !action->text().contains("tar.7z")) {
+    if (action->text().contains("7z")) {
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }
