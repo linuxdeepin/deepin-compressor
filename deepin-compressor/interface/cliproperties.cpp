@@ -31,28 +31,40 @@ CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, c
 {
 }
 
-QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, ulong volumeSize, bool isTar7z)
+QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, ulong volumeSize, bool isTar7z, const QString &globalWorkDir)
 {
-    const QString oneSpace = " "; //一个空格
-
     if (!encryptionMethod.isEmpty()) {
         Q_ASSERT(!password.isEmpty());
     }
+
     if (isTar7z) {
-        QVector<QString> strold = {" ", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "[", "]", "{", "}", "<", ">", "+", "-", ";"};
-        QVector<QString> strnew = {"\\ ", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}", "\\<", "\\>", "\\+", "\\-", "\\;"};
-//        注意字符转译，待优化
-//        QStringList arguments1 = {"-c", "tar -cf - 2\\ git.doc | 7z a -si 2\\ git.tar.7z"};
+//        tar.7z压缩命令: tar cf - -C /home/username/Desktop/ 1.txt -C /home/username/Desktop/2/3/ 4K | 7z a - si new.tar.7z
+        const QString oneSpace = " "; //一个空格
+        QVector<QString> strold = {  " ",   "!",   "$",   "&",   "*",   "(",   ")",   "<",   ">",   "+",   "-",   ";"};
+        QVector<QString> strnew = {"\\ ", "\\!", "\\$", "\\&", "\\*", "\\(", "\\)", "\\<", "\\>", "\\+", "\\-", "\\;"};
+//        注意字符转意，待优化
+
         QStringList args;
         args << "-c";
+        QString newGlobalWorkDir = globalWorkDir + '/';
+        for (int n = 0; n < strold.length(); ++n) {
+            newGlobalWorkDir.replace(strold[n], strnew[n]);
+        }
 
-        QString tmp;
-        tmp += "tar -cf - ";
+        QString tmp = "tar cf - ";
         for (QString file : files) {
             for (int n = 0; n < strold.length(); ++n) {
                 file.replace(strold[n], strnew[n]);
             }
-            tmp += file + oneSpace;
+            if (file.endsWith('/')) {
+                file.chop(1);
+            }
+            int pos = file.lastIndexOf('/');
+            if (pos > 0) {
+                tmp += "-C " + newGlobalWorkDir + file.mid(0, pos + 1) + oneSpace + file.mid(pos + 1) + oneSpace;
+            } else {
+                tmp += "-C " + newGlobalWorkDir + oneSpace + file + oneSpace;
+            }
         }
         tmp += "| 7z a -si ";
         if (!password.isEmpty()) {
@@ -81,6 +93,7 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         }
         tmp += tmparchive;
         args << tmp;
+//        qDebug() << tmp;
         return args;
     } else {
         QStringList args;

@@ -1628,7 +1628,7 @@ void MainWindow::onCompressPressed(QMap< QString, QString > &Args)
         globalWorkDirList.insert(globalWorkDir);
     }
 
-    if (globalWorkDirList.count() == 1) {
+    if (globalWorkDirList.count() == 1 || 0 == Args[QStringLiteral("createtar7z")].compare("true")) {
         creatArchive(Args);
     } else if (globalWorkDirList.count() > 1) {
         QMap< QString, QStringList > compressmap;

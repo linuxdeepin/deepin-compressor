@@ -271,7 +271,8 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
                                                 options.compressionMethod(),
                                                 options.encryptionMethod(),
                                                 options.volumeSize(),
-                                                options.isTar7z());
+                                                options.isTar7z(),
+                                                options.globalWorkDir());
     arguments.removeOne("-l");//beaucse -l will failed if files contains softLink which links parent folder.
     bool ret = false;
     //tar.7z： Different compression commands
@@ -1155,6 +1156,7 @@ bool CliInterface::handleLine(const QString &line)
                 } else {
                     emitProgress(percentage);
                 }
+//                emitFileName(strfilename.toString());//TODO
             }
         }
     }
