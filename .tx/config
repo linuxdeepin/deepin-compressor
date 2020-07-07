@@ -4,14 +4,14 @@ minimum_perc = 80
 mode = developer
 
 [deepin-archive-manager.deepin-archive-manager]
-file_filter = deepin-compressor/translations/deepin-compressor_<lang>.ts
-source_file = deepin-compressor/translations/deepin-compressor_en.ts
+file_filter = translations/deepin-compressor_<lang>.ts
+source_file = translations/deepin-compressor_en.ts
 source_lang = en_US
 type = QT
 
 
 [deepin-archive-manager.deepin-archive-manager-desktop-ts]
-file_filter = deepin-compressor/translations/desktop/desktop_<lang>.ts
-source_file = deepin-compressor/translations/desktop/desktop.ts
+file_filter = translations/desktop/desktop_<lang>.ts
+source_file = translations/desktop/desktop.ts
 source_lang = en
 type = QT
