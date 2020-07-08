@@ -713,10 +713,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
             int iIndex;
             if (extractAll) {
                 iIndex = i;
-                entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+                entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW)));
             } else {
                 iIndex = m_listExtractIndex[i];
-                entry = trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+                entry = trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW));
             }
 
             const bool isDirectory = entry.endsWith(QDir::separator());
@@ -1945,10 +1945,11 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
                 if (!iter.key().endsWith("/")) {
                     qExtractSize += iter.value().first.size;
 
-                    int iIndex = iter.value().second;
-                    if (iIndex >= 0) {
-                        m_listExtractIndex << iIndex;
-                    }
+                }
+
+                int iIndex = iter.value().second;
+                if (iIndex >= 0) {
+                    m_listExtractIndex << iIndex;
                 }
 
                 ++iter;
