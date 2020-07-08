@@ -464,7 +464,6 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
     if (status) {
         m_encryptedlabel->setVisible(true);
         m_password->setVisible(true);
-        m_splitcompress->setVisible(true);
         m_encryptedfilelistlabel->setVisible(true);
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
@@ -472,7 +471,6 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
     } else {
         m_encryptedlabel->setVisible(false);
         m_password->setVisible(false);
-        m_splitcompress->setVisible(false);
         m_encryptedfilelistlabel->setVisible(false);
         m_file_secret->setVisible(false);
         m_splitcompress->setVisible(false);
@@ -645,12 +643,23 @@ void CompressSetting::onSplitChanged(int /*status*/)
 
 void CompressSetting::ontypeChanged(QAction *action)
 {
-    qDebug() << action->text();
-    setTypeImage(action->text());
-    m_compresstype->setText(action->text());
+//    qDebug() << action->text();
+    QString selectType = action->text();
+    setTypeImage(selectType);
+    m_compresstype->setText(selectType);
 
-    //tar.7z暂不支持加密
-    if (action->text().contains("7z")) {
+    if (0 == selectType.compare("tar.7z")) {
+        m_encryptedlabel->setEnabled(true);
+        m_password->setEnabled(true);
+        m_encryptedfilelistlabel->setEnabled(true);
+        m_file_secret->setEnabled(true);
+        m_splitcompress->setChecked(false);
+        m_splitcompress->setEnabled(false); //tar.7z暂不支持分卷压缩
+//        m_splitnumedit->setRange(0.0, 1000000);
+        m_splitnumedit->setEnabled(false);
+        m_splitnumedit->setValue(0.0);
+        isSplitChecked = false;
+    } else if (0 == selectType.compare("7z")) {
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }
@@ -659,7 +668,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_encryptedfilelistlabel->setEnabled(true);
         m_file_secret->setEnabled(true);
         m_splitcompress->setEnabled(true);
-    } else if (action->text().contains("zip")) {
+    } else if (0 == selectType.compare("zip")) {
         m_splitnumedit->setEnabled(false);
         m_encryptedlabel->setEnabled(true);
         m_password->setEnabled(true);
