@@ -1,6 +1,5 @@
 #include "libzipplugin.h"
 //#include "kpluginfactory.h"
-#include "detectencoding.h"
 
 //#include <KIO/Global>
 //#include <KLocalizedString>
@@ -265,18 +264,9 @@ QString  LibzipPlugin::trans2uft8(const char *str)
     } else if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
                || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)
                || ((QString)codec_name).contains("iso", Qt::CaseInsensitive)) {
-        QString code = "";
-        QString codemine = "";
-        QString type = "";
-        file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
-        if (("utf-8" == codemine || "us-ascii" == codemine)) {
-            m_codecstr = "UTF-8";
-            return QString(str);
-        } else {
-            QTextCodec *codec = QTextCodec::codecForName("GBK");
-            m_codecstr = codec_name;
-            return codec->toUnicode(str);
-        }
+        QTextCodec *codec = QTextCodec::codecForName("GBK");
+        m_codecstr = codec_name;
+        return codec->toUnicode(str);
     } else if (!((QString)codec_name).contains("UTF", Qt::CaseInsensitive)) {
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecstr = codec_name;

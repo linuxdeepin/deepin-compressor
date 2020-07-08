@@ -47,7 +47,6 @@ SOURCES += \
     ../../deepin-compressor/interface/archiveinterface.cpp \
     ../../deepin-compressor/interface/analysepsdtool.cpp \
     ../../deepin-compressor/interface/filewatcher.cpp \
-    detectencoding.cpp \
     ../ChardetDetector/tables/LangBulgarianModel.cpp \
     ../ChardetDetector/tables/LangCyrillicModel.cpp \
     ../ChardetDetector/tables/LangGreekModel.cpp \
