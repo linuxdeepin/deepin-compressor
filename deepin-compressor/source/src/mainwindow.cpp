@@ -1484,8 +1484,8 @@ void MainWindow::SlotExtractPassword(QString password)
     m_progressdialog->clearprocess();
     // m_progressTransFlag = false;
     if (Encryption_Load == m_encryptiontype) {
-        m_pageid = PAGE_LOADING;
-        refreshPage();
+//        m_pageid = PAGE_LOADING;
+//        refreshPage();
         LoadPassword(password);
     } else if (Encryption_Extract == m_encryptiontype) {
         ExtractPassword(password);
