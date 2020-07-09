@@ -1606,7 +1606,17 @@ QByteArray LibzipPlugin::detectEncode(const QByteArray &data, const QString &fil
 
     QString detectedResult;
     float chardetconfidence = 0;
-    ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
+//    ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
+    QString str(data);
+    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (bFlag) {
+        QByteArray newData = data;
+        newData += "啊啊啊啊啊啊啊啊啊啊啊啊啊";
+        ChartDet_DetectingTextCoding(newData, detectedResult, chardetconfidence);
+    } else {
+        ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
+    }
+
     //qDebug() << "chardet编码：" << detectedResult;
     m_codecstr = detectedResult.toLatin1();
     if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
