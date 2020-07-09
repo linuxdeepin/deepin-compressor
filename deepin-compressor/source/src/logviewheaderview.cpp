@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include "DFontSizeManager"
 static const int kSpacingMargin = 4;
 
