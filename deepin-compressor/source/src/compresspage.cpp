@@ -102,29 +102,23 @@ void CompressPage::onNextPress()
 void CompressPage::showDialog()
 {
     DDialog *dialog = new DDialog(this);
-
-    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(48, 48));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-
+    dialog->addSpacing(32);
+    dialog->setMinimumSize(380, 140);
+    dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+    DLabel *pContent = new DLabel(tr("Please add files to the top-level directory"), dialog);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    pContent->setMinimumSize(293, 20/*this->width()*/);
+    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
 
-    DLabel *strlabel = new DLabel(dialog);
-    strlabel->setForegroundRole(DPalette::WindowText);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-
-    strlabel->setText(QObject::tr("Please add files to the top-level directory"));
-    dialog->addButton(QObject::tr("OK"));
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-
-    DWidget *widget = new DWidget(dialog);
-
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
-
-    //dialog->moveToCenter();
     dialog->exec();
     delete dialog;
+
     return;
 }
 
