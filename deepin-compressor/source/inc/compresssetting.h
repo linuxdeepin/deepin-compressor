@@ -22,19 +22,21 @@
 #ifndef COMPRESSSETTING_H
 #define COMPRESSSETTING_H
 
+#include "lib_edit_button.h"
+#include "pluginmanager.h"
+
 #include <DWidget>
 #include <DPushButton>
 #include <DLabel>
 #include <DLineEdit>
 #include <DSwitchButton>
-#include <dpasswordedit.h>
-#include <QVBoxLayout>
-#include "lib_edit_button.h"
-#include "pluginmanager.h"
-#include "dfilechooseredit.h"
+#include <DPasswordEdit>
 #include <DCheckBox>
 #include <DMenu>
-#include "DSpinBox"
+#include <DSpinBox>
+#include <dfilechooseredit.h>
+
+#include <QVBoxLayout>
 
 DWIDGET_USE_NAMESPACE
 

@@ -32,7 +32,6 @@ public:
     MyFileItem(const QString &text);
     MyFileItem(const QIcon &icon, const QString &text);
 
-
     bool operator<(const QStandardItem &other) const override;
 };
 

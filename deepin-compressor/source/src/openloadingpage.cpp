@@ -21,10 +21,10 @@
 #include "openloadingpage.h"
 
 #include <DLabel>
-
-#include <QVBoxLayout>
 #include <DFontSizeManager>
 #include <DApplicationHelper>
+
+#include <QVBoxLayout>
 
 OpenLoadingPage::OpenLoadingPage(DWidget *parent)
     : DWidget(parent)

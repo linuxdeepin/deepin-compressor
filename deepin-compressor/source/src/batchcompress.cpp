@@ -36,6 +36,7 @@ BatchCompress::BatchCompress(QObject *parent): BatchJobs(parent)
         delete m_Args;
         m_Args = nullptr;
     }
+
     m_Args = new QMap<QString, QString>();
 //    connect(this, &KJob::result, this, &BatchExtract::showFailedFiles);
 }
@@ -79,14 +80,13 @@ void BatchCompress::addCompress(const QStringList &files)
         filename = filename.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0" + QString::number(num) + ")" + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
         num++;
     }
-    qDebug() << filename;
 
+    qDebug() << filename;
 
     CompressionOptions options;
     options.setCompressionLevel((*m_Args)[QStringLiteral("compressionLevel")].toInt());
     options.setEncryptionMethod((*m_Args)[QStringLiteral("encryptionMethod")]);
     options.setVolumeSize((*m_Args)[QStringLiteral("volumeSize")].toULongLong());
-
 
     QVector<Archive::Entry *> all_entries;
 
@@ -95,7 +95,6 @@ void BatchCompress::addCompress(const QStringList &files)
         entry->setFullPath(file);
         all_entries.append(entry);
     }
-
 
     if (all_entries.isEmpty()) {
         qDebug() << "all_entries.isEmpty()";
@@ -106,6 +105,7 @@ void BatchCompress::addCompress(const QStringList &files)
     if (globalWorkDir.right(1) == QLatin1String("/")) {
         globalWorkDir.chop(1);
     }
+
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
@@ -123,7 +123,6 @@ void BatchCompress::addCompress(const QStringList &files)
 
 //    connect(job, &KJob::result, this, &BatchCompress::SlotCreateJobFinished);
 //    connect(job, &KJob::result, this, &BatchCompress::SlotCreateJobFinished, Qt::ConnectionType::UniqueConnection);
-
 }
 
 void BatchCompress::SlotProgressFile(KJob *job, const QString &name)
@@ -140,6 +139,7 @@ void BatchCompress::clearSubjobs()
         disconnect(job, SIGNAL(percent(KJob *, ulong)), this, SLOT(forwardProgress(KJob *, ulong)));
         disconnect(job, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
     }
+
     BatchJobs::clearSubjobs();
 }
 
@@ -148,6 +148,7 @@ bool BatchCompress::doKill()
     if (subjobs().isEmpty()) {
         return false;
     }
+
     KJob *pCurJob = subjobs().first();
     this->clearSubjobs();
     if (pCurJob) {
@@ -174,7 +175,6 @@ void BatchCompress::slotStartJob()
     for (const auto &url : qAsConst(m_inputs)) {
         addCompress(url);
     }
-
 
     m_initialJobCount = subjobs().size();
 
@@ -223,6 +223,7 @@ void BatchCompress::forwardProgress(KJob *job, unsigned long percent)
     if (percent >= 100) {
         percent = 100;
     }
+
     emit batchProgress(job, jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
 }
 

@@ -22,9 +22,11 @@
 #ifndef MyFILESYSTEMMODEL_H
 #define MyFILESYSTEMMODEL_H
 
-#include <QFileSystemModel>
-#include <DTableView>
 #include "mimetypedisplaymanager.h"
+
+#include <DTableView>
+
+#include <QFileSystemModel>
 
 DWIDGET_USE_NAMESPACE
 

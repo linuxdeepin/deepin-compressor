@@ -22,11 +22,13 @@
 
 #include "compresspage.h"
 #include "utils.h"
+#include "fileViewer.h"
+#include "queries.h"
 
 #include "DFileDialog"
-#include "fileViewer.h"
 #include <DDialog>
 #include <DRecentManager>
+
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
@@ -34,7 +36,6 @@
 #include <QShortcut>
 #include <QTimer>
 #include <QVBoxLayout>
-#include "queries.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -145,6 +146,7 @@ void CompressPage::onAddfileSlot()
         showDialog();
         return;
     }
+
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -154,6 +156,7 @@ void CompressPage::onAddfileSlot()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
+
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();

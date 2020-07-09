@@ -20,10 +20,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "myfileitem.h"
+#include "utils.h"
+
 #include <QDateTime>
 #include <QDebug>
 #include <QObject>
-#include "utils.h"
 
 MyFileItem::MyFileItem() {}
 

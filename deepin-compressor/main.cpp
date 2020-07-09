@@ -22,13 +22,15 @@
 
 #include "mainwindow.h"
 #include "compressorapplication.h"
-#include <DWidgetUtil>
-#include <QCommandLineParser>
-#include <DLog>
 #include "utils.h"
-#include <DApplicationSettings>
 #include "openwithdialog/openwithdialog.h"
+
+#include <DWidgetUtil>
+#include <DLog>
+#include <DApplicationSettings>
 #include <DDesktopServices>
+
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
@@ -109,6 +111,7 @@ int main(int argc, char *argv[])
         if (file.contains("file://")) {
             file.remove("file://");
         }
+
         newfilelist.append(file);
     }
 
@@ -127,7 +130,6 @@ int main(int argc, char *argv[])
 
     w.showNormal();
     w.show();
-
 
     return app.exec();
 }

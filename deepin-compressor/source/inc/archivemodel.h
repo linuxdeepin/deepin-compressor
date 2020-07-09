@@ -22,13 +22,12 @@
 #ifndef ARCHIVEMODEL_H
 #define ARCHIVEMODEL_H
 
-
 #include "archiveentry.h"
+#include "mimetypedisplaymanager.h"
 
 #include <QAbstractItemModel>
 #include <QScopedPointer>
 #include <QTableView>
-#include "mimetypedisplaymanager.h"
 
 class Query;
 
@@ -189,4 +188,5 @@ private:
     MimeTypeDisplayManager *m_mimetype;
     ReadOnlyArchiveInterface *m_plugin;
 };
+
 #endif // ARCHIVEMODEL_H

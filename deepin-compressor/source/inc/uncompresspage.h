@@ -23,17 +23,18 @@
 #ifndef SINGLEFILEPAGE_H
 #define SINGLEFILEPAGE_H
 
-#include "DWidget"
+#include "fileViewer.h"
+#include "lib_edit_button.h"
+#include "archivesortfiltermodel.h"
+
+#include <DWidget>
 #include <DFileDialog>
 #include <DPushButton>
 #include <DLineEdit>
-#include "DLabel"
-#include "lib_edit_button.h"
+#include <DLabel>
 #include <DCommandLinkButton>
 #include <DPalette>
-#include "archivesortfiltermodel.h"
 #include <DApplicationHelper>
-#include "fileViewer.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,16 +65,13 @@ signals:
     void sigextractfiles(QVector<Archive::Entry *>, QString path, EXTRACT_TYPE type);
     void sigOpenExtractFile(const QVector<Archive::Entry *> &fileList, const QString &programma);
 
-
 public slots:
     void oneCompressPress();
     void onPathButoonClicked();
     void onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path);
     void onextractfilesOpenSlot(const QVector<Archive::Entry *> &fileList, const QString &programma);
 
-
 private:
-
     fileViewer *m_fileviewer;
     DPushButton *m_nextbutton;
     QStringList m_filelist;
@@ -85,6 +83,6 @@ private:
     EXTRACT_TYPE extractType = EXTRACT_TO;
 
     int m_width;
-
 };
+
 #endif

@@ -1,13 +1,13 @@
 #ifndef BATCHEXTRACT_H
 #define BATCHEXTRACT_H
 
+#include "queries.h"
+#include "batchjobs.h"
+#include "archivemodel.h"
 
 #include <QMap>
 #include <QObject>
 #include <QVector>
-#include "queries.h"
-#include "batchjobs.h"
-#include "archivemodel.h"
 #include <QUrl>
 
 class BatchExtract : public BatchJobs
@@ -35,9 +35,9 @@ public:
 
 Q_SIGNALS:
     void batchProgress(KJob *job, ulong progress);
-    void batchFilenameProgress(KJob *job, const QString & name);
-    void sendCurFile(const QString&  filename);
-    void sendFailFile(const QString&  filename);
+    void batchFilenameProgress(KJob *job, const QString &name);
+    void sendCurFile(const QString  &filename);
+    void sendFailFile(const QString  &filename);
 
 private Q_SLOTS:
     void forwardProgress(KJob *job, unsigned long percent);

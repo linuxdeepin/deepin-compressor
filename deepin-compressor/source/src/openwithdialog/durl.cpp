@@ -33,7 +33,6 @@
 #include <QDebug>
 #include <QUrlQuery>
 
-
 QRegularExpression DUrl::burn_rxp = QRegularExpression("^(.*?)/(" BURN_SEG_ONDISC "|" BURN_SEG_STAGING ")(.*)$");
 
 static inline QString parseDecodedComponent(const QString &data)
@@ -338,6 +337,7 @@ QString DUrl::burnDestDevice() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return "";
     }
+
     return m.captured(1);
 }
 
@@ -347,6 +347,7 @@ QString DUrl::burnFilePath() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return "";
     }
+
     return m.captured(3);
 }
 
@@ -356,6 +357,7 @@ bool DUrl::burnIsOnDisc() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return false;
     }
+
     return m.captured(2) == BURN_SEG_ONDISC;
 }
 

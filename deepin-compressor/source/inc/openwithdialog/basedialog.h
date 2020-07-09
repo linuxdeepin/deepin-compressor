@@ -25,7 +25,7 @@
 #ifndef BASEDIALOG_H
 #define BASEDIALOG_H
 
-#include <ddialog.h>
+#include <DDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -40,7 +40,7 @@ class BaseDialog : public DAbstractDialog
 {
     Q_OBJECT
 public:
-    explicit BaseDialog(QWidget *parent = 0);
+    explicit BaseDialog(QWidget *parent = nullptr);
     ~BaseDialog();
 
     void setTitle(const QString &title);

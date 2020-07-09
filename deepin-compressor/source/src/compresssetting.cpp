@@ -20,13 +20,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compresssetting.h"
-
-#include "DApplicationHelper"
-#include "DFontSizeManager"
 #include "utils.h"
+
+#include <DApplicationHelper>
+#include <DFontSizeManager>
 #include <DDialog>
 #include <DFileDialog>
 #include <DStyle>
+
 #include <QDebug>
 #include <QFileIconProvider>
 #include <QFileInfo>
@@ -36,8 +37,7 @@
 #include <QScrollArea>
 #include <QStandardPaths>
 #include <QTemporaryFile>
-#include <qevent.h>
-
+#include <QKeyEvent>
 #include <QRegExp>
 
 TypeLabel::TypeLabel(QWidget *parent) : DLabel(parent)
@@ -101,6 +101,7 @@ void CompressSetting::InitUI()
             m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
         }
     }
+
     m_typemenu->addAction("zip");
     setTypeImage("zip");
 
@@ -426,8 +427,8 @@ void CompressSetting::onNextButoonClicked()
 
             unvalidStr = fileInfo.baseName();
         }
-
     }
+
     const QString fixedType = m_openArgs[QStringLiteral("fixedMimeType")];
     if (unvalidStr != "") {
         QSet<QString> special = {"application/x-7z-compressed", "application/zip", "application/x-java-archive", "application/x-tar"};
@@ -443,9 +444,8 @@ void CompressSetting::onNextButoonClicked()
             return;
         }
     }
+
     //check end
-
-
     emit sigCompressPressed(m_openArgs);
 
     m_openArgs.remove(QStringLiteral("createNewArchive"));
@@ -534,6 +534,7 @@ bool CompressSetting::checkfilename(QString str)
     if (str.length() == 0) {
         return false;
     }
+
     if (str.length() > 255) {
         return false;
     }

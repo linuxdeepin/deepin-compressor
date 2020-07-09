@@ -20,12 +20,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compressor_fail.h"
+#include "utils.h"
 
 #include <DFileDialog>
+#include <DFontSizeManager>
+#include <DApplicationHelper>
+
 #include <QBoxLayout>
-#include <utils.h>
-#include "DFontSizeManager"
-#include "DApplicationHelper"
 
 Compressor_Fail::Compressor_Fail(QWidget *parent)
     : DWidget(parent)

@@ -1,9 +1,10 @@
 #ifndef BATCHCOMPRESS_H
 #define BATCHCOMPRESS_H
 
+#include "batchjobs.h"
+
 #include <QMap>
 #include <QVector>
-#include "batchjobs.h"
 
 class BatchCompress: public BatchJobs
 {
@@ -15,7 +16,7 @@ public:
     {
         m_initialJobCount = 0;
         m_inputs.clear();
-        if(m_Args){
+        if (m_Args) {
             m_Args->clear();
             delete m_Args;
             m_Args = nullptr;
@@ -33,8 +34,8 @@ protected:
 
 Q_SIGNALS:
     void batchProgress(KJob *job, ulong progress);
-    void batchFilenameProgress(KJob *job, const QString & name);
-    void sendCurFile(const QString&  filename);
+    void batchFilenameProgress(KJob *job, const QString &name);
+    void sendCurFile(const QString  &filename);
 
 private Q_SLOTS:
     void forwardProgress(KJob *job, unsigned long percent);
@@ -42,13 +43,13 @@ private Q_SLOTS:
     void slotStartJob();
 
     void SlotProgressFile(KJob *job, const QString &name);
-    void SlotCreateJobFinished(KJob* job);
+    void SlotCreateJobFinished(KJob *job);
 private:
     int m_initialJobCount;
 //    QMap<KJob *, QPair<QString, QString> > m_fileNames;
 
     QVector<QStringList> m_inputs;
-    QMap<QString, QString>* m_Args = nullptr;
+    QMap<QString, QString> *m_Args = nullptr;
 };
 
 #endif // BATCHCOMPRESS_H

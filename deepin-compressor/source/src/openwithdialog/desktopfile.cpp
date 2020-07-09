@@ -24,6 +24,7 @@
 
 #include "openwithdialog/desktopfile.h"
 #include "openwithdialog/properties.h"
+
 #include <QFile>
 #include <QSettings>
 #include <QDebug>
@@ -118,6 +119,7 @@ QString DesktopFile::getDisplayName() const
     if (m_deepinVendor == QStringLiteral("deepin") && !m_genericName.isEmpty()) {
         return m_genericName;
     }
+
     return m_localName.isEmpty() ? m_name : m_localName;
 }
 

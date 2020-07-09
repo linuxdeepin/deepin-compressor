@@ -22,12 +22,13 @@
 
 //#include "myfilesystemmodelprivate.h"
 #include "myfilesystemmodel.h"
+#include "mimetypes.h"
+#include "utils.h"
+
+#include <DFontSizeManager>
+
 #include <QDateTime>
 #include <QDebug>
-#include <utils.h>
-#include "DFontSizeManager"
-#include "mimetypes.h"
-
 #include <QMimeDatabase>
 
 MyFileSystemModel::MyFileSystemModel(QObject *parent)
@@ -66,6 +67,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     }
+
     return QVariant();
 }
 
@@ -146,11 +148,14 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 if (icon.isNull()) {
                     icon = QIcon::fromTheme("empty").pixmap(24, 24);
                 }
+
                 return icon;
             }
+
             return QVariant();
         }
     }
+
     return QFileSystemModel::data(index, role);
 }
 

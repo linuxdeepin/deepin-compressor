@@ -24,11 +24,15 @@
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyleHelper>
+#include <DFontSizeManager>
+
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
+
 #include <QPainterPath>
 #include "DFontSizeManager"
+
 static const int kSpacingMargin = 4;
 
 DWIDGET_USE_NAMESPACE

@@ -20,15 +20,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "extractpausedialog.h"
+#include <utils.h>
+
+#include <DFontSizeManager>
+#include <DLabel>
+#include <DWidget>
+#include <DApplicationHelper>
+
 #include <QBoxLayout>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
-#include <utils.h>
-#include "DFontSizeManager"
-#include "DLabel"
-#include "QAbstractButton"
-#include "DWidget"
-#include <DApplicationHelper>
+#include <QAbstractButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -100,4 +102,3 @@ void ExtractPauseDialog::closeEvent(QCloseEvent */*event*/)
 {
     emit sigbuttonpress(2);
 }
-

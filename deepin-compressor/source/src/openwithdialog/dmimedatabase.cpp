@@ -26,7 +26,6 @@
 //#include "shutil/fileutils.h"
 
 #include <QFileInfo>
-
 #include <QUrl>
 
 DMimeDatabase::DMimeDatabase()
@@ -62,7 +61,6 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
         }
     }
 
-
     return result;
 }
 
@@ -73,5 +71,3 @@ QMimeType DMimeDatabase::mimeTypeForUrl(const QUrl &url) const
 
     return QMimeDatabase::mimeTypeForUrl(url);
 }
-
-

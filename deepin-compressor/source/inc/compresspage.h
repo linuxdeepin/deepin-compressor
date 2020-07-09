@@ -63,12 +63,10 @@ signals:
     void sigRefreshFileList(const QStringList &files);
 
 private:
-
     fileViewer *m_fileviewer;
     DPushButton *m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
-
 };
 
 #endif

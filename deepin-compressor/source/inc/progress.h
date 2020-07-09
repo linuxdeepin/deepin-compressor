@@ -27,6 +27,7 @@
 #include <DPushButton>
 #include <DLabel>
 #include <DProgressBar>
+
 #include <QTimer>
 
 DWIDGET_USE_NAMESPACE

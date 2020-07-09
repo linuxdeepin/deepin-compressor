@@ -21,27 +21,28 @@
  */
 
 #include "homepage.h"
+#include "mainwindow.h"
 #include "utils.h"
-#include <QApplication>
-#include <QDir>
+
 #include <DFileDialog>
 #include <DPalette>
+#include <DFontSizeManager>
+#include <DGuiApplicationHelper>
+
+#include <QApplication>
+#include <QDir>
 #include <QShortcut>
-#include "DFontSizeManager"
-#include "DGuiApplicationHelper"
-#include "mainwindow.h"
 
 DGUI_USE_NAMESPACE
 
-
 HomePage::HomePage(QWidget *parent)
     : DWidget(parent),
-      m_layout(new QVBoxLayout(this)),
-      m_iconLabel(new DLabel(this)),
-      m_tipsLabel(new DLabel(tr("Drag file or folder here"), this)),
-      m_splitLine(new DLabel(this)),
-      m_chooseBtn(new DCommandLinkButton(tr("Select File"), this)),
-      m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
+      m_layout(new QVBoxLayout(this))
+    , m_iconLabel(new DLabel(this))
+    , m_tipsLabel(new DLabel(tr("Drag file or folder here"), this))
+    , m_splitLine(new DLabel(this))
+    , m_chooseBtn(new DCommandLinkButton(tr("Select File"), this))
+    ,  m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
 {
     m_unloadPixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
     m_loadedPixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));

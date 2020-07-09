@@ -21,6 +21,10 @@
  */
 
 #include "utils.h"
+#include "mimetypes.h"
+
+#include <DStandardPaths>
+
 #include <QDir>
 #include <QFile>
 #include <QDebug>
@@ -33,10 +37,9 @@
 #include <QImageReader>
 #include <QPixmap>
 #include <QTextCodec>
-#include <KEncodingProber>
 #include <QRegularExpression>
-#include "mimetypes.h"
-#include <DStandardPaths>
+
+#include <KEncodingProber>
 
 DCORE_USE_NAMESPACE
 
@@ -86,7 +89,6 @@ QString Utils::getConfigPath()
 
     return dir.filePath(qApp->applicationName());
 }
-
 
 QString Utils::suffixList()
 {
@@ -183,6 +185,7 @@ QString Utils::humanReadableSize(const qint64 &size, int precision)
         measure = it.next();
         sizeAsDouble /= 1024.0;
     }
+
     return QString::fromLatin1("%1 %2").arg(sizeAsDouble, 0, 'f', precision).arg(measure);
 }
 
@@ -207,6 +210,7 @@ qint64 Utils::humanReadableToSize(const QString &size)
             sizeAsStr.remove(suffix);
             break;
         }
+
         loop++;
     }
 
@@ -492,6 +496,7 @@ bool Utils::checkAndDeleteDir(const QString &iFilePath)
         QFile deleteFile(iFilePath);
         return  deleteFile.remove();
     }
+
     return false;
 }
 
@@ -530,7 +535,6 @@ bool Utils::deleteDir(const QString &iFilePath)
     }
 
     return !error;
-
 }
 
 QString Utils::readConf()
@@ -540,6 +544,7 @@ QString Utils::readConf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
 
@@ -560,6 +565,7 @@ QString Utils::readConf()
     if (readStatus) {
         confValue = confFile.readAll();
     }
+
     confFile.close();
 
     return confValue;
@@ -573,6 +579,7 @@ bool Utils::existMimeType(QString mimetype)
     for (int i = 0; i < confList.count(); i++) {
         qDebug() << confList.at(i);
     }
+
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
         if (confList.at(i).contains("." + mimetype + ":")) {

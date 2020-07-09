@@ -22,26 +22,27 @@
 #ifndef FILEVIWER_H
 #define FILEVIWER_H
 
-#include <QFileInfo>
-#include <QLineEdit>
-#include <DTableView>
-#include <DLabel>
-#include <QItemDelegate>
-#include <QPainter>
-#include "myfilesystemmodel.h"
-#include <DScrollBar>
-#include <QStandardItemModel>
-#include <dfiledragserver.h>
-#include <dfiledrag.h>
 #include "archivemodel.h"
-#include <DMenu>
+#include "myfilesystemmodel.h"
 #include "mimetypedisplaymanager.h"
 #include "archivesortfiltermodel.h"
+#include "openwithdialog/openwithdialog.h"
+
+#include <DTableView>
+#include <DLabel>
+#include <DScrollBar>
+#include <DMenu>
 #include <DApplicationHelper>
 #include <DFontSizeManager>
-#include <QUrl>
+#include <dfiledragserver.h>
+#include <dfiledrag.h>
 
-#include "openwithdialog/openwithdialog.h"
+#include <QFileInfo>
+#include <QLineEdit>
+#include <QItemDelegate>
+#include <QPainter>
+#include <QStandardItemModel>
+#include <QUrl>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -116,7 +117,6 @@ struct SortInfo {
     int sortRole;
 };
 
-
 class MimesAppsManager;
 class fileViewer : public DWidget
 {
@@ -162,8 +162,6 @@ protected slots:
     void onRightMenuClicked(QAction *action);
     void onRightMenuOpenWithClicked(QAction *action);
     void slotDragLeave(QString path);
-
-
 
 signals:
     void sigFileRemoved(const QStringList &filelist);
@@ -220,7 +218,6 @@ private:
     QAction *deleteAction;
 
     int openFileTempLink = 0;
-
 };
 
 #endif // FILEVIWER_H

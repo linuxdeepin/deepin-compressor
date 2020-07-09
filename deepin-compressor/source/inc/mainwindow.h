@@ -23,9 +23,6 @@
 
 #pragma once
 
-#include <DMainWindow>
-#include <QSettings>
-#include <DTitlebar>
 #include "homepage.h"
 #include "uncompresspage.h"
 #include "compresspage.h"
@@ -40,14 +37,18 @@
 #include "extractpausedialog.h"
 #include "settingdialog.h"
 #include "encodingpage.h"
-#include <DIconButton>
 #include "archivesortfiltermodel.h"
 #include "batchextract.h"
 #include "batchcompress.h"
 #include "openloadingpage.h"
-#include <DFileWatcher>
-#include <QElapsedTimer>
 
+#include <DMainWindow>
+#include <DTitlebar>
+#include <DIconButton>
+#include <DFileWatcher>
+
+#include <QElapsedTimer>
+#include <QSettings>
 
 #define TITLE_FIXED_HEIGHT 50
 
@@ -171,6 +172,7 @@ private slots:
     void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
     void slotStopSpinner();
     void slotWorkTimeOut();
+
 signals:
     void sigquitApp();
     void sigZipAddFile();
@@ -263,7 +265,6 @@ private:
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif
-
 };
 
 

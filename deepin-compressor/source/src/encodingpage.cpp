@@ -20,12 +20,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "encodingpage.h"
+
+#include <DFontSizeManager>
+
 #include <QVBoxLayout>
 #include <QFileIconProvider>
 #include <QDir>
 #include <QTemporaryFile>
 #include <QTextCodec>
-#include "DFontSizeManager"
 
 EncodingPage::EncodingPage(QWidget *parent)
     : DWidget(parent)
@@ -43,7 +45,6 @@ void EncodingPage::InitUI()
     m_filenamelabel->setText("");
 
     DFontSizeManager::instance()->bind(m_filenamelabel, DFontSizeManager::T5, QFont::DemiBold);
-
 
     QStringList encodeList;
 
@@ -87,7 +88,6 @@ void EncodingPage::InitUI()
     buttonlayout->addSpacing(10);
     buttonlayout->addWidget(m_confirmbutton);
     buttonlayout->addStretch();
-
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
 //    mainlayout->addSpacing(62);

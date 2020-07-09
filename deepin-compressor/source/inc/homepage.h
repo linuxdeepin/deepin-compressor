@@ -23,14 +23,16 @@
 #ifndef HOMEPAGE_H
 #define HOMEPAGE_H
 
+#include "filewatcher.h"
+
 #include <DWidget>
-#include <QVBoxLayout>
 #include <DLabel>
 #include <DFileDialog>
-#include <QSettings>
 #include <DCommandLinkButton>
 #include <DSpinner>
-#include "filewatcher.h"
+
+#include <QSettings>
+#include <QVBoxLayout>
 
 DWIDGET_USE_NAMESPACE
 

@@ -22,18 +22,19 @@
 #include "archivemodel.h"
 
 #include "jobs.h"
+#include "mimetypes.h"
+#include "utils.h"
+
+#include <DPalette>
+#include <DFontSizeManager>
+
 #include <QDBusConnection>
 #include <QFileIconProvider>
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QRegularExpression>
-
 #include <QTextCodec>
 #include <QUrl>
-#include <utils.h>
-#include "DPalette"
-#include "DFontSizeManager"
-#include "mimetypes.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -146,6 +147,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
     }
+
     return QVariant();
 }
 
@@ -186,6 +188,7 @@ QVariant ArchiveModel::headerData(int section, Qt::Orientation, int role) const
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     }
+
     return QVariant();
 }
 
@@ -246,6 +249,7 @@ QModelIndex ArchiveModel::parent(const QModelIndex &index) const
             return createIndex(item->getParent()->row(), 0, item->getParent());
         }
     }
+
     return QModelIndex();
 }
 
@@ -256,6 +260,7 @@ Archive::Entry *ArchiveModel::entryForIndex(const QModelIndex &index)
         Q_ASSERT(item);
         return item;
     }
+
     return nullptr;
 }
 
@@ -270,6 +275,7 @@ int ArchiveModel::rowCount(const QModelIndex &parent) const
             return parentEntry->entries().count();
         }
     }
+
     return 0;
 }
 
@@ -283,7 +289,6 @@ Qt::DropActions ArchiveModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
-
 
 QMimeData *ArchiveModel::mimeData(const QModelIndexList &indexes) const
 {
@@ -402,6 +407,7 @@ Archive::Entry *ArchiveModel::parentFor(const Archive::Entry *entry, InsertBehav
     if (pieces.isEmpty()) {
         return nullptr;
     }
+
     pieces.removeLast();
 
     // Used to speed up loading of large archives.
@@ -442,6 +448,7 @@ Archive::Entry *ArchiveModel::parentFor(const Archive::Entry *entry, InsertBehav
             entry->setProperty("isDirectory", true);
             insertEntry(entry, behaviour);
         }
+
         if (!entry->isDir()) {
             Archive::Entry *e = new Archive::Entry(parent);
             e->copyMetaData(entry);
@@ -449,6 +456,7 @@ Archive::Entry *ArchiveModel::parentFor(const Archive::Entry *entry, InsertBehav
             // We avoid removing previous entries unless necessary.
             insertEntry(e, behaviour);
         }
+
         parent = entry;
     }
 
@@ -466,6 +474,7 @@ QModelIndex ArchiveModel::indexForEntry(Archive::Entry *entry)
         Q_ASSERT(entry->getParent()->isDir());
         return createIndex(entry->row(), 0, entry);
     }
+
     return QModelIndex();
 }
 
@@ -530,9 +539,6 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
 //        qDebug()<<utf8code;
 //    }
 
-
-
-
 //    QTextCodec* utf8Codec= QTextCodec::codecForName("utf-8");
 //    QTextCodec* gb2312Codec = QTextCodec::codecForName("EUC-KR");
 
@@ -591,6 +597,7 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     if (entryFileName.isEmpty()) { // The entry contains only "." or "./"
         return;
     }
+
     receivedEntry->setProperty("fullPath", entryFileName);
 
     // For some archive formats (e.g. AppImage and RPM) paths of folders do not
@@ -688,6 +695,7 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     if (icon.isNull()) {
         icon = QIcon::fromTheme("empty").pixmap(24, 24);
     }
+
 //    qDebug()<<icon;
     m_entryIcons.insert(entry->fullPath(NoTrailingSlash), icon);
 }
@@ -793,9 +801,9 @@ AddJob *ArchiveModel::addFiles(QVector<Archive::Entry *> &entries, const Archive
         connect(job, &AddJob::newEntry, this, &ArchiveModel::slotNewEntry);
         connect(job, &AddJob::userQuery, this, &ArchiveModel::slotUserQuery);
 
-
         return job;
     }
+
     return nullptr;
 }
 
@@ -812,9 +820,9 @@ MoveJob *ArchiveModel::moveFiles(QVector<Archive::Entry *> &entries, Archive::En
         connect(job, &MoveJob::entryRemoved, this, &ArchiveModel::slotEntryRemoved);
         connect(job, &MoveJob::finished, this, &ArchiveModel::slotCleanupEmptyDirs);
 
-
         return job;
     }
+
     return nullptr;
 }
 CopyJob *ArchiveModel::copyFiles(QVector<Archive::Entry *> &entries, Archive::Entry *destination, const CompressionOptions &options)
@@ -828,9 +836,9 @@ CopyJob *ArchiveModel::copyFiles(QVector<Archive::Entry *> &entries, Archive::En
         connect(job, &CopyJob::newEntry, this, &ArchiveModel::slotNewEntry);
         connect(job, &CopyJob::userQuery, this, &ArchiveModel::slotUserQuery);
 
-
         return job;
     }
+
     return nullptr;
 }
 
@@ -846,6 +854,7 @@ DeleteJob *ArchiveModel::deleteFiles(QVector<Archive::Entry *> entries)
         connect(job, &DeleteJob::userQuery, this, &ArchiveModel::slotUserQuery);
         return job;
     }
+
     return nullptr;
 }
 
@@ -873,6 +882,7 @@ bool ArchiveModel::conflictingEntries(QList<const Archive::Entry *> &conflicting
             destination = m_rootEntry.data();
         }
     }
+
     const Archive::Entry *lastDirEntry = destination;
     QString skippedDirPath;
 
@@ -923,8 +933,10 @@ bool ArchiveModel::hasDuplicatedEntries(const QStringList &entries)
         if (tempList.contains(entry)) {
             return true;
         }
+
         tempList << entry;
     }
+
     return false;
 }
 
@@ -934,6 +946,7 @@ QMap<QString, Archive::Entry *> ArchiveModel::entryMap(const QVector<Archive::En
     for (Archive::Entry *entry : entries) {
         map.insert(entry->fullPath(), entry);
     }
+
     return map;
 }
 

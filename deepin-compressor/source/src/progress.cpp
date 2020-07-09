@@ -21,16 +21,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "progress.h"
+#include "utils.h"
+#include "mainwindow.h"
+
+#include <DDialog>
+#include <QGraphicsDropShadowEffect>
+#include <DFontSizeManager>
 
 #include <QFileIconProvider>
 #include <QVBoxLayout>
 #include <QDebug>
-#include <DDialog>
-#include <QGraphicsDropShadowEffect>
-#include "DFontSizeManager"
-#include "utils.h"
 #include <QTimerEvent>
-#include "mainwindow.h"
 
 Progress::Progress(DWidget *parent)
     : DWidget(parent)
@@ -137,6 +138,7 @@ void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
     } else if (type == DECOMPRESSING) {
         m_speedLabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
     }
+
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
 }
 
@@ -216,6 +218,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
             m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
         }
     }
+
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 

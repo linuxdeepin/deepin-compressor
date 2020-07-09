@@ -20,26 +20,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "settingdialog.h"
-#include <QStandardItemModel>
-#include <qsettingbackend.h>
-#include <QDebug>
-#include <DFileDialog>
-#include <QBoxLayout>
-#include <DComboBox>
-#include <DLabel>
-#include <QMessageBox>
+#include "kprocess.h"
+
 #include <DPalette>
 #include <DSettingsWidgetFactory>
 #include "DPushButton"
 #include "DApplicationHelper"
-#include "kprocess.h"
+#include <DComboBox>
+#include <DLabel>
+#include <DFileDialog>
 #include <DStandardPaths>
 #include <DSuggestButton>
 
+#include <QStandardItemModel>
+#include <QDebug>
+#include <QBoxLayout>
+#include <QMessageBox>
+#include <qsettingbackend.h>
+
 DGUI_USE_NAMESPACE
 
-SettingDialog::SettingDialog(QWidget *parent):
-    DSettingsDialog(parent)
+SettingDialog::SettingDialog(QWidget *parent)
+    : DSettingsDialog(parent)
 {
     m_associtionlist << "file_association.file_association_type.x-7z-compressed"
                      << "file_association.file_association_type.x-archive"
@@ -118,8 +120,6 @@ SettingDialog::SettingDialog(QWidget *parent):
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
     }
-
-
 }
 
 void SettingDialog::initUI()
@@ -227,6 +227,7 @@ void SettingDialog::initUI()
                         } else {
                             combobox->setEditText(m_curpath);
                         }
+
                         return;
                     }
 
@@ -254,10 +255,7 @@ void SettingDialog::initUI()
                     m_index_last = 2;
                 }
                 m_comboboxoption->setValue(m_curpath);
-
-
             });
-
 
             qDebug() << m_curpath;
             return widget;
@@ -315,6 +313,7 @@ void SettingDialog::done(int status)
 
         loop++;
     }
+
     m_valuelist = m_valuelisttemp;
 //    writeToConfbf();
 }
@@ -326,6 +325,7 @@ void SettingDialog::readFromConfbf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile file(confPath);
 
@@ -369,6 +369,7 @@ void SettingDialog::writeToConfbf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
 
     QFile file(confPath);
@@ -412,6 +413,7 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
     } else if (key.contains("default_path") && value.toString() == "") {
         emit sigReset();
     }
+
     writeToConfbf();
 
 }

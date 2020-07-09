@@ -27,9 +27,6 @@
 
 #include <QMimeDatabase>
 
-
-
-
 class DMimeDatabase : public QMimeDatabase
 {
     Q_DISABLE_COPY(DMimeDatabase)
@@ -41,7 +38,5 @@ public:
     QMimeType mimeTypeForFile(const QFileInfo &fileInfo, MatchMode mode = MatchDefault) const;
     QMimeType mimeTypeForUrl(const QUrl &url) const;
 };
-
-
 
 #endif // DMIMEDATABASE_H

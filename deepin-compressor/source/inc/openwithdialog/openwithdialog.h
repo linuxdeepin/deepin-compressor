@@ -25,22 +25,21 @@
 #ifndef OPENWITHDIALOG_H
 #define OPENWITHDIALOG_H
 
-#include "basedialog.h"
-
-#include <dflowlayout.h>
-#include <QCommandLinkButton>
-
-#include <QObject>
-#include <QUrl>
-#include <QMimeType>
-#include <QProcess>
-
-
 #include "durl.h"
 #include "singleton.h"
 #include "dmimedatabase.h"
 #include "mimesappsmanager.h"
 #include "kprocess.h"
+#include "basedialog.h"
+
+#include <dflowlayout.h>
+
+#include <QCommandLinkButton>
+#include <QObject>
+#include <QUrl>
+#include <QMimeType>
+#include <QProcess>
+
 
 DWIDGET_USE_NAMESPACE
 

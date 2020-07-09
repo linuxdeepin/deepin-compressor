@@ -22,11 +22,12 @@
 #ifndef PROGRESSDIALOG_H
 #define PROGRESSDIALOG_H
 
+#include "extractpausedialog.h"
+
 #include <DTitlebar>
 #include <DPushButton>
 #include <DLabel>
 #include <DProgressBar>
-#include "extractpausedialog.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -42,7 +43,7 @@ public:
     void setCurrentFile(const QString &file);
     void setProcess(unsigned long  value);
     void setFinished(const QString &path);
-    void setMsg(const QString& msg);
+    void setMsg(const QString &msg);
     void showdialog();
     bool isshown();
     void clearprocess();
@@ -71,7 +72,6 @@ public:
 
 private:
     DTitlebar *m_titlebar;
-
 };
 
 #endif // PROGRESSDIALOG_H

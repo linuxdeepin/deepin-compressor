@@ -43,7 +43,6 @@ BatchExtract::BatchExtract(QObject *parent)
 
 void BatchExtract::addExtraction(const QUrl &url)
 {
-
     QString destination = destinationFolder();
 
     auto job = Archive::batchExtract(url.toLocalFile(), destination, autoSubfolder(), preservePaths());
@@ -110,7 +109,6 @@ void BatchExtract::slotStartJob()
     for (const auto &url : qAsConst(m_inputs)) {
         addExtraction(url);
     }
-
 
     m_initialJobCount = subjobs().size();
 
@@ -219,7 +217,5 @@ void BatchExtract::setPreservePaths(bool value)
 
 bool BatchExtract::showExtractDialog()
 {
-
     return true;
 }
-

@@ -23,13 +23,14 @@
 #include "uncompresspage.h"
 #include "utils.h"
 
+#include <DStandardPaths>
+#include <DMessageManager>
+#include <DDialog>
+
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QFile>
 #include <QUrl>
-#include <DStandardPaths>
-#include <DMessageManager>
-#include <DDialog>
 #include <QFontMetrics>
 
 DCORE_USE_NAMESPACE
@@ -93,6 +94,7 @@ void UnCompressPage::oneCompressPress()
         } else {
             showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         }
+
         return;
     } else {
         emit sigDecompressPress(m_pathstr);
@@ -215,6 +217,7 @@ QString UnCompressPage::getAndDisplayPath(QString path)
     if (fontSize > m_width) {
         pathStr = fontMetrics.elidedText(path, Qt::ElideMiddle, m_width);//返回一个带有省略号的字符串
     }
+
     return pathStr;
 }
 
@@ -228,6 +231,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     if (fileList.count() == 0) {
         return;
     }
+
     // get extract type
     extractType = type;
 
@@ -255,6 +259,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         if (!dir.exists()) {
             dir.mkdir(tmppath);
         }
+
         emit sigextractfiles(fileList, tmppath, type);
     } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
         QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
@@ -262,6 +267,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         if (!dir.exists()) {
             dir.mkdir(tmppath);
         }
+
         emit sigextractfiles(fileList, tmppath, type);
     } else {
         emit sigextractfiles(fileList, m_pathstr, type);
@@ -273,4 +279,3 @@ void UnCompressPage::onextractfilesOpenSlot(const QVector<Archive::Entry *> &fil
 {
     emit sigOpenExtractFile(fileList, programma);
 }
-

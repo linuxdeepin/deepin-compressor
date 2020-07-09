@@ -40,15 +40,16 @@ handleQObject(QObject *object)
 }
 
 template<typename T>
-static typename QtPrivate::QEnableIf<!QtPrivate::AreArgumentsCompatible<T, QObject>::value>::Type
-handleQObject(void*) {}
+static typename QtPrivate::QEnableIf < !QtPrivate::AreArgumentsCompatible<T, QObject>::value >::Type
+handleQObject(void *) {}
 }
 
 template<typename T>
 class Singleton
 {
 public:
-    static T *instance() {
+    static T *instance()
+    {
         static T instance;
 
         if (QtPrivate::AreArgumentsCompatible<T, QObject>::value) {
@@ -62,7 +63,7 @@ private:
     Singleton();
     ~Singleton();
     Singleton(const Singleton &);
-    Singleton & operator = (const Singleton &);
+    Singleton &operator = (const Singleton &);
 };
 
 #endif // SINGLETON_H

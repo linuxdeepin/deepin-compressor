@@ -20,10 +20,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "encryptionpage.h"
+#include "utils.h"
+
+#include <DFontSizeManager>
+
 #include <QBoxLayout>
-#include <utils.h>
 #include <QDebug>
-#include "DFontSizeManager"
 
 EncryptionPage::EncryptionPage(QWidget *parent)
     : DWidget(parent)
