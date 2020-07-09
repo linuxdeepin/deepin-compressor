@@ -26,9 +26,9 @@
 #include "archiveentry.h"
 #include "cliproperties.h"
 //#include "filewatcher.h"
+
 #include <QProcess>
 #include <QRegularExpression>
-
 
 class KProcess;
 
@@ -96,8 +96,9 @@ public:
     QString multiVolumeName() const override;
 
     CliProperties *cliProperties() const;
-    virtual void cleanIfCanceled()override;
-    virtual void watchFileList(QStringList *strList)override;
+    virtual void cleanIfCanceled() override;
+    virtual void watchFileList(QStringList *strList) override;
+
 protected:
 
     bool setAddedFiles();
@@ -151,7 +152,6 @@ protected:
     CompressionOptions m_passedOptions;
 
     KProcess *m_process = nullptr;
-
 
     bool m_abortingOperation = false;
     qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
@@ -208,8 +208,8 @@ private:
 
     void watchDestFilesBegin();
     void watchDestFilesEnd();
-private:
 
+private:
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
     QHash<int, QList<QRegularExpression> > m_patternCache;
@@ -245,8 +245,6 @@ private Q_SLOTS:
      *  @brief slotFilesWatchedChanged
      */
     void slotFilesWatchedChanged(QString fileChanged);
-
 };
-
 
 #endif /* CLIINTERFACE_H */

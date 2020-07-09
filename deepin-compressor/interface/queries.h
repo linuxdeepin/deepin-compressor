@@ -22,6 +22,7 @@
 #ifndef QUERIES_H
 #define QUERIES_H
 
+#include <DApplicationHelper>
 
 #include <DCheckBox>
 #include <QString>
@@ -29,7 +30,6 @@
 #include <QWaitCondition>
 #include <QMutex>
 #include <QVariant>
-#include <DApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -75,11 +75,10 @@ public:
     QVariant response() const;
 
     int execDialog();
+
 protected:
     Query();
     virtual ~Query() {}
-
-
 
     QueryData m_data;
 
@@ -172,6 +171,7 @@ public:
 
     bool responseCancelled();
     bool dontAskAgain();
+
 private:
     QCheckBox m_chkDontAskAgain;
 };

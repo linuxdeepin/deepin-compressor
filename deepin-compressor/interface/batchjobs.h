@@ -1,5 +1,6 @@
 #ifndef BATCHJOBS_H
 #define BATCHJOBS_H
+
 #include "archivejob.h"
 #include "archivejob_p.h"
 
@@ -36,6 +37,7 @@ public Q_SLOTS:
 
 protected:
 //    BatchJobs(BatchJobsPrivate &dd, QObject *parent);
+
 private:
     QList<KJob *> m_subjobs;
 //    Q_DECLARE_PRIVATE(BatchJobs)

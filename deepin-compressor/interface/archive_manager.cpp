@@ -24,11 +24,11 @@
 #include "jobs.h"
 #include "mimetypes.h"
 #include "pluginmanager.h"
+#include "kpluginloader.h"
+#include "kpluginfactory.h"
 
 #include <QMimeDatabase>
 #include <QRegularExpression>
-#include "kpluginloader.h"
-#include "kpluginfactory.h"
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -302,7 +302,6 @@ TestJob *Archive::testArchive()
         return nullptr;
     }
 
-
     TestJob *job = new TestJob(m_iface);
     return job;
 }
@@ -437,10 +436,10 @@ DeleteJob *Archive::deleteFiles(QVector<Archive::Entry *> &entries)
         return nullptr;
     }
 
-
     if (m_iface->isReadOnly()) {
         return nullptr;
     }
+
     DeleteJob *newJob = new DeleteJob(entries, static_cast<ReadWriteArchiveInterface *>(m_iface));
 
     return newJob;
@@ -587,4 +586,3 @@ bool Archive::hasMultipleTopLevelEntries() const
 {
     return !isSingleFile() && !isSingleFolder();
 }
-

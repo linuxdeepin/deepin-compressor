@@ -26,8 +26,6 @@
 
 #include <QDateTime>
 
-
-
 enum PathFormat {
     NoTrailingSlash,
     WithTrailingSlash
@@ -116,7 +114,6 @@ private:
 
 QDebug  operator<<(QDebug d, const Archive::Entry &entry);
 QDebug  operator<<(QDebug d, const Archive::Entry *entry);
-
 
 Q_DECLARE_METATYPE(Archive::Entry *)
 

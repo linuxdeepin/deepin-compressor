@@ -1,9 +1,11 @@
 #include "analysepsdtool.h"
-#include <stdio.h>
 
 #include <DStandardPaths>
 #include <QDir>
+
 #include <QProcess>
+
+#include <stdio.h>
 
 DCORE_USE_NAMESPACE
 
@@ -26,6 +28,7 @@ AnalyseToolRar4::~AnalyseToolRar4()
         it.value() = nullptr;
         it++;
     }
+
     pMapInfo->clear();
     lineCount = 0;
 }
@@ -95,6 +98,7 @@ AnalyseTool7Z::~AnalyseTool7Z()
         it.value() = nullptr;
         it++;
     }
+
     pMapInfo->clear();
     lineCount = 0;
 }
@@ -214,9 +218,11 @@ QString AnalyseHelp::getDestionFolderPath()
     if (destSubFolderName == "") {
         return "";
     }
+
     if (destPath == "") {
         return "";
     }
+
     return destPath + "/" + destSubFolderName;
 }
 
@@ -251,6 +257,7 @@ void AnalyseHelp::analyseLine(const QString &line)
 //            }
 //        }
     }
+
     this->lineCount++;
 
 }
@@ -311,7 +318,6 @@ int AnalyseHelp::isRightPsd()
     }
 
 }
-
 
 ///////密码正确
 //"\b\b\b\b    \b\b\b\bEverything is Ok"

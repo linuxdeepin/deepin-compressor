@@ -27,7 +27,6 @@
 #include <QMimeType>
 #include <QVector>
 
-
 class PluginManager : public QObject
 {
     Q_OBJECT
@@ -53,7 +52,6 @@ public:
     void setFileSize(qint64 size);
 
 private:
-
     void loadPlugins();
     QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const;
     static QStringList sortByComment(const QSet<QString> &mimeTypes);
@@ -63,6 +61,5 @@ private:
     QHash<QString, QVector<Plugin *>> m_preferredPluginsCache;
     qint64  m_filesize = 0;
 };
-
 
 #endif

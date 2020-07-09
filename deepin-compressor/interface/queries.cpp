@@ -20,19 +20,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "queries.h"
+
+#include <DDialog>
+#include <DFontSizeManager>
+#include <DApplicationHelper>
+#include <DLabel>
+#include <DPasswordEdit>
+
 #include <QApplication>
 #include <QDir>
 #include <QMessageBox>
 #include <QPointer>
 #include <QUrl>
-#include <DDialog>
-#include <DFontSizeManager>
-#include <DApplicationHelper>
-#include <DLabel>
 #include <QBoxLayout>
 #include <QImageReader>
 #include <QDebug>
-#include <DPasswordEdit>
 #include <QMainWindow>
 
 
@@ -128,7 +130,6 @@ bool OverwriteQuery::applyAll()
 
 void OverwriteQuery::execute()
 {
-
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
 
     QString path = sourceUrl.toString();
@@ -309,7 +310,6 @@ void PasswordNeededQuery::execute()
 
 //    m_data[QStringLiteral("password")] = password;
 //    setResponse(notCancelled && !password.isEmpty());
-
     qDebug() << m_data[QStringLiteral("archiveFilename")];
     DDialog *dialog = new DDialog(getMainWindow());
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
@@ -374,7 +374,6 @@ void WrongPasswordQuery::execute()
 {
     // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
     // at the moment (#231974)
-
     qDebug() << m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
     DDialog *dialog = new DDialog(getMainWindow());
@@ -396,7 +395,6 @@ void WrongPasswordQuery::execute()
     strlabel2->setText(QObject::tr("Wrong password"));
 
     dialog->addButton(QObject::tr("OK"));
-
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -463,5 +461,3 @@ bool ContinueExtractionQuery::dontAskAgain()
 {
     return m_chkDontAskAgain.isChecked();
 }
-
-

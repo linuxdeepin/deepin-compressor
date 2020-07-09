@@ -21,7 +21,6 @@
  */
 #include "archiveentry.h"
 
-
 Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &rootNode)
     : QObject(parent)
     , rootNode(rootNode)
@@ -34,6 +33,7 @@ Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &r
 {
     if (!fullPath.isEmpty())
         setFullPath(fullPath);
+
     m_iIndex = 0;
 }
 
@@ -151,6 +151,7 @@ int Archive::Entry::row() const
     if (getParent()) {
         return getParent()->entries().indexOf(const_cast<Archive::Entry *>(this));
     }
+
     return 0;
 }
 
@@ -223,6 +224,7 @@ QDebug operator<<(QDebug d, const Archive::Entry &entry)
     if (!entry.rootNode.isEmpty()) {
         d.nospace() << "," << entry.rootNode;
     }
+
     d.nospace() << ")";
     return d.space();
 }
@@ -233,8 +235,7 @@ QDebug operator<<(QDebug d, const Archive::Entry *entry)
     if (!entry->rootNode.isEmpty()) {
         d.nospace() << "," << entry->rootNode;
     }
+
     d.nospace() << ")";
     return d.space();
 }
-
-

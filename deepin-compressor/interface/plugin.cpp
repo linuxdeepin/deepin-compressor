@@ -24,7 +24,6 @@
 #include <QJsonArray>
 #include <QStandardPaths>
 
-
 Plugin::Plugin(QObject *parent, const KPluginMetaData &metaData)
     : QObject(parent)
     , m_enabled(true)
@@ -108,4 +107,3 @@ bool Plugin::findExecutables(const QStringList &executables)
 
     return true;
 }
-

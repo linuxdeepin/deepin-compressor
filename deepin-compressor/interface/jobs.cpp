@@ -29,7 +29,6 @@
 #include <QThread>
 #include <QTimer>
 
-
 class Job::Private : public QThread
 {
     Q_OBJECT
@@ -179,6 +178,7 @@ void Job::onError(const QString &message, const QString &details)
         emitResult();
         return;
     }
+
     setError(KJob::UserDefinedError);
     setErrorText(message);
     emit sigExtractSpinnerFinished();
@@ -589,6 +589,7 @@ void ExtractJob::doWork()
     if (pTool == nullptr) {
         return;
     }
+
     bool ret = pTool->extractFiles(m_entries, m_destinationDir, m_options);
 
     if (!pTool->waitForFinishedSignal()/*&& archiveInterface()->isUserCancel() == false*/) {
@@ -800,6 +801,7 @@ void AddJob::doWork()
     if (!archiveInterface()->waitForFinishedSignal()) {
         onFinished(ret);
     }
+
     if (fileListWathed != nullptr) {
         fileListWathed->clear();
         delete fileListWathed;
@@ -977,6 +979,5 @@ bool TestJob::testSucceeded()
 {
     return m_testSuccess;
 }
-
 
 #include "jobs.moc"

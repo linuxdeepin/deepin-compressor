@@ -22,12 +22,11 @@
 #ifndef KPROCESS_H
 #define KPROCESS_H
 
-#include "kcoreaddons_export.h"
-
 #include <QProcess>
 
-class KProcessPrivate;
+#include "kcoreaddons_export.h"
 
+class KProcessPrivate;
 
 class KCOREADDONS_EXPORT KProcess : public QProcess
 {
@@ -85,4 +84,3 @@ private:
 };
 
 #endif
-

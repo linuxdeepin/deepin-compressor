@@ -22,11 +22,10 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include <QObject>
-
 #include "kpluginmetadata.h"
-#include <QJsonObject>
 
+#include <QObject>
+#include <QJsonObject>
 
 class Plugin : public QObject
 {
@@ -57,13 +56,10 @@ Q_SIGNALS:
     void enabledChanged();
 
 private:
-
     static bool findExecutables(const QStringList &executables);
 
     bool m_enabled;
     KPluginMetaData m_metaData;
 };
-
-
 
 #endif

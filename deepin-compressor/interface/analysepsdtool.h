@@ -3,7 +3,7 @@
 
 #include <QMap>
 
-enum ENUMLINEINFO{
+enum ENUMLINEINFO {
     RIGHTPSD,
     WRONGPSD,
 };
@@ -15,41 +15,43 @@ enum ENUMLINEINFO{
 #define EVERYOK "Everything is Ok"
 #define WRONGPSD7Z ". Wrong password? "
 
-typedef struct lineInfo{
-    lineInfo(QString l,bool b);
+typedef struct lineInfo {
+    lineInfo(QString l, bool b);
     QString line;
     bool read;
-}LineInfo;
+} LineInfo;
 
-class AnalyseTool{
+class AnalyseTool
+{
 public:
     AnalyseTool();
 
-    virtual ~AnalyseTool() {
+    virtual ~AnalyseTool()
+    {
 
     }
 
     virtual void analyseLine(const QString &line) = 0;
     // mark something for record
-    virtual void mark(ENUMLINEINFO id,QString line,bool read) = 0;
+    virtual void mark(ENUMLINEINFO id, QString line, bool read) = 0;
 
-    virtual LineInfo* getLineInfo(ENUMLINEINFO) = 0;
+    virtual LineInfo *getLineInfo(ENUMLINEINFO) = 0;
 
     virtual int isRightPsd() = 0;
 };
 
-
-class AnalyseToolRar4:public AnalyseTool{
+class AnalyseToolRar4: public AnalyseTool
+{
 public:
     explicit AnalyseToolRar4();
 
     ~AnalyseToolRar4()override;
 
-    void mark(ENUMLINEINFO id,QString line,bool read)override;
+    void mark(ENUMLINEINFO id, QString line, bool read)override;
 
     void analyseLine(const QString &line)override;
 
-    LineInfo* getLineInfo(ENUMLINEINFO id)override;
+    LineInfo *getLineInfo(ENUMLINEINFO id)override;
 
     /**
      * @brief isRightPsd
@@ -58,22 +60,22 @@ public:
     int isRightPsd();
 
 private:
-    QMap<ENUMLINEINFO,LineInfo*>* pMapInfo;
+    QMap<ENUMLINEINFO, LineInfo *> *pMapInfo;
     int lineCount = 0;
 };
 
-
-class AnalyseTool7Z:public AnalyseTool{
+class AnalyseTool7Z: public AnalyseTool
+{
 public:
     explicit AnalyseTool7Z();
 
     ~AnalyseTool7Z()override;
 
-    void mark(ENUMLINEINFO id,QString line,bool read)override;
+    void mark(ENUMLINEINFO id, QString line, bool read)override;
 
     void analyseLine(const QString &line)override;
 
-    LineInfo* getLineInfo(ENUMLINEINFO id)override;
+    LineInfo *getLineInfo(ENUMLINEINFO id)override;
 
     /**
      * @brief isRightPsd
@@ -82,24 +84,25 @@ public:
     int isRightPsd();
 
 private:
-    QMap<ENUMLINEINFO,LineInfo*>* pMapInfo;
+    QMap<ENUMLINEINFO, LineInfo *> *pMapInfo;
     int lineCount = 0;
 };
 
-class AnalyseHelp{
+class AnalyseHelp
+{
 public:
-    explicit AnalyseHelp(QString destPath,QString subFolderName);
+    explicit AnalyseHelp(QString destPath, QString subFolderName);
 
     ~AnalyseHelp();
 
-    void analyseLine(const QString& line);
+    void analyseLine(const QString &line);
 
     // mark something for record
-    void mark(ENUMLINEINFO id,QString line,bool read);
+    void mark(ENUMLINEINFO id, QString line, bool read);
 
-    LineInfo* getLineInfo(ENUMLINEINFO id);
+    LineInfo *getLineInfo(ENUMLINEINFO id);
 
-    void setDestDir(const QString& path);
+    void setDestDir(const QString &path);
 
     QString getDestDir();
 
@@ -119,14 +122,14 @@ public:
     void checkReplaceTip(const QString &line);
 private:
     void resetTempDir();
+
 private:
-    AnalyseTool* pTool = nullptr;
+    AnalyseTool *pTool = nullptr;
     QString destPath = "";
     QString destSubFolderName = "";
     QString tempPath = "";
     int lineCount = 0;
     bool replaceTip = false;
 };
-
 
 #endif // ANALYSEPSDTOOL_H

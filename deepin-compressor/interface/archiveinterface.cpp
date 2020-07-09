@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QTextCodec>
+
 #include <sys/stat.h>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
@@ -183,6 +184,7 @@ QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entr
     for (const Archive::Entry *file : entries) {
         filesList << file->fullPath(format);
     }
+
     return filesList;
 }
 
@@ -245,6 +247,7 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
                 lastFolder = QString();
             }
         }
+
         paths << newPath;
     }
 
@@ -263,9 +266,11 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IRUSR) {
         pers |= QFileDevice::ReadUser;
     }
+
     if (perm & S_IWUSR) {
         pers |= QFileDevice::WriteUser;
     }
+
     if (perm & S_IXUSR) {
         pers |= QFileDevice::ExeUser;
     }
@@ -276,6 +281,7 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IWGRP) {
         pers |= QFileDevice::WriteGroup;
     }
+
     if (perm & S_IXGRP) {
         pers |= QFileDevice::ExeGroup;
     }
@@ -283,9 +289,11 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IROTH) {
         pers |= QFileDevice::ReadOther;
     }
+
     if (perm & S_IWOTH) {
         pers |= QFileDevice::WriteOther;
     }
+
     if (perm & S_IXOTH) {
         pers |= QFileDevice::ExeOther;
     }

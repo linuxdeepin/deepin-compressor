@@ -23,12 +23,10 @@
 #define ARCHIVE_H
 
 #include "options.h"
-
 #include "archivejob.h"
 
 #include <QHash>
 #include <QMimeType>
-
 
 class LoadJob;
 class BatchExtractJob;
@@ -112,7 +110,6 @@ public:
     QString multiVolumeName() const;
     ReadOnlyArchiveInterface *interface();
 
-
     bool hasMultipleTopLevelEntries() const;
     static BatchExtractJob *batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent = nullptr);
     static CreateJob *create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent = nullptr, bool useLibArchive = false);
@@ -153,7 +150,7 @@ private:
     static Archive *create(const QString &fileName, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, const QString &fixedMimeType, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
-    static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent= nullptr , bool useLibArchive = false);
+    static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent = nullptr, bool useLibArchive = false);
     ReadOnlyArchiveInterface *m_iface;
     bool m_isReadOnly;
     bool m_isSingleFolder;
@@ -167,8 +164,5 @@ private:
     QStringList m_compressionMethods;
     QStringList m_encryptionMethods;
 };
-
-
-
 
 #endif // ARCHIVE_H

@@ -23,6 +23,7 @@
 #define CLIPROPERTIES_H
 
 #include "archiveinterface.h"
+
 #include <QVariant>
 
 typedef QHash<QString, QVariant> Hash;
@@ -128,6 +129,5 @@ private:
     QMimeType m_mimeType;
     KPluginMetaData m_metaData;
 };
-
 
 #endif /* CLIPROPERTIES_H */

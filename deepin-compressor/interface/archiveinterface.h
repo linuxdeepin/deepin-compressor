@@ -29,15 +29,14 @@
 #define ARCHIVEINTERFACE_H
 
 #include "archive_manager.h"
-
 #include "archiveentry.h"
+#include "kpluginmetadata.h"
 
 #include <QObject>
 #include <QStringList>
 #include <QString>
 #include <QVariantList>
 #include <QFileDevice>
-#include "kpluginmetadata.h"
 
 class Query;
 
@@ -236,6 +235,7 @@ public:
     bool ifReplaceTip = false;  //是否有替换提示
     bool m_bAllEntry = true;           // 是否传递 所有entry
     ExtractPsdStatus extractPsdStatus = ReadOnlyArchiveInterface::Default;
+
 Q_SIGNALS:
 
     /**
@@ -345,7 +345,5 @@ protected:
 private Q_SLOTS:
     void onEntryRemoved(const QString &path);
 };
-
-
 
 #endif // ARCHIVEINTERFACE_H

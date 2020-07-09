@@ -22,10 +22,7 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-
 #include <QDebug>
-
-
 
 class  Options
 {
@@ -35,7 +32,6 @@ public:
     void setEncryptedArchiveHint(bool encrypted);
 
 private:
-
     bool m_encryptedArchiveHint = false;
 };
 
@@ -78,7 +74,6 @@ private:
 class  ExtractionOptions : public Options
 {
 public:
-
     bool preservePaths() const;
     void setPreservePaths(bool preservePaths);
     bool isDragAndDropEnabled() const;
@@ -91,7 +86,6 @@ public:
     void setAutoCreatDir(bool bAutoCreatDir);
 
 private:
-
     bool m_preservePaths = true;
     bool m_dragAndDrop = false;
     bool m_alwaysUseTempDir = false;
@@ -101,7 +95,6 @@ private:
 
 QDebug  operator<<(QDebug d, const CompressionOptions &options);
 QDebug  operator<<(QDebug d, const ExtractionOptions &options);
-
 
 Q_DECLARE_METATYPE(CompressionOptions)
 Q_DECLARE_METATYPE(ExtractionOptions)

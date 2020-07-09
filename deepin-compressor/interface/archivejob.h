@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QPair>
 
-
 class KJobPrivate;
 
 class  KJob : public QObject
@@ -45,6 +44,7 @@ public:
                       Killable       = 0x0001,
                       Suspendable    = 0x0002
                     };
+
     Q_ENUM(Capability)
 
     Q_DECLARE_FLAGS(Capabilities, Capability)

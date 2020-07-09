@@ -25,6 +25,7 @@
 #include <QByteArray>
 #include <QLoggingCategory>
 #include <QVector>
+
 class QJsonObject;
 class QJsonValue;
 
@@ -54,6 +55,5 @@ extern bool s_verbose;
 extern bool s_compatibilityMode;
 #endif
 }
-
 
 #endif // DESKTOPFILEPARSER_H

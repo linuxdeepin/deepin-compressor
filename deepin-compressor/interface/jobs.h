@@ -22,12 +22,10 @@
 #ifndef JOBS_H
 #define JOBS_H
 
-
 #include "archiveinterface.h"
 #include "archive_manager.h"
 #include "archiveentry.h"
 #include "queries.h"
-
 #include "archivejob.h"
 
 #include <QElapsedTimer>
@@ -50,8 +48,6 @@ protected:
     Job(ReadOnlyArchiveInterface *interface);
     ~Job() override;
     bool doKill() override;
-
-
 
     void connectToArchiveInterfaceSignals();
 
@@ -78,6 +74,7 @@ Q_SIGNALS:
     void sigCancelled();
     void updateDestFile(QString dstFile);
     void sigExtractSpinnerFinished();
+
 private:
     Archive *m_archive;
     ReadOnlyArchiveInterface *m_archiveInterface;
@@ -126,7 +123,6 @@ signals:
     void sigLodJobPassword();
 };
 
-
 class BatchExtractJob : public Job
 {
     Q_OBJECT
@@ -164,7 +160,6 @@ private:
     unsigned long m_lastPercentage = 0;
 };
 
-
 class CreateJob : public Job
 {
     Q_OBJECT
@@ -199,16 +194,16 @@ public:
     ExtractionOptions extractionOptions() const;
     bool Killjob();
 
-
     void resetTimeOut();
 
 public Q_SLOTS:
     void doWork() override;
-    void onFinished(bool result)override;
+    void onFinished(bool result) override;
     void slotWorkTimeOut(bool isWorkProcess);
     void slotExtractJobPwdCheckDown();
-    void onProgress(double progress)override;
-    void onProgressFilename(const QString &filename)override;
+    void onProgress(double progress) override;
+    void onProgressFilename(const QString &filename) override;
+
 signals:
     void sigExtractJobPassword();
     void sigExtractJobFinished();
@@ -216,13 +211,13 @@ signals:
 
 private:
     void cleanIfCanceled();
+
 private:
     QVector<Archive::Entry *> m_entries;
     QString m_destinationDir;
     ExtractionOptions m_options;
     bool m_bTimeout = true;//if work time out,if greater than 700ms,emit the progress info.
 };
-
 
 class TempExtractJob : public Job
 {
@@ -253,7 +248,6 @@ class PreviewJob : public TempExtractJob
 public:
     PreviewJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface);
 };
-
 
 class OpenJob : public TempExtractJob
 {
@@ -310,7 +304,6 @@ private:
     Archive::Entry *m_destination;
     CompressionOptions m_options;
 };
-
 
 class CopyJob : public Job
 {
@@ -377,6 +370,5 @@ private Q_SLOTS:
 private:
     bool m_testSuccess;
 };
-
 
 #endif // JOBS_H

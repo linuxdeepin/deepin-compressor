@@ -23,13 +23,12 @@
 #define KJOB_P_H
 
 #include "archivejob.h"
+
 #include <QMap>
 #include <QEventLoopLocker>
 
-
 class QTimer;
 class QEventLoop;
-
 
 class  KJobPrivate
 {

@@ -21,6 +21,7 @@
  */
 #include "kpluginmetadata.h"
 #include "desktopfileparser_p.h"
+#include "kpluginloader.h"
 
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -30,7 +31,6 @@
 #include <QPluginLoader>
 #include <QStringList>
 
-#include "kpluginloader.h"
 //#include "kaboutdata.h"
 
 class KPluginMetaDataPrivate : public QSharedData
@@ -75,7 +75,9 @@ KPluginMetaData::KPluginMetaData(const QString &file)
         QJsonParseError error;
         m_metaData = QJsonDocument::fromJson(f.readAll(), &error).object();
         if (error.error) {
+
         }
+
         m_fileName = file;
         d->metaDataFileName = file;
     } else {
@@ -127,6 +129,7 @@ void KPluginMetaData::loadFromDesktopFile(const QString &file, const QStringList
         Q_ASSERT(!isValid());
         return; // file could not be parsed for some reason, leave this object invalid
     }
+
     d = new KPluginMetaDataPrivate;
     d->metaDataFileName = QFileInfo(file).absoluteFilePath();
     if (!libraryPath.isEmpty()) {
@@ -183,6 +186,7 @@ QStringList KPluginMetaData::readStringList(const QJsonObject &obj, const QStrin
         if (asString.isEmpty()) {
             return QStringList();
         }
+
         const QString id = obj.value(QStringLiteral("KPlugin")).toObject().value(QStringLiteral("Id")).toString();
         return QStringList(asString);
     }
@@ -195,16 +199,19 @@ QJsonValue KPluginMetaData::readTranslatedValue(const QJsonObject &jo, const QSt
     if (it != jo.constEnd()) {
         return it.value();
     }
+
     const QStringRef language = languageWithCountry.midRef(0, languageWithCountry.indexOf(QLatin1Char('_')));
     it = jo.constFind(key + QLatin1Char('[') + language + QLatin1Char(']'));
     if (it != jo.constEnd()) {
         return it.value();
     }
+
     // no translated value found -> check key
     it = jo.constFind(key);
     if (it != jo.constEnd()) {
         return jo.value(key);
     }
+
     return defaultValue;
 }
 
@@ -258,10 +265,12 @@ QString KPluginMetaData::pluginId() const
             return id;
         }
     }
+
     // passing QFileInfo an empty string gives the CWD, which is not what we want
     if (m_fileName.isEmpty()) {
         return QString();
     }
+
     return QFileInfo(m_fileName).baseName();
 }
 
@@ -303,6 +312,7 @@ bool KPluginMetaData::isEnabledByDefault() const
     } else if (val.isString()) {
         return val.toString() == QLatin1String("true");
     }
+
     return false;
 }
 
@@ -321,6 +331,7 @@ QString KPluginMetaData::value(const QString &key, const QString &defaultValue) 
         //" but it is a bool";
         return value.toBool() ? QStringLiteral("true") : QStringLiteral("false");
     }
+
     return defaultValue;
 }
 
@@ -333,4 +344,3 @@ QObject *KPluginMetaData::instantiate() const
 {
     return QPluginLoader(m_fileName).instance();
 }
-

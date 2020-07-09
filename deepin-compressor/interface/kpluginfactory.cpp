@@ -58,7 +58,9 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
     // we allow different interfaces to be registered without keyword
     if (!keyword.isEmpty()) {
         if (d->createInstanceHash.contains(keyword)) {
+
         }
+
         d->createInstanceHash.insert(keyword, KPluginFactoryPrivate::Plugin(metaObject, instanceFunction));
     } else {
         QList<KPluginFactoryPrivate::Plugin> clashes(d->createInstanceHash.values(keyword));
@@ -72,6 +74,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
                 }
             }
         }
+
         foreach (const KPluginFactoryPrivate::Plugin &plugin, clashes) {
             superClass = plugin.first->superClass();
             if (superClass) {
@@ -82,6 +85,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
                 }
             }
         }
+
         d->createInstanceHash.insertMulti(keyword, KPluginFactoryPrivate::Plugin(metaObject, instanceFunction));
     }
 }
@@ -137,7 +141,9 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
         for (const QMetaObject *current = plugin.first; current; current = current->superClass()) {
             if (0 == qstrcmp(iface, current->className())) {
                 if (obj) {
+
                 }
+
                 qDebug() << "111111111111111111";
                 obj = plugin.second(parentWidget, parent, args);
                 qDebug() << "222222222222222222";
@@ -149,6 +155,7 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
     if (obj) {
         emit objectCreated(obj);
     }
+
     return obj;
 }
 
@@ -158,6 +165,7 @@ QStringList KPluginFactory::variantListToStringList(const QVariantList &list)
     for (const QVariant &var : list) {
         stringlist << var.toString();
     }
+
     return stringlist;
 }
 
@@ -167,6 +175,7 @@ QVariantList KPluginFactory::stringListToVariantList(const QStringList &list)
     for (const QString &str : list) {
         variantlist << QVariant(str);
     }
+
     return variantlist;
 }
 

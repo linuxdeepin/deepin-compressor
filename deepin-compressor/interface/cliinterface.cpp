@@ -21,8 +21,9 @@
  */
 #include "cliinterface.h"
 #include "queries.h"
-
 #include "kprocess.h"
+#include "analysepsdtool.h"
+#include "filewatcher.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -35,9 +36,9 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QUrl>
+
 #include <linux/limits.h>
-#include "analysepsdtool.h"
-#include "filewatcher.h"
+
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
@@ -48,6 +49,7 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWrit
     if (QMetaType::type("QProcess::ExitStatus") == 0) {
         qRegisterMetaType< QProcess::ExitStatus >("QProcess::ExitStatus");
     }
+
     m_cliProps = new CliProperties(this, m_metaData, mimetype());
 }
 
@@ -109,7 +111,6 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
     qDebug() << "destination directory:" << destinationDirectory;
     this->extractPsdStatus = NotChecked;
 
-
     return this->extractFF(files, destinationDirectory, options);
 }
 
@@ -138,6 +139,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         this->extractPsdStatus = Checked;
         emit sigExtractPwdCheckDown();
     }
+
     qDebug() << "####destpath：" << destPath;
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
@@ -151,7 +153,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
-
     bool ifNeedPsd = options.encryptedArchiveHint();
     if (ifNeedPsd == false) {
         //don't need psd
@@ -160,7 +161,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
             return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
         }
     }
-
 
     //get user input password
     QString psdd = password();
@@ -196,8 +196,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         destDir = QUrl(m_extractTempDir->path());
         QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
     }
-
-
 
     return runProcess(
                m_cliProps->property("extractProgram").toString(),
@@ -287,6 +285,7 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
     if (ret == true) {
         this->watchDestFilesBegin();
     }
+
     return ret;
 }
 
@@ -411,9 +410,11 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         for (const QString &fullPath : removedFullPaths) {
             emit entryRemoved(fullPath);
         }
+
         for (Archive::Entry *e : qAsConst(m_newMovedFiles)) {
             emit entry(e);
         }
+
         m_newMovedFiles.clear();
     }
 
@@ -452,6 +453,7 @@ void CliInterface::watchDestFilesBegin()
     if (this->pFileWatcherdd == nullptr) {
         this->pFileWatcherdd = new FileWatcher(this);
     }
+
     connect(this->pFileWatcherdd, &FileWatcher::sigFileChanged, this, &CliInterface::slotFilesWatchedChanged);
     this->pFileWatcherdd->beginWork();
 }
@@ -469,6 +471,7 @@ void CliInterface::watchFileList(QStringList *strList)
     if (this->pFileWatcherdd == nullptr) {
         this->pFileWatcherdd = new FileWatcher(this);
     }
+
     this->pFileWatcherdd->watch(strList);
 }
 
@@ -573,6 +576,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
             emit error("Extraction failed. the file is broken");
             setPassword(QString());
         }
+
         cleanUpExtracting();
         emit finished(false);
         return;
@@ -635,25 +639,21 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
     bool skipAll = false;
 
     for (const Archive::Entry *file : files) {
-
         QFileInfo relEntry(file->fullPath().remove(file->rootNode));
         QFileInfo absSourceEntry(QDir::current().absolutePath() + QLatin1Char('/') + file->fullPath());
         QFileInfo absDestEntry(finalDestDir.path() + QLatin1Char('/') + relEntry.filePath());
 
         if (absSourceEntry.isDir()) {
-
             // For directories, just create the path.
             if (!finalDestDir.mkpath(relEntry.filePath())) {
                 qDebug() << "Failed to create directory" << relEntry.filePath() << "in final destination.";
             }
         } else {
-
             // If destination file exists, prompt the user.
             if (absDestEntry.exists()) {
                 qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
 
                 if (!skipAll && !overwriteAll) {
-
                     OverwriteQuery query(absDestEntry.absoluteFilePath());
                     query.setNoRenameMode(true);
                     query.execute();
@@ -662,6 +662,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseOverwriteAll()) {
                             overwriteAll = true;
                         }
+
                         if (!QFile::remove(absDestEntry.absoluteFilePath())) {
                             qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                         }
@@ -669,6 +670,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseAutoSkip()) {
                             skipAll = true;
                         }
+
                         continue;
                     } else if (query.responseCancelled()) {
                         emit cancelled();
@@ -699,6 +701,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
             }
         }
     }
+
     return true;
 }
 
@@ -779,6 +782,7 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                 if (query.responseOverwriteAll()) {
                     overwriteAll = true;
                 }
+
                 if (!QFile::remove(absDestEntry.absoluteFilePath())) {
                     qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                 }
@@ -786,6 +790,7 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                 if (query.responseAutoSkip()) {
                     skipAll = true;
                 }
+
                 continue;
             } else if (query.responseCancelled()) {
                 qDebug() << "Copy action cancelled.";
@@ -836,6 +841,7 @@ void CliInterface::setNewMovedFiles(const QVector< Archive::Entry * > &entries, 
             if (entriesWithoutChildren > 1) {
                 charsCount += nameLength;
             }
+
             newPath = destination->fullPath() + entry->fullPath().right(charsCount);
         } else {
             if (entriesWithoutChildren > 1) {
@@ -845,6 +851,7 @@ void CliInterface::setNewMovedFiles(const QVector< Archive::Entry * > &entries, 
                 // we have to use destination as newPath.
                 newPath = destination->fullPath(NoTrailingSlash);
             }
+
             if (entry->isDir()) {
                 newPath += QLatin1Char('/');
                 nameLength = entry->name().count() + 1;  // plus slash
@@ -874,7 +881,6 @@ QStringList CliInterface::extractFilesList(const QVector< Archive::Entry * > &en
 void CliInterface::killProcess(bool emitFinished)
 {
     // TODO: Would be good to unit test #304764/#304178.
-
     if (!m_process) {
         return;
     }
@@ -939,7 +945,6 @@ void CliInterface::readStdout(bool handleAll)
     // characters they send out (newline, backspace, carriage return,
     // etc), so keep in mind that this function is supposed to handle
     // all those special cases and be the lowest common denominator
-
     if (m_abortingOperation)
         return;
 
@@ -976,6 +981,7 @@ void CliInterface::readStdout(bool handleAll)
         if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPasswordMessage) {
             handleAll = true;  // 7z output has no \n
         }
+
         if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !wrongPasswordMessage) {
             handleAll = true;  // compress .tar.7z output has no \n
         }
@@ -1036,6 +1042,7 @@ bool CliInterface::setAddedFiles()
         if (!QFile::rename(oldPath, newPath)) {
             return false;
         }
+
         m_tempAddedFiles << new Archive::Entry(nullptr, file->name());
     }
     return true;
@@ -1066,7 +1073,6 @@ bool CliInterface::handleLine(const QString &line)
 //        emit finished(false);
 //        return false;
 //    }
-
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
         if (pAnalyseHelp->isNotKnown() == true) {
@@ -1125,6 +1131,7 @@ bool CliInterface::handleLine(const QString &line)
             if (-1 == count) {
                 count = line.indexOf("-");
             }
+
             if (count > 0) {
                 strfilename = line.midRef(count + 2);
             }
@@ -1162,7 +1169,6 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (m_operationMode == Extract) {
-
         //        if (isPasswordPrompt(line)) {
         //            qDebug() << "Found a password prompt";
 
@@ -1202,6 +1208,7 @@ bool CliInterface::handleLine(const QString &line)
                     if (pAnalyseHelp != nullptr) {
                         pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
                     }
+
                     this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
 //                    qDebug() << "$$$$$WrongPassword";
                     emit sigExtractNeedPassword();
@@ -1285,11 +1292,9 @@ bool CliInterface::handleLine(const QString &line)
             extractDst7z_ = folder.remove("        Name: ");
         }
 
-
         return readListLine(line);
 
     }
-
 
     if (m_operationMode == Delete) {
         return readDeleteLine(line);
@@ -1361,6 +1366,7 @@ bool CliInterface::handleFileExistsMessage(const QString &line)
             // If the program has no way to cancel the extraction, we resort to killing it
             return doKill();
         }
+
         responseToProcess = choices.at(4);
     }
 
@@ -1435,6 +1441,7 @@ bool CliInterface::addComment(const QString &comment)
                     m_cliProps->commentArgs(filename(), m_commentTempFile->fileName()))) {
         return false;
     }
+
     m_comment = comment;
     return true;
 }
@@ -1453,6 +1460,7 @@ QString CliInterface::multiVolumeName() const
             break;
         }
     }
+
     return name;
 }
 
