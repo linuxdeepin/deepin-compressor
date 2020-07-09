@@ -157,7 +157,7 @@ public:
      * will return
      *  some/destination/dir/
      *  some/destination/dir/entry
-     *  some/destination/dir/some/enty
+     *  some/destination/dir/some/entry
      *  some/destination/entry
      */
     static QStringList entryPathsFromDestination(QStringList entries, const Archive::Entry *destination, int entriesWithoutChildren);
