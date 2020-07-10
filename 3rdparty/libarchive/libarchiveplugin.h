@@ -2,7 +2,6 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
-
 #include <archive.h>
 
 #include <QScopedPointer>
@@ -35,6 +34,7 @@ public:
     bool hasBatchExtractionProgress() const override;
     virtual void cleanIfCanceled()override;
     virtual void watchFileList(QStringList *strList)override;
+
 protected:
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)

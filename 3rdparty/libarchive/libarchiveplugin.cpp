@@ -1,5 +1,8 @@
 #include "libarchiveplugin.h"
 #include "queries.h"
+#include "kprocess.h"
+#include "archive_entry.h"
+#include "../common/common.h"
 
 #include <QThread>
 #include <QFileInfo>
@@ -10,12 +13,6 @@
 #include <QStandardPaths>
 
 #include <KEncodingProber>
-
-#include <archive_entry.h>
-#include <kprocess.h>
-
-
-#include "../common/common.h"
 
 /*static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
@@ -149,6 +146,7 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
             }
             return list_New();
         }
+
         return false;
     } else {
         return list_New();
@@ -231,6 +229,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             list();
             m_emitNoEntries = false;
         }
+
         totalEntriesCount = m_cachedArchiveEntryCount;
     } else {
         totalEntriesCount = files.size();
@@ -261,7 +260,6 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
-
         if (!extractAll && remainingFiles.isEmpty()) {
             break;
         }
@@ -403,6 +401,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                     continue;
                 }
             }
+
 //            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             //this->extractPsdStatus;
             // Write the entry header and check return value.
@@ -418,6 +417,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                 if (entryIsDir) {
                     per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
                 }
+
                 QFile::setPermissions(destinationDirectory + QDir::separator() + entryName, per);
             }
             break;
@@ -437,10 +437,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                         emit cancelled();
                         return false;
                     }
+
                     dontPromptErrors = query.dontAskAgain();
                 }
                 break;
-
             case ARCHIVE_FATAL:
                 emit error(tr("@info", "Fatal error, extraction aborted."));
                 return false;
@@ -507,7 +507,6 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
     QString utf8path = trans2uft8(archive_entry_pathname(aentry));
 
     e->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
-
 
     const QString owner = QString::fromLatin1(archive_entry_uname(aentry));
     if (!owner.isEmpty()) {
@@ -629,6 +628,7 @@ void LibarchivePlugin::slotRestoreWorkingDir()
         if (this->ifReplaceTip == true) {
             return;
         }
+
         if (this->m_extractDestDir == "" || this->destDirName == "") {
             return;
         } else {
@@ -638,7 +638,6 @@ void LibarchivePlugin::slotRestoreWorkingDir()
                 ReadWriteArchiveInterface::clearPath(fullPath);
             }
         }
-
     }
 }
 
@@ -665,6 +664,7 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
     } else if (method == QLatin1String("zstd")) {
         return QStringLiteral("Zstandard");
     }
+
     return QString();
 }
 
@@ -732,5 +732,3 @@ void LibarchivePlugin::watchFileList(QStringList */*strList*/)
 {
 
 }
-
-

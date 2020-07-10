@@ -4,19 +4,16 @@
 #include "cliinterface.h"
 #include "kpluginfactory.h"
 
-
 class CliPluginFactory : public KPluginFactory
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_cli7z.json")
     Q_INTERFACES(KPluginFactory)
+
 public:
     explicit CliPluginFactory();
     ~CliPluginFactory();
 };
-
-
-
 
 class CliPlugin : public CliInterface
 {
@@ -68,6 +65,5 @@ private:
     bool m_isFirstInformationEntry;
 
 };
-
 
 #endif // CLIPLUGIN_H

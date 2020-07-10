@@ -2,12 +2,10 @@
 #define LIBZIPPLUGIN_H
 
 #include "archiveinterface.h"
-
+#include "kpluginfactory.h"
 
 #include <zip.h>
 #include <minizip/unzip.h>
-#include "kpluginfactory.h"
-
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0;
@@ -20,6 +18,7 @@ class LibzipPluginFactory : public KPluginFactory
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_libzip.json")
     Q_INTERFACES(KPluginFactory)
+
 public:
     explicit LibzipPluginFactory();
     ~LibzipPluginFactory();

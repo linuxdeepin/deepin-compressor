@@ -15,6 +15,7 @@ ReadWriteLibarchivePluginFactory::ReadWriteLibarchivePluginFactory()
 {
     registerPlugin<ReadWriteLibarchivePlugin>();
 }
+
 ReadWriteLibarchivePluginFactory::~ReadWriteLibarchivePluginFactory()
 {
 

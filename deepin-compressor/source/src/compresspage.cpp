@@ -25,7 +25,7 @@
 #include "fileViewer.h"
 #include "queries.h"
 
-#include "DFileDialog"
+#include <DFileDialog>
 #include <DDialog>
 #include <DRecentManager>
 

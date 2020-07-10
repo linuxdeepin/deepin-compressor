@@ -2,11 +2,10 @@
 #define READWRITELIBARCHIVEPLUGIN_H
 
 #include "../libarchiveplugin.h"
+#include "kpluginfactory.h"
 
 #include <QStringList>
 #include <QSaveFile>
-#include "kpluginfactory.h"
-
 
 class ReadWriteLibarchivePluginFactory : public KPluginFactory
 {
@@ -17,7 +16,6 @@ public:
     explicit ReadWriteLibarchivePluginFactory();
     ~ReadWriteLibarchivePluginFactory();
 };
-
 
 class ReadWriteLibarchivePlugin : public LibarchivePlugin
 {
@@ -61,7 +59,7 @@ private:
      *
      * @return bool indicating whether the operation was successful.
      */
-    bool writeFile(const QString &relativeName, const QString &destination,  const FileProgressInfo& info, bool partialprogress = false );
+    bool writeFile(const QString &relativeName, const QString &destination,  const FileProgressInfo &info, bool partialprogress = false);
 
     QSaveFile m_tempFile;
     ArchiveWrite m_archiveWriter;
