@@ -2095,6 +2095,10 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         m_encryptiontype = Encryption_SingleExtract;
     }
 
+    if (fileList.size() == 1 && !(fileList.at(0)->fullPath().endsWith("/"))) {
+        m_progressdialog->setCurrentFile(fileList.at(0)->fullPath());
+    }
+
     m_progressdialog->clearprocess();
     if (!m_model) {
         return;

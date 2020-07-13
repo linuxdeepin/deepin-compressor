@@ -137,6 +137,7 @@ void ProgressDialog::setFinished(const QString &path)
         m_extractdialog->reject();
         //reject();
         hide();
+        m_filelable->setText(tr("Extracting") + ":");
         emit extractSuccess(tr("Extraction successful", "progressdialog"));
         emit sigResetPercentAndTime();
     }
