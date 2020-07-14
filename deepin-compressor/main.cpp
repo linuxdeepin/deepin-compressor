@@ -59,11 +59,8 @@ int main(int argc, char *argv[])
         newfilelist.append(file);
     }
 
-    QDBusConnection bus = QDBusConnection::sessionBus();
-    bool busRegistered = false;
-
     bool isMutlWindows = false;
-    if (argc >= 3) {
+    if (argc >= 3 && !QString(argv[2]).contains(HEADBUS)) {
         QString lastStr = argv[argc - 1];
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
                 && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
@@ -83,9 +80,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (argc == 2 || !isMutlWindows) {
-        //QDBusConnection bus = QDBusConnection::sessionBus();
-        /*bool*/ busRegistered = bus.registerService("com.archive.mainwindow.monitor");
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    bool busRegistered = bus.registerService("com.archive.mainwindow.monitor");
+
+    if (argc == 1 || argc == 2 || (!isMutlWindows && argc >= 3)) {
         if (busRegistered == false) {
             com::archive::mainwindow::monitor monitor("com.archive.mainwindow.monitor", HEADBUS, QDBusConnection::sessionBus());
             if (monitor.isValid()) {

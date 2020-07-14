@@ -1307,7 +1307,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //    QMessageBox::information(nullptr, "Title", info,
 //                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     if (files.last() == QStringLiteral("extract_here")) {//解压
-
         m_bIsRightMenu = true;
         QFileInfo fileinfo(files.at(0));
         m_strDecompressFileName = fileinfo.fileName();
