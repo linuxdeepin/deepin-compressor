@@ -55,22 +55,48 @@ int main(int argc, char *argv[])
         if (file.contains("file://")) {
             file.remove("file://");
         }
+
         newfilelist.append(file);
     }
 
     QDBusConnection bus = QDBusConnection::sessionBus();
-    bool busRegistered = bus.registerService("com.archive.mainwindow.monitor");
-    if (busRegistered == false) {
-        com::archive::mainwindow::monitor monitor("com.archive.mainwindow.monitor", HEADBUS, QDBusConnection::sessionBus());
-        if (monitor.isValid()) {
-            QDBusPendingReply<bool> reply = monitor.createSubWindow(newfilelist);
-            reply.waitForFinished();
-            if (reply.isValid()) {
-                bool isClosed = reply.value();
-                if (isClosed) {
-//                    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-                    app.exit();
-                    return 0;
+    bool busRegistered = false;
+
+    bool isMutlWindows = false;
+    if (argc >= 3) {
+        QString lastStr = argv[argc - 1];
+        if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
+                && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
+                && lastStr != "extract_split_multi") {
+            isMutlWindows = true;
+            for (int i = 1; i < argc; ++i) {
+                QProcess p;
+                QString command = "xdg-open";
+                QStringList args;
+                args.append(argv[i]);
+                p.start(command, args);
+                p.waitForFinished();
+            }
+
+            app.exit();
+            return 0;
+        }
+    }
+
+    if (argc == 2 || !isMutlWindows) {
+        //QDBusConnection bus = QDBusConnection::sessionBus();
+        /*bool*/ busRegistered = bus.registerService("com.archive.mainwindow.monitor");
+        if (busRegistered == false) {
+            com::archive::mainwindow::monitor monitor("com.archive.mainwindow.monitor", HEADBUS, QDBusConnection::sessionBus());
+            if (monitor.isValid()) {
+                QDBusPendingReply<bool> reply = monitor.createSubWindow(newfilelist);
+                reply.waitForFinished();
+                if (reply.isValid()) {
+                    bool isClosed = reply.value();
+                    if (isClosed) {
+                        app.exit();
+                        return 0;
+                    }
                 }
             }
         }
@@ -104,53 +130,33 @@ int main(int argc, char *argv[])
         multilist.append(newfilelist.last().remove("_multi"));
         newfilelist = multilist;
     }
+
     MainWindow w;
+    //判断目标文件是否合法
+    if (!w.checkSettings(argv[1])) {
+        app.exit();
+        return 0;
+    } else {
+        w.bindAdapter();
 
-    QString lastStr = argv[argc - 1];
-
-    if (argc >= 2) {
-        if (argc >= 3) {
-            if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
-                    && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
-                    && lastStr != "extract_split_multi") {
-                for (int i = 1; i < argc; i++) {
-                    QProcess p;
-                    QString command = "xdg-open";
-                    QStringList args;
-                    args.append(argv[i]);
-                    p.start(command, args);
-                    p.waitForFinished();
-                }
-                return 0;
+        if (busRegistered == true) {
+            // init modules.
+            if (app.setSingleInstance("deepin-compressor")) {
+                Dtk::Widget::moveToCenter(&w);
             }
-        }
 
-        //判断目标文件是否合法
-        if (!w.checkSettings(argv[1])) {
-            return 0;
+            QString strWId = QString::number(w.winId());
+            bus.registerObject(HEADBUS, &w);
+
+            QObject::connect(&w, &MainWindow::sigquitApp, &app, &DApplication::quit);
+            // handle command line parser.
+            if (!newfilelist.isEmpty()) {
+                QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
+            }
+
+            w.show();
         }
     }
-    w.bindAdapter();
 
-    if (busRegistered == true) {
-
-        // init modules.
-        if (app.setSingleInstance("deepin-compressor")) {
-            Dtk::Widget::moveToCenter(&w);
-        }
-
-        QString strWId = QString::number(w.winId());
-        bus.registerObject(HEADBUS, &w);
-
-        QObject::connect(&w, &MainWindow::sigquitApp, &app, &DApplication::quit);
-        // handle command line parser.
-        if (!newfilelist.isEmpty()) {
-            QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
-        }
-
-        w.show();
-    }
     return app.exec();
 }
-
-//#define LOGINFO(a) MainWindow::getLogger()->info(a)

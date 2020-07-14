@@ -342,7 +342,6 @@ private:
      */
     void refreshPage();
 
-
     /**
      * @brief setTitleButtonStyle   设置标题栏按钮样式以及显隐状态
      * @param bVisible  显示/隐藏
