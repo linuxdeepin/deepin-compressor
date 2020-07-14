@@ -21,12 +21,14 @@
  */
 #include "archiveinterface.h"
 #include "mimetypes.h"
+#include "structs.h"
 
 #include <QDir>
 #include <QFileInfo>
 #include <QProcess>
 #include <QTextCodec>
 
+#include <sys/stat.h>
 #include <sys/stat.h>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
@@ -52,6 +54,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
 
 ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()
 {
+    qDebug() << "destructor";
 }
 
 void ReadOnlyArchiveInterface::onEntry(Archive::Entry *archiveEntry)
@@ -184,7 +187,6 @@ QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entr
     for (const Archive::Entry *file : entries) {
         filesList << file->fullPath(format);
     }
-
     return filesList;
 }
 
@@ -247,7 +249,6 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
                 lastFolder = QString();
             }
         }
-
         paths << newPath;
     }
 
@@ -266,11 +267,9 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IRUSR) {
         pers |= QFileDevice::ReadUser;
     }
-
     if (perm & S_IWUSR) {
         pers |= QFileDevice::WriteUser;
     }
-
     if (perm & S_IXUSR) {
         pers |= QFileDevice::ExeUser;
     }
@@ -281,7 +280,6 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IWGRP) {
         pers |= QFileDevice::WriteGroup;
     }
-
     if (perm & S_IXGRP) {
         pers |= QFileDevice::ExeGroup;
     }
@@ -289,11 +287,9 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     if (perm & S_IROTH) {
         pers |= QFileDevice::ReadOther;
     }
-
     if (perm & S_IWOTH) {
         pers |= QFileDevice::WriteOther;
     }
-
     if (perm & S_IXOTH) {
         pers |= QFileDevice::ExeOther;
     }
@@ -334,6 +330,11 @@ bool ReadOnlyArchiveInterface::isCheckPsw() const
 bool ReadOnlyArchiveInterface::isAnyFileExtracted() const
 {
     return bAnyFileExtracted;
+}
+
+void ReadOnlyArchiveInterface::bindProgressInfo(ProgressAssistant *pProgressIns)
+{
+    this->m_pProgressInfo = pProgressIns;
 }
 
 bool ReadWriteArchiveInterface::isReadOnly() const

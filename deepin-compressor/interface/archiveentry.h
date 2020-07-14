@@ -31,6 +31,55 @@ enum PathFormat {
     WithTrailingSlash
 };
 
+//#include <iostream>
+//#include <vector>
+
+// Factory
+//template<typename T>
+//class EntryFactory
+//{
+//public:
+//    T *create();
+//    void load(T *);
+//    void cleanup();
+//    EntryFactory();
+//private:
+//    std::vector<T *> objs_;
+//};
+
+//template<typename T>
+//EntryFactory<T>::EntryFactory()
+//{
+//}
+
+//template<typename T>
+//void EntryFactory<T>::cleanup()
+//{
+//    foreach (T *pOjb, objs_) {
+//        if (pOjb) {
+//            std::cout << "release " << pOjb << std::endl;
+//            delete pOjb;
+//            pOjb = nullptr;
+//        }
+//    }
+//    objs_.clear();
+//}
+
+//template<typename T>
+//T *EntryFactory<T>::create()
+//{
+//    T *obj = new T;
+//    objs_.push_back(obj);
+
+//    return obj;
+//}
+
+//template<typename T>
+//void EntryFactory<T>::load(T *obj)
+//{
+//    objs_.push_back(obj);
+//}
+
 class Archive::Entry : public QObject
 {
     Q_OBJECT
@@ -53,7 +102,7 @@ class Archive::Entry : public QObject
     Q_PROPERTY(bool isPasswordProtected MEMBER m_isPasswordProtected)
 
 public:
-
+    static int count;
     explicit Entry(QObject *parent = nullptr, const QString &fullPath = {}, const QString &rootNode = {});
     ~Entry() override;
 
@@ -66,6 +115,20 @@ public:
     void removeEntryAt(int index);
     Entry *getParent() const;
     void setParent(Entry *parent);
+    qint64 getSize();
+    /**
+     * @brief calAllSize(include child entry's size)
+     * @param size
+     * @see 计算当前entry节点及其子节点的文件总大小
+     */
+    void calAllSize(qint64 &size);
+    /**
+     * @brief calEntriesCount
+     * @param count
+     * @see 计算entry树的所有节点数目,文件夹和文件都算1个
+     */
+    void calEntriesCount(qint64 &count) const;
+    void setSize(qint64 size);
     void setFullPath(const QString &fullPath);
     QString fullPath(PathFormat format = WithTrailingSlash) const;
     QString name() const;
@@ -75,8 +138,21 @@ public:
     Entry *find(const QString &name) const;
     Entry *findByPath(const QStringList &pieces, int index = 0) const;
     void countChildren(uint &dirs, uint &files) const;
-
+    void getVector(Entry *pE, QVector<Archive::Entry *> &vector);
+    /**
+     * @brief getAllNodesFullPath
+     * @param pE
+     * @param pList
+     * @see 获取所有子节点的fullpath列表
+     */
+    void getAllNodesFullPath(QStringList &pList);
+    void getFilesCount(Archive::Entry *pEntry, int &count);
     bool operator==(const Archive::Entry &right) const;
+    /**
+     * @brief clean
+     * @see 释放内存
+     */
+    void clean();
 
     // 压缩包索引
     void setCompressIndex(int iIndex);
@@ -86,18 +162,19 @@ public:
     QString rootNode;
     bool compressedSizeIsSet;
 
+
 private:
     QVector<Entry *> m_entries;
     QMap<QString, int> m_mapIndex;
     int m_iIndex;
     QString         m_name;
-    Entry           *m_parent;
+    Entry           *m_parent = nullptr;//此处应该赋值nullptr
 
     QString m_fullPath;
     QString m_permissions;
     QString m_owner;
     QString m_group;
-    qulonglong m_size;
+    qint64 m_size;
     qulonglong m_compressedSize;
     QString m_link;
     QString m_ratio;
@@ -114,6 +191,7 @@ private:
 
 QDebug  operator<<(QDebug d, const Archive::Entry &entry);
 QDebug  operator<<(QDebug d, const Archive::Entry *entry);
+
 
 Q_DECLARE_METATYPE(Archive::Entry *)
 

@@ -61,6 +61,7 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
         }
     }
 
+
     return result;
 }
 
@@ -71,3 +72,5 @@ QMimeType DMimeDatabase::mimeTypeForUrl(const QUrl &url) const
 
     return QMimeDatabase::mimeTypeForUrl(url);
 }
+
+

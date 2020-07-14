@@ -23,23 +23,58 @@
 #include "mainwindow.h"
 #include "compressorapplication.h"
 #include "utils.h"
-#include "openwithdialog/openwithdialog.h"
+#include "monitorInterface.h"
 
 #include <DWidgetUtil>
 #include <DLog>
 #include <DApplicationSettings>
-#include <DDesktopServices>
 
 #include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
     // load dtk xcb plugin.
     DApplication::loadDXcbPlugin();
 
     // init Dtk application's attrubites.
     CompressorApplication app(argc, argv);
+
+    // add command line parser to app.
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Deepin Compressor.");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("filename", "File path.", "file [file..]");
+    parser.process(app);
+
+    const QStringList fileList = parser.positionalArguments();
+    QStringList newfilelist;
+    foreach (QString file, fileList) {
+        if (file.contains("file://")) {
+            file.remove("file://");
+        }
+        newfilelist.append(file);
+    }
+
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    bool busRegistered = bus.registerService("com.archive.mainwindow.monitor");
+    if (busRegistered == false) {
+        com::archive::mainwindow::monitor monitor("com.archive.mainwindow.monitor", HEADBUS, QDBusConnection::sessionBus());
+        if (monitor.isValid()) {
+            QDBusPendingReply<bool> reply = monitor.createSubWindow(newfilelist);
+            reply.waitForFinished();
+            if (reply.isValid()) {
+                bool isClosed = reply.value();
+                if (isClosed) {
+//                    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+                    app.exit();
+                    return 0;
+                }
+            }
+        }
+    }
 
     app.loadTranslator();
     app.setOrganizationName("deepin");
@@ -54,17 +89,22 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
-    // add command line parser to app.
-    QCommandLineParser parser;
-    parser.setApplicationDescription("Deepin Compressor.");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("filename", "File path.", "file [file..]");
-    parser.process(app);
+    QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
-    // init modules.
+    if (appIcon.isNull()) {
+        appIcon = QIcon(":assets/icons/deepin/builtin/icons/deepin-compressor.svg");
+    }
+
+    app.setProductIcon(appIcon);
+    app.setWindowIcon(appIcon);
+
+    QStringList multilist;
+    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
+        multilist.append(newfilelist.at(0));
+        multilist.append(newfilelist.last().remove("_multi"));
+        newfilelist = multilist;
+    }
     MainWindow w;
-    app.setMainWindow(&w);
 
     QString lastStr = argv[argc - 1];
 
@@ -85,51 +125,32 @@ int main(int argc, char *argv[])
             }
         }
 
+        //判断目标文件是否合法
         if (!w.checkSettings(argv[1])) {
             return 0;
         }
     }
+    w.bindAdapter();
 
-    QIcon appIcon = QIcon::fromTheme("deepin-compressor");
+    if (busRegistered == true) {
 
-    if (appIcon.isNull()) {
-        appIcon = QIcon(":assets/icons/deepin/builtin/icons/deepin-compressor.svg");
-    }
-
-    app.setProductIcon(appIcon);
-    app.setWindowIcon(appIcon);
-    //w.titlebar()->setIcon(appIcon);
-
-    if (app.setSingleInstance("deepin-compressor")) {
-        Dtk::Widget::moveToCenter(&w);
-    }
-
-    const QStringList fileList = parser.positionalArguments();
-
-    QStringList newfilelist;
-    foreach (QString file, fileList) {
-        if (file.contains("file://")) {
-            file.remove("file://");
+        // init modules.
+        if (app.setSingleInstance("deepin-compressor")) {
+            Dtk::Widget::moveToCenter(&w);
         }
 
-        newfilelist.append(file);
+        QString strWId = QString::number(w.winId());
+        bus.registerObject(HEADBUS, &w);
+
+        QObject::connect(&w, &MainWindow::sigquitApp, &app, &DApplication::quit);
+        // handle command line parser.
+        if (!newfilelist.isEmpty()) {
+            QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
+        }
+
+        w.show();
     }
-
-    QStringList multilist;
-    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
-        multilist.append(newfilelist.at(0));
-        multilist.append(newfilelist.last().remove("_multi"));
-        newfilelist = multilist;
-    }
-
-    QObject::connect(&w, &MainWindow::sigquitApp, &app, DApplication::quit);
-    // handle command line parser.
-    if (!fileList.isEmpty()) {
-        QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
-    }
-
-    w.showNormal();
-    w.show();
-
     return app.exec();
 }
+
+//#define LOGINFO(a) MainWindow::getLogger()->info(a)

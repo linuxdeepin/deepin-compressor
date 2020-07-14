@@ -20,7 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "jobs.h"
-#include "archiveentry.h"
+//#include "archiveentry.h"
+#include "structs.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -71,6 +72,7 @@ Job::Job(ReadOnlyArchiveInterface *interface)
 Job::~Job()
 {
     if (d->isRunning()) {
+        d->terminate();
         d->wait();
     }
 
@@ -147,7 +149,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename, Qt::ConnectionType::UniqueConnection);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::updateDestFileSignal, this, &Job::onUpdateDestFile, Qt::ConnectionType::UniqueConnection);
 
-    auto readWriteInterface = qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
+    ReadWriteArchiveInterface *readWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
     if (readWriteInterface) {
         connect(readWriteInterface, &ReadWriteArchiveInterface::entryRemoved, this, &Job::onEntryRemoved, Qt::ConnectionType::UniqueConnection);
     }
@@ -177,8 +179,16 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
+    } else if (message == "Failed to open archive: %1") {
+        setError(KJob::OpenFailedError);
+        setErrorText(message);
+        emitResult();
+    } else if (message == "Wrong password.") {
+        setError(KJob::WrongPsdError);
+        setErrorText(message);
+        emitResult();
+        return;
     }
-
     setError(KJob::UserDefinedError);
     setErrorText(message);
     emit sigExtractSpinnerFinished();
@@ -218,6 +228,7 @@ void Job::onFinished(bool result)
         setError(KJob::NopasswordError); //阻止解压zip加密包出现解压失败界面再出现输入密码界面
     } else if ((archive() && !archive()->isValid())  || false == result) {
         if (KJob::UserFilenameLong == error()) {
+        } else if (KJob::WrongPsdError == error()) {
         } else {
             setError(KJob::UserDefinedError);
         }
@@ -269,6 +280,7 @@ LoadJob::LoadJob(Archive *archive, ReadOnlyArchiveInterface *interface)
     , m_dirCount(0)
     , m_filesCount(0)
 {
+    mType = Job::ENUM_JOBTYPE::LOADJOB;
     qDebug() << "LoadJob job instance";
     connect(this, &LoadJob::newEntry, this, &LoadJob::onNewEntry);
 }
@@ -288,15 +300,15 @@ LoadJob::LoadJob(ReadOnlyArchiveInterface *interface, bool isbatch)
 void LoadJob::doWork()
 {
     //emit description(this, tr("Loading archive"), qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, ("Loading archive"), qMakePair(QString("Archive"), archiveInterface()->filename()));
+    ReadOnlyArchiveInterface *pTool = archiveInterface();
+    emit description(this, ("Loading archive"), qMakePair(QString("Archive"), pTool->filename()));
     connectToArchiveInterfaceSignals();
 
     bool ret = false;
 
-    if (archiveInterface()) {
+    if (pTool) {
         connect(archiveInterface(), &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &LoadJob::sigLodJobPassword);
-
-        ret = archiveInterface()->list(m_isbatch);
+        ret = pTool->list(m_isbatch);
     }
 
     if (!archiveInterface()->waitForFinishedSignal()) {
@@ -389,6 +401,7 @@ BatchExtractJob::BatchExtractJob(LoadJob *loadJob, const QString &destination, b
     , m_autoSubfolder(autoSubfolder)
     , m_preservePaths(preservePaths)
 {
+    mType = Job::ENUM_JOBTYPE::BATCHEXTRACTJOB;
     qDebug() << "BatchExtractJob job instance";
 }
 
@@ -502,6 +515,7 @@ CreateJob::CreateJob(Archive *archive, const QVector<Archive::Entry *> &entries,
     , m_entries(entries)
     , m_options(options)
 {
+    mType = Job::ENUM_JOBTYPE::CREATEJOB;
     qDebug() << "Created job instance";
 }
 
@@ -520,7 +534,7 @@ void CreateJob::doWork()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &CreateJob::onProgress);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &CreateJob::onProgressFilename);
 
-    m_addJob = archive()->addFiles(m_entries, nullptr, m_options);
+    m_addJob = archive()->addFiles(m_entries, nullptr, nullptr, m_options);
 
     if (m_addJob) {
         connect(m_addJob, &KJob::result, this, &CreateJob::emitResult);
@@ -547,25 +561,27 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     , m_destinationDir(destinationDir)
     , m_options(options)
 {
+    mType = Job::ENUM_JOBTYPE::EXTRACTJOB;
     qDebug() << "ExtractJob job instance";
     connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
     connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::slotExtractJobPwdCheckDown, Qt::QueuedConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress, this, &ExtractJob::onProgress, Qt::ConnectionType::UniqueConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress_filename, this, &ExtractJob::onProgressFilename, Qt::ConnectionType::UniqueConnection);
 
-    // m_bTimeout = false;
+}
+
+void ExtractJob::resetTimeOut()
+{
+    this->m_bTimeout = false;
 }
 
 void ExtractJob::doWork()
 {
     //percent( this, 0);
-
     QString desc;
     if (m_entries.count() == 0) {
-        //desc = tr("Extracting all files");
         desc = ("Extracting all files");
     } else {
-        //desc = tr("Extracting one file", "Extracting %1 files", m_entries.count());
         desc = QString("Extracting %1 files").arg(m_entries.count());
     }
 
@@ -600,12 +616,36 @@ void ExtractJob::doWork()
 
 void ExtractJob::cleanIfCanceled()
 {
+    if (this->archiveInterface()->extractPsdStatus != ReadOnlyArchiveInterface::Canceled) {
+        return;
+    }
+
     this->archiveInterface()->waitForFinishedSignal();
+    Settings_Extract_Info *pSettingInfo = this->m_options.pSettingInfo;
+    if (pSettingInfo != nullptr) {
+        if (pSettingInfo->str_CreateFolder.isEmpty()) {
+            return;
+        }
+
+        QString fullPath = pSettingInfo->str_defaultPath;
+        if (!fullPath.endsWith(QDir::separator())) {
+            fullPath += QDir::separator();
+        }
+        fullPath += pSettingInfo->str_CreateFolder;
+        qDebug() << "取消删除：" << fullPath;
+        QFileInfo fileInfo(fullPath);
+        if (fileInfo.exists()) {
+            ReadWriteArchiveInterface::clearPath(fullPath);
+        }
+    }
+
+    qDebug() << "do nothing";
 }
 
 void ExtractJob::onFinished(bool result)
 {
-    this->archiveInterface()->cleanIfCanceled();
+//    this->archiveInterface()->cleanIfCanceled();
+    cleanIfCanceled();
     emit sigExtractSpinnerFinished();
     Job::onFinished(result);
 }
@@ -627,16 +667,13 @@ bool ExtractJob::Killjob()
     return kill();
 }
 
-void ExtractJob::resetTimeOut()
-{
-    m_bTimeout = false;
-}
-
 void ExtractJob::onProgress(double value)
 {
-    if (this->m_bTimeout) {
-        setPercent(static_cast<unsigned long>(100.0 * value));
+    if (!this->m_bTimeout) {
+        this->archiveInterface()->m_pProgressInfo->restartTimer();
     }
+
+    setPercent(static_cast<unsigned long>(100.0 * value));
 }
 
 void ExtractJob::onProgressFilename(const QString &filename)
@@ -656,11 +693,22 @@ ExtractionOptions ExtractJob::extractionOptions() const
     return m_options;
 }
 
+Archive::Entry *ExtractJob::getWorkEntry()
+{
+    if (this->m_entries.length() > 0) {
+        return m_entries[0];
+    } else {
+        return nullptr;
+    }
+}
+
+
 TempExtractJob::TempExtractJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : Job(interface)
     , m_entry(entry)
     , m_passwordProtectedHint(passwordProtectedHint)
 {
+    mType = Job::ENUM_JOBTYPE::TEMPEXTRACTJOB;
     m_tmpExtractDir = new QTemporaryDir();
 }
 
@@ -717,18 +765,21 @@ QString TempExtractJob::extractionDir() const
 PreviewJob::PreviewJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : TempExtractJob(entry, passwordProtectedHint, interface)
 {
+    mType = Job::ENUM_JOBTYPE::PREVIEWJOB;
     qDebug() << "PreviewJob job instance";
 }
 
 OpenJob::OpenJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : TempExtractJob(entry, passwordProtectedHint, interface)
 {
+    mType = Job::ENUM_JOBTYPE::OPENJOB;
     qDebug() << "OpenJob job instance";
 }
 
 OpenWithJob::OpenWithJob(Archive::Entry *entry, bool passwordProtectedHint, ReadOnlyArchiveInterface *interface)
     : OpenJob(entry, passwordProtectedHint, interface)
 {
+    mType = Job::ENUM_JOBTYPE::OPENWITHJOB;
     qDebug() << "OpenWithJob job instance";
 }
 
@@ -738,7 +789,32 @@ AddJob::AddJob(const QVector<Archive::Entry *> &entries, const Archive::Entry *d
     , m_destination(destination)
     , m_options(options)
 {
+    mType = Job::ENUM_JOBTYPE::ADDJOB;
     qDebug() << "AddJob job instance";
+}
+
+const QVector<Archive::Entry *> &AddJob::entries()
+{
+    return this->m_entries;
+}
+
+quint64 getAllFileCount(const QString &fullPath)
+{
+    QFileInfo fileInfo(fullPath);
+    quint64 size = 1;
+    if (fileInfo.isDir()) {
+        QDirIterator it(fullPath,
+                        QDir::AllEntries | QDir::Readable |
+                        QDir::Hidden | QDir::NoDotAndDotDot,
+                        QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            size++;
+            it.next();
+        }
+        return size;
+    } else {
+        return size;
+    }
 }
 
 void AddJob::doWork()
@@ -752,30 +828,7 @@ void AddJob::doWork()
         QDir::setCurrent(globalWorkDir);
     }
 
-    // Count total number of entries to be added.
-    uint totalCount = 0;
-    QElapsedTimer timer;
-    timer.start();
-    for (const Archive::Entry *entry : qAsConst(m_entries)) {
-        totalCount++;
-        if (QFileInfo(entry->fullPath()).isDir()) {
-            QDirIterator it(entry->fullPath(), QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
-            while (it.hasNext()) {
-                it.next();
-                totalCount++;
-            }
-        }
-    }
-
-    qDebug() << "Going to add" << totalCount << "entries, counted in" << timer.elapsed() << "ms";
-
-    //const QString desc = tr("Compressing a file", "Compressing %1 files", totalCount);
-    const QString desc = QString("Compressing %1 files").arg(totalCount);
-    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
-    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
-
     ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
-
     Q_ASSERT(m_writeInterface);
 
     QStringList *fileListWathed = new QStringList();
@@ -785,14 +838,24 @@ void AddJob::doWork()
 
         const QString &fullPath = entry->fullPath();
         fileListWathed->append(fullPath);
-        QString relativePath = workDir.relativeFilePath(fullPath);
-
-        if (fullPath.endsWith(QLatin1Char('/'))) {
-            relativePath += QLatin1Char('/');
-        }
-
-        entry->setFullPath(relativePath);
     }
+
+    // Count total number of entries to be added.
+    QElapsedTimer timer;
+    timer.start();
+    uint totalCount = 0;
+
+    if (m_writeInterface->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_READWRITE_LIBARCHIVE) {
+        const QString &firstFilePath = fileListWathed->at(0);
+        totalCount = static_cast<uint>(getAllFileCount(firstFilePath));
+    } else {
+        totalCount = static_cast<uint>(m_entries.length());
+    }
+    const QString desc = QString("Compressing %1 files").arg(totalCount);
+    //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
+
+    qDebug() << "Going to add" << totalCount << "entries, counted in" << timer.elapsed() << "ms";
 
     connectToArchiveInterfaceSignals();
     m_writeInterface->watchFileList(fileListWathed);
@@ -801,7 +864,6 @@ void AddJob::doWork()
     if (!archiveInterface()->waitForFinishedSignal()) {
         onFinished(ret);
     }
-
     if (fileListWathed != nullptr) {
         fileListWathed->clear();
         delete fileListWathed;
@@ -814,6 +876,18 @@ void AddJob::onFinished(bool result)
         QDir::setCurrent(m_oldWorkingDir);
     }
 
+    if (result) {
+        foreach (Archive::Entry *pEntry, m_entries) {
+            if (!pEntry) {
+                continue;
+            }
+            pEntry->setProperty("timestamp", QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss")));
+            //在这里改变fullpath属性
+//            onEntry(pEntry);
+            emit addEntry(pEntry);
+        }
+    }
+
     Job::onFinished(result);
 }
 
@@ -824,6 +898,7 @@ MoveJob::MoveJob(const QVector<Archive::Entry *> &entries, Archive::Entry *desti
     , m_destination(destination)
     , m_options(options)
 {
+    mType = Job::ENUM_JOBTYPE::MOVEJOB;
     qDebug() << "MoveJob job instance";
 }
 
@@ -837,7 +912,7 @@ void MoveJob::doWork()
     emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
     ReadWriteArchiveInterface *m_writeInterface =
-        qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
+        dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
 
     Q_ASSERT(m_writeInterface);
 
@@ -864,6 +939,7 @@ CopyJob::CopyJob(const QVector<Archive::Entry *> &entries, Archive::Entry *desti
     , m_destination(destination)
     , m_options(options)
 {
+    mType = Job::ENUM_JOBTYPE::COPYJOB;
     qDebug() << "CopyJob job instance";
 }
 
@@ -901,6 +977,8 @@ DeleteJob::DeleteJob(const QVector<Archive::Entry *> &entries, ReadWriteArchiveI
     : Job(interface)
     , m_entries(entries)
 {
+    mType = Job::ENUM_JOBTYPE::DELETEJOB;
+    qDebug() << "deleteJob instance";
 }
 
 void DeleteJob::doWork()
@@ -910,9 +988,8 @@ void DeleteJob::doWork()
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
     emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
 
-    ReadWriteArchiveInterface *m_writeInterface =
-        qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
-
+    ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
+    connect(m_writeInterface, &ReadOnlyArchiveInterface::progress, this, &DeleteJob::onProgress);
     Q_ASSERT(m_writeInterface);
 
     connectToArchiveInterfaceSignals();
@@ -923,10 +1000,19 @@ void DeleteJob::doWork()
     }
 }
 
+Archive::Entry *DeleteJob::getWorkEntry()
+{
+    if (this->m_entries.length() == 0) {
+        return nullptr;
+    }
+    return this->m_entries[0];
+}
+
 CommentJob::CommentJob(const QString &comment, ReadWriteArchiveInterface *interface)
     : Job(interface)
     , m_comment(comment)
 {
+    mType = Job::ENUM_JOBTYPE::COMMENTJOB;
 }
 
 void CommentJob::doWork()
@@ -950,6 +1036,7 @@ void CommentJob::doWork()
 TestJob::TestJob(ReadOnlyArchiveInterface *interface)
     : Job(interface)
 {
+    mType = Job::ENUM_JOBTYPE::TESTJOB;
     m_testSuccess = false;
 }
 
@@ -979,5 +1066,44 @@ bool TestJob::testSucceeded()
 {
     return m_testSuccess;
 }
+
+UpdateJob::UpdateJob(const QVector<Archive::Entry *> &entries, ReadWriteArchiveInterface *interface)
+    : Job(interface)
+    , m_entries(entries)
+{
+    mType = Job::ENUM_JOBTYPE::UPDATEJOB;
+    qDebug() << "updateJob instance";
+}
+
+void UpdateJob::doWork()
+{
+    QString desc = QString("Updating %1 files").arg(m_entries.count());
+    emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
+
+    ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
+    connect(m_writeInterface, &ReadOnlyArchiveInterface::progress, this, &UpdateJob::onProgress);
+    Q_ASSERT(m_writeInterface);
+
+    connectToArchiveInterfaceSignals();
+    bool ret = m_writeInterface->deleteFiles(m_entries);
+
+    if (!archiveInterface()->waitForFinishedSignal()) {
+        onFinished(ret);
+    }
+}
+
+Archive::Entry *UpdateJob::getWorkEntry()
+{
+    if (this->m_entries.length() == 0) {
+        return nullptr;
+    }
+    return this->m_entries[0];
+}
+
+bool UpdateJob::doKill()
+{
+    return m_addJob && m_addJob->kill();
+}
+
 
 #include "jobs.moc"

@@ -37,6 +37,27 @@ class  KJob : public QObject
     Q_PROPERTY(Capabilities capabilities READ capabilities CONSTANT)
 
 public:
+    enum ENUM_JOBTYPE {
+        NONE = 0,//表示该Job尚未new或者已经delete
+        CREATEJOB = 1,
+        LOADJOB,
+        ADDJOB,
+        DELETEJOB,
+        EXTRACTJOB,
+        BATCHCOMPRESSJOB,//批量压缩
+        BATCHEXTRACTJOB,//批量解压
+        TEMPEXTRACTJOB,
+        OPENJOB,
+        OPENWITHJOB,
+        PREVIEWJOB,
+        MOVEJOB,
+        COPYJOB,
+        COMMENTJOB,
+        TESTJOB,
+        UPDATEJOB
+    };
+//    Q_ENUM(ENUM_JOBTYPE)
+
     enum Unit { Bytes, Files, Directories };
     Q_ENUM(Unit)
 
@@ -44,7 +65,6 @@ public:
                       Killable       = 0x0001,
                       Suspendable    = 0x0002
                     };
-
     Q_ENUM(Capability)
 
     Q_DECLARE_FLAGS(Capabilities, Capability)
@@ -59,6 +79,8 @@ public:
 
     enum KillVerbosity { Quietly, EmitResult };
     Q_ENUM(KillVerbosity)
+
+    ENUM_JOBTYPE mType;
 
 public Q_SLOTS:
     bool kill(KillVerbosity verbosity = Quietly);
@@ -84,9 +106,12 @@ public:
         UserSkiped = 3,
         /*** File name is too long error */
         UserFilenameLong = 4,
+        /*** open file error */
+        OpenFailedError,
         /***Have not entered the password***/
         NopasswordError,
-
+        /***Wrong password */
+        WrongPsdError,
         UserDefinedError = 100
     };
 

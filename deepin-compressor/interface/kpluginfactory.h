@@ -30,8 +30,8 @@
 //#include "kexportplugin.h" // for source compat
 
 class QWidget;
-
 class KPluginFactoryPrivate;
+
 namespace KParts {
 class Part;
 }
@@ -69,6 +69,7 @@ class Part;
 #define K_PLUGIN_CLASS_WITH_JSON(classname, jsonFile) K_PLUGIN_FACTORY_WITH_JSON(classname ## Factory, jsonFile, registerPlugin<classname >();)
 #define K_PLUGIN_FACTORY_DECLARATION(name) K_PLUGIN_FACTORY_DECLARATION_WITH_BASEFACTORY(name, KPluginFactory)
 #define K_PLUGIN_FACTORY_DEFINITION(name, pluginRegistrations) K_PLUGIN_FACTORY_DEFINITION_WITH_BASEFACTORY(name, KPluginFactory, pluginRegistrations)
+
 
 class  KPluginFactory : public QObject
 {

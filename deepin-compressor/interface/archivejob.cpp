@@ -22,8 +22,6 @@
 #include "archivejob.h"
 #include "archivejob_p.h"
 
-//#include "kjobuidelegate.h"
-
 #include <QEventLoop>
 #include <QMap>
 #include <QMetaType>
@@ -32,13 +30,11 @@
 #include <climits>
 
 KJobPrivate::KJobPrivate()
-    : q_ptr(nullptr), error(KJob::NoError)
-    , progressUnit(KJob::Bytes), percentage(ULONG_MAX)
-    , speedTimer(nullptr), eventLoop(nullptr)
-    , capabilities(KJob::NoCapabilities)
-    , suspended(false)
-    , isAutoDelete(true)
-    , isFinished(false)
+    : q_ptr(nullptr), error(KJob::NoError),
+      progressUnit(KJob::Bytes), percentage(ULONG_MAX),
+      speedTimer(nullptr), eventLoop(nullptr),
+      capabilities(KJob::NoCapabilities),
+      suspended(false), isAutoDelete(true), isFinished(false)
 {
 }
 
@@ -66,6 +62,7 @@ KJob::~KJob()
 
     delete d_ptr->speedTimer;
     delete d_ptr;
+    mType = ENUM_JOBTYPE::NONE;
 }
 
 
@@ -183,13 +180,11 @@ bool KJob::exec()
     if (!d->isFinished) {
         d->eventLoop->exec(QEventLoop::ExcludeUserInputEvents);
     }
-
     d->eventLoop = nullptr;
 
     if (wasAutoDelete) {
         deleteLater();
     }
-
     return (d->error == NoError);
 }
 

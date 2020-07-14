@@ -24,9 +24,9 @@
 #include <DLabel>
 #include <DHeaderView>
 
-#define SCROLLMARGIN 10
-
 class LogViewHeaderView;
+
+#define SCROLLMARGIN 10
 
 class MyLabel: public Dtk::Widget::DLabel
 {
@@ -34,10 +34,8 @@ class MyLabel: public Dtk::Widget::DLabel
 public:
     MyLabel(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *e) override;
-
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
-
 signals:
     void labelDoubleClickEvent(QMouseEvent *event);
 };
@@ -78,7 +76,8 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    virtual void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
+    virtual void paintSection(QPainter *painter, const QRect &rect,
+                              int logicalIndex) const override;
 
 private:
     void resizeEvent(QResizeEvent *event) override;

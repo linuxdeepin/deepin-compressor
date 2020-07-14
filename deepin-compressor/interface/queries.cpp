@@ -22,10 +22,10 @@
 #include "queries.h"
 
 #include <DDialog>
+#include <DPasswordEdit>
 #include <DFontSizeManager>
 #include <DApplicationHelper>
 #include <DLabel>
-#include <DPasswordEdit>
 
 #include <QApplication>
 #include <QDir>
@@ -83,6 +83,15 @@ int Query::execDialog()
     return 0;
 }
 
+QString Query::toShortString(QString strSrc, int limitCounts, int left)
+{
+    left = (left >= limitCounts || left <= 0) ? limitCounts / 2 : left;
+    int right = limitCounts - left;
+    QString displayName = "";
+    displayName = strSrc.length() > limitCounts ? strSrc.left(left) + "..." + strSrc.right(right) : strSrc;
+    return displayName;
+}
+
 void Query::waitForResponse()
 {
     QMutexLocker locker(&m_responseMutex);
@@ -130,6 +139,7 @@ bool OverwriteQuery::applyAll()
 
 void OverwriteQuery::execute()
 {
+
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
 
     QString path = sourceUrl.toString();
@@ -310,17 +320,19 @@ void PasswordNeededQuery::execute()
 
 //    m_data[QStringLiteral("password")] = password;
 //    setResponse(notCancelled && !password.isEmpty());
+
     qDebug() << m_data[QStringLiteral("archiveFilename")];
     DDialog *dialog = new DDialog(getMainWindow());
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedHeight(20);
+    strlabel->setFixedHeight(40);
     strlabel->setForegroundRole(DPalette::WindowText);
-
+    strlabel->setWordWrap(true);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(QObject::tr("Encrypted file, please enter the password"));
+    QString fileName = toShortString(m_data[QStringLiteral("archiveFilename")].toString());
+    strlabel->setText(fileName + "\n" + QObject::tr("Encrypted file, please enter the password"));
 
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->setFixedWidth(280);
@@ -338,7 +350,8 @@ void PasswordNeededQuery::execute()
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
-
+    QRect mainWindowGeometr = getMainWindow()->geometry();
+    dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - TITLE_FIXED_HEIGHT + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
     const int mode = dialog->exec();
 
     const QString password = "";
@@ -374,6 +387,7 @@ void WrongPasswordQuery::execute()
 {
     // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
     // at the moment (#231974)
+
     qDebug() << m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
     DDialog *dialog = new DDialog(getMainWindow());
@@ -395,6 +409,7 @@ void WrongPasswordQuery::execute()
     strlabel2->setText(QObject::tr("Wrong password"));
 
     dialog->addButton(QObject::tr("OK"));
+
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -461,3 +476,5 @@ bool ContinueExtractionQuery::dontAskAgain()
 {
     return m_chkDontAskAgain.isChecked();
 }
+
+

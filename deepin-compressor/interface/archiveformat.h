@@ -25,6 +25,7 @@
 #include "archive_manager.h"
 #include "kpluginmetadata.h"
 
+
 class  ArchiveFormat
 {
 public:
@@ -71,5 +72,7 @@ private:
     QStringList m_encryptionMethods;
     QString m_defaultEncryptionMethod;
 };
+
+
 
 #endif // ARCHIVEFORMAT_H

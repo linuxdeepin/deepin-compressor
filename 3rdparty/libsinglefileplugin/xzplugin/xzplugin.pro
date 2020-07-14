@@ -51,7 +51,8 @@ SOURCES += \
     ../../../deepin-compressor/interface/kpluginmetadata.cpp \
     ../../../deepin-compressor/interface/pluginmanager.cpp \
     ../../../deepin-compressor/interface/analysepsdtool.cpp \
-    ../../../deepin-compressor/interface/filewatcher.cpp
+    ../../../deepin-compressor/interface/filewatcher.cpp \
+    ../../../deepin-compressor/interface/structs.cpp
 
 HEADERS += \
         xzplugin.h \
@@ -81,7 +82,8 @@ HEADERS += \
     ../../../deepin-compressor/interface/jobs.h \
     ../../../deepin-compressor/interface/kprocess.h \
     ../../../deepin-compressor/interface/analysepsdtool.h \
-    ../../../deepin-compressor/interface/filewatcher.h
+    ../../../deepin-compressor/interface/filewatcher.h \
+    ../../../deepin-compressor/interface/structs.h
 
 unix {
     target.path = /usr/lib/deepin-compressor/plugins

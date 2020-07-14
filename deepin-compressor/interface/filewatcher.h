@@ -18,10 +18,8 @@ public:
     void watch(QStringList *fullPath);
     void beginWork();
     void finishWork();
-
 signals:
     void sigFileChanged(QString fileChanged);
-
 protected:
     virtual void timerEvent(QTimerEvent *event);
 
@@ -70,5 +68,6 @@ protected:
 private:
     int m_nTimerID = -1;
 };
+
 
 #endif // FILEWATCHER_H

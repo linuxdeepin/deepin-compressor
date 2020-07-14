@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QJsonObject>
 
+
 class Plugin : public QObject
 {
     Q_OBJECT
@@ -56,10 +57,13 @@ Q_SIGNALS:
     void enabledChanged();
 
 private:
+
     static bool findExecutables(const QStringList &executables);
 
     bool m_enabled;
     KPluginMetaData m_metaData;
 };
+
+
 
 #endif

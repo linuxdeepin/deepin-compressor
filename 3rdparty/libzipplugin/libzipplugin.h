@@ -4,8 +4,11 @@
 #include "archiveinterface.h"
 #include "kpluginfactory.h"
 
+#include <QFileDevice>
+
 #include <zip.h>
 #include <minizip/unzip.h>
+
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0;
@@ -13,12 +16,28 @@ struct FileProgressInfo {
     QString fileName;
 };
 
+/**
+ * @brief The enum_extractEntryStatus enum
+ * @see 解压单个entry的三种可能结果
+ */
+enum enum_extractEntryStatus {
+    FAIL,//解压失败
+    SUCCESS,//解压成功
+    PSD_NEED//需要密码
+};
+
+enum enum_checkEntryPsd {
+    NOTCHECK,//未检测
+    PSDWRONG,//密码错误
+    RIGHT,//打开正确
+    PSDNEED//需要输入密码
+};
+
 class LibzipPluginFactory : public KPluginFactory
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "kerfuffle_libzip.json")
     Q_INTERFACES(KPluginFactory)
-
 public:
     explicit LibzipPluginFactory();
     ~LibzipPluginFactory();
@@ -44,18 +63,43 @@ public:
     void cleanIfCanceled()override;
     void watchFileList(QStringList *strList)override;
 
+    /**
+     * @brief checkArchivePsd:首次解压Archive需要判断一次密码
+     * @param archive:归档对象
+     * @return 如果返回false，结束当前解压
+     */
+    bool checkArchivePsd(zip_t *archive, int &iCodecIndex);
+
+    /**
+     * @brief checkEntriesPsd:首次提取Entry树需要判断一次密码
+     * @param archive
+     * @param selectedEnV:选中的Entry树
+     * @return 如果返回false，结束当前解压
+     */
+    //bool checkEntriesPsd(zip_t *archive, const QVector<Archive::Entry *> &selectedEnV);
+    bool checkEntriesPsd(zip_t *archive, QList<int> listExtractIndex);
+
+    /**
+     * @brief checkEntryPsd
+     * @param archive:归档对象
+     * @param pCur:检测密码的Entry节点
+     * @param stop:是否停止当前job
+     */
+    //void checkEntryPsd(zip_t *archive, Archive::Entry *pCur, enum_checkEntryPsd &status);
+    void checkEntryPsd(zip_t *archive, int iIndex, enum_checkEntryPsd &status);
+
     int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 
     virtual void showEntryListFirstLevel(const QString &directory) override;
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
 
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
-
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 
 private:
-    bool extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
+    bool deleteEntry(Archive::Entry *pEntry, zip_t *archive/*, int &curNo, int count = -1*/);
+    enum_extractEntryStatus extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);

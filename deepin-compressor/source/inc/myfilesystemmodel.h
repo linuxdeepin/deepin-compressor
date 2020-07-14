@@ -54,7 +54,7 @@ public:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
     void setPathIndex(int *index);
     void setTableView(DTableView *tableview);
-
+    void deleteRows(QModelIndexList &list);
 signals:
     void sigShowLabel() const;
 

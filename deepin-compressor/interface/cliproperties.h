@@ -130,4 +130,5 @@ private:
     KPluginMetaData m_metaData;
 };
 
+
 #endif /* CLIPROPERTIES_H */

@@ -21,17 +21,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "progress.h"
-#include "utils.h"
 #include "mainwindow.h"
+#include "utils.h"
+#include "archiveinterface.h"
+#include "structs.h"
 
-#include <DDialog>
-#include <QGraphicsDropShadowEffect>
 #include <DFontSizeManager>
+#include <DApplicationHelper>
+#include <DDialog>
 
 #include <QFileIconProvider>
+#include <QGraphicsDropShadowEffect>
+#include <QTimerEvent>
 #include <QVBoxLayout>
 #include <QDebug>
-#include <QTimerEvent>
 
 Progress::Progress(DWidget *parent)
     : DWidget(parent)
@@ -43,7 +46,7 @@ Progress::Progress(DWidget *parent)
     m_timerTime = new QTimer(this);
     m_timerTime->setInterval(1000);
     connect(m_timerTime, &QTimer::timeout, this, &Progress::slotChangeTimeLeft);
-
+    m_pInfo = new ProgressAssistant(this);
 //    m_timerProgress = new QTimer(this);
 //    m_timerProgress->setInterval(1000);
 //    connect(m_timerProgress, &QTimer::timeout, this, &Progress::setTempProgress);
@@ -83,7 +86,7 @@ void Progress::InitUI()
     m_cancelbutton = new DPushButton(this);
     m_cancelbutton->setMinimumSize(340, 36);
     m_cancelbutton->setText(tr("Cancel"));
-    m_cancelbutton->setFocusPolicy(Qt::NoFocus);
+    m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
 
     //add speed and time label
     m_speedLabel = new DLabel(this);
@@ -131,15 +134,19 @@ void Progress::InitConnection()
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
 }
 
-void Progress::setSpeedAndTimeText(COMPRESS_TYPE type)
+void Progress::setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type)
 {
-    if (type == COMPRESSING) {
+    if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
-    } else if (type == DECOMPRESSING) {
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
         m_speedLabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        m_speedLabel->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
+        m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
     }
-
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
+    qDebug() << "setspeedandtimetext";
 }
 
 void Progress::setTempProgress()
@@ -151,7 +158,20 @@ void Progress::setTempProgress()
 
 //    m_percent += 0.3;
 //    setprogress(m_percent);
-//    qDebug() << "临时百分比" << m_percent;
+    //    qDebug() << "临时百分比" << m_percent;
+}
+
+void Progress::refreshSpeedAndTime(unsigned long compressPercent)
+{
+    double speed = this->m_pInfo->getSpeed(compressPercent);
+    qint64 timeLeft = this->m_pInfo->getLeftTime(compressPercent);
+    this->setSpeedAndTime(speed, timeLeft);
+    this->m_pInfo->restartTimer();
+}
+
+ProgressAssistant *Progress::pInfo()
+{
+    return m_pInfo;
 }
 
 void Progress::slotChangeTimeLeft()
@@ -167,6 +187,7 @@ void Progress::slotChangeTimeLeft()
 
 void Progress::setprogress(double percent)
 {
+    //qDebug() << "setProgress(percent)" << percent;
     m_progressbar->setValue(percent);
     m_progressbar->update();
     m_percent = percent;
@@ -180,8 +201,18 @@ void Progress::setprogress(double percent)
 void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
 {
     m_speed = speed;
-    lastTimeLeft = timeLeft;
-    displaySpeedAndTime(speed, timeLeft);
+    qint64 gap = timeLeft - lastTimeLeft;
+
+    if (timeLeft > 2) {
+        if (gap > 59 || gap < -59) { //时间差大于1分钟，会实时刷新
+            lastTimeLeft = timeLeft;
+        }
+    }
+    if (timeLeft < 30) {//剩余时间小于30s，会实时刷新
+        lastTimeLeft = timeLeft;
+    }
+
+    displaySpeedAndTime(speed, lastTimeLeft);
 
     if (lastTimeLeft > 2) {
         m_timerTime->start();
@@ -201,7 +232,23 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
 
     //add update speed and time label
-    if (m_type == COMPRESSING) {
+    if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
+        if (speed < 1024) {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+        } else if (speed > 1024 && speed < 1024 * 300) {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+        }
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        if (speed < 1024) {
+            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+        } else {
+            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+        }
+
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
+//        m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
         if (speed < 1024) {
             m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
         } else if (speed > 1024 && speed < 1024 * 300) {
@@ -218,7 +265,6 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
             m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
         }
     }
-
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
@@ -244,9 +290,10 @@ void Progress::setProgressFilename(QString filename)
     }
 
     QFontMetrics elideFont(m_progressfilelabel->font());
-    if (m_type == COMPRESSING) {
+    if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING || m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
-
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Deleteing") + ": " + filename, Qt::ElideMiddle, 520));
     } else {
         if (m_openType) {
             m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));
@@ -256,14 +303,24 @@ void Progress::setProgressFilename(QString filename)
     }
 }
 
-void Progress::settype(COMPRESS_TYPE type)
+void Progress::settype(Progress::ENUM_PROGRESS_TYPE type)
 {
-    m_type = type;
+    m_ProgressType = type;
+}
+
+Progress::ENUM_PROGRESS_TYPE Progress::getType()
+{
+    return m_ProgressType;
 }
 
 void Progress::setopentype(bool type)
 {
     m_openType = type;
+}
+
+bool Progress::getOpenType()
+{
+    return m_openType;
 }
 
 int Progress::showConfirmDialog()
@@ -279,6 +336,8 @@ int Progress::showConfirmDialog()
 //    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
     DLabel *strlabel2 = new DLabel(dialog);
+    strlabel2->setFixedHeight(18);
+    strlabel2->setForegroundRole(DPalette::ToolTipText);
 
     strlabel2->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
@@ -291,9 +350,11 @@ int Progress::showConfirmDialog()
 
 //    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T7, QFont::Medium);
 
-    if (m_type == COMPRESSING) {
+    if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         //strlabel->setText(tr("Stop compressing "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        strlabel2->setText(tr("Are you sure you want to stop the updating?"));
     } else {
         //strlabel->setText(tr("Stop extracting "));
         if (m_openType) {
@@ -340,6 +401,6 @@ void Progress::cancelbuttonPressedSlot()
 //        m_timerProgress->stop();
         m_speed = 0;
         lastTimeLeft = 0;
-        emit sigCancelPressed(m_type);
+        emit sigCancelPressed(m_ProgressType);
     }
 }

@@ -32,6 +32,7 @@ public:
     void setEncryptedArchiveHint(bool encrypted);
 
 private:
+
     bool m_encryptedArchiveHint = false;
 };
 
@@ -71,9 +72,11 @@ private:
     QString m_globalWorkDir;
 };
 
+class Settings_Extract_Info;
 class  ExtractionOptions : public Options
 {
 public:
+
     bool preservePaths() const;
     void setPreservePaths(bool preservePaths);
     bool isDragAndDropEnabled() const;
@@ -85,7 +88,11 @@ public:
     bool isAutoCreatDir() const;
     void setAutoCreatDir(bool bAutoCreatDir);
 
+public:
+    Settings_Extract_Info *pSettingInfo = nullptr;
+
 private:
+
     bool m_preservePaths = true;
     bool m_dragAndDrop = false;
     bool m_alwaysUseTempDir = false;
@@ -95,6 +102,7 @@ private:
 
 QDebug  operator<<(QDebug d, const CompressionOptions &options);
 QDebug  operator<<(QDebug d, const ExtractionOptions &options);
+
 
 Q_DECLARE_METATYPE(CompressionOptions)
 Q_DECLARE_METATYPE(ExtractionOptions)

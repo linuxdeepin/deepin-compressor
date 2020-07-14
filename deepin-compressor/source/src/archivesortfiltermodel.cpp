@@ -37,6 +37,9 @@ ArchiveSortFilterModel::ArchiveSortFilterModel(QObject *parent)
 bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                                       const QModelIndex &rightIndex) const
 {
+    if (leftIndex.column() < 0 || rightIndex.column() < 0)
+        return false;
+
     ArchiveModel *srcModel = qobject_cast<ArchiveModel *>(sourceModel());
     const int col = srcModel->shownColumns().at(leftIndex.column());
     const QByteArray property = srcModel->propertiesMap().value(col);
@@ -129,4 +132,18 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
         }
     }
     return false;
+}
+
+bool ArchiveSortFilterModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginInsertRows(parent, row, row + count - 1);
+
+    endInsertRows();
+
+    return true;
+}
+
+void ArchiveSortFilterModel::refreshNow()
+{
+    emit insertRows(0, 0, this->index(0, 0));
 }

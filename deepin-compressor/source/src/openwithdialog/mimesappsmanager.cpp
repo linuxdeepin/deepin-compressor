@@ -24,9 +24,6 @@
 
 #include "openwithdialog/mimesappsmanager.h"
 #include "openwithdialog/dmimedatabase.h"
-
-//#include "app/define.h"
-
 #include "openwithdialog/singleton.h"
 #include "openwithdialog/desktopfile.h"
 #include "openwithdialog/dfmstandardpaths.h"
@@ -40,11 +37,11 @@
 #include <QThread>
 #include <QStandardPaths>
 #include <QDebug>
-
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QApplication>
+
 
 #undef signals
 extern "C" {
@@ -53,6 +50,8 @@ extern "C" {
 #include <gio/gappinfo.h>
 }
 #define signals public
+
+
 
 QStringList MimesAppsManager::DesktopFiles = {};
 QMap<QString, QStringList> MimesAppsManager::MimeApps = {};
@@ -220,7 +219,6 @@ void MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
     if (file.open(QFile::WriteOnly)) {
         file.write(content);
     }
-
     file.close();
 }
 
@@ -230,7 +228,6 @@ QByteArray MimeAppsWorker::readData(const QString &path)
     if (!file.open(QFile::ReadOnly)) {
         qDebug() << path << "isn't exists!";
     }
-
     QByteArray content = file.readAll();
     file.close();
     return content;
@@ -283,7 +280,6 @@ QString MimesAppsManager::getDefaultAppByMimeType(const QString &mimeType)
     if (defaultApp) {
         url = g_app_info_get_id(defaultApp);
     }
-
     return url;
 }
 
@@ -309,7 +305,6 @@ QString MimesAppsManager::getDefaultAppDisplayNameByGio(const QString &mimeType)
     if (defaultApp) {
         appDisplayName = g_app_info_get_name(defaultApp);
     }
-
     g_object_unref(defaultApp);
     return appDisplayName;
 }
@@ -324,7 +319,6 @@ QString MimesAppsManager::getDefaultAppDesktopFileByMimeType(const QString &mime
     GDesktopAppInfo *desktopAppInfo = g_desktop_app_info_new(desktop_id);
     if (!desktopAppInfo)
         return "";
-
     QString desktopFile = g_desktop_app_info_get_filename(desktopAppInfo);
 
     g_object_unref(defaultApp);
@@ -335,8 +329,8 @@ QString MimesAppsManager::getDefaultAppDesktopFileByMimeType(const QString &mime
 
 bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const QString &appPath)
 {
-    GAppInfo *app = nullptr;
-    GList *apps = nullptr;
+    GAppInfo *app = NULL;
+    GList *apps = NULL;
     apps = g_app_info_get_all();
 
     GList *iterator = apps;
@@ -460,10 +454,8 @@ QStringList MimesAppsManager::getRecommendedAppsByGio(const QString &mimeType)
             recommendApps << app;
             g_object_unref(dekstopAppInfo);
         }
-
         iterator = iterator->next;
     }
-
     g_list_free(recomendAppInfoList);
     return recommendApps;
 }
@@ -518,7 +510,6 @@ QStringList MimesAppsManager::getDesktopFiles()
             desktopFiles.append(it.filePath());
         }
     }
-
     return desktopFiles;
 }
 
@@ -533,7 +524,6 @@ QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
     foreach (QString f, getApplicationsFolders()) {
         desktopObjs.insert(f, DesktopFile(f));
     }
-
     return desktopObjs;
 }
 
@@ -543,6 +533,7 @@ void MimesAppsManager::initMimeTypeApps()
     DesktopFiles.clear();
     DesktopObjs.clear();
     DDE_MimeTypes.clear();
+
 
     QMap<QString, QSet<QString>> mimeAppsSet;
     loadDDEMimeTypes();
@@ -635,7 +626,6 @@ void MimesAppsManager::initMimeTypeApps()
             }
         }
     }
-
     f.close();
 
     const QString mimeInfoCacheRootPath = getMimeInfoCacheFileRootPath();
@@ -688,6 +678,7 @@ void MimesAppsManager::loadDDEMimeTypes()
     QTextStream in(&file);
     QString desktopKey;
     while (!in.atEnd()) {
+
         // Read new line
         QString line = in.readLine();
 
@@ -715,7 +706,6 @@ void MimesAppsManager::loadDDEMimeTypes()
             desktopKey.clear();
         }
     }
-
     file.close();
 }
 

@@ -72,6 +72,7 @@ public:
 
 private:
     DTitlebar *m_titlebar;
+
 };
 
 #endif // PROGRESSDIALOG_H

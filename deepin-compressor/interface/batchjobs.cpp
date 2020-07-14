@@ -1,4 +1,5 @@
 #include "batchjobs.h"
+
 #include <QDebug>
 
 //BatchJobsPrivate::BatchJobsPrivate()
@@ -49,7 +50,6 @@ bool BatchJobs::removeSubjob(KJob *job)
         disconnect(job, &KJob::infoMessage, this, &BatchJobs::slotInfoMessage);
         return true;
     }
-
     return false;
 }
 
@@ -70,7 +70,6 @@ void BatchJobs::clearSubjobs()
         disconnect(job, &KJob::result, this, &BatchJobs::slotResult);
         disconnect(job, &KJob::infoMessage, this, &BatchJobs::slotInfoMessage);
     }
-
     m_subjobs.clear();
 }
 
@@ -84,7 +83,6 @@ void BatchJobs::slotResult(KJob *job)
         // Finish this job
         emitResult();
     }
-
     // After a subjob is done, we might want to start another one.
     // Therefore do not emitResult
     removeSubjob(job);

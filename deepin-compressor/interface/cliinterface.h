@@ -25,13 +25,11 @@
 #include "archiveinterface.h"
 #include "archiveentry.h"
 #include "cliproperties.h"
-//#include "filewatcher.h"
 
 #include <QProcess>
 #include <QRegularExpression>
 
 class KProcess;
-
 class QDir;
 class QTemporaryDir;
 class QTemporaryFile;
@@ -96,9 +94,8 @@ public:
     QString multiVolumeName() const override;
 
     CliProperties *cliProperties() const;
-    virtual void cleanIfCanceled() override;
-    virtual void watchFileList(QStringList *strList) override;
-
+    virtual void cleanIfCanceled()override;
+    virtual void watchFileList(QStringList *strList)override;
 protected:
 
     bool setAddedFiles();
@@ -152,6 +149,7 @@ protected:
     CompressionOptions m_passedOptions;
 
     KProcess *m_process = nullptr;
+
 
     bool m_abortingOperation = false;
     qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
@@ -209,12 +207,16 @@ private:
     void watchDestFilesBegin();
     void watchDestFilesEnd();
 
+    QString getFileName(int percent);
 private:
+
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
     QHash<int, QList<QRegularExpression> > m_patternCache;
 
     QVector<Archive::Entry *> m_removedFiles;
+    QVector<Archive::Entry *> m_extractedFiles;
+    QVector<Archive::Entry *> m_addFiles;
     QVector<Archive::Entry *> m_newMovedFiles;
     int m_exitCode = 0;
     bool m_listEmptyLines = false;
@@ -224,7 +226,6 @@ private:
     QString m_extractDestDir;
     QScopedPointer<QTemporaryDir> m_extractTempDir;
     QScopedPointer<QTemporaryFile> m_commentTempFile;
-    QVector<Archive::Entry *> m_extractedFiles;
     qulonglong m_archiveSizeOnDisk = 0;
     qulonglong m_listedSize = 0;
     bool m_isbatchlist = false;
@@ -245,6 +246,8 @@ private Q_SLOTS:
      *  @brief slotFilesWatchedChanged
      */
     void slotFilesWatchedChanged(QString fileChanged);
+
 };
+
 
 #endif /* CLIINTERFACE_H */

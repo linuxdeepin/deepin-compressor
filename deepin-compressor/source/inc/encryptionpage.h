@@ -39,6 +39,7 @@ public:
 
     void setPassowrdFocus();
     void resetPage();
+    void setInputflag(bool bFlag);
 private:
 signals:
     void sigExtractPassword(QString password);
@@ -55,7 +56,7 @@ private:
     DPasswordEdit *m_password = nullptr;
 
     bool m_inputflag = false;
-    bool pwdCheckDown = true;
+//    bool pwdCheckDown = true;
 };
 
 #endif // ENCRYPTIONPAGE_H

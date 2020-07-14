@@ -56,4 +56,5 @@ extern bool s_compatibilityMode;
 #endif
 }
 
+
 #endif // DESKTOPFILEPARSER_H

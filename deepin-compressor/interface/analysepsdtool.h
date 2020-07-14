@@ -11,23 +11,22 @@ enum ENUMLINEINFO {
 #define VALIDLINE 0
 #define EXTRACT_REPLACE_TIP "Would you like to replace the existing file"
 #define ALLOK "All OK"
+#define OneBBBB ("\b\b\b\b")
 #define DoubleBBBB "\b\b\b\b    \b\b\b\b"
 #define EVERYOK "Everything is Ok"
 #define WRONGPSD7Z ". Wrong password? "
 
-typedef struct lineInfo {
-    lineInfo(QString l, bool b);
+typedef struct lineInfo{
+    lineInfo(QString l,bool b);
     QString line;
     bool read;
-} LineInfo;
+}LineInfo;
 
-class AnalyseTool
-{
+class AnalyseTool{
 public:
     AnalyseTool();
 
-    virtual ~AnalyseTool()
-    {
+    virtual ~AnalyseTool() {
 
     }
 
@@ -40,8 +39,8 @@ public:
     virtual int isRightPsd() = 0;
 };
 
-class AnalyseToolRar4: public AnalyseTool
-{
+
+class AnalyseToolRar4:public AnalyseTool{
 public:
     explicit AnalyseToolRar4();
 
@@ -64,8 +63,8 @@ private:
     int lineCount = 0;
 };
 
-class AnalyseTool7Z: public AnalyseTool
-{
+
+class AnalyseTool7Z:public AnalyseTool{
 public:
     explicit AnalyseTool7Z();
 
@@ -88,8 +87,7 @@ private:
     int lineCount = 0;
 };
 
-class AnalyseHelp
-{
+class AnalyseHelp{
 public:
     explicit AnalyseHelp(QString destPath, QString subFolderName);
 
@@ -122,7 +120,6 @@ public:
     void checkReplaceTip(const QString &line);
 private:
     void resetTempDir();
-
 private:
     AnalyseTool *pTool = nullptr;
     QString destPath = "";
@@ -131,5 +128,6 @@ private:
     int lineCount = 0;
     bool replaceTip = false;
 };
+
 
 #endif // ANALYSEPSDTOOL_H

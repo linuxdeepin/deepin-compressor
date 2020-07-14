@@ -20,16 +20,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compressor_success.h"
-#include "utils.h"
 
-#include <DFileDialog>
 #include <DFontSizeManager>
 #include <DApplicationHelper>
+#include <DFileDialog>
 #include <DDesktopServices>
 
 #include <QBoxLayout>
 #include <QDebug>
 
+#include <utils.h>
 
 Compressor_Success::Compressor_Success(QWidget *parent)
     : DWidget(parent)
@@ -126,6 +126,7 @@ void Compressor_Success::showfiledirSlot(bool iIsUrl)
         }
     }
 
+
     //emit sigQuitApp();
 }
 
@@ -166,3 +167,5 @@ void Compressor_Success::clear()
     setCompressFullPath("");
     setCompressNewFullPath("");
 }
+
+

@@ -27,6 +27,8 @@
 
 #include "desktopfile.h"
 
+#include <DMenu>
+
 #include <QObject>
 #include <QSet>
 #include <QMimeType>
@@ -35,7 +37,7 @@
 #include <QFileSystemWatcher>
 #include <QTimer>
 #include <QIcon>
-#include <DMenu>
+
 
 DWIDGET_USE_NAMESPACE
 
@@ -48,7 +50,7 @@ class MimeAppsWorker: public QObject
     Q_OBJECT
 
 public:
-    MimeAppsWorker(QObject *parent = nullptr);
+    MimeAppsWorker(QObject *parent = 0);
     ~MimeAppsWorker();
 
     void initConnect();
@@ -63,7 +65,7 @@ public slots:
 
 
 private:
-    QFileSystemWatcher *m_fileSystemWatcher = nullptr;
+    QFileSystemWatcher *m_fileSystemWatcher = NULL;
     QTimer *m_updateCacheTimer;
 };
 
@@ -73,7 +75,7 @@ class MimesAppsManager: public QObject
     Q_OBJECT
 
 public:
-    MimesAppsManager(QObject *parent = nullptr);
+    MimesAppsManager(QObject *parent = 0);
     ~MimesAppsManager();
 
     static QStringList DesktopFiles;
@@ -123,7 +125,7 @@ signals:
     void requestUpdateCache();
 
 private:
-    MimeAppsWorker *m_mimeAppsWorker = nullptr;
+    MimeAppsWorker *m_mimeAppsWorker = NULL;
 
 };
 

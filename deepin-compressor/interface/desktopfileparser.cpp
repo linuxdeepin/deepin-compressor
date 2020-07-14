@@ -47,6 +47,7 @@ Q_LOGGING_CATEGORY(DESKTOPPARSER, "kf5.kcoreaddons.desktopparser", QtWarningMsg)
 #define DESKTOPTOJSON_VERBOSE_WARNING QT_NO_QDEBUG_MACRO()
 #endif
 
+
 using namespace DesktopFileParser;
 
 // This code was taken from KConfigGroupPrivate::deserializeList
@@ -55,11 +56,9 @@ QStringList DesktopFileParser::deserializeList(const QString &data, char separat
     if (data.isEmpty()) {
         return QStringList();
     }
-
     if (data == QLatin1String("\\0")) {
         return QStringList(QString());
     }
-
     QStringList value;
     QString val;
     val.reserve(data.size());
@@ -76,14 +75,12 @@ QStringList DesktopFileParser::deserializeList(const QString &data, char separat
                 // don't add an empty entry to the end if the last character is a separator
                 return value;
             }
-
             val.clear();
             val.reserve(data.size() - p);
         } else {
             val += data[p];
         }
     }
-
     value.append(val);
     return value;
 }
@@ -109,7 +106,6 @@ QByteArray DesktopFileParser::escapeValue(const QByteArray &input)
                 result.append(input[i]);
                 break;
             }
-
             i++; // consume next character
             char nextChar = input[i];
             switch (nextChar) {
@@ -134,7 +130,6 @@ QByteArray DesktopFileParser::escapeValue(const QByteArray &input)
             }
         }
     }
-
     return result;
 }
 
@@ -157,7 +152,6 @@ struct CustomPropertyDefinition {
                 qCWarning(DESKTOPPARSER) << "Invalid integer value for key" << key << "-" << str;
                 return QJsonValue();
             }
-
             return QJsonValue(result);
         }
         case QVariant::Double: {
@@ -167,7 +161,6 @@ struct CustomPropertyDefinition {
                 qCWarning(DESKTOPPARSER) << "Invalid double value for key" << key << "-" << str;
                 return QJsonValue();
             }
-
             return QJsonValue(result);
         }
         case QVariant::Bool: {
@@ -176,7 +169,6 @@ struct CustomPropertyDefinition {
                 qCWarning(DESKTOPPARSER) << "Invalid boolean value for key" << key << "-" << str;
                 return QJsonValue();
             }
-
             return QJsonValue(result);
         }
         default:
@@ -184,7 +176,6 @@ struct CustomPropertyDefinition {
             Q_UNREACHABLE();
         }
     }
-
     QByteArray key;
     QVariant::Type type;
 };
@@ -197,7 +188,6 @@ bool readUntilDesktopEntryGroup(QFile &file, const QString &path, int &lineNr)
         qCWarning(DESKTOPPARSER) << "Error: Failed to open " << path;
         return false;
     }
-
     // we only convert data inside the [Desktop Entry] group
     while (!file.atEnd()) {
         const QByteArray line = file.readLine().trimmed();
@@ -206,7 +196,6 @@ bool readUntilDesktopEntryGroup(QFile &file, const QString &path, int &lineNr)
             return true;
         }
     }
-
     qCWarning(DESKTOPPARSER) << "Error: Could not find [Desktop Entry] group in " << path;
     return false;
 }
@@ -219,7 +208,6 @@ QByteArray readTypeEntryForCurrentGroup(QFile &df, QByteArray *nextGroup)
     if (group.isEmpty()) {
         qCWarning(DESKTOPPARSER, "Read empty .desktop file group name! Invalid file?");
     }
-
     while (!df.atEnd()) {
         QByteArray line = df.readLine().trimmed();
         // skip empty lines and comments
@@ -230,7 +218,6 @@ QByteArray readTypeEntryForCurrentGroup(QFile &df, QByteArray *nextGroup)
             if (!line.endsWith(']')) {
                 qCWarning(DESKTOPPARSER) << "Illegal .desktop group definition (does not end with ']'):" << line;
             }
-
             QByteArray name = line.mid(1, line.lastIndexOf(']') - 1).trimmed();
             // we have reached the next group -> return current group and Type= value
             *nextGroup = name;
@@ -255,18 +242,15 @@ bool tokenizeKeyValue(QFile &df, const QString &src, QByteArray &key, QString &v
         DESKTOPTOJSON_VERBOSE_DEBUG << "Line " << lineNr << ": empty";
         return true;
     }
-
     if (line.startsWith('#')) {
         DESKTOPTOJSON_VERBOSE_DEBUG << "Line " << lineNr << ": comment";
         return true; // skip comments
     }
-
     if (line.startsWith('[')) {
         // start of new group -> doesn't interest us anymore
         DESKTOPTOJSON_VERBOSE_DEBUG << "Line " << lineNr << ": start of new group " << line;
         return false;
     }
-
     // must have form key=value now
     const int equalsIndex = line.indexOf('=');
     if (equalsIndex == -1) {
@@ -274,7 +258,6 @@ bool tokenizeKeyValue(QFile &df, const QString &src, QByteArray &key, QString &v
                                            "and doesn't contain an '=' character: \"" << line.constData() << '\"';
         return true;
     }
-
     // trim key and value to remove spaces around the '=' char
     key = line.mid(0, equalsIndex).trimmed();
     if (key.isEmpty()) {
@@ -315,23 +298,19 @@ static QVector<CustomPropertyDefinition> *parseServiceTypesFile(const QString &i
                 path = rcPath;
             }
         }
-
         if (path.isEmpty()) {
             qCWarning(DESKTOPPARSER).nospace() << "Could not locate service type file kservicetypes5/" << qPrintable(inputPath) << ", tried " << QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation) << " and " << rcPath;
             return nullptr;
         }
     }
-
     QFile df(path);
     if (!df.exists()) {
         qCCritical(DESKTOPPARSER) << "Service type file" << path << "does not exist";
         return nullptr;
     }
-
     if (!readUntilDesktopEntryGroup(df, path, lineNr)) {
         return nullptr;
     }
-
     QVector<CustomPropertyDefinition> result;
     // TODO: passing nextGroup by pointer is inefficient as it will make deep copies every time
     // Not exactly performance critical code though so low priority
@@ -343,7 +322,6 @@ static QVector<CustomPropertyDefinition> *parseServiceTypesFile(const QString &i
                                  << typeStr << "instead.";
         return nullptr;
     }
-
     while (!df.atEnd()) {
         QByteArray currentGroup = nextGroup;
         typeStr = readTypeEntryForCurrentGroup(df, &nextGroup);
@@ -351,12 +329,10 @@ static QVector<CustomPropertyDefinition> *parseServiceTypesFile(const QString &i
             qCWarning(DESKTOPPARSER) << "Skipping invalid group" << currentGroup << "in service type" << path;
             continue;
         }
-
         if (typeStr.isEmpty()) {
             qCWarning(DESKTOPPARSER) << "Could not find Type= key in group" << currentGroup;
             continue;
         }
-
         QByteArray propertyName = currentGroup.mid(qstrlen("PropertyDef::"));
         QVariant::Type type = QVariant::nameToType(typeStr.constData());
         switch (type) {
@@ -377,7 +353,6 @@ static QVector<CustomPropertyDefinition> *parseServiceTypesFile(const QString &i
                                      << "found in" << path << "\nOnly QString, QStringList, int, double and bool are supported.";
         }
     }
-
     return new QVector<CustomPropertyDefinition>(result);
 }
 
@@ -387,6 +362,7 @@ Q_GLOBAL_STATIC(ServiceTypesHash, s_serviceTypes)
 // access must be guarded by serviceTypesMutex as this code could be executed by multiple threads
 QBasicMutex s_serviceTypesMutex;
 } // end of anonymous namespace
+
 
 ServiceTypeDefinition::ServiceTypeDefinition()
 {
@@ -405,7 +381,6 @@ ServiceTypeDefinition ServiceTypeDefinition::fromFiles(const QStringList &paths)
 #endif
         }
     }
-
     return ret;
 }
 
@@ -439,7 +414,6 @@ QJsonValue ServiceTypeDefinition::parseValue(const QByteArray &key, const QStrin
             return propertyDef.fromString(value);
         }
     }
-
     qCDebug(DESKTOPPARSER) << "Unknown property type for key" << key << "-> falling back to string";
     return QJsonValue(value);
 }
@@ -505,7 +479,6 @@ void DesktopFileParser::convertToJson(const QByteArray &key, ServiceTypeDefiniti
                                                    << "\" at line " << lineNr << "but got \"" << value << "\" instead.";
             }
         }
-
         kplugin[QStringLiteral("EnabledByDefault")] = boolValue;
     } else if (key == QByteArrayLiteral("X-KDE-PluginInfo-Author")) {
         QJsonObject authorsObject = kplugin.value(QStringLiteral("Authors")).toArray().at(0).toObject();
@@ -561,7 +534,6 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
         if (!tokenizeKeyValue(df, src, key, value, lineNr)) {
             break;
         }
-
         // some .desktop files still use the legacy ServiceTypes= key
         if (key == QByteArrayLiteral("X-KDE-ServiceTypes") || key == QByteArrayLiteral("ServiceTypes")) {
             const QString dotDesktop = QStringLiteral(".desktop");
@@ -576,7 +548,6 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
                     absFileName = locateRelativeServiceType(
                                       service.toLower().remove(slashChar) + dotDesktop);
                 }
-
                 if (absFileName.isEmpty()) {
                     qCWarning(DESKTOPPARSER) << "Unable to find service type for service" << service << "listed in" << src;
                 } else {
@@ -586,7 +557,6 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
             break;
         }
     }
-
     lineNr = 0;
     df.seek(startPos);
 
@@ -600,7 +570,6 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
         } else if (key.isEmpty()) {
             continue;
         }
-
 #ifdef BUILDING_DESKTOPTOJSON_TOOL
         if (s_compatibilityMode) {
             convertToCompatibilityJson(QString::fromUtf8(key), value, json, lineNr);
@@ -614,7 +583,7 @@ bool DesktopFileParser::convert(const QString &src, const QStringList &serviceTy
             *libraryPath = value;
         }
     }
-
     json[QStringLiteral("KPlugin")] = kplugin;
     return true;
 }
+

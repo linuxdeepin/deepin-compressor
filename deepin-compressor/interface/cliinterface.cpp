@@ -39,17 +39,15 @@
 
 #include <linux/limits.h>
 
-
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
-    // qDebug() << __FUNCTION__;
+    mType = ENUM_PLUGINTYPE::PLUGIN_CLIINTERFACE;
     // because this interface uses the event loop
     setWaitForFinishedSignal(true);
 
     if (QMetaType::type("QProcess::ExitStatus") == 0) {
         qRegisterMetaType< QProcess::ExitStatus >("QProcess::ExitStatus");
     }
-
     m_cliProps = new CliProperties(this, m_metaData, mimetype());
 }
 
@@ -111,6 +109,7 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
     qDebug() << "destination directory:" << destinationDirectory;
     this->extractPsdStatus = NotChecked;
 
+
     return this->extractFF(files, destinationDirectory, options);
 }
 
@@ -139,7 +138,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         this->extractPsdStatus = Checked;
         emit sigExtractPwdCheckDown();
     }
-
     qDebug() << "####destpath：" << destPath;
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
@@ -153,6 +151,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
+
     bool ifNeedPsd = options.encryptedArchiveHint();
     if (ifNeedPsd == false) {
         //don't need psd
@@ -161,6 +160,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
             return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
         }
     }
+
 
     //get user input password
     QString psdd = password();
@@ -197,6 +197,8 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
     }
 
+
+
     return runProcess(
                m_cliProps->property("extractProgram").toString(),
                m_cliProps->extractArgs(filename(), extractFilesList(files), options.preservePaths(), password()));
@@ -208,7 +210,7 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
     Q_UNUSED(numberOfEntriesToAdd)
 
     m_operationMode = Add;
-
+    m_addFiles = files;
     QVector< Archive::Entry * > filesToPass = QVector< Archive::Entry * >();
     // If destination path is specified, we have recreate its structure inside the temp directory
     // and then place symlinks of targeted files there.
@@ -216,7 +218,7 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
 
     qDebug() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
     m_curfilenumber = 0;
-    m_allfilenumber = numberOfEntriesToAdd;
+    m_allfilenumber = static_cast<int>(numberOfEntriesToAdd);
 
     if (!destinationPath.isEmpty()) {
         m_extractTempDir.reset(new QTemporaryDir());
@@ -230,11 +232,10 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
             // The entries may have parent. We have to save and apply it to our new entry in order to prevent memory
             // leaks.
             if (preservedParent == nullptr) {
-                preservedParent = file->parent();
+                preservedParent = file->getParent();
             }
-
-            const QString filePath = QDir::currentPath() + QLatin1Char('/') + file->fullPath(NoTrailingSlash);
-            const QString newFilePath = absoluteDestinationPath + file->fullPath(NoTrailingSlash);
+            const QString filePath = file->fullPath();
+            const QString newFilePath = absoluteDestinationPath + file->name();
             if (QFile::link(filePath, newFilePath)) {
                 qDebug() << "Symlink's created:" << filePath << newFilePath;
             } else {
@@ -271,7 +272,11 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
                                                 options.volumeSize(),
                                                 options.isTar7z(),
                                                 options.globalWorkDir());
-    arguments.removeOne("-l");//beaucse -l will failed if files contains softLink which links parent folder.
+
+    if (destinationPath.isEmpty()) {//如果不是追加，需要去除-l
+        arguments.removeOne("-l");
+    }
+
     bool ret = false;
     //tar.7z： Different compression commands
     if (options.isTar7z()) {
@@ -281,11 +286,9 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
     } else {
         ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
     }
-
     if (ret == true) {
         this->watchDestFilesBegin();
     }
-
     return ret;
 }
 
@@ -410,11 +413,9 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         for (const QString &fullPath : removedFullPaths) {
             emit entryRemoved(fullPath);
         }
-
         for (Archive::Entry *e : qAsConst(m_newMovedFiles)) {
             emit entry(e);
         }
-
         m_newMovedFiles.clear();
     }
 
@@ -445,7 +446,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
 void CliInterface::cleanIfCanceled()
 {
-
+    //qDebug() << "取消操作！";
 }
 
 void CliInterface::watchDestFilesBegin()
@@ -453,7 +454,6 @@ void CliInterface::watchDestFilesBegin()
     if (this->pFileWatcherdd == nullptr) {
         this->pFileWatcherdd = new FileWatcher(this);
     }
-
     connect(this->pFileWatcherdd, &FileWatcher::sigFileChanged, this, &CliInterface::slotFilesWatchedChanged);
     this->pFileWatcherdd->beginWork();
 }
@@ -471,7 +471,6 @@ void CliInterface::watchFileList(QStringList *strList)
     if (this->pFileWatcherdd == nullptr) {
         this->pFileWatcherdd = new FileWatcher(this);
     }
-
     this->pFileWatcherdd->watch(strList);
 }
 
@@ -576,7 +575,6 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
             emit error("Extraction failed. the file is broken");
             setPassword(QString());
         }
-
         cleanUpExtracting();
         emit finished(false);
         return;
@@ -585,6 +583,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         //emit error(tr("wrong password"));
         emit error("wrong password");
         setPassword(QString());
+        // emit finished(false);
         return;
     }
 
@@ -639,21 +638,25 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
     bool skipAll = false;
 
     for (const Archive::Entry *file : files) {
+
         QFileInfo relEntry(file->fullPath().remove(file->rootNode));
         QFileInfo absSourceEntry(QDir::current().absolutePath() + QLatin1Char('/') + file->fullPath());
         QFileInfo absDestEntry(finalDestDir.path() + QLatin1Char('/') + relEntry.filePath());
 
         if (absSourceEntry.isDir()) {
+
             // For directories, just create the path.
             if (!finalDestDir.mkpath(relEntry.filePath())) {
                 qDebug() << "Failed to create directory" << relEntry.filePath() << "in final destination.";
             }
         } else {
+
             // If destination file exists, prompt the user.
             if (absDestEntry.exists()) {
                 qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
 
                 if (!skipAll && !overwriteAll) {
+
                     OverwriteQuery query(absDestEntry.absoluteFilePath());
                     query.setNoRenameMode(true);
                     query.execute();
@@ -662,7 +665,6 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseOverwriteAll()) {
                             overwriteAll = true;
                         }
-
                         if (!QFile::remove(absDestEntry.absoluteFilePath())) {
                             qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                         }
@@ -670,7 +672,6 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseAutoSkip()) {
                             skipAll = true;
                         }
-
                         continue;
                     } else if (query.responseCancelled()) {
                         emit cancelled();
@@ -701,7 +702,6 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
             }
         }
     }
-
     return true;
 }
 
@@ -782,7 +782,6 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                 if (query.responseOverwriteAll()) {
                     overwriteAll = true;
                 }
-
                 if (!QFile::remove(absDestEntry.absoluteFilePath())) {
                     qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                 }
@@ -790,7 +789,6 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
                 if (query.responseAutoSkip()) {
                     skipAll = true;
                 }
-
                 continue;
             } else if (query.responseCancelled()) {
                 qDebug() << "Copy action cancelled.";
@@ -841,7 +839,6 @@ void CliInterface::setNewMovedFiles(const QVector< Archive::Entry * > &entries, 
             if (entriesWithoutChildren > 1) {
                 charsCount += nameLength;
             }
-
             newPath = destination->fullPath() + entry->fullPath().right(charsCount);
         } else {
             if (entriesWithoutChildren > 1) {
@@ -851,7 +848,6 @@ void CliInterface::setNewMovedFiles(const QVector< Archive::Entry * > &entries, 
                 // we have to use destination as newPath.
                 newPath = destination->fullPath(NoTrailingSlash);
             }
-
             if (entry->isDir()) {
                 newPath += QLatin1Char('/');
                 nameLength = entry->name().count() + 1;  // plus slash
@@ -881,6 +877,7 @@ QStringList CliInterface::extractFilesList(const QVector< Archive::Entry * > &en
 void CliInterface::killProcess(bool emitFinished)
 {
     // TODO: Would be good to unit test #304764/#304178.
+
     if (!m_process) {
         return;
     }
@@ -945,6 +942,7 @@ void CliInterface::readStdout(bool handleAll)
     // characters they send out (newline, backspace, carriage return,
     // etc), so keep in mind that this function is supposed to handle
     // all those special cases and be the lowest common denominator
+
     if (m_abortingOperation)
         return;
 
@@ -981,7 +979,6 @@ void CliInterface::readStdout(bool handleAll)
         if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPasswordMessage) {
             handleAll = true;  // 7z output has no \n
         }
-
         if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !wrongPasswordMessage) {
             handleAll = true;  // compress .tar.7z output has no \n
         }
@@ -1042,7 +1039,6 @@ bool CliInterface::setAddedFiles()
         if (!QFile::rename(oldPath, newPath)) {
             return false;
         }
-
         m_tempAddedFiles << new Archive::Entry(nullptr, file->name());
     }
     return true;
@@ -1051,7 +1047,7 @@ bool CliInterface::setAddedFiles()
 void CliInterface::emitProgress(float value)
 {
     if (this->pAnalyseHelp == nullptr) {
-        emit progress(value);
+        emit progress(static_cast<double>(value));
     }
 }
 
@@ -1062,17 +1058,38 @@ void CliInterface::emitFileName(QString name)
     }
 }
 
+QString CliInterface::getFileName(int percent)
+{
+    if (percent > 100) {
+        percent = 100;
+    }
+    if (percent <= 0) {
+        percent = 0;
+    }
+
+    if (m_operationMode == ReadWriteArchiveInterface::Delete) {
+        int lenV = m_removedFiles.length();
+        double cell = 100 * 1.0 / lenV;
+        int index = static_cast<int>(percent / cell);
+        index = index > (lenV - 1)  ? (lenV - 1) : index;
+        return m_removedFiles[index]->name();
+    } else if (m_operationMode == ReadWriteArchiveInterface::Add) {
+        int lenV = m_addFiles.length();
+        double cell = 100 * 1.0 / lenV;
+        int index = static_cast<int>(percent / cell);
+        index = index > (lenV - 1) ? (lenV - 1) : index;
+        return m_addFiles[index]->name();
+    }
+    return "";
+}
+
 bool CliInterface::handleLine(const QString &line)
 {
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-//    qDebug() << "#####" << line;
-//    if (line == QString("没有那个文件或目录") || line == QString("No such file or directory")) {
-//        emit cancelled();
-//        emit finished(false);
-//        return false;
-//    }
+    //qDebug() << "#####" << line;
+
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
         if (pAnalyseHelp->isNotKnown() == true) {
@@ -1092,14 +1109,11 @@ bool CliInterface::handleLine(const QString &line)
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         // read the percentage
         int pos = line.indexOf(QLatin1Char('%'));
-//        qDebug()<<"####"<<line;
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
-//            emit progress(float(percentage) / 100);
             emitProgress(float(percentage) / 100);
             if (line.contains("Extracting")) {
                 QStringRef strfilename = line.midRef(12, pos - 24);
-//                emit progress_filename(strfilename.toString());
                 emitFileName(strfilename.toString());
             }
 
@@ -1112,12 +1126,9 @@ bool CliInterface::handleLine(const QString &line)
         // read the percentage
         int pos = line.indexOf(QLatin1Char(':'));
         if (pos > 1 && line.length() > 17) {
-
             m_curfilenumber++;
-//            emit progress(float(m_curfilenumber) / m_allfilenumber);
             emitProgress(float(m_curfilenumber) / m_allfilenumber);
             QStringRef strfilename = line.midRef(pos + 2, line.length() - 24);
-//            emit progress_filename(strfilename.toString());
             emitFileName(strfilename.toString());
             return true;
         }
@@ -1125,23 +1136,43 @@ bool CliInterface::handleLine(const QString &line)
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
+            if (percentage > 0 && percentage != 46) {
+                if (line.contains(OneBBBB) == true) {
+                    QStringRef strfilename;
+                    if (m_operationMode == ReadWriteArchiveInterface::Delete) {//如果是删除
 
-            QStringRef strfilename;
-            int count = line.indexOf("+");
-            if (-1 == count) {
-                count = line.indexOf("-");
-            }
-
-            if (count > 0) {
-                strfilename = line.midRef(count + 2);
-            }
-
-            if (!strfilename.toString().contains("Wrong password")) {
-                if (percentage > 0) {
-//                    emit progress(float(percentage) / 100);
-                    emitProgress(float(percentage) / 100);
-//                    emit progress_filename(strfilename.toString());
-                    emitFileName(strfilename.toString());
+                        QString filename = getFileName(percentage);
+                        if (!strfilename.toString().contains("Wrong password")) {
+                            if (percentage > 0) {
+                                emitProgress(float(percentage) / 100);
+                                //qDebug() << "delete..." << filename;
+                                emitFileName(filename);
+                            }
+                        }
+                    } else if (m_operationMode == ReadWriteArchiveInterface::Add) {
+                        QString filename = getFileName(percentage);
+                        if (!strfilename.toString().contains("Wrong password")) {
+                            if (percentage > 0) {
+                                emitProgress(float(percentage) / 100);
+                                //qDebug() << "add..." << filename;
+                                emitFileName(filename);
+                            }
+                        }
+                    } else {
+                        int count = line.indexOf("+");
+                        if (-1 == count) {
+                            count = line.indexOf("-");
+                        }
+                        if (count > 0) {
+                            strfilename = line.midRef(count + 2);
+                        }
+                        if (!strfilename.toString().contains("Wrong password")) {
+                            if (percentage > 0) {
+                                emitProgress(float(percentage) / 100);
+                                emitFileName(strfilename.toString());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1169,6 +1200,7 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (m_operationMode == Extract) {
+
         //        if (isPasswordPrompt(line)) {
         //            qDebug() << "Found a password prompt";
 
@@ -1190,8 +1222,12 @@ bool CliInterface::handleLine(const QString &line)
 
         if (isDiskFullMsg(line)) {
             qDebug() << "Found disk full message:" << line;
-            //emit error(tr("@info", "Extraction failed because the disk is full."));
-            emit error("@info", "Extraction failed because the disk is full.");
+            QString message = "@info";
+            size_t length = strlen(message.toUtf8().data());
+            char *cMsg = static_cast<char *>(malloc((length + 1) * sizeof(char)));
+            strcpy(cMsg, message.toUtf8().data());
+            emit error(cMsg, "Extraction failed because the disk is full.");
+            free(cMsg);
             return false;
         }
 
@@ -1208,7 +1244,6 @@ bool CliInterface::handleLine(const QString &line)
                     if (pAnalyseHelp != nullptr) {
                         pAnalyseHelp->mark(ENUMLINEINFO::WRONGPSD, line, true);
                     }
-
                     this->extractPsdStatus = ReadOnlyArchiveInterface::WrongPsd;
 //                    qDebug() << "$$$$$WrongPassword";
                     emit sigExtractNeedPassword();
@@ -1219,9 +1254,7 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         return readExtractLine(line);
-    }
-
-    if (m_operationMode == List) {
+    } else if (m_operationMode == List) {
         if (isPasswordPrompt(line)) {
             m_isPasswordPrompt = true;
             qDebug() << "Found a password prompt" << m_isbatchlist;
@@ -1292,9 +1325,11 @@ bool CliInterface::handleLine(const QString &line)
             extractDst7z_ = folder.remove("        Name: ");
         }
 
+
         return readListLine(line);
 
     }
+
 
     if (m_operationMode == Delete) {
         return readDeleteLine(line);
@@ -1366,7 +1401,6 @@ bool CliInterface::handleFileExistsMessage(const QString &line)
             // If the program has no way to cancel the extraction, we resort to killing it
             return doKill();
         }
-
         responseToProcess = choices.at(4);
     }
 
@@ -1441,7 +1475,6 @@ bool CliInterface::addComment(const QString &comment)
                     m_cliProps->commentArgs(filename(), m_commentTempFile->fileName()))) {
         return false;
     }
-
     m_comment = comment;
     return true;
 }
@@ -1460,7 +1493,6 @@ QString CliInterface::multiVolumeName() const
             break;
         }
     }
-
     return name;
 }
 
@@ -1474,7 +1506,7 @@ void CliInterface::onEntry(Archive::Entry *archiveEntry)
     if (archiveEntry->compressedSizeIsSet) {
         m_listedSize += archiveEntry->property("compressedSize").toULongLong();
         if (m_listedSize <= m_archiveSizeOnDisk) {
-            emit progress(float(m_listedSize) / float(m_archiveSizeOnDisk));
+            emit progress(static_cast<double>(m_listedSize * 1.0 / m_archiveSizeOnDisk));
         } else {
             // In case summed compressed size exceeds archive size on disk.
             emit progress(1.0);

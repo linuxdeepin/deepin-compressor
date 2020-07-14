@@ -85,7 +85,6 @@ ArchiveFormat ArchiveFormat::fromMetadata(const QMimeType &mimeType, const KPlug
         for (const QJsonValue &value : array) {
             encryptionMethods.append(value.toString());
         }
-
         QString defaultEncMethod = formatProps[QStringLiteral("EncryptionMethodDefault")].toString();
 
         Archive::EncryptionType encType = Archive::Unencrypted;
@@ -171,3 +170,5 @@ QString ArchiveFormat::defaultEncryptionMethod() const
 {
     return m_defaultEncryptionMethod;
 }
+
+

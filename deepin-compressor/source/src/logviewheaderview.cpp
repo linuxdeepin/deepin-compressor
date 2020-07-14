@@ -20,11 +20,12 @@
  */
 
 #include "logviewheaderview.h"
+
+#include <DFontSizeManager>
 #include <DApplication>
 #include <DApplicationHelper>
 #include <DPalette>
 #include <DStyleHelper>
-#include <DFontSizeManager>
 
 #include <QDebug>
 #include <QPaintEvent>

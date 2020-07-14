@@ -21,6 +21,8 @@
  */
 #include "archiveentry.h"
 
+int Archive::Entry::count = 0;
+
 Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &rootNode)
     : QObject(parent)
     , rootNode(rootNode)
@@ -31,15 +33,18 @@ Archive::Entry::Entry(QObject *parent, const QString &fullPath, const QString &r
     , m_isDirectory(false)
     , m_isPasswordProtected(false)
 {
+    count++;
+    //qDebug() << "自增后count:" << count;
+    m_mapIndex.clear();
     if (!fullPath.isEmpty())
         setFullPath(fullPath);
-
     m_iIndex = 0;
 }
 
 Archive::Entry::~Entry()
 {
-
+    count--;
+    //qDebug() << "自减后count:" << count;
 }
 
 void Archive::Entry::copyMetaData(const Archive::Entry *sourceEntry)
@@ -115,6 +120,53 @@ void Archive::Entry::setParent(Archive::Entry *parent)
     m_parent = parent;
 }
 
+qint64 Archive::Entry::getSize()
+{
+    return m_size;
+}
+
+void Archive::Entry::calAllSize(qint64 &size)
+{
+    if (this->isDir() == false) {
+        size += getSize();
+        //size += 1;
+        return ;
+    }
+    const auto archiveEntries = this->entries();
+    for (auto entry : archiveEntries) {
+        if (entry->isDir() == true) {
+            entry->calAllSize(size);
+        } else {
+            size += entry->getSize();
+            //size += 1;//如果计算真实的大小就用上面getSize，如果计算有效文件的个数，就+1
+        }
+    }
+}
+
+void Archive::Entry::calEntriesCount(qint64 &count)const
+{
+    if (this->isDir() == false) {
+        count += 1;
+        return ;
+    } else {
+        count += 1;
+    }
+
+    const auto archiveEntries = this->entries();
+    for (auto entry : archiveEntries) {
+        if (entry->isDir() == true) {
+            entry->calEntriesCount(count);
+        } else {
+            count += 1;
+        }
+    }
+}
+
+void Archive::Entry::setSize(qint64 size)
+{
+    m_size = size;
+}
+
 void Archive::Entry::setFullPath(const QString &fullPath)
 {
     m_fullPath = fullPath;
@@ -151,7 +203,6 @@ int Archive::Entry::row() const
     if (getParent()) {
         return getParent()->entries().indexOf(const_cast<Archive::Entry *>(this));
     }
-
     return 0;
 }
 
@@ -203,6 +254,56 @@ void Archive::Entry::countChildren(uint &dirs, uint &files) const
     }
 }
 
+void Archive::Entry::getAllNodesFullPath(QStringList &pList)
+{
+    pList.append(this->fullPath());
+    if (this->isDir() == false) {
+        return;
+    }
+    const auto archiveEntries = this->entries();
+    for (Archive::Entry *entry : archiveEntries) {
+        pList.append(entry->fullPath());
+        if (entry->isDir() == true) {
+            entry->getAllNodesFullPath(pList);
+        }
+    }
+}
+
+/**
+ * @brief Archive::Entry::getFilesCount,include file,exclude dir
+ * @param pEntry
+ * @param count
+ */
+void Archive::Entry::getFilesCount(Archive::Entry *pEntry, int &count)
+{
+    if (pEntry->isDir() == false) {
+        count ++;
+        return;
+    }
+
+    const auto archiveEntries = pEntry->entries();
+    for (auto entry : archiveEntries) {
+        this->getFilesCount(entry, count);
+    }
+}
+
+void Archive::Entry::getVector(Entry *pE, QVector<Archive::Entry *> &vector)
+{
+    if (pE->isDir()) {
+        const auto archiveEntries = pE->entries();
+        for (auto entry : archiveEntries) {
+            if (entry->isDir() == true) {
+                this->getVector(entry, vector);
+            } else {
+                vector.append(entry);
+            }
+        }
+
+    }
+    vector.append(pE);
+
+}
+
 bool Archive::Entry::operator==(const Archive::Entry &right) const
 {
     return m_fullPath == right.m_fullPath;
@@ -218,13 +319,31 @@ int Archive::Entry::compressIndex()
     return m_iCompressIndex;
 }
 
+void Archive::Entry::clean()
+{
+    Archive::Entry *p = this;
+    if (p->isDir() == false) {
+        delete p;
+        p = nullptr;
+    }
+    const auto archiveEntries = this->entries();
+    for (auto entry : archiveEntries) {
+        if (entry->isDir() == true && entry != nullptr) {
+            entry->clean();
+        }
+        if (entry) {
+            delete entry;
+            entry = nullptr;
+        }
+    }
+}
+
 QDebug operator<<(QDebug d, const Archive::Entry &entry)
 {
     d.nospace() << "Entry(" << entry.property("fullPath");
     if (!entry.rootNode.isEmpty()) {
         d.nospace() << "," << entry.rootNode;
     }
-
     d.nospace() << ")";
     return d.space();
 }
@@ -235,7 +354,8 @@ QDebug operator<<(QDebug d, const Archive::Entry *entry)
     if (!entry->rootNode.isEmpty()) {
         d.nospace() << "," << entry->rootNode;
     }
-
     d.nospace() << ")";
     return d.space();
 }
+
+

@@ -2,14 +2,15 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
-#include <archive.h>
 
 #include <QScopedPointer>
 #include <QProcess>
 
+#include <archive.h>
+
 struct FileProgressInfo {
-    float fileProgressProportion = 0.0;
-    float fileProgressStart;
+    float fileProgressProportion = 0.0; //内部百分值范围
+    float fileProgressStart;            //上次的百分值
     float totalFileSize;
 };
 
@@ -34,7 +35,6 @@ public:
     bool hasBatchExtractionProgress() const override;
     virtual void cleanIfCanceled()override;
     virtual void watchFileList(QStringList *strList)override;
-
 protected:
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)
@@ -58,10 +58,12 @@ protected:
     typedef QScopedPointer<struct archive, ArchiveWriteCustomDeleter> ArchiveWrite;
 
     bool initializeReader();
+    void createEntry(const QString &externalPath, struct archive_entry *entry);
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
-    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool partialprogress = true);
-    void copyData(const QString &filename, struct archive *source, struct archive *dest,  bool partialprogress = true);
-
+    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty = true);
+    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);
+    void copyDataFromSource_ArchiveEntry(Archive::Entry *pSourceEntry, struct archive *source, struct archive *dest, bool bInternalDuty = true);
+    void copyDataFromSourceAdd(const QString &filename, struct archive *source, struct archive *dest, struct archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty = true);
     ArchiveRead m_archiveReader;
     ArchiveRead m_archiveReadDisk;
 
@@ -75,7 +77,7 @@ private:
     void deleteTempTarPkg(const QStringList &tars);
 
     int m_cachedArchiveEntryCount;
-    qlonglong m_currentExtractedFilesSize = 0;
+    qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
     bool m_emitNoEntries;
     qlonglong m_extractedFilesSize;
     QVector<Archive::Entry *> m_emittedEntries;

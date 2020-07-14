@@ -34,6 +34,8 @@ CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, c
 
 QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, ulong volumeSize, bool isTar7z, const QString &globalWorkDir)
 {
+    Q_UNUSED(globalWorkDir);
+
     if (!encryptionMethod.isEmpty()) {
         Q_ASSERT(!password.isEmpty());
     }
@@ -47,61 +49,46 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
 
         QStringList args;
         args << "-c";
-        QString newGlobalWorkDir = globalWorkDir + '/';
-        for (int n = 0; n < strold.length(); ++n) {
-            newGlobalWorkDir.replace(strold[n], strnew[n]);
-        }
 
         QString tmp = "tar cf - ";
         for (QString file : files) {
             for (int n = 0; n < strold.length(); ++n) {
                 file.replace(strold[n], strnew[n]);
             }
-
             if (file.endsWith('/')) {
                 file.chop(1);
             }
-
             int pos = file.lastIndexOf('/');
             if (pos > 0) {
-                tmp += "-C " + newGlobalWorkDir + file.mid(0, pos + 1) + oneSpace + file.mid(pos + 1) + oneSpace;
-            } else {
-                tmp += "-C " + newGlobalWorkDir + oneSpace + file + oneSpace;
+                //此处传进来的files是绝对路径，处理和dev分支有点区别，
+                tmp += "-C " + file.mid(0, pos + 1) + oneSpace + file.mid(pos + 1) + oneSpace;
             }
         }
-
         tmp += "| 7z a -si ";
         if (!password.isEmpty()) {
             for (QString &val : substitutePasswordSwitch(password, headerEncryption)) {
                 tmp += val + oneSpace;
             }
         }
-
         if (compressionLevel > -1) {
             tmp += substituteCompressionLevelSwitch(compressionLevel) + oneSpace;
         }
-
         if (!compressionMethod.isEmpty()) {
             tmp += substituteCompressionMethodSwitch(compressionMethod) + oneSpace;
         }
-
         if (!encryptionMethod.isEmpty()) {
             tmp += substituteEncryptionMethodSwitch(encryptionMethod) + oneSpace;
         }
-
         if (volumeSize > 0) {
             tmp += substituteMultiVolumeSwitch(volumeSize) + oneSpace;
         }
-
         if (!m_progressarg.isEmpty()) {
             tmp += m_progressarg + oneSpace;
         }
-
         QString tmparchive = archive;
         for (int n = 0; n < strold.length(); ++n) {
             tmparchive.replace(strold[n], strnew[n]);
         }
-
         tmp += tmparchive;
         args << tmp;
 //        qDebug() << tmp;
@@ -115,26 +102,21 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         if (!password.isEmpty()) {
             args << substitutePasswordSwitch(password, headerEncryption);
         }
-
         if (compressionLevel > -1) {
             args << substituteCompressionLevelSwitch(compressionLevel);
         }
-
         if (!compressionMethod.isEmpty()) {
             args << substituteCompressionMethodSwitch(compressionMethod);
         }
         if (!encryptionMethod.isEmpty()) {
             args << substituteEncryptionMethodSwitch(encryptionMethod);
         }
-
         if (volumeSize > 0) {
             args << substituteMultiVolumeSwitch(volumeSize);
         }
-
         if (!m_progressarg.isEmpty()) {
             args << m_progressarg;
         }
-
         args << archive;
         args << files;
 
@@ -151,7 +133,6 @@ QStringList CliProperties::commentArgs(const QString &archive, const QString &co
     for (const QString &s : commentSwitches) {
         args << s;
     }
-
     args << archive;
 
     args.removeAll(QString());
@@ -162,10 +143,14 @@ QStringList CliProperties::deleteArgs(const QString &archive, const QVector<Arch
 {
     QStringList args;
     args << m_deleteSwitch;
+
+    if (!m_progressarg.isEmpty()) {
+        args << m_progressarg;
+    }
+
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
     }
-
     args << archive;
     for (const Archive::Entry *e : files) {
         args << e->fullPath(NoTrailingSlash);
@@ -188,11 +173,9 @@ QStringList CliProperties::extractArgs(const QString &archive, const QStringList
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
     }
-
     if (!m_progressarg.isEmpty()) {
         args << m_progressarg;
     }
-
     args << archive;
     args << files;
 
@@ -211,7 +194,6 @@ QStringList CliProperties::listArgs(const QString &archive, const QString &passw
     if (!password.isEmpty() && encryptionType == Archive::EncryptionType::HeaderEncrypted) {
         args << substitutePasswordSwitch(password);
     }
-
     args << archive;
 
     args.removeAll(QString());
@@ -225,7 +207,6 @@ QStringList CliProperties::moveArgs(const QString &archive, const QVector<Archiv
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
     }
-
     args << archive;
     if (entries.count() > 1) {
         for (const Archive::Entry *file : entries) {
@@ -245,11 +226,9 @@ QStringList CliProperties::testArgs(const QString &archive, const QString &passw
     for (const QString &s : qAsConst(m_testSwitch)) {
         args << s;
     }
-
     if (!password.isEmpty()) {
         args << substitutePasswordSwitch(password);
     }
-
     args << archive;
 
     args.removeAll(QString());
@@ -289,7 +268,6 @@ QStringList CliProperties::substitutePasswordSwitch(const QString &password, boo
     } else {
         passwordSwitch = m_passwordSwitch;
     }
-
     Q_ASSERT(!passwordSwitch.isEmpty());
 
     QMutableListIterator<QString> i(passwordSwitch);
@@ -384,3 +362,5 @@ bool CliProperties::isTestPassedMsg(const QString &line)
     }
     return false;
 }
+
+

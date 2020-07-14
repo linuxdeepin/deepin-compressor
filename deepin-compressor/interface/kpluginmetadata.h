@@ -22,6 +22,7 @@
 #ifndef KPLUGINMETADATA_H
 #define KPLUGINMETADATA_H
 
+
 #include <QExplicitlySharedDataPointer>
 #include <QJsonObject>
 #include <QString>
@@ -36,6 +37,7 @@ class QStringList;
 class KPluginMetaDataPrivate;
 class KAboutPerson;
 class QObject;
+
 
 /**
  * @class KPluginMetaData kpluginmetadata.h KPluginMetaData

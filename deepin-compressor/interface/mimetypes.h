@@ -24,6 +24,7 @@
 
 #include <QMimeType>
 
+
 /**
  * @param filename Absolute path of a file.
  * @return The mimetype of the given file.

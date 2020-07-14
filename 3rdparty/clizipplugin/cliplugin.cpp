@@ -1,12 +1,11 @@
 #include "cliplugin.h"
+#include "../../deepin-compressor/interface/kpluginfactory.h"
 
 #include <QDateTime>
 #include <QDir>
 #include <QRegularExpression>
 #include <QTemporaryDir>
-
 #include <QDateTime>
-#include "../../deepin-compressor/interface/kpluginfactory.h"
 
 
 //K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")

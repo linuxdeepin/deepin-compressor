@@ -26,6 +26,7 @@
 #include <DStandardPaths>
 
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QDebug>
 #include <QFileInfo>
@@ -90,6 +91,7 @@ QString Utils::getConfigPath()
     return dir.filePath(qApp->applicationName());
 }
 
+
 QString Utils::suffixList()
 {
     return QString("");
@@ -116,19 +118,21 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
 bool Utils::isCompressed_file(const QString &filePath)
 {
-    QString mime = judgeFileMime(filePath);
+    QString mime = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
+
     bool ret = false;
+
     if (mime.size() > 0) {
         ret = existMimeType(mime);
     } else {
         ret = false;
     }
 
-    if (filePath.endsWith(".deb")) {
+    if (filePath.endsWith(".deb")) {    // 对deb文件识别为普通文件
         ret = false;
     }
 
-    if (filePath.endsWith(".crx")) {
+    if (filePath.endsWith(".crx")) {    // 对crx文件识别为压缩包
         ret = true;
     }
 
@@ -185,7 +189,6 @@ QString Utils::humanReadableSize(const qint64 &size, int precision)
         measure = it.next();
         sizeAsDouble /= 1024.0;
     }
-
     return QString::fromLatin1("%1 %2").arg(sizeAsDouble, 0, 'f', precision).arg(measure);
 }
 
@@ -210,7 +213,6 @@ qint64 Utils::humanReadableToSize(const QString &size)
             sizeAsStr.remove(suffix);
             break;
         }
-
         loop++;
     }
 
@@ -496,7 +498,6 @@ bool Utils::checkAndDeleteDir(const QString &iFilePath)
         QFile deleteFile(iFilePath);
         return  deleteFile.remove();
     }
-
     return false;
 }
 
@@ -535,6 +536,7 @@ bool Utils::deleteDir(const QString &iFilePath)
     }
 
     return !error;
+
 }
 
 QString Utils::readConf()
@@ -544,7 +546,6 @@ QString Utils::readConf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
-
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
 
@@ -565,7 +566,6 @@ QString Utils::readConf()
     if (readStatus) {
         confValue = confFile.readAll();
     }
-
     confFile.close();
 
     return confValue;
@@ -579,7 +579,6 @@ bool Utils::existMimeType(QString mimetype)
     for (int i = 0; i < confList.count(); i++) {
         qDebug() << confList.at(i);
     }
-
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
         if (confList.at(i).contains("." + mimetype + ":")) {

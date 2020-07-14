@@ -21,10 +21,8 @@
  */
 #include "pluginmanager.h"
 #include "kpluginloader.h"
-//#include "settings.h"
 
 #include <QPluginLoader>
-//#include <KSharedConfig>
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -35,6 +33,7 @@
 #include <QDebug>
 
 #include <algorithm>
+
 
 PluginManager::PluginManager(QObject *parent) : QObject(parent)
 {
@@ -212,11 +211,9 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 filteredPlugins << plugin;
                 continue;
             }
-
             filteredPlugins << plugin;
         }
     }
-
     qDebug() << filteredPlugins.count();
     return filteredPlugins;
 }
@@ -340,3 +337,5 @@ bool PluginManager::libarchiveHasLzo()
     dependencyTool.waitForFinished();
     return dependencyTool.readAllStandardOutput().contains(QByteArrayLiteral("lzo"));
 }
+
+

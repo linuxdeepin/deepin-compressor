@@ -38,11 +38,31 @@ public:
     };
 
     explicit PluginManager(QObject *parent = nullptr);
+
+    /**
+    * @brief installedPlugins 获取已安装插件
+    */
     QVector<Plugin *> installedPlugins() const;
+
+    /**
+    * @brief availablePlugins 获取有效插件
+    */
     QVector<Plugin *> availablePlugins() const;
+
+    /**
+    * @brief availableWritePlugins 获取可写插件
+    */
     QVector<Plugin *> availableWritePlugins() const;
     QVector<Plugin *> enabledPlugins() const;
+
+    /**
+    * @brief preferredPluginsFor 根据类型获取使用的插件
+    */
     QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType);
+
+    /**
+    * @brief preferredWritePluginsFor 根据压缩类型获取可写插件
+    */
     QVector<Plugin *> preferredWritePluginsFor(const QMimeType &mimeType) const;
     Plugin *preferredPluginFor(const QMimeType &mimeType);
     Plugin *preferredWritePluginFor(const QMimeType &mimeType) const;
@@ -52,6 +72,7 @@ public:
     void setFileSize(qint64 size);
 
 private:
+
     void loadPlugins();
     QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const;
     static QStringList sortByComment(const QSet<QString> &mimeTypes);
@@ -61,5 +82,6 @@ private:
     QHash<QString, QVector<Plugin *>> m_preferredPluginsCache;
     qint64  m_filesize = 0;
 };
+
 
 #endif

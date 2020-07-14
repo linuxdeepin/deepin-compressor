@@ -28,8 +28,8 @@
 #include <QDebug>
 #include <QFileInfo>
 
-ProgressDialog::ProgressDialog(QWidget *parent)
-    : DAbstractDialog(parent)
+ProgressDialog::ProgressDialog(QWidget *parent):
+    DAbstractDialog(parent)
 {
     initUI();
     initConnect();
@@ -106,6 +106,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
         m_extractdialog->move(this->geometry().topLeft()); //解决提取时取消提示框不居中显示
         m_extractdialog->exec();
     }
+
 }
 
 void ProgressDialog::setCurrentTask(const QString &file)

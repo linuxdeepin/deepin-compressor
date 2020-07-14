@@ -92,7 +92,6 @@ KPluginLoader::KPluginLoader(const KPluginName &pluginName, QObject *parent)
     if (pluginName.isValid()) {
         d->loader->setFileName(pluginName.name());
         if (d->loader->fileName().isEmpty()) {
-
         }
     } else {
         d->errorString = pluginName.errorString();
@@ -132,7 +131,6 @@ quint32 KPluginLoader::pluginVersion()
     if (!load()) {
         return qint32(-1);
     }
-
     return d->pluginVersion;
 }
 
@@ -183,7 +181,8 @@ bool KPluginLoader::load()
     Q_D(KPluginLoader);
 
     if (!d->loader->load()) {
-        qDebug() << d->loader->errorString();
+        QString error = d->loader->errorString();
+        qDebug() << error;
         return false;
     }
 
@@ -202,7 +201,6 @@ bool KPluginLoader::load()
     } else {
         d->pluginVersion = ~0U;
     }
-
     d->pluginVersionResolved = true;
 
     return true;
@@ -253,6 +251,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
         }
     }
 
+
     foreach (const QString &dir, dirsToCheck) {
         QDirIterator it(dir, QDir::Files);
         while (it.hasNext()) {
@@ -274,14 +273,11 @@ QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, st
         if (!metadata.isValid()) {
             return;
         }
-
         if (filter && !filter(metadata)) {
             return;
         }
-
         ret.append(metadata);
     });
-
     return ret;
 }
 
@@ -290,7 +286,6 @@ QVector< KPluginMetaData > KPluginLoader::findPluginsById(const QString &directo
     auto filter = [&pluginId](const KPluginMetaData & md) -> bool {
         return md.pluginId() == pluginId;
     };
-
     return KPluginLoader::findPlugins(directory, filter);
 }
 
@@ -305,10 +300,8 @@ QList<QObject *> KPluginLoader::instantiatePlugins(const QString &directory,
         if (!obj) {
             continue;
         }
-
         obj->setParent(parent);
         ret.append(obj);
     }
-
     return ret;
 }

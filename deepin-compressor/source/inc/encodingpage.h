@@ -21,6 +21,7 @@
  */
 #ifndef ENCODINGPAGE_H
 #define ENCODINGPAGE_H
+
 #include <DWidget>
 #include <DPushButton>
 #include <DLabel>

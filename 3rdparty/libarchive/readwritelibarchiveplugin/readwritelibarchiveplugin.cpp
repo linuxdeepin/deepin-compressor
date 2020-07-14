@@ -9,13 +9,15 @@
 
 #include <archive_entry.h>
 
+// 300M
+#define MB300 314572800 /*(300*1024*1024)*/
+
 //K_PLUGIN_CLASS_WITH_JSON(ReadWriteLibarchivePlugin, "kerfuffle_libarchive.json")
 
 ReadWriteLibarchivePluginFactory::ReadWriteLibarchivePluginFactory()
 {
     registerPlugin<ReadWriteLibarchivePlugin>();
 }
-
 ReadWriteLibarchivePluginFactory::~ReadWriteLibarchivePluginFactory()
 {
 
@@ -24,6 +26,7 @@ ReadWriteLibarchivePluginFactory::~ReadWriteLibarchivePluginFactory()
 ReadWriteLibarchivePlugin::ReadWriteLibarchivePlugin(QObject *parent, const QVariantList &args)
     : LibarchivePlugin(parent, args)
 {
+    mType = ENUM_PLUGINTYPE::PLUGIN_READWRITE_LIBARCHIVE;
 }
 
 ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
@@ -33,6 +36,24 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd)
 {
     const bool creatingNewFile = !QFileInfo::exists(filename());
+    if (destination == nullptr) {
+        m_numberOfEntries = 0;
+    } else {
+        qint64 count = 0;
+        Archive::Entry *pParentEntry = destination->getParent();
+        if (pParentEntry == nullptr) {
+            destination->calEntriesCount(count);
+            m_numberOfEntries = (uint)count;//
+        } else {
+            while (pParentEntry->getParent() != nullptr) {
+                pParentEntry = pParentEntry->getParent();
+            }
+            pParentEntry->calEntriesCount(count);
+            m_numberOfEntries = (uint)count;//
+        }
+    }
+
+    //          总数量     = 原有的归档数量      + 新添加的文件数量
     const uint totalCount = m_numberOfEntries + numberOfEntriesToAdd;
 
     m_writtenFiles.clear();
@@ -47,11 +68,16 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
 
     // First write the new files.
     uint addedEntries = 0;
-    bool partialprogress  = totalCount < 6;
+    qint64 sizeOfAdd = 0;
+    files[0]->calAllSize(sizeOfAdd);
+    bool bInternalDuty = false;
+    if (sizeOfAdd > MB300 && files[0]->isDir() == false) {//如果大于300M
+//        bool bInternalDuty  = totalCount < 6;//如果总文件数量小于6个，那么启动细分进度
+        bInternalDuty = true;
+    }
+
     // Recreate destination directory structure.
-    const QString destinationPath = (destination == nullptr)
-                                    ? QString()
-                                    : destination->fullPath();
+    QString destinationPath = (destination == nullptr) ? QString() : destination->fullPath();
 
     for (Archive::Entry *selectedFile : files) {
         if (QThread::currentThread()->isInterruptionRequested()) {
@@ -62,23 +88,19 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
 
         FileProgressInfo info;
 
-        if (partialprogress) {
-            info.fileProgressStart = static_cast<float>(addedEntries) / (static_cast<float>(totalCount));
-            info.fileProgressProportion = 1.0 / (static_cast<float>(totalCount));
-            //info.totalFileSize = (float)(archive_entry_size(selectedFile));
+        if (bInternalDuty) {
+            info.fileProgressStart = static_cast<float>(addedEntries) / (static_cast<float>(totalCount));//记录当前进度值
+            info.fileProgressProportion = (float)1.0 / totalCount;//设定内度百分比范围,1表示对当前这一个压缩包进行内部进度细分分析
         }
 
-        if (!writeFile(selectedFile->fullPath(), destinationPath, info, partialprogress)) {
+        if (!writeFileFromEntry(selectedFile->fullPath(), destinationPath, selectedFile, info, bInternalDuty)) {
             finish(false);
             return false;
         }
 
         addedEntries++;
-
-        if (partialprogress == false) {
-            emit progress(float(addedEntries) / float(totalCount));
-        }
-
+        emit progress(float(addedEntries) / float(totalCount));
+        //qDebug() << "front========" << "addedEntries:" << addedEntries << "totalCount:" << totalCount;
         // For directories, write all subfiles/folders.
         const QString &fullPath = selectedFile->fullPath();
         if (QFileInfo(fullPath).isDir()) {
@@ -86,6 +108,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                             QDir::AllEntries | QDir::Readable |
                             QDir::Hidden | QDir::NoDotAndDotDot,
                             QDirIterator::Subdirectories);
+            QString firstDirFullPath = fullPath;
+            QString externalPath = selectedFile->fullPath().remove(selectedFile->name());
 
             while (!QThread::currentThread()->isInterruptionRequested() && it.hasNext()) {
                 QString path = it.next();
@@ -97,30 +121,30 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                     continue;
                 }
 
-                const bool isRealDir = it.fileInfo().isDir() && !it.fileInfo().isSymLink();
-
-                if (isRealDir) {
-                    path.append(QLatin1Char('/'));
-                }
-
+                bInternalDuty = false;
                 FileProgressInfo info;
-
-                if (partialprogress) {
-                    info.fileProgressStart = static_cast<float>(addedEntries) / (static_cast<float>(totalCount));
-                    info.fileProgressProportion = 1.0 / (static_cast<float>(totalCount));
+                if (it.fileInfo().size() > MB300 && it.fileInfo().isDir() == false) {//如果不是文件夹，且大小超过300M，则执行内部进度分析
+                    bInternalDuty = true;
+                }
+                if (bInternalDuty) {
+                    info.fileProgressStart = (float)addedEntries / totalCount; //记录当前进度值
+                    info.fileProgressProportion = (float)1.0 / totalCount;//设定内部百分比范围；1表示对当前这一个压缩包进行内部进度细分分析
                 }
 
-                if (!writeFile(path, destinationPath, info, totalCount < 6)) {
+                if (!writeFileTodestination(path, destinationPath, externalPath, info, bInternalDuty)) {
                     finish(false);
                     return false;
                 }
 
                 addedEntries++;
 
-                if (partialprogress == false) {
-                    emit progress(float(addedEntries) / float(totalCount));
+                if (bInternalDuty == false) {//如果不启动内部进度细分分析
+                    double percent = float(addedEntries) / totalCount;
+                    //qDebug() << "back=======percent:" << percent;
+                    emit progress(percent);
                 }
             }
+            //qDebug() << "back========" << "addedEntries:" << addedEntries << "totalCount:" << totalCount;
         }
 
     }
@@ -129,10 +153,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
     // If we have old archive entries.
     if (!creatingNewFile) {
         m_filesPaths = m_writtenFiles;
-        isSuccessful = processOldEntries(addedEntries, Add, totalCount);
-        if (isSuccessful) {
-        } else {
-        }
+        isSuccessful = processOldEntries_Add(addedEntries, Add, totalCount);
     }
 
     finish(isSuccessful);
@@ -194,7 +215,9 @@ bool ReadWriteLibarchivePlugin::copyFiles(const QVector<Archive::Entry *> &files
 
 bool ReadWriteLibarchivePlugin::deleteFiles(const QVector<Archive::Entry *> &files)
 {
-
+    if (files.length() == 0) {
+        return false;
+    }
     if (!initializeReader()) {
         return false;
     }
@@ -205,10 +228,23 @@ bool ReadWriteLibarchivePlugin::deleteFiles(const QVector<Archive::Entry *> &fil
 
     // Copy old elements from previous archive to new archive.
     uint deletedEntries = 0;
-    m_filesPaths = entryFullPaths(files);
-    const bool isSuccessful = processOldEntries(deletedEntries, Delete, m_numberOfEntries);
+//    m_filesPaths = entryFullPaths(files);
+    qint64 count = 0;
+    Archive::Entry *pFirstEntry = files[0];
+
+    m_filesPaths.clear();
+    pFirstEntry->getAllNodesFullPath(m_filesPaths);
+
+    while (pFirstEntry->getParent() != nullptr) {
+        pFirstEntry = pFirstEntry->getParent();
+    }
+    Archive::Entry *pRootEntry = pFirstEntry;
+    pRootEntry->calEntriesCount(count);
+    m_numberOfEntries = (uint)count - m_filesPaths.length();
+//    const bool isSuccessful = processOldEntries(deletedEntries, Delete, m_numberOfEntries);
+    const bool isSuccessful = deleteEntry(deletedEntries, m_numberOfEntries);
     if (isSuccessful) {
-    } else {
+        emit entryRemoved(files[0]->fullPath());
     }
 
     finish(isSuccessful);
@@ -470,6 +506,96 @@ bool ReadWriteLibarchivePlugin::processOldEntries(uint &entriesCounter, Operatio
     return !QThread::currentThread()->isInterruptionRequested();
 }
 
+bool ReadWriteLibarchivePlugin::processOldEntries_Add(uint &entriesCounter, ReadWriteArchiveInterface::OperationMode mode, uint totalCount)
+{
+    const uint newEntries = entriesCounter;
+    entriesCounter = 0;
+
+    // Create a map that contains old path as key and new path as value.
+    QMap<QString, QString> pathMap;
+    struct archive_entry *entry;
+    while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
+        const QString file = QFile::decodeName(archive_entry_pathname(entry));
+        emit progress_filename(file);
+        if (m_filesPaths.contains(file)) {
+            archive_read_data_skip(m_archiveReader.data());
+            switch (mode) {
+            case Add:
+                // When overwriting entries, we need to decrement the counter manually,
+                // because entry was emitted.
+                m_numberOfEntries--;
+                break;
+            default:
+                Q_ASSERT(false);
+            }
+            continue;
+        }
+
+        // Write old entries.
+        FileProgressInfo info;
+        float entrySize = archive_entry_size(entry);
+        bool bInternalDuty = false;
+        if (entrySize > MB300) { //如果大于300M
+            bInternalDuty = true;
+            info.fileProgressStart = (newEntries + entriesCounter) * 1.0 / (totalCount); //记录当前进度值
+            info.fileProgressProportion = (float)1.0 / totalCount;//设定内度百分比范围,1表示对当前这一个压缩包进行内部进度细分分析
+        }
+
+
+//        if (writeEntry(entry)) {
+        if (writeEntry_Add(entry, info, bInternalDuty)) {
+            if (mode == Add) {
+                entriesCounter++;
+            }
+        } else {
+            return false;
+        }
+
+        if (bInternalDuty == false) {
+            double percent = float(newEntries + entriesCounter) / totalCount;
+            //qDebug() << "add========" << "newEntries:" << newEntries << ",entriesCounter:" << entriesCounter << ",totalCount:" << totalCount << ",percent:" << percent;
+            emit progress(percent);
+        }
+
+    }
+
+    return !QThread::currentThread()->isInterruptionRequested();
+}
+
+bool ReadWriteLibarchivePlugin::deleteEntry(uint &entriesCounter, uint totalCount)
+{
+    const uint newEntries = entriesCounter;
+    // entriesCounter = 0;
+    uint iteratedEntries = 0;
+
+    // Create a map that contains old path as key and new path as value.
+    QMap<QString, QString> pathMap;
+
+    struct archive_entry *entry;
+    int count = archive_filter_count(m_archiveReader.data());
+    while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
+        const QString file = QFile::decodeName(archive_entry_pathname(entry));
+        if (m_filesPaths.contains(file)) {
+            archive_read_data_skip(m_archiveReader.data());
+            //entriesCounter++;
+            m_filesPaths.removeOne(file);
+            //emit entryRemoved(file);
+        } else {
+            // Write old entries.
+            if (writeEntry(entry)) {
+                iteratedEntries++;
+                double percent = float(newEntries + /*entriesCounter + */iteratedEntries) / float(totalCount);
+                //qDebug() << "==========deleteEntry:percent:" << percent;
+                emit progress(percent);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    return !QThread::currentThread()->isInterruptionRequested();
+}
+
 bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
 {
     const int returnCode = archive_write_header(m_archiveWriter.data(), entry);
@@ -477,7 +603,7 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
     case ARCHIVE_OK:
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
-        copyData(QLatin1String(archive_entry_pathname(entry)), m_archiveReader.data(), m_archiveWriter.data(), false);
+        copyDataFromSource(QLatin1String(archive_entry_pathname(entry)), m_archiveReader.data(), m_archiveWriter.data(), false);
         break;
     case ARCHIVE_FAILED:
     case ARCHIVE_FATAL:
@@ -490,10 +616,199 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
     return true;
 }
 
+bool ReadWriteLibarchivePlugin::writeEntry_Add(archive_entry *entry, FileProgressInfo &info, bool bInternalDuty)
+{
+    const int returnCode = archive_write_header(m_archiveWriter.data(), entry);
+    switch (returnCode) {
+    case ARCHIVE_OK:
+        // If the whole archive is extracted and the total filesize is
+        // available, we use partial progress.
+        copyDataFromSourceAdd(QLatin1String(archive_entry_pathname(entry)), m_archiveReader.data(), m_archiveWriter.data(), entry, info, bInternalDuty);
+//        copyDataFromSource(QLatin1String(archive_entry_pathname(entry)), m_archiveReader.data(), m_archiveWriter.data(), false);
+        break;
+    case ARCHIVE_FAILED:
+    case ARCHIVE_FATAL:
+        emit error(tr("@info", "Could not compress entry, operation aborted."));
+        return false;
+    default:
+        break;
+    }
+
+    return true;
+}
+
+bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, const QString destination, Archive::Entry *pEntry, const FileProgressInfo &info, bool bInternalDuty)
+{
+    //如果是文件夹，采用软链接的形式
+    QString newFilePath = relativeName;
+    QString absoluteDestinationPath = "";
+    if (QFileInfo(relativeName).isDir()) {
+        m_extractTempDir.reset(new QTemporaryDir());
+        absoluteDestinationPath = m_extractTempDir->path() + QDir::separator() + destination;
+        QDir dir;
+        dir.mkpath(absoluteDestinationPath);//创建临时文件夹
+        QString newFilePath = absoluteDestinationPath + pEntry->name();
+        if (QFile::link(relativeName, newFilePath)) {
+            qDebug() << "Symlink's created:" << destination << relativeName;
+        } else {
+            qDebug() << "Can't create symlink" << destination << relativeName;
+            return false;
+        }
+    }
+
+//    QFileInfo fileInfo(relativeName);
+    QFileInfo fileInfo(newFilePath);
+    const QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
+    const QString destinationFilename = destination + fileInfo.fileName();
+
+    // #253059: Even if we use archive_read_disk_entry_from_file,
+    //          libarchive may have been compiled without HAVE_LSTAT,
+    //          or something may have caused it to follow symlinks, in
+    //          which case stat() will be called. To avoid this, we
+    //          call lstat() ourselves.
+    struct stat st;
+    lstat(QFile::encodeName(absoluteFilename).constData(), &st); // krazy:exclude=syscalls
+
+    struct archive_entry *entry = archive_entry_new();
+    archive_entry_set_pathname(entry, QFile::encodeName(destinationFilename).constData());
+    archive_entry_copy_sourcepath(entry, QFile::encodeName(absoluteFilename).constData());
+    archive_read_disk_entry_from_file(m_archiveReadDisk.data(), entry, -1, &st);
+
+    const auto returnCode = archive_write_header(m_archiveWriter.data(), entry);
+    if (returnCode == ARCHIVE_OK) {
+        // If the whole archive is extracted and the total filesize is
+        // available, we use partial progress.
+        copyData(absoluteFilename, m_archiveWriter.data(), info, bInternalDuty);
+        if (QFileInfo(relativeName).isDir()) {//clean temp path;
+            QDir::cleanPath(absoluteDestinationPath);
+        }
+    } else {
+        if (QFileInfo(relativeName).isDir()) {
+            QDir::cleanPath(absoluteDestinationPath);
+        }
+        emit error(tr("@info Error in a message box",
+                      "Could not compress entry."));
+
+        archive_entry_free(entry);
+
+        return false;
+    }
+
+    if (QThread::currentThread()->isInterruptionRequested()) {
+        archive_entry_free(entry);
+        return false;
+    }
+
+    m_writtenFiles.push_back(destinationFilename);
+
+//    emitEntryFromArchiveEntry(entry);//这句不需要添加，因为在MainWindow::addArchive函数中已经建立了Archive::Entry在ArchiveModel的树
+
+    archive_entry_free(entry);
+
+    return true;
+}
+
+bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath,  const FileProgressInfo &info, bool partialprogress)
+{
+    //如果是文件夹，采用软链接的形式
+    QString newFilePath = sourceFileFullPath;
+    QFileInfo sourceFileInfo(sourceFileFullPath);
+    QString absoluteDestinationPath = "";
+    if (sourceFileInfo.isDir()) {
+        m_extractTempDir.reset(new QTemporaryDir());
+        absoluteDestinationPath = m_extractTempDir->path() + QDir::separator() + destination;
+        QDir dir;
+        dir.mkpath(absoluteDestinationPath);
+        QString newFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
+        if (QFile::link(sourceFileFullPath, newFilePath)) {
+            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
+        } else {
+            qDebug() << "Can't create symlink" << destination << sourceFileFullPath;
+            return false;
+        }
+    }
+
+//    QFileInfo fileInfo(relativeName);
+    QFileInfo fileInfo(newFilePath);
+    QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
+    QString destinationFilename = absoluteFilename;
+    destinationFilename = destination + destinationFilename.remove(externalPath);
+
+    // #253059: Even if we use archive_read_disk_entry_from_file,
+    //          libarchive may have been compiled without HAVE_LSTAT,
+    //          or something may have caused it to follow symlinks, in
+    //          which case stat() will be called. To avoid this, we
+    //          call lstat() ourselves.
+    struct stat st;
+    lstat(QFile::encodeName(absoluteFilename).constData(), &st); // krazy:exclude=syscalls
+
+    struct archive_entry *entry = archive_entry_new();
+    archive_entry_set_pathname(entry, QFile::encodeName(destinationFilename).constData());
+    archive_entry_copy_sourcepath(entry, QFile::encodeName(absoluteFilename).constData());
+    archive_read_disk_entry_from_file(m_archiveReadDisk.data(), entry, -1, &st);
+
+    const auto returnCode = archive_write_header(m_archiveWriter.data(), entry);
+    if (returnCode == ARCHIVE_OK) {
+        // If the whole archive is extracted and the total filesize is
+        // available, we use partial progress.
+        copyData(absoluteFilename, m_archiveWriter.data(), info, partialprogress);
+        if (sourceFileInfo.isDir()) {
+            QDir::cleanPath(absoluteDestinationPath);
+        }
+    } else {
+
+        emit error(tr("@info Error in a message box",
+                      "Could not compress entry."));
+
+        archive_entry_free(entry);
+
+        if (sourceFileInfo.isDir()) {
+            QDir::cleanPath(absoluteDestinationPath);
+        }
+        return false;
+    }
+
+    if (QThread::currentThread()->isInterruptionRequested()) {
+        archive_entry_free(entry);
+        return false;
+    }
+
+    m_writtenFiles.push_back(destinationFilename);
+
+//    emitEntryFromArchiveEntry(entry);//屏蔽by hsw 20200528
+
+    archive_entry_free(entry);
+
+    return true;
+}
+
 // TODO: if we merge this with copyData(), we can pass more data
 //       such as an fd to archive_read_disk_entry_from_file()
 bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QString &destination, const FileProgressInfo &info, bool partialprogress)
 {
+
+//    const QString filePath = file->fullPath();
+////            const QString newFilePath = absoluteDestinationPath + file->fullPath(NoTrailingSlash);
+//    const QString newFilePath = absoluteDestinationPath + file->name();
+//    if (QFile::link(filePath, newFilePath)) {
+//        qDebug() << "Symlink's created:" << filePath << newFilePath;
+//    } else {
+//        qDebug() << "Can't create symlink" << filePath << newFilePath;
+//        emit finished(false);
+//        return false;
+//    }
+    m_extractTempDir.reset(new QTemporaryDir());
+    const QString absoluteDestinationPath = m_extractTempDir->path() + QDir::separator() + destination;
+    QDir dir;
+    dir.mkpath(absoluteDestinationPath);
+
+    if (QFile::link(destination, relativeName)) {
+        qDebug() << "Symlink's created:" << destination << relativeName;
+    } else {
+        qDebug() << "Can't create symlink" << destination << relativeName;
+        return false;
+    }
+
     QFileInfo fileInfo(relativeName);
     const QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
     const QString destinationFilename = destination + relativeName;

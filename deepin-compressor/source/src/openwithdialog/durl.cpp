@@ -25,13 +25,14 @@
 #include "openwithdialog/durl.h"
 #include "openwithdialog/dfmstandardpaths.h"
 
-#include <utility>
-
 #include <QFileInfo>
 #include <QSet>
 #include <QDir>
 #include <QDebug>
 #include <QUrlQuery>
+
+#include <utility>
+
 
 QRegularExpression DUrl::burn_rxp = QRegularExpression("^(.*?)/(" BURN_SEG_ONDISC "|" BURN_SEG_STAGING ")(.*)$");
 
@@ -337,7 +338,6 @@ QString DUrl::burnDestDevice() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return "";
     }
-
     return m.captured(1);
 }
 
@@ -347,7 +347,6 @@ QString DUrl::burnFilePath() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return "";
     }
-
     return m.captured(3);
 }
 
@@ -357,7 +356,6 @@ bool DUrl::burnIsOnDisc() const
     if (scheme() != BURN_SCHEME || !path().contains(burn_rxp, &m)) {
         return false;
     }
-
     return m.captured(2) == BURN_SEG_ONDISC;
 }
 

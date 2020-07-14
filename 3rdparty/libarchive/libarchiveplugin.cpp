@@ -1,8 +1,5 @@
 #include "libarchiveplugin.h"
 #include "queries.h"
-#include "kprocess.h"
-#include "archive_entry.h"
-#include "../common/common.h"
 
 #include <QThread>
 #include <QFileInfo>
@@ -13,6 +10,13 @@
 #include <QStandardPaths>
 
 #include <KEncodingProber>
+
+#include <archive_entry.h>
+#include <kprocess.h>
+
+
+#include "../common/common.h"
+#include "structs.h"
 
 /*static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
@@ -106,6 +110,7 @@ LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     , m_emitNoEntries(false)
     , m_extractedFilesSize(0)
 {
+    mType = ENUM_PLUGINTYPE::PLUGIN_LIBARCHIVE;
     archive_read_disk_set_standard_lookup(m_archiveReadDisk.data());
 
     connect(this, &ReadOnlyArchiveInterface::error, this, &LibarchivePlugin::slotRestoreWorkingDir);
@@ -146,7 +151,6 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
             }
             return list_New();
         }
-
         return false;
     } else {
         return list_New();
@@ -219,7 +223,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
     archive_write_disk_set_options(writer.data(), extractionFlags());
 
     int totalEntriesCount = 0;
-    const bool extractAll = files.isEmpty();
+    const bool extractAll = files.isEmpty();//如果是双击解压，则为false;如果是按钮解压，则为true
     if (extractAll) {
         if (!m_cachedArchiveEntryCount) {
             emit progress(0);
@@ -229,10 +233,11 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             list();
             m_emitNoEntries = false;
         }
-
         totalEntriesCount = m_cachedArchiveEntryCount;
     } else {
         totalEntriesCount = files.size();
+        this->m_pProgressInfo->resetProgress();
+        this->m_pProgressInfo->setTotalSize(files[0]->getSize());//双击解压，设置解压总大小
     }
 
     this->extractPsdStatus = ReadOnlyArchiveInterface::Default;
@@ -253,13 +258,14 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
     QString fileBeingRenamed;
     // To avoid traversing the entire archive when extracting a limited set of
     // entries, we maintain a list of remaining entries and stop when it's empty.
-    const QStringList fullPaths = entryFullPaths(files);
-    QStringList remainingFiles = entryFullPaths(files);
+//    const QStringList fullPaths = entryFullPaths(files);
+    QStringList remainingFiles = entryFullPaths(files);//获取双击的文件名称
 
     QString extractDst;
 
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
+
         if (!extractAll && remainingFiles.isEmpty()) {
             break;
         }
@@ -322,7 +328,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
             // Find the index of entry.
             if (entryName != fileBeingRenamed) {
-                index = fullPaths.indexOf(entryName);
+                index = remainingFiles.indexOf(entryName);
             }
             if (!extractAll && index == -1) {
                 // If entry is not found in files, skip entry.
@@ -401,23 +407,24 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                     continue;
                 }
             }
-
 //            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             //this->extractPsdStatus;
             // Write the entry header and check return value.
             const int returnCode = archive_write_header(writer.data(), entry);
             switch (returnCode) {
-            case ARCHIVE_OK:
+            case ARCHIVE_OK: {
                 // If the whole archive is extracted and the total filesize is
                 // available, we use partial progress.
-            {
-                copyData(entryName, m_archiveReader.data(), writer.data(), (extractAll && m_extractedFilesSize));
-//                qDebug() <<  destinationDirectory + QDir::separator() + entryName;
+                if (extractAll == false) {
+                    copyDataFromSource_ArchiveEntry(files[0], m_archiveReader.data(), writer.data(), (m_extractedFilesSize));
+                } else {
+                    copyDataFromSource(entryName, m_archiveReader.data(), writer.data(), (extractAll && m_extractedFilesSize));
+                }
+                // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
                 QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
                 if (entryIsDir) {
                     per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
                 }
-
                 QFile::setPermissions(destinationDirectory + QDir::separator() + entryName, per);
             }
             break;
@@ -437,10 +444,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                         emit cancelled();
                         return false;
                     }
-
                     dontPromptErrors = query.dontAskAgain();
                 }
                 break;
+
             case ARCHIVE_FATAL:
                 emit error(tr("@info", "Fatal error, extraction aborted."));
                 return false;
@@ -498,39 +505,84 @@ bool LibarchivePlugin::initializeReader()
     return true;
 }
 
-void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
+void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *aentry)
 {
-    auto e = new Archive::Entry();
+    Archive::Entry *pCurEntry = new Archive::Entry();
 //    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
 //    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
 //    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
     QString utf8path = trans2uft8(archive_entry_pathname(aentry));
 
-    e->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
+    pCurEntry->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
+
 
     const QString owner = QString::fromLatin1(archive_entry_uname(aentry));
     if (!owner.isEmpty()) {
-        e->setProperty("owner", owner);
+        pCurEntry->setProperty("owner", owner);
     }
 
     const QString group = QString::fromLatin1(archive_entry_gname(aentry));
     if (!group.isEmpty()) {
-        e->setProperty("group", group);
+        pCurEntry->setProperty("group", group);
     }
 
-    e->compressedSizeIsSet = false;
-    e->setProperty("size", (qlonglong)archive_entry_size(aentry));
-    e->setProperty("isDirectory", S_ISDIR(archive_entry_mode(aentry)));
+    pCurEntry->compressedSizeIsSet = false;
+    pCurEntry->setProperty("size", (qlonglong)archive_entry_size(aentry));
+    pCurEntry->setProperty("isDirectory", S_ISDIR(archive_entry_mode(aentry)));
 
     if (archive_entry_symlink(aentry)) {
-        e->setProperty("link", QLatin1String(archive_entry_symlink(aentry)));
+        pCurEntry->setProperty("link", QLatin1String(archive_entry_symlink(aentry)));
     }
 
     auto time = static_cast<uint>(archive_entry_mtime(aentry));
-    e->setProperty("timestamp", QDateTime::fromTime_t(time));
+    pCurEntry->setProperty("timestamp", QDateTime::fromTime_t(time));
 
-    emit entry(e);
-    m_emittedEntries << e;
+    if (pCurEntry->isDir()) {
+        pCurEntry->setIsDirectory(true);
+        QHash<QString, QIcon> *map = new QHash<QString, QIcon>();
+        Archive::CreateEntry(pCurEntry->fullPath(), pCurEntry, externalPath, map);
+//        m_model->appendEntryIcons(*map);
+        delete map;
+        map = nullptr;
+    }
+
+    emit entry(pCurEntry);
+    m_emittedEntries << pCurEntry;
+}
+
+void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
+{
+    Archive::Entry *pCurEntry = new Archive::Entry();
+//    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
+//    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+//    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
+    QString utf8path = trans2uft8(archive_entry_pathname(aentry));
+
+    pCurEntry->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
+
+    const QString owner = QString::fromLatin1(archive_entry_uname(aentry));
+    if (!owner.isEmpty()) {
+        pCurEntry->setProperty("owner", owner);
+    }
+
+    const QString group = QString::fromLatin1(archive_entry_gname(aentry));
+    if (!group.isEmpty()) {
+        pCurEntry->setProperty("group", group);
+    }
+
+    pCurEntry->compressedSizeIsSet = false;
+    pCurEntry->setProperty("size", (qlonglong)archive_entry_size(aentry));
+    pCurEntry->setProperty("isDirectory", S_ISDIR(archive_entry_mode(aentry)));
+
+    if (archive_entry_symlink(aentry)) {
+        pCurEntry->setProperty("link", QLatin1String(archive_entry_symlink(aentry)));
+    }
+
+    auto time = static_cast<uint>(archive_entry_mtime(aentry));
+    pCurEntry->setProperty("timestamp", QDateTime::fromTime_t(time));
+
+    emit entry(pCurEntry);
+    m_emittedEntries << pCurEntry;
 }
 
 int LibarchivePlugin::extractionFlags() const
@@ -552,7 +604,7 @@ int LibarchivePlugin::extractionFlags() const
     return result;
 }
 
-void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool partialprogress)
+void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty)
 {
     m_currentExtractedFilesSize = 0;
     char buff[10240];
@@ -566,7 +618,7 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
 
     pastProgress = -1;
 
-    float fileSize = static_cast<float>(file.size());
+    float fileSize = static_cast<float>(file.size());//filesize in the disk
 
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
@@ -576,9 +628,9 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
             return;
         }
 
-        if (partialprogress) {
+        if (bInternalDuty) {
             m_currentExtractedFilesSize += readBytes;
-            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;
+            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;//根据内容写入比例，加上上次的进度值
             if (static_cast<int>(100 * currentProgress) != pastProgress) {
                 emit progress(currentProgress);
                 pastProgress = static_cast<int>(100 * currentProgress);
@@ -592,10 +644,10 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
     file.close();
 }
 
-void LibarchivePlugin::copyData(const QString &filename, struct archive *source, struct archive *dest, bool /*partialprogress*/)
+void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest,  bool partialprogress)
 {
     char buff[10240];
-
+    qlonglong size = 0;
     auto readBytes = archive_read_data(source, buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
@@ -603,14 +655,66 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *source,
             return;
         }
 
-        /*if (partialprogress)*/ {
-            m_currentExtractedFilesSize += readBytes;
-            emit progress(float(m_currentExtractedFilesSize) / m_extractedFilesSize);
+        if (partialprogress) {
+            size += readBytes;
+            emit progress(float(size + m_currentExtractedFilesSize) / m_extractedFilesSize);
             emit progress_filename(filename);
         }
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
     }
+    if (partialprogress) {
+        m_currentExtractedFilesSize  += size;
+    }
+}
+
+void LibarchivePlugin::copyDataFromSource_ArchiveEntry(Archive::Entry *pSourceEntry, archive *source, archive *dest, bool bInternalDuty)
+{
+    QString fileName = pSourceEntry->name();
+    qint64 fullSize = pSourceEntry->getSize();
+    char buff[10240];
+    qlonglong size = 0;
+    auto readBytes = archive_read_data(source, buff, sizeof(buff));
+    while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        archive_write_data(dest, buff, static_cast<size_t>(readBytes));
+        if (archive_errno(dest) != ARCHIVE_OK) {
+            return;
+        }
+
+        if (bInternalDuty) {
+            size += readBytes;
+            emit progress(size * 1.0 / fullSize);
+            emit progress_filename(fileName);
+        }
+
+        readBytes = archive_read_data(source, buff, sizeof(buff));
+    }
+    if (bInternalDuty) {
+        m_currentExtractedFilesSize  += size;
+    }
+}
+
+void LibarchivePlugin::copyDataFromSourceAdd(const QString &/*filename*/, archive *source, archive *dest, archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty)
+{
+    char buff[10240];
+    m_currentExtractedFilesSize = 0;
+    float entrySize = archive_entry_size(sourceEntry);
+    auto readBytes = archive_read_data(source, buff, sizeof(buff));
+    while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        archive_write_data(dest, buff, static_cast<size_t>(readBytes));
+        if (archive_errno(dest) != ARCHIVE_OK) {
+            return;
+        }
+
+        if (bInternalDuty) {
+            m_currentExtractedFilesSize += readBytes;
+            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / entrySize) * info.fileProgressProportion + info.fileProgressStart;//根据内容写入比例，加上上次的进度值
+            emit progress(currentProgress);
+            //emit progress_filename(file.fileName());
+        }
+        readBytes = archive_read_data(source, buff, sizeof(buff));
+    }
+
 }
 
 void LibarchivePlugin::slotRestoreWorkingDir()
@@ -625,10 +729,10 @@ void LibarchivePlugin::slotRestoreWorkingDir()
     }
 
     if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
+        qDebug() << "=====点击了取消";
         if (this->ifReplaceTip == true) {
             return;
         }
-
         if (this->m_extractDestDir == "" || this->destDirName == "") {
             return;
         } else {
@@ -638,6 +742,7 @@ void LibarchivePlugin::slotRestoreWorkingDir()
                 ReadWriteArchiveInterface::clearPath(fullPath);
             }
         }
+
     }
 }
 
@@ -664,7 +769,6 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
     } else if (method == QLatin1String("zstd")) {
         return QStringLiteral("Zstandard");
     }
-
     return QString();
 }
 
@@ -732,3 +836,5 @@ void LibarchivePlugin::watchFileList(QStringList */*strList*/)
 {
 
 }
+
+

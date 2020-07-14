@@ -22,16 +22,16 @@
 #include "kprocess_p.h"
 
 #include <QStandardPaths>
+#include <QFile>
 #include <qplatformdefs.h>
-#include <qfile.h>
 
 /////////////////////////////
 // public member functions //
 /////////////////////////////
 
-KProcess::KProcess(QObject *parent)
-    : QProcess(parent)
-    , d_ptr(new KProcessPrivate(this))
+KProcess::KProcess(QObject *parent) :
+    QProcess(parent),
+    d_ptr(new KProcessPrivate(this))
 {
     setOutputChannelMode(ForwardedChannels);
 }
@@ -80,7 +80,6 @@ void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
         env = systemEnvironment();
         env.removeAll(QStringLiteral(DUMMYENV));
     }
-
     QString fname(name);
     fname.append(QLatin1Char('='));
     for (QStringList::Iterator it = env.begin(); it != env.end(); ++it)
@@ -89,10 +88,8 @@ void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
                 *it = fname.append(value);
                 setEnvironment(env);
             }
-
             return;
         }
-
     env.append(fname.append(value));
     setEnvironment(env);
 }
@@ -104,7 +101,6 @@ void KProcess::unsetEnv(const QString &name)
         env = systemEnvironment();
         env.removeAll(QStringLiteral(DUMMYENV));
     }
-
     QString fname(name);
     fname.append(QLatin1Char('='));
     for (QStringList::Iterator it = env.begin(); it != env.end(); ++it)
@@ -113,7 +109,6 @@ void KProcess::unsetEnv(const QString &name)
             if (env.isEmpty()) {
                 env.append(QStringLiteral(DUMMYENV));
             }
-
             setEnvironment(env);
             return;
         }
@@ -151,7 +146,6 @@ KProcess &KProcess::operator<<(const QString &arg)
     } else {
         d->args << arg;
     }
-
     return *this;
 }
 
@@ -164,7 +158,6 @@ KProcess &KProcess::operator<<(const QStringList &args)
     } else {
         d->args << args;
     }
-
     return *this;
 }
 
@@ -271,7 +264,6 @@ int KProcess::execute(int msecs)
         waitForFinished(-1);
         return -2;
     }
-
     return (exitStatus() == QProcess::NormalExit) ? exitCode() : -1;
 }
 
@@ -299,7 +291,6 @@ int KProcess::startDetached()
     if (!QProcess::startDetached(d->prog, d->args, workingDirectory(), &pid)) {
         return 0;
     }
-
     return static_cast<int>(pid);
 }
 
@@ -310,7 +301,6 @@ int KProcess::startDetached(const QString &exe, const QStringList &args)
     if (!QProcess::startDetached(exe, args, QString(), &pid)) {
         return 0;
     }
-
     return static_cast<int>(pid);
 }
 

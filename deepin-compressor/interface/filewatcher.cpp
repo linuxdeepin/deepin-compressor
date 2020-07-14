@@ -4,6 +4,8 @@
 #include <QTimerEvent>
 #include <QFileInfo>
 
+#define TIMER_TIMEOUT   (1000)
+
 FileWatcher::FileWatcher(QObject *parent)
     : QObject(parent)
 {
@@ -59,6 +61,8 @@ void FileWatcher::handleTimeout()
     }
 }
 
+
+
 TimerWatcher::TimerWatcher(QObject *parent)
     : QObject(parent)
 {
@@ -92,14 +96,13 @@ void TimerWatcher::timerEvent(QTimerEvent *event)
         if (this->pCaller == nullptr || this->callback == nullptr) {
             return;
         }
-
         bool result = (this->pCaller->*callback)();
         if (result == true) {
             emit sigBindFuncDone(result);
         } else {
             qDebug() << "condition not ok";
         }
-
         this->finishWork();//stop timer work
     }
 }
+

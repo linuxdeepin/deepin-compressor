@@ -22,15 +22,18 @@
 #ifndef QUERIES_H
 #define QUERIES_H
 
-#include <DApplicationHelper>
+#include "customdatainfo.h"
 
+#include <DApplicationHelper>
 #include <DCheckBox>
+
 #include <QString>
 #include <QHash>
 #include <QWaitCondition>
 #include <QMutex>
 #include <QVariant>
 
+//#define TITLE_FIXED_HEIGHT 50               // 标题栏高度
 DWIDGET_USE_NAMESPACE
 
 enum RenameDialog_Result {
@@ -69,16 +72,20 @@ typedef QHash<QString, QVariant> QueryData;
 class  Query
 {
 public:
+
+    static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
+
     virtual void execute() = 0;
     void waitForResponse();
     void setResponse(const QVariant &response);
     QVariant response() const;
 
     int execDialog();
-
 protected:
     Query();
     virtual ~Query() {}
+
+
 
     QueryData m_data;
 
@@ -171,7 +178,6 @@ public:
 
     bool responseCancelled();
     bool dontAskAgain();
-
 private:
     QCheckBox m_chkDontAskAgain;
 };

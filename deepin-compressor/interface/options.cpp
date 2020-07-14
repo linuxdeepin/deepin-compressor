@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "options.h"
+#include "structs.h"
 
 bool Options::encryptedArchiveHint() const
 {
@@ -170,15 +171,12 @@ QDebug operator<<(QDebug d, const CompressionOptions &options)
     if (!options.compressionMethod().isEmpty()) {
         d.nospace() << ", compression method: " << options.compressionMethod();
     }
-
     if (!options.encryptionMethod().isEmpty()) {
         d.nospace() << ", encryption method: " << options.encryptionMethod();
     }
-
     if (!options.globalWorkDir().isEmpty()) {
         d.nospace() << ", global work dir: " << options.globalWorkDir();
     }
-
     d.nospace() << ", compression level: " << options.compressionLevel();
     d.nospace() << ", volume size: " << options.volumeSize();
     d.nospace() << ")";
@@ -194,3 +192,5 @@ QDebug operator<<(QDebug d, const ExtractionOptions &options)
     d.nospace() << ")";
     return d.space();
 }
+
+

@@ -11,7 +11,6 @@ CliPluginFactory::CliPluginFactory()
 {
     registerPlugin<CliPlugin>();
 }
-
 CliPluginFactory::~CliPluginFactory()
 {
 
@@ -41,11 +40,13 @@ void CliPlugin::resetParsing()
 
 void CliPlugin::setupCliProperties()
 {
+
     m_cliProps->setProperty("captureProgress", false);
 
     m_cliProps->setProperty("addProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("addSwitch", QStringList{QStringLiteral("a"),
                                                      QStringLiteral("-l")});
+
     m_cliProps->setProperty("deleteProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("deleteSwitch", QStringLiteral("d"));
 
@@ -57,6 +58,7 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("listProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("listSwitch", QStringList{QStringLiteral("l"),
                                                       QStringLiteral("-slt")});
+
     m_cliProps->setProperty("moveProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("moveSwitch", QStringLiteral("rn"));
 
@@ -70,11 +72,9 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("compressionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/x-7z-compressed"), QStringLiteral("-m0=$CompressionMethod")},
         {QStringLiteral("application/zip"), QStringLiteral("-mm=$CompressionMethod")}
     });
-
     m_cliProps->setProperty("encryptionMethodSwitch", QHash<QString, QVariant> {{QStringLiteral("application/x-7z-compressed"), QString()},
         {QStringLiteral("application/zip"), QStringLiteral("-mem=$EncryptionMethod")}
     });
-
     m_cliProps->setProperty("multiVolumeSwitch", QStringLiteral("-v$VolumeSizek"));
     m_cliProps->setProperty("testPassedPatterns", QStringList{QStringLiteral("^Everything is Ok$")});
     m_cliProps->setProperty("fileExistsFileNameRegExp", QStringList{QStringLiteral("^file \\./(.*)$"),
@@ -124,9 +124,7 @@ bool CliPlugin::readListLine(const QString &line)
         }
         emit error(tr("Listing the archive failed."));
         return false;
-    }
-
-    if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
+    } else if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
         //  7z l -slt -p123 1G压缩文件.7z.001
         //  Open ERROR: Can not open the file as [7z] archive means password error
         if (isPasswordList()) {
@@ -202,6 +200,7 @@ bool CliPlugin::readListLine(const QString &line)
             m_comment.append(line.section(QLatin1Char('='), 1) + QLatin1Char('\n'));
         }
         break;
+
     case ParseStateComment:
         if (line == entryInfoDelimiter) {
             m_parseState = ParseStateEntryInformation;
@@ -213,13 +212,13 @@ bool CliPlugin::readListLine(const QString &line)
             m_comment.append(line + QLatin1Char('\n'));
         }
         break;
+
     case ParseStateEntryInformation:
         if (m_isFirstInformationEntry) {
             m_isFirstInformationEntry = false;
             m_currentArchiveEntry = new Archive::Entry(this);
             m_currentArchiveEntry->compressedSizeIsSet = false;
         }
-
         if (line.startsWith(QLatin1String("Path = "))) {
             const QString entryFilename =
                 QDir::fromNativeSeparators(line.mid(7).trimmed());
@@ -246,7 +245,6 @@ bool CliPlugin::readListLine(const QString &line)
                 } else {
                     delete m_currentArchiveEntry;
                 }
-
                 m_currentArchiveEntry = nullptr;
             }
         } else if (line.startsWith(QLatin1String("Folder = "))) {
@@ -271,6 +269,7 @@ bool CliPlugin::readListLine(const QString &line)
                 // FAT attributes
                 m_currentArchiveEntry->setProperty("permissions", attributes);
             }
+
         } else if (line.startsWith(QLatin1String("CRC = "))) {
             m_currentArchiveEntry->setProperty("CRC", line.mid(6).trimmed());
 
@@ -282,9 +281,11 @@ bool CliPlugin::readListLine(const QString &line)
                 QStringList methods = line.section(QLatin1Char('='), 1).trimmed().split(QLatin1Char(' '), QString::SkipEmptyParts);
                 handleMethods(methods);
             }
+
         } else if (line.startsWith(QLatin1String("Encrypted = ")) &&
                    line.size() >= 13) {
             m_currentArchiveEntry->setProperty("isPasswordProtected", line.at(12) == QLatin1Char('+'));
+
         } else if (line.startsWith(QLatin1String("Block = ")) ||
                    line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;
@@ -293,7 +294,6 @@ bool CliPlugin::readListLine(const QString &line)
             } else {
                 delete m_currentArchiveEntry;
             }
-
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
             m_isFirstInformationEntry = true;
@@ -302,7 +302,6 @@ bool CliPlugin::readListLine(const QString &line)
             } else {
                 delete m_currentArchiveEntry;
             }
-
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
@@ -311,10 +310,8 @@ bool CliPlugin::readListLine(const QString &line)
             } else {
                 delete m_currentArchiveEntry;
             }
-
             m_currentArchiveEntry = nullptr;
         }
-
         break;
     }
 
@@ -351,6 +348,7 @@ bool CliPlugin::readDeleteLine(const QString &line)
 void CliPlugin::handleMethods(const QStringList &methods)
 {
     for (const QString &method : methods) {
+
         QRegularExpression rxEncMethod(QStringLiteral("^(7zAES|AES-128|AES-192|AES-256|ZipCrypto)$"));
         if (rxEncMethod.match(method).hasMatch()) {
             QRegularExpression rxAESMethods(QStringLiteral("^(AES-128|AES-192|AES-256)$"));
@@ -414,5 +412,7 @@ void CliPlugin::watchFileList(QStringList *strList)
 {
     CliInterface::watchFileList(strList);
 }
+
+
 
 //#include "moc_cliplugin.cpp"

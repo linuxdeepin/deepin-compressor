@@ -25,11 +25,12 @@
 
 #include <DWidget>
 #include <DPushButton>
-#include <QSettings>
+
 
 DWIDGET_USE_NAMESPACE
 
 class fileViewer;
+class QSettings;
 
 class CompressPage : public DWidget
 {
@@ -63,10 +64,12 @@ signals:
     void sigRefreshFileList(const QStringList &files);
 
 private:
+
     fileViewer *m_fileviewer;
     DPushButton *m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
+
 };
 
 #endif

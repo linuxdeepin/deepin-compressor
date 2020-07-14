@@ -20,10 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compresssetting.h"
+#include "DApplicationHelper"
+#include "DFontSizeManager"
 #include "utils.h"
 
-#include <DApplicationHelper>
-#include <DFontSizeManager>
 #include <DDialog>
 #include <DFileDialog>
 #include <DStyle>
@@ -101,7 +101,6 @@ void CompressSetting::InitUI()
             m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
         }
     }
-
     m_typemenu->addAction("zip");
     setTypeImage("zip");
 
@@ -346,7 +345,7 @@ void CompressSetting::onNextButoonClicked()
     QString fixedMimeType;
     QString tmpCompresstype = m_compresstype->text();
     QString strTar7z;
-    if (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) {
+    if (0 == QString("tar.7z").compare(tmpCompresstype, Qt::CaseInsensitive)) {
         tmpCompresstype = "7z";
         strTar7z = ".tar";
         m_openArgs[QStringLiteral("createtar7z")] = QString("true");
@@ -355,11 +354,7 @@ void CompressSetting::onNextButoonClicked()
 //    QString tmpCompresstype = (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) ? QString("7z") : m_compresstype->text();
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
-        if (
-            qDebug() << QMimeDatabase().mimeTypeForName(type).preferredSuffix() << tmpCompresstype;
-            0
-            == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(tmpCompresstype,
-                                                                               Qt::CaseInsensitive)) {
+        if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(tmpCompresstype, Qt::CaseInsensitive)) {
             fixedMimeType = type;
             break;
         }
@@ -427,8 +422,8 @@ void CompressSetting::onNextButoonClicked()
 
             unvalidStr = fileInfo.baseName();
         }
-    }
 
+    }
     const QString fixedType = m_openArgs[QStringLiteral("fixedMimeType")];
     if (unvalidStr != "") {
         QSet<QString> special = {"application/x-7z-compressed", "application/zip", "application/x-java-archive", "application/x-tar"};
@@ -444,8 +439,9 @@ void CompressSetting::onNextButoonClicked()
             return;
         }
     }
-
     //check end
+
+
     emit sigCompressPressed(m_openArgs);
 
     m_openArgs.remove(QStringLiteral("createNewArchive"));
@@ -534,7 +530,6 @@ bool CompressSetting::checkfilename(QString str)
     if (str.length() == 0) {
         return false;
     }
-
     if (str.length() > 255) {
         return false;
     }
@@ -580,7 +575,7 @@ bool CompressSetting::checkFilePermission(const QString &path)
     return filePermissionFlag;
 }
 
-void CompressSetting::getSelectedFileSize(qint64 size)
+void CompressSetting::setSelectedFileSize(qint64 size)
 {
     m_getFileSize = size;
 }
@@ -725,22 +720,448 @@ void CompressSetting::slotEchoModeChanged(bool echoOn)
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
 }
 
-int CompressSetting::showWarningDialog(const QString &msg, int index)
+void CompressSetting::autoCompressEntry(const QString &compresspath, const QStringList &path, Archive::Entry *pWorkEntry)
 {
-    DDialog *dialog = new DDialog(this);
+    qDebug() << "开始执行添加操作！" << ";compresspath:" << compresspath << ";path:" << path;
+    for (int i = 0; i < path.count(); i++) {
+        if (compresspath == path.at(i)) {
+            DDialog *pDialog = new DDialog(this);
+            pDialog->getButton(pDialog->addButton(tr("Close")))->setShortcut(Qt::Key_C);
+            showWarningDialog(tr("You cannot add the archive to yourself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            return;
+        }
+    }
+
+    QStringList cFileInfoList = path ;
+    QFileInfo cFileInfo(compresspath);
+    QDir dir(cFileInfo.path());//compress path
+
+    QString name = cFileInfo.fileName();
+    if (!checkfilename(name)) {
+        showWarningDialog(tr("Invalid file name"));
+        return;
+    }
+
+    if (name.isEmpty()) {
+        showWarningDialog(tr("Please enter the path"));
+        return;
+    }
+
+    if (false == dir.exists()) {
+        showWarningDialog(tr("The path does not exist, please retry"));
+        return;
+    }
+
+    for (int i = 0; i < cFileInfoList.count(); i++) {
+        QFileInfo m_fileName(cFileInfoList.at(i));
+        if (!m_fileName.exists()) {
+            filePermission = false;
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
+            return;
+        }
+
+        if (m_fileName.isFile()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            }
+        } else if (m_fileName.isDir()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            } else {
+                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
+                if (!filePermission) {
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                    return;
+                }
+            }
+        }
+    }
+
+    QFileInfo m_fileDestinationPath(cFileInfo.path());
+    if (!(m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable())) {
+        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
+        return;
+    }
+
+    qDebug() << "开始设置参数！";
+    QMap< QString, QString > m_openArgs;
+    const QString password = "";
+    QString fixedMimeType;
+    if (!m_supportedMimeTypes.size()) {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+    }
+    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+        if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
+            fixedMimeType = type;
+            break;
+        }
+    }
+
+    m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("false");
+    m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
+    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
+    } else if ("application/zip" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 4:Standard
+    } else {
+        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
+    }
+
+    if (m_splitnumedit && m_splitnumedit->value() > 0) {
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
+    }
+    //    if (!dialog.data()->compressionMethod().isEmpty()) {
+    //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
+    //    }
+    if (m_password && !m_password->text().isEmpty()) {
+        m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
+    }
+
+    m_openArgs[QStringLiteral("encryptionPassword")] = password;
+
+    m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("false");
+
+    m_openArgs[QStringLiteral("localFilePath")] = cFileInfo.path();
+    m_openArgs[QStringLiteral("filename")] = cFileInfo.fileName();
+//        cFileInfo.baseName() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+
+    m_openArgs[QStringLiteral("sourceFilePath")] = compresspath;
+    if (path.size()) {
+        QString paths = path[0];
+        for (int i = 1 ; i < path.size() ; i++) {
+            paths += "--" + path[i];
+        }
+        m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
+    }
+
+    emit sigUncompressStateAutoCompressEntry(m_openArgs, pWorkEntry);
+
+    m_openArgs.remove(QStringLiteral("createNewArchive"));
+    m_openArgs.remove(QStringLiteral("fixedMimeType"));
+    m_openArgs.remove(QStringLiteral("compressionLevel"));
+    m_openArgs.remove(QStringLiteral("encryptionPassword"));
+    m_openArgs.remove(QStringLiteral("encryptHeader"));
+    m_openArgs.remove(QStringLiteral("localFilePath"));
+    m_openArgs.remove(QStringLiteral("filename"));
+    m_openArgs.remove(QStringLiteral("sourceFilePath"));
+    m_openArgs.remove(QStringLiteral("ToCompressFilePath"));
+}
+
+void CompressSetting::autoCompress(const QString &compresspath, const QStringList &path)
+{
+    qDebug() << "开始执行添加操作！" << ";compresspath:" << compresspath << ";path:" << path;
+    for (int i = 0; i < path.count(); i++) {
+        if (compresspath == path.at(i)) {
+            DDialog *pDialog = new DDialog(this);
+            pDialog->getButton(pDialog->addButton(tr("Close(C)")))->setShortcut(Qt::Key_C);
+            showWarningDialog(tr("You cannot add the archive to yourself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            return;
+        }
+    }
+
+    QStringList cFileInfoList = path ;
+    QFileInfo cFileInfo(compresspath);
+    QDir dir(cFileInfo.path());//compress path
+
+    QString name = cFileInfo.fileName();
+    if (!checkfilename(name)) {
+        showWarningDialog(tr("Invalid file name"));
+        return;
+    }
+
+    if (name.isEmpty()) {
+        showWarningDialog(tr("Please enter the path"));
+        return;
+    }
+
+    if (false == dir.exists()) {
+        showWarningDialog(tr("The path does not exist, please retry"));
+        return;
+    }
+
+    for (int i = 0; i < cFileInfoList.count(); i++) {
+        QFileInfo m_fileName(cFileInfoList.at(i));
+        if (!m_fileName.exists()) {
+            filePermission = false;
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
+            return;
+        }
+
+        if (m_fileName.isFile()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            }
+        } else if (m_fileName.isDir()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            } else {
+                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
+                if (!filePermission) {
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                    return;
+                }
+            }
+        }
+    }
+
+    QFileInfo m_fileDestinationPath(cFileInfo.path());
+    if (!(m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable())) {
+        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
+        return;
+    }
+
+    qDebug() << "开始设置参数！";
+    QMap< QString, QString > m_openArgs;
+    const QString password = "";
+    QString fixedMimeType;
+    if (!m_supportedMimeTypes.size()) {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+    }
+    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+        if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
+            fixedMimeType = type;
+            break;
+        }
+    }
+
+    m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("false");
+    m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
+    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
+    } else if ("application/zip" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 4:Standard
+    } else {
+        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
+    }
+
+    if (m_splitnumedit && m_splitnumedit->value() > 0) {
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
+    }
+    //    if (!dialog.data()->compressionMethod().isEmpty()) {
+    //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
+    //    }
+    if (m_password && !m_password->text().isEmpty()) {
+        m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
+    }
+
+    m_openArgs[QStringLiteral("encryptionPassword")] = password;
+
+    m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("false");
+
+    m_openArgs[QStringLiteral("localFilePath")] = cFileInfo.path();
+    m_openArgs[QStringLiteral("filename")] = cFileInfo.fileName();
+//        cFileInfo.baseName() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+
+    m_openArgs[QStringLiteral("sourceFilePath")] = compresspath;
+    if (path.size()) {
+        QString paths = path[0];
+        for (int i = 1 ; i < path.size() ; i++) {
+            paths += "--" + path[i];
+        }
+        m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
+    }
+
+    emit sigUncompressStateAutoCompress(m_openArgs);
+
+    m_openArgs.remove(QStringLiteral("createNewArchive"));
+    m_openArgs.remove(QStringLiteral("fixedMimeType"));
+    m_openArgs.remove(QStringLiteral("compressionLevel"));
+    m_openArgs.remove(QStringLiteral("encryptionPassword"));
+    m_openArgs.remove(QStringLiteral("encryptHeader"));
+    m_openArgs.remove(QStringLiteral("localFilePath"));
+    m_openArgs.remove(QStringLiteral("filename"));
+    m_openArgs.remove(QStringLiteral("sourceFilePath"));
+    m_openArgs.remove(QStringLiteral("ToCompressFilePath"));
+}
+
+void CompressSetting::autoMoveToArchive(const QStringList &files, const QString &archive)
+{
+    qDebug() << "开始执行移动操作！" << ";movepath:" << archive << ";path:" << files[0];
+    for (int i = 0; i < files.count(); i++) {
+        if (archive == files.at(i)) {
+            showWarningDialog(tr("You cannot move the file to yourself"));
+            return;
+        }
+    }
+
+    QStringList cFileInfoList = files ;
+    QFileInfo cFileInfo(archive);
+    QDir dir(cFileInfo.path());//relative compress path
+
+    QString name = cFileInfo.fileName();
+    if (!checkfilename(name)) {
+        showWarningDialog(tr("Invalid file name"));
+        return;
+    }
+
+    if (name.isEmpty()) {
+        showWarningDialog(tr("Please enter the path"));
+        return;
+    }
+
+    if (false == dir.exists()) {
+        showWarningDialog(tr("The path does not exist, please retry"));
+        return;
+    }
+
+    for (int i = 0; i < cFileInfoList.count(); i++) {
+        QFileInfo m_fileName(cFileInfoList.at(i));
+        if (!m_fileName.exists()) {
+            filePermission = false;
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(m_fileName.fileName()));
+            return;
+        }
+
+        if (m_fileName.isFile()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            }
+        } else if (m_fileName.isDir()) {
+            if (!m_fileName.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                return;
+            } else {
+                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
+                if (!filePermission) {
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(m_fileName.fileName()), i);
+                    return;
+                }
+            }
+        }
+    }
+
+    qDebug() << "开始设置参数！";
+    QMap< QString, QString > m_openArgs;
+    const QString password = "";
+    QString fixedMimeType;
+    if (!m_supportedMimeTypes.size()) {
+        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+    }
+    for (const QString &type : qAsConst(m_supportedMimeTypes)) {
+        if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
+            fixedMimeType = type;
+            break;
+        }
+    }
+
+    m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("false");
+    m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
+    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
+        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
+    } else {
+        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
+    }
+
+    if (m_splitnumedit && m_splitnumedit->value() > 0) {
+        m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
+    }
+    //    if (!dialog.data()->compressionMethod().isEmpty()) {
+    //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
+    //    }
+    if (m_password && !m_password->text().isEmpty()) {
+        m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
+    }
+
+    m_openArgs[QStringLiteral("encryptionPassword")] = password;
+
+    m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("false");
+
+    m_openArgs[QStringLiteral("localFilePath")] = cFileInfo.path();
+    m_openArgs[QStringLiteral("filename")] = cFileInfo.fileName();
+//        cFileInfo.baseName() + "." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
+
+    m_openArgs[QStringLiteral("sourceFilePath")] = archive;
+    if (files.size()) {
+        QString paths = files[0];
+        for (int i = 1 ; i < files.size() ; i++) {
+            paths += "--" + files[i];
+        }
+        m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
+    }
+
+    emit sigMoveFilesToArchive(m_openArgs);
+
+    m_openArgs.remove(QStringLiteral("createNewArchive"));
+    m_openArgs.remove(QStringLiteral("fixedMimeType"));
+    m_openArgs.remove(QStringLiteral("compressionLevel"));
+    m_openArgs.remove(QStringLiteral("encryptionPassword"));
+    m_openArgs.remove(QStringLiteral("encryptHeader"));
+    m_openArgs.remove(QStringLiteral("localFilePath"));
+    m_openArgs.remove(QStringLiteral("filename"));
+    m_openArgs.remove(QStringLiteral("sourceFilePath"));
+    m_openArgs.remove(QStringLiteral("ToCompressFilePath"));
+}
+
+int CompressSetting::showWarningDialog(const QString &msg, int index, const QString &strTitle, DDialog *pDialogShow)
+{
+    DDialog *dialog = pDialogShow;
+    if (dialog == nullptr) {
+        dialog = new DDialog(this);
+    }
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-    dialog->addSpacing(32);
-    dialog->setMinimumSize(380, 140);
-    dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
-    DLabel *pContent = new DLabel(msg, dialog);
-    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    // dialog->addSpacing(32);
+    int wMin = 380;
+    dialog->setMinimumSize(wMin, 140);
+    if (pDialogShow == nullptr) {
+        dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+    }
     DPalette pa;
+
+    DWidget *pWidget = new DWidget(dialog);
+    QVBoxLayout *pLayout = new QVBoxLayout(pWidget);
+    pLayout->setContentsMargins(0, 0, 0, 0);
+
+    if (!strTitle.isEmpty()) {
+        //dialog->setMinimumSize(wMin, 180);
+
+        DLabel *pTitle = new DLabel(strTitle/*, dialog*/);
+        pTitle->setMinimumSize(QSize(154, 20));
+        pTitle->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+        pa = DApplicationHelper::instance()->palette(pTitle);
+        pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
+        DFontSizeManager::instance()->bind(pTitle, DFontSizeManager::T5, QFont::Medium);
+        pTitle->setMinimumWidth(dialog->width());
+        //pTitle->move(dialog->width() / 2 - pTitle->width() / 2, 60);
+
+        DPalette palette = DApplicationHelper::instance()->palette(pTitle);
+        QColor color;
+        if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+            color = palette.color(DPalette::ToolTipText);
+        } else {
+            color = palette.color(DPalette::TextLively);
+        }
+        color.setAlphaF(1);
+        palette.setColor(DPalette::Foreground, color);
+        DApplicationHelper::instance()->setPalette(pTitle, palette);
+
+        pLayout->addWidget(pTitle, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    }
+
+
+    DLabel *pContent = new DLabel(msg/*, dialog*/);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
-    pContent->setMinimumSize(293, 20/*this->width()*/);
-    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
+    pContent->setMinimumWidth(dialog->width());
+    //pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */iMoveY);
+
+    pLayout->addWidget(pContent, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    pWidget->setLayout(pLayout);
+    dialog->addContent(pWidget);
+
     int res = dialog->exec();
     delete dialog;
 
@@ -757,14 +1178,16 @@ int CompressSetting::showWarningDialog(const QString &msg, int index)
 bool CompressSetting::existSameFileName()
 {
     DDialog *dialog = new DDialog(this);
-    dialog->setMinimumSize(QSize(380, 190));
+//    dialog->setMinimumSize(QSize(380, 190));
+    dialog->setFixedWidth(440);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel(dialog);
     strlabel->setMinimumSize(QSize(154, 20));
     strlabel->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+//    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T5, QFont::DemiBold);
     strlabel->setText(tr("The file name under this path already exists, replace it?"));
 
     dialog->addButton(tr("Cancel"));

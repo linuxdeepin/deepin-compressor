@@ -25,6 +25,7 @@
 #include <QPluginLoader>
 #include <QtPlugin>
 
+
 /**
  * \relates KPluginLoader
  * Use this macro if you want to give your plugin a version number.
@@ -57,3 +58,4 @@ class  K_EXPORT_PLUGIN_is_deprecated_see_KDE5PORTING
 #endif
 
 #endif // KEXPORTPLUGIN_H
+

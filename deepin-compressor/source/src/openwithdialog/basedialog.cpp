@@ -24,12 +24,12 @@
 
 #include "openwithdialog/basedialog.h"
 
-#include <dwindowclosebutton.h>
-#include <dtitlebar.h>
+//#include <dwindowclosebutton.h>
+#include <DWindowCloseButton>
 
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QWindow>
+//#include <QApplication>
+//#include <QDesktopWidget>
+//#include <QWindow>
 #include <QShowEvent>
 #include <QDebug>
 

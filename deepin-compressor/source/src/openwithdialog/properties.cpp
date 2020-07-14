@@ -58,6 +58,7 @@ Properties::Properties(const Properties &other)
  */
 bool Properties::load(const QString &fileName, const QString &group)
 {
+
     // NOTE: This class is used for reading of property files instead of QSettings
     // class, which considers separator ';' as comment
 
@@ -77,6 +78,7 @@ bool Properties::load(const QString &fileName, const QString &group)
     // Read propeties
     QTextStream in(&file);
     while (!in.atEnd()) {
+
         // Read new line
         QString line = in.readLine();
 
@@ -100,7 +102,6 @@ bool Properties::load(const QString &fileName, const QString &group)
             data.insert(line.left(first_equal).trimmed(), line.mid(first_equal + 1).trimmed());
         }
     }
-
     file.close();
 
     return true;
@@ -114,6 +115,7 @@ bool Properties::load(const QString &fileName, const QString &group)
  */
 bool Properties::save(const QString &fileName, const QString &group)
 {
+
     // Try open file
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -167,7 +169,6 @@ void Properties::set(const QString &key, const QVariant &value)
     if (data.contains(key)) {
         data.take(key);
     }
-
     data.insert(key, value);
 }
 

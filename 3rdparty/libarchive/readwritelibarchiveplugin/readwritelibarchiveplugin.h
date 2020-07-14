@@ -6,6 +6,8 @@
 
 #include <QStringList>
 #include <QSaveFile>
+#include <QTemporaryDir>
+
 
 class ReadWriteLibarchivePluginFactory : public KPluginFactory
 {
@@ -16,6 +18,7 @@ public:
     explicit ReadWriteLibarchivePluginFactory();
     ~ReadWriteLibarchivePluginFactory();
 };
+
 
 class ReadWriteLibarchivePlugin : public LibarchivePlugin
 {
@@ -46,13 +49,22 @@ private:
      * @return bool indicating whether the operation was successful.
      */
     bool processOldEntries(uint &entriesCounter, OperationMode mode, uint totalCount);
-
+    bool processOldEntries_Add(uint &entriesCounter, OperationMode mode, uint totalCount);
+    /**
+     * @brief deleteEntry
+     * @param entriesCounter
+     * @param mode
+     * @param totalCount
+     * @see 删除Entry
+     */
+    bool deleteEntry(uint &entriesCounter, uint totalCount);
     /**
      * Writes entry being read into memory.
      *
      * @return bool indicating whether the operation was successful.
      */
     bool writeEntry(struct archive_entry *entry);
+    bool writeEntry_Add(struct archive_entry *entry, FileProgressInfo &info, bool bInternalDuty);
 
     /**
      * Writes entry from physical disk.
@@ -60,7 +72,8 @@ private:
      * @return bool indicating whether the operation was successful.
      */
     bool writeFile(const QString &relativeName, const QString &destination,  const FileProgressInfo &info, bool partialprogress = false);
-
+    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const FileProgressInfo &info, bool partialprogress = false);
+    bool writeFileFromEntry(const QString &relativeName, const QString destination, Archive::Entry *pEntry, const FileProgressInfo &info, bool bInternalDuty = false);
     QSaveFile m_tempFile;
     ArchiveWrite m_archiveWriter;
 
@@ -68,10 +81,11 @@ private:
     // and then is used by processOldEntries method (in Add mode) for skipping already written entries.
     QStringList m_writtenFiles;
 
-    // Passed argument from job which is used by processOldEntries method.
+    // Passed argument from job which is used by processOldEntries method，删除的时候用deleteEntry方法.
     QStringList m_filesPaths;
     int m_entriesWithoutChildren = 0;
     const Archive::Entry *m_destination = nullptr;
+    QScopedPointer<QTemporaryDir> m_extractTempDir; //added by hsw 20200528
 };
 
 #endif // READWRITELIBARCHIVEPLUGIN_H

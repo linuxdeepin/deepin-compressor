@@ -2,7 +2,6 @@
 #define READONLYLIBARCHIVEPLUGIN_H
 
 #include "../libarchiveplugin.h"
-
 #include "kpluginfactory.h"
 
 

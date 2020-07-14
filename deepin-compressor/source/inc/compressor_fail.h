@@ -34,7 +34,7 @@ class Compressor_Fail: public DWidget
 {
     Q_OBJECT
 public:
-    Compressor_Fail(QWidget *parent = nullptr);
+    Compressor_Fail(QWidget *parent =nullptr);
     void InitUI();
     void InitConnection();
 
@@ -61,5 +61,6 @@ public slots:
     void commandLinkBackButtonClicked();
 
 };
+
 
 #endif // COMPRESSOR_FAIL_H

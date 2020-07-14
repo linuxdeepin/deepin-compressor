@@ -22,6 +22,7 @@
 #ifndef KPLUGINLOADER_H
 #define KPLUGINLOADER_H
 
+
 #include <QPluginLoader>
 #include <QtPlugin>
 
@@ -29,8 +30,10 @@
 
 class KPluginFactory;
 class KPluginMetaData;
+
 class KPluginLoaderPrivate;
 class KPluginName;
+
 
 class KPluginLoader : public QObject
 {
@@ -39,7 +42,6 @@ class KPluginLoader : public QObject
     Q_PROPERTY(QLibrary::LoadHints loadHints READ loadHints WRITE setLoadHints)
     Q_PROPERTY(QString pluginName READ pluginName)
     Q_PROPERTY(quint32 pluginVersion READ pluginVersion)
-
 public:
     /**
      * Load a plugin by name.

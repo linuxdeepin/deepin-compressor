@@ -19,6 +19,8 @@ DEFINES += QT_MESSAGELOGCONTEXT
 
 INCLUDEPATH +=  $$PWD/source/inc/ \
                 $$PWD/interface/
+#                $$PWD/../plugin/libLogPlugin
+#LIBS += -L/data/home/gaoxiang/GX/dvp/project/compressor/jared-compress/build-compressor-unknown-Debug/plugin/libLogPlugin -llibLogPlugin
 
 # Input
 HEADERS +=  \
@@ -61,6 +63,7 @@ HEADERS +=  \
     interface/kcoreaddons_export.h \
     interface/kprocess.h \
     interface/kprocess_p.h \
+    interface/customdatainfo.h \
     source/inc/encryptionpage.h \
     source/inc/progressdialog.h \
     source/inc/extractpausedialog.h \
@@ -81,8 +84,20 @@ HEADERS +=  \
     source/inc/openwithdialog/openwithdialog.h \
     source/inc/openwithdialog/properties.h \
     source/inc/openwithdialog/singleton.h \
-    interface/filewatcher.h \
+    interface/filewatcher.h\
+    source/inc/monitorAdaptor.h \
+    source/inc/monitorInterface.h \
+    interface/TSMutex.h \
+    interface/TSSingleton.h \
+    interface/globalarchivemanager.h \
+    interface/tsconstval.h \
+    interface/tscommontypes.h \
+    interface/tstypes.h \
+    interface/globalarchivemanager_p.h \
+    interface/archiverunnable.h \
+    interface/structs.h \
     source/inc/openloadingpage.h
+
 
 
 
@@ -142,7 +157,13 @@ SOURCES +=  \
     source/src/openwithdialog/mimesappsmanager.cpp \
     source/src/openwithdialog/openwithdialog.cpp \
     source/src/openwithdialog/properties.cpp \
-    interface/filewatcher.cpp \
+    interface/filewatcher.cpp\
+    source/src/monitorAdaptor.cpp \
+    source/src/monitorInterface.cpp \
+    interface/TSMutex.cpp \
+    interface/globalarchivemanager.cpp \
+    interface/archiverunnable.cpp \
+    interface/structs.cpp \
     source/src/openloadingpage.cpp
 
 

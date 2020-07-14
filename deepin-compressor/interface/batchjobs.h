@@ -37,7 +37,6 @@ public Q_SLOTS:
 
 protected:
 //    BatchJobs(BatchJobsPrivate &dd, QObject *parent);
-
 private:
     QList<KJob *> m_subjobs;
 //    Q_DECLARE_PRIVATE(BatchJobs)

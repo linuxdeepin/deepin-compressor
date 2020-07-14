@@ -26,12 +26,13 @@
 #define BASEDIALOG_H
 
 #include <DDialog>
+#include <DTitlebar>
 
 DWIDGET_USE_NAMESPACE
 
-DWIDGET_BEGIN_NAMESPACE
-class DTitlebar;
-DWIDGET_END_NAMESPACE
+//DWIDGET_BEGIN_NAMESPACE
+//class DTitlebar;
+//DWIDGET_END_NAMESPACE
 
 class QShowEvent;
 class QWidget;
@@ -40,7 +41,7 @@ class BaseDialog : public DAbstractDialog
 {
     Q_OBJECT
 public:
-    explicit BaseDialog(QWidget *parent = nullptr);
+    explicit BaseDialog(QWidget *parent = 0);
     ~BaseDialog();
 
     void setTitle(const QString &title);

@@ -26,13 +26,13 @@
 #include "filewatcher.h"
 
 #include <DWidget>
-#include <DLabel>
-#include <DFileDialog>
 #include <DCommandLinkButton>
 #include <DSpinner>
+#include <DLabel>
+//#include <DFileDialog>
 
-#include <QSettings>
 #include <QVBoxLayout>
+#include <QSettings>
 
 DWIDGET_USE_NAMESPACE
 

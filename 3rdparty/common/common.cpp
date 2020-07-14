@@ -1,11 +1,13 @@
 #include "common.h"
+#include "detectencoding.h"
+
 #include <QTextCodec>
-#include <KEncodingProber>
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include <QLocale>
 #include <QTextStream>
-#include "detectencoding.h"
+
+#include <KEncodingProber>
 
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {

@@ -23,11 +23,12 @@
 #define ARCHIVE_H
 
 #include "options.h"
-#include "archivejob.h"
+//#include "archivejob.h"
 
 #include <QHash>
 #include <QMimeType>
 
+class KJob;
 class LoadJob;
 class BatchExtractJob;
 class CreateJob;
@@ -110,14 +111,19 @@ public:
     QString multiVolumeName() const;
     ReadOnlyArchiveInterface *interface();
 
+
     bool hasMultipleTopLevelEntries() const;
     static BatchExtractJob *batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent = nullptr);
     static CreateJob *create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent = nullptr, bool useLibArchive = false);
+    //static AddJob *add(Archive *pArchive, const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
     static Archive *createEmpty(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, bool isbatch = false, QObject *parent = nullptr);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QString &fixedMimeType);
+    static void CreateEntry(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map);//废弃
+    static void CreateEntryNew(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map);//added by hsw
 
     ~Archive() override;
 
@@ -126,9 +132,9 @@ public:
 
     DeleteJob *deleteFiles(QVector<Archive::Entry *> &entries);
     CommentJob *addComment(const QString &comment);
-    TestJob *testArchive();
-
-    AddJob *addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
+    //TestJob *testArchive();
+    AddJob *addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, ReadOnlyArchiveInterface *pIface = nullptr, const CompressionOptions &options = CompressionOptions());
+    //AddJob *addFilesOld(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
     MoveJob *moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
     CopyJob *copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
     ExtractJob *extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options = ExtractionOptions());
@@ -151,7 +157,9 @@ private:
     static Archive *create(const QString &fileName, const QString &fixedMimeType, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent = nullptr, bool useLibArchive = false);
-    ReadOnlyArchiveInterface *m_iface;
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, Plugin *plugin);
+
+    ReadOnlyArchiveInterface *m_iface = nullptr;
     bool m_isReadOnly;
     bool m_isSingleFolder;
     bool m_isMultiVolume;
@@ -164,5 +172,8 @@ private:
     QStringList m_compressionMethods;
     QStringList m_encryptionMethods;
 };
+
+
+
 
 #endif // ARCHIVE_H

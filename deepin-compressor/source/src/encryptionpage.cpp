@@ -99,20 +99,24 @@ void EncryptionPage::setPassowrdFocus()
 void EncryptionPage::resetPage()
 {
     m_inputflag = false;
-    pwdCheckDown = true;
     m_password->clear();
     m_password->setAlert(false);
+}
+
+void EncryptionPage::setInputflag(bool bFlag)
+{
+    m_inputflag = bFlag;
 }
 
 void EncryptionPage::nextbuttonClicked()
 {
     m_inputflag = true;
-    if (pwdCheckDown) {
-        emit sigExtractPassword(m_password->text());
-        //pwdCheckDown:to solve the 7z flash retreat when password is too long and wrong
-        //if pwdCheckDown is true,t indicates that the work of determining the password has been done
-        pwdCheckDown = false;
-    }
+//    if (pwdCheckDown) {
+    emit sigExtractPassword(m_password->text());
+    //pwdCheckDown:to solve the 7z flash retreat when password is too long and wrong
+    //if pwdCheckDown is true,t indicates that the work of determining the password has been done
+//    pwdCheckDown = false;
+//    }
 }
 
 void EncryptionPage::wrongPassWordSlot()
@@ -123,7 +127,7 @@ void EncryptionPage::wrongPassWordSlot()
         m_password->setAlert(true);
         m_password->showAlertMessage(tr("Wrong password"));
     }
-    pwdCheckDown = true;
+//    pwdCheckDown = true;
 }
 
 void EncryptionPage::onPasswordChanged()

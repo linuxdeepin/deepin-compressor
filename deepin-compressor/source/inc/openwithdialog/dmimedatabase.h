@@ -39,4 +39,6 @@ public:
     QMimeType mimeTypeForUrl(const QUrl &url) const;
 };
 
+
+
 #endif // DMIMEDATABASE_H

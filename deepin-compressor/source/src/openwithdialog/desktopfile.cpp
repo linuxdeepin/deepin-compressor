@@ -119,7 +119,6 @@ QString DesktopFile::getDisplayName() const
     if (m_deepinVendor == QStringLiteral("deepin") && !m_genericName.isEmpty()) {
         return m_genericName;
     }
-
     return m_localName.isEmpty() ? m_name : m_localName;
 }
 

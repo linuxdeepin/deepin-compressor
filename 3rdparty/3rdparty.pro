@@ -8,4 +8,3 @@ SUBDIRS += \
     libarchive \
     libsinglefileplugin \
     libzipplugin
-

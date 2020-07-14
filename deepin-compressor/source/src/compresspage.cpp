@@ -22,8 +22,8 @@
 
 #include "compresspage.h"
 #include "utils.h"
-#include "fileViewer.h"
 #include "queries.h"
+#include "fileViewer.h"
 
 #include <DFileDialog>
 #include <DDialog>
@@ -36,6 +36,9 @@
 #include <QShortcut>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QSettings>
+#include <DFontSizeManager>
+
 
 DWIDGET_USE_NAMESPACE
 
@@ -107,11 +110,14 @@ void CompressPage::showDialog()
     dialog->addSpacing(32);
     dialog->setMinimumSize(380, 140);
     dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+
     DLabel *pContent = new DLabel(tr("Please add files to the top-level directory"), dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
     pContent->setMinimumSize(293, 20/*this->width()*/);
     pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
@@ -140,7 +146,6 @@ void CompressPage::onAddfileSlot()
         showDialog();
         return;
     }
-
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -150,7 +155,6 @@ void CompressPage::onAddfileSlot()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
-
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();
@@ -169,6 +173,7 @@ void CompressPage::onAddfileSlot()
 
 void CompressPage::onSelectedFilesSlot(const QStringList &files)
 {
+    // 判断是否在根目录下添加文件，若不是，给出提示
     if (0 != m_fileviewer->getPathIndex()) {
         showDialog();
         return;
@@ -178,22 +183,24 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
     int mode = 0;
     bool bAll = false;
 
+    // 对重复文件进行判断处理
     foreach (QString m_path, m_filelist) {
         QFileInfo mfile(m_path);
         foreach (QString path, files) {
             QFileInfo file(path);
             if (file.fileName() == mfile.fileName()) {
 
-                if (!bAll) {
+                if (!bAll) {    // 判断是否全部应用，若不是，则继续弹出对话框
                     OverwriteQuery query(path);
                     query.execute();
                     mode = query.getExecuteReturn();
 
                     bAll = query.applyAll();
                 }
-                if (-1 == mode || 0 == mode) {        // skip or cancel
+
+                if (-1 == mode || 0 == mode) {      // -1：取消  0：跳过
                     inputlist.removeOne(path);
-                } else {                // overwrite
+                } else {                            // 覆盖
                     m_filelist.removeOne(m_path);
                 }
                 /*int mode = showReplaceDialog(path);
@@ -208,9 +215,8 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
 
     m_filelist.append(inputlist);
 
-    m_fileviewer->setFileList(m_filelist);
-
-    m_fileviewer->setSelectFiles(inputlist);
+    m_fileviewer->setFileList(m_filelist);      // 设置所有压缩文件
+    m_fileviewer->setSelectFiles(inputlist);    // 设置选中的文件
 }
 
 void CompressPage::onRefreshFilelist(const QStringList &filelist)
