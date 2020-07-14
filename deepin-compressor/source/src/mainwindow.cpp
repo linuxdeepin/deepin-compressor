@@ -1288,6 +1288,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
+        m_eWorkStatus = WorkProcess;
+        m_operationtype = Operation_Extract;
         QStringList pathlist = files;
         pathlist.removeLast();
         QFileInfo fileinfo(pathlist.at(0));
@@ -1304,8 +1306,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         batchJob->setDestinationFolder(fileinfo.path());
         batchJob->setPreservePaths(true);
 
+        QStringList transFiles;
         for (const QString &url : qAsConst(pathlist)) {
-            batchJob->addInput(QUrl::fromLocalFile(url));
+            QString transFile = url;
+            transSplitFileName(transFile);
+            if (!transFiles.contains(transFile)) { //为了不重复解压
+                transFiles.append(transFile);
+                batchJob->addInput(QUrl::fromLocalFile(transFile));
+            }
         }
 
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
@@ -1337,6 +1345,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         loadArchive(files.at(0));
     } else if (files.last() == QStringLiteral("extract_multi")) {
+        m_eWorkStatus = WorkProcess;
+        m_operationtype = Operation_Extract;
         QString defaultpath;
         QFileInfo fileinfo(files.at(0));
         if ("" != m_pSettingsDialog->getCurExtractPath() && m_pUnCompressPage->getExtractType() != EXTRACT_HEAR) {
@@ -1377,8 +1387,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         batchJob->setDestinationFolder(curpath);
         batchJob->setPreservePaths(true);
 
+        QStringList transFiles;
         for (const QString &url : qAsConst(pathlist)) {
-            batchJob->addInput(QUrl::fromLocalFile(url));
+            QString transFile = url;
+            transSplitFileName(transFile);
+            if (!transFiles.contains(transFile)) { //为了不重复解压
+                transFiles.append(transFile);
+                batchJob->addInput(QUrl::fromLocalFile(transFile));
+            }
         }
 
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
