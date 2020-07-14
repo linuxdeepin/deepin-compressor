@@ -94,7 +94,8 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             case FullPath:
                 return entry->name();
             case Type: {
-                QMimeType mimetype = determineMimeType(entry->name());
+//                Directory can be identified by fullpath
+                QMimeType mimetype = entry->isDir() ? determineMimeType(entry->fullPath()) : determineMimeType(entry->name());
                 return m_mimetype->displayName(mimetype.name());
             }
             case Size:

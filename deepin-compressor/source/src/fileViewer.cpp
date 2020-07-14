@@ -514,7 +514,8 @@ void fileViewer::refreshTableview()
         firstmodel->setItem(rowindex, 3, item);
 
         //类型
-        QMimeType mimetype = determineMimeType(fileinfo.fileName());
+//        Directory can be identified by fullpath
+        QMimeType mimetype = fileinfo.isDir() ? determineMimeType(fileinfo.filePath()) : determineMimeType(fileinfo.fileName());
         item = new MyFileItem(m_mimetype->displayName(mimetype.name()));
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         font = DFontSizeManager::instance()->get(DFontSizeManager::T7);

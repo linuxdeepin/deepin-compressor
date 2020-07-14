@@ -131,7 +131,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 }
             }
             case 2: {
-                QMimeType mimetype = determineMimeType(file.fileName());
+//                Directory can be identified by fullpath
+                QMimeType mimetype = file.isDir() ? determineMimeType(file.filePath()) : determineMimeType(file.fileName());
                 return m_mimetype->displayName(mimetype.name());
             }
             case 1: {
