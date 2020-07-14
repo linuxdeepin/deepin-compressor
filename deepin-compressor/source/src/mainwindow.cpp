@@ -852,14 +852,96 @@ bool MainWindow::popUpChangedDialog(const qint64 &pid)
 
 bool MainWindow::createSubWindow(const QStringList &urls)
 {
+    MainWindow *subWindow = nullptr;
+    bool bStagger = false;
+
     if (urls.length() == 0) {
-        MainWindow *subWindow = new MainWindow();
+        bStagger = true;
+        /*MainWindow **/subWindow = new MainWindow();
         subWindow->m_pMapGlobalWnd = this->m_pMapGlobalWnd;//获取deepin-compressor进程中的全局窗口map
-        ++m_windowcount;
+        //++m_windowcount;
 
-        qDebug() << m_windowcount;
+//        subWindow->show();
 
+//        return true;
+    } else {
+        QString filePath = urls[0];
+        QFileInfo fileInfo(filePath);
+
+        QStringList inUrls = std::move(const_cast<QStringList & >(urls));
+        qDebug() << "=================urls:" << inUrls;
+
+        QString winid = "";
+        for (int i = 0; i < inUrls.length(); i++) {
+            if (inUrls[i].contains(HEADBUS)) {
+                winid = inUrls[i];
+                inUrls.removeOne(winid);
+                winid.remove(HEADBUS);
+                break;
+            }
+        }
+
+        MainWindow *pParentWnd = nullptr;
+        if (this->m_pMapGlobalWnd != nullptr) {
+            pParentWnd = qobject_cast<MainWindow *>(this->m_pMapGlobalWnd->getOne(winid));
+        }
+
+        //create sub mainwindow
+        //    if (inUrls.length() == 0) {
+        //        return false;
+        //    }
+
+        /*MainWindow **/subWindow = new MainWindow();
+        if (fileInfo.exists() == true && (!subWindow->checkSettings(filePath))) {//判断目标文件是否合法
+            return  false;
+        }
+
+        subWindow->m_pMapGlobalWnd = this->m_pMapGlobalWnd;//获取deepin-compressor进程中的全局窗口map
+        subWindow->m_pChildMndExtractPath = this->m_pChildMndExtractPath;//子面板的解压路径必须和父面板的解压路径统一
+        if (this->m_pMapGlobalWnd == nullptr) {
+            this->m_pMapGlobalWnd = new GlobalMainWindowMap();
+        }
+
+        m_pMapGlobalWnd->insert(QString::number(subWindow->winId()), subWindow);
+
+        if (pParentWnd != nullptr) {
+            bStagger = false;
+            subWindow->m_pCurAuxInfo = new MainWindow_AuxInfo();
+            subWindow->m_pCurAuxInfo->parentAuxInfo = pParentWnd->m_pCurAuxInfo;
+
+            QString strModelIndex = inUrls.takeAt(1);//第一个参数存储的有modelIndex字符串
+            if (pParentWnd->m_pCurAuxInfo != nullptr &&
+                    pParentWnd->m_pCurAuxInfo->information.contains(strModelIndex) == true) {
+                OpenInfo *pInfo = pParentWnd->m_pCurAuxInfo->information[strModelIndex];
+                //            pInfo->isHidden = false;
+                pInfo->option = OpenInfo::OPEN;
+                pInfo->strWinId = QString::number(subWindow->winId());
+                int childCount = pParentWnd->m_pCurAuxInfo->information.size();
+                subWindow->move(pParentWnd->x() + childCount * 130, pParentWnd->y() + childCount * 92);
+                connect(subWindow, &MainWindow::sigTipsWindowPopUp, pParentWnd->m_pUnCompressPage, &UnCompressPage::slotSubWindowTipsPopSig);
+
+                subWindow->m_ePageID = PAGE_ZIP;
+                //        subWindow->onRightMenuSelected(inUrls);
+                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+                //        subWindow->onSelected(inUrls);
+            }
+        } else {
+            bStagger = true;
+            if (inUrls.length() > 0) {
+                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+            }
+        }
+
+        //++m_windowcount;
+
+    }
+
+    ++m_windowcount;
+
+    // 对需要窗口错开的情况移动窗口
+    if (bStagger) {
         int iIndex = (m_windowcount - 1) % 5;
+
         switch (iIndex) {
         case 0:
             Dtk::Widget::moveToCenter(subWindow);
@@ -877,80 +959,9 @@ bool MainWindow::createSubWindow(const QStringList &urls)
             subWindow->move(QApplication::desktop()->availableGeometry().width() - subWindow->width(), QApplication::desktop()->availableGeometry().height() - subWindow->height());
             break;
         }
-
-        subWindow->show();
-
-        return true;
     }
 
-    QString filePath = urls[0];
-    QFileInfo fileInfo(filePath);
-
-    QStringList inUrls = std::move(const_cast<QStringList & >(urls));
-    qDebug() << "=================urls:" << inUrls;
-
-    QString winid = "";
-    for (int i = 0; i < inUrls.length(); i++) {
-        if (inUrls[i].contains(HEADBUS)) {
-            winid = inUrls[i];
-            inUrls.removeOne(winid);
-            winid.remove(HEADBUS);
-            break;
-        }
-    }
-
-    MainWindow *pParentWnd = nullptr;
-    if (this->m_pMapGlobalWnd != nullptr) {
-        pParentWnd = qobject_cast<MainWindow *>(this->m_pMapGlobalWnd->getOne(winid));
-    }
-
-    //create sub mainwindow
-//    if (inUrls.length() == 0) {
-//        return false;
-//    }
-
-    MainWindow *subWindow = new MainWindow();
-    if (fileInfo.exists() == true && (!subWindow->checkSettings(filePath))) {//判断目标文件是否合法
-        return  false;
-    }
-
-    subWindow->m_pMapGlobalWnd = this->m_pMapGlobalWnd;//获取deepin-compressor进程中的全局窗口map
-    subWindow->m_pChildMndExtractPath = this->m_pChildMndExtractPath;//子面板的解压路径必须和父面板的解压路径统一
-    if (this->m_pMapGlobalWnd == nullptr) {
-        this->m_pMapGlobalWnd = new GlobalMainWindowMap();
-    }
-
-    m_pMapGlobalWnd->insert(QString::number(subWindow->winId()), subWindow);
-
-    if (pParentWnd != nullptr) {
-        subWindow->m_pCurAuxInfo = new MainWindow_AuxInfo();
-        subWindow->m_pCurAuxInfo->parentAuxInfo = pParentWnd->m_pCurAuxInfo;
-
-        QString strModelIndex = inUrls.takeAt(1);//第一个参数存储的有modelIndex字符串
-        if (pParentWnd->m_pCurAuxInfo != nullptr &&
-                pParentWnd->m_pCurAuxInfo->information.contains(strModelIndex) == true) {
-            OpenInfo *pInfo = pParentWnd->m_pCurAuxInfo->information[strModelIndex];
-//            pInfo->isHidden = false;
-            pInfo->option = OpenInfo::OPEN;
-            pInfo->strWinId = QString::number(subWindow->winId());
-            int childCount = pParentWnd->m_pCurAuxInfo->information.size();
-            subWindow->move(pParentWnd->x() + childCount * 130, pParentWnd->y() + childCount * 92);
-            connect(subWindow, &MainWindow::sigTipsWindowPopUp, pParentWnd->m_pUnCompressPage, &UnCompressPage::slotSubWindowTipsPopSig);
-
-            subWindow->m_ePageID = PAGE_ZIP;
-            //        subWindow->onRightMenuSelected(inUrls);
-            QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
-            //        subWindow->onSelected(inUrls);
-        }
-    } else {
-        if (inUrls.length() > 0) {
-            QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
-        }
-    }
-
-    ++m_windowcount;
     subWindow->show();
-
     return true;
 }
 
