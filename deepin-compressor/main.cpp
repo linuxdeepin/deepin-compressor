@@ -62,15 +62,38 @@ int main(int argc, char *argv[])
     bool isMutlWindows = false;
     if (argc >= 3 && !QString(argv[2]).contains(HEADBUS)) {
         QString lastStr = argv[argc - 1];
+        QSet<QString> fstList;
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
                 && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
                 && lastStr != "extract_split_multi") {
             isMutlWindows = true;
-            for (int i = 1; i < argc; ++i) {
+
+            for (int i = 1; i < argc; i++) {
+                if (QString(argv[i]).contains(".7z.")) {
+                    QString tempfile = QString(argv[i]).left(QString(argv[i]).length() - 3);
+                    bool isFind = false;
+                    foreach (QString file, fstList) {
+                        if (file.contains(tempfile)) {
+                            isFind = true;
+                            break;
+                        }
+                    }
+
+                    if (!isFind) {
+                        fstList.insert(QString(argv[i]));
+                    }
+                } else {
+                    if (fstList.find(argv[i]) == fstList.end()) {
+                        fstList.insert(QString(argv[i]));
+                    }
+                }
+            }
+
+            foreach (QString file, fstList) {
                 QProcess p;
                 QString command = "xdg-open";
                 QStringList args;
-                args.append(argv[i]);
+                args.append(file);
                 p.start(command, args);
                 p.waitForFinished();
             }
