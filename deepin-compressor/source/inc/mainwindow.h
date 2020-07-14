@@ -540,8 +540,8 @@ private slots:
     void onCompressAddfileSlot(bool status);
 
     /**
-     * @brief slotLoadingFinished
-     * @param job
+     * @brief slotLoadingFinished   压缩包加载结束
+     * @param job   加载Job
      */
     void slotLoadingFinished(KJob *job);
 

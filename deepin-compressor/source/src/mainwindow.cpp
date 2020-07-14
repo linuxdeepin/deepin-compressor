@@ -78,8 +78,9 @@
 #include <QUuid>
 #include <QMessageBox>
 #include <QElapsedTimer>
+#include <QDesktopWidget>
 
-#include "unistd.h"
+#include <unistd.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -855,6 +856,28 @@ bool MainWindow::createSubWindow(const QStringList &urls)
         MainWindow *subWindow = new MainWindow();
         subWindow->m_pMapGlobalWnd = this->m_pMapGlobalWnd;//获取deepin-compressor进程中的全局窗口map
         ++m_windowcount;
+
+        qDebug() << m_windowcount;
+
+        int iIndex = (m_windowcount - 1) % 5;
+        switch (iIndex) {
+        case 0:
+            Dtk::Widget::moveToCenter(subWindow);
+            break;
+        case 1:
+            subWindow->move(0, 0);
+            break;
+        case 2:
+            subWindow->move(QApplication::desktop()->availableGeometry().width() - subWindow->width(), 0);
+            break;
+        case 3:
+            subWindow->move(0, QApplication::desktop()->availableGeometry().height() - subWindow->height());
+            break;
+        case 4:
+            subWindow->move(QApplication::desktop()->availableGeometry().width() - subWindow->width(), QApplication::desktop()->availableGeometry().height() - subWindow->height());
+            break;
+        }
+
         subWindow->show();
 
         return true;
@@ -1246,7 +1269,7 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
                 startCmd("deepin-compressor", arguments);
             }
         }
-    } else {        // 如果是多个压缩包或者单个文件之类的，直接进入压缩界面
+    } else {        // 如果是多个压缩包或者文件之类的，直接进入压缩界面
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING);
         m_ePageID = PAGE_ZIP;
         emit sigZipSelectedFiles(listSelFiles);
@@ -1264,6 +1287,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //        m_initflag = true;
 //    }
 
+    // 初始化子窗口默认解压路径为当前压缩包所在位置
     if (m_pChildMndExtractPath == nullptr && files.count() > 0) {
         m_pChildMndExtractPath = new QString(QFileInfo(files[0]).path());
     }
@@ -1500,8 +1524,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
 void MainWindow::slotLoadingFinished(KJob *job)
 {
-    m_pHomePage->spinnerStop();
+    //m_pHomePage->spinnerStop();
     m_eWorkStatus = WorkNone;
+
     if (job->error()) {
         int errorCode = job->error();
         if (errorCode == KJob::OpenFailedError) {
@@ -1564,7 +1589,7 @@ void MainWindow::loadArchive(const QString &files)
     connect(pLoadJob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
 
     m_pJob->start();
-    m_pHomePage->spinnerStart(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
+    //m_pHomePage->spinnerStart(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
     refreshPage();
 }
 
