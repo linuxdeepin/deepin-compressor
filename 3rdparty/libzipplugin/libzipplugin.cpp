@@ -1270,15 +1270,15 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
 
         m_extractFile = destination;
 
-        if (!m_extractionOptions.isAutoCreatDir()) {
-            // QFileInfo extractileInfo(destination);
-            QDir dir;
-            if (!dir.exists(m_extractDestDir + "/.extractCache")) {
-                qDebug() << dir.mkdir(m_extractDestDir + "/.extractCache");
-            }
+//        if (!m_extractionOptions.isAutoCreatDir()) {
+//            // QFileInfo extractileInfo(destination);
+//            QDir dir;
+//            if (!dir.exists(m_extractDestDir + "/.extractCache")) {
+//                qDebug() << dir.mkdir(m_extractDestDir + "/.extractCache");
+//            }
 
-            qDebug() << QFile::rename(fileInfo.absoluteFilePath(), m_extractDestDir + "/.extractCache/" + fileInfo.fileName());
-        }
+//            qDebug() << QFile::rename(fileInfo.absoluteFilePath(), m_extractDestDir + "/.extractCache/" + fileInfo.fileName());
+//        }
 
         QString strtmp = destination;
         if (strtmp.endsWith(QDir::separator())) {
@@ -1903,21 +1903,21 @@ void LibzipPlugin::slotRestoreWorkingDir()
     if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) {
         qDebug() << "=====点击了取消";
 
-        if (this->ifReplaceTip == true) {
-            if (!m_extractionOptions.isAutoCreatDir()) {
-                QFileInfo fileInfo(m_extractFile);
-                QString strFileName = fileInfo.fileName();
-                QDir dir;
+//        if (this->ifReplaceTip == true) {
+//            if (!m_extractionOptions.isAutoCreatDir()) {
+//                QFileInfo fileInfo(m_extractFile);
+//                QString strFileName = fileInfo.fileName();
+//                QDir dir;
 
-                qDebug() << QFile::remove(m_extractFile);
-                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
-                qDebug() << dir.exists(m_extractDestDir + "/.extractCache");
-                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
-                qDebug() << m_extractDestDir + "/.extractCache/" + fileInfo.fileName();
-                qDebug() << m_extractDestDir + "/" + fileInfo.fileName();
-                qDebug() << QFile::rename(m_extractDestDir + "/.extractCache/" + strFileName, m_extractDestDir + "/" + strFileName);
-            }
-        }
+//                qDebug() << QFile::remove(m_extractFile);
+//                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
+//                qDebug() << dir.exists(m_extractDestDir + "/.extractCache");
+//                qDebug() << QFile::exists(m_extractDestDir + "/.extractCache/" + strFileName);
+//                qDebug() << m_extractDestDir + "/.extractCache/" + fileInfo.fileName();
+//                qDebug() << m_extractDestDir + "/" + fileInfo.fileName();
+//                qDebug() << QFile::rename(m_extractDestDir + "/.extractCache/" + strFileName, m_extractDestDir + "/" + strFileName);
+//            }
+//        }
     }
 }
 
@@ -2391,16 +2391,16 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
 
         m_extractFile = destination;
 
-        if (!m_extractionOptions.isAutoCreatDir()) {
-            // QFileInfo extractileInfo(destination);
-            QDir dir;
-            if (!dir.exists(m_extractDestDir + "/.extractCache")) {
-                qDebug() << dir.mkdir(m_extractDestDir + "/.extractCache");
-            }
+//        if (!m_extractionOptions.isAutoCreatDir()) {
+//            // QFileInfo extractileInfo(destination);
+//            QDir dir;
+//            if (!dir.exists(m_extractDestDir + "/.extractCache")) {
+//                qDebug() << dir.mkdir(m_extractDestDir + "/.extractCache");
+//            }
 
-            qDebug() << QFile::rename(fileInfo.absoluteFilePath(), m_extractDestDir + "/.extractCache/" + fileInfo.fileName());
+//            qDebug() << QFile::rename(fileInfo.absoluteFilePath(), m_extractDestDir + "/.extractCache/" + fileInfo.fileName());
 
-        }
+//        }
 
         QString strtmp = destination;
         if (strtmp.endsWith(QDir::separator())) {

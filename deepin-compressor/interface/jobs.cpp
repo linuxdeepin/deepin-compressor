@@ -158,7 +158,7 @@ void Job::connectToArchiveInterfaceSignals()
 void Job::onCancelled()
 {
     qDebug() << "Cancelled emitted";
-    setError(KJob::KilledJobError);
+    setError(KJob::CancelError);
     emit sigCancelled();
 }
 
@@ -223,7 +223,7 @@ void Job::onFinished(bool result)
 {
     qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
     if (m_archiveInterface && m_archiveInterface->isUserCancel()) {
-        setError(KJob::KilledJobError);
+        setError(KJob::CancelError);
     } else if (m_archiveInterface && !m_archiveInterface->isCheckPsw()) {
         setError(KJob::NopasswordError); //阻止解压zip加密包出现解压失败界面再出现输入密码界面
     } else if ((archive() && !archive()->isValid())  || false == result) {

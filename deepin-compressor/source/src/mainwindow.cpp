@@ -1945,7 +1945,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if ((PAGE_ENCRYPTION == m_ePageID) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)))   {
 
         // do noting:wrong password
-    } else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)) {
+    } else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped && errorCode != KJob::CancelError)) {
         if (m_pProgressdialog->isshown()) {
             m_pProgressdialog->hide();
             // m_pProgressdialog->reject();
@@ -3201,7 +3201,7 @@ void MainWindow::slotJobFinished(KJob *job)
     qDebug() << "job finished" << job->error();
     m_eWorkStatus = WorkNone;
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
-    if (job->error() && (job->error() != KJob::KilledJobError)) {
+    if (job->error() && (job->error() != KJob::KilledJobError && job->error() != KJob::CancelError)) {
         if (m_strPathStore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
