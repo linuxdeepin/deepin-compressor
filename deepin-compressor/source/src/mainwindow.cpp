@@ -1332,7 +1332,21 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_operationtype = Operation_Extract;
         QStringList pathlist = files;
         pathlist.removeLast();
-        QFileInfo fileinfo(pathlist.at(0));
+
+        QStringList pathList;
+        for (int i = 0; i < pathlist.size(); i++) {
+            QString str = pathlist.at(i);
+            if (pathlist.at(i).endsWith(".rar") && pathlist.at(i).contains(".part")) {
+                int x = pathlist.at(i).lastIndexOf("part");
+                int y = pathlist.at(i).lastIndexOf(".");
+                str.replace(x, y - x, "part1");
+                pathList.append(str);
+            } else {
+                pathList.append(str);
+            }
+        }
+
+        QFileInfo fileinfo(pathList.at(0));
         m_strDecompressFileName = fileinfo.fileName();
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
@@ -1347,7 +1361,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         batchJob->setPreservePaths(true);
 
         QStringList transFiles;
-        for (const QString &url : qAsConst(pathlist)) {
+        for (const QString &url : qAsConst(pathList)) {
             QString transFile = url;
             transSplitFileName(transFile);
             if (!transFiles.contains(transFile)) { //为了不重复解压
@@ -1414,6 +1428,20 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         QStringList pathlist = files;
         pathlist.removeLast();
+
+        QStringList pathList;
+        for (int i = 0; i < pathlist.size(); i++) {
+            QString str = pathlist.at(i);
+            if (pathlist.at(i).endsWith(".rar") && pathlist.at(i).contains(".part")) {
+                int x = pathlist.at(i).lastIndexOf("part");
+                int y = pathlist.at(i).lastIndexOf(".");
+                str.replace(x, y - x, "part1");
+                pathList.append(str);
+            } else {
+                pathList.append(str);
+            }
+        }
+
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_strDecompressFileName = fileinfo.fileName();
         m_pUnCompressPage->setdefaultpath(curpath);
@@ -1428,7 +1456,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         batchJob->setPreservePaths(true);
 
         QStringList transFiles;
-        for (const QString &url : qAsConst(pathlist)) {
+        for (const QString &url : qAsConst(pathList)) {
             QString transFile = url;
             transSplitFileName(transFile);
             if (!transFiles.contains(transFile)) { //为了不重复解压
