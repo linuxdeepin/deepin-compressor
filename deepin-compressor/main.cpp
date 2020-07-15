@@ -170,12 +170,14 @@ int main(int argc, char *argv[])
             bus.registerObject(HEADBUS, &w);
 
             QObject::connect(&w, &MainWindow::sigquitApp, &app, &DApplication::quit);
+
             // handle command line parser.
+            // 右键时show()函数在MainWindow的onRightMenuSelected中调用
             if (!newfilelist.isEmpty()) {
                 QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
+            } else {
+                w.show();
             }
-
-            w.show();
         }
     }
 

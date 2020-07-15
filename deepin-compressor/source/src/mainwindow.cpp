@@ -1536,6 +1536,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         setCompressDefaultPath();
         refreshPage();
     }
+
+
+    show();
 }
 
 void MainWindow::slotLoadingFinished(KJob *job)
