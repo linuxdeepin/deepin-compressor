@@ -1336,11 +1336,21 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         QStringList pathList;
         for (int i = 0; i < pathlist.size(); i++) {
             QString str = pathlist.at(i);
+            //对rar分卷名单独处理
             if (pathlist.at(i).endsWith(".rar") && pathlist.at(i).contains(".part")) {
                 int x = pathlist.at(i).lastIndexOf("part");
                 int y = pathlist.at(i).lastIndexOf(".");
-                str.replace(x, y - x, "part1");
-                pathList.append(str);
+
+                if ((y - x) > 5) {
+                    str.replace(x, y - x, "part01");
+                } else {
+                    str.replace(x, y - x, "part1");
+                }
+
+                QFileInfo file(str);
+                if (file.exists()) {
+                    pathList.append(str);
+                }
             } else {
                 pathList.append(str);
             }
@@ -1435,8 +1445,17 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             if (pathlist.at(i).endsWith(".rar") && pathlist.at(i).contains(".part")) {
                 int x = pathlist.at(i).lastIndexOf("part");
                 int y = pathlist.at(i).lastIndexOf(".");
-                str.replace(x, y - x, "part1");
-                pathList.append(str);
+
+                if ((y - x) > 5) {
+                    str.replace(x, y - x, "part01");
+                } else {
+                    str.replace(x, y - x, "part1");
+                }
+
+                QFileInfo file(str);
+                if (file.exists()) {
+                    pathList.append(str);
+                }
             } else {
                 pathList.append(str);
             }
