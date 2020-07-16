@@ -332,11 +332,21 @@ void PasswordNeededQuery::execute()
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     QString fileName = toShortString(m_data[QStringLiteral("archiveFilename")].toString());
     strlabel->setText(fileName + "\n" + QObject::tr("Encrypted file, please enter the password"));
+    strlabel->setToolTip(m_data[QStringLiteral("archiveFilename")].toString());
 
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("OK"));
+    dialog->getButton(0)->setEnabled(false);
+    //确保输入的密码不为空
+    connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [ & ]() {
+        if (passwordedit->text().isEmpty()) {
+            dialog->getButton(0)->setEnabled(false);
+        } else {
+            dialog->getButton(0)->setEnabled(true);
+        }
+    });
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -353,7 +363,6 @@ void PasswordNeededQuery::execute()
     dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - TITLE_FIXED_HEIGHT + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
     const int mode = dialog->exec();
 
-    const QString password = "";
 
     m_data[QStringLiteral("password")] = passwordedit->text();
 

@@ -722,8 +722,7 @@ bool LibzipPlugin::checkArchivePsd(zip_t *archive, int &iCodecIndex)
                 } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_NOPASSWD) {
                     m_isckeckpsd = false; //阻止解压zip加密包出现解压失败界面再出现输入密码界面
                     if (m_extractionOptions.isBatchExtract()) {//批量提取
-                        PasswordNeededQuery query(filename(
-                                                  ));
+                        PasswordNeededQuery query(filename());
                         emit userQuery(&query);
                         query.waitForResponse();
                         if (query.responseCancelled()) {
@@ -742,48 +741,35 @@ bool LibzipPlugin::checkArchivePsd(zip_t *archive, int &iCodecIndex)
                         return false;
                     }
                 } else if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRONGPASSWD) {
-//                m_isckeckpsd = true;
-//                bool bCheckFinished = false;
-//                int iCodecIndex = 0;
-//                while (bCheckFinished == false) {
-//                    if (m_extractionOptions.isBatchExtract()) {
-//                        setPassword(QString());
-//                        emit cancelled();
-//                        bCheckFinished = true;
-//                        return false;
-//                    }
-//                    iCodecIndex++;
-//                    if (iCodecIndex == m_listCodecs.size()) {
-//                        emit sigExtractNeedPassword();
-//                        setPassword(QString());
-//                        bCheckFinished = true;
-//                        return false;
-//                    } else {
-//                        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
-//                    }
-//                }
-
                     m_isckeckpsd = true;
-                    if (m_extractionOptions.isBatchExtract()) {
-                        setPassword(QString());
-                        emit cancelled();
-                        return false;
-                    } else {
-                        emit sigExtractNeedPassword();
-                    }
 
+                    /*zip加密包的中文密码会有多种编码
+                    * 打开加密包失败可能是1、密码错误 2、当前编码不符合原来的密码编码导致密码错误
+                    * 所以密码错误时尝试使用另一种编码的密码打开加密包
+                    */
                     //setPassword(QString());
                     iCodecIndex++;
-                    if (iCodecIndex == m_listCodecs.size()) {
-                        return false;
+                    if (iCodecIndex == m_listCodecs.size()) { //密码
+                        if (m_extractionOptions.isBatchExtract()) { //批量解压时，密码错误继续提示输入密码
+                            PasswordNeededQuery query(filename());
+                            emit userQuery(&query);
+                            query.waitForResponse();
+                            if (query.responseCancelled()) {
+                                setPassword(QString());
+                                emit cancelled();
+                                return false;
+                            }
+                            iCodecIndex = 0;
+                            setPassword(query.password());
+                        } else {
+                            emit sigExtractNeedPassword();
+                            return false;
+                        }
                     } else {
                         i--;
                     }
-
                     zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
                     bPasswordRight = false;
-
-                    break;
                 }
 
             }

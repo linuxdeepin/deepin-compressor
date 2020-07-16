@@ -69,8 +69,9 @@ enum RenameDialog_Result {
 
 typedef QHash<QString, QVariant> QueryData;
 
-class  Query
+class  Query : public QObject
 {
+    Q_OBJECT
 public:
 
     static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
@@ -100,6 +101,7 @@ private:
  */
 class  OverwriteQuery : public Query
 {
+    Q_OBJECT
 public:
     explicit OverwriteQuery(const QString &filename);
     void execute() override;
@@ -135,6 +137,7 @@ private:
  */
 class PasswordNeededQuery : public Query
 {
+    Q_OBJECT
 public:
     explicit PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
     void execute() override;
@@ -149,6 +152,7 @@ public:
  */
 class WrongPasswordQuery : public Query
 {
+    Q_OBJECT
 public:
     explicit WrongPasswordQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
     void execute() override;
@@ -163,6 +167,7 @@ public:
  */
 class LoadCorruptQuery : public Query
 {
+    Q_OBJECT
 public:
     explicit LoadCorruptQuery(const QString &archiveFilename);
     void execute() override;
@@ -172,6 +177,7 @@ public:
 
 class ContinueExtractionQuery : public Query
 {
+    Q_OBJECT
 public:
     explicit ContinueExtractionQuery(const QString &error, const QString &archiveEntry);
     void execute() override;
