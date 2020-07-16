@@ -1324,9 +1324,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
         loadArchive(files.at(0));
-//        m_ePageID = PAGE_UNZIPPROGRESS;
+        m_ePageID = PAGE_UNZIPPROGRESS;
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-//        refreshPage();
+        refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
@@ -1361,9 +1361,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
         m_strDecompressFilePath = fileinfo.path();
-//        m_ePageID = PAGE_UNZIPPROGRESS;
+        m_ePageID = PAGE_UNZIPPROGRESS;
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-//        refreshPage();
+        refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
         batchJob->setAutoSubfolder(true);
@@ -1928,6 +1928,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     if (m_ePageID == PAGE_LOADING) {
         m_pOpenLoadingPage->stop();
     }
+
     if (m_ePageID == PAGE_UNZIP  && m_operationtype != Operation_TempExtract_Open_Choose) { // 如果是解压界面，则返回
         if (m_pProgressdialog->isshown()) {
             m_pProgressdialog->hide();
@@ -1944,7 +1945,6 @@ void MainWindow::slotExtractionDone(KJob *job)
 
         return;
     } else if ((PAGE_ENCRYPTION == m_ePageID) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)))   {
-
         // do noting:wrong password
     } else if (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped && errorCode != KJob::CancelError)) {
         if (m_pProgressdialog->isshown()) {
@@ -1974,7 +1974,6 @@ void MainWindow::slotExtractionDone(KJob *job)
         refreshPage();
         return;
     } else if (Operation_TempExtract == m_operationtype) {
-
         m_pOpenLoadingPage->stop();
 
         QStringList arguments;
@@ -1986,11 +1985,11 @@ void MainWindow::slotExtractionDone(KJob *job)
         if (isCompressedFile == true) {
             programName = "deepin-compressor";
         }
+
         QFileInfo file(firstFileName);
         if (file.fileName().contains("%")/* && file.fileName().contains(".png")*/) {
 
             QProcess p;
-//                QString tempFileName = QString("%1.png").arg(m_iOpenTempFileLink);
             QString tempFileName = QString("%1").arg(m_iOpenTempFileLink) + "." + file.suffix();
             m_iOpenTempFileLink++;
             QString commandCreate = "ln";
@@ -2024,7 +2023,6 @@ void MainWindow::slotExtractionDone(KJob *job)
                 arguments << strIndex;  //the third arg
             }
         }
-//        }
 
         qDebug() << arguments;
         startCmd(programName, arguments);
