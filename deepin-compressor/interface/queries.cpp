@@ -186,7 +186,6 @@ void OverwriteQuery::execute()
     checkLabel->setMinimumSize(QSize(98, 20));
     DFontSizeManager::instance()->bind(checkLabel, DFontSizeManager::T6, QFont::Medium);
 
-
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
         colorRoleChange(strlabel, DPalette::ToolTipText, 0.7);
         colorRoleChange(strlabel2, DPalette::ToolTipText, 1);

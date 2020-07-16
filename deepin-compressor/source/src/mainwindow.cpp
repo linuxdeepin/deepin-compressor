@@ -1324,9 +1324,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
         loadArchive(files.at(0));
-        m_ePageID = PAGE_UNZIPPROGRESS;
+//        m_ePageID = PAGE_UNZIPPROGRESS;
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-        refreshPage();
+//        refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
@@ -1361,9 +1361,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
         m_strDecompressFilePath = fileinfo.path();
-        m_ePageID = PAGE_UNZIPPROGRESS;
+//        m_ePageID = PAGE_UNZIPPROGRESS;
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-        refreshPage();
+//        refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
         batchJob->setAutoSubfolder(true);
@@ -1408,6 +1408,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         }
 
         loadArchive(files.at(0));
+        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
     } else if (files.last() == QStringLiteral("extract_multi")) {
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
@@ -2805,7 +2806,7 @@ void MainWindow::moveToArchive(QMap<QString, QString> &Args)
 
 void MainWindow::transSplitFileName(QString &fileName)  // *.7z.003 -> *.7z.001
 {
-    QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+    QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
     if (reg.exactMatch(fileName) == false) {
         return;
@@ -3733,7 +3734,6 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     // emit sigquitApp();
     slotResetPercentAndTime();
     m_pProgess->setprogress(0);
-
 }
 
 void MainWindow::slotClearTempfile()
@@ -4030,4 +4030,3 @@ void MainWindow::deleteLaterJob()
         m_pJob = nullptr;
     }
 }
-
