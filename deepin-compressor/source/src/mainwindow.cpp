@@ -1890,7 +1890,7 @@ void MainWindow::removeFromParentInfo(MainWindow *CurMainWnd)
 void MainWindow::slotExtractionDone(KJob *job)
 {
     m_eWorkStatus = WorkNone;
-    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
+//    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
     Archive::Entry *pExtractWorkEntry = nullptr;
     if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::EXTRACTJOB) {
         ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
@@ -3702,6 +3702,7 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
         if (pEventloop == nullptr) {
             pEventloop = new QEventLoop(this->m_pProgess);
         }
+
         pExtractJob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
         if (pEventloop->isRunning() == false) {
             connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
