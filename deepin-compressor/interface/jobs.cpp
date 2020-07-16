@@ -148,6 +148,7 @@ void Job::connectToArchiveInterfaceSignals()
     connect(archiveInterface(), &ReadOnlyArchiveInterface::userQuery, this, &Job::onUserQuery, Qt::ConnectionType::UniqueConnection);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &Job::onProgressFilename, Qt::ConnectionType::UniqueConnection);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::updateDestFileSignal, this, &Job::onUpdateDestFile, Qt::ConnectionType::UniqueConnection);
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::sigBatchExtractJobWrongPsd, this, &Job::sigBatchExtractJobWrongPsd, Qt::ConnectionType::UniqueConnection);
 
     ReadWriteArchiveInterface *readWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
     if (readWriteInterface) {
@@ -477,6 +478,10 @@ void BatchExtractJob::slotLoadingFinished(KJob *job)
         disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
         connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
 //        }
+        connect(m_extractJob, &Job::sigBatchExtractJobWrongPsd, this, [&]() {
+            Q_ASSERT(m_extractJob);
+            m_extractJob->start(); //批量解压密码错误时，重新走解压流程
+        });
         m_step = Extracting;
         m_extractJob->start();
     } else {

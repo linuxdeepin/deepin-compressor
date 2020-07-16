@@ -138,6 +138,9 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         this->extractPsdStatus = Checked;
         emit sigExtractPwdCheckDown();
     }
+    if (m_extractionOptions.isBatchExtract()) {
+        destPath = destinationDirectory;
+    }
     qDebug() << "####destpath：" << destPath;
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
@@ -539,11 +542,15 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if (this->extractPsdStatus == Reextract) {
-        qDebug() << this->destDirName;
-        if (this->pAnalyseHelp != nullptr) {
-            this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
-//            qDebug()<<"==========直接解压文件";
-            return;
+        if (m_extractionOptions.isBatchExtract()) {
+
+        } else {
+            qDebug() << this->destDirName;
+            if (this->pAnalyseHelp != nullptr) {
+                this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+                //qDebug()<<"==========直接解压文件";
+                return;
+            }
         }
     } else if (this->extractPsdStatus == Checked) {
 
@@ -563,6 +570,12 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {
+        if (m_extractionOptions.isBatchExtract() && 2 == m_exitCode) {
+            qDebug() << "wrong password";
+            emit sigBatchExtractJobWrongPsd(); //批量解压时，密码错误重新走解压流程
+            setPassword(QString());
+            return;
+        }
         if (password().isEmpty()) {
             //            qDebug() << "Extraction failed, the file is broken";
             //            emit error(tr("Extraction failed. the file is broken"));
@@ -579,12 +592,19 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         emit finished(false);
         return;
     } else if (m_exitCode == 9) {
-        qDebug() << "wrong password";
-        //emit error(tr("wrong password"));
-        emit error("wrong password");
-        setPassword(QString());
-        // emit finished(false);
-        return;
+        if (m_extractionOptions.isBatchExtract()) {
+            qDebug() << "wrong password";
+            emit sigBatchExtractJobWrongPsd(); //批量解压时，密码错误重新走解压流程
+            setPassword(QString());
+            return;
+        } else {
+            qDebug() << "wrong password";
+            //emit error(tr("wrong password"));
+            emit error("wrong password");
+            setPassword(QString());
+            // emit finished(false);
+            return;
+        }
     }
 
     if (m_extractionOptions.isDragAndDropEnabled()) {
@@ -994,11 +1014,13 @@ void CliInterface::readStdout(bool handleAll)
 
     if (wrongPasswordMessage) {
         setPassword(QString());
-        if (m_extractionOptions.isBatchExtract()) {
-            emit cancelled();
-            // There is no process running, so finished() must be emitted manually.
-            emit finished(false);
-            //            return;
+        if (m_extractionOptions.isBatchExtract() && !m_isBatchExtractWrongPsd) {
+            m_isBatchExtractWrongPsd = true;
+            //批量解压密码错误时，不直接结束取消，后面要继续提示输入密码
+//            emit cancelled();
+//            // There is no process running, so finished() must be emitted manually.
+//            emit finished(false);
+            return;
         }
     }
 

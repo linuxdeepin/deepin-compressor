@@ -236,6 +236,7 @@ private:
     AnalyseHelp *pAnalyseHelp = nullptr;
     FileWatcher *pFileWatcherdd = nullptr;
     bool m_isPasswordPrompt = false;
+    bool m_isBatchExtractWrongPsd = false;
 
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);

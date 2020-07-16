@@ -164,6 +164,7 @@ Q_SIGNALS:
     void percent(KJob *job, unsigned long percent);
     void percentfilename(KJob *job, const QString &filename);
     void speed(KJob *job, unsigned long speed);
+    void sigBatchExtractJobWrongPsd();
 
 protected:
     void setError(int errorCode);

@@ -277,6 +277,11 @@ Q_SIGNALS:
      */
     void userQuery(Query *query);
     void updateDestFileSignal(QString destFile);
+    /**
+     * Emitted when password is wrong during BatchExtractJob
+     * - only 7zip need
+     */
+    void sigBatchExtractJobWrongPsd();
 
 protected:
 
