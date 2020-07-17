@@ -260,9 +260,12 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
     if (!m_cliProps->property("passwordSwitch").toString().isEmpty() && options.encryptedArchiveHint()
             && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
+//        TODO:追加暂时不设置密码
+#if 0
         if (!passwordQuery()) {
             return false;
         }
+#endif
     }
 
     QStringList arguments = m_cliProps->addArgs(filename(),
