@@ -1030,7 +1030,7 @@ void MainWindow::refreshPage()
             killTimer(m_iWatchTimerID);
             m_iWatchTimerID = 0;
         }
-        if (this->m_operationtype == Operation_NULL) {
+        if (this->m_operationtype == Operation_Load) {
             int limitCounts = 10;
             int left = 5, right = 5;
             QString displayName = "";
@@ -3197,6 +3197,16 @@ void MainWindow::slotCompressFinished(KJob *job)
 }
 void MainWindow::slotJobFinished(KJob *job)
 {
+    if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
+        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")) {
+            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+                if (!pinterface->isAllEntry()) {
+                    pinterface->updateListMap();
+                }
+            }
+        }
+    }
+
     qDebug() << "job finished" << job->error();
     m_eWorkStatus = WorkNone;
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);

@@ -551,12 +551,20 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
     Archive::Entry *entry = m_rootEntry->findByPath(entryFileName.split(QLatin1Char('/'), QString::SkipEmptyParts));
     if (entry) {
         Archive::Entry *parent = entry->getParent();
+
+        if (parent == nullptr)
+            return;
+
         QModelIndex index = indexForEntry(entry);
         Q_UNUSED(index)
 
         beginRemoveRows(indexForEntry(parent), entry->row(), entry->row());
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
+
+        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")) {
+            parent->setProperty("size", parent->property("size").toLongLong() - 1);
+        }
         endRemoveRows();
     }
 }
@@ -580,8 +588,13 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
     }
 
     QString parentPath = "";
-    if (receivedEntry->getParent() != nullptr) {
-        parentPath = receivedEntry->getParent()->fullPath();
+    Archive::Entry *parentEntry = receivedEntry->getParent();
+    if (parentEntry != nullptr) {
+        parentPath = parentEntry->fullPath();
+        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")) {
+            parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
+        }
+
     }
 
     receivedEntry->setFullPath(parentPath + receivedEntry->name());
@@ -784,7 +797,7 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
     Archive::Entry *entry = parent->find(path.last());
     if (entry) {
         entry->copyMetaData(receivedEntry);
-        entry->setCompressIndex(receivedEntry->compressIndex());
+        //entry->setCompressIndex(receivedEntry->compressIndex());
         entry->setProperty("fullPath", entryFileName);
         /*      if (!entry->isDir()) {
                   insertEntry(entry, behaviour);

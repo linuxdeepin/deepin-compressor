@@ -2469,7 +2469,7 @@ Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglo
 {
     auto e = new Archive::Entry();
 
-    e->setCompressIndex(index);
+    // e->setCompressIndex(index);
 
     if (statBuffer.valid & ZIP_STAT_NAME) {
         // e->setFullPath(statBuffer.name);
@@ -2560,7 +2560,7 @@ Archive::Entry *LibzipPlugin::setEntryDataA(const zip_stat_t &statBuffer, qlongl
 {
     auto e = new Archive::Entry();
 
-    e->setCompressIndex(index);
+    // e->setCompressIndex(index);
 
     if (statBuffer.valid & ZIP_STAT_NAME) {
         // e->setFullPath(statBuffer.name);
@@ -2703,5 +2703,103 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
 //        }
         m_DirRecord = "";
         setEntryVal(statBuffer, index, name, m_DirRecord);
+    }
+}
+
+void LibzipPlugin::updateListMap()
+{
+    m_listMap.clear();
+
+    int errcode = 0;
+    // Open archive.
+    zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_RDONLY, &errcode);
+
+    // Get number of archive entries.
+    const auto nofEntries = zip_get_num_entries(archive, 0);
+
+    for (int i = 0; i < nofEntries; i++) {
+
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+
+        zip_stat_t statBuffer;
+        if (zip_stat_index(archive, i, ZIP_FL_ENC_RAW, &statBuffer)) {
+            continue;
+        }
+
+        QString name = trans2uft8(statBuffer.name);
+        setEntryVal1(statBuffer, m_indexCount, name, m_DirRecord);
+
+        if (m_listMap.find(name) == m_listMap.end()) {
+            m_listMap.insert(name, qMakePair(statBuffer, i));
+        }
+    }
+
+    zip_close(archive);
+}
+
+void LibzipPlugin::setEntryVal1(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord)
+{
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+            // setEntryData(statBuffer, index, name);
+            m_SigDirRecord = name;
+            ++index;
+            // m_DirRecord = name;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+                //setEntryData(statBuffer, index, name);
+                ++index;
+                return;
+            }
+
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+                //setEntryData(statBuffer, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, qMakePair(statBuffer, -1));
+            }
+
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+            //setEntryData(statBuffer, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+                    //setEntryData(statBuffer, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, qMakePair(statBuffer, -1));
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                    //setEntryData(statBuffer, index, folderAppendStr, false);
+                }
+            }
+
+            ++index;
+        }
+    } else {
+//        if (name.left(m_DirRecord.size()) == m_DirRecord) {
+//            setEntryData(statBuffer, index, name);
+//            ++index;
+//        } else {
+//            m_DirRecord = "";
+//            setEntryVal(statBuffer, index, name, m_DirRecord);
+//        }
+        m_DirRecord = "";
+        setEntryVal1(statBuffer, index, name, m_DirRecord);
     }
 }

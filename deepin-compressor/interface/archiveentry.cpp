@@ -309,15 +309,15 @@ bool Archive::Entry::operator==(const Archive::Entry &right) const
     return m_fullPath == right.m_fullPath;
 }
 
-void Archive::Entry::setCompressIndex(int iIndex)
-{
-    m_iCompressIndex = iIndex;
-}
+//void Archive::Entry::setCompressIndex(int iIndex)
+//{
+//    m_iCompressIndex = iIndex;
+//}
 
-int Archive::Entry::compressIndex()
-{
-    return m_iCompressIndex;
-}
+//int Archive::Entry::compressIndex()
+//{
+//    return m_iCompressIndex;
+//}
 
 void Archive::Entry::clean()
 {
