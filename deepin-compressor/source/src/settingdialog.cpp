@@ -255,13 +255,70 @@ void SettingDialog::initUI()
                     combobox->setPalette(plt);
                     m_index_last = 2;
                 }
+
                 m_comboboxoption->setValue(m_curpath);
-
-
             });
 
-
             qDebug() << m_curpath;
+            return widget;
+        }
+
+        return nullptr;
+    });
+
+    this->widgetFactory()->registerWidget("deletebox", [this](QObject * obj) -> QWidget* {
+        m_deleteArchiveOption = qobject_cast<DSettingsOption *>(obj);
+        if (m_deleteArchiveOption)
+        {
+            DWidget *widget = new DWidget(this);
+            QHBoxLayout *layout = new QHBoxLayout();
+
+            DLabel *label = new DLabel(widget);
+            label->setForegroundRole(DPalette::WindowText);
+            label->setText(tr("Delete archives after extraction") + ":");
+
+            DComboBox *combobox = new DComboBox(widget);
+            combobox->setMinimumWidth(300);
+            combobox->setEditable(false);
+            QStringList list;
+            list << tr("Never") << tr("Ask for confirmation") << tr("Always");
+            combobox->addItems(list);
+
+            if ("Always" == m_deleteArchiveOption->value()) {
+                combobox->setCurrentIndex(2);
+            } else if ("Ask for confirmation" == m_deleteArchiveOption->value()) {
+                combobox->setCurrentIndex(1);
+            } else {
+                combobox->setCurrentIndex(0);
+            }
+
+            layout->addWidget(label, 0, Qt::AlignLeft);
+            layout->addWidget(combobox, 0, Qt::AlignLeft);
+
+            widget->setLayout(layout);
+
+            connect(this, &SettingDialog::sigReset, this, [ = ] {
+                combobox->setCurrentIndex(0);
+            });
+
+            connect(combobox, &DComboBox::currentTextChanged, [combobox, this] {
+                if (tr("Never") == combobox->currentText())
+                {
+                    m_isAutoDeleteArchive = "Never";
+                } else if (tr("Ask for confirmation") == combobox->currentText())
+                {
+                    m_isAutoDeleteArchive = "Ask for confirmation";
+                } else if (tr("Always") == combobox->currentText())
+                {
+                    m_isAutoDeleteArchive = "Always";
+                } else
+                {
+                    m_isAutoDeleteArchive = combobox->currentText();
+                }
+
+                m_deleteArchiveOption->setValue(m_isAutoDeleteArchive);
+            });
+
             return widget;
         }
 
@@ -402,6 +459,16 @@ bool SettingDialog::isAutoOpen()
     return m_settings->value("base.decompress.open_folder").toBool();
 }
 
+bool SettingDialog::isAutoDeleteFile()
+{
+    return m_settings->value("base.file_management.delete_file").toBool();
+}
+
+QString SettingDialog::isAutoDeleteArchive()
+{
+    return m_deleteArchiveOption->value().toString();
+}
+
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
 //    qDebug() << key << value;
@@ -411,11 +478,11 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
         if (index > -1) {
             m_valuelisttemp.replace(index, value.toBool());
         }
-    } else if (key.contains("default_path") && value.toString() == "") {
+    } else if ((key.contains("default_path") || key.contains("delete_compressed_file")) && value.toString() == "") {
         emit sigReset();
     }
-    writeToConfbf();
 
+    writeToConfbf();
 }
 
 void SettingDialog::selectpressed()

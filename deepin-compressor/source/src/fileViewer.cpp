@@ -807,7 +807,7 @@ void fileViewer::resetTempFile()
 int fileViewer::popUpDialog(const QString &desc)
 {
     DDialog *dialog = new DDialog(this);
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);
     dialog->addButton(tr("cancel"));

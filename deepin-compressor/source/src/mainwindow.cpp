@@ -1141,6 +1141,9 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(5);
+        if (m_pSettingsDialog->isAutoDeleteFile()) {
+            autoDeleteSourceFile();
+        }
         break;
     case PAGE_ZIP_FAIL:     // 压缩失败界面
         titlebar()->setTitle("");
@@ -1160,9 +1163,8 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
-        unzipSuccessOpenFileDir();
-
         m_pMainLayout->setCurrentIndex(5);
+        unzipSuccessOpenFileDir();
         break;
     case PAGE_UNZIP_FAIL:       // 解压失败界面
         titlebar()->setTitle("");
@@ -1365,6 +1367,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //        InitConnection();
 //        m_initflag = true;
 //    }
+    foreach (QString file, files) {
+        m_rightMenuList.append(file);
+    }
 
     // 初始化子窗口默认解压路径为当前压缩包所在位置
     if (m_pChildMndExtractPath == nullptr && files.count() > 0) {
@@ -2140,6 +2145,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         } else {
             m_pCompressSuccess->setstringinfo(tr("Extraction successful"));
         }
+
         refreshPage();
     }
 
@@ -2614,7 +2620,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     //renameCompress(m_strCreateCompressFile, fixedMimeType);
     m_strDecompressFileName = QFileInfo(m_strCreateCompressFile).fileName();
     m_pCompressSuccess->setCompressFullPath(m_strCreateCompressFile);
-    //qDebug() << m_strCreateCompressFile;
+//    qDebug() << m_strCreateCompressFile;
 
     CompressionOptions options;
     options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
@@ -2885,7 +2891,7 @@ void MainWindow::moveToArchive(QMap<QString, QString> &Args)
     m_eWorkStatus = WorkProcess;
 }
 
-void MainWindow::transSplitFileName(QString &fileName)  // *.7z.003 -> *.7z.001
+void MainWindow::transSplitFileName(QString &fileName)    // *.7z.003 -> *.7z.001
 {
     QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
@@ -2929,7 +2935,10 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 
         if (isFirstFileExist) {  // 1.7z文件已存在  文件名为1(2).7z ...
             for (int newCount = 0; newCount < files.count(); newCount++) {
-                newCount += 2;
+                if (newCount < 2) {
+                    newCount += 2;
+                }
+
                 int count = 0;
                 filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
                            + QString::number(newCount) + ")" + "."
@@ -2952,6 +2961,7 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
                     isOtherFileExist = false;
                     continue;
                 }
+
                 if (files.count() == count) {
                     break;
                 }
@@ -4101,11 +4111,30 @@ void MainWindow::unzipSuccessOpenFileDir()
         if (m_pSettingsDialog->isAutoOpen()) {
             m_pCompressSuccess->showfiledirSlot(false);
         }
+
+        if (m_pSettingsDialog->isAutoDeleteArchive() == AUTO_DELETE_ALWAYS) {
+            autoDeleteSourceFile();
+        } else if (m_pSettingsDialog->isAutoDeleteArchive() == AUTO_DELETE_ASK) {
+            //询问是否删除源压缩文件
+            if (DDialog::Accepted == deleteArchiveDialog()) {
+                autoDeleteSourceFile();
+            }
+        }
+
         slotquitApp();
         return;
     } else {
         if (m_pSettingsDialog->isAutoOpen() && m_operationtype != Operation_NULL) {
             m_pCompressSuccess->showfiledirSlot(false);
+        }
+
+        if (m_pSettingsDialog->isAutoDeleteArchive() == AUTO_DELETE_ALWAYS) {
+            autoDeleteSourceFile();
+        } else if (m_pSettingsDialog->isAutoDeleteArchive() == AUTO_DELETE_ASK) {
+            //询问是否删除源压缩文件
+            if (DDialog::Accepted == deleteArchiveDialog()) {
+                autoDeleteSourceFile();
+            }
         }
     }
 }
@@ -4124,4 +4153,108 @@ void MainWindow::deleteLaterJob()
         m_pJob->deleteLater();
         m_pJob = nullptr;
     }
+}
+
+void MainWindow::autoDeleteSourceFile()
+{
+    if (m_ePageID == PAGE_ZIP_SUCCESS) {
+        QString path = "";
+        if (m_pCompressSetting->onSplitChecked()) { //压缩后的7z分卷文件
+            path = m_strPathStore + QDir::separator() + m_strDecompressFileName + ".001";
+        } else {
+            path = m_strPathStore + QDir::separator() + m_strDecompressFileName;
+        }
+
+        QFile compressediFle(path);
+        QStringList compressedFileList = m_pCompressPage->getCompressFilelist();
+        if (compressediFle.exists()) {
+            foreach (QString path, compressedFileList) {
+                QFileInfo file(path);
+                if (file.isDir()) {
+                    deleteDir(path);
+                } else if (file.isFile()) {
+                    QFile fi(path);
+                    fi.remove();
+                }
+            }
+        }
+    } else if (m_ePageID == PAGE_UNZIP_SUCCESS) {
+        //执行删除源压缩文件的操作
+        if (m_strLoadfile.contains(".7z.0")) { //查找当前解压全部7z分卷包
+            QFileInfo fi(m_strLoadfile);
+            QStringList nameFilters;
+            nameFilters << fi.baseName() + ".7z.*";
+            QDir dir(fi.path());
+            QStringList files = dir.entryList(nameFilters, QDir::Files | QDir::Dirs | QDir::Readable, QDir::Name);
+            foreach (QFileInfo firstFile, files) {
+                QFile file(fi.path() + QDir::separator() + firstFile.fileName());
+                if (file.exists()) {
+                    file.remove();
+                }
+            }
+        } else if (m_rightMenuList.last() == QStringLiteral("extract_multi")
+                   || m_rightMenuList.last() == QStringLiteral("extract_here_multi")) {
+            foreach (QString path, m_rightMenuList) { //右键批量解压
+                QFile file(path);
+                if (file.exists()) {
+                    file.remove();
+                }
+            }
+        } else {
+            QFile file(m_strLoadfile);
+            if (file.exists()) {
+                file.remove();
+            }
+        }
+    }
+}
+
+bool MainWindow::deleteDir(QString path)
+{
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    QDir dir(path);
+    if (!dir.exists()) {
+        return true;
+    }
+
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //设置过滤
+    QFileInfoList fileList = dir.entryInfoList(); // 获取所有的文件信息
+    foreach (QFileInfo file, fileList) { //遍历文件信息
+        if (file.isFile()) { // 是文件，删除
+            file.dir().remove(file.fileName());
+        } else { // 递归删除
+            deleteDir(file.absoluteFilePath());
+        }
+    }
+
+    return dir.rmpath(dir.absolutePath()); // 删除文件夹
+}
+
+int MainWindow::deleteArchiveDialog()
+{
+    DDialog *dialog = new DDialog(this);
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setIcon(pixmap);
+    dialog->addSpacing(32);
+    dialog->addButton(tr("Cancel"), true, DDialog::ButtonNormal);
+    dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
+
+    dialog->setMinimumSize(380, 140);
+    DLabel *pContent = new DLabel(tr("Do you want to delete the archive?"), dialog);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+
+    DPalette pa;
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    pContent->setMinimumWidth(this->width());
+    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
+
+    int res = dialog->exec();
+    delete dialog;
+
+    return res;
 }

@@ -29,8 +29,11 @@ DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
 
-#define TITLE_FIXED_HEIGHT 50               // 标题栏高度
-#define HEADBUS "/QtDusServer/registry"     // DBus头
+#define TITLE_FIXED_HEIGHT 50                   // 标题栏高度
+#define HEADBUS "/QtDusServer/registry"         // DBus头
+#define AUTO_DELETE_NEVER "Never"               //解压后不删除源压缩文件
+#define AUTO_DELETE_ASK "Ask for confirmation"  //解压后询问是否删除源压缩文件
+#define AUTO_DELETE_ALWAYS "Always"             //解压后删除源压缩文件
 
 /**
  * @brief The Page_ID enum

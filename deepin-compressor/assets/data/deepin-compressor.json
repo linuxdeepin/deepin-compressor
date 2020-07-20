@@ -28,6 +28,25 @@
                             "default": false
                         }
                     ]
+                },
+                {
+                    "key": "file_management",
+                    "name": "File Management",
+                    "options": [
+                        {
+                            "key": "delete_compressed_file",
+                            "type": "deletebox",
+                            "default": ""
+                        },
+                        {
+                            "key": "delete_file",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "Delete files after compression",
+                            "default": false
+                        }
+                    ]
+
                 }
             ]
         },

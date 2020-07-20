@@ -1109,6 +1109,7 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
     if (dialog == nullptr) {
         dialog = new DDialog(this);
     }
+
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     // dialog->addSpacing(32);

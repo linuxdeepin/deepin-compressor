@@ -43,6 +43,8 @@ public:
     QString getCurExtractPath();
     bool isAutoCreatDir();
     bool isAutoOpen();
+    bool isAutoDeleteFile();
+    QString isAutoDeleteArchive();
 
     void startcmd(QString &mimetype, bool state);
 
@@ -70,6 +72,7 @@ private:
 
     DSettingsOption *m_comboboxoption;
     QMap<QString, QVariant> m_data; //keep entire data in memory
-
+    DSettingsOption *m_deleteArchiveOption = nullptr;
+    QString m_isAutoDeleteArchive;
 };
 

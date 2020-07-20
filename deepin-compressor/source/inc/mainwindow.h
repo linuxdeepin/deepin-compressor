@@ -366,6 +366,22 @@ private:
      */
     void deleteLaterJob();
 
+    /**
+     * @brief   压缩、解压后删除源文件
+     */
+    void autoDeleteSourceFile();
+
+    /**
+     * @brief   递归删除文件夹
+     */
+    bool deleteDir(QString path);
+
+    /**
+     * @brief deleteArchiveFile  解压之后询问是否删除压缩文件
+     * @return  点击类型
+     */
+    int deleteArchiveDialog();
+
 protected:
     /**
      * @brief dragEnterEvent    拖拽进入
@@ -761,6 +777,7 @@ private:
     QString m_strLoadfile;                                  // 加载文件名（含路径）
     QVector<Archive::Entry *> m_vecExtractSimpleFiles;      // 解压文件
     QString m_strProgram;                                   // 打开方式（应用程序名称）
+    QStringList m_rightMenuList;                            // 右键菜单传递参数
     QFileSystemWatcher *m_pOpenFileWatcher = nullptr;       // 对打开的文件监控
     QMap<QString, bool> m_mapFileHasModified;
 
