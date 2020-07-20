@@ -59,6 +59,8 @@ class ArchiveSortFilterModel;
 class OpenLoadingPage;
 class QEventLoop;
 
+class QFileSystemWatcher;
+
 /**
  * @brief The MainWindow class  整个归档管理器窗口，不用类型的操作通过切换其中的界面实现
  */
@@ -759,6 +761,8 @@ private:
     QString m_strLoadfile;                                  // 加载文件名（含路径）
     QVector<Archive::Entry *> m_vecExtractSimpleFiles;      // 解压文件
     QString m_strProgram;                                   // 打开方式（应用程序名称）
+    QFileSystemWatcher *m_pOpenFileWatcher = nullptr;       // 对打开的文件监控
+    QMap<QString, bool> m_mapFileHasModified;
 
     // 追加压缩参数
     QString m_strAppendFileName;                            // 追加文件名（含路径）

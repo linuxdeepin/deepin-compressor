@@ -79,6 +79,7 @@
 #include <QMessageBox>
 #include <QElapsedTimer>
 #include <QDesktopWidget>
+#include <QFileSystemWatcher>
 
 #include <unistd.h>
 
@@ -91,9 +92,13 @@ int MainWindow::m_windowcount = 1;
 MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
 {
 //    setAttribute(Qt::WA_DeleteOnClose);
+    m_mapFileHasModified.clear();
     qDebug() << "MainWindow::MainWindow";
     m_pArchiveModel = new ArchiveModel(this);
     m_pArchiveFilterModel = new ArchiveSortFilterModel(this);
+
+    m_pOpenFileWatcher = new QFileSystemWatcher(this);
+
 
     m_pMmainWidget = new DWidget(this);
     m_pMainLayout = new QStackedLayout(m_pMmainWidget);
@@ -277,6 +282,9 @@ void MainWindow::closeClean(QCloseEvent *event)
     //SAFE_DELETE_ELE(m_encodingpage);
     SAFE_DELETE_ELE(m_pSettings);
     SAFE_DELETE_ELE(m_pMmainWidget);
+
+    m_mapFileHasModified.clear();
+    SAFE_DELETE_ELE(m_pOpenFileWatcher);
 
 }
 
@@ -652,6 +660,60 @@ void MainWindow::InitConnection()
         shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
         connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    });
+
+    // 打开文件监控
+    connect(m_pOpenFileWatcher, &QFileSystemWatcher::fileChanged, m_pOpenFileWatcher, [ = ](const QString & path) { // 文件修改
+        if ((m_mapFileHasModified.find(path) != m_mapFileHasModified.end()) && (!m_mapFileHasModified[path])) {
+            m_mapFileHasModified[path] = true;
+
+            QFileInfo file(path);
+
+            DDialog *dialog = new DDialog(this);
+            dialog->setMinimumSize(QSize(380, 190));
+            QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+            dialog->setIcon(pixmap);
+
+            // 标题
+            DLabel *strlabel = new DLabel;
+            strlabel->setMinimumSize(QSize(154, 20));
+            strlabel->setAlignment(Qt::AlignCenter);
+            DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+            QString strTitle = QObject::tr("\"%1\"already modified, Whether to update this modification to the compressed package?").arg(file.fileName());
+            strlabel->setText(strTitle);
+
+            QVBoxLayout *mainlayout = new QVBoxLayout;
+            mainlayout->setContentsMargins(0, 0, 0, 0);
+            mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+            DWidget *widget = new DWidget(dialog);
+
+            widget->setLayout(mainlayout);
+            dialog->addContent(widget);
+
+            // 按钮
+            dialog->addButton(QObject::tr("Do not save"));
+            dialog->addButton(QObject::tr("Save"), true, DDialog::ButtonWarning);
+
+            int iMode = dialog->exec();
+
+            if (iMode == 1) {
+                qDebug() << "保存";
+                m_pUnCompressPage->setUpdateFiles(QStringList() << path);
+
+                QString strTemp = file.filePath();
+                for (int i = 0; i < m_vecExtractSimpleFiles.count(); ++i) {
+                    if (m_vecExtractSimpleFiles[i]->property("name").toString() == strTemp.remove(0, QString(DEFAUTL_PATH).length())) {
+                        removeEntryVector(QVector<Archive::Entry *>() << m_vecExtractSimpleFiles[i], false);
+                        break;
+                    }
+                }
+            }
+
+            SAFE_DELETE_ELE(dialog);
+            m_mapFileHasModified[path] = false;
+
+        }
     });
 }
 
@@ -1929,6 +1991,11 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_pOpenLoadingPage->stop();
     }
 
+    QString strFileWatcher;
+    if (m_vecExtractSimpleFiles.count() > 0) {
+        strFileWatcher = m_vecExtractSimpleFiles.at(0)->property("name").toString();
+    }
+
     if (m_ePageID == PAGE_UNZIP  && m_operationtype != Operation_TempExtract_Open_Choose) { // 如果是解压界面，则返回
         if (m_pProgressdialog->isshown()) {
             m_pProgressdialog->hide();
@@ -2074,6 +2141,22 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_pCompressSuccess->setstringinfo(tr("Extraction successful"));
         }
         refreshPage();
+    }
+
+    if (!strFileWatcher.isEmpty() && (Operation_TempExtract == m_operationtype || Operation_TempExtract_Open_Choose == m_operationtype)) {
+        QString strFileName = DEFAUTL_PATH + strFileWatcher;
+
+        if (!QFile(strFileName).exists())
+            return;
+
+        m_pOpenFileWatcher->addPath(strFileName);
+        if (m_mapFileHasModified.find(strFileName) != m_mapFileHasModified.end()) {
+            m_mapFileHasModified[strFileName] = true;
+        } else {
+            m_mapFileHasModified[strFileName] = false;
+        }
+
+        qDebug() << strFileName;
     }
 }
 
@@ -3463,6 +3546,8 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         qint64 size = pDestEntry->getSize();
         qint64 size1 = calFileSize(destEntryPath);
         if (size == size1) {
+
+            m_mapFileHasModified[destEntryPath] = false;
             QString programName = "xdg-open";
             QString firstFileName = m_vecExtractSimpleFiles.at(0)->name();
             bool isCompressedFile = Utils::isCompressed_file(pDestEntry->fullPath());
@@ -3487,6 +3572,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
             startCmd(programName, arguments);
             return;
         } else {
+            m_mapFileHasModified.remove(destEntryPath);
             clearTempFiles(destEntryPath);//if file exists but diff in size,so delete it and extract again.
         }
 

@@ -66,6 +66,9 @@ public:
     int showReplaceDialog(QString name, int &responseValue);
     void resizeEvent(QResizeEvent *event) override;
 
+    // 设置更新文件
+    void setUpdateFiles(const QStringList &listFiles);
+
 signals:
     void sigDecompressPress(const QString &localPath);
     void sigextractfiles(QVector<Archive::Entry *>, QString path, EXTRACT_TYPE type);

@@ -226,6 +226,11 @@ void UnCompressPage::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
+void UnCompressPage::setUpdateFiles(const QStringList &listFiles)
+{
+    m_inputlist = listFiles;
+}
+
 QString UnCompressPage::getAndDisplayPath(QString path)
 {
     const QString curpath = path;
