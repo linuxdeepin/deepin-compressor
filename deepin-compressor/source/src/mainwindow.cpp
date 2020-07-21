@@ -3230,8 +3230,8 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     options.setGlobalWorkDir(globalWorkDir);
 
 #ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(selectedTotalFileSize);
-    m_createJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6);
+    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_pProgess->pInfo()->getTotalSize());
+    m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6);
 #else
     m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this);
 #endif
@@ -3914,9 +3914,9 @@ void MainWindow::resetMainwindow()
 //    selectedTotalFileSize = 0;
 //    lastPercent = 0;
 
-//#ifdef __aarch64__
-//    maxFileSize_ = 0;
-//#endif
+#ifdef __aarch64__
+    maxFileSize_ = 0;
+#endif
     m_pProgess->pInfo()->resetProgress();
     m_pProgess->setprogress(0);
     m_pProgressdialog->setProcess(0);
