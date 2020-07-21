@@ -48,7 +48,8 @@ public:
 
     bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
-
+    bool pauseProcess() Q_DECL_OVERRIDE;
+    bool continueProcess() Q_DECL_OVERRIDE;
     bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
     bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
     bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
@@ -149,8 +150,8 @@ protected:
     CompressionOptions m_passedOptions;
 
     KProcess *m_process = nullptr;
-
-
+    qint64 m_processid = 0;
+    QVector<qint64> m_childprocessid;
     bool m_abortingOperation = false;
     qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
 
@@ -208,6 +209,8 @@ private:
     void watchDestFilesEnd();
 
     QString getFileName(int percent);
+    void getChildProcessidTar7z(const QString &processid, QVector<qint64> &childprocessid);
+
 private:
 
     QByteArray m_stdOutData;
@@ -237,6 +240,7 @@ private:
     FileWatcher *pFileWatcherdd = nullptr;
     bool m_isPasswordPrompt = false;
     bool m_isBatchExtractWrongPsd = false;
+    bool m_isTar7z = false;
 
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);

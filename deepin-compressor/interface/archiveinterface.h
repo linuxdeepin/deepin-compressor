@@ -127,6 +127,16 @@ public:
     virtual bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
 
     /**
+     * @brief 解压缩暂停处理
+     */
+    virtual bool pauseProcess() {}
+
+    /**
+     * @brief 解压缩继续处理
+     */
+    virtual bool continueProcess() {}
+
+    /**
      * @return Whether the plugins do NOT run the functions in their own thread.
      * @see setWaitForFinishedSignal()
      */

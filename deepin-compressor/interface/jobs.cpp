@@ -534,6 +534,24 @@ void CreateJob::setMultiVolume(bool isMultiVolume)
     archive()->setMultiVolume(isMultiVolume);
 }
 
+void CreateJob::doPause()
+{
+    ReadOnlyArchiveInterface *pTool = archiveInterface();
+    if (pTool == nullptr) {
+        return;
+    }
+    bool ret = pTool->pauseProcess();
+}
+
+void CreateJob::doContinue()
+{
+    ReadOnlyArchiveInterface *pTool = archiveInterface();
+    if (pTool == nullptr) {
+        return;
+    }
+    bool ret = pTool->continueProcess();
+}
+
 void CreateJob::doWork()
 {
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &CreateJob::onProgress);
@@ -686,6 +704,24 @@ void ExtractJob::onProgressFilename(const QString &filename)
     if (this->m_bTimeout) {
         setPercentFilename(filename);
     }
+}
+
+void ExtractJob::doPause()
+{
+    ReadOnlyArchiveInterface *pTool = archiveInterface();
+    if (pTool == nullptr) {
+        return;
+    }
+    bool ret = pTool->pauseProcess();
+}
+
+void ExtractJob::doContinue()
+{
+    ReadOnlyArchiveInterface *pTool = archiveInterface();
+    if (pTool == nullptr) {
+        return;
+    }
+    bool ret = pTool->continueProcess();
 }
 
 QString ExtractJob::destinationDirectory() const

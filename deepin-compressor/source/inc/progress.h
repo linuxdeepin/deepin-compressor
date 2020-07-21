@@ -81,15 +81,29 @@ public:
     void setTempProgress();
     void refreshSpeedAndTime(unsigned long compressPercent);
     ProgressAssistant *pInfo();
+    void resetPauseContinueButton();
+
+    /**
+     * @brief 控制暂停继续按钮显示与隐藏
+     * 暂停继续功能暂时支持压缩、解压
+     * 故其他进度界面不显示该按钮
+     */
+    void hidePauseContinueButton();
+
 signals:
-    void  sigCancelPressed(Progress::ENUM_PROGRESS_TYPE compressType);
+    void sigCancelPressed(Progress::ENUM_PROGRESS_TYPE compressType);
+    void sigPauseProcess();
+    void sigContinueProcess();
+//    void sigTypeChange(Progress::ENUM_PROGRESS_TYPE type);
 
 public slots:
     void cancelbuttonPressedSlot();
+    void pauseContinueButtonPressedSlot(bool checked);
     void slotChangeTimeLeft();
 
 private:
     DPushButton *m_cancelbutton;
+    DPushButton *m_PauseContinueButton; //暂停继续按钮
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
     DLabel *m_filenamelabel;

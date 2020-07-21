@@ -84,9 +84,15 @@ void Progress::InitUI()
     m_progressfilelabel->setText(tr("Calculating..."));
 
     m_cancelbutton = new DPushButton(this);
-    m_cancelbutton->setMinimumSize(340, 36);
+    m_cancelbutton->setMinimumSize(200, 36);
     m_cancelbutton->setText(tr("Cancel"));
     m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
+
+    m_PauseContinueButton = new DPushButton(this);
+    m_PauseContinueButton->setMinimumSize(200, 36);
+    m_PauseContinueButton->setText(tr("Pause"));
+    m_PauseContinueButton->setFocusPolicy(Qt::ClickFocus);
+    m_PauseContinueButton->setCheckable(true);
 
     //add speed and time label
     m_speedLabel = new DLabel(this);
@@ -121,6 +127,8 @@ void Progress::InitUI()
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);
     buttonHBoxLayout->addWidget(m_cancelbutton, 2);
+    buttonHBoxLayout->addSpacing(10);
+    buttonHBoxLayout->addWidget(m_PauseContinueButton, 2);
     buttonHBoxLayout->addStretch(1);
 
     mainlayout->addLayout(buttonHBoxLayout);
@@ -132,6 +140,7 @@ void Progress::InitUI()
 void Progress::InitConnection()
 {
     connect(m_cancelbutton, &DPushButton::clicked, this, &Progress::cancelbuttonPressedSlot);
+    connect(m_PauseContinueButton, &DPushButton::clicked, this, &Progress::pauseContinueButtonPressedSlot);
 }
 
 void Progress::setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type)
@@ -172,6 +181,23 @@ void Progress::refreshSpeedAndTime(unsigned long compressPercent)
 ProgressAssistant *Progress::pInfo()
 {
     return m_pInfo;
+}
+
+void Progress::resetPauseContinueButton()
+{
+    m_PauseContinueButton->setChecked(false);
+    m_PauseContinueButton->setText(tr("Pause"));
+}
+
+void Progress::hidePauseContinueButton()
+{
+    if (Progress::OP_COMPRESSING == m_ProgressType || Progress::OP_DECOMPRESSING == m_ProgressType) {
+        m_cancelbutton->setMinimumSize(200, 36);
+        m_PauseContinueButton->setVisible(true);
+    } else {
+        m_PauseContinueButton->setVisible(false);
+        m_cancelbutton->setMinimumSize(340, 36);
+    }
 }
 
 void Progress::slotChangeTimeLeft()
@@ -402,5 +428,19 @@ void Progress::cancelbuttonPressedSlot()
         m_speed = 0;
         lastTimeLeft = 0;
         emit sigCancelPressed(m_ProgressType);
+    }
+}
+
+/**
+ * @brief 按下暂停，弹起继续
+ */
+void Progress::pauseContinueButtonPressedSlot(bool checked)
+{
+    if (checked) {
+        m_PauseContinueButton->setText(tr("Continue"));
+        emit sigPauseProcess();
+    } else {
+        m_PauseContinueButton->setText(tr("Pause"));
+        emit sigContinueProcess();
     }
 }

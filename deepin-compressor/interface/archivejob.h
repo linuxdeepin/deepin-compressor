@@ -76,7 +76,8 @@ public:
     Capabilities capabilities() const;
     bool isSuspended() const;
     Q_SCRIPTABLE virtual void start() = 0;
-
+    virtual void doPause() {}
+    virtual void doContinue() {}
     enum KillVerbosity { Quietly, EmitResult };
     Q_ENUM(KillVerbosity)
 
@@ -112,7 +113,7 @@ public:
         NopasswordError,
         /***Wrong password */
         WrongPsdError,
-		/*same cancel*/
+        /*same cancel*/
         CancelError,
         UserDefinedError = 100
     };

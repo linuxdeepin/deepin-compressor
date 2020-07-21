@@ -545,6 +545,9 @@ private slots:
      */
     void onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressType);
 
+    void onPauseProcess();
+    void onContinueProcess();
+
     /**
      * @brief onTitleButtonPressed
      */

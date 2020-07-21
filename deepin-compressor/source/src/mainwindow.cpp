@@ -596,6 +596,8 @@ void MainWindow::InitConnection()
     connect(m_pCompressSetting, &CompressSetting::sigUncompressStateAutoCompressEntry, this, &MainWindow::onUncompressStateAutoCompressEntry);
     connect(m_pCompressSetting, &CompressSetting::sigFileUnreadable, this, &MainWindow::slotFileUnreadable);
     connect(m_pProgess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
+    connect(m_pProgess, &Progress::sigPauseProcess, this, &MainWindow::onPauseProcess);
+    connect(m_pProgess, &Progress::sigContinueProcess, this, &MainWindow::onContinueProcess);
     connect(m_pCompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
     connect(m_pCompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);
     connect(m_pTitleButton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
@@ -1111,6 +1113,8 @@ void MainWindow::refreshPage()
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
+        m_pProgess->hidePauseContinueButton();
+        m_pProgess->resetPauseContinueButton();
         break;
     case PAGE_UNZIPPROGRESS:  // 进度界面
         m_pProgess->setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
@@ -1125,6 +1129,8 @@ void MainWindow::refreshPage()
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
+        m_pProgess->hidePauseContinueButton();
+        m_pProgess->resetPauseContinueButton();
         break;
     case PAGE_DELETEPROGRESS:  // 进度界面
         m_pProgess->setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE::OP_DELETEING);
@@ -1135,6 +1141,8 @@ void MainWindow::refreshPage()
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
+        m_pProgess->hidePauseContinueButton();
+        m_pProgess->resetPauseContinueButton();
         break;
     case PAGE_ZIP_SUCCESS:  // 压缩成功界面
         titlebar()->setTitle("");
@@ -3495,7 +3503,6 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     if (type == EXTRACT_TEMP) {
         m_operationtype = Operation_TempExtract;
         m_ePageID = Page_ID::PAGE_LOADING;
-
         // m_openType = true;
         m_pProgess->setopentype(true);
         if (m_pCurAuxInfo == nullptr) {
@@ -3805,23 +3812,23 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
         ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
         destDirName = pExtractJob->archiveInterface()->destDirName;
 
-        if (pEventloop == nullptr) {
-            pEventloop = new QEventLoop(this->m_pProgess);
-        }
+//        if (pEventloop == nullptr) {
+//            pEventloop = new QEventLoop(this->m_pProgess);
+//        }
 
         pExtractJob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
-        if (pEventloop->isRunning() == false) {
-            connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
-            if (m_pSpinner == nullptr) {
-                m_pSpinner = new DSpinner(this->m_pProgess);
-                m_pSpinner->setFixedSize(40, 40);
-            }
-            m_pSpinner->move(this->m_pProgess->width() / 2 - 20, this->m_pProgess->height() / 2 - 20);
-            m_pSpinner->hide();
-            m_pSpinner->start();
-            m_pSpinner->show();
-            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
-        }
+//        if (pEventloop->isRunning() == false) {
+//            connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
+//            if (m_pSpinner == nullptr) {
+//                m_pSpinner = new DSpinner(this->m_pProgess);
+//                m_pSpinner->setFixedSize(40, 40);
+//            }
+//            m_pSpinner->move(this->m_pProgess->width() / 2 - 20, this->m_pProgess->height() / 2 - 20);
+//            m_pSpinner->hide();
+//            m_pSpinner->start();
+//            m_pSpinner->show();
+//            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
+//        }
     }
 
     killJob();
@@ -3841,6 +3848,20 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     // emit sigquitApp();
     slotResetPercentAndTime();
     m_pProgess->setprogress(0);
+}
+
+void MainWindow::onPauseProcess()
+{
+    if (m_pJob) {
+        m_pJob->doPause();
+    }
+}
+
+void MainWindow::onContinueProcess()
+{
+    if (m_pJob) {
+        m_pJob->doContinue();
+    }
 }
 
 void MainWindow::slotClearTempfile()

@@ -176,6 +176,8 @@ public:
     void enableEncryption(const QString &password, bool encryptHeader);
 
     void setMultiVolume(bool isMultiVolume);
+    void doPause() Q_DECL_OVERRIDE;
+    void doContinue() Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void doWork() override;
@@ -216,6 +218,8 @@ public:
      */
     Archive::Entry *getWorkEntry();
     void resetTimeOut();
+    void doPause() Q_DECL_OVERRIDE;
+    void doContinue() Q_DECL_OVERRIDE;
 signals:
     void sigExtractJobPassword();
     void sigExtractJobFinished();

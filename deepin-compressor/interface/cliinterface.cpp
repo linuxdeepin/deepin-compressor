@@ -36,8 +36,11 @@
 #include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <QTimer>
 
 #include <linux/limits.h>
+#include <signal.h>
+#include<unistd.h>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args) : ReadWriteArchiveInterface(parent, args)
 {
@@ -111,6 +114,44 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
 
 
     return this->extractFF(files, destinationDirectory, options);
+}
+
+/**
+ * @brief 发送SIGSTOP信号暂停解压缩进程
+ */
+bool CliInterface::pauseProcess()
+{
+    if (!m_childprocessid.empty()) {
+        for (int i = m_childprocessid.size() - 1; i >= 0; i--) {
+            if (m_childprocessid[i] > 0) {
+                kill(static_cast<__pid_t>(m_childprocessid[i]), SIGSTOP);
+            }
+        }
+    }
+    if (m_processid > 0) {
+        kill(static_cast<__pid_t>(m_processid), SIGSTOP);
+    }
+//    qDebug() << m_processid << m_childprocessid;
+    return true;
+}
+
+/**
+ * @brief 发送SIGCONT信号继续解压缩进程
+ */
+bool CliInterface::continueProcess()
+{
+    if (!m_childprocessid.empty()) {
+        for (int i = m_childprocessid.size() - 1; i >= 0; i--) {
+            if (m_childprocessid[i] > 0) {
+                kill(static_cast<__pid_t>(m_childprocessid[i]), SIGCONT);
+            }
+        }
+    }
+    if (m_processid > 0) {
+        kill(static_cast<__pid_t>(m_processid), SIGCONT);
+//    qDebug() << m_processid << m_childprocessid;
+    }
+    return true;
 }
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
@@ -286,6 +327,7 @@ bool CliInterface::addFiles(const QVector< Archive::Entry * > &files, const Arch
     bool ret = false;
     //tar.7z： Different compression commands
     if (options.isTar7z()) {
+        m_isTar7z = true;
         m_filesSize = options.getfilesSize();
         QString strProgram = QStandardPaths::findExecutable("bash");
         ret = runProcess(strProgram, arguments);
@@ -390,9 +432,17 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
 
     m_process->start();
 
-    return true;
-}
+    if (m_process->waitForStarted() && (Extract == m_operationMode || Add == m_operationMode)) {
+        m_childprocessid.clear();
+//        qDebug() << m_process->processId() << m_process->pid() << getppid(m_process->processId());
+        m_processid = m_process->processId();
 
+        if (m_isTar7z) {
+            getChildProcessidTar7z(QString::number(m_processid), m_childprocessid);
+        }
+        return true;
+    }
+}
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_exitCode = exitCode;
@@ -905,6 +955,15 @@ void CliInterface::killProcess(bool emitFinished)
         return;
     }
 
+//先杀掉子进程
+    if (!m_childprocessid.empty()) {
+        for (int i = m_childprocessid.size() - 1; i >= 0; i--) {
+            if (m_childprocessid[i] > 0) {
+                kill(static_cast<__pid_t>(m_childprocessid[i]), SIGKILL);
+            }
+        }
+    }
+
     m_abortingOperation = !emitFinished;
 
     m_process->kill();
@@ -1106,6 +1165,48 @@ QString CliInterface::getFileName(int percent)
         return m_addFiles[index]->name();
     }
     return "";
+}
+
+/**
+ * @brief 对于压缩成tar.7z，bash管道命令会创建多个子进程
+ * @param processid 运行bash命令的进程号(QString类型)
+ * @param childprocessid 存储子进程号的容器
+ */
+void CliInterface::getChildProcessidTar7z(const QString &processid, QVector<qint64> &childprocessid)
+{
+    //使用pstree命令获取子进程号，如pstree -np 17251，子进程号为17252、17253
+    /*bash(17251)-+-tar(17252)
+     *            `-7z(17253)-+-{7z}(17254)
+     *                        |-{7z}(17255)
+     *                        |-{7z}(17257)
+     *                        |-{7z}(17258)
+     *                        |-{7z}(17259)
+     *                        |-{7z}(17260)
+     */
+    QProcess p;
+    p.setProgram("pstree");
+    p.setArguments(QStringList() << "-np" << processid);
+    p.start();
+    if (p.waitForReadyRead()) {
+        QByteArray dd = p.readAllStandardOutput();
+        QList< QByteArray > lines = dd.split('\n');
+        if (lines[0].contains(processid.toUtf8())) {
+            for (const QByteArray &line : qAsConst(lines)) {
+                int a, b;
+                qDebug() << line;
+                if (0 < (a = line.indexOf("-tar(")) && 0 < (b = line.indexOf(")", a))) {
+                    qDebug() << a << b << line.mid(a + 5, b - a - 5).toInt();
+                    childprocessid.append(line.mid(a + 5, b - a - 5).toInt());
+                }
+                if (0 < (a = line.indexOf("-7z(")) && 0 < (b = line.indexOf(")", a))) {
+                    qDebug() << a << b << line.mid(a + 4, b - a - 4).toInt();
+                    childprocessid.append(line.mid(a + 4, b - a - 4).toInt());
+                    break;
+                }
+            }
+        }
+    }
+    p.close();
 }
 
 bool CliInterface::handleLine(const QString &line)
