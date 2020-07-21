@@ -670,17 +670,18 @@ void MainWindow::InitConnection()
             QFileInfo file(path);
 
             DDialog *dialog = new DDialog(this);
-            dialog->setMinimumSize(QSize(380, 190));
+            dialog->setFixedSize(QSize(422, 176));
             QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
             dialog->setIcon(pixmap);
 
             // 标题
             DLabel *strlabel = new DLabel;
-            strlabel->setMinimumSize(QSize(154, 20));
+            strlabel->setFixedWidth(360);
             strlabel->setAlignment(Qt::AlignCenter);
             DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
             QString strTitle = QObject::tr("\"%1\"already modified, Whether to update this modification to the compressed package?").arg(file.fileName());
             strlabel->setText(strTitle);
+            strlabel->setWordWrap(true);
 
             QVBoxLayout *mainlayout = new QVBoxLayout;
             mainlayout->setContentsMargins(0, 0, 0, 0);
@@ -690,9 +691,10 @@ void MainWindow::InitConnection()
 
             widget->setLayout(mainlayout);
             dialog->addContent(widget);
+            dialog->addSpacing(12);
 
             // 按钮
-            dialog->addButton(QObject::tr("Do not save"));
+            dialog->addButton(QObject::tr("Discard"));
             dialog->addButton(QObject::tr("Save"), true, DDialog::ButtonWarning);
 
             int iMode = dialog->exec();
