@@ -30,6 +30,7 @@
 #include <DApplicationSettings>
 
 #include <QCommandLineParser>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +58,13 @@ int main(int argc, char *argv[])
         }
 
         newfilelist.append(file);
+    }
+
+    QStringList multilist;
+    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
+        multilist.append(newfilelist.at(0));
+        multilist.append(newfilelist.last().remove("_multi"));
+        newfilelist = multilist;
     }
 
     bool isMutlWindows = false;
@@ -144,13 +152,6 @@ int main(int argc, char *argv[])
 
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
-
-    QStringList multilist;
-    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
-        multilist.append(newfilelist.at(0));
-        multilist.append(newfilelist.last().remove("_multi"));
-        newfilelist = multilist;
-    }
 
     MainWindow w;
     //判断目标文件是否合法
