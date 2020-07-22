@@ -154,6 +154,8 @@ int main(int argc, char *argv[])
     app.setWindowIcon(appIcon);
 
     MainWindow w;
+    app.setMainWindow(&w);
+
     //判断目标文件是否合法
     if (!w.checkSettings(argv[1])) {
         app.exit();

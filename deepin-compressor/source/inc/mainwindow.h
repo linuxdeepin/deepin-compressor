@@ -58,7 +58,7 @@ class EncodingPage;
 class ArchiveSortFilterModel;
 class OpenLoadingPage;
 class QEventLoop;
-
+class CompressorApplication;
 class QFileSystemWatcher;
 
 /**
@@ -205,7 +205,7 @@ public:
      * @brief applicationQuit   应用程序退出处理
      * @return 是否正常退出
      */
-    bool applicationQuit();
+    bool applicationQuit(CompressorApplication *p);
 
     /**
      * @brief isWorkProcess 判断当前工作状态

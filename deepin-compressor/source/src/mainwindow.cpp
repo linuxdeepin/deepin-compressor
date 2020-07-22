@@ -154,26 +154,39 @@ qint64 MainWindow::getMediaFreeSpace()
     return 0;
 }
 
-bool MainWindow::applicationQuit()
+bool MainWindow::applicationQuit(CompressorApplication *p)
 {
-    killJob();
+    QWidget *pWgt = p->activeWindow();
+    QMainWindow *pWindow = qobject_cast<QMainWindow *>(pWgt);
+    DMainWindow *pp = qobject_cast<DMainWindow *>(pWindow);
 
-    if (m_pProgess->getType() == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
-        return true;
+    if (pp == nullptr)
+        return false;
+
+    if (pp == this) {
+        //       killJob();
+
+        //        if (m_pProgess->getType() == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
+        //            return true;
+        //        }
+
+        //        if (PAGE_ZIPPROGRESS == m_pMainLayout->currentIndex()) {
+        //            if (1 != m_pProgess->showConfirmDialog()) {
+        //                return false;
+        //            }
+        //            deleteCompressFile();
+        //            QString destDirName;
+        //            deleteDecompressFile(destDirName);
+        //        } else if (7 == m_pMainLayout->currentIndex()) {
+        //            deleteCompressFile();
+        //        }
+        close();
+        DApplication::quit();
+    } else {
+        pp->close();
     }
 
-    if (PAGE_ZIPPROGRESS == m_pMainLayout->currentIndex()) {
-        if (1 != m_pProgess->showConfirmDialog()) {
-            return false;
-        }
-        deleteCompressFile();
-        QString destDirName;
-        deleteDecompressFile(destDirName);
-    } else if (7 == m_pMainLayout->currentIndex()) {
-        deleteCompressFile();
-    }
-
-    return true;
+    //return true;
 }
 
 //QString MainWindow::getAddFile()
