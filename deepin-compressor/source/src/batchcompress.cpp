@@ -23,6 +23,7 @@
 #include "batchcompress.h"
 #include "jobs.h"
 #include "queries.h"
+#include "utils.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -59,6 +60,8 @@ void BatchCompress::setCompressArgs(QMap<QString, QString> Args)
         m_Args->insert(it.key(), it.value());
         it++;
     }
+
+    m_bZipPasswordIsChinese = Utils::zipPasswordIsChinese(*m_Args);
 }
 
 void BatchCompress::addCompress(const QStringList &files)
@@ -110,7 +113,7 @@ void BatchCompress::addCompress(const QStringList &files)
     globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
     options.setGlobalWorkDir(globalWorkDir);
 
-    auto job = Archive::create(filename, fixedMimeType, all_entries, options, this);
+    auto job = Archive::create(filename, fixedMimeType, all_entries, options, this, false, !m_bZipPasswordIsChinese);
     addSubjob(job);
 
     if (!password.isEmpty()) {

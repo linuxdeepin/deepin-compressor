@@ -571,6 +571,21 @@ QString Utils::readConf()
     return confValue;
 }
 
+bool Utils::zipPasswordIsChinese(const QMap<QString, QString> &Args)
+{
+    QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
+
+    if (fixedMimeType == "application/zip") {
+        QString strPassword = Args[QStringLiteral("encryptionPassword")];
+
+        if (strPassword.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Utils::existMimeType(QString mimetype)
 {
     QString conf = readConf();

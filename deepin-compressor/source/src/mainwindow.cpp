@@ -3189,6 +3189,8 @@ bool MainWindow::startCmd(const QString &executeName, QStringList arguments)
 
 void MainWindow::creatArchive(QMap< QString, QString > &Args)
 {
+    bool bZipPasswordIsChinese = Utils::zipPasswordIsChinese(Args);
+
     const QStringList filesToAdd = m_pCompressPage->getCompressFilelist();
     const QString fixedMimeType = Args[QStringLiteral("fixedMimeType")];
     const QString password = Args[QStringLiteral("encryptionPassword")];
@@ -3245,9 +3247,9 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
 
 #ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
     double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_pProgess->pInfo()->getTotalSize());
-    m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6);
+    m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this, maxFileSizeProportion > 0.6, !bZipPasswordIsChinese);
 #else
-    m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this);
+    m_pJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this, false, !bZipPasswordIsChinese);
 #endif
 //    m_createJob = Archive::create(m_strCreateCompressFile, fixedMimeType, all_entries, options, this);
 

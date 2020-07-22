@@ -36,8 +36,8 @@
         "Id": "kerfuffle_cli7z",
         "MimeTypes": [
             "application/x-7z-compressed",
-    		"application/x-cd-image",
-                "application/zip",
+            "application/x-cd-image",
+            "application/zip",
             "application/x-java-archive",
             "application/x-tzo"
         ],

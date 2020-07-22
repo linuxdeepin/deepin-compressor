@@ -74,6 +74,13 @@ public:
     static QString readConf();
 
     /**
+     * @brief zipPasswordIsChinese  判断zip格式压缩包密码是否含有中文
+     * @param Args  压缩参数
+     * @return
+     */
+    static bool zipPasswordIsChinese(const QMap<QString, QString> &Args);
+
+    /**
      * @brief existMimeType 判断此文件关联类型是否存在
      * @param mimetype      文件类型
      * @return

@@ -367,10 +367,10 @@ void CompressSetting::onNextButoonClicked()
     } else if ("application/zip" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 5:Standard
 
-        if (password.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
-            showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));
-            return;
-        }
+        //        if (password.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+        //            showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));
+        //            return;
+        //        }
 
     } else {
         m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default

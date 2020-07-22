@@ -336,6 +336,8 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
 
     uint i = 0;
     for (const Archive::Entry *e : files) {
+        // 过滤上级目录（不对全路径进行压缩）
+        QString strPath = QFileInfo(e->fullPath()).absolutePath() + QDir::separator();
 
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
@@ -343,7 +345,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
 
         // If entry is a directory, traverse and add all its files and subfolders.
         if (QFileInfo(e->fullPath()).isDir()) {
-            if (!writeEntry(archive, e->fullPath(), destination, options, true)) {
+            if (!writeEntry(archive, e->fullPath(), destination, options, true, strPath)) {
                 if (zip_close(archive)) {
                     emit error(tr("Failed to write archive."));
                     return false;
@@ -360,7 +362,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                 const QString path = it.next();
 
                 if (QFileInfo(path).isDir()) {
-                    if (!writeEntry(archive, path, destination, options, true)) {
+                    if (!writeEntry(archive, path, destination, options, true, strPath)) {
                         if (zip_close(archive)) {
                             emit error(tr("Failed to write archive."));
                             return false;
@@ -368,7 +370,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                         return false;
                     }
                 } else {
-                    if (!writeEntry(archive, path, destination, options)) {
+                    if (!writeEntry(archive, path, destination, options, false, strPath)) {
                         if (zip_close(archive)) {
                             emit error(tr("Failed to write archive."));
                             return false;
@@ -379,7 +381,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                 i++;
             }
         } else {
-            if (!writeEntry(archive, e->fullPath(), destination, options)) {
+            if (!writeEntry(archive, e->fullPath(), destination, options, false, strPath)) {
                 if (zip_close(archive)) {
                     emit error(tr("Failed to write archive."));
                     return false;
@@ -420,7 +422,7 @@ void LibzipPlugin::emitProgress(double percentage)
     emit progress(percentage);
 }
 
-bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive::Entry *destination, const CompressionOptions &options, bool isDir)
+bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive::Entry *destination, const CompressionOptions &options, bool isDir, const QString &strRoot)
 {
     Q_ASSERT(archive);
 
@@ -431,9 +433,12 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
         destFile = file.toUtf8();
     }
 
+    QString str = destFile.constData();
+    str = str.remove(0, strRoot.length());
+
     qlonglong index;
     if (isDir) {
-        index = zip_dir_add(archive, destFile.constData(), ZIP_FL_ENC_GUESS);
+        index = zip_dir_add(archive, str.toUtf8().constData(), ZIP_FL_ENC_GUESS);
         if (index == -1) {
             // If directory already exists in archive, we get an error.
             return true;
@@ -442,7 +447,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
         zip_source_t *src = zip_source_file(archive, QFile::encodeName(file).constData(), 0, -1);
         Q_ASSERT(src);
 
-        index = zip_file_add(archive, destFile.constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
+        index = zip_file_add(archive, str.toUtf8().constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
         if (index == -1) {
             zip_source_free(src);
             emit error(tr("Failed to add entry: %1"));

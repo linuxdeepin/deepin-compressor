@@ -101,7 +101,7 @@ private Q_SLOTS:
 private:
     bool deleteEntry(Archive::Entry *pEntry, zip_t *archive/*, int &curNo, int count = -1*/);
     enum_extractEntryStatus extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
-    bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
+    bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false, const QString &strRoot = "");
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
     QString permissionsToString(const mode_t &perm);

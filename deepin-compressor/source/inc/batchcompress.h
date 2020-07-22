@@ -50,6 +50,7 @@ private:
 
     QVector<QStringList> m_inputs;
     QMap<QString, QString> *m_Args = nullptr;
+    bool m_bZipPasswordIsChinese = false;
 };
 
 #endif // BATCHCOMPRESS_H

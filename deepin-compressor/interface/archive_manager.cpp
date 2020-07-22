@@ -66,7 +66,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent, bool useLibArchive)
+Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent, bool useLibArchive, bool use7z)
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
@@ -94,6 +94,14 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
         }
     } else {
         offers = pluginManager.preferredPluginsFor(mimeType);
+    }
+
+    if (!use7z) {
+        for (Plugin *plugin : offers) {
+            if (plugin->metaData().name().contains("7z")) {
+                offers.removeOne(plugin);
+            }
+        }
     }
 
     if (offers.isEmpty()) {
@@ -212,9 +220,9 @@ BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &d
     return batchJob;
 }
 
-CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent, bool useLibArchive)
+CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent, bool useLibArchive, bool use7z)
 {
-    auto archive = create(fileName, mimeType, true, parent, useLibArchive);
+    auto archive = create(fileName, mimeType, true, parent, useLibArchive, use7z);
     auto createJob = new CreateJob(archive, entries, options);
 
     return createJob;
