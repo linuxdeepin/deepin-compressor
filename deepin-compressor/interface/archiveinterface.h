@@ -286,7 +286,7 @@ Q_SIGNALS:
      * Emitted when password is wrong during BatchExtractJob
      * - only 7zip need
      */
-    void sigBatchExtractJobWrongPsd();
+    void sigBatchExtractJobWrongPsd(const QString password = "");
 
 protected:
 
