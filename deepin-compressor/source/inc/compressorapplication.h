@@ -7,23 +7,26 @@ class CompressorApplication: public DApplication
 {
     Q_OBJECT
 public:
-    CompressorApplication(int &argc, char **argv):DApplication(argc, argv)
+    CompressorApplication(int &argc, char **argv)
+        : DApplication(argc, argv)
     {
 
     }
 
-    void setMainWindow(MainWindow* wd){ mainWindow_ = wd; }
+    void setMainWindow(MainWindow *wd) { mainWindow_ = wd; }
 
 private:
     void handleQuitAction() override
     {
-        if( mainWindow_->applicationQuit() == false)
-        {
+        if (mainWindow_ == nullptr)
+            return;
+
+        if (mainWindow_->applicationQuit(this) == false) {
             return;
         }
 
-        DApplication::handleQuitAction();
+        //DApplication::handleQuitAction();
     }
 
-    MainWindow* mainWindow_ = nullptr;
+    MainWindow *mainWindow_ = nullptr;
 };

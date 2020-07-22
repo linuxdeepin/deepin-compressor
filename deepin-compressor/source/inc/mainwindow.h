@@ -58,6 +58,7 @@ class EncodingPage;
 class ArchiveSortFilterModel;
 class OpenLoadingPage;
 class QEventLoop;
+class CompressorApplication;
 
 /**
  * @brief The MainWindow class  整个归档管理器窗口，不用类型的操作通过切换其中的界面实现
@@ -203,7 +204,7 @@ public:
      * @brief applicationQuit   应用程序退出处理
      * @return 是否正常退出
      */
-    bool applicationQuit();
+    bool applicationQuit(CompressorApplication *p);
 
     /**
      * @brief isWorkProcess 判断当前工作状态
