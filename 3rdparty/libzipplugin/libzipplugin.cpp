@@ -543,13 +543,20 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     // Register the callback function to get progress feedback.
     m_addarchive = nullptr;
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
-    for (Archive::Entry *pCurEntry : files) {
-//        int i = 0;
-//        qint64 count = 0;
-//        pCurEntry->calEntriesCount(count);
-        bool status = this->deleteEntry(pCurEntry, archive/*, i, count*/);  //delete from archive
+//    for (Archive::Entry *pCurEntry : files) {
+//        //        int i = 0;
+//        //        qint64 count = 0;
+//        //        pCurEntry->calEntriesCount(count);
+//        bool status = this->deleteEntry(pCurEntry, archive/*, i, count*/);  //delete from archive
+//        if (status == true) {
+//            emit entryRemoved(pCurEntry->fullPath());                   //delete from model
+//        }
+//    }
+    for (int i = 0; i < m_listExtractIndex.count(); i++) {
+        QString strFilePath = trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+        bool status = this->deleteEntry(strFilePath, archive/*, i, count*/);        //delete from archive
         if (status == true) {
-            emit entryRemoved(pCurEntry->fullPath());                   //delete from model
+            emit entryRemoved(/*files.at(i)->fullPath()*/strFilePath);      //delete from model
         }
     }
 
@@ -565,13 +572,14 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     return true;
 }
 
-bool LibzipPlugin::deleteEntry(Archive::Entry *pCurEntry, zip_t *archive/*, int &curNo, int count*/)
+bool LibzipPlugin::deleteEntry(QString file/*Archive::Entry *pCurEntry*/, zip_t *archive/*, int &curNo, int count*/)
 {
-    if (pCurEntry->isDir() == true) {
-        for (int i = 0; i < pCurEntry->entries().length(); i++) {
-            this->deleteEntry(pCurEntry->entries().at(i), archive/*, curNo, count*/);
-        }
-    }
+//    QFileInfo fi(file);
+//    if (fi.isDir() == true) {
+//        for (int i = 0; i < m_listExtractIndex.count()/*pCurEntry->entries().length()*/; i++) {
+//            this->deleteEntry(file/*->entries().at(i)*/, archive/*, curNo, count*/);
+//        }
+//    }
 
     if (QThread::currentThread()->isInterruptionRequested()) {
         if (zip_close(archive)) {
@@ -581,7 +589,7 @@ bool LibzipPlugin::deleteEntry(Archive::Entry *pCurEntry, zip_t *archive/*, int 
         return false;
     }
 
-    QString fullpath = pCurEntry->fullPath();
+    QString fullpath = /*pCurEntry->fullPath()*/file;
     char *fileNameDel = nullptr;
     //char *path = fullpath.toUtf8().data();
     size_t length = strlen(fullpath.toUtf8().data());

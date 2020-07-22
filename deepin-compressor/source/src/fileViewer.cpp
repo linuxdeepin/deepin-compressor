@@ -1154,6 +1154,7 @@ void fileViewer::slotDecompressRowDelete()
 //            filelist.push_back(fullPath);
         }
     }
+
     const QStringList filelist;
 //    emit sigFileRemoved(filelist);
     this->m_sortmodel->refreshNow();
