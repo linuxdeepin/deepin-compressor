@@ -489,6 +489,24 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
             emit finished(true);
         }
     } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
+        if (m_isbatchlist && 2 == exitCode) {
+
+            PasswordNeededQuery query(filename());
+            query.execute();
+            if (query.responseCancelled()) {
+                emit error("Canceal when batchextract.");
+                emit cancelled();
+                // There is no process running, so finished() must be emitted manually.
+                emit finished(false);
+                return;
+            }
+            setPassword(query.password());
+
+            setWrongPassword(false); //初始化错误状态
+            m_isPasswordPrompt = false; //初始化错误状态
+            emit sigBatchExtractJobWrongPsd(password()); //批量解压时，列表加密密码错误重新走list流程
+            return;
+        }
         if (m_isPasswordPrompt || password().size() > 0) {
             emit error("wrong password");
             setPassword(QString());
@@ -1390,6 +1408,7 @@ bool CliInterface::handleLine(const QString &line)
                 query.execute();
 
                 if (query.responseCancelled()) {
+                    emit error("Canceal when batchextract.");
                     emit cancelled();
                     // There is no process running, so finished() must be emitted manually.
                     emit finished(false);
@@ -1409,7 +1428,10 @@ bool CliInterface::handleLine(const QString &line)
 
         if (isWrongPasswordMsg(line)) {
             qDebug() << "Wrong password";
-            setPassword(QString());
+            if (m_isbatchlist) {
+            } else {
+                setPassword(QString());
+            }
             setWrongPassword(true);
             emit error("wrong password");
             return false;

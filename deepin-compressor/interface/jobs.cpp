@@ -189,6 +189,11 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
+    } else if (message == "Canceal when batchextract.") {
+        setError(KJob::CancelError);
+        setErrorText(message);
+        emitResult();
+        return;
     }
     setError(KJob::UserDefinedError);
     setErrorText(message);
@@ -230,6 +235,7 @@ void Job::onFinished(bool result)
     } else if ((archive() && !archive()->isValid())  || false == result) {
         if (KJob::UserFilenameLong == error()) {
         } else if (KJob::WrongPsdError == error()) {
+        } else if (KJob::CancelError == error()) {
         } else {
             setError(KJob::UserDefinedError);
         }
@@ -420,6 +426,11 @@ void BatchExtractJob::doWork()
     // Forward LoadJob's signals.
     connect(m_loadJob, &Job::newEntry, this, &BatchExtractJob::newEntry);
     connect(m_loadJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
+    connect(m_loadJob, &Job::sigBatchExtractJobWrongPsd, this, [&](const QString password) {
+        Q_ASSERT(m_loadJob);
+        m_loadJob->archiveInterface()->setPassword(password);
+        m_loadJob->start(); //批量解压密码错误时，列表加密重新list流程
+    });
     m_loadJob->start();
 }
 
