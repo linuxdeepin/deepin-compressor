@@ -155,8 +155,8 @@ public:
     void clean();
 
     // 压缩包索引
-    void setCompressIndex(int iIndex);
-    int compressIndex();
+    //void setCompressIndex(int iIndex);
+    //int compressIndex();
 
 public:
     QString rootNode;
@@ -186,7 +186,7 @@ private:
     bool m_isDirectory;
     bool m_isPasswordProtected;
 
-    int m_iCompressIndex =  0;
+    // int m_iCompressIndex =  0;
 };
 
 QDebug  operator<<(QDebug d, const Archive::Entry &entry);

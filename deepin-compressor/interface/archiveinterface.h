@@ -240,6 +240,11 @@ public:
     virtual qint64 extractSize(const QVector<Archive::Entry *> &/*files*/) {return 0;}
 
     /**
+     * @brief updateListMap
+     */
+    virtual void updateListMap() {};
+
+    /**
      * @brief bindProgressInfo
      * @param pProgressIns
      * @see 绑定进度条信息，方便在插件内部去控制

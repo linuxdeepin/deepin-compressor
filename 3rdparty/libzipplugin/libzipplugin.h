@@ -94,6 +94,7 @@ public:
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
 
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
+    virtual void updateListMap() override;
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 
@@ -122,6 +123,9 @@ private:
     Archive::Entry *setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name);
     void setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
 
+    void setEntryVal1(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
+
+private:
     QVector<Archive::Entry *> m_emittedEntries;
     bool m_overwriteAll;
     bool m_skipAll;

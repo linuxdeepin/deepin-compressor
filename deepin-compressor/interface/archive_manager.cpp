@@ -303,6 +303,7 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
 
     QMimeDatabase db;
     QFileInfo Info;
+    int iChildCount = 0;
     while (Iterator.hasNext()) {
         Info = Iterator.next();
         if (Info.fileName() == "." || Info.fileName() == "..") {
@@ -315,7 +316,6 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
             parentPath += QDir::separator();
         }
 
-        parent->appendEntry(entry);
         if (Info.isDir()) {
             entry->setIsDirectory(true);
             entry->setFullPath(parentPath + Info.fileName() + QDir::separator());
@@ -337,7 +337,12 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
                  : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
         // set Icon end
         map->insert(entry->fullPath(NoTrailingSlash), icon);
+
+        parent->appendEntry(entry);
+        iChildCount++;
     }
+
+    parent->setProperty("size", iChildCount);
 }
 
 //AddJob *Archive::add(Archive *pArchive, const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options)
