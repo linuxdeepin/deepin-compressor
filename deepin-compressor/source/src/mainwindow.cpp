@@ -664,6 +664,12 @@ QMenu *MainWindow::createSettingsMenu()
 
     connect(m_pOpenAction, &QAction::triggered, this, [this] {
         // 打开选择文件对话框
+        if (m_ePageID == PAGE_UNZIP)
+        {
+            emit sigCompressedAddFile();
+            return;
+        }
+
         DFileDialog dialog(this);
         dialog.setAcceptMode(DFileDialog::AcceptOpen);
         dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -689,6 +695,7 @@ QMenu *MainWindow::createSettingsMenu()
         }
 
         onSelected(dialog.selectedFiles());
+
     });
 
     // menu->insertAction();
@@ -1002,7 +1009,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_UNZIP:        // 解压界面
         m_pProgess->resetProgress();
-        m_pOpenAction->setEnabled(false);
+        m_pOpenAction->setEnabled(true);
         setAcceptDrops(false);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
         titlebar()->setTitle(m_strDecompressFileName);
