@@ -1088,7 +1088,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
-        if (m_pProgess->getType()) {
+        if (!m_pProgess->getType()) {
             titlebar()->setTitle(tr("Opening"));
         } else {
             titlebar()->setTitle(tr("Extracting"));
