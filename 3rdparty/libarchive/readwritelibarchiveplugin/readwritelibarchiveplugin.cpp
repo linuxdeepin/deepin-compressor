@@ -230,22 +230,36 @@ bool ReadWriteLibarchivePlugin::deleteFiles(const QVector<Archive::Entry *> &fil
     uint deletedEntries = 0;
 //    m_filesPaths = entryFullPaths(files);
     qint64 count = 0;
-    Archive::Entry *pFirstEntry = files[0];
+    //Archive::Entry *pFirstEntry = files[0];
 
     m_filesPaths.clear();
-    pFirstEntry->getAllNodesFullPath(m_filesPaths);
+    foreach (Archive::Entry *entry, files) {
+        QStringList listTempPath;
+        entry->getAllNodesFullPath(listTempPath);
+        m_filesPaths << listTempPath;
 
-    while (pFirstEntry->getParent() != nullptr) {
-        pFirstEntry = pFirstEntry->getParent();
+        qint64 tempCount = 0;
+        Archive::Entry *pRootEntry = entry;
+        while (pRootEntry->getParent() != nullptr) {
+            pRootEntry = pRootEntry->getParent();
+        }
+
+        pRootEntry->calEntriesCount(tempCount);
+        count += tempCount;
     }
-    Archive::Entry *pRootEntry = pFirstEntry;
-    pRootEntry->calEntriesCount(count);
+    //pFirstEntry->getAllNodesFullPath(m_filesPaths);
+
+//    while (pFirstEntry->getParent() != nullptr) {
+//        pFirstEntry = pFirstEntry->getParent();
+//    }
+//    Archive::Entry *pRootEntry = pFirstEntry;
+//    pRootEntry->calEntriesCount(count);
     m_numberOfEntries = (uint)count - m_filesPaths.length();
 //    const bool isSuccessful = processOldEntries(deletedEntries, Delete, m_numberOfEntries);
     const bool isSuccessful = deleteEntry(deletedEntries, m_numberOfEntries);
-    if (isSuccessful) {
-        emit entryRemoved(files[0]->fullPath());
-    }
+//    if (isSuccessful) {
+//        emit entryRemoved(files[0]->fullPath());
+//    }
 
     finish(isSuccessful);
     return isSuccessful;
@@ -579,7 +593,7 @@ bool ReadWriteLibarchivePlugin::deleteEntry(uint &entriesCounter, uint totalCoun
             archive_read_data_skip(m_archiveReader.data());
             //entriesCounter++;
             m_filesPaths.removeOne(file);
-            //emit entryRemoved(file);
+            emit entryRemoved(file);
         } else {
             // Write old entries.
             if (writeEntry(entry)) {
