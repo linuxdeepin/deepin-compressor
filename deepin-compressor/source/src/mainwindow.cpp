@@ -163,30 +163,32 @@ bool MainWindow::applicationQuit(CompressorApplication *p)
     if (pp == nullptr)
         return false;
 
-    if (pp == this) {
-        //       killJob();
+    pp->close();
 
-        //        if (m_pProgess->getType() == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
-        //            return true;
-        //        }
+    //    if (pp == this) {
+    //        //       killJob();
 
-        //        if (PAGE_ZIPPROGRESS == m_pMainLayout->currentIndex()) {
-        //            if (1 != m_pProgess->showConfirmDialog()) {
-        //                return false;
-        //            }
-        //            deleteCompressFile();
-        //            QString destDirName;
-        //            deleteDecompressFile(destDirName);
-        //        } else if (7 == m_pMainLayout->currentIndex()) {
-        //            deleteCompressFile();
-        //        }
-        close();
-        DApplication::quit();
-    } else {
-        pp->close();
-    }
+    //        //        if (m_pProgess->getType() == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
+    //        //            return true;
+    //        //        }
 
-    //return true;
+    //        //        if (PAGE_ZIPPROGRESS == m_pMainLayout->currentIndex()) {
+    //        //            if (1 != m_pProgess->showConfirmDialog()) {
+    //        //                return false;
+    //        //            }
+    //        //            deleteCompressFile();
+    //        //            QString destDirName;
+    //        //            deleteDecompressFile(destDirName);
+    //        //        } else if (7 == m_pMainLayout->currentIndex()) {
+    //        //            deleteCompressFile();
+    //        //        }
+    //        close();
+    //        //DApplication::quit();
+    //    } else {
+    //        pp->close();
+    //    }
+
+    return true;
 }
 
 //QString MainWindow::getAddFile()
@@ -267,38 +269,36 @@ void MainWindow::closeClean(QCloseEvent *event)
     if (m_windowcount == 1) {
         return;
     }
-    Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
-    if (pRootEntry) {
-        pRootEntry->clean();
-    }
-    SAFE_DELETE_ELE(pRootEntry);
-    SAFE_DELETE_ELE(m_pFileWatcher);
-    SAFE_DELETE_ELE(pEventloop);
-    SAFE_DELETE_ELE(m_pSpinner);
-    SAFE_DELETE_ELE(m_pWatcher);
-//    SAFE_DELETE_ELE(m_pArchiveModel);
-//    SAFE_DELETE_ELE(m_logo);
-//    SAFE_DELETE_ELE(m_titleFrame);
-//    SAFE_DELETE_ELE(m_titlelabel);
-    SAFE_DELETE_ELE(m_pUnCompressPage);
-    SAFE_DELETE_ELE(m_pCompressPage);
-//    SAFE_DELETE_ELE(m_pMainLayout);
-    SAFE_DELETE_ELE(m_pHomePage);
-    SAFE_DELETE_ELE(m_pCompressSetting);
-//    SAFE_DELETE_ELE(m_pProgess);
-    SAFE_DELETE_ELE(m_pCompressSuccess);
-    SAFE_DELETE_ELE(m_pCompressFail);
-    SAFE_DELETE_ELE(m_pEncryptionpage);
-    SAFE_DELETE_ELE(m_pProgressdialog);
-    SAFE_DELETE_ELE(m_pSettingsDialog);
-    SAFE_DELETE_ELE(m_pOpenLoadingPage);
-    //SAFE_DELETE_ELE(m_encodingpage);
-    SAFE_DELETE_ELE(m_pSettings);
-    SAFE_DELETE_ELE(m_pMmainWidget);
 
-    m_mapFileHasModified.clear();
-    SAFE_DELETE_ELE(m_pOpenFileWatcher);
+    //    Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
+    //    if (pRootEntry) {
+    //        pRootEntry->clean();
+    //    }
 
+    //    SAFE_DELETE_ELE(pRootEntry);
+    //    SAFE_DELETE_ELE(m_pFileWatcher);
+    //    SAFE_DELETE_ELE(pEventloop);
+    //    SAFE_DELETE_ELE(m_pSpinner);
+    //    SAFE_DELETE_ELE(m_pWatcher);
+    //    SAFE_DELETE_ELE(m_pArchiveModel);
+    //    SAFE_DELETE_ELE(m_logo);
+    //    SAFE_DELETE_ELE(m_titleFrame);
+    //    SAFE_DELETE_ELE(m_titlelabel);
+    //    SAFE_DELETE_ELE(m_pUnCompressPage);
+    //    SAFE_DELETE_ELE(m_pCompressPage);
+    //    SAFE_DELETE_ELE(m_pMainLayout);
+    //    SAFE_DELETE_ELE(m_pHomePage);
+    //    SAFE_DELETE_ELE(m_pCompressSetting);
+    //    SAFE_DELETE_ELE(m_pProgess);
+    //    SAFE_DELETE_ELE(m_pCompressSuccess);
+    //    SAFE_DELETE_ELE(m_pCompressFail);
+    //    SAFE_DELETE_ELE(m_pEncryptionpage);
+    //    SAFE_DELETE_ELE(m_pProgressdialog);
+    //    SAFE_DELETE_ELE(m_pSettingsDialog);
+    //    SAFE_DELETE_ELE(m_pOpenLoadingPage);
+    //    //SAFE_DELETE_ELE(m_encodingpage);
+    //    SAFE_DELETE_ELE(m_pSettings);
+    //    SAFE_DELETE_ELE(m_pMmainWidget);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -344,6 +344,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     qDebug() << "子窗口开始关闭";
     //判断m_pJob是否结束
+    int mode = -1;
     if (m_pJob == nullptr) {
         if (options == OpenInfo::QUERY_CLOSE_CANCEL) {//如果子面板取消关闭
             event->ignore();
@@ -365,7 +366,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             this->m_eOption = OpenInfo::QUERY_CLOSE_CANCEL;
             return;
         } else {//如果子面板正常关闭；并且当前面板job完成
-            int mode = queryDialogForClose();
+            /*int */ mode = queryDialogForClose();
             if (mode == 0 || mode == -1) {
                 event->ignore();
                 this->m_eOption = OpenInfo::QUERY_CLOSE_CANCEL;
@@ -398,15 +399,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         deleteCompressFile();
+        if (mode == 1) {
+            safeDelete();
+        }
         slotquitApp();
         return;
     }
 
-    if (PAGE_ZIPPROGRESS == m_pMainLayout->currentIndex()) {
-        if (1 != m_pProgess->showConfirmDialog()) {
-            event->ignore();
-            return;
-        }
+    if (PAGE_ZIPPROGRESS == m_ePageID || PAGE_UNZIPPROGRESS == m_ePageID || PAGE_DELETEPROGRESS == m_ePageID /*m_pMainLayout->currentIndex()*/) {
+        //        if (1 != m_pProgess->showConfirmDialog()) {
+        //            event->ignore();
+        //            return;
+        //        }
 
         deleteCompressFile();
         deleteDecompressFile();
@@ -420,9 +424,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         }
 
-        emit sigquitApp();
-    } else if (PAGE_ZIP_FAIL == m_pMainLayout->currentIndex()) {
+        if (mode == 1) {
+            safeDelete();
+        }
+
+        slotquitApp();
+        //emit sigquitApp();
+    } else if (PAGE_ZIP_FAIL == m_ePageID /*m_pMainLayout->currentIndex()*/) {
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_strPathStore)*/);
+        if (mode == 1) {
+            safeDelete();
+        }
         slotquitApp();
     } else {
         slotquitApp();
@@ -4301,4 +4313,37 @@ int MainWindow::deleteArchiveDialog()
     delete dialog;
 
     return res;
+}
+
+void MainWindow::safeDelete()
+{
+    Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
+    if (pRootEntry) {
+        pRootEntry->clean();
+    }
+
+    SAFE_DELETE_ELE(pRootEntry);
+    SAFE_DELETE_ELE(m_pFileWatcher);
+    SAFE_DELETE_ELE(pEventloop);
+    SAFE_DELETE_ELE(m_pSpinner);
+    SAFE_DELETE_ELE(m_pWatcher);
+    //    SAFE_DELETE_ELE(m_pArchiveModel);
+    //    SAFE_DELETE_ELE(m_logo);
+    //    SAFE_DELETE_ELE(m_titleFrame);
+    //    SAFE_DELETE_ELE(m_titlelabel);
+    SAFE_DELETE_ELE(m_pUnCompressPage);
+    SAFE_DELETE_ELE(m_pCompressPage);
+    //    SAFE_DELETE_ELE(m_pMainLayout);
+    SAFE_DELETE_ELE(m_pHomePage);
+    SAFE_DELETE_ELE(m_pCompressSetting);
+    //    SAFE_DELETE_ELE(m_pProgess);
+    SAFE_DELETE_ELE(m_pCompressSuccess);
+    SAFE_DELETE_ELE(m_pCompressFail);
+    SAFE_DELETE_ELE(m_pEncryptionpage);
+    SAFE_DELETE_ELE(m_pProgressdialog);
+    SAFE_DELETE_ELE(m_pSettingsDialog);
+    SAFE_DELETE_ELE(m_pOpenLoadingPage);
+    //SAFE_DELETE_ELE(m_encodingpage);
+    SAFE_DELETE_ELE(m_pSettings);
+    SAFE_DELETE_ELE(m_pMmainWidget);
 }

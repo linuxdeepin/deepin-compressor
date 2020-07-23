@@ -382,6 +382,11 @@ private:
      */
     int deleteArchiveDialog();
 
+    /**
+     * @brief safeDelete    安全删除部分控件
+     */
+    void safeDelete();
+
 protected:
     /**
      * @brief dragEnterEvent    拖拽进入
