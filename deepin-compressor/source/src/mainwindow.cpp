@@ -2786,6 +2786,22 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         return;
     }
 
+    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")) {
+        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+            if (pinterface->isAllEntry()) {
+                foreach (Archive::Entry *p, vectorDel) {
+                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+                }
+            } else {
+                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
+            }
+        }
+    } else {
+        foreach (Archive::Entry *p, vectorDel) {
+            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+        }
+    }
+
     m_pJob =  m_pArchiveModel->deleteFiles(vectorDel);
     if (!m_pJob) {
         return;
