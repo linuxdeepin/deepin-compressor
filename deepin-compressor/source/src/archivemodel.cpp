@@ -600,7 +600,8 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
 
     // If there are no columns registered, then populate columns from entry. If the first entry
     // is a directory we check again for the first file entry to ensure all relevent columms are shown.
-    if (m_showColumns.isEmpty() || !m_fileEntryListed) {
+    //添加m_fileEntryListed判断，追加压缩时有概率多出几列空白列
+    if (m_showColumns.isEmpty() /* || !m_fileEntryListed*/) {
         m_showColumns = {0, 1, 2, 3};//<< toInsert;
         if (behaviour == NotifyViews) {
             beginInsertColumns(QModelIndex(), 0, m_showColumns.size() - 1);
