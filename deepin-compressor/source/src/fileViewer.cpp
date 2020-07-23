@@ -408,7 +408,7 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("Extract", "slotDecompressRowDoubleClicked"));
         m_pRightMenu->addAction(tr("Extract to current directory"));
         m_pRightMenu->addAction(tr("Open"));
-        m_pRightMenu->addAction(tr("DELETE", "slotDecompressRowDelete"));
+        m_pRightMenu->addAction(tr("Delete", "slotDecompressRowDelete"));
 
         openWithDialogMenu = new  DMenu(tr("Open style"), this);
         m_pRightMenu->addMenu(openWithDialogMenu);
@@ -1489,7 +1489,7 @@ void fileViewer::onRightMenuClicked(QAction *action)
             emit sigextractfiles(fileList, EXTRACT_HEAR);
         } else if (action->text() == tr("Open")) {
             slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
-        } else if (action->text() == tr("DELETE") || action->text() == tr("DELETE", "slotDecompressRowDelete")) {
+        } else if (action->text() == tr("Delete") || action->text() == tr("Delete", "slotDecompressRowDelete")) {
             isPromptDelete = true;
             if (DDialog::Accepted == popUpDialog(tr("Do you want to detele the selected file?"))) {
                 slotDecompressRowDelete();

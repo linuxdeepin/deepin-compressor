@@ -1180,15 +1180,14 @@ bool CompressSetting::existSameFileName()
 {
     DDialog *dialog = new DDialog(this);
 //    dialog->setMinimumSize(QSize(380, 190));
-    dialog->setFixedWidth(440);
+    dialog->setMinimumSize(380, 134);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel(dialog);
     strlabel->setMinimumSize(QSize(154, 20));
     strlabel->setAlignment(Qt::AlignCenter);
-//    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T5, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("The file name under this path already exists, replace it?"));
 
     dialog->addButton(tr("Cancel"));

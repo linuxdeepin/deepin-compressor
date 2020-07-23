@@ -362,7 +362,7 @@ int Progress::showConfirmDialog()
 //    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
     DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedHeight(18);
+    strlabel2->setMinimumHeight(18);
     strlabel2->setForegroundRole(DPalette::ToolTipText);
 
     strlabel2->setAlignment(Qt::AlignmentFlag::AlignHCenter);
