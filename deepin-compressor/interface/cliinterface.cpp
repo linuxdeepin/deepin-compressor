@@ -1142,8 +1142,9 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (pAnalyseHelp != nullptr) {
-        if (pAnalyseHelp->isRightPsd() == 1) {
-//            qDebug() << "%%%%%%RightPassword";
+        //        添加!m_isbatchlist条件可解决，批量解压时强制kill掉该解压进程会多次提示输入正确密码，
+        if (pAnalyseHelp->isRightPsd() == 1 && !m_isbatchlist) {
+            //            qDebug() << "%%%%%%RightPassword";
             this->extractPsdStatus = Reextract;
             return false;
         }
