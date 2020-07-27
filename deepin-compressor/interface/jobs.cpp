@@ -551,7 +551,7 @@ void CreateJob::doPause()
     if (pTool == nullptr) {
         return;
     }
-    bool ret = pTool->pauseProcess();
+    pTool->pauseProcess();
 }
 
 void CreateJob::doContinue()
@@ -560,7 +560,7 @@ void CreateJob::doContinue()
     if (pTool == nullptr) {
         return;
     }
-    bool ret = pTool->continueProcess();
+    pTool->continueProcess();
 }
 
 void CreateJob::doWork()
@@ -723,7 +723,7 @@ void ExtractJob::doPause()
     if (pTool == nullptr) {
         return;
     }
-    bool ret = pTool->pauseProcess();
+    pTool->pauseProcess();
 }
 
 void ExtractJob::doContinue()
@@ -732,7 +732,7 @@ void ExtractJob::doContinue()
     if (pTool == nullptr) {
         return;
     }
-    bool ret = pTool->continueProcess();
+    pTool->continueProcess();
 }
 
 QString ExtractJob::destinationDirectory() const

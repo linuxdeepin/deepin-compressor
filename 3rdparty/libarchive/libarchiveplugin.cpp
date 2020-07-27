@@ -622,6 +622,12 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
 
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        if (m_isPause) { //压缩暂停
+            sleep(1);
+            //            qDebug() << "pause";
+            continue;
+        }
+
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
             file.close();
@@ -650,6 +656,12 @@ void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archiv
     qlonglong size = 0;
     auto readBytes = archive_read_data(source, buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        if (m_isPause) { //解压暂停
+            sleep(1);
+            //            qDebug() << "pause";
+            continue;
+        }
+
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
             return;
@@ -676,6 +688,13 @@ void LibarchivePlugin::copyDataFromSource_ArchiveEntry(Archive::Entry *pSourceEn
     qlonglong size = 0;
     auto readBytes = archive_read_data(source, buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        //         TODO:提取暂停，暂时不支持
+        //        if (m_isPause) {
+        //            sleep(1);
+        //            qDebug() << "pause";
+        //            continue;
+        //        }
+
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
             return;

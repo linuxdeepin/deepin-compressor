@@ -95,6 +95,7 @@ public:
 
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
     virtual void updateListMap() override;
+
 private Q_SLOTS:
     void slotRestoreWorkingDir();
 

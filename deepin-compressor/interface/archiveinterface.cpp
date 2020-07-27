@@ -98,6 +98,21 @@ void ReadOnlyArchiveInterface::setHeaderEncryptionEnabled(bool enabled)
     m_isHeaderEncryptionEnabled = enabled;
 }
 
+void ReadOnlyArchiveInterface::pauseProcess()
+{
+    m_isPause = true;
+}
+
+void ReadOnlyArchiveInterface::continueProcess()
+{
+    m_isPause = false;
+}
+
+bool ReadOnlyArchiveInterface::isPause()
+{
+    return m_isPause;
+}
+
 QString ReadOnlyArchiveInterface::password() const
 {
     return m_password;
@@ -335,6 +350,16 @@ bool ReadOnlyArchiveInterface::isAnyFileExtracted() const
 void ReadOnlyArchiveInterface::bindProgressInfo(ProgressAssistant *pProgressIns)
 {
     this->m_pProgressInfo = pProgressIns;
+}
+
+void ReadOnlyArchiveInterface::changeToPause()
+{
+    m_isPause = true;
+}
+
+void ReadOnlyArchiveInterface::changeToContinue()
+{
+    m_isPause = false;
 }
 
 bool ReadWriteArchiveInterface::isReadOnly() const

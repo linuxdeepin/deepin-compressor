@@ -48,8 +48,8 @@ public:
 
     bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
-    bool pauseProcess() Q_DECL_OVERRIDE;
-    bool continueProcess() Q_DECL_OVERRIDE;
+    void pauseProcess() Q_DECL_OVERRIDE;
+    void continueProcess() Q_DECL_OVERRIDE;
     bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
     bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
     bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;

@@ -1686,6 +1686,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         }
         m_ePageID = Page_ID::PAGE_LOADING;
         loadArchive(filename);
+        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
     } else {
         emit sigZipSelectedFiles(files);
         m_ePageID = PAGE_ZIPSET;
@@ -3865,6 +3866,7 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
 //            pEventloop = new QEventLoop(this->m_pProgess);
 //        }
 
+        pExtractJob->archiveInterface()->continueProcess(); //先改为继续解压缩状态状态
         pExtractJob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
 //        if (pEventloop->isRunning() == false) {
 //            connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);

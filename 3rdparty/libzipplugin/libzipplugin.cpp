@@ -413,13 +413,26 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
 
 void LibzipPlugin::emitProgress(double percentage)
 {
-    int i = m_filesize * percentage;
-    if (m_addarchive) {
-        emit progress_filename(trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
-    }
+    bool flag = true;
+    while (flag) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+        if (m_isPause) { //压缩暂停
+            sleep(1);
+            //            qDebug() << "pause";
+            continue;
+        }
 
-    // Go from 0 to 50%. The second half is the subsequent listing.
-    emit progress(percentage);
+        int i = m_filesize * percentage;
+        if (m_addarchive) {
+            emit progress_filename(trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
+        }
+
+        // Go from 0 to 50%. The second half is the subsequent listing.
+        emit progress(percentage);
+        flag = false;
+    }
 }
 
 bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive::Entry *destination, const CompressionOptions &options, bool isDir, const QString &strRoot)
@@ -1355,6 +1368,11 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
         while (sum != statBuffer.size) {
             if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
                 break;
+            }
+            if (m_isPause) { //解压暂停
+                sleep(1);
+                qDebug() << "pause";
+                continue;
             }
 
             const auto readBytes = zip_fread(zipFile, buf, kb);
@@ -2444,6 +2462,12 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
             if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
                 break;
             }
+            if (m_isPause) { //解压暂停
+                sleep(1);
+                qDebug() << "pause";
+                continue;
+            }
+
             const auto readBytes = unzReadCurrentFile(zipfile, buf, kb);
             if (readBytes < 0) {
                 emit error(tr("Failed to read data for entry: %1"));

@@ -38,6 +38,7 @@
 #include <QVariantList>
 #include <QFileDevice>
 #include <QElapsedTimer>
+#include <QMutex>
 
 #define TIMER_TIMEOUT 1000
 
@@ -129,12 +130,14 @@ public:
     /**
      * @brief 解压缩暂停处理
      */
-    virtual bool pauseProcess() {}
+    virtual void pauseProcess();
 
     /**
      * @brief 解压缩继续处理
      */
-    virtual bool continueProcess() {}
+    virtual void continueProcess();
+
+    bool isPause();
 
     /**
      * @return Whether the plugins do NOT run the functions in their own thread.
@@ -260,6 +263,10 @@ public:
      * @see 绑定进度条信息，方便在插件内部去控制
      */
     void bindProgressInfo(ProgressAssistant *pProgressIns);
+
+    void changeToPause();
+    void changeToContinue();
+
 public:
     ENUM_PLUGINTYPE mType;
     QString extractTopFolderName;
@@ -318,6 +325,7 @@ protected:
      */
     uint m_numberOfEntries;
     KPluginMetaData m_metaData;
+    bool m_isPause = false; //暂停继续标志位
 
 private:
     QString m_filename;

@@ -191,6 +191,7 @@ void Progress::resetPauseContinueButton()
 
 void Progress::hidePauseContinueButton()
 {
+    //    暂时只支持压缩解压时暂停取消
     if (Progress::OP_COMPRESSING == m_ProgressType || Progress::OP_DECOMPRESSING == m_ProgressType) {
         m_cancelbutton->setMinimumSize(200, 36);
         m_PauseContinueButton->setVisible(true);

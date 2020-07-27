@@ -119,7 +119,7 @@ bool CliInterface::extractFiles(const QVector< Archive::Entry * > &files, const 
 /**
  * @brief 发送SIGSTOP信号暂停解压缩进程
  */
-bool CliInterface::pauseProcess()
+void CliInterface::pauseProcess()
 {
     if (!m_childprocessid.empty()) {
         for (int i = m_childprocessid.size() - 1; i >= 0; i--) {
@@ -132,13 +132,12 @@ bool CliInterface::pauseProcess()
         kill(static_cast<__pid_t>(m_processid), SIGSTOP);
     }
 //    qDebug() << m_processid << m_childprocessid;
-    return true;
 }
 
 /**
  * @brief 发送SIGCONT信号继续解压缩进程
  */
-bool CliInterface::continueProcess()
+void CliInterface::continueProcess()
 {
     if (!m_childprocessid.empty()) {
         for (int i = m_childprocessid.size() - 1; i >= 0; i--) {
@@ -149,9 +148,8 @@ bool CliInterface::continueProcess()
     }
     if (m_processid > 0) {
         kill(static_cast<__pid_t>(m_processid), SIGCONT);
-//    qDebug() << m_processid << m_childprocessid;
     }
-    return true;
+    //    qDebug() << m_processid << m_childprocessid;
 }
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
