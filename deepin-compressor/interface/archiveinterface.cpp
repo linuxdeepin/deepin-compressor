@@ -352,16 +352,6 @@ void ReadOnlyArchiveInterface::bindProgressInfo(ProgressAssistant *pProgressIns)
     this->m_pProgressInfo = pProgressIns;
 }
 
-void ReadOnlyArchiveInterface::changeToPause()
-{
-    m_isPause = true;
-}
-
-void ReadOnlyArchiveInterface::changeToContinue()
-{
-    m_isPause = false;
-}
-
 bool ReadWriteArchiveInterface::isReadOnly() const
 {
     if (isLocked()) {

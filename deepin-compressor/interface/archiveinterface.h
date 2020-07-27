@@ -264,9 +264,6 @@ public:
      */
     void bindProgressInfo(ProgressAssistant *pProgressIns);
 
-    void changeToPause();
-    void changeToContinue();
-
 public:
     ENUM_PLUGINTYPE mType;
     QString extractTopFolderName;
