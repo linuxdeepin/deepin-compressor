@@ -77,6 +77,7 @@ public:
     bool checkFilePermission(const QString &path);
     void setSelectedFileSize(qint64 size);
     void clickTitleBtnResetAdvancedOptions();
+    QList<QAction *> getTypemenuActions();
 
 private:
     void showEvent(QShowEvent *event) override;

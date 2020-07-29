@@ -440,6 +440,9 @@ void Progress::pauseContinueButtonPressedSlot(bool checked)
     if (checked) {
         m_PauseContinueButton->setText(tr("Continue"));
         emit sigPauseProcess();
+
+        //暂停进度
+        m_timerTime->stop();
     } else {
         m_PauseContinueButton->setText(tr("Pause"));
         emit sigContinueProcess();

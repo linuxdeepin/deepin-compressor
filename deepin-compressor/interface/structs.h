@@ -14,7 +14,6 @@ class ProgressAssistant: public QObject
 public:
     explicit ProgressAssistant(QObject *parent = nullptr);
     void startTimer();
-
     void restartTimer();
     /**
      * @brief resetProgress
