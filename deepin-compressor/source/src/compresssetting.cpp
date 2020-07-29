@@ -585,6 +585,11 @@ void CompressSetting::clickTitleBtnResetAdvancedOptions()
     m_moresetbutton->setChecked(false);
 }
 
+QList<QAction *> CompressSetting::getTypemenuActions()
+{
+    return m_typemenu->actions();
+}
+
 void CompressSetting::showEvent(QShowEvent *event)
 {
     initWidget();

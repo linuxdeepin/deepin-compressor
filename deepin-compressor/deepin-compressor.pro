@@ -182,7 +182,7 @@ desktop.path = $$INSTROOT$$APPDIR
 desktop.files =  deepin-compressor.desktop
 
 desktopcontext.path = $$INSTROOT$$DESKTOPDIR
-desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop deepin-compress-multi.desktop deepin-decompress-split.desktop deepin-decompresshere-split.desktop deepin-decompress-multi.desktop deepin-decompresshere-multi.desktop
+desktopcontext.files +=  deepin-compress.desktop deepin-decompress.desktop deepin-decompresshere.desktop deepin-compress-multi.desktop deepin-decompress-split.desktop deepin-decompresshere-split.desktop deepin-decompress-multi.desktop deepin-decompresshere-multi.desktop deepin-compress-to_zip.desktop deepin-compress-to_7z.desktop
 desktopcontext.files +=  deepin-decompress-split_multi.desktop deepin-decompresshere-split_multi.desktop
 
 manual.path = /usr/share/dman/

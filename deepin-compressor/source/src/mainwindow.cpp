@@ -1617,6 +1617,29 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_ePageID = PAGE_ZIPSET;
         setCompressDefaultPath();
         refreshPage();
+    } else if (files.last() == QStringLiteral("compress_to_zip")) {
+        // qDebug() << "compress_to_zip" << files;
+        QStringList pathlist = files;
+        pathlist.removeLast();
+        emit sigZipSelectedFiles(pathlist);
+        m_ePageID = PAGE_ZIPPROGRESS;
+        setCompressDefaultPath();
+        m_pCompressSetting->onNextButoonClicked();
+    } else if (files.last() == QStringLiteral("compress_to_7z")) {
+        // qDebug() << "compress_to_7z" << files;
+        QStringList pathlist = files;
+        pathlist.removeLast();
+        emit sigZipSelectedFiles(pathlist);
+        m_ePageID = PAGE_ZIPPROGRESS;
+        setCompressDefaultPath();
+        //压缩设置切换到7z格式
+        for (QAction *p : m_pCompressSetting->getTypemenuActions()) {
+            if (0 == p->text().compare("7z")) {
+                m_pCompressSetting->ontypeChanged(p);
+                break;
+            }
+        }
+        m_pCompressSetting->onNextButoonClicked();
     } else if (files.last() == QStringLiteral("extract_here_split")) {
         if (files.at(0).contains(".7z.")) {
             QString filepath = files.at(0);
@@ -1693,7 +1716,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         setCompressDefaultPath();
         refreshPage();
     }
-
 
     show();
 }
@@ -1808,15 +1830,15 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 //    refreshPage();
 //    m_pProgressdialog->setProcess(0);
 //    m_pProgess->setprogress(0);
-m_pProgess->pInfo()->setTotalSize(0); //初始化大小
-calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
-qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
-m_pProgressdialog->setProcess(0);
+    m_pProgess->pInfo()->setTotalSize(0); //初始化大小
+    calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
+    qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
+    m_pProgressdialog->setProcess(0);
 
-m_eWorkStatus = WorkProcess;
-m_operationtype = Operation_Extract;
-if (nullptr == m_pArchiveModel) {
-    return;
+    m_eWorkStatus = WorkProcess;
+    m_operationtype = Operation_Extract;
+    if (nullptr == m_pArchiveModel) {
+        return;
     }
 
     if (nullptr == m_pArchiveModel->archive()) {
