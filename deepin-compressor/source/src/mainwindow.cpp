@@ -1734,12 +1734,15 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 //    refreshPage();
 //    m_pProgressdialog->setProcess(0);
 //    m_pProgess->setprogress(0);
-    m_pProgressdialog->setProcess(0);
+m_pProgess->pInfo()->setTotalSize(0); //初始化大小
+calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
+qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
+m_pProgressdialog->setProcess(0);
 
-    m_eWorkStatus = WorkProcess;
-    m_operationtype = Operation_Extract;
-    if (nullptr == m_pArchiveModel) {
-        return;
+m_eWorkStatus = WorkProcess;
+m_operationtype = Operation_Extract;
+if (nullptr == m_pArchiveModel) {
+    return;
     }
 
     if (nullptr == m_pArchiveModel->archive()) {
@@ -3758,23 +3761,23 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
         ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
         destDirName = pExtractJob->archiveInterface()->destDirName;
 
-        if (pEventloop == nullptr) {
-            pEventloop = new QEventLoop(this->m_pProgess);
-        }
+        //        if (pEventloop == nullptr) {
+        //            pEventloop = new QEventLoop(this->m_pProgess);
+        //        }
 
         pExtractJob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
-        if (pEventloop->isRunning() == false) {
-            connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
-            if (m_pSpinner == nullptr) {
-                m_pSpinner = new DSpinner(this->m_pProgess);
-                m_pSpinner->setFixedSize(40, 40);
-            }
-            m_pSpinner->move(this->m_pProgess->width() / 2 - 20, this->m_pProgess->height() / 2 - 20);
-            m_pSpinner->hide();
-            m_pSpinner->start();
-            m_pSpinner->show();
-            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
-        }
+        //        if (pEventloop->isRunning() == false) {
+        //            connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
+        //            if (m_pSpinner == nullptr) {
+        //                m_pSpinner = new DSpinner(this->m_pProgess);
+        //                m_pSpinner->setFixedSize(40, 40);
+        //            }
+        //            m_pSpinner->move(this->m_pProgess->width() / 2 - 20, this->m_pProgess->height() / 2 - 20);
+        //            m_pSpinner->hide();
+        //            m_pSpinner->start();
+        //            m_pSpinner->show();
+        //            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
+        //        }
     }
 
     killJob();
