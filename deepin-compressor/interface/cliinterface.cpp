@@ -438,8 +438,8 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         if (m_isTar7z) {
             getChildProcessidTar7z(QString::number(m_processid), m_childprocessid);
         }
-        return true;
     }
+    return true;
 }
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
