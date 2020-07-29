@@ -1,7 +1,8 @@
 #include "ddesktopservicesthread.h"
 #include <DDesktopServices>
 
-DDesktopServicesThread::DDesktopServicesThread(QObject *parent): QThread(parent)
+DDesktopServicesThread::DDesktopServicesThread(QObject *parent)
+: QThread(parent)
 {
 
 }

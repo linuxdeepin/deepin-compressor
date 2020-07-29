@@ -73,7 +73,8 @@ int main(int argc, char *argv[])
         QSet<QString> fstList;
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
             && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
-            && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi") {
+            && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
+			&& lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
             isMutlWindows = true;
 
             for (int i = 1; i < argc; i++) {
