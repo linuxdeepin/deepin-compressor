@@ -26,7 +26,7 @@
 #include "fileViewer.h"
 #include "progress.h"
 #include "customdatainfo.h"
-
+#include "ddesktopservicesthread.h"
 #include <DMainWindow>
 #include <DFileWatcher>
 #include <DSpinner>
@@ -386,6 +386,11 @@ private:
      * @brief safeDelete    安全删除部分控件
      */
     void safeDelete();
+    /**
+     * @brief extractMkdir 解压到新建目录
+     */
+    void extractMkdir(const QStringList &files);
+
 
 protected:
     /**
@@ -744,6 +749,10 @@ private slots:
      */
     void slotLoadWrongPassWord();
 
+    /**
+     * @brief slotKillShowFoldItem
+     */
+    void slotKillShowFoldItem();
 public:
     static int m_windowcount;                               // 窗口数目
     OpenInfo::ENUM_OPTION m_eOption = OpenInfo::OPEN;       // 窗口打开标志
@@ -807,6 +816,7 @@ private:
     Page_ID m_ePageID = PAGE_HOME;                          // 界面页类型
     bool m_bIsRightMenu = false;                            // 是否右键菜单引起的操作
     bool m_bIsAddArchive = false;                           // 是否追加压缩
+    QString m_OptionType = "";								// 用户右键点击解压或压缩的标识
 
     // 界面<->插件
     KJob *m_pJob = nullptr;                                 // 指向所有Job派生类对象
@@ -820,7 +830,7 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     int m_iOpenTempFileLink = 0;                            // 打开临时文件索引
     QEventLoop *pEventloop = nullptr;                       // 事件循环
-
+    DDesktopServicesThread *m_DesktopServicesThread;		// 打开指定文件线程
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

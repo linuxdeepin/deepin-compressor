@@ -664,7 +664,13 @@ void MainWindow::InitConnection()
                 if (fileinfo.isDir()) {
                     DDesktopServices::showFolder(fullpath);     // 如果是文件夹
                 } else if (fileinfo.isFile()) {
-                    DDesktopServices::showFileItem(fullpath);   // 如果是单个文件
+                    qDebug() <<"DDesktopServices start:" << fullpath;
+                    m_DesktopServicesThread = new DDesktopServicesThread();
+                    connect(m_DesktopServicesThread,SIGNAL(finished()),this,SLOT(slotKillShowFoldItem()));
+                    m_DesktopServicesThread->m_path = fullpath;
+                    m_DesktopServicesThread->start();
+                   //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
+                    qDebug() <<"DDesktopServices end:" << m_strDecompressFilePath;
                 }
             }
         }
@@ -1425,6 +1431,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //    }
 //    QMessageBox::information(nullptr, "Title", info,
 //                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    m_OptionType = files.last();
     if (files.last() == QStringLiteral("extract_here")) {//解压
         m_bIsRightMenu = true;
         QFileInfo fileinfo(files.at(0));
@@ -1687,13 +1694,16 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_ePageID = Page_ID::PAGE_LOADING;
         loadArchive(filename);
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+    } else if (files.last() == QStringLiteral("extract_mkdir")) { // 解压到新的文件目录
+
+        extractMkdir(files);
+
     } else {
         emit sigZipSelectedFiles(files);
         m_ePageID = PAGE_ZIPSET;
         setCompressDefaultPath();
         refreshPage();
     }
-
 
     show();
 }
@@ -1855,6 +1865,11 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
             m_pCompressSuccess->setCompressNewFullPath(destinationDirectory);
         } else {                        //如果是顶级单个目录，则不创建文件夹
+            // 如果是7z压缩需要手动创建文件目录，解压到当前 by lyx2020-07-27
+            if (m_OptionType == QStringLiteral("extract_mkdir")) {
+                destinationDirectory = userDestination + detectedSubfolder;
+                QDir().mkpath(destinationDirectory);
+            }
             destinationDirectory = userDestination;
             auto rootEntry = this->m_pArchiveModel->getRootEntry();
             if (rootEntry->entries().length() > 0) {
@@ -1865,6 +1880,10 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 
         }
     } else {
+        // 如果是7z压缩需要手动创建文件目录，解压到当前 by lyx2020-07-27
+        if (m_OptionType == QStringLiteral("extract_mkdir")) {
+            QDir().mkpath(userDestination);
+        }
         destinationDirectory = userDestination;
         auto rootEntry = this->m_pArchiveModel->getRootEntry();
         if (rootEntry->entries().length() == 1) {
@@ -2662,7 +2681,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     //renameCompress(m_strCreateCompressFile, fixedMimeType);
     m_strDecompressFileName = QFileInfo(m_strCreateCompressFile).fileName();
     m_pCompressSuccess->setCompressFullPath(m_strCreateCompressFile);
-//    qDebug() << m_strCreateCompressFile;
+    //qDebug() << m_strCreateCompressFile;
 
     CompressionOptions options;
     options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
@@ -4221,6 +4240,14 @@ void MainWindow::killJob()
     }
 }
 
+void MainWindow::slotKillShowFoldItem()
+{
+    if (m_DesktopServicesThread) {
+        delete  m_DesktopServicesThread;
+        m_DesktopServicesThread = nullptr;
+    }
+}
+
 void MainWindow::deleteLaterJob()
 {
     if (m_pJob) {
@@ -4228,7 +4255,25 @@ void MainWindow::deleteLaterJob()
         m_pJob = nullptr;
     }
 }
-
+/**
+ * @brief MainWindow::extractMkdir 解压到新建目录
+ */
+void MainWindow::extractMkdir(const QStringList &files)
+{
+    m_bIsRightMenu = true;
+    QFileInfo fileinfo(files.at(0));
+    m_strDecompressFileName = fileinfo.fileName();
+    QString m_strDompleteBaseName = fileinfo.completeBaseName();
+    m_pUnCompressPage->SetDefaultFile(fileinfo);
+    QString extract_path = fileinfo.path() + "/" + m_strDompleteBaseName;
+    qDebug() << "extract_path:" << extract_path;
+    m_pUnCompressPage->setdefaultpath(extract_path);
+    //m_pSettingsDialog->isAutoCreatDir();
+    loadArchive(files.at(0));
+    m_ePageID = PAGE_UNZIPPROGRESS;
+    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+    refreshPage();
+}
 void MainWindow::autoDeleteSourceFile()
 {
     if (m_ePageID == PAGE_ZIP_SUCCESS) {
