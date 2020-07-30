@@ -26,7 +26,7 @@
 #include "fileViewer.h"
 #include "progress.h"
 #include "customdatainfo.h"
-
+#include "ddesktopservicesthread.h"
 #include <DMainWindow>
 #include <DFileWatcher>
 #include <DSpinner>
@@ -724,6 +724,10 @@ private slots:
      */
     void slotLoadWrongPassWord();
 
+    /**
+     * @brief slotKillShowFoldItem
+     */
+    void slotKillShowFoldItem();
 public:
     static int m_windowcount;                               // 窗口数目
     OpenInfo::ENUM_OPTION m_eOption = OpenInfo::OPEN;       // 窗口打开标志
@@ -797,7 +801,7 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     int m_iOpenTempFileLink = 0;                            // 打开临时文件索引
     QEventLoop *pEventloop = nullptr;                       // 事件循环
-
+    DDesktopServicesThread *m_DesktopServicesThread;		// 打开指定文件线程
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

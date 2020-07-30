@@ -96,7 +96,8 @@ HEADERS +=  \
     interface/globalarchivemanager_p.h \
     interface/archiverunnable.h \
     interface/structs.h \
-    source/inc/openloadingpage.h
+    source/inc/openloadingpage.h \
+    source/inc/ddesktopservicesthread.h
 
 
 
@@ -164,7 +165,8 @@ SOURCES +=  \
     interface/globalarchivemanager.cpp \
     interface/archiverunnable.cpp \
     interface/structs.cpp \
-    source/src/openloadingpage.cpp
+    source/src/openloadingpage.cpp \
+    source/src/ddesktopservicesthread.cpp
 
 
 RESOURCES += deepin-compressor.qrc

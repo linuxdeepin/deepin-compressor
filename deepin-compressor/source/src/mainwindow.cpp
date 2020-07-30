@@ -657,7 +657,13 @@ void MainWindow::InitConnection()
                 if (fileinfo.isDir()) {
                     DDesktopServices::showFolder(fullpath);     // 如果是文件夹
                 } else if (fileinfo.isFile()) {
-                    DDesktopServices::showFileItem(fullpath);   // 如果是单个文件
+                    qDebug() <<"DDesktopServices start:" << fullpath;
+                    m_DesktopServicesThread = new DDesktopServicesThread();
+                    connect(m_DesktopServicesThread,SIGNAL(finished()),this,SLOT(slotKillShowFoldItem()));
+                    m_DesktopServicesThread->m_path = fullpath;
+                    m_DesktopServicesThread->start();
+                   //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
+                    qDebug() <<"DDesktopServices end:" << m_strDecompressFilePath;
                 }
             }
         }
@@ -4086,6 +4092,13 @@ void MainWindow::killJob()
     }
 }
 
+void MainWindow::slotKillShowFoldItem()
+{
+    if (m_DesktopServicesThread) {
+        delete  m_DesktopServicesThread;
+        m_DesktopServicesThread = nullptr;
+    }
+}
 void MainWindow::deleteLaterJob()
 {
     if (m_pJob) {
