@@ -2116,21 +2116,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         if (errcode == 0 && m_operationtype != Operation_SingleExtract && m_operationtype != Operation_DRAG
                 && m_operationtype != Operation_TempExtract_Open_Choose) {
             if (m_convertType.size() > 0) {
-                m_operationtype = Operation_CONVERT;
-                m_convertArgs[QStringLiteral("compressionLevel")] = "3";
-                m_convertArgs[QStringLiteral("localFilePath")] = QFileInfo(m_strLoadfile).path();
-
-                m_convertArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
-                if (m_convertType == "zip") {
-                    m_convertArgs[QStringLiteral("fixedMimeType")] = "application/zip";
-                    m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".zip";
-                } else if (m_convertType == "7z") {
-                    m_convertArgs[QStringLiteral("fixedMimeType")] = "application/x-7z-compressed";
-                    m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".7z";
-                }
-
                 creatArchive(m_convertArgs);
-//                    refreshPage();
             } else {
                 if (this->m_pCurAuxInfo == nullptr || this->m_pCurAuxInfo->information.size() == 0) {
                     m_ePageID = PAGE_UNZIP_SUCCESS;
