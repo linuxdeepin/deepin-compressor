@@ -173,10 +173,10 @@ void Progress::setTempProgress()
     //    qDebug() << "临时百分比" << m_percent;
 }
 
-void Progress::refreshSpeedAndTime(unsigned long compressPercent)
+void Progress::refreshSpeedAndTime(unsigned long compressPercent, bool isConvert)
 {
-    double speed = this->m_pInfo->getSpeed(compressPercent);
-    qint64 timeLeft = this->m_pInfo->getLeftTime(compressPercent);
+    double speed = this->m_pInfo->getSpeed(compressPercent, isConvert);
+    qint64 timeLeft = this->m_pInfo->getLeftTime(compressPercent, isConvert);
     this->setSpeedAndTime(speed, timeLeft);
     this->m_pInfo->restartTimer();
 }

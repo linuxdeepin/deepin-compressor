@@ -80,7 +80,7 @@ public:
     void setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type);
 
     void setTempProgress();
-    void refreshSpeedAndTime(unsigned long compressPercent);
+    void refreshSpeedAndTime(unsigned long compressPercent, bool isConvert = false);
     ProgressAssistant *pInfo();
     void resetPauseContinueButton();
 

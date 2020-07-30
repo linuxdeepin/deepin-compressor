@@ -25,9 +25,9 @@ public:
 
     qint64 &getTotalSize();
 
-    double getSpeed(unsigned long percent);
+    double getSpeed(unsigned long percent, bool isConvert = false);
 
-    qint64 getLeftTime(unsigned long percent);
+    qint64 getLeftTime(unsigned long percent, bool isConvert = false);
 
 private:
     qint64 consumeTime;                 //消耗时间

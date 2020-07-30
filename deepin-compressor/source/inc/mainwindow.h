@@ -810,7 +810,6 @@ private:
     QString m_strDecompressFileName;                        // 压缩包文件名（不含路径）
     QString m_strDecompressFilePath;                        // 压缩包路径
     QString m_strLoadfile;                                  // 加载文件名（含路径）
-    QFileInfo m_loadFile;                                   // 加载文件
     QVector<Archive::Entry *> m_vecExtractSimpleFiles;      // 解压文件
     QString m_strProgram;                                   // 打开方式（应用程序名称）
     QStringList m_rightMenuList;                            // 右键菜单传递参数
@@ -852,7 +851,9 @@ private:
     QEventLoop *pEventloop = nullptr;                       // 事件循环
     DDesktopServicesThread *m_DesktopServicesThread;        // 打开指定文件线程
 
-    QString m_strConvertFileName;                           // 格式转换后的文件名
+    QMap< QString, QString > m_convertArgs;                 // 格式转换压缩参数
+    QString m_convertFile;                                  // 格式转换后的文件名(含路径)
+    QString m_strConvertFileName;                           // 格式转换后的文件名(无路径)
     QString m_convertType = "";                             // 转换格式
     bool m_convertFirst = false;                            // 完成转换第一步：解压
     double m_lastPercent = 0;                               // 记录格式转换解压进度

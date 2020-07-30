@@ -1188,7 +1188,7 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         titlebar()->setTitle(tr("Converting"));
-        m_pProgess->setFilename(m_strDecompressFileName);
+        m_pProgess->setFilename(m_strConvertFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
         m_pProgess->hidePauseContinueButton();
@@ -1804,7 +1804,7 @@ void MainWindow::loadArchive(const QString &files)
 
     m_eWorkStatus = WorkProcess;
     m_strLoadfile = transFile;
-    m_loadFile.setFile(m_strLoadfile);
+//    m_loadFile.setFile(m_strLoadfile);
     m_pUnCompressPage->getFileViewer()->setLoadFilePath(m_strLoadfile);
     m_operationtype = Operation_Load;
     m_ePageID = PAGE_LOADING;
@@ -1987,7 +1987,22 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
     //calSpeedAndTime(percent);
-    m_pProgess->refreshSpeedAndTime(percent);       // 刷新速度和剩余时间
+    //m_pProgess->refreshSpeedAndTime(percent);       // 刷新速度和剩余时间
+    if (m_operationtype == Operation_CONVERT) {
+        if (m_convertFirst && percent <= 100) {
+            m_lastPercent = 30 + percent * 0.7;
+        } else {
+            m_lastPercent = percent * 0.3;
+        }
+
+        if (m_lastPercent > 0) {
+            m_pProgess->refreshSpeedAndTime(m_lastPercent, true);
+        }
+    } else {
+        if (percent > 0) {
+            m_pProgess->refreshSpeedAndTime(percent, true);
+        }
+    }
 
     if (Operation_SingleExtract == m_operationtype || Operation_DRAG == m_operationtype) {
         if (percent < 100 && WorkProcess == m_eWorkStatus) {
@@ -2021,14 +2036,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING);
         refreshPage();
     } else if (PAGE_CONVERTPROGRESS == m_ePageID) {
-        if (m_convertFirst && percent <= 100) {
-            m_lastPercent = 30 + percent * 0.7;
-            m_pProgess->setprogress(m_lastPercent);
-        } else {
-            m_lastPercent = percent * 0.3;
-            m_pProgess->setprogress(m_lastPercent);
-        }
-
+        m_pProgess->setprogress(m_lastPercent);
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_CONVERT);
         if (percent == 100) {
             m_convertFirst = true;
@@ -2109,20 +2117,19 @@ void MainWindow::slotExtractionDone(KJob *job)
                 && m_operationtype != Operation_TempExtract_Open_Choose) {
             if (m_convertType.size() > 0) {
                 m_operationtype = Operation_CONVERT;
-                QMap< QString, QString > Args;
-                Args[QStringLiteral("compressionLevel")] = "3";
-                Args[QStringLiteral("localFilePath")] = QFileInfo(m_strLoadfile).path();
+                m_convertArgs[QStringLiteral("compressionLevel")] = "3";
+                m_convertArgs[QStringLiteral("localFilePath")] = QFileInfo(m_strLoadfile).path();
 
-                Args[QStringLiteral("createNewArchive")] = QStringLiteral("true");
+                m_convertArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
                 if (m_convertType == "zip") {
-                    Args[QStringLiteral("fixedMimeType")] = "application/zip";
-                    Args[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".zip";
+                    m_convertArgs[QStringLiteral("fixedMimeType")] = "application/zip";
+                    m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".zip";
                 } else if (m_convertType == "7z") {
-                    Args[QStringLiteral("fixedMimeType")] = "application/x-7z-compressed";
-                    Args[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".7z";
+                    m_convertArgs[QStringLiteral("fixedMimeType")] = "application/x-7z-compressed";
+                    m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".7z";
                 }
 
-                creatArchive(Args);
+                creatArchive(m_convertArgs);
 //                    refreshPage();
             } else {
                 if (this->m_pCurAuxInfo == nullptr || this->m_pCurAuxInfo->information.size() == 0) {
@@ -2288,9 +2295,10 @@ void MainWindow::slotExtractionDone(KJob *job)
             } else {
                 m_pCompressSuccess->setstringinfo(tr("Extraction successful"));
             }
+            refreshPage();
         }
 
-        refreshPage();
+//        refreshPage();
     }
 
     if (!strFileWatcher.isEmpty() && (Operation_TempExtract == m_operationtype || Operation_TempExtract_Open_Choose == m_operationtype)) {
@@ -2318,6 +2326,26 @@ void MainWindow::slotShowPageUnzipProgress()
 //        refreshPage();
     } else if (m_operationtype != Operation_SingleExtract && m_operationtype != Operation_DRAG) {
         if (m_convertType.size() > 0) {
+            QFileInfo file(m_strLoadfile);
+            m_operationtype = Operation_CONVERT;
+            m_convertArgs[QStringLiteral("compressionLevel")] = "3";
+            m_convertArgs[QStringLiteral("localFilePath")] = QFileInfo(m_strLoadfile).path();
+
+            m_convertArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
+            if (m_convertType == "zip") {
+                m_convertArgs[QStringLiteral("fixedMimeType")] = "application/zip";
+                m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".zip";
+                m_convertFile = file.path() + QDir::separator() + file.baseName() + ".zip";
+            } else if (m_convertType == "7z") {
+                m_convertArgs[QStringLiteral("fixedMimeType")] = "application/x-7z-compressed";
+                m_convertArgs[QStringLiteral("filename")] = QFileInfo(m_strLoadfile).baseName() + ".7z";
+                m_convertFile = file.path() + QDir::separator() + file.baseName() + ".7z";
+            }
+
+//            m_strConvertFileName = m_convertArgs[QStringLiteral("filename")];
+            renameCompress(m_convertFile, m_convertArgs[QStringLiteral("fixedMimeType")]);
+            file.setFile(m_convertFile);
+            m_strConvertFileName = file.fileName();
             m_ePageID = PAGE_CONVERTPROGRESS;
         } else {
             m_ePageID = PAGE_UNZIPPROGRESS;
@@ -3334,26 +3362,28 @@ void MainWindow::deleteConvertTempFile()
 {
     QString tmpPath = DEFAUTL_PATH + "converttempfiles";
     QDir dir(tmpPath);
-    if (!dir.exists()) {
-        dir.mkdir(tmpPath);
-    }
+//    if (!dir.exists()) {
+//        dir.mkdir(tmpPath);
+//    }
 
-    QStringList fileToDelete;
-    QStringList tmpFilesToDelete;
-    QStringList nameFilters;
-    nameFilters << "*" << "*.*";
-    tmpFilesToDelete = dir.entryList(nameFilters, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach (QString tmpfile, tmpFilesToDelete) {
-        fileToDelete.append(tmpPath + QDir::separator() + tmpfile);
-    }
+    if (dir.exists()) {
+        QStringList fileToDelete;
+        QStringList tmpFilesToDelete;
+        QStringList nameFilters;
+        nameFilters << "*" << "*.*";
+        tmpFilesToDelete = dir.entryList(nameFilters, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        foreach (QString tmpfile, tmpFilesToDelete) {
+            fileToDelete.append(tmpPath + QDir::separator() + tmpfile);
+        }
 
-    foreach (QString path, fileToDelete) {
-        QFileInfo file(path);
-        if (file.isDir()) {
-            deleteDir(path);
-        } else if (file.isFile()) {
-            QFile fi(path);
-            fi.remove();
+        foreach (QString path, fileToDelete) {
+            QFileInfo file(path);
+            if (file.isDir()) {
+                deleteDir(path);
+            } else if (file.isFile()) {
+                QFile fi(path);
+                fi.remove();
+            }
         }
     }
 }
@@ -3476,12 +3506,12 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
         m_ePageID = PAGE_ZIPPROGRESS;
 //        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING);
 //        m_eJobType = JOB_CREATE;
-//        refreshPage();
+        refreshPage();
     }
 
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING);
     m_eJobType = JOB_CREATE;
-    refreshPage();
+//    refreshPage();
 
     m_strPathStore = Args[QStringLiteral("localFilePath")];
     //m_compressDirFiles = CheckAllFiles(m_strPathStore);
@@ -4047,6 +4077,7 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     m_bIsRightMenu = false;
     m_convertFirst = false;
     m_ePageID = PAGE_UNZIP;
+    m_convertArgs.clear();
 
     QString destDirName;
     if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::EXTRACTJOB) { // 解压取消
@@ -4087,12 +4118,12 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     } else if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         QFileInfo fi(m_strLoadfile);
         m_strDecompressFileName = fi.fileName();
-        deleteConvertTempFile();
+//        deleteConvertTempFile();
         m_ePageID = PAGE_UNZIP;
     }
 
     refreshPage();
-    // emit sigquitApp();
+    deleteConvertTempFile();
     slotResetPercentAndTime();
     m_pProgess->setprogress(0);
 }
@@ -4185,9 +4216,15 @@ void MainWindow::resetMainwindow()
 #ifdef __aarch64__
     maxFileSize_ = 0;
 #endif
+//    if (m_convertType.size() == 0) {
+//        m_pProgess->pInfo()->resetProgress();
+//        m_pProgess->setprogress(0);
+//        m_pProgressdialog->setProcess(0);
+//    }
     m_pProgess->pInfo()->resetProgress();
     m_pProgess->setprogress(0);
     m_pProgressdialog->setProcess(0);
+    m_convertArgs.clear();
     m_convertType = "";
 }
 
