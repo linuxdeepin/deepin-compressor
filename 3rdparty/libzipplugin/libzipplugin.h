@@ -106,8 +106,10 @@ private:
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false, const QString &strRoot = "");
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
+    int cancelResult();
     QString permissionsToString(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
+    static int cancelCallback(zip_t *, void *that);
     QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
     QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
     void detectAllfile(zip_t *archive, int num);
@@ -149,6 +151,8 @@ private:
 
     QList<int> m_listExtractIndex;
     QString m_strRootNode;
+
+    bool m_bCancel = false;
 };
 
 #endif // LIBZIPPLUGIN_H

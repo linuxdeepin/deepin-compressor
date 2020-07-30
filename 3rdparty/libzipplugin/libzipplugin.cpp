@@ -129,6 +129,11 @@ void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
     static_cast<LibzipPlugin *>(that)->emitProgress(progress);
 }
 
+int LibzipPlugin::cancelCallback(zip_t *, void *that)
+{
+    return static_cast<LibzipPlugin *>(that)->cancelResult();
+}
+
 LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
     , m_overwriteAll(false)
@@ -397,6 +402,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
     m_addarchive = archive;
     // Register the callback function to get progress feedback.
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
+    zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);
 
     if (zip_close(archive)) {
         emit error(tr("Failed to write archive."));
@@ -432,6 +438,16 @@ void LibzipPlugin::emitProgress(double percentage)
         // Go from 0 to 50%. The second half is the subsequent listing.
         emit progress(percentage);
         flag = false;
+    }
+}
+
+int LibzipPlugin::cancelResult()
+{
+    if (m_bCancel) {
+        m_bCancel = false;
+        return 1;
+    } else {
+        return 0;
     }
 }
 
@@ -710,6 +726,7 @@ bool LibzipPlugin::testArchive()
 
 bool LibzipPlugin::doKill()
 {
+    m_bCancel = true;
     return false;
 }
 
