@@ -52,8 +52,10 @@ enum Page_ID {
     PAGE_UNZIP_FAIL,        // 解压失败界面
     PAGE_ENCRYPTION,        // 解压输入密码界面
     PAGE_DELETEPROGRESS,    // 删除进度界面
-    //PAGE_MAX,               //
-    PAGE_LOADING            // 加载转圈界面
+    //PAGE_MAX,             //
+    PAGE_LOADING,           // 加载转圈界面
+    PAGE_CONVERTPROGRESS,   // 格式转换界面
+    PAGE_CONVERT_SUCCESS    // 格式转换成功界面
 };
 
 /**
@@ -69,7 +71,8 @@ enum Archive_OperationType {
     Operation_TempExtract,              // 临时解压
     Operation_TempExtract_Open,         // 打开
     Operation_TempExtract_Open_Choose,  // 选择打开
-    Operation_DRAG                      // 拖拽
+    Operation_DRAG,                     // 拖拽
+    Operation_CONVERT                   // 格式转换
 };
 
 /**

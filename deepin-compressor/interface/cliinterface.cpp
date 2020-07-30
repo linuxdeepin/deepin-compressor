@@ -177,9 +177,11 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         this->extractPsdStatus = Checked;
         emit sigExtractPwdCheckDown();
     }
+
     if (m_extractionOptions.isBatchExtract()) {
         destPath = destinationDirectory;
     }
+
     qDebug() << "####destpath：" << destPath;
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
@@ -193,7 +195,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
-
     bool ifNeedPsd = options.encryptedArchiveHint();
     if (ifNeedPsd == false) {
         //don't need psd
@@ -202,7 +203,6 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
             return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
         }
     }
-
 
     //get user input password
     QString psdd = password();
@@ -235,11 +235,10 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
             emit finished(false);
             return false;
         }
+
         destDir = QUrl(m_extractTempDir->path());
         QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
     }
-
-
 
     return runProcess(
                m_cliProps->property("extractProgram").toString(),
@@ -438,9 +437,13 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         if (m_isTar7z) {
             getChildProcessidTar7z(QString::number(m_processid), m_childprocessid);
         }
+
+        return true;
     }
+
     return true;
 }
+
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_exitCode = exitCode;
@@ -1257,7 +1260,17 @@ bool CliInterface::handleLine(const QString &line)
             emitProgress(float(percentage) / 100);
             if (line.contains("Extracting")) {
                 QStringRef strfilename = line.midRef(12, pos - 24);
-                emitFileName(strfilename.toString());
+                QString fileName = strfilename.toString();
+                for (int i = fileName.length() - 1; i > 0; i--) {
+                    if (fileName.at(i) == " ") {
+                        continue;
+                    } else {
+                        fileName = fileName.left(i + 1);
+                        break;
+                    }
+                }
+
+                emitFileName(fileName);
             }
 
             return true;

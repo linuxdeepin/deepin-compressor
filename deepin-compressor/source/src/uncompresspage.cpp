@@ -31,12 +31,14 @@
 #include <DMessageManager>
 #include <DDialog>
 #include <DFontSizeManager>
+#include <DRadioButton>
 
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QFile>
 #include <QUrl>
 #include <QFontMetrics>
+#include <QMessageBox>
 
 
 DCORE_USE_NAMESPACE
@@ -88,9 +90,10 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigextractfiles, this, &UnCompressPage::onextractfilesSlot);
     connect(m_fileviewer, &fileViewer::sigOpenWith, this, &UnCompressPage::onextractfilesOpenSlot);
 //    connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &UnCompressPage::onRefreshFilelist);
+    connect(m_fileviewer, &fileViewer::sigNeedConvert, this, &UnCompressPage::convertArchive);
     connect(m_fileviewer, &fileViewer::sigEntryRemoved, this, &UnCompressPage::onRefreshEntryList);
     connect(m_fileviewer, &fileViewer::sigFileAutoCompress, this, &UnCompressPage::onAutoCompress);
-    connect(this, &UnCompressPage::subWindowTipsPopSig, m_fileviewer, &fileViewer::SubWindowDragMsgReceive);
+//    connect(this, &UnCompressPage::subWindowTipsPopSig, m_fileviewer, &fileViewer::SubWindowDragMsgReceive);
 //    connect(this, &UnCompressPage::subWindowTipsUpdateEntry, m_fileviewer, &fileViewer::SubWindowDragUpdateEntry);
 
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
@@ -231,6 +234,34 @@ void UnCompressPage::setUpdateFiles(const QStringList &listFiles)
     m_inputlist = listFiles;
 }
 
+void UnCompressPage::convertArchive()
+{
+    if (m_info.filePath().endsWith(".rar")) {
+        QStringList type = convertArchiveDialog();
+        if (type.at(0) == "true") {
+            QString tmppath1 = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+            QDir dir1(tmppath1);
+            if (!dir1.exists()) {
+                dir1.mkdir(tmppath1);
+            }
+
+            QString tmppath2 = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + "converttempfiles";
+            QDir dir2(tmppath2);
+            if (!dir2.exists()) {
+                dir1.mkdir(tmppath2);
+            }
+
+            if (type.last() == "zip") {
+                emit sigDecompressPress(tmppath2, "zip");
+            } else if (type.last() == "7z") {
+                emit sigDecompressPress(tmppath2, "7z");
+            }
+        }
+    } else {
+        emit sigAutoCompress(m_info.filePath(), m_inputlist);
+    }
+}
+
 QString UnCompressPage::getAndDisplayPath(QString path)
 {
     const QString curpath = path;
@@ -261,11 +292,8 @@ void UnCompressPage::slotCompressedAddFile()
     ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
     int responseValue = 0;
     foreach (QString strPath, dialog.selectedFiles()) {
-
         Archive::Entry *entry = pModel->isExists(strPath);
-
         if (entry != nullptr) {
-
             int mode = showReplaceDialog(strPath, responseValue);
             if (1 == mode) {
                 vectorEntry.push_back(entry);
@@ -276,19 +304,27 @@ void UnCompressPage::slotCompressedAddFile()
         }
     }
 
+//    m_model->refreshNow();
+//    if (vectorEntry.count() > 0) {
+//        emit onRefreshEntryList(vectorEntry, false);
+//    } else {
+//        if (m_inputlist.count() > 0)
+//            emit sigAutoCompress(m_info.filePath(), m_inputlist);
+//        //emit onAutoCompress(m_inputlist);
 
+//        m_inputlist.clear();
+//    }
     m_model->refreshNow();
     if (vectorEntry.count() > 0) {
         emit onRefreshEntryList(vectorEntry, false);
     } else {
-        if (m_inputlist.count() > 0)
-            emit sigAutoCompress(m_info.filePath(), m_inputlist);
-        //emit onAutoCompress(m_inputlist);
+        if (m_inputlist.count() > 0) {
+            convertArchive();
+        }
 
+        //emit onAutoCompress(m_inputlist);
         m_inputlist.clear();
     }
-
-
 
     //emit sigAutoCompress(m_info.filePath(), dialog.selectedFiles());
 }
@@ -419,18 +455,17 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
         } else {
             m_inputlist.push_back(strPath);
         }
-
     }
-
 
     m_model->refreshNow();
     if (vectorEntry.count() > 0) {
         emit onRefreshEntryList(vectorEntry, false);
     } else {
-        if (m_inputlist.count() > 0)
-            emit sigAutoCompress(m_info.filePath(), m_inputlist);
-        //emit onAutoCompress(m_inputlist);
+        if (m_inputlist.count() > 0) {
+            convertArchive();
+        }
 
+        //emit onAutoCompress(m_inputlist);
         m_inputlist.clear();
     }
 }
@@ -460,4 +495,93 @@ int UnCompressPage::showReplaceDialog(QString name, int &responseValue)
     query.execute();
     responseValue = query.response().toInt();
     return query.getExecuteReturn();
+}
+
+QStringList UnCompressPage::convertArchiveDialog()
+{
+    DDialog *dialog = new DDialog(this);
+    dialog->setMinimumSize(QSize(380, 180));
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog->setIcon(pixmap);
+
+    dialog->addButton(tr("Cancel"));
+    dialog->addButton(tr("Convert"), true, DDialog::ButtonRecommend);
+
+    DWidget *widget = new DWidget(dialog);
+    QVBoxLayout *mainlayout = new QVBoxLayout(widget);
+    QHBoxLayout *textLayout = new QHBoxLayout;
+    QHBoxLayout *labelLayout = new QHBoxLayout;
+
+    DLabel *strlabel = new DLabel(/*dialog*/);
+    strlabel->setMinimumSize(QSize(308, 40));
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+    strlabel->setText(tr("Changes to archives in this file type are not supported. Please convert the archive format to save the changes."));
+//    strlabel->adjustSize();
+    strlabel->setWordWrap(true);
+    strlabel->setAlignment(Qt::AlignCenter);
+    textLayout->setSpacing(36);
+    textLayout->addWidget(strlabel/*, Qt::AlignHCenter | Qt::AlignVCenter*/);
+    textLayout->setSpacing(36);
+
+    strlabel->setForegroundRole(DPalette::ToolTipText);
+//    DPalette pa = DApplicationHelper::instance()->palette(strlabel);
+//    pa.setBrush(DPalette::ToolTipText, pa.color(DPalette::ToolTipText));
+//    DApplicationHelper::instance()->setPalette(strlabel, pa);
+
+    DLabel *strlabel2 = new DLabel(/*dialog*/);
+    strlabel2->setMinimumSize(QSize(112, 20));
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
+    strlabel2->setText(tr("Convert the format to:"));
+
+    DRadioButton *zipBtn = new DRadioButton("ZIP");
+    zipBtn->setChecked(true);
+    DRadioButton *_7zBtn = new DRadioButton("7Z");
+    _7zBtn->setChecked(false);
+
+    labelLayout->addStretch();
+    labelLayout->addWidget(strlabel2);
+    labelLayout->setSpacing(20);
+    labelLayout->addWidget(zipBtn);
+    labelLayout->setSpacing(20);
+    labelLayout->addWidget(_7zBtn);
+    labelLayout->addStretch();
+
+    mainlayout->addWidget(strlabel);
+    mainlayout->addStretch();
+    mainlayout->addLayout(labelLayout);
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    QStringList typeList;
+    bool isZipConvert = true;
+    bool is7zConvert = false;
+    QString convertType;
+
+    connect(zipBtn, &DRadioButton::toggled, this, [ =, &isZipConvert]() {
+        isZipConvert = zipBtn->isChecked();
+        qDebug() << "zip" << isZipConvert;
+    });
+
+    connect(_7zBtn, &DRadioButton::toggled, this, [ =, &is7zConvert]() {
+        is7zConvert = _7zBtn->isChecked();
+        qDebug() << "7z" << is7zConvert;
+    });
+
+    qDebug() << "zip" << isZipConvert;
+    qDebug() << "7z" << is7zConvert;
+
+    const int mode = dialog->exec();
+
+    if (mode == QDialog::Accepted) {
+        if (isZipConvert) {
+            typeList << "true" << "zip";
+        } else if (is7zConvert) {
+            typeList << "true" << "7z";
+        }
+    } else {
+        typeList << "false" << "none";
+    }
+
+    return typeList;
 }

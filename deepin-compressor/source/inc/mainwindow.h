@@ -27,6 +27,7 @@
 #include "progress.h"
 #include "customdatainfo.h"
 #include "ddesktopservicesthread.h"
+
 #include <DMainWindow>
 #include <DFileWatcher>
 #include <DSpinner>
@@ -112,6 +113,12 @@ public:
      * @param Args  相关设置参数
      */
     void creatArchive(QMap<QString, QString> &Args);
+
+    /**
+     * @brief creatArchive  创建转换压缩包（单路径）
+     * @param Args  相关设置参数
+     */
+    void creatConvertArchive(QMap<QString, QString> &Args);
 
     /**
      * @brief creatBatchArchive  创建压缩包（多路径）
@@ -279,6 +286,11 @@ private:
      * @param destDirName
      */
     void deleteDecompressFile(QString destDirName = "");
+
+    /**
+     * @brief deleteConvertTempFile    关闭/取消/退出时删除格式转换临时文件
+     */
+    void deleteConvertTempFile();
 
     /**
      * @brief startCmd  启动命令
@@ -590,7 +602,7 @@ private slots:
      * @brief slotextractSelectedFilesTo
      * @param localPath
      */
-    void slotextractSelectedFilesTo(const QString &localPath);
+    void slotextractSelectedFilesTo(const QString &localPath, QString convertType = "");
 
     /**
      * @brief SlotProgress
@@ -753,6 +765,12 @@ private slots:
      * @brief slotKillShowFoldItem
      */
     void slotKillShowFoldItem();
+
+    /**
+     * @brief slotReloadConvertArchive
+     */
+    void slotReloadConvertArchive(QString path);
+
 public:
     static int m_windowcount;                               // 窗口数目
     OpenInfo::ENUM_OPTION m_eOption = OpenInfo::OPEN;       // 窗口打开标志
@@ -792,11 +810,13 @@ private:
     QString m_strDecompressFileName;                        // 压缩包文件名（不含路径）
     QString m_strDecompressFilePath;                        // 压缩包路径
     QString m_strLoadfile;                                  // 加载文件名（含路径）
+    QFileInfo m_loadFile;                                   // 加载文件
     QVector<Archive::Entry *> m_vecExtractSimpleFiles;      // 解压文件
     QString m_strProgram;                                   // 打开方式（应用程序名称）
     QStringList m_rightMenuList;                            // 右键菜单传递参数
     QFileSystemWatcher *m_pOpenFileWatcher = nullptr;       // 对打开的文件监控
     QMap<QString, bool> m_mapFileHasModified;
+    QStringList m_extractToFile;                            //解压出来的文件
 
     // 追加压缩参数
     QString m_strAppendFileName;                            // 追加文件名（含路径）
@@ -816,7 +836,7 @@ private:
     Page_ID m_ePageID = PAGE_HOME;                          // 界面页类型
     bool m_bIsRightMenu = false;                            // 是否右键菜单引起的操作
     bool m_bIsAddArchive = false;                           // 是否追加压缩
-    QString m_OptionType = "";								// 用户右键点击解压或压缩的标识
+    QString m_OptionType = "";                              // 用户右键点击解压或压缩的标识
 
     // 界面<->插件
     KJob *m_pJob = nullptr;                                 // 指向所有Job派生类对象
@@ -830,23 +850,15 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     int m_iOpenTempFileLink = 0;                            // 打开临时文件索引
     QEventLoop *pEventloop = nullptr;                       // 事件循环
-    DDesktopServicesThread *m_DesktopServicesThread;		// 打开指定文件线程
+    DDesktopServicesThread *m_DesktopServicesThread;        // 打开指定文件线程
+
+    QString m_strConvertFileName;                           // 格式转换后的文件名
+    QString m_convertType = "";                             // 转换格式
+    bool m_convertFirst = false;                            // 完成转换第一步：解压
+    double m_lastPercent = 0;                               // 记录格式转换解压进度
+
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-

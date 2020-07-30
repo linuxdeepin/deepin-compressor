@@ -817,7 +817,7 @@ int fileViewer::popUpDialog(const QString &desc)
         dialog->addButton(tr("update"));
     }
 
-    dialog->setMinimumSize(500, 140);
+    dialog->setMinimumSize(380, 140);
     DLabel *pContent = new DLabel(desc, dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
@@ -1492,7 +1492,11 @@ void fileViewer::onRightMenuClicked(QAction *action)
         } else if (action->text() == tr("Delete") || action->text() == tr("Delete", "slotDecompressRowDelete")) {
             isPromptDelete = true;
             if (DDialog::Accepted == popUpDialog(tr("Do you want to detele the selected file?"))) {
-                slotDecompressRowDelete();
+                if (m_loadPath.endsWith(".rar")) {
+                    emit sigNeedConvert();
+                } else {
+                    slotDecompressRowDelete();
+                }
             }
         }
     } else {

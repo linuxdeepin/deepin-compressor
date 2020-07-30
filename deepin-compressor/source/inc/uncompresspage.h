@@ -69,8 +69,11 @@ public:
     // 设置更新文件
     void setUpdateFiles(const QStringList &listFiles);
 
+    //提示是否转换压缩文件格式
+    QStringList convertArchiveDialog();
+
 signals:
-    void sigDecompressPress(const QString &localPath);
+    void sigDecompressPress(const QString &localPath, QString conVert = "");
     void sigextractfiles(QVector<Archive::Entry *>, QString path, EXTRACT_TYPE type);
     void sigOpenExtractFile(const QVector<Archive::Entry *> &fileList, const QString &programma);
     void sigFilelistIsEmpty();
@@ -108,6 +111,8 @@ public slots:
     void slotSubWindowTipsPopSig(int, const QStringList &);
 
     void slotDeleteJobFinished(Archive::Entry *pWorkEntry);
+    //转换格式
+    void convertArchive();
 
 private:
     QString getAndDisplayPath(QString path);

@@ -27,6 +27,7 @@
 #include <DDialog>
 #include <DFileDialog>
 #include <DStyle>
+#include <DRadioButton>
 
 #include <QDebug>
 #include <QFileIconProvider>
@@ -371,7 +372,6 @@ void CompressSetting::onNextButoonClicked()
         //            showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));
         //            return;
         //        }
-
     } else {
         m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
     }
@@ -859,6 +859,7 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
 void CompressSetting::autoCompress(const QString &compresspath, const QStringList &path)
 {
     qDebug() << "开始执行添加操作！" << ";compresspath:" << compresspath << ";path:" << path;
+
     for (int i = 0; i < path.count(); i++) {
         if (compresspath == path.at(i)) {
             DDialog *pDialog = new DDialog(this);
@@ -930,6 +931,7 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
     if (!m_supportedMimeTypes.size()) {
         m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     }
+
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
             fixedMimeType = type;

@@ -55,7 +55,8 @@ public:
         OP_COMPRESSING,     // 正常压缩进度
         OP_COMPRESSDRAGADD, // 拖拽添加压缩进度
         OP_DECOMPRESSING,   // 解压缩进度
-        OP_DELETEING        // 删除进度
+        OP_DELETEING,       // 删除进度
+        OP_CONVERT          // 转换格式进度
     };
 
     Progress(DWidget *parent = nullptr);

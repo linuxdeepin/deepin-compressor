@@ -132,6 +132,7 @@ void Archive::Entry::calAllSize(qint64 &size)
         //size += 1;
         return ;
     }
+
     const auto archiveEntries = this->entries();
     for (auto entry : archiveEntries) {
         if (entry->isDir() == true) {

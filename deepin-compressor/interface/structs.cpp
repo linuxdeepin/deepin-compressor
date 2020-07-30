@@ -39,6 +39,7 @@ double ProgressAssistant::getSpeed(unsigned long percent)
     if (consumeTime < 0) {
         m_timer.start();
     }
+
     consumeTime += m_timer.elapsed();
     //qDebug() << "compresstime" << consumeTime;
     double speed;

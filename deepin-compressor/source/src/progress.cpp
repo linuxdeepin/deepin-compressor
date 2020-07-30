@@ -86,12 +86,12 @@ void Progress::InitUI()
     m_cancelbutton = new DPushButton(this);
     m_cancelbutton->setMinimumSize(200, 36);
     m_cancelbutton->setText(tr("Cancel"));
-    m_cancelbutton->setFocusPolicy(Qt::ClickFocus);
+    m_cancelbutton->setFocusPolicy(Qt::NoFocus);
 
     m_PauseContinueButton = new DPushButton(this);
     m_PauseContinueButton->setMinimumSize(200, 36);
     m_PauseContinueButton->setText(tr("Pause"));
-    m_PauseContinueButton->setFocusPolicy(Qt::ClickFocus);
+    m_PauseContinueButton->setFocusPolicy(Qt::NoFocus);
     m_PauseContinueButton->setCheckable(true);
 
     //add speed and time label
@@ -153,7 +153,10 @@ void Progress::setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type)
         m_speedLabel->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
     } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
         m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
+        m_speedLabel->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
     }
+
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
     qDebug() << "setspeedandtimetext";
 }
@@ -192,7 +195,7 @@ void Progress::resetPauseContinueButton()
 void Progress::hidePauseContinueButton()
 {
     //    暂时只支持压缩解压时暂停取消
-    if (Progress::OP_COMPRESSING == m_ProgressType || Progress::OP_DECOMPRESSING == m_ProgressType) {
+    if (Progress::OP_COMPRESSING == m_ProgressType || Progress::OP_DECOMPRESSING == m_ProgressType || Progress::OP_CONVERT == m_ProgressType) {
         m_cancelbutton->setMinimumSize(200, 36);
         m_PauseContinueButton->setVisible(true);
     } else {
@@ -235,6 +238,7 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
             lastTimeLeft = timeLeft;
         }
     }
+
     if (timeLeft < 30) {//剩余时间小于30s，会实时刷新
         lastTimeLeft = timeLeft;
     }
@@ -283,7 +287,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
         } else {
             m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
         }
-    } else {
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
         if (speed < 1024) {
             m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
         } else if (speed > 1024 && speed < 1024 * 300) {
@@ -291,7 +295,16 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
         } else {
             m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
         }
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
+        if (speed < 1024) {
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+        } else if (speed > 1024 && speed < 1024 * 300) {
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/S");
+        }
     }
+
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
@@ -321,6 +334,8 @@ void Progress::setProgressFilename(QString filename)
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Deleteing") + ": " + filename, Qt::ElideMiddle, 520));
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Converting") + ": " + filename, Qt::ElideMiddle, 520));
     } else {
         if (m_openType) {
             m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));
@@ -382,6 +397,8 @@ int Progress::showConfirmDialog()
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
         strlabel2->setText(tr("Are you sure you want to stop the updating?"));
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        strlabel2->setText(tr("Are you sure you want to stop the converting?"));
     } else {
         //strlabel->setText(tr("Stop extracting "));
         if (m_openType) {

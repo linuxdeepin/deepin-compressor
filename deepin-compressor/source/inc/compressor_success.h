@@ -42,6 +42,7 @@ public:
     void setCompressFullPath(const QString &path);
     void setCompressNewFullPath(const QString &path);
     void clear();
+    void setConvertType(QString type);
 
 private:
     DPushButton *m_showfilebutton;
@@ -53,9 +54,11 @@ private:
     QString m_fullpath;
     QString newCreatePath_;
     DCommandLinkButton *commandLinkBackButton = nullptr;
+    QString m_convertType;
 
 signals:
     void sigBackButtonClicked();
+    void sigOpenConvertArchive(QString path);
 
 public slots:
     void showfiledirSlot(bool iIsUrl = true);
