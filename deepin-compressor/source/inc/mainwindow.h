@@ -282,10 +282,10 @@ private:
     void deleteCompressFile(/*QStringList oldfiles, QStringList newfiles*/);
 
     /**
-     * @brief deleteDecompressFile    关闭/取消/退出时删除临时解压文件
+     * @brief deleteDecompressFile    关闭/取消/退出时删除临时解压文件，放到回收站
      * @param destDirName
      */
-    void deleteDecompressFile(QString destDirName = "");
+    void deleteDecompressFile(QString destDirName = QString(""));
 
     /**
      * @brief deleteConvertTempFile    关闭/取消/退出时删除格式转换临时文件

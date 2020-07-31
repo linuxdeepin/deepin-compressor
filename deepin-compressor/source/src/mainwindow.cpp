@@ -1642,7 +1642,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_ePageID = PAGE_ZIPSET;
         setCompressDefaultPath();
         refreshPage();
-    } else if (files.last() == QStringLiteral("compress_to_zip")) {
+    } else if (files.last() == QStringLiteral("compress_to_zip")) { //添加到xx.zip
         // qDebug() << "compress_to_zip" << files;
         QStringList pathlist = files;
         pathlist.removeLast();
@@ -1650,7 +1650,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_ePageID = PAGE_ZIPPROGRESS;
         setCompressDefaultPath();
         m_pCompressSetting->onNextButoonClicked();
-    } else if (files.last() == QStringLiteral("compress_to_7z")) {
+    } else if (files.last() == QStringLiteral("compress_to_7z")) { //添加到xx.7z
         // qDebug() << "compress_to_7z" << files;
         QStringList pathlist = files;
         pathlist.removeLast();
@@ -3310,12 +3310,13 @@ void MainWindow::deleteDecompressFile(QString destDirName)
         if (!tmpDecompressfilepath.endsWith(QDir::separator())) {
             tmpDecompressfilepath += QDir::separator();
         }
-
-        if (m_pUnCompressPage->getDeFileCount() > 1) {
+        if (m_pUnCompressPage->getDeFileCount() > 1) { //多文件(夹)
             if (bAutoCreatDir) {
                 QDir fi(tmpDecompressfilepath);  //注意：若tmpDecompressfilepath为空字符串，则使用（"."）构造目录，后面会删除整个当前目录!!!
                 if (fi.exists()) {
-                    fi.removeRecursively();
+                    QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + fi.dirName();
+                    fi.rename(fi.path(), newname);
+//                    fi.removeRecursively();
                 }
             } /*else {      //不自动创建文件夹，顶级多文件(夹)，未做删除临时文件处理
                 auto rootEntry = this->m_pArchiveModel->getRootEntry();
@@ -3329,15 +3330,19 @@ void MainWindow::deleteDecompressFile(QString destDirName)
                 }
             }*/
         } else if (m_pUnCompressPage->getDeFileCount() == 1) {
-            if (!m_pArchiveModel->archive()->isSingleFile()) { //单个文件还是文件夹？
+            if (!m_pArchiveModel->archive()->isSingleFile()) { //单个文件夹
                 QDir fi(tmpDecompressfilepath + m_pArchiveModel->archive()->subfolderName());
                 if (fi.exists()) {
-                    fi.removeRecursively();
+                    QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + fi.dirName();
+                    fi.rename(fi.path(), newname);
+//                    fi.removeRecursively();
                 }
-            } else {
+            } else { //单个文件
                 QFile fi(tmpDecompressfilepath + destDirName);
                 if (fi.exists()) {
-                    fi.remove();
+                    QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + destDirName;
+                    fi.rename(newname);
+//                    fi.remove();
                 }
             }
         }
