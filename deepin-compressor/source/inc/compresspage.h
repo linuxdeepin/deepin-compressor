@@ -53,23 +53,19 @@ public slots:
     void onSelectedFilesSlot(const QStringList &files);
     void onRefreshFilelist(const QStringList &filelist);
     void onPathIndexChanged();
-
     void clearFiles();
 
 signals:
     void sigselectedFiles(const QStringList &files);
     void sigiscanaddfile(bool status);
     void sigFilelistIsEmpty();
-
     void sigRefreshFileList(const QStringList &files);
 
 private:
-
     fileViewer *m_fileviewer;
     DPushButton *m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
-
 };
 
 #endif

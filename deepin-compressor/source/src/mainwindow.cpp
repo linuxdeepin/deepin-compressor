@@ -394,9 +394,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         deleteCompressFile();
-        if (mode == 1) {
-            safeDelete();
-        }
         slotquitApp();
         return;
     }
@@ -419,17 +416,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         }
 
-        if (mode == 1) {
-            safeDelete();
-        }
-
         slotquitApp();
         //emit sigquitApp();
     } else if (PAGE_ZIP_FAIL == m_ePageID /*m_pMainLayout->currentIndex()*/) {
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_strPathStore)*/);
-        if (mode == 1) {
-            safeDelete();
-        }
         slotquitApp();
     } else {
         slotquitApp();
@@ -1371,7 +1361,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //    }
 //    QMessageBox::information(nullptr, "Title", info,
 //                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    if (files.last() == QStringLiteral("extract_here")) {//解压
+    if (files.last() == QStringLiteral("extract_here")) { //解压到当前文件夹
         m_bIsRightMenu = true;
         QFileInfo fileinfo(files.at(0));
         m_strDecompressFileName = fileinfo.fileName();
@@ -1491,7 +1481,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         const int mode = dialog.exec();
 
         if (mode != QDialog::Accepted) {
-            QTimer::singleShot(100, this, [ = ] { slotquitApp(); });
+            QTimer::singleShot(100, this, [=] {
+                slotquitApp();
+            });
             return;
         }
 
@@ -1652,7 +1644,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         setCompressDefaultPath();
         refreshPage();
     }
-
 
     show();
 }
@@ -4143,17 +4134,17 @@ void MainWindow::deleteLaterJob()
 
 void MainWindow::safeDelete()
 {
-    Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
-    if (pRootEntry) {
-        pRootEntry->clean();
-    }
+    //    Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
+    //    if (pRootEntry) {
+    //        pRootEntry->clean();
+    //    }
 
-    SAFE_DELETE_ELE(pRootEntry);
+    //    SAFE_DELETE_ELE(pRootEntry);
     SAFE_DELETE_ELE(m_pFileWatcher);
     SAFE_DELETE_ELE(pEventloop);
     SAFE_DELETE_ELE(m_pSpinner);
     SAFE_DELETE_ELE(m_pWatcher);
-    //    SAFE_DELETE_ELE(m_pArchiveModel);
+    SAFE_DELETE_ELE(m_pArchiveModel);
     //    SAFE_DELETE_ELE(m_logo);
     //    SAFE_DELETE_ELE(m_titleFrame);
     //    SAFE_DELETE_ELE(m_titlelabel);
