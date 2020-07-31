@@ -58,7 +58,7 @@ void BatchExtract::addExtraction(const QUrl &url)
     connect(job, SIGNAL(percent(KJob *, ulong)),
             this, SLOT(forwardProgress(KJob *, ulong)));
     connect(job, &BatchExtractJob::userQuery,
-            this, &BatchExtract::slotUserQuery);
+            this, &BatchExtract::signalUserQuery);
     connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
             this, SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(job, &BatchExtractJob::signeedpassword,
@@ -81,10 +81,10 @@ bool BatchExtract::doKill()
     return subjobs().first()->kill();
 }
 
-void BatchExtract::slotUserQuery(Query *query)
-{
-    query->execute();
-}
+//void BatchExtract::slotUserQuery(Query *query)
+//{
+//    query->execute();
+//}
 
 bool BatchExtract::autoSubfolder() const
 {

@@ -481,7 +481,9 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     //    } else
     if (m_operationMode == List && isCorrupt()) {
         LoadCorruptQuery query(filename());
-        query.execute();
+        //query.execute();
+        emit userQuery(&query);
+        query.waitForResponse();
         if (!query.responseYes()) {
             emit cancelled();
             emit finished(false);
@@ -493,7 +495,9 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         if (m_isbatchlist && 2 == exitCode) {
 
             PasswordNeededQuery query(filename());
-            query.execute();
+            //query.execute();
+            emit userQuery(&query);
+            query.waitForResponse();
             if (query.responseCancelled()) {
                 emit error("Canceal when batchextract.");
                 emit cancelled();
@@ -751,7 +755,9 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
 
                     OverwriteQuery query(absDestEntry.absoluteFilePath());
                     query.setNoRenameMode(true);
-                    query.execute();
+                    //query.execute();
+                    emit userQuery(&query);
+                    query.waitForResponse();
 
                     if (query.responseOverwrite() || query.responseOverwriteAll()) {
                         if (query.responseOverwriteAll()) {
@@ -868,7 +874,9 @@ bool CliInterface::moveToDestination(const QDir &tempDir, const QDir &destDir, b
 
             OverwriteQuery query(absDestEntry.absoluteFilePath());
             query.setNoRenameMode(true);
-            query.execute();
+            //query.execute();
+            emit userQuery(&query);
+            query.waitForResponse();
 
             if (query.responseOverwrite() || query.responseOverwriteAll()) {
                 if (query.responseOverwriteAll()) {
@@ -1417,7 +1425,9 @@ bool CliInterface::handleLine(const QString &line)
 
             if (m_isbatchlist) {
                 PasswordNeededQuery query(filename());
-                query.execute();
+                //query.execute();
+                emit userQuery(&query);
+                query.waitForResponse();
 
                 if (query.responseCancelled()) {
                     emit error("Canceal when batchextract.");
@@ -1541,7 +1551,9 @@ bool CliInterface::handleFileExistsMessage(const QString &line)
 
     OverwriteQuery query(QDir::current().path() + QLatin1Char('/') + m_storedFileName);
     query.setNoRenameMode(true);
-    query.execute();
+    //    query.execute();
+    emit userQuery(&query);
+    query.waitForResponse();
 
     QString responseToProcess;
     const QStringList choices = m_cliProps->property("fileExistsInput").toStringList();

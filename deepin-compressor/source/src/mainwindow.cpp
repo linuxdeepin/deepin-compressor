@@ -751,6 +751,12 @@ void MainWindow::InitConnection()
             m_mapFileHasModified[path] = false;
         }
     });
+
+    connect(m_pArchiveModel, &ArchiveModel::signalUserQuery, [=](Query *query) {
+        qDebug() << "query->execute";
+        query->setParent(this);
+        query->execute();
+    });
 }
 
 QMenu *MainWindow::createSettingsMenu()
@@ -958,8 +964,10 @@ bool MainWindow::popUpChangedDialog(const qint64 &pid)
 
 bool MainWindow::createSubWindow(const QStringList &urls)
 {
+    qDebug() << "createSubWindow";
     MainWindow *subWindow = nullptr;
     bool bStagger = false;
+    QStringList inUrls;
 
     if (urls.length() == 0) {
         bStagger = true;
@@ -974,8 +982,9 @@ bool MainWindow::createSubWindow(const QStringList &urls)
         QString filePath = urls[0];
         QFileInfo fileInfo(filePath);
 
-        QStringList inUrls = std::move(const_cast<QStringList & >(urls));
-        qDebug() << "=================urls:" << inUrls;
+        /*QStringList */ inUrls = std::move(const_cast<QStringList &>(urls));
+        qDebug() << "=================inUrls:" << inUrls;
+        //qDebug() << "=================urls:" << urls;
 
         QString winid = "";
         for (int i = 0; i < inUrls.length(); i++) {
@@ -1028,14 +1037,14 @@ bool MainWindow::createSubWindow(const QStringList &urls)
 
                 subWindow->m_ePageID = PAGE_ZIP;
                 //        subWindow->onRightMenuSelected(inUrls);
-                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+                //QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
                 //        subWindow->onSelected(inUrls);
             }
         } else {
             bStagger = true;
-            if (inUrls.length() > 0) {
-                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
-            }
+            //            if (inUrls.length() > 0) {
+            //                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+            //            }
         }
 
         //++m_windowcount;
@@ -1067,6 +1076,11 @@ bool MainWindow::createSubWindow(const QStringList &urls)
     }
 
     subWindow->show();
+
+    if (inUrls.length() > 0) {
+        QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+    }
+
     return true;
 }
 
@@ -1513,6 +1527,12 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             }
         }
 
+        connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+        });
+
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
@@ -1617,7 +1637,11 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 batchJob->addInput(QUrl::fromLocalFile(transFile));
             }
         }
-
+        connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+        });
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
@@ -4428,7 +4452,8 @@ void MainWindow::unzipSuccessOpenFileDir()
             }
         }
 
-        slotquitApp();
+        //slotquitApp();
+        close();
         return;
     } else {
         if (m_pSettingsDialog->isAutoOpen() && m_operationtype != Operation_NULL) {

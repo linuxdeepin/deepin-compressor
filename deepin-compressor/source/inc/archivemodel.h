@@ -144,6 +144,7 @@ Q_SIGNALS:
     void droppedFiles(const QStringList &files, const Archive::Entry *);
     void sigShowLabel() const;
 
+    void signalUserQuery(Query *query);
 
 private Q_SLOTS:
     void slotNewEntry(Archive::Entry *entry);
@@ -151,7 +152,7 @@ private Q_SLOTS:
     void slotListEntry(Archive::Entry *entry);
     void slotLoadingFinished(KJob *job);
     void slotEntryRemoved(const QString &path);
-    void slotUserQuery(Query *query);
+    //void slotUserQuery(Query *query);
     void slotCleanupEmptyDirs();
 
 private:
