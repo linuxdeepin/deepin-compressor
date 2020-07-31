@@ -1364,7 +1364,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     }
 
     m_pUnCompressPage->setWidth(this->width());
-    calSelectedTotalFileSize(files);
+//    calSelectedTotalFileSize(files);
 //    QString info = "";
 //    for (int i = 0; i < files.length(); i++) {
 //        info += files[i];
@@ -1382,6 +1382,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
+        calSelectedTotalFileSize(files);
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QStringList pathlist = files;
@@ -1470,6 +1471,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         loadArchive(files.at(0));
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
     } else if (files.last() == QStringLiteral("extract_multi")) {
+        calSelectedTotalFileSize(files);
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QString defaultpath;
