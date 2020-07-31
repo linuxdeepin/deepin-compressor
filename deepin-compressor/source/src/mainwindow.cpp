@@ -752,7 +752,7 @@ void MainWindow::InitConnection()
         }
     });
 
-    connect(m_pArchiveModel, &ArchiveModel::signalUserQuery, [=](Query *query) {
+    connect(m_pArchiveModel, &ArchiveModel::signalUserQuery, [ = ](Query * query) {
         qDebug() << "query->execute";
         query->setParent(this);
         query->execute();
@@ -1456,7 +1456,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     }
 
     m_pUnCompressPage->setWidth(this->width());
-    calSelectedTotalFileSize(files);
+//    calSelectedTotalFileSize(files);
 //    QString info = "";
 //    for (int i = 0; i < files.length(); i++) {
 //        info += files[i];
@@ -1527,7 +1527,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             }
         }
 
-        connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
             qDebug() << "query->execute";
             query->setParent(this);
             query->execute();
@@ -1637,7 +1637,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 batchJob->addInput(QUrl::fromLocalFile(transFile));
             }
         }
-        connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
             qDebug() << "query->execute";
             query->setParent(this);
             query->execute();
