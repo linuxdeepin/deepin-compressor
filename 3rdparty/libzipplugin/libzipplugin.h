@@ -99,7 +99,7 @@ private Q_SLOTS:
     void slotRestoreWorkingDir();
 
 private:
-    bool deleteEntry(QString file/*Archive::Entry *pCurEntry*/, zip_t *archive/*, int &curNo, int count = -1*/);
+    bool deleteEntry(QString file, int index/*Archive::Entry *pCurEntry*/, zip_t *archive/*, int &curNo, int count = -1*/);
     enum_extractEntryStatus extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
@@ -147,6 +147,7 @@ private:
 
     QList<int> m_listExtractIndex;
     QString m_strRootNode;
+    QMap<QString, QString> m_fileNameEncodeMap;
 };
 
 #endif // LIBZIPPLUGIN_H
