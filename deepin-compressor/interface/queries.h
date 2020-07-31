@@ -26,6 +26,7 @@
 
 #include <DApplicationHelper>
 #include <DCheckBox>
+#include <DMainWindow>
 
 #include <QString>
 #include <QHash>
@@ -82,12 +83,15 @@ public:
     QVariant response() const;
 
     int execDialog();
+
+    void setParent(DMainWindow *pParent);
+
 protected:
     Query();
     virtual ~Query() {}
 
 
-
+    DMainWindow *m_pParent = nullptr;
     QueryData m_data;
 
 private:

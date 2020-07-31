@@ -569,10 +569,10 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
     }
 }
 
-void ArchiveModel::slotUserQuery(Query *query)
-{
-    query->execute();
-}
+//void ArchiveModel::slotUserQuery(Query *query)
+//{
+//    query->execute();
+//}
 
 void ArchiveModel::slotNewEntry(Archive::Entry *entry)
 {
@@ -914,7 +914,7 @@ KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QO
     auto loadJob = Archive::load(path, mimeType, parent);
     connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
     connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
-    connect(loadJob, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+    connect(loadJob, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
 
     setPlugin(loadJob->archiveInterface());
     connect(loadJob->archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &ArchiveModel::slotListEntry);
@@ -946,7 +946,7 @@ ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, c
     }
 
     ExtractJob *newJob = m_archive->extractFiles(files, destinationDir, options);
-    connect(newJob, &ExtractJob::userQuery, this, &ArchiveModel::slotUserQuery);
+    connect(newJob, &ExtractJob::userQuery, this, &ArchiveModel::signalUserQuery);
     return newJob;
 }
 
@@ -954,7 +954,7 @@ PreviewJob *ArchiveModel::preview(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
     PreviewJob *job = m_archive->preview(file);
-    connect(job, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+    connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
 
@@ -962,7 +962,7 @@ OpenJob *ArchiveModel::open(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
     OpenJob *job = m_archive->open(file);
-    connect(job, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+    connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
 
@@ -970,7 +970,7 @@ OpenWithJob *ArchiveModel::openWith(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
     OpenWithJob *job = m_archive->openWith(file);
-    connect(job, &Job::userQuery, this, &ArchiveModel::slotUserQuery);
+    connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
 
@@ -983,7 +983,7 @@ AddJob *ArchiveModel::addFiles(QVector<Archive::Entry *> &entries, const Archive
     if (!m_archive->isReadOnly()) {
         AddJob *job = m_archive->addFiles(entries, destination, pIface, options);
         connect(job, &AddJob::newEntry, this, &ArchiveModel::slotNewEntry);
-        connect(job, &AddJob::userQuery, this, &ArchiveModel::slotUserQuery);
+        connect(job, &AddJob::userQuery, this, &ArchiveModel::signalUserQuery);
         connect(job, &AddJob::addEntry, this, &ArchiveModel::slotAddEntry);
 
         return job;
@@ -1000,7 +1000,7 @@ MoveJob *ArchiveModel::moveFiles(QVector<Archive::Entry *> &entries, Archive::En
     if (!m_archive->isReadOnly()) {
         MoveJob *job = m_archive->moveFiles(entries, destination, options);
         connect(job, &MoveJob::newEntry, this, &ArchiveModel::slotNewEntry);
-        connect(job, &MoveJob::userQuery, this, &ArchiveModel::slotUserQuery);
+        connect(job, &MoveJob::userQuery, this, &ArchiveModel::signalUserQuery);
         connect(job, &MoveJob::entryRemoved, this, &ArchiveModel::slotEntryRemoved);
         connect(job, &MoveJob::finished, this, &ArchiveModel::slotCleanupEmptyDirs);
 
@@ -1018,7 +1018,7 @@ CopyJob *ArchiveModel::copyFiles(QVector<Archive::Entry *> &entries, Archive::En
     if (!m_archive->isReadOnly()) {
         CopyJob *job = m_archive->copyFiles(entries, destination, options);
         connect(job, &CopyJob::newEntry, this, &ArchiveModel::slotNewEntry);
-        connect(job, &CopyJob::userQuery, this, &ArchiveModel::slotUserQuery);
+        connect(job, &CopyJob::userQuery, this, &ArchiveModel::signalUserQuery);
 
 
         return job;
@@ -1035,7 +1035,7 @@ DeleteJob *ArchiveModel::deleteFiles(QVector<Archive::Entry *> entries)
 
         connect(job, &DeleteJob::finished, this, &ArchiveModel::slotCleanupEmptyDirs);
 
-        connect(job, &DeleteJob::userQuery, this, &ArchiveModel::slotUserQuery);
+        connect(job, &DeleteJob::userQuery, this, &ArchiveModel::signalUserQuery);
         return job;
     }
     return nullptr;

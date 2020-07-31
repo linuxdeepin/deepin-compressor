@@ -657,13 +657,13 @@ void MainWindow::InitConnection()
                 if (fileinfo.isDir()) {
                     DDesktopServices::showFolder(fullpath);     // 如果是文件夹
                 } else if (fileinfo.isFile()) {
-                    qDebug() <<"DDesktopServices start:" << fullpath;
+                    qDebug() << "DDesktopServices start:" << fullpath;
                     m_DesktopServicesThread = new DDesktopServicesThread();
-                    connect(m_DesktopServicesThread,SIGNAL(finished()),this,SLOT(slotKillShowFoldItem()));
+                    connect(m_DesktopServicesThread, SIGNAL(finished()), this, SLOT(slotKillShowFoldItem()));
                     m_DesktopServicesThread->m_path = fullpath;
                     m_DesktopServicesThread->start();
-                   //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
-                    qDebug() <<"DDesktopServices end:" << m_strDecompressFilePath;
+                    //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
+                    qDebug() << "DDesktopServices end:" << m_strDecompressFilePath;
                 }
             }
         }
@@ -686,6 +686,12 @@ void MainWindow::InitConnection()
         shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
         connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    });
+
+    connect(m_pArchiveModel, &ArchiveModel::signalUserQuery, [ = ](Query * query) {
+        qDebug() << "query->execute";
+        query->setParent(this);
+        query->execute();
     });
 }
 
@@ -895,6 +901,7 @@ bool MainWindow::createSubWindow(const QStringList &urls)
 {
     MainWindow *subWindow = nullptr;
     bool bStagger = false;
+    QStringList inUrls;
 
     if (urls.length() == 0) {
         bStagger = true;
@@ -909,8 +916,9 @@ bool MainWindow::createSubWindow(const QStringList &urls)
         QString filePath = urls[0];
         QFileInfo fileInfo(filePath);
 
-        QStringList inUrls = std::move(const_cast<QStringList & >(urls));
-        qDebug() << "=================urls:" << inUrls;
+        /*QStringList */ inUrls = std::move(const_cast<QStringList &>(urls));
+        qDebug() << "=================inUrls:" << inUrls;
+        //qDebug() << "=================urls:" << urls;
 
         QString winid = "";
         for (int i = 0; i < inUrls.length(); i++) {
@@ -963,14 +971,14 @@ bool MainWindow::createSubWindow(const QStringList &urls)
 
                 subWindow->m_ePageID = PAGE_ZIP;
                 //        subWindow->onRightMenuSelected(inUrls);
-                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+                //QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
                 //        subWindow->onSelected(inUrls);
             }
         } else {
             bStagger = true;
-            if (inUrls.length() > 0) {
-                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
-            }
+//            if (inUrls.length() > 0) {
+//                QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+//            }
         }
 
         //++m_windowcount;
@@ -1003,6 +1011,11 @@ bool MainWindow::createSubWindow(const QStringList &urls)
     }
 
     subWindow->show();
+
+    if (inUrls.length() > 0) {
+        QMetaObject::invokeMethod(subWindow, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, inUrls));
+    }
+
     return true;
 }
 
@@ -1421,6 +1434,12 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             }
         }
 
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+        });
+
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
@@ -1525,6 +1544,12 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 batchJob->addInput(QUrl::fromLocalFile(transFile));
             }
         }
+
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+        });
 
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
@@ -1740,16 +1765,16 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath)
 //    refreshPage();
 //    m_pProgressdialog->setProcess(0);
 //    m_pProgess->setprogress(0);
-m_pProgess->pInfo()->setTotalSize(0); //初始化大小
-calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
-qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
-m_pProgressdialog->setProcess(0);
+    m_pProgess->pInfo()->setTotalSize(0); //初始化大小
+    calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
+    qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
+    m_pProgressdialog->setProcess(0);
 
-m_eWorkStatus = WorkProcess;
-m_operationtype = Operation_Extract;
-if (nullptr == m_pArchiveModel) {
-    return;
-}
+    m_eWorkStatus = WorkProcess;
+    m_operationtype = Operation_Extract;
+    if (nullptr == m_pArchiveModel) {
+        return;
+    }
 
     if (nullptr == m_pArchiveModel->archive()) {
         return;
@@ -4081,7 +4106,8 @@ void MainWindow::unzipSuccessOpenFileDir()
         if (m_pSettingsDialog->isAutoOpen()) {
             m_pCompressSuccess->showfiledirSlot(false);
         }
-        slotquitApp();
+        //slotquitApp();
+        close();
         return;
     } else {
         if (m_pSettingsDialog->isAutoOpen() && m_operationtype != Operation_NULL) {

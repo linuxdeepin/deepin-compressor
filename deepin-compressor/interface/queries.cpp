@@ -38,11 +38,13 @@
 #include <QMainWindow>
 
 
-QWidget *getMainWindow()
+DMainWindow *getMainWindow()
 {
     foreach (QWidget *w, QApplication::allWidgets()) {
-        if (qobject_cast<QMainWindow *>(w)) {
-            return w;
+        QMainWindow *pWindow = qobject_cast<QMainWindow *>(w);
+        if (pWindow) {
+            DMainWindow *pp = qobject_cast<DMainWindow *>(pWindow);
+            return pp;
         }
     }
 
@@ -81,6 +83,11 @@ int Query::execDialog()
 {
     //todo 20191125
     return 0;
+}
+
+void Query::setParent(DMainWindow *pParent)
+{
+    m_pParent = pParent;
 }
 
 QString Query::toShortString(QString strSrc, int limitCounts, int left)
@@ -153,7 +160,12 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
-    DDialog *dialog = new DDialog(getMainWindow());
+    if (m_pParent == nullptr) {
+        m_pParent = getMainWindow();
+    }
+
+    DDialog *dialog = new DDialog(m_pParent);
+
     dialog->setMinimumSize(QSize(380, 190));
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
@@ -321,7 +333,13 @@ void PasswordNeededQuery::execute()
 //    setResponse(notCancelled && !password.isEmpty());
 
     qDebug() << m_data[QStringLiteral("archiveFilename")];
-    DDialog *dialog = new DDialog(getMainWindow());
+
+    if (m_pParent == nullptr) {
+        m_pParent = getMainWindow();
+    }
+
+    DDialog *dialog = new DDialog(m_pParent);
+
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -398,7 +416,13 @@ void WrongPasswordQuery::execute()
 
     qDebug() << m_data[QStringLiteral("archiveFilename")];
     QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
-    DDialog *dialog = new DDialog(getMainWindow());
+
+    if (m_pParent == nullptr) {
+        m_pParent = getMainWindow();
+    }
+
+    DDialog *dialog = new DDialog(m_pParent);
+
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
