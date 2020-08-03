@@ -85,8 +85,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-#define DEFAUTL_PATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"+ QDir::separator()
-
 int MainWindow::m_windowcount = 1;
 
 MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
@@ -727,7 +725,7 @@ void MainWindow::InitConnection()
 
                     QString strTemp = file.filePath();
                     for (int i = 0; i < m_vecExtractSimpleFiles.count(); ++i) {
-                        if (m_vecExtractSimpleFiles[i]->property("name").toString() == strTemp.remove(0, QString(DEFAUTL_PATH).length())) {
+                        if (m_vecExtractSimpleFiles[i]->property("name").toString() == strTemp.remove(0, QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP).length())) {
                             removeEntryVector(QVector<Archive::Entry *>() << m_vecExtractSimpleFiles[i], false);
                             break;
                         }
@@ -2221,12 +2219,12 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_iOpenTempFileLink++;
             QString commandCreate = "ln";
             QStringList args;
-            args.append(DEFAUTL_PATH + firstFileName);
-            args.append(DEFAUTL_PATH + tempFileName);
-            arguments << DEFAUTL_PATH + tempFileName;   //the first arg is filePath
+            args.append(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP + firstFileName);
+            args.append(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP + tempFileName);
+            arguments << /*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP + tempFileName; //the first arg is filePath
             p.execute(commandCreate, args);
         } else {
-            QString destPath = DEFAUTL_PATH + firstFileName;
+            QString destPath = /*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP + firstFileName;
             if (pExtractWorkEntry != nullptr) {
                 this->m_pArchiveModel->mapFilesUpdate.insert(destPath, pExtractWorkEntry);
             }
@@ -2278,9 +2276,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_pOpenLoadingPage->stop();
         QString ppp = m_strProgram;
         if (m_strProgram != tr("Choose default programma")) {
-            OpenWithDialog::chooseOpen(m_strProgram, QString(DEFAUTL_PATH) + m_vecExtractSimpleFiles.at(0)->property("name").toString());
+            OpenWithDialog::chooseOpen(m_strProgram, QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString());
         } else {
-            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(DEFAUTL_PATH) + m_vecExtractSimpleFiles.at(0)->property("name").toString()), this);
+            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString()), this);
             dia->exec();
         }
 
@@ -2304,7 +2302,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     }
 
     if (!strFileWatcher.isEmpty() && (Operation_TempExtract == m_operationtype || Operation_TempExtract_Open_Choose == m_operationtype)) {
-        QString strFileName = DEFAUTL_PATH + strFileWatcher;
+        QString strFileName = /*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP + strFileWatcher;
 
         if (!QFile(strFileName).exists())
             return;
@@ -3367,7 +3365,7 @@ void MainWindow::deleteDecompressFile(QString destDirName)
 
 void MainWindow::deleteConvertTempFile()
 {
-    QString tmpPath = DEFAUTL_PATH + "converttempfiles";
+    QString tmpPath = m_strPathStore /*TEMPDIR_NAME + PATH_SEP + "converttempfiles"*/;
     QDir dir(tmpPath);
 //    if (!dir.exists()) {
 //        dir.mkdir(tmpPath);
@@ -3425,7 +3423,7 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     bool bZipPasswordIsChinese = Utils::zipPasswordIsChinese(Args);
     QStringList filesToAdd;
     if (m_convertType.size() > 0) {
-        QString tmppath = DEFAUTL_PATH + "converttempfiles";
+        QString tmppath = m_strPathStore /*TEMPDIR_NAME + PATH_SEP + "converttempfiles"*/;
         QDir dir(tmppath);
         QStringList tmpFilesToAdd;
         QStringList nameFilters;
@@ -3906,7 +3904,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
 void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList, const QString &programma)
 {
-    QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+    QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
     QDir dir(tmppath);
     if (!dir.exists()) {
         dir.mkdir(tmppath);
@@ -4156,7 +4154,7 @@ void MainWindow::slotClearTempfile()
     QString command = "rm";
     QStringList args;
     args.append("-rf");
-    args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles");
+    args.append(TEMPDIR_NAME);
     p.execute(command, args);
     p.waitForFinished();
 }
@@ -4170,7 +4168,7 @@ void MainWindow::slotquitApp()
         QString command = "rm";
         QStringList args;
         args.append("-rf");
-        args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles");
+        args.append(TEMPDIR_NAME);
         p.execute(command, args);
         p.waitForFinished();
 

@@ -23,6 +23,7 @@
  */
 
 #include "openwithdialog/openwithdialog.h"
+#include "customdatainfo.h"
 
 #include <DHorizontalLine>
 #include <DStyle>
@@ -257,7 +258,7 @@ QString OpenWithDialog::includePercentFile(const QString &file)
     QFileInfo fileInfo(file);
 
     if (fileInfo.fileName().contains("%")) {
-        QString tempFloder = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+        QString tempFloder = TEMPDIR_NAME;
 
         QDir dir(tempFloder);
         if (!dir.exists()) {

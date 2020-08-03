@@ -22,8 +22,11 @@
 #define CUSTOMDATAINFO_H
 
 #include <DMainWindow>
+#include <DStandardPaths>
+
 #include <QString>
 #include <QMap>
+#include <QDir>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -34,6 +37,8 @@ DCORE_USE_NAMESPACE
 #define AUTO_DELETE_NEVER "Never"               //解压后不删除源压缩文件
 #define AUTO_DELETE_ASK "Ask for confirmation"  //解压后询问是否删除源压缩文件
 #define AUTO_DELETE_ALWAYS "Always"             //解压后删除源压缩文件
+#define TEMPDIR_NAME DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" /* + QDir::separator()*/ // 临时文件夹路径
+#define PATH_SEP QDir::separator() // 文件夹结尾符号
 
 /**
  * @brief The Page_ID enum
