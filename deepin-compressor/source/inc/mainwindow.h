@@ -27,6 +27,7 @@
 #include "progress.h"
 #include "customdatainfo.h"
 #include "ddesktopservicesthread.h"
+
 #include <DMainWindow>
 #include <DFileWatcher>
 #include <DSpinner>

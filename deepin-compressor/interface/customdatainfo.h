@@ -24,6 +24,7 @@
 #include <DMainWindow>
 #include <QString>
 #include <QMap>
+#include <DStandardPaths>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -31,6 +32,8 @@ DCORE_USE_NAMESPACE
 
 #define TITLE_FIXED_HEIGHT 50               // 标题栏高度
 #define HEADBUS "/QtDusServer/registry"     // DBus头
+#define TEMPDIR_NAME DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" /* + QDir::separator()*/ // 临时文件夹路径
+#define PATH_SEP QDir::separator() // 文件夹结尾符号
 
 /**
  * @brief The Page_ID enum

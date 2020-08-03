@@ -84,8 +84,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-#define DEFAUTL_PATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"+ QDir::separator()
-
 int MainWindow::m_windowcount = 1;
 
 MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
@@ -2056,16 +2054,12 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_iOpenTempFileLink++;
             QString commandCreate = "ln";
             QStringList args;
-            args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                        + QDir::separator() + firstFileName);
-            args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                        + QDir::separator() + tempFileName);
-            arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                      + QDir::separator() + tempFileName;   //the first arg is filePath
+            args.append(m_strPathStore + PATH_SEP + firstFileName);
+            args.append(m_strPathStore + PATH_SEP + tempFileName);
+            arguments << m_strPathStore + PATH_SEP + tempFileName;   //the first arg is filePath
             p.execute(commandCreate, args);
         } else {
-            QString destPath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                               + QDir::separator() + firstFileName;
+            QString destPath = m_strPathStore + PATH_SEP + firstFileName;
             if (pExtractWorkEntry != nullptr) {
                 this->m_pArchiveModel->mapFilesUpdate.insert(destPath, pExtractWorkEntry);
             }
@@ -2117,9 +2111,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         m_pOpenLoadingPage->stop();
         QString ppp = m_strProgram;
         if (m_strProgram != tr("Choose default programma")) {
-            OpenWithDialog::chooseOpen(m_strProgram, QString(DEFAUTL_PATH) + m_vecExtractSimpleFiles.at(0)->property("name").toString());
+            OpenWithDialog::chooseOpen(m_strProgram, QString(m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString());
         } else {
-            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(DEFAUTL_PATH) + m_vecExtractSimpleFiles.at(0)->property("name").toString()), this);
+            OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString()), this);
             dia->exec();
         }
 
@@ -3613,7 +3607,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
 void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList, const QString &programma)
 {
-    QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+    QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
     QDir dir(tmppath);
     if (!dir.exists()) {
         dir.mkdir(tmppath);
@@ -3836,7 +3830,7 @@ void MainWindow::slotClearTempfile()
     QString command = "rm";
     QStringList args;
     args.append("-rf");
-    args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles");
+    args.append(TEMPDIR_NAME);
     p.execute(command, args);
     p.waitForFinished();
 }
@@ -3850,7 +3844,7 @@ void MainWindow::slotquitApp()
         QString command = "rm";
         QStringList args;
         args.append("-rf");
-        args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles");
+        args.append(TEMPDIR_NAME);
         p.execute(command, args);
         p.waitForFinished();
 

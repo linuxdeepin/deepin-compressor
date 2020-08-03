@@ -736,7 +736,7 @@ void fileViewer::openTempFile(QString path)
     QStringList arguments;
     QString programPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
     if (file.fileName().contains("%")) {
-        QString tmppath = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles";
+        QString tmppath = TEMPDIR_NAME;
         QDir dir(tmppath);
         if (!dir.exists()) {
             dir.mkdir(tmppath);
@@ -749,10 +749,8 @@ void fileViewer::openTempFile(QString path)
         QString commandCreate = "ln";
         QStringList args;
         args.append(path);
-        args.append(DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                    + QDir::separator() + openTempFile);
-        arguments << DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
-                  + QDir::separator() + openTempFile;
+        args.append(TEMPDIR_NAME + PATH_SEP + openTempFile);
+        arguments << TEMPDIR_NAME + PATH_SEP + openTempFile;
         p.execute(commandCreate, args);
     } else {
         arguments << path;
@@ -1387,7 +1385,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 }
             } else {
                 QVector<Archive::Entry *> fileList = getSelEntries();
-                QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+//                QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();
 //                QFile tempFile(fileName);
 //                if (tempFile.exists()) {
 //                    tempFile.remove();
@@ -1415,7 +1413,7 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             }
         } else {
             QVector<Archive::Entry *> fileList = getSelEntries();
-            //QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+            //QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();
             //Utils::checkAndDeleteDir(fileName);
             emit sigextractfiles(fileList, EXTRACT_TEMP);
         }
@@ -1510,7 +1508,7 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
 {
     if (PAGE_UNCOMPRESS == m_pagetype) {
         QVector<Archive::Entry *> fileList = getSelEntries();
-        QString fileName = DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" + QDir::separator() + fileList.at(0)->name();
+        QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();
 
         Utils::checkAndDeleteDir(fileName);
         /*emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());*/
