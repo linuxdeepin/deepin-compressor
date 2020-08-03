@@ -288,11 +288,6 @@ private:
     void deleteDecompressFile(QString destDirName = QString(""));
 
     /**
-     * @brief deleteConvertTempFile    关闭/取消/退出时删除格式转换临时文件
-     */
-    void deleteConvertTempFile();
-
-    /**
      * @brief startCmd  启动命令
      * @param executeName   可执行程序名称
      * @param arguments 命令参数

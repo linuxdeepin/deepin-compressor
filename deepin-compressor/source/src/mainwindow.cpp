@@ -3363,36 +3363,6 @@ void MainWindow::deleteDecompressFile(QString destDirName)
     }
 }
 
-void MainWindow::deleteConvertTempFile()
-{
-    QString tmpPath = m_strPathStore /*TEMPDIR_NAME + PATH_SEP + "converttempfiles"*/;
-    QDir dir(tmpPath);
-//    if (!dir.exists()) {
-//        dir.mkdir(tmpPath);
-//    }
-
-    if (dir.exists()) {
-        QStringList fileToDelete;
-        QStringList tmpFilesToDelete;
-        QStringList nameFilters;
-        nameFilters << "*" << "*.*";
-        tmpFilesToDelete = dir.entryList(nameFilters, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach (QString tmpfile, tmpFilesToDelete) {
-            fileToDelete.append(tmpPath + QDir::separator() + tmpfile);
-        }
-
-        foreach (QString path, fileToDelete) {
-            QFileInfo file(path);
-            if (file.isDir()) {
-                deleteDir(path);
-            } else if (file.isFile()) {
-                QFile fi(path);
-                fi.remove();
-            }
-        }
-    }
-}
-
 bool MainWindow::startCmd(const QString &executeName, QStringList arguments)
 {
     QString programPath = QStandardPaths::findExecutable(executeName);
@@ -4123,12 +4093,10 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     } else if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         QFileInfo fi(m_strLoadfile);
         m_strDecompressFileName = fi.fileName();
-//        deleteConvertTempFile();
         m_ePageID = PAGE_UNZIP;
     }
 
     refreshPage();
-    deleteConvertTempFile();
     slotResetPercentAndTime();
     m_pProgess->setprogress(0);
 }
@@ -4240,9 +4208,6 @@ void MainWindow::slotBackButtonClicked()
 
     m_convertFirst = false;
     slotResetPercentAndTime();
-    if (m_convertType.size() > 0) {
-        deleteConvertTempFile();
-    }
 
     m_pEncryptionpage->resetPage();
     m_pCompressSuccess->clear();
