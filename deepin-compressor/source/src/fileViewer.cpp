@@ -425,11 +425,11 @@ void fileViewer::InitUI()
         m_pRightMenu = new DMenu(this);
         m_pRightMenu->setMinimumWidth(202);
         deleteAction = new QAction(tr("Delete"), this);
-        m_pRightMenu->addAction(deleteAction);
         m_pRightMenu->addAction(tr("Open"));
 
         openWithDialogMenu = new  DMenu(tr("Open style"), this);
         m_pRightMenu->addMenu(openWithDialogMenu);
+        m_pRightMenu->addAction(deleteAction);
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
         pTableViewFile->setAcceptDrops(false);
     }
@@ -678,10 +678,6 @@ void fileViewer::InitConnection()
     // connect the signals to the slot function.
     if (PAGE_COMPRESS == m_pagetype) {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
-        if (m_pRightMenu) {
-            connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
-            //        connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::DeleteCompressFile);
-        }
     } else {
         connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
         connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
@@ -726,6 +722,11 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
             }
 
         }
+    } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
+               && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //Alt+M组合键调用右键菜单
+        int y = pTableViewFile->rowViewportPosition(pTableViewFile->selectionModel()->currentIndex().row()) + MyFileSystemDefine::gTableHeight / 2; //获取选中行y坐标+行高/2
+        int x = static_cast<int>(pTableViewFile->width() * 0.618); //比较合适的x坐标
+        m_pRightMenu->popup(pTableViewFile->viewport()->mapToGlobal(QPoint(x, y)));
     }
 }
 
@@ -1423,9 +1424,6 @@ void fileViewer::showRightMenu(const QPoint &pos)
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (!pTableViewFile->indexAt(pos).isValid() || !curindex.isValid()) {
         return;
-    }
-    if (m_pagetype == PAGE_COMPRESS) {
-        m_pRightMenu->addAction(deleteAction);
     }
 
     openWithDialogMenu->clear();
