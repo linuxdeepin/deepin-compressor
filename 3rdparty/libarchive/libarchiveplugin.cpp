@@ -18,90 +18,6 @@
 #include "../common/common.h"
 #include "structs.h"
 
-/*static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
-{
-    qreal hep_count = 0;
-    int non_base_latin_count = 0;
-    qreal unidentification_count = 0;
-    int replacement_count = 0;
-
-    QTextDecoder decoder(codec);
-    const QString &unicode_data = decoder.toUnicode(data);
-
-    for (int i = 0; i < unicode_data.size(); ++i) {
-        const QChar &ch = unicode_data.at(i);
-
-        if (ch.unicode() > 0x7f)
-            ++non_base_latin_count;
-
-        switch (ch.script()) {
-        case QChar::Script_Hiragana:
-        case QChar::Script_Katakana:
-            hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
-            break;
-        case QChar::Script_Han:
-            hep_count += (country == QLocale::China) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::China) ? 0 : 0.3;
-            break;
-        case QChar::Script_Hangul:
-            hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
-            break;
-        case QChar::Script_Cyrillic:
-            hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
-            break;
-        case QChar::Script_Devanagari:
-            hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
-            break;
-        default:
-            // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
-            if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
-                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
-                    || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
-                    || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
-                    || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
-                    || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
-                    || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
-                ++hep_count;
-            } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
-                ++i;
-
-                if (i < unicode_data.size()) {
-                    const QChar &next_ch = unicode_data.at(i);
-
-                    if (!next_ch.isLowSurrogate()) {
-                        --i;
-                        break;
-                    }
-
-                    uint unicode = QChar::surrogateToUcs4(ch, next_ch);
-
-                    // emoji
-                    if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
-                        hep_count += 2;
-                    }
-                }
-            } else if (ch.unicode() == QChar::ReplacementCharacter) {
-                ++replacement_count;
-            } else if (ch.unicode() > 0x7f) {
-                // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
-                if (codec->name() != "UTF-8")
-                    ++unidentification_count;
-            }
-            break;
-        }
-    }
-
-    float c = qreal(hep_count) / non_base_latin_count / 1.2;
-
-    c -= qreal(replacement_count) / non_base_latin_count;
-    c -= qreal(unidentification_count) / non_base_latin_count;
-
-    return qMax(0.0f, c);
-}*/
 
 LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -129,6 +45,9 @@ LibarchivePlugin::~LibarchivePlugin()
 
 bool LibarchivePlugin::list(bool /*isbatch*/)
 {
+    m_listIndex = 0;
+    m_listMap.clear();
+
     strOldFileName = filename();
 
     QFileInfo fInfo(filename());
@@ -505,7 +424,99 @@ bool LibarchivePlugin::initializeReader()
     return true;
 }
 
-void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *aentry)
+void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile)
+{
+    Archive::Entry *pCurEntry = new Archive::Entry();
+
+    pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
+    pCurEntry->setProperty("owner", aentry.archive_owner);
+    pCurEntry->setProperty("group", aentry.archive_group);
+    if (!isMutilFolderFile) {
+        pCurEntry->setProperty("size", aentry.archive_size);
+    } else {
+        pCurEntry->setProperty("size", 0);
+    }
+
+    pCurEntry->setProperty("isDirectory", aentry.archive_isDirectory);
+    pCurEntry->setProperty("link", aentry.archive_link);
+    pCurEntry->setProperty("timestamp", aentry.archive_timestamp);
+
+    emit entry(pCurEntry);
+    m_emittedEntries << pCurEntry;
+}
+
+Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name)
+{
+    Archive::Entry *pCurEntry = new Archive::Entry();
+
+    pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
+    pCurEntry->setProperty("owner", aentry.archive_owner);
+    pCurEntry->setProperty("group", aentry.archive_group);
+    pCurEntry->setProperty("size", aentry.archive_size);
+    pCurEntry->setProperty("isDirectory", aentry.archive_isDirectory);
+    pCurEntry->setProperty("link", aentry.archive_link);
+    pCurEntry->setProperty("timestamp", aentry.archive_timestamp);
+
+    return pCurEntry;
+}
+
+void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord)
+{
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+            setEntryData(aentry, index, name);
+            m_SigDirRecord = name;
+            ++index;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+                setEntryData(aentry, index, name);
+                ++index;
+                return;
+            }
+
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+                setEntryData(aentry, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, qMakePair(aentry, -1));
+            }
+
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+            setEntryData(aentry, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+                    setEntryData(aentry, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, qMakePair(aentry, -1));
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                }
+            }
+
+            ++index;
+        }
+    } else {
+        m_DirRecord = "";
+        setEntryVal(aentry, index, name, m_DirRecord);
+    }
+}
+
+/*void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *aentry)
 {
     Archive::Entry *pCurEntry = new Archive::Entry();
 //    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
@@ -548,14 +559,36 @@ void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *a
 
     emit entry(pCurEntry);
     m_emittedEntries << pCurEntry;
+}*/
+
+void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
+{
+//    archive_stat *entry = nullptr;
+//    archive_stat entry;
+    m_archiveEntryStat.archive_fullPath = /*trans2uft8*/(archive_entry_pathname(aentry));
+    m_archiveEntryStat.archive_owner = QString::fromLatin1(archive_entry_uname(aentry));
+    m_archiveEntryStat.archive_group = QString::fromLatin1(archive_entry_gname(aentry));
+    if (archive_entry_symlink(aentry)) {
+        m_archiveEntryStat.archive_link = QLatin1String(archive_entry_symlink(aentry));
+    }
+
+    m_archiveEntryStat.archive_timestamp = QDateTime::fromTime_t(static_cast<uint>(archive_entry_mtime(aentry)));
+    m_archiveEntryStat.archive_size = (qlonglong)archive_entry_size(aentry);
+    m_archiveEntryStat.archive_isDirectory = S_ISDIR(archive_entry_mode(aentry));
+
+    setEntryVal(m_archiveEntryStat, m_indexCount, m_archiveEntryStat.archive_fullPath, m_DirRecord);
+
+    if (m_listMap.find(m_archiveEntryStat.archive_fullPath) == m_listMap.end()) {
+        m_listMap.insert(m_archiveEntryStat.archive_fullPath, qMakePair(m_archiveEntryStat, index));
+    }
 }
 
 void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
 {
     Archive::Entry *pCurEntry = new Archive::Entry();
-//    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
-//    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-//    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
+    //    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
+    //    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+    //    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
     QString utf8path = trans2uft8(archive_entry_pathname(aentry));
 
     pCurEntry->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
@@ -812,7 +845,8 @@ bool LibarchivePlugin::list_New(bool /*isbatch*/)
 
     while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
         if (!m_emitNoEntries) {
-            emitEntryFromArchiveEntry(aentry);
+            emitEntryForIndex(aentry, m_listIndex);
+            m_listIndex++;
         }
 
         m_extractedFilesSize += (qlonglong)archive_entry_size(aentry);
@@ -856,4 +890,48 @@ void LibarchivePlugin::watchFileList(QStringList */*strList*/)
 
 }
 
+void LibarchivePlugin::showEntryListFirstLevel(const QString &directory)
+{
+    if (directory.isEmpty()) return;
+    auto iter = m_listMap.find(directory);
+    for (; iter != m_listMap.end() ;) {
+        if (iter.key().left(directory.size()) != directory) {
+            break;
+        } else {
+            QString chopStr = iter.key().right(iter.key().size() - directory.size());
+            if (!chopStr.isEmpty()) {
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value().first, iter.value().second, iter.key());
+                    RefreshEntryFileCount(fileEntry);
+                    emit entry(fileEntry);
+                    m_emittedEntries << fileEntry;
+                }
+            }
 
+            ++iter;
+        }
+    }
+}
+
+void LibarchivePlugin::RefreshEntryFileCount(Archive::Entry *file)
+{
+    if (!file || !file->isDir()) return;
+    qulonglong count = 0;
+    auto iter = m_listMap.find(file->fullPath());
+    for (; iter != m_listMap.end();) {
+        if (!iter.key().startsWith(file->fullPath())) {
+            break;
+        } else {
+            if (iter.key().size() > file->fullPath().size()) {
+                QString chopStr = iter.key().right(iter.key().size() - file->fullPath().size());
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    ++count;
+                }
+            }
+
+            ++iter;
+        }
+
+        file->setProperty("size", count);
+    }
+}

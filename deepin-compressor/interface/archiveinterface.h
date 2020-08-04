@@ -49,6 +49,25 @@ class  ReadOnlyArchiveInterface: public QObject
 {
     Q_OBJECT
 public:
+    struct archive_stat {
+        QString archive_fullPath;                //压缩包内文件绝对路径
+        QString archive_name;                    //
+        QString archive_permissions;             //
+        QString archive_owner;                   //压缩包内文件owner
+        QString archive_group;                   //压缩包内文件group
+        qlonglong archive_size;                  //压缩包内文件大小
+        qulonglong archive_compressedSize;       //
+        QString archive_link;                    //压缩包内文件link
+        QString archive_ratio;                   //
+        QString archive_CRC;                     //
+        QString archive_BLAKE2;                  //
+        QString archive_method;                  //
+        QString archive_version;                 //
+        QDateTime archive_timestamp;             //压缩包内文件修改时间
+        bool archive_isDirectory;                //压缩包内文件是否为文件夹
+        bool archive_isPasswordProtected;
+    };
+
     /**
      * @brief The ENUM_PLUGINTYPE enum
      * @see 插件类型
@@ -75,6 +94,9 @@ public:
 
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadOnlyArchiveInterface() override;
+
+    QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    QString trans2uft8(const char *str);
 
     /**
      * Returns the filename of the archive currently being handled.

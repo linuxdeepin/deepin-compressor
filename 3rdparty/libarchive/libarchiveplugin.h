@@ -35,6 +35,10 @@ public:
     bool hasBatchExtractionProgress() const override;
     virtual void cleanIfCanceled()override;
     virtual void watchFileList(QStringList *strList)override;
+
+    virtual void showEntryListFirstLevel(const QString &directory) override;
+    virtual void RefreshEntryFileCount(Archive::Entry *file) override;
+
 protected:
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)
@@ -59,6 +63,10 @@ protected:
 
     bool initializeReader();
     void createEntry(const QString &externalPath, struct archive_entry *entry);
+    void setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile = false);
+    Archive::Entry *setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name);
+    void setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord);
+    void emitEntryForIndex(archive_entry *aentry, qlonglong index);
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
     void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty = true);
     void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);
@@ -80,12 +88,19 @@ private:
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
     bool m_emitNoEntries;
     qlonglong m_extractedFilesSize;
+    QMap<QString, QPair<archive_stat, qlonglong>> m_listMap;
+    archive_stat m_archiveEntryStat;
+    QString m_DirRecord;
+    QString m_SigDirRecord;
+    int m_indexCount = 0;
+
     QVector<Archive::Entry *> m_emittedEntries;
     QString m_oldWorkingDir;
     QString m_extractDestDir;
     QStringList m_tars;
 
     QString strOldFileName;
+    int m_listIndex = 0;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

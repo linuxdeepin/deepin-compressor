@@ -190,7 +190,6 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     //detectAllfile(archive, nofEntries);
     // Loop through all archive entries.
     for (int i = 0; i < nofEntries; i++) {
-
         if (QThread::currentThread()->isInterruptionRequested()) {
             break;
         }

@@ -2937,7 +2937,8 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         return;
     }
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")) {
+    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+            || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 foreach (Archive::Entry *p, vectorDel) {
@@ -3535,7 +3536,8 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
-        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")) {
+        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+                || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
             if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
                 if (!pinterface->isAllEntry()) {
                     pinterface->updateListMap();
@@ -3689,7 +3691,8 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     resetMainwindow();
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")) {
+    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+            || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 foreach (Archive::Entry *p, fileList) {
