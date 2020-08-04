@@ -573,6 +573,45 @@ void fileViewer::updateAction(bool isdirectory, const QString &fileType)
     }
 }
 
+void fileViewer::updateOpenWithDialogMenu(QModelIndex &curindex)
+{
+    if (!curindex.isValid()) {
+        return;
+    }
+
+    openWithDialogMenu->clear();
+    if (m_pagetype == PAGE_COMPRESS) {
+        if (0 == m_pathindex) {
+            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0);
+            if (m_curfilelist.isEmpty()) {
+                return;
+            }
+            QString selectStr = selectIndex.data().toString();
+            int atindex = -1;
+            for (QFileInfo it : m_curfilelist) {
+                ++atindex;
+                if (selectStr == it.fileName()) {
+                    break;
+                }
+            }
+            updateAction(m_curfilelist.at(atindex).isDir(), selectStr);
+        } else {
+            QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
+            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
+//            qDebug() << m_curfilelist << pModel->fileInfo(curindex);
+            updateAction(pModel && pModel->fileInfo(curindex).isDir(), selectIndex.data().toString());
+        }
+    } else {
+        QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
+//        qDebug() << curindex << pTableViewFile->model()->index(curindex.row(), 0, currentparent).data() << currentparent.isValid();
+        QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
+        QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
+        if (!selectEntry.isEmpty()) {
+            updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
+        }
+    }
+}
+
 void fileViewer::openWithDialog(const QModelIndex &index)
 {
     QModelIndex curindex = pTableViewFile->currentIndex();
@@ -724,9 +763,18 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         }
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
                && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //Alt+M组合键调用右键菜单
+        QModelIndex curindex = pTableViewFile->currentIndex();
+        updateOpenWithDialogMenu(curindex);
+
         int y = pTableViewFile->rowViewportPosition(pTableViewFile->selectionModel()->currentIndex().row()) + MyFileSystemDefine::gTableHeight / 2; //获取选中行y坐标+行高/2
         int x = static_cast<int>(pTableViewFile->width() * 0.618); //比较合适的x坐标
         m_pRightMenu->popup(pTableViewFile->viewport()->mapToGlobal(QPoint(x, y)));
+    } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //回车键以默认方式打开文件(夹)
+        if (PAGE_UNCOMPRESS == m_pagetype) {
+            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
+        } else {
+            slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
+        }
     }
 }
 
@@ -1421,43 +1469,12 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 }
 void fileViewer::showRightMenu(const QPoint &pos)
 {
-    QModelIndex curindex = pTableViewFile->currentIndex();
-    if (!pTableViewFile->indexAt(pos).isValid() || !curindex.isValid()) {
+    if (!pTableViewFile->indexAt(pos).isValid()) {
         return;
     }
 
-    openWithDialogMenu->clear();
-
-    if (m_pagetype == PAGE_COMPRESS) {
-        if (0 == m_pathindex) {
-            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0);
-            if (m_curfilelist.isEmpty()) {
-                return;
-            }
-            QString selectStr = selectIndex.data().toString();
-            int atindex = -1;
-            for (auto it : m_curfilelist) {
-                ++atindex;
-                if (selectStr == it.fileName()) {
-                    break;
-                }
-            }
-            updateAction(m_curfilelist.at(atindex).isDir(), selectStr);
-        } else {
-            QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
-            QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
-//            qDebug() << pTableViewFile->indexAt(pos).data().toString() << m_curfilelist << pModel->fileInfo(curindex);
-            updateAction(pModel && pModel->fileInfo(curindex).isDir(), selectIndex.data().toString());
-        }
-    } else {
-        QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
-//        qDebug() << pTableViewFile->rowAt(pos.y()) << pTableViewFile->columnAt(pos.x()) << curindex << pTableViewFile->model()->index(curindex.row(), 0, currentparent).data() << currentparent.isValid();
-        QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
-        QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
-        if (!selectEntry.isEmpty()) {
-            updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
-        }
-    }
+    QModelIndex curindex = pTableViewFile->currentIndex();
+    updateOpenWithDialogMenu(curindex);
 
     m_pRightMenu->popup(QCursor::pos());
 }

@@ -256,6 +256,10 @@ private:
 
     void updateAction(const QString &fileType);
     void updateAction(bool isdirectory, const QString &fileType);
+    /**
+     * @brief 更新打开方式菜单
+     */
+    void updateOpenWithDialogMenu(QModelIndex &curindex);
     void openWithDialog(const QModelIndex &index);
     void openWithDialog(const QModelIndex &index, const QString &programma);
 
