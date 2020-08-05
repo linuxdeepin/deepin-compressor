@@ -41,6 +41,7 @@
 #include <DFontSizeManager>
 #include <DStandardPaths>
 #include <DPalette>
+#include <DWidget>
 
 #include <QLayout>
 #include <QDir>
@@ -805,28 +806,35 @@ void fileViewer::resetTempFile()
 int fileViewer::popUpDialog(const QString &desc)
 {
     DDialog *dialog = new DDialog(this);
-    QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setFixedSize(380, 139);
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
-    dialog->addSpacing(32);
-    dialog->addButton(tr("cancel"));
+    //    dialog->addSpacing(32);
+    dialog->addButton(tr("Cancel"));
     if (isPromptDelete) {
-        dialog->addButton(tr("confirm"));
+        dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
     } else {
-        dialog->addButton(tr("update"));
+        dialog->addButton(tr("Update"), true, DDialog::ButtonRecommend);
     }
 
-    dialog->setMinimumSize(500, 140);
     DLabel *pContent = new DLabel(desc, dialog);
-    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    pContent->setFixedSize(293, 20);
+    pContent->setAlignment(Qt::AlignCenter);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
-    pContent->setMinimumWidth(this->width());
-    pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
-    //connect(dialog, &DDialog::buttonClicked, this, &fileViewer::clickedSlot);
+
+    DWidget *widget = new DWidget(dialog);
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(pContent, 0, Qt::AlignCenter);
+    mainlayout->addSpacing(10);
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
     int state = dialog->exec();
-    delete dialog;
+    dialog->deleteLater();
     return state;
 }
 
@@ -1227,6 +1235,7 @@ void fileViewer::clickedSlot(int index, const QString &/*text*/)
         //update select archive
         upDateArchive(m_ActionInfo);
     }
+    dialog->deleteLater();
 }
 
 QString getShortName(QString &destFileName)
@@ -1256,45 +1265,54 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
         QString warningStr0 = QString(tr("update file '%1' from package '%2'?")).arg(getShortName(destFileName)).arg(getShortName(sourceFileName));
         QString warningStr1 = QString(tr("one file has been modified by other application.if you update package file ,\n your modifications will lose."));
+        QString warningStr2 = QString(tr("update file '%1' from package '%2'?")).arg(destFileName).arg(sourceFileName);
+
         m_ActionInfo.mode = (SUBACTION_MODE)mode;
         m_ActionInfo.archive = sourceArchive;
         m_ActionInfo.packageFile = destFile;
         m_ActionInfo.ActionFiles = urls;
 
-        DDialog dialog(this);
-        QPixmap pixmap = Utils::renderSVG(":/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-        dialog.setIcon(pixmap);
-        dialog.addSpacing(12);
-        dialog.getButton(dialog.addButton(tr("Cancel")))->setShortcut(Qt::Key_C);
-        dialog.getButton(dialog.addButton(tr("Update")))->setShortcut(Qt::Key_U);
+        DDialog *dialog = new DDialog(this);
+        dialog->setFixedSize(380, 200);
+        QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+        dialog->setIcon(pixmap);
 
-        dialog.setFixedSize(480, 190);
-        DLabel *pContent0 = new DLabel(warningStr1, &dialog);
-        pContent0->setFixedWidth(400);
-        pContent0->setAlignment(Qt::AlignmentFlag::AlignLeft | Qt::AlignmentFlag::AlignTop);
-        DPalette pa;
-        pa = DApplicationHelper::instance()->palette(pContent0);
-        pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
-        DFontSizeManager::instance()->bind(pContent0, DFontSizeManager::T6, QFont::Medium);
-        QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T6);
-        pContent0->setMinimumHeight(font.pixelSize() * 2 + 12);
-        pContent0->setWordWrap(true);
-        pContent0->move(dialog.width() / 2 - 400 / 2, 90 - 20);
+        DLabel *strlabel = new DLabel(dialog);
+        strlabel->setFixedSize(293, 40);
+        strlabel->setForegroundRole(DPalette::TextTitle);
+        strlabel->setWordWrap(true);
+        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Bold);
+        strlabel->setText(warningStr0);
+        strlabel->setAlignment(Qt::AlignCenter);
+        strlabel->setToolTip(warningStr2);
 
-        DLabel *pContent1 = new DLabel(warningStr0, &dialog);
-        pContent1->setMinimumWidth(400);
-        pContent1->setWordWrap(true);
-        pa = DApplicationHelper::instance()->palette(pContent1);
-        pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
-        DFontSizeManager::instance()->bind(pContent1, DFontSizeManager::T5, QFont::Bold);
-        font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-//        pContent1->setMinimumHeight(font.pixelSize()  + 12);
-        pContent1->adjustSize();
-        pContent1->setAlignment(Qt::AlignmentFlag::AlignCenter);
-        pContent1->move(dialog.width() / 2 - pContent1->width() / 2, 48 - pContent1->height() / 2);
+        DLabel *strlabel2 = new DLabel(dialog);
+        strlabel2->setFixedSize(340, 40);
+        strlabel2->setForegroundRole(DPalette::NoType);
+        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
+        strlabel2->setText(warningStr1);
+        strlabel2->setWordWrap(true);
+        strlabel2->setAlignment(Qt::AlignCenter);
 
-        connect(&dialog, &DDialog::buttonClicked, this, &fileViewer::clickedSlot);
-        dialog.exec();
+        dialog->addButton(QObject::tr("Cancel"));
+        dialog->addButton(QObject::tr("Update"), true, DDialog::ButtonRecommend);
+
+        QVBoxLayout *mainlayout = new QVBoxLayout;
+        mainlayout->setContentsMargins(0, 0, 0, 0);
+        mainlayout->addWidget(strlabel, 0, Qt::AlignCenter);
+        mainlayout->addWidget(strlabel2, 0, Qt::AlignCenter);
+        mainlayout->addSpacing(10);
+
+        DWidget *widget = new DWidget(dialog);
+        widget->setLayout(mainlayout);
+        dialog->addContent(widget);
+
+        int index = dialog->exec();
+        dialog->deleteLater();
+        if (index == 1) {
+            //update select archive
+            upDateArchive(m_ActionInfo);
+        }
     }
 }
 
