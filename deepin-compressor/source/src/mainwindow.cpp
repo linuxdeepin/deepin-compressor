@@ -688,32 +688,30 @@ void MainWindow::InitConnection()
             QFileInfo file(path);
 
             DDialog *dialog = new DDialog(this);
-            dialog->setFixedSize(QSize(422, 176));
-            QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+            dialog->setFixedSize(380, 200);
+            QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
             dialog->setIcon(pixmap);
-
             // 标题
             DLabel *strlabel = new DLabel;
-            strlabel->setFixedWidth(360);
+            strlabel->setFixedWidth(340);
             strlabel->setAlignment(Qt::AlignCenter);
             DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-            QString strTitle = QObject::tr("\"%1\"already modified, Whether to update this modification to the compressed package?").arg(file.fileName());
+            QString strTitle = QObject::tr("\"%1\"already modified, Whether to update this modification to the compressed package?").arg(Utils::toShortString(file.fileName()));
             strlabel->setText(strTitle);
             strlabel->setWordWrap(true);
 
             QVBoxLayout *mainlayout = new QVBoxLayout;
             mainlayout->setContentsMargins(0, 0, 0, 0);
-            mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+            mainlayout->addWidget(strlabel, 0, Qt::AlignCenter);
 
             DWidget *widget = new DWidget(dialog);
-
             widget->setLayout(mainlayout);
             dialog->addContent(widget);
             dialog->addSpacing(12);
 
             // 按钮
             dialog->addButton(QObject::tr("Discard"));
-            dialog->addButton(QObject::tr("Save"), true, DDialog::ButtonWarning);
+            dialog->addButton(QObject::tr("Save"), true, DDialog::ButtonRecommend);
 
             int iMode = dialog->exec();
 
@@ -733,7 +731,7 @@ void MainWindow::InitConnection()
                 }
             }
 
-            SAFE_DELETE_ELE(dialog);
+            dialog->deleteLater();
             m_mapFileHasModified[path] = false;
         }
     });
