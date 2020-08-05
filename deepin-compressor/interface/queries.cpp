@@ -344,13 +344,23 @@ void PasswordNeededQuery::execute()
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedHeight(40);
+    strlabel->setFixedSize(300, 20);
     strlabel->setForegroundRole(DPalette::WindowText);
     strlabel->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    QString fileName = toShortString(m_data[QStringLiteral("archiveFilename")].toString());
-    strlabel->setText(fileName + "\n" + QObject::tr("Encrypted file, please enter the password"));
-    strlabel->setToolTip(m_data[QStringLiteral("archiveFilename")].toString());
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::DemiBold);
+    QString archiveFullPath = m_data[QStringLiteral("archiveFilename")].toString();
+    QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
+    strlabel->setText(fileName);
+    strlabel->setAlignment(Qt::AlignCenter);
+    strlabel->setToolTip(archiveFullPath);
+
+    DLabel *strlabel2 = new DLabel(dialog);
+    strlabel2->setFixedHeight(20);
+    strlabel2->setForegroundRole(DPalette::WindowText);
+    strlabel2->setWordWrap(true);
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Normal);
+    strlabel2->setText(tr("Encrypted file, please enter the password"));
+    strlabel2->setAlignment(Qt::AlignCenter);
 
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->setFixedWidth(280);
@@ -368,9 +378,10 @@ void PasswordNeededQuery::execute()
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignCenter);
+    mainlayout->addWidget(strlabel2, 0, Qt::AlignCenter);
     mainlayout->addSpacing(10);
-    mainlayout->addWidget(passwordedit, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(passwordedit, 0, Qt::AlignCenter);
     mainlayout->addSpacing(10);
 
     DWidget *widget = new DWidget(dialog);
