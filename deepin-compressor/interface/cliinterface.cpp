@@ -95,10 +95,10 @@ bool CliInterface::list(bool isbatch)
     // To compute progress.
     m_archiveSizeOnDisk = static_cast< qulonglong >(QFileInfo(filename()).size());
     connect(this, &ReadOnlyArchiveInterface::entry, this, &CliInterface::onEntry);
-    if ((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password())) {
-        // qprocess can't read all the output string,so set wrong password to detect if need password
-        setPassword("temp");
-    }
+//    if ((m_cliProps->property("listProgram").toString().contains("unrar")) && ("" == password())) {
+//        // qprocess can't read all the output string,so set wrong password to detect if need password
+//        setPassword("temp");
+//    }
 
     return runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(filename(), password()));
 }
