@@ -1429,9 +1429,9 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                     pinterface->showEntryListFirstLevel(pathstr);
                 }
                 restoreHeaderSort(zipPathUnique + this->m_loadPath + "/" + entry->fullPath());
-                if (0 == entry->entries().count()) {
-                    showPlable();
-                }
+                //if (0 == entry->entries().count()) {
+                showPlable();
+                //}
             } else {
                 QVector<Archive::Entry *> fileList = getSelEntries();
                 //                QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();

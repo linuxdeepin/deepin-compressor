@@ -62,10 +62,10 @@ ArchiveModel::ArchiveModel(QObject *parent)
 
 ArchiveModel::~ArchiveModel()
 {
-    Archive::Entry *pRootEntry = this->getRootEntry();
-    if (pRootEntry) {
-        pRootEntry->clean();
-    }
+//    Archive::Entry *pRootEntry = this->getRootEntry();
+//    if (pRootEntry) {
+//        pRootEntry->clean();
+//    }
     m_archive.reset(nullptr);
 }
 

@@ -67,6 +67,7 @@ protected:
     Archive::Entry *setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name);
     void setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord);
     void emitEntryForIndex(archive_entry *aentry, qlonglong index);
+    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
     void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty = true);
     void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);

@@ -4146,6 +4146,7 @@ void MainWindow::slotquitApp()
         emit sigquitApp();
     }
 
+    setVisible(false);
     safeDelete();
 }
 

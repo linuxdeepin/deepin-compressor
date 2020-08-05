@@ -39,6 +39,7 @@ LibarchivePlugin::~LibarchivePlugin()
         // Entries might be passed to pending slots, so we just schedule their deletion.
         e->deleteLater();
     }
+    m_emittedEntries.clear();
 
     deleteTempTarPkg(m_tars);
 }
@@ -184,7 +185,6 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
-
         if (!extractAll && remainingFiles.isEmpty()) {
             break;
         }
@@ -203,9 +203,9 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         }
 
         // entryName is the name inside the archive, full path
-//        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
-//        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-//        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
+        //        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
+        //        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
+        //        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
         QString utf8path = trans2uft8(archive_entry_pathname(entry));
         QString entryName = QDir::fromNativeSeparators(utf8path);
 
@@ -241,10 +241,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         }
 
         // Should the entry be extracted?
-        if (extractAll ||
-                remainingFiles.contains(entryName) ||
-                entryName == fileBeingRenamed) {
-
+        if (extractAll || remainingFiles.contains(entryName) || entryName == fileBeingRenamed) {
             // Find the index of entry.
             if (entryName != fileBeingRenamed) {
                 index = remainingFiles.indexOf(entryName);
@@ -326,7 +323,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                     continue;
                 }
             }
-//            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
+            //            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             //this->extractPsdStatus;
             // Write the entry header and check return value.
             const int returnCode = archive_write_header(writer.data(), entry);
@@ -462,7 +459,10 @@ Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry, 
 
 void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord)
 {
-    if (dirRecord.isEmpty()) {
+    if ((name.endsWith("/") && name.count("/") == 1) || (name.count("/") == 0)) {
+        setEntryData(aentry, index, name);
+    }
+    /*if (dirRecord.isEmpty()) {
         if (name.endsWith("/") && name.count("/") == 1) {
             setEntryData(aentry, index, name);
             m_SigDirRecord = name;
@@ -513,7 +513,7 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
     } else {
         m_DirRecord = "";
         setEntryVal(aentry, index, name, m_DirRecord);
-    }
+    }*/
 }
 
 /*void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *aentry)
@@ -581,6 +581,35 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
     if (m_listMap.find(m_archiveEntryStat.archive_fullPath) == m_listMap.end()) {
         m_listMap.insert(m_archiveEntryStat.archive_fullPath, qMakePair(m_archiveEntryStat, index));
     }
+}
+
+qint64 LibarchivePlugin::extractSize(const QVector<Archive::Entry *> &files)
+{
+    qint64 qExtractSize = 0;
+    for (Archive::Entry *e : files) {
+        QString strPath = e->fullPath();
+        auto iter = m_listMap.find(strPath);
+        for (; iter != m_listMap.end();) {
+            if (!iter.key().startsWith(strPath)) {
+                break;
+            } else {
+                if (!iter.key().endsWith("/")) {
+                    qExtractSize += iter.value().first.archive_size;
+                }
+
+//                int iIndex = iter.value().second;
+//                if (iIndex >= 0) {
+//                    m_listExtractIndex << iIndex;
+//                }
+
+                ++iter;
+            }
+        }
+    }
+
+//    std::sort(m_listExtractIndex.begin(), m_listExtractIndex.end());
+
+    return qExtractSize;
 }
 
 void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)

@@ -151,10 +151,11 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
 
 LibzipPlugin::~LibzipPlugin()
 {
-//    for (const auto e : qAsConst(m_emittedEntries)) {
-//        // Entries might be passed to pending slots, so we just schedule their deletion.
-//        e->deleteLater();
-//    }
+    for (const auto e : qAsConst(m_emittedEntries)) {
+        // Entries might be passed to pending slots, so we just schedule their deletion.
+        e->deleteLater();
+    }
+    m_emittedEntries.clear();
 }
 
 bool LibzipPlugin::list(bool /*isbatch*/)
