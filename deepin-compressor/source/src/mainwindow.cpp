@@ -1461,9 +1461,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
-        calSelectedTotalFileSize(files);
-        m_eWorkStatus = WorkProcess;
-        m_operationtype = Operation_Extract;
         QStringList pathlist = files;
         pathlist.removeLast();
 
@@ -1495,14 +1492,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pUnCompressPage->SetDefaultFile(fileinfo);
         m_pUnCompressPage->setdefaultpath(fileinfo.path());
         m_strDecompressFilePath = fileinfo.path();
-        m_ePageID = PAGE_UNZIPPROGRESS;
-        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-        refreshPage();
-
-        BatchExtract *batchJob = new BatchExtract();
-        batchJob->setAutoSubfolder(true);
-        batchJob->setDestinationFolder(fileinfo.path());
-        batchJob->setPreservePaths(true);
 
         QStringList transFiles;
         for (const QString &url : qAsConst(pathList)) {
@@ -1510,33 +1499,55 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             transSplitFileName(transFile);
             if (!transFiles.contains(transFile)) { //为了不重复解压
                 transFiles.append(transFile);
-                batchJob->addInput(QUrl::fromLocalFile(transFile));
             }
         }
 
-        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
-            qDebug() << "query->execute";
-            query->setParent(this);
-            query->execute();
-        });
+        if (transFiles.count() == 1) {
+            m_bIsRightMenu = true;
+            loadArchive(transFiles.at(0));
+        } else {
+            calSelectedTotalFileSize(files);
+            m_eWorkStatus = WorkProcess;
+            m_operationtype = Operation_Extract;
 
-        connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
-        connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
-        connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
-        connect(batchJob, &BatchExtract::sendFailFile, this, &MainWindow::slotBatchExtractError);
-        //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
-        //                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-        //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
-        //                m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
-        connect(batchJob,
-                SIGNAL(batchFilenameProgress(KJob *, const QString &)),
-                this,
-                SLOT(SlotProgressFile(KJob *, const QString &)));
-        //        connect(batchJob, &BatchExtract::sigCancelled,
-        //                this, &MainWindow::sigquitApp);
+            BatchExtract *batchJob = new BatchExtract();
+            batchJob->setAutoSubfolder(true);
+            batchJob->setDestinationFolder(fileinfo.path());
+            batchJob->setPreservePaths(true);
 
-        qDebug() << "Starting job";
-        batchJob->start();
+            for (const QString &url : qAsConst(transFiles)) {
+                batchJob->addInput(QUrl::fromLocalFile(url));
+            }
+
+            connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+                qDebug() << "query->execute";
+                query->setParent(this);
+                query->execute();
+            });
+
+            connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
+            connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
+            connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
+            connect(batchJob, &BatchExtract::sendFailFile, this, &MainWindow::slotBatchExtractError);
+            //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
+            //                this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+            //        connect(batchJob, &BatchExtract::sigExtractJobPassword,
+            //                m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+            connect(batchJob,
+                    SIGNAL(batchFilenameProgress(KJob *, const QString &)),
+                    this,
+                    SLOT(SlotProgressFile(KJob *, const QString &)));
+            //        connect(batchJob, &BatchExtract::sigCancelled,
+            //                this, &MainWindow::sigquitApp);
+
+            qDebug() << "Starting job";
+            batchJob->start();
+        }
+
+        m_ePageID = PAGE_UNZIPPROGRESS;
+        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+        refreshPage();
+
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_strDecompressFileName = fileinfo.fileName();
