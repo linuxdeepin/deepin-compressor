@@ -23,7 +23,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 INCLUDEPATH += $$PWD/../../../deepin-compressor/source/inc/ \
-                $$PWD/../../../deepin-compressor/interface/
+                $$PWD/../../../deepin-compressor/interface/\
+               $$PWD/../../ChardetDetector/
 
 SOURCES += \
     ../../common/common.cpp \
@@ -50,7 +51,33 @@ SOURCES += \
     ../../../deepin-compressor/interface/analysepsdtool.cpp \
     ../../../deepin-compressor/interface/filewatcher.cpp \
     ../../common/detectencoding.cpp \
-    ../../../deepin-compressor/interface/structs.cpp
+    ../../../deepin-compressor/interface/structs.cpp \
+    ../../ChardetDetector/tables/LangBulgarianModel.cpp \
+    ../../ChardetDetector/tables/LangCyrillicModel.cpp \
+    ../../ChardetDetector/tables/LangGreekModel.cpp \
+    ../../ChardetDetector/tables/LangHebrewModel.cpp \
+    ../../ChardetDetector/tables/LangHungarianModel.cpp \
+    ../../ChardetDetector/tables/LangThaiModel.cpp \
+    ../../ChardetDetector/chardet.cpp \
+    ../../ChardetDetector/CharDistribution.cpp \
+    ../../ChardetDetector/JpCntx.cpp \
+    ../../ChardetDetector/nsBig5Prober.cpp \
+    ../../ChardetDetector/nsCharSetProber.cpp \
+    ../../ChardetDetector/nsEscCharsetProber.cpp \
+    ../../ChardetDetector/nsEscSM.cpp \
+    ../../ChardetDetector/nsEUCJPProber.cpp \
+    ../../ChardetDetector/nsEUCKRProber.cpp \
+    ../../ChardetDetector/nsEUCTWProber.cpp \
+    ../../ChardetDetector/nsGB2312Prober.cpp \
+    ../../ChardetDetector/nsHebrewProber.cpp \
+    ../../ChardetDetector/nsLatin1Prober.cpp \
+    ../../ChardetDetector/nsMBCSGroupProber.cpp \
+    ../../ChardetDetector/nsMBCSSM.cpp \
+    ../../ChardetDetector/nsSBCharSetProber.cpp \
+    ../../ChardetDetector/nsSBCSGroupProber.cpp \
+    ../../ChardetDetector/nsSJISProber.cpp \
+    ../../ChardetDetector/nsUniversalDetector.cpp \
+    ../../ChardetDetector/nsUTF8Prober.cpp
 
 HEADERS += \
         ../../common/common.h \
@@ -83,11 +110,47 @@ HEADERS += \
     ../../../deepin-compressor/interface/analysepsdtool.h \
     ../../../deepin-compressor/interface/filewatcher.h \
     ../../common/detectencoding.h \
-    ../../../deepin-compressor/interface/structs.h
+    ../../../deepin-compressor/interface/structs.h \
+    ../../ChardetDetector/chardet.h \
+    ../../ChardetDetector/CharDistribution.h \
+    ../../ChardetDetector/JpCntx.h \
+    ../../ChardetDetector/nsBig5Prober.h \
+    ../../ChardetDetector/nsCharSetProber.h \
+    ../../ChardetDetector/nsCodingStateMachine.h \
+    ../../ChardetDetector/nscore.h \
+    ../../ChardetDetector/nsEscCharsetProber.h \
+    ../../ChardetDetector/nsEUCJPProber.h \
+    ../../ChardetDetector/nsEUCKRProber.h \
+    ../../ChardetDetector/nsEUCTWProber.h \
+    ../../ChardetDetector/nsGB2312Prober.h \
+    ../../ChardetDetector/nsHebrewProber.h \
+    ../../ChardetDetector/nsLatin1Prober.h \
+    ../../ChardetDetector/nsMBCSGroupProber.h \
+    ../../ChardetDetector/nsPkgInt.h \
+    ../../ChardetDetector/nsSBCharSetProber.h \
+    ../../ChardetDetector/nsSBCSGroupProber.h \
+    ../../ChardetDetector/nsSJISProber.h \
+    ../../ChardetDetector/nsUniversalDetector.h \
+    ../../ChardetDetector/nsUTF8Prober.h \
+    ../../ChardetDetector/prmem.h \
+    ../../ChardetDetector/version.h
 unix {
     target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target
 }
 
 DISTFILES += \
-    kerfuffle_libarchive.json
+    kerfuffle_libarchive.json \
+    ../../ChardetDetector/tables/Big5Freq.tab \
+    ../../ChardetDetector/tables/EUCKRFreq.tab \
+    ../../ChardetDetector/tables/EUCTWFreq.tab \
+    ../../ChardetDetector/tables/GB2312Freq.tab \
+    ../../ChardetDetector/tables/JISFreq.tab \
+    ../../ChardetDetector/Big5Freq.tab \
+    ../../ChardetDetector/EUCKRFreq.tab \
+    ../../ChardetDetector/EUCTWFreq.tab \
+    ../../ChardetDetector/GB2312Freq.tab \
+    ../../ChardetDetector/JISFreq.tab
+
+SUBDIRS += \
+    ../../ChardetDetector/ChardetDetector.pro

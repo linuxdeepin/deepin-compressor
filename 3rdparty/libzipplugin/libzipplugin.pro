@@ -73,7 +73,9 @@ SOURCES += \
     ../ChardetDetector/nsSJISProber.cpp \
     ../ChardetDetector/nsUniversalDetector.cpp \
     ../ChardetDetector/nsUTF8Prober.cpp \
-    ../../deepin-compressor/interface/structs.cpp
+    ../../deepin-compressor/interface/structs.cpp \
+    ../common/common.cpp \
+    ../common/detectencoding.cpp
 HEADERS += \
         libzipplugin.h \
         libzipplugin_global.h \ 
@@ -144,7 +146,9 @@ HEADERS += \
     ../ChardetDetector/nsUTF8Prober.h \
     ../ChardetDetector/prmem.h \
     ../ChardetDetector/version.h \
-    ../../deepin-compressor/interface/structs.h
+    ../../deepin-compressor/interface/structs.h \
+    ../common/common.h \
+    ../common/detectencoding.h
 unix {
     target.path = /usr/lib/deepin-compressor/plugins
     INSTALLS += target

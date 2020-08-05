@@ -95,9 +95,6 @@ public:
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadOnlyArchiveInterface() override;
 
-    QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-    QString trans2uft8(const char *str);
-
     /**
      * Returns the filename of the archive currently being handled.
      */

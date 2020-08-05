@@ -8,7 +8,9 @@
 #include <QTextStream>
 
 #include <KEncodingProber>
+#include "../../../3rdparty/ChardetDetector/chardet.h"
 
+QByteArray m_codecStr;
 static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
     qreal hep_count = 0;
@@ -97,67 +99,111 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
 QString trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
-    //qDebug() << codec_name;
-    /*if ("" == m_codecname) {
+    if ("" == codec_name) {
 
-        if ("windows-1252" == codec_name || "IBM855" == codec_name) {
+        if (codec_name.isEmpty()) {
+            return str;
+        }
+        if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
+                || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)) {
             return str;
         }
 
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
-        m_codecstr = codec_name;
+        m_codecStr = codec_name;
         return codec->toUnicode(str);
-    } else */if ("gb18030" == codec_name) {
+    } else if ("gb18030" == codec_name) {
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
-//        m_codecstr = codec_name;
+        m_codecStr = codec_name;
         return codec->toUnicode(str);
-    } else if ("windows-1252" == codec_name || "IBM855" == codec_name) {
-        QString code = "";
-        QString codemine = "";
-        QString type = "";
-        file_encoding((unsigned char *)str, sizeof(str), code, codemine, type);
-        if (("utf-8" == codemine || "us-ascii" == codemine)) {
-//            m_codecstr = "UTF-8";
-            return QString(str);
-        } else {
-            QTextCodec *codec = QTextCodec::codecForName("GBK");
-//            m_codecstr = m_codecname;
-            return codec->toUnicode(str);
-        }
-    }/* else if ("UTF-8" != codec_name) {
-        QTextCodec *codec = QTextCodec::codecForName(m_codecname);
-        m_codecstr = m_codecname;
+    } else if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
+               || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)
+               || ((QString)codec_name).contains("iso", Qt::CaseInsensitive)) {
+        QTextCodec *codec = QTextCodec::codecForName("GBK");
+        m_codecStr = codec_name;
         return codec->toUnicode(str);
-    } */else {
-//        m_codecstr = "UTF-8";
+    } else if (!((QString)codec_name).contains("UTF", Qt::CaseInsensitive)) {
+        QTextCodec *codec = QTextCodec::codecForName(codec_name);
+        m_codecStr = codec_name;
+        return codec->toUnicode(str);
+    } else {
+        m_codecStr = "UTF-8";
         return QString(str);
     }
-
-//    QByteArray codec_name = detectEncode(str);
-
-//    if ("gb18030" == codec_name)
-//    {
-//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-//        return codec->toUnicode(str);
-//    }
-//    if( "windows-1252" == codec_name)
-//    {
-//        return str;
-//    }
-
-//    if ("UTF-8" != codec_name)
-//    {
-//        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-//        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
-
-//        QString nameunicode = codec->toUnicode(str);
-//        return codecutf8->fromUnicode(nameunicode);
-//    }
-
-//    return QString(str);
 }
 
 QByteArray detectEncode(const QByteArray &data, const QString &fileName)
+{
+    QString detectedResult;
+    float chardetconfidence = 0;
+    QString str(data);
+    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (bFlag) {
+        QByteArray newData = data;
+        newData += "为增加编码探测率而保留的中文";    //手动添加中文字符，避免字符长度太短而导致判断编码错误
+        ChartDet_DetectingTextCoding(newData, detectedResult, chardetconfidence);
+    } else {
+        ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
+    }
+    //qDebug() << "chardet编码：" << detectedResult;
+    m_codecStr = detectedResult.toLatin1();
+    if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
+        m_codecStr = "UTF-8";
+        return  m_codecStr;
+    } else {
+        if (((QString)m_codecStr).contains("windows", Qt::CaseInsensitive) || ((QString)m_codecStr).contains("IBM", Qt::CaseInsensitive)
+                || ((QString)m_codecStr).contains("x-mac", Qt::CaseInsensitive) || ((QString)m_codecStr).contains("Big5", Qt::CaseInsensitive)
+                || ((QString)m_codecStr).contains("gb18030", Qt::CaseInsensitive)  || ((QString)m_codecStr).contains("iso", Qt::CaseInsensitive)) {
+            return  m_codecStr;
+        } else {
+            m_codecStr = textCodecDetect(data, fileName);
+        }
+    }
+
+    return  m_codecStr;
+}
+
+int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
+{
+    DetectObj *obj = detect_obj_init();
+
+    if (obj == nullptr) {
+        //qDebug() << "Memory Allocation failed\n";
+        return CHARDET_MEM_ALLOCATED_FAIL;
+    }
+
+#ifndef CHARDET_BINARY_SAFE
+    // before 1.0.5. This API is deprecated on 1.0.5
+    switch (detect(str, &obj))
+#else
+    // from 1.0.5
+    switch (detect_r(str, strlen(str), &obj))
+#endif
+    {
+    case CHARDET_OUT_OF_MEMORY :
+        qDebug() << "On handle processing, occured out of memory\n";
+        detect_obj_free(&obj);
+        return CHARDET_OUT_OF_MEMORY;
+    case CHARDET_NULL_OBJECT :
+        qDebug() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+        return CHARDET_NULL_OBJECT;
+    }
+
+#ifndef CHARDET_BOM_CHECK
+    //qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+#else
+    // from 1.0.6 support return whether exists BOM
+    qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+#endif
+
+    encoding = obj->encoding;
+    confidence = obj->confidence;
+    detect_obj_free(&obj);
+
+    return CHARDET_SUCCESS ;
+}
+
+QByteArray textCodecDetect(const QByteArray &data, const QString &fileName)
 {
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {
@@ -318,9 +364,6 @@ QByteArray detectEncode(const QByteArray &data, const QString &fileName)
         return def_codec->name();
     }
 
-
+    qDebug() << "QCodecs编码：" << encoding;
     return encoding;
 }
-
-
-

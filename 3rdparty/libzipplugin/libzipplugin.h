@@ -88,7 +88,7 @@ public:
     //void checkEntryPsd(zip_t *archive, Archive::Entry *pCur, enum_checkEntryPsd &status);
     void checkEntryPsd(zip_t *archive, int iIndex, enum_checkEntryPsd &status);
 
-    int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
+    //int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 
     virtual void showEntryListFirstLevel(const QString &directory) override;
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
@@ -110,10 +110,10 @@ private:
     QString permissionsToString(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
     static int cancelCallback(zip_t *, void *that);
-    QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-    QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
+    //QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    //QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
     void detectAllfile(zip_t *archive, int num);
-    QString  trans2uft8(const char *str);
+//    QString  trans2uft8(const char *str);
 
     const char *passwordUnicode(const QString &strPassword, int iIndex);
 

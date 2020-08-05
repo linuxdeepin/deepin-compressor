@@ -565,7 +565,7 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
 {
 //    archive_stat *entry = nullptr;
 //    archive_stat entry;
-    m_archiveEntryStat.archive_fullPath = /*trans2uft8*/(archive_entry_pathname(aentry));
+    m_archiveEntryStat.archive_fullPath = trans2uft8(archive_entry_pathname(aentry));
     m_archiveEntryStat.archive_owner = QString::fromLatin1(archive_entry_uname(aentry));
     m_archiveEntryStat.archive_group = QString::fromLatin1(archive_entry_gname(aentry));
     if (archive_entry_symlink(aentry)) {
