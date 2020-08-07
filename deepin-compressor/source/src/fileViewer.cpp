@@ -574,10 +574,10 @@ void fileViewer::updateAction(bool isdirectory, const QString &fileType)
     }
 }
 
-void fileViewer::updateOpenWithDialogMenu(QModelIndex &curindex)
+bool fileViewer::updateOpenWithDialogMenu(QModelIndex &curindex)
 {
     if (!curindex.isValid()) {
-        return;
+        return false;
     }
 
     openWithDialogMenu->clear();
@@ -585,7 +585,7 @@ void fileViewer::updateOpenWithDialogMenu(QModelIndex &curindex)
         if (0 == m_pathindex) {
             QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0);
             if (m_curfilelist.isEmpty()) {
-                return;
+                return false;
             }
             QString selectStr = selectIndex.data().toString();
             int atindex = -1;
@@ -611,6 +611,8 @@ void fileViewer::updateOpenWithDialogMenu(QModelIndex &curindex)
             updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
         }
     }
+
+    return true;
 }
 
 void fileViewer::openWithDialog(const QModelIndex &index)
@@ -765,7 +767,9 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
                && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //Alt+M组合键调用右键菜单
         QModelIndex curindex = pTableViewFile->currentIndex();
-        updateOpenWithDialogMenu(curindex);
+        if (!updateOpenWithDialogMenu(curindex)) {
+            return;
+        }
 
         int y = pTableViewFile->rowViewportPosition(pTableViewFile->selectionModel()->currentIndex().row()) + MyFileSystemDefine::gTableHeight / 2; //获取选中行y坐标+行高/2
         int x = static_cast<int>(pTableViewFile->width() * 0.618); //比较合适的x坐标
@@ -1492,7 +1496,9 @@ void fileViewer::showRightMenu(const QPoint &pos)
     }
 
     QModelIndex curindex = pTableViewFile->currentIndex();
-    updateOpenWithDialogMenu(curindex);
+    if (!updateOpenWithDialogMenu(curindex)) {
+        return;
+    }
 
     m_pRightMenu->popup(QCursor::pos());
 }

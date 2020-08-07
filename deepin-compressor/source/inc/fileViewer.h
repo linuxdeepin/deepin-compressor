@@ -259,7 +259,7 @@ private:
     /**
      * @brief 更新打开方式菜单
      */
-    void updateOpenWithDialogMenu(QModelIndex &curindex);
+    bool updateOpenWithDialogMenu(QModelIndex &curindex);
     void openWithDialog(const QModelIndex &index);
     void openWithDialog(const QModelIndex &index, const QString &programma);
 

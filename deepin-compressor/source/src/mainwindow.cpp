@@ -1687,7 +1687,6 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 break;
             }
         }
-
         m_pCompressSetting->onNextButoonClicked();
     } else if (files.last() == QStringLiteral("extract_here_split")) {
         if (files.at(0).contains(".7z.")) {

@@ -97,7 +97,8 @@ HEADERS +=  \
     interface/archiverunnable.h \
     interface/structs.h \
     source/inc/openloadingpage.h \
-    source/inc/ddesktopservicesthread.h
+    source/inc/ddesktopservicesthread.h \
+    source/inc/customwidget.h
 
 
 
@@ -166,7 +167,8 @@ SOURCES +=  \
     interface/archiverunnable.cpp \
     interface/structs.cpp \
     source/src/openloadingpage.cpp \
-    source/src/ddesktopservicesthread.cpp
+    source/src/ddesktopservicesthread.cpp \
+    source/src/customwidget.cpp
 
 
 RESOURCES += deepin-compressor.qrc

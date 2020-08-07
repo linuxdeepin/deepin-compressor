@@ -21,6 +21,7 @@
  */
 #include "settingdialog.h"
 #include "kprocess.h"
+#include "customwidget.h"
 
 #include <DPushButton>
 #include <DApplicationHelper>
@@ -166,7 +167,8 @@ void SettingDialog::initUI()
             label->setForegroundRole(DPalette::WindowText);
             label->setText(tr("Extract archives to") + ":");
 
-            DComboBox *combobox = new DComboBox(widget);
+            CustomCombobox *combobox = new CustomCombobox(widget);
+            combobox->setFocusPolicy(Qt::TabFocus);
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;
@@ -277,7 +279,8 @@ void SettingDialog::initUI()
             label->setForegroundRole(DPalette::WindowText);
             label->setText(tr("Delete archives after extraction") + ":");
 
-            DComboBox *combobox = new DComboBox(widget);
+            CustomCombobox *combobox = new CustomCombobox(widget);
+            combobox->setFocusPolicy(Qt::TabFocus);
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;
