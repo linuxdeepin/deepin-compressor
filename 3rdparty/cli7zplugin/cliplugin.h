@@ -68,15 +68,9 @@ private:
 
     bool emitEntryForIndex(archive_stat &archive);
     void setEntryVal(archive_stat &archive);
-//    void setEntryVal(archive_stat &archive, int &index, const QString &name, QString &dirRecord);
     void setEntryData(archive_stat &archive, bool isMutilFolderFile = false);
-//    Archive::Entry *setEntryData(archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile = false);
     Archive::Entry *setEntryDataA(archive_stat &archive);
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
-
-    QString m_DirRecord;
-    QString m_SigDirRecord;
-    int m_indexCount = 0;
 
     int m_linesComment;
     Archive::Entry *m_currentArchiveEntry;
