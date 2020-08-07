@@ -80,12 +80,13 @@
 #include <QElapsedTimer>
 #include <QDesktopWidget>
 #include <QFileSystemWatcher>
-
+#include <QtConcurrent/QtConcurrent>
 #include <unistd.h>
 
 DWIDGET_USE_NAMESPACE
 
 int MainWindow::m_windowcount = 1;
+QMutex mutex;
 
 MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
 {
@@ -110,7 +111,6 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
     setAcceptDrops(true);
 
     initTitleBar();
-
     //m_startTimer = startTimer(500);
     InitUI();
     InitConnection();
@@ -1280,10 +1280,12 @@ void MainWindow::calSelectedTotalFileSize(const QStringList &files)
 #endif
             m_pProgess->pInfo()->getTotalSize() += curFileSize;
         } else if (fi.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
-            m_pProgess->pInfo()->getTotalSize() += calFileSize(file);
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
+            // m_pProgess->pInfo()->getTotalSize() += calFileSize(file);
         }
     }
-
+    // 等待线程池结束
+    QThreadPool::globalInstance()->waitForDone();
     // 设置压缩总大小
     m_pCompressSetting->setSelectedFileSize(m_pProgess->pInfo()->getTotalSize());
 }
@@ -1291,13 +1293,46 @@ void MainWindow::calSelectedTotalFileSize(const QStringList &files)
 void MainWindow::calSelectedTotalEntrySize(QVector<Archive::Entry *> &vectorDel)
 {
     qint64 size = 0;
-
     // 计算每一个entry的大小
     foreach (Archive::Entry *entry, vectorDel) {
         entry->calAllSize(size);
     }
 //    m_ProgressIns += size;
     m_pProgess->pInfo()->getTotalSize() += size;
+}
+
+void MainWindow::calFileSizeByThread(const QString &path)
+{
+    QDir dir(path);
+    if (!dir.exists())
+        return;
+    // 获得文件夹中的文件列表
+    QFileInfoList list = dir.entryInfoList();
+    int i = 0;
+    do {
+        QFileInfo fileInfo = list.at(i);
+        if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") {
+            i++;
+            continue;
+        }
+        bool bisDir = fileInfo.isDir();
+        if (bisDir) {
+            // 如果是文件夹 则将此文件夹放入线程池中进行计算
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
+        } else {
+            mutex.lock();
+            // 如果是文件则直接计算大小
+            qint64 curFileSize = fileInfo.size();
+#ifdef __aarch64__
+            if (maxFileSize_ < curFileSize) {
+                maxFileSize_ = curFileSize;
+            }
+#endif
+            m_pProgess->pInfo()->getTotalSize() += curFileSize;
+            mutex.unlock();
+        }
+        i++;
+    } while (i < list.size());
 }
 
 qint64 MainWindow::calFileSize(const QString &path)

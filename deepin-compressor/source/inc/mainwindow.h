@@ -32,7 +32,6 @@
 #include <DFileWatcher>
 #include <DSpinner>
 #include <DIconButton>
-
 #include <QEvent>
 
 static QVector<qint64> m_gTempProcessId;                 // 临时进程ID
@@ -319,12 +318,17 @@ private:
      * @return
      */
     qint64 calFileSize(const QString &path);
+    /**
+     * @brief calFileSizeByThread  用多线程的方式计算文件或文件夹所有文件大小
+     * @param path 文件或文件夹路径
+     */
+    void calFileSizeByThread(const QString &path);
 
-//    /**
-//     * @brief calSpeedAndTime   计算速度和剩余时间
-//     * @param compressPercent   当前进度百分比
-//     */
-//    void calSpeedAndTime(unsigned long compressPercent);
+    //    /**
+    //     * @brief calSpeedAndTime   计算速度和剩余时间
+    //     * @param compressPercent   当前进度百分比
+    //     */
+    //    void calSpeedAndTime(unsigned long compressPercent);
 
     /**
      * @brief getDefaultApp 根据文件类型获取默认打开的应用的程序
