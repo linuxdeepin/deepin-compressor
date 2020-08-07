@@ -68,11 +68,11 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
 
 LibzipPlugin::~LibzipPlugin()
 {
-    for (const auto e : qAsConst(m_emittedEntries)) {
-        // Entries might be passed to pending slots, so we just schedule their deletion.
-        e->deleteLater();
-    }
-    m_emittedEntries.clear();
+//    for (const auto e : qAsConst(m_emittedEntries)) {
+//        // Entries might be passed to pending slots, so we just schedule their deletion.
+//        e->deleteLater();
+//    }
+//    m_emittedEntries.clear();
 }
 
 bool LibzipPlugin::list(bool /*isbatch*/)
@@ -1643,7 +1643,7 @@ void LibzipPlugin::showEntryListFirstLevel(const QString &directory)
                     Archive::Entry *fileEntry = setEntryDataA(iter.value().first, iter.value().second, iter.key());
                     RefreshEntryFileCount(fileEntry);
                     emit entry(fileEntry);
-                    m_emittedEntries << fileEntry;
+//                    m_emittedEntries << fileEntry;
                 }
             }
 
@@ -1802,7 +1802,7 @@ bool LibzipPlugin::minizip_emitEntryForIndex(unzFile zipfile)
     }
 
     emit entry(e);
-    m_emittedEntries << e;
+//    m_emittedEntries << e;
 
     return true;
 }
@@ -2155,7 +2155,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
 
 Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
-    auto e = new Archive::Entry();
+    auto e = new Archive::Entry(this);
 
     // e->setCompressIndex(index);
 
@@ -2240,13 +2240,13 @@ Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglo
     }
 
     emit entry(e);
-    m_emittedEntries << e;
+//    m_emittedEntries << e;
     return e;
 }
 
 Archive::Entry *LibzipPlugin::setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name)
 {
-    auto e = new Archive::Entry();
+    auto e = new Archive::Entry(this);
 
     // e->setCompressIndex(index);
 

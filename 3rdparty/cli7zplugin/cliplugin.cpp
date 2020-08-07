@@ -148,7 +148,7 @@ void CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bo
 
 Archive::Entry *CliPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry();
+    Archive::Entry *pCurEntry = new Archive::Entry(this);
 
     pCurEntry->setProperty("fullPath", archive.archive_fullPath);
     pCurEntry->setProperty("owner", archive.archive_owner);

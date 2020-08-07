@@ -423,7 +423,7 @@ bool LibarchivePlugin::initializeReader()
 
 void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry();
+    Archive::Entry *pCurEntry = new Archive::Entry(this);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);
@@ -444,7 +444,7 @@ void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong in
 
 Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry();
+    Archive::Entry *pCurEntry = new Archive::Entry(this);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);
