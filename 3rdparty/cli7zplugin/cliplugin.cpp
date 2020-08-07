@@ -89,12 +89,188 @@ void CliPlugin::setupCliProperties()
 
 void CliPlugin::fixDirectoryFullName()
 {
-    if (m_currentArchiveEntry->isDir()) {
-        const QString directoryName = m_currentArchiveEntry->fullPath();
+//    if (m_currentArchiveEntry->isDir()) {
+//        const QString directoryName = m_currentArchiveEntry->fullPath();
+//        if (!directoryName.endsWith(QLatin1Char('/'))) {
+//            m_currentArchiveEntry->setProperty("fullPath", QString(directoryName + QLatin1Char('/')));
+//        }
+//    }
+    if (m_fileStat.archive_isDirectory) {
+        const QString directoryName = m_fileStat.archive_fullPath;
         if (!directoryName.endsWith(QLatin1Char('/'))) {
-            m_currentArchiveEntry->setProperty("fullPath", QString(directoryName + QLatin1Char('/')));
+            m_fileStat.archive_fullPath = QString(directoryName + QLatin1Char('/'));
+//            m_currentArchiveEntry->setProperty("fullPath", QString(directoryName + QLatin1Char('/')));
         }
     }
+}
+
+bool CliPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    setEntryVal(archive/*, m_indexCount, archive.archive_fullPath, m_DirRecord*/);
+    if (m_listMap.find(archive.archive_fullPath) == m_listMap.end()) {
+        m_listMap.insert(archive.archive_fullPath, archive);
+    }
+
+    return true;
+}
+
+void CliPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    if ((archive.archive_fullPath.endsWith("/") && archive.archive_fullPath.count("/") == 1) || (archive.archive_fullPath.count("/") == 0)) {
+        setEntryData(archive);
+    }
+}
+
+/*void CliPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive, int &index, const QString &name, QString &dirRecord)
+{
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+            setEntryData(archive);
+            m_SigDirRecord = name;
+            ++index;
+            // m_DirRecord = name;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+                setEntryData(archive, index, name);
+                ++index;
+                return;
+            }
+
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+                setEntryData(archive, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, qMakePair(archive, -1));
+            }
+
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+            setEntryData(statBuffer, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+                    setEntryData(statBuffer, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, qMakePair(statBuffer, -1));
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                    //setEntryData(statBuffer, index, folderAppendStr, false);
+                }
+            }
+
+            ++index;
+        }
+    } else {
+//        if (name.left(m_DirRecord.size()) == m_DirRecord) {
+//            setEntryData(statBuffer, index, name);
+//            ++index;
+//        } else {
+//            m_DirRecord = "";
+//            setEntryVal(statBuffer, index, name, m_DirRecord);
+//        }
+        m_DirRecord = "";
+        setEntryVal(statBuffer, index, name, m_DirRecord);
+    }
+}*/
+
+/*Archive::Entry *CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile)
+{
+    m_currentArchiveEntry->setProperty("fullPath", archive.archive_fullPath);
+    if (!isMutilFolderFile) {
+        m_currentArchiveEntry->setProperty("size", archive.archive_size);
+    } else {
+        m_currentArchiveEntry->setProperty("size", 0);
+    }
+
+    m_currentArchiveEntry->setProperty("size", archive.archive_size);
+    m_currentArchiveEntry->setProperty("compressedSize", archive.archive_compressedSize);
+    m_currentArchiveEntry->setProperty("timestamp", archive.archive_timestamp);
+    m_currentArchiveEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    m_currentArchiveEntry->setProperty("permissions", archive.archive_permissions);
+    m_currentArchiveEntry->setProperty("CRC", archive.archive_CRC);
+    m_currentArchiveEntry->setProperty("method", archive.archive_method);
+    m_currentArchiveEntry->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
+
+    if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+        emit entry(m_currentArchiveEntry);
+    } else {
+        delete m_currentArchiveEntry;
+    }
+}*/
+
+void CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
+{
+    m_currentArchiveEntry->setProperty("fullPath", archive.archive_fullPath);
+    if (!isMutilFolderFile) {
+        m_currentArchiveEntry->setProperty("size", archive.archive_size);
+    } else {
+        m_currentArchiveEntry->setProperty("size", 0);
+    }
+
+    m_currentArchiveEntry->setProperty("size", archive.archive_size);
+    m_currentArchiveEntry->setProperty("compressedSize", archive.archive_compressedSize);
+    m_currentArchiveEntry->setProperty("timestamp", archive.archive_timestamp);
+    m_currentArchiveEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    m_currentArchiveEntry->setProperty("permissions", archive.archive_permissions);
+    m_currentArchiveEntry->setProperty("CRC", archive.archive_CRC);
+    m_currentArchiveEntry->setProperty("method", archive.archive_method);
+    m_currentArchiveEntry->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
+
+    if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+        emit entry(m_currentArchiveEntry);
+    } else {
+        delete m_currentArchiveEntry;
+    }
+}
+
+Archive::Entry *CliPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    Archive::Entry *pCurEntry = new Archive::Entry();
+
+    pCurEntry->setProperty("fullPath", archive.archive_fullPath);
+    pCurEntry->setProperty("owner", archive.archive_owner);
+    pCurEntry->setProperty("group", archive.archive_group);
+    pCurEntry->setProperty("size", archive.archive_size);
+    pCurEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    pCurEntry->setProperty("link", archive.archive_link);
+    pCurEntry->setProperty("timestamp", archive.archive_timestamp);
+
+    return pCurEntry;
+}
+
+qint64 CliPlugin::extractSize(const QVector<Archive::Entry *> &files)
+{
+    qint64 qExtractSize = 0;
+    for (Archive::Entry *e : files) {
+        QString strPath = e->fullPath();
+        auto iter = m_listMap.find(strPath);
+        for (; iter != m_listMap.end();) {
+            if (!iter.key().startsWith(strPath)) {
+                break;
+            } else {
+                if (!iter.key().endsWith("/")) {
+                    qExtractSize += iter.value().archive_size;
+                }
+
+                ++iter;
+            }
+        }
+    }
+
+    return qExtractSize;
 }
 
 bool CliPlugin::isPasswordList()
@@ -122,6 +298,7 @@ bool CliPlugin::readListLine(const QString &line)
         if (isPasswordList()) {
             return true;
         }
+
         emit error(tr("Listing the archive failed."));
         return false;
     } else if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
@@ -130,6 +307,7 @@ bool CliPlugin::readListLine(const QString &line)
         if (isPasswordList()) {
             return true;
         }
+
         emit error(tr("Listing the archive failed."));
         return false;
     }
@@ -145,7 +323,6 @@ bool CliPlugin::readListLine(const QString &line)
             const QString p7zipVersion = matchVersion.captured(1);
         }
         break;
-
     case ParseStateHeader:
         if (line.startsWith(QLatin1String("Listing archive:"))) {
 
@@ -153,16 +330,14 @@ bool CliPlugin::readListLine(const QString &line)
                    (line == archiveInfoDelimiter2)) {
             m_parseState = ParseStateArchiveInformation;
         } else if (line.contains(QLatin1String("Error: "))) {
+
         }
         break;
-
     case ParseStateArchiveInformation:
         if (line == entryInfoDelimiter) {
             m_parseState = ParseStateEntryInformation;
-
         } else if (line.startsWith(QLatin1String("Type = "))) {
             const QString type = line.mid(7).trimmed();
-
             if (type == QLatin1String("7z")) {
                 m_archiveType = ArchiveType7z;
             } else if (type == QLatin1String("bzip2")) {
@@ -187,20 +362,16 @@ bool CliPlugin::readListLine(const QString &line)
                 // Should not happen
                 return false;
             }
-
         } else if (line.startsWith(QLatin1String("Volumes = "))) {
             m_numberOfVolumes = line.section(QLatin1Char('='), 1).trimmed().toInt();
-
         } else if (line.startsWith(QLatin1String("Method = "))) {
             QStringList methods = line.section(QLatin1Char('='), 1).trimmed().split(QLatin1Char(' '), QString::SkipEmptyParts);
             handleMethods(methods);
-
         } else if (line.startsWith(QLatin1String("Comment = "))) {
             m_parseState = ParseStateComment;
             m_comment.append(line.section(QLatin1Char('='), 1) + QLatin1Char('\n'));
         }
         break;
-
     case ParseStateComment:
         if (line == entryInfoDelimiter) {
             m_parseState = ParseStateEntryInformation;
@@ -212,106 +383,111 @@ bool CliPlugin::readListLine(const QString &line)
             m_comment.append(line + QLatin1Char('\n'));
         }
         break;
-
     case ParseStateEntryInformation:
         if (m_isFirstInformationEntry) {
             m_isFirstInformationEntry = false;
             m_currentArchiveEntry = new Archive::Entry(this);
             m_currentArchiveEntry->compressedSizeIsSet = false;
         }
+
         if (line.startsWith(QLatin1String("Path = "))) {
-            const QString entryFilename =
-                QDir::fromNativeSeparators(line.mid(7).trimmed());
-            m_currentArchiveEntry->setProperty("fullPath", entryFilename);
-
+            const QString entryFilename = QDir::fromNativeSeparators(line.mid(7).trimmed());
+            m_fileStat.archive_fullPath = entryFilename;
+//            m_currentArchiveEntry->setProperty("fullPath", entryFilename);
         } else if (line.startsWith(QLatin1String("Size = "))) {
-            m_currentArchiveEntry->setProperty("size", line.mid(7).trimmed());
-
+            m_fileStat.archive_size = line.mid(7).trimmed().toInt();
+//            m_currentArchiveEntry->setProperty("size", line.mid(7).trimmed());
         } else if (line.startsWith(QLatin1String("Packed Size = "))) {
             // #236696: 7z files only show a single Packed Size value
             //          corresponding to the whole archive.
             if (m_archiveType != ArchiveType7z) {
                 m_currentArchiveEntry->compressedSizeIsSet = true;
-                m_currentArchiveEntry->setProperty("compressedSize", line.mid(14).trimmed());
+                m_fileStat.archive_compressedSize = line.mid(14).trimmed().toInt();
+//                m_currentArchiveEntry->setProperty("compressedSize", line.mid(14).trimmed());
             }
-
         } else if (line.startsWith(QLatin1String("Modified = "))) {
-            m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(),
-                                                                                  QStringLiteral("yyyy-MM-dd hh:mm:ss")));
+            m_fileStat.archive_timestamp = QDateTime::fromString(line.mid(11).trimmed());
+//            m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
             if (ArchiveTypeIso == m_archiveType) {
                 m_isFirstInformationEntry = true;
-                if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                    emit entry(m_currentArchiveEntry);
-                } else {
-                    delete m_currentArchiveEntry;
-                }
+//                if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+//                    emit entry(m_currentArchiveEntry);
+//                } else {
+//                    delete m_currentArchiveEntry;
+//                }
+
                 m_currentArchiveEntry = nullptr;
             }
         } else if (line.startsWith(QLatin1String("Folder = "))) {
             const QString isDirectoryStr = line.mid(9).trimmed();
             Q_ASSERT(isDirectoryStr == QStringLiteral("+") || isDirectoryStr == QStringLiteral("-"));
             const bool isDirectory = isDirectoryStr.startsWith(QLatin1Char('+'));
-            m_currentArchiveEntry->setProperty("isDirectory", isDirectory);
+            m_fileStat.archive_isDirectory = isDirectory;
+//            m_currentArchiveEntry->setProperty("isDirectory", isDirectory);
             fixDirectoryFullName();
-
         } else if (line.startsWith(QLatin1String("Attributes = "))) {
             const QString attributes = line.mid(13).trimmed();
             if (attributes.contains(QLatin1Char('D'))) {
-                m_currentArchiveEntry->setProperty("isDirectory", true);
+                m_fileStat.archive_isDirectory = true;
+//                m_currentArchiveEntry->setProperty("isDirectory", true);
                 fixDirectoryFullName();
+            } else {
+                m_fileStat.archive_isDirectory = false;
             }
 
             if (attributes.contains(QLatin1Char('_'))) {
+                m_fileStat.archive_permissions = attributes.mid(attributes.indexOf(QLatin1Char(' ')) + 1);
                 // Unix attributes
-                m_currentArchiveEntry->setProperty("permissions",
-                                                   attributes.mid(attributes.indexOf(QLatin1Char(' ')) + 1));
+//                m_currentArchiveEntry->setProperty("permissions", attributes.mid(attributes.indexOf(QLatin1Char(' ')) + 1));
             } else {
+                m_fileStat.archive_permissions = attributes;
                 // FAT attributes
-                m_currentArchiveEntry->setProperty("permissions", attributes);
+//                m_currentArchiveEntry->setProperty("permissions", attributes);
             }
-
         } else if (line.startsWith(QLatin1String("CRC = "))) {
-            m_currentArchiveEntry->setProperty("CRC", line.mid(6).trimmed());
-
+            m_fileStat.archive_CRC = line.mid(6).trimmed();
+//            m_currentArchiveEntry->setProperty("CRC", line.mid(6).trimmed());
         } else if (line.startsWith(QLatin1String("Method = "))) {
-            m_currentArchiveEntry->setProperty("method", line.mid(9).trimmed());
-
+            m_fileStat.archive_method = line.mid(9).trimmed();
+//            m_currentArchiveEntry->setProperty("method", line.mid(9).trimmed());
             // For zip archives we need to check method for each entry.
             if (m_archiveType == ArchiveTypeZip) {
                 QStringList methods = line.section(QLatin1Char('='), 1).trimmed().split(QLatin1Char(' '), QString::SkipEmptyParts);
                 handleMethods(methods);
             }
-
-        } else if (line.startsWith(QLatin1String("Encrypted = ")) &&
-                   line.size() >= 13) {
-            m_currentArchiveEntry->setProperty("isPasswordProtected", line.at(12) == QLatin1Char('+'));
-
-        } else if (line.startsWith(QLatin1String("Block = ")) ||
-                   line.startsWith(QLatin1String("Version = "))) {
+        } else if (line.startsWith(QLatin1String("Encrypted = ")) && line.size() >= 13) {
+            m_fileStat.archive_isPasswordProtected = line.at(12) == QLatin1Char('+');
+//            m_currentArchiveEntry->setProperty("isPasswordProtected", line.at(12) == QLatin1Char('+'));
+        } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;
-            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                emit entry(m_currentArchiveEntry);
-            } else {
-                delete m_currentArchiveEntry;
-            }
+            emitEntryForIndex(m_fileStat);
+//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+//                emit entry(m_currentArchiveEntry);
+//            } else {
+//                delete m_currentArchiveEntry;
+//            }
+
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
             m_isFirstInformationEntry = true;
-            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                emit entry(m_currentArchiveEntry);
-            } else {
-                delete m_currentArchiveEntry;
-            }
+//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+//                emit entry(m_currentArchiveEntry);
+//            } else {
+//                delete m_currentArchiveEntry;
+//            }
+
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
-            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-                emit entry(m_currentArchiveEntry);
-            } else {
-                delete m_currentArchiveEntry;
-            }
+//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+//                emit entry(m_currentArchiveEntry);
+//            } else {
+//                delete m_currentArchiveEntry;
+//            }
+
             m_currentArchiveEntry = nullptr;
         }
+
         break;
     }
 
@@ -413,6 +589,50 @@ void CliPlugin::watchFileList(QStringList *strList)
     CliInterface::watchFileList(strList);
 }
 
+void CliPlugin::showEntryListFirstLevel(const QString &directory)
+{
+    if (directory.isEmpty()) return;
+    auto iter = m_listMap.find(directory);
+    for (; iter != m_listMap.end() ;) {
+        if (iter.key().left(directory.size()) != directory) {
+            break;
+        } else {
+            QString chopStr = iter.key().right(iter.key().size() - directory.size());
+            if (!chopStr.isEmpty()) {
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value());
+                    RefreshEntryFileCount(fileEntry);
+                    emit entry(fileEntry);
+//                    m_emittedEntries << fileEntry;
+                }
+            }
 
+            ++iter;
+        }
+    }
+}
+
+void CliPlugin::RefreshEntryFileCount(Archive::Entry *file)
+{
+    if (!file || !file->isDir()) return;
+    qulonglong count = 0;
+    auto iter = m_listMap.find(file->fullPath());
+    for (; iter != m_listMap.end();) {
+        if (!iter.key().startsWith(file->fullPath())) {
+            break;
+        } else {
+            if (iter.key().size() > file->fullPath().size()) {
+                QString chopStr = iter.key().right(iter.key().size() - file->fullPath().size());
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    ++count;
+                }
+            }
+
+            ++iter;
+        }
+
+        file->setProperty("size", count);
+    }
+}
 
 //#include "moc_cliplugin.cpp"

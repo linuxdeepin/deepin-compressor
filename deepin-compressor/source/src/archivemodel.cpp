@@ -103,7 +103,8 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".tar")) {
+                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+                            || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")) {
                         return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
                     } else {
                         return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
@@ -562,7 +563,8 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
 
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".tar")) {
+        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")) {
             parent->setProperty("size", parent->property("size").toLongLong() - 1);
         }
         endRemoveRows();
@@ -593,7 +595,8 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
     Archive::Entry *parentEntry = receivedEntry->getParent();
     if (parentEntry != nullptr) {
         parentPath = parentEntry->fullPath();
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".tar")) {
+        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")) {
             parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
         }
 

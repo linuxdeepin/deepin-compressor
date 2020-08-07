@@ -81,6 +81,7 @@
 #include <QDesktopWidget>
 #include <QFileSystemWatcher>
 #include <QtConcurrent/QtConcurrent>
+
 #include <unistd.h>
 
 DWIDGET_USE_NAMESPACE
@@ -2981,7 +2982,7 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
     }
 
     if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
+            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")) {
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 foreach (Archive::Entry *p, vectorDel) {
@@ -3580,7 +3581,7 @@ void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
         if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-                || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
+                || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")) {
             if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
                 if (!pinterface->isAllEntry()) {
                     pinterface->updateListMap();
@@ -3735,7 +3736,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     resetMainwindow();
 
     if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".tar")) {
+            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")) {
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 foreach (Archive::Entry *p, fileList) {

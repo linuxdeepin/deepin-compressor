@@ -32,6 +32,7 @@
 #include <DFileWatcher>
 #include <DSpinner>
 #include <DIconButton>
+
 #include <QEvent>
 
 static QVector<qint64> m_gTempProcessId;                 // 临时进程ID

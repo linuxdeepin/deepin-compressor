@@ -1304,7 +1304,6 @@ bool CliInterface::handleLine(const QString &line)
                 if (line.contains(OneBBBB) == true) {
                     QStringRef strfilename;
                     if (m_operationMode == ReadWriteArchiveInterface::Delete) {//如果是删除
-
                         QString filename = getFileName(percentage);
                         if (!strfilename.toString().contains("Wrong password")) {
                             if (percentage > 0) {
@@ -1327,9 +1326,11 @@ bool CliInterface::handleLine(const QString &line)
                         if (-1 == count) {
                             count = line.indexOf("-");
                         }
+
                         if (count > 0) {
                             strfilename = line.midRef(count + 2);
                         }
+
                         if (!strfilename.toString().contains("Wrong password")) {
                             if (percentage > 0) {
                                 emitProgress(float(percentage) / 100);
@@ -1364,7 +1365,6 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (m_operationMode == Extract) {
-
         //        if (isPasswordPrompt(line)) {
         //            qDebug() << "Found a password prompt";
 
@@ -1403,6 +1403,7 @@ bool CliInterface::handleLine(const QString &line)
         if (isWrongPasswordMsg(line)) {
             setPassword(QString());
             if (m_extractionOptions.isBatchExtract()) {
+
             } else {
                 if (this->extractPsdStatus != ReadOnlyArchiveInterface::WrongPsd) {
                     if (pAnalyseHelp != nullptr) {
@@ -1422,7 +1423,6 @@ bool CliInterface::handleLine(const QString &line)
         if (isPasswordPrompt(line)) {
             m_isPasswordPrompt = true;
             qDebug() << "Found a password prompt" << m_isbatchlist;
-
             if (m_isbatchlist) {
                 PasswordNeededQuery query(filename());
                 //query.execute();
@@ -1451,9 +1451,11 @@ bool CliInterface::handleLine(const QString &line)
         if (isWrongPasswordMsg(line)) {
             qDebug() << "Wrong password";
             if (m_isbatchlist) {
+
             } else {
                 setPassword(QString());
             }
+
             setWrongPassword(true);
             emit error("wrong password");
             return false;
@@ -1495,18 +1497,14 @@ bool CliInterface::handleLine(const QString &line)
             extractDst7z_ = folder.remove("        Name: ");
         }
 
-
         return readListLine(line);
-
     }
-
 
     if (m_operationMode == Delete) {
         return readDeleteLine(line);
     }
 
     if (m_operationMode == Test) {
-
         if (isPasswordPrompt(line)) {
             qDebug() << "Found a password prompt";
             return false;
