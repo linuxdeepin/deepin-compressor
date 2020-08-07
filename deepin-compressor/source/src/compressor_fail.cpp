@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compressor_fail.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 #include <DApplicationHelper>
@@ -56,10 +57,9 @@ void Compressor_Fail::InitUI()
 //    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_stringdetaillabel, DFontSizeManager::T8);
     m_stringdetaillabel->setText(m_stringdetail);
-    m_retrybutton = new DPushButton(this);
+    m_retrybutton = new CustomPushButton(this);
     m_retrybutton->setMinimumSize(340, 36);
     m_retrybutton->setText(tr("Retry"));
-    m_retrybutton->setFocusPolicy(Qt::NoFocus);
 
     commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;

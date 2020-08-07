@@ -362,6 +362,8 @@ void PasswordNeededQuery::execute()
     strlabel2->setAlignment(Qt::AlignCenter);
 
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
+    passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
+    passwordedit->setFocusPolicy(Qt::StrongFocus);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("OK"));
@@ -373,6 +375,10 @@ void PasswordNeededQuery::execute()
         } else {
             dialog->getButton(0)->setEnabled(true);
         }
+    });
+    //隐藏密码时不能输入中文,显示密码时可以输入中文
+    connect(passwordedit, &DPasswordEdit::echoModeChanged, passwordedit, [&](bool echoOn) {
+        passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
     });
 
     QVBoxLayout *mainlayout = new QVBoxLayout;

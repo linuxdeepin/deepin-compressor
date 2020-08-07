@@ -29,6 +29,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class CustomPushButton;
 class Compressor_Success: public DWidget
 {
     Q_OBJECT
@@ -45,7 +46,7 @@ public:
     void setConvertType(QString type);
 
 private:
-    DPushButton *m_showfilebutton;
+    CustomPushButton *m_showfilebutton;
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
     DLabel *m_stringinfolabel;

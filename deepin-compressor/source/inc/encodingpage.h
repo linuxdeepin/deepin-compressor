@@ -28,6 +28,7 @@
 #include <DComboBox>
 
 DWIDGET_USE_NAMESPACE
+class CustomPushButton;
 
 class EncodingPage: public DWidget
 {
@@ -46,8 +47,8 @@ private:
     DComboBox *m_codebox;
     DLabel *m_codelabel;
     DLabel *m_detaillabel;
-    DPushButton *m_cancelbutton;
-    DPushButton *m_confirmbutton;
+    CustomPushButton *m_cancelbutton;
+    CustomPushButton *m_confirmbutton;
 };
 
 #endif // ENCODINGPAGE_H

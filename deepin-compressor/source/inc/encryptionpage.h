@@ -28,6 +28,7 @@
 #include <DPasswordEdit>
 
 DWIDGET_USE_NAMESPACE
+class CustomPushButton;
 
 class EncryptionPage: public DWidget
 {
@@ -52,7 +53,7 @@ public slots:
     void slotEchoModeChanged(bool echoOn);
 
 private:
-    DPushButton *m_nextbutton = nullptr;
+    CustomPushButton *m_nextbutton = nullptr;
     DPasswordEdit *m_password = nullptr;
 
     bool m_inputflag = false;

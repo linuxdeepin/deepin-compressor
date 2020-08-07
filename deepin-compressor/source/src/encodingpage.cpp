@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "encodingpage.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 
@@ -79,8 +80,8 @@ void EncodingPage::InitUI()
 //    m_detaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
     DFontSizeManager::instance()->bind(m_detaillabel, DFontSizeManager::T8);
 
-    m_cancelbutton = new DPushButton(tr("Cancel"), this);
-    m_confirmbutton = new DPushButton(tr("Select Character Encoding"), this);
+    m_cancelbutton = new CustomPushButton(tr("Cancel"), this);
+    m_confirmbutton = new CustomPushButton(tr("Select Character Encoding"), this);
     m_cancelbutton->setFixedSize(165, 36);
     m_confirmbutton->setFixedSize(165, 36);
     QHBoxLayout *buttonlayout = new QHBoxLayout;

@@ -25,6 +25,7 @@
 #include "utils.h"
 #include "archiveinterface.h"
 #include "structs.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 #include <DApplicationHelper>
@@ -83,18 +84,14 @@ void Progress::InitUI()
     DFontSizeManager::instance()->bind(m_progressfilelabel, DFontSizeManager::T8);
     m_progressfilelabel->setText(tr("Calculating..."));
 
-    m_cancelbutton = new DPushButton(this);
+    m_cancelbutton = new CustomPushButton(this);
     m_cancelbutton->setMinimumSize(200, 36);
     m_cancelbutton->setText(tr("Cancel"));
-    m_cancelbutton->setFocusPolicy(Qt::TabFocus);
-    m_cancelbutton->setDefault(true); //响应回车键
 
-    m_PauseContinueButton = new DPushButton(this);
+    m_PauseContinueButton = new CustomPushButton(this);
     m_PauseContinueButton->setMinimumSize(200, 36);
     m_PauseContinueButton->setText(tr("Pause"));
-    m_PauseContinueButton->setFocusPolicy(Qt::TabFocus);
     m_PauseContinueButton->setCheckable(true);
-    m_PauseContinueButton->setDefault(true);
 
     //add speed and time label
     m_speedLabel = new DLabel(this);

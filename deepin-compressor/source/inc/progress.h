@@ -40,7 +40,7 @@ DWIDGET_USE_NAMESPACE
 //};
 
 
-
+class CustomPushButton;
 class ProgressAssistant;
 class Progress: public DWidget
 {

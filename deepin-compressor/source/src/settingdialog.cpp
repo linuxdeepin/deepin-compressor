@@ -132,9 +132,9 @@ void SettingDialog::initUI()
         {
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
-            DPushButton *button1 = new DPushButton(tr("Select All"));
-            DPushButton *button2 = new DPushButton(tr("Clear All"));
-            DSuggestButton *button3 = new DSuggestButton(tr("Recommended"));
+            CustomPushButton *button1 = new CustomPushButton(tr("Select All"));
+            CustomPushButton *button2 = new CustomPushButton(tr("Clear All"));
+            CustomSuggestButton *button3 = new CustomSuggestButton(tr("Recommended"));
             button1->setMinimumSize(153, 36);
             button2->setMinimumSize(153, 36);
             button3->setMinimumSize(153, 36);
@@ -168,7 +168,6 @@ void SettingDialog::initUI()
             label->setText(tr("Extract archives to") + ":");
 
             CustomCombobox *combobox = new CustomCombobox(widget);
-            combobox->setFocusPolicy(Qt::TabFocus);
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;
@@ -280,7 +279,6 @@ void SettingDialog::initUI()
             label->setText(tr("Delete archives after extraction") + ":");
 
             CustomCombobox *combobox = new CustomCombobox(widget);
-            combobox->setFocusPolicy(Qt::TabFocus);
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;

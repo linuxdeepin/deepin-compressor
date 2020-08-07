@@ -21,6 +21,7 @@
  */
 #include "encryptionpage.h"
 #include "utils.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 
@@ -44,7 +45,7 @@ void EncryptionPage::InitUI()
     DFontSizeManager::instance()->bind(stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     stringinfolabel->setText(tr("Encrypted file, please enter the password"));
-    m_nextbutton = new DPushButton(this);
+    m_nextbutton = new CustomPushButton(this);
     m_nextbutton->setMinimumSize(340, 36);
     m_nextbutton->setText(tr("Next"));
     m_nextbutton->setDisabled(true);

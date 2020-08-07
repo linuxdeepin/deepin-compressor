@@ -31,6 +31,7 @@ DWIDGET_USE_NAMESPACE
 
 class fileViewer;
 class QSettings;
+class CustomPushButton;
 
 class CompressPage : public DWidget
 {
@@ -63,7 +64,7 @@ signals:
 
 private:
     fileViewer *m_fileviewer;
-    DPushButton *m_nextbutton;
+    CustomPushButton *m_nextbutton;
     QSettings *m_settings;
     QStringList m_filelist;
 };

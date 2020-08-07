@@ -26,6 +26,7 @@
 #include "lib_edit_button.h"
 #include "archivesortfiltermodel.h"
 #include "queries.h"
+#include "customwidget.h"
 
 #include <DStandardPaths>
 #include <DMessageManager>
@@ -49,7 +50,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 {
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
-    m_nextbutton = new DPushButton(tr("Extract"), this);
+    m_nextbutton = new CustomPushButton(tr("Extract"), this);
     m_nextbutton->setMinimumSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;

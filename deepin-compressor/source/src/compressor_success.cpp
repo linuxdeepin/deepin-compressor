@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "compressor_success.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 #include <DApplicationHelper>
@@ -27,6 +28,9 @@
 #include <DDesktopServices>
 
 #include <QBoxLayout>
+#include <QKeyEvent>
+#include <QApplication>
+#include <QTimer>
 #include <QDebug>
 
 #include <utils.h>
@@ -50,11 +54,9 @@ void Compressor_Success::InitUI()
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
-    m_showfilebutton = new DPushButton(this);
+    m_showfilebutton = new CustomPushButton(this);
     m_showfilebutton->setMinimumSize(340, 36);
     m_showfilebutton->setText(tr("View"));
-    m_showfilebutton->setFocusPolicy(Qt::TabFocus);
-    m_showfilebutton->setDefault(true); //响应回车键
 
     commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
@@ -173,3 +175,27 @@ void Compressor_Success::setConvertType(QString type)
 {
     m_convertType = type;
 }
+
+//bool Compressor_Success::eventFilter(QObject *watched, QEvent *event)
+//{
+//    if (watched == m_showfilebutton) {
+//        if (QEvent::KeyPress == event->type()) {
+//            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+//            if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) {
+//                QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
+//                QApplication::sendEvent(m_showfilebutton, &pressSpace);
+//                // 设置定时
+//                QTimer::singleShot(80, this, [&]() {
+//                    // 模拟空格键松开事件
+//                    QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
+//                    QApplication::sendEvent(m_showfilebutton, &releaseSpace);
+//                });
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        }
+//    } else {
+//        return DWidget::eventFilter(watched, event);
+//    }
+//}

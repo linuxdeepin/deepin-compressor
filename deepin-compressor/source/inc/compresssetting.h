@@ -46,6 +46,7 @@ DWIDGET_USE_NAMESPACE
 #define D_COMPRESS_SPLIT_MIX    5000
 #define D_COMPRESS_SPLIT_MIN   0
 
+class CustomPushButton;
 
 class TypeLabel: public DLabel
 {
@@ -110,7 +111,7 @@ private:
     bool existSameFileName();
 
 private:
-    DPushButton *m_nextbutton = nullptr;
+    CustomPushButton *m_nextbutton = nullptr;
     QPixmap m_compressicon;
     TypeLabel *m_compresstype = nullptr;
     DLineEdit *m_filename = nullptr;

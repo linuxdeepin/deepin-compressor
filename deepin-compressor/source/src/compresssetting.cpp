@@ -23,6 +23,7 @@
 #include "DApplicationHelper"
 #include "DFontSizeManager"
 #include "utils.h"
+#include "customwidget.h"
 
 #include <DDialog>
 #include <DFileDialog>
@@ -195,7 +196,7 @@ void CompressSetting::InitUI()
     mainLayout->addLayout(infoLayout, 10);
     mainLayout->addStretch();
 
-    m_nextbutton = new DPushButton(tr("Compress"), this);
+    m_nextbutton = new CustomPushButton(tr("Compress"), this);
     m_nextbutton->setMinimumSize(340, 36);
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);

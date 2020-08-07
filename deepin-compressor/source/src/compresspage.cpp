@@ -24,6 +24,7 @@
 #include "utils.h"
 #include "queries.h"
 #include "fileViewer.h"
+#include "customwidget.h"
 
 #include <DFileDialog>
 #include <DDialog>
@@ -45,7 +46,7 @@ DWIDGET_USE_NAMESPACE
 CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 {
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
-    m_nextbutton = new DPushButton(tr("Next"), this);
+    m_nextbutton = new CustomPushButton(tr("Next"), this);
     m_nextbutton->setMinimumSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;

@@ -22,6 +22,7 @@
 #define CUSTOMWIDGET_H
 #include <DSuggestButton>
 #include <QComboBox>
+#include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
 class CustomSuggestButton: public DSuggestButton
@@ -32,8 +33,8 @@ public:
     explicit CustomSuggestButton(const QString &text, QWidget *parent = nullptr);
 
 protected:
-//    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-//    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
 
 class CustomCombobox: public QComboBox
@@ -44,6 +45,20 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+};
+
+class CustomPushButton: public QPushButton
+{
+    Q_OBJECT
+public:
+    explicit CustomPushButton(QWidget *parent = nullptr);
+    explicit CustomPushButton(const QString &text, QWidget *parent = nullptr);
+    CustomPushButton(const QIcon &icon, const QString &text, QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // CUSTOMWIDGET_H

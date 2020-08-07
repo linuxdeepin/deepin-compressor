@@ -29,12 +29,13 @@
 #include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
+class CustomPushButton;
 
 class Compressor_Fail: public DWidget
 {
     Q_OBJECT
 public:
-    Compressor_Fail(QWidget *parent =nullptr);
+    Compressor_Fail(QWidget *parent = nullptr);
     void InitUI();
     void InitConnection();
 
@@ -42,7 +43,7 @@ public:
     void setFailStrDetail(const QString &str);
 
 private:
-    DPushButton *m_retrybutton;
+    CustomPushButton *m_retrybutton;
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
     DLabel *m_stringinfolabel;
