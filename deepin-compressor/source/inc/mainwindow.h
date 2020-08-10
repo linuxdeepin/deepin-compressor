@@ -278,7 +278,7 @@ private:
      * @brief deleteDecompressFile    关闭/取消/退出时删除临时解压文件，放到回收站
      * @param destDirName
      */
-    void deleteDecompressFile(QString destDirName = QString(""));
+    void deleteDecompressFile(QString destDirName);
 
     /**
      * @brief startCmd  启动命令
@@ -808,7 +808,7 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     int m_iOpenTempFileLink = 0;                            // 打开临时文件索引
     QEventLoop *pEventloop = nullptr;                       // 事件循环
-    DDesktopServicesThread *m_DesktopServicesThread;		// 打开指定文件线程
+    DDesktopServicesThread *m_DesktopServicesThread; // 打开指定文件线程
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif
