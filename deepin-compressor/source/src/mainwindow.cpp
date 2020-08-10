@@ -2554,6 +2554,7 @@ void MainWindow::onCompressNext()
 
 void MainWindow::onCompressPressed(QMap< QString, QString > &Args)
 {
+    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING);
     m_pProgressdialog->setProcess(0);
     m_pProgess->setprogress(0);
     m_bIsAddArchive = false;
