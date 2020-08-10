@@ -85,7 +85,7 @@ int Query::execDialog()
     return 0;
 }
 
-void Query::setParent(DMainWindow *pParent)
+void Query::setParent(QWidget *pParent)
 {
     m_pParent = pParent;
 }

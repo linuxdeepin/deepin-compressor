@@ -131,6 +131,7 @@ void CompressPage::showDialog()
 int CompressPage::showReplaceDialog(QString name)
 {
     OverwriteQuery query(name);
+    query.setParent(this);
     query.execute();
     return query.getExecuteReturn();
 }
@@ -192,6 +193,7 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
 
                 if (!bAll) {    // 判断是否全部应用，若不是，则继续弹出对话框
                     OverwriteQuery query(path);
+                    query.setParent(this);
                     query.execute();
                     mode = query.getExecuteReturn();
 
