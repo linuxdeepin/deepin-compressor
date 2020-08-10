@@ -130,7 +130,6 @@ void CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bo
         m_currentArchiveEntry->setProperty("size", 0);
     }
 
-    m_currentArchiveEntry->setProperty("size", archive.archive_size);
     m_currentArchiveEntry->setProperty("compressedSize", archive.archive_compressedSize);
     m_currentArchiveEntry->setProperty("timestamp", archive.archive_timestamp);
     m_currentArchiveEntry->setProperty("isDirectory", archive.archive_isDirectory);
@@ -151,12 +150,14 @@ Archive::Entry *CliPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat 
     Archive::Entry *pCurEntry = new Archive::Entry(this);
 
     pCurEntry->setProperty("fullPath", archive.archive_fullPath);
-    pCurEntry->setProperty("owner", archive.archive_owner);
-    pCurEntry->setProperty("group", archive.archive_group);
     pCurEntry->setProperty("size", archive.archive_size);
-    pCurEntry->setProperty("isDirectory", archive.archive_isDirectory);
-    pCurEntry->setProperty("link", archive.archive_link);
+    pCurEntry->setProperty("compressedSize", archive.archive_compressedSize);
     pCurEntry->setProperty("timestamp", archive.archive_timestamp);
+    pCurEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    pCurEntry->setProperty("permissions", archive.archive_permissions);
+    pCurEntry->setProperty("CRC", archive.archive_CRC);
+    pCurEntry->setProperty("method", archive.archive_method);
+    pCurEntry->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
 
     return pCurEntry;
 }
