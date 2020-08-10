@@ -5,6 +5,7 @@
 
 #include <DDesktopServices>
 #include <QDebug>
+#include <QFileInfo>
 DWIDGET_USE_NAMESPACE
 
 class DDesktopServicesThread : public QThread
