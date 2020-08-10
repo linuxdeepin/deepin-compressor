@@ -447,6 +447,7 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
 
             if (!bAll) {
                 OverwriteQuery query(strPath);
+                query.setParent(this);
                 query.execute();
                 mode = query.getExecuteReturn();
 
@@ -502,6 +503,7 @@ void UnCompressPage::slotDeleteJobFinished(Archive::Entry *pWorkEntry)
 int UnCompressPage::showReplaceDialog(QString name, int &responseValue)
 {
     OverwriteQuery query(name);
+    query.setParent(this);
     query.execute();
     responseValue = query.response().toInt();
     return query.getExecuteReturn();

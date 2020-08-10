@@ -84,13 +84,13 @@ public:
 
     int execDialog();
 
-    void setParent(DMainWindow *pParent);
+    void setParent(QWidget *pParent);
 
 protected:
     Query();
     virtual ~Query() {}
 
-    DMainWindow *m_pParent = nullptr;
+    QWidget *m_pParent = nullptr;
     QueryData m_data;
 
 private:
