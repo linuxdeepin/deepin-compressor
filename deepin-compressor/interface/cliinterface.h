@@ -46,6 +46,7 @@ public:
 
     int copyRequiredSignals() const override;
 
+    QMap<QString, archive_stat> m_listMap;
     bool list(bool isbatch = false) override;
     bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
     void pauseProcess() Q_DECL_OVERRIDE;
@@ -212,7 +213,6 @@ private:
     void getChildProcessidTar7z(const QString &processid, QVector<qint64> &childprocessid);
 
 private:
-
     QByteArray m_stdOutData;
     QRegularExpression m_passwordPromptPattern;
     QHash<int, QList<QRegularExpression> > m_patternCache;

@@ -9,14 +9,14 @@
 
 CliPluginFactory::CliPluginFactory()
 {
-    registerPlugin<CliPlugin>();
+    registerPlugin<Cli7zPlugin>();
 }
 CliPluginFactory::~CliPluginFactory()
 {
 
 }
 
-CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
+Cli7zPlugin::Cli7zPlugin(QObject *parent, const QVariantList &args)
     : CliInterface(parent, args)
     , m_archiveType(ArchiveType7z)
     , m_parseState(ParseStateTitle)
@@ -27,20 +27,20 @@ CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
     setupCliProperties();
 }
 
-CliPlugin::~CliPlugin()
+Cli7zPlugin::~Cli7zPlugin()
 {
 }
 
-void CliPlugin::resetParsing()
+void Cli7zPlugin::resetParsing()
 {
+    m_listMap.clear();
     m_parseState = ParseStateTitle;
     m_comment.clear();
     m_numberOfVolumes = 0;
 }
 
-void CliPlugin::setupCliProperties()
+void Cli7zPlugin::setupCliProperties()
 {
-
     m_cliProps->setProperty("captureProgress", false);
 
     m_cliProps->setProperty("addProgram", QStringLiteral("7z"));
@@ -87,7 +87,7 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("multiVolumeSuffix", QStringList{QStringLiteral("$Suffix.001")});
 }
 
-void CliPlugin::fixDirectoryFullName()
+void Cli7zPlugin::fixDirectoryFullName()
 {
 //    if (m_currentArchiveEntry->isDir()) {
 //        const QString directoryName = m_currentArchiveEntry->fullPath();
@@ -104,7 +104,7 @@ void CliPlugin::fixDirectoryFullName()
     }
 }
 
-bool CliPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archive)
+bool Cli7zPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archive)
 {
     setEntryVal(archive/*, m_indexCount, archive.archive_fullPath, m_DirRecord*/);
     if (m_listMap.find(archive.archive_fullPath) == m_listMap.end()) {
@@ -114,14 +114,14 @@ bool CliPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archiv
     return true;
 }
 
-void CliPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
+void Cli7zPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
 {
     if ((archive.archive_fullPath.endsWith("/") && archive.archive_fullPath.count("/") == 1) || (archive.archive_fullPath.count("/") == 0)) {
         setEntryData(archive);
     }
 }
 
-void CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
+void Cli7zPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
 {
     m_currentArchiveEntry->setProperty("fullPath", archive.archive_fullPath);
     if (!isMutilFolderFile) {
@@ -145,7 +145,7 @@ void CliPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bo
     }
 }
 
-Archive::Entry *CliPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
+Archive::Entry *Cli7zPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
 {
     Archive::Entry *pCurEntry = new Archive::Entry(this);
 
@@ -162,7 +162,7 @@ Archive::Entry *CliPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat 
     return pCurEntry;
 }
 
-qint64 CliPlugin::extractSize(const QVector<Archive::Entry *> &files)
+qint64 Cli7zPlugin::extractSize(const QVector<Archive::Entry *> &files)
 {
     qint64 qExtractSize = 0;
     for (Archive::Entry *e : files) {
@@ -184,7 +184,7 @@ qint64 CliPlugin::extractSize(const QVector<Archive::Entry *> &files)
     return qExtractSize;
 }
 
-bool CliPlugin::isPasswordList()
+bool Cli7zPlugin::isPasswordList()
 {
     QStringList programLst = m_process->program();
 
@@ -197,7 +197,7 @@ bool CliPlugin::isPasswordList()
     return false;
 }
 
-bool CliPlugin::readListLine(const QString &line)
+bool Cli7zPlugin::readListLine(const QString &line)
 {
     static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+
     static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04
@@ -405,7 +405,7 @@ bool CliPlugin::readListLine(const QString &line)
     return true;
 }
 
-bool CliPlugin::readExtractLine(const QString &line)
+bool Cli7zPlugin::readExtractLine(const QString &line)
 {
     if (line.startsWith(QLatin1String("ERROR: E_FAIL"))) {
         emit error(tr("Extraction failed due to an unknown error."));
@@ -421,7 +421,7 @@ bool CliPlugin::readExtractLine(const QString &line)
     return true;
 }
 
-bool CliPlugin::readDeleteLine(const QString &line)
+bool Cli7zPlugin::readDeleteLine(const QString &line)
 {
     if (line.startsWith(QLatin1String("Error: ")) &&
             line.endsWith(QLatin1String(" is not supported archive"))) {
@@ -432,7 +432,7 @@ bool CliPlugin::readDeleteLine(const QString &line)
     return true;
 }
 
-void CliPlugin::handleMethods(const QStringList &methods)
+void Cli7zPlugin::handleMethods(const QStringList &methods)
 {
     for (const QString &method : methods) {
 
@@ -462,45 +462,45 @@ void CliPlugin::handleMethods(const QStringList &methods)
     }
 }
 
-bool CliPlugin::isPasswordPrompt(const QString &line)
+bool Cli7zPlugin::isPasswordPrompt(const QString &line)
 {
     return line.startsWith(QLatin1String("Enter password (will not be echoed):"));
 }
 
-bool CliPlugin::isWrongPasswordMsg(const QString &line)
+bool Cli7zPlugin::isWrongPasswordMsg(const QString &line)
 {
     return line.contains(QLatin1String("Wrong password"));
 }
 
-bool CliPlugin::isCorruptArchiveMsg(const QString &line)
+bool Cli7zPlugin::isCorruptArchiveMsg(const QString &line)
 {
     return (line == QLatin1String("Unexpected end of archive") ||
             line == QLatin1String("Headers Error"));
 }
 
-bool CliPlugin::isDiskFullMsg(const QString &line)
+bool Cli7zPlugin::isDiskFullMsg(const QString &line)
 {
     return line.contains(QLatin1String("No space left on device"));
 }
 
-bool CliPlugin::isFileExistsMsg(const QString &line)
+bool Cli7zPlugin::isFileExistsMsg(const QString &line)
 {
     return (line == QLatin1String("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? ") ||
             line == QLatin1String("? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "));
 }
 
-bool CliPlugin::isFileExistsFileName(const QString &line)
+bool Cli7zPlugin::isFileExistsFileName(const QString &line)
 {
     return (line.startsWith(QLatin1String("file ./")) ||
             line.startsWith(QLatin1String("  Path:     ./")));
 }
 
-void CliPlugin::watchFileList(QStringList *strList)
+void Cli7zPlugin::watchFileList(QStringList *strList)
 {
     CliInterface::watchFileList(strList);
 }
 
-void CliPlugin::showEntryListFirstLevel(const QString &directory)
+void Cli7zPlugin::showEntryListFirstLevel(const QString &directory)
 {
     if (directory.isEmpty()) return;
     auto iter = m_listMap.find(directory);
@@ -523,7 +523,7 @@ void CliPlugin::showEntryListFirstLevel(const QString &directory)
     }
 }
 
-void CliPlugin::RefreshEntryFileCount(Archive::Entry *file)
+void Cli7zPlugin::RefreshEntryFileCount(Archive::Entry *file)
 {
     if (!file || !file->isDir()) return;
     qulonglong count = 0;

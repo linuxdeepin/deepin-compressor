@@ -830,7 +830,8 @@ QVector<Archive::Entry *> fileViewer::getSelEntries()
     QVector<Archive::Entry *> fileList;
     QModelIndexList listModelIndex = pTableViewFile->selectionModel()->selectedRows();
     if (m_decompressmodel->archive()->fileName().endsWith(".zip") || m_decompressmodel->archive()->fileName().endsWith(".jar")
-            || m_decompressmodel->archive()->fileName().endsWith(".tar") || m_decompressmodel->archive()->fileName().endsWith(".7z")) {
+            || m_decompressmodel->archive()->fileName().endsWith(".tar") || m_decompressmodel->archive()->fileName().endsWith(".7z")
+            || m_decompressmodel->archive()->fileName().endsWith(".rar")) {
         if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
             if (pinterface->isAllEntry()) {
                 fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));

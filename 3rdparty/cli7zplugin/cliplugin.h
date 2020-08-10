@@ -16,14 +16,12 @@ public:
 };
 
 
-
-
-class CliPlugin : public CliInterface
+class Cli7zPlugin : public CliInterface
 {
     Q_OBJECT
 public:
-    explicit CliPlugin(QObject *parent, const QVariantList &args);
-    ~CliPlugin() override;
+    explicit Cli7zPlugin(QObject *parent, const QVariantList &args);
+    ~Cli7zPlugin() override;
 
     void resetParsing() override;
     bool isPasswordList();
@@ -76,7 +74,7 @@ private:
     Archive::Entry *m_currentArchiveEntry;
     bool m_isFirstInformationEntry;
 
-    QMap<QString, archive_stat> m_listMap;
+//    QMap<QString, archive_stat> m_listMap;
     archive_stat m_fileStat;
 };
 

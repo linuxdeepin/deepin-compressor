@@ -8,14 +8,15 @@
 //K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
 CliPluginFactory::CliPluginFactory()
 {
-    registerPlugin<CliPlugin>();
+    registerPlugin<CliRarPlugin>();
 }
+
 CliPluginFactory::~CliPluginFactory()
 {
 
 }
 
-CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
+CliRarPlugin::CliRarPlugin(QObject *parent, const QVariantList &args)
     : CliInterface(parent, args)
     , m_parseState(ParseStateTitle)
     , m_isUnrar5(false)
@@ -26,19 +27,19 @@ CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
     , m_remainingIgnoreLines(1) //The first line of UNRAR output is empty.
     , m_linesComment(0)
 {
-
     // Empty lines are needed for parsing output of unrar.
     setListEmptyLines(true);
 
     setupCliProperties();
 }
 
-CliPlugin::~CliPlugin()
+CliRarPlugin::~CliRarPlugin()
 {
 }
 
-void CliPlugin::resetParsing()
+void CliRarPlugin::resetParsing()
 {
+    m_listMap.clear();
     m_parseState = ParseStateTitle;
     m_remainingIgnoreLines = 1;
     m_unrarVersion.clear();
@@ -46,7 +47,7 @@ void CliPlugin::resetParsing()
     m_numberOfVolumes = 0;
 }
 
-void CliPlugin::setupCliProperties()
+void CliRarPlugin::setupCliProperties()
 {
 
     m_cliProps->setProperty("captureProgress", true);
@@ -103,7 +104,7 @@ void CliPlugin::setupCliProperties()
                                                              QStringLiteral("part1.$Suffix")});
 }
 
-bool CliPlugin::readListLine(const QString &line)
+bool CliRarPlugin::readListLine(const QString &line)
 {
     // Ignore number of lines corresponding to m_remainingIgnoreLines.
     if (m_remainingIgnoreLines > 0) {
@@ -139,7 +140,7 @@ bool CliPlugin::readListLine(const QString &line)
     return true;
 }
 
-bool CliPlugin::handleUnrar5Line(const QString &line)
+bool CliRarPlugin::handleUnrar5Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
         emit error(tr("Failed to find all archive volumes."));
@@ -200,16 +201,80 @@ bool CliPlugin::handleUnrar5Line(const QString &line)
             return true;
             // Empty line indicates end of entry.
         } else if (line.trimmed().isEmpty() && !m_unrar5Details.isEmpty()) {
-            handleUnrar5Entry();
+//            handleUnrar5Entry();
+            emitEntryForIndex(m_fileStat);
         } else {
             // All detail lines should contain a colon.
             if (!line.contains(QLatin1Char(':'))) {
                 return true;
             }
 
+//            bool isLink = false;
+//            QString linkTarget;
+//            bool isDircetory = false;
             // The details are on separate lines, so we store them in the QHash
             // m_unrar5Details.
             m_unrar5Details.insert(line.section(QLatin1Char(':'), 0, 0).trimmed().toLower(), line.section(QLatin1Char(':'), 1).trimmed());
+            /*if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "attributes") {
+                m_fileStat.archive_permissions = line.section(QLatin1Char(':'), 1).trimmed();
+                if (m_fileStat.archive_permissions.startsWith("l")) {
+                    isLink = true;
+                }
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "packed size") {
+                m_fileStat.archive_compressedSize = line.section(QLatin1Char(':'), 1).trimmed().toUInt();
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "mtime") {
+                QString time = line.section(QLatin1Char(':'), 1).trimmed();
+                m_fileStat.archive_timestamp = QDateTime::fromString(time.left((time.length() - 10)), QStringLiteral("yyyy-MM-dd HH:mm:ss"));
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "name") {
+                m_fileStat.archive_fullPath = line.section(QLatin1Char(':'), 1).trimmed();
+                m_fileStat.archive_name = line.section(QLatin1Char(':'), 1).trimmed();
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "size") {
+                m_fileStat.archive_size = line.section(QLatin1Char(':'), 1).trimmed().toInt();
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "type") {
+                if (line.section(QLatin1Char(':'), 1).trimmed() == "File") {
+                    m_fileStat.archive_isDirectory = false;
+                } else if (line.section(QLatin1Char(':'), 1).trimmed().contains("link")) {
+                    isLink = true;
+                } else {
+                    isDircetory = true;
+                    m_fileStat.archive_isDirectory = true;
+                }
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "ratio") {
+                QString compressionRatio = line.section(QLatin1Char(':'), 1).trimmed();
+                compressionRatio.chop(1); // Remove the '%'
+                m_fileStat.archive_ratio = compressionRatio;
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "compression") {
+                QString compression = line.section(QLatin1Char(':'), 1).trimmed();
+                int optionPos = compression.indexOf(QLatin1Char('-'));
+                if (optionPos != -1) {
+                    m_fileStat.archive_method = compression.mid(optionPos);
+                    m_fileStat.archive_version = compression.left(optionPos).trimmed();
+                } else {
+                    // No method specified.
+                    m_fileStat.archive_method = QString();
+                    m_fileStat.archive_version = compression;
+                }
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower().contains("crc32")) {
+                m_fileStat.archive_CRC = line.section(QLatin1Char(':'), 1).trimmed();
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "blake2") {
+                m_fileStat.archive_BLAKE2 = line.section(QLatin1Char(':'), 1).trimmed();
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "flags") {
+                m_fileStat.archive_isPasswordProtected = line.section(QLatin1Char(':'), 1).trimmed().contains("encrypted");
+            } else if (line.section(QLatin1Char(':'), 0, 0).trimmed().toLower() == "target") {
+                linkTarget = line.section(QLatin1Char(':'), 1).trimmed();
+            }
+
+            if (isDircetory && (!m_fileStat.archive_fullPath.endsWith(QLatin1Char('/')))) {
+                m_fileStat.archive_fullPath += QLatin1Char('/');
+                m_fileStat.archive_name += QLatin1Char('/');
+                isDircetory = false;
+            }
+
+            if (isLink) {
+                m_fileStat.archive_link = linkTarget;
+                isLink = false;
+                linkTarget = "";
+            }*/
         }
 
         break;
@@ -220,7 +285,7 @@ bool CliPlugin::handleUnrar5Line(const QString &line)
     return true;
 }
 
-void CliPlugin::handleUnrar5Entry()
+void CliRarPlugin::handleUnrar5Entry()
 {
     Archive::Entry *e = new Archive::Entry(this);
 
@@ -271,7 +336,7 @@ void CliPlugin::handleUnrar5Entry()
     emit entry(e);
 }
 
-bool CliPlugin::handleUnrar4Line(const QString &line)
+bool CliRarPlugin::handleUnrar4Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
         emit error(tr("Failed to find all archive volumes."));
@@ -443,7 +508,7 @@ bool CliPlugin::handleUnrar4Line(const QString &line)
     return true;
 }
 
-void CliPlugin::handleUnrar4Entry()
+void CliRarPlugin::handleUnrar4Entry()
 {
     Archive::Entry *e = new Archive::Entry(this);
 
@@ -498,7 +563,7 @@ void CliPlugin::handleUnrar4Entry()
     emit entry(e);
 }
 
-bool CliPlugin::readExtractLine(const QString &line)
+bool CliRarPlugin::readExtractLine(const QString &line)
 {
     const QRegularExpression rxCRC(QStringLiteral("CRC failed"));
     if (rxCRC.match(line).hasMatch()) {
@@ -514,53 +579,234 @@ bool CliPlugin::readExtractLine(const QString &line)
     return true;
 }
 
-bool CliPlugin::hasBatchExtractionProgress() const
+bool CliRarPlugin::hasBatchExtractionProgress() const
 {
     return true;
 }
 
-void CliPlugin::ignoreLines(int lines, ParseState nextState)
+void CliRarPlugin::ignoreLines(int lines, ParseState nextState)
 {
     m_remainingIgnoreLines = lines;
     m_parseState = nextState;
 }
 
-bool CliPlugin::isPasswordPrompt(const QString &line)
+bool CliRarPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    QString compressionRatio = m_unrar5Details.value(QStringLiteral("ratio"));
+    compressionRatio.chop(1); // Remove the '%'
+    m_fileStat.archive_ratio = compressionRatio;
+
+    QString dateTime = m_unrar5Details.value(QStringLiteral("mtime"));
+    QDateTime ts = QDateTime::fromString(dateTime.left((dateTime.length() - 10)), QStringLiteral("yyyy-MM-dd HH:mm:ss"));
+    m_fileStat.archive_timestamp = ts;
+
+    bool isDirectory = (m_unrar5Details.value(QStringLiteral("type")) == QLatin1String("Directory"));
+    m_fileStat.archive_isDirectory = isDirectory;
+    if (isDirectory && !m_unrar5Details.value(QStringLiteral("name")).endsWith(QLatin1Char('/'))) {
+        m_unrar5Details[QStringLiteral("name")] += QLatin1Char('/');
+    }
+
+    QString compression = m_unrar5Details.value(QStringLiteral("compression"));
+    int optionPos = compression.indexOf(QLatin1Char('-'));
+    if (optionPos != -1) {
+        m_fileStat.archive_method = compression.mid(optionPos);
+        m_fileStat.archive_version = compression.left(optionPos).trimmed();
+    } else {
+        // No method specified.
+        m_fileStat.archive_method = QString();
+        m_fileStat.archive_version = compression;
+    }
+
+    m_isPasswordProtected = m_unrar5Details.value(QStringLiteral("flags")).contains(QStringLiteral("encrypted"));
+    m_fileStat.archive_isPasswordProtected = m_isPasswordProtected;
+    if (m_isPasswordProtected) {
+        m_isRAR5 ? emit encryptionMethodFound(QStringLiteral("AES256")) : emit encryptionMethodFound(QStringLiteral("AES128"));
+    }
+
+    m_fileStat.archive_fullPath = m_unrar5Details.value(QStringLiteral("name"));
+    m_fileStat.archive_size = m_unrar5Details.value(QStringLiteral("size")).toInt();
+    m_fileStat.archive_compressedSize = m_unrar5Details.value(QStringLiteral("packed size")).toULongLong();
+    m_fileStat.archive_permissions = m_unrar5Details.value(QStringLiteral("attributes"));
+    m_fileStat.archive_CRC = m_unrar5Details.value(QStringLiteral("crc32"));
+    m_fileStat.archive_BLAKE2 = m_unrar5Details.value(QStringLiteral("blake2"));
+
+    if (m_fileStat.archive_permissions.startsWith(QLatin1Char('l'))) {
+        m_fileStat.archive_link = m_unrar5Details.value(QStringLiteral("target"));
+    }
+
+    m_unrar5Details.clear();
+
+    setEntryVal(archive);
+    if (m_listMap.find(archive.archive_fullPath) == m_listMap.end()) {
+        m_listMap.insert(archive.archive_fullPath, archive);
+    }
+
+    return true;
+}
+
+void CliRarPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    if ((archive.archive_fullPath.endsWith("/") && archive.archive_fullPath.count("/") == 1) || (archive.archive_fullPath.count("/") == 0)) {
+        setEntryData(archive);
+    }
+}
+
+void CliRarPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
+{
+    Archive::Entry *e = new Archive::Entry(this);
+
+    e->setProperty("ratio", m_fileStat.archive_ratio);
+    e->setProperty("timestamp", m_fileStat.archive_timestamp);
+    e->setProperty("isDirectory", m_fileStat.archive_isDirectory);
+    e->setProperty("method", m_fileStat.archive_method);
+    e->setProperty("version", m_fileStat.archive_version);
+    e->setProperty("isPasswordProtected", m_fileStat.archive_isPasswordProtected);
+    if (m_fileStat.archive_isPasswordProtected) {
+        m_isRAR5 ? emit encryptionMethodFound(QStringLiteral("AES256")) : emit encryptionMethodFound(QStringLiteral("AES128"));
+    }
+
+    e->setProperty("fullPath", m_fileStat.archive_fullPath);
+    if (!isMutilFolderFile) {
+        e->setProperty("size", archive.archive_size);
+    } else {
+        e->setProperty("size", 0);
+    }
+
+    e->setProperty("compressedSize", m_fileStat.archive_compressedSize);
+    e->setProperty("permissions", m_fileStat.archive_permissions);
+    e->setProperty("CRC", m_fileStat.archive_CRC);
+    e->setProperty("BLAKE2", m_fileStat.archive_BLAKE2);
+    e->setProperty("link", m_fileStat.archive_link);
+
+//    m_unrar5Details.clear();
+    emit entry(e);
+}
+
+Archive::Entry *CliRarPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
+{
+    Archive::Entry *e = new Archive::Entry(this);
+
+    e->setProperty("ratio", archive.archive_ratio);
+    e->setProperty("timestamp", archive.archive_timestamp);
+    e->setProperty("isDirectory", archive.archive_isDirectory);
+    e->setProperty("method", archive.archive_method);
+    e->setProperty("version", archive.archive_version);
+    e->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
+    e->setProperty("fullPath", archive.archive_fullPath);
+    e->setProperty("size", archive.archive_size);
+    e->setProperty("compressedSize", archive.archive_compressedSize);
+    e->setProperty("permissions", archive.archive_permissions);
+    e->setProperty("CRC", archive.archive_CRC);
+    e->setProperty("BLAKE2", archive.archive_BLAKE2);
+    e->setProperty("link", archive.archive_link);
+
+    return e;
+}
+
+qint64 CliRarPlugin::extractSize(const QVector<Archive::Entry *> &files)
+{
+    qint64 qExtractSize = 0;
+    for (Archive::Entry *e : files) {
+        QString strPath = e->fullPath();
+        auto iter = m_listMap.find(strPath);
+        for (; iter != m_listMap.end();) {
+            if (!iter.key().startsWith(strPath)) {
+                break;
+            } else {
+                if (!iter.key().endsWith("/")) {
+                    qExtractSize += iter.value().archive_size;
+                }
+
+                ++iter;
+            }
+        }
+    }
+
+    return qExtractSize;
+}
+
+bool CliRarPlugin::isPasswordPrompt(const QString &line)
 {
     return line.startsWith(QLatin1String("Enter password (will not be echoed) for"));
 }
 
-bool CliPlugin::isWrongPasswordMsg(const QString &line)
+bool CliRarPlugin::isWrongPasswordMsg(const QString &line)
 {
     return (line.contains(QLatin1String("password incorrect")) || line.contains(QLatin1String("wrong password")) || line.contains(QLatin1String("The specified password is incorrect")));
 }
 
-bool CliPlugin::isCorruptArchiveMsg(const QString &line)
+bool CliRarPlugin::isCorruptArchiveMsg(const QString &line)
 {
     return (line == QLatin1String("Unexpected end of archive") ||
             line.contains(QLatin1String("the file header is corrupt")) ||
             line.endsWith(QLatin1String("checksum error")));
 }
 
-bool CliPlugin::isDiskFullMsg(const QString &line)
+bool CliRarPlugin::isDiskFullMsg(const QString &line)
 {
     return line.contains(QLatin1String("No space left on device"));
 }
 
-bool CliPlugin::isFileExistsMsg(const QString &line)
+bool CliRarPlugin::isFileExistsMsg(const QString &line)
 {
     return (line == QLatin1String("[Y]es, [N]o, [A]ll, n[E]ver, [R]ename, [Q]uit "));
 }
 
-bool CliPlugin::isFileExistsFileName(const QString &line)
+bool CliRarPlugin::isFileExistsFileName(const QString &line)
 {
     return (line.startsWith(QLatin1String("Would you like to replace the existing file ")) || // unrar 5
             line.contains(QLatin1String(" already exists. Overwrite it"))); // unrar 3 & 4
 }
 
-bool CliPlugin::isLocked() const
+bool CliRarPlugin::isLocked() const
 {
     return m_isLocked;
+}
+
+void CliRarPlugin::showEntryListFirstLevel(const QString &directory)
+{
+    if (directory.isEmpty()) return;
+    auto iter = m_listMap.find(directory);
+    for (; iter != m_listMap.end() ;) {
+        if (iter.key().left(directory.size()) != directory) {
+            break;
+        } else {
+            QString chopStr = iter.key().right(iter.key().size() - directory.size());
+            if (!chopStr.isEmpty()) {
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value());
+                    RefreshEntryFileCount(fileEntry);
+                    emit entry(fileEntry);
+//                    m_emittedEntries << fileEntry;
+                }
+            }
+
+            ++iter;
+        }
+    }
+}
+
+void CliRarPlugin::RefreshEntryFileCount(Archive::Entry *file)
+{
+    if (!file || !file->isDir()) return;
+    qulonglong count = 0;
+    auto iter = m_listMap.find(file->fullPath());
+    for (; iter != m_listMap.end();) {
+        if (!iter.key().startsWith(file->fullPath())) {
+            break;
+        } else {
+            if (iter.key().size() > file->fullPath().size()) {
+                QString chopStr = iter.key().right(iter.key().size() - file->fullPath().size());
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    ++count;
+                }
+            }
+
+            ++iter;
+        }
+
+        file->setProperty("size", count);
+    }
 }
 
 #include "moc_cliplugin.cpp"

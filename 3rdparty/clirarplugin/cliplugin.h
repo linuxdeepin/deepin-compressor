@@ -15,13 +15,13 @@ public:
 };
 
 
-class CliPlugin : public CliInterface
+class CliRarPlugin : public CliInterface
 {
     Q_OBJECT
 
 public:
-    explicit CliPlugin(QObject *parent, const QVariantList &args);
-    ~CliPlugin() override;
+    explicit CliRarPlugin(QObject *parent, const QVariantList &args);
+    ~CliRarPlugin() override;
 
     void resetParsing() override;
     bool readListLine(const QString &line) override;
@@ -35,6 +35,8 @@ public:
     bool isFileExistsFileName(const QString &line) override;
     bool isLocked() const override;
 
+    virtual void showEntryListFirstLevel(const QString &directory) override;
+    virtual void RefreshEntryFileCount(Archive::Entry *file) override;
 private:
 
     enum ParseState {
@@ -54,6 +56,12 @@ private:
     void handleUnrar4Entry();
     void ignoreLines(int lines, ParseState nextState);
 
+    bool emitEntryForIndex(archive_stat &archive);
+    void setEntryVal(archive_stat &archive);
+    void setEntryData(archive_stat &archive, bool isMutilFolderFile = false);
+    Archive::Entry *setEntryDataA(archive_stat &archive);
+    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
+
     QStringList m_unrar4Details;
     QHash<QString, QString> m_unrar5Details;
 
@@ -66,6 +74,10 @@ private:
 
     int m_remainingIgnoreLines;
     int m_linesComment;
+
+//    QMap<QString, archive_stat> m_listMap;
+    Archive::Entry *m_rarArchiveEntry;
+    archive_stat m_fileStat;
 };
 
 #endif // CLIPLUGIN_H
