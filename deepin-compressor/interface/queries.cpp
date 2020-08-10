@@ -354,7 +354,7 @@ void PasswordNeededQuery::execute()
     strlabel->setToolTip(archiveFullPath);
 
     DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedHeight(20);
+    strlabel2->setFixedWidth(340); //修复英文环境下提示语显示不全
     strlabel2->setForegroundRole(DPalette::WindowText);
     strlabel2->setWordWrap(true);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Normal);
