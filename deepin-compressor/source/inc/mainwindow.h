@@ -285,7 +285,7 @@ private:
      * @brief deleteDecompressFile    关闭/取消/退出时删除临时解压文件，放到回收站
      * @param destDirName
      */
-    void deleteDecompressFile(QString destDirName = QString(""));
+    void deleteDecompressFile(QString destDirName);
 
     /**
      * @brief startCmd  启动命令

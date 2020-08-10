@@ -340,6 +340,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
     }
 
+    QString destDirName;
     qDebug() << "子窗口开始关闭";
     //判断m_pJob是否结束
     int mode = -1;
@@ -369,11 +370,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
                 this->m_eOption = OpenInfo::QUERY_CLOSE_CANCEL;
                 return;
             } else if (mode == 1) {
-//                if (m_pJob) {
-//                    ExtractJob *pJob = dynamic_cast<ExtractJob *>(m_pJob);
-//                    m_pJob->doKill();
-//                    m_pJob = nullptr;
-//                }
+                if (m_pJob->mType == KJob::ENUM_JOBTYPE::EXTRACTJOB) {
+                    ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
+                    destDirName = pExtractJob->archiveInterface()->destDirName; //获取解压目标文件(夹)名
+                }
 
                 closeClean(event);
                 removeFromParentInfo(this);
@@ -398,26 +398,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
         return;
     }
 
-    if (PAGE_ZIPPROGRESS == m_ePageID || PAGE_UNZIPPROGRESS == m_ePageID || PAGE_DELETEPROGRESS == m_ePageID /*m_pMainLayout->currentIndex()*/) {
+    if (PAGE_ZIPPROGRESS == m_ePageID || PAGE_DELETEPROGRESS == m_ePageID /*m_pMainLayout->currentIndex()*/) {
         //        if (1 != m_pProgess->showConfirmDialog()) {
         //            event->ignore();
         //            return;
         //        }
 
         deleteCompressFile();
-        deleteDecompressFile();
-
-        if (m_pJob) {
-            if (m_pJob->mType == KJob::ENUM_JOBTYPE::EXTRACTJOB) {
-                QString destDirName;
-                ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
-                destDirName = pExtractJob->archiveInterface()->destDirName;
-                deleteDecompressFile(destDirName);
-            }
-        }
-
         slotquitApp();
         //emit sigquitApp();
+    } else if (PAGE_UNZIPPROGRESS == m_ePageID) {
+        deleteDecompressFile(destDirName);
+        slotquitApp();
     } else if (PAGE_ZIP_FAIL == m_ePageID /*m_pMainLayout->currentIndex()*/) {
         deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_strPathStore)*/);
         slotquitApp();
@@ -1553,7 +1545,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 batchJob->addInput(QUrl::fromLocalFile(url));
             }
 
-            connect(batchJob, &BatchExtract::signalUserQuery, [=](Query *query) {
+            connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
                 qDebug() << "query->execute";
                 query->setParent(this);
                 query->execute();
@@ -2106,7 +2098,8 @@ void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 {
     m_pProgressdialog->setCurrentFile(filename);
     m_pProgess->setProgressFilename(filename);
-    m_extractToFile.append(filename);
+//     m_extractToFile.append(filename);
+//     qDebug() << m_extractToFile;
 }
 
 void MainWindow::slotBatchExtractFileChanged(const QString &name)
@@ -3362,6 +3355,9 @@ void MainWindow::deleteCompressFile(/*QStringList oldfiles, QStringList newfiles
 //解压取消时删除临时文件,这个函数好像不太安全，尽量不要使用
 void MainWindow::deleteDecompressFile(QString destDirName)
 {
+    if (destDirName.isEmpty()) {
+        return;
+    }
 //    qDebug() << "deleteDecompressFile" << m_strDecompressFilePath << m_strDecompressFileName << m_pUnCompressPage->getDeFileCount() << m_pArchiveModel->archive()->isSingleFile() << m_pArchiveModel->archive()->isSingleFolder();
     bool bAutoCreatDir = m_pSettingsDialog->isAutoCreatDir();
     QString tmpDecompressfilepath = m_strDecompressFilePath;
@@ -3375,7 +3371,6 @@ void MainWindow::deleteDecompressFile(QString destDirName)
                 if (fi.exists()) {
                     QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + fi.dirName();
                     fi.rename(fi.path(), newname);
-//                    fi.removeRecursively();
                 }
             } /*else {      //不自动创建文件夹，顶级多文件(夹)，未做删除临时文件处理
                 auto rootEntry = this->m_pArchiveModel->getRootEntry();
@@ -3390,18 +3385,20 @@ void MainWindow::deleteDecompressFile(QString destDirName)
             }*/
         } else if (m_pUnCompressPage->getDeFileCount() == 1) {
             if (!m_pArchiveModel->archive()->isSingleFile()) { //单个文件夹
-                QDir fi(tmpDecompressfilepath + m_pArchiveModel->archive()->subfolderName());
+//                QString dirName = m_pArchiveModel->archive()->subfolderName();
+//                if (dirName.isEmpty()) {
+//                    return;
+//                }
+                QDir fi(tmpDecompressfilepath + destDirName);
                 if (fi.exists()) {
-                    QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + fi.dirName();
+                    QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + destDirName;
                     fi.rename(fi.path(), newname);
-//                    fi.removeRecursively();
                 }
             } else { //单个文件
                 QFile fi(tmpDecompressfilepath + destDirName);
                 if (fi.exists()) {
                     QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + destDirName;
                     fi.rename(newname);
-//                    fi.remove();
                 }
             }
         }
@@ -4060,8 +4057,6 @@ void MainWindow::closeExtractJobSafe()
 
         killJob();
     }
-
-    //deleteDecompressFile();
 }
 
 void MainWindow::slotLoadWrongPassWord()
