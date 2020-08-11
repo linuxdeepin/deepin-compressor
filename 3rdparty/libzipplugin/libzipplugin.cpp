@@ -489,17 +489,28 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
         return false;
     }
 
-    QString fullpath = /*pCurEntry->fullPath()*/file;
+    int statusDel = zip_delete(archive, index);
+    if (statusDel == -1) {
+        emit error(tr("Failed to delete entry: %1"));
+        if (zip_close(archive)) {
+            emit error(tr("Failed to write archive."));
+            return false;
+        }
+
+        return false;
+    }
+
+    /*QString fullpath = file;
     char *fileNameDel = nullptr;
     //char *path = fullpath.toUtf8().data();
     size_t length = strlen(fullpath.toUtf8().data());
     fileNameDel = (char *)malloc((length + 1) * sizeof(char));
     strcpy(fileNameDel, fullpath.toUtf8().data());
-//    const char *nn1 = zip_get_name(archive, 0, ZIP_FL_ENC_GUESS);
+    //    const char *nn1 = zip_get_name(archive, 0, ZIP_FL_ENC_GUESS);
     zip_int64_t index1 = zip_name_locate(archive, fileNameDel, ZIP_FL_ENC_GUESS);
     if (index1 == -1) {
-//        free(fileNameDel);
-//        return false;
+    //        free(fileNameDel);
+    //        return false;
         QString val = m_fileNameEncodeMap.value(fullpath);
         QStringList listArgs;
         listArgs << "d" << filename() << val;
@@ -512,14 +523,14 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
             return false;
         }
     } else {
-//        qDebug() << "------deleteOk------" << fileNameDel;
-//        free(fileNameDel);
+    //        qDebug() << "------deleteOk------" << fileNameDel;
+    //        free(fileNameDel);
         zip_int64_t indexDel = index;
-//        zip_file_t *zipFile = zip_fopen_index(archive, indexDel, 0);
-//        const char *gg = zip_get_name(archive, index, ZIP_FL_ENC_RAW);
-//        zip_stat_t statBuffer;
-//        zip_stat_index(archive, index, 0, &statBuffer);
-//        int ii = statBuffer.index;
+    //        zip_file_t *zipFile = zip_fopen_index(archive, indexDel, 0);
+    //        const char *gg = zip_get_name(archive, index, ZIP_FL_ENC_RAW);
+    //        zip_stat_t statBuffer;
+    //        zip_stat_index(archive, index, 0, &statBuffer);
+    //        int ii = statBuffer.index;
         int statusDel = zip_delete(archive, indexDel);
         if (statusDel == -1) {
             emit error(tr("Failed to delete entry: %1"));
@@ -530,7 +541,7 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
 
             return false;
         }
-    }
+    }*/
 
     return true;
 }
