@@ -1,8 +1,9 @@
-#1.定义cmake版本
+
 cmake_minimum_required(VERSION 3.8)
-#2.设置项目名称
-set(EXE_NAME deepin-compressor)
-project(${EXE_NAME})
+
+set(LIB_NAME gzplugin)
+project(${LIB_NAME})
+
 
 #3.项目相关设置
 #3.1 包含当前路径，使用*.ui文件时，需要加上这句，否则找不到头文件
@@ -19,8 +20,6 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
  
-
-#4 查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
@@ -34,7 +33,6 @@ find_package(Qt5Xml)
 find_package(Qt5Svg REQUIRED SvgWidgets)
 find_package(KF5Codecs REQUIRED)
 include(FindPkgConfig)
-
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
 include_directories(${DtkWidget_INCLUDE_DIRS})
@@ -81,57 +79,31 @@ set(LIBS_INCLUDE_DIRS
 )
 
 
- 
-#5设置库文件输出目录
+include_directories(${PROJECT_SOURCE_DIR}/../../../deepin-compressor/interface)
+#include_directories(${PROJECT_SOURCE_DIR}/../ChardetDetector)
 
-#5.1 设置lib输出目录
-#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-#5.2 设置可执行程序输出目录
-#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
- 
- 
-#6. 应用interface项目
-#interface的h文件
-include_directories(${PROJECT_SOURCE_DIR}/interface)
-add_subdirectory(interface)
+#set( CASSDK_DIR ${PROJECT_SOURCE_DIR}/../../deepin-compressor/)
 
-#7.主程序的h文件
-include_directories(${PROJECT_SOURCE_DIR}/source/inc)
-include_directories(${PROJECT_SOURCE_DIR}/source/inc/openwithdialog)
+include_directories(${PROJECT_SOURCE_DIR})
 
-#8.主程序的源文件和头文件
-file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp)
-file(GLOB_RECURSE h_files  source/inc/*.h source/inc/openwithdialog/*.h )
-file(GLOB_RECURSE res_files *.qrc)
-file(GLOB_RECURSE ts_files ../translations/*.ts)
+#add_subdirectory(${CASSDK_DIR}/interface interface.out)
+
+
+file(GLOB_RECURSE c_files  *.cpp)
+file(GLOB_RECURSE h_files  *.h)
+file(GLOB_RECURSE json_files  *.json)
 message("============================")
-#foreach(f ${res_files})
-#message(${f})
-#Endforeach(f) 
+foreach(f ${h_files})
+message(${f})
+Endforeach(f) 
 message("============================")
 
-#QT5_WRAP_CPP(HEADER_MOC ${h_files})
 
-QT5_ADD_RESOURCES(QRC_MOC ${res_files})
-QT5_ADD_TRANSLATION(QM_FILES ${ts_files})
-
-#INCLUDE(${QT_USE_FILE})
-#ADD_DEFINITIONS(${QT_DEFINITIONS})
-
-#9.链接编译的lib
-link_directories(${PROJECT_SOURCE_DIR}/lib)
-
-#10.生成可执行程序
-add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${ts_files})
+add_library(${LIB_NAME} SHARED  ${c_files} ${h_files} ${json_files})
 
 
-
-set_target_properties(${EXE_NAME} PROPERTIES AUTOMOC TRUE)
-qt5_use_modules(${EXE_NAME}  Core  Widgets  Xml Gui )
-
-target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc )
-target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc/openwithdialog )
-
-target_link_libraries(${EXE_NAME}  ${LIBS_INCLUDE_DIRS})
-target_link_libraries(${EXE_NAME} Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::DBus Qt5::Svg  KF5::Codecs)
-target_link_libraries(${EXE_NAME} interface)
+set_target_properties(${LIB_NAME} PROPERTIES AUTOMOC TRUE)
+qt5_use_modules(${LIB_NAME}  Core  Widgets  Xml Gui )
+target_include_directories(${LIB_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
+target_link_libraries(${LIB_NAME} Qt5::Widgets)
+target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::DBus Qt5::Svg  KF5::Codecs)

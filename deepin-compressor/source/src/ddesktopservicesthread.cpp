@@ -21,4 +21,5 @@ void DDesktopServicesThread::run()
     } else if (fileinfo.isFile()) {
         DDesktopServices::showFileItem(m_path);
     }
+    return;
 }
