@@ -317,7 +317,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
 //                m_currentArchiveEntry->setProperty("compressedSize", line.mid(14).trimmed());
             }
         } else if (line.startsWith(QLatin1String("Modified = "))) {
-            m_fileStat.archive_timestamp = QDateTime::fromString(line.mid(11).trimmed());
+            m_fileStat.archive_timestamp = QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss"));
 //            m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
             if (ArchiveTypeIso == m_archiveType) {
                 m_isFirstInformationEntry = true;
