@@ -21,7 +21,7 @@
 #ifndef CUSTOMWIDGET_H
 #define CUSTOMWIDGET_H
 #include <DSuggestButton>
-#include <QComboBox>
+#include <DComboBox>
 #include <DPushButton>
 
 DWIDGET_USE_NAMESPACE
@@ -37,15 +37,20 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
 
-class CustomCombobox: public QComboBox
+class CustomCombobox: public DComboBox
 {
     Q_OBJECT
 public:
     explicit CustomCombobox(QWidget *parent = nullptr);
 
+private:
+    Qt::FocusReason m_reson;
+
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 };
 
 class CustomPushButton: public QPushButton

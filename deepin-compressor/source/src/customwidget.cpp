@@ -22,8 +22,9 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QTimer>
+#include <DStyle>
+#include <DApplication>
 #include <QDebug>
-
 
 CustomSuggestButton::CustomSuggestButton(QWidget *parent)
     : DSuggestButton(parent)
@@ -59,7 +60,7 @@ void CustomSuggestButton::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-CustomCombobox::CustomCombobox(QWidget *parent): QComboBox(parent)
+CustomCombobox::CustomCombobox(QWidget *parent): DComboBox(parent)
 {
     setFocusPolicy(Qt::TabFocus);
 }
@@ -71,7 +72,7 @@ void CustomCombobox::keyPressEvent(QKeyEvent *event)
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &pressSpace);
     } else {
-        QComboBox::keyPressEvent(event);
+        DComboBox::keyPressEvent(event);
     }
 }
 
@@ -82,8 +83,52 @@ void CustomCombobox::keyReleaseEvent(QKeyEvent *event)
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &releaseSpace);
     } else {
-        QComboBox::keyReleaseEvent(event);
+        DComboBox::keyReleaseEvent(event);
     }
+}
+
+/**
+ * @brief combobox获取到焦点效果
+ * @param event
+ */
+void CustomCombobox::paintEvent(QPaintEvent *event)
+{
+    DComboBox::paintEvent(event);
+    if (hasFocus() && (m_reson & (Qt::TabFocusReason | Qt::BacktabFocusReason))) {
+        DStylePainter painter(this);
+//    painter.setPen(palette().color(QPalette::Text));
+        DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+//    style->drawControl()
+//    // draw the combobox frame, focusrect and selected etc.
+        QStyleOptionComboBox opt;
+        initStyleOption(&opt);
+        const  QStyleOptionComboBox *opt1 = &opt;
+//    painter.draw(QStyle::SE_ComboBoxFocusRect, opt);
+
+//    // draw the icon and text
+//    painter.drawControl(QStyle::CE_ComboBoxLabel, opt);
+        DStyleHelper dstyle(style);
+        int border_width = dstyle.pixelMetric(DStyle::PM_FocusBorderWidth, opt1, this);
+//        int border_space = style->pixelMetric(DStyle::PM_FocusFrameVMargin, opt1, this);
+//        int frame_radius = dstyle.pixelMetric(DStyle::PM_FrameRadius, opt1, this);
+        QColor color = dstyle.getColor(opt1, QPalette::Highlight);
+        // QRect borderRect = style->subElementRect(DStyle::SE_ComboBoxFocusRect, opt1, this);
+
+        painter.setPen(QPen(color, border_width, Qt::SolidLine));
+        painter.setBrush(Qt::NoBrush);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        //.adjusted(1, 1, -1, -1)
+
+        //painter.drawRoundedRect(borderRect, frame_radius, frame_radius);
+        style->drawPrimitive(DStyle::PE_FrameFocusRect, opt1, & painter, this);
+    }
+}
+
+void CustomCombobox::focusInEvent(QFocusEvent *event)
+{
+    m_reson = event->reason();
+    DComboBox::focusInEvent(event);
 }
 
 CustomPushButton::CustomPushButton(QWidget *parent)
