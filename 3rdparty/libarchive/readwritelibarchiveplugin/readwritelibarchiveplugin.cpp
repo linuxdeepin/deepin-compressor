@@ -109,7 +109,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                             QDir::Hidden | QDir::NoDotAndDotDot,
                             QDirIterator::Subdirectories);
             QString firstDirFullPath = fullPath;
-            QString externalPath = selectedFile->fullPath().remove(selectedFile->name());
+            QString externalPath = selectedFile->fullPath();
+            externalPath.chop(selectedFile->name().length());
 
             while (!QThread::currentThread()->isInterruptionRequested() && it.hasNext()) {
                 QString path = it.next();
