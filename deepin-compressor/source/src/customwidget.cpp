@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <DStyle>
 #include <DApplication>
+#include <DStyleOptionButton>
 #include <QDebug>
 
 CustomSuggestButton::CustomSuggestButton(QWidget *parent)
@@ -40,7 +41,7 @@ CustomSuggestButton::CustomSuggestButton(const QString &text, QWidget *parent)
 
 void CustomSuggestButton::keyPressEvent(QKeyEvent *event)
 {
-    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行按下按钮
         // 模拟空格键按下事件
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &pressSpace);
@@ -51,7 +52,7 @@ void CustomSuggestButton::keyPressEvent(QKeyEvent *event)
 
 void CustomSuggestButton::keyReleaseEvent(QKeyEvent *event)
 {
-    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行弹起按钮
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &releaseSpace);
@@ -150,7 +151,7 @@ CustomPushButton::CustomPushButton(const QIcon &icon, const QString &text, QWidg
 
 void CustomPushButton::keyPressEvent(QKeyEvent *event)
 {
-    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行按下按钮
         // 模拟空格键按下事件
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &pressSpace);
@@ -161,11 +162,108 @@ void CustomPushButton::keyPressEvent(QKeyEvent *event)
 
 void CustomPushButton::keyReleaseEvent(QKeyEvent *event)
 {
-    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行弹起按钮
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
         QApplication::sendEvent(this, &releaseSpace);
     } else {
         QPushButton::keyReleaseEvent(event);
+    }
+}
+
+CustomSwitchButton::CustomSwitchButton(QWidget *parent)
+    : DSwitchButton(parent)
+{
+    setFocusPolicy(Qt::StrongFocus);
+}
+
+void CustomSwitchButton::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
+        // 模拟空格键按下事件
+        QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
+        QApplication::sendEvent(this, &pressSpace);
+        QTimer::singleShot(80, this, [&]() {
+            // 模拟空格键松开事件
+            QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
+            QApplication::sendEvent(this, &releaseSpace);
+        });
+    } else {
+        DSwitchButton::keyPressEvent(event);
+    }
+}
+
+void CustomSwitchButton::paintEvent(QPaintEvent *event)
+{
+    DSwitchButton::paintEvent(event);
+    if (hasFocus() && (m_reson & (Qt::TabFocusReason | Qt::BacktabFocusReason))) {
+        DStylePainter painter(this);
+        //    painter.setPen(palette().color(QPalette::Text));
+        DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+        //    style->drawControl()
+        //    // draw the combobox frame, focusrect and selected etc.
+        DStyleOptionButton opt;
+        this->initStyleOption(&opt);
+        const  QStyleOptionButton *opt1 = &opt;
+        //    painter.draw(QStyle::SE_ComboBoxFocusRect, opt);
+
+        //    // draw the icon and text
+        //    painter.drawControl(QStyle::CE_ComboBoxLabel, opt);
+        DStyleHelper dstyle(style);
+        int border_width = dstyle.pixelMetric(DStyle::PM_FocusBorderWidth, opt1, this);
+        //        int border_space = style->pixelMetric(DStyle::PM_FocusFrameVMargin, opt1, this);
+        //        int frame_radius = dstyle.pixelMetric(DStyle::PM_FrameRadius, opt1, this);
+        QColor color = dstyle.getColor(opt1, QPalette::Highlight);
+        // QRect borderRect = style->subElementRect(DStyle::SE_ComboBoxFocusRect, opt1, this);
+
+        painter.setPen(QPen(color, border_width, Qt::SolidLine));
+        painter.setBrush(Qt::NoBrush);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        //.adjusted(1, 1, -1, -1)
+
+        //painter.drawRoundedRect(borderRect, frame_radius, frame_radius);
+        style->drawPrimitive(DStyle::PE_FrameFocusRect, opt1, & painter, this);
+    }
+}
+
+void CustomSwitchButton::focusInEvent(QFocusEvent *event)
+{
+    qDebug() << "focusInEvent";
+    m_reson = event->reason();
+    DSwitchButton::focusInEvent(event);
+}
+
+CustomCheckBox::CustomCheckBox(QWidget *parent)
+    : DCheckBox(parent)
+{
+
+}
+
+CustomCheckBox::CustomCheckBox(const QString &text, QWidget *parent)
+    : DCheckBox(text, parent)
+{
+
+}
+
+void CustomCheckBox::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行切换状态
+        // 模拟空格键按下事件
+        QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
+        QApplication::sendEvent(this, &pressSpace);
+    } else {
+        DCheckBox::keyPressEvent(event);
+    }
+}
+
+void CustomCheckBox::keyReleaseEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行切换状态
+        // 模拟空格键松开事件
+        QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
+        QApplication::sendEvent(this, &releaseSpace);
+    } else {
+        DCheckBox::keyReleaseEvent(event);
     }
 }

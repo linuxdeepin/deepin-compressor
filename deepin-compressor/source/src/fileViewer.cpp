@@ -216,6 +216,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 MyTableView::MyTableView(QWidget *parent)
     : DTableView(parent)
 {
+    setFocusPolicy(Qt::StrongFocus);
     setMinimumSize(580, 300);
     header_ = new LogViewHeaderView(Qt::Horizontal, this);
     setHorizontalHeader(header_);
@@ -728,6 +729,7 @@ void fileViewer::InitConnection()
     connect(openWithDialogMenu, &DMenu::triggered, this, &fileViewer::onRightMenuOpenWithClicked);
     connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
     connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
+    connect(pTableViewFile, &MyTableView::sigTabPress, this, &fileViewer::sigTabPress);
     connect(pModel, &MyFileSystemModel::sigShowLabel, this, &fileViewer::showPlable);
 }
 
@@ -1751,6 +1753,21 @@ Archive::Entry *MyTableView::getParentArchiveEntry()
         return item;
     }
     return nullptr;
+}
+
+void MyTableView::focusInEvent(QFocusEvent *event)
+{
+    m_reson = event->reason();
+    DTableView::focusInEvent(event);
+}
+
+void MyTableView::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Tab == event->key()) {
+        emit sigTabPress();
+    } else {
+        DTableView::keyPressEvent(event);
+    }
 }
 
 void MyTableView::dropEvent(QDropEvent *event)

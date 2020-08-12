@@ -98,6 +98,9 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 //    connect(this, &UnCompressPage::subWindowTipsUpdateEntry, m_fileviewer, &fileViewer::SubWindowDragUpdateEntry);
 
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
+    connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
+        m_nextbutton->setFocus(Qt::TabFocusReason);
+    });
 //    connect(m_fileviewer, &fileViewer::sigFileAutoCompressToArchive, this, &UnCompressPage::sigAddArchiveFiles);
 }
 

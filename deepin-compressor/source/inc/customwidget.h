@@ -23,6 +23,8 @@
 #include <DSuggestButton>
 #include <DComboBox>
 #include <DPushButton>
+#include <DSwitchButton>
+#include <DCheckBox>
 
 DWIDGET_USE_NAMESPACE
 class CustomSuggestButton: public DSuggestButton
@@ -60,6 +62,34 @@ public:
     explicit CustomPushButton(QWidget *parent = nullptr);
     explicit CustomPushButton(const QString &text, QWidget *parent = nullptr);
     CustomPushButton(const QIcon &icon, const QString &text, QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+};
+
+class CustomSwitchButton: public DSwitchButton
+{
+    Q_OBJECT
+public:
+    explicit CustomSwitchButton(QWidget *parent = Q_NULLPTR);
+
+private:
+    Qt::FocusReason m_reson;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+//    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
+};
+
+class CustomCheckBox: public DCheckBox
+{
+    Q_OBJECT
+public:
+    explicit CustomCheckBox(QWidget *parent = nullptr);
+    explicit CustomCheckBox(const QString &text, QWidget *parent = nullptr);
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;

@@ -75,6 +75,9 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
     connect(m_fileviewer, &fileViewer::sigpathindexChanged, this, &CompressPage::onPathIndexChanged);
+    connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
+        m_nextbutton->setFocus(Qt::TabFocusReason);
+    });
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &CompressPage::onAddfileSlot);

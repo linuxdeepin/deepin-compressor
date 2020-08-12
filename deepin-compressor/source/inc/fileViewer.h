@@ -134,6 +134,7 @@ protected:
 signals:
     void sigdragLeave(QString path);
     void signalDrop(QStringList file);
+    void sigTabPress();
 
 public slots:
     void slotDragpath(QUrl url);
@@ -145,9 +146,15 @@ private:
     QPoint dragpos;
     DFileDragServer *s = nullptr;
     QString m_path;
+    Qt::FocusReason m_reson;
 
 public:
     LogViewHeaderView *header_;
+
+    // QWidget interface
+protected:
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
 
 struct SortInfo {
@@ -248,6 +255,7 @@ signals:
     void sigFileAutoCompress(const QStringList &, Archive::Entry *pWorkEntry = nullptr);
     void sigNeedConvert();
 //    void sigFileAutoCompressToArchive(const QStringList &, const QString &);//废弃，added by hsw 20200528
+    void sigTabPress();
 
 private:
     void refreshTableview();

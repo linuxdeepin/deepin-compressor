@@ -126,7 +126,7 @@ void CompressSetting::InitUI()
 
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
     moresetlabel->setForegroundRole(DPalette::WindowText);
-    m_moresetbutton = new DSwitchButton(this);
+    m_moresetbutton = new CustomSwitchButton(this);
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
@@ -141,11 +141,11 @@ void CompressSetting::InitUI()
     m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"), this);
     m_encryptedfilelistlabel->setToolTip(tr("Support 7z type only"));
     m_encryptedfilelistlabel->setEnabled(false);
-    m_file_secret = new DSwitchButton(this);
+    m_file_secret = new CustomSwitchButton(this);
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
-    m_splitcompress = new DCheckBox(tr("Split to volumes") + ":", this);
+    m_splitcompress = new CustomCheckBox(tr("Split to volumes") + ":", this);
     m_splitcompress->setEnabled(false);
     m_splitcompress->setToolTip(tr("Support 7z type only"));
     m_splitnumedit = new DDoubleSpinBox(this);

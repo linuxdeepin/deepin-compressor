@@ -34,7 +34,6 @@
 #include <DSwitchButton>
 #include <DPasswordEdit>
 #include <dfilechooseredit.h>
-#include <DCheckBox>
 #include <DSpinBox>
 #include <DMenu>
 
@@ -47,6 +46,8 @@ DWIDGET_USE_NAMESPACE
 #define D_COMPRESS_SPLIT_MIN   0
 
 class CustomPushButton;
+class CustomSwitchButton;
+class CustomCheckBox;
 
 class TypeLabel: public DLabel
 {
@@ -123,16 +124,16 @@ private:
     QVBoxLayout *m_fileLayout = nullptr;
 
     QHBoxLayout *m_moresetlayout = nullptr;
-    DSwitchButton *m_moresetbutton = nullptr;
+    CustomSwitchButton *m_moresetbutton = nullptr;
     DPasswordEdit *m_password = nullptr;
     QHBoxLayout *m_file_secretlayout = nullptr;
-    DSwitchButton *m_file_secret = nullptr;
+    CustomSwitchButton *m_file_secret = nullptr;
     QHBoxLayout *m_splitlayout = nullptr;
     DDoubleSpinBox *m_splitnumedit = nullptr;
     DPushButton *m_plusbutton = nullptr;
     DPushButton *m_minusbutton = nullptr;
     DLabel *m_encryptedlabel = nullptr;
-    DCheckBox *m_splitcompress = nullptr;
+    CustomCheckBox *m_splitcompress = nullptr;
     DLabel *m_encryptedfilelistlabel = nullptr;
     DMenu *m_typemenu = nullptr;
 
