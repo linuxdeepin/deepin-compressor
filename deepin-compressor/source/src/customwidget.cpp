@@ -229,7 +229,6 @@ void CustomSwitchButton::paintEvent(QPaintEvent *event)
 
 void CustomSwitchButton::focusInEvent(QFocusEvent *event)
 {
-    qDebug() << "focusInEvent";
     m_reson = event->reason();
     DSwitchButton::focusInEvent(event);
 }

@@ -68,6 +68,8 @@ void CompressSetting::InitUI()
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_compresstype->setMinimumHeight(25);
+    m_compresstype->setFocusPolicy(Qt::TabFocus);
+    m_compresstype->installEventFilter(this);
 
     DStyle style;
     QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
@@ -214,6 +216,8 @@ void CompressSetting::InitUI()
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
 
     setBackgroundRole(DPalette::Base);
+
+    setTabOrder(m_compresstype, m_filename);
 }
 
 void CompressSetting::InitConnection()
@@ -1216,5 +1220,25 @@ bool CompressSetting::existSameFileName()
         return true;
     } else {
         return false;
+    }
+}
+
+bool CompressSetting::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_compresstype) {
+        if (QEvent::KeyPress == event->type()) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) { //响应"回车键"
+                m_typemenu->popup(m_compresstype->mapToGlobal(m_compresstype->pos()));
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        // pass the event on to the parent class
+        return DWidget::eventFilter(watched, event);
     }
 }

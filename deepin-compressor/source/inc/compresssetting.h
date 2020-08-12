@@ -54,8 +54,10 @@ class TypeLabel: public DLabel
     Q_OBJECT
 public:
     TypeLabel(QWidget *parent = nullptr);
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+
 signals:
     void labelClickEvent(QMouseEvent *event);
 };
@@ -143,6 +145,9 @@ private:
     bool filePermission = true;
     qint64 m_getFileSize;
     bool isSplitChecked = false;
+
+public:
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // COMPRESSSETTING_H
