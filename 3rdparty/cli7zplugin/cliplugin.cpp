@@ -164,9 +164,12 @@ Archive::Entry *Cli7zPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_sta
 
 qint64 Cli7zPlugin::extractSize(const QVector<Archive::Entry *> &files)
 {
+    m_listFileName.clear();
+
     qint64 qExtractSize = 0;
     for (Archive::Entry *e : files) {
         QString strPath = e->fullPath();
+        m_strRootNode = e->rootNode;
         auto iter = m_listMap.find(strPath);
         for (; iter != m_listMap.end();) {
             if (!iter.key().startsWith(strPath)) {
@@ -176,6 +179,7 @@ qint64 Cli7zPlugin::extractSize(const QVector<Archive::Entry *> &files)
                     qExtractSize += iter.value().archive_size;
                 }
 
+                m_listFileName << iter.value().archive_fullPath;
                 ++iter;
             }
         }

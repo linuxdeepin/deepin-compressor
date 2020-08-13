@@ -733,26 +733,22 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
     bool overwriteAll = false;
     bool skipAll = false;
 
-    for (const Archive::Entry *file : files) {
-
-        QFileInfo relEntry(file->fullPath().remove(file->rootNode));
-        QFileInfo absSourceEntry(QDir::current().absolutePath() + QLatin1Char('/') + file->fullPath());
+    for (const QString strPath/*Archive::Entry *file*/ : m_listFileName/*files*/) {
+        QString strTemp = strPath;
+        QFileInfo relEntry(strTemp/*file->fullPath()*/.remove(m_strRootNode/*file->rootNode*/));
+        QFileInfo absSourceEntry(QDir::current().absolutePath() + QLatin1Char('/') + strPath/*file->fullPath()*/);
         QFileInfo absDestEntry(finalDestDir.path() + QLatin1Char('/') + relEntry.filePath());
 
         if (absSourceEntry.isDir()) {
-
             // For directories, just create the path.
             if (!finalDestDir.mkpath(relEntry.filePath())) {
                 qDebug() << "Failed to create directory" << relEntry.filePath() << "in final destination.";
             }
         } else {
-
             // If destination file exists, prompt the user.
             if (absDestEntry.exists()) {
                 qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
-
                 if (!skipAll && !overwriteAll) {
-
                     OverwriteQuery query(absDestEntry.absoluteFilePath());
                     query.setNoRenameMode(true);
                     //query.execute();
@@ -763,6 +759,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseOverwriteAll()) {
                             overwriteAll = true;
                         }
+
                         if (!QFile::remove(absDestEntry.absoluteFilePath())) {
                             qDebug() << "Failed to remove" << absDestEntry.absoluteFilePath();
                         }
@@ -770,6 +767,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
                         if (query.responseAutoSkip()) {
                             skipAll = true;
                         }
+
                         continue;
                     } else if (query.responseCancelled()) {
                         emit cancelled();
@@ -800,6 +798,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector< Archive::Entry * > &fil
             }
         }
     }
+
     return true;
 }
 

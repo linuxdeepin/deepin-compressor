@@ -156,6 +156,9 @@ protected:
     bool m_abortingOperation = false;
     qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
 
+    QString m_strRootNode;
+    QStringList m_listFileName;
+
 private:
     void init();
     bool handleFileExistsMessage(const QString &filename);

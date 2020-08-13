@@ -2975,21 +2975,31 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         return;
     }
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
-            || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
-        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-            if (pinterface->isAllEntry()) {
-                foreach (Archive::Entry *p, vectorDel) {
-                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
-                }
-            } else {
-                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
+//    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
+//        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//            if (pinterface->isAllEntry()) {
+//                foreach (Archive::Entry *p, vectorDel) {
+//                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//                }
+//            } else {
+//                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
+//            }
+//        }
+//    } else {
+//        foreach (Archive::Entry *p, vectorDel) {
+//            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//        }
+//    }
+
+    if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+        if (pinterface->isAllEntry()) {
+            foreach (Archive::Entry *p, vectorDel) {
+                m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
             }
-        }
-    } else {
-        foreach (Archive::Entry *p, vectorDel) {
-            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+        } else {
+            m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
         }
     }
 
@@ -3579,13 +3589,18 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
-        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-                || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
-                || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
-            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-                if (!pinterface->isAllEntry()) {
-                    pinterface->updateListMap();
-                }
+//        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//                || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
+//                || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
+//            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//                if (!pinterface->isAllEntry()) {
+//                    pinterface->updateListMap();
+//                }
+//            }
+//        }
+        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+            if (!pinterface->isAllEntry()) {
+                pinterface->updateListMap();
             }
         }
     }
@@ -3735,21 +3750,30 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     resetMainwindow();
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
-            || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
-        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-            if (pinterface->isAllEntry()) {
-                foreach (Archive::Entry *p, fileList) {
-                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
-                }
-            } else {
-                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
+//    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
+//        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//            if (pinterface->isAllEntry()) {
+//                foreach (Archive::Entry *p, fileList) {
+//                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//                }
+//            } else {
+//                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
+//            }
+//        }
+//    } else {
+//        foreach (Archive::Entry *p, fileList) {
+//            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//        }
+//    }
+    if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+        if (pinterface->isAllEntry()) {
+            foreach (Archive::Entry *p, fileList) {
+                m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
             }
-        }
-    } else {
-        foreach (Archive::Entry *p, fileList) {
-            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+        } else {
+            m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
         }
     }
 

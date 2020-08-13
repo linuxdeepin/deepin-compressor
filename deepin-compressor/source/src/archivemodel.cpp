@@ -100,15 +100,25 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
             }
             case Size:
                 if (entry->isDir()) {
-                    uint dirs;
-                    uint files;
-                    entry->countChildren(dirs, files);
-                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
-                            || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
-                            || archive()->fileName().endsWith(".rar")) {
-                        return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
-                    } else {
-                        return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+//                    uint dirs;
+//                    uint files;
+//                    entry->countChildren(dirs, files);
+//                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+//                            || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
+//                            || archive()->fileName().endsWith(".rar")) {
+//                        return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
+//                    } else {
+//                        return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+//                    }
+                    if (m_plugin) {
+                        if (m_plugin->isAllEntry()) {
+                            uint dirs;
+                            uint files;
+                            entry->countChildren(dirs, files);
+                            return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+                        } else {
+                            return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
+                        }
                     }
 
                 } else if (!entry->property("link").toString().isEmpty()) {
@@ -564,11 +574,17 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
 
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
-                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
-                || archive()->fileName().endsWith(".rar")) {
-            parent->setProperty("size", parent->property("size").toLongLong() - 1);
+//        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+//                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
+//                || archive()->fileName().endsWith(".rar")) {
+//            parent->setProperty("size", parent->property("size").toLongLong() - 1);
+//        }
+        if (m_plugin) {
+            if (!m_plugin->isAllEntry()) {
+                parent->setProperty("size", parent->property("size").toLongLong() - 1);
+            }
         }
+
         endRemoveRows();
     }
 }
@@ -597,10 +613,15 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
     Archive::Entry *parentEntry = receivedEntry->getParent();
     if (parentEntry != nullptr) {
         parentPath = parentEntry->fullPath();
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
-                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
-                || archive()->fileName().endsWith(".rar")) {
-            parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
+//        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+//                || archive()->fileName().endsWith(".tar") || archive()->fileName().endsWith(".7z")
+//                || archive()->fileName().endsWith(".rar")) {
+//            parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
+//        }
+        if (m_plugin) {
+            if (!m_plugin->isAllEntry()) {
+                parentEntry->setProperty("size", parentEntry->property("size").toLongLong() - 1);
+            }
         }
 
     }

@@ -288,7 +288,7 @@ public:
     QString extractTopFolderName;
     QString destDirName;        //取消解压，需要该变量
     bool ifReplaceTip = false;  //是否有替换提示
-    bool m_bAllEntry = true;           // 是否传递 所有entry
+    bool m_bAllEntry = false;           // 是否传递 所有entry
     ExtractPsdStatus extractPsdStatus = ReadOnlyArchiveInterface::Default;
     ProgressAssistant *m_pProgressInfo = nullptr;
 Q_SIGNALS:
