@@ -620,7 +620,7 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
 //        }
         if (m_plugin) {
             if (!m_plugin->isAllEntry()) {
-                parentEntry->setProperty("size", parentEntry->property("size").toLongLong() - 1);
+                parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
             }
         }
 
