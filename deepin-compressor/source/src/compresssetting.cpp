@@ -107,7 +107,7 @@ void CompressSetting::InitUI()
     QFormLayout *filelayout = new QFormLayout();
     m_filename = new DLineEdit(this);
     m_filename->setMinimumSize(260, 36);
-    m_filename->setText(tr("Create New Archive"));
+    m_filename->setText(tr("New Archive"));
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
