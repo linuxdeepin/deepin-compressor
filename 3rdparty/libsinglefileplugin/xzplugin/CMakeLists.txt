@@ -56,8 +56,8 @@ include_directories(${GIO_INCLUDE_DIRS})
 #include_directories(${LIBSECRET_INCLUDE_DIRS})
  
 #pkg_check_modules(ATSPI2 REQUIRED atspi-2)
-pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
-include_directories(${DFrameworkDBus_INCLUDE_DIRS})
+#pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
+#include_directories(${DFrameworkDBus_INCLUDE_DIRS})
 
 pkg_search_module(DtkGui REQUIRED dtkgui)	
 include_directories(${DtkGui_INCLUDE_DIRS})
@@ -73,7 +73,7 @@ set(LIBS_INCLUDE_DIRS
 #	${QTGSetting_LIBRARIES}
 #	${LIBSECRET_LIBRARIES}
 	${DtkGui_LIBRARIES}
-	${DFrameworkDBus_LIBRARIES}
+#	${DFrameworkDBus_LIBRARIES}
 )
 
 include_directories(${PROJECT_SOURCE_DIR})

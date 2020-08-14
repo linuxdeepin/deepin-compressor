@@ -38,7 +38,7 @@ pkg_search_module(DtkGui REQUIRED dtkgui)
 pkg_search_module(DtkCore REQUIRED dtkcore)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 ##pkg_check_modules(ATSPI2 REQUIRED atspi-2)
-pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
+#pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
 
 
 # Compile definitions for TerminalWidget
@@ -134,7 +134,7 @@ set(LINK_LIBS
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
     ${DtkGUI_LIBRARIES}
-    ${DFrameworkDBus_LIBRARIES}
+#    ${DFrameworkDBus_LIBRARIES}
     ${ATSPI2_LIBRARIES}
     ${GOBJECT_LIBRARIES}
 )
@@ -149,7 +149,7 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${DtkWidget_INCLUDE_DIRS}
                                               ${DtkCore_LIBRARIES}
                                               ${DtkGUI_INCLUDE_DIRS}
-                                              ${DFrameworkDBus_INCLUDE_DIRS}
+                                    #          ${DFrameworkDBus_INCLUDE_DIRS}
                                               ${ATSPI2_INCLUDE_DIRS}
                                               ${GOBJECT_INCLUDE_DIRS})
 #target_link_libraries (${LIB_NAME} ${LINK_LIBS})
