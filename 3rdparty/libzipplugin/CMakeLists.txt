@@ -28,11 +28,11 @@ include_directories(${DtkWidget_INCLUDE_DIRS})
 pkg_search_module(DtkCore REQUIRED dtkcore)
 include_directories(${DtkCore_INCLUDE_DIRS})
 
-pkg_search_module(libzip REQUIRED libzip)
-include_directories(${libzip_INCLUDE_DIRS})
+#pkg_search_module(libzip REQUIRED libzip-dev)
+#include_directories(${libzip_INCLUDE_DIRS})
 
 if (PKG_CONFIG_FOUND)
-       PKG_CHECK_MODULES(UNZIP minizip)
+#       PKG_CHECK_MODULES(UNZIP minizip)
 endif (PKG_CONFIG_FOUND)
 
 #message(${unzip_LIBRARIES})
@@ -50,7 +50,7 @@ set(c_files
     ../common/detectencoding.cpp
 )
 set(h_files
-	 libzipplugin.h
+	   libzipplugin.h
      libzipplugin_global.h 
     ../common/common.h
     ../common/detectencoding.h
@@ -68,5 +68,5 @@ target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
-#target_link_libraries( ${LIB_NAME} zip)
-target_link_libraries( ${LIB_NAME} minizip)
+target_link_libraries( ${LIB_NAME} -lzip)
+target_link_libraries( ${LIB_NAME} -lminizip)
