@@ -21,12 +21,11 @@ sudo apt-get install deepin-compressor
 #### Build
 - mkdir build
 - cd build
-- qmake ..
+- cmake ..
 - make
+- make install
 
 Caution:
-sudo cp BUILD_PATH/plugin/*/*.so /usr/lib/deepin-compressor/plugins
-sudo cp BUILD_PATH/plugin/*/*/*.so /usr/lib/deepin-compressor/plugins
 
 ## [Wiki](http://gitlab01.archermind.com/amt_SY/compressor/wikis/home)
 
