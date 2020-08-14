@@ -80,7 +80,8 @@ pkg_search_module(LIBSECRET REQUIRED libsecret-1)
 include_directories(${LIBSECRET_INCLUDE_DIRS})
  
 #pkg_check_modules(ATSPI2 REQUIRED atspi-2)
-pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
+pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
+include_directories(${DFrameworkDBus_INCLUDE_DIRS})
 #pkg_search_module(libzip REQUIRED libzip)
 
 pkg_search_module(DtkGui REQUIRED dtkgui)	
@@ -96,6 +97,7 @@ set(LIBS_INCLUDE_DIRS
 	${QTGSetting_LIBRARIES}
 	${LIBSECRET_LIBRARIES}
 	${DtkGui_LIBRARIES}
+	${DFrameworkDBus_LIBRARIES}
 )
 
 

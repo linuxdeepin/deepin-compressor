@@ -38,7 +38,7 @@ pkg_search_module(DtkGui REQUIRED dtkgui)
 pkg_search_module(DtkCore REQUIRED dtkcore)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 ##pkg_check_modules(ATSPI2 REQUIRED atspi-2)
-pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
+pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
 
 
 # Compile definitions for TerminalWidget
