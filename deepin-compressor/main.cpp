@@ -24,7 +24,7 @@
 #include "compressorapplication.h"
 #include "utils.h"
 #include "monitorInterface.h"
-
+#include "environments.h"
 #include <DWidgetUtil>
 #include <DLog>
 #include <DApplicationSettings>
@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
+    app.setApplicationVersion(VERSION);
     app.setProductName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
     DApplicationSettings settings(&app);
