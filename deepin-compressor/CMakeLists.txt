@@ -79,7 +79,7 @@ include_directories(${QTGSetting_INCLUDE_DIRS})
 pkg_search_module(LIBSECRET REQUIRED libsecret-1)	
 include_directories(${LIBSECRET_INCLUDE_DIRS})
  
-pkg_check_modules(ATSPI2 REQUIRED atspi-2)
+#pkg_check_modules(ATSPI2 REQUIRED atspi-2)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 #pkg_search_module(libzip REQUIRED libzip)
 

@@ -7,6 +7,10 @@ project(${EXE_NAME})
 
 SET(CMAKE_BUILD_TYPE "Debug")  
 SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+
+# 添加c++ 11标准支持
+set( CMAKE_CXX_FLAGS "-std=c++11" )
+
 #SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 
