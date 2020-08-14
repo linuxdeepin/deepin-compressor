@@ -290,7 +290,7 @@ install(FILES ${INSTALL_QM_FILES}
 
 install(FILES deepin-compress.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 install(FILES deepin-compress-multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-compressor.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-compressor.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 #install(FILES deepin-compress-to_7z.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 #install(FILES deepin-compress-to_zip.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 install(FILES deepin-decompress.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
