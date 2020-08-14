@@ -47,7 +47,6 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5 REQUIRED Widgets)
 find_package(Qt5Concurrent)
-find_package(Qt5Xml)
 find_package(Qt5Svg REQUIRED SvgWidgets)
 find_package(KF5Codecs REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -67,23 +66,6 @@ include_directories(${GOBJECT_INCLUDE_DIRS})
 pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
-pkg_search_module(DISOMASTER REQUIRED disomaster)
-include_directories(${DISOMASTER_INCLUDE_DIRS})
-
-pkg_search_module(QTUDISKS2 REQUIRED udisks2-qt5)
-include_directories(${QTUDISKS2_INCLUDE_DIRS})
-
-pkg_search_module(QTGSetting REQUIRED gsettings-qt)
-include_directories(${QTGSetting_INCLUDE_DIRS})
-
-pkg_search_module(LIBSECRET REQUIRED libsecret-1)	
-include_directories(${LIBSECRET_INCLUDE_DIRS})
- 
-#pkg_check_modules(ATSPI2 REQUIRED atspi-2)
-#pkg_search_module(DFrameworkDBus REQUIRED dframeworkdbus)
-#include_directories(${DFrameworkDBus_INCLUDE_DIRS})
-#pkg_search_module(libzip REQUIRED libzip)
-
 pkg_search_module(DtkGui REQUIRED dtkgui)	
 include_directories(${DtkGui_INCLUDE_DIRS})
 
@@ -92,23 +74,11 @@ set(LIBS_INCLUDE_DIRS
 	${DtkCore_LIBRARIES}
 	${GOBJECT_LIBRARIES}
 	${GIO_LIBRARIES}
-	${DISOMASTER_LIBRARIES}
-	${QTUDISKS2_LIBRARIES}
-	${QTGSetting_LIBRARIES}
-	${LIBSECRET_LIBRARIES}
 	${DtkGui_LIBRARIES}
-#	${DFrameworkDBus_LIBRARIES}
 )
 
 
- 
-#5设置库文件输出目录
 
-#5.1 设置lib输出目录
-#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-#5.2 设置可执行程序输出目录
-#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
- 
  
 #6. 应用interface项目
 #interface的h文件
@@ -235,7 +205,7 @@ add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${ts_files})
 
 
 set_target_properties(${EXE_NAME} PROPERTIES AUTOMOC TRUE)
-qt5_use_modules(${EXE_NAME}  Core  Widgets  Xml Gui )
+qt5_use_modules(${EXE_NAME}  Core  Widgets  Gui )
 
 target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc )
 target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc/openwithdialog )

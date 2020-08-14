@@ -14,13 +14,6 @@ include(FindPkgConfig)
 
 
 
-
-
-#set(LIBS_INCLUDE_DIRS 
-#	${DtkWidget_LIBRARIES}
-#	${DtkCore_LIBRARIES}
-#	${DtkGui_LIBRARIES}
-#)
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../interface)
 
 include_directories(${INTERFACE_LNCLUDE_DIR})
@@ -30,6 +23,5 @@ file(GLOB_RECURSE json_files  *.json)
 
 add_library(${LIB_NAME} SHARED ${c_files} ${json_files} ${h_files})
 
-#target_link_libraries(${LIB_NAME}  Qt5::Core Qt5::Gui  Qt5::Widgets)
 target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS} )
 target_link_libraries( ${LIB_NAME} interface)

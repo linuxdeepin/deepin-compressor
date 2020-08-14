@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.8)
 set(EXE_NAME compressor)
 project(${EXE_NAME})
 
-SET(CMAKE_BUILD_TYPE "Debug")  
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+#SET(CMAKE_BUILD_TYPE "Debug")  
+#SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 
 # 添加c++ 11标准支持
 set( CMAKE_CXX_FLAGS "-std=c++11" )
@@ -22,7 +22,6 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 add_subdirectory(3rdparty/interface)
 
 add_subdirectory(3rdparty/ChardetDetector)
-
 
 add_subdirectory(3rdparty) 
 

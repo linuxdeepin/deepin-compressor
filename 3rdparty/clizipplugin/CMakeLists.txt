@@ -36,10 +36,6 @@ set(LIBS_INCLUDE_DIRS
 
 include_directories(${PROJECT_SOURCE_DIR}/../ChardetDetector)
 
-#set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../deepin-compressor/interface)
-#include_directories(${INTERFACE_LNCLUDE_DIR})
-#file(GLOB_RECURSE c_files  *.cpp ${INTERFACE_LNCLUDE_DIR}/*.cpp)
-#file(GLOB_RECURSE h_files  *.h ${INTERFACE_LNCLUDE_DIR}/*.h)
 
 file(GLOB_RECURSE json_files  *.json)
 
