@@ -1,5 +1,5 @@
 #include "cliplugin.h"
-#include "../../deepin-compressor/interface/kpluginfactory.h"
+#include "../interface/kpluginfactory.h"
 
 #include <QDateTime>
 #include <QDir>

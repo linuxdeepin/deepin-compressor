@@ -1,6 +1,5 @@
 #include "cliplugin.h"
-#include "../../deepin-compressor/interface/archiveentry.h"
-
+#include "../interface/archiveentry.h"
 #include <QDateTime>
 
 

@@ -1,5 +1,5 @@
 #include "cliplugin.h"
-#include "../../deepin-compressor/interface/queries.h"
+#include "../interface/queries.h"
 
 #include <QJsonArray>
 #include <QJsonParseError>
