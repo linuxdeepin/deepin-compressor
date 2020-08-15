@@ -51,14 +51,12 @@ set(LIBS_INCLUDE_DIRS
 #message(${unzip_LIBRARIES}) 
 set(c_files
    libzipplugin.cpp 
-    ../common/common.cpp 
-    ../common/detectencoding.cpp
+
 )
 set(h_files
 	   libzipplugin.h
      libzipplugin_global.h 
-    ../common/common.h
-    ../common/detectencoding.h
+
 )
 include_directories(../common/)
 include_directories(../ChardetDetector/)
@@ -73,5 +71,6 @@ target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
+target_link_libraries( ${LIB_NAME} compressor-common)
 target_link_libraries( ${LIB_NAME} -lzip)
 target_link_libraries( ${LIB_NAME} -lminizip)

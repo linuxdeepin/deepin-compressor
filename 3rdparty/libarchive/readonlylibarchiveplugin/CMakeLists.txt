@@ -48,17 +48,14 @@ include_directories(../../ChardetDetector)
 #file(GLOB_RECURSE h_files  *.h ../*.h)
 file(GLOB_RECURSE json_files  *.json)
 set(c_files
- ../../common/common.cpp 
         readonlylibarchiveplugin.cpp 
     ../libarchiveplugin.cpp 
-    ../../common/detectencoding.cpp 
+
 )
 set(h_files
-    ../../common/common.h 
     readonlylibarchiveplugin.h 
     readonlylibarchiveplugin_global.h  
     ../libarchiveplugin.h 
-    ../../common/detectencoding.h
 )
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(../../common/)
@@ -72,4 +69,4 @@ target_link_libraries(${LIB_NAME} KF5::Archive)
 target_link_libraries(${LIB_NAME} KF5::Codecs)
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
-
+target_link_libraries( ${LIB_NAME} compressor-common)

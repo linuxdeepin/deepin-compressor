@@ -19,9 +19,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 
-add_subdirectory(3rdparty/interface)
+#add_subdirectory(3rdparty/interface)
 
-add_subdirectory(3rdparty/ChardetDetector)
+#add_subdirectory(3rdparty/ChardetDetector)
 
 add_subdirectory(3rdparty) 
 

@@ -43,18 +43,14 @@ include_directories(${INTERFACE_LNCLUDE_DIR})
 include_directories(../../ChardetDetector)
 
 set( c_files
-	 ../../common/common.cpp 
     readwritelibarchiveplugin.cpp 
-    ../libarchiveplugin.cpp 
-    ../../common/detectencoding.cpp 
+    ../libarchiveplugin.cpp
   
 )
 set(h_files
-    ../../common/common.h 
     readwritelibarchiveplugin.h 
     readwritelibarchiveplugin_global.h  
-    ../libarchiveplugin.h 
-    ../../common/detectencoding.h 
+    ../libarchiveplugin.h
 )
 file(GLOB_RECURSE json_files  *.json)
 
@@ -69,3 +65,4 @@ target_link_libraries(${LIB_NAME} Qt5::Widgets KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
+target_link_libraries( ${LIB_NAME} compressor-common)
