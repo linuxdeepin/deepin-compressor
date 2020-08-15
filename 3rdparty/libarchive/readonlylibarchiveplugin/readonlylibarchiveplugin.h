@@ -1,7 +1,7 @@
 #ifndef READONLYLIBARCHIVEPLUGIN_H
 #define READONLYLIBARCHIVEPLUGIN_H
 
-#include "../libarchiveplugin.h"
+#include "../libarchive/libarchiveplugin.h"
 #include "kpluginfactory.h"
 
 

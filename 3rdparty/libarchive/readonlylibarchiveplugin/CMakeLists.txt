@@ -14,7 +14,6 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
 find_package(Qt5 REQUIRED Widgets)
 find_package(Qt5Concurrent)
 find_package(Qt5Xml)
@@ -41,32 +40,25 @@ set(LIBS_INCLUDE_DIRS
 )
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../interface)
 
+include_directories(../../libarchive)
 include_directories(${INTERFACE_LNCLUDE_DIR})
-include_directories(../../ChardetDetector)
 
-#file(GLOB_RECURSE c_files  *.cpp ../*.cpp )
-#file(GLOB_RECURSE h_files  *.h ../*.h)
+
+file(GLOB_RECURSE c_files  *.cpp )
+file(GLOB_RECURSE h_files  *.h )
 file(GLOB_RECURSE json_files  *.json)
-set(c_files
-        readonlylibarchiveplugin.cpp 
-    ../libarchiveplugin.cpp 
 
-)
-set(h_files
-    readonlylibarchiveplugin.h 
-    readonlylibarchiveplugin_global.h  
-    ../libarchiveplugin.h 
-)
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(../../common/)
 include_directories(../../ChardetDetector)
-include_directories(../../../deepin-compressor)
-include_directories(../)
+
 add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files} ${json_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries(${LIB_NAME} KF5::Archive)
 target_link_libraries(${LIB_NAME} KF5::Codecs)
+target_link_libraries( ${LIB_NAME} compressor-archive)
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
 target_link_libraries( ${LIB_NAME} compressor-common)
+

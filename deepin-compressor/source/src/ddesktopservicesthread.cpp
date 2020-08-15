@@ -9,7 +9,7 @@ DDesktopServicesThread::DDesktopServicesThread(QObject *parent)
 
 bool DDesktopServicesThread::event(QEvent *event)
 {
-
+    return true;
 }
 
 void DDesktopServicesThread::run()

@@ -273,3 +273,7 @@ install(FILES deepin-decompresshere-split_multi.desktop DESTINATION /usr/share/d
 install(FILES deepin-decompress-multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 install(FILES deepin-decompress-split.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
 install(FILES deepin-decompress-split_multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
+
+install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION /usr/share/icons/hicolor/scalable/apps/)
+install(FILES assets/mimetype/deepin-compressor.xml DESTINATION /usr/share/mime/packages/)
+

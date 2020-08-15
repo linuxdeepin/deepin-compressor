@@ -1,7 +1,7 @@
 #ifndef READWRITELIBARCHIVEPLUGIN_H
 #define READWRITELIBARCHIVEPLUGIN_H
 
-#include "../libarchiveplugin.h"
+#include "../libarchive/libarchiveplugin.h"
 #include "kpluginfactory.h"
 
 #include <QStringList>

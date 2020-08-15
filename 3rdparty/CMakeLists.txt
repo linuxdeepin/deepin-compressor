@@ -21,9 +21,7 @@ add_subdirectory(clizipplugin)
 
 add_subdirectory(libzipplugin)
 
-add_subdirectory(libarchive/readwritelibarchiveplugin)
-
-add_subdirectory(libarchive/readonlylibarchiveplugin)
+add_subdirectory(libarchive)
 
 add_subdirectory(libsinglefileplugin/bz2plugin)
 

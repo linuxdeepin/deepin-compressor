@@ -41,28 +41,30 @@ set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../interface)
 
 include_directories(${INTERFACE_LNCLUDE_DIR})
 include_directories(../../ChardetDetector)
+include_directories(../libarchive)
 
 set( c_files
     readwritelibarchiveplugin.cpp 
-    ../libarchiveplugin.cpp
+
   
 )
 set(h_files
     readwritelibarchiveplugin.h 
-    readwritelibarchiveplugin_global.h  
-    ../libarchiveplugin.h
+    readwritelibarchiveplugin_global.h
 )
 file(GLOB_RECURSE json_files  *.json)
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
 include_directories(${PROJECT_SOURCE_DIR}/../../common)
-include_directories(${PROJECT_SOURCE_DIR}/../../../deepin-compressor/interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface)
 include_directories(${PROJECT_SOURCE_DIR}/../)
 
 add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files} ${json_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
+target_link_libraries( ${LIB_NAME} compressor-archive)
 target_link_libraries( ${LIB_NAME} interface)
 target_link_libraries( ${LIB_NAME} ChardetDetector)
 target_link_libraries( ${LIB_NAME} compressor-common)
+

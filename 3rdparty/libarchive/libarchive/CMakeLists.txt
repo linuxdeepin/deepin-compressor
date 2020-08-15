@@ -1,10 +1,7 @@
-project(interface)
+set(LIB_NAME compressor-archive)
+project(${LIB_NAME})
 
 cmake_minimum_required(VERSION 3.9.5)
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
-set(LIB_NAME interface)
-
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -24,7 +21,7 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
+find_package(LibArchive)
 
 
 find_package(Qt5 REQUIRED Widgets)
@@ -34,7 +31,8 @@ pkg_search_module(DtkWidget REQUIRED dtkwidget)
 pkg_search_module(DtkGui REQUIRED dtkgui)
 pkg_search_module(DtkCore REQUIRED dtkcore)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
-
+pkg_search_module(LibArchive REQUIRED libarchive)
+include_directories(${LibArchive_INCLUDE_DIRS})
 
 # Compile definitions for TerminalWidget
 # So we can use QT_VERSION_CHECK
@@ -46,10 +44,10 @@ set(TERMINALWIDGET_VERSION_PATCH "1")
 include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${DtkGui_INCLUDE_DIRS})
 include_directories(${DtkCore_INCLUDE_DIRS})
-set(LIBS_INCLUDE_DIRS 
+set(LIBS_INCLUDE_DIRS
   ${DtkWidget_LIBRARIES}
   ${DtkCore_LIBRARIES}
-  ${DtkCore_LIBRARIES}
+  ${LibArchive_LIBRARIES}
 )
 
 file(GLOB_RECURSE c_files  *.cpp)
@@ -59,8 +57,6 @@ set(LINK_LIBS
     Qt5::Core
     Qt5::DBus
     Qt5::Widgets
-    Qt5::WidgetsPrivate
-    Qt5::Network
 
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
@@ -80,8 +76,15 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${DtkGUI_INCLUDE_DIRS}
                                               ${ATSPI2_INCLUDE_DIRS}
                                               ${GOBJECT_INCLUDE_DIRS})
-include_directories("src")
+include_directories(./)
+include_directories(../../common/)
+include_directories(../../ChardetDetector)
+include_directories(../../interface)
 
-add_library(${LIB_NAME} SHARED  ${h_files} ${c_files}  )
+add_library(${LIB_NAME} SHARED  ${h_files} ${c_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core )
+target_link_libraries(${LIB_NAME} ${LINK_LIBS})
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
+target_link_libraries( ${LIB_NAME} interface)
+target_link_libraries( ${LIB_NAME} ChardetDetector)
+target_link_libraries( ${LIB_NAME} compressor-common)
