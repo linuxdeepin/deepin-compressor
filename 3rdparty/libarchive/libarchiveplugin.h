@@ -102,6 +102,9 @@ private:
 
     QString strOldFileName;
     int m_listIndex = 0;
+
+    QString m_strRootNode;
+    QStringList m_listFileName;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

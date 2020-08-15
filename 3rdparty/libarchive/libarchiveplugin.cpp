@@ -185,7 +185,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
-        if (!extractAll && remainingFiles.isEmpty()) {
+        if (!extractAll && m_listFileName.isEmpty()) {
             break;
         }
 
@@ -241,10 +241,10 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         }
 
         // Should the entry be extracted?
-        if (extractAll || remainingFiles.contains(entryName) || entryName == fileBeingRenamed) {
+        if (extractAll || m_listFileName.contains(entryName) || entryName == fileBeingRenamed) {
             // Find the index of entry.
             if (entryName != fileBeingRenamed) {
-                index = remainingFiles.indexOf(entryName);
+                index = m_listFileName.indexOf(entryName);
             }
             if (!extractAll && index == -1) {
                 // If entry is not found in files, skip entry.
@@ -267,7 +267,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
 
                 // OR, if the file has a rootNode attached, remove it from file path.
             } else if (!extractAll && removeRootNode && entryName != fileBeingRenamed) {
-                const QString &rootNode = files.at(index)->rootNode;
+                const QString &rootNode = m_strRootNode/*files.at(index)->rootNode*/;
                 if (!rootNode.isEmpty()) {
                     const QString truncatedFilename(entryName.remove(entryName.indexOf(rootNode), rootNode.size()));
                     archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
@@ -585,9 +585,12 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
 
 qint64 LibarchivePlugin::extractSize(const QVector<Archive::Entry *> &files)
 {
+    m_listFileName.clear();
+
     qint64 qExtractSize = 0;
     for (Archive::Entry *e : files) {
         QString strPath = e->fullPath();
+        m_strRootNode = e->rootNode;
         auto iter = m_listMap.find(strPath);
         for (; iter != m_listMap.end();) {
             if (!iter.key().startsWith(strPath)) {
@@ -597,11 +600,7 @@ qint64 LibarchivePlugin::extractSize(const QVector<Archive::Entry *> &files)
                     qExtractSize += iter.value().first.archive_size;
                 }
 
-//                int iIndex = iter.value().second;
-//                if (iIndex >= 0) {
-//                    m_listExtractIndex << iIndex;
-//                }
-
+                m_listFileName << iter.value().first.archive_fullPath;
                 ++iter;
             }
         }
