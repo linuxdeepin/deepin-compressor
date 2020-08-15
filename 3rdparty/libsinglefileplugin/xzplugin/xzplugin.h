@@ -1,7 +1,7 @@
 #ifndef XZPLUGIN_H
 #define XZPLUGIN_H
 
-#include "../singlefileplugin.h"
+#include "../singlefile/singlefileplugin.h"
 #include "kpluginfactory.h"
 
 

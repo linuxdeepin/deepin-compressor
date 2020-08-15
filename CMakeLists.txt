@@ -39,11 +39,13 @@ install(TARGETS interface DESTINATION /usr/lib/compressor-lib)
 install(TARGETS ChardetDetector DESTINATION /usr/lib/compressor-lib)
 install(TARGETS compressor-common DESTINATION /usr/lib/compressor-lib)
 install(TARGETS compressor-archive DESTINATION /usr/lib/compressor-lib)
+install(TARGETS compressor-singlefile DESTINATION /usr/lib/compressor-lib)
 
 install(TARGETS interface DESTINATION /usr/lib)
 install(TARGETS ChardetDetector DESTINATION /usr/lib)
 install(TARGETS compressor-common DESTINATION /usr/lib)
 install(TARGETS compressor-archive DESTINATION /usr/lib)
+install(TARGETS compressor-singlefile DESTINATION /usr/lib)
 
 install(TARGETS cli7zplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
@@ -60,5 +62,6 @@ install(TARGETS interface DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS ChardetDetector DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS compressor-common DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS compressor-archive DESTINATION /usr/lib/deepin-compressor/plugins/)
+install(TARGETS compressor-singlefile DESTINATION /usr/lib/deepin-compressor/plugins/)
 
 

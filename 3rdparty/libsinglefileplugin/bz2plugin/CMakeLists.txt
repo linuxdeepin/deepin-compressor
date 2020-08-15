@@ -56,20 +56,12 @@ set(LIBS_INCLUDE_DIRS
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../)
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../interface)
-
+include_directories(${PROJECT_SOURCE_DIR}/../singlefile)
 include_directories(${INTERFACE_LNCLUDE_DIR})
 
-set(c_files
-	bz2plugin.cpp 
-    ../singlefileplugin.cpp 
-)
-set(h_files
-	     bz2plugin.h 
-        bz2plugin_global.h  
-    ../singlefileplugin.h 
-)
-#file(GLOB_RECURSE c_files  *.cpp ../*.cpp ${INTERFACE_LNCLUDE_DIR}/*.cpp)
-#file(GLOB_RECURSE h_files  *.h ../*.h ${INTERFACE_LNCLUDE_DIR}/*.h)
+
+file(GLOB_RECURSE c_files  *.cpp)
+file(GLOB_RECURSE h_files  *.h )
 file(GLOB_RECURSE json_files  *.json)
 
 add_library(${LIB_NAME} SHARED  ${c_files} ${h_files} ${json_files})
@@ -83,3 +75,4 @@ target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5:
 target_link_libraries(${LIB_NAME} KF5::Archive)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} interface)
+target_link_libraries( ${LIB_NAME} compressor-singlefile)

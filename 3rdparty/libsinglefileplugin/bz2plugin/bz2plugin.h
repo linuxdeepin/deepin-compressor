@@ -1,7 +1,7 @@
 #ifndef BZ2PLUGIN_H
 #define BZ2PLUGIN_H
 
-#include "../singlefileplugin.h"
+#include "../singlefile/singlefileplugin.h"
 #include "kpluginfactory.h"
 
 

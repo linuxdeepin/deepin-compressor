@@ -23,11 +23,9 @@ add_subdirectory(libzipplugin)
 
 add_subdirectory(libarchive)
 
-add_subdirectory(libsinglefileplugin/bz2plugin)
+add_subdirectory(libsinglefileplugin)
 
-add_subdirectory(libsinglefileplugin/gzplugin)
 
-add_subdirectory(libsinglefileplugin/xzplugin)
 
 
 

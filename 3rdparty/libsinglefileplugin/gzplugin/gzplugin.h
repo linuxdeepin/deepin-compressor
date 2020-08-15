@@ -1,7 +1,7 @@
 #ifndef GZPLUGIN_H
 #define GZPLUGIN_H
 
-#include "../singlefileplugin.h"
+#include "../singlefile/singlefileplugin.h"
 #include "kpluginfactory.h"
 
 
