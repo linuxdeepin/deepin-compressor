@@ -2358,7 +2358,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         if (!QFile(strFileName).exists())
             return;
 
-        if (Utils::isCompressed_file(strFileName)) {
+        if (!Utils::isCompressed_file(strFileName)) {
             m_pOpenFileWatcher->addPath(strFileName);
             if (m_mapFileHasModified.find(strFileName) != m_mapFileHasModified.end()) {
                 m_mapFileHasModified[strFileName] = true;
