@@ -1,7 +1,7 @@
 #include "cliplugin.h"
 #include "../interface/archiveentry.h"
 #include <QDateTime>
-
+#include <QDir>
 
 
 //K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
@@ -721,6 +721,9 @@ qint64 CliRarPlugin::extractSize(const QVector<Archive::Entry *> &files)
 
                 m_listFileName << iter.value().archive_fullPath;
                 ++iter;
+                if (!strPath.endsWith(QDir::separator())) {
+                    break;
+                }
             }
         }
     }

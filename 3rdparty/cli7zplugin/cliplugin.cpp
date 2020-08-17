@@ -181,6 +181,9 @@ qint64 Cli7zPlugin::extractSize(const QVector<Archive::Entry *> &files)
 
                 m_listFileName << iter.value().archive_fullPath;
                 ++iter;
+                if (!strPath.endsWith(QDir::separator())) {
+                    break;
+                }
             }
         }
     }

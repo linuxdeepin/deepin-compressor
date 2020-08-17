@@ -602,6 +602,9 @@ qint64 LibarchivePlugin::extractSize(const QVector<Archive::Entry *> &files)
 
                 m_listFileName << iter.value().first.archive_fullPath;
                 ++iter;
+                if (!strPath.endsWith(QDir::separator())) {
+                    break;
+                }
             }
         }
     }

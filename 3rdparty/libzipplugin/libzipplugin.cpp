@@ -1708,6 +1708,9 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
                 }
 
                 ++iter;
+                if (!strPath.endsWith(QDir::separator())) {
+                    break;
+                }
             }
         }
     }
