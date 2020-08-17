@@ -2358,11 +2358,13 @@ void MainWindow::slotExtractionDone(KJob *job)
         if (!QFile(strFileName).exists())
             return;
 
-        m_pOpenFileWatcher->addPath(strFileName);
-        if (m_mapFileHasModified.find(strFileName) != m_mapFileHasModified.end()) {
-            m_mapFileHasModified[strFileName] = true;
-        } else {
-            m_mapFileHasModified[strFileName] = false;
+        if (Utils::isCompressed_file(strFileName)) {
+            m_pOpenFileWatcher->addPath(strFileName);
+            if (m_mapFileHasModified.find(strFileName) != m_mapFileHasModified.end()) {
+                m_mapFileHasModified[strFileName] = true;
+            } else {
+                m_mapFileHasModified[strFileName] = false;
+            }
         }
 
         qDebug() << strFileName;
