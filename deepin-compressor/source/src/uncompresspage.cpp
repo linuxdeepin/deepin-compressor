@@ -94,7 +94,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigNeedConvert, this, &UnCompressPage::convertArchive);
     connect(m_fileviewer, &fileViewer::sigEntryRemoved, this, &UnCompressPage::onRefreshEntryList);
     connect(m_fileviewer, &fileViewer::sigFileAutoCompress, this, &UnCompressPage::onAutoCompress);
-//    connect(this, &UnCompressPage::subWindowTipsPopSig, m_fileviewer, &fileViewer::SubWindowDragMsgReceive);
+    connect(this, &UnCompressPage::subWindowTipsPopSig, m_fileviewer, &fileViewer::SubWindowDragMsgReceive);
 //    connect(this, &UnCompressPage::subWindowTipsUpdateEntry, m_fileviewer, &fileViewer::SubWindowDragUpdateEntry);
 
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
