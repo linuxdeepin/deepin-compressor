@@ -13,6 +13,14 @@ set( CMAKE_CXX_FLAGS "-std=c++11" )
 
 #SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+#模糊测试设置 -start
+if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -fsanitize=address")
+endif()
+#模糊测试设置 -end
 
 #3.1 设置lib输出目录
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
@@ -35,14 +43,16 @@ set(CMAKE_INSTALL_PREFIX /usr)
 #file(GLOB INSTALL_LIBS_FILES ${PROJECT_SOURCE_DIR}/lib/*.so)
 #install(FILES ${INSTALL_LIBS_FILES} DESTINATION /usr/lib/deepin-compressor/plugins/)
 
-install(TARGETS interface DESTINATION /usr/lib/compressor-lib)
-install(TARGETS ChardetDetector DESTINATION /usr/lib/compressor-lib)
+#install(TARGETS compressor-interface LIBRARY DESTINATION lib)
+
+install(TARGETS compressor-interface DESTINATION /usr/lib/compressor-lib)
+install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib/compressor-lib)
 install(TARGETS compressor-common DESTINATION /usr/lib/compressor-lib)
 install(TARGETS compressor-archive DESTINATION /usr/lib/compressor-lib)
 install(TARGETS compressor-singlefile DESTINATION /usr/lib/compressor-lib)
 
-install(TARGETS interface DESTINATION /usr/lib)
-install(TARGETS ChardetDetector DESTINATION /usr/lib)
+install(TARGETS compressor-interface DESTINATION /usr/lib)
+install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib)
 install(TARGETS compressor-common DESTINATION /usr/lib)
 install(TARGETS compressor-archive DESTINATION /usr/lib)
 install(TARGETS compressor-singlefile DESTINATION /usr/lib)
@@ -58,8 +68,8 @@ install(TARGETS bz2plugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS gzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS xzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 
-install(TARGETS interface DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS ChardetDetector DESTINATION /usr/lib/deepin-compressor/plugins/)
+install(TARGETS compressor-interface DESTINATION /usr/lib/deepin-compressor/plugins/)
+install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS compressor-common DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS compressor-archive DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS compressor-singlefile DESTINATION /usr/lib/deepin-compressor/plugins/)

@@ -50,4 +50,4 @@ add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files} ${json_files
 set_target_properties(${LIB_NAME} PROPERTIES AUTOMOC TRUE)
 target_link_libraries(${LIB_NAME} Qt5::Widgets)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
-target_link_libraries( ${LIB_NAME} interface)
+target_link_libraries( ${LIB_NAME} compressor-interface)

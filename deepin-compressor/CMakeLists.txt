@@ -197,8 +197,12 @@ QT5_ADD_RESOURCES(QRC_MOC ${res_files})
 #ADD_DEFINITIONS(${QT_DEFINITIONS})
 
 #9.链接编译的lib
-link_directories(compressor-lib interface)
-link_directories(compressor-lib ChardetDetector)
+#link_directories("/usr/lib/compressor-lib")
+
+link_directories(compressor-lib compressor-interface)
+link_directories(compressor-lib compressor-ChardetDetector)
+
+
 #10.生成可执行程序
 add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${ts_files})
 
@@ -218,8 +222,9 @@ target_link_libraries(${EXE_NAME}  ${LIBS_INCLUDE_DIRS})
 #message(${LIBS_INCLUDE_DIRS})
 target_link_libraries(${EXE_NAME}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::DBus Qt5::Svg  KF5::Codecs)
 
-target_link_libraries(${EXE_NAME}  interface)
-target_link_libraries(${EXE_NAME}  ChardetDetector)
+#TARGET_LINK_LIBRARIES(${EXE_NAME}  ${PROJECT_SOURCE_DIR}/../output/compressor-lib/libcompressor-interface.so)
+target_link_libraries(${EXE_NAME}  compressor-interface)
+target_link_libraries(${EXE_NAME}  compressor-ChardetDetector)
 
 #target_link_libraries(${EXE_NAME} cli7zplugin)
 #target_link_libraries(${EXE_NAME} clirarplugin)

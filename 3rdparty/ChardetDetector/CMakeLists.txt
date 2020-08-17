@@ -2,7 +2,7 @@ project(ChardetDetector)
 
 cmake_minimum_required(VERSION 3.9.5)
 
-set(LIB_NAME ChardetDetector)
+set(LIB_NAME compressor-ChardetDetector)
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)
