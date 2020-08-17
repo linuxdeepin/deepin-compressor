@@ -350,7 +350,11 @@ void UnCompressPage::slotCompressedAddFile()
         emit onRefreshEntryList(vectorEntry, false);
     } else {
         if (m_inputlist.count() > 0) {
-            convertArchive();
+            if (m_info.filePath().endsWith(".rar")) {
+                convertArchive();
+            } else {
+                emit sigAutoCompress(m_info.filePath(), m_inputlist);
+            }
         }
 
         //emit onAutoCompress(m_inputlist);
@@ -494,7 +498,11 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
         emit onRefreshEntryList(vectorEntry, false);
     } else {
         if (m_inputlist.count() > 0) {
-            convertArchive();
+            if (m_info.filePath().endsWith(".rar")) {
+                convertArchive();
+            } else {
+                emit sigAutoCompress(m_info.filePath(), m_inputlist);
+            }
         }
 
         //emit onAutoCompress(m_inputlist);
