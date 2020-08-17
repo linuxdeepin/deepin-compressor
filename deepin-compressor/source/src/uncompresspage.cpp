@@ -240,39 +240,57 @@ void UnCompressPage::setUpdateFiles(const QStringList &listFiles)
 
 void UnCompressPage::convertArchive()
 {
-    if (m_info.filePath().endsWith(".rar")) {
-        QStringList type = convertArchiveDialog();
-        if (type.at(0) == "true") {
-            QString strTemp = QUuid::createUuid().toString();
-            strTemp = strTemp.remove('{');
-            strTemp = strTemp.remove('}');
-            QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp /*QUuid::createUuid().toString()*/;
-            //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
-            QDir dir(tmppath);
-            if (!dir.exists()) {
-                dir.mkpath(tmppath);
-            }
-            //            QString tmppath1 = TEMPDIR_NAME;
-            //            QDir dir1(tmppath1);
-            //            if (!dir1.exists()) {
-            //                dir1.mkdir(tmppath1);
-            //            }
-
-            //            QString tmppath2 = TEMPDIR_NAME + PATH_SEP /*+ QUuid::createUuid().toString() + PATH_SEP*/ + "converttempfiles";
-            //            QDir dir2(tmppath2);
-            //            if (!dir2.exists()) {
-            //                dir1.mkpath(tmppath2);
-            //            }
-
-            if (type.last() == "zip") {
-                emit sigDecompressPress(tmppath, "zip");
-            } else if (type.last() == "7z") {
-                emit sigDecompressPress(tmppath, "7z");
-            }
+    QStringList type = convertArchiveDialog();
+    if (type.at(0) == "true") {
+        QString strTemp = QUuid::createUuid().toString();
+        strTemp = strTemp.remove('{');
+        strTemp = strTemp.remove('}');
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp;
+        //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
+        QDir dir(tmppath);
+        if (!dir.exists()) {
+            dir.mkpath(tmppath);
         }
-    } else {
-        emit sigAutoCompress(m_info.filePath(), m_inputlist);
+
+        if (type.last() == "zip") {
+            emit sigDecompressPress(tmppath, "zip");
+        } else if (type.last() == "7z") {
+            emit sigDecompressPress(tmppath, "7z");
+        }
     }
+//    if (m_info.filePath().endsWith(".rar")) {
+//        QStringList type = convertArchiveDialog();
+//        if (type.at(0) == "true") {
+//            QString strTemp = QUuid::createUuid().toString();
+//            strTemp = strTemp.remove('{');
+//            strTemp = strTemp.remove('}');
+//            QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp /*QUuid::createUuid().toString()*/;
+//            //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
+//            QDir dir(tmppath);
+//            if (!dir.exists()) {
+//                dir.mkpath(tmppath);
+//            }
+//            //            QString tmppath1 = TEMPDIR_NAME;
+//            //            QDir dir1(tmppath1);
+//            //            if (!dir1.exists()) {
+//            //                dir1.mkdir(tmppath1);
+//            //            }
+
+//            //            QString tmppath2 = TEMPDIR_NAME + PATH_SEP /*+ QUuid::createUuid().toString() + PATH_SEP*/ + "converttempfiles";
+//            //            QDir dir2(tmppath2);
+//            //            if (!dir2.exists()) {
+//            //                dir1.mkpath(tmppath2);
+//            //            }
+
+//            if (type.last() == "zip") {
+//                emit sigDecompressPress(tmppath, "zip");
+//            } else if (type.last() == "7z") {
+//                emit sigDecompressPress(tmppath, "7z");
+//            }
+//        }
+//    } else {
+//        emit sigAutoCompress(m_info.filePath(), m_inputlist);
+//    }
 }
 
 QString UnCompressPage::getAndDisplayPath(QString path)

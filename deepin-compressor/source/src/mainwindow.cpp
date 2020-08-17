@@ -710,18 +710,32 @@ void MainWindow::InitConnection()
 
             if (iMode == 1) {
                 qDebug() << "保存";
-                m_pUnCompressPage->convertArchive();
-                if (m_convertType.size() == 0) {
+                if (m_strLoadfile.endsWith(".rar")) {
+                    m_pUnCompressPage->convertArchive();
+                } else {
                     m_pUnCompressPage->setUpdateFiles(QStringList() << path);
 
                     QString strTemp = file.filePath();
                     for (int i = 0; i < m_vecExtractSimpleFiles.count(); ++i) {
                         if (m_vecExtractSimpleFiles[i]->property("name").toString() == strTemp.remove(0, QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP).length())) {
                             removeEntryVector(QVector<Archive::Entry *>() << m_vecExtractSimpleFiles[i], false);
+                            //m_pUnCompressPage->onRefreshEntryList(QVector<Archive::Entry *>() << m_vecExtractSimpleFiles[i], false);
                             break;
                         }
                     }
                 }
+//                m_pUnCompressPage->convertArchive();
+//                if (m_convertType.size() == 0) {
+//                    m_pUnCompressPage->setUpdateFiles(QStringList() << path);
+
+//                    QString strTemp = file.filePath();
+//                    for (int i = 0; i < m_vecExtractSimpleFiles.count(); ++i) {
+//                        if (m_vecExtractSimpleFiles[i]->property("name").toString() == strTemp.remove(0, QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP).length())) {
+//                            removeEntryVector(QVector<Archive::Entry *>() << m_vecExtractSimpleFiles[i], false);
+//                            break;
+//                        }
+//                    }
+//                }
             }
 
             dialog->deleteLater();
