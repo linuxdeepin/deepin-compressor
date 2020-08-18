@@ -142,6 +142,9 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         destPath = destinationDirectory;
     }
     qDebug() << "####destpath：" << destPath;
+    if (destPath.endsWith(QDir::separator())) {
+        destPath.chop(1);
+    }
     m_extractDestDir = destPath;
 //    qDebug() << m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
@@ -182,12 +185,15 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
 
     QUrl destDir = QUrl(destPath);
     m_oldWorkingDirExtraction = QDir::currentPath();
-    QDir::setCurrent(destDir.adjusted(QUrl::RemoveScheme).url());
+    QString strTemp = destDir.adjusted(QUrl::RemoveScheme).url();
+    qDebug() << strTemp;
+    QDir::setCurrent(strTemp);
 
     const bool useTmpExtractDir = options.isDragAndDropEnabled() || options.alwaysUseTempDir();
 
     if (useTmpExtractDir) {
         // Create an hidden temp folder in the current directory.
+        qDebug() << QDir::currentPath();
         m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
 
         qDebug() << "Using temporary extraction dir:" << m_extractTempDir->path();

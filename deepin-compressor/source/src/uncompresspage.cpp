@@ -326,17 +326,23 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     } else if (EXTRACT_DRAG == type) {
         emit sigextractfiles(fileList, path, type);
     } else if (EXTRACT_TEMP == type) {
-        QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
+        QString strID = QUuid::createUuid().toString();
+        strID.remove("{");
+        strID.remove("}");
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + strID;
         QDir dir(tmppath);
         if (!dir.exists()) {
-            dir.mkdir(tmppath);
+            dir.mkpath(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
     } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
-        QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
+        QString strID = QUuid::createUuid().toString();
+        strID.remove("{");
+        strID.remove("}");
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + strID;
         QDir dir(tmppath);
         if (!dir.exists()) {
-            dir.mkdir(tmppath);
+            dir.mkpath(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
     } else {
