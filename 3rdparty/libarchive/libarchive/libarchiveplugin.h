@@ -2,6 +2,7 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
+#include "../common/common.h"
 
 #include <QScopedPointer>
 #include <QProcess>
@@ -105,6 +106,7 @@ private:
 
     QString m_strRootNode;
     QStringList m_listFileName;
+    Common *m_common = nullptr;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

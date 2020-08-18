@@ -6,12 +6,13 @@
 #include <QRegularExpression>
 #include <QLocale>
 #include <QTextStream>
+#include <QDebug>
 
 #include <KEncodingProber>
 #include "../ChardetDetector/chardet.h"
 
-QByteArray m_codecStr;
-static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+//QByteArray m_codecStr;
+/*static */float Common::codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
     qreal hep_count = 0;
     int non_base_latin_count = 0;
@@ -96,7 +97,7 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     return qMax(0.0f, c);
 }
 
-QString trans2uft8(const char *str)
+QString Common::trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
     if ("" == codec_name) {
@@ -132,7 +133,7 @@ QString trans2uft8(const char *str)
     }
 }
 
-QByteArray detectEncode(const QByteArray &data, const QString &fileName)
+QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
 {
     QString detectedResult;
     float chardetconfidence = 0;
@@ -163,7 +164,7 @@ QByteArray detectEncode(const QByteArray &data, const QString &fileName)
     return  m_codecStr;
 }
 
-int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
+int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
 {
     DetectObj *obj = detect_obj_init();
 
@@ -203,7 +204,7 @@ int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &conf
     return CHARDET_SUCCESS ;
 }
 
-QByteArray textCodecDetect(const QByteArray &data, const QString &fileName)
+QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileName)
 {
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {

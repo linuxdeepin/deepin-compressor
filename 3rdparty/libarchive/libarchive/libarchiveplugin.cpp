@@ -15,7 +15,7 @@
 #include <kprocess.h>
 
 
-#include "../common/common.h"
+//#include "../common/common.h"
 #include "structs.h"
 
 
@@ -27,6 +27,7 @@ LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     , m_extractedFilesSize(0)
 {
     mType = ENUM_PLUGINTYPE::PLUGIN_LIBARCHIVE;
+    m_common = new Common(this);
     archive_read_disk_set_standard_lookup(m_archiveReadDisk.data());
 
     connect(this, &ReadOnlyArchiveInterface::error, this, &LibarchivePlugin::slotRestoreWorkingDir);
@@ -206,7 +207,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         //        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
         //        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
         //        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
-        QString utf8path = trans2uft8(archive_entry_pathname(entry));
+        QString utf8path = m_common->trans2uft8(archive_entry_pathname(entry));
         QString entryName = QDir::fromNativeSeparators(utf8path);
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
@@ -423,7 +424,7 @@ bool LibarchivePlugin::initializeReader()
 
 void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry(this);
+    Archive::Entry *pCurEntry = new Archive::Entry(/*this*/);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);
@@ -565,7 +566,7 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
 {
 //    archive_stat *entry = nullptr;
 //    archive_stat entry;
-    m_archiveEntryStat.archive_fullPath = trans2uft8(archive_entry_pathname(aentry));
+    m_archiveEntryStat.archive_fullPath = m_common->trans2uft8(archive_entry_pathname(aentry));
     m_archiveEntryStat.archive_owner = QString::fromLatin1(archive_entry_uname(aentry));
     m_archiveEntryStat.archive_group = QString::fromLatin1(archive_entry_gname(aentry));
     if (archive_entry_symlink(aentry)) {
@@ -620,7 +621,7 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
     //    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
     //    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
     //    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
-    QString utf8path = trans2uft8(archive_entry_pathname(aentry));
+    QString utf8path = m_common->trans2uft8(archive_entry_pathname(aentry));
 
     pCurEntry->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
 
