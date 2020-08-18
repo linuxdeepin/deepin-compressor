@@ -2050,6 +2050,7 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
             if (!iter.key().startsWith(strPath)) {
                 break;
             } else {
+
                 if (!iter.key().endsWith("/")) {
                     qExtractSize += iter.value().first.size;
                 }
@@ -2060,6 +2061,11 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
                 }
 
                 ++iter;
+
+                if (!strPath.endsWith(QDir::separator())) {
+                    break;
+                }
+
             }
         }
     }
