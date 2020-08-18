@@ -1,6 +1,6 @@
 project(cli7zplugin)
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.9.5)
 
 set(LIB_NAME cli7zplugin)
 #3.3 打开全局moc
