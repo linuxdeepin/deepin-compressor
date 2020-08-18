@@ -27,6 +27,7 @@
 #include "archivesortfiltermodel.h"
 #include "queries.h"
 #include "customwidget.h"
+#include "utils.h"
 
 #include <DStandardPaths>
 #include <DMessageManager>
@@ -242,10 +243,7 @@ void UnCompressPage::convertArchive()
 {
     QStringList type = convertArchiveDialog();
     if (type.at(0) == "true") {
-        QString strTemp = QUuid::createUuid().toString();
-        strTemp = strTemp.remove('{');
-        strTemp = strTemp.remove('}');
-        QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp;
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + Utils::createRandomString();
         //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
         QDir dir(tmppath);
         if (!dir.exists()) {
@@ -261,10 +259,8 @@ void UnCompressPage::convertArchive()
 //    if (m_info.filePath().endsWith(".rar")) {
 //        QStringList type = convertArchiveDialog();
 //        if (type.at(0) == "true") {
-//            QString strTemp = QUuid::createUuid().toString();
-//            strTemp = strTemp.remove('{');
-//            strTemp = strTemp.remove('}');
-//            QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp /*QUuid::createUuid().toString()*/;
+//            QString strTemp = Utils::createRandomString();
+//            QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + strTemp /*Utils::createRandomString()*/;
 //            //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
 //            QDir dir(tmppath);
 //            if (!dir.exists()) {
@@ -276,7 +272,7 @@ void UnCompressPage::convertArchive()
 //            //                dir1.mkdir(tmppath1);
 //            //            }
 
-//            //            QString tmppath2 = TEMPDIR_NAME + PATH_SEP /*+ QUuid::createUuid().toString() + PATH_SEP*/ + "converttempfiles";
+//            //            QString tmppath2 = TEMPDIR_NAME + PATH_SEP /*+ Utils::createRandomString() + PATH_SEP*/ + "converttempfiles";
 //            //            QDir dir2(tmppath2);
 //            //            if (!dir2.exists()) {
 //            //                dir1.mkpath(tmppath2);
@@ -401,14 +397,14 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     } else if (EXTRACT_DRAG == type) {
         emit sigextractfiles(fileList, path, type);
     } else if (EXTRACT_TEMP == type) {
-        QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
         QDir dir(tmppath);
         if (!dir.exists()) {
             dir.mkpath(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
     } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
-        QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
+        QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
         QDir dir(tmppath);
         if (!dir.exists()) {
             dir.mkdir(tmppath);

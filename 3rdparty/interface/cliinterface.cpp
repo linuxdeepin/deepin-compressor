@@ -207,7 +207,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     //get user input password
     QString psdd = password();
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && ifNeedPsd
-        && psdd.isEmpty()) {
+            && psdd.isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
         if (m_extractionOptions.isBatchExtract()) {
             if (!passwordQuery()) {
@@ -241,8 +241,8 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }
 
     return runProcess(
-        m_cliProps->property("extractProgram").toString(),
-        m_cliProps->extractArgs(filename(), extractFilesList(files), options.preservePaths(), password()));
+               m_cliProps->property("extractProgram").toString(),
+               m_cliProps->extractArgs(filename(), extractFilesList(files), options.preservePaths(), password()));
 }
 
 bool CliInterface::addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination,
@@ -290,13 +290,13 @@ bool CliInterface::addFiles(const QVector<Archive::Entry *> &files, const Archiv
         QDir::setCurrent(m_extractTempDir->path());
 
         filesToPass.push_back(new Archive::Entry(
-            preservedParent, destinationPath.split(QLatin1Char('/'), QString::SkipEmptyParts).at(0)));
+                                  preservedParent, destinationPath.split(QLatin1Char('/'), QString::SkipEmptyParts).at(0)));
     } else {
         filesToPass = files;
     }
 
     if (!m_cliProps->property("passwordSwitch").toString().isEmpty() && options.encryptedArchiveHint()
-        && password().isEmpty()) {
+            && password().isEmpty()) {
         qDebug() << "Password hint enabled, querying user";
 //        TODO:追加暂时不设置密码
 #if 0
@@ -406,9 +406,9 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     m_process->setProgram(programPath, arguments);
-    // qDebug() << programPath << arguments;
+//    qDebug() << QDir::currentPath() << programPath << arguments;
 
-    connect(m_process, &QProcess::readyReadStandardOutput, this, [=]() {
+    connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         readStdout();
     });
 
@@ -591,7 +591,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
                 emit error(("Extraction failed. Make sure that enough space is available."));
             } else {
                 qDebug() << "Extraction aborted, either the password is wrong or the destination folder doesn't have "
-                            "enough space.";
+                         "enough space.";
                 //emit error(tr("Extraction failed. Make sure you provided the correct password and that enough space is "
                 //              "available."));
                 emit error(("Extraction failed. Make sure you provided the correct password and that enough space is "
@@ -1278,7 +1278,7 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if ((m_operationMode == Extract || m_operationMode == Add) && m_process
-        && (m_process->program().at(0).contains("zip"))) {
+            && (m_process->program().at(0).contains("zip"))) {
         // read the percentage
         int pos = line.indexOf(QLatin1Char(':'));
         if (pos > 1 && line.length() > 17) {

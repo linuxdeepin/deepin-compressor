@@ -3967,7 +3967,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
 void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList, const QString &programma)
 {
-    QString tmppath = TEMPDIR_NAME + PATH_SEP + QUuid::createUuid().toString();
+    QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
     QDir dir(tmppath);
     if (!dir.exists()) {
         dir.mkdir(tmppath);
