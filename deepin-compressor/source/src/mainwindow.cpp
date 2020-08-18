@@ -1907,6 +1907,11 @@ void MainWindow::WatcherFile(const QString &files)
         effect->setBlurRadius(4);
         dialog->getButton(0)->setFixedWidth(340);
         //        dialog->getButton(0)->setGraphicsEffect(effect);
+
+        if (isMinimized()) {
+            setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        }
+
         dialog->exec();
         SAFE_DELETE_ELE(dialog);
 
