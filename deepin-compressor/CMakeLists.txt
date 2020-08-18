@@ -118,7 +118,6 @@ set(c_files
 	source/src/myfileitem.cpp
 	source/src/myfilesystemmodel.cpp
 	source/src/openloadingpage.cpp
-	source/src/openwithdialog
 	source/src/progress.cpp
 	source/src/progressdialog.cpp
 	source/src/settingdialog.cpp
@@ -165,7 +164,6 @@ set(h_files
 	source/inc/myfileitem.h
 	source/inc/myfilesystemmodel.h
 	source/inc/openloadingpage.h
-	source/inc/openwithdialog
 	source/inc/progressdialog.h
 	source/inc/progress.h
 	source/inc/settingdialog.h

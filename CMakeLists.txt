@@ -12,13 +12,18 @@ project(${EXE_NAME})
 set( CMAKE_CXX_FLAGS "-std=c++11" )
 
 #SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wl,-rpath=./
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wall
 
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 #模糊测试设置 -start
 if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
-    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -fsanitize=address")
+ #   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+ #   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+  #  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+  #  set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -fsanitize=address")
 endif()
 #模糊测试设置 -end
 
@@ -45,17 +50,17 @@ set(CMAKE_INSTALL_PREFIX /usr)
 
 #install(TARGETS compressor-interface LIBRARY DESTINATION lib)
 
-install(TARGETS compressor-interface DESTINATION /usr/lib/compressor-lib)
-install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib/compressor-lib)
-install(TARGETS compressor-common DESTINATION /usr/lib/compressor-lib)
-install(TARGETS compressor-archive DESTINATION /usr/lib/compressor-lib)
-install(TARGETS compressor-singlefile DESTINATION /usr/lib/compressor-lib)
+install(TARGETS compressor-interface DESTINATION /usr/bin/compressor-lib)
+install(TARGETS compressor-ChardetDetector DESTINATION /usr/bin/compressor-lib)
+install(TARGETS compressor-common DESTINATION /usr/bin/compressor-lib)
+install(TARGETS compressor-archive DESTINATION /usr/bin/compressor-lib)
+install(TARGETS compressor-singlefile DESTINATION /usr/bin/compressor-lib)
 
-install(TARGETS compressor-interface DESTINATION /usr/lib)
-install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib)
-install(TARGETS compressor-common DESTINATION /usr/lib)
-install(TARGETS compressor-archive DESTINATION /usr/lib)
-install(TARGETS compressor-singlefile DESTINATION /usr/lib)
+#install(TARGETS compressor-interface DESTINATION /usr/lib)
+#install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib)
+#install(TARGETS compressor-common DESTINATION /usr/lib)
+#install(TARGETS compressor-archive DESTINATION /usr/lib)
+#install(TARGETS compressor-singlefile DESTINATION /usr/lib)
 
 install(TARGETS cli7zplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
