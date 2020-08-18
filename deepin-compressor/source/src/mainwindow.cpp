@@ -3970,7 +3970,7 @@ void MainWindow::slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fil
     QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
     QDir dir(tmppath);
     if (!dir.exists()) {
-        dir.mkdir(tmppath);
+        dir.mkpath(tmppath); //自动创建目录所需的所有父目录
     }
 
     m_strProgram = programma;

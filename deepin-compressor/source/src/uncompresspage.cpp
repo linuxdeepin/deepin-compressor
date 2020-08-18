@@ -407,7 +407,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
         QDir dir(tmppath);
         if (!dir.exists()) {
-            dir.mkdir(tmppath);
+            dir.mkpath(tmppath);
         }
         emit sigextractfiles(fileList, tmppath, type);
     } else {
