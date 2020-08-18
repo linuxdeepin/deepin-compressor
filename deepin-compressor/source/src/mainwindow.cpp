@@ -1518,7 +1518,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         const int mode = dialog.exec();
 
         if (mode != QDialog::Accepted) {
-            QTimer::singleShot(100, this, [=] {
+            QTimer::singleShot(100, this, [ = ] {
                 slotquitApp();
             });
             return;
@@ -1777,6 +1777,9 @@ void MainWindow::WatcherFile(const QString &files)
         effect->setBlurRadius(4);
         dialog->getButton(0)->setFixedWidth(340);
         //        dialog->getButton(0)->setGraphicsEffect(effect);
+        if (isMinimized()) {
+            setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        }
         dialog->exec();
         SAFE_DELETE_ELE(dialog);
 
@@ -1785,6 +1788,7 @@ void MainWindow::WatcherFile(const QString &files)
         m_ePageID = PAGE_HOME;
         m_pUnCompressPage->setRootPathIndex();
         this->refreshPage();
+
     });
 
 }
