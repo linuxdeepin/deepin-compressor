@@ -205,15 +205,14 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 }
             }
         } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            qDebug()<<plugin->metaData().pluginId()<<m_filesize<<mimeType.name();
-            if(mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296)//4294967296(4GB)
-            {
+            qDebug() << plugin->metaData().pluginId() << m_filesize << mimeType.name();
+            if (mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
                 continue;//when iso is more than 4G,it is udf,use 7z to extract
             }
             filteredPlugins << plugin;
         }
     }
-    qDebug()<<filteredPlugins.count();
+    qDebug() << filteredPlugins.count();
     return filteredPlugins;
 }
 
@@ -246,20 +245,17 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
     std::sort(preferredPlugins.begin(), preferredPlugins.end(), [&mimeType, &readWrite](Plugin * p1, Plugin * p2) {
-    #ifdef __aarch64__
-        if( readWrite && mimeType.name() == QString("application/zip") )
-        {
-            if( p1->metaData().name().contains("Libarchive") )
-            {
+#ifdef __aarch64__
+        if (readWrite && mimeType.name() == QString("application/zip")) {
+            if (p1->metaData().name().contains("Libarchive")) {
                 return true;
             }
 
-            if( p2->metaData().name().contains("Libarchive") )
-            {
+            if (p2->metaData().name().contains("Libarchive")) {
                 return false;
             }
         }
-    #endif
+#endif
 
         return p1->priority() > p2->priority();
     });
@@ -282,17 +278,14 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 //    Q_UNUSED(entrySize)
 //#endif
 
-//    if( (!readWrite) &&  (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/) )
-//    {
-//        foreach(Plugin* plugin, preferredPlugins)
-//        {
-//            if(plugin->metaData().name().contains("7zip"))
-//            {
-//                preferredPlugins.removeOne(plugin);
-//                break;
-//            }
-//        }
-//    }
+    if ((!readWrite) && (mimeType.name() == QString("application/zip") /*|| mimeType.name() == QString("application/x-tar")*/)) {
+        foreach (Plugin *plugin, preferredPlugins) {
+            if (plugin->metaData().name().contains("7zip")) {
+                preferredPlugins.removeOne(plugin);
+                break;
+            }
+        }
+    }
 
     return preferredPlugins;
 }

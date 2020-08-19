@@ -209,3 +209,12 @@ QDebug operator<<(QDebug d, const Archive::Entry *entry)
 }
 
 
+void Archive::Entry::setCompressIndex(int iIndex)
+{
+    m_iCompressIndex = iIndex;
+}
+
+int Archive::Entry::compressIndex()
+{
+    return m_iCompressIndex;
+}

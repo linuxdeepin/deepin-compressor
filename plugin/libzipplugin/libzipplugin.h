@@ -7,8 +7,7 @@
 #include <zip.h>
 #include "kpluginfactory.h"
 
-struct FileProgressInfo
-{
+struct FileProgressInfo {
     float fileProgressProportion = 0.0;
     float fileProgressStart;
     QString fileName;
@@ -43,14 +42,17 @@ public:
     bool addComment(const QString &comment) override;
     bool testArchive() override;
 
+    int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
+
 private:
-    bool extractEntry(zip_t *archive, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo& pi );
+    bool extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false);
     bool emitEntryForIndex(zip_t *archive, qlonglong index);
     void emitProgress(double percentage);
     QString permissionsToString(const mode_t &perm);
     static void progressCallback(zip_t *, double progress, void *that);
     QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
     void detectAllfile(zip_t *archive, int num);
     QString  trans2uft8(const char *str);
 
