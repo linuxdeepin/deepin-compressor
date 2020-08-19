@@ -129,6 +129,9 @@ bool LibarchivePlugin::doKill()
 
 bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
+    emit sigExtractPwdCheckDown();
+    calDecompressSize();
+
     if (!initializeReader()) {
         return false;
     }
@@ -177,7 +180,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
     // To avoid traversing the entire archive when extracting a limited set of
     // entries, we maintain a list of remaining entries and stop when it's empty.
 //    const QStringList fullPaths = entryFullPaths(files);
-    QStringList remainingFiles = entryFullPaths(files);//获取双击的文件名称
+//    QStringList remainingFiles = entryFullPaths(files);//获取双击的文件名称
 
     QString extractDst;
 
@@ -379,7 +382,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             }
 
             extractedEntriesCount++;
-            remainingFiles.removeOne(entryName);
+            m_listFileName.removeOne(entryName);
         } else {
             // Archive entry not among selected files, skip it.
             archive_read_data_skip(m_archiveReader.data());
@@ -914,6 +917,29 @@ void LibarchivePlugin::deleteTempTarPkg(const QStringList &tars)
             p.waitForFinished(-1);
         }
     }
+}
+
+qlonglong LibarchivePlugin::calDecompressSize()
+{
+    m_cachedArchiveEntryCount = 0;
+    m_extractedFilesSize = 0;
+
+    if (!initializeReader()) {
+        return m_extractedFilesSize;
+    }
+
+    struct archive_entry *aentry;
+
+    while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &aentry) == ARCHIVE_OK)) {
+
+        m_extractedFilesSize += (qlonglong)archive_entry_size(aentry);
+        m_cachedArchiveEntryCount++;
+        archive_read_data_skip(m_archiveReader.data());
+    }
+
+    archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
+
+    return m_extractedFilesSize;
 }
 
 void LibarchivePlugin::cleanIfCanceled()

@@ -217,6 +217,7 @@ signals:
     void sigExtractJobPassword();
     void sigExtractJobFinished();
     void sigExtractJobPwdCheckDown();
+    void signalUserQuery(Query *query);
 
 private:
     void cleanIfCanceled();

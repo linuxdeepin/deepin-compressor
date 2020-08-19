@@ -122,12 +122,20 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType)
+ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere)
 {
-    bool write = true;
+    PluginManager pluginManager;
+
+    bool write;
+    if (isRightMenuExtractHere) {
+        write = false;
+    } else {
+        write = true;
+    }
+//    bool write = true;
     bool useLibArchive = false;
 
-    PluginManager pluginManager;
+//    PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
     if (fileinfo.suffix() == QString("iso")) {
         pluginManager.setFileSize(fileinfo.size());

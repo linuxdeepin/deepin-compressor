@@ -167,6 +167,12 @@ public:
     void ExtractPassword(QString password);
 
     /**
+     * @brief rightMenuExtractPassword   右键解压缩到当前文件夹加密解压
+     * @param password  输入的密码
+     */
+    void rightMenuExtractPassword(QString password);
+
+    /**
      * @brief ExtractSinglePassword 加密提取/打开等
      * @param password  输入的密码
      */
@@ -535,6 +541,11 @@ private slots:
      * @brief onRightMenuSelected
      */
     void onRightMenuSelected(const QStringList &);
+
+    /**
+     * @brief rightMenuExtractHere
+     */
+    void rightMenuExtractHere(const QString &localPath);
 
     /**
      * @brief onCompressNext

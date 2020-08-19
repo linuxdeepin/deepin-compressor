@@ -200,11 +200,15 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }
 
     bool ifNeedPsd = options.encryptedArchiveHint();
-    if (ifNeedPsd == false) {
-        //don't need psd
-        this->extractPsdStatus = ReadOnlyArchiveInterface::Reextract;
-        if (this->pAnalyseHelp != nullptr) {
-            return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+    if (options.isRightMenuExtractHere()) {
+        //emit sigExtractPwdCheckDown();
+    } else {
+        if (ifNeedPsd == false) {
+            //don't need psd
+            this->extractPsdStatus = ReadOnlyArchiveInterface::Reextract;
+            if (this->pAnalyseHelp != nullptr) {
+                return this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+            }
         }
     }
 
@@ -1361,24 +1365,25 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (m_operationMode == Extract) {
-        //        if (isPasswordPrompt(line)) {
-        //            qDebug() << "Found a password prompt";
+        if (isPasswordPrompt(line)) {
+            emit sigExtractNeedPassword();
+            //            qDebug() << "Found a password prompt";
 
-        //            PasswordNeededQuery query(filename());
-        //            query.execute();
+            //            PasswordNeededQuery query(filename());
+            //            query.execute();
 
-        //            if (query.responseCancelled()) {
-        //                emit cancelled();
-        //                return false;
-        //            }
+            //            if (query.responseCancelled()) {
+            //                emit cancelled();
+            //                return false;
+            //            }
 
-        //            setPassword(query.password());
+            //            setPassword(query.password());
 
-        //            const QString response(password() + QLatin1Char('\n'));
-        //            writeToProcess(response.toLocal8Bit());
+            //            const QString response(password() + QLatin1Char('\n'));
+            //            writeToProcess(response.toLocal8Bit());
 
-        //            return true;
-        //        }
+            //            return true;
+        }
 
         if (isDiskFullMsg(line)) {
             qDebug() << "Found disk full message:" << line;

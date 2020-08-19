@@ -86,6 +86,7 @@ private:
     QString convertCompressionName(const QString &method);
     bool list_New(bool isbatch = false);
     void deleteTempTarPkg(const QStringList &tars);
+    qlonglong calDecompressSize();
 
     int m_cachedArchiveEntryCount;
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
