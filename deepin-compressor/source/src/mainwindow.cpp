@@ -470,6 +470,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 DFontSizeManager::instance()->bind(pLblContent, DFontSizeManager::T6, QFont::Medium);
                 pLblContent->setMinimumWidth(this->width());
                 pLblContent->move(dialog->width() / 2 - pLblContent->width() / 2, 48);
+
+                if (isMinimized()) {
+                    setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+                }
+
                 dialog->exec();
 
                 // 从文件列表中删除已经不存在的文件
@@ -1049,11 +1054,16 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(true);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
         setAcceptDrops(true);
-        m_iWatchTimerID = startTimer(1000);
+        if (m_iWatchTimerID == 0) {
+            m_iWatchTimerID = startTimer(1000);
+        }
         m_pCompressPage->onPathIndexChanged();
         m_pMainLayout->setCurrentIndex(2);
         break;
     case PAGE_ZIPSET:       // 压缩设置界面
+        if (m_iWatchTimerID == 0) {
+            m_iWatchTimerID = startTimer(1000);
+        }
         titlebar()->setTitle(tr("Create New Archive"));
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
