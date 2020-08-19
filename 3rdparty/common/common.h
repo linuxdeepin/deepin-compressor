@@ -4,8 +4,9 @@
 #include <QString>
 #include <QLocale>
 
-class Common: QObject
+class Common: public QObject
 {
+    Q_OBJECT
 public:
     Common(QObject *parent)
         : QObject(parent) {}

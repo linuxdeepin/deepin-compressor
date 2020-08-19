@@ -2,12 +2,13 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
-#include "../common/common.h"
 
 #include <QScopedPointer>
 #include <QProcess>
 
 #include <archive.h>
+
+class Common;
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0; //内部百分值范围
