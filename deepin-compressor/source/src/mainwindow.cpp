@@ -2525,6 +2525,10 @@ void MainWindow::slotShowPageUnzipProgress()
 
 void MainWindow::SlotNeedPassword()
 {
+    if (m_pArchiveModel->archive()->encryptionType() == Archive::Unencrypted) {
+        m_pArchiveModel->archive()->setEncryptionType(Archive::Encrypted);
+    }
+
     if (isHidden()) {
         show();
     }

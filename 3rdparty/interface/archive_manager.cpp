@@ -579,6 +579,11 @@ int Archive::numberOfVolumes() const
     return m_iface->numberOfVolumes();
 }
 
+Archive::EncryptionType Archive::setEncryptionType(Archive::EncryptionType type)
+{
+    m_encryptionType = type;
+}
+
 Archive::EncryptionType Archive::encryptionType() const
 {
     if (!isValid()) {
