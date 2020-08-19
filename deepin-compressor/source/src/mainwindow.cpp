@@ -2192,6 +2192,10 @@ void MainWindow::slotShowPageUnzipProgress()
 
 void MainWindow::SlotNeedPassword()
 {
+    if (m_pArchiveModel->archive()->encryptionType() == Archive::Unencrypted) {
+        m_pArchiveModel->archive()->setEncryptionType(Archive::Encrypted);
+    }
+
     if (PAGE_ENCRYPTION != m_ePageID) {
         m_ePageID = PAGE_ENCRYPTION;
         refreshPage();
