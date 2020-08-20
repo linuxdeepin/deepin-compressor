@@ -122,6 +122,7 @@ private:
 
 private Q_SLOTS:
     void onNewEntry(const Archive::Entry *);
+    void onIsEncrypted();
 
 signals:
     void sigLodJobPassword();

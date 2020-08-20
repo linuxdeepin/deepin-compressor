@@ -287,6 +287,10 @@ Q_SIGNALS:
      * - only 7zip need
      */
     void sigBatchExtractJobWrongPsd(const QString password = "");
+    /**
+     * @brief sigIsEncrypted 表明该压缩包是加密包
+     */
+    void sigIsEncrypted();
 
 protected:
 
@@ -308,6 +312,7 @@ protected:
      */
     uint m_numberOfEntries;
     KPluginMetaData m_metaData;
+    bool m_isEncrypted = false; //压缩包是否加密
 
 private:
     QString m_filename;

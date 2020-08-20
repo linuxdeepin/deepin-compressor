@@ -289,6 +289,7 @@ LoadJob::LoadJob(Archive *archive, ReadOnlyArchiveInterface *interface)
 {
     mType = Job::ENUM_JOBTYPE::LOADJOB;
     qDebug() << "LoadJob job instance";
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::sigIsEncrypted, this, &LoadJob::onIsEncrypted, Qt::ConnectionType::UniqueConnection);
     connect(this, &LoadJob::newEntry, this, &LoadJob::onNewEntry);
 }
 
@@ -390,6 +391,11 @@ void LoadJob::onNewEntry(const Archive::Entry *entry)
             }
         }
     }
+}
+
+void LoadJob::onIsEncrypted()
+{
+    m_isPasswordProtected = true;
 }
 
 QString LoadJob::subfolderName() const

@@ -515,6 +515,13 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         return false;
     }
 
+    if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
+        if (!m_isEncrypted && statBuffer.encryption_method != ZIP_EM_NONE) { //若list时发现有文件加密，则通知loadjob该压缩包是加密
+            emit sigIsEncrypted();
+            m_isEncrypted = true;
+        }
+    }
+
     QString name = trans2uft8(statBuffer.name);
 //    m_fileNameEncodeMap.insert(statBuffer.name, name);
     setEntryVal(statBuffer, m_indexCount, name, m_DirRecord);

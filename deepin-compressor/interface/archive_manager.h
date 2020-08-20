@@ -143,7 +143,6 @@ public:
     OpenWithJob *openWith(Archive::Entry *entry);
     void encrypt(const QString &password, bool encryptHeader);
 
-    Archive::EncryptionType setEncryptionType(Archive::EncryptionType);
 private Q_SLOTS:
     void onAddFinished(KJob *);
     void onUserQuery(Query *);
