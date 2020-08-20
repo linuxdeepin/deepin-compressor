@@ -218,7 +218,7 @@ target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc/
 
 target_link_libraries(${EXE_NAME}  ${LIBS_INCLUDE_DIRS})
 #message(${LIBS_INCLUDE_DIRS})
-target_link_libraries(${EXE_NAME}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::DBus Qt5::Svg  KF5::Codecs)
+target_link_libraries(${EXE_NAME}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::Svg  KF5::Codecs)
 
 #TARGET_LINK_LIBRARIES(${EXE_NAME}  ${PROJECT_SOURCE_DIR}/../output/compressor-lib/libcompressor-interface.so)
 target_link_libraries(${EXE_NAME}  compressor-interface)
