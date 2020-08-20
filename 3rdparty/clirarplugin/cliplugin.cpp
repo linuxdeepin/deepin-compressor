@@ -437,6 +437,10 @@ bool CliRarPlugin::handleUnrar4Line(const QString &line)
             // Encrypted files are marked with an asterisk.
         } else if (line.startsWith(QLatin1Char('*'))) {
             m_isPasswordProtected = true;
+            if (!m_isEncrypted && m_isPasswordProtected) { //若list时发现有文件加密，则通知loadjob该压缩包是加密
+                emit sigIsEncrypted();
+                m_isEncrypted = true;
+            }
             m_unrar4Details.append(QString(line.trimmed()).remove(0, 1)); //Remove the asterisk
             emit encryptionMethodFound(QStringLiteral("AES128"));
             // Entry names always start at the second position, so a line not
@@ -620,6 +624,10 @@ bool CliRarPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &arc
     m_fileStat.archive_isPasswordProtected = m_isPasswordProtected;
     if (m_isPasswordProtected) {
         m_isRAR5 ? emit encryptionMethodFound(QStringLiteral("AES256")) : emit encryptionMethodFound(QStringLiteral("AES128"));
+    }
+    if (!m_isEncrypted && m_isPasswordProtected) { //若list时发现有文件加密，则通知loadjob该压缩包是加密
+        emit sigIsEncrypted();
+        m_isEncrypted = true;
     }
 
     m_fileStat.archive_fullPath = m_unrar5Details.value(QStringLiteral("name"));

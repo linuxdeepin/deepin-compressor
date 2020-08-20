@@ -117,6 +117,7 @@ private:
 
 private Q_SLOTS:
     void onNewEntry(const Archive::Entry *);
+    void onIsEncrypted();
 
 signals:
     void sigLodJobPassword();
@@ -146,7 +147,8 @@ signals:
 
 private:
     enum Step { Loading,
-                Extracting };
+                Extracting
+              };
 
     void setupDestination();
 

@@ -124,7 +124,7 @@ void Job::start()
 
     // We have an archive but it's not valid, nothing to do.
     if (archive() && !archive()->isValid()) {
-        QTimer::singleShot(0, this, [=]() {
+        QTimer::singleShot(0, this, [ = ]() {
             onFinished(false);
         });
         return;
@@ -291,6 +291,7 @@ LoadJob::LoadJob(Archive *archive, ReadOnlyArchiveInterface *interface)
 {
     mType = Job::ENUM_JOBTYPE::LOADJOB;
     qDebug() << "LoadJob job instance";
+    connect(archiveInterface(), &ReadOnlyArchiveInterface::sigIsEncrypted, this, &LoadJob::onIsEncrypted, Qt::ConnectionType::UniqueConnection);
     connect(this, &LoadJob::newEntry, this, &LoadJob::onNewEntry);
 }
 
@@ -323,7 +324,7 @@ void LoadJob::doWork()
     if (!archiveInterface()->waitForFinishedSignal()) {
         // onFinished() needs to be called after onNewEntry(), because the former reads members set in the latter.
         // So we need to put it in the event queue, just like the single-thread case does by emitting finished().
-        QTimer::singleShot(0, this, [=]() {
+        QTimer::singleShot(0, this, [ = ]() {
             onFinished(ret);
         });
     }
@@ -392,6 +393,11 @@ void LoadJob::onNewEntry(const Archive::Entry *entry)
             }
         }
     }
+}
+
+void LoadJob::onIsEncrypted()
+{
+    m_isPasswordProtected = true;
 }
 
 QString LoadJob::subfolderName() const
@@ -575,7 +581,7 @@ void CreateJob::doWork()
         connect(m_addJob, &KJob::result, this, &CreateJob::emitResult);
         connect(m_addJob, &KJob::result, this, &CreateJob::result);
         // Forward description signal from AddJob, we need to change the first argument ('this' needs to be a CreateJob).
-        connect(m_addJob, &KJob::description, this, [=](KJob *, const QString &title, const QPair<QString, QString> &field1, const QPair<QString, QString> &) {
+        connect(m_addJob, &KJob::description, this, [ = ](KJob *, const QString & title, const QPair<QString, QString> &field1, const QPair<QString, QString> &) {
             emit description(this, title, field1);
         });
 

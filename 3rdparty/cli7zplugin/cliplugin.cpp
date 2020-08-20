@@ -375,6 +375,10 @@ bool Cli7zPlugin::readListLine(const QString &line)
             }
         } else if (line.startsWith(QLatin1String("Encrypted = ")) && line.size() >= 13) {
             m_fileStat.archive_isPasswordProtected = line.at(12) == QLatin1Char('+');
+            if (!m_isEncrypted && m_fileStat.archive_isPasswordProtected) { //若list时发现有文件加密，则通知loadjob该压缩包是加密
+                emit sigIsEncrypted();
+                m_isEncrypted = true;
+            }
 //            m_currentArchiveEntry->setProperty("isPasswordProtected", line.at(12) == QLatin1Char('+'));
         } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;

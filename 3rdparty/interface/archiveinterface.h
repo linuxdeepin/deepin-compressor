@@ -321,6 +321,11 @@ Q_SIGNALS:
      */
     void sigBatchExtractJobWrongPsd(const QString password = "");
 
+    /**
+     * @brief sigIsEncrypted 表明该压缩包是加密包
+     */
+    void sigIsEncrypted();
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.
@@ -341,6 +346,7 @@ protected:
     uint m_numberOfEntries;
     KPluginMetaData m_metaData;
     bool m_isPause = false; //暂停继续标志位
+    bool m_isEncrypted = false; //压缩包是否加密
 
 private:
     QString m_filename;
