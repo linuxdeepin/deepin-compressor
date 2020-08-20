@@ -3,6 +3,7 @@
 
 #include "archiveinterface.h"
 #include "kpluginfactory.h"
+#include "../common/common.h"
 
 #include <QFileDevice>
 
@@ -154,6 +155,7 @@ private:
     QMap<QString, QString> m_fileNameEncodeMap;
 
     bool m_bCancel = false;
+    Common *m_common = nullptr;
 };
 
 #endif // LIBZIPPLUGIN_H

@@ -74,6 +74,12 @@ public:
     static QString readConf();
 
     /**
+     * @brief createRandomString
+     * @see 产生一个随机的QString，去除“{”、”}“
+     */
+    static QString createRandomString();
+
+    /**
      * @brief zipPasswordIsChinese  判断zip格式压缩包密码是否含有中文
      * @param Args  压缩参数
      * @return

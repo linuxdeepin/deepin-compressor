@@ -8,6 +8,8 @@
 
 #include <archive.h>
 
+class Common;
+
 struct FileProgressInfo {
     float fileProgressProportion = 0.0; //内部百分值范围
     float fileProgressStart;            //上次的百分值
@@ -84,6 +86,7 @@ private:
     QString convertCompressionName(const QString &method);
     bool list_New(bool isbatch = false);
     void deleteTempTarPkg(const QStringList &tars);
+    qlonglong calDecompressSize();
 
     int m_cachedArchiveEntryCount;
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
@@ -105,6 +108,7 @@ private:
 
     QString m_strRootNode;
     QStringList m_listFileName;
+    Common *m_common = nullptr;
 };
 
 #endif // LIBARCHIVEPLUGIN_H

@@ -1,7 +1,7 @@
 #include "libzipplugin.h"
 //#include "kpluginfactory.h"
 #include "../common/detectencoding.h"
-#include "../common/common.h"
+//#include "../common/common.h"
 #include "queries.h"
 
 //#include <KIO/Global>
@@ -62,6 +62,7 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     m_listCodecs.clear();
     m_listCodecs << "UTF-8" << "GB18030" << "GBK" << "Big5" << "us-ascii";
     mType = ENUM_PLUGINTYPE::PLUGIN_LIBZIP;
+    m_common = new Common(this);
     connect(this, &ReadOnlyArchiveInterface::error, this, &LibzipPlugin::slotRestoreWorkingDir);
     connect(this, &ReadOnlyArchiveInterface::cancelled, this, &LibzipPlugin::slotRestoreWorkingDir);
 }
@@ -134,7 +135,7 @@ void LibzipPlugin::detectAllfile(zip_t *archive, int num)
         }
 
         if (statBuffer.valid & ZIP_STAT_NAME) {
-            QByteArray codec = detectEncode(statBuffer.name);
+            QByteArray codec = m_common->detectEncode(statBuffer.name);
             codeclist.append(codec);
         }
     }
@@ -302,7 +303,7 @@ void LibzipPlugin::emitProgress(double percentage)
 
         int i = m_filesize * percentage;
         if (m_addarchive) {
-            emit progress_filename(trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
+            emit progress_filename(m_common->trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
         }
 
         // Go from 0 to 50%. The second half is the subsequent listing.
@@ -405,7 +406,7 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         return false;
     }
 
-    QString name = trans2uft8(statBuffer.name);
+    QString name = m_common->trans2uft8(statBuffer.name);
 //    m_fileNameEncodeMap.insert(statBuffer.name, name);
     setEntryVal(statBuffer, m_indexCount, name, m_DirRecord);
     if (m_fileNameEncodeMap.find(name) == m_fileNameEncodeMap.end()) {
@@ -451,7 +452,7 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     //        }
     //    }
     for (int i = 0; i < m_listExtractIndex.count(); i++) {
-        QString strFilePath = trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+        QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
         bool status = this->deleteEntry(strFilePath, m_listExtractIndex[i], archive/*, i, count*/);        //delete from archive
         if (status == true) {
             emit entryRemoved(/*files.at(i)->fullPath()*/strFilePath);      //delete from model
@@ -637,7 +638,7 @@ bool LibzipPlugin::checkArchivePsd(zip_t *archive, int &iCodecIndex)
             }
 
             QString entry;
-            entry = QDir::fromNativeSeparators(trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            entry = QDir::fromNativeSeparators(m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
             const bool isDirectory = entry.endsWith(QDir::separator());
             if (isDirectory) {
                 if (i == nofEntries - 1) {
@@ -797,7 +798,7 @@ void LibzipPlugin::checkEntryPsd(zip_t *archive, int iIndex, enum_checkEntryPsd 
         return;
     }
 
-    QString strFileName = trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW));
+    QString strFileName = m_common->trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW));
 
     if (strFileName.endsWith(QDir::separator()) || iIndex == -1) {
         return;
@@ -963,7 +964,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 break;
             }
 
-            QString strfileNameTemp = trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+            QString strfileNameTemp = m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
             //QString strfileNameTemp = zip_get_name(archive, i, ZIP_FL_ENC_RAW);
 
             if (i == 0) {
@@ -1032,7 +1033,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             FileProgressInfo pi;
 
-            QString strFilePath = trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+            QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
             const QStringList pieces = strFilePath.split(QLatin1Char('/'), QString::SkipEmptyParts);
             QString strName = pieces.isEmpty() ? QString() : pieces.last();
             emit progress_filename(strName);
@@ -1779,7 +1780,7 @@ bool LibzipPlugin::minizip_emitEntryForIndex(unzFile zipfile)
     datetime.setDate(QDate(file_info.tmu_date.tm_year, file_info.tmu_date.tm_mon + 1, file_info.tmu_date.tm_mday));
     datetime.setTime(QTime(file_info.tmu_date.tm_hour, file_info.tmu_date.tm_min, file_info.tmu_date.tm_sec));
     //qDebug() << i << filename << datetime.toString("yyyy-MM-dd hh:mm:ss") << file_info.flag << file_info.uncompressed_size;
-    e->setFullPath(trans2uft8(filename));
+    e->setFullPath(m_common->trans2uft8(filename));
     e->setProperty("isDirectory", strFileName.endsWith(QDir::separator()));
     e->setProperty("timestamp", datetime);
     e->setProperty("size", (qulonglong)file_info.uncompressed_size);
@@ -1862,7 +1863,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
                 return false;
             }
 
-            QString strfileNameTemp = trans2uft8(filename);
+            QString strfileNameTemp = m_common->trans2uft8(filename);
 
             if (i == 0) {
                 extractDst = QDir::fromNativeSeparators(strfileNameTemp);
@@ -1923,7 +1924,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
 //            QString strFileName = files[0]->fullPath();
 //            if (files[0]->fullPath().endsWith(QDir::separator()))
 //                strFileName.chop(1);
-            qDebug() << unzLocateFile(zipfile, trans2uft8(vecFiles[0]->fullPath().toUtf8().data()).toLatin1(), 0);
+            qDebug() << unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[0]->fullPath().toUtf8().data()).toLatin1(), 0);
         }
 
         for (const Archive::Entry *e : vecFiles) {
@@ -1961,7 +1962,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
 //                QString strFileName = files[i]->fullPath();
 //                if (files[i]->fullPath().endsWith(QDir::separator()))
 //                    strFileName.chop(1);
-                int error = unzLocateFile(zipfile, trans2uft8(vecFiles[i]->fullPath().toUtf8().data()).toLatin1(), 0);
+                int error = unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[i]->fullPath().toUtf8().data()).toLatin1(), 0);
                 if (error != UNZ_OK) {
 //                    qDebug() << "cound not read next file\n";
 //                    unzClose(zipfile);
@@ -2169,7 +2170,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
 
 Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
-    auto e = new Archive::Entry(this);
+    auto e = new Archive::Entry(/*this*/);
 
     // e->setCompressIndex(index);
 
@@ -2430,7 +2431,7 @@ void LibzipPlugin::updateListMap()
             continue;
         }
 
-        QString name = trans2uft8(statBuffer.name);
+        QString name = m_common->trans2uft8(statBuffer.name);
         setEntryVal1(statBuffer, m_indexCount, name, m_DirRecord);
 
         if (m_listMap.find(name) == m_listMap.end()) {

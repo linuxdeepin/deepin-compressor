@@ -119,7 +119,7 @@ public:
     static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, bool isbatch = false, QObject *parent = nullptr);
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QString &fixedMimeType);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere = false);
     static void CreateEntry(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map); //废弃
     static void CreateEntryNew(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map); //added by hsw
 
@@ -140,6 +140,8 @@ public:
     OpenJob *open(Archive::Entry *entry);
     OpenWithJob *openWith(Archive::Entry *entry);
     void encrypt(const QString &password, bool encryptHeader);
+
+    Archive::EncryptionType setEncryptionType(Archive::EncryptionType);
 
 private Q_SLOTS:
     void onAddFinished(KJob *);

@@ -1175,6 +1175,10 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
     pWidget->setLayout(pLayout);
     dialog->addContent(pWidget);
 
+    if (isMinimized()) {
+        setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    }
+
     int res = dialog->exec();
     delete dialog;
 

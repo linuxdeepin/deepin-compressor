@@ -212,6 +212,10 @@ QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName)
     for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 
+        if (desktop_info.getFileName().contains("deepin-compressor")) {
+            continue;
+        }
+
         QAction *action = new QAction;
         action->setIcon(QIcon::fromTheme(desktop_info.getIcon()));
         action->setText(desktop_info.getDisplayName());
@@ -392,6 +396,10 @@ void OpenWithDialog::initData()
 
     for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
+
+        if (desktop_info.getFileName().contains("deepin-compressor")) {
+            continue;
+        }
 
         OpenWithDialogListItem *item = createItem(QIcon::fromTheme(desktop_info.getIcon()), desktop_info.getDisplayName(), recommendApps.at(i));
         m_recommandLayout->addWidget(item);

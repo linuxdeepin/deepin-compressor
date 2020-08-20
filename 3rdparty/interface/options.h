@@ -84,6 +84,8 @@ public:
     void setBatchExtract(bool status);
     bool isAutoCreatDir() const;
     void setAutoCreatDir(bool bAutoCreatDir);
+    bool isRightMenuExtractHere() const;
+    void setRightMenuExtractHere(bool rightMenuExtractHere);
 
 public:
     Settings_Extract_Info *pSettingInfo = nullptr;
@@ -94,6 +96,8 @@ private:
     bool m_alwaysUseTempDir = false;
     bool m_isBatch = false;
     bool m_isAutoCreatDir = true;
+    bool m_isRightMenuExtractHere = false;
+
 };
 
 QDebug operator<<(QDebug d, const CompressionOptions &options);

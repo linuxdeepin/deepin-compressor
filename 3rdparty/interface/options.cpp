@@ -77,6 +77,16 @@ void ExtractionOptions::setAutoCreatDir(bool bAutoCreatDir)
     m_isAutoCreatDir = bAutoCreatDir;
 }
 
+bool ExtractionOptions::isRightMenuExtractHere() const
+{
+    return  m_isRightMenuExtractHere;
+}
+
+void ExtractionOptions::setRightMenuExtractHere(bool rightMenuExtractHere)
+{
+    m_isRightMenuExtractHere = rightMenuExtractHere;
+}
+
 bool ExtractionOptions::isBatchExtract()
 {
     return m_isBatch;

@@ -39,6 +39,7 @@
 #include <QPixmap>
 #include <QTextCodec>
 #include <QRegularExpression>
+#include <QUuid>
 
 #include <KEncodingProber>
 
@@ -569,6 +570,14 @@ QString Utils::readConf()
     confFile.close();
 
     return confValue;
+}
+
+QString Utils::createRandomString()
+{
+    QString strtmp = QUuid::createUuid().toString();
+    strtmp.remove("{");
+    strtmp.remove("}");
+    return strtmp;
 }
 
 bool Utils::zipPasswordIsChinese(const QMap<QString, QString> &Args)

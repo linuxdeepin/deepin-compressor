@@ -602,6 +602,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::slotExtractJobPwdCheckDown, Qt::QueuedConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress, this, &ExtractJob::onProgress, Qt::ConnectionType::UniqueConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress_filename, this, &ExtractJob::onProgressFilename, Qt::ConnectionType::UniqueConnection);
+    connect(interface, &ReadOnlyArchiveInterface::userQuery, this, &ExtractJob::signalUserQuery);
 }
 
 void ExtractJob::resetTimeOut()

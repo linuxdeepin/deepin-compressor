@@ -122,12 +122,20 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType)
+ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere)
 {
-    bool write = true;
+    PluginManager pluginManager;
+
+    bool write;
+    if (isRightMenuExtractHere) {
+        write = false;
+    } else {
+        write = true;
+    }
+//    bool write = true;
     bool useLibArchive = false;
 
-    PluginManager pluginManager;
+//    PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
     if (fileinfo.suffix() == QString("iso")) {
         pluginManager.setFileSize(fileinfo.size());
@@ -569,6 +577,11 @@ void Archive::setMultiVolume(bool value)
 int Archive::numberOfVolumes() const
 {
     return m_iface->numberOfVolumes();
+}
+
+Archive::EncryptionType Archive::setEncryptionType(Archive::EncryptionType type)
+{
+    m_encryptionType = type;
 }
 
 Archive::EncryptionType Archive::encryptionType() const
