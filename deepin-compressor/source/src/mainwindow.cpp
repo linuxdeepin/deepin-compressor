@@ -83,7 +83,7 @@
 #include <QtConcurrent/QtConcurrent>
 
 #include <unistd.h>
-
+#define TEST
 DWIDGET_USE_NAMESPACE
 
 int MainWindow::m_windowcount = 1;
@@ -112,9 +112,9 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
     setAcceptDrops(true);
 
     initTitleBar();
-    //m_startTimer = startTimer(500);
-    InitUI();
-    InitConnection();
+    m_startTimer = startTimer(500);
+//    InitUI();
+//    InitConnection();
 
     loadWindowState();
 }
@@ -425,18 +425,19 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     } else */
-    /*qDebug() << "timerEvent";
+    qDebug() << "timerEvent";
     if (m_startTimer == event->timerId()) {
         if (!m_initflag) {
             qDebug() << "timerEvent******************InitUI";
             InitUI();
             InitConnection();
             m_initflag = true;
+            qDebug() << "timerEvent******************InitUI end";
         }
 
         killTimer(m_startTimer);
         m_startTimer = 0;
-    } else*/ if (m_iWatchTimerID == event->timerId()) {     // 监控待压缩的本地文件
+    } else if (m_iWatchTimerID == event->timerId()) {    // 监控待压缩的本地文件
         if (m_pCompressPage == nullptr) {
             return;
         }
@@ -504,6 +505,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::InitUI()
 {
+#ifdef TEST
     m_pUnCompressPage = new UnCompressPage(this);
     m_pCompressPage = new CompressPage(this);
     m_pCompressSetting = new CompressSetting(this);
@@ -539,6 +541,7 @@ void MainWindow::InitUI()
     m_pCompressFail->setAutoFillBackground(true);
     m_pEncryptionpage->setAutoFillBackground(true);
     //m_encodingpage->setAutoFillBackground(true);
+#endif
 }
 
 QJsonObject MainWindow::creatShorcutJson()
@@ -590,6 +593,7 @@ QJsonObject MainWindow::creatShorcutJson()
 
 void MainWindow::InitConnection()
 {
+#ifdef TEST
     // connect the signals to the slot function.
     connect(m_pHomePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
     connect(m_pCompressPage, &CompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
@@ -753,6 +757,7 @@ void MainWindow::InitConnection()
         query->setParent(this);
         query->execute();
     });
+#endif
 }
 
 QMenu *MainWindow::createSettingsMenu()
@@ -1479,13 +1484,13 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-//    qDebug() << "onRightMenuSelected";
-//    if (!m_initflag) {
-//        qDebug() << "onRightMenuSelected******************InitUI";
-//        InitUI();
-//        InitConnection();
-//        m_initflag = true;
-//    }
+    qDebug() << "onRightMenuSelected";
+    if (!m_initflag) {
+        qDebug() << "onRightMenuSelected******************InitUI";
+        InitUI();
+        InitConnection();
+        m_initflag = true;
+    }
     foreach (QString file, files) {
         m_rightMenuList.append(file);
     }

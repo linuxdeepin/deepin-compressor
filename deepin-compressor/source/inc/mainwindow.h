@@ -869,6 +869,9 @@ private:
     bool m_convertFirst = false;                            // 完成转换第一步：解压
     double m_lastPercent = 0;                               // 记录格式转换解压进度
 
+    int m_startTimer = 0;
+    bool m_initflag = false;
+
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

@@ -28,16 +28,18 @@
 #include <DWidgetUtil>
 #include <DLog>
 #include <DApplicationSettings>
-
+#include <QTime>
 #include <QCommandLineParser>
 #include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
+    QTime time1 = QTime::currentTime();
+
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    // load dtk xcb plugin.
-    DApplication::loadDXcbPlugin();
+//    // load dtk xcb plugin.
+//    DApplication::loadDXcbPlugin();
 
     // init Dtk application's attrubites.
     CompressorApplication app(argc, argv);
@@ -49,6 +51,20 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.addPositionalArgument("filename", "File path.", "file [file..]");
     parser.process(app);
+
+    app.loadTranslator();
+    app.setOrganizationName("deepin");
+    app.setApplicationName("deepin-compressor");
+    app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
+    app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
+    app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
+    app.setApplicationVersion(VERSION);
+    app.setProductName(DApplication::translate("Main", "Archive Manager"));
+    app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
+    DApplicationSettings settings(&app);
+
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
 
     const QStringList fileList = parser.positionalArguments();
     QStringList newfilelist;
@@ -66,15 +82,15 @@ int main(int argc, char *argv[])
         multilist.append(newfilelist.last().remove("_multi"));
         newfilelist = multilist;
     }
-
+    qDebug() << time1 << "start";
     bool isMutlWindows = false;
     if (argc >= 3 && !QString(argv[2]).contains(HEADBUS)) {
         QString lastStr = argv[argc - 1];
         QSet<QString> fstList;
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
-            && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
-            && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
-			&& lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
+                && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
+                && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
+                && lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
             isMutlWindows = true;
 
             for (int i = 1; i < argc; i++) {
@@ -112,6 +128,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    qDebug() << "start dbus";
     QDBusConnection bus = QDBusConnection::sessionBus();
     bool busRegistered = bus.registerService("com.archive.mainwindow.monitor");
 
@@ -131,20 +148,21 @@ int main(int argc, char *argv[])
             }
         }
     }
+    qDebug() << "end dbus";
 
-    app.loadTranslator();
-    app.setOrganizationName("deepin");
-    app.setApplicationName("deepin-compressor");
-    app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
-    app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
-    app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
-    app.setApplicationVersion(VERSION);
-    app.setProductName(DApplication::translate("Main", "Archive Manager"));
-    app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
-    DApplicationSettings settings(&app);
+//    app.loadTranslator();
+//    app.setOrganizationName("deepin");
+//    app.setApplicationName("deepin-compressor");
+//    app.setApplicationVersion(DApplication::buildVersion(QDate::currentDate().toString("yyyyMMdd")));
+//    app.setApplicationAcknowledgementPage("https://www.deepin.org/original/deepin-compressor/");
+//    app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
+//    app.setApplicationVersion(VERSION);
+//    app.setProductName(DApplication::translate("Main", "Archive Manager"));
+//    app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
+//    DApplicationSettings settings(&app);
 
-    DLogManager::registerConsoleAppender();
-    DLogManager::registerFileAppender();
+//    DLogManager::registerConsoleAppender();
+//    DLogManager::registerFileAppender();
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
@@ -155,6 +173,7 @@ int main(int argc, char *argv[])
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
 
+    qDebug() << "before MainWindow";
     MainWindow w;
     app.setMainWindow(&w);
 
@@ -182,6 +201,7 @@ int main(int argc, char *argv[])
                 QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
             } else {
                 w.show();
+                qDebug() << "show";
             }
         }
     }
