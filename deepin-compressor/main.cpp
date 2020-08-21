@@ -37,7 +37,9 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     // load dtk xcb plugin.
-    DApplication::loadDXcbPlugin();
+    // 在dde桌面环境中，不调用次函数也会默认使用dxcb插件，且使用此函数强制指定加载dxcb会导致在和wayland环境下不兼容
+    // 综上所述，此函数已经废弃
+    //DApplication::loadDXcbPlugin();
 
     // init Dtk application's attrubites.
     CompressorApplication app(argc, argv);
@@ -74,7 +76,7 @@ int main(int argc, char *argv[])
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
             && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
             && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
-			&& lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
+            && lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
             isMutlWindows = true;
 
             for (int i = 1; i < argc; i++) {
