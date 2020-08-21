@@ -1568,10 +1568,19 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         } else {
             calSelectedTotalFileSize(files);
+            qint64 size = 0;
+            foreach (QString file, files) {
+                QFileInfo fi(file);
+                if (fi.exists()) {
+                    size += fi.size();
+                }
+            }
+
             m_eWorkStatus = WorkProcess;
             m_operationtype = Operation_Extract;
 
             BatchExtract *batchJob = new BatchExtract();
+            batchJob->setBatchTotalSize(size);
             batchJob->setAutoSubfolder(true);
             batchJob->setDestinationFolder(fileinfo.path());
             batchJob->setPreservePaths(true);
@@ -1603,12 +1612,17 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
             qDebug() << "Starting job";
             batchJob->start();
+
+            m_ePageID = PAGE_UNZIPPROGRESS;
+            m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+            refreshPage();
+            show();
         }
 
-        m_ePageID = PAGE_UNZIPPROGRESS;
-        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-        refreshPage();
-        show();
+//        m_ePageID = PAGE_UNZIPPROGRESS;
+//        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+//        refreshPage();
+//        show();
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_strDecompressFileName = fileinfo.fileName();
@@ -1624,6 +1638,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         show();
     } else if (files.last() == QStringLiteral("extract_multi")) {
         calSelectedTotalFileSize(files);
+        qint64 size = 0;
+        foreach (QString file, files) {
+            QFileInfo fi(file);
+            if (fi.exists()) {
+                size += fi.size();
+            }
+        }
+
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QString defaultpath;
@@ -1687,6 +1709,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
+        batchJob->setBatchTotalSize(size);
         batchJob->setAutoSubfolder(true);
         batchJob->setDestinationFolder(curpath);
         batchJob->setPreservePaths(true);
@@ -1770,17 +1793,19 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 m_strDecompressFileName = fileinfo.fileName();
                 m_pUnCompressPage->SetDefaultFile(fileinfo);
                 m_pUnCompressPage->setdefaultpath(fileinfo.path());
-                loadArchive(filepath);
-                m_ePageID = PAGE_UNZIPPROGRESS;
+//                loadArchive(filepath);
+                rightMenuExtractHere(filepath);
+//                m_ePageID = PAGE_UNZIPPROGRESS;
                 m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-                refreshPage();
+//                refreshPage();
             } else {
                 m_pCompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
                 m_ePageID = PAGE_UNZIP_FAIL;
                 refreshPage();
+                show();
             }
         }
-        show();
+//        show();
     } else if (files.last() == QStringLiteral("extract_split")) {
         QString filepath = files.at(0);
         filepath = filepath.left(filepath.length() - 3) + "001";

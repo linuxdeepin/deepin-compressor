@@ -32,6 +32,7 @@ public:
     void setOpenDestinationAfterExtraction(bool value);
     bool preservePaths() const;
     void setPreservePaths(bool value);
+    void setBatchTotalSize(qint64 size);    //批量解压压缩包总大小
 
 Q_SIGNALS:
     void batchProgress(KJob *job, ulong progress);
@@ -54,11 +55,15 @@ private:
     QMap<KJob *, QPair<QString, QString> > m_fileNames;
     bool m_autoSubfolder;
 
-    QVector<QUrl> m_inputs;
+    QList<QUrl> m_inputs;
     QString m_destinationFolder;
     QStringList m_failedFiles;
     bool m_preservePaths;
     bool m_openDestinationAfterExtraction;
+
+    qint64 m_batchTotalSize;     //批量解压压缩包总大小
+    int m_numOfExtracting = 0;   //解压到第几个压缩文件
+    ulong m_lastPercent = 0;    //解压完成的压缩文件占总大小的百分比
 };
 
 #endif // BATCHEXTRACT_H

@@ -455,9 +455,9 @@ void BatchExtractJob::slotLoadingProgress(double progress)
 {
     // Progress from LoadJob counts only for 50% of the BatchExtractJob's duration.
 
-    m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
+//    m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
     qDebug() << m_lastPercentage;
-    setPercent(m_lastPercentage);
+//    setPercent(m_lastPercentage);
 }
 
 void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
@@ -468,8 +468,8 @@ void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
 void BatchExtractJob::slotExtractProgress(double progress)
 {
     // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
-    qDebug() << m_lastPercentage + static_cast<unsigned long>(progress);
-    setPercent(m_lastPercentage + static_cast<unsigned long>(progress));
+//    qDebug() << m_lastPercentage + static_cast<unsigned long>(progress);
+    setPercent(m_lastPercentage + static_cast<unsigned long>(progress * 100));
 }
 
 void BatchExtractJob::slotLoadingFinished(KJob *job)
