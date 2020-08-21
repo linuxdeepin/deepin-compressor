@@ -112,9 +112,7 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
     setAcceptDrops(true);
 
     initTitleBar();
-    //m_startTimer = startTimer(500);
-    InitUI();
-    InitConnection();
+    m_startTimer = startTimer(500);
 
     loadWindowState();
 }
@@ -429,18 +427,19 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     } else */
-    /*qDebug() << "timerEvent";
+    // qDebug() << "timerEvent";
     if (m_startTimer == event->timerId()) {
         if (!m_initflag) {
             qDebug() << "timerEvent******************InitUI";
             InitUI();
             InitConnection();
             m_initflag = true;
+            qDebug() << "timerEvent******************InitUI end";
         }
 
         killTimer(m_startTimer);
         m_startTimer = 0;
-    } else*/ if (m_iWatchTimerID == event->timerId()) {     // 监控待压缩的本地文件
+    } else if (m_iWatchTimerID == event->timerId()) {    // 监控待压缩的本地文件
         if (m_pCompressPage == nullptr) {
             return;
         }
@@ -1483,13 +1482,14 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-//    qDebug() << "onRightMenuSelected";
-//    if (!m_initflag) {
-//        qDebug() << "onRightMenuSelected******************InitUI";
-//        InitUI();
-//        InitConnection();
-//        m_initflag = true;
-//    }
+    // qDebug() << "onRightMenuSelected";
+    if (!m_initflag) {
+        qDebug() << "onRightMenuSelected******************InitUI";
+        InitUI();
+        InitConnection();
+        m_initflag = true;
+        qDebug() << "onRightMenuSelected******************InitUI end";
+    }
     foreach (QString file, files) {
         m_rightMenuList.append(file);
     }
