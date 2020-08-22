@@ -269,13 +269,13 @@ bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, con
 {
     m_tempFile.setFileName(filename());
     if (!m_tempFile.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
-        emit error(tr("@info", "Failed to create a temporary file for writing data."));
+        emit error(("Failed to create a temporary file for writing data."));
         return false;
     }
 
     m_archiveWriter.reset(archive_write_new());
     if (!(m_archiveWriter.data())) {
-        emit error(tr("The archive writer could not be initialized."));
+        emit error(("The archive writer could not be initialized."));
         return false;
     }
 
@@ -300,7 +300,7 @@ bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, con
     }
 
     if (archive_write_open_fd(m_archiveWriter.data(), m_tempFile.handle()) != ARCHIVE_OK) {
-        emit error(tr("@info", "Could not open the archive for writing entries."));
+        emit error(("Could not open the archive for writing entries."));
         return false;
     }
 
@@ -356,7 +356,7 @@ bool ReadWriteLibarchivePlugin::initializeWriterFilters()
     // Libarchive emits a warning for lrzip due to using external executable.
     if ((requiresExecutable && ret != ARCHIVE_WARN) ||
             (!requiresExecutable && ret != ARCHIVE_OK)) {
-        emit error(tr("@info", "Could not set the compression method."));
+        emit error(("Could not set the compression method."));
         return false;
     }
 
@@ -396,7 +396,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
     // Libarchive emits a warning for lrzip due to using external executable.
     if ((requiresExecutable && ret != ARCHIVE_WARN) ||
             (!requiresExecutable && ret != ARCHIVE_OK)) {
-        emit error(tr("@info", "Could not set the compression method."));
+        emit error(("Could not set the compression method."));
         return false;
     }
 
@@ -410,7 +410,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
 
 
         if (ret != ARCHIVE_OK) {
-            emit error(tr("@info", "Could not set the compression level."));
+            emit error(("Could not set the compression level."));
             return false;
         }
     }
@@ -620,7 +620,7 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
         break;
     case ARCHIVE_FAILED:
     case ARCHIVE_FATAL:
-        emit error(tr("@info", "Could not compress entry, operation aborted."));
+        emit error(("Could not compress entry, operation aborted."));
         return false;
     default:
         break;
@@ -641,7 +641,7 @@ bool ReadWriteLibarchivePlugin::writeEntry_Add(archive_entry *entry, FileProgres
         break;
     case ARCHIVE_FAILED:
     case ARCHIVE_FATAL:
-        emit error(tr("@info", "Could not compress entry, operation aborted."));
+        emit error(("Could not compress entry, operation aborted."));
         return false;
     default:
         break;
@@ -699,8 +699,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         if (QFileInfo(relativeName).isDir()) {
             QDir::cleanPath(absoluteDestinationPath);
         }
-        emit error(tr("@info Error in a message box",
-                      "Could not compress entry."));
+        emit error(("Could not compress entry."));
 
         archive_entry_free(entry);
 
@@ -770,8 +769,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         }
     } else {
 
-        emit error(tr("@info Error in a message box",
-                      "Could not compress entry."));
+        emit error(("Could not compress entry."));
 
         archive_entry_free(entry);
 
@@ -846,8 +844,7 @@ bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QSt
         copyData(absoluteFilename, m_archiveWriter.data(), info, partialprogress);
     } else {
 
-        emit error(tr("@info Error in a message box",
-                      "Could not compress entry."));
+        emit error(("Could not compress entry."));
 
         archive_entry_free(entry);
 

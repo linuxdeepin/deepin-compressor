@@ -172,17 +172,17 @@ bool CliPlugin::readExtractLine(const QString &line)
 
     QRegularExpressionMatch unsupCompMethodMatch = rxUnsupCompMethod.match(line);
     if (unsupCompMethodMatch.hasMatch()) {
-        emit error(tr("Extraction failed due to unsupported compression method (%1)."));
+        emit error(("Extraction failed due to unsupported compression method (%1)."));
         return false;
     }
 
     if (rxUnsupEncMethod.match(line).hasMatch()) {
-        emit error(tr("Extraction failed due to unsupported encryption method."));
+        emit error(("Extraction failed due to unsupported encryption method."));
         return false;
     }
 
     if (rxBadCRC.match(line).hasMatch()) {
-        emit error(tr("Extraction failed due to one or more corrupt files. Any extracted files may be damaged."));
+        emit error(("Extraction failed due to one or more corrupt files. Any extracted files may be damaged."));
         return false;
     }
 
@@ -305,7 +305,7 @@ QString CliPlugin::convertCompressionMethod(const QString &method)
         return QStringLiteral("XZ");
     } else if (method == QLatin1String("u099")) {
         emit encryptionMethodFound(QStringLiteral("AES"));
-        return tr("referred to compression method", "unknown");
+        return ("referred to compression method");
     }
     return method;
 }

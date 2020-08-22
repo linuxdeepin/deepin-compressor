@@ -217,7 +217,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             return true;
         }
 
-        emit error(tr("Listing the archive failed."));
+        emit error(("Listing the archive failed."));
         return false;
     } else if (line.startsWith(QLatin1String("ERROR:")) && line.contains(QLatin1String("Can not open the file as archive"))) {
         //  7z l -slt -p123 1G压缩文件.7z.001
@@ -226,7 +226,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             return true;
         }
 
-        emit error(tr("Listing the archive failed."));
+        emit error(("Listing the archive failed."));
         return false;
     }
 
@@ -419,13 +419,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
 bool Cli7zPlugin::readExtractLine(const QString &line)
 {
     if (line.startsWith(QLatin1String("ERROR: E_FAIL"))) {
-        emit error(tr("Extraction failed due to an unknown error."));
+        emit error(("Extraction failed due to an unknown error."));
         return false;
     }
 
     if (line.startsWith(QLatin1String("ERROR: CRC Failed")) ||
             line.startsWith(QLatin1String("ERROR: Headers Error"))) {
-        emit error(tr("Extraction failed due to one or more corrupt files. Any extracted files may be damaged."));
+        emit error(("Extraction failed due to one or more corrupt files. Any extracted files may be damaged."));
         return false;
     }
 
@@ -436,7 +436,7 @@ bool Cli7zPlugin::readDeleteLine(const QString &line)
 {
     if (line.startsWith(QLatin1String("Error: ")) &&
             line.endsWith(QLatin1String(" is not supported archive"))) {
-        emit error(tr("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
+        emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
         return false;
     }
 

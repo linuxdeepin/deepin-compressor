@@ -142,7 +142,7 @@ bool CliRarPlugin::readListLine(const QString &line)
 bool CliRarPlugin::handleUnrar5Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
-        emit error(tr("Failed to find all archive volumes."));
+        emit error(("Failed to find all archive volumes."));
         return false;
     }
 
@@ -338,7 +338,7 @@ void CliRarPlugin::handleUnrar5Entry()
 bool CliRarPlugin::handleUnrar4Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
-        emit error(tr("Failed to find all archive volumes."));
+        emit error(("Failed to find all archive volumes."));
         return false;
     }
 
@@ -358,13 +358,13 @@ bool CliRarPlugin::handleUnrar4Line(const QString &line)
     case ParseStateComment:
         // unrar 4 outputs the following string when opening v5 RAR archives.
         if (line == QLatin1String("Unsupported archive format. Please update RAR to a newer version.")) {
-            emit error(tr("Your unrar executable is version %1, which is too old to handle this archive. Please update to a more recent version."));
+            emit error(("Your unrar executable is version %1, which is too old to handle this archive. Please update to a more recent version."));
             return false;
         }
 
         // unrar 3 reports a non-RAR archive when opening v5 RAR archives.
         if (line.endsWith(QLatin1String(" is not RAR archive"))) {
-            emit error(tr("Unrar reported a non-RAR archive. The installed unrar version (%1) is old. Try updating your unrar."));
+            emit error(("Unrar reported a non-RAR archive. The installed unrar version (%1) is old. Try updating your unrar."));
             return false;
         }
 
@@ -570,12 +570,12 @@ bool CliRarPlugin::readExtractLine(const QString &line)
 {
     const QRegularExpression rxCRC(QStringLiteral("CRC failed"));
     if (rxCRC.match(line).hasMatch()) {
-        emit error(tr("One or more wrong checksums"));
+        emit error(("One or more wrong checksums"));
         return false;
     }
 
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
-        emit error(tr("Failed to find all archive volumes."));
+        emit error(("Failed to find all archive volumes."));
         return false;
     }
 

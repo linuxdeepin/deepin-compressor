@@ -366,7 +366,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
                 break;
 
             case ARCHIVE_FATAL:
-                emit error(tr("@info", "Fatal error, extraction aborted."));
+                emit error(("Fatal error, extraction aborted."));
                 return false;
             default:
                 break;
@@ -402,7 +402,7 @@ bool LibarchivePlugin::initializeReader()
     m_archiveReader.reset(archive_read_new());
 
     if (!(m_archiveReader.data())) {
-        emit error(tr("The archive reader could not be initialized."));
+        emit error(("The archive reader could not be initialized."));
         return false;
     }
 
@@ -415,7 +415,7 @@ bool LibarchivePlugin::initializeReader()
     }
 
     if (archive_read_open_filename(m_archiveReader.data(), QFile::encodeName(filename()).constData(), 10240) != ARCHIVE_OK) {
-        emit error(tr("@info", "Archive corrupted or insufficient permissions."));
+        emit error(("Archive corrupted or insufficient permissions."));
         return false;
     }
 

@@ -72,7 +72,7 @@ bool CliPlugin::readListLine(const QString &line)
     const QRegularExpression rx(QStringLiteral("Failed! \\((.+)\\)$"));
 
     if (rx.match(line).hasMatch()) {
-        emit error(tr("Listing the archive failed."));
+        emit error(("Listing the archive failed."));
         return false;
     }
 
@@ -84,7 +84,7 @@ bool CliPlugin::readExtractLine(const QString &line)
     const QRegularExpression rx(QStringLiteral("Failed! \\((.+)\\)$"));
 
     if (rx.match(line).hasMatch()) {
-        emit error(tr("Extraction failed."));
+        emit error(("Extraction failed."));
         return false;
     }
 
@@ -118,7 +118,7 @@ bool CliPlugin::handleLine(const QString &line)
             m_jsonOutput += line + QLatin1Char('\n');
         } catch (const std::bad_alloc &) {
             m_jsonOutput.clear();
-            emit error(tr("Not enough memory for loading the archive."));
+            emit error(("Not enough memory for loading the archive."));
             return false;
         }
     }
@@ -169,7 +169,7 @@ void CliPlugin::processFinished(int exitCode, QProcess::ExitStatus /*exitStatus*
 
         // lsar -json exits with error code 1 if the archive is header-encrypted and the password is wrong.
         if (exitCode == 1) {
-            emit error(tr("Wrong password."));
+            emit error(("Wrong password."));
             emit finished(false);
             setPassword(QString());
             return;

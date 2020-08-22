@@ -90,7 +90,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     zip_error_init_with_code(&err, errcode);
     m_bAllEntry = false;
     if (!archive) {
-        //emit error(tr("Failed to open archive: %1"));
+        //emit error(("Failed to open archive: %1"));
         //return false;
         m_bAllEntry = true;
         return minizip_list();
@@ -206,7 +206,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_CREATE, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
@@ -223,7 +223,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
         if (QFileInfo(e->fullPath()).isDir()) {
             if (!writeEntry(archive, e->fullPath(), destination, options, true, strPath)) {
                 if (zip_close(archive)) {
-                    emit error(tr("Failed to write archive."));
+                    emit error(("Failed to write archive."));
                     return false;
                 }
                 return false;
@@ -240,7 +240,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                 if (QFileInfo(path).isDir()) {
                     if (!writeEntry(archive, path, destination, options, true, strPath)) {
                         if (zip_close(archive)) {
-                            emit error(tr("Failed to write archive."));
+                            emit error(("Failed to write archive."));
                             return false;
                         }
                         return false;
@@ -248,7 +248,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                 } else {
                     if (!writeEntry(archive, path, destination, options, false, strPath)) {
                         if (zip_close(archive)) {
-                            emit error(tr("Failed to write archive."));
+                            emit error(("Failed to write archive."));
                             return false;
                         }
                         return false;
@@ -259,7 +259,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
         } else {
             if (!writeEntry(archive, e->fullPath(), destination, options, false, strPath)) {
                 if (zip_close(archive)) {
-                    emit error(tr("Failed to write archive."));
+                    emit error(("Failed to write archive."));
                     return false;
                 }
                 return false;
@@ -276,7 +276,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
     zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);
 
     if (zip_close(archive)) {
-        emit error(tr("Failed to write archive."));
+        emit error(("Failed to write archive."));
         return false;
     }
 
@@ -350,7 +350,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
         index = zip_file_add(archive, str.toUtf8().constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
         if (index == -1) {
             zip_source_free(src);
-            emit error(tr("Failed to add entry: %1"));
+            emit error(("Failed to add entry: %1"));
             return false;
         }
     }
@@ -390,7 +390,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
     }
     const int compLevel = options.isCompressionLevelSet() ? options.compressionLevel() : 6;
     if (zip_set_file_compression(archive, index, compMethod, compLevel) != 0) {
-        emit error(tr("Failed to set compression options for entry: %1"));
+        emit error(("Failed to set compression options for entry: %1"));
         return false;
     }
 
@@ -436,13 +436,13 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     char *fileName = QFile::encodeName(filename()).data();
     zip_t *archive = zip_open(fileName, 0, &errcode);
     if (errcode != ZIP_ER_OK) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
@@ -474,7 +474,7 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     }
 
     if (zip_close(archive)) {
-        emit error(tr("Failed to write archive."));
+        emit error(("Failed to write archive."));
         return false;
     }
     return true;
@@ -491,7 +491,7 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
 
     if (QThread::currentThread()->isInterruptionRequested()) {
         if (zip_close(archive)) {
-            emit error(tr("Failed to write archive."));
+            emit error(("Failed to write archive."));
             return false;
         }
         return false;
@@ -499,9 +499,9 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
 
     int statusDel = zip_delete(archive, index);
     if (statusDel == -1) {
-        emit error(tr("Failed to delete entry: %1"));
+        emit error(("Failed to delete entry: %1"));
         if (zip_close(archive)) {
-            emit error(tr("Failed to write archive."));
+            emit error(("Failed to write archive."));
             return false;
         }
 
@@ -541,9 +541,9 @@ bool LibzipPlugin::deleteEntry(QString file, int index/*Archive::Entry *pCurEntr
     //        int ii = statBuffer.index;
         int statusDel = zip_delete(archive, indexDel);
         if (statusDel == -1) {
-            emit error(tr("Failed to delete entry: %1"));
+            emit error(("Failed to delete entry: %1"));
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
@@ -563,7 +563,7 @@ bool LibzipPlugin::addComment(const QString &comment)
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
@@ -573,7 +573,7 @@ bool LibzipPlugin::addComment(const QString &comment)
     }
 
     if (zip_close(archive)) {
-        emit error(tr("Failed to write archive."));
+        emit error(("Failed to write archive."));
         return false;
     }
 
@@ -931,7 +931,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_RDONLY, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-//        emit error(tr("Failed to open archive: %1"));
+//        emit error(("Failed to open archive: %1"));
 //        return false;
         return minizip_extractFiles(files, destinationDirectory, options);
     }
@@ -1144,7 +1144,7 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
     if (QDir().exists(fileInfo.path()) == false) {
         //extract = true;
         if (!QDir().mkpath(fileInfo.path())) {
-            emit error(tr("Failed to create directory: %1"));
+            emit error(("Failed to create directory: %1"));
             return enum_extractEntryStatus::FAIL;
         }
 
@@ -1229,7 +1229,7 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
         }
 
         if (file.open(QIODevice::WriteOnly) == false) {
-            emit error(tr("Failed to open file for writing: %1"));
+            emit error(("Failed to open file for writing: %1"));
             return enum_extractEntryStatus::FAIL;
         }
 
@@ -1276,7 +1276,7 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
                 file.close();
                 return enum_extractEntryStatus::PSD_NEED;
             } else {
-                emit error(tr("Failed to read data for entry: %1"));
+                emit error(("Failed to read data for entry: %1"));
                 file.close();
                 return enum_extractEntryStatus::FAIL;
             }
@@ -1296,14 +1296,14 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
 
             const auto readBytes = zip_fread(zipFile, buf, kb);
             if (readBytes < 0) {
-                emit error(tr("Failed to read data for entry: %1"));
+                emit error(("Failed to read data for entry: %1"));
                 file.close();
                 zip_fclose(zipFile);
                 return enum_extractEntryStatus::FAIL;
             }
 
             if (out.writeRawData(buf, readBytes) != readBytes) {
-                emit error(tr("Failed to write data for entry: %1"));
+                emit error(("Failed to write data for entry: %1"));
                 file.close();
                 zip_fclose(zipFile);
                 return enum_extractEntryStatus::FAIL;
@@ -1323,7 +1323,7 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
 
         //const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
         if (index == -1) {
-            emit error(tr("Failed to locate entry: %1"));
+            emit error(("Failed to locate entry: %1"));
             file.close();
             zip_fclose(zipFile);
             return enum_extractEntryStatus::FAIL;
@@ -1332,7 +1332,7 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
         zip_uint8_t opsys;
         zip_uint32_t attributes;
         if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-            emit error(tr("Failed to read metadata for entry: %1"));
+            emit error(("Failed to read metadata for entry: %1"));
             file.close();
             zip_fclose(zipFile);
             return enum_extractEntryStatus::FAIL;
@@ -1358,14 +1358,14 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
     } else {
         //const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
         if (index == -1) {
-            emit error(tr("Failed to locate entry: %1"));
+            emit error(("Failed to locate entry: %1"));
             return enum_extractEntryStatus::FAIL;
         }
 
         zip_uint8_t opsys;
         zip_uint32_t attributes;
         if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-            emit error(tr("Failed to read metadata for entry: %1"));
+            emit error(("Failed to read metadata for entry: %1"));
             return enum_extractEntryStatus::FAIL;
         }
 
@@ -1402,7 +1402,7 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::En
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
@@ -1416,21 +1416,21 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::En
         const int index = zip_name_locate(archive, filePaths.at(i).toUtf8().constData(), ZIP_FL_ENC_GUESS);
         if (index == -1) {
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
-            emit error(tr("Failed to move entry: %1"));
+            emit error(("Failed to move entry: %1"));
             return false;
         }
 
         if (zip_file_rename(archive, index, destPaths.at(i).toUtf8().constData(), ZIP_FL_ENC_GUESS) == -1) {
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
-            emit error(tr("Failed to move entry: %1"));
+            emit error(("Failed to move entry: %1"));
             return false;
         }
 
@@ -1440,7 +1440,7 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::En
     }
 
     if (zip_close(archive)) {
-        emit error(tr("Failed to write archive."));
+        emit error(("Failed to write archive."));
         return false;
     }
 
@@ -1457,7 +1457,7 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
@@ -1478,17 +1478,17 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
         const int srcIndex = zip_name_locate(archive, filePaths.at(i).toUtf8().constData(), ZIP_FL_ENC_GUESS);
         if (srcIndex == -1) {
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
-            emit error(tr("Failed to copy entry: %1"));
+            emit error(("Failed to copy entry: %1"));
             return false;
         }
 
         zip_source_t *src = zip_source_zip(archive, archive, srcIndex, 0, 0, -1);
         if (!src) {
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
@@ -1498,9 +1498,9 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
         const int destIndex = zip_file_add(archive, dest.toUtf8().constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
         if (destIndex == -1) {
             zip_source_free(src);
-            emit error(tr("Failed to add entry: %1"));
+            emit error(("Failed to add entry: %1"));
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
@@ -1511,9 +1511,9 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
         zip_uint8_t opsys;
         zip_uint32_t attributes;
         if (zip_file_get_external_attributes(archive, srcIndex, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-            emit error(tr("Failed to read metadata for entry: %1"));
+            emit error(("Failed to read metadata for entry: %1"));
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
@@ -1522,9 +1522,9 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
 
         // Set permissions on dest entry.
         if (zip_file_set_external_attributes(archive, destIndex, ZIP_FL_UNCHANGED, opsys, attributes) != 0) {
-            emit error(tr("Failed to set metadata for entry: %1"));
+            emit error(("Failed to set metadata for entry: %1"));
             if (zip_close(archive)) {
-                emit error(tr("Failed to write archive."));
+                emit error(("Failed to write archive."));
                 return false;
             }
 
@@ -1536,7 +1536,7 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
 
     if (zip_close(archive)) {
-        emit error(tr("Failed to write archive."));
+        emit error(("Failed to write archive."));
         return false;
     }
 
@@ -1736,14 +1736,14 @@ bool LibzipPlugin::minizip_list(bool /*isbatch*/)
     // Open the zip file
     unzFile zipfile = unzOpen(fileName.toUtf8().constData());
     if (zipfile == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
     // Get info about the zip file
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK) {
-        emit error(tr("could not read file global info"));
+        emit error(("could not read file global info"));
         unzClose(zipfile);
     }
 
@@ -1837,14 +1837,14 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
     // Open the zip file
     unzFile zipfile = unzOpen(filename().toUtf8().constData());
     if (zipfile == nullptr) {
-        emit error(tr("Failed to open archive: %1"));
+        emit error(("Failed to open archive: %1"));
         return false;
     }
 
     // Get info about the zip file
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK) {
-        emit error(tr("could not read file global info"));
+        emit error(("could not read file global info"));
         unzClose(zipfile);
     }
 
@@ -2038,7 +2038,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
     if (QDir().exists(fileInfo.path()) == false) {
         //extract = true;
         if (!QDir().mkpath(fileInfo.path())) {
-            emit error(tr("Failed to create directory: %1"));
+            emit error(("Failed to create directory: %1"));
             return false;
         }
 
@@ -2109,7 +2109,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
         }
 
         if (file.open(QIODevice::WriteOnly) == false) {
-            emit error(tr("Failed to open file for writing: %1"));
+            emit error(("Failed to open file for writing: %1"));
             return false;
         }
 
@@ -2144,13 +2144,13 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
 
             const auto readBytes = unzReadCurrentFile(zipfile, buf, kb);
             if (readBytes < 0) {
-                emit error(tr("Failed to read data for entry: %1"));
+                emit error(("Failed to read data for entry: %1"));
                 file.close();
                 return false;
             }
 
             if (out.writeRawData(buf, readBytes) != readBytes) {
-                emit error(tr("Failed to write data for entry: %1"));
+                emit error(("Failed to write data for entry: %1"));
                 file.close();
                 return false;
             }

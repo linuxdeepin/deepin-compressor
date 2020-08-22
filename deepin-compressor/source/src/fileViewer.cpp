@@ -1334,7 +1334,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         QString sourceFileName = sourceArchiveList.last();
 
         QString warningStr0 = QString(tr("update file '%1' from package '%2'?")).arg(getShortName(destFileName)).arg(getShortName(sourceFileName));
-        QString warningStr1 = QString(tr("one file has been modified by other application.if you update package file, your modifications will lose."));
+        QString warningStr1 = QString(tr("one file has been modified by other application.If you don't update package file, your modifications will lose."));
         QString warningStr2 = QString(tr("update file '%1' from package '%2'?")).arg(destFileName).arg(sourceFileName);
 
         m_ActionInfo.mode = (SUBACTION_MODE)mode;
