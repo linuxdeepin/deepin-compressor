@@ -50,7 +50,7 @@ find_package(Qt5Concurrent)
 find_package(Qt5Svg REQUIRED SvgWidgets)
 find_package(KF5Codecs REQUIRED)
 find_package(ZLIB REQUIRED)
-
+find_package(Qt5LinguistTools REQUIRED)
 include(FindPkgConfig)
 
 
@@ -95,7 +95,7 @@ include_directories(${PROJECT_SOURCE_DIR}/source/inc/openwithdialog)
 set(c_files 
 	source/src/archivemodel.cpp
 	source/src/archivesortfiltermodel.cpp
-	source/src/batchcompress.cpp
+        source/src/batchcompress.cpp
 	source/src/batchextract.cpp
 	source/src/compressor_fail.cpp
 	source/src/compressor_success.cpp
@@ -184,25 +184,36 @@ set(h_files
 
 
 file(GLOB_RECURSE res_files *.qrc)
-file(GLOB_RECURSE ts_files ../translations/*.ts)
-
-#QT5_WRAP_CPP(HEADER_MOC ${h_files})
+set(TS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../translations")
+file( GLOB TS_FILES    ${TS_DIR}/*.ts)
 
 QT5_ADD_RESOURCES(QRC_MOC ${res_files})
-#QT5_ADD_TRANSLATION(QM_FILES ${ts_files})
+
+find_program(LUPDATE_EXECUTABLE lupdate)
+
+foreach(_ts_file ${TS_FILES})
+    execute_process(
+        COMMAND ${LUPDATE_EXECUTABLE} -recursive ${CMAKE_SOURCE_DIR} -ts ${_ts_file})
+    message("${LUPDATE_EXECUTABLE} -recursive ${CMAKE_SOURCE_DIR} -ts ${_ts_file}")
+endforeach()
+#lupdate end
+
+file (GLOB APP_TS_FILES ../translations/*.ts)
+#foreach(i ${APP_TS_FILES})
+#    message(${i})
+#    endforeach()
+qt5_create_translation(APP_QM_FILES ${APP_TS_FILES} ${APP_QM_FILES})
 
 #INCLUDE(${QT_USE_FILE})
 #ADD_DEFINITIONS(${QT_DEFINITIONS})
 
 #9.链接编译的lib
-#link_directories("/usr/lib/compressor-lib")
-
 link_directories(compressor-lib compressor-interface)
 link_directories(compressor-lib compressor-ChardetDetector)
 
 
 #10.生成可执行程序
-add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${ts_files})
+add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_FILES} ${APP_QM_FILES})
 
 
 
@@ -220,22 +231,11 @@ target_link_libraries(${EXE_NAME}  ${LIBS_INCLUDE_DIRS})
 #message(${LIBS_INCLUDE_DIRS})
 target_link_libraries(${EXE_NAME}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::Svg  KF5::Codecs)
 
-#TARGET_LINK_LIBRARIES(${EXE_NAME}  ${PROJECT_SOURCE_DIR}/../output/compressor-lib/libcompressor-interface.so)
+
 target_link_libraries(${EXE_NAME}  compressor-interface)
 target_link_libraries(${EXE_NAME}  compressor-ChardetDetector)
 
-#target_link_libraries(${EXE_NAME} cli7zplugin)
-#target_link_libraries(${EXE_NAME} clirarplugin)
-#target_link_libraries(${EXE_NAME} cliunarchiverplugin)
-#target_link_libraries(${EXE_NAME} clizipplugin)
-#target_link_libraries(${EXE_NAME} readwritelibarchiveplugin)
-#target_link_libraries(${EXE_NAME} readonlylibarchiveplugin)
-#target_link_libraries(${EXE_NAME} bz2plugin)
-#target_link_libraries(${EXE_NAME} gzplugin)
-#target_link_libraries(${EXE_NAME} xzplugin)
-#target_link_libraries(${EXE_NAME} libzipplugin)
-#target_link_libraries(${EXE_NAME} zip)
-#target_link_libraries(${EXE_NAME} minizip)
+
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
@@ -256,9 +256,7 @@ file(GLOB INSTALL_QM_FILES ../translations/*.qm)
 install(FILES ${INSTALL_QM_FILES} 
 	DESTINATION /usr/share/deepin-compressor/translations)
 
-#file(GLOB INSTALL_DESKTOP_FILES *.desktop)
-#install(FILES ${INSTALL_DESKTOP_FILES}
-#		 DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
+
 # for i in `ls *.desktop`; do echo "install(FILES ${i} DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)";done
 
 install(FILES deepin-compress.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
