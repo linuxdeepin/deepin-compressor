@@ -123,8 +123,12 @@ public:
     void setPreviousButtonVisible(bool visible);
 
 protected:
+    //bool event(QEvent *event) override;
+
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
+    //void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
@@ -135,6 +139,7 @@ signals:
     void sigdragLeave(QString path);
     void signalDrop(QStringList file);
     void sigTabPress();
+    void signalDoubleClicked(const QModelIndex &);
 
 public slots:
     void slotDragpath(QUrl url);
@@ -147,6 +152,16 @@ private:
     DFileDragServer *s = nullptr;
     QString m_path;
     Qt::FocusReason m_reson;
+    bool m_isPressed;
+    // 记录触摸按下事件，在mouse move事件中使用，用于判断手指移动的距离，当大于
+    // QPlatformTheme::TouchDoubleTapDistance 的值时认为触发触屏滚动
+    //QPoint lastTouchBeginPos;
+    // QPointF m_lastTouchBeginPos;
+    QTime m_lastTouchTime;
+
+public:
+    bool m_bTouch = false;
+    bool m_bDrag = false;
 
 public:
     LogViewHeaderView *header_;
@@ -155,6 +170,9 @@ public:
 protected:
     void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+
+    // QWidget interface
+protected:
 };
 
 struct SortInfo {
@@ -204,7 +222,7 @@ public:
     QVector<Archive::Entry *> filesForIndexes(const QModelIndexList &list) const;
     QModelIndexList addChildren(const QModelIndexList &list) const;
 
-    void startDrag(Qt::DropActions supportedActions);
+    // void startDrag(Qt::DropActions supportedActions);
 
     void deleteCompressFile();
     void resetTempFile();
@@ -224,6 +242,7 @@ public slots:
 protected:
     void resizecolumn();
     void resizeEvent(QResizeEvent *size) override;
+    void showEvent(QShowEvent *event) override;
 
 protected slots:
     void slotCompressRowDoubleClicked(const QModelIndex index);

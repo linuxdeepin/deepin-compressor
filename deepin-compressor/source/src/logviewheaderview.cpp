@@ -242,41 +242,52 @@ void LogViewHeaderView::resizeEvent(QResizeEvent *event)
 
 void LogViewHeaderView::paintEvent(QPaintEvent *event)
 {
-//    QPainter painter(viewport());
-//    painter.save();
+    QPainter painter(viewport());
+    painter.save();
 
-//    QWidget *wnd = DApplication::activeWindow();
-//    DPalette::ColorGroup cg;
-//    if (!wnd) {
-//        cg = DPalette::Inactive;
-//    } else {
-//        cg = DPalette::Active;
-//    }
+    //    QWidget *wnd = DApplication::activeWindow();
+    //    DPalette::ColorGroup cg;
+    //    if (!wnd) {
+    //        cg = DPalette::Inactive;
+    //    } else {
+    //        cg = DPalette::Active;
+    //    }
 
-//    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
-//    DPalette palette = dAppHelper->applicationPalette();
+    //    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    //    DPalette palette = dAppHelper->applicationPalette();
 
-//    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+    //    DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
 
-//    QBrush bgBrush(palette.color(cg, DPalette::Base));
+    //    QBrush bgBrush(palette.color(cg, DPalette::Base));
 
-//    QStyleOptionHeader option;
-//    initStyleOption(&option);
-//    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
+    //    QStyleOptionHeader option;
+    //    initStyleOption(&option);
+    //    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
 
-//    QRect rect = viewport()->rect();
-//    rect.setHeight(36);
-//    QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
-//    QRectF subRect(rect.x(), rect.y() + rect.height(), rect.width(), rect.height());
-//    QPainterPath clipPath, subPath;
-//    clipPath.addRoundedRect(clipRect, radius, radius);
-//    subPath.addRect(subRect);
-//    clipPath = clipPath.subtracted(subPath);
+    QRect rect = viewport()->rect();
+    //    rect.setHeight(36);
+    //    QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
+    //    QRectF subRect(rect.x(), rect.y() + rect.height(), rect.width(), rect.height());
+    //    QPainterPath clipPath, subPath;
+    //    clipPath.addRoundedRect(clipRect, radius, radius);
+    //    subPath.addRect(subRect);
+    //    clipPath = clipPath.subtracted(subPath);
 
-//    painter.fillPath(clipPath, bgBrush);
+    //    painter.fillPath(clipPath, bgBrush);
 
-//    painter.restore();
+    //    DPalette palette = DApplicationHelper::instance()->palette(viewport());
+    //    palette.setColor(DPalette::Background, DPalette::Base);
+    //    painter.fillRect(rect, palette.itemBackground());
+    //    painter.restore();
 
+    //    DPalette pa = DApplicationHelper::instance()->palette(this);
+    //    pa.setBrush(DPalette::ItemBackground, pa.base());
+    //    pa.setBrush(DPalette::Background, pa.base());
+
+    //    DApplicationHelper::instance()->setPalette(this, pa);
+    //    this->setAutoFillBackground(true);
+
+    painter.restore();
     DHeaderView::paintEvent(event);
 }
 

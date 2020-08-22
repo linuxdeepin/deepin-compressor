@@ -55,6 +55,9 @@
 #include <QDrag>
 #include <QApplication>
 #include <QIcon>
+#include <QEvent>
+#include <QScrollBar>
+#include <QScroller>
 
 #include <unistd.h>
 
@@ -216,6 +219,9 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 MyTableView::MyTableView(QWidget *parent)
     : DTableView(parent)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    //QScroller::grabGesture(this->viewport(), QScroller::TouchGesture);
+    // QScroller::grabGesture(this->viewport(), QScroller::LeftMouseButtonGesture);
     setFocusPolicy(Qt::StrongFocus);
     setMinimumSize(580, 300);
     header_ = new LogViewHeaderView(Qt::Horizontal, this);
@@ -237,17 +243,31 @@ MyTableView::MyTableView(QWidget *parent)
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
+    //setSelectionMode(QAbstractItemView::MultiSelection);
 }
 
 void MyTableView::setPreviousButtonVisible(bool visible)
 {
+    qDebug() << "setPreviousButtonVisible";
     header_->gotoPreviousLabel_->setVisible(visible);
     updateGeometries();
+    //QRect rect = geometry();
+    //mapToGlobal();
+    //    if (visible) {
+    //        move(mapFromParent(QPoint(rect.x(), rect.y() + header_->gotoPreviousLabel_->height())));
+    //        resize(width(), height() - header_->gotoPreviousLabel_->height());
+    //        //setGeometry(rect.x(), rect.y() + header_->gotoPreviousLabel_->height(), rect.width(), rect.height() - header_->gotoPreviousLabel_->height());
+    //    } else {
+    //        move(mapFromParent(QPoint(rect.x(), rect.y() - header_->gotoPreviousLabel_->height())));
+    //        resize(width(), height() + header_->gotoPreviousLabel_->height());
+    //        //setGeometry(rect.x(), rect.y() - header_->gotoPreviousLabel_->height(), rect.width(), rect.height() + header_->gotoPreviousLabel_->height());
+    //    }
 }
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MouseButton::LeftButton) {
+        m_lastTouchTime = QTime::currentTime();
         dragpos = e->pos();
     }
     DTableView::mousePressEvent(e);
@@ -255,6 +275,68 @@ void MyTableView::mousePressEvent(QMouseEvent *e)
 
 void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
+    //    if (dragEnabled() == false) {
+    //        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
+    //        int touchmindistance = 2;
+    //        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
+    //        int touchMaxDistance = 30;
+    //        e->accept();
+    //        double horiDelta = e->pos().x() - dragpos.x();
+    //        double vertDelta = e->pos().y() - dragpos.y();
+    //        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
+    //        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
+    //            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
+    //            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta)) ;
+    //        }
+
+    //        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
+    //            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
+    //            double svalue = 1;
+    //            if (vertDelta > 0) {
+    //                //svalue = svalue;
+    //            } else if (vertDelta < 0) {
+    //                svalue = -svalue;
+    //            } else {
+    //                svalue = 0;
+    //            }
+    //            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
+    //        }
+    //        dragpos = e->pos();
+
+    //        return;
+    //    } else {
+    if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300) { // 移动
+        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
+        int touchmindistance = 2;
+        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
+        int touchMaxDistance = 30;
+        e->accept();
+        double horiDelta = e->pos().x() - dragpos.x();
+        double vertDelta = e->pos().y() - dragpos.y();
+        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
+        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
+            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
+            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
+        }
+
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35)) {
+            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
+            double svalue = 1;
+            if (vertDelta > 0) {
+                //svalue = svalue;
+            } else if (vertDelta < 0) {
+                svalue = -svalue;
+            } else {
+                svalue = 0;
+            }
+            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
+        }
+        dragpos = e->pos();
+
+        return;
+    }
+
+    // }
     if (dragEnabled() == false) {
         return;
     }
@@ -308,6 +390,17 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     }
 
     m_path.clear();
+    DTableView::mouseMoveEvent(e);
+}
+
+void MyTableView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    qDebug() << "mouseDoubleClickEvent";
+    if (event->button() == Qt::MouseButton::LeftButton) {
+        emit signalDoubleClicked(indexAt(event->pos()));
+    }
+
+    DTableView::mouseDoubleClickEvent(event);
 }
 
 void MyTableView::slotDragpath(QUrl url)
@@ -720,9 +813,9 @@ void fileViewer::InitConnection()
 {
     // connect the signals to the slot function.
     if (PAGE_COMPRESS == m_pagetype) {
-        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
+        connect(pTableViewFile, SIGNAL(signalDoubleClicked(const QModelIndex &)), this, SLOT(slotCompressRowDoubleClicked(const QModelIndex &)));
     } else {
-        connect(pTableViewFile, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
+        connect(pTableViewFile, SIGNAL(signalDoubleClicked(const QModelIndex &)), this, SLOT(slotDecompressRowDoubleClicked(const QModelIndex &)));
         connect(pTableViewFile, &MyTableView::sigdragLeave, this, &fileViewer::slotDragLeave);
     }
 
@@ -744,6 +837,17 @@ void fileViewer::resizecolumn()
 void fileViewer::resizeEvent(QResizeEvent */*size*/)
 {
     resizecolumn();
+
+    if (m_pathindex > 0) {
+        showPlable();
+    }
+}
+
+void fileViewer::showEvent(QShowEvent *event)
+{
+    if (m_pathindex > 0) {
+        showPlable();
+    }
 }
 
 void fileViewer::keyPressEvent(QKeyEvent *event)
@@ -1388,6 +1492,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
+    qDebug() << "slotCompressRowDoubleClicked";
     QModelIndex curindex = pTableViewFile->currentIndex();
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
@@ -1414,9 +1519,9 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 
                 QDir dir(m_curfilelist.at(row).filePath());
                 //                qDebug() << dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-                    showPlable();
-                }
+                //if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
+                showPlable();
+                //}
 
                 resizecolumn();
             } else {
@@ -1444,6 +1549,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 
 void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
 {
+    qDebug() << "slotDecompressRowDoubleClicked";
     if (index.isValid()) {
         QModelIndex sourceIndex = m_sortmodel->mapToSource(index);
         qDebug() << m_decompressmodel->isentryDir(sourceIndex);
@@ -1694,27 +1800,26 @@ bool fileViewer::isDropAdd()
     return m_bDropAdd;
 }
 
-void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
-{
-    QMimeData *mimeData = new QMimeData;
-    connect(mimeData, SIGNAL(dataRequested(QString)), this, SLOT(createData(QString)), Qt::DirectConnection);
-    QDrag *drag = new QDrag(this);
-    foreach (QFileInfo file, m_curfilelist) {
-        if (file.path() == "") {
-            m_curfilelist.removeOne(file);
-        }
-    }
+//void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
+//{
+//    QMimeData *mimeData = new QMimeData;
+//    connect(mimeData, SIGNAL(dataRequested(QString)), this, SLOT(createData(QString)), Qt::DirectConnection);
+//    QDrag *drag = new QDrag(this);
+//    foreach (QFileInfo file, m_curfilelist) {
+//        if (file.path() == "") {
+//            m_curfilelist.removeOne(file);
+//        }
+//    }
 
-
-    QStringList filelist;
-    foreach (QFileInfo fileinfo, m_curfilelist) {
-        filelist.append(fileinfo.filePath());
-    }
-    curFileListModified = true;
-    emit sigFileRemoved(filelist);
-    drag->setMimeData(mimeData);
-    drag->exec(Qt::CopyAction);
-}
+//    QStringList filelist;
+//    foreach (QFileInfo fileinfo, m_curfilelist) {
+//        filelist.append(fileinfo.filePath());
+//    }
+//    curFileListModified = true;
+//    emit sigFileRemoved(filelist);
+//    drag->setMimeData(mimeData);
+//    drag->exec(Qt::CopyAction);
+//}
 
 void MyTableView::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -1730,12 +1835,14 @@ void MyTableView::dragEnterEvent(QDragEnterEvent *event)
 
 void MyTableView::dragLeaveEvent(QDragLeaveEvent *event)
 {
+    qDebug() << "dragLeaveEvent";
     //DTableView::dragLeaveEvent(event);
     event->accept();
 }
 
 void MyTableView::dragMoveEvent(QDragMoveEvent *event)
 {
+    qDebug() << "dragMoveEvent";
     event->accept();
 }
 

@@ -82,7 +82,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
         if (ppathindex && *ppathindex > 0) {
             //m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
-            emit sigShowLabel();
+            //emit sigShowLabel();
         } /*else {
             m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
         }*/

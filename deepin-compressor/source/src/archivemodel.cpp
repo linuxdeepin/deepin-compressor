@@ -74,7 +74,7 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
     if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
         if (m_ppathindex && *m_ppathindex > 0) {
             //m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight * 2);
-            emit sigShowLabel();
+            //emit sigShowLabel();
         } else {
             //m_tableview->setRowHeight(0, ArchiveModelDefine::gTableHeight);
         }
