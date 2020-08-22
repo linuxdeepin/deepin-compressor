@@ -1,32 +1,23 @@
 #pragma once
 
-#include "DApplication"
-#include "mainwindow.h"
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
+
+class MainWindow;
 
 class CompressorApplication: public DApplication
 {
     Q_OBJECT
 public:
-    CompressorApplication(int &argc, char **argv)
-        : DApplication(argc, argv)
-    {
-
-    }
-
-    void setMainWindow(MainWindow *wd) { mainWindow_ = wd; }
+    CompressorApplication(int &argc, char **argv);
+    void setMainWindow(MainWindow *wd);
 
 private:
-    void handleQuitAction() override
-    {
-        if (mainWindow_ == nullptr)
-            return;
-
-        if (mainWindow_->applicationQuit(this) == false) {
-            return;
-        }
-
-        //DApplication::handleQuitAction();
-    }
+    void handleQuitAction() Q_DECL_OVERRIDE;
 
     MainWindow *mainWindow_ = nullptr;
+
+public:
+    bool notify(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 };

@@ -44,6 +44,8 @@ BatchExtract::BatchExtract(QObject *parent)
 
 void BatchExtract::addExtraction(const QUrl &url)
 {
+    m_numOfExtracting = 0;
+    m_lastPercent = 0;
 
     QString destination = destinationFolder();
 
@@ -162,11 +164,26 @@ void BatchExtract::slotResult(KJob *job)
 void BatchExtract::forwardProgress(KJob *job, unsigned long percent)
 {
     Q_UNUSED(job)
-    qDebug() << percent;
-    auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
-    auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
 
-    emit batchProgress(job, jobPart * remainingJobs + percent / static_cast<ulong>(m_initialJobCount));
+    QString path = m_inputs.at(m_numOfExtracting).toString().remove("file://");
+    QFile file(path);
+    qint64 perFileSize = 0;
+    if (file.exists()) {
+        perFileSize = file.size();
+    }
+
+    qDebug() << percent;
+
+//    auto jobPart = static_cast<ulong>(100 / m_initialJobCount);
+//    auto remainingJobs = static_cast<ulong>(m_initialJobCount - subjobs().size());
+
+    ulong actualPercent = ((percent * perFileSize) / m_batchTotalSize) + m_lastPercent;
+    emit batchProgress(job, actualPercent);
+
+    if (percent > 0 && percent % 100 == 0) {
+        m_lastPercent += ((100 * perFileSize) / m_batchTotalSize);
+        m_numOfExtracting++;
+    }
 }
 
 void BatchExtract::addInput(const QUrl &url)
@@ -216,6 +233,11 @@ void BatchExtract::setOpenDestinationAfterExtraction(bool value)
 void BatchExtract::setPreservePaths(bool value)
 {
     m_preservePaths = value;
+}
+
+void BatchExtract::setBatchTotalSize(qint64 size)
+{
+    m_batchTotalSize = size;
 }
 
 bool BatchExtract::showExtractDialog()

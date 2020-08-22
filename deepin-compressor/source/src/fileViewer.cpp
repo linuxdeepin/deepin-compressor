@@ -878,7 +878,7 @@ void fileViewer::resetTempFile()
 int fileViewer::popUpDialog(const QString &desc)
 {
     DDialog *dialog = new DDialog(this);
-    dialog->setFixedSize(380, 139);
+    dialog->setMinimumSize(380, 139);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addButton(tr("Cancel"));
@@ -889,7 +889,7 @@ int fileViewer::popUpDialog(const QString &desc)
     }
 
     DLabel *pContent = new DLabel(desc, dialog);
-    pContent->setFixedSize(293, 20);
+    pContent->setMinimumSize(293, 20);
     pContent->setAlignment(Qt::AlignCenter);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(pContent);
@@ -1334,7 +1334,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         QString sourceFileName = sourceArchiveList.last();
 
         QString warningStr0 = QString(tr("update file '%1' from package '%2'?")).arg(getShortName(destFileName)).arg(getShortName(sourceFileName));
-        QString warningStr1 = QString(tr("one file has been modified by other application.if you update package file ,\n your modifications will lose."));
+        QString warningStr1 = QString(tr("one file has been modified by other application.if you update package file, your modifications will lose."));
         QString warningStr2 = QString(tr("update file '%1' from package '%2'?")).arg(destFileName).arg(sourceFileName);
 
         m_ActionInfo.mode = (SUBACTION_MODE)mode;
@@ -1343,23 +1343,23 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         m_ActionInfo.ActionFiles = urls;
 
         DDialog *dialog = new DDialog(this);
-        dialog->setFixedSize(380, 200);
+        dialog->setMinimumSize(380, 200);
         QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(pixmap);
 
         DLabel *strlabel = new DLabel(dialog);
-        strlabel->setFixedSize(293, 40);
+        strlabel->setMinimumSize(300, 20);
         strlabel->setForegroundRole(DPalette::TextTitle);
         strlabel->setWordWrap(true);
-        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Bold);
+        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
         strlabel->setText(warningStr0);
         strlabel->setAlignment(Qt::AlignCenter);
         strlabel->setToolTip(warningStr2);
 
         DLabel *strlabel2 = new DLabel(dialog);
-        strlabel2->setFixedSize(340, 40);
+        strlabel2->setMinimumSize(300, 20);
         strlabel2->setForegroundRole(DPalette::NoType);
-        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
+        DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
         strlabel2->setText(warningStr1);
         strlabel2->setWordWrap(true);
         strlabel2->setAlignment(Qt::AlignCenter);
@@ -1369,8 +1369,8 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
         QVBoxLayout *mainlayout = new QVBoxLayout;
         mainlayout->setContentsMargins(0, 0, 0, 0);
-        mainlayout->addWidget(strlabel, 0, Qt::AlignCenter);
-        mainlayout->addWidget(strlabel2, 0, Qt::AlignCenter);
+        mainlayout->addWidget(strlabel, 0, Qt::AlignVCenter);
+        mainlayout->addWidget(strlabel2, 0, Qt::AlignVCenter);
         mainlayout->addSpacing(10);
 
         DWidget *widget = new DWidget(dialog);

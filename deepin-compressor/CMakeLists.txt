@@ -99,6 +99,7 @@ set(c_files
 	source/src/batchextract.cpp
 	source/src/compressor_fail.cpp
 	source/src/compressor_success.cpp
+    source/src/compressorapplication.cpp
 	source/src/compresspage.cpp
 	source/src/compresssetting.cpp
 	source/src/customwidget.cpp

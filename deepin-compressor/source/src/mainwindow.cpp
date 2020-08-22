@@ -112,9 +112,7 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
     setAcceptDrops(true);
 
     initTitleBar();
-    //m_startTimer = startTimer(500);
-    InitUI();
-    InitConnection();
+    m_startTimer = startTimer(500);
 
     loadWindowState();
 }
@@ -259,7 +257,11 @@ void MainWindow::closeClean(QCloseEvent *event)
             DeleteJob *pJob = dynamic_cast<DeleteJob *>(m_pJob);
             pJob->archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
         } else {
-            deleteLaterJob();
+            qDebug() << "closeClean"
+                     << "deleteLaterJob";
+            //deleteLaterJob();
+            delete m_pJob;
+            m_pJob = nullptr;
         }
     }
 
@@ -425,18 +427,19 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     } else */
-    /*qDebug() << "timerEvent";
+    // qDebug() << "timerEvent";
     if (m_startTimer == event->timerId()) {
         if (!m_initflag) {
             qDebug() << "timerEvent******************InitUI";
             InitUI();
             InitConnection();
             m_initflag = true;
+            qDebug() << "timerEvent******************InitUI end";
         }
 
         killTimer(m_startTimer);
         m_startTimer = 0;
-    } else*/ if (m_iWatchTimerID == event->timerId()) {     // 监控待压缩的本地文件
+    } else if (m_iWatchTimerID == event->timerId()) {    // 监控待压缩的本地文件
         if (m_pCompressPage == nullptr) {
             return;
         }
@@ -1479,13 +1482,14 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
 
 void MainWindow::onRightMenuSelected(const QStringList &files)
 {
-//    qDebug() << "onRightMenuSelected";
-//    if (!m_initflag) {
-//        qDebug() << "onRightMenuSelected******************InitUI";
-//        InitUI();
-//        InitConnection();
-//        m_initflag = true;
-//    }
+    // qDebug() << "onRightMenuSelected";
+    if (!m_initflag) {
+        qDebug() << "onRightMenuSelected******************InitUI";
+        InitUI();
+        InitConnection();
+        m_initflag = true;
+        qDebug() << "onRightMenuSelected******************InitUI end";
+    }
     foreach (QString file, files) {
         m_rightMenuList.append(file);
     }
@@ -1564,10 +1568,19 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         } else {
             calSelectedTotalFileSize(files);
+            qint64 size = 0;
+            foreach (QString file, files) {
+                QFileInfo fi(file);
+                if (fi.exists()) {
+                    size += fi.size();
+                }
+            }
+
             m_eWorkStatus = WorkProcess;
             m_operationtype = Operation_Extract;
 
             BatchExtract *batchJob = new BatchExtract();
+            batchJob->setBatchTotalSize(size);
             batchJob->setAutoSubfolder(true);
             batchJob->setDestinationFolder(fileinfo.path());
             batchJob->setPreservePaths(true);
@@ -1599,12 +1612,17 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
             qDebug() << "Starting job";
             batchJob->start();
+
+            m_ePageID = PAGE_UNZIPPROGRESS;
+            m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+            refreshPage();
+            show();
         }
 
-        m_ePageID = PAGE_UNZIPPROGRESS;
-        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-        refreshPage();
-        show();
+//        m_ePageID = PAGE_UNZIPPROGRESS;
+//        m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
+//        refreshPage();
+//        show();
     } else if (files.last() == QStringLiteral("extract")) {
         QFileInfo fileinfo(files.at(0));
         m_strDecompressFileName = fileinfo.fileName();
@@ -1620,6 +1638,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         show();
     } else if (files.last() == QStringLiteral("extract_multi")) {
         calSelectedTotalFileSize(files);
+        qint64 size = 0;
+        foreach (QString file, files) {
+            QFileInfo fi(file);
+            if (fi.exists()) {
+                size += fi.size();
+            }
+        }
+
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QString defaultpath;
@@ -1683,6 +1709,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         refreshPage();
 
         BatchExtract *batchJob = new BatchExtract();
+        batchJob->setBatchTotalSize(size);
         batchJob->setAutoSubfolder(true);
         batchJob->setDestinationFolder(curpath);
         batchJob->setPreservePaths(true);
@@ -1766,17 +1793,19 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 m_strDecompressFileName = fileinfo.fileName();
                 m_pUnCompressPage->SetDefaultFile(fileinfo);
                 m_pUnCompressPage->setdefaultpath(fileinfo.path());
-                loadArchive(filepath);
-                m_ePageID = PAGE_UNZIPPROGRESS;
+//                loadArchive(filepath);
+                rightMenuExtractHere(filepath);
+//                m_ePageID = PAGE_UNZIPPROGRESS;
                 m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
-                refreshPage();
+//                refreshPage();
             } else {
                 m_pCompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
                 m_ePageID = PAGE_UNZIP_FAIL;
                 refreshPage();
+                show();
             }
         }
-        show();
+//        show();
     } else if (files.last() == QStringLiteral("extract_split")) {
         QString filepath = files.at(0);
         filepath = filepath.left(filepath.length() - 3) + "001";
@@ -2231,6 +2260,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 
 void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 {
+    qDebug() << "SlotProgressFile" << filename;
     m_pProgressdialog->setCurrentFile(filename);
     m_pProgess->setProgressFilename(filename);
 //     m_extractToFile.append(filename);
@@ -4312,8 +4342,10 @@ void MainWindow::closeExtractJobSafe()
             connect(pExtractJob, &ExtractJob::sigExtractSpinnerFinished, this, &MainWindow::slotStopSpinner);
 //            pEventloop->exec(QEventLoop::ExcludeUserInputEvents);
         }
-
-        killJob();
+        m_pJob->kill();
+        delete m_pJob;
+        m_pJob = nullptr;
+        // killJob();
     }
 }
 
@@ -4436,9 +4468,11 @@ void MainWindow::slotClearTempfile()
 
 void MainWindow::slotquitApp()
 {
+    qDebug() << "mainwindow数目：" << m_windowcount;
     --m_windowcount;
 
     if (m_windowcount == 0) {
+        qDebug() << "退出整个进程";
         QProcess p;
         QString command = "rm";
         QStringList args;
@@ -4895,29 +4929,45 @@ void MainWindow::safeDelete()
 //    if (pRootEntry) {
 //        pRootEntry->clean();
 //    }
-
 //    SAFE_DELETE_ELE(pRootEntry);
     SAFE_DELETE_ELE(m_pFileWatcher);
+    qDebug() << "开始safeDelete：pEventloop";
     SAFE_DELETE_ELE(pEventloop);
+    qDebug() << "开始safeDelete：m_pSpinner";
     SAFE_DELETE_ELE(m_pSpinner);
+    qDebug() << "开始safeDelete：m_pWatcher";
     SAFE_DELETE_ELE(m_pWatcher);
+    qDebug() << "开始safeDelete：m_pArchiveModel" << m_pArchiveModel;
     SAFE_DELETE_ELE(m_pArchiveModel);
+    qDebug() << "开始safeDelete：m_pUnCompressPage";
     //    SAFE_DELETE_ELE(m_logo);
     //    SAFE_DELETE_ELE(m_titleFrame);
     //    SAFE_DELETE_ELE(m_titlelabel);
     SAFE_DELETE_ELE(m_pUnCompressPage);
+    qDebug() << "开始safeDelete：m_pCompressPage";
     SAFE_DELETE_ELE(m_pCompressPage);
+    qDebug() << "开始safeDelete：m_pHomePage";
     //    SAFE_DELETE_ELE(m_pMainLayout);
     SAFE_DELETE_ELE(m_pHomePage);
+    qDebug() << "开始safeDelete：m_pCompressSetting";
     SAFE_DELETE_ELE(m_pCompressSetting);
+    qDebug() << "开始safeDelete：m_pCompressSuccess";
     //    SAFE_DELETE_ELE(m_pProgess);
     SAFE_DELETE_ELE(m_pCompressSuccess);
+    qDebug() << "开始safeDelete：m_pCompressFail";
     SAFE_DELETE_ELE(m_pCompressFail);
+    qDebug() << "开始safeDelete：m_pEncryptionpage";
     SAFE_DELETE_ELE(m_pEncryptionpage);
+    qDebug() << "开始safeDelete：m_pProgressdialog";
     SAFE_DELETE_ELE(m_pProgressdialog);
+    qDebug() << "开始safeDelete：m_pSettingsDialog";
     SAFE_DELETE_ELE(m_pSettingsDialog);
+    qDebug() << "开始safeDelete：m_pOpenLoadingPage";
     SAFE_DELETE_ELE(m_pOpenLoadingPage);
+    qDebug() << "开始safeDelete：m_pSettings";
     //SAFE_DELETE_ELE(m_encodingpage);
     SAFE_DELETE_ELE(m_pSettings);
+    qDebug() << "开始safeDelete：m_pMmainWidget";
     SAFE_DELETE_ELE(m_pMmainWidget);
+    qDebug() << "结束safeDelete";
 }
