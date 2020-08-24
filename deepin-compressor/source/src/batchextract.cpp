@@ -62,6 +62,7 @@ void BatchExtract::addExtraction(const QUrl &url)
     QFileInfo fi(url.toLocalFile());
     QString userDestination = fi.path();
     QString detectedSubfolder = "";
+
     if (m_settingDialog->isAutoCreatDir()) {   //自动创建文件夹
         detectedSubfolder = fi.completeBaseName();
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
@@ -70,6 +71,7 @@ void BatchExtract::addExtraction(const QUrl &url)
         }
 
         destination = userDestination + detectedSubfolder;
+        QDir(userDestination).mkdir(detectedSubfolder);
     } else {
         destination = userDestination;
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
