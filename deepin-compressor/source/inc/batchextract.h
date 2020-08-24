@@ -4,12 +4,14 @@
 #include "queries.h"
 #include "batchjobs.h"
 #include "archivemodel.h"
+#include "structs.h"
 
 #include <QMap>
 #include <QObject>
 #include <QVector>
 #include <QUrl>
 
+class SettingDialog;
 class BatchExtract : public BatchJobs
 {
     Q_OBJECT
@@ -63,7 +65,9 @@ private:
 
     qint64 m_batchTotalSize;     //批量解压压缩包总大小
     int m_numOfExtracting = 0;   //解压到第几个压缩文件
-    ulong m_lastPercent = 0;    //解压完成的压缩文件占总大小的百分比
+    qint64 m_lastPercent = 0;    //解压完成的压缩文件占总大小的百分比
+    SettingDialog *m_settingDialog = nullptr;
+    Settings_Extract_Info *m_pSettingInfo = nullptr;
 };
 
 #endif // BATCHEXTRACT_H
