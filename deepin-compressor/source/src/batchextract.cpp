@@ -23,6 +23,8 @@
 #include "batchextract.h"
 #include "jobs.h"
 #include "queries.h"
+#include "utils.h"
+#include "settingdialog.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -47,26 +49,67 @@ void BatchExtract::addExtraction(const QUrl &url)
     m_numOfExtracting = 0;
     m_lastPercent = 0;
 
+    m_settingDialog = new SettingDialog;
+    m_pSettingInfo = new Settings_Extract_Info;
+
     QString destination = destinationFolder();
+    QVector<Archive::Entry *> files;
+    ExtractionOptions options;
+//    options.setRightMenuExtractHere(true);
+    options.setAutoCreatDir(m_settingDialog->isAutoCreatDir());
+    options.setBatchExtract(true);
 
-    auto job = Archive::batchExtract(url.toLocalFile(), destination, autoSubfolder(), preservePaths());
+    QFileInfo fi(url.toLocalFile());
+    QString userDestination = fi.path();
+    QString detectedSubfolder = "";
 
+    if (m_settingDialog->isAutoCreatDir()) {   //自动创建文件夹
+        detectedSubfolder = fi.completeBaseName();
+        m_pSettingInfo->str_CreateFolder = detectedSubfolder;
+        if (!userDestination.endsWith(QDir::separator())) {
+            userDestination.append(QDir::separator());
+        }
+
+        destination = userDestination + detectedSubfolder;
+        QDir(userDestination).mkdir(detectedSubfolder);
+    } else {
+        destination = userDestination;
+        m_pSettingInfo->str_CreateFolder = detectedSubfolder;
+    }
+
+    QString fixedMimetype = "application/" + Utils::judgeFileMime(url.toLocalFile());
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(url.toLocalFile(), fixedMimetype, true);
+    ExtractJob *job = new ExtractJob(files, destination, options, pIface);
     qDebug() << QString(QStringLiteral("Registering job from archive %1, to %2, preservePaths %3")).arg(url.toLocalFile(), destination, QString::number(preservePaths()));
 
     addSubjob(job);
 
     m_fileNames[job] = qMakePair(url.toLocalFile(), destination);
 
-    connect(job, SIGNAL(percent(KJob *, ulong)),
-            this, SLOT(forwardProgress(KJob *, ulong)));
-    connect(job, &BatchExtractJob::userQuery,
-            this, &BatchExtract::signalUserQuery);
-    connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
-            this, SLOT(SlotProgressFile(KJob *, const QString &)));
-    connect(job, &BatchExtractJob::signeedpassword,
-    this, [ = ] {
-        qDebug() << "need password";
-    });
+    connect(job, SIGNAL(percent(KJob *, ulong)), this, SLOT(forwardProgress(KJob *, ulong)));
+    connect(job, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
+    connect(job, &ExtractJob::userQuery, this, &BatchExtract::signalUserQuery);
+
+//    QString destination = destinationFolder();
+
+//    auto job = Archive::batchExtract(url.toLocalFile(), destination, autoSubfolder(), preservePaths());
+
+//    qDebug() << QString(QStringLiteral("Registering job from archive %1, to %2, preservePaths %3")).arg(url.toLocalFile(), destination, QString::number(preservePaths()));
+
+//    addSubjob(job);
+
+//    m_fileNames[job] = qMakePair(url.toLocalFile(), destination);
+
+//    connect(job, SIGNAL(percent(KJob *, ulong)),
+//            this, SLOT(forwardProgress(KJob *, ulong)));
+//    connect(job, &BatchExtractJob::userQuery,
+//            this, &BatchExtract::signalUserQuery);
+//    connect(job, SIGNAL(percentfilename(KJob *, const QString &)),
+//            this, SLOT(SlotProgressFile(KJob *, const QString &)));
+//    connect(job, &BatchExtractJob::signeedpassword,
+//    this, [ = ] {
+//        qDebug() << "need password";
+//    });
 }
 
 void BatchExtract::SlotProgressFile(KJob *job, const QString &name)

@@ -1567,6 +1567,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             rightMenuExtractHere(files.at(0));
             m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         } else {
+            m_bIsRightMenu = true;
             calSelectedTotalFileSize(files);
             qint64 size = 0;
             foreach (QString file, files) {
@@ -1637,6 +1638,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         show();
     } else if (files.last() == QStringLiteral("extract_multi")) {
+        m_bIsRightMenu = true;
         calSelectedTotalFileSize(files);
         qint64 size = 0;
         foreach (QString file, files) {
