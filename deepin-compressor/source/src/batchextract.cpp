@@ -65,6 +65,14 @@ void BatchExtract::addExtraction(const QUrl &url)
 
     if (m_settingDialog->isAutoCreatDir()) {   //自动创建文件夹
         detectedSubfolder = fi.completeBaseName();
+        if (fi.filePath().contains(".tar.")) {
+            detectedSubfolder = detectedSubfolder.remove(".tar");
+        } else if (fi.filePath().contains(".7z.")) {
+            detectedSubfolder = detectedSubfolder.remove(".7z");
+        } else if (fi.filePath().contains(".rar.part")) {
+            detectedSubfolder = detectedSubfolder.remove(".rar");
+        }
+
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
         if (!userDestination.endsWith(QDir::separator())) {
             userDestination.append(QDir::separator());

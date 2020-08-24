@@ -1913,6 +1913,14 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
     QString detectedSubfolder = "";
     if (pSettingInfo->b_isAutoCreateDir) {   //自动创建文件夹
         detectedSubfolder = fi.completeBaseName();
+        if (fi.filePath().contains(".tar.")) {
+            detectedSubfolder = detectedSubfolder.remove(".tar");
+        } else if (fi.filePath().contains(".7z.")) {
+            detectedSubfolder = detectedSubfolder.remove(".7z");
+        } else if (fi.filePath().contains(".rar.part")) {
+            detectedSubfolder = detectedSubfolder.remove(".rar");
+        }
+
         pSettingInfo->str_CreateFolder = detectedSubfolder;
         if (!userDestination.endsWith(QDir::separator())) {
             userDestination.append(QDir::separator());
