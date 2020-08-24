@@ -100,3 +100,4 @@ compile_commands.json
 # out dir
 
 output
+so(cmake).sh
