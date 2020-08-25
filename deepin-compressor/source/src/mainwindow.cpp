@@ -1872,7 +1872,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 void MainWindow::rightMenuExtractHere(const QString &localPath)
 {
     QString transFile = localPath;
-    transSplitFileName(transFile);
+    transSplitFileName(transFile);      // 对文件名进行转换（分卷处理）
 //    WatcherFile(transFile);
     m_strLoadfile = transFile;
 
@@ -1976,6 +1976,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
     //m_pHomePage->spinnerStop();
     m_eWorkStatus = WorkNone;
 
+    // 加载出错的情况
     if (job->error()) {
         int errorCode = job->error();
         if (errorCode == KJob::OpenFailedError) {
@@ -1998,17 +1999,18 @@ void MainWindow::slotLoadingFinished(KJob *job)
         return;
     }
 
+    // 设置数据模型
     m_pArchiveFilterModel->setSourceModel(m_pArchiveModel);
     m_pArchiveFilterModel->setFilterKeyColumn(0);
     m_pArchiveFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_pUnCompressPage->setModel(m_pArchiveFilterModel);
 
-    if (!m_bIsRightMenu) {
+    if (!m_bIsRightMenu) {          // 如果不是右键操作，进入解压列表界面
         m_ePageID = PAGE_UNZIP;
         refreshPage();
         deleteLaterJob();
     } else {
-        slotextractSelectedFilesTo(m_pUnCompressPage->getDecompressPath());
+        slotextractSelectedFilesTo(m_pUnCompressPage->getDecompressPath());     // 直接进行解压操作
     }
 }
 
@@ -2022,6 +2024,7 @@ void MainWindow::loadArchive(const QString &files)
     QString transFile = files;
     transSplitFileName(transFile);
 
+    // 监听本地压缩包文件的变化
     WatcherFile(transFile);
 
     m_eWorkStatus = WorkProcess;
@@ -2031,6 +2034,7 @@ void MainWindow::loadArchive(const QString &files)
     m_operationtype = Operation_Load;
     m_ePageID = PAGE_LOADING;
     m_pJob = m_pArchiveModel->loadArchive(transFile, "", m_pArchiveModel);
+
     if (m_pJob == nullptr) {
         return;
     }
@@ -2052,6 +2056,7 @@ void MainWindow::WatcherFile(const QString &files)
     m_pFileWatcher->startWatcher();
     qDebug() << m_pFileWatcher->startWatcher() << "=" << files;
     m_pUnCompressPage->setRootPathIndex(); //解决解压后再次打开压缩包出现返回上一级
+
     connect(m_pFileWatcher, &DFileWatcher::fileMoved, this, [ = ]() { //监控压缩包，重命名时提示
         DDialog *dialog = new DDialog(this);
         dialog->setFixedWidth(440);
@@ -2211,8 +2216,8 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
     //calSpeedAndTime(percent);
-    //m_pProgess->refreshSpeedAndTime(percent);       // 刷新速度和剩余时间
-    if (m_operationtype == Operation_CONVERT) {
+    //m_pProgess->refreshSpeedAndTime(percent);
+    if (m_operationtype == Operation_CONVERT) {     // 如果是格式转换，进度以3:7进行计算
         if (m_convertFirst && percent <= 100) {
             m_lastPercent = 30 + percent * 0.7;
         } else {
@@ -2220,7 +2225,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         }
 
         if (m_lastPercent > 0) {
-            m_pProgess->refreshSpeedAndTime(m_lastPercent, true);
+            m_pProgess->refreshSpeedAndTime(m_lastPercent, true);   // 刷新进度显示
         }
     } else {
         if (percent > 0) {
@@ -2228,6 +2233,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         }
     }
 
+    // 如果是提取或者拖拽解压
     if (Operation_SingleExtract == m_operationtype || Operation_DRAG == m_operationtype) {
         if (percent < 100 && WorkProcess == m_eWorkStatus) {
             if (!m_pProgressdialog->isshown()) {
@@ -2270,6 +2276,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 
 void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 {
+    // 显示当前正在操作的文件名
     qDebug() << "SlotProgressFile" << filename;
     m_pProgressdialog->setCurrentFile(filename);
     m_pProgess->setProgressFilename(filename);
@@ -2280,11 +2287,12 @@ void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 void MainWindow::slotBatchExtractFileChanged(const QString &name)
 {
     qDebug() << name;
-    m_pProgess->setFilename(name);
+    m_pProgess->setFilename(name);  // 显示批量解压时正在操作的压缩包名称
 }
 
 void MainWindow::slotBatchExtractError(const QString &name)
 {
+    // 显示批量解压时错误信息
     m_pCompressFail->setFailStrDetail(name + ":" + +" " + tr("Wrong password"));
     m_ePageID = PAGE_UNZIP_FAIL;
     refreshPage();
@@ -2319,7 +2327,8 @@ void MainWindow::slotExtractionDone(KJob *job)
     m_eWorkStatus = WorkNone;
 //    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
     Archive::Entry *pExtractWorkEntry = nullptr;
-    if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::EXTRACTJOB) {
+
+    if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::EXTRACTJOB) {     // 当前为解压操作时
         ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
         pExtractWorkEntry = pExtractJob->getWorkEntry();
 
@@ -2579,10 +2588,12 @@ void MainWindow::slotShowPageUnzipProgress()
 
 void MainWindow::SlotNeedPassword()
 {
+    // 右键操作时，判断当前界面是否显示
     if (isHidden()) {
         show();
     }
 
+    // 判断如果当前界面不是密码框界面，则显示密码框
     if (PAGE_ENCRYPTION != m_ePageID) {
         m_ePageID = PAGE_ENCRYPTION;
         refreshPage();
@@ -2591,7 +2602,8 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
-    m_pProgressdialog->clearprocess();
+    m_pProgressdialog->clearprocess();      // 清楚进度
+
     // m_progressTransFlag = false;
     if (Operation_Load == m_operationtype) {
         m_ePageID = PAGE_LOADING;

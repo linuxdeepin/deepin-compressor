@@ -198,11 +198,6 @@ public:
     void renameCompress(QString &filename, QString fixedMimeType);
 
     /**
-     * @brief getLoadFile
-     * @return
-     */
-
-    /**
      * @brief getDiskFreeSpace  获取磁盘控件
      * @return 磁盘空间大小
      */
@@ -443,33 +438,33 @@ protected:
 
 signals:
     /**
-     * @brief sigquitApp
+     * @brief sigquitApp    应用程序退出信号
      */
     void sigquitApp();
 
     /**
-     * @brief sigZipAddFile
+     * @brief sigZipAddFile 添加压缩文件信号
      */
     void sigZipAddFile();
 
     /**
-     * @brief sigCompressedAddFile
+     * @brief sigCompressedAddFile  追加压缩文件信号
      */
     void sigCompressedAddFile();
 
     /**
-     * @brief sigZipReturn
+     * @brief sigZipReturn  返回上一级
      */
     void sigZipReturn();
 
     /**
-     * @brief sigZipSelectedFiles
-     * @param files
+     * @brief sigZipSelectedFiles   压缩信号
+     * @param files     待压缩的文件
      */
     void sigZipSelectedFiles(const QStringList &files);
 
     /**
-     * @brief loadingStarted
+     * @brief loadingStarted    加载开始信号
      */
     void loadingStarted();
 
@@ -479,7 +474,7 @@ signals:
     void sigUpdateTableView(const QFileInfo &);
 
     /**
-     * @brief sigTipsWindowPopUp
+     * @brief sigTipsWindowPopUp    子界面提示更新信号
      */
     void sigTipsWindowPopUp(int, const QStringList &);
 
@@ -490,8 +485,8 @@ signals:
     void sigTipsUpdateEntry(int, QVector<Archive::Entry *> &vectorDel);
 
     /**
-     * @brief deleteJobComplete
-     * @param pEntry
+     * @brief deleteJobComplete 自动删除完成信号
+     * @param pEntry    被删除的数据
      */
     void deleteJobComplete(Archive::Entry *pEntry);
 
@@ -538,29 +533,29 @@ private slots:
     void onSelected(const QStringList &listSelFiles);
 
     /**
-     * @brief onRightMenuSelected
+     * @brief onRightMenuSelected   右键处理
      */
     void onRightMenuSelected(const QStringList &);
 
     /**
-     * @brief rightMenuExtractHere
+     * @brief rightMenuExtractHere  右键解压到当前文件夹
      */
     void rightMenuExtractHere(const QString &localPath);
 
     /**
-     * @brief onCompressNext
+     * @brief onCompressNext    下一步
      */
     void onCompressNext();
 
     /**
-     * @brief onCompressPressed
-     * @param Args
+     * @brief onCompressPressed 压缩
+     * @param Args  压缩参数
      */
     void onCompressPressed(QMap<QString, QString> &Args);
 
     /**
-     * @brief onUncompressStateAutoCompress
-     * @param Args
+     * @brief onUncompressStateAutoCompress 压缩
+     * @param Args  压缩参数
      */
     void onUncompressStateAutoCompress(QMap<QString, QString> &Args);
 
@@ -573,16 +568,23 @@ private slots:
     void onUncompressStateAutoCompressEntry(QMap<QString, QString> &Args, Archive::Entry *pWorkEntry = nullptr);
 
     /**
-     * @brief onCancelCompressPressed
-     * @param compressType
+     * @brief onCancelCompressPressed   取消压缩
+     * @param compressType  压缩类型
      */
     void onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressType);
 
+    /**
+     * @brief onPauseProcess    暂停
+     */
     void onPauseProcess();
+
+    /**
+     * @brief onContinueProcess 继续
+     */
     void onContinueProcess();
 
     /**
-     * @brief onTitleButtonPressed
+     * @brief onTitleButtonPressed  标题栏按钮点击
      */
     void onTitleButtonPressed();
 
@@ -599,154 +601,155 @@ private slots:
     void slotLoadingFinished(KJob *job);
 
     /**
-     * @brief slotExtractionDone
+     * @brief slotExtractionDone    解压结束
      * @param job
      */
     void slotExtractionDone(KJob *job);
 
     /**
-     * @brief slotShowPageUnzipProgress
+     * @brief slotShowPageUnzipProgress 显示解压进度
      */
     void slotShowPageUnzipProgress();
 
     /**
-     * @brief slotextractSelectedFilesTo
-     * @param localPath
+     * @brief slotextractSelectedFilesTo    解压
+     * @param localPath 解压地址
+     * @param convertType   转换类型
      */
     void slotextractSelectedFilesTo(const QString &localPath, QString convertType = "");
 
     /**
-     * @brief SlotProgress
-     * @param job
-     * @param percent
+     * @brief SlotProgress  进度显示
+     * @param job   工作类型
+     * @param percent   进度
      */
     void SlotProgress(KJob *job, unsigned long percent);
 
     /**
-     * @brief SlotProgressFile
-     * @param job
-     * @param filename
+     * @brief SlotProgressFile  文件显示
+     * @param job   工作类型
+     * @param filename  正在操作的文件
      */
     void SlotProgressFile(KJob *job, const QString &filename);
 
     /**
-     * @brief SlotNeedPassword
+     * @brief SlotNeedPassword  需要输入密码
      */
     void SlotNeedPassword();
 
     /**
-     * @brief SlotExtractPassword
-     * @param password
+     * @brief SlotExtractPassword   带密码解压
+     * @param password  输入的密码
      */
     void SlotExtractPassword(QString password);
 
     /**
-     * @brief slotCompressFinished
-     * @param job
+     * @brief slotCompressFinished  压缩结束
+     * @param job   工作类型
      */
     void slotCompressFinished(KJob *job);
 
     /**
-     * @brief slotJobFinished
-     * @param job
+     * @brief slotJobFinished   操作结束（加载、解压等）
+     * @param job   工作类型
      */
     void slotJobFinished(KJob *job);
 
     /**
-     * @brief slotExtractSimpleFiles
-     * @param fileList
+     * @brief slotExtractSimpleFiles    提取/打开
+     * @param fileList  待解压的文件
      * @param path
      * @param type
      */
     void slotExtractSimpleFiles(QVector<Archive::Entry *> fileList, QString path, EXTRACT_TYPE type);
 
     /**
-     * @brief slotExtractSimpleFilesOpen
-     * @param fileList
-     * @param programma
+     * @brief slotExtractSimpleFilesOpen    压缩包文件解压打开
+     * @param fileList  待打开的文件
+     * @param programma 打开方式（应用程序）
      */
     void slotExtractSimpleFilesOpen(const QVector<Archive::Entry *> &fileList, const QString &programma);
 
     /**
-     * @brief slotKillExtractJob
+     * @brief slotKillExtractJob    结束提取
      */
     void slotKillExtractJob();
 
     /**
-     * @brief slotFailRetry
+     * @brief slotFailRetry 失败重试
      */
     void slotFailRetry();
 
     /**
-     * @brief slotBatchExtractFileChanged
-     * @param name
+     * @brief slotBatchExtractFileChanged   批量解压，显示当前压缩包
+     * @param name  当前压缩包名称
      */
     void slotBatchExtractFileChanged(const QString &name);
 
     /**
-     * @brief slotBatchExtractError
-     * @param name
+     * @brief slotBatchExtractError 批量解压错误
+     * @param name  当前压缩包名称
      */
     void slotBatchExtractError(const QString &name);
 
     /**
-     * @brief slotClearTempfile
+     * @brief slotClearTempfile 清除临时文件
      */
     void slotClearTempfile();
 
     /**
-     * @brief slotquitApp
+     * @brief slotquitApp   应用程序退出
      */
     void slotquitApp();
 
     /**
-     * @brief onUpdateDestFile
+     * @brief onUpdateDestFile  更新文件显示
      * @param destFile
      */
     void onUpdateDestFile(QString destFile);
 
     /**
-     * @brief onCompressPageFilelistIsEmpty
+     * @brief onCompressPageFilelistIsEmpty 压缩列表为空时，回到首页
      */
     void onCompressPageFilelistIsEmpty();
 
     /**
-     * @brief slotCalDeleteRefreshTotalFileSize
-     * @param files
+     * @brief slotCalDeleteRefreshTotalFileSize     计算待压缩的文件总大小
+     * @param files 待压缩的文件
      */
     void slotCalDeleteRefreshTotalFileSize(const QStringList &files);
 
     /**
-     * @brief slotUncompressCalDeleteRefreshTotoalSize
-     * @param vectorDel
-     * @param isManual,true:by action clicked; false: by message emited.
+     * @brief slotUncompressCalDeleteRefreshTotoalSize  删除压缩包文件
+     * @param vectorDel 需要删除的项
+     * @param isManual  true:手动删除触发     false: 自动删除触发
      */
     void slotUncompressCalDeleteRefreshTotoalSize(QVector<Archive::Entry *> &vectorDel, bool isManual);
 
     /**
-     * @brief resetMainwindow
+     * @brief resetMainwindow   重置参数
      */
     void resetMainwindow();
 
     /**
-     * @brief slotBackButtonClicked
+     * @brief slotBackButtonClicked     返回触发
      */
     void slotBackButtonClicked();
 
     /**
-     * @brief slotResetPercentAndTime
+     * @brief slotResetPercentAndTime   重置百分比和进度
      */
     void slotResetPercentAndTime();
 
     /**
-     * @brief slotFileUnreadable
-     * @param pathList
-     * @param fileIndex
+     * @brief slotFileUnreadable    对不可读文件压缩的处理
+     * @param pathList  文件名（含路径）
+     * @param fileIndex 索引值
      */
     void slotFileUnreadable(QStringList &pathList, int fileIndex);//compress file is unreadable or file is a link
 
     /**
-     * @brief slotStopSpinner
+     * @brief slotStopSpinner   停止加载
      */
     void slotStopSpinner();
 
@@ -756,29 +759,30 @@ private slots:
     void slotWorkTimeOut();
 
     /**
-     * @brief deleteFromArchive
-     * @param files
-     * @param archive
+     * @brief deleteFromArchive     从压缩包中删除文件
+     * @param files     需要删除的文件
+     * @param archive   压缩包
      */
     void deleteFromArchive(const QStringList &files, const QString &archive);
 
     /**
-     * @brief closeExtractJobSafe
+     * @brief closeExtractJobSafe   安全关闭解压操作
      */
     void closeExtractJobSafe();
 
     /**
-     * @brief slotLoadWrongPassWord
+     * @brief slotLoadWrongPassWord 加载密码错误
      */
     void slotLoadWrongPassWord();
 
     /**
-     * @brief slotKillShowFoldItem
+     * @brief slotKillShowFoldItem  结束打开文管对话框线程
      */
     void slotKillShowFoldItem();
 
     /**
-     * @brief slotReloadConvertArchive
+     * @brief slotReloadConvertArchive  重新加载转换后的压缩包
+     * @param path  转换后的压缩包
      */
     void slotReloadConvertArchive(QString path);
 
