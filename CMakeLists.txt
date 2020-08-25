@@ -19,6 +19,14 @@ add_definitions("-DQT_MESSAGELOGCONTEXT")
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+#龙芯特有编译参数 -start
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
+    message(STATUS "this system is mips64=========")
+    set(FLAGS_COMMON "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl, as-need")
+endif()
+#龙芯特有编译参数 -end
+
 #模糊测试设置 -start
 if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
  #   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
