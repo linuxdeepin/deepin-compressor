@@ -64,10 +64,10 @@ private:
     void handleMethods(const QStringList &methods);
     void fixDirectoryFullName();
 
-    bool emitEntryForIndex(archive_stat &archive);
-    void setEntryVal(archive_stat &archive);
-    void setEntryData(archive_stat &archive, bool isMutilFolderFile = false);
-    Archive::Entry *setEntryDataA(archive_stat &archive);
+    bool emitEntryForIndex(const archive_stat &archive);
+    void setEntryVal(const archive_stat &archiveconst, int &index, const QString &name, QString &dirRecord);
+    void setEntryData(const archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile = false);
+    Archive::Entry *setEntryDataA(const archive_stat &archive, const QString &name);
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
 
     int m_linesComment;
@@ -76,6 +76,9 @@ private:
 
 //    QMap<QString, archive_stat> m_listMap;
     archive_stat m_fileStat;
+    QString m_DirRecord = "";
+    QString m_SigDirRecord = "";
+    int m_indexCount = 0;
 };
 
 

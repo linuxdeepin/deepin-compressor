@@ -104,9 +104,9 @@ void Cli7zPlugin::fixDirectoryFullName()
     }
 }
 
-bool Cli7zPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &archive)
+bool Cli7zPlugin::emitEntryForIndex(const ReadOnlyArchiveInterface::archive_stat &archive)
 {
-    setEntryVal(archive/*, m_indexCount, archive.archive_fullPath, m_DirRecord*/);
+    setEntryVal(archive, m_indexCount, archive.archive_fullPath, m_DirRecord);
     if (m_listMap.find(archive.archive_fullPath) == m_listMap.end()) {
         m_listMap.insert(archive.archive_fullPath, archive);
     }
@@ -114,46 +114,107 @@ bool Cli7zPlugin::emitEntryForIndex(ReadOnlyArchiveInterface::archive_stat &arch
     return true;
 }
 
-void Cli7zPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
+void Cli7zPlugin::setEntryVal(const ReadOnlyArchiveInterface::archive_stat &archive, int &index, const QString &name, QString &dirRecord)
 {
-    if ((archive.archive_fullPath.endsWith("/") && archive.archive_fullPath.count("/") == 1) || (archive.archive_fullPath.count("/") == 0)) {
-        setEntryData(archive);
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+            setEntryData(archive, index, name);
+            m_SigDirRecord = name;
+            ++index;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+                setEntryData(archive, index, name);
+                ++index;
+                return;
+            }
+
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+                setEntryData(archive, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, archive/*qMakePair(archiveconst, -1)*/);
+            }
+
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+            setEntryData(archive, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+                    setEntryData(archive, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, archive/*qMakePair(archiveconst, -1)*/);
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                }
+            }
+
+            ++index;
+        }
+    } else {
+        m_DirRecord = "";
+        setEntryVal(archive, index, name, m_DirRecord);
     }
 }
 
-void Cli7zPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
-{
-    m_currentArchiveEntry->setProperty("fullPath", archive.archive_fullPath);
-    if (!isMutilFolderFile) {
-        m_currentArchiveEntry->setProperty("size", archive.archive_size);
-    } else {
-        m_currentArchiveEntry->setProperty("size", 0);
-    }
-
-    m_currentArchiveEntry->setProperty("compressedSize", archive.archive_compressedSize);
-    m_currentArchiveEntry->setProperty("timestamp", archive.archive_timestamp);
-    m_currentArchiveEntry->setProperty("isDirectory", archive.archive_isDirectory);
-    m_currentArchiveEntry->setProperty("permissions", archive.archive_permissions);
-    m_currentArchiveEntry->setProperty("CRC", archive.archive_CRC);
-    m_currentArchiveEntry->setProperty("method", archive.archive_method);
-    m_currentArchiveEntry->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
-
-    if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-        emit entry(m_currentArchiveEntry);
-    } else {
-        delete m_currentArchiveEntry;
-    }
-}
-
-Archive::Entry *Cli7zPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
+void Cli7zPlugin::setEntryData(const ReadOnlyArchiveInterface::archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
     Archive::Entry *pCurEntry = new Archive::Entry(this);
 
-    pCurEntry->setProperty("fullPath", archive.archive_fullPath);
+    pCurEntry->setProperty("fullPath", name/*archive.archive_fullPath*/);
+    if (!isMutilFolderFile) {
+        pCurEntry->setProperty("size", archive.archive_size);
+    } else {
+        pCurEntry->setProperty("size", 0);
+    }
+
+    pCurEntry->setProperty("compressedSize", archive.archive_compressedSize);
+    pCurEntry->setProperty("timestamp", archive.archive_timestamp);
+    if (name.endsWith(QLatin1Char('/'))) {
+        pCurEntry->setProperty("isDirectory", true);
+    } else {
+        pCurEntry->setProperty("isDirectory", false);
+    }
+//    m_currentArchiveEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    pCurEntry->setProperty("permissions", archive.archive_permissions);
+    pCurEntry->setProperty("CRC", archive.archive_CRC);
+    pCurEntry->setProperty("method", archive.archive_method);
+    pCurEntry->setProperty("isPasswordProtected", archive.archive_isPasswordProtected);
+
+//    if (!m_currentArchiveEntry->fullPath().isEmpty()) {
+    emit entry(pCurEntry);
+//    } else {
+//        delete m_currentArchiveEntry;
+//    }
+}
+
+Archive::Entry *Cli7zPlugin::setEntryDataA(const ReadOnlyArchiveInterface:: archive_stat &archive, const QString &name)
+{
+    Archive::Entry *pCurEntry = new Archive::Entry(this);
+
+    pCurEntry->setProperty("fullPath", name/*archive.archive_fullPath*/);
     pCurEntry->setProperty("size", archive.archive_size);
     pCurEntry->setProperty("compressedSize", archive.archive_compressedSize);
     pCurEntry->setProperty("timestamp", archive.archive_timestamp);
-    pCurEntry->setProperty("isDirectory", archive.archive_isDirectory);
+    if (name.endsWith(QLatin1Char('/'))) {
+        pCurEntry->setProperty("isDirectory", true);
+    } else {
+        pCurEntry->setProperty("isDirectory", false);
+    }
+//    pCurEntry->setProperty("isDirectory", archive.archive_isDirectory);
     pCurEntry->setProperty("permissions", archive.archive_permissions);
     pCurEntry->setProperty("CRC", archive.archive_CRC);
     pCurEntry->setProperty("method", archive.archive_method);
@@ -522,7 +583,7 @@ void Cli7zPlugin::showEntryListFirstLevel(const QString &directory)
             QString chopStr = iter.key().right(iter.key().size() - directory.size());
             if (!chopStr.isEmpty()) {
                 if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
-                    Archive::Entry *fileEntry = setEntryDataA(iter.value());
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value(), iter.key());
                     RefreshEntryFileCount(fileEntry);
                     emit entry(fileEntry);
 //                    m_emittedEntries << fileEntry;
