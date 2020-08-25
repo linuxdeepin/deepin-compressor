@@ -102,12 +102,13 @@ QT5_ADD_RESOURCES(QRC_MOC ${res_files})
 
 find_program(LUPDATE_EXECUTABLE lupdate)
 
-foreach(_ts_file ${TS_FILES})
-    execute_process(
-        COMMAND ${LUPDATE_EXECUTABLE} -recursive ${CMAKE_SOURCE_DIR} -ts ${_ts_file})
-    execute_process(COMMAND lrelease ${_ts_file})
-endforeach()
-#lupdate end
+##编译时更新.ts .qm
+#foreach(_ts_file ${TS_FILES})
+#    execute_process(
+#        COMMAND ${LUPDATE_EXECUTABLE} -recursive ${CMAKE_SOURCE_DIR} -ts ${_ts_file})
+#    execute_process(COMMAND lrelease ${_ts_file})
+#endforeach()
+##lupdate end
 
 file (GLOB APP_TS_FILES ../translations/*.ts)
 
