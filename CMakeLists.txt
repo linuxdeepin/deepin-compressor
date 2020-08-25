@@ -20,6 +20,9 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+set(CMAKE_CXX_FLAGS "-Wl,-as-need -fPIE")
+set(CMAKE_EXE_LINKER_FLAGS "-pie")
+
 #龙芯特有编译参数 -start
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
     message(STATUS "this system is mips64=========")
