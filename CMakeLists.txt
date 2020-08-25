@@ -36,6 +36,9 @@ if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif()
 #模糊测试设置 -end
 
+#关闭debug输出
+add_definitions(-DQT_NO_DEBUG_OUTPUT)
+
 #3.1 设置lib输出目录
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
