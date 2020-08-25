@@ -25,6 +25,7 @@
 
 #include <DWidget>
 #include <DPushButton>
+#include <DSuggestButton>
 #include <DLabel>
 #include <DProgressBar>
 
@@ -104,7 +105,7 @@ public slots:
 
 private:
     DPushButton *m_cancelbutton;
-    DPushButton *m_PauseContinueButton; //暂停继续按钮
+    DSuggestButton *m_PauseContinueButton; //暂停继续按钮
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
     DLabel *m_filenamelabel;

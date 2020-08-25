@@ -88,7 +88,7 @@ void Progress::InitUI()
     m_cancelbutton->setMinimumSize(200, 36);
     m_cancelbutton->setText(tr("Cancel"));
 
-    m_PauseContinueButton = new CustomPushButton(this);
+    m_PauseContinueButton = new CustomSuggestButton(this);
     m_PauseContinueButton->setMinimumSize(200, 36);
     m_PauseContinueButton->setText(tr("Pause"));
     m_PauseContinueButton->setCheckable(true);
