@@ -72,10 +72,6 @@
         <translation>Lisäasetukset</translation>
     </message>
     <message>
-        <source>Create New Archive</source>
-        <translation type="vanished">Luo uusi arkisto</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
         <source>Name</source>
         <translation>Nimi</translation>
@@ -738,13 +734,6 @@
     </message>
 </context>
 <context>
-    <name>PasswordNeededQuery</name>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="obsolete">Salattu tiedosto, kirjoita salasana</translation>
-    </message>
-</context>
-<context>
     <name>Progress</name>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="89"/>
@@ -960,34 +949,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Skip</source>
-        <translation type="vanished">Ohita</translation>
-    </message>
-    <message>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="vanished">Toinen samanniminen tiedosto on jo olemassa, korvataanko se?</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Korvaa</translation>
-    </message>
-    <message>
-        <source>Apply to all</source>
-        <translation type="vanished">Koskee kaikkia</translation>
-    </message>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">Salattu tiedosto, kirjoita salasana</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="vanished">Väärä salasana</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="556"/>
         <source>Name</source>
         <translation>Nimi</translation>
@@ -1026,10 +987,6 @@
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Luo kansio automaattisesti purettuja tiedostoja varten</translation>
-    </message>
-    <message>
-        <source>Show extracted files when complete</source>
-        <translation type="vanished">Näytä puretut tiedostot, kun valmis</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>

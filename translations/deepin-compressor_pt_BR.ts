@@ -72,10 +72,6 @@
         <translation>Opções Avançadas</translation>
     </message>
     <message>
-        <source>Create New Archive</source>
-        <translation type="vanished">Criar Novo Arquivo</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
         <source>Name</source>
         <translation>Nome</translation>
@@ -738,13 +734,6 @@
     </message>
 </context>
 <context>
-    <name>PasswordNeededQuery</name>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="obsolete">Arquivo criptografado, digite a senha</translation>
-    </message>
-</context>
-<context>
     <name>Progress</name>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="89"/>
@@ -960,34 +949,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Skip</source>
-        <translation type="vanished">Pular</translation>
-    </message>
-    <message>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="vanished">Já existe outro arquivo com o mesmo nome. Substituí-lo?</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Substituir</translation>
-    </message>
-    <message>
-        <source>Apply to all</source>
-        <translation type="vanished">Aplicar para todos</translation>
-    </message>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">Arquivo criptografado, digite a senha</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="vanished">Senha incorreta</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Ok</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="556"/>
         <source>Name</source>
         <translation>Nome</translation>
@@ -1026,10 +987,6 @@
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Criar uma pasta para os arquivos extraídos</translation>
-    </message>
-    <message>
-        <source>Show extracted files when complete</source>
-        <translation type="vanished">Exibir arquivos extraídos ao concluir</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>

@@ -72,10 +72,6 @@
         <translation>ئالىي تاللاش</translation>
     </message>
     <message>
-        <source>Create New Archive</source>
-        <translation type="vanished">يىڭى ئارخىپ قۇرۇش</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
         <source>Name</source>
         <translation>ئىسمى</translation>
@@ -738,13 +734,6 @@
     </message>
 </context>
 <context>
-    <name>PasswordNeededQuery</name>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="obsolete">شىفىرلانغان ھۆججەت ، مەخپىي نومۇرنى كىرگۈزۈڭ</translation>
-    </message>
-</context>
-<context>
     <name>Progress</name>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="89"/>
@@ -960,34 +949,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Skip</source>
-        <translation type="vanished">ئاتلاش</translation>
-    </message>
-    <message>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="vanished">ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">ئالماشتۇرۇڭ</translation>
-    </message>
-    <message>
-        <source>Apply to all</source>
-        <translation type="vanished">ھەممەيلەنگە ئىلتىماس قىلىڭ</translation>
-    </message>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">شىفىرلانغان ھۆججەت ، مەخپىي نومۇرنى كىرگۈزۈڭ</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="vanished">مەخپىي نومۇر خاتا</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">تاماملاندى</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="556"/>
         <source>Name</source>
         <translation>ئىسمى</translation>
@@ -1026,10 +987,6 @@
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>كۆپ چىقىرىۋېتىلگەن ھۆججەتلەر ئۈچۈن ئاپتوماتىك ھۆججەت قىسقۇچ قۇرالايسىز</translation>
-    </message>
-    <message>
-        <source>Show extracted files when complete</source>
-        <translation type="vanished">چىقىرىۋېتىلگەن ھۆججەتلەرنى تاماملاڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>

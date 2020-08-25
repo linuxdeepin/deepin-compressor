@@ -72,10 +72,6 @@
         <translation>Gelişmiş Seçenekler</translation>
     </message>
     <message>
-        <source>Create New Archive</source>
-        <translation type="vanished">Yeni Arşiv Oluştur</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
         <source>Name</source>
         <translation>İsim</translation>
@@ -738,13 +734,6 @@
     </message>
 </context>
 <context>
-    <name>PasswordNeededQuery</name>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="obsolete">Şifrelenmiş dosya, lütfen parolayı gir</translation>
-    </message>
-</context>
-<context>
     <name>Progress</name>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="89"/>
@@ -960,34 +949,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Skip</source>
-        <translation type="vanished">Atla</translation>
-    </message>
-    <message>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="vanished">Aynı ada sahip başka bir dosya zaten var, değiştirilsin mi?</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Değiştir</translation>
-    </message>
-    <message>
-        <source>Apply to all</source>
-        <translation type="vanished">Tümünü onayla</translation>
-    </message>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">Şifrelenmiş dosya, lütfen parolayı gir</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="vanished">Yanlış parola</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">TAMAM</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="556"/>
         <source>Name</source>
         <translation>İsim</translation>
@@ -1026,10 +987,6 @@
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Birden çok çıkarılan dosya için otomatik klasör oluştur</translation>
-    </message>
-    <message>
-        <source>Show extracted files when complete</source>
-        <translation type="vanished">Tamamlandığında çıkarılan dosyaları göster</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>

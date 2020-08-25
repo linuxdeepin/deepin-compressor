@@ -72,10 +72,6 @@
         <translation>Додаткові параметри</translation>
     </message>
     <message>
-        <source>Create New Archive</source>
-        <translation type="vanished">Створити архів</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="123"/>
         <source>Name</source>
         <translation>Назва</translation>
@@ -953,34 +949,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Skip</source>
-        <translation type="vanished">Пропустити</translation>
-    </message>
-    <message>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="vanished">Існує інший файл із такою самою назвою. Замінити його?</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Замінити</translation>
-    </message>
-    <message>
-        <source>Apply to all</source>
-        <translation type="vanished">Застосувати до всіх</translation>
-    </message>
-    <message>
-        <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">Зашифрований файл. Будь ласка, введіть пароль</translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="vanished">Помилковий пароль</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">Гаразд</translation>
-    </message>
-    <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="556"/>
         <source>Name</source>
         <translation>Назва</translation>
@@ -1019,10 +987,6 @@
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Автоматично створювати теку для декількох видобутих файлів</translation>
-    </message>
-    <message>
-        <source>Show extracted files when complete</source>
-        <translation type="vanished">Показати видобуті файли, коли завершено</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>
