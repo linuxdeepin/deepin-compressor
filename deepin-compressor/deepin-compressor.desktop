@@ -15,3 +15,4 @@ Terminal=false
 Type=Application
 StartupNotify=true
 X-Deepin-Vendor=deepin
+TZ='Asia/Shanghai'
