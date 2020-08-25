@@ -90,7 +90,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     zip_error_init_with_code(&err, errcode);
     m_bAllEntry = false;
     if (!archive) {
-        //emit error(("Failed to open archive: %1"));
+        //emit error(("Failed to open the archive: %1"));
         //return false;
         m_bAllEntry = true;
         return minizip_list();
@@ -206,7 +206,7 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_CREATE, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -436,13 +436,13 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     char *fileName = QFile::encodeName(filename()).data();
     zip_t *archive = zip_open(fileName, 0, &errcode);
     if (errcode != ZIP_ER_OK) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -563,7 +563,7 @@ bool LibzipPlugin::addComment(const QString &comment)
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -931,7 +931,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), ZIP_RDONLY, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-//        emit error(("Failed to open archive: %1"));
+//        emit error(("Failed to open the archive: %1"));
 //        return false;
         return minizip_extractFiles(files, destinationDirectory, options);
     }
@@ -1402,7 +1402,7 @@ bool LibzipPlugin::moveFiles(const QVector<Archive::Entry *> &files, Archive::En
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -1457,7 +1457,7 @@ bool LibzipPlugin::copyFiles(const QVector<Archive::Entry *> &files, Archive::En
     zip_t *archive = zip_open(QFile::encodeName(filename()).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
     if (archive == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -1736,7 +1736,7 @@ bool LibzipPlugin::minizip_list(bool /*isbatch*/)
     // Open the zip file
     unzFile zipfile = unzOpen(fileName.toUtf8().constData());
     if (zipfile == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 
@@ -1837,7 +1837,7 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
     // Open the zip file
     unzFile zipfile = unzOpen(filename().toUtf8().constData());
     if (zipfile == nullptr) {
-        emit error(("Failed to open archive: %1"));
+        emit error(("Failed to open the archive: %1"));
         return false;
     }
 

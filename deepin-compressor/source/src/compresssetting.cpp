@@ -639,7 +639,7 @@ void CompressSetting::onSplitChanged(int /*status*/)
 //            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0);
 //        }
         QString size = Utils::humanReadableSize(m_getFileSize, 1);
-        m_splitnumedit->setToolTip(tr("Total file size: %1").arg(size));
+        m_splitnumedit->setToolTip(tr("Total size: %1").arg(size));
         isSplitChecked = true;
     } else {
         m_splitnumedit->setEnabled(false);
@@ -737,7 +737,7 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
         if (compresspath == path.at(i)) {
             DDialog *pDialog = new DDialog(this);
             pDialog->getButton(pDialog->addButton(tr("Close")))->setShortcut(Qt::Key_C);
-            showWarningDialog(tr("You cannot add the archive to yourself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            showWarningDialog(tr("You cannot add the archive to itself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
             return;
         }
     }
@@ -868,8 +868,8 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
     for (int i = 0; i < path.count(); i++) {
         if (compresspath == path.at(i)) {
             DDialog *pDialog = new DDialog(this);
-            pDialog->getButton(pDialog->addButton(tr("Close(C)")))->setShortcut(Qt::Key_C);
-            showWarningDialog(tr("You cannot add the archive to yourself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            pDialog->addButton(tr("OK"));
+            showWarningDialog(tr("You cannot add the archive to itself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
             return;
         }
     }
@@ -999,7 +999,7 @@ void CompressSetting::autoMoveToArchive(const QStringList &files, const QString 
     qDebug() << "开始执行移动操作！" << ";movepath:" << archive << ";path:" << files[0];
     for (int i = 0; i < files.count(); i++) {
         if (archive == files.at(i)) {
-            showWarningDialog(tr("You cannot move the file to yourself"));
+            showWarningDialog(tr("You cannot add the archive to itself"));
             return;
         }
     }
@@ -1204,7 +1204,7 @@ bool CompressSetting::existSameFileName()
     strlabel->setMinimumSize(QSize(154, 20));
     strlabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(tr("The file name under this path already exists, replace it?"));
+    strlabel->setText(tr("Another file with the same name already exists, replace it?"));
 
     dialog->addButton(tr("Cancel"));
     dialog->addButton(tr("Replace"), true, DDialog::ButtonWarning);

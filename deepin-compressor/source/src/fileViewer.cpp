@@ -505,7 +505,7 @@ void fileViewer::InitUI()
         m_pRightMenu->addAction(tr("Open"));
         m_pRightMenu->addAction(tr("Delete", "slotDecompressRowDelete"));
 
-        openWithDialogMenu = new  DMenu(tr("Open style"), this);
+        openWithDialogMenu = new  DMenu(tr("Open with"), this);
         m_pRightMenu->addMenu(openWithDialogMenu);
 
 
@@ -522,7 +522,7 @@ void fileViewer::InitUI()
         deleteAction = new QAction(tr("Delete"), this);
         m_pRightMenu->addAction(tr("Open"));
 
-        openWithDialogMenu = new  DMenu(tr("Open style"), this);
+        openWithDialogMenu = new  DMenu(tr("Open with"), this);
         m_pRightMenu->addMenu(openWithDialogMenu);
         m_pRightMenu->addAction(deleteAction);
         pTableViewFile->setDragDropMode(QAbstractItemView::DragDrop);
@@ -656,7 +656,7 @@ void fileViewer::updateAction(const QString &fileType)
     QList<QAction *> listAction =  OpenWithDialog::addMenuOpenAction(fileType);
 
     openWithDialogMenu->addActions(listAction);
-    openWithDialogMenu->addAction(new QAction(tr("Choose default programma"), openWithDialogMenu));
+    openWithDialogMenu->addAction(new QAction(tr("Select default program"), openWithDialogMenu));
 }
 
 void fileViewer::updateAction(bool isdirectory, const QString &fileType)
@@ -862,7 +862,7 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Delete && pTableViewFile->selectionModel()->selectedRows().count() != 0/* && 0 != m_pathindex*/) {
         //deleteCompressFile();
         isPromptDelete = true;
-        if (DDialog::Accepted == popUpDialog(tr("Do you want to detele the selected file?"))) {
+        if (DDialog::Accepted == popUpDialog(tr("Do you want to delete the selected file(s)?"))) {
             if (PAGE_COMPRESS == m_pagetype) {
                 deleteCompressFile();
             } else {
@@ -1028,7 +1028,7 @@ void fileViewer::deleteCompressFile()
             fileinfo = pModel->fileInfo(qAsConst(index));
             break;
         }
-        int isDelete = showWarningDialog(tr("Your current operation will permanently delete this file, please backup it in advance!Are you sure to delete?"));
+        int isDelete = showWarningDialog(tr("It will permanently delete the file(s). Are you sure you want to continue?"));
         if (isDelete == 1) {
             Utils::checkAndDeleteDir(fileinfo.filePath());
         }
@@ -1652,7 +1652,7 @@ void fileViewer::onRightMenuClicked(QAction *action)
             slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
         } else if (action->text() == tr("Delete") || action->text() == tr("Delete", "slotDecompressRowDelete")) {
             isPromptDelete = true;
-            if (DDialog::Accepted == popUpDialog(tr("Do you want to detele the selected file?"))) {
+            if (DDialog::Accepted == popUpDialog(tr("Do you want to delete the selected file(s)?"))) {
                 if (m_loadPath.endsWith(".rar")) {
                     emit sigNeedConvert();
                 } else {
@@ -1678,7 +1678,7 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
 
         Utils::checkAndDeleteDir(fileName);
         /*emit sigOpenWith(filesAndRootNodesForIndexes(addChildren(pTableViewFile->selectionModel()->selectedRows())), action->text());*/
-        if (action->text() == tr("Choose default programma")) {
+        if (action->text() == tr("Select default program")) {
 
             QModelIndex curindex = pTableViewFile->currentIndex();
             QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
@@ -1700,7 +1700,7 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
             emit sigOpenWith(fileList, action->text());
         }
     } else {
-        if (action->text() != tr("Choose default programma")) {
+        if (action->text() != tr("Select default program")) {
             openWithDialog(pTableViewFile->currentIndex(), action->text());
         } else {
             openWithDialog(pTableViewFile->currentIndex());

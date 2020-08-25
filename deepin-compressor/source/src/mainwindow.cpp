@@ -233,9 +233,9 @@ int MainWindow::queryDialogForClose()
     dialog->setFixedWidth(440);
     QIcon icon = QIcon::fromTheme("deepin-compressor");
     dialog->setIcon(icon /*, QSize(32, 32)*/);
-    dialog->setMessage(tr("Do you want to close the window even it has working job?"));
+    dialog->setMessage(tr("Are you sure you want to stop the ongoing task?"));
     dialog->addButton(tr("Cancel"));
-    dialog->addButton(QObject::tr("OK"));
+    dialog->addButton(QObject::tr("Confirm"));
 //    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
 //    effect->setOffset(0, 4);
 //    effect->setColor(QColor(0, 145, 255, 76));
@@ -697,7 +697,7 @@ void MainWindow::InitConnection()
             strlabel->setFixedWidth(340);
             strlabel->setAlignment(Qt::AlignCenter);
             DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-            QString strTitle = QObject::tr("\"%1\"already modified, Whether to update this modification to the compressed package?").arg(Utils::toShortString(file.fileName()));
+            QString strTitle = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(Utils::toShortString(file.fileName()));
             strlabel->setText(strTitle);
             strlabel->setWordWrap(true);
 
@@ -1161,7 +1161,7 @@ void MainWindow::refreshPage()
             int left = 5, right = 5;
             QString displayName = "";
             displayName = m_strDecompressFileName.length() > limitCounts ? m_strDecompressFileName.left(left) + "..." + m_strDecompressFileName.right(right) : m_strDecompressFileName;
-            QString strTitle = tr("adding files to %1").arg(m_strDecompressFileName);
+            QString strTitle = tr("Adding files to %1").arg(m_strDecompressFileName);
             titlebar()->setTitle(strTitle);
         } else {
             titlebar()->setTitle(tr("Compressing"));
@@ -1197,7 +1197,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
-        titlebar()->setTitle(tr("Deleteing"));
+        titlebar()->setTitle(tr("Deleting"));
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
@@ -1258,7 +1258,7 @@ void MainWindow::refreshPage()
         break;
     case PAGE_CONVERT_SUCCESS:
         titlebar()->setTitle("");
-        m_pCompressSuccess->setstringinfo(tr("Convertion successful"));
+        m_pCompressSuccess->setstringinfo(tr("Conversion successful"));
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
@@ -1983,7 +1983,7 @@ void MainWindow::slotLoadingFinished(KJob *job)
                 LoadJob *pLoadJob = dynamic_cast<LoadJob *>(job);
                 ReadOnlyArchiveInterface *pFace = pLoadJob->archiveInterface();
                 QString fileName = pFace->filename();
-                QString tipError = tr("Failed to open archive: %1").arg(fileName);
+                QString tipError = tr("Failed to open the archive: %1").arg(fileName);
                 m_pCompressFail->setFailStrDetail(tipError);
                 m_ePageID = PAGE_UNZIP_FAIL;
                 refreshPage();
@@ -2401,11 +2401,11 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_pCompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
         }
         if (KJob::UserFilenameLong == errorCode) {
-            m_pCompressFail->setFailStrDetail(tr("Filename is too long, unable to extract"));
+            m_pCompressFail->setFailStrDetail(tr("File name too long, unable to extract"));
         } else if (KJob::OpenFailedError == errorCode) {
-            m_pCompressFail->setFailStrDetail(tr("Failed to open archive: %1"));
+            m_pCompressFail->setFailStrDetail(tr("Failed to open the archive: %1"));
         } else if (KJob::WrongPsdError == errorCode) {
-            m_pCompressFail->setFailStrDetail(tr("Wrong password") + "," + tr("unable to extract"));
+            m_pCompressFail->setFailStrDetail(tr("Wrong password") + "," + tr("Unable to extract"));
         }
 
         m_ePageID = PAGE_UNZIP_FAIL;
@@ -4713,7 +4713,7 @@ int MainWindow::promptDialog()
     dialog->setMinimumSize(380, 140);
     dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
     dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
-    DLabel *pContent = new DLabel(tr("Please open the Archive Manager and set the file association type"), dialog);
+    DLabel *pContent = new DLabel(tr("Please check the file association type in the settings of Archive Manager"), dialog);
 
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;

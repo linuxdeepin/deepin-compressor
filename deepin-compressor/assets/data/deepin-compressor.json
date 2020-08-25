@@ -24,7 +24,7 @@
                             "key": "open_folder",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "Show extracted files when complete",
+                            "text": "Show extracted files when completed",
                             "default": false
                         }
                     ]

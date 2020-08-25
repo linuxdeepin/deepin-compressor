@@ -332,7 +332,7 @@ void Progress::setProgressFilename(QString filename)
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING || m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Deleteing") + ": " + filename, Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Deleting") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Converting") + ": " + filename, Qt::ElideMiddle, 520));
     } else {
@@ -395,13 +395,13 @@ int Progress::showConfirmDialog()
         //strlabel->setText(tr("Stop compressing "));
         strlabel2->setText(tr("Are you sure you want to stop the compression?"));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
-        strlabel2->setText(tr("Are you sure you want to stop the updating?"));
+        strlabel2->setText(tr("Are you sure you want to stop the update?"));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
-        strlabel2->setText(tr("Are you sure you want to stop the converting?"));
+        strlabel2->setText(tr("Are you sure you want to stop the conversion?"));
     } else {
         //strlabel->setText(tr("Stop extracting "));
         if (m_openType) {
-            strlabel2->setText(tr("Are you sure you want to stop open the file?"));
+            strlabel2->setText(("Are you sure you want to stop open the file?"));
         } else {
             strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
         }

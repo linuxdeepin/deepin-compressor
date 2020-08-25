@@ -182,7 +182,7 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
-    } else if (message == "Failed to open archive: %1") {
+    } else if (message == "Failed to open the archive: %1") {
         setError(KJob::OpenFailedError);
         setErrorText(message);
         emitResult();
