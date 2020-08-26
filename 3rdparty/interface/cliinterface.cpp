@@ -385,7 +385,7 @@ bool CliInterface::deleteFiles(const QVector<Archive::Entry *> &files)
     m_removedFiles = files;
 
     return runProcess(m_cliProps->property("deleteProgram").toString(),
-                      m_cliProps->deleteArgs(filename(), files, password()));
+                      m_cliProps->deleteArgs(filename(), files, /*password*/QString()));
 }
 
 bool CliInterface::testArchive()
@@ -1500,7 +1500,35 @@ bool CliInterface::handleLine(const QString &line)
     }
 
     if (m_operationMode == Delete) {
-        return readDeleteLine(line);
+        //return readDeleteLine(line);
+        if (line.startsWith(QLatin1String("Error: ")) &&
+                line.endsWith(QLatin1String(" is not supported archive"))) {
+            m_removedFiles.clear();
+            emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
+            return false;
+        } else if (line.startsWith(QLatin1String("Enter password (will not be echoed):"))) {
+            qDebug() << "Found a password prompt";
+
+            PasswordNeededQuery query(filename());
+            emit userQuery(&query);
+            query.waitForResponse();
+
+            if (query.responseCancelled()) {
+                emit cancelled();
+                return false;
+            }
+
+            setPassword(query.password());
+
+            const QString response(password() + QLatin1Char('\n'));
+            writeToProcess(response.toLocal8Bit());
+
+            //return true;
+        } else if (line.startsWith(QLatin1String("E_FAIL"))) {
+            m_removedFiles.clear();
+            emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
+            return false;
+        }
     }
 
     if (m_operationMode == Test) {
