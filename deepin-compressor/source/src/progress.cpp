@@ -322,6 +322,11 @@ void Progress::setTypeImage(QString type)
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 
+DPushButton *Progress::getCancelbutton()
+{
+    return m_cancelbutton;
+}
+
 void Progress::setProgressFilename(QString filename)
 {
     if (filename.isEmpty()) {

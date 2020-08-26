@@ -109,6 +109,11 @@ void EncryptionPage::setInputflag(bool bFlag)
     m_inputflag = bFlag;
 }
 
+DPasswordEdit *EncryptionPage::getPasswordEdit()
+{
+    return m_password;
+}
+
 void EncryptionPage::nextbuttonClicked()
 {
     m_inputflag = true;

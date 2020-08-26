@@ -176,6 +176,11 @@ void Compressor_Success::setConvertType(QString type)
     m_convertType = type;
 }
 
+CustomPushButton *Compressor_Success::getShowfilebutton()
+{
+    return m_showfilebutton;
+}
+
 //bool Compressor_Success::eventFilter(QObject *watched, QEvent *event)
 //{
 //    if (watched == m_showfilebutton) {

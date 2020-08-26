@@ -49,6 +49,7 @@
 #include "monitorInterface.h"
 //#include "filewatcher.h"
 #include "monitorAdaptor.h"
+#include "customwidget.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -57,6 +58,7 @@
 #include <DStandardPaths>
 #include <DFontSizeManager>
 #include <DWidgetUtil>
+#include <DWindowCloseButton>
 
 #include <QDebug>
 #include <QDir>
@@ -828,6 +830,7 @@ void MainWindow::initTitleBar()
     m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
     m_pTitleButton->setFixedSize(38, 38);
     m_pTitleButton->setVisible(false);
+    m_pTitleButton->setObjectName("TitleButton");
 
     QHBoxLayout *leftLayout = new QHBoxLayout;
     leftLayout->addSpacing(6);
@@ -1084,6 +1087,64 @@ bool MainWindow::createSubWindow(const QStringList &urls)
     return true;
 }
 
+bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
+{
+    if (evt->key() == Qt::Key_Tab) {
+        DWindowCloseButton *closebtn = this->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+        if (obj == this->titlebar()) {
+            if (m_pTitleButton->isVisible()) {
+                m_pTitleButton->setFocus(Qt::TabFocusReason);
+                return true;
+            } else {
+                return false;
+            }
+        } else if (obj->objectName() == "TitleButton") {
+            titlebar()->setFocus(Qt::TabFocusReason);
+            //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
+            //  return  true;
+        } else if (obj == closebtn) {
+            switch (m_ePageID) {
+            case PAGE_HOME:
+                m_pHomePage->getChooseBtn()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_UNZIP:
+                m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIP:
+                m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIPSET:
+                m_pCompressSetting->getFilenameLineEdit()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIPPROGRESS:
+            case PAGE_UNZIPPROGRESS:
+            case PAGE_DELETEPROGRESS:
+            case PAGE_CONVERTPROGRESS:
+                m_pProgess->getCancelbutton()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIP_SUCCESS:
+            case PAGE_UNZIP_SUCCESS:
+            case PAGE_CONVERT_SUCCESS:
+                m_pCompressSuccess->getShowfilebutton()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIP_FAIL:
+            case PAGE_UNZIP_FAIL:
+                m_pCompressFail->getRetrybutton()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ENCRYPTION:
+                m_pEncryptionpage->getPasswordEdit()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return  true;
+        }
+    } else if (evt->key() == Qt::Key_Backtab) {
+
+    }
+    return  false;
+}
+
 //void MainWindow::setEnable()
 //{
 //    setAcceptDrops(true);
@@ -1105,6 +1166,10 @@ void MainWindow::refreshPage()
 {
     m_pEncryptionpage->resetPage();
     qDebug() << "m_ePageID: " << m_ePageID;
+
+    if (focusWidget()) {
+        focusWidget()->clearFocus();
+    }
 
     switch (m_ePageID) {
     case PAGE_HOME:         // 首页
@@ -1152,6 +1217,8 @@ void MainWindow::refreshPage()
 
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_ArrowLeave);
         m_pMainLayout->setCurrentIndex(3);
+        m_pCompressSetting->getFilenameLineEdit()->lineEdit()->selectAll();
+        m_pCompressSetting->getFilenameLineEdit()->lineEdit()->setFocus();
         break;
     case PAGE_ZIPPROGRESS:  // 进度界面
         if (this->m_operationtype == Operation_Load) {

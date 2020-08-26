@@ -42,6 +42,7 @@ public:
 
     void setFailStr(const QString &str);
     void setFailStrDetail(const QString &str);
+    CustomPushButton *getRetrybutton();
 
 private:
     CustomPushButton *m_retrybutton;

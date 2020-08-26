@@ -69,7 +69,12 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
 
                 return true;
             }
+        } else if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab) {
+            if (mainWindow_) {
+                return mainWindow_->handleApplicationTabEventNotify(watched, keyEvent);
+            }
         }
+
     }
 
     return DApplication::notify(watched, event);

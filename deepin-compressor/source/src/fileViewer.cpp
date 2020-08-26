@@ -446,6 +446,7 @@ void fileViewer::InitUI()
     QHBoxLayout *mainlayout = new QHBoxLayout;
 
     pTableViewFile = new MyTableView(this);
+    pTableViewFile->setObjectName("TableViewFile");
 
 
     connect(pTableViewFile->header_->gotoPreviousLabel_, SIGNAL(doubleClickedSignal()), this, SLOT(slotCompressRePreviousDoubleClicked()));
@@ -1874,7 +1875,7 @@ void MyTableView::focusInEvent(QFocusEvent *event)
 void MyTableView::keyPressEvent(QKeyEvent *event)
 {
     if (Qt::Key_Tab == event->key()) {
-        emit sigTabPress();
+        emit sigTabPress(); //tableview已获取焦点，按tab键，焦点不再列表内切换
     } else {
         DTableView::keyPressEvent(event);
     }

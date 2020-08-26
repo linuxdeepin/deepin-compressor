@@ -595,6 +595,11 @@ QList<QAction *> CompressSetting::getTypemenuActions()
     return m_typemenu->actions();
 }
 
+DLineEdit *CompressSetting::getFilenameLineEdit()
+{
+    return m_filename;
+}
+
 void CompressSetting::showEvent(QShowEvent *event)
 {
     initWidget();

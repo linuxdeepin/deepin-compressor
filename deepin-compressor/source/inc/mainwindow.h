@@ -515,6 +515,16 @@ public slots:
      */
     bool createSubWindow(const QStringList &urls);
 
+    /**
+    * @brief LogCollectorMain::handleApplicationTabEventNotify
+    * 处理application中notify的tab keyevent ,直接在dapplication中调用
+    * 只调整我们需要调整的顺序,其他的默认
+    * @param obj 接收事件的对象
+    * @param evt 对象接收的键盘事件
+    * @return true处理并屏蔽事件 false交给application的notify处理
+     */
+    bool handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt);
+
 private slots:
 //    /**
 //     * @brief setEnable

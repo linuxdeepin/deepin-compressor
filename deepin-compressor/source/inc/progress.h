@@ -72,6 +72,7 @@ public:
     void setopentype(bool type);
     bool getOpenType();
     void setTypeImage(QString type);
+    DPushButton *getCancelbutton();
 
     int showConfirmDialog();
     void resetProgress();

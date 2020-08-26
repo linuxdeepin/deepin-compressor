@@ -82,6 +82,7 @@ public:
     void setSelectedFileSize(qint64 size);
     void clickTitleBtnResetAdvancedOptions();
     QList<QAction *> getTypemenuActions();
+    DLineEdit *getFilenameLineEdit();
 
 private:
     void showEvent(QShowEvent *event) override;

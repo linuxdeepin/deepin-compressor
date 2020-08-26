@@ -116,6 +116,11 @@ void Compressor_Fail::setFailStrDetail(const QString &str)
     m_stringdetaillabel->setText(m_stringdetail);
 }
 
+CustomPushButton *Compressor_Fail::getRetrybutton()
+{
+    return m_retrybutton;
+}
+
 void Compressor_Fail::commandLinkBackButtonClicked()
 {
     emit sigBackButtonClickedOnFail();

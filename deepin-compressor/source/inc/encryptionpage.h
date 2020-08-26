@@ -41,6 +41,8 @@ public:
     void setPassowrdFocus();
     void resetPage();
     void setInputflag(bool bFlag);
+    DPasswordEdit *getPasswordEdit();
+
 private:
 signals:
     void sigExtractPassword(QString password);

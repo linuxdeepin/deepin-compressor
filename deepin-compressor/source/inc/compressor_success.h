@@ -46,6 +46,7 @@ public:
     void setCompressNewFullPath(const QString &path);
     void clear();
     void setConvertType(QString type);
+    CustomPushButton *getShowfilebutton();
 
 private:
     CustomPushButton *m_showfilebutton;

@@ -48,6 +48,7 @@ public:
     void setIconPixmap(bool isLoaded);
     void spinnerStart(QObject *pWnd = nullptr, pMember_callback func = nullptr);
     void spinnerStop();
+    CustomCommandLinkButton *getChooseBtn();
 
     void resizeEvent(QResizeEvent *event) override;
 

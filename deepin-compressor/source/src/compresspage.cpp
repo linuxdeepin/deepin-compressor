@@ -145,6 +145,11 @@ void CompressPage::setRootPathIndex()
     m_fileviewer->setRootPathIndex();
 }
 
+fileViewer *CompressPage::getFileViewer()
+{
+    return m_fileviewer;
+}
+
 void CompressPage::onAddfileSlot()
 {
     if (0 != m_fileviewer->getPathIndex()) {
