@@ -1437,9 +1437,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         QStringList sourceArchiveList = sourceArchive.split(QDir::separator());
         QString sourceFileName = sourceArchiveList.last();
 
-        QString warningStr0 = QString(tr("update file '%1' from package '%2'?")).arg(getShortName(destFileName)).arg(getShortName(sourceFileName));
-        QString warningStr1 = QString(tr("one file has been modified by other application.If you don't update package file, your modifications will lose."));
-        QString warningStr2 = QString(tr("update file '%1' from package '%2'?")).arg(destFileName).arg(sourceFileName);
+        QString warningStr1 = QString(tr("Files have been changed. Do you want to update the changes to %1?")).arg(Utils::toShortString(sourceFileName));
 
         m_ActionInfo.mode = (SUBACTION_MODE)mode;
         m_ActionInfo.archive = sourceArchive;
@@ -1450,15 +1448,6 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         dialog->setMinimumSize(380, 200);
         QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(pixmap);
-
-        DLabel *strlabel = new DLabel(dialog);
-        strlabel->setMinimumSize(300, 20);
-        strlabel->setForegroundRole(DPalette::TextTitle);
-        strlabel->setWordWrap(true);
-        DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-        strlabel->setText(warningStr0);
-        strlabel->setAlignment(Qt::AlignCenter);
-        strlabel->setToolTip(warningStr2);
 
         DLabel *strlabel2 = new DLabel(dialog);
         strlabel2->setMinimumSize(300, 20);
@@ -1473,7 +1462,6 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
         QVBoxLayout *mainlayout = new QVBoxLayout;
         mainlayout->setContentsMargins(0, 0, 0, 0);
-        mainlayout->addWidget(strlabel, 0, Qt::AlignVCenter);
         mainlayout->addWidget(strlabel2, 0, Qt::AlignVCenter);
         mainlayout->addSpacing(10);
 

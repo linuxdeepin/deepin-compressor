@@ -737,7 +737,7 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
         if (compresspath == path.at(i)) {
             DDialog *pDialog = new DDialog(this);
             pDialog->getButton(pDialog->addButton(tr("Close")))->setShortcut(Qt::Key_C);
-            showWarningDialog(tr("You cannot add the archive to itself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            showWarningDialog(tr("You cannot add the archive to itself"), 0, "", pDialog);
             return;
         }
     }
@@ -869,7 +869,7 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
         if (compresspath == path.at(i)) {
             DDialog *pDialog = new DDialog(this);
             pDialog->addButton(tr("OK"));
-            showWarningDialog(tr("You cannot add the archive to itself"), 0, tr("An error occurred while adding the file to the archive"), pDialog);
+            showWarningDialog(tr("You cannot add the archive to itself"), 0, "", pDialog);
             return;
         }
     }

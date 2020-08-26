@@ -2513,7 +2513,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if (Operation_TempExtract_Open_Choose == m_operationtype) {
         m_pOpenLoadingPage->stop();
         QString ppp = m_strProgram;
-        if (m_strProgram != tr("Choose default programma")) {
+        if (m_strProgram != tr("Select default program")) {
             OpenWithDialog::chooseOpen(m_strProgram, QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString());
         } else {
             OpenWithDialog *dia = new OpenWithDialog(DUrl(QString(/*TEMPDIR_NAME*/ m_strPathStore + PATH_SEP) + m_vecExtractSimpleFiles.at(0)->property("name").toString()), this);
