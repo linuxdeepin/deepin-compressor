@@ -875,6 +875,7 @@ private:
 
     int m_startTimer = 0;
     bool m_initflag = false;
+    bool m_isFileModified = false;                          // 监控文件是否已经发生改变
 
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;

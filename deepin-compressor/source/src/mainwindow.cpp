@@ -451,6 +451,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
             // 若本地文件不存在了，则提示用户
             if (!filein.exists()) {
+                m_isFileModified = true;
                 QString displayName = Utils::toShortString(filein.fileName());
                 QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
                 DDialog *dialog = new DDialog(this);
@@ -1116,6 +1117,7 @@ void MainWindow::refreshPage()
         setTitleButtonStyle(false);
         titlebar()->setTitle("");
         m_pMainLayout->setCurrentIndex(0);
+        m_isFileModified = false;
         break;
     case PAGE_UNZIP:        // 解压界面
         m_pProgess->resetProgress();
@@ -1152,10 +1154,10 @@ void MainWindow::refreshPage()
         m_pMainLayout->setCurrentIndex(3);
         break;
     case PAGE_ZIPPROGRESS:  // 进度界面
-        if (0 != m_iWatchTimerID) {
-            killTimer(m_iWatchTimerID);
-            m_iWatchTimerID = 0;
-        }
+//        if (0 != m_iWatchTimerID) {
+//            killTimer(m_iWatchTimerID);
+//            m_iWatchTimerID = 0;
+//        }
         if (this->m_operationtype == Operation_Load) {
             int limitCounts = 10;
             int left = 5, right = 5;
@@ -1226,6 +1228,11 @@ void MainWindow::refreshPage()
         if (m_pSettingsDialog->isAutoDeleteFile()) {
             autoDeleteSourceFile();
         }
+
+//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+//            killTimer(m_iWatchTimerID);
+//            m_iWatchTimerID = 0;
+//        }
         break;
     case PAGE_ZIP_FAIL:     // 压缩失败界面
         titlebar()->setTitle("");
@@ -1234,6 +1241,10 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(6);
+//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+//            killTimer(m_iWatchTimerID);
+//            m_iWatchTimerID = 0;
+//        }
         break;
     case PAGE_UNZIP_SUCCESS:    // 解压成功界面
         if (m_pFileWatcher) {
@@ -1247,6 +1258,10 @@ void MainWindow::refreshPage()
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(5);
         unzipSuccessOpenFileDir();
+//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+//            killTimer(m_iWatchTimerID);
+//            m_iWatchTimerID = 0;
+//        }
         break;
     case PAGE_UNZIP_FAIL:       // 解压失败界面
         titlebar()->setTitle("");
@@ -1255,6 +1270,10 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(6);
+//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+//            killTimer(m_iWatchTimerID);
+//            m_iWatchTimerID = 0;
+//        }
         break;
     case PAGE_CONVERT_SUCCESS:
         titlebar()->setTitle("");
@@ -1873,7 +1892,7 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
 {
     QString transFile = localPath;
     transSplitFileName(transFile);      // 对文件名进行转换（分卷处理）
-//    WatcherFile(transFile);
+    WatcherFile(transFile);
     m_strLoadfile = transFile;
 
     m_pProgess->pInfo()->setTotalSize(0); //初始化大小
@@ -3842,12 +3861,22 @@ void MainWindow::slotCompressFinished(KJob *job)
             if (getMediaFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
+                //                if (job->error() == KJob::CancelError) {
+                //                    m_pCompressFail->setFailStrDetail(tr("File was changed"));
+                //                } else {
+                //                    m_pCompressFail->setFailStrDetail(tr("Damaged file"));
+                //                }
                 m_pCompressFail->setFailStrDetail(tr("Damaged file"));
             }
         } else {
             if (getDiskFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
+//                if (job->error() == KJob::CancelError) {
+//                    m_pCompressFail->setFailStrDetail(tr("File was changed"));
+//                } else {
+//                    m_pCompressFail->setFailStrDetail(tr("Damaged file"));
+//                }
                 m_pCompressFail->setFailStrDetail(tr("Damaged file"));
             }
         }
@@ -3860,9 +3889,12 @@ void MainWindow::slotCompressFinished(KJob *job)
     m_strCreateCompressFile.clear();
     if (m_convertType.size() > 0) {
         m_ePageID = PAGE_CONVERT_SUCCESS;
-//        m_convertType = "";
+        //        m_convertType = "";
     } else {
-        m_ePageID = PAGE_ZIP_SUCCESS;
+        if (!m_isFileModified) {
+            m_ePageID = PAGE_ZIP_SUCCESS;
+        }
+        //        m_ePageID = PAGE_ZIP_SUCCESS;
     }
 
     refreshPage();
