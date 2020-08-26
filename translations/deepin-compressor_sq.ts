@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -56,7 +54,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresspage.cpp" line="118"/>
         <source>Please add files to the top-level directory</source>
-        <translation type="unfinished">Ju lutemi, shtoni kartela te drejtoria e epërme</translation>
+        <translation>Ju lutemi, shtoni kartela te drejtoria e epërme</translation>
     </message>
 </context>
 <context>
@@ -118,7 +116,7 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="901"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1031"/>
         <source>%1 was changed on the disk, please import it again.</source>
-        <translation type="unfinished">%1 ndryshoi në disk, ju lutemi, riimportojeni.</translation>
+        <translation>%1 ndryshoi në disk, ju lutemi, riimportojeni.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="319"/>
@@ -134,46 +132,46 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1044"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1049"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S’keni leje të ngjishni %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="339"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="796"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="928"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>S’keni leje të ruani kartela këtu, ju lutemi, ndryshoni lejet dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="344"/>
         <source>Too many volumes, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Shumë vëllime, ju lutemi, ndryshojini dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="441"/>
         <source>Files that begin with &apos;@&apos; cannot be compressed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartelat që fillojnë me @ s’mund të ngjeshen</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="642"/>
         <source>Total size: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Madhësi gjithsej: %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="740"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="872"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1002"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation>S’mund ta shtoni arkivin te vetvetja</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1207"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished">Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
+        <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="739"/>
         <source>Close</source>
-        <translation type="unfinished">Mbylle</translation>
+        <translation>Mbylle</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="871"/>
@@ -184,12 +182,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1209"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1210"/>
         <source>Replace</source>
-        <translation type="unfinished">Zëvendëso</translation>
+        <translation>Zëvendëso</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="288"/>
@@ -202,7 +200,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="114"/>
         <source>New Archive</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkiv i Ri</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="283"/>
@@ -407,12 +405,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1185"/>
         <source>Opening</source>
-        <translation type="unfinished"></translation>
+        <translation>Po hapet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1212"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>Po shndërrohet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1221"/>
@@ -422,12 +420,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4929"/>
         <source>Confirm</source>
-        <translation type="unfinished">Ripohojeni</translation>
+        <translation>Ripohojeni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4932"/>
         <source>Do you want to delete the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation>Doni të fshihet arkivi?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2390"/>
@@ -479,7 +477,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1164"/>
         <source>Adding files to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Po shtohen kartela te %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1167"/>
@@ -494,7 +492,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1200"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Po fshihet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1232"/>
@@ -509,7 +507,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1261"/>
         <source>Conversion successful</source>
-        <translation type="unfinished"></translation>
+        <translation>Shndërrim i suksesshëm</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1454"/>
@@ -530,7 +528,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1987"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2415"/>
         <source>Failed to open the archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S’u arrit të hapet arkivi: %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2296"/>
@@ -541,12 +539,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2503"/>
         <source>Select default program</source>
-        <translation type="unfinished"></translation>
+        <translation>Përzgjidhni program parazgjedhje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4728"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Ju lutemi, kontrolloni llojin e përshoqërimit të kartelës te rregullimet e Përgjegjësit të Arkivave</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1804"/>
@@ -559,7 +557,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="236"/>
         <source>Are you sure you want to stop the ongoing task?</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeni i sigurt se doni të ndalet akti në xhirim e sipër?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2065"/>
@@ -579,12 +577,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2413"/>
         <source>File name too long, unable to extract</source>
-        <translation type="unfinished"></translation>
+        <translation>Emër kartele shumë i gjatë, s’arrihet të përftohet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2417"/>
         <source>Unable to extract</source>
-        <translation type="unfinished"></translation>
+        <translation>S’arrihet të përftohet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="3845"/>
@@ -686,7 +684,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="52"/>
         <source>Loading, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Po ngarkohet, ju lutemi, pritni…</translation>
     </message>
 </context>
 <context>
@@ -694,37 +692,37 @@
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="311"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>Hape me</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="330"/>
         <source>Add other programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Shtoni programe të tjera</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="331"/>
         <source>Set as default</source>
-        <translation type="unfinished"></translation>
+        <translation>Caktoje si parazgjedhje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="333"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="334"/>
         <source>Confirm</source>
-        <translation type="unfinished">Ripohojeni</translation>
+        <translation>Ripohojeni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="338"/>
         <source>Recommended Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikacione të Rekomanduar</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="340"/>
         <source>Other Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikacione të Tjera</translation>
     </message>
 </context>
 <context>
@@ -752,7 +750,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="191"/>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="463"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pushim</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="152"/>
@@ -760,7 +758,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="277"/>
         <source>Speed</source>
         <comment>delete</comment>
-        <translation type="unfinished">Shpejtësi</translation>
+        <translation>Shpejtësi</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="156"/>
@@ -769,27 +767,27 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="303"/>
         <source>Speed</source>
         <comment>convert</comment>
-        <translation type="unfinished">Shpejtësi</translation>
+        <translation>Shpejtësi</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="398"/>
         <source>Are you sure you want to stop the update?</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeni i sigurt se doni të ndalet përditësimi?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="400"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeni i sigurt se doni të ndalet shndërrimi?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="337"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>Po shndërrohet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="340"/>
         <source>Opening</source>
-        <translation type="unfinished"></translation>
+        <translation>Po hapet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="396"/>
@@ -804,7 +802,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="457"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Vazhdo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="406"/>
@@ -847,7 +845,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="335"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Po fshihet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="342"/>
@@ -889,7 +887,7 @@
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="142"/>
         <source>Extraction successful</source>
         <comment>progressdialog</comment>
-        <translation type="unfinished">Përftim i suksesshëm</translation>
+        <translation>Përftim i suksesshëm</translation>
     </message>
 </context>
 <context>
@@ -965,7 +963,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1461"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Përditësoje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="5"/>
@@ -985,17 +983,17 @@
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Shfaqi kartelat e përftuara, kur të plotësohet</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="9"/>
         <source>File Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrim Kartelash</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="10"/>
         <source>Delete files after compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Fshiji kartelat pas ngjeshjes</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="11"/>
@@ -1022,27 +1020,27 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="238"/>
         <source>Confirm</source>
-        <translation type="unfinished">Ripohojeni</translation>
+        <translation>Ripohojeni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="700"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ndryshoi. Doni të ruhen ndryshimet te arkivi?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="714"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Hidhe tej</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1460"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="715"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruaje</translation>
     </message>
 </context>
 <context>
@@ -1051,11 +1049,6 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="135"/>
         <source>Select All</source>
         <translation>Përzgjidhe Krejt</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="137"/>
-        <source>Recommended</source>
-        <translation>E këshilluar</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="174"/>
@@ -1067,6 +1060,11 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="136"/>
         <source>Clear All</source>
         <translation>Spastroji Krejt</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="137"/>
+        <source>Recommended</source>
+        <translation>E këshilluar</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="168"/>
@@ -1088,25 +1086,25 @@
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="279"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Fshiji arkivat pas përftimit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="285"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="306"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurrë</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="285"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="309"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Kërko ripohim</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="285"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="312"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Përherë</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="361"/>
@@ -1131,12 +1129,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="116"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished">Shtegu parazgjedhje i përftimeve s’ekziston, ju lutemi, riprovoni</translation>
+        <translation>Shtegu parazgjedhje i përftimeve s’ekziston, ju lutemi, riprovoni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="118"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>S’keni leje të ruani kartela këtu, ju lutemi, ndryshoni lejet dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="137"/>
@@ -1146,27 +1144,27 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="190"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="545"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="546"/>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>Shndërroje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="556"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuk mbulohet ndryshime te arkiva me këtë lloj kartelash. Që të ruhen ndryshimet, ju lutemi, shndërroni formatin e arkivit.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="572"/>
         <source>Convert the format to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Shndërroje formatin në:</translation>
     </message>
 </context>
 <context>
@@ -1189,7 +1187,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1639"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1652"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Përzgjidhni kartelën</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="601"/>
@@ -1205,54 +1203,54 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="990"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1254"/>
         <source>Confirm</source>
-        <translation type="unfinished">Ripohojeni</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1031"/>
-        <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripohojeni</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="988"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1253"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anuloje</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="506"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1641"/>
         <source>Delete</source>
         <comment>slotDecompressRowDelete</comment>
-        <translation type="unfinished">Fshije</translation>
+        <translation>Fshije</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="508"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="525"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>Hape me</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="659"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1669"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1691"/>
         <source>Select default program</source>
-        <translation type="unfinished"></translation>
+        <translation>Përzgjidhni program parazgjedhje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="865"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1643"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation>Doni të fshihet kartelat(t) e përzgjedhur?</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="992"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1031"/>
+        <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
+        <translation>Do të fshijë përgjithnjë kartelën(at). Jeni i sigurt se doni të vazhdohet?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1440"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="992"/>
+        <source>Update</source>
+        <translation>Përditësoje</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="503"/>
