@@ -1135,7 +1135,7 @@ void MainWindow::refreshPage()
         setAcceptDrops(true);
 
         if (m_iWatchTimerID == 0) {
-            m_iWatchTimerID = startTimer(1000);
+            m_iWatchTimerID = startTimer(1);
         }
 
         m_pCompressPage->onPathIndexChanged();
@@ -1147,7 +1147,7 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
 
         if (m_iWatchTimerID == 0) {
-            m_iWatchTimerID = startTimer(1000);
+            m_iWatchTimerID = startTimer(1);
         }
 
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_ArrowLeave);
@@ -1229,10 +1229,10 @@ void MainWindow::refreshPage()
             autoDeleteSourceFile();
         }
 
-//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
-//            killTimer(m_iWatchTimerID);
-//            m_iWatchTimerID = 0;
-//        }
+        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+            killTimer(m_iWatchTimerID);
+            m_iWatchTimerID = 0;
+        }
         break;
     case PAGE_ZIP_FAIL:     // 压缩失败界面
         titlebar()->setTitle("");
@@ -1241,10 +1241,10 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(6);
-//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
-//            killTimer(m_iWatchTimerID);
-//            m_iWatchTimerID = 0;
-//        }
+        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+            killTimer(m_iWatchTimerID);
+            m_iWatchTimerID = 0;
+        }
         break;
     case PAGE_UNZIP_SUCCESS:    // 解压成功界面
         if (m_pFileWatcher) {
@@ -1258,10 +1258,10 @@ void MainWindow::refreshPage()
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(5);
         unzipSuccessOpenFileDir();
-//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
-//            killTimer(m_iWatchTimerID);
-//            m_iWatchTimerID = 0;
-//        }
+        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+            killTimer(m_iWatchTimerID);
+            m_iWatchTimerID = 0;
+        }
         break;
     case PAGE_UNZIP_FAIL:       // 解压失败界面
         titlebar()->setTitle("");
@@ -1270,10 +1270,10 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(false);
         m_pMainLayout->setCurrentIndex(6);
-//        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
-//            killTimer(m_iWatchTimerID);
-//            m_iWatchTimerID = 0;
-//        }
+        if (0 != m_iWatchTimerID && (!m_isFileModified)) {
+            killTimer(m_iWatchTimerID);
+            m_iWatchTimerID = 0;
+        }
         break;
     case PAGE_CONVERT_SUCCESS:
         titlebar()->setTitle("");
