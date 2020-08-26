@@ -1154,10 +1154,6 @@ void MainWindow::refreshPage()
         m_pMainLayout->setCurrentIndex(3);
         break;
     case PAGE_ZIPPROGRESS:  // 进度界面
-//        if (0 != m_iWatchTimerID) {
-//            killTimer(m_iWatchTimerID);
-//            m_iWatchTimerID = 0;
-//        }
         if (this->m_operationtype == Operation_Load) {
             int limitCounts = 10;
             int left = 5, right = 5;
@@ -2228,7 +2224,6 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
     }*/
     m_pProgess->pInfo()->startTimer();
     pExtractJob->archiveInterface()->destDirName = "";
-//    tttttt.start();
     m_pJob->start();
 }
 
@@ -2342,7 +2337,6 @@ void MainWindow::removeFromParentInfo(MainWindow *CurMainWnd)
 
 void MainWindow::slotExtractionDone(KJob *job)
 {
-//    qDebug() << "解压完成时间：" << tttttt.elapsed();
     m_eWorkStatus = WorkNone;
 //    m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
     Archive::Entry *pExtractWorkEntry = nullptr;
@@ -3845,14 +3839,12 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
 
     m_strPathStore = Args[QStringLiteral("localFilePath")];
     //m_compressDirFiles = CheckAllFiles(m_strPathStore);
-//    tttttt.start();
     m_pJob->start();
     m_eWorkStatus = WorkProcess;
 }
 
 void MainWindow::slotCompressFinished(KJob *job)
 {
-//    qDebug() << "压缩完成时间" << tttttt.elapsed();
     qDebug() << "job finished" << job->error();
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
     m_eWorkStatus = WorkNone;
@@ -3861,22 +3853,12 @@ void MainWindow::slotCompressFinished(KJob *job)
             if (getMediaFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
-                //                if (job->error() == KJob::CancelError) {
-                //                    m_pCompressFail->setFailStrDetail(tr("File was changed"));
-                //                } else {
-                //                    m_pCompressFail->setFailStrDetail(tr("Damaged file"));
-                //                }
                 m_pCompressFail->setFailStrDetail(tr("Damaged file"));
             }
         } else {
             if (getDiskFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
             } else {
-//                if (job->error() == KJob::CancelError) {
-//                    m_pCompressFail->setFailStrDetail(tr("File was changed"));
-//                } else {
-//                    m_pCompressFail->setFailStrDetail(tr("Damaged file"));
-//                }
                 m_pCompressFail->setFailStrDetail(tr("Damaged file"));
             }
         }
