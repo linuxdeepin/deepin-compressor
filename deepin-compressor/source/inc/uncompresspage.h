@@ -39,6 +39,7 @@ DWIDGET_USE_NAMESPACE
 class Lib_Edit_Button;
 class ArchiveSortFilterModel;
 class CustomPushButton;
+class CustomCommandLinkButton;
 
 class UnCompressPage : public DWidget
 {
@@ -123,7 +124,7 @@ private:
     CustomPushButton *m_nextbutton;
     QStringList m_filelist;
     QVector<Archive::Entry *> m_vectorDel;
-    DCommandLinkButton *m_extractpath;
+    CustomCommandLinkButton *m_extractpath;
     DLabel *m_pixmaplabel;
     Lib_Edit_Button *m_pathbutton;
     QString m_pathstr;

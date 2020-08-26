@@ -266,3 +266,31 @@ void CustomCheckBox::keyReleaseEvent(QKeyEvent *event)
         DCheckBox::keyReleaseEvent(event);
     }
 }
+
+CustomCommandLinkButton::CustomCommandLinkButton(const QString text, QWidget *parent)
+    : DCommandLinkButton(text, parent)
+{
+
+}
+
+void CustomCommandLinkButton::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行切换状态
+        // 模拟空格键按下事件
+        QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
+        QApplication::sendEvent(this, &pressSpace);
+    } else {
+        DCommandLinkButton::keyPressEvent(event);
+    }
+}
+
+void CustomCommandLinkButton::keyReleaseEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行切换状态
+        // 模拟空格键松开事件
+        QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
+        QApplication::sendEvent(this, &releaseSpace);
+    } else {
+        DCommandLinkButton::keyReleaseEvent(event);
+    }
+}

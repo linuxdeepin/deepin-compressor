@@ -30,6 +30,8 @@
 DWIDGET_USE_NAMESPACE
 
 class CustomPushButton;
+class CustomCommandLinkButton;
+
 class Compressor_Success: public DWidget
 {
     Q_OBJECT
@@ -54,7 +56,7 @@ private:
     QString m_path;
     QString m_fullpath;
     QString newCreatePath_;
-    DCommandLinkButton *commandLinkBackButton = nullptr;
+    CustomCommandLinkButton *commandLinkBackButton = nullptr;
     QString m_convertType;
 
 signals:

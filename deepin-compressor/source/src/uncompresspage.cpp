@@ -57,7 +57,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
-    m_extractpath = new DCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
+    m_extractpath = new CustomCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
     m_extractpath->setToolTip(m_pathstr);
 //    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 //    m_extractpath->setMinimumSize(129, 18);
@@ -100,8 +100,9 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
     connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
-        m_nextbutton->setFocus(Qt::TabFocusReason);
+        m_extractpath->setFocus(Qt::TabFocusReason); //tableview已获取焦点，按tab键，焦点切换到m_extractpath
     });
+    setTabOrder(m_extractpath, m_nextbutton);
 //    connect(m_fileviewer, &fileViewer::sigFileAutoCompressToArchive, this, &UnCompressPage::sigAddArchiveFiles);
 }
 

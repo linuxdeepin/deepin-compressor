@@ -25,6 +25,7 @@
 #include "DGuiApplicationHelper"
 #include "mainwindow.h"
 #include "utils.h"
+#include "customwidget.h"
 
 #include <DPalette>
 #include <DFileDialog>
@@ -42,7 +43,7 @@ HomePage::HomePage(QWidget *parent)
       m_iconLabel(new DLabel(this)),
       m_tipsLabel(new DLabel(tr("Drag file or folder here"), this)),
       m_splitLine(new DLabel(this)),
-      m_chooseBtn(new DCommandLinkButton(tr("Select File"), this)),
+      m_chooseBtn(new CustomCommandLinkButton(tr("Select File"), this)),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
 {
     m_unloadPixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));

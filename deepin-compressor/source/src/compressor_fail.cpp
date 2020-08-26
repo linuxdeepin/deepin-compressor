@@ -61,7 +61,7 @@ void Compressor_Fail::InitUI()
     m_retrybutton->setMinimumSize(340, 36);
     m_retrybutton->setText(tr("Retry"));
 
-    commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
+    commandLinkBackButton = new CustomCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
     commandLinkButtonLayout->addStretch();
     commandLinkButtonLayout->addWidget(commandLinkBackButton);

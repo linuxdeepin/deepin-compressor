@@ -36,6 +36,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+class CustomCommandLinkButton;
+
 class HomePage : public DWidget
 {
     Q_OBJECT
@@ -65,7 +67,7 @@ private:
     DLabel *m_iconLabel;
     DLabel *m_tipsLabel;
     DLabel *m_splitLine;
-    DCommandLinkButton *m_chooseBtn;
+    CustomCommandLinkButton *m_chooseBtn;
     QSettings *m_settings;
     DSpinner *m_spinner;
     TimerWatcher *m_pWatcher = nullptr;

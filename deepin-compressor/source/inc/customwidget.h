@@ -25,6 +25,7 @@
 #include <DPushButton>
 #include <DSwitchButton>
 #include <DCheckBox>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 class CustomSuggestButton: public DSuggestButton
@@ -96,4 +97,15 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
 
+class CustomCommandLinkButton: public DCommandLinkButton
+{
+    Q_OBJECT
+
+public:
+    explicit CustomCommandLinkButton(const QString text, QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+};
 #endif // CUSTOMWIDGET_H

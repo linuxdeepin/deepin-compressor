@@ -30,6 +30,7 @@
 
 DWIDGET_USE_NAMESPACE
 class CustomPushButton;
+class CustomCommandLinkButton;
 
 class Compressor_Fail: public DWidget
 {
@@ -52,7 +53,7 @@ private:
     DLabel *m_stringdetaillabel;
     QString m_stringdetail;
 
-    DCommandLinkButton *commandLinkBackButton = nullptr;
+    CustomCommandLinkButton *commandLinkBackButton = nullptr;
 
 signals:
     void sigBackButtonClickedOnFail();

@@ -58,7 +58,7 @@ void Compressor_Success::InitUI()
     m_showfilebutton->setMinimumSize(340, 36);
     m_showfilebutton->setText(tr("View"));
 
-    commandLinkBackButton = new DCommandLinkButton(tr("Back"), this);
+    commandLinkBackButton = new CustomCommandLinkButton(tr("Back"), this);
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
     commandLinkButtonLayout->addStretch();
     commandLinkButtonLayout->addWidget(commandLinkBackButton);
