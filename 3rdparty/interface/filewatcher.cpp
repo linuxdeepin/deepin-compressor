@@ -94,12 +94,14 @@ void TimerWatcher::timerEvent(QTimerEvent *event)
         if (this->pCaller == nullptr || this->callback == nullptr) {
             return;
         }
+
         bool result = (this->pCaller->*callback)();
         if (result == true) {
             emit sigBindFuncDone(result);
         } else {
             qDebug() << "condition not ok";
         }
+
         this->finishWork(); //stop timer work
     }
 }

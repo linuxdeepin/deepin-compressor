@@ -72,6 +72,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
                 }
             }
         }
+
         foreach (const KPluginFactoryPrivate::Plugin &plugin, clashes) {
             superClass = plugin.first->superClass();
             if (superClass) {
@@ -82,6 +83,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
                 }
             }
         }
+
         d->createInstanceHash.insertMulti(keyword, KPluginFactoryPrivate::Plugin(metaObject, instanceFunction));
     }
 }
@@ -148,6 +150,7 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
     if (obj) {
         emit objectCreated(obj);
     }
+
     return obj;
 }
 
@@ -157,6 +160,7 @@ QStringList KPluginFactory::variantListToStringList(const QVariantList &list)
     for (const QVariant &var : list) {
         stringlist << var.toString();
     }
+
     return stringlist;
 }
 
@@ -166,5 +170,6 @@ QVariantList KPluginFactory::stringListToVariantList(const QStringList &list)
     for (const QString &str : list) {
         variantlist << QVariant(str);
     }
+
     return variantlist;
 }

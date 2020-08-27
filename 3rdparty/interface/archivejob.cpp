@@ -186,11 +186,13 @@ bool KJob::exec()
     if (!d->isFinished) {
         d->eventLoop->exec(QEventLoop::ExcludeUserInputEvents);
     }
+
     d->eventLoop = nullptr;
 
     if (wasAutoDelete) {
         deleteLater();
     }
+
     return (d->error == NoError);
 }
 

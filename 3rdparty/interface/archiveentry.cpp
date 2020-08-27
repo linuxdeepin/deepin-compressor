@@ -106,6 +106,7 @@ void Archive::Entry::removeEntryAt(int index)
         if (iter.value() > index) {
             iter.value() -= 1;
         }
+
         iter++;
     }
 }
@@ -204,6 +205,7 @@ int Archive::Entry::row() const
     if (getParent()) {
         return getParent()->entries().indexOf(const_cast<Archive::Entry *>(this));
     }
+
     return 0;
 }
 
@@ -232,9 +234,11 @@ Archive::Entry *Archive::Entry::findByPath(const QStringList &pieces, int index)
     if (index == pieces.count() - 1) {
         return next;
     }
+
     if (next && next->isDir()) {
         return next->findByPath(pieces, index + 1);
     }
+
     return nullptr;
 }
 
@@ -261,6 +265,7 @@ void Archive::Entry::getAllNodesFullPath(QStringList &pList)
     if (this->isDir() == false) {
         return;
     }
+
     const auto archiveEntries = this->entries();
     for (Archive::Entry *entry : archiveEntries) {
         pList.append(entry->fullPath());
@@ -300,6 +305,7 @@ void Archive::Entry::getVector(Entry *pE, QVector<Archive::Entry *> &vector)
             }
         }
     }
+
     vector.append(pE);
 }
 
@@ -325,11 +331,13 @@ void Archive::Entry::clean()
         delete p;
         p = nullptr;
     }
+
     const auto archiveEntries = this->entries();
     for (auto entry : archiveEntries) {
         if (entry->isDir() == true && entry != nullptr) {
             entry->clean();
         }
+
         if (entry) {
             delete entry;
             entry = nullptr;
@@ -343,6 +351,7 @@ QDebug operator<<(QDebug d, const Archive::Entry &entry)
     if (!entry.rootNode.isEmpty()) {
         d.nospace() << "," << entry.rootNode;
     }
+
     d.nospace() << ")";
     return d.space();
 }
@@ -353,6 +362,7 @@ QDebug operator<<(QDebug d, const Archive::Entry *entry)
     if (!entry->rootNode.isEmpty()) {
         d.nospace() << "," << entry->rootNode;
     }
+
     d.nospace() << ")";
     return d.space();
 }

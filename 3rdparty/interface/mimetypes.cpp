@@ -46,10 +46,12 @@ QMimeType determineMimeType(const QString &filename)
             cleanExtension.remove(QStringLiteral("bz2"));
             isBZ2 = true;
         }
+
         if (fileinfo.completeSuffix().toLower().contains(QStringLiteral("lz4"))) {
             cleanExtension.remove(QStringLiteral("lz4"));
             isLZ4 = true;
         }
+
         if (fileinfo.completeSuffix().toLower().contains(QStringLiteral("7z"))) {
             cleanExtension.remove(QStringLiteral("7z"));
             is7Z = true;
@@ -67,9 +69,11 @@ QMimeType determineMimeType(const QString &filename)
         if (isBZ2) {
             cleanExtension.append(QStringLiteral(".bz2"));
         }
+
         if (isLZ4) {
             cleanExtension.append(QStringLiteral(".lz4"));
         }
+
         if (is7Z) {
             cleanExtension.append(QStringLiteral(".7z"));
         }

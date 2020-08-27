@@ -1074,12 +1074,12 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="367"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="455"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="456"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="453"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="454"/>
         <source>Wrong password</source>
         <translation>Неправильный пароль</translation>
     </message>

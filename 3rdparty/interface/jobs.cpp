@@ -197,6 +197,7 @@ void Job::onError(const QString &message, const QString &details)
         emitResult();
         return;
     }
+
     setError(KJob::UserDefinedError);
     setErrorText(message);
     emit sigExtractSpinnerFinished();
@@ -246,6 +247,7 @@ void Job::onFinished(bool result)
     } else {
         setError(KJob::NoError);
     }
+
     if (!d->isInterruptionRequested()) {
         emitResult();
     }
@@ -439,6 +441,7 @@ void BatchExtractJob::doWork()
         m_loadJob->archiveInterface()->setPassword(password);
         m_loadJob->start(); //批量解压密码错误时，列表加密重新list流程
     });
+
     m_loadJob->start();
 }
 
@@ -501,6 +504,7 @@ void BatchExtractJob::slotLoadingFinished(KJob *job)
             Q_ASSERT(m_extractJob);
             m_extractJob->start(); //批量解压密码错误时，重新走解压流程
         });
+
         m_step = Extracting;
         m_extractJob->start();
     } else {
@@ -558,6 +562,7 @@ void CreateJob::doPause()
     if (pTool == nullptr) {
         return;
     }
+
     pTool->pauseProcess();
 }
 
@@ -567,6 +572,7 @@ void CreateJob::doContinue()
     if (pTool == nullptr) {
         return;
     }
+
     pTool->continueProcess();
 }
 
@@ -672,6 +678,7 @@ void ExtractJob::cleanIfCanceled()
         if (!fullPath.endsWith(QDir::separator())) {
             fullPath += QDir::separator();
         }
+
         fullPath += pSettingInfo->str_CreateFolder;
         qDebug() << "取消删除：" << fullPath;
         QFileInfo fileInfo(fullPath);
@@ -730,6 +737,7 @@ void ExtractJob::doPause()
     if (pTool == nullptr) {
         return;
     }
+
     pTool->pauseProcess();
 }
 
@@ -739,6 +747,7 @@ void ExtractJob::doContinue()
     if (pTool == nullptr) {
         return;
     }
+
     pTool->continueProcess();
 }
 
@@ -868,6 +877,7 @@ quint64 getAllFileCount(const QString &fullPath)
             size++;
             it.next();
         }
+
         return size;
     } else {
         return size;
@@ -908,6 +918,7 @@ void AddJob::doWork()
     } else {
         totalCount = static_cast<uint>(m_entries.length());
     }
+
     const QString desc = QString("Compressing %1 files").arg(totalCount);
     //emit description(this, desc, qMakePair(tr("Archive"), archiveInterface()->filename()));
     emit description(this, desc, qMakePair(QString("Archive"), archiveInterface()->filename()));
@@ -921,6 +932,7 @@ void AddJob::doWork()
     if (!archiveInterface()->waitForFinishedSignal()) {
         onFinished(ret);
     }
+
     if (fileListWathed != nullptr) {
         fileListWathed->clear();
         delete fileListWathed;
@@ -938,6 +950,7 @@ void AddJob::onFinished(bool result)
             if (!pEntry) {
                 continue;
             }
+
             pEntry->setProperty("timestamp", QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss")));
             //在这里改变fullpath属性
             //            onEntry(pEntry);
@@ -1062,6 +1075,7 @@ Archive::Entry *DeleteJob::getWorkEntry()
     if (this->m_entries.length() == 0) {
         return nullptr;
     }
+
     return this->m_entries[0];
 }
 
@@ -1154,6 +1168,7 @@ Archive::Entry *UpdateJob::getWorkEntry()
     if (this->m_entries.length() == 0) {
         return nullptr;
     }
+
     return this->m_entries[0];
 }
 

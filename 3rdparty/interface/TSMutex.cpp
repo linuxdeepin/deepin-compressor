@@ -7,6 +7,7 @@ struct TSMutexPrivate {
     TSMutexPrivate()
     {
     }
+
     QMutex _spin;
 };
 
@@ -26,6 +27,7 @@ TSMutex &TSMutex::operator=(const TSMutex &r)
         delete _p;
         _p = new TSMutexPrivate();
     }
+
     return *this;
 }
 

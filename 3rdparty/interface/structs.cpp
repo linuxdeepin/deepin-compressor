@@ -91,5 +91,6 @@ qint64 ProgressAssistant::getLeftTime(unsigned long percent, bool isConvert)
     if (timeLeft != 100 && timeLeft == 0) {
         timeLeft = 1;
     }
+
     return timeLeft;
 }

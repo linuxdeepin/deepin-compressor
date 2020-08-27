@@ -200,6 +200,7 @@ QStringList ReadOnlyArchiveInterface::entryFullPaths(const QVector<Archive::Entr
     for (const Archive::Entry *file : entries) {
         filesList << file->fullPath(format);
     }
+
     return filesList;
 }
 
@@ -241,6 +242,7 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
             if (entriesWithoutChildren != 1) {
                 charsCount += nameLength;
             }
+
             newPath = destinationPath + entryPath.right(charsCount);
         } else {
             const QString name = entryPath.split(QLatin1Char('/'), QString::SkipEmptyParts).last();
@@ -254,6 +256,7 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
                 // we have to use destination as newPath.
                 newPath = destinationPath;
             }
+
             if (entryPath.right(1) == QLatin1String("/")) {
                 nameLength = name.count() + 1; // plus slash
                 lastFolder = entryPath;
@@ -262,6 +265,7 @@ QStringList ReadOnlyArchiveInterface::entryPathsFromDestination(QStringList entr
                 lastFolder = QString();
             }
         }
+
         paths << newPath;
     }
 

@@ -132,6 +132,7 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, cons
     } else {
         write = true;
     }
+
 //    bool write = true;
     bool useLibArchive = false;
 
@@ -176,6 +177,7 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, cons
             break;
         }
     }
+
     return pIface;
 }
 
@@ -190,6 +192,7 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, Plug
 
     const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
                                QVariant().fromValue(plugin->metaData())};
+
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     return iface;
 }
@@ -205,6 +208,7 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
 
     const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
                                QVariant().fromValue(plugin->metaData())};
+
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     if (!iface) {
         return new Archive(FailedPlugin, parent);
@@ -240,9 +244,11 @@ void Archive::CreateEntry(QString path, Entry *&parent, QString externalPath, QH
     if (!dir.exists()) {
         return;
     }
+
     if (map == nullptr) {
         map = new QHash<QString, QIcon>();
     }
+
     dir.setFilter(QDir::Files | QDir::Dirs | QDir::Hidden);
     dir.setSorting(QDir::DirsFirst);
     QFileInfoList list = dir.entryInfoList();
@@ -294,6 +300,7 @@ void Archive::CreateEntry(QString path, Entry *&parent, QString externalPath, QH
         map->insert(entry->fullPath(NoTrailingSlash), icon);
         i++;
     };
+
     //qDebug() << "SSSSS4";
 }
 
@@ -303,12 +310,15 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
     if (!file.exists()) {
         return;
     }
+
     if (file.isDir() == false) {
         return;
     }
+
     if (map == nullptr) {
         map = new QHash<QString, QIcon>();
     }
+
     QDir dir(file.filePath());
     dir.setFilter(QDir::Files | QDir::Dirs | QDir::Hidden);
     dir.setSorting(QDir::DirsFirst);
@@ -323,6 +333,7 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
         if (Info.fileName() == "." || Info.fileName() == "..") {
             continue;
         }
+
         Archive::Entry *entry = new Archive::Entry();
         entry->setProperty("timestamp", QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss")));
         QString parentPath = parent->fullPath();
@@ -438,6 +449,7 @@ void Archive::onCompressionMethodFound(const QString &method)
     if (!methods.contains(method) && method != QLatin1String("Store")) {
         methods.append(method);
     }
+
     methods.sort();
 
     setProperty("compressionMethods", methods);
@@ -450,6 +462,7 @@ void Archive::onEncryptionMethodFound(const QString &method)
     if (!methods.contains(method)) {
         methods.append(method);
     }
+
     methods.sort();
 
     setProperty("encryptionMethods", methods);
@@ -649,6 +662,7 @@ DeleteJob *Archive::deleteFiles(QVector<Archive::Entry *> &entries)
     if (m_iface->isReadOnly()) {
         return nullptr;
     }
+
     DeleteJob *newJob = new DeleteJob(entries, static_cast<ReadWriteArchiveInterface *>(m_iface));
 
     return newJob;

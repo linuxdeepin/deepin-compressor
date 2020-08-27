@@ -211,9 +211,11 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 filteredPlugins << plugin;
                 continue;
             }
+
             filteredPlugins << plugin;
         }
     }
+
     qDebug() << filteredPlugins.count();
     return filteredPlugins;
 }
