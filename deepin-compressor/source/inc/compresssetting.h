@@ -83,6 +83,8 @@ public:
     void clickTitleBtnResetAdvancedOptions();
     QList<QAction *> getTypemenuActions();
     DLineEdit *getFilenameLineEdit();
+    CustomPushButton *getNextbutton();
+    TypeLabel *getCompresstype();
 
 private:
     void showEvent(QShowEvent *event) override;

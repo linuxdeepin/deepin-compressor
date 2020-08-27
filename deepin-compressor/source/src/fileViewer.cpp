@@ -835,7 +835,6 @@ void fileViewer::InitConnection()
     connect(openWithDialogMenu, &DMenu::triggered, this, &fileViewer::onRightMenuOpenWithClicked);
     connect(m_pRightMenu, &DMenu::triggered, this, &fileViewer::onRightMenuClicked);
     connect(pTableViewFile, &MyTableView::customContextMenuRequested, this, &fileViewer::showRightMenu);
-    connect(pTableViewFile, &MyTableView::sigTabPress, this, &fileViewer::sigTabPress);
     connect(pModel, &MyFileSystemModel::sigShowLabel, this, &fileViewer::showPlable);
 }
 
@@ -1892,15 +1891,6 @@ void MyTableView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
     DTableView::focusInEvent(event);
-}
-
-void MyTableView::keyPressEvent(QKeyEvent *event)
-{
-    if (Qt::Key_Tab == event->key()) {
-        emit sigTabPress(); //tableview已获取焦点，按tab键，焦点不再列表内切换
-    } else {
-        DTableView::keyPressEvent(event);
-    }
 }
 
 void MyTableView::dropEvent(QDropEvent *event)

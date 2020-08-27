@@ -64,6 +64,7 @@ void CompressSetting::InitUI()
     m_pixmaplabel = new DLabel(this);
 
     m_compresstype = new TypeLabel(this);
+    m_compresstype->setObjectName("CompressType");
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
@@ -604,6 +605,16 @@ QList<QAction *> CompressSetting::getTypemenuActions()
 DLineEdit *CompressSetting::getFilenameLineEdit()
 {
     return m_filename;
+}
+
+CustomPushButton *CompressSetting::getNextbutton()
+{
+    return m_nextbutton;
+}
+
+TypeLabel *CompressSetting::getCompresstype()
+{
+    return m_compresstype;
 }
 
 void CompressSetting::showEvent(QShowEvent *event)

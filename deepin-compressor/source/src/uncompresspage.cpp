@@ -98,9 +98,6 @@ UnCompressPage::UnCompressPage(QWidget *parent)
 //    connect(this, &UnCompressPage::subWindowTipsUpdateEntry, m_fileviewer, &fileViewer::SubWindowDragUpdateEntry);
 
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
-    connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
-        m_extractpath->setFocus(Qt::TabFocusReason); //tableview已获取焦点，按tab键，焦点切换到m_extractpath
-    });
 
     setTabOrder(m_extractpath, m_nextbutton);
 //    connect(m_fileviewer, &fileViewer::sigFileAutoCompressToArchive, this, &UnCompressPage::sigAddArchiveFiles);
@@ -368,6 +365,16 @@ void UnCompressPage::slotCompressedAddFile()
 fileViewer *UnCompressPage::getFileViewer()
 {
     return m_fileviewer;
+}
+
+CustomPushButton *UnCompressPage::getNextbutton()
+{
+    return m_nextbutton;
+}
+
+CustomCommandLinkButton *UnCompressPage::getPathCommandLinkButton()
+{
+    return m_extractpath;
 }
 
 QString UnCompressPage::getDecompressPath()

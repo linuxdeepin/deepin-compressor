@@ -45,6 +45,7 @@ public:
     int showReplaceDialog(QString name);
     void setRootPathIndex();
     fileViewer *getFileViewer();
+    CustomPushButton *getNextbutton();
 
 signals:
     void sigNextPress();

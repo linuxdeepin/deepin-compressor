@@ -74,9 +74,6 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
     connect(m_nextbutton, &DPushButton::clicked, this, &CompressPage::onNextPress);
     connect(m_fileviewer, &fileViewer::sigFileRemoved, this, &CompressPage::onRefreshFilelist);
     connect(m_fileviewer, &fileViewer::sigpathindexChanged, this, &CompressPage::onPathIndexChanged);
-    connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
-        m_nextbutton->setFocus(Qt::TabFocusReason); //tableview已获取焦点，按tab键，焦点切换到m_nextbutton
-    });
 
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
@@ -148,6 +145,11 @@ void CompressPage::setRootPathIndex()
 fileViewer *CompressPage::getFileViewer()
 {
     return m_fileviewer;
+}
+
+CustomPushButton *CompressPage::getNextbutton()
+{
+    return m_nextbutton;
 }
 
 void CompressPage::onAddfileSlot()

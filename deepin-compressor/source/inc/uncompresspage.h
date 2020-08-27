@@ -65,6 +65,8 @@ public:
     void setWidth(int windowWidth);
     void slotCompressedAddFile();
     fileViewer *getFileViewer();
+    CustomPushButton *getNextbutton();
+    CustomCommandLinkButton *getPathCommandLinkButton();
     int showReplaceDialog(QString name, int &responseValue);
     void resizeEvent(QResizeEvent *event) override;
 

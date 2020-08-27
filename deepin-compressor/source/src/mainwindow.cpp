@@ -59,6 +59,7 @@
 #include <DFontSizeManager>
 #include <DWidgetUtil>
 #include <DWindowCloseButton>
+#include <DWindowOptionButton>
 
 #include <QDebug>
 #include <QDir>
@@ -1089,24 +1090,33 @@ bool MainWindow::createSubWindow(const QStringList &urls)
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 {
-    if (evt->key() == Qt::Key_Tab) {
+    if (evt->key() == Qt::Key_Tab) { //tab焦点顺序：从上到下，从左到右
         DWindowCloseButton *closebtn = this->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
-        if (obj == this->titlebar()) {
+        if (obj == this->titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
             if (m_pTitleButton->isVisible()) {
                 m_pTitleButton->setFocus(Qt::TabFocusReason);
                 return true;
             } else {
                 return false;
             }
-        } else if (obj->objectName() == "TitleButton") {
+        } else if (obj->objectName() == "TitleButton") { //焦点顺序：标题栏按钮->标题栏设置按钮
             titlebar()->setFocus(Qt::TabFocusReason);
             //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
             //  return  true;
-        } else if (obj == closebtn) {
+        } else if (obj->objectName() == "TableViewFile") { //焦点顺序：文件列表->解压路径按钮/下一步按钮
             switch (m_ePageID) {
-            case PAGE_HOME:
-                m_pHomePage->getChooseBtn()->setFocus(Qt::TabFocusReason);
+            case PAGE_UNZIP:
+                m_pUnCompressPage->getPathCommandLinkButton()->setFocus(Qt::TabFocusReason);
                 break;
+            case PAGE_ZIP:
+                m_pCompressPage->getNextbutton()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
+        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->文件列表/压缩类型选择
+            switch (m_ePageID) {
             case PAGE_UNZIP:
                 m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
                 break;
@@ -1114,33 +1124,44 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
                 break;
             case PAGE_ZIPSET:
-                m_pCompressSetting->getFilenameLineEdit()->setFocus(Qt::TabFocusReason);
+                m_pCompressSetting->getCompresstype()->setFocus(Qt::TabFocusReason);
                 break;
-            case PAGE_ZIPPROGRESS:
-            case PAGE_UNZIPPROGRESS:
-            case PAGE_DELETEPROGRESS:
-            case PAGE_CONVERTPROGRESS:
-                m_pProgess->getCancelbutton()->setFocus(Qt::TabFocusReason);
+            default:
+                return false;
+            }
+            return true;
+        }
+    } else if (evt->key() == Qt::Key_Backtab) { //shift+tab 焦点顺序，与tab焦点顺序相反
+        DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
+        if (obj == optionbtn) {
+            if (m_pTitleButton->isVisible()) {
+                m_pTitleButton->setFocus(Qt::BacktabFocusReason);
+                return true;
+            } else {
+                return false;
+            }
+        } else if (obj->objectName() == "TitleButton") {
+            switch (m_ePageID) {
+            case PAGE_UNZIP:
+                m_pUnCompressPage->getNextbutton()->setFocus(Qt::BacktabFocusReason);
                 break;
-            case PAGE_ZIP_SUCCESS:
-            case PAGE_UNZIP_SUCCESS:
-            case PAGE_CONVERT_SUCCESS:
-                m_pCompressSuccess->getShowfilebutton()->setFocus(Qt::TabFocusReason);
+            case PAGE_ZIP:
+                m_pCompressPage->getNextbutton()->setFocus(Qt::BacktabFocusReason);
                 break;
-            case PAGE_ZIP_FAIL:
-            case PAGE_UNZIP_FAIL:
-                m_pCompressFail->getRetrybutton()->setFocus(Qt::TabFocusReason);
-                break;
-            case PAGE_ENCRYPTION:
-                m_pEncryptionpage->getPasswordEdit()->setFocus(Qt::TabFocusReason);
+            case PAGE_ZIPSET:
+                m_pCompressSetting->getNextbutton()->setFocus(Qt::BacktabFocusReason);
                 break;
             default:
                 return false;
             }
             return  true;
+        } else if (obj->objectName() == "TableViewFile" || obj->objectName() == "CompressType") {
+            DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+            if (closeButton) {
+                closeButton->setFocus(Qt::BacktabFocusReason);
+            }
+            return  true;
         }
-    } else if (evt->key() == Qt::Key_Backtab) {
-
     }
 
     return  false;
