@@ -50,6 +50,7 @@
 #include "filewatcher.h"
 #include "monitorAdaptor.h"
 #include "customwidget.h"
+#include "mimetypes.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -2060,7 +2061,7 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
     m_strPathStore = destinationDirectory;
     qDebug() << "destinationDirectory:" << destinationDirectory;
 
-    QString fixedMimetype = "application/" + Utils::judgeFileMime(transFile);
+    QString fixedMimetype = determineMimeType(transFile).name();
     ReadOnlyArchiveInterface *pIface = Archive::createInterface(transFile, fixedMimetype, true);
 
     ExtractJob *pExtractJob = new ExtractJob(files, destinationDirectory, options, pIface);
@@ -2819,7 +2820,7 @@ void MainWindow::rightMenuExtractPassword(QString password)
     ExtractionOptions options;
     QVector< Archive::Entry * > files;
 
-    QString fixedMimetype = "application/" + Utils::judgeFileMime(m_strLoadfile);
+    QString fixedMimetype = determineMimeType(m_strLoadfile).name();
     ReadOnlyArchiveInterface *pIface = Archive::createInterface(m_strLoadfile, fixedMimetype, true);
 
     options.setAutoCreatDir(m_pSettingsDialog->isAutoCreatDir());

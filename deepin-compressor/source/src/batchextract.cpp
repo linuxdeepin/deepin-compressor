@@ -25,6 +25,7 @@
 #include "queries.h"
 #include "utils.h"
 #include "settingdialog.h"
+#include "mimetypes.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -87,7 +88,7 @@ void BatchExtract::addExtraction(const QUrl &url)
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
     }
 
-    QString fixedMimetype = "application/" + Utils::judgeFileMime(url.toLocalFile());
+    QString fixedMimetype = determineMimeType(url.toLocalFile()).name();
     ReadOnlyArchiveInterface *pIface = Archive::createInterface(url.toLocalFile(), fixedMimetype, true);
     ExtractJob *job = new ExtractJob(files, destination, options, pIface);
     qDebug() << QString(QStringLiteral("Registering job from archive %1, to %2, preservePaths %3")).arg(url.toLocalFile(), destination, QString::number(preservePaths()));
