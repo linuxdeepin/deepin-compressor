@@ -427,7 +427,7 @@ void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong in
     Q_UNUSED(index);
     Q_UNUSED(name);
 
-    Archive::Entry *pCurEntry = new Archive::Entry(/*this*/);
+    Archive::Entry *pCurEntry = new Archive::Entry(this);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);
@@ -465,12 +465,7 @@ Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry, 
 
 void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord)
 {
-    Q_UNUSED(dirRecord);
-
-    if ((name.endsWith("/") && name.count("/") == 1) || (name.count("/") == 0)) {
-        setEntryData(aentry, index, name);
-    }
-    /*if (dirRecord.isEmpty()) {
+    if (dirRecord.isEmpty()) {
         if (name.endsWith("/") && name.count("/") == 1) {
             setEntryData(aentry, index, name);
             m_SigDirRecord = name;
@@ -506,7 +501,7 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
             //Create FileFolder and file
             QStringList fileDirs = name.split("/");
             QString folderAppendStr = "";
-            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+            for (int i = 0; i < fileDirs.size(); ++i) {
                 if (i < fileDirs.size() - 1) {
                     folderAppendStr.append(fileDirs[i]).append("/");
                     setEntryData(aentry, index, folderAppendStr, true);
@@ -521,7 +516,7 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
     } else {
         m_DirRecord = "";
         setEntryVal(aentry, index, name, m_DirRecord);
-    }*/
+    }
 }
 
 /*void LibarchivePlugin::createEntry(const QString &externalPath, archive_entry *aentry)
