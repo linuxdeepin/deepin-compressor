@@ -2032,8 +2032,10 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
             detectedSubfolder = detectedSubfolder.remove(".tar");
         } else if (fi.filePath().contains(".7z.")) {
             detectedSubfolder = detectedSubfolder.remove(".7z");
-        } else if (fi.filePath().contains(".rar.part")) {
-            detectedSubfolder = detectedSubfolder.remove(".rar");
+        } else if (fi.filePath().contains(".part01.rar")) {
+            detectedSubfolder = detectedSubfolder.remove(".part01");
+        } else if (fi.filePath().contains(".part1.rar")) {
+            detectedSubfolder = detectedSubfolder.remove(".part1");
         }
 
         pSettingInfo->str_CreateFolder = detectedSubfolder;
