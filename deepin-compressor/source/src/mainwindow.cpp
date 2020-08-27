@@ -1988,7 +1988,7 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
 {
     QString transFile = localPath;
     transSplitFileName(transFile);      // 对文件名进行转换（分卷处理）
-    WatcherFile(transFile);
+    WatcherFile(localPath);
     m_strLoadfile = transFile;
 
     m_pProgess->pInfo()->setTotalSize(0); //初始化大小
