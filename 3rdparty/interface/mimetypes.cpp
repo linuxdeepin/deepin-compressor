@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QRegularExpression>
+#include <QDebug>
 
 QMimeType determineMimeType(const QString &filename)
 {
@@ -84,6 +85,9 @@ QMimeType determineMimeType(const QString &filename)
     QMimeType mimeFromExtension = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchExtension);
     QMimeType mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
 
+    qDebug() << "mimeFromExtension******************" << mimeFromExtension.name();
+    qDebug() << "mimeFromContent****************" << mimeFromContent.name();
+
     // mimeFromContent will be "application/octet-stream" when file is
     // unreadable, so use extension.
     if (!fileinfo.isReadable()) {
@@ -106,6 +110,11 @@ QMimeType determineMimeType(const QString &filename)
         if (mimeFromExtension.inherits(QStringLiteral("application/x-cd-image"))) {
             return mimeFromExtension;
         }
+
+        if (mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar"))) {
+            return mimeFromExtension;
+        }
+
     }
 
     return mimeFromContent;
