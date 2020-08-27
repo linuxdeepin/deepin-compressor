@@ -188,6 +188,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     if (destPath.endsWith("/")) {
         destPath.chop(1);
     }
+
     qDebug() << "####destpath：" << destPath;
 
     m_extractDestDir = destPath;

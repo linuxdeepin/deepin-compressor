@@ -56,7 +56,7 @@ void AnalyseToolRar4::analyseLine(const QString &line)
         int percentage = line.midRef(pos - 3, 3).toInt();
         if (percentage >= 0) {
             lineCount++;
-            if (line.startsWith("Extracting") == true && line.endsWith("OK ")) {
+            if ((line.startsWith("Extracting") == true && line.endsWith("OK ")) || line.startsWith("...")) { // 解压分卷文件命令行输出以"..."开头
                 (*pMapInfo)[RIGHTPSD]->line = line;
                 (*pMapInfo)[RIGHTPSD]->read = true;
                 return;
