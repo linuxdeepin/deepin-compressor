@@ -45,12 +45,12 @@ LibzipPluginFactory::~LibzipPluginFactory()
 
 void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 {
-    static_cast<LibzipPlugin *>(that)->emitProgress(progress);
+    static_cast<LibzipPlugin *>(that)->emitProgress(progress);      // 进度回调
 }
 
 int LibzipPlugin::cancelCallback(zip_t *, void *that)
 {
-    return static_cast<LibzipPlugin *>(that)->cancelResult();
+    return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
 }
 
 LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
@@ -60,9 +60,9 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     , m_listAfterAdd(false)
 {
     m_listCodecs.clear();
-    m_listCodecs << "UTF-8" << "GB18030" << "GBK" << "Big5" << "us-ascii";
-    mType = ENUM_PLUGINTYPE::PLUGIN_LIBZIP;
-    m_common = new Common(this);
+    m_listCodecs << "UTF-8" << "GB18030" << "GBK" << "Big5" << "us-ascii";  // 初始化中文编码格式
+    mType = ENUM_PLUGINTYPE::PLUGIN_LIBZIP;     // 初始化插件类型
+    m_common = new Common(this);    // 初始化通用工具类
     connect(this, &ReadOnlyArchiveInterface::error, this, &LibzipPlugin::slotRestoreWorkingDir);
     connect(this, &ReadOnlyArchiveInterface::cancelled, this, &LibzipPlugin::slotRestoreWorkingDir);
 }
@@ -86,7 +86,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
 
     // Open archive.
     QString fileName = filename();
-    zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);
+    zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
     zip_error_init_with_code(&err, errcode);
     m_bAllEntry = false;
     if (!archive) {
@@ -113,8 +113,8 @@ bool LibzipPlugin::list(bool /*isbatch*/)
             break;
         }
 
-        emitEntryForIndex(archive, i);
-        emit progress(float(i + 1) / nofEntries);
+        emitEntryForIndex(archive, i);  // 构建数据
+        emit progress(float(i + 1) / nofEntries);   // 发送进度
     }
 
     zip_close(archive);
@@ -166,10 +166,12 @@ const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex
         // QStringList listCodecName = QStringList() << "UTF-8" << "GB18030" << "GBK" <<"Big5"<< "us-ascii";
         int nCount = strPassword.count();
         bool b = false;
+
+        // 检测密码是否含有中文
         for (int i = 0 ; i < nCount ; i++) {
             QChar cha = strPassword.at(i);
             ushort uni = cha.unicode();
-            if (uni >= 0x4E00 && uni <= 0x9FA5) {
+            if (uni >= 0x4E00 && uni <= 0x9FA5) {   // 判断是否是中文
                 b = true;
                 break;
             }
@@ -356,7 +358,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
     }
 
 #ifndef Q_OS_WIN
-    // Set permissions.
+    // 设置文件权限
     QT_STATBUF result;
     if (QT_STAT(QFile::encodeName(file).constData(), &result) != 0) {
     } else {
@@ -366,6 +368,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
     }
 #endif
 
+    // 设置压缩加密算法
     if (!password().isEmpty()) {
         Q_ASSERT(!options.encryptionMethod().isEmpty());
         if (options.encryptionMethod() == QLatin1String("AES128")) {
@@ -377,7 +380,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
         }
     }
 
-    // Set compression level and method.
+    // 设置压缩算法
     zip_int32_t compMethod = ZIP_CM_DEFAULT;
     if (!options.compressionMethod().isEmpty()) {
         if (options.compressionMethod() == QLatin1String("Deflate")) {
@@ -388,6 +391,8 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
             compMethod = ZIP_CM_STORE;
         }
     }
+
+    // 设置压缩等级
     const int compLevel = options.isCompressionLevelSet() ? options.compressionLevel() : 6;
     if (zip_set_file_compression(archive, index, compMethod, compLevel) != 0) {
         emit error(("Failed to set compression options for entry: %1"));
@@ -420,6 +425,7 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         m_fileNameEncodeMap.insert(name, statBuffer.name);
     }
 
+    // 存储数据
     if (m_listMap.find(name) == m_listMap.end()) {
         m_listMap.insert(name, qMakePair(statBuffer, index));
     }
@@ -638,7 +644,7 @@ bool LibzipPlugin::checkArchivePsd(zip_t *archive, int &iCodecIndex)
 
     bool bPasswordRight = false;
     while (!bPasswordRight) {
-        //check password
+        // 检测密码
         for (qlonglong i = 0; i < nofEntries; i++) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
@@ -912,7 +918,7 @@ bool LibzipPlugin::checkEntriesPsd(zip_t *archive, QList<int> listExtractIndex)
 
 bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
-    this->extractPsdStatus = ReadOnlyArchiveInterface::NotChecked;
+    this->extractPsdStatus = ReadOnlyArchiveInterface::NotChecked;  // 初始化密码状态为未检测
     //reset member variable ifReplace;
     ifReplaceTip = false;
     m_extractDestDir = destinationDirectory;
@@ -921,7 +927,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     bAnyFileExtracted = false;
 
     const bool extractAll = files.isEmpty();    // true:"解压"; false:"提取"
-    const bool removeRootNode = options.isDragAndDropEnabled();
+    const bool removeRootNode = options.isDragAndDropEnabled();     // 是否是拖拽提取
     m_extractionOptions = options;
 
     int errcode = 0;
@@ -938,7 +944,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     int iCodecIndex = 0;
 
-    // Set password if known.
+    // 若密码不为空，先设置密码
     if (!password().isEmpty()) {
         zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
     }
@@ -956,9 +962,10 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
     if (status == false) {
         return false;
     }
-    //检测完毕,if psd right or no need psd,emit signal to show progress view.
+    //检测完毕,如果密码正确或不需要密码，发送此信号，通知开始解压
 
     emit sigExtractPwdCheckDown();
+
     m_isckeckpsd = true;
     // Extract entries.
     m_overwriteAll = false; // Whether to overwrite all files
@@ -982,7 +989,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 }
             }
 
-            emit progress_filename(strfileNameTemp);
+            emit progress_filename(strfileNameTemp);        // 当前正在解压的文件名
 
             FileProgressInfo pi;
 
@@ -1009,7 +1016,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 return false;
             } else if (enumRes == enum_extractEntryStatus::SUCCESS) {
                 emit progress(float(i + 1) / nofEntries);
-            } else if (enumRes == enum_extractEntryStatus::PSD_NEED) {// need input psd and extractEntry again, added by hsw 20200613
+            } else if (enumRes == enum_extractEntryStatus::PSD_NEED) {// 需要再次输入密码，弹出密码输入对话框
                 PasswordNeededQuery query(entryName);
                 emit userQuery(&query);
                 query.waitForResponse();
