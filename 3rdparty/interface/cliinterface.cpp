@@ -171,15 +171,17 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     m_extractedFiles = files;
     QString destPath = "";
 
+
+
     ifReplaceTip = false;
-    if (this->extractPsdStatus == NotChecked) {
-        pAnalyseHelp = new AnalyseHelp(destinationDirectory, this->extractTopFolderName);
-        destPath = pAnalyseHelp->getTempPath();
-    } else {
-        destPath = destinationDirectory;
-        this->extractPsdStatus = Checked;
-        emit sigExtractPwdCheckDown();
-    }
+//    if (this->extractPsdStatus == NotChecked) {
+//        pAnalyseHelp = new AnalyseHelp(destinationDirectory, this->extractTopFolderName);
+//        destPath = destinationDirectory/*pAnalyseHelp->getTempPath()*/;
+
+//    } else {
+    destPath = destinationDirectory;
+    this->extractPsdStatus = Checked;
+//}
 
     if (m_extractionOptions.isBatchExtract()) {
         destPath = destinationDirectory;
@@ -192,7 +194,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     qDebug() << "####destpath：" << destPath;
 
     m_extractDestDir = destPath;
-    //    qDebug() << m_extractDestDir;
+//    qDebug() << m_extractDestDir;
     if (extractDst7z_.isEmpty() == false) {
         destDirName = extractDst7z_;
         updateDestFileSignal(m_extractDestDir + "/" + extractDst7z_);
@@ -204,6 +206,11 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
     }
 
     bool ifNeedPsd = options.encryptedArchiveHint();
+
+    if (!ifNeedPsd) {
+        emit sigExtractPwdCheckDown();
+    }
+
     if (options.isRightMenuExtractHere()) {
         //emit sigExtractPwdCheckDown();
     } else {
@@ -216,7 +223,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
-    //get user input password
+//get user input password
     QString psdd = password();
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && ifNeedPsd
             && psdd.isEmpty()) {
@@ -639,15 +646,15 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if (this->extractPsdStatus == Reextract) {
-        if (m_extractionOptions.isBatchExtract()) {
-        } else {
-            qDebug() << this->destDirName;
-            if (this->pAnalyseHelp != nullptr) {
-                this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
-                //qDebug()<<"==========直接解压文件";
-                return;
-            }
-        }
+//        if (m_extractionOptions.isBatchExtract()) {
+//        } else {
+//            qDebug() << this->destDirName;
+//            if (this->pAnalyseHelp != nullptr) {
+//                this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+//                //qDebug()<<"==========直接解压文件";
+//                return;
+//            }
+//        }
     } else if (this->extractPsdStatus == Checked) {
     } else if (this->extractPsdStatus == Canceled) {
         if (ifReplaceTip == false) {
@@ -687,7 +694,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         cleanUpExtracting();
         emit finished(false);
         return;
-    } else if (m_exitCode == 9) {
+    } else if (m_exitCode == 9 || m_exitCode == 11) {
         if (m_extractionOptions.isBatchExtract()) {
             qDebug() << "wrong password";
             emit sigBatchExtractJobWrongPsd(); //批量解压时，密码错误重新走解压流程
@@ -1113,8 +1120,16 @@ void CliInterface::readStdout(bool handleAll)
         if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !wrongPasswordMessage) {
             handleAll = true; // compress .tar.7z output has no \n
         }
+
+        if (m_process->program().length() > 4) {
+            if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x" && m_process->program().at(3) == "-p-" && m_process->program().at(4).contains("-p")) && !wrongPasswordMessage) {
+                handleAll = true; // unrar output has no \n
+            }
+        }
     }
 
+    qDebug() << m_process->program();
+    qDebug() << "handleAll***************" << handleAll;
     bool foundErrorMessage = (wrongPasswordMessage || isDiskFullMsg(QLatin1String(lines.last()))
                               || isFileExistsMsg(QLatin1String(lines.last())))
                              || isPasswordPrompt(QLatin1String(lines.last()));
@@ -1153,6 +1168,7 @@ void CliInterface::readStdout(bool handleAll)
         m_stdOutData = lines.takeLast();
     }
 
+    //qDebug() << "#############################################" << lines;
     for (const QByteArray &line : qAsConst(lines)) {
         if (!line.isEmpty() || (m_listEmptyLines && m_operationMode == List)) {
             if (!handleLine(QString::fromLocal8Bit(line))) {
@@ -1267,7 +1283,7 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-    //qDebug() << "#####" << line;
+    qDebug() << "#####" << line;
 
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
