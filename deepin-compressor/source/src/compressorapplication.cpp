@@ -81,4 +81,3 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
 
     return DApplication::notify(watched, event);
 }
-

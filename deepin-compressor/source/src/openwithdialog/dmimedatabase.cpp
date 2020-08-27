@@ -51,16 +51,17 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
     static QStringList officeSuffixList {
         "docx", "xlsx", "pptx", "doc", "ppt", "xls"
     };
+
     static QStringList wrongMimeTypeNames {
         "application/x-ole-storage", "application/zip"
     };
+
     if (officeSuffixList.contains(fileInfo.suffix()) && wrongMimeTypeNames.contains(result.name())) {
         QList<QMimeType> results = QMimeDatabase::mimeTypesForFileName(fileInfo.fileName());
         if (!results.isEmpty()) {
             return results.first();
         }
     }
-
 
     return result;
 }
@@ -72,5 +73,3 @@ QMimeType DMimeDatabase::mimeTypeForUrl(const QUrl &url) const
 
     return QMimeDatabase::mimeTypeForUrl(url);
 }
-
-

@@ -57,7 +57,6 @@ void Lib_Edit_Button::InitUI(DLineEdit *edit)
     QLineEdit *qedit = edit->lineEdit();
     // 设置输入框中文件输入区，不让输入的文字在被隐藏在按钮下
     qedit->setTextMargins(0, 1, size.width(), 1);
-
 }
 
 void Lib_Edit_Button::removebutton()

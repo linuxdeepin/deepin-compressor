@@ -105,6 +105,7 @@ void CompressSetting::InitUI()
             m_typemenu->addAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix());
         }
     }
+
     m_typemenu->addAction("zip");
     setTypeImage("zip");
 
@@ -227,8 +228,7 @@ void CompressSetting::InitConnection()
     connect(m_splitcompress, &DCheckBox::stateChanged, this, &CompressSetting::onSplitChanged);
     connect(m_password, &DPasswordEdit::echoModeChanged, this, &CompressSetting::slotEchoModeChanged);
 
-    connect(
-        DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSetting::onThemeChanged);
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSetting::onThemeChanged);
     connect(m_savepath, &DFileChooserEdit::textChanged, this, &CompressSetting::onThemeChanged);
 
     connect(m_filename, &DLineEdit::textChanged, this, [ = ] {
@@ -357,6 +357,7 @@ void CompressSetting::onNextButoonClicked()
         m_openArgs[QStringLiteral("createtar7z")] = QString("true");
         m_openArgs[QStringLiteral("selectFilesSize")] = QString::number(m_getFileSize);
     }
+
 //    QString tmpCompresstype = (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) ? QString("7z") : m_compresstype->text();
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
@@ -385,9 +386,11 @@ void CompressSetting::onNextButoonClicked()
     if (m_splitnumedit->value() > 0 && m_splitcompress->isChecked()) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
+
     //    if (!dialog.data()->compressionMethod().isEmpty()) {
     //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
     //    }
+
     qDebug() << m_openArgs[QStringLiteral("volumeSize")];
     if (!m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
@@ -421,14 +424,14 @@ void CompressSetting::onNextButoonClicked()
         if (globalWorkDir.right(1) == QLatin1String("/")) {
             globalWorkDir.chop(1);
         }
+
         QFileInfo fileInfo(globalWorkDir);
         globalWorkDir = fileInfo.dir().absolutePath();
         if (fileInfo.baseName().left(1) == "@") {
-
             unvalidStr = fileInfo.baseName();
         }
-
     }
+
     const QString fixedType = m_openArgs[QStringLiteral("fixedMimeType")];
     if (unvalidStr != "") {
         QSet<QString> special = {"application/x-7z-compressed", "application/zip", "application/x-java-archive", "application/x-tar"};
@@ -445,7 +448,6 @@ void CompressSetting::onNextButoonClicked()
         }
     }
     //check end
-
 
     emit sigCompressPressed(m_openArgs);
 
@@ -522,11 +524,13 @@ quint64 CompressSetting::dirFileSize(const QString &path)
         //计算文件大小
         size += fileInfo.size();
     }
+
     // dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
     foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         //若存在子目录，则递归调用dirFileSize()函数
         size += dirFileSize(path + QDir::separator() + subDir);
     }
+
     return size;
 }
 
@@ -535,6 +539,7 @@ bool CompressSetting::checkfilename(QString str)
     if (str.length() == 0) {
         return false;
     }
+
     if (str.length() > 255) {
         return false;
     }
@@ -547,6 +552,7 @@ bool CompressSetting::checkfilename(QString str)
     if (black_list.contains(str.at(0))) {
         return false;
     }
+
 //----------------:;39;“\][=-~!*()；//command : #
     black_list.clear();
     black_list = {'/'};
@@ -674,6 +680,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
         }
+
         m_encryptedlabel->setEnabled(true);
         m_password->setEnabled(true);
         m_encryptedfilelistlabel->setEnabled(true);
@@ -809,6 +816,7 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
     if (!m_supportedMimeTypes.size()) {
         m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     }
+
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
             fixedMimeType = type;
@@ -829,9 +837,11 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
     if (m_splitnumedit && m_splitnumedit->value() > 0) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
+
     //    if (!dialog.data()->compressionMethod().isEmpty()) {
     //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
     //    }
+
     if (m_password && !m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
     }
@@ -850,6 +860,7 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
         for (int i = 1 ; i < path.size() ; i++) {
             paths += "--" + path[i];
         }
+
         m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
     }
 
@@ -962,9 +973,11 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
     if (m_splitnumedit && m_splitnumedit->value() > 0) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
+
     //    if (!dialog.data()->compressionMethod().isEmpty()) {
     //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
     //    }
+
     if (m_password && !m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
     }
@@ -983,6 +996,7 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
         for (int i = 1 ; i < path.size() ; i++) {
             paths += "--" + path[i];
         }
+
         m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
     }
 
@@ -1065,6 +1079,7 @@ void CompressSetting::autoMoveToArchive(const QStringList &files, const QString 
     if (!m_supportedMimeTypes.size()) {
         m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
     }
+
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
             fixedMimeType = type;
@@ -1083,9 +1098,11 @@ void CompressSetting::autoMoveToArchive(const QStringList &files, const QString 
     if (m_splitnumedit && m_splitnumedit->value() > 0) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
+
     //    if (!dialog.data()->compressionMethod().isEmpty()) {
     //        m_openArgs.metaData()[QStringLiteral("compressionMethod")] = dialog.data()->compressionMethod();
     //    }
+
     if (m_password && !m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
     }
@@ -1104,6 +1121,7 @@ void CompressSetting::autoMoveToArchive(const QStringList &files, const QString 
         for (int i = 1 ; i < files.size() ; i++) {
             paths += "--" + files[i];
         }
+
         m_openArgs[QStringLiteral("ToCompressFilePath")] = paths;
     }
 
@@ -1135,6 +1153,7 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
     if (pDialogShow == nullptr) {
         dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
     }
+
     DPalette pa;
 
     DWidget *pWidget = new DWidget(dialog);
@@ -1143,7 +1162,6 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
 
     if (!strTitle.isEmpty()) {
         //dialog->setMinimumSize(wMin, 180);
-
         DLabel *pTitle = new DLabel(strTitle/*, dialog*/);
         pTitle->setMinimumSize(QSize(154, 20));
         pTitle->setAlignment(Qt::AlignmentFlag::AlignHCenter);
@@ -1160,13 +1178,13 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
         } else {
             color = palette.color(DPalette::TextLively);
         }
+
         color.setAlphaF(1);
         palette.setColor(DPalette::Foreground, color);
         DApplicationHelper::instance()->setPalette(pTitle, palette);
 
         pLayout->addWidget(pTitle, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     }
-
 
     DLabel *pContent = new DLabel(msg/*, dialog*/);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);

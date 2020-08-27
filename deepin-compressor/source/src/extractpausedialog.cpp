@@ -32,7 +32,6 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 
-
 DWIDGET_USE_NAMESPACE
 
 ExtractPauseDialog::ExtractPauseDialog(QWidget *parent):
@@ -103,4 +102,3 @@ void ExtractPauseDialog::closeEvent(QCloseEvent */*event*/)
 {
     emit sigbuttonpress(2);
 }
-

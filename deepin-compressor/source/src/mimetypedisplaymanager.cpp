@@ -54,7 +54,6 @@ void MimeTypeDisplayManager::initData()
     m_displayNames[FileType::Backups] = tr("Backup file");
     m_displayNames[FileType::Unknown] = tr("Unknown");
 
-
     m_defaultIconNames[FileType::Directory] = "folder";
     m_defaultIconNames[FileType::DesktopApplication] = "application-default-icon";
     m_defaultIconNames[FileType::Videos] = "video";
@@ -121,6 +120,7 @@ QStringList MimeTypeDisplayManager::readlines(const QString &path)
     if (!file.open(QIODevice::ReadOnly)) {
         return result;
     }
+
     QTextStream in(&file);
     while (!in.atEnd()) {
         // Read new line
@@ -129,8 +129,10 @@ QStringList MimeTypeDisplayManager::readlines(const QString &path)
         if (line.trimmed().isEmpty()) {
             continue;
         }
+
         result.append(line.trimmed());
     }
+
     file.close();
     return result;
 }

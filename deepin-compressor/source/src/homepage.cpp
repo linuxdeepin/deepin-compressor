@@ -21,21 +21,20 @@
  */
 
 #include "homepage.h"
-#include "DFontSizeManager"
-#include "DGuiApplicationHelper"
 #include "mainwindow.h"
 #include "utils.h"
 #include "customwidget.h"
 
 #include <DPalette>
 #include <DFileDialog>
+#include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
 #include <QApplication>
 #include <QDir>
 #include <QShortcut>
 
 DGUI_USE_NAMESPACE
-
 
 HomePage::HomePage(QWidget *parent)
     : DWidget(parent),
@@ -154,6 +153,7 @@ void HomePage::onChooseBtnClicked()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
+
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();

@@ -29,6 +29,7 @@
 #include <DFileDialog>
 #include <DDialog>
 #include <DRecentManager>
+#include <DFontSizeManager>
 
 #include <QApplication>
 #include <QDebug>
@@ -38,8 +39,6 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QSettings>
-#include <DFontSizeManager>
-
 
 DWIDGET_USE_NAMESPACE
 
@@ -78,6 +77,7 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
     connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
         m_nextbutton->setFocus(Qt::TabFocusReason); //tableview已获取焦点，按tab键，焦点切换到m_nextbutton
     });
+
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &CompressPage::onAddfileSlot);
@@ -156,6 +156,7 @@ void CompressPage::onAddfileSlot()
         showDialog();
         return;
     }
+
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
@@ -165,6 +166,7 @@ void CompressPage::onAddfileSlot()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
+
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();
@@ -199,7 +201,6 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
         foreach (QString path, files) {
             QFileInfo file(path);
             if (file.fileName() == mfile.fileName()) {
-
                 if (!bAll) {    // 判断是否全部应用，若不是，则继续弹出对话框
                     OverwriteQuery query(path);
                     query.setParent(this);
@@ -214,6 +215,7 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
                 } else {                            // 覆盖
                     m_filelist.removeOne(m_path);
                 }
+
                 /*int mode = showReplaceDialog(path);
                 if (0 == mode) {
                     inputlist.removeOne(path);

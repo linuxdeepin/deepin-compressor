@@ -21,6 +21,7 @@
  */
 #include "compressor_success.h"
 #include "customwidget.h"
+#include "utils.h"
 
 #include <DFontSizeManager>
 #include <DApplicationHelper>
@@ -32,8 +33,6 @@
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
-
-#include <utils.h>
 
 Compressor_Success::Compressor_Success(QWidget *parent)
     : DWidget(parent)

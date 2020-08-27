@@ -19,12 +19,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "customwidget.h"
-#include <QKeyEvent>
-#include <QApplication>
-#include <QTimer>
+
 #include <DStyle>
 #include <DApplication>
 #include <DStyleOptionButton>
+
+#include <QKeyEvent>
+#include <QApplication>
+#include <QTimer>
 #include <QDebug>
 
 CustomSuggestButton::CustomSuggestButton(QWidget *parent)

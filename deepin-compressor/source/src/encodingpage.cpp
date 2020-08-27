@@ -47,7 +47,6 @@ void EncodingPage::InitUI()
 
     DFontSizeManager::instance()->bind(m_filenamelabel, DFontSizeManager::T5, QFont::DemiBold);
 
-
     QStringList encodeList;
 
     for (int mib : QTextCodec::availableMibs()) {
@@ -90,7 +89,6 @@ void EncodingPage::InitUI()
     buttonlayout->addSpacing(10);
     buttonlayout->addWidget(m_confirmbutton);
     buttonlayout->addStretch();
-
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
 //    mainlayout->addSpacing(62);

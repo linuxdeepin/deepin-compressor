@@ -21,14 +21,13 @@
  */
 #include "compressor_fail.h"
 #include "customwidget.h"
+#include "utils.h"
 
 #include <DFontSizeManager>
 #include <DApplicationHelper>
 #include <DFileDialog>
 
 #include <QBoxLayout>
-
-#include <utils.h>
 
 Compressor_Fail::Compressor_Fail(QWidget *parent)
     : DWidget(parent)

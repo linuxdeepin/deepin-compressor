@@ -34,10 +34,10 @@
 #include <DSettingsWidgetFactory>
 
 #include <QStandardItemModel>
-#include <qsettingbackend.h>
 #include <QDebug>
 #include <QBoxLayout>
 #include <QMessageBox>
+#include <qsettingbackend.h>
 
 DGUI_USE_NAMESPACE
 
@@ -121,8 +121,6 @@ SettingDialog::SettingDialog(QWidget *parent):
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
     }
-
-
 }
 
 void SettingDialog::initUI()
@@ -246,9 +244,7 @@ void SettingDialog::initUI()
                     DPalette plt = DApplicationHelper::instance()->palette(combobox);
 
                     if (!dir.exists()) {
-
                         plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));
-
                     } else {
                         plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));
                     }
@@ -326,8 +322,7 @@ void SettingDialog::initUI()
         return nullptr;
     });
 
-    const QString confDir = DStandardPaths::writableLocation(
-                                QStandardPaths::AppDataLocation);
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
     // 创建设置项存储后端
@@ -346,8 +341,7 @@ void SettingDialog::initUI()
 
 void SettingDialog::initConnect()
 {
-    connect(m_settings, &DSettings::valueChanged,
-            this, &SettingDialog::settingsChanged);
+    connect(m_settings, &DSettings::valueChanged, this, &SettingDialog::settingsChanged);
 }
 
 void SettingDialog::done(int status)
@@ -375,6 +369,7 @@ void SettingDialog::done(int status)
 
         loop++;
     }
+
     m_valuelist = m_valuelisttemp;
 //    writeToConfbf();
 }
@@ -386,6 +381,7 @@ void SettingDialog::readFromConfbf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile file(confPath);
 
@@ -429,6 +425,7 @@ void SettingDialog::writeToConfbf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
 
     QFile file(confPath);

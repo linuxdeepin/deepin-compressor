@@ -57,4 +57,3 @@ bool MonitorAdaptor::popUpChangedDialog(qlonglong pid)
     QMetaObject::invokeMethod(parent(), "popUpChangedDialog", Q_RETURN_ARG(bool, out0), Q_ARG(qlonglong, pid));
     return out0;
 }
-

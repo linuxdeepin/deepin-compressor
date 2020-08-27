@@ -61,6 +61,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
                 rstr = rstr.remove(QObject::tr("item(s)"));
                 return lstr.toInt() < rstr.toInt();
             }
+
             lstr = l.toString().simplified();
             rstr = r.toString().simplified();
 
@@ -68,6 +69,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             qint64 rint = Utils::humanReadableToSize(rstr);
             return lint < rint;
         }
+
         break;
     }
     case 1: {
@@ -91,6 +93,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             QDateTime rdate = QDateTime::fromString(rstr, "yyyyMMddhh:mm:ss");  // add by Airy
             return !rdate.operator < (ldate);
         }
+
         break;
     }
     case 0: {
@@ -101,6 +104,7 @@ bool MyFileItem::operator<(const QStandardItem &other) const
             rstr = rstr.remove(QRegExp("\\s"));
             return lstr < rstr;
         }
+
         break;
     }
     default:

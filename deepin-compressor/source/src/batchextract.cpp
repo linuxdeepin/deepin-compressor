@@ -165,7 +165,6 @@ void BatchExtract::slotStartJob()
         addExtraction(url);
     }
 
-
     m_initialJobCount = subjobs().size();
 
     qDebug() << "Starting first job";
@@ -191,6 +190,7 @@ void BatchExtract::slotResult(KJob *job)
 //        while (hasSubjobs()) {
 //            removeSubjob(job);
 //        }
+
         removeSubjob(job);
         emit sendFailFile(file.fileName());
 
@@ -293,7 +293,5 @@ void BatchExtract::setBatchTotalSize(qint64 size)
 
 bool BatchExtract::showExtractDialog()
 {
-
     return true;
 }
-

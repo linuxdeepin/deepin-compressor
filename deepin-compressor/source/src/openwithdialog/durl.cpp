@@ -33,7 +33,6 @@
 
 #include <utility>
 
-
 QRegularExpression DUrl::burn_rxp = QRegularExpression("^(.*?)/(" BURN_SEG_ONDISC "|" BURN_SEG_STAGING ")(.*)$");
 
 static inline QString parseDecodedComponent(const QString &data)
@@ -695,16 +694,20 @@ DUrl DUrl::parentUrl(const DUrl &url)
     if (!paths.isEmpty() && paths.last().isEmpty()) {
         paths.removeLast();
     }
+
     if (!paths.isEmpty()) {
         paths.removeLast();
     }
+
     QString _path;
     foreach (QString p, paths) {
         _path += "/" + p;
     }
+
     if (_path.isEmpty()) {
         _path += "/";
     }
+
     _url.setPath(_path);
 
     return _url;
@@ -833,4 +836,5 @@ QDataStream &operator>>(QDataStream &in, DUrl &url)
     url.m_virtualPath = virtualPath;
     return in;
 }
+
 QT_END_NAMESPACE

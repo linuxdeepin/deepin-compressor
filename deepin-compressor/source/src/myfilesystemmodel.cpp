@@ -20,7 +20,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "myfilesystemmodel.h"
 #include "mimetypes.h"
 #include "utils.h"
@@ -74,6 +73,7 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
     }
+
     return QVariant();
 }
 
@@ -126,7 +126,6 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
                     return QString::number(fileInfo->count()) + " " + tr("item(s)");
                 } else {
-
                     return Utils::humanReadableSize(file.size(), 1);
                 }
             }
@@ -155,11 +154,14 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 if (icon.isNull()) {
                     icon = QIcon::fromTheme("empty").pixmap(24, 24);
                 }
+
                 return icon;
             }
+
             return QVariant();
         }
     }
+
     return QFileSystemModel::data(index, role);
 }
 
@@ -173,4 +175,3 @@ void MyFileSystemModel::sort(int column, Qt::SortOrder order)
         QFileSystemModel::sort(column, order);
     }
 }
-

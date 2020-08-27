@@ -53,7 +53,6 @@
 
 #include "openwithdialog/properties.h"
 
-
 class OpenWithDialogListItem : public QWidget
 {
     Q_OBJECT
@@ -241,8 +240,8 @@ void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileNam
             openFileName = desktop_info.getFileName();
             break;
         }
-
     }
+
     mimeAppsManager->setDefautlAppForTypeByGio(mimeType.name(), openFileName);
 
     KProcess *cmdprocess = new KProcess;
@@ -253,7 +252,6 @@ void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileNam
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
-
 }
 
 QString OpenWithDialog::includePercentFile(const QString &file)
@@ -301,7 +299,6 @@ QString OpenWithDialog::AppDisplayName()
 
 OpenWithDialog::~OpenWithDialog()
 {
-
 
 }
 
@@ -376,8 +373,6 @@ void OpenWithDialog::initData()
 {
 //    const DAbstractFileInfoPointer &file_info = DFileService::instance()->createFileInfo(this, m_url);
     QString mineTypeStr(m_url.path());
-
-
 
 //    if (!file_info)
 //        return;
@@ -550,17 +545,13 @@ void OpenWithDialog::openFileByApp()
         mimeAppsManager->setDefautlAppForTypeByGio(m_mimeType.name(), app);
     }
 
-
 //    const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType);
 //    QString programmPath;
 
 //    for (int i = 0; i < recommendApps.count(); ++i) {
 //        const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 //        if( desktop_info.getName() == app )
-
-
 //    }
-
 
     KProcess *cmdprocess = new KProcess;
     QStringList arguments;
@@ -572,10 +563,6 @@ void OpenWithDialog::openFileByApp()
     cmdprocess->start();
 
     close();
-
-
-
-
 
 //    if (DFileService::instance()->openFileByApp(this, app, m_url))
 //        close();

@@ -190,6 +190,7 @@ QString Utils::humanReadableSize(const qint64 &size, int precision)
         measure = it.next();
         sizeAsDouble /= 1024.0;
     }
+
     return QString::fromLatin1("%1 %2").arg(sizeAsDouble, 0, 'f', precision).arg(measure);
 }
 
@@ -214,6 +215,7 @@ qint64 Utils::humanReadableToSize(const QString &size)
             sizeAsStr.remove(suffix);
             break;
         }
+
         loop++;
     }
 
@@ -303,6 +305,7 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
                 if (codec->name() != "UTF-8")
                     ++unidentification_count;
             }
+
             break;
         }
     }
@@ -499,6 +502,7 @@ bool Utils::checkAndDeleteDir(const QString &iFilePath)
         QFile deleteFile(iFilePath);
         return  deleteFile.remove();
     }
+
     return false;
 }
 
@@ -547,6 +551,7 @@ QString Utils::readConf()
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile confFile(confPath);
 
@@ -603,6 +608,7 @@ bool Utils::existMimeType(QString mimetype)
     for (int i = 0; i < confList.count(); i++) {
         qDebug() << confList.at(i);
     }
+
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
         if (confList.at(i).contains("." + mimetype + ":")) {

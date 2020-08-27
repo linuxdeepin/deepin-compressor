@@ -27,7 +27,6 @@
 #include "archivesortfiltermodel.h"
 #include "queries.h"
 #include "customwidget.h"
-#include "utils.h"
 
 #include <DStandardPaths>
 #include <DMessageManager>
@@ -102,6 +101,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigTabPress, m_nextbutton, [&]() {
         m_extractpath->setFocus(Qt::TabFocusReason); //tableview已获取焦点，按tab键，焦点切换到m_extractpath
     });
+
     setTabOrder(m_extractpath, m_nextbutton);
 //    connect(m_fileviewer, &fileViewer::sigFileAutoCompressToArchive, this, &UnCompressPage::sigAddArchiveFiles);
 }
@@ -257,6 +257,7 @@ void UnCompressPage::convertArchive()
             emit sigDecompressPress(tmppath, "7z");
         }
     }
+
 //    if (m_info.filePath().endsWith(".rar")) {
 //        QStringList type = convertArchiveDialog();
 //        if (type.at(0) == "true") {
@@ -299,6 +300,7 @@ QString UnCompressPage::getAndDisplayPath(QString path)
     if (fontSize > m_iWidth) {
         pathStr = fontMetrics.elidedText(path, Qt::ElideMiddle, m_iWidth);//返回一个带有省略号的字符串
     }
+
     return pathStr;
 }
 
@@ -315,6 +317,7 @@ void UnCompressPage::slotCompressedAddFile()
     if (mode != QDialog::Accepted) {
         return;
     }
+
     QVector<Archive::Entry *> vectorEntry;
     m_inputlist.clear();
     ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
@@ -342,6 +345,7 @@ void UnCompressPage::slotCompressedAddFile()
 
 //        m_inputlist.clear();
 //    }
+
     m_model->refreshNow();
     if (vectorEntry.count() > 0) {
         emit onRefreshEntryList(vectorEntry, false);
@@ -376,6 +380,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
     if (fileList.count() == 0) {
         return;
     }
+
     // get extract type
     extractType = type;
 
@@ -403,6 +408,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         if (!dir.exists()) {
             dir.mkpath(tmppath);
         }
+
         emit sigextractfiles(fileList, tmppath, type);
     } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
         QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
@@ -410,6 +416,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         if (!dir.exists()) {
             dir.mkpath(tmppath);
         }
+
         emit sigextractfiles(fileList, tmppath, type);
     } else {
         emit sigextractfiles(fileList, m_pathstr, type);
@@ -419,7 +426,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
 //void UnCompressPage::onRefreshFilelist(const QStringList &filelist)
 //{
 //    m_filelist = filelist;
-////    m_fileviewer->setFileList(m_filelist);
+//  //    m_fileviewer->setFileList(m_filelist);
 
 //    emit sigRefreshFileList(m_filelist);
 
@@ -460,11 +467,9 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
     bool bAll = false;
 //    int responseValue = Result_Cancel;
     foreach (QString strPath, path) {
-
         Archive::Entry *entry = pModel->isExists(strPath);
 
         if (entry != nullptr) {
-
             //int mode = showReplaceDialog(strPath, responseValue);
 
             if (!bAll) {
@@ -475,6 +480,7 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
 
                 bAll = query.applyAll();
             }
+
 //            if (-1 == mode || 0 == mode) {        // skip or cancel
 //                inputlist.removeOne(path);
 //            } else {                // overwrite
@@ -518,8 +524,8 @@ void UnCompressPage::slotDeleteJobFinished(Archive::Entry *pWorkEntry)
 //        emit sigAutoCompressEntry(m_info.filePath(), m_inputlist, pWorkEntry);
         emit sigAutoCompress(m_info.filePath(), m_inputlist);
     }
-//    emit sigAutoCompress(m_info.filePath(), m_inputlist);
 
+//    emit sigAutoCompress(m_info.filePath(), m_inputlist);
 
     m_inputlist.clear();
 

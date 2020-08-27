@@ -24,7 +24,7 @@
 #include "archiveentry.h"
 #include "archivemodel.h"
 #include "mimetypes.h"
-#include "source/inc/mimetypedisplaymanager.h"
+#include "mimetypedisplaymanager.h"
 
 #include <QCollator>
 
@@ -66,6 +66,7 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                 return true;
             }
         }
+
         break;
         case Size: {
             uint dirs;
@@ -87,6 +88,7 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                 return true;
             }
         }
+
         break;
         case Type: {
             QMimeType mimeLeftType = determineMimeType(left->fullPath());
@@ -103,6 +105,7 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                 return true;
             }
         }
+
         break;
         case FullPath: {
             if (left->name().at(0).script() == QChar::Script_Han) {
@@ -128,9 +131,11 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
                 }
             }
         }
+
         break;
         }
     }
+
     return false;
 }
 

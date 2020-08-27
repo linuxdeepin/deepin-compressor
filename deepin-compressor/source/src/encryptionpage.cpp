@@ -133,6 +133,7 @@ void EncryptionPage::wrongPassWordSlot()
         m_password->setAlert(true);
         m_password->showAlertMessage(tr("Wrong password"));
     }
+
 //    pwdCheckDown = true;
 }
 
