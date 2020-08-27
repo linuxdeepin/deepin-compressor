@@ -67,7 +67,12 @@ signals:
 private:
     fileViewer *m_fileviewer;
     CustomPushButton *m_nextbutton;
+    /**
+     * @brief m_settings 某些设置
+     * 选择文件、打卡文件、添加文件操作时默认打开的路径
+     */
     QSettings *m_settings;
+    //需要压缩的文件(夹)
     QStringList m_filelist;
 };
 

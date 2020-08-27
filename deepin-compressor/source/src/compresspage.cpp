@@ -103,6 +103,9 @@ void CompressPage::onNextPress()
     }
 }
 
+/**
+ * @brief CompressPage::showDialog 在根目录添加文件提示框
+ */
 void CompressPage::showDialog()
 {
     DDialog *dialog = new DDialog(this);
@@ -129,6 +132,11 @@ void CompressPage::showDialog()
     return;
 }
 
+/**
+ * @brief CompressPage::showReplaceDialog 添加重复文件提示
+ * @param name
+ * @return
+ */
 int CompressPage::showReplaceDialog(QString name)
 {
     OverwriteQuery query(name);
@@ -152,6 +160,9 @@ CustomPushButton *CompressPage::getNextbutton()
     return m_nextbutton;
 }
 
+/**
+ * @brief CompressPage::onAddfileSlot 添加文件按钮、"Ctrl+O" 添加文件
+ */
 void CompressPage::onAddfileSlot()
 {
     if (0 != m_fileviewer->getPathIndex()) {
@@ -217,13 +228,6 @@ void CompressPage::onSelectedFilesSlot(const QStringList &files)
                 } else {                            // 覆盖
                     m_filelist.removeOne(m_path);
                 }
-
-                /*int mode = showReplaceDialog(path);
-                if (0 == mode) {
-                    inputlist.removeOne(path);
-                } else {
-                    m_filelist.removeOne(m_path);
-                }*/
             }
         }
     }

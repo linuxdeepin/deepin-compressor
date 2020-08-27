@@ -121,20 +121,21 @@ public slots:
 private:
     QString getAndDisplayPath(QString path);
 private:
-
+    //文件列表
     fileViewer *m_fileviewer;
+    //解压按钮
     CustomPushButton *m_nextbutton;
-    QStringList m_filelist;
     QVector<Archive::Entry *> m_vectorDel;
+    //选择解压路径按钮
     CustomCommandLinkButton *m_extractpath;
-    DLabel *m_pixmaplabel;
-    Lib_Edit_Button *m_pathbutton;
     QString m_pathstr;
     QFileInfo m_info;
 
     ArchiveSortFilterModel *m_model;
     EXTRACT_TYPE extractType = EXTRACT_TO;
-    int m_iWidth;                           // 界面宽度
+    //界面宽度
+    int m_iWidth;
+    //存放追加、修改、删除的文件
     QStringList m_inputlist;
 };
 #endif

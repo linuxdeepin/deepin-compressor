@@ -288,6 +288,11 @@ void UnCompressPage::convertArchive()
 //    }
 }
 
+/**
+ * @brief UnCompressPage::getAndDisplayPath 获取大小长度合适的解压路径字符串
+ * @param path
+ * @return
+ */
 QString UnCompressPage::getAndDisplayPath(QString path)
 {
     const QString curpath = path;
@@ -477,8 +482,6 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
         Archive::Entry *entry = pModel->isExists(strPath);
 
         if (entry != nullptr) {
-            //int mode = showReplaceDialog(strPath, responseValue);
-
             if (!bAll) {
                 OverwriteQuery query(strPath);
                 query.setParent(this);
@@ -488,13 +491,7 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
                 bAll = query.applyAll();
             }
 
-//            if (-1 == mode || 0 == mode) {        // skip or cancel
-//                inputlist.removeOne(path);
-//            } else {                // overwrite
-//                m_filelist.removeOne(m_path);
-//            }
-
-            if (1 == mode) {
+            if (1 == mode) { //替换
                 vectorEntry.push_back(entry);
                 m_inputlist.push_back(strPath);
             }
@@ -539,6 +536,12 @@ void UnCompressPage::slotDeleteJobFinished(Archive::Entry *pWorkEntry)
     emit sigDeleteJobFinished(pWorkEntry);
 }
 
+/**
+ * @brief UnCompressPage::showReplaceDialog 添加重复文件提示
+ * @param name
+ * @param responseValue
+ * @return
+ */
 int UnCompressPage::showReplaceDialog(QString name, int &responseValue)
 {
     OverwriteQuery query(name);

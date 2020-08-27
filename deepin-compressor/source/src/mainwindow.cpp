@@ -47,7 +47,7 @@
 #include "jobs.h"
 #include "kprocess.h"
 #include "monitorInterface.h"
-//#include "filewatcher.h"
+#include "filewatcher.h"
 #include "monitorAdaptor.h"
 #include "customwidget.h"
 
