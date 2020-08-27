@@ -23,13 +23,8 @@
 #ifndef HOMEPAGE_H
 #define HOMEPAGE_H
 
-#include "filewatcher.h"
-
 #include <DWidget>
-#include <DCommandLinkButton>
-#include <DSpinner>
 #include <DLabel>
-//#include <DFileDialog>
 
 #include <QVBoxLayout>
 #include <QSettings>
@@ -46,18 +41,14 @@ public:
     HomePage(QWidget *parent = nullptr);
 
     void setIconPixmap(bool isLoaded);
-    void spinnerStart(QObject *pWnd = nullptr, pMember_callback func = nullptr);
-    void spinnerStop();
     CustomCommandLinkButton *getChooseBtn();
-
-    void resizeEvent(QResizeEvent *event) override;
 
 signals:
     void fileSelected(const QStringList files) const;
 
 public slots:
     void themeChanged();
-    void slotSpinnerStart(bool result);
+
 private:
     void onChooseBtnClicked();
 
@@ -70,8 +61,6 @@ private:
     DLabel *m_splitLine;
     CustomCommandLinkButton *m_chooseBtn;
     QSettings *m_settings;
-    DSpinner *m_spinner;
-    TimerWatcher *m_pWatcher = nullptr;
 };
 
 #endif

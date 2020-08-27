@@ -25,13 +25,10 @@
 #include "utils.h"
 #include "customwidget.h"
 
-#include <DPalette>
 #include <DFileDialog>
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 
-#include <QApplication>
-#include <QDir>
 #include <QShortcut>
 
 DGUI_USE_NAMESPACE
@@ -76,12 +73,6 @@ HomePage::HomePage(QWidget *parent)
 
     connect(m_chooseBtn, &DCommandLinkButton::clicked, this, &HomePage::onChooseBtnClicked);
 
-    m_spinner = new DSpinner(this);
-    m_spinner->setFixedSize(40, 40);
-
-    m_spinner->move(285, 200);
-    m_spinner->hide();
-
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
     connect(openkey, &QShortcut::activated, this, &HomePage::onChooseBtnClicked);
@@ -91,9 +82,6 @@ HomePage::HomePage(QWidget *parent)
                      this, &HomePage::themeChanged);
 
     setBackgroundRole(DPalette::Background);
-
-    m_pWatcher = new TimerWatcher(this);
-    connect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, this, &HomePage::slotSpinnerStart);
 }
 
 void HomePage::setIconPixmap(bool isLoaded)
@@ -105,40 +93,9 @@ void HomePage::setIconPixmap(bool isLoaded)
     }
 }
 
-void HomePage::slotSpinnerStart(bool result)
-{
-    if (result == true) {
-        m_spinner->show();
-        m_spinner->start();
-        m_chooseBtn->setEnabled(false);
-    }
-}
-
-void HomePage::spinnerStart(QObject *pObj, pMember_callback func)
-{
-    if (func != nullptr && pObj != nullptr) {
-        this->m_pWatcher->bindFunction(pObj, func);
-        this->m_pWatcher->beginWork(MS_TIMERWATCHER);
-    }
-}
-
-void HomePage::spinnerStop()
-{
-    this->m_pWatcher->finishWork();
-    m_spinner->hide();
-    m_spinner->stop();
-    m_chooseBtn->setEnabled(true);
-}
-
 CustomCommandLinkButton *HomePage::getChooseBtn()
 {
     return m_chooseBtn;
-}
-
-void HomePage::resizeEvent(QResizeEvent *event)
-{
-    m_spinner->move(width() / 2 - 20, height() / 2 - 5);
-    QWidget::resizeEvent(event);
 }
 
 void HomePage::onChooseBtnClicked()
