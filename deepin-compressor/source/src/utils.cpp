@@ -133,7 +133,7 @@ bool Utils::isCompressed_file(const QString &filePath)
         ret = false;
     }
 
-    if (filePath.endsWith(".crx")) {    // 对crx文件识别为压缩包
+    if (filePath.endsWith(".crx") || filePath.endsWith(".apk")) {    // 对crx、apk文件识别为压缩包
         ret = true;
     }
 
