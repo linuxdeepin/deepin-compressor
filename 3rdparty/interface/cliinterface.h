@@ -245,6 +245,8 @@ private:
     bool m_isBatchExtractWrongPsd = false;
     bool m_isTar7z = false;
 
+    bool m_bRarNeedPassword = false;
+
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void continueCopying(bool result);

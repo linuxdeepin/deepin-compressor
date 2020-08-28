@@ -172,7 +172,14 @@ void BatchExtract::slotStartJob()
 
     qDebug() << "Starting first job";
 
-    subjobs().at(0)->start();
+    m_job = subjobs().at(0);
+
+    connect(m_job, &Job::sigBatchExtractJobWrongPsd, this, [&]() {
+        Q_ASSERT(m_job);
+        m_job->start(); //批量解压密码错误时，重新走解压流程
+    });
+
+    m_job->start();
 }
 
 void BatchExtract::showFailedFiles()
@@ -207,7 +214,13 @@ void BatchExtract::slotResult(KJob *job)
         emitResult();
     } else {
         qDebug() << "Starting the next job";
-        subjobs().at(0)->start();
+        m_job = subjobs().at(0);
+        m_job->start();
+
+        connect(m_job, &Job::sigBatchExtractJobWrongPsd, this, [&]() {
+            Q_ASSERT(m_job);
+            m_job->start(); //批量解压密码错误时，重新走解压流程
+        });
         QString curfile = m_fileNames[subjobs().at(0)].first;
         qDebug() << "Send curfilename" << curfile;
         QFileInfo file(curfile);

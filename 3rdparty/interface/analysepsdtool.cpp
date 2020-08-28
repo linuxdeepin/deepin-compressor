@@ -4,6 +4,7 @@
 
 #include <QDir>
 #include <QProcess>
+#include <QDebug>
 
 #include <stdio.h>
 
@@ -121,6 +122,7 @@ void AnalyseTool7Z::mark(ENUMLINEINFO id, QString line, bool read)
 
 void AnalyseTool7Z::analyseLine(const QString &line)
 {
+    qDebug() << line << line.length();
     lineCount++;
     if (line.contains(DoubleBBBB)) {
         if (line.contains(WRONGPSD7Z)) {

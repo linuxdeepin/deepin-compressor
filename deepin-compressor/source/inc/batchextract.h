@@ -68,6 +68,8 @@ private:
     qint64 m_lastPercent = 0;    //解压完成的压缩文件占总大小的百分比
     SettingDialog *m_settingDialog = nullptr;
     Settings_Extract_Info *m_pSettingInfo = nullptr;
+
+    KJob *m_job;
 };
 
 #endif // BATCHEXTRACT_H

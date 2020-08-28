@@ -223,6 +223,10 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
         }
     }
 
+    if (m_extractionOptions.isBatchExtract() && filename().endsWith("rar")) {
+        ifNeedPsd = m_bRarNeedPassword;
+    }
+
 //get user input password
     QString psdd = password();
     if (!m_cliProps->property("passwordSwitch").toStringList().isEmpty() && ifNeedPsd
@@ -1037,7 +1041,8 @@ void CliInterface::killProcess(bool emitFinished)
 bool CliInterface::passwordQuery()
 {
     PasswordNeededQuery query(filename());
-    query.execute();
+    emit userQuery(&query);
+    query.waitForResponse();
 
     if (query.responseCancelled()) {
         emit cancelled();
@@ -1128,8 +1133,8 @@ void CliInterface::readStdout(bool handleAll)
         }
     }
 
-    qDebug() << m_process->program();
-    qDebug() << "handleAll***************" << handleAll;
+    //qDebug() << m_process->program();
+    //qDebug() << "handleAll***************" << handleAll;
     bool foundErrorMessage = (wrongPasswordMessage || isDiskFullMsg(QLatin1String(lines.last()))
                               || isFileExistsMsg(QLatin1String(lines.last())))
                              || isPasswordPrompt(QLatin1String(lines.last()));
@@ -1283,7 +1288,7 @@ bool CliInterface::handleLine(const QString &line)
     // TODO: This should be implemented by each plugin; the way progress is
     //       shown by each CLI application is subject to a lot of variation.
 
-    qDebug() << "#####" << line;
+    //qDebug() << "#####" << line;
 
     if (pAnalyseHelp != nullptr) {
         pAnalyseHelp->analyseLine(line);
@@ -1375,6 +1380,9 @@ bool CliInterface::handleLine(const QString &line)
 
                         if (!strfilename.toString().contains("Wrong password")) {
                             if (percentage > 0) {
+                                if (m_extractionOptions.isBatchExtract() && percentage == 100) {
+                                    percentage = 0;
+                                }
                                 emitProgress(float(percentage) / 100);
                                 emitFileName(strfilename.toString());
                             }
@@ -1408,23 +1416,28 @@ bool CliInterface::handleLine(const QString &line)
 
     if (m_operationMode == Extract) {
         if (isPasswordPrompt(line)) {
-            emit sigExtractNeedPassword();
-            //            qDebug() << "Found a password prompt";
+            if (m_extractionOptions.isBatchExtract()) {
+                qDebug() << "Found a password prompt";
 
-            //            PasswordNeededQuery query(filename());
-            //            query.execute();
+                PasswordNeededQuery query(filename());
+                emit userQuery(&query);
+                query.waitForResponse();
 
-            //            if (query.responseCancelled()) {
-            //                emit cancelled();
-            //                return false;
-            //            }
+                if (query.responseCancelled()) {
+                    emit cancelled();
+                    return false;
+                }
 
-            //            setPassword(query.password());
+                setPassword(query.password());
 
-            //            const QString response(password() + QLatin1Char('\n'));
-            //            writeToProcess(response.toLocal8Bit());
+                const QString response(password() + QLatin1Char('\n'));
+                writeToProcess(response.toLocal8Bit());
 
-            //            return true;
+                return true;
+            } else {
+                emit sigExtractNeedPassword();
+            }
+
         }
 
         if (isDiskFullMsg(line)) {
@@ -1446,6 +1459,30 @@ bool CliInterface::handleLine(const QString &line)
         if (isWrongPasswordMsg(line)) {
             setPassword(QString());
             if (m_extractionOptions.isBatchExtract()) {
+
+                if (filename().endsWith("rar")) {
+                    m_bRarNeedPassword = true;
+                }
+
+//                PasswordNeededQuery query(filename());
+//                emit userQuery(&query);
+//                query.waitForResponse();
+
+//                if (query.responseCancelled()) {
+//                    emit cancelled();
+//                    return false;
+//                }
+
+//                setPassword(query.password());
+
+//                const QString response(password() + QLatin1Char('\n'));
+//                writeToProcess(response.toLocal8Bit());
+
+//                return true;
+//                emit sigBatchExtractJobWrongPsd(); //批量解压时，密码错误重新走解压流程
+//                setPassword(QString());
+//                return true;
+
             } else {
                 if (this->extractPsdStatus != ReadOnlyArchiveInterface::WrongPsd) {
                     if (pAnalyseHelp != nullptr) {
