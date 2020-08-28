@@ -3,6 +3,7 @@
 #include <DStandardPaths>
 #include <QDir>
 #include <QProcess>
+#include <QDebug>
 
 #include <stdio.h>
 
@@ -128,7 +129,8 @@ void AnalyseTool7Z::analyseLine(const QString &line)
             (*pMapInfo)[RIGHTPSD]->line = line;
             (*pMapInfo)[RIGHTPSD]->read = true;
             return;
-        } else if (line.length() > 24) {                         //right psd
+        } else if (line.length() >= 20) { //right psd
+            //line打印如下: "\b\b\b\b    \b\b\b\b  0% - A" line.length()最小应该是20(A代只文件名)
             int pos = line.indexOf(QLatin1Char('%'));
             if (pos > 1) {
                 int percentage = line.midRef(pos - 3, 3).toInt();
