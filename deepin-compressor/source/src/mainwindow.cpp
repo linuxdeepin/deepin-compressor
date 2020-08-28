@@ -2724,7 +2724,7 @@ void MainWindow::SlotNeedPassword()
 
 void MainWindow::SlotExtractPassword(QString password)
 {
-    m_pProgressdialog->clearprocess();      // 清楚进度
+    m_pProgressdialog->clearprocess();      // 清除进度
 
     // m_progressTransFlag = false;
     if (Operation_Load == m_operationtype) {

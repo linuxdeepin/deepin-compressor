@@ -116,6 +116,7 @@ DPasswordEdit *EncryptionPage::getPasswordEdit()
 
 void EncryptionPage::nextbuttonClicked()
 {
+    m_nextbutton->setDisabled(true); //防止快速点击两次导致重复解压
     m_inputflag = true;
 //    if (pwdCheckDown) {
     emit sigExtractPassword(m_password->text());
