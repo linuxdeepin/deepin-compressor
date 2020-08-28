@@ -2766,22 +2766,41 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         return;
     }
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
-        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-            if (pinterface->isAllEntry()) {
-                foreach (Archive::Entry *p, vectorDel) {
-                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
-                }
-            } else {
-                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
+    ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin();
+    if (pinterface == nullptr) {
+        return;
+    }
+
+    if (pinterface->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
+        if (pinterface->isAllEntry()) {
+            foreach (Archive::Entry *p, vectorDel) {
+                m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
             }
+        } else {
+            m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
         }
     } else {
         foreach (Archive::Entry *p, vectorDel) {
             m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
         }
     }
+
+//    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
+//        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//            if (pinterface->isAllEntry()) {
+//                foreach (Archive::Entry *p, vectorDel) {
+//                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//                }
+//            } else {
+//                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(vectorDel);
+//            }
+//        }
+//    } else {
+//        foreach (Archive::Entry *p, vectorDel) {
+//            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//        }
+//    }
 
     m_pJob =  m_pArchiveModel->deleteFiles(vectorDel);
     if (!m_pJob) {
@@ -3335,14 +3354,24 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
-        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-                || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
-            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-                if (!pinterface->isAllEntry()) {
-                    pinterface->updateListMap();
-                }
+        ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin();
+        if (pinterface == nullptr) {
+            return;
+        }
+
+        if (pinterface->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
+            if (!pinterface->isAllEntry()) {
+                pinterface->updateListMap();
             }
         }
+//        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//                || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
+//            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//                if (!pinterface->isAllEntry()) {
+//                    pinterface->updateListMap();
+//                }
+//            }
+//        }
     }
 
     qDebug() << "job finished" << job->error();
@@ -3486,22 +3515,40 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
     resetMainwindow();
 
-    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-            || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
-        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-            if (pinterface->isAllEntry()) {
-                foreach (Archive::Entry *p, fileList) {
-                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
-                }
-            } else {
-                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
+    ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin();
+    if (pinterface == nullptr) {
+        return;
+    }
+
+    if (pinterface->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
+        if (pinterface->isAllEntry()) {
+            foreach (Archive::Entry *p, fileList) {
+                m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
             }
+        } else {
+            m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
         }
     } else {
         foreach (Archive::Entry *p, fileList) {
             m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
         }
     }
+//    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
+//            || m_pArchiveModel->archive()->fileName().endsWith(".apk")) {
+//        if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
+//            if (pinterface->isAllEntry()) {
+//                foreach (Archive::Entry *p, fileList) {
+//                    m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//                }
+//            } else {
+//                m_pProgess->pInfo()->getTotalSize() = pinterface->extractSize(fileList);
+//            }
+//        }
+//    } else {
+//        foreach (Archive::Entry *p, fileList) {
+//            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
+//        }
+//    }
 
 //    if (type == EXTRACT_TO) {// 传递的是顶节点
 //        foreach (Archive::Entry *p, fileList) {

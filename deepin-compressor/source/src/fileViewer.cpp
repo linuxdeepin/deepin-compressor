@@ -776,25 +776,48 @@ QVector<Archive::Entry *> fileViewer::getSelEntries()
 {
     QVector<Archive::Entry *> fileList;
     QModelIndexList listModelIndex = pTableViewFile->selectionModel()->selectedRows();
-    if (m_decompressmodel->archive()->fileName().endsWith(".zip") || m_decompressmodel->archive()->fileName().endsWith(".jar")
-            || m_decompressmodel->archive()->fileName().endsWith(".apk")) {
-        if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
-            if (pinterface->isAllEntry()) {
-                fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
-            } else {
-                foreach (QModelIndex index, listModelIndex) {
-                    Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
-                    QModelIndex selectionRoot = index.parent();
-                    entry->rootNode = selectionRoot.isValid()
-                                      ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
-                                      : QString();
-                    fileList << entry;
-                }
+    ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin();
+
+    if (pinterface == nullptr) {
+        return fileList;
+    }
+
+    if (pinterface->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
+        if (pinterface->isAllEntry()) {
+            fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
+        } else {
+            foreach (QModelIndex index, listModelIndex) {
+                Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+                QModelIndex selectionRoot = index.parent();
+                entry->rootNode = selectionRoot.isValid()
+                                  ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
+                                  : QString();
+                fileList << entry;
             }
         }
     } else {
         fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
     }
+
+    /* if (m_decompressmodel->archive()->fileName().endsWith(".zip") || m_decompressmodel->archive()->fileName().endsWith(".jar")
+             || m_decompressmodel->archive()->fileName().endsWith(".apk")) {
+         if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
+             if (pinterface->isAllEntry()) {
+                 fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
+             } else {
+                 foreach (QModelIndex index, listModelIndex) {
+                     Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
+                     QModelIndex selectionRoot = index.parent();
+                     entry->rootNode = selectionRoot.isValid()
+                                       ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
+                                       : QString();
+                     fileList << entry;
+                 }
+             }
+         }
+     } else {
+        fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
+    }*/
 
     return fileList;
 }

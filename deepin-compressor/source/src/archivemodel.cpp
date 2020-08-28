@@ -103,12 +103,17 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                     uint dirs;
                     uint files;
                     entry->countChildren(dirs, files);
-                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".apk")) {
+                    if (archive()->interface()->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
                         return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
                     } else {
                         return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
                     }
-
+//                    if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar")
+//                            || archive()->fileName().endsWith(".apk")) {
+//                        return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
+//                    } else {
+//                        return QString::number(dirs + files) + " " + tr("item(s)") + "    ";//KIO::itemsSummaryString(dirs + files, files, dirs, 0, false);
+//                    }
                 } else if (!entry->property("link").toString().isEmpty()) {
                     return QVariant();
                 } else {
@@ -562,9 +567,12 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
 
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".apk")) {
+        if (archive()->interface()->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
             parent->setProperty("size", parent->property("size").toLongLong() - 1);
         }
+//        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".apk")) {
+//            parent->setProperty("size", parent->property("size").toLongLong() - 1);
+//        }
         endRemoveRows();
     }
 }
@@ -591,7 +599,10 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
     Archive::Entry *parentEntry = receivedEntry->getParent();
     if (parentEntry != nullptr) {
         parentPath = parentEntry->fullPath();
-        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".apk")) {
+//        if (archive()->fileName().endsWith(".zip") || archive()->fileName().endsWith(".jar") || archive()->fileName().endsWith(".apk")) {
+//            parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
+//        }
+        if (archive()->interface()->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_LIBZIP) {
             parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
         }
     }
