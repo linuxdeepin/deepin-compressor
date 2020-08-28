@@ -85,8 +85,8 @@ QMimeType determineMimeType(const QString &filename)
     QMimeType mimeFromExtension = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchExtension);
     QMimeType mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
 
-    qDebug() << "mimeFromExtension******************" << mimeFromExtension.name();
-    qDebug() << "mimeFromContent****************" << mimeFromContent.name();
+    //qDebug() << "mimeFromExtension******************" << mimeFromExtension.name();
+    //qDebug() << "mimeFromContent****************" << mimeFromContent.name();
 
     // mimeFromContent will be "application/octet-stream" when file is
     // unreadable, so use extension.

@@ -2399,7 +2399,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 {
     // 显示当前正在操作的文件名
-    qDebug() << "SlotProgressFile" << filename;
+    //qDebug() << "SlotProgressFile" << filename;
     m_pProgressdialog->setCurrentFile(filename);
     m_pProgess->setProgressFilename(filename);
 //     m_extractToFile.append(filename);
