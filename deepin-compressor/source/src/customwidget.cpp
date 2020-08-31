@@ -231,7 +231,7 @@ void CustomSwitchButton::paintEvent(QPaintEvent *event)
 
 void CustomSwitchButton::focusInEvent(QFocusEvent *event)
 {
-    m_reson = event->reason();
+    //    m_reson = event->reason(); //不使用自绘的焦点效果，注释掉
     DSwitchButton::focusInEvent(event);
 }
 

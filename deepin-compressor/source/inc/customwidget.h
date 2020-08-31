@@ -76,7 +76,7 @@ public:
     explicit CustomSwitchButton(QWidget *parent = Q_NULLPTR);
 
 private:
-    Qt::FocusReason m_reson;
+    Qt::FocusReason m_reson = Qt::NoFocusReason;
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
