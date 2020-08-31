@@ -51,6 +51,7 @@
 #include "monitorAdaptor.h"
 #include "customwidget.h"
 #include "mimetypes.h"
+#include "logviewheaderview.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -1104,6 +1105,18 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             titlebar()->setFocus(Qt::TabFocusReason);
             //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
             //  return  true;
+        } else if (obj->objectName() == "gotoPreviousLabel") { //焦点顺序：返回上一页->文件列表
+            switch (m_ePageID) {
+            case PAGE_UNZIP:
+                m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                break;
+            case PAGE_ZIP:
+                m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
         } else if (obj->objectName() == "TableViewFile") { //焦点顺序：文件列表->解压路径按钮/下一步按钮
             switch (m_ePageID) {
             case PAGE_UNZIP:
@@ -1116,13 +1129,21 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 return false;
             }
             return true;
-        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->文件列表/压缩类型选择
+        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
             switch (m_ePageID) {
             case PAGE_UNZIP:
-                m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                if (m_pUnCompressPage->getFileViewer()->getTableView()->header_->gotoPreviousLabel_->isVisible()) {
+                    m_pUnCompressPage->getFileViewer()->getTableView()->header_->gotoPreviousLabel_->setFocus(Qt::TabFocusReason);
+                } else {
+                    m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                }
                 break;
             case PAGE_ZIP:
-                m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                if (m_pCompressPage->getFileViewer()->getTableView()->header_->gotoPreviousLabel_->isVisible()) {
+                    m_pCompressPage->getFileViewer()->getTableView()->header_->gotoPreviousLabel_->setFocus(Qt::TabFocusReason);
+                } else {
+                    m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::TabFocusReason);
+                }
                 break;
             case PAGE_ZIPSET:
                 m_pCompressSetting->getCompresstype()->setFocus(Qt::TabFocusReason);
@@ -1155,13 +1176,29 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             default:
                 return false;
             }
-            return  true;
-        } else if (obj->objectName() == "TableViewFile" || obj->objectName() == "CompressType") {
+            return true;
+        } else if (obj->objectName() == "TableViewFile") {
+            if (static_cast<MyTableView *>(obj)->header_->gotoPreviousLabel_->isVisible()) {
+                static_cast<MyTableView *>(obj)->header_->gotoPreviousLabel_->setFocus(Qt::BacktabFocusReason);
+            } else {
+                DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+                if (closeButton) {
+                    closeButton->setFocus(Qt::BacktabFocusReason);
+                }
+            }
+            return true;
+        } else if (obj->objectName() == "CompressType" || obj->objectName() == "gotoPreviousLabel") {
             DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
             if (closeButton) {
                 closeButton->setFocus(Qt::BacktabFocusReason);
             }
             return  true;
+        } else if (obj == m_pCompressPage->getNextbutton()) {
+            m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getNextbutton()) {
+            m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
+            return true;
         }
     }
 

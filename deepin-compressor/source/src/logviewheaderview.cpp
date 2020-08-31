@@ -68,7 +68,7 @@ void MyLabel::mouseDoubleClickEvent(QMouseEvent *event)
 
 PreviousLabel::PreviousLabel(const QString &text, LogViewHeaderView *parent): DLabel(text, parent), headerView_(parent)
 {
-
+    setFocusPolicy(Qt::TabFocus);
 }
 
 void PreviousLabel::paintEvent(QPaintEvent *e)
@@ -134,6 +134,28 @@ void PreviousLabel::leaveEvent(QEvent *event)
     update();
 }
 
+void PreviousLabel::focusInEvent(QFocusEvent *event)
+{
+    focusIn_ = true;
+    DLabel::focusInEvent(event);
+}
+
+void PreviousLabel::focusOutEvent(QFocusEvent *event)
+{
+    focusIn_ = false;
+    DLabel::focusOutEvent(event);
+}
+
+void PreviousLabel::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key::Key_Enter == event->key() || Qt::Key::Key_Return == event->key()) {
+        clearFocus(); //返回上一级时需主动移除焦点
+        emit doubleClickedSignal();
+    } else {
+        DLabel::keyPressEvent(event);
+    }
+}
+
 LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent), gotoPreviousLabel_(new PreviousLabel("     .. " + tr("Back"), this))
 {
@@ -145,6 +167,7 @@ LogViewHeaderView::LogViewHeaderView(Qt::Orientation orientation, QWidget *paren
 
     gotoPreviousLabel_->setFixedHeight(36);
     gotoPreviousLabel_->hide();
+    gotoPreviousLabel_->setObjectName("gotoPreviousLabel");
     DFontSizeManager::instance()->bind(gotoPreviousLabel_, DFontSizeManager::T6, QFont::Weight::Medium);
 }
 
