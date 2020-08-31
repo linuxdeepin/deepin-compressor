@@ -10,8 +10,7 @@ Name=Deepin Archive Manager
 Name[en]=Deepin Archive Manager
 Name[zh_CN]=归档管理器
 TryExec=/usr/bin/deepin-compressor
-#Exec=/usr/bin/deepin-compressor  %F
-Exec=/usr/bin/deepin-turbo-invoker  --type=dtkwidget deepin-compressor %F
+Exec=/usr/bin/deepin-compressor  %F
 Terminal=false
 Type=Application
 StartupNotify=true
