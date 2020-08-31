@@ -1,7 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    deepin-compressor \
-    3rdparty
-
-deepin-compressor.depends = 3rdparty
+ message("please use cmake to build this application.")
