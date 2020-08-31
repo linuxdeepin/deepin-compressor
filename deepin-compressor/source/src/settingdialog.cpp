@@ -193,7 +193,7 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(this, &SettingDialog::sigReset, this, [ = ] {
+            connect(this, &SettingDialog::sigResetPath, this, [=] {
                 combobox->setCurrentIndex(0);
             });
 
@@ -294,7 +294,7 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(this, &SettingDialog::sigReset, this, [ = ] {
+            connect(this, &SettingDialog::sigResetDeleteArchive, this, [=] {
                 combobox->setCurrentIndex(0);
             });
 
@@ -476,8 +476,10 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
         if (index > -1) {
             m_valuelisttemp.replace(index, value.toBool());
         }
-    } else if ((key.contains("default_path") || key.contains("delete_compressed_file")) && value.toString() == "") {
-        emit sigReset();
+    } else if ((key.contains("default_path")) && value.toString() == "") {
+        emit sigResetPath();
+    } else if ((key.contains("delete_compressed_file")) && value.toString() == "") {
+        emit sigResetDeleteArchive();
     }
 
     writeToConfbf();

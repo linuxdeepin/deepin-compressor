@@ -59,7 +59,9 @@ public slots:
     virtual void done(int status) override;
 
 signals:
-    void sigReset();
+    void sigResetPath();
+    void sigResetDeleteArchive();
+
 private:
     DSettings *m_settings;
     KProcess *m_process = nullptr;
