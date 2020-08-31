@@ -744,7 +744,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
     QFileInfo fileInfo(newFilePath);
     QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
     QString destinationFilename = absoluteFilename;
-    destinationFilename = destination + destinationFilename.remove(externalPath);
+    destinationFilename = destination + newFilePath.remove(externalPath);
 
     // #253059: Even if we use archive_read_disk_entry_from_file,
     //          libarchive may have been compiled without HAVE_LSTAT,
