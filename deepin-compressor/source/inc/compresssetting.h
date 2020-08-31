@@ -57,9 +57,15 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
+    void focusOutEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 
 signals:
     void labelClickEvent(QMouseEvent *event);
+
+private:
+    Qt::FocusReason m_reson = Qt::NoFocusReason;
 };
 
 class CompressSetting : public DWidget
@@ -85,6 +91,7 @@ public:
     DLineEdit *getFilenameLineEdit();
     CustomPushButton *getNextbutton();
     TypeLabel *getCompresstype();
+    TypeLabel *getClickLabel();
 
 private:
     void showEvent(QShowEvent *event) override;

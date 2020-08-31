@@ -29,6 +29,7 @@
 #include <DFileDialog>
 #include <DStyle>
 #include <DRadioButton>
+#include <DApplication>
 
 #include <QDebug>
 #include <QFileIconProvider>
@@ -52,6 +53,37 @@ void TypeLabel::mousePressEvent(QMouseEvent *event)
     DLabel::mousePressEvent(event);
 }
 
+void TypeLabel::paintEvent(QPaintEvent *event)
+{
+    if (hasFocus() && (m_reson & (Qt::TabFocusReason | Qt::BacktabFocusReason | Qt::PopupFocusReason))) {
+        DStylePainter painter(this);
+        DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
+        QStyleOptionFrame opt;
+        initStyleOption(&opt);
+        const QStyleOptionFrame *opt1 = &opt;
+        DStyleHelper dstyle(style);
+        int border_width = dstyle.pixelMetric(DStyle::PM_FocusBorderWidth, opt1, this);
+        QColor color = dstyle.getColor(opt1, QPalette::Highlight);
+        painter.setPen(QPen(color, border_width, Qt::SolidLine));
+        painter.setBrush(Qt::NoBrush);
+        painter.setRenderHint(QPainter::Antialiasing);
+        style->drawPrimitive(DStyle::PE_FrameFocusRect, opt1, &painter, this);
+    }
+    QLabel::paintEvent(event);
+}
+
+void TypeLabel::focusInEvent(QFocusEvent *event)
+{
+    m_reson = event->reason();
+    QLabel::focusInEvent(event);
+}
+
+void TypeLabel::focusOutEvent(QFocusEvent *event)
+{
+    m_reson = event->reason();
+    QLabel::focusOutEvent(event);
+}
+
 CompressSetting::CompressSetting(QWidget *parent) : DWidget(parent)
 {
 }
@@ -64,13 +96,10 @@ void CompressSetting::InitUI()
     m_pixmaplabel = new DLabel(this);
 
     m_compresstype = new TypeLabel(this);
-    m_compresstype->setObjectName("CompressType");
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
     m_compresstype->setMinimumHeight(25);
-    m_compresstype->setFocusPolicy(Qt::TabFocus);
-    m_compresstype->installEventFilter(this);
 
     DStyle style;
     QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
@@ -93,6 +122,10 @@ void CompressSetting::InitUI()
 
     m_clicklabel = new TypeLabel(this);
     m_clicklabel->setMinimumSize(125, 40);
+    m_clicklabel->setObjectName("ClickTypeLabel");
+    m_clicklabel->setFocusPolicy(Qt::TabFocus);
+    m_clicklabel->installEventFilter(this);
+
     m_clicklabel->setLayout(typelayout);
     layout->addWidget(m_clicklabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -615,6 +648,11 @@ CustomPushButton *CompressSetting::getNextbutton()
 TypeLabel *CompressSetting::getCompresstype()
 {
     return m_compresstype;
+}
+
+TypeLabel *CompressSetting::getClickLabel()
+{
+    return m_clicklabel;
 }
 
 void CompressSetting::showEvent(QShowEvent *event)
@@ -1263,11 +1301,12 @@ bool CompressSetting::existSameFileName()
 
 bool CompressSetting::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_compresstype) {
+    if (watched == m_clicklabel) {
         if (QEvent::KeyPress == event->type()) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) { //响应"回车键"
                 m_typemenu->popup(m_compresstype->mapToGlobal(m_compresstype->pos()));
+                m_typemenu->setFocus();
                 return true;
             } else {
                 return false;

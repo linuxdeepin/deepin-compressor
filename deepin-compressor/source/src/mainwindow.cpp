@@ -1092,6 +1092,9 @@ bool MainWindow::createSubWindow(const QStringList &urls)
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 {
+    if (!m_pUnCompressPage || !m_pCompressPage || !m_pCompressSetting) {
+        return false;
+    }
     if (evt->key() == Qt::Key_Tab) { //tab焦点顺序：从上到下，从左到右
         DWindowCloseButton *closebtn = this->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
         if (obj == this->titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
@@ -1146,7 +1149,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 }
                 break;
             case PAGE_ZIPSET:
-                m_pCompressSetting->getCompresstype()->setFocus(Qt::TabFocusReason);
+                m_pCompressSetting->getClickLabel()->setFocus(Qt::TabFocusReason);
                 break;
             default:
                 return false;
@@ -1187,7 +1190,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 }
             }
             return true;
-        } else if (obj->objectName() == "CompressType" || obj->objectName() == "gotoPreviousLabel") {
+        } else if (obj->objectName() == "ClickTypeLabel" || obj->objectName() == "gotoPreviousLabel") {
             DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
             if (closeButton) {
                 closeButton->setFocus(Qt::BacktabFocusReason);
