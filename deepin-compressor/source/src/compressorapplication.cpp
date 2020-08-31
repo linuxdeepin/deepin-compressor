@@ -70,8 +70,10 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
                 return true;
             }
         } else if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab) {
-            if (mainWindow_) {
-                bool rs =  mainWindow_->handleApplicationTabEventNotify(watched, keyEvent);
+            QWidget *pWgt = activeWindow();
+            MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
+            if (pWindow) {
+                bool rs = pWindow->handleApplicationTabEventNotify(watched, keyEvent);
                 if (rs) {
                     return rs;
                 }
