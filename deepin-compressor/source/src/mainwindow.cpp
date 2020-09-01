@@ -4163,7 +4163,7 @@ void MainWindow::slotJobFinished(KJob *job)
         //reload package archive
         QString filename =   m_pArchiveModel->archive()->fileName();
         QStringList ArchivePath = QStringList() << filename;
-        if (m_pJob->mType == Job::ENUM_JOBTYPE::DELETEJOB) {
+        if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::DELETEJOB) {
             this->m_pUnCompressPage->getFileViewer()->getTableView()->clearSelection();// delete 后清除选中
             deleteLaterJob();
         }
