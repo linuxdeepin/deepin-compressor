@@ -1095,7 +1095,8 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
     if (!m_pUnCompressPage || !m_pCompressPage || !m_pCompressSetting) {
         return false;
     }
-    if (evt->key() == Qt::Key_Tab) { //tab焦点顺序：从上到下，从左到右
+    int keyOfEvent = evt->key();
+    if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
         DWindowCloseButton *closebtn = this->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
         if (obj == this->titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
             if (m_pTitleButton->isVisible()) {
@@ -1156,7 +1157,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             }
             return true;
         }
-    } else if (evt->key() == Qt::Key_Backtab) { //shift+tab 焦点顺序，与tab焦点顺序相反
+    } else if (Qt::Key_Backtab == keyOfEvent) { //shift+tab 焦点顺序，与tab焦点顺序相反
         DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
         if (obj == optionbtn) {
             if (m_pTitleButton->isVisible()) {
@@ -1200,12 +1201,25 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
             return true;
         } else if (obj == m_pUnCompressPage->getNextbutton()) {
+            m_pUnCompressPage->getPathCommandLinkButton()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getPathCommandLinkButton()) {
+            m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        }
+    } else if (Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) { //Key_Left、Key_Up几处顺序特殊处理
+        if (obj == m_pCompressPage->getNextbutton()) {
+            m_pCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getNextbutton()) {
+            m_pUnCompressPage->getPathCommandLinkButton()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getPathCommandLinkButton()) {
             m_pUnCompressPage->getFileViewer()->getTableView()->setFocus(Qt::BacktabFocusReason);
             return true;
         }
     }
-
-    return  false;
+    return false;
 }
 
 //void MainWindow::setEnable()

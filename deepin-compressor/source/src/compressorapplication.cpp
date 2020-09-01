@@ -53,7 +53,8 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) {
+        int keyOfEvent = keyEvent->key();
+        if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
             //checkbox响应"回车键"
             if (watched->metaObject()->className() == QStringLiteral("QCheckBox")) {
                 DCheckBox *checkBox = static_cast<DCheckBox *>(watched);
@@ -69,7 +70,8 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
 
                 return true;
             }
-        } else if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab) {
+        } else if (Qt::Key_Tab == keyOfEvent || Qt::Key_Backtab == keyOfEvent
+                   || Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) {
             QWidget *pWgt = activeWindow();
             MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
             if (pWindow) {
