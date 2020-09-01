@@ -172,9 +172,6 @@ public:
     // QWidget interface
 protected:
     void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
-
-    // QWidget interface
-protected:
 };
 
 struct SortInfo {

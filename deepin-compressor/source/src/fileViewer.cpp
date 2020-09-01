@@ -228,7 +228,7 @@ void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewI
 {
     QPainterPath focusPath;
     QRect rect = option.rect;
-    qDebug() << rect;
+    //    qDebug() << rect;
     qreal qRadius = 4;
     rect.setY(rect.y() + 1);
     rect.setHeight(rect.height() - 1);
@@ -266,7 +266,7 @@ void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewI
 
     QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
     if (option.state & QStyle::State_Selected) {
-        qDebug() << index;
+        //        qDebug() << index;
         //painter->setPen(Qt::red);
         painter->setPen(option.palette.color(cg, QPalette::Base));
         painter->drawPath(focusPath);
@@ -1949,14 +1949,15 @@ void MyTableView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
 
-    if (model()->rowCount() > 0) {
-        if (currentIndex().isValid()) {
-            selectRow(currentIndex().row());
-        } else {
-            selectRow(0);
+    if (m_reson == Qt::BacktabFocusReason || m_reson == Qt::TabFocusReason) { //修复不能多选删除
+        if (model()->rowCount() > 0) {
+            if (currentIndex().isValid()) {
+                selectRow(currentIndex().row());
+            } else {
+                selectRow(0);
+            }
         }
     }
-
 
     DTableView::focusInEvent(event);
 }
