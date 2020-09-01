@@ -340,9 +340,9 @@ bool CliInterface::addFiles(const QVector<Archive::Entry *> &files, const Archiv
                                                 options.isTar7z(),
                                                 options.globalWorkDir());
 
-    if (destinationPath.isEmpty()) { //如果不是追加，需要去除-l
-        arguments.removeOne("-l");
-    }
+    //if (destinationPath.isEmpty()) { //如果不是追加，需要去除-l
+    //arguments.removeOne("-l");
+    //}
 
     bool ret = false;
     //tar.7z： Different compression commands
