@@ -695,12 +695,13 @@ void MainWindow::InitConnection()
             QFileInfo file(path);
 
             DDialog *dialog = new DDialog(this);
-            dialog->setFixedSize(380, 200);
+            dialog->setMinimumSize(380, 134);
             QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
             dialog->setIcon(pixmap);
             // 标题
             DLabel *strlabel = new DLabel;
-            strlabel->setFixedWidth(340);
+            strlabel->setMinimumSize(317, 20);
+//            strlabel->setFixedWidth(340);
             strlabel->setAlignment(Qt::AlignCenter);
             DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
             QString strTitle = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(Utils::toShortString(file.fileName()));

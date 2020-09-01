@@ -1514,12 +1514,12 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         m_ActionInfo.ActionFiles = urls;
 
         DDialog *dialog = new DDialog(this);
-        dialog->setMinimumSize(380, 200);
+        dialog->setMinimumSize(380, 134);
         QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(pixmap);
 
         DLabel *strlabel2 = new DLabel(dialog);
-        strlabel2->setMinimumSize(300, 20);
+        strlabel2->setMinimumSize(317, 20);
         strlabel2->setForegroundRole(DPalette::NoType);
         DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
         strlabel2->setText(warningStr1);
