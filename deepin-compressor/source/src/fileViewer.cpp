@@ -63,8 +63,9 @@
 const QString rootPathUnique = "_&_&_&_";
 const QString zipPathUnique = "_&_&_";
 
-FirstRowDelegate::FirstRowDelegate(QObject *parent)
+FirstRowDelegate::FirstRowDelegate(MyTableView *pTableView, QObject *parent)
     : QItemDelegate(parent)
+    , m_pTableView(pTableView)
 {
 
 }
@@ -204,7 +205,12 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->drawText(displayRect, static_cast<int>(opt.displayAlignment), text);
     }
 
-    drawFocus(painter, opt, displayRect);
+    if (m_pTableView->selectionModel()->selectedRows().count() != 0) {
+        if (m_pTableView->currentIndex().isValid() && m_pTableView->currentIndex().row() == index.row() && m_pTableView->hasFocus()) {
+            drawBackground(painter, option, index);
+        }
+    }
+
 
     // done
     painter->restore();
@@ -215,7 +221,56 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 //        loption.rect.setX(loption.rect.x() + 6);
 //        return QItemDelegate::paint(painter, loption, index);;
 //    }
-//    return QItemDelegate::paint(painter, option, index);
+    //    return QItemDelegate::paint(painter, option, index);
+}
+
+void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QPainterPath focusPath;
+    QRect rect = option.rect;
+    qDebug() << rect;
+    qreal qRadius = 4;
+    rect.setY(rect.y() + 1);
+    rect.setHeight(rect.height() - 1);
+
+    if (index.column() == 0) {
+        rect.setX(rect.x() + SCROLLMARGIN);
+
+        QRect focusRect(rect.x() + qRadius, rect.y() + qRadius, rect.width() - qRadius, rect.height() - 2 * qRadius);
+        focusPath.moveTo(focusRect.topRight());
+        focusPath.lineTo(focusRect.x() + qRadius, focusRect.y());
+        focusPath.arcTo(QRect(focusRect.x(), focusRect.y(), qRadius * 2, qRadius * 2), 90, 90);
+        focusPath.lineTo(focusRect.x(), focusRect.y() + focusRect.height() - qRadius);
+        focusPath.arcTo(QRect(focusRect.x(), focusRect.y() + focusRect.height() - qRadius * 2, qRadius * 2, qRadius * 2), 180, 90);
+        focusPath.lineTo(focusRect.bottomRight());
+    } else if (index.column() == 3) {
+        rect.setWidth(rect.width() - SCROLLMARGIN); // right margin
+
+        QRect focusRect(rect.x() - 2, rect.y() + qRadius, rect.width() - qRadius, rect.height() - 2 * qRadius);
+
+        focusPath.moveTo(focusRect.topLeft());
+        focusPath.lineTo(focusRect.topRight().x() - qRadius, focusRect.y());
+        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * qRadius, focusRect.y(), qRadius * 2, qRadius * 2), 90, -90);
+        focusPath.lineTo(focusRect.topRight().x(), focusRect.y() + focusRect.height() - qRadius);
+        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * qRadius, focusRect.y() + focusRect.height() - qRadius * 2, qRadius * 2, qRadius * 2), 0, -90);
+        focusPath.lineTo(focusRect.bottomLeft());
+
+    } else {
+
+        QRect focusRect(rect.x(), rect.y() + qRadius, rect.width() + 2, rect.height() - 2 * qRadius);
+        focusPath.moveTo(focusRect.topLeft());
+        focusPath.lineTo(focusRect.topRight());
+        focusPath.moveTo(focusRect.bottomLeft());
+        focusPath.lineTo(focusRect.bottomRight());
+    }
+
+    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
+    if (option.state & QStyle::State_Selected) {
+        qDebug() << index;
+        //painter->setPen(Qt::red);
+        painter->setPen(option.palette.color(cg, QPalette::Base));
+        painter->drawPath(focusPath);
+    }
 }
 
 MyTableView::MyTableView(QWidget *parent)
@@ -457,7 +512,7 @@ void fileViewer::InitUI()
     connect(pTableViewFile->header_, &QHeaderView::sortIndicatorChanged, this, &fileViewer::onSortIndicatorChanged);
 
     pTableViewFile->verticalHeader()->setDefaultSectionSize(MyFileSystemDefine::gTableHeight);
-    pdelegate = new FirstRowDelegate(this);
+    pdelegate = new FirstRowDelegate(pTableViewFile, this);
     pdelegate->setPathIndex(&m_pathindex);
     pTableViewFile->setItemDelegate(pdelegate);
 //    plabel = new MyLabel(pTableViewFile);
@@ -1495,10 +1550,13 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
 {
     qDebug() << "slotCompressRowDoubleClicked";
-    QModelIndex curindex = pTableViewFile->currentIndex();
+    QModelIndex curindex = index/*pTableViewFile->currentIndex()*/;
     if (curindex.isValid()) {
         if (0 == m_pathindex) {
             QStandardItem *item = firstmodel->itemFromIndex(index.siblingAtColumn(0));
+            if (item == nullptr) {
+                return;
+            }
             QString itemText = item->text().trimmed();
             int row = 0;
             foreach (QFileInfo file, m_curfilelist) {
@@ -1890,6 +1948,7 @@ Archive::Entry *MyTableView::getParentArchiveEntry()
 void MyTableView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
+    selectRow(currentIndex().row());
     DTableView::focusInEvent(event);
 }
 

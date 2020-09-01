@@ -91,16 +91,17 @@ class QStandardItemModel;
 class ArchiveModel;
 class MimeTypeDisplayManager;
 class ArchiveSortFilterModel;
+class MyTableView;
 
 class FirstRowDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    FirstRowDelegate(QObject *parent = nullptr);
+    FirstRowDelegate(MyTableView *pTableView, QObject *parent = nullptr);
     void setPathIndex(int *index);
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void drawFocus(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
-                           const QRect &/*rect*/) const
+    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option,
+                           const QRect &rect) const
     {
     }
 
@@ -109,10 +110,13 @@ public:
     {
     }
 
+    virtual void drawBackground(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
+
 protected:
 
 private:
     int *ppathindex;
+    MyTableView *m_pTableView;
 };
 
 class MyTableView: public DTableView
