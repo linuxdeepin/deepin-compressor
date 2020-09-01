@@ -1948,7 +1948,16 @@ Archive::Entry *MyTableView::getParentArchiveEntry()
 void MyTableView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
-    selectRow(currentIndex().row());
+
+    if (model()->rowCount() > 0) {
+        if (currentIndex().isValid()) {
+            selectRow(currentIndex().row());
+        } else {
+            selectRow(0);
+        }
+    }
+
+
     DTableView::focusInEvent(event);
 }
 
