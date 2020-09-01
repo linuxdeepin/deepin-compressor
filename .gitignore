@@ -87,7 +87,7 @@ CMakeLists.txt.user*
 
 
 
-# QtCreator 4.8< compilation database 
+# QtCreator 4.8< compilation database
 
 compile_commands.json
 
@@ -102,3 +102,4 @@ compile_commands.json
 output
 so(cmake).sh
 tests/test_output
+*.qm
