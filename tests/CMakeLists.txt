@@ -1,0 +1,13 @@
+#1.定义cmake版本
+cmake_minimum_required(VERSION 3.9.5)
+#2.设置项目名称
+set(EXE_NAME tests)
+project(${EXE_NAME})
+
+add_subdirectory(UnitTest)
+
+add_subdirectory(../3rdparty/googletest googletest.out)
+
+#add_subdirectory(ChardetDetector)
+
+
