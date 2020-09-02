@@ -320,6 +320,25 @@ void MyTableView::setPreviousButtonVisible(bool visible)
     //        //setGeometry(rect.x(), rect.y() - header_->gotoPreviousLabel_->height(), rect.width(), rect.height() + header_->gotoPreviousLabel_->height());
     //    }
 }
+bool MyTableView::event(QEvent *e)
+{
+    switch (e->type()) {
+    case QEvent::TouchBegin: {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent *>(e);
+
+        if (!m_isPressed && touchEvent->device()->type() == QTouchDevice::TouchScreen && touchEvent->touchPointStates() == Qt::TouchPointPressed) {
+            QList<QTouchEvent::TouchPoint> points = touchEvent->touchPoints();
+            //dell触摸屏幕只有一个touchpoint 但却能捕获到pinchevent缩放手势?
+            //  qDebug() << "11111" << points.count();
+            if (points.count() == 1) {
+                m_isPressed = true;
+            }
+        }
+        break;
+    }
+    }
+    return DTableView::event(e);
+}
 
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
@@ -363,7 +382,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     //        return;
     //    } else {
-    if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300) { // 移动
+    if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300 && m_isPressed) { // 移动
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
@@ -451,6 +470,12 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     m_path.clear();
     DTableView::mouseMoveEvent(e);
+}
+
+void MyTableView::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_isPressed = false;
+    DTableView::mouseReleaseEvent(event);
 }
 
 void MyTableView::mouseDoubleClickEvent(QMouseEvent *event)

@@ -127,11 +127,11 @@ public:
     void setPreviousButtonVisible(bool visible);
 
 protected:
-    //bool event(QEvent *event) override;
+    bool event(QEvent *event) override;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
-    //void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
