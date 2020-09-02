@@ -69,15 +69,21 @@ include_directories(${GIO_INCLUDE_DIRS})
 pkg_search_module(DtkGui REQUIRED dtkgui)	
 include_directories(${DtkGui_INCLUDE_DIRS})
 
-set(LIBS_INCLUDE_DIRS 
-	${DtkWidget_LIBRARIES}
-	${DtkCore_LIBRARIES}
-	${GOBJECT_LIBRARIES}
-	${GIO_LIBRARIES}
-	${DtkGui_LIBRARIES}
+set(LIBS_LIBRARIES_DIRS
+        ${DtkWidget_LIBRARIES}
+        ${DtkCore_LIBRARIES}
+        ${GOBJECT_LIBRARIES}
+        ${GIO_LIBRARIES}
+        ${DtkGui_LIBRARIES}
 )
 
-
+set(LIBS_INCLUDE_DIRS
+        ${DtkWidget_INCLUDE_DIRS}
+        ${DtkCore_INCLUDE_DIRS}
+        ${DtkGui_INCLUDE_DIRS}
+        ${GOBJECT_INCLUDE_DIRS}
+        ${GIO_INCLUDE_DIRS}
+)
 
  
 #6. 应用interface项目
@@ -124,7 +130,7 @@ link_directories(compressor-lib compressor-ChardetDetector)
 
 #10.生成可执行程序
 add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_FILES} ${APP_QM_FILES})
-
+target_include_directories(${EXE_NAME} PRIVATE ${LIBS_INCLUDE_DIRS})
 
 
 set_target_properties(${EXE_NAME} PROPERTIES AUTOMOC TRUE)
@@ -133,54 +139,57 @@ qt5_use_modules(${EXE_NAME}  Core  Widgets  Gui )
 target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc )
 target_include_directories(${EXE_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/source/inc/openwithdialog )
 
-target_link_libraries(${EXE_NAME}  ${LIBS_INCLUDE_DIRS})
-#message(${LIBS_INCLUDE_DIRS})
-target_link_libraries(${EXE_NAME}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::DBus Qt5::Svg  KF5::Codecs)
-
-
-target_link_libraries(${EXE_NAME}  compressor-interface)
-target_link_libraries(${EXE_NAME}  compressor-ChardetDetector)
-
+target_link_libraries(${EXE_NAME}
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
+    Qt5::DBus
+    Qt5::Svg
+    KF5::Codecs
+    ${LIBS_LIBRARIES_DIRS}
+    compressor-interface
+    compressor-ChardetDetector
+)
 
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
 
 install(FILES ../output/deepin-compressor
-        DESTINATION /usr/bin/
+        DESTINATION bin/
         PERMISSIONS OWNER_READ OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE)
 
 install(FILES  deepin-compressor.desktop
-        DESTINATION /usr/share/applications/
+        DESTINATION share/applications/
         PERMISSIONS OWNER_READ OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE)
 
 file(GLOB INSTALL_QM_FILES ../translations/*.qm)
 install(FILES ${INSTALL_QM_FILES} 
-	DESTINATION /usr/share/deepin-compressor/translations)
+        DESTINATION share/deepin-compressor/translations)
 
 
-# for i in `ls *.desktop`; do echo "install(FILES ${i} DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)";done
+# for i in `ls *.desktop`; do echo "install(FILES ${i} DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)";done
 
-install(FILES deepin-compress.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-compress-multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-#install(FILES deepin-compressor.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-#install(FILES deepin-compress-to_7z.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-#install(FILES deepin-compress-to_zip.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompress.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompresshere.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompresshere-multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompresshere-split.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompresshere-split_multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-#install(FILES deepin-decompressmkdir.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-#install(FILES deepin-decompressmkdir-split.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompress-multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompress-split.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
-install(FILES deepin-decompress-split_multi.desktop DESTINATION /usr/share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-compress.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-compress-multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-compressor.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-compress-to_7z.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-compress-to_zip.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompress.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompresshere.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompresshere-multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompresshere-split.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompresshere-split_multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-decompressmkdir.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+#install(FILES deepin-decompressmkdir-split.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompress-multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompress-split.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES deepin-decompress-split_multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
 
-install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION /usr/share/icons/hicolor/scalable/apps/)
-install(FILES assets/mimetype/deepin-compressor.xml DESTINATION /usr/share/mime/packages/)
+install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES assets/mimetype/deepin-compressor.xml DESTINATION share/mime/packages/)
 

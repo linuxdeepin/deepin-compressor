@@ -10,7 +10,6 @@ add_subdirectory(ChardetDetector)
 
 add_subdirectory(common)
 
-
 add_subdirectory(cli7zplugin)
 
 add_subdirectory(clirarplugin)
