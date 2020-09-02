@@ -191,7 +191,8 @@ void BatchExtract::showFailedFiles()
 
 void BatchExtract::slotResult(KJob *job)
 {
-    if (job->error() && job->error() != KJob::CancelError) {
+    //批量解压，关闭密码输入框跳过当前压缩包
+    if (job->error() && job->error() != KJob::CancelError && job->error() != KJob::NopasswordError) {
         qDebug() << "There was en error:" << job->error() << ", errorText:" << job->errorString();
 
         QString curfile = m_fileNames[subjobs().at(0)].first;
