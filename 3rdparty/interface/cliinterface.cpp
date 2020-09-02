@@ -767,7 +767,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
 
     for (const QString strPath /*Archive::Entry *file*/ : m_listFileName /*files*/) {
         QString strTemp = strPath;
-        QFileInfo relEntry(strTemp /*file->fullPath()*/.remove(m_strRootNode /*file->rootNode*/));
+        QFileInfo relEntry(strTemp /*file->fullPath()*/.remove(0, m_strRootNode.length() /*file->rootNode*/));
         QFileInfo absSourceEntry(QDir::current().absolutePath() + QLatin1Char('/') + strPath /*file->fullPath()*/);
         QFileInfo absDestEntry(finalDestDir.path() + QLatin1Char('/') + relEntry.filePath());
 
