@@ -1424,7 +1424,10 @@ bool CliInterface::handleLine(const QString &line)
                 query.waitForResponse();
 
                 if (query.responseCancelled()) {
+                    emit error("Canceal when batchextract.");
                     emit cancelled();
+                    // There is no process running, so finished() must be emitted manually.
+                    emit finished(false);
                     return false;
                 }
 
