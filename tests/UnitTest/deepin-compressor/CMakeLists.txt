@@ -101,13 +101,13 @@ file(GLOB_RECURSE c_files
     ../../../deepin-compressor/source/*.cpp
     ../../../deepin-compressor/source/*.c
     ./source/src/*.cpp ./source/src/*.c
-    ../3rdparty/cli7zplugin/*.cpp
-    ../3rdparty/clirarplugin/*.cpp
-    ../3rdparty/cliunarchiverplugin/*.cpp
-    ../3rdparty/common/*.cpp
-    ../3rdparty/interface/*.cpp
-    ../3rdparty/libarchive/*.cpp
-    ../3rdparty/libzipplugin/*.cpp
+#    ../3rdparty/cli7zplugin/*.cpp
+#    ../3rdparty/clirarplugin/*.cpp
+#    ../3rdparty/cliunarchiverplugin/*.cpp
+#    ../3rdparty/common/*.cpp
+#    ../3rdparty/interface/*.cpp
+#    ../3rdparty/libarchive/*.cpp
+#    ../3rdparty/libzipplugin/*.cpp
     )
 #foreach(i  ${c_files})
 #    message(${i})
