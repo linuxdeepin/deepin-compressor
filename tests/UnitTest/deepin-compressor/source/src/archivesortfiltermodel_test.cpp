@@ -55,21 +55,21 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     Archive::Entry *rightEntry = new Archive::Entry();
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = false;
-
+    armodel->m_showColumns.push_back(10);
     // model->sort(1,Qt::DescendingOrder);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
     model->sort(1, Qt::SortOrder::DescendingOrder);
     Stub *stub = new Stub;
     stub->set(ADDR(ArchiveSortFilterModel, sortOrder), MyDescendingOrder);
-
+    armodel->m_showColumns.push_back(1);
     bool res = model->lessThan(leftModel, rightModel);
     stub->reset(ADDR(ArchiveSortFilterModel, sortOrder));
     //  rightModel.c = -1;
@@ -86,6 +86,8 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     ArchiveModel *armodel = new ArchiveModel(nullptr);
     //armodel->setItemData()
     ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
+    armodel->m_showColumns.push_back(10);
+    armodel->m_showColumns.push_back(10);
     QModelIndex leftModel;
     QModelIndex rightModel;
     Archive::Entry *leftEntry = new Archive::Entry();
@@ -97,8 +99,8 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -116,6 +118,7 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     ArchiveModel *armodel = new ArchiveModel(nullptr);
     //armodel->setItemData()
     ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
+    armodel->m_showColumns.push_back(1);
     QModelIndex leftModel;
     QModelIndex rightModel;
     Archive::Entry *leftEntry = new Archive::Entry();
@@ -124,11 +127,11 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_isDirectory = true;
     model->setSourceModel(armodel);
     leftModel.r = 1;
-    leftModel.c = 1;
+    leftModel.c = 0;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 0;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -144,6 +147,7 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
 TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT007)
 {
     ArchiveModel *armodel = new ArchiveModel(nullptr);
+
     //armodel->setItemData()
     ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
     QModelIndex leftModel;
@@ -154,14 +158,15 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "好你2";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -187,7 +192,8 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "你好";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
@@ -220,14 +226,15 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "fff";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -253,14 +260,15 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "好你2";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -286,14 +294,15 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "eee";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -319,14 +328,15 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     rightEntry->m_name = "fff";
     leftEntry->m_isDirectory = true;
     rightEntry->m_isDirectory = true;
-    armodel->m_showColumns.push_back(1);
+    armodel->m_showColumns.push_back(0);
+    armodel->m_showColumns.push_back(0);
     model->setSourceModel(armodel);
     leftModel.r = 1;
     leftModel.c = 1;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 1;
-    rightModel.c = 2;
+    rightModel.r = 2;
+    rightModel.c = 1;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
 
@@ -557,11 +567,12 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
     delete leftEntry;
     delete rightEntry;
 }
-
+// 139行   return false;
 TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT019)
 {
     ArchiveModel *armodel = new ArchiveModel(nullptr);
     //armodel->setItemData()
+    armodel->m_showColumns.push_back(10);
     ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
     QModelIndex leftModel;
     QModelIndex rightModel;
@@ -581,11 +592,11 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
 
     model->setSourceModel(armodel);
     leftModel.r = 1;
-    leftModel.c = 3;
+    leftModel.c = 0;
     leftModel.m = armodel;
     leftModel.i = (quintptr)leftEntry;
     rightModel.r = 2;
-    rightModel.c = 3;
+    rightModel.c = 0;
     rightModel.m = armodel;
     rightModel.i = (quintptr)rightEntry;
     bool res = model->lessThan(leftModel, rightModel);
