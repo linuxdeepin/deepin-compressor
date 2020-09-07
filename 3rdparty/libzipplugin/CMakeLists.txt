@@ -66,7 +66,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 file(GLOB_RECURSE json_files  *.json)
 
-add_library(${LIB_NAME} SHARED ${c_files} ${h_files})
+add_library(${LIB_NAME} SHARED ${c_files} ${json_files} ${h_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-interface)
