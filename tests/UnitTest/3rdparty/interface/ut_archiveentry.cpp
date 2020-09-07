@@ -264,7 +264,7 @@ TEST(Archive_fullPath_UT, Archive_fullPath_UT017)
     delete archive1;
 }
 
-TEST(Archive_name_UT, Archive_name_UT017)
+TEST(Archive_name_UT, Archive_name_UT018)
 {
     Archive::Entry *archive1 = new Archive::Entry();
     archive1->setFullPath("/home/asdf/a.cpp");
@@ -272,7 +272,7 @@ TEST(Archive_name_UT, Archive_name_UT017)
     ASSERT_EQ(name, "a.cpp");
     delete archive1;
 }
-TEST(Archive_setIsDirectory_UT, Archive_setIsDirectory_UT018)
+TEST(Archive_setIsDirectory_UT, Archive_setIsDirectory_UT019)
 {
     Archive::Entry *archive1 = new Archive::Entry();
     archive1->setIsDirectory(true);
@@ -280,7 +280,7 @@ TEST(Archive_setIsDirectory_UT, Archive_setIsDirectory_UT018)
     delete archive1;
 }
 
-TEST(Archive_isDir_UT, Archive_isDir_UT019)
+TEST(Archive_isDir_UT, Archive_isDir_UT020)
 {
     Archive::Entry *archive1 = new Archive::Entry();
     archive1->setIsDirectory(true);
@@ -288,7 +288,7 @@ TEST(Archive_isDir_UT, Archive_isDir_UT019)
     delete archive1;
 }
 
-TEST(Archive_row_UT, Archive_row_UT020)
+TEST(Archive_row_UT, Archive_row_UT021)
 {
     Archive::Entry *archiveDir = new Archive::Entry();
     Archive::Entry *archive1 = new Archive::Entry();
@@ -326,7 +326,7 @@ TEST(Archive_row_UT, Archive_row_UT020)
     delete archive2;
 }
 
-TEST(Archive_find_UT, Archive_find_UT021)
+TEST(Archive_find_UT, Archive_find_UT022)
 {
     Archive::Entry *archiveDir = new Archive::Entry();
     archiveDir->setFullPath("/home");
@@ -361,7 +361,7 @@ TEST(Archive_find_UT, Archive_find_UT021)
     delete archive2;
 }
 // 230行
-TEST(Archive_findByPath_UT, Archive_findByPath_UT022)
+TEST(Archive_findByPath_UT, Archive_findByPath_UT023)
 {
     QStringList pieces;
     pieces.append("home");
@@ -373,7 +373,7 @@ TEST(Archive_findByPath_UT, Archive_findByPath_UT022)
     delete rarchive;
 }
 // 235行
-TEST(Archive_findByPath_UT, Archive_findByPath_UT023)
+TEST(Archive_findByPath_UT, Archive_findByPath_UT024)
 {
     QStringList pieces;
     pieces.append("home");
@@ -392,7 +392,7 @@ TEST(Archive_findByPath_UT, Archive_findByPath_UT023)
 }
 
 // 242行
-TEST(Archive_findByPath_UT, Archive_findByPath_UT024)
+TEST(Archive_findByPath_UT, Archive_findByPath_UT025)
 {
     QStringList pieces;
     pieces.append("home");
@@ -410,7 +410,7 @@ TEST(Archive_findByPath_UT, Archive_findByPath_UT024)
     delete rarchive;
 }
 
-TEST(Archive_findByPath_UT, Archive_findByPath_UT025)
+TEST(Archive_findByPath_UT, Archive_findByPath_UT026)
 {
     QStringList pieces;
     pieces.append("index.php");
@@ -429,7 +429,7 @@ TEST(Archive_findByPath_UT, Archive_findByPath_UT025)
     delete rarchive;
 }
 
-TEST(Archive_countChildren_UT, Archive_countChildren_UT026)
+TEST(Archive_countChildren_UT, Archive_countChildren_UT027)
 {
     Archive::Entry *archive = new Archive::Entry();
     archive->setIsDirectory(false);
@@ -441,7 +441,7 @@ TEST(Archive_countChildren_UT, Archive_countChildren_UT026)
     delete archive;
 }
 
-TEST(Archive_countChildren_UT, Archive_countChildren_UT027)
+TEST(Archive_countChildren_UT, Archive_countChildren_UT028)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     Archive::Entry *archivedir1 = new Archive::Entry();
@@ -471,7 +471,7 @@ TEST(Archive_countChildren_UT, Archive_countChildren_UT027)
     delete archivefile3;
 }
 
-TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT027)
+TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT029)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     archiveParent->setFullPath("/home/temp/id");
@@ -479,7 +479,7 @@ TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT027)
     delete archiveParent;
 }
 
-TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT028)
+TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT030)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     Archive::Entry *archiveSub = new Archive::Entry();
@@ -506,7 +506,7 @@ TEST(Archive_getAllNodesFullPath_UT, Archive_getAllNodesFullPath_UT028)
     delete archiveSubDir_file;
 }
 
-TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT029)
+TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT031)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     Archive::Entry *archiveSub = new Archive::Entry();
@@ -530,7 +530,7 @@ TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT029)
     delete archiveSubDir_file;
 }
 // 288行
-TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT030)
+TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT032)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
 
@@ -545,7 +545,7 @@ TEST(Archive_getFilesCount_UT, Archive_getFilesCount_UT030)
     delete archiveSubDir_file;
 }
 
-TEST(Archive_getVector_UT, Archive_getVector_UT031)
+TEST(Archive_getVector_UT, Archive_getVector_UT033)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     Archive::Entry *archiveSub = new Archive::Entry();
@@ -572,7 +572,7 @@ TEST(Archive_getVector_UT, Archive_getVector_UT031)
     }
 }
 
-TEST(Archive_operator_UT, Archive_operator_UT032)
+TEST(Archive_operator_UT, Archive_operator_UT034)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     const Archive::Entry *archiveSub = new Archive::Entry(nullptr, "/home");
@@ -593,18 +593,18 @@ bool getIsDir2()
     return false;
 }
 
-TEST(Archive_clean_UT, Archive_clean_UT033)
+TEST(Archive_clean_UT, Archive_clean_UT035)
 {
     Archive::Entry *archiveSubDir_file = new Archive::Entry();
     archiveSubDir_file->setFullPath("/home/temp/id/b.php");
     Stub *stub = new Stub;
     stub->set(ADDR(Archive::Entry, isDir), getIsDir2);
     archiveSubDir_file->clean();
-    ASSERT_EQ(archiveSubDir_file, nullptr);
-    delete (archiveSubDir_file);
+    ASSERT_NE(archiveSubDir_file, nullptr);
+    // delete archiveSubDir_file;
 }
 
-TEST(Archive_clean_UT, Archive_clean_UT034)
+TEST(Archive_clean_UT, Archive_clean_UT036)
 {
     Archive::Entry *archiveParent = new Archive::Entry();
     Archive::Entry *archiveSub = new Archive::Entry();
@@ -620,5 +620,21 @@ TEST(Archive_clean_UT, Archive_clean_UT034)
     archiveParent->appendEntry(archiveSub);
     archiveSubDir->appendEntry(archiveSubDir_file);
     archiveParent->clean();
-    ASSERT_EQ(archiveParent, nullptr);
+    ASSERT_NE(archiveParent, nullptr);
+}
+
+TEST(Archive_operator_UT, Archive_operator_UT037)
+{
+    //Archive::Entry *archiveParent = new Archive::Entry();
+    Archive::Entry archiveSub;
+    archiveSub.rootNode = "/home";
+    qDebug() << archiveSub;
+}
+TEST(Archive_operator_UT, Archive_operator_UT038)
+{
+    Archive::Entry *archiveParent = new Archive::Entry();
+
+    archiveParent->rootNode = "/home";
+    qDebug() << archiveParent;
+    delete archiveParent;
 }
