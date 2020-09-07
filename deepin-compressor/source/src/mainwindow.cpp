@@ -403,6 +403,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
         deleteCompressFile();
         slotquitApp();
         return;
+    } else if (m_pProgess->getType() == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+        if (m_pJob && m_pJob->mType == Job::ENUM_JOBTYPE::DELETEJOB) {
+            DeleteJob *pDeleteJob = dynamic_cast<DeleteJob *>(m_pJob);
+            pDeleteJob->kill();
+            pDeleteJob = nullptr;
+        }
+        slotquitApp();
+        return;
     }
 
     if (PAGE_ZIPPROGRESS == m_ePageID || PAGE_DELETEPROGRESS == m_ePageID /*m_pMainLayout->currentIndex()*/) {

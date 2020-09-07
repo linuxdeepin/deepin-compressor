@@ -1035,6 +1035,14 @@ void CliInterface::killProcess(bool emitFinished)
     //        m_process->waitForFinished(1000);
     //    }
 
+    //取消删除操作时，删除掉临时文件
+    if (m_operationMode == Delete) {
+        QFile fi(filename() + ".tmp");
+        if (fi.exists()) {
+            fi.remove();
+        }
+    }
+
     m_abortingOperation = false;
 }
 
@@ -1596,16 +1604,18 @@ bool CliInterface::handleLine(const QString &line)
             query.waitForResponse();
 
             if (query.responseCancelled()) {
-                emit cancelled();
-                return false;
+                const QString response(QLatin1Char('\n'));
+                writeToProcess(response.toLocal8Bit());
+                //                emit cancelled();
+                //                return false;
+            } else {
+                setPassword(query.password());
+
+                const QString response(password() + QLatin1Char('\n'));
+                writeToProcess(response.toLocal8Bit());
+
+                //return true;
             }
-
-            setPassword(query.password());
-
-            const QString response(password() + QLatin1Char('\n'));
-            writeToProcess(response.toLocal8Bit());
-
-            //return true;
         } else if (line.startsWith(QLatin1String("E_FAIL"))) {
             m_removedFiles.clear();
             emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
@@ -1732,8 +1742,8 @@ void CliInterface::writeToProcess(const QByteArray &data)
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
-    qDebug() << "Writing" << data << "to the process";
-
+    //    qDebug() << "Writing" << data << "to the process";
+    qDebug() << "Writing ****** to the process";
     m_process->write(data);
 }
 
