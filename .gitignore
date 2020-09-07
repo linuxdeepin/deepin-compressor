@@ -101,3 +101,4 @@ compile_commands.json
 
 output
 so(cmake).sh
+tests/test_output
