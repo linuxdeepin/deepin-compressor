@@ -155,7 +155,11 @@ private:
     DFileDragServer *s = nullptr;
     QString m_path;
     Qt::FocusReason m_reson;
-    bool m_isPressed;
+    /**
+     * @brief m_isPressed 触摸按下标志
+     * true: 按下; false: 松开
+     */
+    bool m_isPressed = false;
     // 记录触摸按下事件，在mouse move事件中使用，用于判断手指移动的距离，当大于
     // QPlatformTheme::TouchDoubleTapDistance 的值时认为触发触屏滚动
     //QPoint lastTouchBeginPos;
