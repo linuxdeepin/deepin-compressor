@@ -23,13 +23,6 @@ set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
-#add_subdirectory(../../3rdparty/interface interface.out)
-#add_subdirectory(../../3rdparty/common common.out)
-#add_subdirectory(../../3rdparty/cli7zplugin cli7zplugin.out)
-#add_subdirectory(../../3rdparty/clirarplugin clirarplugin.out)
-#add_subdirectory(../../3rdparty/libzipplugin libzipplugin.out)
-#add_subdirectory(../../3rdparty/libarchive libarchive.out)
-
 #demo start　
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -101,13 +94,6 @@ file(GLOB_RECURSE c_files
     ../../../deepin-compressor/source/*.cpp
     ../../../deepin-compressor/source/*.c
     ./source/src/*.cpp ./source/src/*.c
-#    ../3rdparty/cli7zplugin/*.cpp
-#    ../3rdparty/clirarplugin/*.cpp
-#    ../3rdparty/cliunarchiverplugin/*.cpp
-#    ../3rdparty/common/*.cpp
-#    ../3rdparty/interface/*.cpp
-#    ../3rdparty/libarchive/*.cpp
-#    ../3rdparty/libzipplugin/*.cpp
     )
 #foreach(i  ${c_files})
 #    message(${i})

@@ -35,3 +35,15 @@ int main(int argc, char *argv[])
 
     return RUN_ALL_TESTS();
 }
+
+/*#include <gtest/gtest.h>
+#include <gmock/gmock-matchers.h>
+#include <QApplication>
+#include <iostream>
+
+int main(int argc, char *argv[])
+{
+    std::cout << "Starting UnitTest" << std::endl;
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}*/
