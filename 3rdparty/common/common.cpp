@@ -100,19 +100,9 @@
 QString Common::trans2uft8(const char *str)
 {
     QByteArray codec_name = detectEncode(str);
-    if ("" == codec_name) {
 
-        if (codec_name.isEmpty()) {
-            return str;
-        }
-        if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
-                || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)) {
-            return str;
-        }
-
-        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-        m_codecStr = codec_name;
-        return codec->toUnicode(str);
+    if (codec_name.isEmpty()) {
+        return str;
     } else if ("gb18030" == codec_name) {
         QTextCodec *codec = QTextCodec::codecForName(codec_name);
         m_codecStr = codec_name;
