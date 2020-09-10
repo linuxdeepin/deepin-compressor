@@ -128,7 +128,7 @@ QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
     QString detectedResult;
     float chardetconfidence = 0;
     QString str(data);
-    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+")); //匹配的是中文
     if (bFlag) {
         QByteArray newData = data;
         newData += "为增加编码探测率而保留的中文";    //手动添加中文字符，避免字符长度太短而导致判断编码错误

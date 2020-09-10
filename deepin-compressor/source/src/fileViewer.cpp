@@ -347,6 +347,8 @@ void MyTableView::mousePressEvent(QMouseEvent *e)
         dragpos = e->pos();
     }
 
+    viewport()->update();
+
     DTableView::mousePressEvent(e);
 }
 
@@ -382,7 +384,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     //        return;
     //    } else {
-    if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300 && m_isPressed) { // 移动
+    if (m_isPressed) { // 如果是触摸屏操作
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30

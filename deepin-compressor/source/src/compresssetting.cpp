@@ -215,6 +215,7 @@ void CompressSetting::InitUI()
     m_rightwidget->setLayout(m_fileLayout);
 
     QScrollArea *m_scroll = new QScrollArea(this);
+    m_scroll->setFocusPolicy(Qt::NoFocus);
     m_scroll->setWidget(m_rightwidget);
     // m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scroll->setFrameShape(QFrame::NoFrame);
