@@ -56,6 +56,7 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
         int keyOfEvent = keyEvent->key();
         if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
             //checkbox响应"回车键"
+            qDebug() << watched->metaObject()->className();
             if (watched->metaObject()->className() == QStringLiteral("QCheckBox")) {
                 DCheckBox *checkBox = static_cast<DCheckBox *>(watched);
                 // 模拟空格键按下事件
@@ -66,6 +67,19 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
                     // 模拟空格键松开事件
                     QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
                     QApplication::sendEvent(checkBox, &releaseSpace);
+                });
+
+                return true;
+            } else if (watched->metaObject()->className() == QStringLiteral("Dtk::Widget::DSuggestButton")) {
+                DSuggestButton *btn = static_cast<DSuggestButton *>(watched);
+                // 模拟空格键按下事件
+                QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
+                QApplication::sendEvent(btn, &pressSpace);
+                // 设置定时
+                QTimer::singleShot(80, this, [btn]() {
+                    // 模拟空格键松开事件
+                    QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
+                    QApplication::sendEvent(btn, &releaseSpace);
                 });
 
                 return true;
