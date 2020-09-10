@@ -68,7 +68,7 @@ private:
     void setEntryVal(const archive_stat &archiveconst, int &index, const QString &name, QString &dirRecord);
     void setEntryData(const archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile = false);
     Archive::Entry *setEntryDataA(const archive_stat &archive, const QString &name);
-    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
+    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override; // 获取大小
 
     int m_linesComment;
     Archive::Entry *m_currentArchiveEntry;
