@@ -113,17 +113,23 @@ void Compressor_Success::showfiledirSlot(bool iIsUrl)
             }
         } else {
             QFileInfo fileInfo(m_fullpath);
+            if (getSpilitArchive()) {
+                fileInfo.setFile(m_fullpath + ".001");
+            } else {
+                fileInfo.setFile(m_fullpath);
+            }
+
             if (fileInfo.isDir()) {
                 if (iIsUrl) {
-                    DDesktopServices::showFolder(QUrl(m_fullpath, QUrl::TolerantMode));
+                    DDesktopServices::showFolder(QUrl(fileInfo.filePath(), QUrl::TolerantMode));
                 } else {
-                    DDesktopServices::showFolder(m_fullpath);
+                    DDesktopServices::showFolder(fileInfo.filePath());
                 }
             } else if (fileInfo.isFile()) {
                 if (iIsUrl) {
-                    DDesktopServices::showFileItem(QUrl(m_fullpath, QUrl::TolerantMode));
+                    DDesktopServices::showFileItem(QUrl(fileInfo.filePath(), QUrl::TolerantMode));
                 } else {
-                    DDesktopServices::showFileItem(m_fullpath);
+                    DDesktopServices::showFileItem(fileInfo.filePath());
                 }
             }
         }
@@ -164,8 +170,20 @@ void Compressor_Success::setCompressNewFullPath(const QString &path)
     newCreatePath_ = path;
 }
 
+void  Compressor_Success::setSpilitArchive(bool isSpilit)
+{
+    m_isSpilitArchive = isSpilit;
+}
+
+bool Compressor_Success::getSpilitArchive()
+{
+    return m_isSpilitArchive;
+}
+
 void Compressor_Success::clear()
 {
+    m_isSpilitArchive = false;
+    m_convertType = "";
     setCompressFullPath("");
     setCompressNewFullPath("");
 }
