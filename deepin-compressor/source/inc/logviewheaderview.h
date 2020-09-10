@@ -81,6 +81,8 @@ protected:
     void paintEvent(QPaintEvent *e) override;
     virtual void paintSection(QPainter *painter, const QRect &rect,
                               int logicalIndex) const override;
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void resizeEvent(QResizeEvent *event) override;

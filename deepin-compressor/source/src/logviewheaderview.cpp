@@ -255,6 +255,39 @@ void LogViewHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
     painter->restore();
 }
 
+void LogViewHeaderView::keyPressEvent(QKeyEvent *event)
+{
+    //阻止通过上下左右键切换到tableview
+    switch (event->key()) {
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
+        break;
+    default:
+        DHeaderView::keyPressEvent(event);
+        break;
+    }
+}
+
+void LogViewHeaderView::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
+        break;
+    default:
+        DHeaderView::keyReleaseEvent(event);
+        break;
+    }
+}
+
 void LogViewHeaderView::resizeEvent(QResizeEvent *event)
 {
     gotoPreviousLabel_->setFixedWidth(event->size().width() - 2 * SCROLLMARGIN);
