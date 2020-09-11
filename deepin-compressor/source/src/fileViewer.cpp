@@ -320,6 +320,7 @@ void MyTableView::setPreviousButtonVisible(bool visible)
     //        //setGeometry(rect.x(), rect.y() - header_->gotoPreviousLabel_->height(), rect.width(), rect.height() + header_->gotoPreviousLabel_->height());
     //    }
 }
+
 bool MyTableView::event(QEvent *e)
 {
     switch (e->type()) {
@@ -1335,6 +1336,12 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
         }
     }
 
+    //返回上一级 焦点重新设置
+    QModelIndex tmpindex = pTableViewFile->model()->parent(pTableViewFile->currentIndex());
+    pTableViewFile->setFocus(); //焦点丢失，需手动设置焦点
+    if (tmpindex.isValid()) {
+        pTableViewFile->setCurrentIndex(tmpindex); //设置选中
+    }
     emit  sigpathindexChanged();
 }
 
@@ -1612,6 +1619,15 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 showPlable();
                 //}
 
+                QTimer::singleShot(100, this, [&]() {
+                    //因为进入目录后自动排序需要时间，所以延时100m设置选中
+                    QModelIndex tmpindex = pModel->index(0, 0, m_indexmode);
+                    // qDebug() << pModel->rowCount() << tmpindex << m_indexmode << QThread::currentThreadId();
+                    if (tmpindex.isValid()) {
+                        pTableViewFile->setCurrentIndex(tmpindex);
+                    }
+                });
+
                 resizecolumn();
             } else {
                 openTempFile(m_curfilelist.at(row).filePath());
@@ -1621,6 +1637,15 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             m_pathindex++;
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
+
+            QTimer::singleShot(100, this, [&]() {
+                //因为进入目录后自动排序需要时间，所以延时100m设置选中
+                QModelIndex tmpindex = pModel->index(0, 0, m_indexmode);
+                // qDebug() <<pModel->rowCount() << tmpindex << m_indexmode << QThread::currentThreadId();
+                if (tmpindex.isValid()) {
+                    pTableViewFile->setCurrentIndex(tmpindex);
+                }
+            });
         } else if (pModel && !pModel->fileInfo(curindex).isDir()) {
             KProcess *cmdprocess = new KProcess;
             QStringList arguments;
@@ -1669,6 +1694,12 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 //if (0 == entry->entries().count()) {
                 showPlable();
                 //}
+
+                //进入目录，设置选中
+                QModelIndex tmpindex = pTableViewFile->model()->index(0, 0, index);
+                if (tmpindex.isValid()) {
+                    pTableViewFile->setCurrentIndex(tmpindex);
+                }
             } else {
                 QVector<Archive::Entry *> fileList = getSelEntries();
                 //                QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();
@@ -1699,6 +1730,12 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
             restoreHeaderSort(zipPathUnique + /*MainWindow::getLoadFile()*/this->m_loadPath + "/" + entry->fullPath());
             if (0 == entry->entries().count()) {
                 showPlable();
+            } else {
+                //进入目录，设置选中
+                QModelIndex tmpindex = pTableViewFile->model()->index(0, 0, index);
+                if (tmpindex.isValid()) {
+                    pTableViewFile->setCurrentIndex(tmpindex);
+                }
             }
         } else {
             QVector<Archive::Entry *> fileList = getSelEntries();
