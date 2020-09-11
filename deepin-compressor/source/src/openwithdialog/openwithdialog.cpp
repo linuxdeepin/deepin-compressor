@@ -199,7 +199,7 @@ OpenWithDialog::OpenWithDialog(const DUrl &url, QWidget *parent) :
     initData();
 }
 
-QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName)
+QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName, DMenu *menu)
 {
     mimeAppsManager->initMimeTypeApps();
     DMimeDatabase db;
@@ -215,7 +215,7 @@ QList<QAction *> OpenWithDialog::addMenuOpenAction(const QString &fileName)
             continue;
         }
 
-        QAction *action = new QAction;
+        QAction *action = new QAction(menu);
         action->setIcon(QIcon::fromTheme(desktop_info.getIcon()));
         action->setText(desktop_info.getDisplayName());
         listAction << action;

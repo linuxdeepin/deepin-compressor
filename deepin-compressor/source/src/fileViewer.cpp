@@ -741,7 +741,7 @@ void fileViewer::restoreHeaderSort(const QString &currentPath)
 
 void fileViewer::updateAction(const QString &fileType)
 {
-    QList<QAction *> listAction =  OpenWithDialog::addMenuOpenAction(fileType);
+    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction(fileType, openWithDialogMenu);
 
     openWithDialogMenu->addActions(listAction);
     openWithDialogMenu->addAction(new QAction(tr("Select default program"), openWithDialogMenu));

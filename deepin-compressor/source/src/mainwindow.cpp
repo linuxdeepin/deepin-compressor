@@ -3311,7 +3311,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     QFileInfo fi(sourceArchivePath);
     Archive::Entry *sourceEntry  = nullptr;
     if (fi.isAbsolute()) {
-        sourceEntry = new Archive::Entry();
+        sourceEntry = new Archive::Entry(this);
         if (fi.isDir()) {
             sourceEntry->setIsDirectory(true);
         }
@@ -3390,6 +3390,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     //m_strPathStore = Args[QStringLiteral("localFilePath")];
     m_pJob->start();
     m_eWorkStatus = WorkProcess;
+    //    delete sourceEntry;
 }
 
 void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool isManual)
@@ -4319,6 +4320,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         }
 
         m_pCurAuxInfo->information.insert(key, pNewInfo);
+        delete pNewInfo;
     } else if (type == EXTRACT_TEMP_CHOOSE_OPEN) {
         m_operationtype =  Operation_TempExtract_Open_Choose;
         m_pProgess->setopentype(true);
@@ -5185,5 +5187,9 @@ void MainWindow::safeDelete()
     SAFE_DELETE_ELE(m_pSettings);
     qDebug() << "开始safeDelete：m_pMmainWidget";
     SAFE_DELETE_ELE(m_pMmainWidget);
+    qDebug() << "开始safeDelete：m_pChildMndExtractPath";
+    SAFE_DELETE_ELE(m_pChildMndExtractPath);
+    qDebug() << "开始safeDelete：m_pCurAuxInfo";
+    SAFE_DELETE_ELE(m_pCurAuxInfo);
     qDebug() << "结束safeDelete";
 }
