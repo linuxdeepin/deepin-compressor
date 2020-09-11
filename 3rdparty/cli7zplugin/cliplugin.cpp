@@ -389,6 +389,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
 //            m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
             if (ArchiveTypeIso == m_archiveType) {
                 m_isFirstInformationEntry = true;
+                emitEntryForIndex(m_fileStat);
 //                if (!m_currentArchiveEntry->fullPath().isEmpty()) {
 //                    emit entry(m_currentArchiveEntry);
 //                } else {
@@ -453,6 +454,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
             m_isFirstInformationEntry = true;
+            emitEntryForIndex(m_fileStat);
 //            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
 //                emit entry(m_currentArchiveEntry);
 //            } else {
@@ -462,6 +464,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
+            emitEntryForIndex(m_fileStat);
 //            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
 //                emit entry(m_currentArchiveEntry);
 //            } else {

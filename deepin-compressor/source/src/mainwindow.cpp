@@ -3946,6 +3946,10 @@ void MainWindow::creatArchive(QMap< QString, QString > &Args)
     m_pCompressSuccess->setCompressFullPath(m_strCreateCompressFile);
     qDebug() << m_strCreateCompressFile;
 
+    if (Args[QStringLiteral("volumeSize")].size() > 0) {
+        m_pCompressSuccess->setSpilitArchive(true);
+    }
+
     CompressionOptions options;
     options.setCompressionLevel(Args[QStringLiteral("compressionLevel")].toInt());
     //    options.setCompressionMethod(Args[QStringLiteral("compressionMethod")]);

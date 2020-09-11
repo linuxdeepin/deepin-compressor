@@ -56,7 +56,7 @@ void BatchExtract::addExtraction(const QUrl &url)
     QString destination = destinationFolder();
     QVector<Archive::Entry *> files;
     ExtractionOptions options;
-//    options.setRightMenuExtractHere(true);
+//    options.setRightMenuExtractHere(m_isExtractHere);
     options.setAutoCreatDir(m_settingDialog->isAutoCreatDir());
     options.setBatchExtract(true);
 
@@ -81,10 +81,13 @@ void BatchExtract::addExtraction(const QUrl &url)
             userDestination.append(QDir::separator());
         }
 
-        destination = userDestination + detectedSubfolder;
-        QDir(userDestination).mkdir(detectedSubfolder);
+        destination = destination + QDir::separator() + detectedSubfolder + QDir::separator();
+        QDir dir(destination);
+        if (!dir.exists()) {
+            dir.mkpath(destination);
+        }
     } else {
-        destination = userDestination;
+//        destination = userDestination;
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
     }
 

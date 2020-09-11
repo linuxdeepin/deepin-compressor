@@ -607,6 +607,10 @@ QStringList UnCompressPage::convertArchiveDialog()
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
 
+    dialog->setTabOrder(zipBtn, _7zBtn);
+    dialog->setTabOrder(_7zBtn, dialog->getButton(0));
+    dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
+
     QStringList typeList;
     bool isZipConvert = true;
     bool is7zConvert = false;
