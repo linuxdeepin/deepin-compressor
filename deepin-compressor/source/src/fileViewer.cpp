@@ -332,6 +332,8 @@ bool MyTableView::event(QEvent *e)
             //dell触摸屏幕只有一个touchpoint 但却能捕获到pinchevent缩放手势?
             //  qDebug() << "11111" << points.count();
             if (points.count() == 1) {
+                QTouchEvent::TouchPoint p = points.at(0);
+                dragpos = p.pos();
                 m_isPressed = true;
             }
         }
@@ -385,7 +387,12 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     //        return;
     //    } else {
-    if (m_isPressed) { // 如果是触摸屏操作
+
+    if (m_isPressed) {
+        //      /  qDebug() <<  m_lastTouchTime.msecsTo(QTime::currentTime());
+        //        if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 100) {
+        //            return ;
+        //        }
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
@@ -393,14 +400,14 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
         e->accept();
         double horiDelta = e->pos().x() - dragpos.x();
         double vertDelta = e->pos().y() - dragpos.y();
-        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
+        qDebug() << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << e->pos() << "m_lastTouchBeginPos" << dragpos;
         if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
-            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
+            qDebug() << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
             horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
         }
 
-        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35)) {
-            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
+            qDebug() << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
             double svalue = 1;
             if (vertDelta > 0) {
                 //svalue = svalue;
@@ -409,14 +416,47 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
             } else {
                 svalue = 0;
             }
-
             verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
         }
-
         dragpos = e->pos();
-
         return;
     }
+
+    //    if (m_isPressed) { // 移动
+    //        //if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300) {
+    //        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
+    //        int touchmindistance = 2;
+    //        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
+    //        int touchMaxDistance = 30;
+    //        e->accept();
+    //        double horiDelta = e->pos().x() - dragpos.x();
+    //        double vertDelta = e->pos().y() - dragpos.y();
+    //        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
+    //        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
+    //            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
+    //            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
+    //        }
+
+    //        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
+    //            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
+    //            double svalue = 1;
+    //            if (vertDelta > 0) {
+    //                //svalue = svalue;
+    //            } else if (vertDelta < 0) {
+    //                svalue = -svalue;
+    //            } else {
+    //                svalue = 0;
+    //            }
+
+    //            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
+    //        }
+
+    //        //}
+
+    //        dragpos = e->pos();
+
+    //        return;
+    //    }
 
     // }
     if (dragEnabled() == false) {
@@ -477,6 +517,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
 void MyTableView::mouseReleaseEvent(QMouseEvent *event)
 {
+    qDebug() << "mouseReleaseEvent";
     m_isPressed = false;
     DTableView::mouseReleaseEvent(event);
 }
