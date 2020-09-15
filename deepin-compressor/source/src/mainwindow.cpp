@@ -2696,6 +2696,10 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if (Operation_NULL == m_operationtype) {
         qDebug() << "do nothing";
     } else {
+        if (errorCode == KJob::CancelError) {
+            slotquitApp();
+        }
+
         if (m_convertType.size() == 0) {
             m_ePageID = PAGE_UNZIP_SUCCESS;
             if (errorCode == KJob::UserSkiped) {
