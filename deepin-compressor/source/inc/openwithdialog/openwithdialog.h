@@ -62,7 +62,7 @@ class OpenWithDialog : public BaseDialog
 public:
     explicit OpenWithDialog(const DUrl &url, QWidget *parent = nullptr);
 
-    static QList<QAction *> addMenuOpenAction(const QString &fileName);
+    static QList<QAction *> addMenuOpenAction(const QString &fileName, DMenu *menu);
     static void chooseOpen(const QString &programma, const QString &fileName);
     static QString includePercentFile(const QString &file);
 

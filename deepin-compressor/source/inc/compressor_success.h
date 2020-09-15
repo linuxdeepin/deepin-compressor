@@ -44,6 +44,8 @@ public:
     QString getPath();
     void setCompressFullPath(const QString &path);
     void setCompressNewFullPath(const QString &path);
+    void setSpilitArchive(bool isSpilit);
+    bool getSpilitArchive();
     void clear();
     void setConvertType(QString type);
     CustomPushButton *getShowfilebutton();
@@ -59,6 +61,7 @@ private:
     QString newCreatePath_;
     CustomCommandLinkButton *commandLinkBackButton = nullptr;
     QString m_convertType;
+    bool m_isSpilitArchive = false;
 
 signals:
     void sigBackButtonClicked();

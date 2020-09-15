@@ -55,6 +55,7 @@ public:
     void setPathIndex(int *index);
     void setTableView(DTableView *tableview);
     void deleteRows(QModelIndexList &list);
+
 signals:
     void sigShowLabel() const;
 

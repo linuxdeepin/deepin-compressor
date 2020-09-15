@@ -122,9 +122,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 if (file.isDir()) {
 //                    return "-";
                     QDir dir(file.filePath());
-                    QList<QFileInfo> *fileInfo = new QList<QFileInfo>(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files));
-
-                    return QString::number(fileInfo->count()) + " " + tr("item(s)");
+                    int filescounts = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count();
+                    return QString::number(filescounts) + " " + tr("item(s)");
                 } else {
                     return Utils::humanReadableSize(file.size(), 1);
                 }
