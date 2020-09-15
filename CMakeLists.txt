@@ -26,7 +26,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-pie")
 #龙芯特有编译参数 -start
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
     message(STATUS "this system is mips64=========")
-    set(FLAGS_COMMON "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl, as-need")
+    set(CMAKE_CXX_FLAGS "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl,--as-needed")
 endif()
 #龙芯特有编译参数 -end
 
