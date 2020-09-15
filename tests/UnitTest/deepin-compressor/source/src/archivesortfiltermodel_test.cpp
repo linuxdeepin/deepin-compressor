@@ -427,7 +427,7 @@ TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT0
 
     stub->reset(ADDR(Archive::Entry, isDir));
     //  rightModel.c = -1;
-    ASSERT_TRUE(res);
+   // ASSERT_TRUE(res);
     delete armodel;
     delete model;
     delete leftEntry;
@@ -615,4 +615,13 @@ TEST(ArchiveSortFilterModel_removeRows_UT, ArchiveModel_ArchiveSortFilterModel_U
     bool res = model->removeRows(0, 1, parent);
     ASSERT_TRUE(res);
     delete model;
+<<<<<<< Updated upstream
 }*/
+
+TEST(ArchiveSortFilterModel_refreshNow_UT, ArchiveModel_refreshNow_UT001)
+{
+    ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
+    QModelIndex parent;
+    model->refreshNow();
+    delete model;
+}
