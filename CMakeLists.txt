@@ -20,10 +20,14 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+#对DApplication 进行加速
+set(CMAKE_CXX_FLAGS "-Wl,--as-needed -fPIE")
+set(CMAKE_EXE_LINKER_FLAGS "-pie")
+
 #龙芯特有编译参数 -start
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
     message(STATUS "this system is mips64=========")
-    set(FLAGS_COMMON "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl, as-need")
+    set(CMAKE_CXX_FLAGS "-O3 -ftree-vectorize -march=loongson3a -mhard-float -mno-micromips -mno-mips16 -flax-vector-conversions -mloongson-ext2 -mloongson-mmi -Wl,--as-needed")
 endif()
 #龙芯特有编译参数 -end
 
