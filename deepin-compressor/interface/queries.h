@@ -80,7 +80,7 @@ public:
     void waitForResponse();
     void setResponse(const QVariant &response);
     QVariant response() const;
-
+    bool bCancel();
     int execDialog();
 protected:
     Query();
@@ -93,6 +93,9 @@ protected:
 private:
     QWaitCondition m_responseCondition;
     QMutex m_responseMutex;
+
+protected:
+    bool m_bCancel = false;
 };
 
 /* *****************************************************************

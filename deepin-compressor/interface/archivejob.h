@@ -112,7 +112,7 @@ public:
         NopasswordError,
         /***Wrong password */
         WrongPsdError,
-		/*same cancel*/
+        /*same cancel*/
         CancelError,
         UserDefinedError = 100
     };

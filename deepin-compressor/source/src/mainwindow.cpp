@@ -1363,6 +1363,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         refreshPage();
     } else if (files.last() == QStringLiteral("extract_here_multi")) {
+        m_eJobType = JOB_BATCHEXTRACT;
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QStringList pathlist = files;
@@ -1415,6 +1416,14 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             }
         }
 
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+
+            m_bCancel = query->bCancel();
+        });
+
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(batchJob, &BatchExtract::sendCurFile, this, &MainWindow::slotBatchExtractFileChanged);
@@ -1445,6 +1454,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         loadArchive(files.at(0));
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
     } else if (files.last() == QStringLiteral("extract_multi")) {
+        m_eJobType = JOB_BATCHEXTRACT;
         m_eWorkStatus = WorkProcess;
         m_operationtype = Operation_Extract;
         QString defaultpath;
@@ -1519,6 +1529,15 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
                 batchJob->addInput(QUrl::fromLocalFile(transFile));
             }
         }
+
+        connect(batchJob, &BatchExtract::signalUserQuery, [ = ](Query * query) {
+            qDebug() << "query->execute";
+            query->setParent(this);
+            query->execute();
+
+            m_bCancel = query->bCancel();
+
+        });
 
         connect(batchJob, SIGNAL(batchProgress(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
         connect(batchJob, &KJob::result, this, &MainWindow::slotExtractionDone);
@@ -2101,6 +2120,18 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if (Operation_NULL == m_operationtype) {
         qDebug() << "do nothing";
     } else {
+        if (m_eJobType == JOB_BATCHEXTRACT) {
+            if (m_bCancel) {
+                m_bCancel = false;
+                slotquitApp();
+            }
+        } else {
+            if (errorCode == KJob::CancelError) {
+                slotquitApp();
+            }
+        }
+
+
         m_ePageID = PAGE_UNZIP_SUCCESS;
         if (errorCode == KJob::UserSkiped) {
             m_bIsRightMenu = false;

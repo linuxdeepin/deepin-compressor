@@ -77,6 +77,11 @@ QVariant Query::response() const
     return m_data.value(QStringLiteral("response"));
 }
 
+bool Query::bCancel()
+{
+    return m_bCancel;
+}
+
 int Query::execDialog()
 {
     //todo 20191125
@@ -221,6 +226,7 @@ void OverwriteQuery::execute()
     const int mode = dialog->exec();
     ret = mode;
     if (-1 == mode) {
+        m_bCancel = true;
         setResponse(Result_Cancel);
     } else if (0 == mode) {
         if (checkbox->isChecked()) {
@@ -369,6 +375,7 @@ void PasswordNeededQuery::execute()
     delete dialog;
 
     if (-1 == mode) {
+        m_bCancel = true;
         setResponse(Result_Cancel);
     } else {
         setResponse(Result_Skip);

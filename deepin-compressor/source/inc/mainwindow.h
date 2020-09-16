@@ -798,6 +798,8 @@ private:
     int m_iOpenTempFileLink = 0;                            // 打开临时文件索引
     QEventLoop *pEventloop = nullptr;                       // 事件循环
 
+    bool m_bCancel = false;
+
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

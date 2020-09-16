@@ -38,12 +38,13 @@ Q_SIGNALS:
     void batchFilenameProgress(KJob *job, const QString &name);
     void sendCurFile(const QString  &filename);
     void sendFailFile(const QString  &filename);
+    void signalUserQuery(Query *query);
 
 private Q_SLOTS:
     void forwardProgress(KJob *job, unsigned long percent);
     void showFailedFiles();
     void slotResult(KJob *job) override;
-    void slotUserQuery(Query *query);
+//    void slotUserQuery(Query *query);
     void slotStartJob();
 
     void SlotProgressFile(KJob *job, const QString &name);
