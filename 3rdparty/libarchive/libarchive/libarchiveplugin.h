@@ -66,8 +66,11 @@ protected:
     bool initializeReader();
     void createEntry(const QString &externalPath, struct archive_entry *entry);
     void setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile = false);
-    Archive::Entry *setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name);
+    Archive::Entry *setEntryDataA(/*const */archive_stat &aentry/*, qlonglong index*/, const QString &name);
     void setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord);
+    virtual void updateListMap(QVector<Archive::Entry *> &files, int type) override;
+    void updateListMap(Archive::Entry *entry, int type);
+
     void emitEntryForIndex(archive_entry *aentry, qlonglong index);
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
     void emitEntryFromArchiveEntry(struct archive_entry *entry);
@@ -92,7 +95,7 @@ private:
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
     bool m_emitNoEntries;
     qlonglong m_extractedFilesSize;
-    QMap<QString, QPair<archive_stat, qlonglong>> m_listMap;
+    QMap<QString, /*QPair<*/archive_stat/*, qlonglong>*/> m_listMap;
     archive_stat m_archiveEntryStat;
     QString m_DirRecord;
     QString m_SigDirRecord;

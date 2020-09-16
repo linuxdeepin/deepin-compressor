@@ -223,6 +223,62 @@ Archive::Entry *Cli7zPlugin::setEntryDataA(const ReadOnlyArchiveInterface:: arch
     return pCurEntry;
 }
 
+void Cli7zPlugin::setEntryVal1(const ReadOnlyArchiveInterface::archive_stat &archive, int &index, const QString &name, QString &dirRecord)
+{
+    if (dirRecord.isEmpty()) {
+        if (name.endsWith("/") && name.count("/") == 1) {
+//            setEntryData(archive, index, name);
+            m_SigDirRecord = name;
+            ++index;
+        } else  if (name.endsWith("/") && name.count("/") > 1) {
+            if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
+//                setEntryData(archive, index, name);
+                ++index;
+                return;
+            }
+
+            //Create FileFolder
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + "/";
+//                setEntryData(archive, index, folderAppendStr);
+                m_listMap.insert(folderAppendStr, archive/*qMakePair(archiveconst, -1)*/);
+            }
+
+            ++index;
+            m_DirRecord = name;
+        } else if (name.count("/") == 0) {
+//            setEntryData(archive, index, name);
+            ++index;
+        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+            if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
+                return;
+            } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {
+                return;
+            }
+
+            //Create FileFolder and file
+            QStringList fileDirs = name.split("/");
+            QString folderAppendStr = "";
+            for (int i = 0 ; i <  fileDirs.size() ; ++i) {
+                if (i < fileDirs.size() - 1) {
+                    folderAppendStr.append(fileDirs[i]).append("/");
+//                    setEntryData(archive, index, folderAppendStr, true);
+                    m_listMap.insert(folderAppendStr, archive/*qMakePair(archiveconst, -1)*/);
+                } else {
+                    folderAppendStr.append(fileDirs[i]);
+                }
+            }
+
+            ++index;
+        }
+    } else {
+        m_DirRecord = "";
+        setEntryVal1(archive, index, name, m_DirRecord);
+    }
+}
+
 qint64 Cli7zPlugin::extractSize(const QVector<Archive::Entry *> &files)
 {
     m_listFileName.clear();
@@ -618,6 +674,41 @@ void Cli7zPlugin::RefreshEntryFileCount(Archive::Entry *file)
         }
 
         file->setProperty("size", count);
+    }
+}
+
+void Cli7zPlugin::updateListMap(QVector<Archive::Entry *> &files, int type)
+{
+    foreach (Archive::Entry *file, files) {
+        updateListMap(file, type);
+    }
+}
+
+void Cli7zPlugin::updateListMap(Archive::Entry *entry, int type)
+{
+    if (type == 1) {
+        archive_stat filestat;
+        filestat.archive_fullPath = entry->fullPath();
+        filestat.archive_timestamp = entry->m_timestamp;
+        filestat.archive_size = entry->getSize();
+        filestat.archive_isDirectory = entry->isDir();
+
+        if (m_listMap.find(entry->fullPath()) == m_listMap.end()) {
+            m_listMap.insert(entry->fullPath(), filestat);
+        }
+    } else if (type == 2 || type == 3) {
+        archive_stat filestat;
+        filestat.archive_fullPath = entry->fullPath();
+
+        if (m_listMap.find(entry->fullPath()) != m_listMap.end()) {
+            m_listMap.remove(entry->fullPath());
+        }
+    }
+
+    if (entry->isDir()) {
+        foreach (Archive::Entry *file, entry->entries()) {
+            updateListMap(file, type);
+        }
     }
 }
 

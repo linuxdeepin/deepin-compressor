@@ -55,8 +55,8 @@ public:
         QString archive_permissions; //
         QString archive_owner; //压缩包内文件owner
         QString archive_group; //压缩包内文件group
-        qlonglong archive_size; //压缩包内文件大小
-        qulonglong archive_compressedSize; //
+        qlonglong archive_size = 0; //压缩包内文件大小
+        qulonglong archive_compressedSize = 0; //
         QString archive_link; //压缩包内文件link
         QString archive_ratio; //
         QString archive_CRC; //
@@ -64,8 +64,8 @@ public:
         QString archive_method; //
         QString archive_version; //
         QDateTime archive_timestamp; //压缩包内文件修改时间
-        bool archive_isDirectory; //压缩包内文件是否为文件夹
-        bool archive_isPasswordProtected;
+        bool archive_isDirectory = true; //压缩包内文件是否为文件夹
+        bool archive_isPasswordProtected = false;
     };
 
     /**
@@ -274,7 +274,7 @@ public:
     /**
      * @brief updateListMap
      */
-    virtual void updateListMap() {};
+    virtual void updateListMap(QVector<Archive::Entry *> &files, int type) {};
 
     /**
      * @brief bindProgressInfo

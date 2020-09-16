@@ -3212,6 +3212,8 @@ void MainWindow::addArchiveEntry(QMap<QString, QString> &Args, Archive::Entry *p
 //    m_ProgressIns += size;
     m_pProgess->pInfo()->getTotalSize() += size;
 
+//    m_entries = filesToAdd;
+    m_entries = all_entries;
     m_pJob = m_pArchiveModel->addFiles(all_entries, sourceEntry, pIface, options);//this added by hsw
     if (!m_pJob) {
         return;
@@ -3369,6 +3371,8 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
 
     resetMainwindow();
 
+//    m_entries = filesToAdd;
+    m_entries = all_entries;
     m_pJob = m_pArchiveModel->addFiles(all_entries, sourceEntry, pIface, options);//this added by hsw
     if (!m_pJob) {
         return;
@@ -3404,6 +3408,10 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         return;
     }
 
+//    foreach (Archive::Entry *entry, vectorDel) {
+//        m_entries.append(entry->fullPath());
+//    }
+
 //    if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
 //            || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
 //            || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
@@ -3432,6 +3440,7 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
         }
     }
 
+    m_entries = vectorDel;
     m_pJob =  m_pArchiveModel->deleteFiles(vectorDel);
     if (!m_pJob) {
         return;
@@ -4080,7 +4089,7 @@ void MainWindow::slotJobFinished(KJob *job)
 
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (!pinterface->isAllEntry()) {
-                pinterface->updateListMap();
+                pinterface->updateListMap(m_entries, m_eJobType);
             }
         }
     }
@@ -4527,6 +4536,8 @@ void MainWindow::deleteFromArchive(const QStringList &files, const QString &/*ar
         return;
     }
 
+//    m_entries = files;
+    m_entries = all_entries;
     m_pJob =  m_pArchiveModel->deleteFiles(all_entries);
     if (!m_pJob) {
         return;

@@ -159,6 +159,7 @@ public:
     //int compressIndex();
 
 public:
+    QDateTime m_timestamp;
     QString rootNode;
     bool compressedSizeIsSet;
 
@@ -181,7 +182,7 @@ private:
     QString m_BLAKE2;
     QString m_method;
     QString m_version;
-    QDateTime m_timestamp;
+//    QDateTime m_timestamp;
     bool m_isDirectory;
     bool m_isPasswordProtected;
 

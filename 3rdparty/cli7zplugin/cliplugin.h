@@ -38,6 +38,8 @@ public:
 
     virtual void showEntryListFirstLevel(const QString &directory) override;
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
+    virtual void updateListMap(QVector<Archive::Entry *> &files, int type) override;
+    void updateListMap(Archive::Entry *entry, int type);
 
 private:
     enum ArchiveType {
@@ -68,6 +70,8 @@ private:
     void setEntryVal(const archive_stat &archiveconst, int &index, const QString &name, QString &dirRecord);
     void setEntryData(const archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile = false);
     Archive::Entry *setEntryDataA(const archive_stat &archive, const QString &name);
+    void setEntryVal1(const archive_stat &archive, int &index, const QString &name, QString &dirRecord);
+
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override; // 获取大小
 
     int m_linesComment;

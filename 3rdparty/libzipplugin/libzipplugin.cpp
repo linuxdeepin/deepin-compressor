@@ -2283,7 +2283,7 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
     }
 }
 
-void LibzipPlugin::updateListMap()
+void LibzipPlugin::updateListMap(QVector<Archive::Entry *> &files, int type)
 {
     m_listMap.clear();
 

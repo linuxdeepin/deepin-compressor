@@ -446,9 +446,9 @@ void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong in
     m_emittedEntries << pCurEntry;
 }
 
-Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry, qlonglong index, const QString &name)
+Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry/*, qlonglong index*/, const QString &name)
 {
-    Q_UNUSED(index);
+    //Q_UNUSED(index);
     Q_UNUSED(name);
     Archive::Entry *pCurEntry = new Archive::Entry(this);
 
@@ -483,7 +483,12 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
             for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
                 folderAppendStr += fileDirs[i] + "/";
                 setEntryData(aentry, index, folderAppendStr);
-                m_listMap.insert(folderAppendStr, qMakePair(aentry, -1));
+                //m_listMap.insert(folderAppendStr, /*qMakePair(*/aentry/*, -1)*/);
+                if (m_listMap.find(folderAppendStr) == m_listMap.end()) {
+                    archive_stat tempaentry;
+                    tempaentry.archive_fullPath = folderAppendStr;
+                    m_listMap.insert(folderAppendStr, tempaentry);
+                }
             }
 
             ++index;
@@ -505,7 +510,13 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
                 if (i < fileDirs.size() - 1) {
                     folderAppendStr.append(fileDirs[i]).append("/");
                     setEntryData(aentry, index, folderAppendStr, true);
-                    m_listMap.insert(folderAppendStr, qMakePair(aentry, -1));
+                    // m_listMap.insert(folderAppendStr, /*qMakePair(*/aentry/*, -1)*/);
+
+                    if (m_listMap.find(folderAppendStr) == m_listMap.end()) {
+                        archive_stat tempaentry;
+                        tempaentry.archive_fullPath = folderAppendStr;
+                        m_listMap.insert(folderAppendStr, tempaentry);
+                    }
                 } else {
                     folderAppendStr.append(fileDirs[i]);
                 }
@@ -516,6 +527,41 @@ void LibarchivePlugin::setEntryVal(/*const */archive_stat &aentry, int &index, c
     } else {
         m_DirRecord = "";
         setEntryVal(aentry, index, name, m_DirRecord);
+    }
+}
+
+void LibarchivePlugin::updateListMap(QVector<Archive::Entry *> &files, int type)
+{
+    foreach (Archive::Entry *file, files) {
+        updateListMap(file, type);
+    }
+}
+
+void LibarchivePlugin::updateListMap(Archive::Entry *entry, int type)
+{
+    if (type == 1) {
+        archive_stat filestat;
+        filestat.archive_fullPath = entry->fullPath();
+        filestat.archive_timestamp = entry->m_timestamp;
+        filestat.archive_size = entry->getSize();
+        filestat.archive_isDirectory = entry->isDir();
+
+        if (m_listMap.find(entry->fullPath()) == m_listMap.end()) {
+            m_listMap.insert(entry->fullPath(), filestat);
+        }
+    } else if (type == 2 || type == 3) {
+        archive_stat filestat;
+        filestat.archive_fullPath = entry->fullPath();
+
+        if (m_listMap.find(entry->fullPath()) != m_listMap.end()) {
+            m_listMap.remove(entry->fullPath());
+        }
+    }
+
+    if (entry->isDir()) {
+        foreach (Archive::Entry *file, entry->entries()) {
+            updateListMap(file, type);
+        }
     }
 }
 
@@ -582,7 +628,7 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
     setEntryVal(m_archiveEntryStat, m_indexCount, m_archiveEntryStat.archive_fullPath, m_DirRecord);
 
     if (m_listMap.find(m_archiveEntryStat.archive_fullPath) == m_listMap.end()) {
-        m_listMap.insert(m_archiveEntryStat.archive_fullPath, qMakePair(m_archiveEntryStat, index));
+        m_listMap.insert(m_archiveEntryStat.archive_fullPath, /*qMakePair(*/m_archiveEntryStat/*, index)*/);
     }
 }
 
@@ -600,10 +646,10 @@ qint64 LibarchivePlugin::extractSize(const QVector<Archive::Entry *> &files)
                 break;
             } else {
                 if (!iter.key().endsWith("/")) {
-                    qExtractSize += iter.value().first.archive_size;
+                    qExtractSize += iter.value()/*.first*/.archive_size;
                 }
 
-                m_listFileName << iter.value().first.archive_fullPath;
+                m_listFileName << iter.value()/*.first*/.archive_fullPath;
                 ++iter;
                 if (!strPath.endsWith(QDir::separator())) {
                     break;
@@ -958,7 +1004,7 @@ void LibarchivePlugin::showEntryListFirstLevel(const QString &directory)
             QString chopStr = iter.key().right(iter.key().size() - directory.size());
             if (!chopStr.isEmpty()) {
                 if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
-                    Archive::Entry *fileEntry = setEntryDataA(iter.value().first, iter.value().second, iter.key());
+                    Archive::Entry *fileEntry = setEntryDataA(iter.value()/*.first, -1*/, iter.key());
                     RefreshEntryFileCount(fileEntry);
                     emit entry(fileEntry);
                     m_emittedEntries << fileEntry;
