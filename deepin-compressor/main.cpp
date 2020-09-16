@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+
     // load dtk xcb plugin.
     // 在dde桌面环境中，不调用次函数也会默认使用dxcb插件，且使用此函数强制指定加载dxcb会导致在和wayland环境下不兼容
     // 综上所述，此函数已经废弃
