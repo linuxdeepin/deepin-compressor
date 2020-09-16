@@ -689,7 +689,7 @@ void Cli7zPlugin::updateListMap(Archive::Entry *entry, int type)
     if (type == 1) {
         archive_stat filestat;
         filestat.archive_fullPath = entry->fullPath();
-        filestat.archive_timestamp = entry->m_timestamp;
+        filestat.archive_timestamp = entry->getTime();
         filestat.archive_size = entry->getSize();
         filestat.archive_isDirectory = entry->isDir();
 

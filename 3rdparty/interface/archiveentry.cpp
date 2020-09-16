@@ -126,6 +126,11 @@ qint64 Archive::Entry::getSize()
     return m_size;
 }
 
+QDateTime Archive::Entry::getTime()
+{
+    return m_timestamp;
+}
+
 void Archive::Entry::calAllSize(qint64 &size)
 {
     if (this->isDir() == false) {

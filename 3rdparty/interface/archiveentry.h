@@ -116,6 +116,7 @@ public:
     Entry *getParent() const;
     void setParent(Entry *parent);
     qint64 getSize();
+    QDateTime getTime();
     /**
      * @brief calAllSize(include child entry's size)
      * @param size
