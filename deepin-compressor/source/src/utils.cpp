@@ -40,6 +40,7 @@
 #include <QTextCodec>
 #include <QRegularExpression>
 #include <QUuid>
+#include <QProcessEnvironment>
 
 #include <KEncodingProber>
 
@@ -575,6 +576,19 @@ QString Utils::readConf()
     confFile.close();
 
     return confValue;
+}
+
+bool Utils::judgeKlu()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 QString Utils::createRandomString()

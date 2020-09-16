@@ -73,6 +73,8 @@ public:
     static quint64 getAllFileCount(const QString &path);
     static QString readConf();
 
+    static bool judgeKlu();
+
     /**
      * @brief createRandomString
      * @see 产生一个随机的QString，去除“{”、”}“

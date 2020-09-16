@@ -45,6 +45,10 @@ int main(int argc, char *argv[])
     // init Dtk application's attrubites.
     CompressorApplication app(argc, argv);
 
+    if (Utils::judgeKlu()) {
+        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    }
+
     // add command line parser to app.
     QCommandLineParser parser;
     parser.setApplicationDescription("Deepin Compressor.");
