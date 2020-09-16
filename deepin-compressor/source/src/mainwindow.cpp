@@ -4324,7 +4324,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
         }
 
         m_pCurAuxInfo->information.insert(key, pNewInfo);
-        delete pNewInfo;
+        //delete pNewInfo;
     } else if (type == EXTRACT_TEMP_CHOOSE_OPEN) {
         m_operationtype =  Operation_TempExtract_Open_Choose;
         m_pProgess->setopentype(true);
