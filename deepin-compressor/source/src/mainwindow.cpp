@@ -1610,15 +1610,15 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
             m_pUnCompressPage->SetDefaultFile(fileinfo);     // 设置解压文件信息
 
             // 设置子压缩包解压路径为当前压缩包路径
-            if (m_pChildMndExtractPath == nullptr) {
-                m_pChildMndExtractPath = new QString(fileinfo.path());
+            if (m_pChildMndExtractPath.isEmpty()) {
+                m_pChildMndExtractPath = QString(fileinfo.path());
             }
 
             // 根据设置选项设置默认解压路径
             if ("" != m_pSettingsDialog->getCurExtractPath() && m_pUnCompressPage->getExtractType() != EXTRACT_HEAR) {
                 m_pUnCompressPage->setdefaultpath(m_pSettingsDialog->getCurExtractPath());
             } else {
-                m_pUnCompressPage->setdefaultpath(*m_pChildMndExtractPath);
+                m_pUnCompressPage->setdefaultpath(m_pChildMndExtractPath);
             }
 
             m_pUnCompressPage->getFileViewer()->setRootPathIndex();  //added by hsw 20200612 重置m_pathindex
@@ -1675,8 +1675,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     }
 
     // 初始化子窗口默认解压路径为当前压缩包所在位置
-    if (m_pChildMndExtractPath == nullptr && files.count() > 0) {
-        m_pChildMndExtractPath = new QString(QFileInfo(files[0]).path());
+    if (m_pChildMndExtractPath.isEmpty() && files.count() > 0) {
+        m_pChildMndExtractPath = QString(QFileInfo(files[0]).path());
     }
 
     m_pUnCompressPage->setWidth(this->width());
@@ -2030,7 +2030,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 //            if (m_pChildMndExtractPath == nullptr) {
 //                m_pChildMndExtractPath = new QString(fileinfo.path());
 //            }
-            m_pUnCompressPage->setdefaultpath(*m_pChildMndExtractPath);
+m_pUnCompressPage->setdefaultpath(m_pChildMndExtractPath);
         }
 
         m_ePageID = Page_ID::PAGE_LOADING;
@@ -4343,7 +4343,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 //        m_ePageID = PAGE_UNZIPPROGRESS;
         m_operationtype = Operation_SingleExtract;
         //m_strPathStore = QFileInfo(m_pArchiveModel->archive()->fileName()).absolutePath();
-        m_strPathStore = *m_pChildMndExtractPath;
+        m_strPathStore = m_pChildMndExtractPath;
         destinationDirectory = m_strPathStore;
     } else if (type == EXTRACT_TO) {
         programName = "deepin-compressor";
@@ -5201,8 +5201,6 @@ void MainWindow::safeDelete()
     SAFE_DELETE_ELE(m_pSettings);
     qDebug() << "开始safeDelete：m_pMmainWidget";
     SAFE_DELETE_ELE(m_pMmainWidget);
-    qDebug() << "开始safeDelete：m_pChildMndExtractPath";
-    SAFE_DELETE_ELE(m_pChildMndExtractPath);
     qDebug() << "开始safeDelete：m_pCurAuxInfo";
     SAFE_DELETE_ELE(m_pCurAuxInfo);
     qDebug() << "结束safeDelete";

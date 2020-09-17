@@ -799,7 +799,7 @@ private slots:
 public:
     static int m_windowcount;                               // 窗口数目
     OpenInfo::ENUM_OPTION m_eOption = OpenInfo::OPEN;       // 窗口打开标志
-    QString *m_pChildMndExtractPath = nullptr;              // 保存的有次级面板解压路径（用户解压路径，非临时路径），该变量其他地方用不到
+    QString m_pChildMndExtractPath; // 保存的有次级面板解压路径（用户解压路径，非临时路径），该变量其他地方用不到
 
 private:
     DWidget *m_pMmainWidget = nullptr;                      // 中心面板
