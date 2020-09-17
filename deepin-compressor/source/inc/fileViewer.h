@@ -151,7 +151,8 @@ private:
     // get parent archive::entry pointer
     Archive::Entry *getParentArchiveEntry();
 private:
-    QPointF dragpos;
+    QPointF touchpos;
+    QPoint dragpos;
     DFileDragServer *s = nullptr;
     QString m_path;
     Qt::FocusReason m_reson;

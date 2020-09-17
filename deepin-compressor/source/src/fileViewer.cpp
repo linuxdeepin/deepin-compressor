@@ -333,7 +333,8 @@ bool MyTableView::event(QEvent *e)
             //  qDebug() << "11111" << points.count();
             if (points.count() == 1) {
                 QTouchEvent::TouchPoint p = points.at(0);
-                dragpos = p.pos();
+                m_lastTouchTime = QTime::currentTime();
+                touchpos = p.pos();
                 m_isPressed = true;
             }
         }
@@ -346,7 +347,6 @@ bool MyTableView::event(QEvent *e)
 void MyTableView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MouseButton::LeftButton) {
-        m_lastTouchTime = QTime::currentTime();
         dragpos = e->pos();
     }
 
@@ -398,15 +398,15 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
         int touchMaxDistance = 30;
         e->accept();
-        double horiDelta = e->pos().x() - dragpos.x();
-        double vertDelta = e->pos().y() - dragpos.y();
-        qDebug() << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << e->pos() << "m_lastTouchBeginPos" << dragpos;
+        double horiDelta = e->pos().x() - touchpos.x();
+        double vertDelta = e->pos().y() - touchpos.y();
+        qDebug() << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << e->pos() << "m_lastTouchBeginPos" << touchpos;
         if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
             qDebug() << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
             horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
         }
 
-        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < header_->height() + 2 && qAbs(vertDelta) > header_->height() - 2 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
             qDebug() << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
             double svalue = 1;
             if (vertDelta > 0) {
@@ -418,7 +418,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
             }
             verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
         }
-        dragpos = e->pos();
+        touchpos = e->pos();
         return;
     }
 
