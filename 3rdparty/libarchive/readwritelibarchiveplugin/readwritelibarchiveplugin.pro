@@ -9,7 +9,7 @@ QT += dtkwidget KCodecs
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = readwritelibarchiveplugin
 TEMPLATE = lib
-LIBS +=  -larchive
+LIBS +=  -larchive -lKF5Codecs
 DEFINES += READWRITELIBARCHIVEPLUGIN_LIBRARY
 CONFIG         += plugin
 # The following define makes your compiler emit warnings if you use

@@ -9,7 +9,7 @@ QT += KCodecs dtkwidget
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = libzipplugin
 TEMPLATE = lib
-LIBS +=  -lzip -lminizip
+LIBS +=  -lzip -lminizip -lKF5Codecs
 DEFINES += LIBZIPPLUGIN_LIBRARY
 CONFIG         += plugin
 # The following define makes your compiler emit warnings if you use

@@ -16,7 +16,7 @@ PKGCONFIG +=  gsettings-qt libsecret-1 gio-unix-2.0  disomaster  dtkwidget dtkgu
 
 DEFINES += QT_MESSAGELOGCONTEXT
 #DEFINES += __aarch64__
-
+LIBS +=  -lKF5Codecs
 INCLUDEPATH +=  $$PWD/source/inc/ \
                 $$PWD/interface/
 #                $$PWD/../plugin/libLogPlugin
