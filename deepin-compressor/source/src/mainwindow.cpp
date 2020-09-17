@@ -907,6 +907,7 @@ void MainWindow::dropEvent(QDropEvent *e)
     // 判断本地文件
     QStringList fileList;
     for (const auto &url : mime->urls()) {
+        // 如果不是本地文件继续处理，忽略该文件
         if (!url.isLocalFile()) {
             continue;
         }
@@ -2308,11 +2309,12 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
     if (pSettingInfo == nullptr) {
         pSettingInfo = new Settings_Extract_Info();
     }
-
+    // 是否为自动创建目录
     pSettingInfo->b_isAutoCreateDir = m_pSettingsDialog->isAutoCreatDir();
     options.setAutoCreatDir(pSettingInfo->b_isAutoCreateDir);
-
+    // 获取压缩设置
     options.pSettingInfo = pSettingInfo;
+    // 设置解压目标目录
     pSettingInfo->str_defaultPath = userDestination;
 
     QString detectedSubfolder = "";
@@ -2369,27 +2371,24 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 
     ExtractJob *pExtractJob = dynamic_cast<ExtractJob *>(m_pJob);
     pExtractJob->archiveInterface()->extractTopFolderName = m_pArchiveModel->archive()->subfolderName();
+    //  进度条消息绑定
     connect(pExtractJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
+    // 绑定测试如果压缩包解压需要密码，会提示界面需要密码。
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
+    // 密码输入错误给出，提示。
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
-
+    // 点击密码确认，激活解压进度页面
     connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
+    // 文件进度展示
     connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
+    // 取消操作
     connect(pExtractJob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
+    // 更新目标文件
     connect(pExtractJob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
-
+    // 设置解压目标目录
     m_strDecompressFilePath = destinationDirectory;
 
-    /*if(m_pArchiveModel->archive()->property("isPasswordProtected").toBool() == true)
-    {
-        if (PAGE_ENCRYPTION != m_ePageID)
-        {
-            m_ePageID = PAGE_ENCRYPTION;
-            refreshPage();
-        }
-        return;
-    }*/
     m_pProgess->pInfo()->startTimer();
     pExtractJob->archiveInterface()->destDirName = "";
     m_pJob->start();
