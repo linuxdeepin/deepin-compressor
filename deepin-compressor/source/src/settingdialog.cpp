@@ -166,6 +166,7 @@ void SettingDialog::initUI()
             label->setText(tr("Extract archives to") + ":");
 
             CustomCombobox *combobox = new CustomCombobox(widget);
+            combobox->setAccessibleName("xialakuang");
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;

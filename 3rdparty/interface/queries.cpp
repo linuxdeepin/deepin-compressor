@@ -164,6 +164,7 @@ void OverwriteQuery::execute()
     }
 
     DDialog *dialog = new DDialog(m_pParent);
+    dialog->setAccessibleName("Overwrite_dialog");
 
     dialog->setMinimumSize(QSize(380, 190));
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
@@ -191,6 +192,7 @@ void OverwriteQuery::execute()
     dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
 
     DCheckBox *checkbox = new DCheckBox;
+    checkbox->setAccessibleName("Applyall_btn");
     checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
@@ -311,6 +313,7 @@ bool OverwriteQuery::multiMode()
 
 PasswordNeededQuery::PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain)
 {
+    //    setObjectName("PasswordNeededQuery");
     m_data[QStringLiteral("archiveFilename")] = archiveFilename;
     m_data[QStringLiteral("incorrectTryAgain")] = incorrectTryAgain;
 }
@@ -337,6 +340,7 @@ void PasswordNeededQuery::execute()
     }
 
     DDialog *dialog = new DDialog(m_pParent);
+    dialog->setAccessibleName("PasswordNeeded_dialog");
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
@@ -436,6 +440,7 @@ void WrongPasswordQuery::execute()
     }
 
     DDialog *dialog = new DDialog(m_pParent);
+    dialog->setAccessibleName("WrongPassword_dialog");
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 

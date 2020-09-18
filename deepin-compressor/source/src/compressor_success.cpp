@@ -54,10 +54,12 @@ void Compressor_Success::InitUI()
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
     m_stringinfolabel->setText(m_stringinfo);
     m_showfilebutton = new CustomPushButton(this);
+    m_showfilebutton->setAccessibleName("Showfile_btn");
     m_showfilebutton->setMinimumSize(340, 36);
     m_showfilebutton->setText(tr("View"));
 
     commandLinkBackButton = new CustomCommandLinkButton(tr("Back"), this);
+    commandLinkBackButton->setAccessibleName("Back_btn");
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
     commandLinkButtonLayout->addStretch();
     commandLinkButtonLayout->addWidget(commandLinkBackButton);

@@ -79,19 +79,19 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation, int role) c
 
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
-    if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
-        if (ppathindex && *ppathindex > 0) {
-            //m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
-            //emit sigShowLabel();
-        } /*else {
-            m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
-        }*/
-    }
+    //    if ((1 == index.row() || 0 == index.row()) && 0 == index.column()) {
+    //        if (ppathindex && *ppathindex > 0) {
+    //            //m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
+    //            //emit sigShowLabel();
+    //        } /*else {
+    //            m_tableview->setRowHeight(0, MyFileSystemDefine::gTableHeight);
+    //        }*/
+    //    }
 
-//    if (0 != index.row()) {
-//        m_tableview->setRowHeight(index.row(), MyFileSystemDefine::gTableHeight);
-//    }
-
+    //    if (0 != index.row()) {
+    //        m_tableview->setRowHeight(index.row(), MyFileSystemDefine::gTableHeight);
+    //    }
+    qDebug() << "chendu: " << index << role;
     if (index.isValid()) {
         QFileInfo file = fileInfo(index);
         switch (role) {
@@ -143,6 +143,21 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 return "";
             }
         }
+
+        case Qt::AccessibleTextRole: {
+            int col = index.column();
+            switch (col) {
+            case 3:
+            case 2:
+            case 1:
+            case 0: {
+                return QString("CompressContent_%1_%2").arg(index.row()).arg(col);
+            }
+            default:
+                return "";
+            }
+        }
+
         case Qt::DecorationRole:
             if (index.column() == 0) {
                 QMimeDatabase db;

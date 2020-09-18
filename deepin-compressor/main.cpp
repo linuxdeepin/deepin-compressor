@@ -25,11 +25,13 @@
 #include "utils.h"
 #include "monitorInterface.h"
 #include "environments.h"
+#include "accessible.h"
 
 #include <DWidgetUtil>
 #include <DLog>
 #include <DApplicationSettings>
 
+#include <QAccessible>
 #include <QCommandLineParser>
 #include <QMessageBox>
 
@@ -152,6 +154,9 @@ int main(int argc, char *argv[])
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
+
+    //Accessibility自动化
+    QAccessible::installFactory(accessibleFactory);
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 

@@ -85,10 +85,12 @@ void Progress::InitUI()
     m_progressfilelabel->setText(tr("Calculating..."));
 
     m_cancelbutton = new CustomPushButton(this);
+    m_cancelbutton->setAccessibleName("Cancel_btn");
     m_cancelbutton->setMinimumSize(200, 36);
     m_cancelbutton->setText(tr("Cancel"));
 
     m_PauseContinueButton = new CustomSuggestButton(this);
+    m_PauseContinueButton->setAccessibleName("PauseContinue_btn");
     m_PauseContinueButton->setMinimumSize(200, 36);
     m_PauseContinueButton->setText(tr("Pause"));
     m_PauseContinueButton->setCheckable(true);
@@ -372,7 +374,7 @@ bool Progress::getOpenType()
 int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog(this);
-
+    dialog->setAccessibleName("Cancel_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 //    DPalette pa, pa2;

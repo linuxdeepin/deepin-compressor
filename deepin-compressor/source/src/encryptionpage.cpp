@@ -50,10 +50,10 @@ void EncryptionPage::InitUI()
     m_nextbutton->setText(tr("Next"));
     m_nextbutton->setDisabled(true);
     m_password = new DPasswordEdit(this);
+    m_password->setAccessibleName("m_password");
     m_password->setMinimumSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
-
     m_password->setFocusPolicy(Qt::StrongFocus);
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);

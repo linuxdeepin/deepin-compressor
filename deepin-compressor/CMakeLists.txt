@@ -96,7 +96,7 @@ include_directories(${PROJECT_SOURCE_DIR}/source/inc)
 include_directories(${PROJECT_SOURCE_DIR}/source/inc/openwithdialog)
 
 #8.主程序的源文件和头文件
-file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp)
+file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp accessible.h accessibledefine.h)
 file(GLOB_RECURSE h_files  source/*.h )
 
 

@@ -121,6 +121,7 @@ void CompressSetting::InitUI()
     typelayout->addStretch();
 
     m_clicklabel = new TypeLabel(this);
+    m_clicklabel->setAccessibleName("ClickType_lab");
     m_clicklabel->setMinimumSize(125, 40);
     m_clicklabel->setObjectName("ClickTypeLabel");
     m_clicklabel->setFocusPolicy(Qt::TabFocus);
@@ -164,6 +165,7 @@ void CompressSetting::InitUI()
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
     moresetlabel->setForegroundRole(DPalette::WindowText);
     m_moresetbutton = new CustomSwitchButton(this);
+    m_moresetbutton->setAccessibleName("Moreset_btn");
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
@@ -179,10 +181,12 @@ void CompressSetting::InitUI()
     m_encryptedfilelistlabel->setToolTip(tr("Support 7z type only"));
     m_encryptedfilelistlabel->setEnabled(false);
     m_file_secret = new CustomSwitchButton(this);
+    m_file_secret->setAccessibleName("FileSecret_btn");
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
     m_splitcompress = new CustomCheckBox(tr("Split to volumes") + ":", this);
+    m_splitcompress->setAccessibleName("Split_cbox");
     m_splitcompress->setEnabled(false);
     m_splitcompress->setToolTip(tr("Support 7z type only"));
     m_splitnumedit = new DDoubleSpinBox(this);
@@ -235,6 +239,7 @@ void CompressSetting::InitUI()
     mainLayout->addStretch();
 
     m_nextbutton = new CustomPushButton(tr("Compress"), this);
+    m_nextbutton->setAccessibleName("Compress_btn");
     m_nextbutton->setMinimumSize(340, 36);
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);
@@ -1268,7 +1273,8 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
 bool CompressSetting::existSameFileName()
 {
     DDialog *dialog = new DDialog(this);
-//    dialog->setMinimumSize(QSize(380, 190));
+    dialog->setAccessibleName("Replace_dialog");
+    //    dialog->setMinimumSize(QSize(380, 190));
     dialog->setMinimumSize(380, 134);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);

@@ -235,6 +235,7 @@ qint64 MainWindow::getDiskFreeSpace()
 int MainWindow::queryDialogForClose()
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Stop_dialog");
     dialog->setFixedWidth(440);
     QIcon icon = QIcon::fromTheme("deepin-compressor");
     dialog->setIcon(icon /*, QSize(32, 32)*/);
@@ -844,6 +845,7 @@ void MainWindow::initTitleBar()
     m_pTitleButton->setFixedSize(38, 38);
     m_pTitleButton->setVisible(false);
     m_pTitleButton->setObjectName("TitleButton");
+    m_pTitleButton->setAccessibleName("Title_btn");
 
     QHBoxLayout *leftLayout = new QHBoxLayout;
     leftLayout->addSpacing(6);
@@ -2240,6 +2242,7 @@ void MainWindow::WatcherFile(const QString &files)
 
     connect(m_pFileWatcher, &DFileWatcher::fileMoved, this, [ = ]() { //监控压缩包，重命名时提示
         DDialog *dialog = new DDialog(this);
+        dialog->setAccessibleName("Localarchivechange_dialog");
         dialog->setFixedWidth(440);
         QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(icon);
@@ -5132,6 +5135,7 @@ bool MainWindow::deleteDir(QString path)
 int MainWindow::deleteArchiveDialog()
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Delete_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->addSpacing(32);

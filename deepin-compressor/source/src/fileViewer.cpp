@@ -719,6 +719,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Medium);
         item->setFont(font);
         firstmodel->setItem(rowindex, 0, item);
+        item->setAccessibleText(QString("CompressContent_%1_%2").arg(rowindex).arg(0));
 
         // 大小（对于文件夹，显示为下一层级的项数，对于文件，显示文件大小）
         if (fileinfo.isDir()) {
@@ -736,6 +737,7 @@ void fileViewer::refreshTableview()
         item->setFont(font);
         item->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         firstmodel->setItem(rowindex, 3, item);
+        item->setAccessibleText(QString("CompressContent_%1_%2").arg(rowindex).arg(3));
 
         //类型
 //        Directory can be identified by fullpath
@@ -746,6 +748,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Normal);
         item->setFont(font);
         firstmodel->setItem(rowindex, 2, item);
+        item->setAccessibleText(QString("CompressContent_%1_%2").arg(rowindex).arg(2));
 
         // 时间
         item = new MyFileItem(QLocale().toString(fileinfo.lastModified(), tr("yyyy/MM/dd hh:mm:ss")));
@@ -754,6 +757,7 @@ void fileViewer::refreshTableview()
         font.setWeight(QFont::Normal);
         item->setFont(font);
         firstmodel->setItem(rowindex, 1, item);
+        item->setAccessibleText(QString("CompressContent_%1_%2").arg(rowindex).arg(1));
         rowindex++;
     }
 
@@ -1116,6 +1120,7 @@ void fileViewer::resetTempFile()
 int fileViewer::popUpDialog(const QString &desc)
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Delete_dialog");
     dialog->setMinimumSize(380, 139);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
@@ -1389,6 +1394,7 @@ void fileViewer::slotCompressRePreviousDoubleClicked()
 int fileViewer::showWarningDialog(const QString &msg)
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Warning_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
     dialog->setMinimumSize(380, 140);
@@ -1589,6 +1595,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
         m_ActionInfo.ActionFiles = urls;
 
         DDialog *dialog = new DDialog(this);
+        dialog->setAccessibleName("Updateparent_dialog");
         dialog->setMinimumSize(380, 134);
         QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
         dialog->setIcon(pixmap);
@@ -1660,6 +1667,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
                 showPlable();
                 //}
 
+                //自动选中第一行
                 QTimer::singleShot(100, this, [&]() {
                     //因为进入目录后自动排序需要时间，所以延时100m设置选中
                     QModelIndex tmpindex = pModel->index(0, 0, m_indexmode);
@@ -1679,6 +1687,7 @@ void fileViewer::slotCompressRowDoubleClicked(const QModelIndex index)
             restoreHeaderSort(pModel->rootPath());
             pTableViewFile->setRootIndex(m_indexmode);
 
+            //自动选中第一行
             QTimer::singleShot(100, this, [&]() {
                 //因为进入目录后自动排序需要时间，所以延时100m设置选中
                 QModelIndex tmpindex = pModel->index(0, 0, m_indexmode);

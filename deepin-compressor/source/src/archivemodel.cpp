@@ -165,6 +165,20 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                 font.setWeight(QFont::Normal);
                 return font;
             }
+        case Qt::AccessibleTextRole: {
+            int col = index.column();
+            switch (col) {
+            case 3:
+            case 2:
+            case 1:
+            case 0: {
+                qDebug() << QString("UncompressContent_%1_%2").arg(index.row()).arg(col) << index.data();
+                return QString("UncompressContent_%1_%2").arg(index.row()).arg(col);
+            }
+            default:
+                return "";
+            }
+        }
         default:
             return QVariant();
         }
@@ -367,7 +381,6 @@ Qt::DropActions ArchiveModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
-
 
 QMimeData *ArchiveModel::mimeData(const QModelIndexList &indexes) const
 {

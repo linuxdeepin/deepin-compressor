@@ -51,12 +51,14 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     m_pathstr = "~/Desktop";
     m_fileviewer = new fileViewer(this, PAGE_UNCOMPRESS);
     m_nextbutton = new CustomPushButton(tr("Extract"), this);
+    m_nextbutton->setAccessibleName("Extract_btn");
     m_nextbutton->setMinimumSize(340, 36);
 
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
     m_extractpath = new CustomCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
+    m_extractpath->setAccessibleName("Extractpath_btn");
     m_extractpath->setToolTip(m_pathstr);
 //    m_extractpath->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
 //    m_extractpath->setMinimumSize(129, 18);
@@ -180,6 +182,7 @@ int UnCompressPage::getDeFileCount()
 int UnCompressPage::showWarningDialog(const QString &msg)
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Warning_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 //    dialog->setMessage(msg);
@@ -554,6 +557,7 @@ int UnCompressPage::showReplaceDialog(QString name, int &responseValue)
 QStringList UnCompressPage::convertArchiveDialog()
 {
     DDialog *dialog = new DDialog(this);
+    dialog->setAccessibleName("Conver_dialog");
     dialog->setMinimumSize(QSize(380, 180));
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);

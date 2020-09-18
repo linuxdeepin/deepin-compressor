@@ -57,10 +57,12 @@ void Compressor_Fail::InitUI()
     DFontSizeManager::instance()->bind(m_stringdetaillabel, DFontSizeManager::T8);
     m_stringdetaillabel->setText(m_stringdetail);
     m_retrybutton = new CustomPushButton(this);
+    m_retrybutton->setAccessibleName("Retry_Btn");
     m_retrybutton->setMinimumSize(340, 36);
     m_retrybutton->setText(tr("Retry"));
 
     commandLinkBackButton = new CustomCommandLinkButton(tr("Back"), this);
+    commandLinkBackButton->setAccessibleName("Back_btn");
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
     commandLinkButtonLayout->addStretch();
     commandLinkButtonLayout->addWidget(commandLinkBackButton);

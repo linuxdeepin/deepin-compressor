@@ -42,6 +42,7 @@ HomePage::HomePage(QWidget *parent)
       m_chooseBtn(new CustomCommandLinkButton(tr("Select File"), this)),
       m_settings(new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this))
 {
+    m_chooseBtn->setAccessibleName("Choose_btn");
     m_unloadPixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
     m_loadedPixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_folder_128px.svg", QSize(128, 128));
 
