@@ -9,7 +9,7 @@
 #include <archive_manager.h>
 #include <QModelIndex>
 #include "archivemodel.h"
-/*
+
 TEST(ArchiveSortFilterModel_ArchiveSortFilterModel_UT, ArchiveModel_ArchiveSortFilterModel_UT001)
 {
     ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
@@ -615,8 +615,7 @@ TEST(ArchiveSortFilterModel_removeRows_UT, ArchiveModel_ArchiveSortFilterModel_U
     bool res = model->removeRows(0, 1, parent);
     ASSERT_TRUE(res);
     delete model;
-<<<<<<< Updated upstream
-}*/
+}
 
 TEST(ArchiveSortFilterModel_refreshNow_UT, ArchiveModel_refreshNow_UT001)
 {

@@ -52,23 +52,7 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT002)
     delete model;
 }
 
-TEST(ArchiveModel_data_UT, ArchiveModel_data_UT003)
-{
-    ArchiveModel *model = new ArchiveModel(nullptr);
-    Archive::Entry *entry = new Archive::Entry();
 
-    QModelIndex index;
-    index.r = 2;
-    index.c = 2;
-    index.m = model;
-    index.i = (quintptr)entry;
-    model->m_ppathindex = nullptr;
-
-    model->data(index, 0);
-    ASSERT_NE(model, nullptr);
-    delete entry;
-    delete model;
-}
 //---------------------
 // 1. Qt::DisplayRole分支
 // 2. FullPath 分支
@@ -625,7 +609,9 @@ TEST(ArchiveModel_index_UT, ArchiveModel_index_UT002)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
     Archive::Entry *parent = new Archive::Entry();
+    parent->setIsDirectory(true);
     entry->setParent(parent);
+    entry->setIsDirectory(true);
     entry->m_entries << parent;
     QModelIndex index;
     index.r = 0;
@@ -806,7 +792,9 @@ TEST(ArchiveMohandel_createNoncolumnIndex_UT, ArchiveModel_createNoncolumnIndex_
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
     Archive::Entry *parent = new Archive::Entry();
+    entry->setIsDirectory(true);
     entry->m_parent = parent;
+    parent->setIsDirectory(true);
     QModelIndex index;
     index.r = 0;
     index.c = 1;
@@ -946,95 +934,6 @@ QModelIndex index03(int row, int column, const QModelIndex &parent)
     index.i = (quintptr)entry;
     return index;
 }
-/*
-Archive::Entry * entryForIndex03()
-{
-    Archive::Entry *a = new Archive::Entry;
-
-    return a;
-}
-//
-TEST(ArchivehandeMol_dropMimeData_UT, ArchiveModel_dropMimeData_UT003)
->>>>>>> Stashed changes
-{
-    ArchiveModel *model = new ArchiveModel(nullptr);
-    typedef QModelIndex (ArchiveModel::*fptr)(int,int,const QModelIndex&);
-    fptr A_foo = (fptr)(&ArchiveModel::index);
-    ArchiveError errorCode;
-    QObject *parent = new QObject;
-    QString path;
-     QString mimeType;
-    Archive *temp = Archive::createEmpty(path, mimeType, parent);
-    QMimeData * data = new QMimeData();
-    model->m_archive.reset(temp);
-    QList<QUrl> urls ;
-    QUrl url;
-    url.setUrl("/home/assd");
-    urls.push_back(url);
-    data->setUrls(urls);
-    QModelIndex index;
-    index.r = 1;
-    index.c = 2;
-    for (int i = 0; i < 10; ++i) {
-        model->m_showColumns.append(i);
-    }
-    Stub *stub = new Stub;
-<<<<<<< Updated upstream
-    stub->set(ADDR(QModelIndex, internalPointer), myInternalPointer);
-    stub->set(ADDR(QModelIndex, isValid), myisValid);
-
-    returnAt = 0;
-    QString name = model->data(index, Qt::DisplayRole).toString();
-    std::cout << name.toStdString() << std::endl;
-    ASSERT_EQ(name.toStdString(), "压缩文件");
-    stub->reset(ADDR(QModelIndex, internalPointer));
-    stub->reset(ADDR(QModelIndex, isValid));
-    delete  stub;
-    delete model;
-
-}
-
-TEST(ArchiveModel_Data_UT, ArchiveModel_Data_Ut003)
-{
-    ArchiveModel *model = new ArchiveModel(nullptr);
-    QModelIndex index;
-    index.r = 1;
-    index.c = 3;
-    for (int i = 0; i < 10; ++i) {
-        model->m_showColumns.append(i);
-    }
-    Stub *stub = new Stub;
-    stub->set(ADDR(QModelIndex, internalPointer), myInternalPointer);
-    stub->set(ADDR(QModelIndex, isValid), myisValid);
-
-    returnAt = 0;
-    QString name = model->data(index, Qt::DisplayRole).toString();
-    std::cout << name.toStdString() << std::endl;
-    ASSERT_EQ(name.toStdString(), "压缩文件");
-    stub->reset(ADDR(QModelIndex, internalPointer));
-    stub->reset(ADDR(QModelIndex, isValid));
-    delete  stub;
-    delete model;
-
-}
-
-
-
-//TEST(ArchiveModel_cleanFileName_UT,ArchiveModel_cleanFileName_UT001)
-//{
-//    ArchiveModel *mode =  new ArchiveModel;
-//    mode->cleanFileName("");
-//}
-
-=======
-    stub->set(A_foo, index03);
-    model->dropMimeData(data,Qt::DropAction::ActionMask,0,0,index);
-    ASSERT_NE(model, nullptr);
-    delete data;
-    delete model;
-}
-*/
-
 TEST(ArchivehandeMol_resetmparent_UT, ArchiveModel_resetmparent_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
@@ -1108,7 +1007,7 @@ TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT003)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry;
-    entry->setIsDirectory(false);
+    entry->setIsDirectory(true);
     entry->setFullPath("/home/arv00/tmp/dd/aa");
     model->s_previousMatch = entry;
     model->m_rootEntry.reset(entry);
@@ -1121,14 +1020,14 @@ TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT003)
 
 bool getIsDir()
 {
-    return false;
+    return true;
 }
 // 519 行
 TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT004)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry;
-    entry->setIsDirectory(false);
+    entry->setIsDirectory(true);
     entry->setFullPath("/home/arv00/tmp/dd/aa");
     model->s_previousMatch = entry;
     model->m_rootEntry.reset(entry);
@@ -1144,10 +1043,14 @@ TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT004)
 TEST(ArchivehandeMol_indexForEntry_UT, ArchiveModel_indexForEntry_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
-    Archive::Entry *entry = new Archive::Entry;
-
+    Archive::Entry *parent = new Archive::Entry;
+    Archive::Entry *entry = new Archive::Entry(parent);
+    parent->setIsDirectory(true);
+    entry->setParent(parent);
     model->indexForEntry(entry);
+
     delete entry;
+    delete parent;
     delete model;
 }
 

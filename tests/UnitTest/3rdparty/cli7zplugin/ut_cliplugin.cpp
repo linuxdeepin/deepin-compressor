@@ -10,7 +10,7 @@
 #include "pluginmanager.h"
 #include "kpluginloader.h"
 #include "kpluginfactory.h"
-
+#include "archiveinterface.h"
 #include <QMimeDatabase>
 #include <QRegularExpression>
 
@@ -328,6 +328,153 @@ TEST(Cli7zPlugin_setEntryVal_UT, Cli7zPlugin_setEntryVal_UT014)
     delete Cli7zPlugin1;
 }
 
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT001)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    Cli7zPlugin1->setEntryVal1(archinve, index, "", dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT002)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "/";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT003)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "//home/tmp";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT004)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "///";
+    Cli7zPlugin1->m_SigDirRecord = "/";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT005)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "///";
+    Cli7zPlugin1->m_SigDirRecord = "";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT006)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "///g";
+    Cli7zPlugin1->m_SigDirRecord = "///g";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT007)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "";
+    QString name = "///g";
+    Cli7zPlugin1->m_DirRecord = "///g";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_setEntryVal1_UT, Cli7zPlugin_setEntryVal1_UT008)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("//home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Cli7zPlugin1->m_fileStat.archive_isDirectory = true;
+    Cli7zPlugin1->m_fileStat.archive_fullPath = "/home/test";
+    ReadOnlyArchiveInterface::archive_stat archinve;
+    int index = 0;
+    QString dirRecord = "/home";
+    QString name = "///g";
+    Cli7zPlugin1->m_DirRecord = "///g";
+    Cli7zPlugin1->setEntryVal1(archinve, index, name, dirRecord);
+
+    delete Cli7zPlugin1;
+}
 
 TEST(Cli7zPlugin_setEntryData_UT, Cli7zPlugin_setEntryData_UT015)
 {
@@ -719,7 +866,7 @@ TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT009)
 
    Cli7zPlugin1->m_parseState = Cli7zPlugin::ParseStateEntryInformation;
    Cli7zPlugin1->m_isFirstInformationEntry = true;
-   bool r5= Cli7zPlugin1->readListLine("Folder = dd");
+   bool r5 = Cli7zPlugin1->readListLine("Folder = +");
 
    Cli7zPlugin1->m_parseState = Cli7zPlugin::ParseStateEntryInformation;
    Cli7zPlugin1->m_isFirstInformationEntry = true;
@@ -1016,3 +1163,53 @@ TEST(Cli7zPlugin_RefreshEntryFileCount_UT, Cli7zPlugin_RefreshEntryFileCount_UT0
     delete Cli7zPlugin1;
 }
 
+TEST(Cli7zPlugin_updateListMap_UT, Cli7zPlugin_updateListMap_UT001)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Archive::Entry *entry = new Archive::Entry();
+    Cli7zPlugin1->updateListMap(entry, 1);
+    delete entry;
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_updateListMap_UT, Cli7zPlugin_updateListMap_UT002)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Archive::Entry *entry = new Archive::Entry();
+    entry->setFullPath("/home");
+    ReadOnlyArchiveInterface::archive_stat temp;
+    Cli7zPlugin1->m_listMap["/home"] = temp;
+    Cli7zPlugin1->updateListMap(entry, 2);
+    delete entry;
+    delete Cli7zPlugin1;
+}
+
+TEST(Cli7zPlugin_updateListMap_UT, Cli7zPlugin_updateListMap_UT003)
+{
+    // QWidget *qman = new QWidget();
+    KPluginMetaData ss;
+    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+                               QVariant().fromValue(ss)};
+    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+    Archive::Entry *entry = new Archive::Entry();
+    Archive::Entry *sub = new Archive::Entry(entry);
+    sub->setIsDirectory(true);
+    entry->setIsDirectory(true);
+    entry->entries().push_back(sub);
+
+    entry->setFullPath("/home");
+    ReadOnlyArchiveInterface::archive_stat temp;
+    Cli7zPlugin1->m_listMap["/home"] = temp;
+    Cli7zPlugin1->updateListMap(entry, 100);
+    delete sub;
+    delete entry;
+    delete Cli7zPlugin1;
+}
