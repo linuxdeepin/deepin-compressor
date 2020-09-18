@@ -2460,7 +2460,11 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         }
     }
 }
-
+/**
+ * @brief SlotProgressFile  文件显示,解压过程中，显示为文件名字内容
+ * @param job   工作类型
+ * @param filename  正在操作的文件
+ */
 void MainWindow::SlotProgressFile(KJob * /*job*/, const QString &filename)
 {
     // 显示当前正在操作的文件名
@@ -2507,7 +2511,10 @@ void MainWindow::removeFromParentInfo(MainWindow *CurMainWnd)
         }
     }
 }
-
+/**
+ * @brief slotExtractionDone    解压结束
+ * @param job
+ */
 void MainWindow::slotExtractionDone(KJob *job)
 {
     m_eWorkStatus = WorkNone;
@@ -2519,7 +2526,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         pExtractWorkEntry = pExtractJob->getWorkEntry();
 
         if (this->m_pWatcher != nullptr) {
+            // 结束文件监控操作。
             this->m_pWatcher->finishWork();
+            // 取消监控信号
             disconnect(this->m_pWatcher, &TimerWatcher::sigBindFuncDone, pExtractJob, &ExtractJob::slotWorkTimeOut);
             SAFE_DELETE_ELE(m_pWatcher);
         }
@@ -2532,7 +2541,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             if (m_bIsRightMenu) {
                 show();
             }
-
+            // 待废弃，密码框使用模态框
             m_ePageID = PAGE_ENCRYPTION;
             refreshPage();
             return;
@@ -2543,6 +2552,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             if (m_convertType.size() > 0) {
                 creatArchive(m_convertArgs);
             } else {
+                // 解压成功展示解压成功界面
                 if (this->m_pCurAuxInfo == nullptr || this->m_pCurAuxInfo->information.size() == 0) {
                     m_ePageID = PAGE_UNZIP_SUCCESS;
                     m_pCompressSuccess->setstringinfo(tr("Extraction successful"));
@@ -2554,7 +2564,7 @@ void MainWindow::slotExtractionDone(KJob *job)
     }
 
     int errorCode = job->error();
-
+    // 加载页面
     if (m_ePageID == PAGE_LOADING) {
         m_pOpenLoadingPage->stop();
     }
@@ -2735,7 +2745,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         qDebug() << strFileName;
     }
 }
-
+/**
+ * @brief slotShowPageUnzipProgress 显示解压进度
+ */
 void MainWindow::slotShowPageUnzipProgress()
 {
     if (Operation_TempExtract_Open_Choose == m_operationtype || Operation_TempExtract == m_operationtype) {

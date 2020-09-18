@@ -141,7 +141,9 @@ void Job::start()
 
 void Job::connectToArchiveInterfaceSignals()
 {
+    // 取消信号
     connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &Job::onCancelled, Qt::ConnectionType::UniqueConnection);
+    //
     connect(archiveInterface(), &ReadOnlyArchiveInterface::error, this, &Job::onError, Qt::ConnectionType::UniqueConnection);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &Job::onEntry, Qt::ConnectionType::UniqueConnection);
     connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &Job::onProgress, Qt::ConnectionType::UniqueConnection);

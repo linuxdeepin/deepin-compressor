@@ -110,8 +110,15 @@ public:
      * @return The password of the archive, if any.
      */
     QString password() const;
-
+    /**
+     * @brief isMultiVolume 是否使用分卷
+     * @return
+     */
     bool isMultiVolume() const;
+    /**
+     * @brief numberOfVolumes   分卷的数量
+     * @return
+     */
     int numberOfVolumes() const;
 
     /**
@@ -133,7 +140,15 @@ public:
      */
     virtual bool list(bool isbatch = false) = 0;
     virtual bool testArchive() = 0;
+    /**
+     * @brief setPassword 设置密码
+     * @param password 密码
+     */
     void setPassword(const QString &password);
+    /**
+     * @brief setHeaderEncryptionEnabled 是否加密,查看的时候需要队整个包解密
+     * @param enabled
+     */
     void setHeaderEncryptionEnabled(bool enabled);
 
     /**
@@ -155,7 +170,10 @@ public:
      * @brief 解压缩继续处理
      */
     virtual void continueProcess();
-
+    /**
+     * @brief isPause 返回是否暂停状态
+     * @return
+     */
     bool isPause();
 
     /**

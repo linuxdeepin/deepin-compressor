@@ -47,7 +47,9 @@ protected:
     Job(ReadOnlyArchiveInterface *interface);
     ~Job() override;
     bool doKill() override;
-
+    /**
+     * @brief connectToArchiveInterfaceSignals 信号链接，将job的信号与插件对接
+     */
     void connectToArchiveInterfaceSignals();
 
 public Q_SLOTS:
@@ -160,7 +162,9 @@ private:
     bool m_preservePaths;
     unsigned long m_lastPercentage = 0;
 };
-
+/**
+ * @brief The CreateJob class 创建job
+ */
 class CreateJob : public Job
 {
     Q_OBJECT

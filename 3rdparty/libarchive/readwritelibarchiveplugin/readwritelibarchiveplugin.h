@@ -27,9 +27,10 @@ class ReadWriteLibarchivePlugin : public LibarchivePlugin
 public:
     explicit ReadWriteLibarchivePlugin(QObject *parent, const QVariantList &args);
     ~ReadWriteLibarchivePlugin() override;
-
+    // 压缩文件,追加压缩
     bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
     bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
+
     bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
     bool deleteFiles(const QVector<Archive::Entry *> &files) override;
 
@@ -84,7 +85,7 @@ private:
     // Passed argument from job which is used by processOldEntries method，删除的时候用deleteEntry方法.
     QStringList m_filesPaths;
     int m_entriesWithoutChildren = 0;
-    const Archive::Entry *m_destination = nullptr;
+    const Archive::Entry *m_destination = nullptr; // 目标
     QScopedPointer<QTemporaryDir> m_extractTempDir; //added by hsw 20200528
 };
 
