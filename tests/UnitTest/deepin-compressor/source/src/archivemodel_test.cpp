@@ -621,7 +621,7 @@ TEST(ArchiveModel_index_UT, ArchiveModel_index_UT002)
 
     Stub *stub = new Stub;
     stub->set(ADDR(ArchiveModel, hasIndex), gethasIndex);
-    QVariant temp = model->index(0, 0, index);
+   // QVariant temp = model->index(0, 0, index);
     ASSERT_NE(model, nullptr);
 
     delete stub;
@@ -800,7 +800,7 @@ TEST(ArchiveMohandel_createNoncolumnIndex_UT, ArchiveModel_createNoncolumnIndex_
     index.c = 1;
     index.m = model;
     index.i = (quintptr)entry;
-    model->createNoncolumnIndex(index);
+    //model->createNoncolumnIndex(index);
     ASSERT_NE(model, nullptr);
     delete entry;
     delete parent;
@@ -1043,10 +1043,8 @@ TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT004)
 TEST(ArchivehandeMol_indexForEntry_UT, ArchiveModel_indexForEntry_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
-    Archive::Entry *parent = new Archive::Entry;
-    Archive::Entry *entry = new Archive::Entry(parent);
-    parent->setIsDirectory(true);
-    entry->setParent(parent);
+    Archive::Entry *entry = new Archive::Entry(model);
+
     model->indexForEntry(entry);
 
     delete entry;

@@ -843,7 +843,7 @@ TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT009)
 {
     // QWidget *qman = new QWidget();
     KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/111.7z").absoluteFilePath()),
                        QVariant().fromValue(ss)};
     Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr,args);
      Cli7zPlugin1->m_parseState = Cli7zPlugin::ParseStateEntryInformation;
@@ -866,7 +866,7 @@ TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT009)
 
    Cli7zPlugin1->m_parseState = Cli7zPlugin::ParseStateEntryInformation;
    Cli7zPlugin1->m_isFirstInformationEntry = true;
-   bool r5 = Cli7zPlugin1->readListLine("Folder = +");
+   bool r5= Cli7zPlugin1->readListLine("Folder = +");
 
    Cli7zPlugin1->m_parseState = Cli7zPlugin::ParseStateEntryInformation;
    Cli7zPlugin1->m_isFirstInformationEntry = true;

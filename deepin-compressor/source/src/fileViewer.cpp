@@ -236,28 +236,28 @@ void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewI
     if (index.column() == 0) {
         rect.setX(rect.x() + SCROLLMARGIN);
 
-        QRect focusRect(rect.x() + qRadius, rect.y() + qRadius, rect.width() - qRadius, rect.height() - 2 * qRadius);
+        QRect focusRect(rect.x() + static_cast<int>(qRadius), rect.y() + static_cast<int>(qRadius), rect.width() - static_cast<int>(qRadius), rect.height() - 2 * static_cast<int>(qRadius));
         focusPath.moveTo(focusRect.topRight());
         focusPath.lineTo(focusRect.x() + qRadius, focusRect.y());
-        focusPath.arcTo(QRect(focusRect.x(), focusRect.y(), qRadius * 2, qRadius * 2), 90, 90);
+        focusPath.arcTo(QRect(focusRect.x(), focusRect.y(), static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2), 90, 90);
         focusPath.lineTo(focusRect.x(), focusRect.y() + focusRect.height() - qRadius);
-        focusPath.arcTo(QRect(focusRect.x(), focusRect.y() + focusRect.height() - qRadius * 2, qRadius * 2, qRadius * 2), 180, 90);
+        focusPath.arcTo(QRect(focusRect.x(), focusRect.y() + focusRect.height() - static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2), 180, 90);
         focusPath.lineTo(focusRect.bottomRight());
     } else if (index.column() == 3) {
         rect.setWidth(rect.width() - SCROLLMARGIN); // right margin
 
-        QRect focusRect(rect.x() - 2, rect.y() + qRadius, rect.width() - qRadius, rect.height() - 2 * qRadius);
+        QRect focusRect(rect.x() - 2, rect.y() + static_cast<int>(qRadius), rect.width() - static_cast<int>(qRadius), rect.height() - 2 * static_cast<int>(qRadius));
 
         focusPath.moveTo(focusRect.topLeft());
         focusPath.lineTo(focusRect.topRight().x() - qRadius, focusRect.y());
-        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * qRadius, focusRect.y(), qRadius * 2, qRadius * 2), 90, -90);
+        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * static_cast<int>(qRadius), focusRect.y(), static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2), 90, -90);
         focusPath.lineTo(focusRect.topRight().x(), focusRect.y() + focusRect.height() - qRadius);
-        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * qRadius, focusRect.y() + focusRect.height() - qRadius * 2, qRadius * 2, qRadius * 2), 0, -90);
+        focusPath.arcTo(QRect(focusRect.topRight().x() - 2 * static_cast<int>(qRadius), focusRect.y() + focusRect.height() - static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2, static_cast<int>(qRadius) * 2), 0, -90);
         focusPath.lineTo(focusRect.bottomLeft());
 
     } else {
 
-        QRect focusRect(rect.x(), rect.y() + qRadius, rect.width() + 2, rect.height() - 2 * qRadius);
+        QRect focusRect(rect.x(), rect.y() + static_cast<int>(qRadius), rect.width() + 2, rect.height() - 2 * static_cast<int>(qRadius));
         focusPath.moveTo(focusRect.topLeft());
         focusPath.lineTo(focusRect.topRight());
         focusPath.moveTo(focusRect.bottomLeft());
@@ -569,7 +569,14 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
         pTableViewFile->setDragEnabled(false);
     }
 }
-
+fileViewer::~fileViewer()
+{
+    delete m_mimetype;
+    delete pTableViewFile;
+    delete firstmodel;
+    delete pModel;
+    delete openWithDialogMenu;
+}
 void fileViewer::InitUI()
 {
     QHBoxLayout *mainlayout = new QHBoxLayout;
@@ -1200,7 +1207,7 @@ void fileViewer::deleteCompressFile()
 void fileViewer::subWindowChangedMsg(const SUBACTION_MODE &mode, const QStringList &msg)
 {
     com::archive::mainwindow::monitor monitor("com.archive.mainwindow.monitor", HEADBUS, QDBusConnection::sessionBus());
-    QDBusPendingReply<bool> reply = monitor.onSubWindowActionFinished((int)mode, getppid(), msg);
+    QDBusPendingReply<bool> reply = monitor.onSubWindowActionFinished(static_cast<int>(mode), getppid(), msg);
     reply.waitForFinished();
     if (reply.isValid()) {
         bool isClosed = reply.value();
@@ -1589,7 +1596,7 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
         QString warningStr1 = QString(tr("Files have been changed. Do you want to update the changes to %1?")).arg(Utils::toShortString(sourceFileName));
 
-        m_ActionInfo.mode = (SUBACTION_MODE)mode;
+        m_ActionInfo.mode = static_cast<SUBACTION_MODE>(mode);
         m_ActionInfo.archive = sourceArchive;
         m_ActionInfo.packageFile = destFile;
         m_ActionInfo.ActionFiles = urls;
