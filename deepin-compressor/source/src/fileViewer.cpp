@@ -569,14 +569,7 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
         pTableViewFile->setDragEnabled(false);
     }
 }
-fileViewer::~fileViewer()
-{
-    delete m_mimetype;
-    delete pTableViewFile;
-    delete firstmodel;
-    delete pModel;
-    delete openWithDialogMenu;
-}
+
 void fileViewer::InitUI()
 {
     QHBoxLayout *mainlayout = new QHBoxLayout;

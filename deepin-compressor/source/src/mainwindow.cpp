@@ -2399,8 +2399,13 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
+    //qDebug() << "m_lastPercent进度：" << m_lastPercent << " percent新进度：" << percent;
     //calSpeedAndTime(percent);
     //m_pProgess->refreshSpeedAndTime(percent);
+
+    if (m_lastPercent >= percent)
+        return;
+
     if (m_operationtype == Operation_CONVERT) {     // 如果是格式转换，进度以3:7进行计算
         if (m_convertFirst && percent <= 100) {
             m_lastPercent = 30 + percent * 0.7;
@@ -2413,6 +2418,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         }
     } else {
         if (percent > 0) {
+            m_lastPercent = percent;
             m_pProgess->refreshSpeedAndTime(percent, true);
         }
     }
