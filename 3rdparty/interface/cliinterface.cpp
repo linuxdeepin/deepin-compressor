@@ -60,16 +60,14 @@ CliInterface::~CliInterface()
 {
     //    Q_ASSERT(!m_process);
 
-    if (m_process != nullptr) {
-        m_process->kill();
-        m_process->waitForFinished(1);
-    }
-
+    //    if (m_process != nullptr) {
+    //        m_process->kill();
+    //        m_process->waitForFinished(1);
+    //    }
     if (pAnalyseHelp != nullptr) {
         delete pAnalyseHelp;
         pAnalyseHelp = nullptr;
     }
-
     if (pFileWatcherdd != nullptr) {
         this->watchDestFilesEnd();
         delete pFileWatcherdd;
@@ -1585,7 +1583,6 @@ bool CliInterface::handleLine(const QString &line)
             QString folder = line;
             extractDst7z_ = folder.remove("        Name: ");
         }
-
         return readListLine(line);
     }
 

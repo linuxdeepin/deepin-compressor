@@ -37,7 +37,7 @@ include_directories(${PROJECT_SOURCE_DIR}/../ChardetDetector)
 include_directories(${PROJECT_SOURCE_DIR})
 
 
-set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../deepin-compressor/interface)
+set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../interface)
 
 include_directories(${INTERFACE_LNCLUDE_DIR})
 file(GLOB_RECURSE c_files  *.cpp)

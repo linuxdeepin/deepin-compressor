@@ -1,11 +1,9 @@
 #include "cliplugin.h"
+#include "kprocess.h"
 #include "../interface/queries.h"
 
 #include <QJsonArray>
 #include <QJsonParseError>
-
-
-
 
 CliPluginFactory::CliPluginFactory()
 {
@@ -27,6 +25,11 @@ CliPlugin::CliPlugin(QObject *parent, const QVariantList &args)
 
 CliPlugin::~CliPlugin()
 {
+    //确保kprocess先释放，避免阻塞时调用虚函数错误
+    if (m_process != nullptr) {
+        m_process->kill();
+        m_process->waitForFinished(1);
+    }
 }
 
 bool CliPlugin::list(bool /*isbatch*/)

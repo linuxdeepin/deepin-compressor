@@ -569,7 +569,6 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
         pTableViewFile->setDragEnabled(false);
     }
 }
-
 void fileViewer::InitUI()
 {
     QHBoxLayout *mainlayout = new QHBoxLayout;

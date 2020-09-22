@@ -1,8 +1,8 @@
 #include "cliplugin.h"
+#include "kprocess.h"
 #include "../interface/archiveentry.h"
 #include <QDateTime>
 #include <QDir>
-
 
 //K_PLUGIN_CLASS_WITH_JSON(CliPlugin, "kerfuffle_clirar.json")
 CliPluginFactory::CliPluginFactory()
@@ -34,6 +34,11 @@ CliRarPlugin::CliRarPlugin(QObject *parent, const QVariantList &args)
 
 CliRarPlugin::~CliRarPlugin()
 {
+    //确保kprocess先释放，避免阻塞时调用虚函数错误
+    if (m_process != nullptr) {
+        m_process->kill();
+        m_process->waitForFinished(1);
+    }
 }
 
 void CliRarPlugin::resetParsing()

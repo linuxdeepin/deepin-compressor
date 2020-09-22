@@ -35,7 +35,7 @@ set(LIBS_INCLUDE_DIRS
 
 
 include_directories(${PROJECT_SOURCE_DIR}/../ChardetDetector)
-
+include_directories(${PROJECT_SOURCE_DIR}/../interface)
 
 file(GLOB_RECURSE json_files  *.json)
 

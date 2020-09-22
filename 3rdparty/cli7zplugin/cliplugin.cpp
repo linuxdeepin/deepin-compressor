@@ -29,6 +29,11 @@ Cli7zPlugin::Cli7zPlugin(QObject *parent, const QVariantList &args)
 
 Cli7zPlugin::~Cli7zPlugin()
 {
+    //确保kprocess先释放，避免阻塞时调用虚函数错误
+    if (m_process != nullptr) {
+        m_process->kill();
+        m_process->waitForFinished(1);
+    }
 }
 
 void Cli7zPlugin::resetParsing()
