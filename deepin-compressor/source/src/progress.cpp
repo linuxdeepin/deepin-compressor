@@ -40,12 +40,18 @@
 Progress::Progress(DWidget *parent)
     : DWidget(parent)
 {
+    // 初始化压缩包文件
     m_filename = "新建归档文件.rar";
+    // 初始化展示进度的文件
     m_progressfile = "设计图111.jpg";
+    // 初始化界面
     InitUI();
+    // 初始化信号链接
     InitConnection();
+    // 设置定时任务
     m_timerTime = new QTimer(this);
     m_timerTime->setInterval(1000);
+    // 链接定时任务
     connect(m_timerTime, &QTimer::timeout, this, &Progress::slotChangeTimeLeft);
     m_pInfo = new ProgressAssistant(this);
 //    m_timerProgress = new QTimer(this);
@@ -204,14 +210,17 @@ void Progress::hidePauseContinueButton()
         m_cancelbutton->setMinimumSize(340, 36);
     }
 }
-
+/**
+ * @brief Progress::slotChangeTimeLeft 定时任务定时暂时进度信息
+ */
 void Progress::slotChangeTimeLeft()
 {
+    // 如果剩余时间小于2秒自动关闭定时任务
     if (lastTimeLeft < 2) {
         m_timerTime->stop();
         return;
     }
-
+    // 剩余时间-1
     lastTimeLeft--;
     displaySpeedAndTime(m_speed, lastTimeLeft);
 }
@@ -228,7 +237,11 @@ void Progress::setprogress(double percent)
 //        m_timerProgress->stop();
 //    }
 }
-
+/**
+ * @brief Progress::setSpeedAndTime 设置速度以及剩余时间
+ * @param speed
+ * @param timeLeft
+ */
 void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
 {
     m_speed = speed;
@@ -252,13 +265,20 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
         m_timerTime->stop();
     }
 }
-
+/**
+ * @brief Progress::displaySpeedAndTime 显示压缩或者解压速度，以及剩余时间
+ * @param spee      速度单位 （K）
+ * @param timeLeft  剩余时间 单位（s）
+ */
 void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
 {
+    // 计算剩余需要的小时。
     qint64 hour = timeLeft / 3600;
+    // 计算剩余的分钟
     qint64 minute = (timeLeft - hour * 3600) / 60;
+    // 计算剩余的秒数
     qint64 seconds = timeLeft - hour * 3600 - minute * 60;
-
+    // 格式化数据
     QString hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
     QString mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
@@ -305,7 +325,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
             m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/S");
         }
     }
-
+    // 设置剩余时间
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
@@ -328,7 +348,10 @@ DPushButton *Progress::getCancelbutton()
 {
     return m_cancelbutton;
 }
-
+/**
+ * @brief Progress::setProgressFilename 设置进度展示的文件名称
+ * @param filename
+ */
 void Progress::setProgressFilename(QString filename)
 {
     if (filename.isEmpty()) {
@@ -336,6 +359,7 @@ void Progress::setProgressFilename(QString filename)
     }
 
     QFontMetrics elideFont(m_progressfilelabel->font());
+    // 根据不同的压缩类型修改界面提示
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING || m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Compressing") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
@@ -350,12 +374,18 @@ void Progress::setProgressFilename(QString filename)
         }
     }
 }
-
+/**
+ * @brief Progress::settype 设置压缩进度类型
+ * @param type
+ */
 void Progress::settype(Progress::ENUM_PROGRESS_TYPE type)
 {
     m_ProgressType = type;
 }
-
+/**
+ * @brief Progress::getType 获取当前进度类型
+ * @return
+ */
 Progress::ENUM_PROGRESS_TYPE Progress::getType()
 {
     return m_ProgressType;
@@ -370,10 +400,14 @@ bool Progress::getOpenType()
 {
     return m_openType;
 }
-
+/**
+ * @brief Progress::showConfirmDialog 显示确认按钮
+ * @return
+ */
 int Progress::showConfirmDialog()
 {
     DDialog *dialog = new DDialog(this);
+    // 设置取消弹出框
     dialog->setAccessibleName("Cancel_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
@@ -400,21 +434,22 @@ int Progress::showConfirmDialog()
 
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         //strlabel->setText(tr("Stop compressing "));
-        strlabel2->setText(tr("Are you sure you want to stop the compression?"));
+        strlabel2->setText(tr("Are you sure you want to stop the compression?")); // 是否想要停止当天压缩
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
-        strlabel2->setText(tr("Are you sure you want to stop the update?"));
+        strlabel2->setText(tr("Are you sure you want to stop the update?")); // 是否要停止当前更新。当删除文件是
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
-        strlabel2->setText(tr("Are you sure you want to stop the conversion?"));
+        strlabel2->setText(tr("Are you sure you want to stop the conversion?")); //  是否停止
     } else {
         //strlabel->setText(tr("Stop extracting "));
         if (m_openType) {
-            strlabel2->setText(("Are you sure you want to stop open the file?"));
+            strlabel2->setText(("Are you sure you want to stop open the file?")); // 是否停止当前文件打开
         } else {
-            strlabel2->setText(tr("Are you sure you want to stop the extraction?"));
+            strlabel2->setText(tr("Are you sure you want to stop the extraction?")); // 是否停止解压
         }
     }
-
+    // 添加取消按钮
     dialog->addButton(tr("Cancel"));
+    // 添加确认按钮
     dialog->addButton(tr("Confirm"), true, DDialog::ButtonRecommend);
     QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(dialog);
     effect->setOffset(0, 4);
@@ -432,18 +467,23 @@ int Progress::showConfirmDialog()
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
+    // 设置窗口初始化位置
     dialog->move(mapToGlobal(this->geometry().topLeft()).x() + this->width() / 2  - dialog->width() / 2,  mapToGlobal(this->geometry().topLeft()).y() - TITLE_FIXED_HEIGHT + this->height() / 2  - dialog->height() / 2); //dialog move to center
     int res = dialog->exec();
     delete dialog;
 
     return res;
 }
-
+/**
+ * @brief Progress::resetProgress 重新设置
+ */
 void Progress::resetProgress()
 {
     m_progressfilelabel->setText(tr("Calculating..."));
 }
-
+/**
+ * @brief Progress::cancelbuttonPressedSlot 取消按钮点击事件
+ */
 void Progress::cancelbuttonPressedSlot()
 {
     if (DDialog::Accepted == showConfirmDialog()) {
@@ -451,6 +491,7 @@ void Progress::cancelbuttonPressedSlot()
 //        m_timerProgress->stop();
         m_speed = 0;
         lastTimeLeft = 0;
+        // 发送暂停信号，并且将进度的类型传递给页面。界面根据不同的进度类型进行处理。
         emit sigCancelPressed(m_ProgressType);
     }
 }

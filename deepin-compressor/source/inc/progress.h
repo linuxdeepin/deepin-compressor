@@ -100,18 +100,25 @@ signals:
 //    void sigTypeChange(Progress::ENUM_PROGRESS_TYPE type);
 
 public slots:
+    /**
+     * @brief cancelbuttonPressedSlot 取消按钮操作
+     */
     void cancelbuttonPressedSlot();
+    /**
+     * @brief pauseContinueButtonPressedSlot 暂停按钮操作
+     * @param checked
+     */
     void pauseContinueButtonPressedSlot(bool checked);
     void slotChangeTimeLeft();
 
 private:
-    DPushButton *m_cancelbutton;
+    DPushButton *m_cancelbutton; // 取消按钮
     DSuggestButton *m_PauseContinueButton; //暂停继续按钮
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
-    DLabel *m_filenamelabel;
-    DProgressBar *m_progressbar;
-    DLabel *m_progressfilelabel;
+    DLabel *m_filenamelabel; // 展示正在操作的文件（压缩包名称）
+    DProgressBar *m_progressbar; // 进度空间
+    DLabel *m_progressfilelabel; // 暂时进度中处理的文件
     QString m_progressfile;
     DLabel *m_shadow;
 
