@@ -206,7 +206,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 
     if (m_pTableView->selectionModel()->selectedRows().count() != 0) {
-        if (m_pTableView->currentIndex().isValid() && m_pTableView->currentIndex().row() == index.row() && m_pTableView->hasFocus()) {
+        if (m_pTableView->currentIndex().isValid() && m_pTableView->currentIndex().row() == index.row() && m_pTableView->hasFocus() && (m_pTableView->m_reson == Qt::BacktabFocusReason || m_pTableView->m_reson == Qt::TabFocusReason)) {
             drawBackground(painter, option, index);
         }
     }
@@ -2062,7 +2062,7 @@ Archive::Entry *MyTableView::getParentArchiveEntry()
 void MyTableView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
-
+    qDebug() << m_reson;
     if (m_reson == Qt::BacktabFocusReason || m_reson == Qt::TabFocusReason) { //修复不能多选删除
         if (model()->rowCount() > 0) {
             if (currentIndex().isValid()) {

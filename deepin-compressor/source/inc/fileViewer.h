@@ -126,6 +126,8 @@ public:
     MyTableView(QWidget *parent = nullptr);
     void setPreviousButtonVisible(bool visible);
 
+    Qt::FocusReason m_reson;
+
 protected:
     bool event(QEvent *event) override;
 
@@ -155,7 +157,6 @@ private:
     QPoint dragpos;
     DFileDragServer *s = nullptr;
     QString m_path;
-    Qt::FocusReason m_reson;
     /**
      * @brief m_isPressed 触摸按下标志
      * true: 按下; false: 松开
