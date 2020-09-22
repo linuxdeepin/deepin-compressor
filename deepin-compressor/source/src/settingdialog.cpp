@@ -122,29 +122,36 @@ SettingDialog::SettingDialog(QWidget *parent):
         m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
     }
 }
+/**
+ * @brief SettingDialog::initUI 初始化界面
+ */
 
 void SettingDialog::initUI()
 {
+    // 监控自定义按钮
     this->widgetFactory()->registerWidget("custom-button", [this](QObject * obj) -> QWidget* {
         if (/*DSettingsOption *option = */qobject_cast<DSettingsOption *>(obj))
         {
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
+            // 初始化全选按钮
             CustomPushButton *button1 = new CustomPushButton(tr("Select All"));
+            // 初始化全部取消按钮
             CustomPushButton *button2 = new CustomPushButton(tr("Clear All"));
+            // 初始化推荐选择
             CustomSuggestButton *button3 = new CustomSuggestButton(tr("Recommended"));
             button1->setMinimumSize(153, 36);
             button2->setMinimumSize(153, 36);
             button3->setMinimumSize(153, 36);
-            layout->addStretch();
+            layout->addStretch(); // 设置自动按钮可以自动伸缩
             layout->addWidget(button1);
-            layout->addStretch();
+            layout->addStretch(); // 设置自动按钮可以自动伸缩
             layout->addWidget(button2);
-            layout->addStretch();
+            layout->addStretch(); // 设置自动按钮可以自动伸缩
             layout->addWidget(button3);
             layout->addStretch();
             buttonwidget->setLayout(layout);
-
+            // 处理每个按钮的信号
             connect(button1, &QPushButton::clicked, this, &SettingDialog::selectpressed);
             connect(button2, &QPushButton::clicked, this, &SettingDialog::cancelpressed);
             connect(button3, &QPushButton::clicked, this, &SettingDialog::recommandedPressed);
@@ -153,8 +160,9 @@ void SettingDialog::initUI()
 
         return nullptr;
     });
-
-    this->widgetFactory()->registerWidget("pathbox", [this](QObject * obj) -> QWidget* {
+    // 注册自定义pathbox信息，该信息在json配置文件中配置
+    this->widgetFactory()->registerWidget("pathbox", [this](QObject *obj) -> QWidget * {
+        // 默认解压地址的下拉框设置
         m_comboboxoption = qobject_cast<DSettingsOption *>(obj);
         if (m_comboboxoption)
         {
@@ -170,18 +178,22 @@ void SettingDialog::initUI()
             combobox->setMinimumWidth(300);
             combobox->setEditable(false);
             QStringList list;
+            // 当前目录,桌面,其他目录
             list << tr("Current directory") << tr("Desktop") << tr("Other directory");
             combobox->addItems(list);
             qDebug() << m_comboboxoption->value();
+            // 初始化每个下拉框对应的信息
+
+            // 默认桌面目录设置
             if (QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_comboboxoption->value()) {
                 combobox->setCurrentIndex(1);
                 m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
                 m_index_last = 1;
-            } else if ("" == m_comboboxoption->value()) {
+            } else if ("" == m_comboboxoption->value()) { // 默认当前目录US何止
                 combobox->setCurrentIndex(0);
                 m_curpath = "";
                 m_index_last = 0;
-            } else {
+            } else { // 其他目录设置，
                 combobox->setEditable(true);
                 combobox->setCurrentIndex(2);
                 m_curpath = m_comboboxoption->value().toString();
@@ -263,7 +275,7 @@ void SettingDialog::initUI()
 
         return nullptr;
     });
-
+    // 注册deletebox信息，json配置文件中需要对应进行配置
     this->widgetFactory()->registerWidget("deletebox", [this](QObject * obj) -> QWidget* {
         m_deleteArchiveOption = qobject_cast<DSettingsOption *>(obj);
         if (m_deleteArchiveOption)
@@ -322,7 +334,7 @@ void SettingDialog::initUI()
 
         return nullptr;
     });
-
+    // json配置文件存储地址设置
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
@@ -374,15 +386,18 @@ void SettingDialog::done(int status)
     m_valuelist = m_valuelisttemp;
 //    writeToConfbf();
 }
-
+/**
+ * @brief SettingDialog::readFromConfbf 读取配置文件。应用启动时需要自动读取该配置文件。
+ */
 void SettingDialog::readFromConfbf()
 {
+    // 配置文件目录
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir dir;
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
-
+    // 设置配置文件地址
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
     QFile file(confPath);
 
@@ -396,9 +411,9 @@ void SettingDialog::readFromConfbf()
 
         file.close();
     }
-
+    // 获取文件状态
     bool readStatus = file.open(QIODevice::ReadOnly | QIODevice::Text);
-
+    // 如果文件可读，那么处理文件
     if (readStatus == true) {
         QByteArray t = file.readAll();
         if (t.length() > 0) {
@@ -418,20 +433,24 @@ void SettingDialog::readFromConfbf()
 
     file.close();
 }
-
+/**
+ * @brief SettingDialog::writeToConfbf  将获取的配置信息，写入磁盘
+ */
 void SettingDialog::writeToConfbf()
 {
+    //   获取配置文件目录
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir dir;
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
     }
-
+    // 设置配置文件的绝对路径
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";
-
+    // 打开配置文件
     QFile file(confPath);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QMap<QString, QVariant>::iterator it = m_data.begin();
+    // 写配置
     while (it != m_data.end()) {
         it.key();
         QString content = it.key() + ":" + it.value().toString() + "\n";
@@ -441,33 +460,54 @@ void SettingDialog::writeToConfbf()
 
     file.close();
 }
-
+/**
+ * @brief SettingDialog::getCurExtractPath 获取当前解压目录
+ * @return
+ */
 QString SettingDialog::getCurExtractPath()
 {
     qDebug() << m_curpath;
     return m_curpath;
 }
-
+/**
+ * @brief SettingDialog::isAutoCreatDir 是否创建新的目录进行解压,
+ * @return
+ */
 bool SettingDialog::isAutoCreatDir()
 {
+    // 读取配置文件信息
     return m_settings->value("base.decompress.create_folder").toBool();
 }
-
+/**
+ * @brief SettingDialog::isAutoOpen 是否自动打开,到对应的文件目录
+ * @return
+ */
 bool SettingDialog::isAutoOpen()
 {
+    // 读取配置文件信息
     return m_settings->value("base.decompress.open_folder").toBool();
 }
-
+/**
+ * @brief SettingDialog::isAutoDeleteFile   压缩成功是否自动删除文件
+ * @return
+ */
 bool SettingDialog::isAutoDeleteFile()
 {
     return m_settings->value("base.file_management.delete_file").toBool();
 }
-
+/**
+ * @brief SettingDialog::isAutoDeleteArchive    解压成功是否自动删除压缩包
+ * @return
+ */
 QString SettingDialog::isAutoDeleteArchive()
 {
     return m_deleteArchiveOption->value().toString();
 }
-
+/**
+ * @brief SettingDialog::settingsChanged    设置改变信号,当用户修改配置后自动，识别信息，并且将其保存至配置文件目录
+ * @param key       关键词
+ * @param value     关键词对应需要修改的值
+ */
 void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
 {
 //    qDebug() << key << value;
@@ -482,10 +522,12 @@ void SettingDialog::settingsChanged(const QString &key, const QVariant &value)
     } else if ((key.contains("delete_compressed_file")) && value.toString() == "") {
         emit sigResetDeleteArchive();
     }
-
+    // 写配置文件
     writeToConfbf();
 }
-
+/**
+ * @brief SettingDialog::selectpressed 全选操作
+ */
 void SettingDialog::selectpressed()
 {
     foreach (QString key, m_associtionlist) {
@@ -493,7 +535,9 @@ void SettingDialog::selectpressed()
         m_data[key] = QVariant(true);
     }
 }
-
+/**
+ * @brief SettingDialog::cancelpressed  全部取消操作
+ */
 void SettingDialog::cancelpressed()
 {
     foreach (QString key, m_associtionlist) {
@@ -501,7 +545,9 @@ void SettingDialog::cancelpressed()
         m_data[key] = QVariant(false);
     }
 }
-
+/**
+ * @brief SettingDialog::recommandedPressed 设置推荐选项操作
+ */
 void SettingDialog::recommandedPressed()
 {
     QMap<QString, QVariant>::iterator it = m_data.begin();

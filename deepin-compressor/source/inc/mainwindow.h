@@ -353,7 +353,7 @@ private:
     int promptDialog();
 
     /**
-     * @brief refreshPage
+     * @brief refreshPage 刷新主界面内容，比如压缩页面，设置页面，压缩成功页面，压缩失败页面。
      */
     void refreshPage();
 
