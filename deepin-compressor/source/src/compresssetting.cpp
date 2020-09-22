@@ -214,6 +214,7 @@ void CompressSetting::InitUI()
     m_fileLayout->addWidget(m_splitcompress);
     m_fileLayout->addWidget(m_splitnumedit);
     m_fileLayout->addStretch();
+    m_fileLayout->setContentsMargins(0, 0, 50, 0);
 
     DWidget *m_rightwidget = new DWidget(this);
     m_rightwidget->setLayout(m_fileLayout);
@@ -232,7 +233,7 @@ void CompressSetting::InitUI()
     infoLayout->addStretch();
     infoLayout->addWidget(m_scroll, 10);
     infoLayout->addStretch();
-    infoLayout->setContentsMargins(0, 0, 50, 0);
+    infoLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addLayout(infoLayout, 10);
@@ -248,7 +249,7 @@ void CompressSetting::InitUI()
 
     mainLayout->addLayout(buttonHBoxLayout);
 
-    mainLayout->setContentsMargins(12, 6, 20, 20);
+    mainLayout->setContentsMargins(12, 6, 0, 20);
 
     m_splitnumedit->setEnabled(false);
     m_password->setEnabled(true);
