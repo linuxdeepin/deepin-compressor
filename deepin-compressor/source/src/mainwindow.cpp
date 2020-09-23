@@ -2619,6 +2619,12 @@ void MainWindow::slotExtractionDone(KJob *job)
         }
 
         m_ePageID = PAGE_UNZIP_FAIL;
+
+        //修复bug:右键解压到当前文件夹时，如果失败，不显示失败界面
+        if (!isVisible()) {
+            show();
+        }
+
 //        if (KJob::NopasswordError == errorCode) {
 //            m_ePageID = PAGE_ENCRYPTION;
 //        }
