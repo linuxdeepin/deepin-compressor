@@ -38,19 +38,29 @@ Compressor_Fail::Compressor_Fail(QWidget *parent)
     InitConnection();
 }
 
+Compressor_Fail::~Compressor_Fail()
+{
+    SAFE_DELETE_ELE(m_stringdetaillabel);
+    SAFE_DELETE_ELE(m_pixmaplabel);
+    SAFE_DELETE_ELE(m_stringinfolabel);
+    SAFE_DELETE_ELE(m_retrybutton);
+    SAFE_DELETE_ELE(commandLinkBackButton);
+}
+
 void Compressor_Fail::InitUI()
 {
+    // 设置失败显示的图标
     m_compressicon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(128, 128));
     m_pixmaplabel = new DLabel(this);
     m_pixmaplabel->setPixmap(m_compressicon);
     m_stringinfolabel = new DLabel(this);
-    m_stringinfolabel->setText(m_stringinfo);
-//    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-//    font.setWeight(QFont::DemiBold);
-//    m_stringinfolabel->setFont(font);
+    m_stringinfolabel->setText(m_stringinfo); // 设置显示信息
+    //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
+    //    font.setWeight(QFont::DemiBold);
+    //    m_stringinfolabel->setFont(font);
     DFontSizeManager::instance()->bind(m_stringinfolabel, DFontSizeManager::T5, QFont::DemiBold);
     m_stringinfolabel->setForegroundRole(DPalette::ToolTipText);
-
+    // 展示详细信息的控件
     m_stringdetaillabel = new DLabel(this);
     m_stringdetaillabel->setForegroundRole(DPalette::TextTips);
 //    m_stringdetaillabel->setFont(DFontSizeManager::instance()->get(DFontSizeManager::T8));
@@ -74,7 +84,7 @@ void Compressor_Fail::InitUI()
     mainlayout->addWidget(m_stringinfolabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_stringdetaillabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
-
+    // 按钮layout
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);
     buttonHBoxLayout->addWidget(m_retrybutton, 2);
@@ -87,9 +97,12 @@ void Compressor_Fail::InitUI()
 
     setBackgroundRole(DPalette::Base);
 }
-
+/**
+ * @brief Compressor_Fail::InitConnection 初始化信号
+ */
 void Compressor_Fail::InitConnection()
 {
+    // 绑定失败重试信号
     connect(m_retrybutton, &DPushButton::clicked, this, &Compressor_Fail::sigFailRetry);
     connect(commandLinkBackButton, &DCommandLinkButton::clicked, this, &Compressor_Fail::commandLinkBackButtonClicked);
 //    auto changeTheme = [this]() {
@@ -104,24 +117,35 @@ void Compressor_Fail::InitConnection()
 
 //    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, changeTheme);
 }
-
+/**
+ * @brief Compressor_Fail::setFailStr 设置错误展示的标题
+ * @param str
+ */
 void Compressor_Fail::setFailStr(const QString &str)
 {
     m_stringinfo = str;
     m_stringinfolabel->setText(m_stringinfo);
 }
-
+/**
+ * @brief Compressor_Fail::setFailStrDetail 设置带显示的
+ * @param str
+ */
 void Compressor_Fail::setFailStrDetail(const QString &str)
 {
     m_stringdetail = str;
     m_stringdetaillabel->setText(m_stringdetail);
 }
-
-CustomPushButton *Compressor_Fail::getRetrybutton()
-{
-    return m_retrybutton;
-}
-
+/**
+ * @brief Compressor_Fail::getRetrybutton 获取重试的失败按钮
+ * @return
+ */
+//CustomPushButton *Compressor_Fail::getRetrybutton()
+//{
+//    return m_retrybutton;
+//}
+/**
+ * @brief Compressor_Fail::commandLinkBackButtonClicked
+ */
 void Compressor_Fail::commandLinkBackButtonClicked()
 {
     emit sigBackButtonClickedOnFail();

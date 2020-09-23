@@ -32,7 +32,9 @@ DWIDGET_USE_NAMESPACE
 class fileViewer;
 class QSettings;
 class CustomPushButton;
-
+/**
+ * @brief The CompressPage class 压缩界面
+ */
 class CompressPage : public DWidget
 {
     Q_OBJECT
@@ -51,7 +53,7 @@ signals:
     void sigNextPress();
 
 public slots:
-    void onNextPress();
+    void onNextPress(); // 点击下一步开始压缩
     void onAddfileSlot();
     void onSelectedFilesSlot(const QStringList &files);
     void onRefreshFilelist(const QStringList &filelist);

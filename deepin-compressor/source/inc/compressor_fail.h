@@ -31,28 +31,44 @@
 DWIDGET_USE_NAMESPACE
 class CustomPushButton;
 class CustomCommandLinkButton;
-
+/**
+ * @brief The Compressor_Fail class 压缩失败展示界面
+ */
 class Compressor_Fail: public DWidget
 {
     Q_OBJECT
 public:
     Compressor_Fail(QWidget *parent = nullptr);
+    ~Compressor_Fail();
+    /**
+     * @brief InitUI 初始化界面信息
+     */
     void InitUI();
+    /**
+     * @brief InitConnection 初始化链接信息
+     */
     void InitConnection();
-
+    /**
+     * @brief setFailStr 设置显示失败之后的提示问题标题
+     * @param str   标题信息
+     */
     void setFailStr(const QString &str);
+    /**
+     * @brief setFailStrDetail 设置显示失败之后的详细信息
+     * @param str     详细信息内容
+     */
     void setFailStrDetail(const QString &str);
-    CustomPushButton *getRetrybutton();
+    //  CustomPushButton *getRetrybutton();
 
 private:
-    CustomPushButton *m_retrybutton;
-    QPixmap m_compressicon;
+    CustomPushButton *m_retrybutton; // 重试按钮
+    QPixmap m_compressicon; // 图标
     DLabel *m_pixmaplabel;
-    DLabel *m_stringinfolabel;
-    QString m_stringinfo;
+    DLabel *m_stringinfolabel; // 展示错误标题控件
+    QString m_stringinfo; // 展示错误标题的信息
 
-    DLabel *m_stringdetaillabel;
-    QString m_stringdetail;
+    DLabel *m_stringdetaillabel; // 展示错误详细信息的控件
+    QString m_stringdetail; // 展示错误详细信息的内容
 
     CustomCommandLinkButton *commandLinkBackButton = nullptr;
 

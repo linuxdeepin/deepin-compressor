@@ -44,6 +44,7 @@ DWIDGET_USE_NAMESPACE
 
 CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 {
+    // 设置展示列表
     m_fileviewer = new fileViewer(this, PAGE_COMPRESS);
     m_nextbutton = new CustomPushButton(tr("Next"), this);
     m_nextbutton->setAccessibleName("Next_btn");
@@ -86,9 +87,11 @@ CompressPage::CompressPage(QWidget *parent) : DWidget(parent)
 
 void CompressPage::onNextPress()
 {
+    // 如果文件列表为空提示用户添加文件再进行压缩。
     if (m_filelist.isEmpty()) {
+        // 初始化对话框
         DDialog *dialog = new DDialog(this);
-
+        // 设置图标
         QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
         dialog->setIcon(pixmap);
         dialog->setMessage(tr("Please add files"));
@@ -109,6 +112,7 @@ void CompressPage::onNextPress()
  */
 void CompressPage::showDialog()
 {
+    // 初始化对话框
     DDialog *dialog = new DDialog(this);
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
@@ -125,6 +129,7 @@ void CompressPage::showDialog()
 
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
     pContent->setMinimumSize(293, 20/*this->width()*/);
+    // 将显示内容移至对话框中心
     pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */48);
 
     dialog->exec();
