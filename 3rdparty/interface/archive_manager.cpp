@@ -47,14 +47,26 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
 
     const QMimeType mimeType = fixedMimeType.isEmpty() ? determineMimeType(fileName) : QMimeDatabase().mimeTypeForName(fixedMimeType);
 
-    const QVector<Plugin *> offers = pluginManager.preferredPluginsFor(mimeType);
+    QVector<Plugin *> offers = pluginManager.preferredPluginsFor(mimeType);
     if (offers.isEmpty()) {
         qDebug() << "Could not find a plugin to handle" << fileName;
         return new Archive(NoPlugin, parent);
     }
 
+    //tar.lzo格式 由P7zip插件压缩mimeFromContent为"application/x-7z-compressed"，由Libarchive插件压缩mimeFromContent为"application/x-lzop"
+    //删除P7zip插件处理 mimeFromContent为"application/x-lzop" 的情况
+    QMimeDatabase db;
+    QMimeType mimeFromContent = db.mimeTypeForFile(fileName, QMimeDatabase::MatchContent);
+    bool remove7zFlag = "application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name();
+
     Archive *archive = nullptr;
     for (Plugin *plugin : offers) {
+        //删除P7zip插件
+        if (remove7zFlag && plugin->metaData().name().contains("P7zip")) {
+            offers.removeOne(plugin);
+            continue;
+        }
+
         archive = create(fileName, plugin, parent);
         // Use the first valid plugin, according to the priority sorting.
         if (archive->isValid()) {
@@ -169,8 +181,20 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, cons
         return nullptr;
     }
 
+    //tar.lzo格式 由P7zip插件压缩mimeFromContent为"application/x-7z-compressed"，由Libarchive插件压缩mimeFromContent为"application/x-lzop"
+    //删除P7zip插件处理 mimeFromContent为"application/x-lzop" 的情况
+    QMimeDatabase db;
+    QMimeType mimeFromContent = db.mimeTypeForFile(fileName, QMimeDatabase::MatchContent);
+    bool remove7zFlag = "application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name();
+
     ReadOnlyArchiveInterface *pIface = nullptr;
     for (Plugin *plugin : offers) {
+        //删除P7zip插件
+        if (remove7zFlag && plugin->metaData().name().contains("P7zip")) {
+            offers.removeOne(plugin);
+            continue;
+        }
+
         pIface = createInterface(fileName, plugin);
         // Use the first valid plugin, according to the priority sorting.
         if (pIface) {
