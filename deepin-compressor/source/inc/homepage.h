@@ -32,24 +32,36 @@
 DWIDGET_USE_NAMESPACE
 
 class CustomCommandLinkButton;
-
+/**
+ * @brief The HomePage class 主页
+ */
 class HomePage : public DWidget
 {
     Q_OBJECT
 
 public:
     HomePage(QWidget *parent = nullptr);
-
+    ~HomePage();
     void setIconPixmap(bool isLoaded);
     CustomCommandLinkButton *getChooseBtn();
 
 signals:
+    /**
+     * @brief fileSelected 文件选择信号
+     * @param files
+     */
     void fileSelected(const QStringList files) const;
 
 public slots:
+    /**
+     * @brief themeChanged 主题改变
+     */
     void themeChanged();
 
 private:
+    /**
+     * @brief onChooseBtnClicked 响应选择文件按钮的槽函数
+     */
     void onChooseBtnClicked();
 
 private:

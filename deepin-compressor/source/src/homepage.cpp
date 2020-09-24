@@ -85,6 +85,19 @@ HomePage::HomePage(QWidget *parent)
     setBackgroundRole(DPalette::Background);
 }
 
+HomePage::~HomePage()
+{
+    SAFE_DELETE_ELE(m_layout);
+    SAFE_DELETE_ELE(m_iconLabel);
+    SAFE_DELETE_ELE(m_tipsLabel);
+    SAFE_DELETE_ELE(m_splitLine);
+    SAFE_DELETE_ELE(m_chooseBtn);
+    SAFE_DELETE_ELE(m_settings);
+}
+/**
+ * @brief HomePage::setIconPixmap 设置图标
+ * @param isLoaded  true设置加载图标。false:设置非加载图标
+ */
 void HomePage::setIconPixmap(bool isLoaded)
 {
     if (isLoaded) {
@@ -98,20 +111,24 @@ CustomCommandLinkButton *HomePage::getChooseBtn()
 {
     return m_chooseBtn;
 }
-
+/**
+ * @brief HomePage::onChooseBtnClicked 点击按钮选择需要压缩或者解压的文件
+ */
 void HomePage::onChooseBtnClicked()
 {
+    // 初始化文件选择对话框
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setAllowMixedSelection(true);
-//    dialog.setNameFilter(Utils::suffixList());
-
+    //    dialog.setNameFilter(Utils::suffixList());
+    // 从设置中获取获取历史文件目录
     QString historyDir = m_settings->value("dir").toString();
+    // 设置如果历史目录为空自动设置主目录作为历史目录
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
-
+    // 设置目录位置
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();
@@ -123,10 +140,12 @@ void HomePage::onChooseBtnClicked()
     if (mode != QDialog::Accepted) {
         return;
     }
-
+    // 发送目录选择信号。
     emit fileSelected(dialog.selectedFiles());
 }
-
+/**
+ * @brief HomePage::themeChanged 主题改变，主题改变以后线条也改变
+ */
 void HomePage::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
