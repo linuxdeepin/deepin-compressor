@@ -42,6 +42,14 @@ Compressor_Success::Compressor_Success(QWidget *parent)
     InitConnection();
 }
 
+Compressor_Success::~Compressor_Success()
+{
+    SAFE_DELETE_ELE(m_pixmaplabel);
+    SAFE_DELETE_ELE(m_stringinfolabel);
+    SAFE_DELETE_ELE(commandLinkBackButton);
+    SAFE_DELETE_ELE(m_showfilebutton);
+}
+
 void Compressor_Success::InitUI()
 {
     m_compressicon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_128px.svg", QSize(128, 128));
@@ -195,10 +203,10 @@ void Compressor_Success::setConvertType(QString type)
     m_convertType = type;
 }
 
-CustomPushButton *Compressor_Success::getShowfilebutton()
-{
-    return m_showfilebutton;
-}
+//CustomPushButton *Compressor_Success::getShowfilebutton()
+//{
+//    return m_showfilebutton;
+//}
 
 //bool Compressor_Success::eventFilter(QObject *watched, QEvent *event)
 //{

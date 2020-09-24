@@ -37,24 +37,56 @@ class Compressor_Success: public DWidget
     Q_OBJECT
 public:
     Compressor_Success(QWidget *parent = nullptr);
+    ~Compressor_Success();
+    /**
+     * @brief InitUI 初始化界面信息
+     */
     void InitUI();
+    /**
+     * @brief InitConnection 初始化信息绑定
+     */
     void InitConnection();
+    /**
+     * @brief setstringinfo 设置成功信息
+     * @param str
+     */
     void setstringinfo(QString str);
+    /**
+     * @brief setCompressPath
+     * @param path
+     */
     void setCompressPath(QString path);
     QString getPath();
+    /**
+     * @brief setCompressFullPath
+     * @param path
+     */
     void setCompressFullPath(const QString &path);
     void setCompressNewFullPath(const QString &path);
     void setSpilitArchive(bool isSpilit);
     bool getSpilitArchive();
+    /**
+     * @brief clear 清空数据
+     */
     void clear();
+
     void setConvertType(QString type);
-    CustomPushButton *getShowfilebutton();
+    //CustomPushButton *getShowfilebutton();
 
 private:
     CustomPushButton *m_showfilebutton;
+    /**
+     * @brief m_compressicon    图标
+     */
     QPixmap m_compressicon;
     DLabel *m_pixmaplabel;
+    /**
+     * @brief m_stringinfolabel 信息展示控件
+     */
     DLabel *m_stringinfolabel;
+    /**
+     * @brief m_stringinfo 外部获取需要展示的字符串
+     */
     QString m_stringinfo;
     QString m_path;
     QString m_fullpath;
@@ -68,6 +100,10 @@ signals:
     void sigOpenConvertArchive(QString path);
 
 public slots:
+    /**
+     * @brief showfiledirSlot 显示文件目录，点击会弹出包或者目录的当前目录位置。
+     * @param iIsUrl
+     */
     void showfiledirSlot(bool iIsUrl = true);
     void commandLinkBackButtonClicked();
 
