@@ -12,7 +12,9 @@
 #include <QFileInfo>
 #include <QMimeData>
 #include <QUrl>
+#include <jobs.h>
 #include "archive_manager.h"
+#include <QIcon>
 int returnAt = 0;
 
 
@@ -1036,6 +1038,7 @@ TEST(ArchivehandeMol_parentFor_UT, ArchiveModel_parentFor_UT004)
     stub->set(ADDR(Archive::Entry, isDir), getIsDir);
     model->parentFor(entry, ArchiveModel::InsertBehaviour::NotifyViews);
     // delete entry;
+    delete stub;
     delete model;
 }
 
@@ -1048,7 +1051,7 @@ TEST(ArchivehandeMol_indexForEntry_UT, ArchiveModel_indexForEntry_UT001)
     model->indexForEntry(entry);
 
     delete entry;
-    delete parent;
+    //delete parent;
     delete model;
 }
 
@@ -1070,19 +1073,343 @@ TEST(ArchivehandeMol_slotEntryRemoved_UT, ArchiveModel_slotEntryRemoved_UT001)
     model->slotEntryRemoved("");
     delete model;
 }
-
+Archive::Entry *getEntry_slotEntryRemoved()
+{
+    Archive::Entry *entry = new Archive::Entry();
+    return entry;
+}
 TEST(ArchivehandeMol_slotEntryRemoved_UT, ArchiveModel_slotEntryRemoved_UT002)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *rootEntry = new Archive::Entry;
+    // Stub *stub = new Stub;
+    // stub->set(ADDR(Archive::Entry, findByPath), getEntry_slotEntryRemoved);
     rootEntry->setFullPath("/");
+    rootEntry->setIsDirectory(true);
+    Archive::Entry *SubEntry = new Archive::Entry(rootEntry);
+    SubEntry->setFullPath("/home");
+
+    Archive::Entry *Sub2Entry = new Archive::Entry(SubEntry);
+    Sub2Entry->setFullPath("/home/parent");
+    rootEntry->appendEntry(SubEntry);
+
     model->m_rootEntry.reset(rootEntry);
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    model->setPlugin(interface);
+
     model->slotEntryRemoved("/home");
+    //delete rootEntry;
+    delete interface;
     delete model;
 }
 
 TEST(ArchivehandeMol_slotEntryRemoved_UT, ArchiveModel_slotEntryRemoved_UT003)
 {
+}
+
+TEST(ArchivehandeMol_slotNewEntry_UT, ArchiveModel_slotNewEntry_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    model->slotNewEntry(rootEntry);
+    delete rootEntry;
+    delete model;
+}
+
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    model->slotAddEntry(rootEntry);
+    delete rootEntry;
+    delete model;
+}
+
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT002)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("/home");
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    delete rootEntry;
+    delete interface;
+    delete model;
+}
+
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT003)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./");
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    delete rootEntry;
+    delete interface;
+    delete model;
+}
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT004)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./home");
+    subEntry->setIsDirectory(true);
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    delete rootEntry;
+    delete interface;
+    delete model;
+}
+// 测试如果总数据中存在了该节点，需要跳过
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT005)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./home");
+    subEntry->setIsDirectory(true);
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    model->slotAddEntry(subEntry);
+    delete subEntry;
+    delete rootEntry;
+    delete interface;
+
+    delete model;
+}
+static int ifind_slotAddEntry = 0;
+Archive::Entry *find_slotAddEntry()
+{
+    if (ifind_slotAddEntry == 0) {
+        ifind_slotAddEntry++;
+        return nullptr;
+    }
+    Archive::Entry *entry = new Archive::Entry();
+
+    return entry;
+}
+// 创建一个entry,如果从父类中找到了这个entry进行宝贝
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT006)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    rootEntry->setIsDirectory(true);
+    rootEntry->appendEntry(subEntry);
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./home");
+    model->setPlugin(interface);
+    Stub *stub = new Stub;
+    stub->set(ADDR(Archive::Entry, find), find_slotAddEntry);
+    model->slotAddEntry(subEntry);
+    delete subEntry;
+    delete rootEntry;
+    delete interface;
+    delete stub;
+    delete model;
+}
+
+// 创建一个entry,如果从父类中找到了这个entry进行
+TEST(ArchivehandeMol_slotListEntry_UT, ArchiveModel_slotListEntry_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+
+    model->slotListEntry(rootEntry);
+    delete rootEntry;
+    delete model;
+}
+
+TEST(ArchivehandeMol_newEntry_UT, ArchiveModel_newEntry_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+
+    model->newEntry(rootEntry, ArchiveModel::InsertBehaviour::DoNotNotifyViews);
+    delete rootEntry;
+    delete model;
+}
+
+TEST(ArchivehandeMol_newEntry_UT, ArchiveModel_newEntry_UT002)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    rootEntry->setFullPath("/home");
+    model->newEntry(rootEntry, ArchiveModel::InsertBehaviour::DoNotNotifyViews);
+    delete rootEntry;
+    delete model;
+}
+// 父类中没有相同的数据，插入新数据
+TEST(ArchivehandeMol_newEntry_UT, ArchiveModel_newEntry_UT003)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    rootEntry->setFullPath("/home");
+    subEntry->setFullPath("./tmp");
+    model->newEntry(subEntry, ArchiveModel::InsertBehaviour::NotifyViews);
+    delete rootEntry;
+    delete model;
+}
+// TODO
+TEST(ArchivehandeMol_slotLoadingFinished_UT, ArchiveModel_slotLoadingFinished_UT001)
+{
+    //    ArchiveModel *model = new ArchiveModel(nullptr);
+    //    Archive::Entry *rootEntry = new Archive::Entry;
+    //    rootEntry->setFullPath("/home");
+    //    QVector<Archive::Entry *> entries;
+    //    entries.append(rootEntry);
+    //     ReadOnlyArchiveInterface *pIface = Archive::createInterface("/home", "7z", true);
+    //     ExtractionOptions options;
+    //     ExtractJob *m_pJob1 =  new ExtractJob(entries, "~", options,pIface);
+    //    KJob *m_pJob = nullptr;
+    //    m_pJob = m_pJob1;
+    //  //  model->slotLoadingFinished(m_pJob);
+    //    delete model;
+}
+
+TEST(ArchivehandeMol_insertEntry_UT, ArchiveModel_insertEntry_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    rootEntry->setIsDirectory(true);
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    subEntry->setParent(rootEntry);
+    subEntry->setIsDirectory(true);
+    Archive::Entry *sub2Entry = new Archive::Entry(subEntry);
+    sub2Entry->setParent(subEntry);
+    rootEntry->appendEntry(subEntry);
+    subEntry->appendEntry(sub2Entry);
+
+    model->insertEntry(sub2Entry, ArchiveModel::InsertBehaviour::NotifyViews);
+
+    delete sub2Entry;
+    delete subEntry;
+    delete rootEntry;
+    delete model;
+}
+
+TEST(ArchivehandeMol_appendEntryIcons_UT, ArchiveModel_appendEntryIcons_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    QHash<QString, QIcon> *map = new QHash<QString, QIcon>();
+    QIcon i;
+    map->insert("hh", i);
+    model->appendEntryIcons(*map);
+    map->clear();
+    delete map;
+    map = nullptr;
+    delete model;
+}
+
+TEST(ArchivehandeMol_archive_UT, ArchiveModel_archive_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    model->archive();
+    delete model;
+}
+
+TEST(ArchivehandeMol_reset_UT, ArchiveModel_reset_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    model->reset();
+    delete model;
+}
+
+TEST(ArchivehandeMol_createEmptyArchive_UT, ArchiveModel_createEmptyArchive_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    model->createEmptyArchive("", "7z", nullptr);
+    delete model;
+}
+
+TEST(ArchivehandeMol_loadArchive_UT, ArchiveModel_loadArchive_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    model->loadArchive("", "7z", nullptr);
+    delete model;
+}
+
+TEST(ArchivehandeMol_extractFile_UT, ArchiveModel_extractFile_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+    model->extractFile(file, "/home", option);
+    delete file;
+    delete model;
+}
+
+TEST(ArchivehandeMol_extractFiles_UT, ArchiveModel_extractFiles_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+
+    model->archive()->encrypt("asd", Archive::Encrypted);
+    model->extractFile(file, "/home", option);
+    delete file;
+    delete model;
+}
+
+TEST(ArchivehandeMol_preview_UT, ArchiveModel_preview_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+    model->preview(file);
+    delete file;
+    delete model;
+}
+
+TEST(ArchivehandeMol_open_UT, ArchiveModel_open_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+    model->open(file);
+    delete file;
+    delete model;
+}
+
+TEST(ArchivehandeMol_openWith_UT, ArchiveModel_openWith_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+    model->open(file);
+    delete file;
+    delete model;
+}
+
+TEST(ArchivehandeMol_addFiles_UT, ArchiveModel_addFiles_UT001)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *file = new Archive::Entry();
+    ExtractionOptions option;
+    model->createEmptyArchive("", "7z", nullptr);
+    // model->addFiles(file);
+    delete file;
+    delete model;
 }
 
 TEST(ArchivehandeMol_countEntriesAndSize_UT, ArchiveModel_countEntriesAndSize_UT001)
@@ -1094,24 +1421,6 @@ TEST(ArchivehandeMol_countEntriesAndSize_UT, ArchiveModel_countEntriesAndSize_UT
 
 TEST(ArchivehandeMol_traverseAndCountDirNode_UT, ArchiveModel_traverseAndCountDirNode_UT001)
 {
-}
-
-TEST(ArchivehandeMol_slotNewEntry_UT, ArchiveModel_slotNewEntry_UT001)
-{
-    ArchiveModel *model = new ArchiveModel(nullptr);
-    Archive::Entry *entry = new Archive::Entry;
-    model->slotNewEntry(entry);
-    delete entry;
-    delete model;
-}
-
-TEST(ArchivehandeMol_slotListEntry_UT, ArchiveModel_slotListEntry_UT001)
-{
-    ArchiveModel *model = new ArchiveModel(nullptr);
-    Archive::Entry *entry = new Archive::Entry;
-    model->slotNewEntry(entry);
-    delete entry;
-    delete model;
 }
 
 TEST(ArchivehandeMol_setPlugin_UT, ArchiveModel_setPlugin_UT001)
