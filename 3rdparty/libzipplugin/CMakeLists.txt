@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.9.5)
 set(LIB_NAME libzipplugin)
 
 #3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)

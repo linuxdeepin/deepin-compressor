@@ -17,7 +17,7 @@ configure_file(environments.h.in environments.h @ONLY)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS "-std=c++11")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
@@ -28,8 +28,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+#set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTORCC ON)
 #set(CMAKE_CXX_FLAGS "-g -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -ldtkwidget -ldtkgui -ldtkcore")#${EXE_NAME}
 #-ldtkwidget -ldtkgui -ldtkcore
@@ -66,7 +66,7 @@ include_directories(${GOBJECT_INCLUDE_DIRS})
 pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
-pkg_search_module(DtkGui REQUIRED dtkgui)	
+pkg_search_module(DtkGui REQUIRED dtkgui)
 include_directories(${DtkGui_INCLUDE_DIRS})
 
 set(LIBS_INCLUDE_DIRS 

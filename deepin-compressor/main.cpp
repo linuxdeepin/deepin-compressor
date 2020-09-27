@@ -66,6 +66,10 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    //    for (int i = 0; i < argc; i++) {
+    //        qDebug() << argv[i];
+    //    }
+
     const QStringList fileList = parser.positionalArguments();
     QStringList newfilelist;
     foreach (QString file, fileList) {

@@ -7,7 +7,7 @@ set(LIB_NAME readwritelibarchiveplugin)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)

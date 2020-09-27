@@ -99,4 +99,5 @@ compile_commands.json
 
 # out dir
 
-output
+output/
+build/
