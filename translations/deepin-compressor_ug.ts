@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ug">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -56,7 +54,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresspage.cpp" line="118"/>
         <source>Please add files to the top-level directory</source>
-        <translation type="unfinished">يۇقىرى دەرىجىلىك مۇندەرىجىگە ھۆججەت قوشۇڭ</translation>
+        <translation>يۇقىرى دەرىجىلىك مۇندەرىجىگە ھۆججەت قوشۇڭ</translation>
     </message>
 </context>
 <context>
@@ -113,6 +111,14 @@
         <translation>ھەجىمگە بۆلۈش</translation>
     </message>
     <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="335"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="830"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="966"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1099"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>دىسكىدا% 1 ئۆزگەرتىلدى ، قايتا ئەكىرىڭ.</translation>
+    </message>
+    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="353"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="359"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="364"/>
@@ -126,69 +132,46 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1112"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1117"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="378"/>
-        <source>Too many volumes, please change and retry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="478"/>
-        <source>Files that begin with &apos;@&apos; cannot be compressed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1279"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished">ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="800"/>
-        <source>Close</source>
-        <translation type="unfinished">تاقاش</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1281"/>
-        <source>Cancel</source>
-        <translation type="unfinished">ئەمەلدىن قالدۇرۇش</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1282"/>
-        <source>Replace</source>
-        <translation type="unfinished">ئالماشتۇرۇڭ</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="335"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="830"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="966"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1099"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation type="unfinished">دىسكىدا% 1 ئۆزگەرتىلدى ، قايتا ئەكىرىڭ.</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
-        <source>New Archive</source>
-        <translation type="unfinished"></translation>
+        <translation>% 1 نى پىرىسلاش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="373"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="857"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="993"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇ يەردە ھۆججەتلەرنى ساقلاش ھوقۇقىڭىز يوق ، ئۆزگەرتىپ قايتا سىناڭ</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="378"/>
+        <source>Too many volumes, please change and retry</source>
+        <translation>توم بەك كۆپ ، ئۆزگەرتىپ قايتا سىناڭ</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="478"/>
+        <source>Files that begin with &apos;@&apos; cannot be compressed</source>
+        <translation>@ بىلەن باشلانغان ھۆججەتلەرنى پىرىسلاشقا بولمايدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="702"/>
         <source>Total size: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>جەمئىي چوڭلۇقى:1%</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="801"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="937"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1070"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation>ئارخىپنى ئۆزىگە قوشالمايسىز</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1279"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="800"/>
+        <source>Close</source>
+        <translation>تاقاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="936"/>
@@ -197,12 +180,27 @@
         <translation>تاماملاندى</translation>
     </message>
     <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1281"/>
+        <source>Cancel</source>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1282"/>
+        <source>Replace</source>
+        <translation>ئالماشتۇرۇڭ</translation>
+    </message>
+    <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="322"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="817"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="953"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1086"/>
         <source>Please enter the path</source>
         <translation>مۇندەرىجىنى كىرگۈزۈڭ</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
+        <source>New Archive</source>
+        <translation>يىڭى ئارخىپ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="317"/>
@@ -409,12 +407,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1338"/>
         <source>Opening</source>
-        <translation type="unfinished"></translation>
+        <translation>ئېچىۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1366"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>ئايلاندۇرۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1375"/>
@@ -424,19 +422,19 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5119"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈڭ</translation>
+        <translation>جەزىملەشتۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5122"/>
         <source>Do you want to delete the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation>تاللانغان ئارخىپىنى يۇيۇۋەتمەكچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2573"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2669"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2703"/>
         <source>Skip all files</source>
-        <translation type="unfinished"></translation>
+        <translation>ھەممە ھۆججەتتىن ئاتلاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2546"/>
@@ -481,7 +479,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1316"/>
         <source>Adding files to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 غا ھۆججەت قوشۇۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1319"/>
@@ -496,7 +494,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1354"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۆچۈرلىۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1392"/>
@@ -511,7 +509,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1437"/>
         <source>Conversion successful</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۆزگەرتىش مۇۋەپپەقىيەتلىك</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1633"/>
@@ -532,7 +530,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2167"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2598"/>
         <source>Failed to open the archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ئارخىپ %1 نى ئاچالمىدى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2481"/>
@@ -543,12 +541,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2687"/>
         <source>Select default program</source>
-        <translation type="unfinished"></translation>
+        <translation>سۈكۈتتىكى پىروگراممىنى تاللاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4918"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>ئارخىپ باشقۇرغۇچىنىڭ تەڭشەكلىرىدىكى ھۆججەت بىرلەشمىسىنىڭ تۈرىنى تەكشۈرۈپ بېقىڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1982"/>
@@ -561,7 +559,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="241"/>
         <source>Are you sure you want to stop the ongoing task?</source>
-        <translation type="unfinished"></translation>
+        <translation>داۋاملىشىۋاتقان ۋەزىپىنى توختاتماقچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2245"/>
@@ -581,12 +579,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2596"/>
         <source>File name too long, unable to extract</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەت نامى بەك ئۇزۇن،چىقىرىشقا ئامالسىز</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2600"/>
         <source>Unable to extract</source>
-        <translation type="unfinished"></translation>
+        <translation>چىقىرىشقا ئامالسىز</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4030"/>
@@ -688,7 +686,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="52"/>
         <source>Loading, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>يۈكلەۋاتىدۇ،كۈتۈپ تۇرۇڭ...</translation>
     </message>
 </context>
 <context>
@@ -696,37 +694,37 @@
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="308"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>بىلەن ئېچىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="327"/>
         <source>Add other programs</source>
-        <translation type="unfinished"></translation>
+        <translation>باشقا پىروگراممىلارنى قوشۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="328"/>
         <source>Set as default</source>
-        <translation type="unfinished"></translation>
+        <translation>سۈكۈتتىكى قىلىپ تەڭشەش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="330"/>
         <source>Cancel</source>
-        <translation type="unfinished">ئەمەلدىن قالدۇرۇش</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="331"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈڭ</translation>
+        <translation>جەزىملەشتۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="335"/>
         <source>Recommended Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>تەۋسىيەلىك ئەپلەر</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="337"/>
         <source>Other Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>باشقا ئەپلەر</translation>
     </message>
 </context>
 <context>
@@ -734,7 +732,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="359"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="unfinished">شىفىرلانغان ھۆججەت ، مەخپىي نومۇرنى كىرگۈزۈڭ</translation>
+        <translation>شىفىرلانغان ھۆججەت ، مەخپىي نومۇرنى كىرگۈزۈڭ</translation>
     </message>
 </context>
 <context>
@@ -762,7 +760,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="191"/>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="468"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>توختاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="152"/>
@@ -770,7 +768,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="277"/>
         <source>Speed</source>
         <comment>delete</comment>
-        <translation type="unfinished"></translation>
+        <translation>پىرېستىن يېشىش سۈرئىتى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="156"/>
@@ -779,27 +777,27 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="303"/>
         <source>Speed</source>
         <comment>convert</comment>
-        <translation type="unfinished"></translation>
+        <translation>پىرېستىن يېشىش سۈرئىتى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="403"/>
         <source>Are you sure you want to stop the update?</source>
-        <translation type="unfinished"></translation>
+        <translation>يىڭىلاشنى توختاتماقچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="405"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation type="unfinished"></translation>
+        <translation>ئايلاندۇرۇشنى توختاتماقچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="342"/>
         <source>Converting</source>
-        <translation type="unfinished"></translation>
+        <translation>ئايلاندۇرۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="345"/>
         <source>Opening</source>
-        <translation type="unfinished"></translation>
+        <translation>ئېچىۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="401"/>
@@ -814,7 +812,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="462"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>داۋاملىق</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="411"/>
@@ -832,13 +830,13 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="287"/>
         <source>Speed</source>
         <comment>compress</comment>
-        <translation type="unfinished"></translation>
+        <translation>پىرېسلاش سۈرئىتى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="159"/>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="307"/>
         <source>Time left</source>
-        <translation type="unfinished"></translation>
+        <translation>قالغان ۋاقىت</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="150"/>
@@ -847,7 +845,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="295"/>
         <source>Speed</source>
         <comment>uncompress</comment>
-        <translation type="unfinished"></translation>
+        <translation>پىرېستىن يېشىش سۈرئىتى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="338"/>
@@ -857,7 +855,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="340"/>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۆچۈرلىۋاتىدۇ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="347"/>
@@ -899,7 +897,7 @@
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="141"/>
         <source>Extraction successful</source>
         <comment>progressdialog</comment>
-        <translation type="unfinished">ئېلىش مۇۋەپپەقىيەتلىك بولدى</translation>
+        <translation>ئېلىش مۇۋەپپەقىيەتلىك بولدى</translation>
     </message>
 </context>
 <context>
@@ -975,7 +973,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1555"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>يىڭىلاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="5"/>
@@ -995,17 +993,17 @@
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"></translation>
+        <translation>چىقىرىۋېتىلگەن ھۆججەتلەرنى تاماملاپ بولۇپ كۆرسىتىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="9"/>
         <source>File Management</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەت باشقۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="10"/>
         <source>Delete files after compression</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەتلەرنى پىرىسلاپ بولۇپ يۇيۇۋىتىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="11"/>
@@ -1032,58 +1030,58 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="243"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈڭ</translation>
+        <translation>جەزىملەشتۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="715"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation>% 1 ئۆزگەردى. ئارخىپقا ئۆزگەرتىش كىرگۈزمەكچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="729"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>تاشلىۋېتىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1554"/>
         <source>Cancel</source>
-        <translation type="unfinished">ئەمەلدىن قالدۇرۇش</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="730"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>ساقلاش</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="188"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished">ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
+        <translation>ئوخشاش ئىسىمدىكى باشقا بىر ھۆججەت بۇرۇنلا مەۋجۇت ، ئۇنى ئالماشتۇرامسىز؟</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="190"/>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>ئاتلاش</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="191"/>
         <source>Replace</source>
-        <translation type="unfinished">ئالماشتۇرۇڭ</translation>
+        <translation>ئالماشتۇرۇڭ</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="196"/>
         <source>Apply to all</source>
-        <translation type="unfinished"></translation>
+        <translation>ھەممەيلەنگە ئىلتىماس قىلىڭ</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="367"/>
         <location filename="../3rdparty/interface/queries.cpp" line="456"/>
         <source>OK</source>
-        <translation type="unfinished">تاماملاندى</translation>
+        <translation>تاماملاندى</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="454"/>
         <source>Wrong password</source>
-        <translation type="unfinished">مەخپىي نومۇر خاتا</translation>
+        <translation>مەخپىي نومۇر خاتا</translation>
     </message>
 </context>
 <context>
@@ -1092,11 +1090,6 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="133"/>
         <source>Select All</source>
         <translation>ھەممىنى تاللاڭ</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="135"/>
-        <source>Recommended</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="172"/>
@@ -1108,6 +1101,11 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="134"/>
         <source>Clear All</source>
         <translation>ھەممىنى تازىلاش</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="135"/>
+        <source>Recommended</source>
+        <translation>تەۋسىيەلىك تاللاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="166"/>
@@ -1129,25 +1127,25 @@
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="275"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەتلەرنى يېشىپ بولۇپ يۇيۇۋىتىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="281"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="302"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>ھەرگىز</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="281"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="305"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>جەزملەشتۈرۈشنى سوراڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="281"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="308"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>مەڭگۈ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="355"/>
@@ -1172,12 +1170,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="113"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished">سۈكۈتتىكى ئېلىش يولى مەۋجۇت ئەمەس ، قايتا سىناڭ</translation>
+        <translation>سۈكۈتتىكى ئېلىش يولى مەۋجۇت ئەمەس ، قايتا سىناڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="115"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇ يەردە ھۆججەتلەرنى ساقلاش ھوقۇقىڭىز يوق ، ئۆزگەرتىپ قايتا سىناڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="134"/>
@@ -1187,27 +1185,27 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="187"/>
         <source>OK</source>
-        <translation type="unfinished">تاماملاندى</translation>
+        <translation>تاماملاندى</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="561"/>
         <source>Cancel</source>
-        <translation type="unfinished">ئەمەلدىن قالدۇرۇش</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="562"/>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>ئايلاندۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="572"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>بۇ ھۆججەت تىپىدىكى ئارخىپلارنى ئۆزگەرتىشنى قوللىمايدۇ. ئۆزگەرتىشلەرنى ساقلاش ئۈچۈن ئارخىپ فورماتىنى ئۆزگەرتىڭ.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="588"/>
         <source>Convert the format to:</source>
-        <translation type="unfinished"></translation>
+        <translation>فورماتىنى ئۆزگەرتىش:</translation>
     </message>
 </context>
 <context>
@@ -1230,7 +1228,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1745"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1758"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="685"/>
@@ -1246,54 +1244,54 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1080"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1346"/>
         <source>Confirm</source>
-        <translation type="unfinished">جەزىملەشتۈرۈڭ</translation>
-    </message>
-    <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1122"/>
-        <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>جەزىملەشتۈرۈڭ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1078"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1345"/>
         <source>Cancel</source>
-        <translation type="unfinished">ئەمەلدىن قالدۇرۇش</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="590"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1747"/>
         <source>Delete</source>
         <comment>slotDecompressRowDelete</comment>
-        <translation type="unfinished">ئۆچۈرۈش</translation>
+        <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="592"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="609"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>بىلەن ئېچىش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="744"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1776"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1796"/>
         <source>Select default program</source>
-        <translation type="unfinished"></translation>
+        <translation>سۈكۈتتىكى پىروگراممىنى تاللاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="956"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1749"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation>تاللانغان ھۆججەتلەرنى يۇيۇۋەتمەكچىمۇ؟</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1122"/>
+        <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
+        <translation>ئۇ ھۆججەت (لەرنى) مەڭگۈلۈك ئۆچۈرۈۋېتىدۇ. راستىنلا داۋاملاشتۇرامسىز؟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەتلەر ئۆزگەرتىلدى. ئۆزگەرتىشلەرنى% 1 گە يېڭىلاشنى خالامسىز؟</translation>
+    </message>
+    <message>
+        <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>
+        <source>Update</source>
+        <translation>يىڭىلاش</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="587"/>

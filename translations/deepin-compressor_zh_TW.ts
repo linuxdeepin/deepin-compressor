@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -377,7 +375,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="572"/>
         <source>Select the file</source>
-        <translation>打開</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="576"/>
@@ -392,7 +390,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="781"/>
         <source>Open file</source>
-        <translation>打開文件</translation>
+        <translation>開啟文件</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="822"/>
@@ -409,7 +407,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1338"/>
         <source>Opening</source>
-        <translation>正在打開</translation>
+        <translation>正在開啟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1366"/>
@@ -452,7 +450,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1631"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation>添加壓縮文件到目錄或在新視窗中打開該文件？</translation>
+        <translation>添加壓縮文件到目錄或在新視窗中開啟該文件？</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="584"/>
@@ -521,7 +519,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1634"/>
         <source>Open in new window</source>
-        <translation>在新視窗中打開</translation>
+        <translation>在新視窗中開啟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1841"/>
@@ -532,7 +530,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2167"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2598"/>
         <source>Failed to open the archive: %1</source>
-        <translation>打開壓縮文件&quot;%1&quot;失敗</translation>
+        <translation>開啟壓縮文件&quot;%1&quot;失敗</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2481"/>
@@ -696,7 +694,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="308"/>
         <source>Open with</source>
-        <translation>打開方式</translation>
+        <translation>開啟方式</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="327"/>
@@ -799,7 +797,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="345"/>
         <source>Opening</source>
-        <translation>正在打開</translation>
+        <translation>正在開啟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="401"/>
@@ -995,7 +993,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when completed</source>
-        <translation>當解壓完成後自動打開對應的資料夾</translation>
+        <translation>當解壓完成後自動開啟對應的資料夾</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="9"/>
@@ -1230,7 +1228,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1745"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1758"/>
         <source>Open</source>
-        <translation>打開</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="685"/>
@@ -1265,7 +1263,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="592"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="609"/>
         <source>Open with</source>
-        <translation>打開方式</translation>
+        <translation>開啟方式</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="744"/>

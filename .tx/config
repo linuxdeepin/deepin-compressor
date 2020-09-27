@@ -9,9 +9,79 @@ source_file = translations/deepin-compressor_en.ts
 source_lang = en
 type = QT
 
-
 [deepin-archive-manager.deepin-archive-manager-desktop-ts]
 file_filter = translations/desktop/desktop_<lang>.ts
 source_file = translations/desktop/desktop.ts
+preTranslate_file = deepin-compressor/deepin-compressor.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-compress-ts]
+file_filter = translations/desktop/compress/desktop_<lang>.ts
+source_file = translations/desktop/compress/desktop.ts
+preTranslate_file = deepin-compressor/deepin-compress.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-compress-multi-ts]
+file_filter = translations/desktop/compress-multi/desktop_<lang>.ts
+source_file = translations/desktop/compress-multi/desktop.ts
+preTranslate_file = deepin-compressor/deepin-compress-multi.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompress-ts]
+file_filter = translations/desktop/decompress/desktop_<lang>.ts
+source_file = translations/desktop/decompress/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompress.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompress-multi-ts]
+file_filter = translations/desktop/decompress-multi/desktop_<lang>.ts
+source_file = translations/desktop/decompress-multi/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompress-multi.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompress-split-ts]
+file_filter = translations/desktop/decompress-split/desktop_<lang>.ts
+source_file = translations/desktop/decompress-split/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompress-split.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompress-split-multi-ts]
+file_filter = translations/desktop/decompress-split-multi/desktop_<lang>.ts
+source_file = translations/desktop/decompress-split-multi/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompress-split_multi.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-ts]
+file_filter = translations/desktop/decompresshere/desktop_<lang>.ts
+source_file = translations/desktop/decompresshere/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompresshere.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-multi-ts]
+file_filter = translations/desktop/decompresshere-multi/desktop_<lang>.ts
+source_file = translations/desktop/decompresshere-multi/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompresshere-multi.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-split-ts]
+file_filter = translations/desktop/decompresshere-split/desktop_<lang>.ts
+source_file = translations/desktop/decompresshere-split/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompresshere-split.desktop
+source_lang = en
+type = QT
+
+[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-split-multi-ts]
+file_filter = translations/desktop/decompresshere-split-multi/desktop_<lang>.ts
+source_file = translations/desktop/decompresshere-split-multi/desktop.ts
+preTranslate_file = deepin-compressor/deepin-decompresshere-split_multi.desktop
 source_lang = en
 type = QT

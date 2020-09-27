@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -202,7 +200,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
         <source>New Archive</source>
-        <translation>Fitxer nou</translation>
+        <translation>Arxiu nou</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="317"/>
@@ -734,7 +732,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="359"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Fitxer xifrat, introduïu la contrasenya</translation>
+        <translation>Fitxer encriptat. Si us plau, introduïu-ne la contrasenya.</translation>
     </message>
 </context>
 <context>
@@ -1057,7 +1055,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="188"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Ja existeix un altre fitxer amb el mateix nom, voleu reemplaçar-lo?</translation>
+        <translation>Ja existeix un altre fitxer amb el mateix nom. Voleu reemplaçar-lo?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="190"/>
@@ -1288,7 +1286,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi ha fitxers que han canviat. Voleu actualitzar-ne els canvis a %1?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>

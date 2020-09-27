@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -1288,7 +1286,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Файли змінено. Хочете внести ці зміни до %1?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>

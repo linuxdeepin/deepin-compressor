@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>ArchiveModel</name>
     <message>
@@ -184,7 +182,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1281"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1282"/>
@@ -277,7 +275,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/encodingpage.cpp" line="82"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/encodingpage.cpp" line="83"/>
@@ -318,7 +316,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/extractpausedialog.cpp" line="69"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/extractpausedialog.cpp" line="70"/>
@@ -464,7 +462,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1632"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5118"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="114"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="330"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="331"/>
@@ -743,7 +741,7 @@
         <location filename="../deepin-compressor/source/src/progress.cpp" line="89"/>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="415"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="85"/>
@@ -1047,7 +1045,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1554"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="730"/>
@@ -1192,7 +1190,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="561"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="562"/>
@@ -1252,7 +1250,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1078"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1345"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="590"/>
@@ -1288,7 +1286,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory byly změněny. Chcete změny aktualizovat do %1?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>
