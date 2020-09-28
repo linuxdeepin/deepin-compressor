@@ -276,10 +276,10 @@ bool Job::doKill()
         return true;
     }
 
-    if (d->isRunning()) {
+    if (d->isRunning()) { //Returns true if the thread is running
         qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
-        d->requestInterruption();
-        d->wait(1000);
+        d->requestInterruption(); //请求中断线程(建议性)
+        d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
     }
 
     return true;
@@ -413,131 +413,131 @@ QString LoadJob::subfolderName() const
     return m_subfolderName;
 }
 
-BatchExtractJob::BatchExtractJob(LoadJob *loadJob, const QString &destination, bool autoSubfolder, bool preservePaths)
-    : Job(loadJob->archive())
-    , m_loadJob(loadJob)
-    , m_destination(destination)
-    , m_autoSubfolder(autoSubfolder)
-    , m_preservePaths(preservePaths)
-{
-    mType = Job::ENUM_JOBTYPE::BATCHEXTRACTJOB;
-    qDebug() << "BatchExtractJob job instance";
-}
+//BatchExtractJob::BatchExtractJob(LoadJob *loadJob, const QString &destination, bool autoSubfolder, bool preservePaths)
+//    : Job(loadJob->archive())
+//    , m_loadJob(loadJob)
+//    , m_destination(destination)
+//    , m_autoSubfolder(autoSubfolder)
+//    , m_preservePaths(preservePaths)
+//{
+//    mType = Job::ENUM_JOBTYPE::BATCHEXTRACTJOB;
+//    qDebug() << "BatchExtractJob job instance";
+//}
 
-void BatchExtractJob::doWork()
-{
-    connect(m_loadJob, &KJob::result, this, &BatchExtractJob::slotLoadingFinished);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &BatchExtractJob::onCancelled);
+//void BatchExtractJob::doWork()
+//{
+//    connect(m_loadJob, &KJob::result, this, &BatchExtractJob::slotLoadingFinished);
+//    connect(archiveInterface(), &ReadOnlyArchiveInterface::cancelled, this, &BatchExtractJob::onCancelled);
 
-    //    if (archiveInterface()->hasBatchExtractionProgress()) {
-    // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
-    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &BatchExtractJob::slotExtractFilenameProgress);
-    //    }
+//    //    if (archiveInterface()->hasBatchExtractionProgress()) {
+//    // progress() will be actually emitted by the LoadJob, but the archiveInterface() is the same.
+//    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
+//    connect(archiveInterface(), &ReadOnlyArchiveInterface::progress_filename, this, &BatchExtractJob::slotExtractFilenameProgress);
+//    //    }
 
-    // Forward LoadJob's signals.
-    connect(m_loadJob, &Job::newEntry, this, &BatchExtractJob::newEntry);
-    connect(m_loadJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
-    connect(m_loadJob, &Job::sigBatchExtractJobWrongPsd, this, [&](const QString password) {
-        Q_ASSERT(m_loadJob);
-        m_loadJob->archiveInterface()->setPassword(password);
-        m_loadJob->start(); //批量解压密码错误时，列表加密重新list流程
-    });
+//    // Forward LoadJob's signals.
+//    connect(m_loadJob, &Job::newEntry, this, &BatchExtractJob::newEntry);
+//    connect(m_loadJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
+//    connect(m_loadJob, &Job::sigBatchExtractJobWrongPsd, this, [&](const QString password) {
+//        Q_ASSERT(m_loadJob);
+//        m_loadJob->archiveInterface()->setPassword(password);
+//        m_loadJob->start(); //批量解压密码错误时，列表加密重新list流程
+//    });
 
-    m_loadJob->start();
-}
+//    m_loadJob->start();
+//}
 
-bool BatchExtractJob::doKill()
-{
-    if (m_step == Loading) {
-        return m_loadJob->kill();
-    }
+//bool BatchExtractJob::doKill()
+//{
+//    if (m_step == Loading) {
+//        return m_loadJob->kill();
+//    }
 
-    return m_extractJob->kill();
-}
+//    return m_extractJob->kill();
+//}
 
-void BatchExtractJob::slotLoadingProgress(double progress)
-{
-    // Progress from LoadJob counts only for 50% of the BatchExtractJob's duration.
+//void BatchExtractJob::slotLoadingProgress(double progress)
+//{
+//    // Progress from LoadJob counts only for 50% of the BatchExtractJob's duration.
 
-//    m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
-    qDebug() << m_lastPercentage;
-//    setPercent(m_lastPercentage);
-}
+////    m_lastPercentage = static_cast<unsigned long>(100.0 * progress);
+//    qDebug() << m_lastPercentage;
+////    setPercent(m_lastPercentage);
+//}
 
-void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
-{
-    setPercentFilename(filename);
-}
+//void BatchExtractJob::slotExtractFilenameProgress(const QString &filename)
+//{
+//    setPercentFilename(filename);
+//}
 
-void BatchExtractJob::slotExtractProgress(double progress)
-{
-    // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
-//    qDebug() << m_lastPercentage + static_cast<unsigned long>(progress);
-    setPercent(m_lastPercentage + static_cast<unsigned long>(progress * 100));
-}
+//void BatchExtractJob::slotExtractProgress(double progress)
+//{
+//    // The 2nd 50% of the BatchExtractJob's duration comes from the ExtractJob.
+////    qDebug() << m_lastPercentage + static_cast<unsigned long>(progress);
+//    setPercent(m_lastPercentage + static_cast<unsigned long>(progress * 100));
+//}
 
-void BatchExtractJob::slotLoadingFinished(KJob *job)
-{
-    if (job->error()) {
-        // Forward errors as well.
-        onError(job->errorString(), QString());
-        onFinished(false);
-        return;
-    }
+//void BatchExtractJob::slotLoadingFinished(KJob *job)
+//{
+//    if (job->error()) {
+//        // Forward errors as well.
+//        onError(job->errorString(), QString());
+//        onFinished(false);
+//        return;
+//    }
 
-    // Now we can start extraction.
-    setupDestination();
+//    // Now we can start extraction.
+//    setupDestination();
 
-    ExtractionOptions options;
-    options.setPreservePaths(m_preservePaths);
-    options.setBatchExtract(true);
+//    ExtractionOptions options;
+//    options.setPreservePaths(m_preservePaths);
+//    options.setBatchExtract(true);
 
-    m_extractJob = archive()->extractFiles({}, m_destination, options);
-    if (m_extractJob) {
-        connect(m_extractJob, &KJob::result, this, &BatchExtractJob::emitResult);
-        connect(m_extractJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
-        //        if (archiveInterface()->hasBatchExtractionProgress()) {
-        // The LoadJob is done, change slot and start setting the percentage from m_lastPercentage on.
-        disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
-        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
-        //        }
-        connect(m_extractJob, &Job::sigBatchExtractJobWrongPsd, this, [&]() {
-            Q_ASSERT(m_extractJob);
-            m_extractJob->start(); //批量解压密码错误时，重新走解压流程
-        });
+//    m_extractJob = archive()->extractFiles({}, m_destination, options);
+//    if (m_extractJob) {
+//        connect(m_extractJob, &KJob::result, this, &BatchExtractJob::emitResult);
+//        connect(m_extractJob, &Job::userQuery, this, &BatchExtractJob::userQuery);
+//        //        if (archiveInterface()->hasBatchExtractionProgress()) {
+//        // The LoadJob is done, change slot and start setting the percentage from m_lastPercentage on.
+//        disconnect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotLoadingProgress);
+//        connect(archiveInterface(), &ReadOnlyArchiveInterface::progress, this, &BatchExtractJob::slotExtractProgress);
+//        //        }
+//        connect(m_extractJob, &Job::sigBatchExtractJobWrongPsd, this, [&]() {
+//            Q_ASSERT(m_extractJob);
+//            m_extractJob->start(); //批量解压密码错误时，重新走解压流程
+//        });
 
-        m_step = Extracting;
-        m_extractJob->start();
-    } else {
-        emitResult();
-    }
-}
+//        m_step = Extracting;
+//        m_extractJob->start();
+//    } else {
+//        emitResult();
+//    }
+//}
 
-void BatchExtractJob::setupDestination()
-{
-    const bool isSingleFolderRPM = (archive()->isSingleFolder() && (archive()->mimeType().name() == QLatin1String("application/x-rpm")));
+//void BatchExtractJob::setupDestination()
+//{
+//    const bool isSingleFolderRPM = (archive()->isSingleFolder() && (archive()->mimeType().name() == QLatin1String("application/x-rpm")));
 
-    if (m_autoSubfolder && (!archive()->isSingleFolder() || isSingleFolderRPM)) {
-        const QDir d(m_destination);
-        QString subfolderName = archive()->subfolderName();
+//    if (m_autoSubfolder && (!archive()->isSingleFolder() || isSingleFolderRPM)) {
+//        const QDir d(m_destination);
+//        QString subfolderName = archive()->subfolderName();
 
-        // Special case for single folder RPM archives.
-        // We don't want the autodetected folder to have a meaningless "usr" name.
-        if (isSingleFolderRPM && subfolderName == QStringLiteral("usr")) {
-            qDebug() << "Detected single folder RPM archive. Using archive basename as subfolder name";
-            subfolderName = QFileInfo(archive()->fileName()).completeBaseName();
-        }
+//        // Special case for single folder RPM archives.
+//        // We don't want the autodetected folder to have a meaningless "usr" name.
+//        if (isSingleFolderRPM && subfolderName == QStringLiteral("usr")) {
+//            qDebug() << "Detected single folder RPM archive. Using archive basename as subfolder name";
+//            subfolderName = QFileInfo(archive()->fileName()).completeBaseName();
+//        }
 
-        if (d.exists(subfolderName)) {
-            //TODO_DS            subfolderName = KIO::suggestName(QUrl::fromUserInput(m_destination, QString(), QUrl::AssumeLocalFile), subfolderName);
-        }
+//        if (d.exists(subfolderName)) {
+//            //TODO_DS            subfolderName = KIO::suggestName(QUrl::fromUserInput(m_destination, QString(), QUrl::AssumeLocalFile), subfolderName);
+//        }
 
-        d.mkdir(subfolderName);
+//        d.mkdir(subfolderName);
 
-        m_destination += QLatin1Char('/') + subfolderName;
-    }
-}
+//        m_destination += QLatin1Char('/') + subfolderName;
+//    }
+//}
 
 CreateJob::CreateJob(Archive *archive, const QVector<Archive::Entry *> &entries, const CompressionOptions &options)
     : Job(archive)

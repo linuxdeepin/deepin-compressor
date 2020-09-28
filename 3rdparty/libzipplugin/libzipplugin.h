@@ -91,7 +91,16 @@ public:
 
     //int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 
+    /**
+    * show the package first level entry
+    * @brief the input param is entry full path
+    */
     virtual void showEntryListFirstLevel(const QString &directory) override;
+
+    /**
+     * current directory entry file count
+     * @brief the input param is entry file
+     */
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
 
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
@@ -125,6 +134,16 @@ private:
      */
     enum_extractEntryStatus extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
 
+    /**
+     * @brief writeEntry 添加新的Entry
+     * @param archive 压缩包数据
+     * @param entry 新文件
+     * @param destination
+     * @param options 压缩配置参数
+     * @param isDir
+     * @param strRoot
+     * @return
+     */
     bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false, const QString &strRoot = "");
 
     /**
@@ -193,7 +212,7 @@ private:
     bool minizip_extractEntry(unzFile zipfile, unz_file_info file_info, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
 
     /**
-     * @brief setEntryData  设置文件数据
+     * @brief setEntryData  设置Entry数据
      * @param statBuffer    文件数据信息
      * @param index     文件索引
      * @param name      文件名
@@ -228,7 +247,7 @@ private:
 
     QList<int> m_listExtractIndex;  // 需要解压的文件索引
     QString m_strRootNode;  // 父节点
-    QMap<QString, QString> m_fileNameEncodeMap;
+    //    QMap<QString, QString> m_fileNameEncodeMap;
 
     bool m_bCancel = false;     // 是否取消
     Common *m_common = nullptr; // 通用工具类

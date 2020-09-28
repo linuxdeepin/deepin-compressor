@@ -246,13 +246,13 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
     return new Archive(iface, !plugin->isReadWrite(), parent);
 }
 
-BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent)
-{
-    auto loadJob = load(fileName, true, parent);
-    auto batchJob = new BatchExtractJob(loadJob, destination, autoSubfolder, preservePaths);
+//BatchExtractJob *Archive::batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent)
+//{
+//    auto loadJob = load(fileName, true, parent);
+//    auto batchJob = new BatchExtractJob(loadJob, destination, autoSubfolder, preservePaths);
 
-    return batchJob;
-}
+//    return batchJob;
+//}
 
 CreateJob *Archive::create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent, bool useLibArchive, bool use7z)
 {

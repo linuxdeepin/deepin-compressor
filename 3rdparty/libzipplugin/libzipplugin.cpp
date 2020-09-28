@@ -78,7 +78,7 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list(bool /*isbatch*/)
 {
-    m_fileNameEncodeMap.clear();
+    //    m_fileNameEncodeMap.clear();
     m_numberOfEntries = 0;
 
     int errcode = 0;
@@ -89,6 +89,8 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
     zip_error_init_with_code(&err, errcode);
     m_bAllEntry = false;
+
+    //某些特殊文件，如.crx用zip打不开，需要替换minizip
     if (!archive) {
         //emit error(("Failed to open the archive: %1"));
         //return false;
@@ -294,7 +296,7 @@ void LibzipPlugin::emitProgress(double percentage)
 {
     bool flag = true;
     while (flag) {
-        if (QThread::currentThread()->isInterruptionRequested()) {
+        if (QThread::currentThread()->isInterruptionRequested()) { //线程结束
             break;
         }
         if (m_isPause) { //压缩暂停
@@ -421,9 +423,9 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
     QString name = m_common->trans2uft8(statBuffer.name);
 //    m_fileNameEncodeMap.insert(statBuffer.name, name);
     setEntryVal(statBuffer, m_indexCount, name, m_DirRecord);
-    if (m_fileNameEncodeMap.find(name) == m_fileNameEncodeMap.end()) {
-        m_fileNameEncodeMap.insert(name, statBuffer.name);
-    }
+    //    if (m_fileNameEncodeMap.find(name) == m_fileNameEncodeMap.end()) {
+    //        m_fileNameEncodeMap.insert(name, statBuffer.name);
+    //    }
 
     // 存储数据
     if (m_listMap.find(name) == m_listMap.end()) {
@@ -1574,7 +1576,7 @@ qint64 LibzipPlugin::extractSize(const QVector<Archive::Entry *> &files)
                 break;
             } else {
                 if (!iter.key().endsWith("/")) {
-                    qExtractSize += iter.value().first.size;
+                    qExtractSize += iter.value().first.size; //文件压缩前大小
                 }
 
                 int iIndex = iter.value().second;
@@ -2079,6 +2081,7 @@ Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglo
         }
     }
 
+    //压缩算法
     if (statBuffer.valid & ZIP_STAT_COMP_METHOD) {
         switch (statBuffer.comp_method) {
         case ZIP_CM_STORE:
@@ -2108,6 +2111,7 @@ Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglo
         }
     }
 
+    //加密算法
     if (statBuffer.valid & ZIP_STAT_ENCRYPTION_METHOD) {
         if (statBuffer.encryption_method != ZIP_EM_NONE) {
             e->setProperty("isPasswordProtected", true);
@@ -2221,12 +2225,12 @@ Archive::Entry *LibzipPlugin::setEntryDataA(const zip_stat_t &statBuffer, qlongl
 void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord)
 {
     if (dirRecord.isEmpty()) {
-        if (name.endsWith("/") && name.count("/") == 1) {
+        if (name.endsWith("/") && name.count("/") == 1) { //单层目录
             setEntryData(statBuffer, index, name);
             m_SigDirRecord = name;
             ++index;
             // m_DirRecord = name;
-        } else  if (name.endsWith("/") && name.count("/") > 1) {
+        } else if (name.endsWith("/") && name.count("/") > 1) { //多层目录
             if (!m_SigDirRecord.isEmpty() && name.left(m_SigDirRecord.size()) == m_SigDirRecord) {
                 setEntryData(statBuffer, index, name);
                 ++index;
@@ -2244,10 +2248,10 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
 
             ++index;
             m_DirRecord = name;
-        } else if (name.count("/") == 0) {
+        } else if (name.count("/") == 0) { //不带路径的文件名
             setEntryData(statBuffer, index, name);
             ++index;
-        } else if (!name.endsWith("/") && name.count("/") >= 1) {
+        } else if (!name.endsWith("/") && name.count("/") >= 1) { //带路径的文件名
             if (!m_SigDirRecord.isEmpty() && (name.left(m_SigDirRecord.size()) == m_SigDirRecord)) {
                 return;
             } else if (!m_DirRecord.isEmpty() && (name.left(m_DirRecord.size()) == m_DirRecord)) {

@@ -125,43 +125,43 @@ signals:
     void sigLodJobPassword();
 };
 
-class BatchExtractJob : public Job
-{
-    Q_OBJECT
+//class BatchExtractJob : public Job
+//{
+//    Q_OBJECT
 
-public:
-    explicit BatchExtractJob(LoadJob *loadJob, const QString &destination, bool autoSubfolder, bool preservePaths);
+//public:
+//    explicit BatchExtractJob(LoadJob *loadJob, const QString &destination, bool autoSubfolder, bool preservePaths);
 
-public Q_SLOTS:
-    void doWork() override;
+//public Q_SLOTS:
+//    void doWork() override;
 
-protected:
-    bool doKill() override;
+//protected:
+//    bool doKill() override;
 
-private Q_SLOTS:
-    void slotLoadingProgress(double progress);
-    void slotExtractProgress(double progress);
-    void slotExtractFilenameProgress(const QString &filename);
-    void slotLoadingFinished(KJob *job);
+//private Q_SLOTS:
+//    void slotLoadingProgress(double progress);
+//    void slotExtractProgress(double progress);
+//    void slotExtractFilenameProgress(const QString &filename);
+//    void slotLoadingFinished(KJob *job);
 
-signals:
-    void signeedpassword();
+//signals:
+//    void signeedpassword();
 
-private:
-    enum Step { Loading,
-                Extracting
-              };
+//private:
+//    enum Step { Loading,
+//                Extracting
+//              };
 
-    void setupDestination();
+//    void setupDestination();
 
-    Step m_step = Loading;
-    ExtractJob *m_extractJob = nullptr;
-    LoadJob *m_loadJob;
-    QString m_destination;
-    bool m_autoSubfolder;
-    bool m_preservePaths;
-    unsigned long m_lastPercentage = 0;
-};
+//    Step m_step = Loading;
+//    ExtractJob *m_extractJob = nullptr;
+//    LoadJob *m_loadJob;
+//    QString m_destination;
+//    bool m_autoSubfolder;
+//    bool m_preservePaths;
+//    unsigned long m_lastPercentage = 0;
+//};
 /**
  * @brief The CreateJob class 创建job
  */
