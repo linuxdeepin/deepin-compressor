@@ -150,26 +150,30 @@ void Progress::InitConnection()
     connect(m_PauseContinueButton, &DPushButton::clicked, this, &Progress::pauseContinueButtonPressedSlot);
 }
 
+/**
+ * @brief Progress::setSpeedAndTimeText  设置速度和剩余时间
+ * @param type 进度类型
+ */
 void Progress::setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type)
 {
-    if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
+    if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) { // 压缩
         m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
-    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) { // 解压
         m_speedLabel->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
-    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) { // 删除
         m_speedLabel->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
-    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) { // 追加压缩
         m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
-    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
+    } else if (type == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) { // 格式转换
         m_speedLabel->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
     }
 
-    m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating..."));
+    m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating...")); // 剩余时间计算中
     qDebug() << "setspeedandtimetext";
 }
 
-void Progress::setTempProgress()
-{
+//void Progress::setTempProgress()
+//{
 //    if (m_percent >= 99) {
 //        m_timerProgress->stop();
 //        return;
@@ -177,9 +181,14 @@ void Progress::setTempProgress()
 
 //    m_percent += 0.3;
 //    setprogress(m_percent);
-    //    qDebug() << "临时百分比" << m_percent;
-}
+//    qDebug() << "临时百分比" << m_percent;
+//}
 
+/**
+ * @brief Progress::refreshSpeedAndTime 刷新速度和剩余时间
+ * @param compressPercent 百分比
+ * @param isConvert 是否为格式转换进度
+ */
 void Progress::refreshSpeedAndTime(unsigned long compressPercent, bool isConvert)
 {
     double speed = this->m_pInfo->getSpeed(compressPercent, isConvert);
@@ -193,12 +202,18 @@ ProgressAssistant *Progress::pInfo()
     return m_pInfo;
 }
 
+/**
+ * @brief Progress::resetPauseContinueButton 改变暂停/继续按钮的标题
+ */
 void Progress::resetPauseContinueButton()
 {
     m_PauseContinueButton->setChecked(false);
     m_PauseContinueButton->setText(tr("Pause"));
 }
 
+/**
+ * @brief Progress::hidePauseContinueButton 设置暂停/继续按钮是否可见
+ */
 void Progress::hidePauseContinueButton()
 {
     //    暂时只支持压缩解压时暂停取消
@@ -220,11 +235,16 @@ void Progress::slotChangeTimeLeft()
         m_timerTime->stop();
         return;
     }
+
     // 剩余时间-1
     lastTimeLeft--;
     displaySpeedAndTime(m_speed, lastTimeLeft);
 }
 
+/**
+ * @brief Progress::setprogress 设置进度
+ * @param percent 进度值
+ */
 void Progress::setprogress(double percent)
 {
     //qDebug() << "setProgress(percent)" << percent;
@@ -237,6 +257,7 @@ void Progress::setprogress(double percent)
 //        m_timerProgress->stop();
 //    }
 }
+
 /**
  * @brief Progress::setSpeedAndTime 设置速度以及剩余时间
  * @param speed
@@ -257,8 +278,10 @@ void Progress::setSpeedAndTime(double speed, qint64 timeLeft)
         lastTimeLeft = timeLeft;
     }
 
+    // 显示速度个剩余时间
     displaySpeedAndTime(speed, lastTimeLeft);
 
+    // 如果剩余时间大于2秒开启定时任务
     if (lastTimeLeft > 2) {
         m_timerTime->start();
     } else {
@@ -286,10 +309,13 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
     //add update speed and time label
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         if (speed < 1024) {
+            // 速度小于1024k， 显示速度单位为KB/S
             m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
         } else if (speed > 1024 && speed < 1024 * 300) {
+            // 速度大于1M/S，且小于300MB/S， 显示速度单位为MB/S
             m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
         } else {
+            // 速度大于300MB/S，显示速度为>300MB/S
             m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
         }
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
@@ -325,18 +351,28 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
             m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/S");
         }
     }
+
     // 设置剩余时间
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
+/**
+ * @brief Progress::setFilename 设置文件名
+ * @param filename 文件名
+ */
 void Progress::setFilename(QString filename)
 {
     QFileInfo fileinfo(filename);
     setTypeImage(fileinfo.completeSuffix());
-    QString displayName = Utils::toShortString(filename);
+
+    QString displayName = Utils::toShortString(filename); //文件名过长，中间用...代替
     m_filenamelabel->setText(displayName);
 }
 
+/**
+ * @brief Progress::setTypeImage 根据文件类型设置显示图片
+ * @param type 文件类型
+ */
 void Progress::setTypeImage(QString type)
 {
     QFileIconProvider provider;
@@ -348,9 +384,10 @@ DPushButton *Progress::getCancelbutton()
 {
     return m_cancelbutton;
 }
+
 /**
  * @brief Progress::setProgressFilename 设置进度展示的文件名称
- * @param filename
+ * @param filename 文件名
  */
 void Progress::setProgressFilename(QString filename)
 {
@@ -374,14 +411,16 @@ void Progress::setProgressFilename(QString filename)
         }
     }
 }
+
 /**
  * @brief Progress::settype 设置压缩进度类型
- * @param type
+ * @param type 进度类型
  */
 void Progress::settype(Progress::ENUM_PROGRESS_TYPE type)
 {
     m_ProgressType = type;
 }
+
 /**
  * @brief Progress::getType 获取当前进度类型
  * @return
@@ -400,6 +439,7 @@ bool Progress::getOpenType()
 {
     return m_openType;
 }
+
 /**
  * @brief Progress::showConfirmDialog 显示确认按钮
  * @return
@@ -474,6 +514,7 @@ int Progress::showConfirmDialog()
 
     return res;
 }
+
 /**
  * @brief Progress::resetProgress 重新设置
  */
@@ -481,6 +522,7 @@ void Progress::resetProgress()
 {
     m_progressfilelabel->setText(tr("Calculating..."));
 }
+
 /**
  * @brief Progress::cancelbuttonPressedSlot 取消按钮点击事件
  */

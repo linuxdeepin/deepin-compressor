@@ -81,7 +81,7 @@ public:
     void displaySpeedAndTime(double speed, qint64 timeLeft);
     void setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type);
 
-    void setTempProgress();
+//    void setTempProgress();
     void refreshSpeedAndTime(unsigned long compressPercent, bool isConvert = false);
     ProgressAssistant *pInfo();
     void resetPauseContinueButton();
