@@ -260,24 +260,6 @@ public:
      */
     ReadOnlyArchiveInterface *getPlugin();
 
-    //void countEntriesAndSize();
-    //qulonglong numberOfFiles() const;
-    //qulonglong numberOfFolders() const;
-    //qulonglong uncompressedSize() const;
-
-    // bool conflictingEntries(QList<const Archive::Entry *> &conflictingEntries, const QStringList &entries, bool allowMerging) const;
-
-    //static bool hasDuplicatedEntries(const QStringList &entries);
-
-    //static QMap<QString, Archive::Entry *> entryMap(const QVector<Archive::Entry *> &entries);
-
-    //const QHash<QString, QIcon> entryIcons() const;
-
-    //QMap<QString, Archive::Entry *> filesToMove;
-    //QMap<QString, Archive::Entry *> filesToCopy;
-    //store the map what key is path,value is entryChild. 如果双击查看一个entryChild,需要这个map去建立映射.
-
-    //    QList<Archive::Entry *> *getLeavesList();
 Q_SIGNALS:
     void loadingStarted();
     void loadingFinished(KJob *);
@@ -349,8 +331,6 @@ private:
      * @return
      */
     Archive::Entry *parentFor(const Archive::Entry *entry, InsertBehaviour behaviour = NotifyViews);
-    //static bool compareAscending(const QModelIndex &a, const QModelIndex &b);
-    //static bool compareDescending(const QModelIndex &a, const QModelIndex &b);
     /**
      * Insert the node @p node into the model, ensuring all views are notified
      * of the change.
@@ -370,7 +350,6 @@ private:
      */
     void newEntry(Archive::Entry *receivedEntry, InsertBehaviour behaviour);
 
-    //void traverseAndCountDirNode(Archive::Entry *dir);
 
     /**
      * @brief setPlugin     设置插件
@@ -389,10 +368,6 @@ private:
     QMap<int, QByteArray> m_propertiesMap; // 属性列表
 
     QString m_dbusPathName; // dbus路径
-
-    //qulonglong m_numberOfFiles;
-    //qulonglong m_numberOfFolders;
-    //qulonglong m_uncompressedSize;
 
     // Whether a file entry has been listed. Used to ensure all relevent columns are shown,
     // since directories might have fewer columns than files.
