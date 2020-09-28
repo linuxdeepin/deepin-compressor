@@ -33,11 +33,11 @@ LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
 
 LibarchivePlugin::~LibarchivePlugin()
 {
-    for (const auto e : qAsConst(m_emittedEntries)) {
-        // Entries might be passed to pending slots, so we just schedule their deletion.
-        e->deleteLater();
-    }
-    m_emittedEntries.clear();
+    //    for (const auto e : qAsConst(m_emittedEntries)) {
+    //        // Entries might be passed to pending slots, so we just schedule their deletion.
+    //        e->deleteLater();
+    //    }
+    //m_emittedEntries.clear();
 
     deleteTempTarPkg(m_tars);
 }
@@ -443,7 +443,7 @@ void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong in
     pCurEntry->setProperty("timestamp", aentry.archive_timestamp);
 
     emit entry(pCurEntry);
-    m_emittedEntries << pCurEntry;
+    // m_emittedEntries << pCurEntry;
 }
 
 Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry/*, qlonglong index*/, const QString &name)
@@ -695,7 +695,7 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
     pCurEntry->setProperty("timestamp", QDateTime::fromTime_t(time));
 
     emit entry(pCurEntry);
-    m_emittedEntries << pCurEntry;
+    //m_emittedEntries << pCurEntry;
 }
 
 int LibarchivePlugin::extractionFlags() const
@@ -1007,7 +1007,7 @@ void LibarchivePlugin::showEntryListFirstLevel(const QString &directory)
                     Archive::Entry *fileEntry = setEntryDataA(iter.value()/*.first, -1*/, iter.key());
                     RefreshEntryFileCount(fileEntry);
                     emit entry(fileEntry);
-                    m_emittedEntries << fileEntry;
+                    //m_emittedEntries << fileEntry;
                 }
             }
 

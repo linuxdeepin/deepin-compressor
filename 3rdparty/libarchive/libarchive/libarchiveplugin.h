@@ -101,7 +101,7 @@ private:
     QString m_SigDirRecord;
     int m_indexCount = 0;
 
-    QVector<Archive::Entry *> m_emittedEntries;
+    //QVector<Archive::Entry *> m_emittedEntries;
     QString m_oldWorkingDir;
     QString m_extractDestDir;
     QStringList m_tars;
