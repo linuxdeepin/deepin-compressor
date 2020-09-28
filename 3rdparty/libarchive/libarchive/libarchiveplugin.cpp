@@ -978,7 +978,7 @@ qlonglong LibarchivePlugin::calDecompressSize()
         archive_read_data_skip(m_archiveReader.data());
     }
 
-    archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
+    archive_read_close(m_archiveReader.data()) /* == ARCHIVE_OK*/;
 
     return m_extractedFilesSize;
 }

@@ -585,7 +585,7 @@ bool ReadWriteLibarchivePlugin::deleteEntry(uint &entriesCounter, uint totalCoun
     QMap<QString, QString> pathMap;
 
     struct archive_entry *entry;
-    int count = archive_filter_count(m_archiveReader.data());
+    /*int count = */ archive_filter_count(m_archiveReader.data());
     while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
         const QString file = QFile::decodeName(archive_entry_pathname(entry));
         if (m_filesPaths.contains(file)) {

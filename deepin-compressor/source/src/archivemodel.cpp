@@ -95,6 +95,8 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
                         } else {
                             return QString::number(entry->property("size").toLongLong()) + " " + tr("item(s)") + "    ";
                         }
+                    } else {
+                        return QVariant();
                     }
 
                 } else if (!entry->property("link").toString().isEmpty()) {
@@ -750,7 +752,7 @@ void ArchiveModel::slotLoadingFinished(KJob *job)
             QModelIndex  mIndex = index(i, 0);
             Archive::Entry *pEntry = entryForIndex(mIndex);
             if (pEntry && pEntry->isDir()) {
-                qlonglong sizeVal = pEntry->property("size").value<qulonglong>();
+                qulonglong sizeVal = pEntry->property("size").value<qulonglong>();
                 if (!sizeVal) {
                     if (ReadOnlyArchiveInterface *pInterface = getPlugin()) {
                         pInterface->RefreshEntryFileCount(pEntry); // 刷新文件夹显示的子文件数目

@@ -340,6 +340,8 @@ bool MyTableView::event(QEvent *e)
         }
         break;
     }
+    default:
+        break;
     }
     return DTableView::event(e);
 }

@@ -318,7 +318,7 @@ void LogViewHeaderView::paintEvent(QPaintEvent *event)
     //    initStyleOption(&option);
     //    int radius = style->pixelMetric(DStyle::PM_FrameRadius, &option);
 
-    QRect rect = viewport()->rect();
+    //QRect rect = viewport()->rect();
     //    rect.setHeight(36);
     //    QRectF clipRect(rect.x(), rect.y(), rect.width(), rect.height() * 2);
     //    QRectF subRect(rect.x(), rect.y() + rect.height(), rect.width(), rect.height());

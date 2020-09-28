@@ -175,7 +175,7 @@ private:
     QString m_permissions;
     QString m_owner;
     QString m_group;
-    qint64 m_size;
+    qulonglong m_size;
     qulonglong m_compressedSize;
     QString m_link;
     QString m_ratio;
