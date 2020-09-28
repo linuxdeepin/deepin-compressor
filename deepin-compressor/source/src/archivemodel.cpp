@@ -43,14 +43,16 @@ DWIDGET_USE_NAMESPACE
 
 ArchiveModel::ArchiveModel(QObject *parent)
     : QAbstractItemModel(parent)
-    , m_numberOfFiles(0)
-    , m_numberOfFolders(0)
+    //    , m_numberOfFiles(0)
+    //    , m_numberOfFolders(0)
     , m_fileEntryListed(false)
 {
+    // 初始化根节点
     initRootEntry();
 
     m_mimetype = new MimeTypeDisplayManager(this);
-    // Mappings between column indexes and entry properties.
+
+    // 初始化列数据
     m_propertiesMap = {
         { FullPath, "fullPath" },
         { Timestamp, "timestamp" },
@@ -139,8 +141,8 @@ QVariant ArchiveModel::data(const QModelIndex &index, int role) const
         case Qt::DecorationRole:
             if (index.column() == 0) {
                 const Archive::Entry *e = static_cast<Archive::Entry *>(index.internalPointer());
-                QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
-                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(24, 24, mode);
+                //QIcon::Mode mode = (filesToMove.contains(e->fullPath())) ? QIcon::Disabled : QIcon::Normal;
+                return m_entryIcons.value(e->fullPath(NoTrailingSlash)).pixmap(24, 24 /*, mode*/);
             }
 
             return QVariant();
@@ -248,6 +250,7 @@ QModelIndex ArchiveModel::index(int row, int column, const QModelIndex &parent) 
 
 bool ArchiveModel::isentryDir(const QModelIndex &index)
 {
+    // 获取当前索引位置的entry，并且判断是否是文件夹
     const Archive::Entry *parentEntry = index.isValid()
                                         ? static_cast<Archive::Entry *>(index.internalPointer())
                                         : m_rootEntry.data();
@@ -261,6 +264,7 @@ void ArchiveModel::setPathIndex(int *index)
 
 void ArchiveModel::setParentEntry(const QModelIndex &index)
 {
+    // 获取当前索引位置的entry，并将此数据存储为父节点数据
     Archive::Entry *parentEntry = index.isValid()
                                   ? static_cast<Archive::Entry *>(index.internalPointer())
                                   : m_rootEntry.data();
@@ -275,10 +279,10 @@ Archive::Entry *ArchiveModel::getParentEntry()
         return nullptr;
     }
 
-    if (*m_ppathindex == 0) {
+    if (*m_ppathindex == 0) { // 如果目录层级为0,即根目录，返回根目录数据
         return m_rootEntry.data();
     } else {
-        return m_parent;
+        return m_parent; // 否则返回父节点数据
     }
 }
 
@@ -290,8 +294,9 @@ Archive::Entry *ArchiveModel::getRootEntry()
 Archive::Entry *ArchiveModel::isExists(QString fullPath)
 {
     QFileInfo fileInfo(fullPath);
-    Archive::Entry *parent = this->getParentEntry();
+    Archive::Entry *parent = this->getParentEntry(); // 获取父节点数据
     //qint64 size = fileInfo.size();
+    // 判断父节点是否为空，若为空，获取根节点
     if (parent == nullptr) {
         parent = this->getRootEntry();
         if (parent == nullptr) {
@@ -299,9 +304,9 @@ Archive::Entry *ArchiveModel::isExists(QString fullPath)
         }
     }
 
-    QVector<Archive::Entry *> vector =  parent->entries();
+    QVector<Archive::Entry *> vector = parent->entries(); // 获取父节点下的所有子节点数据
     QVector<Archive::Entry *>::iterator it = vector.begin();
-    while (it != vector.end()) {
+    while (it != vector.end()) { // 对所有子节点进行迭代判重
         Archive::Entry *entry = *it;
         //qint64 sizeOri = entry->property("size").toLongLong();
         if (entry->name() == fileInfo.fileName() /*&& size == sizeOri*/) {
@@ -587,6 +592,7 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         return;
     }
 
+    // 根据路径获取对应的entry
     Archive::Entry *entry = m_rootEntry->findByPath(entryFileName.split(QLatin1Char('/'), QString::SkipEmptyParts));
     if (entry) {
         Archive::Entry *parent = entry->getParent();
@@ -597,6 +603,7 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         QModelIndex index = indexForEntry(entry);
         Q_UNUSED(index)
 
+        // 开始移除某条数据
         beginRemoveRows(indexForEntry(parent), entry->row(), entry->row());
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
@@ -875,7 +882,7 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
 
 void ArchiveModel::slotLoadingFinished(KJob *job)
 {
-    std::sort(m_showColumns.begin(), m_showColumns.end());
+    std::sort(m_showColumns.begin(), m_showColumns.end()); // 对列进行排序
 
     if (!job->error()) {
         qDebug() << "Showing columns: " << m_showColumns;
@@ -886,7 +893,8 @@ void ArchiveModel::slotLoadingFinished(KJob *job)
         endResetModel();
     }
 
-    emit loadingFinished(job);
+    emit loadingFinished(job); // 发送加载结束信号
+
     if (m_tableview && m_showColumns.length() > 0) {
         m_tableview->sortByColumn(0, Qt::AscendingOrder);
         //refresh entry file count
@@ -897,7 +905,7 @@ void ArchiveModel::slotLoadingFinished(KJob *job)
                 qlonglong sizeVal = pEntry->property("size").value<qulonglong>();
                 if (!sizeVal) {
                     if (ReadOnlyArchiveInterface *pInterface = getPlugin()) {
-                        pInterface->RefreshEntryFileCount(pEntry);
+                        pInterface->RefreshEntryFileCount(pEntry); // 刷新文件夹显示的子文件数目
                     }
                 }
             }
@@ -910,11 +918,13 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     Q_ASSERT(entry);
     Archive::Entry *parent = entry->getParent();
     Q_ASSERT(parent);
+
+    // 判断类型以便区分是否需要向列表中插入一行数据
     if (behaviour == NotifyViews) {
         beginInsertRows(indexForEntry(parent), parent->entries().count(), parent->entries().count());
     }
 
-    parent->appendEntry(entry);
+    parent->appendEntry(entry); // 向父节点中插入当前数据
     if (behaviour == NotifyViews) {
         endInsertRows();
     }
@@ -922,6 +932,7 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
     // Save an icon for each newly added entry.
     QMimeDatabase db;
     QIcon icon;
+    // 根据类型获取图标
     entry->isDir()
     ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
              : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
@@ -935,6 +946,7 @@ void ArchiveModel::insertEntry(Archive::Entry *entry, InsertBehaviour behaviour)
 
 void ArchiveModel::appendEntryIcons(const QHash<QString, QIcon> &map)
 {
+    // 向m_entryIcons添加新的文件名及其类型图标
     QHash<QString, QIcon>::const_iterator iter1 = map.constBegin();
     while (iter1 != map.constEnd()) {
         m_entryIcons.insert(iter1.key(), iter1.value());
@@ -949,6 +961,7 @@ Archive *ArchiveModel::archive() const
 
 void ArchiveModel::reset()
 {
+    //重置相关数据
     m_archive.reset(nullptr);
     s_previousMatch = nullptr;
     s_previousPieces->clear();
@@ -960,16 +973,17 @@ void ArchiveModel::reset()
     endResetModel();
 }
 
-void ArchiveModel::createEmptyArchive(const QString &path, const QString &mimeType, QObject *parent)
-{
-    reset();
-    m_archive.reset(Archive::createEmpty(path, mimeType, parent));
-}
+//void ArchiveModel::createEmptyArchive(const QString &path, const QString &mimeType, QObject *parent)
+//{
+//    reset();
+//    m_archive.reset(Archive::createEmpty(path, mimeType, parent));
+//}
 
 KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QObject *parent)
 {
     reset();
 
+    // 创建加载操作，加载压缩包数据
     auto loadJob = Archive::load(path, mimeType, parent);
     connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
     connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
@@ -978,16 +992,16 @@ KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QO
     setPlugin(loadJob->archiveInterface());
     connect(loadJob->archiveInterface(), &ReadOnlyArchiveInterface::entry, this, &ArchiveModel::slotListEntry);
 
-    emit loadingStarted();
+    emit loadingStarted(); // 发送加载开始信号
 
     return loadJob;
 }
 
-ExtractJob *ArchiveModel::extractFile(Archive::Entry *file, const QString &destinationDir, const ExtractionOptions &options) const
-{
-    QVector<Archive::Entry *> files({file});
-    return extractFiles(files, destinationDir, options);
-}
+//ExtractJob *ArchiveModel::extractFile(Archive::Entry *file, const QString &destinationDir, const ExtractionOptions &options) const
+//{
+//    QVector<Archive::Entry *> files({file});
+//    return extractFiles(files, destinationDir, options);
+//}
 
 ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDir, const ExtractionOptions &options) const
 {
@@ -1004,6 +1018,7 @@ ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, c
         m_archive->encrypt(psd, headerEncrypted);
     }
 
+    // 创建解压操作
     ExtractJob *newJob = m_archive->extractFiles(files, destinationDir, options);
     connect(newJob, &ExtractJob::userQuery, this, &ArchiveModel::signalUserQuery);
     return newJob;
@@ -1012,7 +1027,7 @@ ExtractJob *ArchiveModel::extractFiles(const QVector<Archive::Entry *> &files, c
 PreviewJob *ArchiveModel::preview(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
-    PreviewJob *job = m_archive->preview(file);
+    PreviewJob *job = m_archive->preview(file); // 预览压缩包文件
     connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
@@ -1020,7 +1035,7 @@ PreviewJob *ArchiveModel::preview(Archive::Entry *file) const
 OpenJob *ArchiveModel::open(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
-    OpenJob *job = m_archive->open(file);
+    OpenJob *job = m_archive->open(file); // 打开压缩包文件
     connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
@@ -1028,7 +1043,7 @@ OpenJob *ArchiveModel::open(Archive::Entry *file) const
 OpenWithJob *ArchiveModel::openWith(Archive::Entry *file) const
 {
     Q_ASSERT(m_archive);
-    OpenWithJob *job = m_archive->openWith(file);
+    OpenWithJob *job = m_archive->openWith(file); // 以...方式打开压缩包文件
     connect(job, &Job::userQuery, this, &ArchiveModel::signalUserQuery);
     return job;
 }
@@ -1040,6 +1055,7 @@ AddJob *ArchiveModel::addFiles(QVector<Archive::Entry *> &entries, const Archive
     }
 
     if (!m_archive->isReadOnly()) {
+        // 创建添加/压缩操作
         AddJob *job = m_archive->addFiles(entries, destination, pIface, options);
         connect(job, &AddJob::newEntry, this, &ArchiveModel::slotNewEntry);
         connect(job, &AddJob::userQuery, this, &ArchiveModel::signalUserQuery);
@@ -1058,6 +1074,7 @@ MoveJob *ArchiveModel::moveFiles(QVector<Archive::Entry *> &entries, Archive::En
     }
 
     if (!m_archive->isReadOnly()) {
+        // 创建移动操作
         MoveJob *job = m_archive->moveFiles(entries, destination, options);
         connect(job, &MoveJob::newEntry, this, &ArchiveModel::slotNewEntry);
         connect(job, &MoveJob::userQuery, this, &ArchiveModel::signalUserQuery);
@@ -1077,6 +1094,7 @@ CopyJob *ArchiveModel::copyFiles(QVector<Archive::Entry *> &entries, Archive::En
     }
 
     if (!m_archive->isReadOnly()) {
+        // 创建拷贝操作
         CopyJob *job = m_archive->copyFiles(entries, destination, options);
         connect(job, &CopyJob::newEntry, this, &ArchiveModel::slotNewEntry);
         connect(job, &CopyJob::userQuery, this, &ArchiveModel::signalUserQuery);
@@ -1091,6 +1109,7 @@ DeleteJob *ArchiveModel::deleteFiles(QVector<Archive::Entry *> entries)
 {
     Q_ASSERT(m_archive);
     if (!m_archive->isReadOnly()) {
+        // 创建删除操作
         DeleteJob *job = m_archive->deleteFiles(entries);
         connect(job, &DeleteJob::entryRemoved, this, &ArchiveModel::slotEntryRemoved);
 
@@ -1112,94 +1131,94 @@ void ArchiveModel::encryptArchive(const QString &password, bool encryptHeader)
     m_archive->encrypt(password, encryptHeader);
 }
 
-bool ArchiveModel::conflictingEntries(QList<const Archive::Entry *> &conflictingEntries, const QStringList &entries, bool allowMerging) const
-{
-    bool error = false;
+//bool ArchiveModel::conflictingEntries(QList<const Archive::Entry *> &conflictingEntries, const QStringList &entries, bool allowMerging) const
+//{
+//    bool error = false;
 
-    // We can't accept destination as an argument, because it can be a new entry path for renaming.
-    const Archive::Entry *destination;
-    {
-        QStringList destinationParts = entries.first().split(QLatin1Char('/'), QString::SkipEmptyParts);
-        destinationParts.removeLast();
-        if (destinationParts.count() > 0) {
-            destination = m_rootEntry->findByPath(destinationParts);
-        } else {
-            destination = m_rootEntry.data();
-        }
-    }
+//    // We can't accept destination as an argument, because it can be a new entry path for renaming.
+//    const Archive::Entry *destination;
+//    {
+//        QStringList destinationParts = entries.first().split(QLatin1Char('/'), QString::SkipEmptyParts);
+//        destinationParts.removeLast();
+//        if (destinationParts.count() > 0) {
+//            destination = m_rootEntry->findByPath(destinationParts);
+//        } else {
+//            destination = m_rootEntry.data();
+//        }
+//    }
 
-    const Archive::Entry *lastDirEntry = destination;
-    QString skippedDirPath;
+//    const Archive::Entry *lastDirEntry = destination;
+//    QString skippedDirPath;
 
-    for (const QString &entry : entries) {
-        if (skippedDirPath.count() > 0 && entry.startsWith(skippedDirPath)) {
-            continue;
-        } else {
-            skippedDirPath.clear();
-        }
+//    for (const QString &entry : entries) {
+//        if (skippedDirPath.count() > 0 && entry.startsWith(skippedDirPath)) {
+//            continue;
+//        } else {
+//            skippedDirPath.clear();
+//        }
 
-        while (!entry.startsWith(lastDirEntry->fullPath())) {
-            lastDirEntry = lastDirEntry->getParent();
-        }
+//        while (!entry.startsWith(lastDirEntry->fullPath())) {
+//            lastDirEntry = lastDirEntry->getParent();
+//        }
 
-        bool isDir = entry.right(1) == QLatin1String("/");
-        const Archive::Entry *archiveEntry = lastDirEntry->find(entry.split(QLatin1Char('/'), QString::SkipEmptyParts).last());
+//        bool isDir = entry.right(1) == QLatin1String("/");
+//        const Archive::Entry *archiveEntry = lastDirEntry->find(entry.split(QLatin1Char('/'), QString::SkipEmptyParts).last());
 
-        if (archiveEntry != nullptr) {
-            if (archiveEntry->isDir() != isDir || !allowMerging) {
-                if (isDir) {
-                    skippedDirPath = lastDirEntry->fullPath();
-                }
+//        if (archiveEntry != nullptr) {
+//            if (archiveEntry->isDir() != isDir || !allowMerging) {
+//                if (isDir) {
+//                    skippedDirPath = lastDirEntry->fullPath();
+//                }
 
-                if (!error) {
-                    conflictingEntries.clear();
-                    error = true;
-                }
+//                if (!error) {
+//                    conflictingEntries.clear();
+//                    error = true;
+//                }
 
-                conflictingEntries << archiveEntry;
-            } else {
-                if (isDir) {
-                    lastDirEntry = archiveEntry;
-                } else if (!error) {
-                    conflictingEntries << archiveEntry;
-                }
-            }
-        } else if (isDir) {
-            skippedDirPath = entry;
-        }
-    }
+//                conflictingEntries << archiveEntry;
+//            } else {
+//                if (isDir) {
+//                    lastDirEntry = archiveEntry;
+//                } else if (!error) {
+//                    conflictingEntries << archiveEntry;
+//                }
+//            }
+//        } else if (isDir) {
+//            skippedDirPath = entry;
+//        }
+//    }
 
-    return error;
-}
+//    return error;
+//}
 
-bool ArchiveModel::hasDuplicatedEntries(const QStringList &entries)
-{
-    QStringList tempList;
-    for (const QString &entry : entries) {
-        if (tempList.contains(entry)) {
-            return true;
-        }
+//bool ArchiveModel::hasDuplicatedEntries(const QStringList &entries)
+//{
+//    QStringList tempList;
+//    for (const QString &entry : entries) {
+//        if (tempList.contains(entry)) {
+//            return true;
+//        }
 
-        tempList << entry;
-    }
+//        tempList << entry;
+//    }
 
-    return false;
-}
+//    return false;
+//}
 
-QMap<QString, Archive::Entry *> ArchiveModel::entryMap(const QVector<Archive::Entry *> &entries)
-{
-    QMap<QString, Archive::Entry *> map;
-    for (Archive::Entry *entry : entries) {
-        map.insert(entry->fullPath(), entry);
-    }
+//QMap<QString, Archive::Entry *> ArchiveModel::entryMap(const QVector<Archive::Entry *> &entries)
+//{
+//    QMap<QString, Archive::Entry *> map;
+//    for (Archive::Entry *entry : entries) {
+//        map.insert(entry->fullPath(), entry);
+//    }
 
-    return map;
-}
+//    return map;
+//}
 
-const QHash<QString, QIcon> ArchiveModel::entryIcons() const
-{
-    return m_entryIcons;
-}
+//const QHash<QString, QIcon> ArchiveModel::entryIcons() const
+//{
+//    return m_entryIcons;
+//}
 
 ReadOnlyArchiveInterface *ArchiveModel::getPlugin()
 {
@@ -1242,67 +1261,67 @@ void ArchiveModel::slotCleanupEmptyDirs()
     }
 }
 
-void ArchiveModel::countEntriesAndSize()
-{
-    // This function is used to count the number of folders/files and
-    // the total compressed size. This is needed for PropertiesDialog
-    // to update the corresponding values after adding/deleting files.
+//void ArchiveModel::countEntriesAndSize()
+//{
+//    // This function is used to count the number of folders/files and
+//    // the total compressed size. This is needed for PropertiesDialog
+//    // to update the corresponding values after adding/deleting files.
 
-    // When ArchiveModel has been properly fixed, this code can likely
-    // be removed.
+//    // When ArchiveModel has been properly fixed, this code can likely
+//    // be removed.
 
-    m_numberOfFiles = 0;
-    m_numberOfFolders = 0;
-    m_uncompressedSize = 0;
+//    m_numberOfFiles = 0;
+//    m_numberOfFolders = 0;
+//    m_uncompressedSize = 0;
 
-    QElapsedTimer timer;
-    timer.start();
+//    QElapsedTimer timer;
+//    timer.start();
 
-    traverseAndCountDirNode(m_rootEntry.data());
+//    traverseAndCountDirNode(m_rootEntry.data());
 
-    qDebug() << "Time to count entries and size:" << timer.elapsed() << "ms";
-}
+//    qDebug() << "Time to count entries and size:" << timer.elapsed() << "ms";
+//}
 
-void ArchiveModel::traverseAndCountDirNode(Archive::Entry *dir)
-{
-    const auto entries = dir->entries();
-    for (Archive::Entry *entry : entries) {
-        if (entry->isDir()) {
-            traverseAndCountDirNode(entry);
-            m_numberOfFolders++;
-        } else {
-            m_numberOfFiles++;
-            m_uncompressedSize += entry->property("size").toULongLong();
-        }
-    }
-}
+//void ArchiveModel::traverseAndCountDirNode(Archive::Entry *dir)
+//{
+//    const auto entries = dir->entries();
+//    for (Archive::Entry *entry : entries) {
+//        if (entry->isDir()) {
+//            traverseAndCountDirNode(entry);
+//            m_numberOfFolders++;
+//        } else {
+//            m_numberOfFiles++;
+//            m_uncompressedSize += entry->property("size").toULongLong();
+//        }
+//    }
+//}
 
 void ArchiveModel::setPlugin(ReadOnlyArchiveInterface *interface)
 {
-    m_plugin = interface;
+    m_plugin = interface; // 返回插件指针
 }
 
-qulonglong ArchiveModel::numberOfFiles() const
-{
-    return m_numberOfFiles;
-}
+//qulonglong ArchiveModel::numberOfFiles() const
+//{
+//    return m_numberOfFiles;
+//}
 
-qulonglong ArchiveModel::numberOfFolders() const
-{
-    return m_numberOfFolders;
-}
+//qulonglong ArchiveModel::numberOfFolders() const
+//{
+//    return m_numberOfFolders;
+//}
 
-qulonglong ArchiveModel::uncompressedSize() const
-{
-    return m_uncompressedSize;
-}
+//qulonglong ArchiveModel::uncompressedSize() const
+//{
+//    return m_uncompressedSize;
+//}
 
 QList<int> ArchiveModel::shownColumns() const
 {
-    return m_showColumns;
+    return m_showColumns; // 返回表格的列数
 }
 
 QMap<int, QByteArray> ArchiveModel::propertiesMap() const
 {
-    return m_propertiesMap;
+    return m_propertiesMap; // 返回属性列表
 }

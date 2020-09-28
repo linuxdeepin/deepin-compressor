@@ -984,6 +984,8 @@ void fileViewer::resizeEvent(QResizeEvent */*size*/)
 
 void fileViewer::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event)
+
     if (m_pathindex > 0) {
         showPlable();
     }
