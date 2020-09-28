@@ -91,15 +91,15 @@ CompressSetting::CompressSetting(QWidget *parent) : DWidget(parent)
 void CompressSetting::InitUI()
 {
     // DWidget *leftwidget = new DWidget(this);
-    QHBoxLayout *typelayout = new QHBoxLayout;
-    QHBoxLayout *layout = new QHBoxLayout;
+    // 图片
     m_pixmaplabel = new DLabel(this);
 
+    // 压缩类型
     m_compresstype = new TypeLabel(this);
+    m_compresstype->setMinimumHeight(25);
     DPalette pa;
     pa = DApplicationHelper::instance()->palette(m_compresstype);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
-    m_compresstype->setMinimumHeight(25);
 
     DStyle style;
     QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
@@ -107,14 +107,16 @@ void CompressSetting::InitUI()
     typepixmap = new TypeLabel(this);
     typepixmap->setMinimumHeight(25);
     typepixmap->setPixmap(pixmap);
+
+    // 默认压缩类型为zip
     m_compresstype->setText("zip");
     m_compresstype->setWordWrap(true);
     m_compresstype->setPalette(pa);
     m_compresstype->setAlignment(Qt::AlignCenter);
-    //    QFont font = DFontSizeManager::instance()->get(DFontSizeManager::T5);
-    //    font.setWeight(QFont::DemiBold);
-    //    m_compresstype->setFont(font);
     DFontSizeManager::instance()->bind(m_compresstype, DFontSizeManager::T5, QFont::DemiBold);
+
+    // 图片和压缩类型的label布局
+    QHBoxLayout *typelayout = new QHBoxLayout;
     typelayout->addStretch();
     typelayout->addWidget(m_compresstype, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     typelayout->addWidget(typepixmap, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -126,10 +128,12 @@ void CompressSetting::InitUI()
     m_clicklabel->setObjectName("ClickTypeLabel");
     m_clicklabel->setFocusPolicy(Qt::TabFocus);
     m_clicklabel->installEventFilter(this);
-
     m_clicklabel->setLayout(typelayout);
+
+    QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(m_clicklabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
+    // 文件类型菜单
     m_typemenu = new DMenu(this);
     m_typemenu->setMinimumWidth(162);
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
@@ -145,12 +149,16 @@ void CompressSetting::InitUI()
     setTypeImage("zip");
 
     QFormLayout *filelayout = new QFormLayout();
+
+    // 文件名
     m_filename = new DLineEdit(this);
     m_filename->setMinimumSize(260, 36);
     m_filename->setText(tr("New Archive"));
+
     QLineEdit *qfilename = m_filename->lineEdit();
     qfilename->setMaxLength(70);
 
+    // 路径
     m_savepath = new DFileChooserEdit(this);
     m_savepath->setFileMode(DFileDialog::Directory);
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
@@ -162,33 +170,45 @@ void CompressSetting::InitUI()
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
     filelayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
 
+    // 高级选项
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
     moresetlabel->setForegroundRole(DPalette::WindowText);
+
     m_moresetbutton = new CustomSwitchButton(this);
     m_moresetbutton->setAccessibleName("Moreset_btn");
     m_moresetlayout = new QHBoxLayout();
     m_moresetlayout->addWidget(moresetlabel, 0, Qt::AlignLeft);
     m_moresetlayout->addWidget(m_moresetbutton, 1, Qt::AlignRight);
+
+    // 加密文件
     m_encryptedlabel = new DLabel(tr("Encrypt the archive") + ":", this);
     m_encryptedlabel->setToolTip(tr("Support zip, 7z type only"));
-
     m_encryptedlabel->setForegroundRole(DPalette::WindowText);
+
     m_password = new DPasswordEdit(this);
+
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
     m_password->setMinimumSize(260, 36);
+
+    // 加密文件列表
     m_encryptedfilelistlabel = new DLabel(tr("Encrypt the file list too"), this);
     m_encryptedfilelistlabel->setToolTip(tr("Support 7z type only"));
     m_encryptedfilelistlabel->setEnabled(false);
+
     m_file_secret = new CustomSwitchButton(this);
     m_file_secret->setAccessibleName("FileSecret_btn");
+
     m_file_secretlayout = new QHBoxLayout();
     m_file_secretlayout->addWidget(m_encryptedfilelistlabel, 0, Qt::AlignLeft);
     m_file_secretlayout->addWidget(m_file_secret, 1, Qt::AlignRight);
+
+    // 分卷压缩
     m_splitcompress = new CustomCheckBox(tr("Split to volumes") + ":", this);
     m_splitcompress->setAccessibleName("Split_cbox");
     m_splitcompress->setEnabled(false);
     m_splitcompress->setToolTip(tr("Support 7z type only"));
+
     m_splitnumedit = new DDoubleSpinBox(this);
     m_splitnumedit->setMinimumSize(260, 36);
     m_splitnumedit->setSuffix("MB");
@@ -242,13 +262,13 @@ void CompressSetting::InitUI()
     m_nextbutton = new CustomPushButton(tr("Compress"), this);
     m_nextbutton->setAccessibleName("Compress_btn");
     m_nextbutton->setMinimumSize(340, 36);
+
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);
     buttonHBoxLayout->addWidget(m_nextbutton, 2);
     buttonHBoxLayout->addStretch(1);
 
     mainLayout->addLayout(buttonHBoxLayout);
-
     mainLayout->setContentsMargins(12, 6, 0, 20);
 
     m_splitnumedit->setEnabled(false);
@@ -258,7 +278,6 @@ void CompressSetting::InitUI()
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
 
     setBackgroundRole(DPalette::Base);
-
     setTabOrder(m_compresstype, m_filename);
 }
 
@@ -301,6 +320,7 @@ void CompressSetting::InitConnection()
 void CompressSetting::initWidget()
 {
     if (m_nextbutton == nullptr) {
+        // 获取支持压缩的类型
         m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
 
         InitUI();
@@ -316,28 +336,31 @@ void CompressSetting::showRightMenu(QMouseEvent * /*e*/)
     m_typemenu->popup(pos);
 }
 
+/**
+ * @brief CompressSetting::onNextButoonClicked 点击压缩按钮
+ */
 void CompressSetting::onNextButoonClicked()
 {
     QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
-    if (!checkfilename(name)) {
+    if (!checkfilename(name)) { // 检查文件名是否合法
         showWarningDialog(tr("Invalid file name"));
         return;
     }
 
-    if ((m_savepath->text().remove(" ")).isEmpty()) {
+    if ((m_savepath->text().remove(" ")).isEmpty()) { // 检查是否已经选择保存路径
         showWarningDialog(tr("Please enter the path"));
         return;
     }
 
-    if (false == dir.exists()) {
+    if (false == dir.exists()) { // 检查选择保存路径是否存在
         showWarningDialog(tr("The path does not exist, please retry"));
         return;
     }
 
     for (int i = 0; i < m_pathlist.count(); i++) {
         QFileInfo m_fileName(m_pathlist.at(i));
-        if (!m_fileName.exists()) {
+        if (!m_fileName.exists()) {  // 待压缩文件已经不存在
             filePermission = false;
             showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(Utils::toShortString(m_fileName.fileName())));
             return;
@@ -354,7 +377,7 @@ void CompressSetting::onNextButoonClicked()
                 qDebug() << "file is :" << fileInfo.fileName();
             }
         }*/
-        if (m_fileName.isFile()) {
+        if (m_fileName.isFile()) { // 检查文件是否可读
             if (!m_fileName.isReadable()) {
                 filePermission = false;
                 showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
@@ -376,17 +399,19 @@ void CompressSetting::onNextButoonClicked()
     }
 
     QFileInfo m_fileDestinationPath(m_savepath->text());
-    if (!(m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable())) {
+    if (!(m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable())) { // 检查一选择保存路径是否有权限
         showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         return;
     }
 
+    // 分卷数量不能多于10 卷
     if ((((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10) && m_compresstype->text().contains("7z") && m_splitcompress->isChecked()) {
         showWarningDialog(tr("Too many volumes, please change and retry"));
         //  Up to 10 volumes, please change and retry
         return;
     }
 
+    // 保存压缩参数
     QMap< QString, QString > m_openArgs;
     const QString password = m_password->text();
     QString fixedMimeType;
@@ -408,8 +433,11 @@ void CompressSetting::onNextButoonClicked()
         }
     }
 
+    // 创建压缩文件
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
+    // 压缩类型
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
+    // 压缩等级
     if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
         m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
     } else if ("application/zip" == fixedMimeType) {
@@ -424,6 +452,7 @@ void CompressSetting::onNextButoonClicked()
     }
 
     qDebug() << m_splitnumedit->value();
+    // 分卷压缩大小
     if (m_splitnumedit->value() > 0 && m_splitcompress->isChecked()) {
         m_openArgs[QStringLiteral("volumeSize")] = QString::number(static_cast< int >(m_splitnumedit->value() * 1024));
     }
@@ -433,17 +462,22 @@ void CompressSetting::onNextButoonClicked()
     //    }
 
     qDebug() << m_openArgs[QStringLiteral("volumeSize")];
+    // 是否加密
     if (!m_password->text().isEmpty()) {
         m_openArgs[QStringLiteral("encryptionMethod")] = "AES256";  // 5 is default
     }
 
+    // 密码
     m_openArgs[QStringLiteral("encryptionPassword")] = password;
 
+    // 是否列表加密
     if (m_file_secret->isChecked()) {
         m_openArgs[QStringLiteral("encryptHeader")] = QStringLiteral("true");
     }
 
+    // 压缩路径
     m_openArgs[QStringLiteral("localFilePath")] = m_savepath->text();
+    // 压缩文件名
     m_openArgs[QStringLiteral("filename")] =
         m_filename->text() + strTar7z + "."  + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix();
 
@@ -503,16 +537,20 @@ void CompressSetting::onNextButoonClicked()
     m_openArgs.remove(QStringLiteral("selectFilesSize"));
 }
 
+/**
+ * @brief CompressSetting::onAdvanceButtonClicked 是否选择高级选项
+ * @param status
+ */
 void CompressSetting::onAdvanceButtonClicked(bool status)
 {
-    if (status) {
+    if (status) { // 打开高级选项设置
         m_encryptedlabel->setVisible(true);
         m_password->setVisible(true);
         m_encryptedfilelistlabel->setVisible(true);
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
         m_splitnumedit->setVisible(true);
-    } else {
+    } else { // 关闭高级选项设置
         m_encryptedlabel->setVisible(false);
         m_password->setVisible(false);
         m_encryptedfilelistlabel->setVisible(false);
@@ -527,6 +565,10 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
     }
 }
 
+/**
+ * @brief CompressSetting::setTypeImage 设置图片
+ * @param type 类型
+ */
 void CompressSetting::setTypeImage(QString type)
 {
     QFileIconProvider provider;
@@ -535,6 +577,10 @@ void CompressSetting::setTypeImage(QString type)
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 
+/**
+ * @brief CompressSetting::setDefaultPath 设置路径
+ * @param path
+ */
 void CompressSetting::setDefaultPath(QString path)
 {
     initWidget();
@@ -544,6 +590,10 @@ void CompressSetting::setDefaultPath(QString path)
     m_savepath->setDirectoryUrl(dir);
 }
 
+/**
+ * @brief CompressSetting::setDefaultName 设置文件名
+ * @param name
+ */
 void CompressSetting::setDefaultName(QString name)
 {
     initWidget();
@@ -556,25 +606,30 @@ void CompressSetting::setDefaultName(QString name)
     qfilename->setFocus();
 }
 
-quint64 CompressSetting::dirFileSize(const QString &path)
-{
-    QDir dir(path);
-    quint64 size = 0;
-    // dir.entryInfoList(QDir::Files)返回文件信息
-    foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
-        //计算文件大小
-        size += fileInfo.size();
-    }
+//quint64 CompressSetting::dirFileSize(const QString &path)
+//{
+//    QDir dir(path);
+//    quint64 size = 0;
+//    // dir.entryInfoList(QDir::Files)返回文件信息
+//    foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
+//        //计算文件大小
+//        size += fileInfo.size();
+//    }
 
-    // dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
-    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        //若存在子目录，则递归调用dirFileSize()函数
-        size += dirFileSize(path + QDir::separator() + subDir);
-    }
+//    // dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)返回所有子目录，并进行过滤
+//    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+//        //若存在子目录，则递归调用dirFileSize()函数
+//        size += dirFileSize(path + QDir::separator() + subDir);
+//    }
 
-    return size;
-}
+//    return size;
+//}
 
+/**
+ * @brief CompressSetting::checkfilename 检查压缩文件名是否合法
+ * @param str
+ * @return
+ */
 bool CompressSetting::checkfilename(QString str)
 {
     if (str.length() == 0) {
@@ -596,6 +651,7 @@ bool CompressSetting::checkfilename(QString str)
 
 //----------------:;39;“\][=-~!*()；//command : #
     black_list.clear();
+    // 文件名不能以‘/’开头
     black_list = {'/'};
 //    black_list = { '/', '\t', '\b', '@', '#', '$', '%', '^', '&' }; /*, '*', '(', ')', '[', ']'*/
     foreach (QChar black_char, black_list) {
@@ -607,6 +663,11 @@ bool CompressSetting::checkfilename(QString str)
     return true;
 }
 
+/**
+ * @brief CompressSetting::checkFilePermission 检查文件权限
+ * @param path
+ * @return
+ */
 bool CompressSetting::checkFilePermission(const QString &path)
 {
     bool filePermissionFlag = true;
@@ -627,16 +688,27 @@ bool CompressSetting::checkFilePermission(const QString &path)
     return filePermissionFlag;
 }
 
+/**
+ * @brief CompressSetting::setSelectedFileSize 设置文件大小
+ * @param size
+ */
 void CompressSetting::setSelectedFileSize(qint64 size)
 {
     m_getFileSize = size;
 }
 
+/**
+ * @brief CompressSetting::clickTitleBtnResetAdvancedOptions 返回压缩列表界面，关闭高级选项设置
+ */
 void CompressSetting::clickTitleBtnResetAdvancedOptions()
 {
     m_moresetbutton->setChecked(false);
 }
 
+/**
+ * @brief CompressSetting::getTypemenuActions 获取菜单选项
+ * @return
+ */
 QList<QAction *> CompressSetting::getTypemenuActions()
 {
     return m_typemenu->actions();
@@ -696,16 +768,19 @@ void CompressSetting::setFilepath(QStringList pathlist)
     m_pathlist = pathlist;
 }
 
+/**
+ * @brief CompressSetting::onSplitChanged 分卷
+ */
 void CompressSetting::onSplitChanged(int /*status*/)
 {
-    if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) {
+    if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) { // 分卷压缩
         m_splitnumedit->setEnabled(true);
 //        if ((m_getFileSize / 1024 / 1024) >= 1) { //1M以上的文件
 //            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0 + 0.1);
 //        } else if ((m_getFileSize / 1024) > 102 && (m_getFileSize / 1024) <= 1024) { //0.1M－1M的文件
 //            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0);
 //        }
-        QString size = Utils::humanReadableSize(m_getFileSize, 1);
+        QString size = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小
         m_splitnumedit->setToolTip(tr("Total size: %1").arg(size));
         isSplitChecked = true;
     } else {
@@ -714,6 +789,10 @@ void CompressSetting::onSplitChanged(int /*status*/)
     }
 }
 
+/**
+ * @brief CompressSetting::ontypeChanged 压缩类型改变
+ * @param action
+ */
 void CompressSetting::ontypeChanged(QAction *action)
 {
 //    qDebug() << action->text();
@@ -787,11 +866,19 @@ void CompressSetting::onThemeChanged()
     m_filename->setPalette(plt);
 }
 
+/**
+ * @brief CompressSetting::onSplitChecked 是否选择分卷压缩
+ * @return
+ */
 bool CompressSetting::onSplitChecked()
 {
     return isSplitChecked;
 }
 
+/**
+ * @brief CompressSetting::slotEchoModeChanged 设置密码是否可见
+ * @param echoOn
+ */
 void CompressSetting::slotEchoModeChanged(bool echoOn)
 {
     qDebug() << echoOn;
@@ -1271,6 +1358,10 @@ int CompressSetting::showWarningDialog(const QString &msg, int index, const QStr
     return res;
 }
 
+/**
+ * @brief CompressSetting::existSameFileName 提示存在同名压缩文件
+ * @return
+ */
 bool CompressSetting::existSameFileName()
 {
     DDialog *dialog = new DDialog(this);

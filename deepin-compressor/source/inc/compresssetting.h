@@ -82,7 +82,7 @@ public:
     void setDefaultPath(QString path);
     void setDefaultName(QString name);
     void setFilepath(QStringList pathlist);
-    quint64 dirFileSize(const QString &path);
+//    quint64 dirFileSize(const QString &path);
     bool checkfilename(QString str);
     bool checkFilePermission(const QString &path);
     void setSelectedFileSize(qint64 size);
