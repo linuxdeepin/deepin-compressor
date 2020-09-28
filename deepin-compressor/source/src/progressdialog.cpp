@@ -41,6 +41,7 @@ void ProgressDialog::initUI()
     setFixedWidth(m_defaultWidth);
     setMinimumHeight(m_defaultHeight);
 
+    // 标题栏显示有几个任务正在进行
     m_titlebar = new DTitlebar(this);
     m_titlebar->setFixedHeight(50);
     m_titlebar->layout()->setContentsMargins(0, 0, 0, 0);
@@ -51,17 +52,20 @@ void ProgressDialog::initUI()
     m_titlebar->setBackgroundTransparent(true);
 
     QVBoxLayout *contentlayout = new QVBoxLayout;
-    DPalette pa;
 
+    // 显示当前任务
     m_tasklable = new DLabel(this);
-    DFontSizeManager::instance()->bind(m_tasklable, DFontSizeManager::T6, QFont::Medium);
-    m_tasklable->setForegroundRole(DPalette::WindowText);
-    m_filelable = new DLabel(this);
-    DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
-    m_filelable->setForegroundRole(DPalette::TextTips);
     m_tasklable->setText(tr("Task") + ": ");
-    m_filelable->setText(tr("Extracting") + ":");
+    m_tasklable->setForegroundRole(DPalette::WindowText);
+    DFontSizeManager::instance()->bind(m_tasklable, DFontSizeManager::T6, QFont::Medium);
 
+    // 显示当前文件名
+    m_filelable = new DLabel(this);
+    m_filelable->setText(tr("Extracting") + ":");
+    m_filelable->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(m_filelable, DFontSizeManager::T8, QFont::Normal);
+
+    // 显示进度
     m_circleprogress = new  DProgressBar(this);
     m_circleprogress->setFixedSize(336, 6);
     m_circleprogress->setValue(0);
@@ -88,10 +92,14 @@ void ProgressDialog::initConnect()
     connect(m_extractdialog, &ExtractPauseDialog::sigbuttonpress, this, &ProgressDialog::slotextractpress);
 }
 
+/**
+ * @brief ProgressDialog::slotextractpress 是否取消提取
+ * @param index
+ */
 void ProgressDialog::slotextractpress(int index)
 {
     qDebug() << index;
-    if (1 == index) {
+    if (1 == index) { // 取消提取
         emit stopExtract();
         emit sigResetPercentAndTime();
     } else {
@@ -108,19 +116,30 @@ void ProgressDialog::closeEvent(QCloseEvent *)
     }
 }
 
+/**
+ * @brief ProgressDialog::setCurrentTask 设置当前压缩文件名
+ * @param file
+ */
 void ProgressDialog::setCurrentTask(const QString &file)
 {
     QFileInfo fileinfo(file);
-
     m_tasklable->setText(tr("Task") + ":" + fileinfo.fileName());
 }
 
+/**
+ * @brief ProgressDialog::setCurrentFile 设置正在提取的文件名
+ * @param file
+ */
 void ProgressDialog::setCurrentFile(const QString &file)
 {
     QFileInfo fileinfo(file);
     m_filelable->setText(tr("Extracting") + ":" + fileinfo.fileName());
 }
 
+/**
+ * @brief ProgressDialog::setProcess 设置进度
+ * @param value
+ */
 void ProgressDialog::setProcess(unsigned long  value)
 {
     if (100 != m_circleprogress->value()) {
@@ -128,6 +147,10 @@ void ProgressDialog::setProcess(unsigned long  value)
     }
 }
 
+/**
+ * @brief ProgressDialog::setFinished 提取结束
+ * @param path
+ */
 void ProgressDialog::setFinished(const QString &path)
 {
     if (100 != m_circleprogress->value()) {
@@ -143,6 +166,10 @@ void ProgressDialog::setFinished(const QString &path)
     }
 }
 
+/**
+ * @brief ProgressDialog::setMsg  设置提示消息
+ * @param msg
+ */
 void ProgressDialog::setMsg(const QString &msg)
 {
     if (100 != m_circleprogress->value()) {
@@ -162,11 +189,18 @@ void ProgressDialog::showdialog()
     exec();
 }
 
+/**
+ * @brief ProgressDialog::clearprocess 清除进度
+ */
 void ProgressDialog::clearprocess()
 {
     m_circleprogress->setValue(0);
 }
 
+/**
+ * @brief ProgressDialog::isshown 弹窗是否显示
+ * @return
+ */
 bool ProgressDialog::isshown()
 {
     return this->isVisible() || m_extractdialog->isVisible();
