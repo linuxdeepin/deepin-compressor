@@ -57,6 +57,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_fileviewer);
 
+    // 解压路径
     m_extractpath = new CustomCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
     m_extractpath->setAccessibleName("Extractpath_btn");
     m_extractpath->setToolTip(m_pathstr);
@@ -75,7 +76,6 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     pathlayout->addStretch(1);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-
     mainLayout->addLayout(contentLayout);
     mainLayout->addStretch();
     mainLayout->addLayout(pathlayout);
@@ -98,36 +98,45 @@ UnCompressPage::UnCompressPage(QWidget *parent)
     connect(m_fileviewer, &fileViewer::sigFileAutoCompress, this, &UnCompressPage::onAutoCompress);
     connect(this, &UnCompressPage::subWindowTipsPopSig, m_fileviewer, &fileViewer::SubWindowDragMsgReceive);
 //    connect(this, &UnCompressPage::subWindowTipsUpdateEntry, m_fileviewer, &fileViewer::SubWindowDragUpdateEntry);
-
     connect(m_fileviewer, &fileViewer::sigFileRemovedFromArchive, this, &UnCompressPage::sigDeleteArchiveFiles);
 
     setTabOrder(m_extractpath, m_nextbutton);
 //    connect(m_fileviewer, &fileViewer::sigFileAutoCompressToArchive, this, &UnCompressPage::sigAddArchiveFiles);
 }
 
+/**
+ * @brief UnCompressPage::oneCompressPress 点击解压按钮
+ */
 void UnCompressPage::oneCompressPress()
 {
     QFileInfo m_fileDestinationPath(m_pathstr);
     bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
 
-    if (!m_permission) {
-        if (!m_fileDestinationPath.exists()) {
+    if (!m_permission) { // 无法解压到已选中路径
+        if (!m_fileDestinationPath.exists()) { // 路径不存在
             showWarningDialog(tr("The default extraction path does not exist, please retry"));
-        } else {
+        } else { // 路径无权限
             showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
         }
         return;
-    } else {
+    } else { // 发送解压信号
         emit sigDecompressPress(m_pathstr);
     }
 }
 
+/**
+ * @brief UnCompressPage::setModel 设置数据模型
+ * @param model
+ */
 void UnCompressPage::setModel(ArchiveSortFilterModel *model)
 {
     m_model = model;
     m_fileviewer->setDecompressModel(m_model);
 }
 
+/**
+ * @brief UnCompressPage::onPathButoonClicked 选择路径
+ */
 void UnCompressPage::onPathButoonClicked()
 {
     DFileDialog dialog(this);
@@ -143,7 +152,6 @@ void UnCompressPage::onPathButoonClicked()
     }
 
     QList<QUrl> pathlist = dialog.selectedUrls();
-
     QString str = pathlist.at(0).toLocalFile();
     m_pathstr = str;
     m_extractpath->setToolTip(m_pathstr);
@@ -152,6 +160,10 @@ void UnCompressPage::onPathButoonClicked()
     m_extractpath->setText(tr("Extract to:") + str);
 }
 
+/**
+ * @brief UnCompressPage::setdefaultpath 设置解压路径
+ * @param path
+ */
 void UnCompressPage::setdefaultpath(const QString path)
 {
     m_pathstr = path;
@@ -163,11 +175,19 @@ void UnCompressPage::setdefaultpath(const QString path)
     m_extractpath->setText(tr("Extract to:") + str);
 }
 
+/**
+ * @brief UnCompressPage::SetDefaultFile 设置解压文件信息
+ * @param info
+ */
 void UnCompressPage::SetDefaultFile(QFileInfo info)
 {
     m_info = info;
 }
 
+/**
+ * @brief UnCompressPage::getFileCount 获取文件数量
+ * @return
+ */
 int UnCompressPage::getFileCount()
 {
     return m_fileviewer->getFileCount();
@@ -184,11 +204,11 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     DDialog *dialog = new DDialog(this);
     dialog->setAccessibleName("Warning_dialog");
     QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+
     dialog->setIcon(pixmap);
-//    dialog->setMessage(msg);
-//    dialog->addSpacing(32);
     dialog->addButton(tr("OK"));
     dialog->setMinimumSize(380, 140);
+
     DLabel *pContent = new DLabel(msg, dialog);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
     DPalette pa;
@@ -213,6 +233,10 @@ int UnCompressPage::showWarningDialog(const QString &msg)
     return res;
 }
 
+/**
+ * @brief UnCompressPage::getExtractType 获取解压类型
+ * @return
+ */
 EXTRACT_TYPE UnCompressPage::getExtractType()
 {
     return extractType;
@@ -223,11 +247,19 @@ void UnCompressPage::setRootPathIndex()
     m_fileviewer->setRootPathIndex();
 }
 
+/**
+ * @brief UnCompressPage::setWidth 获取应用窗口宽度
+ * @param windowWidth
+ */
 void UnCompressPage::setWidth(int windowWidth)
 {
     m_iWidth = windowWidth;
 }
 
+/**
+ * @brief UnCompressPage::resizeEvent 窗口大小发生变化
+ * @param event
+ */
 void UnCompressPage::resizeEvent(QResizeEvent *event)
 {
     setWidth(width());
@@ -235,15 +267,23 @@ void UnCompressPage::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
+/**
+ * @brief UnCompressPage::setUpdateFiles 更新文件列表
+ * @param listFiles
+ */
 void UnCompressPage::setUpdateFiles(const QStringList &listFiles)
 {
     m_inputlist = listFiles;
 }
 
+/**
+ * @brief UnCompressPage::convertArchive 格式转换
+ */
 void UnCompressPage::convertArchive()
 {
-    QStringList type = convertArchiveDialog();
+    QStringList type = convertArchiveDialog(); //  确认是否进行格式转换
     if (type.at(0) == "true") {
+        // 格式转换，需要将压缩文件解压到临时路径
         QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles" + PATH_SEP + Utils::createRandomString();
         //QString tmppath = TEMPDIR_NAME + PATH_SEP + "converttempfiles";
         QDir dir(tmppath);
@@ -251,9 +291,9 @@ void UnCompressPage::convertArchive()
             dir.mkpath(tmppath);
         }
 
-        if (type.last() == "zip") {
-            emit sigDecompressPress(tmppath, "zip");
-        } else if (type.last() == "7z") {
+        if (type.last() == "zip") { // 转换为zip格式
+            emit sigDecompressPress(tmppath, "zip"); // 发送解压信号
+        } else if (type.last() == "7z") { // 转换为7z格式
             emit sigDecompressPress(tmppath, "7z");
         }
     }
@@ -309,6 +349,9 @@ QString UnCompressPage::getAndDisplayPath(QString path)
     return pathStr;
 }
 
+/**
+ * @brief UnCompressPage::slotCompressedAddFile 解压列表界面添加文件进行追加压缩
+ */
 void UnCompressPage::slotCompressedAddFile()
 {
     DFileDialog dialog(this);
@@ -356,7 +399,7 @@ void UnCompressPage::slotCompressedAddFile()
         emit onRefreshEntryList(vectorEntry, false);
     } else {
         if (m_inputlist.count() > 0) {
-            if (m_info.filePath().endsWith(".rar")) {
+            if (m_info.filePath().endsWith(".rar")) { // 如果是rar文件，需要进行格式转换
                 convertArchive();
             } else {
                 emit sigAutoCompress(m_info.filePath(), m_inputlist);
@@ -385,11 +428,21 @@ CustomCommandLinkButton *UnCompressPage::getPathCommandLinkButton()
     return m_extractpath;
 }
 
+/**
+ * @brief UnCompressPage::getDecompressPath 获取解压路径
+ * @return
+ */
 QString UnCompressPage::getDecompressPath()
 {
     return m_pathstr;
 }
 
+/**
+ * @brief UnCompressPage::onextractfilesSlot 解压列表右键菜单对应提取的操作
+ * @param fileList
+ * @param type
+ * @param path
+ */
 void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTRACT_TYPE type, QString path)
 {
     if (fileList.count() == 0) {
@@ -415,9 +468,9 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         QString curpath = pathlist.at(0).toLocalFile();
 
         emit sigextractfiles(fileList, curpath, type);
-    } else if (EXTRACT_DRAG == type) {
+    } else if (EXTRACT_DRAG == type) { // 拖拽提取
         emit sigextractfiles(fileList, path, type);
-    } else if (EXTRACT_TEMP == type) {
+    } else if (EXTRACT_TEMP == type) { // 双击打开文件
         QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
         QDir dir(tmppath);
         if (!dir.exists()) {
@@ -425,7 +478,7 @@ void UnCompressPage::onextractfilesSlot(QVector<Archive::Entry *> fileList, EXTR
         }
 
         emit sigextractfiles(fileList, tmppath, type);
-    } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) {
+    } else if (EXTRACT_TEMP_CHOOSE_OPEN == type) { // 菜单“打开”
         QString tmppath = TEMPDIR_NAME + PATH_SEP + Utils::createRandomString();
         QDir dir(tmppath);
         if (!dir.exists()) {
@@ -465,6 +518,11 @@ void UnCompressPage::onextractfilesOpenSlot(const QVector<Archive::Entry *> &fil
     emit sigOpenExtractFile(fileList, programma);
 }
 
+/**
+ * @brief UnCompressPage::onAutoCompress 执行压缩操作
+ * @param path
+ * @param pWorkEntry
+ */
 void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWorkEntry)
 {
     m_inputlist.clear();
@@ -525,9 +583,13 @@ void UnCompressPage::slotSubWindowTipsPopSig(int mode, const QStringList &args)
     emit subWindowTipsPopSig(mode, args);
 }
 
+/**
+ * @brief UnCompressPage::slotDeleteJobFinished 删除操作结束
+ * @param pWorkEntry
+ */
 void UnCompressPage::slotDeleteJobFinished(Archive::Entry *pWorkEntry)
 {
-    if (m_inputlist.count() > 0) {
+    if (m_inputlist.count() > 0) { // 重新压缩剩余文件
 //        emit sigAutoCompressEntry(m_info.filePath(), m_inputlist, pWorkEntry);
         emit sigAutoCompress(m_info.filePath(), m_inputlist);
     }
@@ -554,14 +616,19 @@ int UnCompressPage::showReplaceDialog(QString name, int &responseValue)
     return query.getExecuteReturn();
 }
 
+/**
+ * @brief UnCompressPage::convertArchiveDialog 提示是否进行格式转换
+ * @return
+ */
 QStringList UnCompressPage::convertArchiveDialog()
 {
     DDialog *dialog = new DDialog(this);
     dialog->setAccessibleName("Conver_dialog");
     dialog->setMinimumSize(QSize(380, 180));
-    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
-    dialog->setIcon(pixmap);
 
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+
+    dialog->setIcon(pixmap);
     dialog->addButton(tr("Cancel"));
     dialog->addButton(tr("Convert"), true, DDialog::ButtonRecommend);
 
@@ -572,16 +639,17 @@ QStringList UnCompressPage::convertArchiveDialog()
 
     DLabel *strlabel = new DLabel(/*dialog*/);
     strlabel->setMinimumSize(QSize(308, 40));
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("Changes to archives in this file type are not supported. Please convert the archive format to save the changes."));
 //    strlabel->adjustSize();
     strlabel->setWordWrap(true);
     strlabel->setAlignment(Qt::AlignCenter);
+    strlabel->setForegroundRole(DPalette::ToolTipText);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+
     textLayout->setSpacing(36);
     textLayout->addWidget(strlabel/*, Qt::AlignHCenter | Qt::AlignVCenter*/);
     textLayout->setSpacing(36);
 
-    strlabel->setForegroundRole(DPalette::ToolTipText);
 //    DPalette pa = DApplicationHelper::instance()->palette(strlabel);
 //    pa.setBrush(DPalette::ToolTipText, pa.color(DPalette::ToolTipText));
 //    DApplicationHelper::instance()->setPalette(strlabel, pa);
@@ -609,8 +677,8 @@ QStringList UnCompressPage::convertArchiveDialog()
     mainlayout->addLayout(labelLayout);
 
     widget->setLayout(mainlayout);
-    dialog->addContent(widget);
 
+    dialog->addContent(widget);
     dialog->setTabOrder(zipBtn, _7zBtn);
     dialog->setTabOrder(_7zBtn, dialog->getButton(0));
     dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
@@ -620,11 +688,13 @@ QStringList UnCompressPage::convertArchiveDialog()
     bool is7zConvert = false;
     QString convertType;
 
+    // 转换zip格式
     connect(zipBtn, &DRadioButton::toggled, this, [ =, &isZipConvert]() {
         isZipConvert = zipBtn->isChecked();
         qDebug() << "zip" << isZipConvert;
     });
 
+    // 转换为7z格式
     connect(_7zBtn, &DRadioButton::toggled, this, [ =, &is7zConvert]() {
         is7zConvert = _7zBtn->isChecked();
         qDebug() << "7z" << is7zConvert;
