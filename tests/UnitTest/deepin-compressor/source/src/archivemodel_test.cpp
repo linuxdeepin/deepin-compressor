@@ -1313,8 +1313,8 @@ TEST(ArchivehandeMol_appendEntryIcons_UT, ArchiveModel_appendEntryIcons_UT001)
     map->insert("hh", i);
     model->appendEntryIcons(*map);
     map->clear();
-    delete map;
-    map = nullptr;
+//    delete map;
+//    map = nullptr;
     delete model;
 }
 
