@@ -88,6 +88,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     rect.setY(rect.y() + 1);
     rect.setHeight(rect.height() - 1);
 
+    // 绘制圆角矩形背景色
     if (index.column() == 0) {
         rect.setX(rect.x() + SCROLLMARGIN); // left margin
         QPainterPath rectPath, roundedPath;
@@ -109,6 +110,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         path.addRect(rect);
     }
 
+    // 绘制隔行换色
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     if (ppathindex && *ppathindex > 0) {
@@ -205,6 +207,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         painter->drawText(displayRect, static_cast<int>(opt.displayAlignment), text);
     }
 
+    // 绘制焦点圆角矩形焦点外框
     if (m_pTableView->selectionModel()->selectedRows().count() != 0) {
         if (m_pTableView->currentIndex().isValid() && m_pTableView->currentIndex().row() == index.row() && m_pTableView->hasFocus() && (m_pTableView->m_reson == Qt::BacktabFocusReason || m_pTableView->m_reson == Qt::TabFocusReason)) {
             drawBackground(painter, option, index);
@@ -276,11 +279,12 @@ void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewI
 MyTableView::MyTableView(QWidget *parent)
     : DTableView(parent)
 {
-    setAttribute(Qt::WA_AcceptTouchEvents);
+    setAttribute(Qt::WA_AcceptTouchEvents); // 设置接收触摸屏事件
     //QScroller::grabGesture(this->viewport(), QScroller::TouchGesture);
     // QScroller::grabGesture(this->viewport(), QScroller::LeftMouseButtonGesture);
     setFocusPolicy(Qt::StrongFocus);
     setMinimumSize(580, 300);
+    // 设置自定义表头控件
     header_ = new LogViewHeaderView(Qt::Horizontal, this);
     setHorizontalHeader(header_);
 
@@ -295,9 +299,9 @@ MyTableView::MyTableView(QWidget *parent)
     };
 
     changeTheme();
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, changeTheme);
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, changeTheme); // 主题风格变化处理
 
-    setAcceptDrops(true);
+    setAcceptDrops(true); // 接受拖拽事件
     setDragEnabled(true);
     setDropIndicatorShown(true);
     //setSelectionMode(QAbstractItemView::MultiSelection);
@@ -305,7 +309,7 @@ MyTableView::MyTableView(QWidget *parent)
 
 void MyTableView::setPreviousButtonVisible(bool visible)
 {
-    qDebug() << "setPreviousButtonVisible";
+    // 显示上一级按钮且更新列表尺寸
     header_->gotoPreviousLabel_->setVisible(visible);
     updateGeometries();
     //QRect rect = geometry();
@@ -461,6 +465,8 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     //    }
 
     // }
+
+    // 如果不支持拖拽事件，直接过滤
     if (dragEnabled() == false) {
         return;
     }
@@ -474,10 +480,13 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     if (!(e->buttons() & Qt::MouseButton::LeftButton) || s) {
         return;
     }
+
+    // 曼哈顿距离处理，避免误操作
     if ((e->pos() - dragpos).manhattanLength() < QApplication::startDragDistance()) {
         return;
     }
 
+    // 创建文件拖拽服务，处理拖拽到文管操作
     s = new DFileDragServer(this);
     DFileDrag *drag = new DFileDrag(this, s);
     QMimeData *m = new QMimeData();
@@ -500,6 +509,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 //        qDebug()<<static_path;
 //    });
 
+    // 拖拽操作连接槽函数，返回目标路径
     connect(drag, &DFileDrag::targetUrlChanged, this, &MyTableView::slotDragpath);
     Qt::DropAction result = drag->exec(Qt::CopyAction);
 
@@ -519,14 +529,14 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
 void MyTableView::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << "mouseReleaseEvent";
+    // 鼠标松开重置标志位
     m_isPressed = false;
     DTableView::mouseReleaseEvent(event);
 }
 
 void MyTableView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    qDebug() << "mouseDoubleClickEvent";
+    // 鼠标双击处理
     if (event->button() == Qt::MouseButton::LeftButton) {
         emit signalDoubleClicked(indexAt(event->pos()));
     }
@@ -536,8 +546,8 @@ void MyTableView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void MyTableView::slotDragpath(QUrl url)
 {
-    m_path = url.toLocalFile();
-    qDebug() << m_path;
+    m_path = url.toLocalFile(); // 获取拖拽提取目标路径
+    qDebug() << "拖拽提取目标路径：" << m_path;
 }
 
 void fileViewer::onDropSlot(QStringList files)
@@ -562,11 +572,12 @@ fileViewer::fileViewer(QWidget *parent, PAGE_TYPE type)
 {
     //setWindowTitle(tr("File Viewer"));
     setMinimumSize(580, 300);
-    m_pathindex = 0;
+    m_pathindex = 0; // 初始化目录层级为0
     m_mimetype = new MimeTypeDisplayManager(this);
     InitUI();
     InitConnection();
 
+    // 判断是否为压缩列表，若是，屏蔽拖拽事件
     if (PAGE_COMPRESS == type) {
         pTableViewFile->setDragEnabled(false);
     }
@@ -578,6 +589,7 @@ void fileViewer::InitUI()
     pTableViewFile = new MyTableView(this);
     pTableViewFile->setObjectName("TableViewFile");
 
+    // 连接表头和返回上一级信号
     connect(pTableViewFile->header_->gotoPreviousLabel_, SIGNAL(doubleClickedSignal()), this, SLOT(slotCompressRePreviousDoubleClicked()));
     connect(pTableViewFile->header_, &QHeaderView::sortIndicatorChanged, this, &fileViewer::onSortIndicatorChanged);
 
@@ -596,6 +608,7 @@ void fileViewer::InitUI()
     QStringList labels = QString("Name,Size,Type,Time modified").simplified().split(",");
     firstmodel->setHorizontalHeaderLabels(labels);
 
+    // 设置列表相关配置
     pTableViewFile->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pTableViewFile->horizontalHeader()->setStretchLastSection(true);
     pTableViewFile->setShowGrid(false);
@@ -625,6 +638,7 @@ void fileViewer::InitUI()
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
 
+    // 根据列表类型创建右键菜单
     if (PAGE_UNCOMPRESS == m_pagetype) {
         pTableViewFile->setContextMenuPolicy(Qt::CustomContextMenu);
         m_pRightMenu = new DMenu(this);
@@ -1428,22 +1442,22 @@ int fileViewer::showWarningDialog(const QString &msg)
     return res;
 }
 
-QVector<Archive::Entry *> fileViewer::selectedEntriesVector()
-{
-    QVector<Archive::Entry *> vectorEntry;
-    QItemSelectionModel *selectedModel = pTableViewFile->selectionModel();
-    if (pTableViewFile && selectedModel) {
-        for (const QModelIndex &iter :  selectedModel->selectedRows()) {
-            QModelIndex delegateIndex = m_sortmodel->index(iter.row(), iter.column(), iter.parent());//get delegate index
-            QVariant var = m_sortmodel->data(delegateIndex);
-            QModelIndex sourceIndex = m_sortmodel->mapToSource(delegateIndex);                      //get source index
-            Archive::Entry *entry = m_decompressmodel->entryForIndex(sourceIndex);                  //get entry by sourceindex
-            vectorEntry.push_back(entry);
-        }
-    }
+//QVector<Archive::Entry *> fileViewer::selectedEntriesVector()
+//{
+//    QVector<Archive::Entry *> vectorEntry;
+//    QItemSelectionModel *selectedModel = pTableViewFile->selectionModel();
+//    if (pTableViewFile && selectedModel) {
+//        for (const QModelIndex &iter :  selectedModel->selectedRows()) {
+//            QModelIndex delegateIndex = m_sortmodel->index(iter.row(), iter.column(), iter.parent());//get delegate index
+//            QVariant var = m_sortmodel->data(delegateIndex);
+//            QModelIndex sourceIndex = m_sortmodel->mapToSource(delegateIndex);                      //get source index
+//            Archive::Entry *entry = m_decompressmodel->entryForIndex(sourceIndex);                  //get entry by sourceindex
+//            vectorEntry.push_back(entry);
+//        }
+//    }
 
-    return vectorEntry;
-}
+//    return vectorEntry;
+//}
 
 //void fileViewer::slotDecompressRowDelete()
 //{
@@ -1546,23 +1560,23 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
     }
 }
 
-void fileViewer::clickedSlot(int index, const QString &/*text*/)
-{
-    DDialog *dialog = qobject_cast<DDialog *>(sender());
-    if (!dialog) {
-        return;
-    }
+//void fileViewer::clickedSlot(int index, const QString &/*text*/)
+//{
+//    DDialog *dialog = qobject_cast<DDialog *>(sender());
+//    if (!dialog) {
+//        return;
+//    }
 
-    if (index == 0) {
-        dialog->close();
-    } else if (index == 1) {
-        dialog->close();
-        //update select archive
-        upDateArchive(m_ActionInfo);
-    }
+//    if (index == 0) {
+//        dialog->close();
+//    } else if (index == 1) {
+//        dialog->close();
+//        //update select archive
+//        upDateArchive(m_ActionInfo);
+//    }
 
-    dialog->deleteLater();
-}
+//    dialog->deleteLater();
+//}
 
 QString getShortName(QString &destFileName)
 {
@@ -1975,6 +1989,7 @@ void fileViewer::setDecompressModel(ArchiveSortFilterModel *model)
 
 void fileViewer::selectRowByEntry(Archive::Entry *pSelectedEntry)
 {
+    // 根据传递的entry，指定选中行
     QModelIndex sourceIndex = this->m_decompressmodel->indexForEntry(pSelectedEntry);
     QModelIndex delegateIndex = this->m_sortmodel->mapFromSource(sourceIndex);
     this->pTableViewFile->selectRow(delegateIndex.row());
