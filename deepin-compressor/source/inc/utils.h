@@ -61,7 +61,7 @@ public:
     ~Utils();
 
     static QString getConfigPath();
-    static QString suffixList();
+//    static QString suffixList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
     static bool isCompressed_file(const QString &filePath);
     static QString humanReadableSize(const qint64 &size, int precision);

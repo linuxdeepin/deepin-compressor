@@ -780,7 +780,7 @@ void CompressSetting::onSplitChanged(int /*status*/)
 //        } else if ((m_getFileSize / 1024) > 102 && (m_getFileSize / 1024) <= 1024) { //0.1M－1M的文件
 //            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0);
 //        }
-        QString size = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小
+        QString size = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小（包含单位）
         m_splitnumedit->setToolTip(tr("Total size: %1").arg(size));
         isSplitChecked = true;
     } else {
