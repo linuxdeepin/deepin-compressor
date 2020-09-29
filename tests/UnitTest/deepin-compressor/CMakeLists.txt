@@ -105,15 +105,13 @@ file(GLOB_RECURSE h_files  ../../../deepin-compressor/source/*.h )
 #foreach(i  ${h_files})
 #    message(${i})
 #endforeach()
-include_directories(../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(../../3rdparty/googletest/googlemock/include)
-include_directories(../../3rdparty/googletest/googletest/include)
+include_directories(../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+include_directories(../../../3rdparty/googletest/googlemock/include)
+include_directories(../../../3rdparty/googletest/googletest/include)
 
 include_directories(../../../deepin-compressor/source/inc)
 include_directories(../../../deepin-compressor/source/inc/openwithdialog)
 
-include_directories(../../../3rdparty/googletest/googletest/include)
-include_directories(../../../3rdparty/googletest/googletest/include)
 file(GLOB_RECURSE res_files *.qrc)
 set(TS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../translations")
 file( GLOB TS_FILES    ${TS_DIR}/*.ts)
@@ -151,9 +149,11 @@ target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
 set_target_properties(${PROJECT_NAME_TEST} PROPERTIES AUTOMOC TRUE)
 qt5_use_modules(${PROJECT_NAME_TEST}  Core  Widgets  Gui )
 
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../deepin-compressor/source/inc )
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../deepin-compressor/source/inc/openwithdialog )
-
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../../deepin-compressor/source/inc )
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../../deepin-compressor/source/inc/openwithdialog )
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googlemock/include)
+target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googletest/include)
 
 target_link_libraries(${PROJECT_NAME_TEST}  ${LIBS_INCLUDE_DIRS})
 #message(${LIBS_INCLUDE_DIRS})
