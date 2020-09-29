@@ -139,7 +139,7 @@ private:
     DLabel *m_encryptedfilelistlabel = nullptr;
     DMenu *m_typemenu = nullptr;
 
-    PluginManager m_pluginManger;
+    PluginManager *m_pluginManger = nullptr;
     QStringList m_supportedMimeTypes;
     QStringList m_pathlist;
     bool filePermission = true;

@@ -260,7 +260,10 @@ void CompressSetting::InitConnection()
 void CompressSetting::initWidget()
 {
     if (m_nextbutton == nullptr) {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        if (!m_pluginManger) {
+            m_pluginManger = new PluginManager(this);
+        }
+        m_supportedMimeTypes = m_pluginManger->supportedWriteMimeTypes(PluginManager::SortByComment);
 
         InitUI();
         InitConnection();
@@ -802,7 +805,10 @@ void CompressSetting::autoCompressEntry(const QString &compresspath, const QStri
     const QString password = "";
     QString fixedMimeType;
     if (!m_supportedMimeTypes.size()) {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        if (!m_pluginManger) {
+            m_pluginManger = new PluginManager(this);
+        }
+        m_supportedMimeTypes = m_pluginManger->supportedWriteMimeTypes(PluginManager::SortByComment);
     }
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {
@@ -934,7 +940,10 @@ void CompressSetting::autoCompress(const QString &compresspath, const QStringLis
     const QString password = "";
     QString fixedMimeType;
     if (!m_supportedMimeTypes.size()) {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        if (!m_pluginManger) {
+            m_pluginManger = new PluginManager(this);
+        }
+        m_supportedMimeTypes = m_pluginManger->supportedWriteMimeTypes(PluginManager::SortByComment);
     }
 
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
@@ -1058,7 +1067,10 @@ void CompressSetting::autoMoveToArchive(const QStringList &files, const QString 
     const QString password = "";
     QString fixedMimeType;
     if (!m_supportedMimeTypes.size()) {
-        m_supportedMimeTypes = m_pluginManger.supportedWriteMimeTypes(PluginManager::SortByComment);
+        if (!m_pluginManger) {
+            m_pluginManger = new PluginManager(this);
+        }
+        m_supportedMimeTypes = m_pluginManger->supportedWriteMimeTypes(PluginManager::SortByComment);
     }
     for (const QString &type : qAsConst(m_supportedMimeTypes)) {
         if (0 == QMimeDatabase().mimeTypeForName(type).preferredSuffix().compare(cFileInfo.completeSuffix(), Qt::CaseInsensitive)) {

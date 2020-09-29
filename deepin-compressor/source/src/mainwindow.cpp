@@ -425,7 +425,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         killTimer(m_timerId);
         m_timerId = 0;
     } else */
-    qDebug() << "timerEvent";
+    //    qDebug() << "timerEvent";
     if (m_startTimer == event->timerId()) {
         if (!m_initflag) {
             qDebug() << "timerEvent******************InitUI";
