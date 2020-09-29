@@ -217,14 +217,6 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     // done
     painter->restore();
-
-//    if(index.column() == 0)
-//    {
-//        QStyleOptionViewItem loption = option;
-//        loption.rect.setX(loption.rect.x() + 6);
-//        return QItemDelegate::paint(painter, loption, index);;
-//    }
-    //    return QItemDelegate::paint(painter, option, index);
 }
 
 void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -312,17 +304,6 @@ void MyTableView::setPreviousButtonVisible(bool visible)
     // 显示上一级按钮且更新列表尺寸
     header_->gotoPreviousLabel_->setVisible(visible);
     updateGeometries();
-    //QRect rect = geometry();
-    //mapToGlobal();
-    //    if (visible) {
-    //        move(mapFromParent(QPoint(rect.x(), rect.y() + header_->gotoPreviousLabel_->height())));
-    //        resize(width(), height() - header_->gotoPreviousLabel_->height());
-    //        //setGeometry(rect.x(), rect.y() + header_->gotoPreviousLabel_->height(), rect.width(), rect.height() - header_->gotoPreviousLabel_->height());
-    //    } else {
-    //        move(mapFromParent(QPoint(rect.x(), rect.y() - header_->gotoPreviousLabel_->height())));
-    //        resize(width(), height() + header_->gotoPreviousLabel_->height());
-    //        //setGeometry(rect.x(), rect.y() - header_->gotoPreviousLabel_->height(), rect.width(), rect.height() + header_->gotoPreviousLabel_->height());
-    //    }
 }
 
 bool MyTableView::event(QEvent *e)
@@ -363,42 +344,7 @@ void MyTableView::mousePressEvent(QMouseEvent *e)
 
 void MyTableView::mouseMoveEvent(QMouseEvent *e)
 {
-    //    if (dragEnabled() == false) {
-    //        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
-    //        int touchmindistance = 2;
-    //        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
-    //        int touchMaxDistance = 30;
-    //        e->accept();
-    //        double horiDelta = e->pos().x() - dragpos.x();
-    //        double vertDelta = e->pos().y() - dragpos.y();
-    //        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
-    //        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
-    //            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
-    //            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta)) ;
-    //        }
-
-    //        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
-    //            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
-    //            double svalue = 1;
-    //            if (vertDelta > 0) {
-    //                //svalue = svalue;
-    //            } else if (vertDelta < 0) {
-    //                svalue = -svalue;
-    //            } else {
-    //                svalue = 0;
-    //            }
-    //            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
-    //        }
-    //        dragpos = e->pos();
-
-    //        return;
-    //    } else {
-
     if (m_isPressed) {
-        //      /  qDebug() <<  m_lastTouchTime.msecsTo(QTime::currentTime());
-        //        if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 100) {
-        //            return ;
-        //        }
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
@@ -427,44 +373,6 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
         touchpos = e->pos();
         return;
     }
-
-    //    if (m_isPressed) { // 移动
-    //        //if (m_lastTouchTime.msecsTo(QTime::currentTime()) < 300) {
-    //        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
-    //        int touchmindistance = 2;
-    //        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
-    //        int touchMaxDistance = 30;
-    //        e->accept();
-    //        double horiDelta = e->pos().x() - dragpos.x();
-    //        double vertDelta = e->pos().y() - dragpos.y();
-    //        //  qDebug()  << "horiDelta" << horiDelta << "vertDelta" << vertDelta << "event->pos()" << event->pos() << "m_lastTouchBeginPos" << m_lastTouchBeginPos;
-    //        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
-    //            //    qDebug()  << "horizontalScrollBar()->value()" << horizontalScrollBar()->value();
-    //            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
-    //        }
-
-    //        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < 40 && qAbs(vertDelta) > 35 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
-    //            //       qDebug()  << "verticalScrollBar()->value()" << verticalScrollBar()->value() << "vertDelta" << vertDelta;
-    //            double svalue = 1;
-    //            if (vertDelta > 0) {
-    //                //svalue = svalue;
-    //            } else if (vertDelta < 0) {
-    //                svalue = -svalue;
-    //            } else {
-    //                svalue = 0;
-    //            }
-
-    //            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
-    //        }
-
-    //        //}
-
-    //        dragpos = e->pos();
-
-    //        return;
-    //    }
-
-    // }
 
     // 如果不支持拖拽事件，直接过滤
     if (dragEnabled() == false) {
@@ -503,11 +411,6 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
     }
 
     drag->setMimeData(m);
-
-//    connect(drag, &DFileDrag::targetUrlChanged, [drag] {
-//        static_path = drag->targetUrl().toString();
-//        qDebug()<<static_path;
-//    });
 
     // 拖拽操作连接槽函数，返回目标路径
     connect(drag, &DFileDrag::targetUrlChanged, this, &MyTableView::slotDragpath);
@@ -621,20 +524,9 @@ void fileViewer::InitUI()
     //pTableViewFile->sortByColumn(0, Qt::AscendingOrder);
     pTableViewFile->setIconSize(QSize(24, 24));
 
-    //QHeaderView *headerview = pTableViewFile->horizontalHeader();
-    //headerview->setMinimumHeight(MyFileSystemDefine::gTableHeight);
-//    DPalette pa;
-//    pa = DApplicationHelper::instance()->palette(headerview);
-//    pa.setBrush(DPalette::Background, pa.color(DPalette::Base));
-//    headerview->setPalette(pa);
     pTableViewFile->setFrameShape(DTableView::NoFrame);
     pTableViewFile->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//    plabel->setText("     .. " + tr("Back"));
-//    DFontSizeManager::instance()->bind(plabel, DFontSizeManager::T6, QFont::Weight::Medium);
-// //    plabel->setAutoFillBackground(true);
-//    plabel->hide();
 
-//    plabel->setGeometry(0, MyFileSystemDefine::gTableHeight, 580, MyFileSystemDefine::gTableHeight - 7);
     mainlayout->addWidget(pTableViewFile);
     setLayout(mainlayout);
 
@@ -881,25 +773,6 @@ void fileViewer::openWithDialog(const QModelIndex &index)
 
             OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
             openDialog->exec();
-//            if (m_curfilelist.at(row).isDir()) {
-//                pModel->setPathIndex(&m_pathindex);
-//                pTableViewFile->setModel(pModel);
-//                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
-//                m_pathindex++;
-//                restoreHeaderSort(pModel->rootPath());
-//                pTableViewFile->setRootIndex(m_indexmode);
-
-//                QDir dir(m_curfilelist.at(row).filePath());
-
-//                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-//                    showPlable();
-//                }
-
-//                resizecolumn();
-//            } else {
-//                OpenWithDialog *openDialog = new OpenWithDialog(DUrl(m_curfilelist.at(row).filePath()), this);
-//                openDialog->exec();
-//            }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             m_pathindex++;
@@ -933,25 +806,6 @@ void fileViewer::openWithDialog(const QModelIndex &index, const QString &program
             }
 
             OpenWithDialog::chooseOpen(programma, m_curfilelist.at(row).filePath());
-//            if (m_curfilelist.at(row).isDir()) {
-//                pModel->setPathIndex(&m_pathindex);
-//                pTableViewFile->setModel(pModel);
-//                m_indexmode = pModel->setRootPath(m_curfilelist.at(row).filePath());
-//                m_pathindex++;
-//                restoreHeaderSort(pModel->rootPath());
-//                pTableViewFile->setRootIndex(m_indexmode);
-
-//                QDir dir(m_curfilelist.at(row).filePath());
-
-//                if (0 == dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count()) {
-//                    showPlable();
-//                }
-
-//                resizecolumn();
-//            } else {
-//                OpenWithDialog::chooseOpen(programma, m_curfilelist.at(row).filePath());
-
-//            }
         } else if (pModel && pModel->fileInfo(curindex).isDir()) {
             m_indexmode = pModel->setRootPath(pModel->fileInfo(curindex).filePath());
             m_pathindex++;
@@ -1090,26 +944,6 @@ QVector<Archive::Entry *> fileViewer::getSelEntries()
 {
     QVector<Archive::Entry *> fileList;
     QModelIndexList listModelIndex = pTableViewFile->selectionModel()->selectedRows();
-//    if (m_decompressmodel->archive()->fileName().endsWith(".zip") || m_decompressmodel->archive()->fileName().endsWith(".jar")
-//            || m_decompressmodel->archive()->fileName().endsWith(".tar") || m_decompressmodel->archive()->fileName().endsWith(".7z")
-//            || m_decompressmodel->archive()->fileName().endsWith(".rar")) {
-//        if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
-//            if (pinterface->isAllEntry()) {
-//                fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
-//            } else {
-//                foreach (QModelIndex index, listModelIndex) {
-//                    Archive::Entry *entry = m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(index));
-//                    QModelIndex selectionRoot = index.parent();
-//                    entry->rootNode = selectionRoot.isValid()
-//                                      ? m_decompressmodel->entryForIndex(m_sortmodel->mapToSource(selectionRoot))->fullPath()
-//                                      : QString();
-//                    fileList << entry;
-//                }
-//            }
-//        }
-//    } else {
-//        fileList = filesAndRootNodesForIndexes(addChildren(listModelIndex));
-//    }
 
     if (ReadOnlyArchiveInterface *pinterface = m_decompressmodel->getPlugin()) {
         if (pinterface->isAllEntry()) {
@@ -1282,13 +1116,6 @@ void fileViewer::setFileList(const QStringList &files)
 {
     curFileListModified = true;
 
-//    if (files.count() > m_curfilelist.count()) {
-//        m_fileaddindex.clear();
-//        for (int i = 0; i < files.count() - m_curfilelist.count(); i++) {
-//            m_fileaddindex.append(files.count() - 1 + i);
-//        }
-//    }
-
     // 重置所有压缩文件
     m_curfilelist.clear();
     foreach (QString filepath, files) {
@@ -1346,27 +1173,6 @@ int fileViewer::getDeFileCount()
 
 void fileViewer::slotCompressRePreviousDoubleClicked()
 {
-    /*
-    if (PAGE_COMPRESS == m_pagetype) {
-        if (m_pathindex > 1) {
-            if (m_curfilelist.size())
-                m_curfilelist = QFileInfo(m_curfilelist.at(0).path()).dir().entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-            else {
-                m_curfilelist = m_parentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-            }
-        } else {
-            pTableViewFile->setPreviousButtonVisible(false);
-            m_curfilelist = m_parentFileList;
-        }
-
-        curFileListModified = true;
-        m_pathindex--;
-        showPlable();
-        refreshTableview();
-
-    }
-    */
-
     if (PAGE_COMPRESS == m_pagetype) {
         if (m_pathindex > 1) {
             m_pathindex--;
@@ -1441,46 +1247,6 @@ int fileViewer::showWarningDialog(const QString &msg)
 
     return res;
 }
-
-//QVector<Archive::Entry *> fileViewer::selectedEntriesVector()
-//{
-//    QVector<Archive::Entry *> vectorEntry;
-//    QItemSelectionModel *selectedModel = pTableViewFile->selectionModel();
-//    if (pTableViewFile && selectedModel) {
-//        for (const QModelIndex &iter :  selectedModel->selectedRows()) {
-//            QModelIndex delegateIndex = m_sortmodel->index(iter.row(), iter.column(), iter.parent());//get delegate index
-//            QVariant var = m_sortmodel->data(delegateIndex);
-//            QModelIndex sourceIndex = m_sortmodel->mapToSource(delegateIndex);                      //get source index
-//            Archive::Entry *entry = m_decompressmodel->entryForIndex(sourceIndex);                  //get entry by sourceindex
-//            vectorEntry.push_back(entry);
-//        }
-//    }
-
-//    return vectorEntry;
-//}
-
-//void fileViewer::slotDecompressRowDelete()
-//{
-//    QStringList filelist;
-//    QItemSelectionModel *selectedModel = pTableViewFile->selectionModel();
-//    if (pTableViewFile && selectedModel) {
-//        for (const QModelIndex &iter :  selectedModel->selectedRows()) {
-
-//            QModelIndex delegateIndex = m_sortmodel->index(iter.row(), iter.column(), iter.parent());//获取代理索引
-//            QVariant var = m_sortmodel->data(delegateIndex);
-//            QModelIndex sourceIndex = m_sortmodel->mapToSource(delegateIndex);//获取源索引
-//            QVariant varSource = m_decompressmodel->data(sourceIndex, Qt::DisplayRole);
-//            Archive::Entry *entry = m_decompressmodel->entryForIndex(sourceIndex);//获取对应的压缩文档
-
-//            QString fullPath = iter.data().value<QString>();
-//            filelist.push_back(fullPath);
-//        }
-//    }
-//    m_decompressmodel;
-//    emit sigFileRemoved(filelist);
-
-//    subWindowChangedMsg(ACTION_DELETE, filelist);
-//}
 
 void fileViewer::slotDecompressRowDelete()
 {
@@ -1559,24 +1325,6 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
         }
     }
 }
-
-//void fileViewer::clickedSlot(int index, const QString &/*text*/)
-//{
-//    DDialog *dialog = qobject_cast<DDialog *>(sender());
-//    if (!dialog) {
-//        return;
-//    }
-
-//    if (index == 0) {
-//        dialog->close();
-//    } else if (index == 1) {
-//        dialog->close();
-//        //update select archive
-//        upDateArchive(m_ActionInfo);
-//    }
-
-//    dialog->deleteLater();
-//}
 
 QString getShortName(QString &destFileName)
 {
@@ -1769,12 +1517,6 @@ void fileViewer::slotDecompressRowDoubleClicked(const QModelIndex index)
                 }
             } else {
                 QVector<Archive::Entry *> fileList = getSelEntries();
-                //                QString fileName = TEMPDIR_NAME + PATH_SEP + fileList.at(0)->name();
-                //                QFile tempFile(fileName);
-                //                if (tempFile.exists()) {
-                //                    tempFile.remove();
-                //                }
-                //                Utils::checkAndDeleteDir(fileName);
 
                 emit sigextractfiles(fileList, EXTRACT_TEMP);
             }
@@ -1883,10 +1625,6 @@ void fileViewer::onRightMenuOpenWithClicked(QAction *action)
             QModelIndex curindex = pTableViewFile->currentIndex();
             QModelIndex currentparent = pTableViewFile->model()->parent(curindex);
             QModelIndex selectIndex = pTableViewFile->model()->index(curindex.row(), 0, currentparent);
-//            QVector<Archive::Entry *> selectEntry = filesForIndexes(QModelIndexList() << selectIndex);
-//            if (!selectEntry.isEmpty()) {
-//                updateAction(selectEntry.at(0)->isDir(), selectIndex.data().toString());
-//            }
 
             OpenWithDialog *openDialog = new OpenWithDialog(DUrl(selectIndex.data().toString()), this);
             openDialog->SetShowType(SelApp);
@@ -2000,27 +1738,6 @@ bool fileViewer::isDropAdd()
     return m_bDropAdd;
 }
 
-//void fileViewer::startDrag(Qt::DropActions /*supportedActions*/)
-//{
-//    QMimeData *mimeData = new QMimeData;
-//    connect(mimeData, SIGNAL(dataRequested(QString)), this, SLOT(createData(QString)), Qt::DirectConnection);
-//    QDrag *drag = new QDrag(this);
-//    foreach (QFileInfo file, m_curfilelist) {
-//        if (file.path() == "") {
-//            m_curfilelist.removeOne(file);
-//        }
-//    }
-
-//    QStringList filelist;
-//    foreach (QFileInfo fileinfo, m_curfilelist) {
-//        filelist.append(fileinfo.filePath());
-//    }
-//    curFileListModified = true;
-//    emit sigFileRemoved(filelist);
-//    drag->setMimeData(mimeData);
-//    drag->exec(Qt::CopyAction);
-//}
-
 void MyTableView::dragEnterEvent(QDragEnterEvent *event)
 {
     const auto *mime = event->mimeData();
@@ -2115,9 +1832,7 @@ void MyTableView::dropEvent(QDropEvent *event)
 
         QStringList existFileList;
         QStringList FilterAddFileList;
-//        Archive::Entry *pParentEntry = this->getParentArchiveEntry();
-        //ArchiveSortFilterModel *sortModel = qobject_cast<ArchiveSortFilterModel *>(this->model());
-        //ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(sortModel->sourceModel());
+
         for (int i = 0; i < model()->rowCount() ; i++) {
             QString IndexStr = model()->index(i, 0).data().toString();
             existFileList << IndexStr;
@@ -2127,18 +1842,6 @@ void MyTableView::dropEvent(QDropEvent *event)
         QString dda =  selectionModel()->metaObject()->className();
         for (const QString &fileUrl : fileList) {
             QFileInfo fileInfo(fileUrl);
-//            if (existFileList.contains(fileInfo.fileName())) {
-//                //TODO TIPS
-//                continue;
-//            } else {
-//                FilterAddFileList.push_back(fileUrl);
-//            }
-//            if (pModel->isExists(fileUrl) == true) {//need to check more attributes
-//                existFiles << fileUrl;
-//                continue;
-//            } else {
-//                FilterAddFileList.push_back(fileUrl);
-//            }
 
             FilterAddFileList.push_back(fileUrl);
         }
