@@ -85,6 +85,15 @@ TEST(BatchExtract_start_UT, BatchExtract_start_UT001)
 TEST(BatchExtract_slotStartJob_UT, BatchExtract_slotStartJob_UT001)
 {
     BatchExtract *batchExtract = new BatchExtract(nullptr);
+    QVector<Archive::Entry *> files;
+    ExtractionOptions options;
+    options.setBatchExtract(true);
+
+    QFileInfo fi("/home/chenglu/Desktop/pic.part1.rar");
+    QString fixedMimetype = determineMimeType(fi.filePath()).name();
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(fi.filePath(), fixedMimetype, true);
+    ExtractJob *job = new ExtractJob(files, "/home/chenglu/Desktop", options, pIface);
+    batchExtract->addSubjob(job);
     batchExtract->m_inputs << QUrl::fromLocalFile("/home/chenglu/Desktop/1.tar.gz")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.part01.rar")
@@ -126,6 +135,8 @@ TEST(BatchExtract_slotResult_UT, BatchExtract_slotResult_UT002)
     QString fixedMimetype = determineMimeType(fi.filePath()).name();
     ReadOnlyArchiveInterface *pIface = Archive::createInterface(fi.filePath(), fixedMimetype, true);
     ExtractJob *job = new ExtractJob(files, "/home/chenglu/Desktop", options, pIface);
+    batchExtract->addSubjob(job);
+    job->setError(7);
     batchExtract->slotResult(job);
     delete job;
 }
@@ -163,23 +174,43 @@ TEST(BatchExtract_slotResult_UT, BatchExtract_slotResult_UT004)
 TEST(BatchExtract_forwardProgress_UT, BatchExtract_forwardProgress_UT001)
 {
     BatchExtract *batchExtract = new BatchExtract(nullptr);
+    QVector<Archive::Entry *> files;
+    ExtractionOptions options;
+    options.setBatchExtract(true);
+
+    QFileInfo fi("/home/chenglu/Desktop/pic.part1.rar");
+    QString fixedMimetype = determineMimeType(fi.filePath()).name();
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(fi.filePath(), fixedMimetype, true);
+    ExtractJob *job = new ExtractJob(files, "/home/chenglu/Desktop", options, pIface);
+    batchExtract->m_batchTotalSize = 106496;
+
     batchExtract->m_numOfExtracting = 0;
     batchExtract->m_inputs << QUrl::fromLocalFile("/home/chenglu/Desktop/1.tar.gz")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.part01.rar")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.part1.rar");
-    batchExtract->forwardProgress(nullptr, 0);
+    batchExtract->forwardProgress(job, 0);
 }
 
 TEST(BatchExtract_forwardProgress_UT, BatchExtract_forwardProgress_UT002)
 {
     BatchExtract *batchExtract = new BatchExtract(nullptr);
+    QVector<Archive::Entry *> files;
+    ExtractionOptions options;
+    options.setBatchExtract(true);
+
+    QFileInfo fi("/home/chenglu/Desktop/pic.part1.rar");
+    QString fixedMimetype = determineMimeType(fi.filePath()).name();
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(fi.filePath(), fixedMimetype, true);
+    ExtractJob *job = new ExtractJob(files, "/home/chenglu/Desktop", options, pIface);
+    batchExtract->m_batchTotalSize = 106496;
+
     batchExtract->m_numOfExtracting = 1;
     batchExtract->m_inputs << QUrl::fromLocalFile("/home/chenglu/Desktop/1.tar.gz")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.part01.rar")
                            << QUrl::fromLocalFile("/home/chenglu/Desktop/1.part1.rar");
-    batchExtract->forwardProgress(nullptr, 100);
+    batchExtract->forwardProgress(job, 100);
 }
 
 TEST(BatchExtract_addInput_UT, BatchExtract_addInput_UT001)
