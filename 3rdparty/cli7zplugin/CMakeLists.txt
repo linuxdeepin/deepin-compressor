@@ -17,6 +17,8 @@ include(FindPkgConfig)
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../interface)
 
 include_directories(${INTERFACE_LNCLUDE_DIR})
+link_directories(${PROJECT_SOURCE_DIR}/../interface)
+
 file(GLOB_RECURSE c_files  *.cpp)
 file(GLOB_RECURSE h_files  *.h)
 file(GLOB_RECURSE json_files  *.json)

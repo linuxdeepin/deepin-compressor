@@ -39,7 +39,7 @@ set(LIBS_INCLUDE_DIRS
 	${LibArchive_LIBRARIES}
 )
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../interface)
-
+#link_directories(/usr/lib/deepin-compressor/plugins)
 include_directories(../../libarchive)
 include_directories(${INTERFACE_LNCLUDE_DIR})
 

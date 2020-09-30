@@ -30,6 +30,6 @@ file(GLOB_RECURSE tab_files *.tab)
 include_directories(${PROJECT_SOURCE_DIR})
 
 
-add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files})
+add_library(${LIB_NAME} ${c_files} ${h_files}  ${tab_files})
 target_include_directories(${LIB_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 target_link_libraries(${LIB_NAME} Qt5::Widgets)

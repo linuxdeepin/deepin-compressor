@@ -16,7 +16,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE") #-Wl,--as-needed
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wl,-rpath=./
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins:/lib")
+#    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins:/lib")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1")
 endif()
 
 add_definitions("-DQT_MESSAGELOGCONTEXT")
@@ -58,7 +59,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 #add_subdirectory(3rdparty/interface)
 
 #add_subdirectory(3rdparty/ChardetDetector)
-
+# link_directories(/usr/lib/deepin-compressor/plugins)
 add_subdirectory(3rdparty) 
 
 add_subdirectory(deepin-compressor)
@@ -73,11 +74,11 @@ set(CMAKE_INSTALL_PREFIX /usr)
 
 #install(TARGETS compressor-interface LIBRARY DESTINATION lib)
 
-install(TARGETS compressor-interface DESTINATION /usr/bin/compressor-lib)
-install(TARGETS compressor-ChardetDetector DESTINATION /usr/bin/compressor-lib)
-install(TARGETS compressor-common DESTINATION /usr/bin/compressor-lib)
-install(TARGETS compressor-archive DESTINATION /usr/bin/compressor-lib)
-install(TARGETS compressor-singlefile DESTINATION /usr/bin/compressor-lib)
+#install(TARGETS compressor-interface DESTINATION /usr/bin/compressor-lib)
+#install(TARGETS compressor-ChardetDetector DESTINATION /usr/bin/compressor-lib)
+#install(TARGETS compressor-common DESTINATION /usr/bin/compressor-lib)
+#install(TARGETS compressor-archive DESTINATION /usr/bin/compressor-lib)
+#install(TARGETS compressor-singlefile DESTINATION /usr/bin/compressor-lib)
 
 #install(TARGETS compressor-interface DESTINATION /usr/lib)
 #install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib)
@@ -87,19 +88,19 @@ install(TARGETS compressor-singlefile DESTINATION /usr/bin/compressor-lib)
 
 install(TARGETS cli7zplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS cliunarchiverplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS clizipplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS cliunarchiverplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS clizipplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS bz2plugin DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS gzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS xzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS bz2plugin DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS gzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS xzplugin DESTINATION /usr/lib/deepin-compressor/plugins/)
 
-install(TARGETS compressor-interface DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS compressor-common DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS compressor-archive DESTINATION /usr/lib/deepin-compressor/plugins/)
-install(TARGETS compressor-singlefile DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-interface DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-ChardetDetector DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-common DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-archive DESTINATION /usr/lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-singlefile DESTINATION /usr/lib/deepin-compressor/plugins/)
 
 
