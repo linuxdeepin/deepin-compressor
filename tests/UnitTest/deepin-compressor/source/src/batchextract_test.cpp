@@ -7,7 +7,7 @@
 TEST(BatchExtract_BatchExtract_UT, BatchExtract_BatchExtract_UT001)
 {
     BatchExtract *batchExtract = new BatchExtract(nullptr);
-    ASSERT_NE(batchExtract, nullptr);
+    EXPECT_NE(batchExtract, nullptr);
     delete batchExtract;
 }
 
@@ -45,7 +45,7 @@ TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT001)
 {
     BatchExtract *batchExtract = new BatchExtract(nullptr);
     bool kill = batchExtract->doKill();
-    ASSERT_EQ(kill, true);
+    EXPECT_EQ(kill, true);
 }
 
 TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT002)
@@ -53,7 +53,7 @@ TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT002)
     BatchExtract *batchExtract = new BatchExtract(nullptr);
     batchExtract->addExtraction(QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001"));
     bool kill = batchExtract->doKill();
-    ASSERT_EQ(kill, false);
+    EXPECT_EQ(kill, false);
 }
 
 TEST(BatchExtract_autoSubfolder_UT, BatchExtract_autoSubfolder_UT001)
