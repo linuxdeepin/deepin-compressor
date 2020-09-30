@@ -141,15 +141,3 @@ TEST(CompressPage_getCompressFilelist_UT, CompressPAge_getCompressFilelist_UT001
     CompressPage *compress = new CompressPage(nullptr);
     QStringList strList = compress->getCompressFilelist();
 }
-
-
-
-
-
-
-
-
-
-
-
-
