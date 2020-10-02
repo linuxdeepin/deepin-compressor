@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME compressor)
 project(${EXE_NAME})
 
-#SET(CMAKE_BUILD_TYPE "Debug")  
+#SET(CMAKE_BUILD_TYPE "Debug")
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 
 # 添加c++ 11标准支持
@@ -40,6 +40,19 @@ if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif()
 #模糊测试设置 -end
 
+# Install settings
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif ()
+
+if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
+
+    # generate qm
+    execute_process(COMMAND bash "translate_generation.sh"
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+endif ()
+
 #3.1 设置lib输出目录
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
@@ -49,11 +62,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 
 #add_subdirectory(3rdparty/ChardetDetector)
 
-add_subdirectory(3rdparty) 
+add_subdirectory(3rdparty)
 
 add_subdirectory(deepin-compressor)
-
-set(CMAKE_INSTALL_PREFIX /usr)
 
 #file(GLOB INSTALL_DESKTOP_FILES deepin-compressor/*.desktop)
 #install(FILES ${INSTALL_DESKTOP_FILES} DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
@@ -91,5 +102,3 @@ install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plu
 install(TARGETS compressor-common DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
-
-

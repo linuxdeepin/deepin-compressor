@@ -45,7 +45,7 @@ set(TERMINALWIDGET_VERSION_PATCH "1")
 include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${DtkGui_INCLUDE_DIRS})
 include_directories(${DtkCore_INCLUDE_DIRS})
-set(LIBS_INCLUDE_DIRS 
+set(LIBS_INCLUDE_DIRS
   ${DtkWidget_LIBRARIES}
   ${DtkCore_LIBRARIES}
   ${DtkCore_LIBRARIES}
@@ -80,7 +80,7 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${GOBJECT_INCLUDE_DIRS})
 include_directories("src")
 
-add_library(${LIB_NAME}   ${h_files} ${c_files}  )
+add_library(${LIB_NAME} SHARED ${h_files} ${c_files}  )
 target_link_libraries(${LIB_NAME} Qt5::Widgets KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries(${LIB_NAME} compressor-ChardetDetector)
