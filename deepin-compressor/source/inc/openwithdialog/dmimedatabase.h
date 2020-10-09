@@ -36,7 +36,7 @@ public:
 
     QMimeType mimeTypeForFile(const QString &fileName, MatchMode mode = MatchDefault) const;
     QMimeType mimeTypeForFile(const QFileInfo &fileInfo, MatchMode mode = MatchDefault) const;
-    QMimeType mimeTypeForUrl(const QUrl &url) const;
+    // QMimeType mimeTypeForUrl(const QUrl &url) const;
 };
 
 

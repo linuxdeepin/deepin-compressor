@@ -64,8 +64,8 @@ public:
     };
 
     static QString location(StandardLocation type);
-    static QString fromStandardUrl(const DUrl &standardUrl);
-    static DUrl toStandardUrl(const QString &localPath);
+    //static QString fromStandardUrl(const DUrl &standardUrl);
+    //static DUrl toStandardUrl(const QString &localPath);
 
 #ifdef QMAKE_TARGET
     static QString getConfigPath();

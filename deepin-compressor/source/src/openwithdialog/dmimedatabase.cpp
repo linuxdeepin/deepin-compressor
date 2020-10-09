@@ -66,10 +66,10 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
     return result;
 }
 
-QMimeType DMimeDatabase::mimeTypeForUrl(const QUrl &url) const
-{
-    if (url.isLocalFile())
-        return mimeTypeForFile(url.toLocalFile());
+//QMimeType DMimeDatabase::mimeTypeForUrl(const QUrl &url) const
+//{
+//    if (url.isLocalFile())
+//        return mimeTypeForFile(url.toLocalFile());
 
-    return QMimeDatabase::mimeTypeForUrl(url);
-}
+//    return QMimeDatabase::mimeTypeForUrl(url);
+//}

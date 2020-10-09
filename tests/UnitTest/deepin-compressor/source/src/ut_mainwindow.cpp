@@ -22,7 +22,7 @@
 #include "mainwindow.h"
 
 #include <gtest/gtest.h>
-
+#include "jobs.h"
 class TestMainWindow : public ::testing::Test
 {
 public:
@@ -43,3 +43,46 @@ public:
 protected:
     MainWindow *m_tester;
 };
+
+TEST_F(TestMainWindow, initTest)
+{
+}
+
+TEST_F(TestMainWindow, testInitUI)
+{
+    m_tester->InitUI();
+    ASSERT_NE(m_tester->m_pOpenLoadingPage, nullptr);
+}
+
+TEST_F(TestMainWindow, testInitConnection)
+{
+    m_tester->InitUI();
+    m_tester->InitConnection();
+    ASSERT_NE(m_tester->m_pOpenLoadingPage, nullptr);
+}
+
+TEST_F(TestMainWindow, testinitTitleBar)
+{
+    m_tester->initTitleBar();
+    ASSERT_NE(m_tester->m_pTitleButton, nullptr);
+}
+
+TEST_F(TestMainWindow, testcreateSettingsMenu)
+{
+    QMenu *pMenu = m_tester->createSettingsMenu();
+    ASSERT_NE(pMenu, nullptr);
+    delete pMenu;
+}
+
+TEST_F(TestMainWindow, testloadArchive)
+{
+    m_tester->InitUI();
+    m_tester->InitConnection();
+
+    m_tester->loadArchive("../UnitTest/regress/windows.7z.tar");
+
+    LoadJob *temp = dynamic_cast<LoadJob *>(m_tester->m_pJob);
+    ASSERT_NE(m_tester->m_pJob, nullptr);
+    delete temp->m_archive;
+    temp->m_archive = nullptr;
+}

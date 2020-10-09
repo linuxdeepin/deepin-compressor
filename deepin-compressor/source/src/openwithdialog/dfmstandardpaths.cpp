@@ -130,67 +130,67 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
     return QString();
 }
 
-QString DFMStandardPaths::fromStandardUrl(const DUrl &standardUrl)
-{
-    if (standardUrl.scheme() != "standard")
-        return QString();
+//QString DFMStandardPaths::fromStandardUrl(const DUrl &standardUrl)
+//{
+//    if (standardUrl.scheme() != "standard")
+//        return QString();
 
-    static QMap<QString, QString> path_convert {
-        {"home", location(HomePath)},
-        {"desktop", location(DesktopPath)},
-        {"videos", location(VideosPath)},
-        {"music", location(MusicPath)},
-        {"pictures", location(PicturesPath)},
-        {"documents", location(DocumentsPath)},
-        {"downloads", location(DownloadsPath)}
-    };
+//    static QMap<QString, QString> path_convert {
+//        {"home", location(HomePath)},
+//        {"desktop", location(DesktopPath)},
+//        {"videos", location(VideosPath)},
+//        {"music", location(MusicPath)},
+//        {"pictures", location(PicturesPath)},
+//        {"documents", location(DocumentsPath)},
+//        {"downloads", location(DownloadsPath)}
+//    };
 
-    const QString &path = path_convert.value(standardUrl.host());
+//    const QString &path = path_convert.value(standardUrl.host());
 
-    if (path.isEmpty())
-        return path;
+//    if (path.isEmpty())
+//        return path;
 
-    const QString &url_path = standardUrl.path();
+//    const QString &url_path = standardUrl.path();
 
-    if (url_path.isEmpty() || url_path == "/")
-        return path;
+//    if (url_path.isEmpty() || url_path == "/")
+//        return path;
 
-    return path + standardUrl.path();
-}
+//    return path + standardUrl.path();
+//}
 
-DUrl DFMStandardPaths::toStandardUrl(const QString &localPath)
-{
-    static QList<QPair<QString, QString>> path_convert {
-        {location(DesktopPath), "desktop"},
-        {location(VideosPath), "videos"},
-        {location(MusicPath), "music"},
-        {location(PicturesPath), "pictures"},
-        {location(DocumentsPath), "documents"},
-        {location(DownloadsPath), "downloads"},
-        {location(HomePath), "home"}
-    };
+//DUrl DFMStandardPaths::toStandardUrl(const QString &localPath)
+//{
+//    static QList<QPair<QString, QString>> path_convert {
+//        {location(DesktopPath), "desktop"},
+//        {location(VideosPath), "videos"},
+//        {location(MusicPath), "music"},
+//        {location(PicturesPath), "pictures"},
+//        {location(DocumentsPath), "documents"},
+//        {location(DownloadsPath), "downloads"},
+//        {location(HomePath), "home"}
+//    };
 
-    for (auto begin : path_convert) {
-        if (localPath.startsWith(begin.first)) {
-            const QString &path = localPath.mid(begin.first.size());
+//    for (auto begin : path_convert) {
+//        if (localPath.startsWith(begin.first)) {
+//            const QString &path = localPath.mid(begin.first.size());
 
-            if (!path.isEmpty() && !path.startsWith("/"))
-                continue;
+//            if (!path.isEmpty() && !path.startsWith("/"))
+//                continue;
 
-            DUrl url;
+//            DUrl url;
 
-            url.setScheme("standard");
-            url.setHost(begin.second);
+//            url.setScheme("standard");
+//            url.setHost(begin.second);
 
-            if (!path.isEmpty() && path != "/")
-                url.setPath(path);
+//            if (!path.isEmpty() && path != "/")
+//                url.setPath(path);
 
-            return url;
-        }
-    }
+//            return url;
+//        }
+//    }
 
-    return DUrl();
-}
+//    return DUrl();
+//}
 
 #ifdef QMAKE_TARGET
 QString DFMStandardPaths::getConfigPath()
