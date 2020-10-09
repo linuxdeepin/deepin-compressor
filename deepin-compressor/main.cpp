@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     app.setMainWindow(&w);
 
     //判断目标文件是否合法
-    if (!w.checkSettings(argv[1])) {
+    if (argc >= 2 && !w.checkSettings(argv[1])) {
         app.exit();
         return 0;
     } else {
