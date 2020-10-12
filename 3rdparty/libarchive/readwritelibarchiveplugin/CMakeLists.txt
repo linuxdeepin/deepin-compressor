@@ -42,15 +42,8 @@ include_directories(${INTERFACE_LNCLUDE_DIR})
 include_directories(../../ChardetDetector)
 include_directories(../libarchive)
 
-set( c_files
-    readwritelibarchiveplugin.cpp 
-
-  
-)
-set(h_files
-    readwritelibarchiveplugin.h 
-    readwritelibarchiveplugin_global.h
-)
+file(GLOB_RECURSE c_files  *.cpp )
+file(GLOB_RECURSE h_files  *.h )
 file(GLOB_RECURSE json_files  *.json)
 
 include_directories(${PROJECT_SOURCE_DIR})

@@ -49,21 +49,15 @@ set(LIBS_INCLUDE_DIRS
   #${UNZIP_LIBRARIES}
 )
 #message(${unzip_LIBRARIES}) 
-set(c_files
-   libzipplugin.cpp 
 
-)
-set(h_files
-	   libzipplugin.h
-     libzipplugin_global.h 
-
-)
 include_directories(../common/)
 include_directories(../ChardetDetector/)
 include_directories(../interface/)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
+file(GLOB_RECURSE c_files  *.cpp )
+file(GLOB_RECURSE h_files  *.h )
 file(GLOB_RECURSE json_files  *.json)
 
 add_library(${LIB_NAME} SHARED ${c_files} ${json_files} ${h_files})

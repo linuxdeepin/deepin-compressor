@@ -45,51 +45,20 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 
-#add_subdirectory(3rdparty/interface)
-
-#add_subdirectory(3rdparty/ChardetDetector)
-
 add_subdirectory(3rdparty) 
 
-add_subdirectory(deepin-compressor)
+add_subdirectory(src)
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
-#file(GLOB INSTALL_DESKTOP_FILES deepin-compressor/*.desktop)
-#install(FILES ${INSTALL_DESKTOP_FILES} DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
-
-#file(GLOB INSTALL_LIBS_FILES ${PROJECT_SOURCE_DIR}/lib/*.so)
-#install(FILES ${INSTALL_LIBS_FILES} DESTINATION lib/deepin-compressor/plugins/)
-
-#install(TARGETS compressor-interface LIBRARY DESTINATION lib)
-
-install(TARGETS compressor-interface DESTINATION bin/compressor-lib)
-install(TARGETS compressor-ChardetDetector DESTINATION bin/compressor-lib)
-install(TARGETS compressor-common DESTINATION bin/compressor-lib)
-install(TARGETS compressor-archive DESTINATION bin/compressor-lib)
-install(TARGETS compressor-singlefile DESTINATION bin/compressor-lib)
-
-#install(TARGETS compressor-interface DESTINATION lib)
-#install(TARGETS compressor-ChardetDetector DESTINATION lib)
-#install(TARGETS compressor-common DESTINATION lib)
-#install(TARGETS compressor-archive DESTINATION lib)
-#install(TARGETS compressor-singlefile DESTINATION lib)
-
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS cliunarchiverplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS clizipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
-
 install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-common DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
 
 
