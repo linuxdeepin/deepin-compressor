@@ -2825,6 +2825,7 @@ void MainWindow::slotExtractionDone(KJob *job)
         qDebug() << strFileName;
     }
 }
+
 /**
  * @brief slotShowPageUnzipProgress 显示解压进度
  */
@@ -5110,7 +5111,10 @@ void MainWindow::unzipSuccessOpenFileDir()
         }
 
         //slotquitApp();
-        close();
+        QTimer::singleShot(100, this, [ = ]() {
+            close();;
+        });
+//        close();
         return;
     } else {
         if (m_pSettingsDialog->isAutoOpen() && m_operationtype != Operation_NULL) {
