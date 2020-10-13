@@ -50,7 +50,6 @@ set(LIBS_INCLUDE_DIRS
 )
 #message(${unzip_LIBRARIES}) 
 
-include_directories(../common/)
 include_directories(../ChardetDetector/)
 include_directories(../interface/)
 
@@ -65,6 +64,5 @@ target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-interface)
 target_link_libraries( ${LIB_NAME} compressor-ChardetDetector)
-target_link_libraries( ${LIB_NAME} compressor-common)
 target_link_libraries( ${LIB_NAME} -lzip)
 target_link_libraries( ${LIB_NAME} -lminizip)

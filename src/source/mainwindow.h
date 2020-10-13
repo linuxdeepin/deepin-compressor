@@ -1,0 +1,148 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     gaoxiang <gaoxiang@uniontech.com>
+*
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include "uistruct.h"
+
+#include <DMainWindow>
+
+class QStackedWidget;
+class QSettings;
+
+class LoadingPage;
+class HomePage;
+class CompressPage;
+class CompressSettingPage;
+class UnCompressPage;
+class ProgressPage;
+class SuccessPage;
+class FailurePage;
+class SettingDialog;
+
+class PluginManager;
+
+DWIDGET_USE_NAMESPACE
+
+// 主界面
+class MainWindow : public DMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
+
+private:
+    /**
+     * @brief initUI    初始化界面
+     */
+    void initUI();
+
+    /**
+     * @brief initTitleBar  初始化标题栏
+     */
+    void initTitleBar();
+
+    /**
+     * @brief initData  初始化相关数据
+     */
+    void initData();
+
+    /**
+     * @brief initConnections   初始化信号槽
+     */
+    void initConnections();
+
+    /**
+     * @brief refreshPage   刷新界面页
+     */
+    void refreshPage();
+
+    /**
+     * @brief calSelectedTotalFileSize  计算本地选择的文件大小
+     * @param files 选择文件
+     * return 文件总大小
+     */
+    qint64 calSelectedTotalFileSize(const QStringList &files);
+
+    /**
+     * @brief calFileSizeByThread  用多线程的方式计算文件或文件夹所有文件大小
+     * @param path 文件或文件夹路径
+     */
+    void calFileSizeByThread(const QString &path, qint64 &qSize);
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
+private slots:
+    /**
+     * @brief slotChoosefiles   选择本地文件
+     */
+    void slotChoosefiles();
+
+    /**
+     * @brief slotDragSelectedFiles     拖拽添加文件
+     * @param listFiles     拖拽的文件
+     */
+    void slotDragSelectedFiles(const QStringList &listFiles);
+
+    /**
+     * @brief compressLevelChanged  处理压缩层级变化
+     * @param bRootIndex    是否是根目录
+     */
+    void slotCompressLevelChanged(bool bRootIndex);
+
+    /**
+     * @brief slotCompressNext  压缩界面点击下一步按钮处理操作
+     */
+    void slotCompressNext();
+
+    /**
+     * @brief slotCompress  压缩点击
+     */
+    void slotCompress();
+
+private:
+    QStackedWidget *m_pMainWidget;  // 中心面板
+
+    HomePage *m_pHomePage;            // 首页
+    CompressPage *m_pCompressPage;    // 压缩列表界面
+    CompressSettingPage *m_pCompressSettingPage;  // 压缩设置界面
+    UnCompressPage *m_pUnCompressPage;    // 解压列表界面
+    ProgressPage *m_pProgressPage;    // 进度界面
+    SuccessPage *m_pSuccessPage;  // 成功界面
+    FailurePage *m_pFailurePage;  // 失败界面
+    LoadingPage *m_pLoadingPage;  // 加载界面
+
+    DIconButton *m_pTitleButton;                  // 标题栏按钮（添加文件）
+    QAction *m_pOpenAction;                                 // 菜单 - 打开
+
+    SettingDialog *m_pSettingDlg;       // 设置界面
+
+    QSettings *m_pSettings;     // 默认配置信息
+
+    Page_ID m_ePageID;      // 界面标识
+};
+
+#endif // MAINWINDOW_H

@@ -92,6 +92,11 @@ include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface)
 
 #7.主程序的h文件
 include_directories(${PROJECT_SOURCE_DIR}/source)
+include_directories(${PROJECT_SOURCE_DIR}/source/common)
+include_directories(${PROJECT_SOURCE_DIR}/source/dialog)
+include_directories(${PROJECT_SOURCE_DIR}/source/job)
+include_directories(${PROJECT_SOURCE_DIR}/source/page)
+include_directories(${PROJECT_SOURCE_DIR}/source/tree)
 
 #8.主程序的源文件和头文件
 file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp)

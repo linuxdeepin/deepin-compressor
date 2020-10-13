@@ -77,7 +77,6 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${ATSPI2_INCLUDE_DIRS}
                                               ${GOBJECT_INCLUDE_DIRS})
 include_directories(./)
-include_directories(../../common/)
 include_directories(../../ChardetDetector)
 include_directories(../../interface)
 
@@ -87,4 +86,3 @@ target_link_libraries(${LIB_NAME} ${LINK_LIBS})
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-interface)
 target_link_libraries( ${LIB_NAME} compressor-ChardetDetector)
-target_link_libraries( ${LIB_NAME} compressor-common)

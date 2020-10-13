@@ -48,7 +48,6 @@ file(GLOB_RECURSE json_files  *.json)
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
-include_directories(${PROJECT_SOURCE_DIR}/../../common)
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
 include_directories(${PROJECT_SOURCE_DIR}/../)
 
@@ -58,5 +57,4 @@ target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-archive)
 target_link_libraries( ${LIB_NAME} compressor-interface)
 target_link_libraries( ${LIB_NAME} compressor-ChardetDetector)
-target_link_libraries( ${LIB_NAME} compressor-common)
 

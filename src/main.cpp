@@ -20,7 +20,7 @@
 */
 
 
-
+#include "mainwindow.h"
 #include "compressorapplication.h"
 #include "environments.h"
 
@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
 
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
+
+    MainWindow w;
+    w.show();
 
     return app.exec();
 }

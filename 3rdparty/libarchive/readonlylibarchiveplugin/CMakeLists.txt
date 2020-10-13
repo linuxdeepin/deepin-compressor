@@ -49,7 +49,6 @@ file(GLOB_RECURSE h_files  *.h )
 file(GLOB_RECURSE json_files  *.json)
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(../../common/)
 include_directories(../../ChardetDetector)
 
 add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files} ${json_files})
@@ -60,5 +59,4 @@ target_link_libraries(${LIB_NAME} KF5::Codecs)
 target_link_libraries( ${LIB_NAME} compressor-archive)
 target_link_libraries( ${LIB_NAME} compressor-interface)
 target_link_libraries( ${LIB_NAME} compressor-ChardetDetector)
-target_link_libraries( ${LIB_NAME} compressor-common)
 
