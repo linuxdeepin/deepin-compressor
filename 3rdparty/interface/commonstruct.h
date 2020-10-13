@@ -25,7 +25,7 @@
 #include <QString>
 #include <QMetaType>
 
-
+// 文件数据
 struct FileEntry {
     FileEntry()
     {
@@ -41,6 +41,18 @@ struct FileEntry {
     QDateTime lastModifiedTime; // 文件最后修改时间
 };
 Q_DECLARE_METATYPE(FileEntry)
+
+// 压缩选项
+struct CompressOptions {
+
+};
+Q_DECLARE_METATYPE(CompressOptions)
+
+// 解压选项
+struct ExtractionOptions {
+
+};
+Q_DECLARE_METATYPE(ExtractionOptions)
 
 
 #endif // COMMONSTRUCT_H

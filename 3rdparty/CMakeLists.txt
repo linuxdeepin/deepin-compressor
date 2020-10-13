@@ -12,7 +12,13 @@ add_subdirectory(cli7zplugin)
 
 add_subdirectory(clirarplugin)
 
+#add_subdirectory(cliunarchiverplugin)
+
+#add_subdirectory(clizipplugin)
+
 add_subdirectory(libarchive)
+
+#add_subdirectory(libsinglefileplugin)
 
 add_subdirectory(libzipplugin)
 

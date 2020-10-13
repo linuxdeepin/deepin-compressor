@@ -59,5 +59,10 @@ install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugi
 install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
-
+#install(TARGETS cliunarchiverplugin DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS clizipplugin DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
 
