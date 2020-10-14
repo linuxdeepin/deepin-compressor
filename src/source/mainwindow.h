@@ -39,7 +39,7 @@ class SuccessPage;
 class FailurePage;
 class SettingDialog;
 
-class PluginManager;
+class ArchiveManager;
 
 DWIDGET_USE_NAMESPACE
 
@@ -143,6 +143,8 @@ private:
     QSettings *m_pSettings;     // 默认配置信息
 
     Page_ID m_ePageID;      // 界面标识
+
+    ArchiveManager *m_pArchiveManager;
 };
 
 #endif // MAINWINDOW_H

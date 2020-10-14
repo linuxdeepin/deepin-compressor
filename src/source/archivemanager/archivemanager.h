@@ -21,6 +21,9 @@
 #ifndef ARCHIVEMANAGER_H
 #define ARCHIVEMANAGER_H
 
+#include "commonstruct.h"
+#include "archivejob.h"
+
 #include <QObject>
 
 class ArchiveManager : public QObject
@@ -29,6 +32,45 @@ class ArchiveManager : public QObject
 public:
     explicit ArchiveManager(QObject *parent = nullptr);
     ~ArchiveManager() override;
+
+    /**
+     * @brief createArchive     创建压缩包
+     * @param files             待压缩文件
+     * @param strDestination    压缩包名称（含路径）
+     * @param options           压缩参数
+     * @param bBatch            是否批量压缩（多路径）
+     */
+    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool bBatch = false);
+
+Q_SIGNALS:
+    /**
+     * @brief signalPercent     进度信号
+     * @param iPercent          百分比
+     */
+    void signalPercent(int iPercent);
+
+    /**
+     * @brief signalCurrentFileName     发送当前正在操作的文件名
+     * @param strFileName               文件名
+     */
+    void signalCurrentFileName(const QString &strFileName);
+
+    /**
+     * @brief signalError       错误信号
+     * @param eErrorType        错误类型
+     */
+    void signalError(ErrorType eErrorType);
+
+    /**
+     * @brief signalFinished    操作结束信号
+     */
+    void signalFinished();
+
+private Q_SLOTS:
+
+
+private:
+    ArchiveJob *m_pJob = nullptr;     // 当前操作指针操作
 };
 
 #endif // ARCHIVEMANAGER_H

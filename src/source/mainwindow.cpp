@@ -31,7 +31,7 @@
 #include "uitools.h"
 #include "pluginmanager.h"
 #include "settingdialog.h"
-//#include "queries.h"
+#include "archivemanager.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -72,6 +72,8 @@ void MainWindow::initUI()
     m_pFailurePage = new FailurePage(this);  // 失败界面
 
     m_pSettingDlg = new SettingDialog(this);
+
+    m_pArchiveManager = new ArchiveManager(this);
 
     // 添加界面至主界面
     m_pMainWidget->addWidget(m_pHomePage);
@@ -352,4 +354,11 @@ void MainWindow::slotCompress()
 {
     qDebug() << "点击了压缩按钮";
 
+    QStringList listFiles = m_pCompressPage->compressFiles();   // 获取待压缩文件
+
+    QVector<FileEntry> files;
+    QString strDestination;
+    CompressOptions options;
+    bool bBatch = false;
+    m_pArchiveManager->createArchive(files, strDestination, options, bBatch);
 }

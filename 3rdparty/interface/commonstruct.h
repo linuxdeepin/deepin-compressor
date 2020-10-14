@@ -26,6 +26,12 @@
 #include <QMetaType>
 #include <QVector>
 
+// 错误类型
+enum ErrorType {
+    ET_NoError = 0,     // 无错误
+
+};
+
 // 文件数据
 struct FileEntry {
     FileEntry()

@@ -30,3 +30,8 @@ ArchiveManager::~ArchiveManager()
 {
 
 }
+
+void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool bBatch)
+{
+
+}

@@ -31,10 +31,22 @@ public:
     explicit ArchiveJob(QObject *parent = nullptr);
     ~ArchiveJob() override;
 
+    // 操作类型
+    enum JobType {
+        JT_None = 0,        // 无操作
+        JT_Create,          // 创建压缩包
+        JT_Add,             // 添加压缩文件
+        JT_Load,            // 加载压缩包
+        JT_Extract,         // 解压
+    };
+
     /**
      * @brief start     开始操作
      */
     virtual void start() = 0;
+
+public:
+    JobType m_eJobType;     // 操作类型
 };
 
 #endif // ARCHIVEJOB_H
