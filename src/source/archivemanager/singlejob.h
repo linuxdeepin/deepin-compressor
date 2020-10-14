@@ -62,6 +62,11 @@ public:
      */
     virtual void doWork() = 0;
 
+    /**
+     * @brief start     开始
+     */
+    void start() override;
+
 protected:
     ReadOnlyArchiveInterface *m_pInterface;
 

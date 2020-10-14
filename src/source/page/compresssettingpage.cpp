@@ -493,4 +493,6 @@ void CompressSettingPage::slotCompressClicked()
         }
     }
 
+    emit signalCompressClicked(QVariant::fromValue(compressInfo));
+
 }

@@ -23,6 +23,8 @@
 
 #include "commonstruct.h"
 #include "archivejob.h"
+#include "archiveinterface.h"
+#include "plugin.h"
 
 #include <QObject>
 
@@ -40,7 +42,11 @@ public:
      * @param options           压缩参数
      * @param bBatch            是否批量压缩（多路径）
      */
-    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool bBatch = false);
+    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive = false, bool bBatch = false);
+
+private:
+    ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive = false);
+    ReadOnlyArchiveInterface *createInterface(const QString &fileName, Plugin *plugin);
 
 Q_SIGNALS:
     /**
@@ -70,7 +76,7 @@ private Q_SLOTS:
 
 
 private:
-    ArchiveJob *m_pJob = nullptr;     // 当前操作指针操作
+    ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针操作
 };
 
 #endif // ARCHIVEMANAGER_H

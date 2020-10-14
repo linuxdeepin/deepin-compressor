@@ -34,6 +34,13 @@ public:
     explicit ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadOnlyArchiveInterface() override;
 
+    // 插件类型
+    enum Plugintype {
+        PT_Cliinterface,
+        PT_LibArchive,
+        PT_Libzip
+    };
+
     /**
      * @brief list      加载压缩包
      * @return
@@ -54,6 +61,9 @@ public:
      * @return                      是否解压成功
      */
     virtual bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
+
+public:
+    Plugintype m_ePlugintype;
 };
 
 // 可读可写（可用来压缩、查看、解压等）

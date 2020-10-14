@@ -350,14 +350,16 @@ void MainWindow::slotCompressNext()
     refreshPage();
 }
 
-void MainWindow::slotCompress()
+void MainWindow::slotCompress(const QVariant &val)
 {
     qDebug() << "点击了压缩按钮";
 
+    CompressParameter compressInfo = val.value<CompressParameter>();    // 获取压缩参数
     QStringList listFiles = m_pCompressPage->compressFiles();   // 获取待压缩文件
 
+    // 创建压缩所需相关数据，调用压缩参数
     QVector<FileEntry> files;
-    QString strDestination;
+    QString strDestination = "/home/gaoxiang/Desktop/2.zip";
     CompressOptions options;
     bool bBatch = false;
     m_pArchiveManager->createArchive(files, strDestination, options, bBatch);

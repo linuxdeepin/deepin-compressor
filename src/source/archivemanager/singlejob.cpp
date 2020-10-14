@@ -42,6 +42,11 @@ SingleJob::~SingleJob()
 
 }
 
+void SingleJob::start()
+{
+
+}
+
 // 加载操作
 LoadJob::LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)

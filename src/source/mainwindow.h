@@ -121,7 +121,7 @@ private slots:
     /**
      * @brief slotCompress  压缩点击
      */
-    void slotCompress();
+    void slotCompress(const QVariant &val);
 
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板

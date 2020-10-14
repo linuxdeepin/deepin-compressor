@@ -20,6 +20,8 @@
 */
 #include "libzipplugin.h"
 
+#include <QDebug>
+
 
 LibzipPluginFactory::LibzipPluginFactory()
 {
@@ -36,7 +38,8 @@ LibzipPluginFactory::~LibzipPluginFactory()
 LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
-
+    qDebug() << "LibzipPlugin";
+    m_ePlugintype = PT_Libzip;
 }
 
 LibzipPlugin::~LibzipPlugin()

@@ -133,7 +133,7 @@ private:
     void setSplitEnabled(bool bEnabled);
 
 signals:
-    void signalCompressClicked();
+    void signalCompressClicked(const QVariant &val);
 
 private slots:
     /**
