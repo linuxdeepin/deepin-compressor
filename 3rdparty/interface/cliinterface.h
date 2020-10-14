@@ -153,7 +153,7 @@ protected:
     KProcess *m_process = nullptr;
     qint64 m_processid = 0;
     QVector<qint64> m_childprocessid;
-    bool m_abortingOperation = false;
+    //    bool m_abortingOperation = false;
     qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
 
     QString m_strRootNode;
@@ -226,6 +226,7 @@ private:
     QVector<Archive::Entry *> m_newMovedFiles;
     int m_exitCode = 0;
     bool m_listEmptyLines = false;
+    bool m_isProcessKilled = false;
     QString m_storedFileName;
 
     ExtractionOptions m_extractionOptions;

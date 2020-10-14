@@ -162,11 +162,11 @@ void CliPlugin::processFinished(int exitCode, QProcess::ExitStatus /*exitStatus*
 
     deleteProcess();
 
-    // #193908 - #222392
-    // Don't emit finished() if the job was killed quietly.
-    if (m_abortingOperation) {
-        return;
-    }
+    //    // #193908 - #222392
+    //    // Don't emit finished() if the job was killed quietly.
+    //    if (m_abortingOperation) {
+    //        return;
+    //    }
 
     if (!password().isEmpty()) {
 

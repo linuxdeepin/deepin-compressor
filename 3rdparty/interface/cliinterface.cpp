@@ -449,7 +449,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     }
 
     m_stdOutData.clear();
-
+    m_isProcessKilled = false;
     m_process->start();
 
     if (m_process->waitForStarted() && (Extract == m_operationMode || Add == m_operationMode)) {
@@ -482,11 +482,11 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
     deleteProcess();
 
-    // #193908 - #222392
-    // Don't emit finished() if the job was killed quietly.
-    if (m_abortingOperation) {
-        return;
-    }
+    //    // #193908 - #222392
+    //    // Don't emit finished() if the job was killed quietly.
+    //    if (m_abortingOperation) {
+    //        return;
+    //    }
 
     if (m_operationMode == Delete || m_operationMode == Move) {
         const QStringList removedFullPaths = entryFullPaths(m_removedFiles);
@@ -606,10 +606,10 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         m_process = nullptr;
     }
 
-    // Don't emit finished() if the job was killed quietly.
-    if (m_abortingOperation) {
-        return;
-    }
+    //    // Don't emit finished() if the job was killed quietly.
+    //    if (m_abortingOperation) {
+    //        return;
+    //    }
 
     if (m_extractionOptions.alwaysUseTempDir()) {
         // unar exits with code 1 if extraction fails.
@@ -1022,9 +1022,10 @@ void CliInterface::killProcess(bool emitFinished)
         }
     }
 
-    m_abortingOperation = !emitFinished;
+    //    m_abortingOperation = !emitFinished;
 
     m_process->kill();
+    m_isProcessKilled = true;
     //    // Give some time for the application to finish gracefully
     //    if (!m_process->waitForFinished(5)) {
     //        m_process->kill();
@@ -1041,7 +1042,7 @@ void CliInterface::killProcess(bool emitFinished)
         }
     }
 
-    m_abortingOperation = false;
+    //    m_abortingOperation = false;
 }
 
 bool CliInterface::passwordQuery()
@@ -1091,9 +1092,13 @@ void CliInterface::readStdout(bool handleAll)
     // etc), so keep in mind that this function is supposed to handle
     // all those special cases and be the lowest common denominator
 
-    if (m_abortingOperation)
-        return;
+    //    if (m_abortingOperation)
+    //        return;
 
+    //进程结束，不再对后面命令行缓存数据处理
+    if (m_isProcessKilled) {
+        return;
+    }
     Q_ASSERT(m_process);
 
     if (!m_process->bytesAvailable()) {
