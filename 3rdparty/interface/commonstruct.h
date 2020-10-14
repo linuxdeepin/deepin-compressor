@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QMetaType>
+#include <QVector>
 
 // 文件数据
 struct FileEntry {

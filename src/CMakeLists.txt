@@ -92,9 +92,9 @@ include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface)
 
 #7.主程序的h文件
 include_directories(${PROJECT_SOURCE_DIR}/source)
+include_directories(${PROJECT_SOURCE_DIR}/source/archivemanager)
 include_directories(${PROJECT_SOURCE_DIR}/source/common)
 include_directories(${PROJECT_SOURCE_DIR}/source/dialog)
-include_directories(${PROJECT_SOURCE_DIR}/source/job)
 include_directories(${PROJECT_SOURCE_DIR}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/source/tree)
 
