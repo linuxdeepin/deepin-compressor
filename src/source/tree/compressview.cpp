@@ -51,10 +51,10 @@ CompressView::~CompressView()
 void CompressView::addCompressFiles(const QStringList &listFiles)
 {
     m_listCompressFiles << listFiles;
+    m_listEntry.clear();
 
     // 刷新待压缩数据
     foreach (QString strFile, listFiles) {
-
         QFileInfo fileInfo(strFile);
         FileEntry entry;
         QMimeType mimetype;

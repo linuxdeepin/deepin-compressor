@@ -62,10 +62,41 @@ public:
      * @param btnMsg1       第一个按钮内容
      * @param btnType1      第一个按钮类型
      * @param btnMsg2       第二个按钮内容
-     * @param btnType2      第二个按钮操作
+     * @param btnType2      第二个按钮类型
+     * @param btnMsg3       第三个按钮内容
+     * @param btnType3      第三个按钮类型
      * @return
      */
-    int showDialog(const QString &strDesText = "", const QString btnMsg1 = "", ButtonType btnType1 = ButtonNormal, const QString btnMsg2 = "", ButtonType btnType2 = ButtonNormal);
+    int showDialog(const QString &strDesText = "", const QString btnMsg1 = "", ButtonType btnType1 = ButtonNormal,
+                   const QString btnMsg2 = "", ButtonType btnType2 = ButtonNormal,
+                   const QString btnMsg3 = "", ButtonType btnType3 = ButtonNormal);
+};
+
+enum Overwrite_Result {
+    OR_Cancel = 0,
+    OR_Skip = 1,
+    OR_SkipAll = 2,
+    OR_Overwrite = 3,
+    OR_OverwriteAll = 4,
+};
+
+class OverwriteQueryDialog : public DDialog
+{
+    Q_OBJECT
+
+public:
+    explicit OverwriteQueryDialog(QWidget *parent = nullptr);
+    ~OverwriteQueryDialog() override;
+
+    void showDialog(QString file);
+    int getDialogResult();
+    int getQueryResult();
+    bool getApplyAll();
+
+private:
+    int m_ret;
+    int m_retType;
+    bool m_applyAll;
 };
 
 #endif // POPUPDIALOG_H
