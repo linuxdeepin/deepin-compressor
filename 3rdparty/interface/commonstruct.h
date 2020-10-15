@@ -40,9 +40,9 @@ struct FileEntry {
         isDirectory = false;
     }
 
-    QString strFullPath;    //压缩包内文件绝对路径
-    QString strFileName;        // 文件名
-    QString strType; //文件类型
+    QString strFullPath;    // 文件名（含绝对路径：/../../xx.xx）
+    QString strFileName;        // 文件名（不含绝对路径：xx.xx）
+    QString strType;        //文件类型
     bool isDirectory;        // 是否为文件夹
     qlonglong qSize;        // 文件真实大小（文件夹显示项）
     QDateTime lastModifiedTime; // 文件最后修改时间
@@ -51,7 +51,25 @@ Q_DECLARE_METATYPE(FileEntry)
 
 // 压缩选项
 struct CompressOptions {
+    CompressOptions()
+    {
+        bEncryption = false;
+        bHeaderEncryption = false;
+        bSplit = false;
+        iVolumeSize = 0;
+        iCompressionLevel = -1;
+        bTar_7z = false;
+    }
 
+    bool bEncryption;       // 是否加密
+    QString strPassword;        // 密码
+    QString strEncryptionMethod;    // 加密算法
+    bool bHeaderEncryption;     // 是否列表加密
+    bool bSplit;        // 是否分卷
+    int iVolumeSize;    // 分卷大小（kb）
+    int iCompressionLevel;      // 压缩等级
+
+    bool bTar_7z;       // 是否是tar.7z格式（补充）
 };
 Q_DECLARE_METATYPE(CompressOptions)
 

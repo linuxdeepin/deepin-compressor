@@ -44,6 +44,12 @@ public:
      */
     void setCompressFullPath(const QString &strFullPath);
 
+    /**
+     * @brief setDes    设置成功信息展示
+     * @param strDes    描述内容
+     */
+    void setDes(const QString &strDes);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -55,18 +61,18 @@ private:
      */
     void initConnections();
 
+signals:
+    void sigBackButtonClicked();
+
+public slots:
+    void slotShowfiledirSlot(bool iIsUrl = true);
+
 private:
     DLabel *m_pSuccessPixmapLbl; //成功图片显示
     DLabel *m_pSuccessLbl;      // 成功文字显示
     CustomPushButton *m_pShowFileBtn; // 查看文件按钮
     CustomCommandLinkButton *m_pReturnBtn; // 返回按钮
     QString m_strFullPath;  // 压缩地址
-
-signals:
-    void sigBackButtonClicked();
-
-public slots:
-    void slotShowfiledirSlot(bool iIsUrl = true);
 };
 
 #endif //SUCCESSPAGE_H

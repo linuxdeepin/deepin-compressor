@@ -27,6 +27,7 @@
 #include "plugin.h"
 
 #include <QObject>
+#include <QMimeType>
 
 class ArchiveManager : public QObject
 {
@@ -34,6 +35,8 @@ class ArchiveManager : public QObject
 public:
     explicit ArchiveManager(QObject *parent = nullptr);
     ~ArchiveManager() override;
+
+    ArchiveJob *archiveJob();
 
     /**
      * @brief createArchive     创建压缩包
@@ -46,7 +49,7 @@ public:
 
 private:
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive = false);
-    ReadOnlyArchiveInterface *createInterface(const QString &fileName, Plugin *plugin);
+    ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
 Q_SIGNALS:
     /**
@@ -76,7 +79,8 @@ private Q_SLOTS:
 
 
 private:
-    ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针操作
+    ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针
+    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针
 };
 
 #endif // ARCHIVEMANAGER_H

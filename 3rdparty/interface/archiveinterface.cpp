@@ -20,16 +20,29 @@
 */
 #include "archiveinterface.h"
 
+#include <QDebug>
+
+Q_DECLARE_METATYPE(KPluginMetaData)
 
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
     : QObject(parent)
 {
+    Q_ASSERT(args.size() >= 3);
+    qDebug() << "Created read-only interface for" << args.first().toString();
+    m_strArchiveName = args.at(1).toString();
+    m_metaData = args.at(1).value<KPluginMetaData>();
+    m_mimetype = args.at(2).value<QMimeType>();
 
 }
 
 ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()
 {
 
+}
+
+bool ReadOnlyArchiveInterface::waitForFinished()
+{
+    return m_bWaitForFinished;
 }
 
 

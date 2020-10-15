@@ -45,6 +45,11 @@ void SuccessPage::setCompressFullPath(const QString &strFullPath)
     m_strFullPath = strFullPath;
 }
 
+void SuccessPage::setDes(const QString &strDes)
+{
+    m_pSuccessLbl->setText(strDes);
+}
+
 void SuccessPage::initUI()
 {
     //成功图标

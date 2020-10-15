@@ -42,6 +42,11 @@ ArchiveManager::~ArchiveManager()
 
 }
 
+ArchiveJob *ArchiveManager::archiveJob()
+{
+    return m_pArchiveJob;
+}
+
 void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive, bool bBatch)
 {
     ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, false, useLibArchive);
@@ -49,9 +54,10 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
     if (bBatch) {       // 批量压缩（多路径）
 
     } else {            // 单路径压缩
-        CreateJob *pCreateJob = new CreateJob(files, pInterface, this);
+        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
         // 连接槽函数
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalFinished);
 
 
         m_pArchiveJob = pCreateJob;
@@ -104,7 +110,7 @@ ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileNam
             continue;
         }
 
-        pIface = createInterface(fileName, plugin);
+        pIface = createInterface(fileName, mimeType, plugin);
         // Use the first valid plugin, according to the priority sorting.
         if (pIface) {
             break;
@@ -114,7 +120,7 @@ ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileNam
     return pIface;
 }
 
-ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, Plugin *plugin)
+ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin)
 {
     Q_ASSERT(plugin);
 
@@ -124,7 +130,8 @@ ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileNam
     }
 
     const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
-                               QVariant().fromValue(plugin->metaData())
+                               QVariant().fromValue(plugin->metaData()),
+                               QVariant::fromValue(mimeType)
                               };
 
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);

@@ -147,6 +147,8 @@ void MainWindow::initConnections()
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
     connect(m_pCompressPage, &CompressPage::signalCompressNextClicked, this, &MainWindow::slotCompressNext);
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
+
+    connect(m_pArchiveManager, &ArchiveManager::signalFinished, this, &MainWindow::slotJobFinshed);
 }
 
 void MainWindow::refreshPage()
@@ -186,10 +188,12 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
+        m_pSuccessPage->setDes(tr("Compression successful"));
     }
     break;
     case PI_UnCompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
+        m_pSuccessPage->setDes(tr("Extraction successful"));
     }
     break;
     case PI_ConvertSuccess: {
@@ -354,13 +358,83 @@ void MainWindow::slotCompress(const QVariant &val)
 {
     qDebug() << "点击了压缩按钮";
 
-    CompressParameter compressInfo = val.value<CompressParameter>();    // 获取压缩参数
+    CompressParameter stCompressInfo = val.value<CompressParameter>();    // 获取压缩参数
     QStringList listFiles = m_pCompressPage->compressFiles();   // 获取待压缩文件
 
+    if (listFiles.count() == 0) {
+        qDebug() << "没有需要压缩的文件";
+        return;
+    }
+
     // 创建压缩所需相关数据，调用压缩参数
-    QVector<FileEntry> files;
+    QVector<FileEntry> vecFiles;
     QString strDestination = "/home/gaoxiang/Desktop/2.zip";
     CompressOptions options;
     bool bBatch = false;
-    m_pArchiveManager->createArchive(files, strDestination, options, bBatch);
+
+    QSet< QString > globalWorkDirList;
+    // 构建压缩文件数据
+    foreach (QString strFile, listFiles) {
+        FileEntry stFileEntry;
+        stFileEntry.strFullPath = strFile;
+        vecFiles.push_back(stFileEntry);
+
+        QString globalWorkDir = strFile;
+        if (globalWorkDir.right(1) == QLatin1String("/")) {
+            globalWorkDir.chop(1);
+        }
+
+        globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+        globalWorkDirList.insert(globalWorkDir);
+    }
+
+    // 构建压缩参数
+    options.bEncryption = stCompressInfo.bEncryption;
+    options.strPassword = stCompressInfo.strPassword;
+    options.strEncryptionMethod = stCompressInfo.strEncryptionMethod;
+    options.bHeaderEncryption = stCompressInfo.bHeaderEncryption;
+    options.bSplit = stCompressInfo.bSplit;
+    options.iVolumeSize = stCompressInfo.iVolumeSize;
+    options.iCompressionLevel = stCompressInfo.iCompressionLevel;
+    options.bTar_7z = stCompressInfo.bTar_7z;
+
+    // 判断是否批量压缩（多路径）
+    if (globalWorkDirList.count() == 1 || options.bTar_7z) {
+        bBatch = false;
+    } else {
+        bBatch = true;
+    }
+
+    m_pArchiveManager->createArchive(vecFiles, strDestination, options, bBatch);
+}
+
+void MainWindow::slotJobFinshed()
+{
+    ArchiveJob *pJob = m_pArchiveManager->archiveJob();
+    if (pJob == nullptr) {
+        return;
+    }
+
+    switch (pJob->m_eJobType) {
+    case ArchiveJob::JT_Create: {
+        qDebug() << "创建结束";
+        m_ePageID = PI_CompressSuccess;
+    }
+    break;
+    case ArchiveJob::JT_Add: {
+        qDebug() << "添加结束";
+    }
+    break;
+    case ArchiveJob::JT_Load: {
+        qDebug() << "加载结束";
+    }
+    break;
+    case ArchiveJob::JT_Extract: {
+        qDebug() << "解压结束";
+        m_ePageID = PI_UnCompressSuccess;
+    }
+    break;
+    }
+
+    refreshPage();
 }

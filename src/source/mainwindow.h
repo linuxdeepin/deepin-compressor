@@ -123,6 +123,11 @@ private slots:
      */
     void slotCompress(const QVariant &val);
 
+    /**
+     * @brief slotJobFinshed    操作结束处理
+     */
+    void slotJobFinshed();
+
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板
 

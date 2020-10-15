@@ -33,7 +33,6 @@ public:
 
     // 操作类型
     enum JobType {
-        JT_None = 0,        // 无操作
         JT_Create,          // 创建压缩包
         JT_Add,             // 添加压缩文件
         JT_Load,            // 加载压缩包
@@ -45,8 +44,16 @@ public:
      */
     virtual void start() = 0;
 
+Q_SIGNALS:
+    /**
+     * @brief signalJobFinshed  操作结束信号
+     */
+    void signalJobFinshed();
+
 public:
     JobType m_eJobType;     // 操作类型
+
+
 };
 
 #endif // ARCHIVEJOB_H

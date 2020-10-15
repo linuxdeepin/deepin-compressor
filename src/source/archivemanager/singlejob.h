@@ -26,6 +26,7 @@
 #include "commonstruct.h"
 
 #include <QThread>
+#include <QElapsedTimer>
 
 class SingleJob;
 
@@ -47,6 +48,7 @@ public:
 
 private:
     SingleJob *q;
+
 };
 
 // 单个操作
@@ -67,11 +69,24 @@ public:
      */
     void start() override;
 
+private:
+    /**
+     * @brief initConnections   初始化插件和job的信号槽连接
+     */
+    void initConnections();
+
+private Q_SLOTS:
+    /**
+     * @brief slotFinished  操作结束处理
+     */
+    void slotFinished(bool bRight);
+
 protected:
     ReadOnlyArchiveInterface *m_pInterface;
 
 private:
-    SingleJobThread *const d;
+    SingleJobThread *const d;   // 线程
+    QElapsedTimer jobTimer;     // 操作计时
 };
 
 // 加载操作
@@ -94,7 +109,7 @@ class AddJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit AddJob(const QVector<FileEntry> &files, const QString &strDestination, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~AddJob() override;
 
     /**
@@ -104,6 +119,8 @@ public:
 
 private:
     QVector<FileEntry> m_vecFiles;
+    QString m_strDestination;
+    CompressOptions m_stCompressOptions;
 };
 
 // 创建压缩包操作
@@ -111,7 +128,7 @@ class CreateJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~CreateJob() override;
 
     /**
@@ -121,7 +138,8 @@ public:
 
 private:
     QVector<FileEntry> m_vecFiles;
-
+    AddJob *m_pAddJob;
+    CompressOptions m_stCompressOptions;
 };
 
 // 解压操作

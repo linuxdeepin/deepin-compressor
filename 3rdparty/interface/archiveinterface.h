@@ -22,8 +22,11 @@
 #define ARCHIVEINTERFACE_H
 
 #include "commonstruct.h"
+#include "kpluginmetadata.h"
 
 #include <QObject>
+#include <QString>
+#include <QMimeType>
 
 // 只读（查看和解压等）
 class ReadOnlyArchiveInterface : public QObject
@@ -62,8 +65,29 @@ public:
      */
     virtual bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
 
+    /**
+     * @brief waitForFinished   判断是否通过线程调用
+     * @return false：线程调用
+     */
+    bool waitForFinished();
+
+Q_SIGNALS:
+    /**
+     * @brief signalFinished    结束信号
+     * @param bNormal   是否正确结束
+     */
+    void signalFinished(bool bRight);
+
 public:
     Plugintype m_ePlugintype;
+
+protected:
+    bool m_bWaitForFinished = false;    // 等待结束
+    KPluginMetaData m_metaData;
+
+private:
+    QString m_strArchiveName;
+    QMimeType m_mimetype;
 };
 
 // 可读可写（可用来压缩、查看、解压等）

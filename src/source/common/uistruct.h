@@ -66,28 +66,20 @@ enum Page_ID {
     PI_Loading,             // 加载
 };
 
-// 压缩格式类型
-//enum Compress_Type {
-//    CT_7z,
-//    CT_Tar7z,
-//    CT_Tar,
-//    CT_Zip,
-//};
-
 // 压缩参数
 struct CompressParameter {
     CompressParameter()
     {
-        //eType = CT_Zip;
         bEncryption = false;
         bHeaderEncryption = false;
         bSplit = false;
         iVolumeSize = 0;
         iCompressionLevel = -1;
+        bTar_7z = false;
     }
 
-    //Compress_Type eType;    // 压缩格式
-    QString strMimeType;    // 格式类型
+
+    QString strMimeType;    // 格式类型（application/x-tar）
     QString strArchiveName; // 压缩包名称（无后缀）
     QString strTargetPath;  // 保存路径
     bool bEncryption = false;       // 是否加密
@@ -97,6 +89,8 @@ struct CompressParameter {
     bool bSplit;        // 是否分卷
     int iVolumeSize;    // 分卷大小
     int iCompressionLevel;      // 压缩等级
+
+    bool bTar_7z;       // 是否是tar.7z格式（补充）
 };
 Q_DECLARE_METATYPE(CompressParameter)
 

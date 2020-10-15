@@ -21,6 +21,7 @@
 #include "singlejob.h"
 
 #include <QThread>
+#include <QDebug>
 
 // 工作线程
 void SingleJobThread::run()
@@ -44,7 +45,34 @@ SingleJob::~SingleJob()
 
 void SingleJob::start()
 {
+    jobTimer.start();
 
+    // 若插件指针为空，立即异常退出
+    if (m_pInterface == nullptr) {
+        slotFinished(false);
+        return;
+    }
+
+    // 判断是否通过线程的方式调用
+    if (m_pInterface->waitForFinished()) {
+        doWork();   // 直接执行操作
+    } else {
+        d->start(); // 开启线程，执行操作
+    }
+}
+
+void SingleJob::initConnections()
+{
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished);
+}
+
+void SingleJob::slotFinished(bool bRight)
+{
+    qDebug() << "Job finished, result:" << bRight << ", time:" << jobTimer.elapsed() << "ms";
+
+    if (bRight) {
+        emit signalJobFinshed();
+    }
 }
 
 // 加载操作
@@ -65,8 +93,11 @@ void LoadJob::doWork()
 }
 
 // 压缩操作
-AddJob::AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+AddJob::AddJob(const QVector<FileEntry> &files, const QString &strDestination, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
+    , m_vecFiles(files)
+    , m_strDestination(strDestination)
+    , m_stCompressOptions(options)
 {
 
 }
@@ -78,13 +109,18 @@ AddJob::~AddJob()
 
 void AddJob::doWork()
 {
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
+    if (pWriteInterface) {
+        pWriteInterface->addFiles(m_vecFiles, m_strDestination, m_stCompressOptions);
+    }
 }
 
 // 创建压缩包操作
-CreateJob::CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+CreateJob::CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
+    , m_stCompressOptions(options)
 {
 
 }
@@ -96,7 +132,7 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
-
+    m_pAddJob = new AddJob(m_vecFiles, "", m_pInterface, m_stCompressOptions, this);
 }
 
 // 解压操作

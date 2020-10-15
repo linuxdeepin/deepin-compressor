@@ -462,7 +462,7 @@ void CompressSettingPage::slotCompressClicked()
     CompressParameter compressInfo;
 
     compressInfo.strMimeType = m_strMimeType;       // 格式类型
-    compressInfo.strArchiveName = m_pFileNameEdt->text() + "." + m_pCompressTypeLbl->text();;   // 压缩包名称
+    compressInfo.strArchiveName = m_pFileNameEdt->text() + "." + m_pCompressTypeLbl->text();   // 压缩包名称
     compressInfo.strTargetPath = m_pSavePathEdt->text();    // 压缩包保存路径
     compressInfo.strPassword = m_pPasswordEdt->lineEdit()->text();
     compressInfo.bEncryption = !(compressInfo.strPassword.isEmpty());     // 是否加密
@@ -470,6 +470,7 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.bHeaderEncryption = m_pListEncryptionBtn->isChecked();     // 是否列表加密
     compressInfo.bSplit = m_pSplitCkb->isChecked();     // 是否分卷
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
+    compressInfo.bTar_7z = (m_pCompressTypeLbl->text() == "tar.7z") ? true : false;     // 是否为tar.7z格式
 
     // 压缩等级
     if ("application/x-tar" == compressInfo.strMimeType || "application/x-tarz" == compressInfo.strMimeType) {
