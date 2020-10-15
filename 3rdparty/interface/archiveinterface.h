@@ -85,7 +85,7 @@ protected:
     bool m_bWaitForFinished = false;    // 等待结束
     KPluginMetaData m_metaData;
 
-private:
+protected:
     QString m_strArchiveName;
     QMimeType m_mimetype;
 };
@@ -102,7 +102,7 @@ public:
     /**
      * @brief addFiles          压缩文件
      * @param files             待压缩文件
-     * @param strDestination    压缩包名称（含路径）
+     * @param strDestination    压缩包内路径
      * @param options           压缩参数
      * @return
      */

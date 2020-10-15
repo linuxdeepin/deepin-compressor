@@ -35,7 +35,7 @@ SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     , m_pInterface(pInterface)
     , d(new SingleJobThread(this))
 {
-
+    initConnections();
 }
 
 SingleJob::~SingleJob()
@@ -132,7 +132,8 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
-    m_pAddJob = new AddJob(m_vecFiles, "", m_pInterface, m_stCompressOptions, this);
+    m_pAddJob = new AddJob(m_vecFiles, "", m_pInterface, m_stCompressOptions, nullptr);
+    m_pAddJob->start();
 }
 
 // 解压操作

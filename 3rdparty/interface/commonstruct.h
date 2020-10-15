@@ -64,6 +64,7 @@ struct CompressOptions {
     bool bEncryption;       // 是否加密
     QString strPassword;        // 密码
     QString strEncryptionMethod;    // 加密算法
+    QString strCompressionMethod;    // 压缩算法
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     int iVolumeSize;    // 分卷大小（kb）

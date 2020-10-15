@@ -52,7 +52,14 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
     ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, false, useLibArchive);
 
     if (bBatch) {       // 批量压缩（多路径）
+        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
+        // 连接槽函数
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalFinished);
+
+
+        m_pArchiveJob = pCreateJob;
+        pCreateJob->start();
     } else {            // 单路径压缩
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 

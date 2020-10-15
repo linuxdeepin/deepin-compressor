@@ -368,7 +368,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
     // 创建压缩所需相关数据，调用压缩参数
     QVector<FileEntry> vecFiles;
-    QString strDestination = "/home/gaoxiang/Desktop/2.zip";
+    QString strDestination;
     CompressOptions options;
     bool bBatch = false;
 
@@ -388,10 +388,13 @@ void MainWindow::slotCompress(const QVariant &val)
         globalWorkDirList.insert(globalWorkDir);
     }
 
+    strDestination = stCompressInfo.strTargetPath + QDir::separator() + stCompressInfo.strArchiveName;
+
     // 构建压缩参数
     options.bEncryption = stCompressInfo.bEncryption;
     options.strPassword = stCompressInfo.strPassword;
     options.strEncryptionMethod = stCompressInfo.strEncryptionMethod;
+    options.strCompressionMethod = stCompressInfo.strCompressionMethod;
     options.bHeaderEncryption = stCompressInfo.bHeaderEncryption;
     options.bSplit = stCompressInfo.bSplit;
     options.iVolumeSize = stCompressInfo.iVolumeSize;
@@ -405,7 +408,7 @@ void MainWindow::slotCompress(const QVariant &val)
         bBatch = true;
     }
 
-    m_pArchiveManager->createArchive(vecFiles, strDestination, options, bBatch);
+    m_pArchiveManager->createArchive(vecFiles, strDestination, options, false, bBatch);
 }
 
 void MainWindow::slotJobFinshed()

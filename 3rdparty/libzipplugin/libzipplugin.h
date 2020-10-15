@@ -26,6 +26,7 @@
 
 #include <QObject>
 
+#include <zip.h>
 
 class LibzipPluginFactory : public KPluginFactory
 {
@@ -59,6 +60,18 @@ public:
     bool copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
     bool deleteFiles(const QVector<FileEntry> &files) override;
     bool addComment(const QString &comment) override;
+
+private:
+    bool writeEntry(zip_t *archive, const QString &entry, const QString &strDestination, const CompressOptions &options, bool isDir = false, const QString &strRoot = "");
+    static void progressCallback(zip_t *, double progress, void *that);
+    static int cancelCallback(zip_t *, void *that);
+
+private:
+    int m_filesize;             // 压缩的文件数目
+    zip_t *m_addarchive;        // 压缩包
+
+Q_SIGNALS:
+    void error(const QString &message = "", const QString &details = "");
 };
 
 #endif // LIBZIPPLUGIN_H
