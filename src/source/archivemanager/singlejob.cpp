@@ -93,10 +93,9 @@ void LoadJob::doWork()
 }
 
 // 压缩操作
-AddJob::AddJob(const QVector<FileEntry> &files, const QString &strDestination, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
+AddJob::AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
-    , m_strDestination(strDestination)
     , m_stCompressOptions(options)
 {
     m_eJobType = JT_Add;
@@ -112,7 +111,7 @@ void AddJob::doWork()
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
     if (pWriteInterface) {
-        pWriteInterface->addFiles(m_vecFiles, m_strDestination, m_stCompressOptions);
+        pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
     }
 }
 
@@ -132,14 +131,15 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
-    m_pAddJob = new AddJob(m_vecFiles, "", m_pInterface, m_stCompressOptions, nullptr);
+    m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
     m_pAddJob->start();
 }
 
 // 解压操作
-ExtractJob::ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+ExtractJob::ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
+    , m_stExtractionOptions(options)
 {
 
 }
@@ -151,7 +151,7 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
-
+    m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
 }
 
 // 删除操作

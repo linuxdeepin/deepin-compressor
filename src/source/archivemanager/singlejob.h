@@ -111,7 +111,7 @@ class AddJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit AddJob(const QVector<FileEntry> &files, const QString &strDestination, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
+    explicit AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~AddJob() override;
 
     /**
@@ -149,7 +149,7 @@ class ExtractJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent = nullptr);
     ~ExtractJob() override;
 
     /**
@@ -159,7 +159,7 @@ public:
 
 private:
     QVector<FileEntry> m_vecFiles;
-
+    ExtractionOptions m_stExtractionOptions;
 };
 
 // 删除操作

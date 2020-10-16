@@ -41,7 +41,7 @@ public:
     /**
      * @brief createArchive     创建压缩包
      * @param files             待压缩文件
-     * @param strDestination    压缩包名称（含路径）
+     * @param strDestination    文件存储在压缩包的路径（为空时，处于根目录）
      * @param options           压缩参数
      * @param bBatch            是否批量压缩（多路径）
      */
@@ -58,6 +58,14 @@ public:
      * @param stArchiveData         压缩包数据
      */
     void getLoadArchiveData(ArchiveData &stArchiveData);
+
+    /**
+     * @brief extractArchive    解压文件
+     * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
+     * @param strArchiveName    压缩包名称
+     * @param options           解压参数
+     */
+    void extractArchive(const QVector<FileEntry> &files, const QString &strArchiveName, const ExtractionOptions &options);
 
 private:
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);

@@ -97,12 +97,12 @@ bool LibzipPlugin::testArchive()
     return true;
 }
 
-bool LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options)
+bool LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
     return true;
 }
 
-bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options)
+bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     int errcode = 0;
     zip_error_t err;
@@ -127,7 +127,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
 
         // If entry is a directory, traverse and add all its files and subfolders.
         if (QFileInfo(e.strFullPath).isDir()) {
-            if (!writeEntry(archive, e.strFullPath, strDestination, options, true, strPath)) {
+            if (!writeEntry(archive, e.strFullPath, options, true, strPath)) {
                 if (zip_close(archive)) {
                     //emit error(("Failed to write archive."));
                     return false;
@@ -144,7 +144,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
                 const QString path = it.next();
 
                 if (QFileInfo(path).isDir()) {
-                    if (!writeEntry(archive, path, strDestination, options, true, strPath)) {
+                    if (!writeEntry(archive, path, options, true, strPath)) {
                         if (zip_close(archive)) {
                             //emit error(("Failed to write archive."));
                             return false;
@@ -152,7 +152,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
                         return false;
                     }
                 } else {
-                    if (!writeEntry(archive, path, strDestination, options, false, strPath)) {
+                    if (!writeEntry(archive, path, options, false, strPath)) {
                         if (zip_close(archive)) {
                             //emit error(("Failed to write archive."));
                             return false;
@@ -163,7 +163,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
                 i++;
             }
         } else {
-            if (!writeEntry(archive, e.strFullPath, strDestination, options, false, strPath)) {
+            if (!writeEntry(archive, e.strFullPath, options, false, strPath)) {
                 if (zip_close(archive)) {
                     //emit error(("Failed to write archive."));
                     return false;
@@ -193,12 +193,12 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
     return true;
 }
 
-bool LibzipPlugin::moveFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options)
+bool LibzipPlugin::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     return true;
 }
 
-bool LibzipPlugin::copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options)
+bool LibzipPlugin::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     return true;
 }
@@ -214,13 +214,13 @@ bool LibzipPlugin::addComment(const QString &comment)
 }
 
 
-bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const QString &strDestination, const CompressOptions &options, bool isDir, const QString &strRoot)
+bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir, const QString &strRoot)
 {
     Q_ASSERT(archive);
 
     QString str;
-    if (!strDestination.isEmpty()) {
-        str = QString(strDestination + entry.mid(strRoot.length()));
+    if (!options.strDestination.isEmpty()) {
+        str = QString(options.strDestination + entry.mid(strRoot.length()));
     } else {
         //移除前缀路径
         str = entry.mid(strRoot.length());

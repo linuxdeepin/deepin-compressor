@@ -101,6 +101,15 @@ void ArchiveManager::getLoadArchiveData(ArchiveData &stArchiveData)
     }
 }
 
+void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QString &strArchiveName, const ExtractionOptions &options)
+{
+    if (m_pInterface == nullptr) {
+        m_pInterface = createInterface(strArchiveName);
+    }
+
+    //ExtractJob
+}
+
 ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive)
 {
     QFileInfo fileinfo(fileName);

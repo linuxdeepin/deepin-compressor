@@ -60,11 +60,10 @@ public:
     /**
      * @brief extractFiles          解压
      * @param files                 待解压的文件，若数目为0,则是全部解压，否则为部分提取
-     * @param destinationDirectory  解压路径
      * @param options               解压参数
      * @return                      是否解压成功
      */
-    virtual bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) = 0;
+    virtual bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) = 0;
 
     /**
      * @brief waitForFinished   判断是否通过线程调用
@@ -111,29 +110,26 @@ public:
     /**
      * @brief addFiles          压缩文件
      * @param files             待压缩文件
-     * @param strDestination    压缩包内路径
      * @param options           压缩参数
      * @return
      */
-    virtual bool addFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) = 0;
+    virtual bool addFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          移动压缩文件
      * @param files             待移动文件
-     * @param strDestination    压缩包名称（含路径）
      * @param options           压缩参数
      * @return
      */
-    virtual bool moveFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) = 0;
+    virtual bool moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          拷贝压缩文件
      * @param files             待拷贝文件
-     * @param strDestination    压缩包名称（含路径）
      * @param options           压缩参数
      * @return
      */
-    virtual bool copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) = 0;
+    virtual bool copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          删除压缩文件

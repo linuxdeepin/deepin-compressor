@@ -95,13 +95,21 @@ struct CompressOptions {
     int iVolumeSize;    // 分卷大小（kb）
     int iCompressionLevel;      // 压缩等级
 
+    QString strDestination; // 压缩上级目录（若为空，代表在根目录压缩文件）
     bool bTar_7z;       // 是否是tar.7z格式（补充）
 };
 Q_DECLARE_METATYPE(CompressOptions)
 
 // 解压选项
 struct ExtractionOptions {
+    ExtractionOptions()
+    {
+        bAllExtract = true;
+    }
 
+    QString strTargetPath;      // 解压目标路径
+    bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
+    QString strDestination;         // 提取时的上级目录（若为空，代表提取的是根目录下的文件）
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

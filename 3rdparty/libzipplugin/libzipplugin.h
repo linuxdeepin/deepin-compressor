@@ -53,13 +53,13 @@ public:
 public:
     bool list() override;
     bool testArchive() override;
-    bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
+    bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
 
     // ReadWriteArchiveInterface interface
 public:
-    bool addFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
-    bool moveFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
-    bool copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
+    bool addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    bool moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    bool copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
     bool deleteFiles(const QVector<FileEntry> &files) override;
     bool addComment(const QString &comment) override;
 
@@ -74,7 +74,7 @@ private:
      * @param strRoot 文件前缀路径
      * @return
      */
-    bool writeEntry(zip_t *archive, const QString &entry, const QString &strDestination, const CompressOptions &options, bool isDir = false, const QString &strRoot = "");
+    bool writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir = false, const QString &strRoot = "");
 
     /**
      * @brief progressCallback  进度回调函数
