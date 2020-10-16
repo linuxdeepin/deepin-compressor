@@ -1,10 +1,8 @@
-project(readwritelibarchiveplugin)
-
 cmake_minimum_required(VERSION 3.9.5)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 set(LIB_NAME readwritelibarchiveplugin)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+project(${LIB_NAME})
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #3.3 打开全局moc
 set(CMAKE_AUTOMOC ON)
@@ -42,16 +40,16 @@ include_directories(${INTERFACE_LNCLUDE_DIR})
 include_directories(../../ChardetDetector)
 include_directories(../libarchive)
 
-file(GLOB_RECURSE c_files  *.cpp )
-file(GLOB_RECURSE h_files  *.h )
-file(GLOB_RECURSE json_files  *.json)
+file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp )
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h )
+file(GLOB_RECURSE json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
 include_directories(${PROJECT_SOURCE_DIR}/../)
 
-add_library(${LIB_NAME} SHARED  ${c_files} ${h_files}  ${tab_files} ${json_files})
+add_library(${LIB_NAME} SHARED  ${c_files} ${h_files} ${json_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-archive)

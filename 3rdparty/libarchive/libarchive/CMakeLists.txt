@@ -50,8 +50,8 @@ set(LIBS_INCLUDE_DIRS
   ${LibArchive_LIBRARIES}
 )
 
-file(GLOB_RECURSE c_files  *.cpp)
-file(GLOB_RECURSE h_files  *.h)
+file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
 
 set(LINK_LIBS
     Qt5::Core

@@ -120,9 +120,9 @@ public:
     void doWork() override;
 
 private:
-    QVector<FileEntry> m_vecFiles;
-    QString m_strDestination;
-    CompressOptions m_stCompressOptions;
+    QVector<FileEntry> m_vecFiles; //待压缩文件(夹)
+    QString m_strDestination; //追加时当前压缩包内路径
+    CompressOptions m_stCompressOptions; //压缩配置
 };
 
 // 创建压缩包操作

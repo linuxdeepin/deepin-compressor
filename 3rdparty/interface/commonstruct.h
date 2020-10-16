@@ -94,7 +94,6 @@ struct CompressOptions {
     bool bSplit;        // 是否分卷
     int iVolumeSize;    // 分卷大小（kb）
     int iCompressionLevel;      // 压缩等级
-
     QString strDestination; // 压缩上级目录（若为空，代表在根目录压缩文件）
     bool bTar_7z;       // 是否是tar.7z格式（补充）
 };
