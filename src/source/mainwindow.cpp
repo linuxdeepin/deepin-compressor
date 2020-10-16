@@ -148,7 +148,7 @@ void MainWindow::initConnections()
     connect(m_pCompressPage, &CompressPage::signalCompressNextClicked, this, &MainWindow::slotCompressNext);
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
 
-    connect(m_pArchiveManager, &ArchiveManager::signalFinished, this, &MainWindow::slotJobFinshed);
+    connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
 }
 
 void MainWindow::refreshPage()
@@ -331,10 +331,33 @@ void MainWindow::slotChoosefiles()
 
 void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 {
-    m_ePageID = PI_Compress;
-    refreshPage();
+    // 未选择任何文件
+    if (listFiles.count() == 0) {
+        return;
+    }
 
-    m_pCompressPage->addCompressFiles(listFiles);       // 添加压缩文件
+    /* 当选择的文件数目大于1时，执行压缩流程
+    *  若数目为1，根据文件格式判断是压缩还是需要解压
+    */
+    if (listFiles.count() > 1) {
+        m_ePageID = PI_Compress;
+        m_pCompressPage->addCompressFiles(listFiles);       // 添加压缩文件
+    } else {
+        if (UiTools::isArchiveFile(listFiles[0])) {     // 压缩文件处理
+            m_pUnCompressPage->setArchiveName(listFiles[0]);
+
+            m_ePageID = PI_Loading;
+            m_pLoadingPage->startLoading();
+            m_pArchiveManager->loadArchive(listFiles[0]);
+
+
+        } else {        // 普通文件处理
+            m_ePageID = PI_Compress;
+            m_pCompressPage->addCompressFiles(listFiles);       // 添加压缩文件
+        }
+    }
+
+    refreshPage();      // 刷新界面
 }
 
 void MainWindow::slotCompressLevelChanged(bool bRootIndex)
@@ -429,7 +452,13 @@ void MainWindow::slotJobFinshed()
     }
     break;
     case ArchiveJob::JT_Load: {
+        m_pLoadingPage->stopLoading();
+        m_ePageID = PI_UnCompress;
         qDebug() << "加载结束";
+
+        ArchiveData stArchiveData;
+        m_pArchiveManager->getLoadArchiveData(stArchiveData);
+        m_pUnCompressPage->setLoadData(stArchiveData);
     }
     break;
     case ArchiveJob::JT_Extract: {

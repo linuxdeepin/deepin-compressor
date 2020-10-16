@@ -102,6 +102,8 @@ public:
      */
     void doWork() override;
 
+private:
+
 };
 
 // 压缩操作

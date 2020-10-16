@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "libzipplugin.h"
+#include "common.h"
 
 #include <QDebug>
 #include <QFile>
@@ -27,6 +28,7 @@
 #include <QThread>
 #include <qplatformdefs.h>
 #include <QDirIterator>
+#include <QTimer>
 
 //#include <zlib.h>
 
@@ -56,6 +58,37 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list()
 {
+    qDebug() << "插件加载压缩包数据";
+    m_stArchiveData = ArchiveData();
+
+    // 处理加载流程
+    int errcode = 0;
+    zip_error_t err;
+
+    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
+    zip_error_init_with_code(&err, errcode);
+
+    //某些特殊文件，如.crx用zip打不开，需要替换minizip
+    if (!archive) {
+//        m_bAllEntry = true;
+//        return minizip_list();
+    }
+
+    // 获取文件压缩包文件数目
+    const auto nofEntries = zip_get_num_entries(archive, 0);
+
+    // 循环构建数据
+    for (zip_int64_t i = 0; i < nofEntries; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+
+        handleArchiveData(archive, i);  // 构建数据
+    }
+
+    zip_close(archive);
+
+    emit signalFinished(true);
     return true;
 }
 
@@ -78,7 +111,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
-        emit error(("Failed to open the archive: %1")); //ReadOnlyArchiveInterface::error
+        //emit error(("Failed to open the archive: %1")); //ReadOnlyArchiveInterface::error
         return false;
     }
 
@@ -96,7 +129,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
         if (QFileInfo(e.strFullPath).isDir()) {
             if (!writeEntry(archive, e.strFullPath, strDestination, options, true, strPath)) {
                 if (zip_close(archive)) {
-                    emit error(("Failed to write archive."));
+                    //emit error(("Failed to write archive."));
                     return false;
                 }
                 return false;
@@ -113,7 +146,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
                 if (QFileInfo(path).isDir()) {
                     if (!writeEntry(archive, path, strDestination, options, true, strPath)) {
                         if (zip_close(archive)) {
-                            emit error(("Failed to write archive."));
+                            //emit error(("Failed to write archive."));
                             return false;
                         }
                         return false;
@@ -121,7 +154,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
                 } else {
                     if (!writeEntry(archive, path, strDestination, options, false, strPath)) {
                         if (zip_close(archive)) {
-                            emit error(("Failed to write archive."));
+                            //emit error(("Failed to write archive."));
                             return false;
                         }
                         return false;
@@ -132,7 +165,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
         } else {
             if (!writeEntry(archive, e.strFullPath, strDestination, options, false, strPath)) {
                 if (zip_close(archive)) {
-                    emit error(("Failed to write archive."));
+                    //emit error(("Failed to write archive."));
                     return false;
                 }
                 return false;
@@ -148,7 +181,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const QString &strD
 //    zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);
 
     if (zip_close(archive)) {
-        emit error(("Failed to write archive."));
+        //emit error(("Failed to write archive."));
         emit signalFinished(true);
         return false;
     }
@@ -180,16 +213,7 @@ bool LibzipPlugin::addComment(const QString &comment)
     return true;
 }
 
-/**
- * @brief writeEntry 添加新的Entry
- * @param archive 压缩包数据
- * @param entry 新文件
- * @param strDestination 压缩包内路径
- * @param options 压缩配置参数
- * @param isDir
- * @param strRoot 文件前缀路径
- * @return
- */
+
 bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const QString &strDestination, const CompressOptions &options, bool isDir, const QString &strRoot)
 {
     Q_ASSERT(archive);
@@ -212,14 +236,14 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const QStrin
     } else {
         zip_source_t *src = zip_source_file(archive, QFile::encodeName(entry).constData(), 0, -1);
         if (!src) {
-            emit error(("Failed to add entry: %1"));
+            //emit error(("Failed to add entry: %1"));
             return false;
         }
 
         index = zip_file_add(archive, str.toUtf8().constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
         if (index == -1) {
             zip_source_free(src);
-            emit error(("Failed to add entry: %1"));
+            //emit error(("Failed to add entry: %1"));
             return false;
         }
     }
@@ -247,7 +271,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const QStrin
             ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_256, options.strPassword.toUtf8().constData());
         }
         if (ret != 0) {
-            emit error(("Failed to set compression options for entry: %1"));
+            //emit error(("Failed to set compression options for entry: %1"));
             return false;
         }
     }
@@ -267,29 +291,83 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const QStrin
     // 设置压缩等级
     const int compLevel = (options.iCompressionLevel != -1) ? options.iCompressionLevel : 6;
     if (zip_set_file_compression(archive, uindex, compMethod, compLevel) != 0) {
-        emit error(("Failed to set compression options for entry: %1"));
+        //emit error(("Failed to set compression options for entry: %1"));
         return false;
     }
 
     return true;
 }
 
-/**
- * @brief progressCallback  进度回调函数
- * @param progress  进度
- * @param that
- */
+
 void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 {
 //    static_cast<LibzipPlugin *>(that)->emitProgress(progress);      // 进度回调
 }
 
-/**
- * @brief cancelCallback    取消回调函数
- * @param that
- * @return
- */
+
 int LibzipPlugin::cancelCallback(zip_t *, void *that)
 {
-//    return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
+    //    return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
+}
+
+bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
+{
+    if (archive == nullptr) {
+        return false;
+    }
+
+    zip_stat_t statBuffer;
+    if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer)) {
+        return false;
+    }
+
+    QString name = m_common->trans2uft8(statBuffer.name);
+
+    FileEntry entry;
+    entry.iIndex = int(index);
+    entry.strFullPath = name;
+    statBuffer2FileEntry(statBuffer, entry);
+
+    // 获取第一层数据
+    if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
+        m_stArchiveData.listRootEntry.push_back(entry);
+    }
+
+    // 存储总数据
+    m_stArchiveData.mapFileEntry[name] = entry;
+
+    return true;
+}
+
+void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry &entry)
+{
+    // FileEntry stFileEntry;
+
+    // 文件名
+    if (statBuffer.valid & ZIP_STAT_NAME) {
+        const QStringList pieces = entry.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+        entry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
+    }
+
+    // 是否为文件夹
+    if (entry.strFullPath.endsWith(QDir::separator())) {
+        entry.isDirectory = true;
+    }
+
+    // 文件真实大小（文件夹显示项）
+    if (statBuffer.valid & ZIP_STAT_SIZE) {
+        if (!entry.isDirectory) {
+            entry.qSize = qlonglong(statBuffer.size);
+            m_stArchiveData.qSize += statBuffer.size;
+            m_stArchiveData.qComressSize += statBuffer.comp_size;
+        } else {
+            entry.qSize = 0;
+        }
+    }
+
+    // 文件最后修改时间
+    if (statBuffer.valid & ZIP_STAT_MTIME) {
+        entry.uLastModifiedTime = uint(statBuffer.mtime);
+    }
+
 }

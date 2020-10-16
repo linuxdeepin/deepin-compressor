@@ -23,6 +23,7 @@
 
 #include "commonstruct.h"
 #include "kpluginmetadata.h"
+#include "common.h"
 
 #include <QObject>
 #include <QString>
@@ -71,6 +72,12 @@ public:
      */
     bool waitForFinished();
 
+    /**
+     * @brief getArchiveData    获取压缩包数据
+     * @param stArchiveData     压缩包数据
+     */
+    void getArchiveData(ArchiveData &stArchiveData);
+
 Q_SIGNALS:
     /**
      * @brief signalFinished    结束信号
@@ -84,10 +91,12 @@ public:
 protected:
     bool m_bWaitForFinished = false;    // 等待结束
     KPluginMetaData m_metaData;
-
-protected:
     QString m_strArchiveName;
     QMimeType m_mimetype;
+
+    Common *m_common = nullptr; // 通用工具类
+
+    ArchiveData m_stArchiveData;
 };
 
 // 可读可写（可用来压缩、查看、解压等）

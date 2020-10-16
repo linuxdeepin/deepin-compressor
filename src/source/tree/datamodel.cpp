@@ -33,6 +33,7 @@
 DataModel::DataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    m_pMimetype = new MimeTypeDisplayManager(this);
 }
 
 DataModel::~DataModel()
@@ -79,10 +80,12 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
             return entry.strFileName;
         }
         case DC_Time: {
-            return QLocale().toString(entry.lastModifiedTime, tr("yyyy/MM/dd hh:mm:ss")); // 第二列绑定修改时间格式
+            return QDateTime::fromTime_t(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
+            // return QLocale().toString(entry.lastModifiedTime, tr("yyyy/MM/dd hh:mm:ss")); // 第二列绑定修改时间格式
         }
         case DC_Type: {
-            return entry.strType;
+            QMimeType mimetype = entry.isDirectory ? determineMimeType(entry.strFullPath) : determineMimeType(entry.strFileName);
+            return m_pMimetype->displayName(mimetype.name());
         }
         case DC_Size: {
             return strSize; // 第四列绑定大小（文件夹为子文件数目，文件为大小）
@@ -92,7 +95,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     }
     // 数据信息
     case Qt::UserRole: {
-        return QVariant::fromValue(entry); // 第一列绑定QFileInfo数据
+        return QVariant::fromValue(entry); // 每一列绑定FileEntry数据
     }
     // 图标数据
     case Qt::DecorationRole: {
@@ -146,14 +149,17 @@ void DataModel::sort(int column, Qt::SortOrder order)
     beginResetModel();//在开始添加此函数
     qSort(m_listEntry.begin(), m_listEntry.end(), [&](FileEntry entrya, FileEntry entryb) -> bool {
         //文件与目录分开排序,目录始终在前
-        if (entrya.isDirectory && !entryb.isDirectory) {
+        if (entrya.isDirectory && !entryb.isDirectory)
+        {
             return true;
         }
-        if (!entrya.isDirectory && entryb.isDirectory) {
+        if (!entrya.isDirectory && entryb.isDirectory)
+        {
             return false;
         }
 
-        switch (column) {
+        switch (column)
+        {
         case DC_Name: {
             if (order == Qt::AscendingOrder) { //升序
                 if (QChar::Script_Han == entrya.strFileName.at(0).script()) { //左侧第一个是汉字
@@ -181,18 +187,22 @@ void DataModel::sort(int column, Qt::SortOrder order)
         case DC_Time: {
             // 比较文件最后一次修改时间
             if (order == Qt::AscendingOrder) {
-                return (entrya.lastModifiedTime < entryb.lastModifiedTime);
+                return (entrya.uLastModifiedTime < entryb.uLastModifiedTime);
             } else {
-                return (entrya.lastModifiedTime > entryb.lastModifiedTime);
+                return (entrya.uLastModifiedTime > entryb.uLastModifiedTime);
             }
         }
         case DC_Type: {
+
+            QMimeType mimeLeftType = determineMimeType(entrya.strFullPath);
+            QMimeType mimeRightType = determineMimeType(entryb.strFullPath);
+
             // 比较显示类型
             QCollator col;
             if (order == Qt::AscendingOrder) {
-                return (col.compare(entrya.strType, entryb.strType) < 0);
+                return (col.compare(m_pMimetype->displayName(mimeLeftType.name()), m_pMimetype->displayName(mimeRightType.name())) < 0);
             } else {
-                return (col.compare(entrya.strType, entryb.strType) > 0);
+                return (col.compare(m_pMimetype->displayName(mimeLeftType.name()), m_pMimetype->displayName(mimeRightType.name())) > 0);
             }
         }
         case DC_Size: {

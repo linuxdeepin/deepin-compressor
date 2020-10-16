@@ -39,6 +39,15 @@ ArchiveManager::ArchiveManager(QObject *parent)
 
 ArchiveManager::~ArchiveManager()
 {
+    if (m_pArchiveJob != nullptr) {
+        delete m_pArchiveJob;
+        m_pArchiveJob = nullptr;
+    }
+
+    if (m_pInterface != nullptr) {
+        delete m_pInterface;
+        m_pInterface = nullptr;
+    }
 
 }
 
@@ -55,7 +64,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
         // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalFinished);
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
 
 
         m_pArchiveJob = pCreateJob;
@@ -64,11 +73,31 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
         // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalFinished);
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
 
 
         m_pArchiveJob = pCreateJob;
         pCreateJob->start();
+    }
+}
+
+void ArchiveManager::loadArchive(const QString &strArchiveName)
+{
+    m_pInterface = createInterface(strArchiveName);
+
+    LoadJob *pLoadJob = new LoadJob(m_pInterface);
+
+    // 连接槽函数
+    connect(pLoadJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
+
+    m_pArchiveJob = pLoadJob;
+    pLoadJob->start();
+}
+
+void ArchiveManager::getLoadArchiveData(ArchiveData &stArchiveData)
+{
+    if (m_pInterface != nullptr) {
+        m_pInterface->getArchiveData(stArchiveData);
     }
 }
 
@@ -144,4 +173,3 @@ ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileNam
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     return iface;
 }
-

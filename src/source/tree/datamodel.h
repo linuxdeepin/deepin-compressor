@@ -51,7 +51,8 @@ public:
     void refreshFileEntry(const QList<FileEntry> &listEntry);
 
 private:
-    QList<FileEntry> m_listEntry;
+    QList<FileEntry> m_listEntry;       // 显示的数据
+    MimeTypeDisplayManager *m_pMimetype; // 类型管理
 };
 
 #endif // DATAMODEL_H

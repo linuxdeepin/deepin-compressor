@@ -22,6 +22,8 @@
 #ifndef UNCOMPRESSPAGE_H
 #define UNCOMPRESSPAGE_H
 
+#include "commonstruct.h"
+
 #include <DWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -38,10 +40,22 @@ public:
     ~UnCompressPage() override;
 
     /**
+     * @brief setArchiveName    设置压缩包名称
+     * @param strArchiveName    压缩包名称（含路径）
+     */
+    void setArchiveName(const QString &strArchiveName);
+
+    /**
      * @brief setDefaultUncompressPath  设置默认解压路径
      * @param strPath   解压路径
      */
     void setDefaultUncompressPath(const QString &strPath);
+
+    /**
+     * @brief setLoadData   设置加载完之后的数据
+     * @param stArchiveData 压缩包数据
+     */
+    void setLoadData(const ArchiveData &stArchiveData);
 
 private:
     /**
@@ -59,7 +73,8 @@ private:
     CustomCommandLinkButton *m_pUncompressPathBtn;
     CustomPushButton *m_pUnCompressBtn;   // 解压
 
-    QString m_strUnCompressPath;
+    QString m_strArchiveName;       // 压缩包名称
+    QString m_strUnCompressPath;    // 解压路径
 };
 
 #endif // UNCOMPRESSPAGE_H

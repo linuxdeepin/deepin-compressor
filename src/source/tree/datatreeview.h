@@ -28,7 +28,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class SortFilterModel;
+class DataModel;
 
 // treeview代理，用来设置高度和去掉部分样式
 class StyleTreeViewDelegate : public QStyledItemDelegate
@@ -55,8 +55,25 @@ public:
     ~DataTreeView() override;
 
 protected:
-    void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const;
-    void focusInEvent(QFocusEvent *event)override;
+    void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const override;
+    void focusInEvent(QFocusEvent *event) override;
+
+    /**
+     * @brief dragEnterEvent    拖拽进入
+     */
+    void dragEnterEvent(QDragEnterEvent *) override;
+
+    /**
+     * @brief dragMoveEvent     拖拽移动
+     */
+    void dragMoveEvent(QDragMoveEvent *) override;
+
+    /**
+     * @brief dropEvent 拖拽放下
+     */
+    void dropEvent(QDropEvent *) override;
+
+    void resizeEvent(QResizeEvent *event);
 
 private:
     /**
@@ -75,8 +92,23 @@ protected:
      */
     void resizeColumnWidth();
 
+Q_SIGNALS:
+    /**
+     * @brief signalDragFiles   外部文件拖拽至列表信号
+     * @param listFiles         外部拖拽文件
+     */
+    void signalDragFiles(const QStringList &listFiles);
+
+protected:
+
+    DataModel *m_pModel;
+
+    int m_iLevel = 0;       // 目录层级
+    QString m_strCurrentPath;   // 当前目录
+
 private:
     Qt::FocusReason m_reson;
+
 };
 
 #endif // DATATREEVIEW_H

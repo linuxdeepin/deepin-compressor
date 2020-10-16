@@ -25,6 +25,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
+find_package(KF5Codecs REQUIRED)
 
 
 find_package(Qt5 REQUIRED Widgets)
@@ -83,5 +84,6 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
 include_directories("src")
 
 add_library(${LIB_NAME}   ${h_files} ${c_files}  )
-target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core )
+target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
+target_link_libraries(${LIB_NAME} compressor-ChardetDetector)

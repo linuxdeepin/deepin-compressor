@@ -23,6 +23,7 @@
 #define UNCOMPRESSVIEW_H
 
 #include "datatreeview.h"
+#include "commonstruct.h"
 
 #include <DWidget>
 
@@ -35,6 +36,12 @@ public:
     explicit UnCompressView(QWidget *parent = nullptr);
     ~UnCompressView() override;
 
+    /**
+     * @brief setLoadData   设置加载完之后的数据
+     * @param stArchiveData 压缩包数据
+     */
+    void setLoadData(const ArchiveData &stArchiveData);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -46,8 +53,26 @@ private:
      */
     void initConnections();
 
-private:
+    /**
+     * @brief calFirSize    计算文件夹中子文件项数
+     * @param strFilePath
+     * @return
+     */
+    qlonglong calDirItemCount(const QString &strFilePath);
 
+private slots:
+    /**
+     * @brief slotDragFiles     外部文件拖拽至列表处理（追加压缩）
+     * @param listFiles         外部拖拽文件
+     */
+    void slotDragFiles(const QStringList &listFiles);
+
+private:
+    //QMap<QString, FileEntry> m_mapEntry;        // 总数据
+    //
+
+    ArchiveData m_stArchiveData;
+    //QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
 };
 
 #endif // UNCOMPRESSVIEW_H

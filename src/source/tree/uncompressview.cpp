@@ -20,17 +20,33 @@
 */
 
 #include "uncompressview.h"
+#include "datamodel.h"
 
 
 UnCompressView::UnCompressView(QWidget *parent)
     : DataTreeView(parent)
 {
-
+    initUI();
+    initConnections();
 }
 
 UnCompressView::~UnCompressView()
 {
 
+}
+
+void UnCompressView::setLoadData(const ArchiveData &stArchiveData)
+{
+    m_stArchiveData = stArchiveData;
+
+    // 刷新第一层级文件夹子项的数目
+    for (int i = 0; i < m_stArchiveData.listRootEntry.count(); ++i) {
+        if (m_stArchiveData.listRootEntry[i].isDirectory) {
+            m_stArchiveData.listRootEntry[i].qSize = calDirItemCount(m_stArchiveData.listRootEntry[i].strFullPath);
+        }
+    }
+
+    m_pModel->refreshFileEntry(m_stArchiveData.listRootEntry);
 }
 
 void UnCompressView::initUI()
@@ -39,6 +55,34 @@ void UnCompressView::initUI()
 }
 
 void UnCompressView::initConnections()
+{
+    connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles);
+}
+
+qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
+{
+    qlonglong qItemCount = 0;
+
+    auto iter = m_stArchiveData.mapFileEntry.find(strFilePath);
+    for (; iter != m_stArchiveData.mapFileEntry.end();) {
+        if (!iter.key().startsWith(strFilePath)) {
+            break;
+        } else {
+            if (iter.key().size() > strFilePath.size()) {
+                QString chopStr = iter.key().right(iter.key().size() - strFilePath.size());
+                if ((chopStr.endsWith("/") && chopStr.count("/") == 1) || chopStr.count("/") == 0) {
+                    ++qItemCount;
+                }
+            }
+
+            ++iter;
+        }
+    }
+
+    return qItemCount;
+}
+
+void UnCompressView::slotDragFiles(const QStringList &listFiles)
 {
 
 }

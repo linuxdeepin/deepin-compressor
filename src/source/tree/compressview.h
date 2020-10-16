@@ -29,7 +29,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class DataModel;
+
 class QFileSystemWatcher;
 
 // 压缩列表
@@ -84,6 +84,11 @@ private:
      */
     QList<FileEntry> getDirFiles(const QString &strPath);
 
+    /**
+     * @brief handleLevelChanged    处理目录层级变化
+     */
+    void handleLevelChanged();
+
 signals:
     /**
      * @brief signalLevelChanged    目录层级变化
@@ -113,15 +118,15 @@ private slots:
      */
     void slotDirChanged();
 
+    /**
+     * @brief slotDragFiles     外部文件拖拽至列表处理
+     * @param listFiles         外部拖拽文件
+     */
+    void slotDragFiles(const QStringList &listFiles);
+
 private:
     QStringList m_listCompressFiles;    // 待压缩的文件
     QList<FileEntry> m_listEntry;
-
-    DataModel *m_pModel;
-    SortFilterModel *m_pSortFilterModel;
-
-    int m_iLevel = 0;       // 目录层级
-    QString m_strCurrentPath;   // 当前目录
 
     QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控
 };

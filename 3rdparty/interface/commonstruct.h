@@ -25,6 +25,7 @@
 #include <QString>
 #include <QMetaType>
 #include <QVector>
+#include <QMap>
 
 // 错误类型
 enum ErrorType {
@@ -38,16 +39,40 @@ struct FileEntry {
     {
         qSize = 0;
         isDirectory = false;
+        uLastModifiedTime = 0;
+        iIndex = -1;
     }
 
     QString strFullPath;    // 文件名（含绝对路径：/../../xx.xx）
     QString strFileName;        // 文件名（不含绝对路径：xx.xx）
-    QString strType;        //文件类型
+    //QString strType;        // 文件类型
     bool isDirectory;        // 是否为文件夹
     qlonglong qSize;        // 文件真实大小（文件夹显示项）
-    QDateTime lastModifiedTime; // 文件最后修改时间
+    // QDateTime lastModifiedTime; // 文件最后修改时间
+    uint uLastModifiedTime;      // 文件最后修改时间
+
+    int iIndex;         // 文件在压缩包中的索引位置（目前是只有zip格式会用到，通过索引查找）
 };
 Q_DECLARE_METATYPE(FileEntry)
+
+// 压缩包数据
+struct ArchiveData {
+    ArchiveData()
+    {
+        qSize = 0;
+        qComressSize = false;
+        strComment = "";
+        mapFileEntry.clear();
+        listRootEntry.clear();
+    }
+
+    qlonglong qSize;                            // 原始大小
+    qlonglong qComressSize;                     // 压缩包大小
+    QString strComment;                         // 压缩包注释信息
+    QMap<QString, FileEntry>  mapFileEntry;     // 压缩包内所有文件
+    QList<FileEntry> listRootEntry;             // 第一层数据
+};
+Q_DECLARE_METATYPE(ArchiveData)
 
 // 压缩选项
 struct CompressOptions {

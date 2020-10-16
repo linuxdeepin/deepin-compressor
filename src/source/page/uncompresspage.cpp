@@ -26,6 +26,7 @@
 #include <DFontSizeManager>
 
 #include <QHBoxLayout>
+#include <QDebug>
 
 UnCompressPage::UnCompressPage(QWidget *parent)
     : DWidget(parent)
@@ -39,9 +40,20 @@ UnCompressPage::~UnCompressPage()
 
 }
 
+void UnCompressPage::setArchiveName(const QString &strArchiveName)
+{
+    qDebug() << "加载压缩包：" << strArchiveName;
+    m_strArchiveName = strArchiveName;
+}
+
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
+}
+
+void UnCompressPage::setLoadData(const ArchiveData &stArchiveData)
+{
+    m_pUnCompressView->setLoadData(stArchiveData);
 }
 
 void UnCompressPage::initUI()

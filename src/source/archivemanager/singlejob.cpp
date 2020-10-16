@@ -79,7 +79,7 @@ void SingleJob::slotFinished(bool bRight)
 LoadJob::LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
 {
-
+    m_eJobType = JT_Load;
 }
 
 LoadJob::~LoadJob()
@@ -89,7 +89,7 @@ LoadJob::~LoadJob()
 
 void LoadJob::doWork()
 {
-
+    m_pInterface->list();
 }
 
 // 压缩操作
@@ -99,7 +99,7 @@ AddJob::AddJob(const QVector<FileEntry> &files, const QString &strDestination, R
     , m_strDestination(strDestination)
     , m_stCompressOptions(options)
 {
-
+    m_eJobType = JT_Add;
 }
 
 AddJob::~AddJob()
@@ -122,7 +122,7 @@ CreateJob::CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *
     , m_vecFiles(files)
     , m_stCompressOptions(options)
 {
-
+    m_eJobType = JT_Create;
 }
 
 CreateJob::~CreateJob()

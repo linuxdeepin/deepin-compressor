@@ -81,6 +81,34 @@ public:
      */
     static QString humanReadableSize(const qint64 &size, int precision);
 
+    /**
+     * @brief isArchiveFile     判断文件是否为压缩包
+     * @param strFileName          文件名（含路径）
+     * @return                  true：压缩包    false：普通文件
+     */
+    static bool isArchiveFile(const QString &strFileName);
+
+
+    /**
+     * @brief judgeFileMime     判断文件类型
+     * @param strFileName  文件名
+     * @return
+     */
+    static QString judgeFileMime(const QString &strFileName);
+
+    /**
+     * @brief isExistMimeType 判断此文件关联类型是否存在
+     * @param strMimeType      文件类型
+     * @return
+     */
+    static bool isExistMimeType(const QString &strMimeType);
+
+    /**
+     * @brief readConf   读取配置信息
+     * @return  配置信息
+     */
+    static QString readConf();
+
 private:
     static QStringList m_associtionlist;
 };

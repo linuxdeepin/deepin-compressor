@@ -22,7 +22,6 @@
 #include "compressview.h"
 #include "datamodel.h"
 #include "uistruct.h"
-#include "sortfiltermodel.h"
 #include "popupdialog.h"
 #include "mimetypes.h"
 #include "mimetypedisplaymanager.h"
@@ -50,11 +49,40 @@ CompressView::~CompressView()
 
 void CompressView::addCompressFiles(const QStringList &listFiles)
 {
-    m_listCompressFiles << listFiles;
+    int mode = 0;
+    bool applyAll = false;
+
+    // 对新添加的文件进行判重
+    QStringList listSelFiles = listFiles;
+
+    foreach (QString oldPath, m_listCompressFiles) {
+        QFileInfo oldFile(oldPath);  // 已存在的文件
+        foreach (QString newPath, listFiles) {
+            QFileInfo newFile(newPath);  // 新添加的文件
+            if (oldFile.fileName() == newFile.fileName()) {  // 文件名相同的文件需要询问是否替换
+                if (!applyAll) { // // 判断不是应用到全部文件，继续弹出询问对话框
+                    OverwriteQueryDialog dialog(this);
+                    dialog.showDialog(newFile.fileName());
+
+                    mode = dialog.getDialogResult();
+                    applyAll = dialog.getApplyAll();
+                }
+
+                if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
+                    listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
+                } else { // 替换
+                    m_listCompressFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
+                }
+            }
+        }
+    }
+
+
+    m_listCompressFiles << listSelFiles;
     m_listEntry.clear();
 
     // 刷新待压缩数据
-    foreach (QString strFile, listFiles) {
+    foreach (QString strFile, m_listCompressFiles) {
         QFileInfo fileInfo(strFile);
         FileEntry entry;
         QMimeType mimetype;
@@ -70,20 +98,17 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
             entry.qSize = fileInfo.size(); //文件大小
         }
         MimeTypeDisplayManager m_mimetype;
-        entry.strType = m_mimetype.displayName(mimetype.name()); // 文件类型
-        entry.lastModifiedTime = fileInfo.lastModified();
+        //entry.strType = m_mimetype.displayName(mimetype.name()); // 文件类型
+        //entry.lastModifiedTime = fileInfo.lastModified();
+        entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();
 
         m_listEntry << entry;
     }
 
     m_pModel->refreshFileEntry(m_listEntry);
 
-    //m_pModel->setCurrentLevel(0, m_listCompressFiles);  // 设置第一层显示数据
-
     resizeColumnWidth();
-    //header()->setSortIndicator(0, Qt::AscendingOrder);
 
-    // m_pSortFilterModel->sort(0, Qt::AscendingOrder);
 
 }
 
@@ -103,23 +128,13 @@ void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void CompressView::initUI()
 {
-    m_pModel = new DataModel(this);
-//    m_pSortFilterModel = new SortFilterModel(this);
-
-//    m_pSortFilterModel->setFilterKeyColumn(0);
-//    m_pSortFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-//    m_pSortFilterModel->setSourceModel(m_pModel);
-    setModel(m_pModel);
-    setSortingEnabled(true);
-    setContextMenuPolicy(Qt::CustomContextMenu);    // 设置自定义右键菜单
-
-
     m_pFileWatcher = new QFileSystemWatcher(this);
+
 }
 
 void CompressView::initConnections()
 {
+    connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles);
     connect(this, &CompressView::customContextMenuRequested, this, &CompressView::slotShowRightMenu);
     connect(m_pFileWatcher, &QFileSystemWatcher::directoryChanged, this, &CompressView::slotDirChanged); // 文件目录变化
 }
@@ -140,9 +155,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
             m_pModel->refreshFileEntry(getDirFiles(m_strCurrentPath));
 
-            // 发送层级变化信号，通知mainwindow是否是根目录
-            bool bRoot = (m_iLevel == 0 ? true : false);
-            emit signalLevelChanged(bRoot);
+            handleLevelChanged();
 
             resizeColumnWidth();
             header()->setSortIndicator(0, Qt::AscendingOrder);
@@ -173,13 +186,22 @@ QList<FileEntry> CompressView::getDirFiles(const QString &strPath)
             entry.qSize = info.size(); //文件大小
         }
         MimeTypeDisplayManager m_mimetype;
-        entry.strType = m_mimetype.displayName(mimetype.name()); // 文件类型
-        entry.lastModifiedTime = info.lastModified();
+        //entry.strType = m_mimetype.displayName(mimetype.name()); // 文件类型
+        //entry.lastModifiedTime = info.lastModified();
+        entry.uLastModifiedTime = info.lastModified().toTime_t();
 
         listEntry << entry;
     }
 
     return listEntry;
+}
+
+void CompressView::handleLevelChanged()
+{
+    // 发送层级变化信号，通知mainwindow是否是根目录
+    bool bRoot = (m_iLevel == 0 ? true : false);
+    setAcceptDrops(bRoot);
+    emit signalLevelChanged(bRoot);
 }
 
 void CompressView::slotShowRightMenu(const QPoint &pos)
@@ -229,9 +251,7 @@ void CompressView::slotBackToPre()
     resizeColumnWidth();
     header()->setSortIndicator(0, Qt::AscendingOrder);
 
-    // 发送层级变化信号，通知mainwindow是否是根目录
-    bool bRoot = (m_iLevel == 0 ? true : false);
-    emit signalLevelChanged(bRoot);
+    handleLevelChanged();
 }
 
 void CompressView::slotDeleteFile()
@@ -279,4 +299,9 @@ void CompressView::slotDirChanged()
 {
     // 本地文件有变化
     m_pModel->refreshFileEntry(getDirFiles(m_strCurrentPath));
+}
+
+void CompressView::slotDragFiles(const QStringList &listFiles)
+{
+    addCompressFiles(listFiles);
 }

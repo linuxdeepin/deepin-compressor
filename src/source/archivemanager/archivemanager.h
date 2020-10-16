@@ -47,8 +47,20 @@ public:
      */
     void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive = false, bool bBatch = false);
 
+    /**
+     * @brief loadArchive
+     * @param strArchiveName
+     */
+    void loadArchive(const QString &strArchiveName);
+
+    /**
+     * @brief getLoadArchiveData    获取加载完之后的压缩包数据
+     * @param stArchiveData         压缩包数据
+     */
+    void getLoadArchiveData(ArchiveData &stArchiveData);
+
 private:
-    ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive = false);
+    ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
 Q_SIGNALS:
@@ -73,14 +85,16 @@ Q_SIGNALS:
     /**
      * @brief signalFinished    操作结束信号
      */
-    void signalFinished();
+    void signalJobFinished();
 
 private Q_SLOTS:
 
 
 private:
     ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针
-    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针
+
+    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压以及后续使用）
+
 };
 
 #endif // ARCHIVEMANAGER_H

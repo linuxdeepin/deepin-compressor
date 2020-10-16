@@ -28,6 +28,8 @@
 
 #include <zip.h>
 
+class Common;
+
 class LibzipPluginFactory : public KPluginFactory
 {
     Q_OBJECT
@@ -62,16 +64,55 @@ public:
     bool addComment(const QString &comment) override;
 
 private:
+    /**
+     * @brief writeEntry 添加新的Entry
+     * @param archive 压缩包数据
+     * @param entry 新文件
+     * @param strDestination 压缩包内路径
+     * @param options 压缩配置参数
+     * @param isDir
+     * @param strRoot 文件前缀路径
+     * @return
+     */
     bool writeEntry(zip_t *archive, const QString &entry, const QString &strDestination, const CompressOptions &options, bool isDir = false, const QString &strRoot = "");
+
+    /**
+     * @brief progressCallback  进度回调函数
+     * @param progress  进度
+     * @param that
+     */
     static void progressCallback(zip_t *, double progress, void *that);
+
+    /**
+     * @brief cancelCallback    取消回调函数
+     * @param that
+     * @return
+     */
     static int cancelCallback(zip_t *, void *that);
+
+    /**
+     * @brief handleArchiveData 处理压缩包数据
+     * @param archive   压缩包
+     * @param index 索引
+     * * @return
+     */
+    bool handleArchiveData(zip_t *archive, zip_int64_t index);
+
+    /**
+     * @brief statBuffer2FileEntry  数据转换
+     * @param statBuffer    压缩包中结构体数据
+     * @return      通用结构体
+     */
+    void statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry &entry);
+
+
+Q_SIGNALS:
+    //void error(const QString &message = "", const QString &details = "");
 
 private:
     int m_filesize;             // 压缩的文件数目
     zip_t *m_addarchive;        // 压缩包
 
-Q_SIGNALS:
-    void error(const QString &message = "", const QString &details = "");
 };
 
 #endif // LIBZIPPLUGIN_H

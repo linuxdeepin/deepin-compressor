@@ -21,6 +21,7 @@
 
 #include "datatreeview.h"
 #include "treeheaderview.h"
+#include "datamodel.h"
 
 #include <DApplication>
 #include <DStyle>
@@ -29,6 +30,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QHeaderView>
+#include <QMimeData>
 
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
@@ -167,6 +169,11 @@ void DataTreeView::initUI()
     pHeaderView->setStretchLastSection(true);
     setHeader(pHeaderView);
 
+    m_pModel = new DataModel(this);
+    setModel(m_pModel);
+    setSortingEnabled(true);
+    setContextMenuPolicy(Qt::CustomContextMenu);    // 设置自定义右键菜单
+    setAcceptDrops(true);
 }
 
 void DataTreeView::initConnections()
@@ -256,4 +263,53 @@ void DataTreeView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
     DTreeView::focusInEvent(event);
+}
+
+void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
+{
+    const auto *mime = e->mimeData();
+
+    // 判断是否有url
+    if (!mime->hasUrls()) {
+        e->ignore();
+    }
+
+    e->accept();
+}
+
+void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
+{
+    e->accept();
+}
+
+void DataTreeView::dropEvent(QDropEvent *e)
+{
+    auto *const mime = e->mimeData();
+
+    if (false == mime->hasUrls()) {
+        e->ignore();
+    }
+
+    e->accept();
+
+    // 判断本地文件
+    QStringList fileList;
+    for (const auto &url : mime->urls()) {
+        if (!url.isLocalFile()) {
+            continue;
+        }
+
+        fileList << url.toLocalFile();
+    }
+
+    if (fileList.size() == 0) {
+        return;
+    }
+
+    emit signalDragFiles(fileList);
+}
+
+void DataTreeView::resizeEvent(QResizeEvent *event)
+{
+    resizeColumnWidth();
 }

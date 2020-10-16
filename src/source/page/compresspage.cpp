@@ -51,38 +51,38 @@ CompressPage::~CompressPage()
 
 void CompressPage::addCompressFiles(const QStringList &listFiles)
 {
-    QStringList listExistFiles = m_pCompressView->getCompressFiles();
+//    QStringList listExistFiles = m_pCompressView->getCompressFiles();
 
-    int mode = 0;
-    bool applyAll = false;
+//    int mode = 0;
+//    bool applyAll = false;
 
-    // 对新添加的文件进行判重
-    QStringList listSelFiles = listFiles;
+//    // 对新添加的文件进行判重
+//    QStringList listSelFiles = listFiles;
 
-    foreach (QString oldPath, listExistFiles) {
-        QFileInfo oldFile(oldPath);  // 已存在的文件
-        foreach (QString newPath, listFiles) {
-            QFileInfo newFile(newPath);  // 新添加的文件
-            if (oldFile.fileName() == newFile.fileName()) {  // 文件名相同的文件需要询问是否替换
-                if (!applyAll) { // // 判断不是应用到全部文件，继续弹出询问对话框
-                    OverwriteQueryDialog dialog;
-                    dialog.showDialog(newFile.fileName());
+//    foreach (QString oldPath, listExistFiles) {
+//        QFileInfo oldFile(oldPath);  // 已存在的文件
+//        foreach (QString newPath, listFiles) {
+//            QFileInfo newFile(newPath);  // 新添加的文件
+//            if (oldFile.fileName() == newFile.fileName()) {  // 文件名相同的文件需要询问是否替换
+//                if (!applyAll) { // // 判断不是应用到全部文件，继续弹出询问对话框
+//                    OverwriteQueryDialog dialog(this);
+//                    dialog.showDialog(newFile.fileName());
 
-                    mode = dialog.getDialogResult();
-                    applyAll = dialog.getApplyAll();
-                }
+//                    mode = dialog.getDialogResult();
+//                    applyAll = dialog.getApplyAll();
+//                }
 
-                if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
-                    listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
-                } else { // 替换
-                    listExistFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
-                }
-            }
-        }
-    }
+//                if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
+//                    listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
+//                } else { // 替换
+//                    listExistFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
+//                }
+//            }
+//        }
+//    }
 
 
-    m_pCompressView->addCompressFiles(listSelFiles);
+    m_pCompressView->addCompressFiles(listFiles);
 }
 
 QStringList CompressPage::compressFiles()
@@ -128,49 +128,49 @@ void CompressPage::initConnections()
     connect(m_pCompressView, &CompressView::signalLevelChanged, this, &CompressPage::slotCompressLevelChanged);
 }
 
-void CompressPage::dragEnterEvent(QDragEnterEvent *e)
-{
-    const auto *mime = e->mimeData();
+//void CompressPage::dragEnterEvent(QDragEnterEvent *e)
+//{
+//    const auto *mime = e->mimeData();
 
-    // 判断是否有url
-    if (!mime->hasUrls()) {
-        e->ignore();
-    }
+//    // 判断是否有url
+//    if (!mime->hasUrls()) {
+//        e->ignore();
+//    }
 
-    e->accept();
-}
+//    e->accept();
+//}
 
-void CompressPage::dragMoveEvent(QDragMoveEvent *e)
-{
-    e->accept();
-}
+//void CompressPage::dragMoveEvent(QDragMoveEvent *e)
+//{
+//    e->accept();
+//}
 
-void CompressPage::dropEvent(QDropEvent *e)
-{
-    auto *const mime = e->mimeData();
+//void CompressPage::dropEvent(QDropEvent *e)
+//{
+//    auto *const mime = e->mimeData();
 
-    if (false == mime->hasUrls()) {
-        e->ignore();
-    }
+//    if (false == mime->hasUrls()) {
+//        e->ignore();
+//    }
 
-    e->accept();
+//    e->accept();
 
-    // 判断本地文件
-    QStringList fileList;
-    for (const auto &url : mime->urls()) {
-        if (!url.isLocalFile()) {
-            continue;
-        }
+//    // 判断本地文件
+//    QStringList fileList;
+//    for (const auto &url : mime->urls()) {
+//        if (!url.isLocalFile()) {
+//            continue;
+//        }
 
-        fileList << url.toLocalFile();
-    }
+//        fileList << url.toLocalFile();
+//    }
 
-    if (fileList.size() == 0) {
-        return;
-    }
+//    if (fileList.size() == 0) {
+//        return;
+//    }
 
-    addCompressFiles(fileList);
-}
+//    addCompressFiles(fileList);
+//}
 
 void CompressPage::slotCompressNextClicked()
 {

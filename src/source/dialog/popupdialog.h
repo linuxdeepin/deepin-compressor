@@ -47,7 +47,7 @@ public:
 };
 
 
-// 简单询问对话框（描述 + 确定按钮 + 取消按钮）
+// 简单询问对话框（描述 + 多个按钮）
 class SimpleQueryDialog : public DDialog
 {
     Q_OBJECT

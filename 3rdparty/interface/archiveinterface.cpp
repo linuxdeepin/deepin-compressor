@@ -32,6 +32,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
     m_strArchiveName = args.first().toString();
     m_metaData = args.at(1).value<KPluginMetaData>();
     m_mimetype = args.at(2).value<QMimeType>();
+    m_common = new Common(this);
 
 }
 
@@ -44,6 +45,20 @@ bool ReadOnlyArchiveInterface::waitForFinished()
 {
     return m_bWaitForFinished;
 }
+
+void ReadOnlyArchiveInterface::getArchiveData(ArchiveData &stArchiveData)
+{
+    stArchiveData = m_stArchiveData;
+}
+
+//void ReadOnlyArchiveInterface::getFileEntry(QList<FileEntry> &listRootEntry, QMap<QString, FileEntry> &mapEntry)
+//{
+//    listRootEntry.clear();
+//    mapEntry.clear();
+
+//    listRootEntry = m_listRootEntry;
+//    mapEntry = m_mapEntry;
+//}
 
 
 
