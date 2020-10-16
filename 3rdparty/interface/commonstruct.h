@@ -109,6 +109,8 @@ struct ExtractionOptions {
     QString strTargetPath;      // 解压目标路径
     bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
     QString strDestination;         // 提取时的上级目录（若为空，代表提取的是根目录下的文件）
+    qlonglong qSize;                            // 原始大小
+    qlonglong qComressSize;                     // 压缩包大小
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

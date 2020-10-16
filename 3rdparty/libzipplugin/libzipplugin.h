@@ -105,6 +105,13 @@ private:
      */
     void statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry &entry);
 
+    bool extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize);
+
+    /**
+     * @brief emitProgress  发送进度信号
+     * @param dPercentage    百分比
+     */
+    void emitProgress(double dPercentage);
 
 Q_SIGNALS:
     //void error(const QString &message = "", const QString &details = "");

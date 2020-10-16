@@ -95,7 +95,7 @@ private:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
-private slots:
+private Q_SLOTS:
     /**
      * @brief slotChoosefiles   选择本地文件
      */
@@ -127,6 +127,18 @@ private slots:
      * @brief slotJobFinshed    操作结束处理
      */
     void slotJobFinshed();
+
+    /**
+     * @brief slotUncompressSlicked     解压按钮点击，执行解压操作
+     * @param strUncompressPath         解压路径
+     */
+    void slotUncompressSlicked(const QString &strUncompressPath);
+
+    /**
+     * @brief slotReceiveProgress   进度信号处理
+     * @param dPercentage   进度值
+     */
+    void slotReceiveProgress(double dPercentage);
 
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板

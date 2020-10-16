@@ -64,6 +64,7 @@ void SingleJob::start()
 void SingleJob::initConnections()
 {
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress);
 }
 
 void SingleJob::slotFinished(bool bRight)

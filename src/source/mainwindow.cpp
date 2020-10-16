@@ -147,8 +147,10 @@ void MainWindow::initConnections()
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
     connect(m_pCompressPage, &CompressPage::signalCompressNextClicked, this, &MainWindow::slotCompressNext);
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
+    connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressSlicked);
 
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
+    connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
 }
 
 void MainWindow::refreshPage()
@@ -188,12 +190,12 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
-        m_pSuccessPage->setDes(tr("Compression successful"));
+        m_pSuccessPage->setSuccessDes(tr("Compression successful"));
     }
     break;
     case PI_UnCompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
-        m_pSuccessPage->setDes(tr("Extraction successful"));
+        m_pSuccessPage->setSuccessDes(tr("Extraction successful"));
     }
     break;
     case PI_ConvertSuccess: {
@@ -349,6 +351,7 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
             m_ePageID = PI_Loading;
             m_pLoadingPage->startLoading();
             m_pArchiveManager->loadArchive(listFiles[0]);
+            m_pUnCompressPage->setDefaultUncompressPath(QFileInfo(listFiles[0]).absolutePath());
 
 
         } else {        // 普通文件处理
@@ -469,4 +472,28 @@ void MainWindow::slotJobFinshed()
     }
 
     refreshPage();
+}
+
+void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
+{
+    QString strArchiveName = m_pUnCompressPage->archiveName();
+    ExtractionOptions options;
+    ArchiveData stArchiveData;
+
+    m_pArchiveManager->getLoadArchiveData(stArchiveData);
+
+    options.strTargetPath = strUncompressPath;
+    options.bAllExtract = true;
+    options.qSize = stArchiveData.qSize;
+    options.qComressSize = stArchiveData.qComressSize;
+
+    m_pArchiveManager->extractArchive(QVector<FileEntry>(), strArchiveName, options);
+
+    m_ePageID = PI_UnCompressProgress;
+    refreshPage();
+}
+
+void MainWindow::slotReceiveProgress(double dPercentage)
+{
+    m_pProgressPage->setProgress(dPercentage);
 }

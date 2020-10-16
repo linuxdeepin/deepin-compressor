@@ -64,7 +64,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
         // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
 
 
         m_pArchiveJob = pCreateJob;
@@ -73,7 +73,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
         // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
+        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
 
 
         m_pArchiveJob = pCreateJob;
@@ -88,7 +88,7 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
     LoadJob *pLoadJob = new LoadJob(m_pInterface);
 
     // 连接槽函数
-    connect(pLoadJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::signalJobFinished);
+    connect(pLoadJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
 
     m_pArchiveJob = pLoadJob;
     pLoadJob->start();
@@ -107,7 +107,14 @@ void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QStri
         m_pInterface = createInterface(strArchiveName);
     }
 
-    //ExtractJob
+    ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, options);
+
+    // 连接槽函数
+    connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+
+    pExtractJob->start();
+    m_pArchiveJob = pExtractJob;
 }
 
 ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive)
@@ -181,4 +188,14 @@ ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileNam
 
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     return iface;
+}
+
+void ArchiveManager::slotJobFinished()
+{
+    emit signalJobFinished();
+
+    if (m_pArchiveJob != nullptr) {
+        m_pArchiveJob->deleteLater();
+        m_pArchiveJob = nullptr;
+    }
 }

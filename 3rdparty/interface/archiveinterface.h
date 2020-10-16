@@ -86,6 +86,12 @@ Q_SIGNALS:
     void error(const QString &message = "", const QString &details = "");
     void progress_filename(const QString &filename);
 
+    /**
+     * @brief signalprogress    进度信号
+     * @param iPercent  进度值
+     */
+    void signalprogress(double dPercentage);
+
 public:
     Plugintype m_ePlugintype;
 

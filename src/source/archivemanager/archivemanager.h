@@ -71,6 +71,8 @@ private:
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
+private:
+
 Q_SIGNALS:
     /**
      * @brief signalPercent     进度信号
@@ -95,8 +97,17 @@ Q_SIGNALS:
      */
     void signalJobFinished();
 
-private Q_SLOTS:
+    /**
+     * @brief signalprogress    进度信号
+     * @param iPercent  进度值
+     */
+    void signalprogress(double dPercentage);
 
+private Q_SLOTS:
+    /**
+     * @brief slotJobFinished
+     */
+    void slotJobFinished();
 
 private:
     ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针

@@ -50,6 +50,12 @@ Q_SIGNALS:
      */
     void signalJobFinshed();
 
+    /**
+     * @brief signalprogress    进度信号
+     * @param iPercent  进度值
+     */
+    void signalprogress(double dPercentage);
+
 public:
     JobType m_eJobType;     // 操作类型
 

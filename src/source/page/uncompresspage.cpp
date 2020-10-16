@@ -22,11 +22,13 @@
 #include "uncompresspage.h"
 #include "uncompressview.h"
 #include "customwidget.h"
+#include "popupdialog.h"
 
 #include <DFontSizeManager>
 
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QFileInfo>
 
 UnCompressPage::UnCompressPage(QWidget *parent)
     : DWidget(parent)
@@ -46,9 +48,17 @@ void UnCompressPage::setArchiveName(const QString &strArchiveName)
     m_strArchiveName = strArchiveName;
 }
 
+QString UnCompressPage::archiveName()
+{
+    return m_strArchiveName;
+}
+
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
+
+    m_pUncompressPathBtn->setToolTip(strPath);
+    m_pUncompressPathBtn->setText(tr("Extract to:") + strPath);
 }
 
 void UnCompressPage::setLoadData(const ArchiveData &stArchiveData)
@@ -99,5 +109,28 @@ void UnCompressPage::initUI()
 
 void UnCompressPage::initConnections()
 {
+    connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
+}
 
+void UnCompressPage::slotUncompressClicked()
+{
+    // 判断解压路径是否有可执行权限或者路径是否存在进行解压创建文件
+    QFileInfo m_fileDestinationPath(m_strUnCompressPath);
+    bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
+
+    if (!m_permission) { // 无法解压到已选中路径
+        QString strDes;
+        if (!m_fileDestinationPath.exists()) { // 路径不存在
+            strDes = tr("The default extraction path does not exist, please retry");
+        } else { // 路径无权限
+            strDes = tr("You do not have permission to save files here, please change and retry");
+        }
+
+        TipDialog dialog(this);
+        dialog.showDialog(strDes, tr("OK"), DDialog::ButtonNormal);
+
+        return;
+    } else { // 发送解压信号
+        emit signalUncompress(m_strUnCompressPath);
+    }
 }

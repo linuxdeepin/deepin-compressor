@@ -29,6 +29,7 @@
 #include <qplatformdefs.h>
 #include <QDirIterator>
 #include <QTimer>
+#include <QDataStream>
 
 //#include <zlib.h>
 
@@ -99,11 +100,45 @@ bool LibzipPlugin::testArchive()
 
 bool LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
+    qDebug() << "解压缩数据";
+
+    int errcode = 0;
+    zip_error_t err;
+
+    // 打开压缩包
+    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);
+    zip_error_init_with_code(&err, errcode);
+    if (archive == nullptr) {
+        // 特殊包操作
+        // return minizip_extractFiles(files, options);
+    }
+
+    // 执行解压操作
+    if (options.bAllExtract) {  // 全部解压
+        qlonglong qExtractSize = 0;
+        zip_int64_t nofEntries = zip_get_num_entries(archive, 0);
+
+        for (zip_int64_t i = 0; i < nofEntries; ++i) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
+
+            if (!extractEntry(archive, i, options, qExtractSize)) {
+                return false;
+            }
+        }
+    } else { // 部分提取
+
+    }
+
+    zip_close(archive);
+    emit signalFinished(true);
     return true;
 }
 
 bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+    qDebug() << "添加压缩包数据";
     int errcode = 0;
     zip_error_t err;
 
@@ -301,7 +336,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
 
 void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 {
-//    static_cast<LibzipPlugin *>(that)->emitProgress(progress);      // 进度回调
+    static_cast<LibzipPlugin *>(that)->emitProgress(progress);      // 进度回调
 }
 
 
@@ -370,4 +405,77 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
         entry.uLastModifiedTime = uint(statBuffer.mtime);
     }
 
+}
+
+bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize)
+{
+    zip_stat_t statBuffer;
+    if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer)) {
+        return false;
+    }
+
+    QString strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
+    bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
+
+    // 解压完整文件名（含路径）
+    QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
+    QFile file(strDestFileName);
+
+    if (bIsDirectory) {     // 文件夹
+        QDir dir;
+        dir.mkpath(strDestFileName);
+    } else {        // 普通文件
+        zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+        if (zipFile == nullptr) {
+            // 错误处理
+        }
+
+        if (file.open(QIODevice::WriteOnly) == false) {
+            return false;
+        }
+
+        QDataStream out(&file);
+        int kb = 1024;
+        zip_int64_t sum = 0;
+        char buf[kb];
+        int writeSize = 0;
+        while (sum != zip_int64_t(statBuffer.size)) {
+
+            const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(kb));
+            if (readBytes < 0) {
+
+                file.close();
+                zip_fclose(zipFile);
+                return false;
+            }
+
+            if (out.writeRawData(buf, int(readBytes)) != readBytes) {
+                file.close();
+                zip_fclose(zipFile);
+                return false;
+            }
+
+            qExtractSize += readBytes;
+            sum += readBytes;
+            writeSize += readBytes;
+
+
+
+            //qDebug() << qExtractSize << "**************" << options.qSize;
+            double dV = qExtractSize;
+            double dPppp = dV / options.qSize;
+            //qDebug() << "百分比" << dPppp;
+            emit signalprogress(dPppp * 100);
+        }
+
+        file.close();
+        zip_fclose(zipFile);
+    }
+
+    return true;
+}
+
+void LibzipPlugin::emitProgress(double dPercentage)
+{
+    emit signalprogress(dPercentage);
 }

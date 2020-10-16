@@ -35,6 +35,7 @@ class CustomPushButton;
 // 解压界面（列表）
 class UnCompressPage : public DWidget
 {
+    Q_OBJECT
 public:
     explicit UnCompressPage(QWidget *parent = nullptr);
     ~UnCompressPage() override;
@@ -44,6 +45,12 @@ public:
      * @param strArchiveName    压缩包名称（含路径）
      */
     void setArchiveName(const QString &strArchiveName);
+
+    /**
+     * @brief archiveName   获取压缩包名称
+     * @return
+     */
+    QString archiveName();
 
     /**
      * @brief setDefaultUncompressPath  设置默认解压路径
@@ -67,6 +74,19 @@ private:
      * @brief initConnections   初始化信号槽
      */
     void initConnections();
+
+Q_SIGNALS:
+    /**
+     * @brief signalUncompress  点击解压按钮
+     * @param strTargetPath     解压目标路径
+     */
+    void signalUncompress(const QString &strTargetPath);
+
+private Q_SLOTS:
+    /**
+     * @brief slotUncompressClicked 解压按钮点击槽函数
+     */
+    void slotUncompressClicked();
 
 private:
     UnCompressView *m_pUnCompressView;    // 压缩列表

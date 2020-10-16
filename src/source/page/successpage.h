@@ -48,7 +48,7 @@ public:
      * @brief setDes    设置成功信息展示
      * @param strDes    描述内容
      */
-    void setDes(const QString &strDes);
+    void setSuccessDes(const QString &strDes);
 
 private:
     /**
