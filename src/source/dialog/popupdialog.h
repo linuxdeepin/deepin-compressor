@@ -72,6 +72,9 @@ public:
                    const QString btnMsg3 = "", ButtonType btnType3 = ButtonNormal);
 };
 
+/**
+ * @brief The Overwrite_Result enum  替换对话框选择结果
+ */
 enum Overwrite_Result {
     OR_Cancel = 0,
     OR_Skip = 1,
@@ -80,6 +83,7 @@ enum Overwrite_Result {
     OR_OverwriteAll = 4,
 };
 
+// 同名文件提示是否替换
 class OverwriteQueryDialog : public DDialog
 {
     Q_OBJECT
@@ -88,15 +92,34 @@ public:
     explicit OverwriteQueryDialog(QWidget *parent = nullptr);
     ~OverwriteQueryDialog() override;
 
+    /**
+     * @brief showDialog    显示对话框
+     * @param file   同名文件名
+     */
     void showDialog(QString file);
+
+    /**
+     * @brief getDialogResult  返回对话框状态
+     * @return
+     */
     int getDialogResult();
+
+    /**
+     * @brief getQueryResult  返回对话框选择结果
+     * @return
+     */
     int getQueryResult();
+
+    /**
+     * @brief getApplyAll  返回是否应用到全部文件
+     * @return
+     */
     bool getApplyAll();
 
 private:
-    int m_ret;
-    int m_retType;
-    bool m_applyAll;
+    int m_ret;   // 对话框状态
+    int m_retType;   // 对话框选择结果
+    bool m_applyAll = false;  // 应用到全部文件
 };
 
 #endif // POPUPDIALOG_H

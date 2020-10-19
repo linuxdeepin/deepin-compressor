@@ -466,7 +466,7 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.strTargetPath = m_pSavePathEdt->text();    // 压缩包保存路径
     compressInfo.strPassword = m_pPasswordEdt->lineEdit()->text();
     compressInfo.bEncryption = !(compressInfo.strPassword.isEmpty());     // 是否加密
-    compressInfo.strEncryptionMethod = "AES256";        // 加密算法
+    compressInfo.strEncryptionMethod = compressInfo.bEncryption ? "AES256" : "";       // 加密算法
     compressInfo.bHeaderEncryption = m_pListEncryptionBtn->isChecked();     // 是否列表加密
     compressInfo.bSplit = m_pSplitCkb->isChecked();     // 是否分卷
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小

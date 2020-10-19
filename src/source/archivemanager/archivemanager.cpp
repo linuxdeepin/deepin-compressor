@@ -58,7 +58,7 @@ ArchiveJob *ArchiveManager::archiveJob()
 
 void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive, bool bBatch)
 {
-    ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, false, useLibArchive);
+    ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, true, useLibArchive);
 
     if (bBatch) {       // 批量压缩（多路径）
         CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);

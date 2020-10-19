@@ -33,6 +33,20 @@ enum ErrorType {
 
 };
 
+//加密类型
+enum EncryptionType {
+    Unencrypted,
+    Encrypted,
+    HeaderEncrypted
+};
+
+// 文件路径格式
+enum PathFormat {
+    NoTrailingSlash,
+    WithTrailingSlash
+};
+
+
 // 文件数据
 struct FileEntry {
     FileEntry()
