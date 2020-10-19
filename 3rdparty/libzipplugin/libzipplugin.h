@@ -118,7 +118,7 @@ Q_SIGNALS:
 
 private:
     int m_filesize;             // 压缩的文件数目
-    zip_t *m_addarchive;        // 压缩包
+    zip_t *m_addarchive = nullptr;        // 压缩操作存储的压缩包
 
 };
 

@@ -89,7 +89,7 @@ private:
      * @brief calFileSizeByThread  用多线程的方式计算文件或文件夹所有文件大小
      * @param path 文件或文件夹路径
      */
-    void calFileSizeByThread(const QString &path, qint64 &qSize);
+    void calFileSizeByThread(const QString &path);
 
     // QWidget interface
 protected:
@@ -140,6 +140,12 @@ private Q_SLOTS:
      */
     void slotReceiveProgress(double dPercentage);
 
+    /**
+     * @brief slotReceiveCurFileName    当前操作的文件名显示处理
+     * @param strName       当前文件名
+     */
+    void slotReceiveCurFileName(const QString &strName);
+
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板
 
@@ -162,6 +168,8 @@ private:
     Page_ID m_ePageID;      // 界面标识
 
     ArchiveManager *m_pArchiveManager;
+
+    qint64 m_qTotalSize = 0;
 };
 
 #endif // MAINWINDOW_H

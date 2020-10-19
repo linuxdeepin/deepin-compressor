@@ -493,6 +493,7 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.bSplit = m_pSplitCkb->isChecked();     // 是否分卷
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
     compressInfo.bTar_7z = (m_pCompressTypeLbl->text() == "tar.7z") ? true : false;     // 是否为tar.7z格式
+    compressInfo.qSize = m_qFileSize;
 
     // 压缩等级
     if ("application/x-tar" == compressInfo.strMimeType || "application/x-tarz" == compressInfo.strMimeType) {

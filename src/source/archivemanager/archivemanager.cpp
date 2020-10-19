@@ -75,6 +75,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         // 连接槽函数
         connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
+        connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
 
 
         m_pArchiveJob = pCreateJob;
@@ -113,6 +114,7 @@ void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QStri
     // 连接槽函数
     connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
     connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
 
     pExtractJob->start();
     m_pArchiveJob = pExtractJob;

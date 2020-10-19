@@ -118,13 +118,18 @@ struct ExtractionOptions {
     ExtractionOptions()
     {
         bAllExtract = true;
+        bRightExtract = false;
+        qSize = 0;
+        qComressSize = 0;
     }
 
     QString strTargetPath;      // 解压目标路径
     bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
     QString strDestination;         // 提取时的上级目录（若为空，代表提取的是根目录下的文件）
-    qlonglong qSize;                            // 原始大小
-    qlonglong qComressSize;                     // 压缩包大小
+    qint64 qSize;                            // 原始大小
+    qint64 qComressSize;                     // 压缩包大小
+
+    bool bRightExtract;         // 是否是右键解压
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

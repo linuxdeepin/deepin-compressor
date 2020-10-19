@@ -91,13 +91,18 @@ Q_SIGNALS:
      */
     void signalFinished(bool bRight);
     void error(const QString &message = "", const QString &details = "");
-    void progress_filename(const QString &filename);
 
     /**
      * @brief signalprogress    进度信号
      * @param iPercent  进度值
      */
     void signalprogress(double dPercentage);
+
+    /**
+     * @brief signalCurFileName     发送当前正在操作的文件名
+     * @param filename      文件名
+     */
+    void signalCurFileName(const QString &filename);
 
 public:
     Plugintype m_ePlugintype;

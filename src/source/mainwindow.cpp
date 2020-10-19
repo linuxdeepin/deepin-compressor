@@ -151,6 +151,7 @@ void MainWindow::initConnections()
 
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
+    connect(m_pArchiveManager, &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
 }
 
 void MainWindow::refreshPage()
@@ -175,21 +176,25 @@ void MainWindow::refreshPage()
     case PI_CompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
         m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Compressing"));
     }
     break;
     case PI_UnCompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
         m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Extracting"));
     }
     break;
     case PI_DeleteProgress: {
         m_pMainWidget->setCurrentIndex(4);
         m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Deleting"));
     }
     break;
     case PI_ConvertProgress: {
         m_pMainWidget->setCurrentIndex(4);
         m_pProgressPage->resetProgress();
+        titlebar()->setTitle("Converting");
     }
     break;
     case PI_CompressSuccess: {
@@ -227,7 +232,7 @@ void MainWindow::refreshPage()
 
 qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
-    qint64 qTotalSize = 0;
+    m_qTotalSize = 0;
 
     foreach (QString file, files) {
         QFileInfo fi(file);
@@ -240,19 +245,19 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
                 maxFileSize_ = curFileSize;
             }
 #endif
-            qTotalSize += curFileSize;
+            m_qTotalSize += curFileSize;
         } else if (fi.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
-            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file, qTotalSize);
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
         }
     }
 
     // 等待线程池结束
     QThreadPool::globalInstance()->waitForDone();
 
-    return qTotalSize;
+    return m_qTotalSize;
 }
 
-void MainWindow::calFileSizeByThread(const QString &path, qint64 &qSize)
+void MainWindow::calFileSizeByThread(const QString &path)
 {
     QDir dir(path);
     if (!dir.exists())
@@ -270,7 +275,7 @@ void MainWindow::calFileSizeByThread(const QString &path, qint64 &qSize)
         bool bisDir = fileInfo.isDir();
         if (bisDir) {
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
-            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath(), qSize);
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小
@@ -280,7 +285,7 @@ void MainWindow::calFileSizeByThread(const QString &path, qint64 &qSize)
                 maxFileSize_ = curFileSize;
             }
 #endif
-            qSize += curFileSize;
+            m_qTotalSize += curFileSize;
             mutex.unlock();
         }
 
@@ -375,6 +380,7 @@ void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 
 void MainWindow::slotCompressNext()
 {
+    m_qTotalSize = 0;
     QStringList listCompressFiles = m_pCompressPage->compressFiles();       // 获取待压缩的文件
     m_pCompressSettingPage->setFileSize(listCompressFiles, calSelectedTotalFileSize(listCompressFiles));
     m_pCompressSettingPage->refreshMenu();
@@ -440,6 +446,11 @@ void MainWindow::slotCompress(const QVariant &val)
 
     m_pArchiveManager->createArchive(vecFiles, strDestination, options, false, bBatch);
 
+
+    m_pProgressPage->setProgressType(PT_Compress);
+    m_pProgressPage->setArchiveName(stCompressInfo.strArchiveName, stCompressInfo.qSize);
+
+
     m_ePageID = PI_CompressProgress;
     refreshPage();
 }
@@ -487,14 +498,21 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
     ExtractionOptions options;
     ArchiveData stArchiveData;
 
+    // 获取压缩包数据
     m_pArchiveManager->getLoadArchiveData(stArchiveData);
 
+    // 构建解压参数
     options.strTargetPath = strUncompressPath;
     options.bAllExtract = true;
     options.qSize = stArchiveData.qSize;
     options.qComressSize = stArchiveData.qComressSize;
 
+    // 调用解压函数
     m_pArchiveManager->extractArchive(QVector<FileEntry>(), strArchiveName, options);
+
+    // 设置进度界面参数
+    m_pProgressPage->setProgressType(PT_UnCompress);
+    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName(), options.qSize);
 
     m_ePageID = PI_UnCompressProgress;
     refreshPage();
@@ -503,4 +521,9 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
     m_pProgressPage->setProgress(qRound(dPercentage));
+}
+
+void MainWindow::slotReceiveCurFileName(const QString &strName)
+{
+    m_pProgressPage->setCurrentFileName(strName);
 }

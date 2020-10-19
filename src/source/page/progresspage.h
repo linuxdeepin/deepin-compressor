@@ -28,6 +28,7 @@
 #include <DLabel>
 #include <DProgressBar>
 #include <DSuggestButton>
+#include <QElapsedTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,9 +54,9 @@ public:
 
     /**
      * @brief setProgress   设置当前进度
-     * @param iPercent  进度值
+     * @param dPercent  进度值
      */
-    void setProgress(int iPercent);
+    void setProgress(double dPercent);
 
     /**
      * @brief setCurrentFileName    设置当前文件名
@@ -67,6 +68,7 @@ public:
      * @brief resetProgress 重置进度
      */
     void resetProgress();
+
 
 private:
     /**
@@ -80,9 +82,18 @@ private:
     void initConnections();
 
     /**
-     * @brief refreshSpeedAndRemainingTime  刷新速度和剩余时间大小
+     * @brief calSpeedAndRemainingTime  计算速度和剩余时间
+     * @param dSpeed                    速度
+     * @param qRemainingTime            剩余时间
      */
-    void refreshSpeedAndRemainingTime();
+    void calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTime);
+
+    /**
+     * @brief displaySpeedAndTime   显示速度和剩余时间
+     * @param speed                 速度
+     * @param timeLeft              剩余时间
+     */
+    void displaySpeedAndTime(double dSpeed, qint64 qRemainingTime);
 
 private:
     DLabel *m_pPixmapLbl;       // 类型图片
@@ -96,7 +107,10 @@ private:
 
     Progress_Type m_eType;      // 进度类型
     qint64 m_qTotalSize;         // 文件大小
-    int m_iPerent;      // 进度值
+    double m_dPerent;      // 进度值
+
+    QElapsedTimer m_timer;
+    qint64 m_qConsumeTime; //消耗时间
 };
 
 #endif // COMPRESSPAGE_H

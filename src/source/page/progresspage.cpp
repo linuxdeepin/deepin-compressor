@@ -25,6 +25,9 @@
 
 #include <QHBoxLayout>
 #include <QFileIconProvider>
+#include <QTimer>
+#include <QDebug>
+#include <QCoreApplication>
 
 
 ProgressPage::ProgressPage(QWidget *parent)
@@ -42,6 +45,18 @@ ProgressPage::~ProgressPage()
 void ProgressPage::setProgressType(Progress_Type eType)
 {
     m_eType = eType;
+
+    if (m_eType == PT_Compress || m_eType == PT_CompressAdd) { // 压缩
+        m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
+    }  else if (m_eType == PT_Delete) { // 删除
+        m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
+    }  else if (m_eType == PT_Convert) { // 格式转换
+        m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
+    } else { // 解压
+        m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
+    }
+
+    m_pRemainingTimeLbl->setText(tr("Time left") + ": " + tr("Calculating...")); // 剩余时间计算中
 }
 
 void ProgressPage::setArchiveName(const QString &strArchiveName, qint64 qTotalSize)
@@ -56,10 +71,24 @@ void ProgressPage::setArchiveName(const QString &strArchiveName, qint64 qTotalSi
     m_pPixmapLbl->setPixmap(icon.pixmap(128, 128));
 }
 
-void ProgressPage::setProgress(int iPercent)
+void ProgressPage::setProgress(double dPercent)
 {
-    m_iPerent = iPercent;
-    m_pProgressBar->setValue(iPercent);
+    if ((m_dPerent - dPercent) == 0.0 || (m_dPerent > dPercent)) {
+        return ;
+    }
+    m_dPerent = dPercent;
+    m_pProgressBar->setValue(m_dPerent);     // 进度条刷新值
+    m_pProgressBar->update();
+
+    // 刷新界面显示
+    double dSpeed;
+    qint64 qRemainingTime;
+    calSpeedAndRemainingTime(dSpeed, qRemainingTime);
+    m_timer.restart();      // 重启定时器
+
+    // 显示速度个剩余时间
+    displaySpeedAndTime(dSpeed, qRemainingTime);
+
 }
 
 void ProgressPage::setCurrentFileName(const QString &strFileName)
@@ -79,7 +108,12 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
 
 void ProgressPage::resetProgress()
 {
+    // 重置相关参数
     m_pProgressBar->setValue(0);
+    m_pFileNameLbl->setText(tr("Calculating..."));
+    m_timer.elapsed();
+    m_dPerent = 0;
+    m_qConsumeTime = 0;
 }
 
 void ProgressPage::initUI()
@@ -101,7 +135,7 @@ void ProgressPage::initUI()
     // 配置进度条
     m_pProgressBar->setRange(0, 100);
     m_pProgressBar->setFixedSize(240, 8);
-    m_pProgressBar->setValue(0);
+    m_pProgressBar->setValue(1);
     m_pProgressBar->setOrientation(Qt::Horizontal);  //水平方向
     m_pProgressBar->setAlignment(Qt::AlignVCenter);
     m_pProgressBar->setTextVisible(false);
@@ -161,7 +195,6 @@ void ProgressPage::initUI()
     setArchiveName("新建归档文件.zip", 102400);
     setProgress(50);
     setCurrentFileName("55555.txt");
-    refreshSpeedAndRemainingTime();
 }
 
 void ProgressPage::initConnections()
@@ -169,30 +202,91 @@ void ProgressPage::initConnections()
 
 }
 
-void ProgressPage::refreshSpeedAndRemainingTime()
+void ProgressPage::calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTime)
 {
-    qint64 hour = 7200 / 3600;
-    qint64 minute = (7200 - hour * 3600) / 60;
-    qint64 seconds = 7200 - hour * 3600 - minute * 60;
+    if (m_qConsumeTime < 0) {
+        m_timer.start();
+    }
+    m_qConsumeTime += m_timer.elapsed();
 
+    // 计算速度
+    if (m_qConsumeTime == 0) {
+        dSpeed = 0.0; //处理速度
+    } else {
+        if (m_eType == PT_Convert) {
+            dSpeed = 2 * (m_qTotalSize / 1024.0) * (m_dPerent / 100) / m_qConsumeTime * 1000;
+        } else {
+            dSpeed = (m_qTotalSize / 1024.0) * (m_dPerent / 100) / m_qConsumeTime * 1000;
+        }
+    }
+
+    // 计算剩余时间
+    double sizeLeft = 0;
+    if (m_eType == PT_Convert) {
+        sizeLeft = (m_qTotalSize * 2 / 1024.0) * (100 - m_dPerent) / 100; //剩余大小
+    } else {
+        sizeLeft = (m_qTotalSize / 1024.0) * (100 - m_dPerent) / 100; //剩余大小
+    }
+
+    if (dSpeed != 0.0) {
+        qRemainingTime = qint64(sizeLeft / dSpeed); //剩余时间
+    }
+
+    if (qRemainingTime != 100 && qRemainingTime == 0) {
+        qRemainingTime = 1;
+    }
+}
+
+void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
+{
+    // 计算剩余需要的小时。
+    qint64 hour = qRemainingTime / 3600;
+    // 计算剩余的分钟
+    qint64 minute = (qRemainingTime - hour * 3600) / 60;
+    // 计算剩余的秒数
+    qint64 seconds = qRemainingTime - hour * 3600 - minute * 60;
+    // 格式化数据
     QString hh = QString("%1").arg(hour, 2, 10, QLatin1Char('0'));
     QString mm = QString("%1").arg(minute, 2, 10, QLatin1Char('0'));
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
 
     //add update speed and time label
-    if (m_eType == PT_Compress) {
-
+    if (m_eType == PT_Compress || m_eType == PT_CompressAdd) {
+        if (dSpeed < 1024) {
+            // 速度小于1024k， 显示速度单位为KB/S
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
+            // 速度大于1M/S，且小于300MB/S， 显示速度单位为MB/S
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+        } else {
+            // 速度大于300MB/S，显示速度为>300MB/S
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+        }
     } else if (m_eType == PT_Delete) {
-
-    } else if (m_eType == PT_CompressAdd) {
+        if (dSpeed < 1024) {
+            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+        } else {
+            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+        }
 
     } else if (m_eType == PT_UnCompress) {
-
+        if (dSpeed < 1024) {
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
+        }
     } else if (m_eType == PT_Convert) {
-
-    } else {
-        m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
+        if (dSpeed < 1024) {
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+        } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+        } else {
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + ">300MB/S");
+        }
     }
 
+    // 设置剩余时间
     m_pRemainingTimeLbl->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }

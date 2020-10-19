@@ -100,7 +100,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
             break;
         }
 
-        emit progress_filename(selectedFile.strFullPath);
+        emit signalCurFileName(selectedFile.strFullPath);
 
         FileProgressInfo info;
 
@@ -132,7 +132,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
             while (!QThread::currentThread()->isInterruptionRequested() && it.hasNext()) {
                 QString path = it.next();
 
-                emit progress_filename(it.filePath());
+                emit signalCurFileName(it.filePath());
 
                 if ((it.fileName() == QLatin1String("..")) ||
                         (it.fileName() == QLatin1String("."))) {

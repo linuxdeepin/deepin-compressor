@@ -56,6 +56,12 @@ Q_SIGNALS:
      */
     void signalprogress(double dPercentage);
 
+    /**
+     * @brief signalCurFileName 发送当前正在操作的文件名
+     * @param strName   当前文件名
+     */
+    void signalCurFileName(const QString &strName);
+
 public:
     JobType m_eJobType;     // 操作类型
 

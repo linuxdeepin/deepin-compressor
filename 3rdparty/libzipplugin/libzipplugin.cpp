@@ -122,6 +122,7 @@ bool LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const Extractio
                 break;
             }
 
+            // 解压单个文件
             if (!extractEntry(archive, i, options, qExtractSize)) {
                 return false;
             }
@@ -148,8 +149,8 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptio
         return false;
     }
 
-    uint i = 0;
-    for (const FileEntry e : files) {
+    m_filesize = 0;
+    for (const FileEntry &e : files) {
         // 过滤上级目录（不对全路径进行压缩）
         QString strPath = QFileInfo(e.strFullPath).absolutePath() + QDir::separator();
 
@@ -193,7 +194,7 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptio
                         return false;
                     }
                 }
-                i++;
+                ++m_filesize;
             }
         } else {
             if (!writeEntry(archive, e.strFullPath, options, false, strPath)) {
@@ -204,10 +205,10 @@ bool LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptio
                 return false;
             }
         }
-        ++i;
+        ++m_filesize;
     }
 
-    m_filesize = i;
+
     m_addarchive = archive;
     // TODO:Register the callback function to get progress feedback.
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
@@ -415,6 +416,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
     }
 
     QString strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
+    emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
     bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
 
     // 解压完整文件名（含路径）
@@ -430,10 +432,12 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
             // 错误处理
         }
 
+        // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
             return false;
         }
 
+        // 写文件
         QDataStream out(&file);
         int kb = 1024;
         zip_int64_t sum = 0;
@@ -455,17 +459,16 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
                 return false;
             }
 
-            qExtractSize += readBytes;
             sum += readBytes;
             writeSize += readBytes;
 
-
-
-            //qDebug() << qExtractSize << "**************" << options.qSize;
-            double dV = qExtractSize;
-            double dPppp = dV / options.qSize;
-            //qDebug() << "百分比" << dPppp;
-            emit signalprogress(dPppp * 100);
+            // 计算进度并显示（右键快捷解压使用压缩包大小，计算比例）
+            qExtractSize += readBytes;
+            if (options.bRightExtract) {
+                emit signalprogress((double(qExtractSize * options.qComressSize / options.qSize)) / options.qComressSize * 100);
+            } else {
+                emit signalprogress((double(qExtractSize)) / options.qSize * 100);
+            }
         }
 
         file.close();
@@ -477,5 +480,11 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
 
 void LibzipPlugin::emitProgress(double dPercentage)
 {
+    zip_uint64_t index = zip_uint64_t(m_filesize * dPercentage);
+
+    if (m_addarchive) {
+        emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_addarchive, index, ZIP_FL_ENC_RAW)));
+    }
+
     emit signalprogress(dPercentage * 100);
 }

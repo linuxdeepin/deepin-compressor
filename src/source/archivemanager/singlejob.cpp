@@ -65,6 +65,7 @@ void SingleJob::initConnections()
 {
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName);
 }
 
 void SingleJob::slotFinished(bool bRight)
@@ -144,7 +145,9 @@ CreateJob::~CreateJob()
 void CreateJob::doWork()
 {
     m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CreateJob::signalprogress);
+//    connect(m_pAddJob, &AddJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
+//    connect(m_pAddJob, &AddJob::signalprogress, this, &CreateJob::signalprogress);
+//    connect(m_pAddJob, &AddJob::signalCurFileName, this, &CreateJob::signalCurFileName);
     m_pAddJob->start();
 }
 
@@ -154,7 +157,7 @@ ExtractJob::ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface
     , m_vecFiles(files)
     , m_stExtractionOptions(options)
 {
-
+    m_eJobType = JT_Extract;
 }
 
 ExtractJob::~ExtractJob()

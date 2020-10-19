@@ -76,6 +76,7 @@ struct CompressParameter {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
+        qSize = 0;
     }
 
 
@@ -92,6 +93,8 @@ struct CompressParameter {
     int iCompressionLevel;      // 压缩等级
 
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+
+    qint64 qSize;       // 文件总大小
 };
 Q_DECLARE_METATYPE(CompressParameter)
 
