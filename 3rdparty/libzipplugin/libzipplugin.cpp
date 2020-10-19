@@ -59,8 +59,8 @@ LibzipPlugin::~LibzipPlugin()
 
 bool LibzipPlugin::list()
 {
-    qDebug() << "插件加载压缩包数据";
-    m_stArchiveData = ArchiveData();
+    qDebug() << "LibzipPlugin插件加载压缩包数据";
+    m_stArchiveData.reset();
 
     // 处理加载流程
     int errcode = 0;

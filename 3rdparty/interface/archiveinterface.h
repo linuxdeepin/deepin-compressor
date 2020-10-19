@@ -111,7 +111,7 @@ protected:
     bool m_bWaitForFinished = false;    // 等待结束
     uint m_numberOfEntries; //原有的归档数量
     KPluginMetaData m_metaData;
-    QString m_strArchiveName; //最终的压缩包名
+    QString m_strArchiveName; //1、压缩：最终的压缩包名 2、解压：加载的压缩包名
     QMimeType m_mimetype;
     Common *m_common = nullptr; // 通用工具类
     ArchiveData m_stArchiveData;

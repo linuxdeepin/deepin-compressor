@@ -79,6 +79,14 @@ struct ArchiveData {
         mapFileEntry.clear();
         listRootEntry.clear();
     }
+    void reset()
+    {
+        qSize = 0;
+        qComressSize = false;
+        strComment = "";
+        mapFileEntry.clear();
+        listRootEntry.clear();
+    }
 
     qlonglong qSize;                            // 原始大小
     qlonglong qComressSize;                     // 压缩包大小

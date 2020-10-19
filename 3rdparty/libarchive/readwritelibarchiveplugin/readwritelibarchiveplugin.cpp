@@ -178,31 +178,6 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
     return isSuccessful;
 }
 
-bool ReadWriteLibarchivePlugin::initializeReader()
-{
-    m_archiveReader.reset(archive_read_new());
-
-    if (!(m_archiveReader.data())) {
-        emit error(("The archive reader could not be initialized."));
-        return false;
-    }
-
-    if (archive_read_support_filter_all(m_archiveReader.data()) != ARCHIVE_OK) {
-        return false;
-    }
-
-    if (archive_read_support_format_all(m_archiveReader.data()) != ARCHIVE_OK) {
-        return false;
-    }
-
-    if (archive_read_open_filename(m_archiveReader.data(), QFile::encodeName(m_strArchiveName).constData(), 10240) != ARCHIVE_OK) {
-        emit error(("Archive corrupted or insufficient permissions."));
-        return false;
-    }
-
-    return true;
-}
-
 bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, const CompressOptions &options)
 {
     m_tempFile.setFileName(m_strArchiveName);
@@ -391,7 +366,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         dir.mkpath(absoluteDestinationPath);
         QString newFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
         if (QFile::link(sourceFileFullPath, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
+//            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
         } else {
             qDebug() << "Can't create symlink" << destination << sourceFileFullPath;
             return false;
@@ -466,7 +441,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         dir.mkpath(absoluteDestinationPath);//创建临时文件夹
         QString newFilePath = absoluteDestinationPath + relativeFileInfo.fileName();
         if (QFile::link(relativeName, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << relativeName;
+//            qDebug() << "Symlink's created:" << destination << relativeName;
         } else {
             qDebug() << "Can't create symlink" << destination << relativeName;
             return false;

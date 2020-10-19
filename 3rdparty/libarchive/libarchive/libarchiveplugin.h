@@ -22,6 +22,9 @@
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
+#include "commonstruct.h"
+
+#include <archive.h>
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0; //内部百分值范围
@@ -50,6 +53,44 @@ public:
     bool copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
     bool deleteFiles(const QVector<FileEntry> &files) override;
     bool addComment(const QString &comment) override;
+
+protected:
+    /**
+     * @brief initializeReader 读取压缩包数据之前一系列操作
+     * @return
+     */
+    bool initializeReader();
+
+    struct ArchiveReadCustomDeleter {
+        static inline void cleanup(struct archive *a)
+        {
+            if (a) {
+                archive_read_free(a);
+            }
+        }
+    };
+    typedef QScopedPointer<struct archive, ArchiveReadCustomDeleter> ArchiveRead;
+    ArchiveRead m_archiveReader;
+
+private:
+    bool list_New();
+    QString convertCompressionName(const QString &method);
+    /**
+     * @brief emitEntryForIndex 构建压缩包内数据
+     * @param aentry
+     */
+    void emitEntryForIndex(archive_entry *aentry);
+    /**
+     * @brief deleteTempTarPkg 删除list时解压出来的临时tar包
+     * @param tars
+     */
+    void deleteTempTarPkg(const QStringList &tars);
+
+private:
+    int m_ArchiveEntryCount = 0; //压缩包内文件(夹)总数量
+    QString m_strOldArchiveName; //压缩包名(全路径)
+    QStringList m_tars; //list时解压出来的临时tar包
+    qlonglong m_extractedFilesSize; //压缩包内文件原始总大小
 };
 
 

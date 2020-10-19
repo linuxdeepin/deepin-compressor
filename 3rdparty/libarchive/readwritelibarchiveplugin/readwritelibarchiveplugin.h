@@ -46,7 +46,6 @@ public:
 
     // ReadOnlyArchiveInterface interface
 public:
-//    bool list() override;
 //    bool testArchive() override;
 //    bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
 
@@ -59,15 +58,6 @@ public:
 //    bool addComment(const QString &comment) override;
 
 private:
-    struct ArchiveReadCustomDeleter {
-        static inline void cleanup(struct archive *a)
-        {
-            if (a) {
-                archive_read_free(a);
-            }
-        }
-    };
-
     struct ArchiveWriteCustomDeleter {
         static inline void cleanup(struct archive *a)
         {
@@ -77,15 +67,12 @@ private:
         }
     };
 
-    typedef QScopedPointer<struct archive, ArchiveReadCustomDeleter> ArchiveRead;
     typedef QScopedPointer<struct archive, ArchiveWriteCustomDeleter> ArchiveWrite;
     QSaveFile m_tempFile;
     QStringList m_writtenFiles; //已经压缩完的文件
-    ArchiveRead m_archiveReader;
     ArchiveRead m_archiveReadDisk;
     ArchiveWrite m_archiveWriter;
 
-    bool initializeReader();
     bool initializeWriter(const bool creatingNewFile = false, const CompressOptions &options = CompressOptions());
     /**
      * @brief initializeWriterFilters 设置过滤器(追加)
