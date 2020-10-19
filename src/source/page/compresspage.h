@@ -60,22 +60,6 @@ private:
      */
     void initConnections();
 
-protected:
-//    /**
-//     * @brief dragEnterEvent    拖拽进入
-//     */
-//    void dragEnterEvent(QDragEnterEvent *) override;
-
-//    /**
-//     * @brief dragMoveEvent     拖拽移动
-//     */
-//    void dragMoveEvent(QDragMoveEvent *) override;
-
-//    /**
-//     * @brief dropEvent 拖拽放下
-//     */
-//    void dropEvent(QDropEvent *) override;
-
 signals:
     /**
      * @brief signalFileChoose  选择文件信号

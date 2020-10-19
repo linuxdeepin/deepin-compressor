@@ -74,6 +74,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
 
         // 连接槽函数
         connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+        connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
 
 
         m_pArchiveJob = pCreateJob;
@@ -88,7 +89,7 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
     LoadJob *pLoadJob = new LoadJob(m_pInterface);
 
     // 连接槽函数
-    connect(pLoadJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pLoadJob, &LoadJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
 
     m_pArchiveJob = pLoadJob;
     pLoadJob->start();

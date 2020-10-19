@@ -107,13 +107,35 @@ void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize
 {
     m_listFiles = listFiles;
     m_qFileSize = qSize;
-}
 
-void CompressSettingPage::setCompressSavePath(const QString &strPath)
-{
-    m_pSavePathEdt->setText(strPath);
-    QUrl dir(strPath);
+    QFileInfo fileinfobase(m_listFiles.at(0));
+
+    QString strDefaultSavePath = fileinfobase.path();     // 初始化压缩包保存位置为第一个文件所在的位置
+
+    // 若文件处于不同的位置，则压缩包保存位置默认为桌面
+    for (int loop = 1; loop < m_listFiles.count(); loop++) {
+        QFileInfo fileinfo(m_listFiles.at(loop));
+        if (fileinfo.path() != fileinfobase.path()) {
+            strDefaultSavePath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+            break;
+        }
+    }
+
+    // 设置默认存储路径
+    m_pSavePathEdt->setText(strDefaultSavePath);
+    QUrl dir(strDefaultSavePath);
     m_pSavePathEdt->setDirectoryUrl(dir);
+
+    // 设置默认压缩包名称
+    if (1 == m_listFiles.count()) {       // 若是单文件
+        if (fileinfobase.isDir()) {
+            m_pFileNameEdt->setText(fileinfobase.fileName());         // 如果是文件夹，压缩包名为文件夹
+        } else {
+            m_pFileNameEdt->setText(fileinfobase.completeBaseName()); // 如果是文件，压缩包名为完整的文件名
+        }
+    } else {
+        m_pFileNameEdt->setText(tr("Create New Archive"));            // 如果是多文件，压缩包名为新建归档文件
+    }
 }
 
 void CompressSettingPage::refreshMenu()

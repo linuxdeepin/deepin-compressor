@@ -74,12 +74,6 @@ public:
     void setFileSize(const QStringList &listFiles, qint64 qSize);
 
     /**
-     * @brief setCompressSavePath   设置压缩包存储路径
-     * @param strPath   存储路径
-     */
-    void setCompressSavePath(const QString &strPath);
-
-    /**
      * @brief refreshMenu   刷新压缩类型菜单
      */
     void refreshMenu();

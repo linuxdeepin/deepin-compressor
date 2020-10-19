@@ -67,7 +67,7 @@ public:
 
     /**
      * @brief waitForFinished   判断是否通过线程调用
-     * @return false：线程调用
+     * @return true：线程调用
      */
     bool waitForFinished();
 

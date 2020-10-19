@@ -174,18 +174,22 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        m_pProgressPage->resetProgress();
     }
     break;
     case PI_UnCompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        m_pProgressPage->resetProgress();
     }
     break;
     case PI_DeleteProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        m_pProgressPage->resetProgress();
     }
     break;
     case PI_ConvertProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        m_pProgressPage->resetProgress();
     }
     break;
     case PI_CompressSuccess: {
@@ -435,6 +439,9 @@ void MainWindow::slotCompress(const QVariant &val)
     }
 
     m_pArchiveManager->createArchive(vecFiles, strDestination, options, false, bBatch);
+
+    m_ePageID = PI_CompressProgress;
+    refreshPage();
 }
 
 void MainWindow::slotJobFinshed()
@@ -495,5 +502,5 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
-    m_pProgressPage->setProgress(dPercentage);
+    m_pProgressPage->setProgress(qRound(dPercentage));
 }

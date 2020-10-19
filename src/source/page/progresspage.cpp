@@ -77,6 +77,11 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
     }
 }
 
+void ProgressPage::resetProgress()
+{
+    m_pProgressBar->setValue(0);
+}
+
 void ProgressPage::initUI()
 {
     // 初始化控件

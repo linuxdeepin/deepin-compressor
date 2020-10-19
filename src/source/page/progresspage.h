@@ -63,6 +63,10 @@ public:
      */
     void setCurrentFileName(const QString &strFileName);
 
+    /**
+     * @brief resetProgress 重置进度
+     */
+    void resetProgress();
 
 private:
     /**

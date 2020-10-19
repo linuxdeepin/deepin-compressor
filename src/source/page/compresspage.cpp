@@ -128,50 +128,6 @@ void CompressPage::initConnections()
     connect(m_pCompressView, &CompressView::signalLevelChanged, this, &CompressPage::slotCompressLevelChanged);
 }
 
-//void CompressPage::dragEnterEvent(QDragEnterEvent *e)
-//{
-//    const auto *mime = e->mimeData();
-
-//    // 判断是否有url
-//    if (!mime->hasUrls()) {
-//        e->ignore();
-//    }
-
-//    e->accept();
-//}
-
-//void CompressPage::dragMoveEvent(QDragMoveEvent *e)
-//{
-//    e->accept();
-//}
-
-//void CompressPage::dropEvent(QDropEvent *e)
-//{
-//    auto *const mime = e->mimeData();
-
-//    if (false == mime->hasUrls()) {
-//        e->ignore();
-//    }
-
-//    e->accept();
-
-//    // 判断本地文件
-//    QStringList fileList;
-//    for (const auto &url : mime->urls()) {
-//        if (!url.isLocalFile()) {
-//            continue;
-//        }
-
-//        fileList << url.toLocalFile();
-//    }
-
-//    if (fileList.size() == 0) {
-//        return;
-//    }
-
-//    addCompressFiles(fileList);
-//}
-
 void CompressPage::slotCompressNextClicked()
 {
     qDebug() << "点击了压缩下一步按钮";
@@ -179,17 +135,8 @@ void CompressPage::slotCompressNextClicked()
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {
 
-        DDialog *dialog = new DDialog(this);
-
-        QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(30, 30));
-        dialog->setIcon(pixmap);
-        dialog->setMessage(tr("Please add files"));
-        dialog->addButton(tr("OK"));
-        dialog->addSpacing(15);
-
-        dialog->exec();
-        delete dialog;
-
+        TipDialog dialog(this);
+        dialog.showDialog(tr("Please add files"), tr("OK"));
     } else {
         emit signalCompressNextClicked();  // 发送下一步信号
     }

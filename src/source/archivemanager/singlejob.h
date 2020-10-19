@@ -75,7 +75,7 @@ private:
      */
     void initConnections();
 
-private Q_SLOTS:
+protected Q_SLOTS:
     /**
      * @brief slotFinished  操作结束处理
      */

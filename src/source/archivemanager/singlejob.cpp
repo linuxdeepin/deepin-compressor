@@ -90,7 +90,11 @@ LoadJob::~LoadJob()
 
 void LoadJob::doWork()
 {
-    m_pInterface->list();
+    bool bResult = m_pInterface->list();
+
+    if (!(m_pInterface->waitForFinished())) {
+        slotFinished(bResult);
+    }
 }
 
 // 压缩操作
@@ -111,9 +115,16 @@ void AddJob::doWork()
 {
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
-    if (pWriteInterface) {
-        pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+    if (pWriteInterface == nullptr) {
+        return;
     }
+
+    bool bResult = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+
+    if (!(pWriteInterface->waitForFinished())) {
+        slotFinished(bResult);
+    }
+
 }
 
 // 创建压缩包操作
@@ -133,6 +144,7 @@ CreateJob::~CreateJob()
 void CreateJob::doWork()
 {
     m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CreateJob::signalprogress);
     m_pAddJob->start();
 }
 
@@ -152,7 +164,11 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
-    m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
+    bool bResult = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
+
+    if (!(m_pInterface->waitForFinished())) {
+        slotFinished(bResult);
+    }
 }
 
 // 删除操作
