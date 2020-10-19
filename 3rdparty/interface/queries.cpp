@@ -369,6 +369,8 @@ void AddCompressUsePasswordQuery::execute()
     dialog->addButton(QObject::tr("Confirm"), true, DDialog::ButtonRecommend);
 
     DPasswordEdit *pwdLineEdit = new DPasswordEdit;
+    QLineEdit *edit = pwdLineEdit->lineEdit();
+    edit->setPlaceholderText(tr("Please input password"));
     pwdLineEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     pwdLineEdit->setFocusPolicy(Qt::StrongFocus);
     pwdLineEdit->setMinimumSize(360, 36);
@@ -381,8 +383,12 @@ void AddCompressUsePasswordQuery::execute()
     connect(pwdCheckbox, &DCheckBox::stateChanged, this, [ = ] {
         if (pwdCheckbox->checkState() == Qt::Checked)
         {
+            pwdLineEdit->setEnabled(true);
             dialog->setMinimumSize(QSize(380, 216));
             mainlayout->addWidget(pwdLineEdit);
+        } else
+        {
+            pwdLineEdit->setEnabled(false);
         }
     });
 
