@@ -22,11 +22,16 @@
 
 #include <QStandardPaths>
 #include <QFileInfo>
-#include <QProcess>
+#include <QDebug>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
+    setWaitForFinishedSignal(true);
+    if (QMetaType::type("QProcess::ExitStatus") == 0) {
+        qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
+    }
+
     m_cliProps = new CliProperties(this, m_metaData, m_mimetype);
 }
 
@@ -52,6 +57,8 @@ bool CliInterface::extractFiles(const QVector<FileEntry> &files, const Extractio
 
 bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+    m_workStatus = WS_Add;
+
     bool ret = false;
     QFileInfo fi(m_strArchiveName);  // 压缩文件（全路径）
     QVector<FileEntry> tempfiles = files;
@@ -99,18 +106,108 @@ bool CliInterface::addComment(const QString &comment)
 
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
+    Q_ASSERT(!m_process);
+
     QString programPath = QStandardPaths::findExecutable(programName);
     if (programPath.isEmpty()) {
         return false;
-    } else {
-        QProcess p;
-        p.execute(programName, arguments);
-        p.waitForFinished();
-        return true;
     }
+
+    m_process = new KProcess;
+    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    m_process->setProgram(programPath, arguments);
+
+    connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+        readStdout();
+    });
+
+
+    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, &CliInterface::processFinished);
+
+    m_stdOutData.clear();
+    m_process->start();
+
+    return true;
+}
+
+void CliInterface::deleteProcess()
+{
+    if (m_process) {
+        readStdout(true);
+
+        delete m_process;
+        m_process = nullptr;
+    }
+}
+
+void CliInterface::killProcess(bool emitFinished)
+{
+    Q_UNUSED(emitFinished);
+    if (!m_process) {
+        return;
+    }
+
+    m_process->kill();
 }
 
 void CliInterface::readStdout(bool handleAll)
 {
+    Q_ASSERT(m_process);
 
+    if (!m_process->bytesAvailable()) {
+        // if process has no more data, we can just bail out
+        return;
+    }
+
+    QByteArray dd = m_process->readAllStandardOutput();
+    m_stdOutData += dd;
+    QList<QByteArray> lines = m_stdOutData.split('\n');
+
+//    bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
+
+    if (m_process->program().length() > 2) {
+        if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")/* && !wrongPasswordMessage*/) {
+            handleAll = true; // 7z output has no \n
+        }
+    }
+
+    // this is complex, here's an explanation:
+    // if there is no newline, then there is no guaranteed full line to
+    // handle in the output. The exception is that it is supposed to handle
+    // all the data, OR if there's been an error message found in the
+    // partial data.
+//    if (lines.size() == 1 && !handleAll) {
+//        return;
+//    }
+
+    if (handleAll) {
+        m_stdOutData.clear();
+    } else {
+        // because the last line might be incomplete we leave it for now
+        // note, this last line may be an empty string if the stdoutdata ends
+        // with a newline
+        m_stdOutData = lines.takeLast();
+    }
+
+    for (const QByteArray &line : qAsConst(lines)) {
+        if (!line.isEmpty()) {
+            if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
+                killProcess();
+                return;
+            }
+        }
+    }
+}
+
+void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    m_exitCode = exitCode;
+    qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
+
+    deleteProcess();
+
+    emit signalprogress(1.0);
+    emit signalFinished(true);
 }

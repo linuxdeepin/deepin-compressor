@@ -20,6 +20,8 @@
 */
 #include "cli7zplugin.h"
 
+#include <QDebug>
+
 
 Cli7zPluginFactory::Cli7zPluginFactory()
 {
@@ -90,3 +92,64 @@ void Cli7zPlugin::setupCliProperties()
     m_cliProps->setProperty("multiVolumeSuffix", QStringList{QStringLiteral("$Suffix.001")});
 }
 
+bool Cli7zPlugin::isPasswordPrompt(const QString &line)
+{
+    return line.startsWith(QLatin1String("Enter password (will not be echoed):"));
+}
+
+bool Cli7zPlugin::isWrongPasswordMsg(const QString &line)
+{
+    return line.contains(QLatin1String("Wrong password"));
+}
+
+bool Cli7zPlugin::isCorruptArchiveMsg(const QString &line)
+{
+    return (line == QLatin1String("Unexpected end of archive") ||
+            line == QLatin1String("Headers Error"));
+}
+
+bool Cli7zPlugin::isDiskFullMsg(const QString &line)
+{
+    return line.contains(QLatin1String("No space left on device"));
+}
+
+bool Cli7zPlugin::isFileExistsMsg(const QString &line)
+{
+    return (line == QLatin1String("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? ") ||
+            line == QLatin1String("? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "));
+}
+
+bool Cli7zPlugin::isFileExistsFileName(const QString &line)
+{
+    return (line.startsWith(QLatin1String("file ./")) ||
+            line.startsWith(QLatin1String("  Path:     ./")));
+}
+
+bool Cli7zPlugin::handleLine(const QString &line, WorkStatus workStatus)
+{
+    qDebug() << line;
+
+    if (workStatus == WS_Add) {
+        int pos = line.indexOf(QLatin1Char('%'));
+        if (pos > 1) {
+            int percentage = line.midRef(pos - 3, 3).toInt();
+            if (percentage > 0) {
+                if (line.contains("\b\b\b\b") == true) {
+                    QStringRef strfilename;
+                    int count = line.indexOf("+");
+                    if (-1 == count) {
+                        count = line.indexOf("-");
+                    }
+
+                    if (count > 0) {
+                        strfilename = line.midRef(count + 2);
+                    }
+
+                    emit signalprogress(percentage);
+                }
+            }
+        }
+    }
+
+    return true;
+}

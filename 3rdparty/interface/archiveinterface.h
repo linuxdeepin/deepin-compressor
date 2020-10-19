@@ -77,6 +77,13 @@ public:
      */
     void getArchiveData(ArchiveData &stArchiveData);
 
+protected:
+    /**
+     * Setting this option to true will NOT run the functions in their own thread.
+     * Instead it will be necessary to call finished(bool) when the operation is actually finished.
+     */
+    void setWaitForFinishedSignal(bool value);
+
 Q_SIGNALS:
     /**
      * @brief signalFinished    结束信号
@@ -113,6 +120,17 @@ class ReadWriteArchiveInterface : public ReadOnlyArchiveInterface
 public:
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadWriteArchiveInterface() override;
+
+    enum WorkStatus {
+        WS_List,
+        WS_Extract,
+        WS_Add,
+        WS_Delete,
+        WS_Move,
+        WS_Copy,
+        WS_Comment,
+        WS_Test
+    };
 
     /**
      * @brief addFiles          压缩文件

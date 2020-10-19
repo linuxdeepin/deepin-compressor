@@ -51,6 +51,11 @@ void ReadOnlyArchiveInterface::getArchiveData(ArchiveData &stArchiveData)
     stArchiveData = m_stArchiveData;
 }
 
+void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
+{
+    m_bWaitForFinished = value;
+}
+
 //void ReadOnlyArchiveInterface::getFileEntry(QList<FileEntry> &listRootEntry, QMap<QString, FileEntry> &mapEntry)
 //{
 //    listRootEntry.clear();

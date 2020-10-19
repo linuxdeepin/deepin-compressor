@@ -3,6 +3,7 @@
 
 #include "archiveinterface.h"
 #include "cliproperties.h"
+#include "kprocess.h"
 
 class CliInterface : public ReadWriteArchiveInterface
 {
@@ -17,6 +18,13 @@ public:
     bool list() override;
     bool testArchive() override;
     bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
+
+    virtual bool isPasswordPrompt(const QString &line) = 0;
+    virtual bool isWrongPasswordMsg(const QString &line) = 0;
+    virtual bool isCorruptArchiveMsg(const QString &line) = 0;
+    virtual bool isDiskFullMsg(const QString &line) = 0;
+    virtual bool isFileExistsMsg(const QString &line) = 0;
+    virtual bool isFileExistsFileName(const QString &line) = 0;
 
     // ReadWriteArchiveInterface interface
 public:
@@ -35,6 +43,20 @@ protected:
      */
     bool runProcess(const QString &programName, const QStringList &arguments);
 
+    /**
+     * Handles the given @p line.
+     * @return True if the line is ok. False if the line contains/triggers a "fatal" error
+     * or a canceled user query. If false is returned, the caller is supposed to call killProcess().
+     */
+    virtual bool handleLine(const QString &line, WorkStatus workStatus) = 0;
+
+    void deleteProcess();
+
+    /**
+     * Kill the running process. The finished signal is emitted according to @p emitFinished.
+     */
+    void killProcess(bool emitFinished = true);
+
 protected slots:
     /**
      * @brief readStdout  读取命令行输出
@@ -42,8 +64,16 @@ protected slots:
      */
     virtual void readStdout(bool handleAll = false);
 
+    virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
 protected:
     CliProperties *m_cliProps = nullptr;
+    KProcess *m_process = nullptr;
+
+private:
+    QByteArray m_stdOutData;
+    int m_exitCode = 0;
+    WorkStatus m_workStatus = WS_List;
 };
 
 #endif // CLIINTERFACE_H
