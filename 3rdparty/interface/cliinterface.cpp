@@ -57,7 +57,7 @@ bool CliInterface::extractFiles(const QVector<FileEntry> &files, const Extractio
 
 bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
-    m_workStatus = WS_Add;
+    m_workStatus = WT_Add;
 
     bool ret = false;
     QFileInfo fi(m_strArchiveName);  // 压缩文件（全路径）

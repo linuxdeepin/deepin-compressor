@@ -32,7 +32,7 @@ public:
 
 private:
     void setupCliProperties();
-    bool handleLine(const QString &line, WorkStatus workStatus) override;
+    bool handleLine(const QString &line, WorkType workStatus) override;
 };
 
 #endif // CLI7ZPLUGIN_H

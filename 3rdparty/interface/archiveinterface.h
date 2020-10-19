@@ -121,15 +121,15 @@ public:
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadWriteArchiveInterface() override;
 
-    enum WorkStatus {
-        WS_List,
-        WS_Extract,
-        WS_Add,
-        WS_Delete,
-        WS_Move,
-        WS_Copy,
-        WS_Comment,
-        WS_Test
+    enum WorkType {
+        WT_List,
+        WT_Extract,
+        WT_Add,
+        WT_Delete,
+        WT_Move,
+        WT_Copy,
+        WT_Comment,
+        WT_Test
     };
 
     /**

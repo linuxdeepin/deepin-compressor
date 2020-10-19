@@ -48,7 +48,7 @@ protected:
      * @return True if the line is ok. False if the line contains/triggers a "fatal" error
      * or a canceled user query. If false is returned, the caller is supposed to call killProcess().
      */
-    virtual bool handleLine(const QString &line, WorkStatus workStatus) = 0;
+    virtual bool handleLine(const QString &line, WorkType workStatus) = 0;
 
     void deleteProcess();
 
@@ -73,7 +73,7 @@ protected:
 private:
     QByteArray m_stdOutData;
     int m_exitCode = 0;
-    WorkStatus m_workStatus = WS_List;
+    WorkType m_workStatus = WT_List;
 };
 
 #endif // CLIINTERFACE_H

@@ -125,11 +125,11 @@ bool Cli7zPlugin::isFileExistsFileName(const QString &line)
             line.startsWith(QLatin1String("  Path:     ./")));
 }
 
-bool Cli7zPlugin::handleLine(const QString &line, WorkStatus workStatus)
+bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 {
     qDebug() << line;
 
-    if (workStatus == WS_Add) {
+    if (workStatus == WT_Add) {
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
