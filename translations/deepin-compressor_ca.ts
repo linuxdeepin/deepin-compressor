@@ -229,7 +229,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compressor_fail.cpp" line="36"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Fitxer malmès, no es pot extreure</translation>
+        <translation>Fitxer malmès, no es pot extreure.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compressor_fail.cpp" line="61"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/encodingpage.cpp" line="78"/>
         <source>Select an encoding to continue</source>
-        <translation>Trieu una codificació per continuar</translation>
+        <translation>Trieu una codificació per continuar.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/encodingpage.cpp" line="82"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/homepage.cpp" line="40"/>
         <source>Drag file or folder here</source>
-        <translation>Arrossegueu un fitxer o una carpeta aquí</translation>
+        <translation>Arrossegueu un fitxer o una carpeta aquí.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/homepage.cpp" line="42"/>
@@ -519,7 +519,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1634"/>
         <source>Open in new window</source>
-        <translation>Obre en finestra nova</translation>
+        <translation>Obre en una finestra nova</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1841"/>
@@ -1257,7 +1257,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1747"/>
         <source>Delete</source>
         <comment>slotDecompressRowDelete</comment>
-        <translation>Suprimeix</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="592"/>

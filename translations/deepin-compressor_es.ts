@@ -54,7 +54,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresspage.cpp" line="118"/>
         <source>Please add files to the top-level directory</source>
-        <translation>Añada archivos al directorio de nivel superior</translation>
+        <translation>Añada archivos a la carpeta del nivel superior</translation>
     </message>
 </context>
 <context>
@@ -132,20 +132,19 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1112"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1117"/>
         <source>You do not have permission to compress %1</source>
-        <translation>No tienes permiso para comprimir %1</translation>
+        <translation>No tiene permisos para comprimir %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="373"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="857"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="993"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>No tienes permiso para salvar archivos aqui,
-por favor cambia e intentalo nuevamente</translation>
+        <translation>No tiene permisos para guardar archivos aquí, por favor cámbielos e inténtelo de nuevo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="378"/>
         <source>Too many volumes, please change and retry</source>
-        <translation>Demasiados volumenes, por favor cambia e intentalo nuevamente</translation>
+        <translation>Demasiados volúmenes, por favor cámbielos e inténtelo de nuevo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="478"/>
@@ -162,7 +161,7 @@ por favor cambia e intentalo nuevamente</translation>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="937"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1070"/>
         <source>You cannot add the archive to itself</source>
-        <translation>No puedes agregar un archivo a sí mismo</translation>
+        <translation>No se puede añadir un archivo a sí mismo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1279"/>
@@ -201,7 +200,7 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
         <source>New Archive</source>
-        <translation>Nuevo Archivo</translation>
+        <translation>Nuevo archivo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="317"/>
@@ -428,7 +427,7 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5122"/>
         <source>Do you want to delete the archive?</source>
-        <translation>Desea borrar el archivo?</translation>
+        <translation>¿Desea borrar el archivo?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2573"/>
@@ -547,7 +546,7 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4918"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation>Por favor verifique el tipo asociado del archivo en la configuración del Administrador de Archivos</translation>
+        <translation>Verifique la asociación del tipo de archivo en la configuración del Administrador de archivos</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1982"/>
@@ -580,12 +579,12 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2596"/>
         <source>File name too long, unable to extract</source>
-        <translation>Nombre de archivo muy largo, imposible extraer</translation>
+        <translation>El nombre del archivo es muy largo, no se puede extraer</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2600"/>
         <source>Unable to extract</source>
-        <translation>Imposible extraer</translation>
+        <translation>No se puede extraer</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4030"/>
@@ -705,7 +704,7 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="328"/>
         <source>Set as default</source>
-        <translation>Establecer por defecto</translation>
+        <translation>Establecer como predeterminado</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="330"/>
@@ -720,12 +719,12 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="335"/>
         <source>Recommended Applications</source>
-        <translation>Aplicaciones Recomendadas</translation>
+        <translation>Aplicaciones recomendadas</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/openwithdialog/openwithdialog.cpp" line="337"/>
         <source>Other Applications</source>
-        <translation>Otras Aplicaciones</translation>
+        <translation>Otras aplicaciones</translation>
     </message>
 </context>
 <context>
@@ -761,7 +760,7 @@ por favor cambia e intentalo nuevamente</translation>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="191"/>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="468"/>
         <source>Pause</source>
-        <translation>Pausa</translation>
+        <translation>Pausar</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="152"/>
@@ -783,12 +782,12 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="403"/>
         <source>Are you sure you want to stop the update?</source>
-        <translation>Esta seguro que quiere detener la actualización?</translation>
+        <translation>¿Está seguro que quiere detener la actualización?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="405"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation>¿Esta seguro que quiere detener la conversión?</translation>
+        <translation>¿Está seguro que quiere detener la conversión?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="342"/>
@@ -994,12 +993,12 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="8"/>
         <source>Show extracted files when completed</source>
-        <translation>Mostrar archivos extraídos cuando se completen</translation>
+        <translation>Mostrar archivos extraídos al terminar</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="9"/>
         <source>File Management</source>
-        <translation>Gestión de Archivos</translation>
+        <translation>Administración de archivos</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settings_translation.cpp" line="10"/>
@@ -1176,8 +1175,7 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="115"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>No tienes permiso para salvar archivos aqui,
-por favor cambia e intentalo nuevamente</translation>
+        <translation>No tiene permisos para guardar archivos aquí, por favor cámbielos e inténtelo de nuevo</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="134"/>
@@ -1202,13 +1200,12 @@ por favor cambia e intentalo nuevamente</translation>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="572"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation>No se admiten cambios en este tipo de archivos.
-Por favor cambia el formato de archivo para guardar los cambios.</translation>
+        <translation>No se admiten cambios en este tipo de archivos. Por favor convierta el archivo a otro formato para guardar los cambios.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="588"/>
         <source>Convert the format to:</source>
-        <translation>Cambiar el formato a:</translation>
+        <translation>Convertir el formato a:</translation>
     </message>
 </context>
 <context>
@@ -1279,18 +1276,17 @@ Por favor cambia el formato de archivo para guardar los cambios.</translation>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="956"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1749"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation>¿Desea borrar archivo(s) seleccionados?</translation>
+        <translation>¿Desea borrar los archivos seleccionados?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1122"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation>Eliminará permanentemente el archivo(s).
-¿Estas seguro que quieres continuar?</translation>
+        <translation>Eliminará permanentemente los archivos. ¿Está seguro que quiere continuar?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation type="unfinished"/>
+        <translation>Se han modificado los archivos. ¿Quiere actualizar los cambios a %1?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>

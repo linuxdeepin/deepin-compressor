@@ -370,7 +370,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="568"/>
         <source>Help</source>
-        <translation>幫助</translation>
+        <translation>說明</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="572"/>

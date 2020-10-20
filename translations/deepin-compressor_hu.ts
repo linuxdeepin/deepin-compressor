@@ -54,7 +54,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresspage.cpp" line="118"/>
         <source>Please add files to the top-level directory</source>
-        <translation>Kérjük, adjon hozzá fájlokat a legfelső szintű könyvtárhoz</translation>
+        <translation>Kérjük adjon hozzá fájlokat a legfelső szintű mappához</translation>
     </message>
 </context>
 <context>
@@ -97,7 +97,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="178"/>
         <source>Encrypt the file list too</source>
-        <translation>Fájllista titkosítása</translation>
+        <translation>Titkosítsa a fájllistát is</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="179"/>
@@ -195,7 +195,7 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="953"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1086"/>
         <source>Please enter the path</source>
-        <translation>Kérem adja meg az elérési útvonalat</translation>
+        <translation>Kérjük adja meg az elérési útvonalat</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
@@ -216,7 +216,7 @@
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="958"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1091"/>
         <source>The path does not exist, please retry</source>
-        <translation>Elérési útvonal nem létezik, próbálja újra</translation>
+        <translation>Az elérési útvonal nem létezik, kérjük próbálja újra</translation>
     </message>
 </context>
 <context>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compressor_fail.cpp" line="35"/>
         <source>Extraction failed</source>
-        <translation>Kicsomagolás sikertelen</translation>
+        <translation>A kicsomagolás sikertelen</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compressor_fail.cpp" line="36"/>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compressor_success.cpp" line="40"/>
         <source>Compression successful</source>
-        <translation>Tömörítés sikeres</translation>
+        <translation>A tömörítés sikeres</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compressor_success.cpp" line="58"/>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/encryptionpage.cpp" line="47"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Titkosított fájl, kérem adja meg a jelszót</translation>
+        <translation>Titkosított fájl, kérjük adja meg a jelszót</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/encryptionpage.cpp" line="50"/>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/extractpausedialog.cpp" line="67"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>Biztosan megszakítja a kicsomagolást?</translation>
+        <translation>Biztosan meg akarja szakítani a kicsomagolást?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/extractpausedialog.cpp" line="69"/>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="596"/>
         <source>Shortcuts</source>
-        <translation>Parancsikonok</translation>
+        <translation>Gyorsbillentyűk</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="781"/>
@@ -417,7 +417,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1375"/>
         <source>Compression successful</source>
-        <translation>Tömörítés sikeres</translation>
+        <translation>A tömörítés sikeres</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5119"/>
@@ -427,7 +427,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5122"/>
         <source>Do you want to delete the archive?</source>
-        <translation>Törli az archívumot?</translation>
+        <translation>Biztos, hogy törli az archívumot?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2573"/>
@@ -440,12 +440,12 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2546"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2705"/>
         <source>Extraction successful</source>
-        <translation>Kicsomagolás sikeres</translation>
+        <translation>A kicsomagolás sikeres</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="469"/>
         <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 megváltozott a lemezen, kérjük importálja újra.</translation>
+        <translation>A %1 megváltozott a lemezen, kérjük importálja újra.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1631"/>
@@ -455,7 +455,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="584"/>
         <source>Display shortcuts</source>
-        <translation>Parancsikonok megjelenítése</translation>
+        <translation>Gyorsbillentyűk megjelenítése</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="242"/>
@@ -499,17 +499,17 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1392"/>
         <source>Compression failed</source>
-        <translation>Tömörítés sikertelen</translation>
+        <translation>A tömörítés sikertelen</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1424"/>
         <source>Extraction failed</source>
-        <translation>Kicsomagolás sikertelen</translation>
+        <translation>A kicsomagolás sikertelen</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1437"/>
         <source>Conversion successful</source>
-        <translation>Konvertálás sikeres</translation>
+        <translation>A konvertálás sikeres</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1633"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1841"/>
         <source>Find directory</source>
-        <translation>Könyvtár keresése</translation>
+        <translation>Mappa keresése</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2167"/>
@@ -574,7 +574,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4085"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4091"/>
         <source>Insufficient space, please clear and retry</source>
-        <translation>Nincs elegendő tárhely, kérem szabadítson fel tárterületet és próbálja újra</translation>
+        <translation>Nincs elegendő tárhely, kérjük szabadítson fel tárterületet és próbálja újra</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2596"/>
@@ -600,7 +600,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mimetypedisplaymanager.cpp" line="46"/>
         <source>Directory</source>
-        <translation>Könyvtár</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mimetypedisplaymanager.cpp" line="47"/>
@@ -673,7 +673,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/myfilesystemmodel.cpp" line="127"/>
         <source>item(s)</source>
-        <translation>Elem(ek)</translation>
+        <translation>elem(ek)</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/myfilesystemmodel.cpp" line="138"/>
@@ -686,7 +686,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/openloadingpage.cpp" line="52"/>
         <source>Loading, please wait...</source>
-        <translation>Betöltés, kérem várjon...</translation>
+        <translation>Betöltés, kérjük várjon...</translation>
     </message>
 </context>
 <context>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="359"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Titkosított fájl, kérem adja meg a jelszót</translation>
+        <translation>Titkosított fájl, kérjük adja meg a jelszót</translation>
     </message>
 </context>
 <context>
@@ -782,12 +782,12 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="403"/>
         <source>Are you sure you want to stop the update?</source>
-        <translation>Biztosan megszakítja a frissítést?</translation>
+        <translation>Biztosan meg akarja szakítani a frissítést?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="405"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation>Biztosan megszakítja a konvertálást?</translation>
+        <translation>Biztosan meg akarja szakítani a konvertálást?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="342"/>
@@ -817,7 +817,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="411"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>Biztosan megszakítja a kicsomagolást?</translation>
+        <translation>Biztosan meg akarja szakítani a kicsomagolást?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="148"/>
@@ -886,7 +886,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="136"/>
         <source>Extraction successful</source>
-        <translation>Kicsomagolás sikeres</translation>
+        <translation>A kicsomagolás sikeres</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="136"/>
@@ -897,7 +897,7 @@
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="141"/>
         <source>Extraction successful</source>
         <comment>progressdialog</comment>
-        <translation>Kicsomagolás sikeres</translation>
+        <translation>A kicsomagolás sikeres</translation>
     </message>
 </context>
 <context>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="729"/>
         <source>Discard</source>
-        <translation>Eldobás</translation>
+        <translation>Elvetés</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1554"/>
@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="196"/>
         <source>Apply to all</source>
-        <translation>Alkalmazás mindre</translation>
+        <translation>Alkalmazás az összesre</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="367"/>
@@ -1095,7 +1095,7 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="172"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="201"/>
         <source>Current directory</source>
-        <translation>Jelenlegi könyvtár</translation>
+        <translation>Jelenlegi mappa</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="134"/>
@@ -1116,7 +1116,7 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="172"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="211"/>
         <source>Other directory</source>
-        <translation>Más könyvtár</translation>
+        <translation>Más mappa</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="172"/>
@@ -1139,7 +1139,7 @@
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="281"/>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="305"/>
         <source>Ask for confirmation</source>
-        <translation>Kérdezzen rá</translation>
+        <translation>Kérjen megerősítést</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="281"/>
@@ -1150,7 +1150,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/settingdialog.cpp" line="355"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>Az alapértelmezett kicsomagolási útvonal nem létezik, próbálja újra</translation>
+        <translation>Az alapértelmezett kicsomagolási útvonal nem létezik, kérjük próbálja újra</translation>
     </message>
 </context>
 <context>
@@ -1170,7 +1170,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="113"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>Az alapértelmezett kicsomagolási útvonal nem létezik, próbálja újra</translation>
+        <translation>Az alapértelmezett kicsomagolási útvonal nem létezik, kérjük próbálja újra</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="115"/>
@@ -1180,7 +1180,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="134"/>
         <source>Find directory</source>
-        <translation>Könyvtár keresése</translation>
+        <translation>Mappa keresése</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="187"/>
@@ -1200,7 +1200,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="572"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation>Az ilyen típusú archívumok módosításai nem támogatottak. A változások mentéséhez alakítsa át az archív formátumot.</translation>
+        <translation>Az ilyen típusú archívumok módosításai nem támogatottak. A változások mentéséhez kérjük alakítsa át az archívum formátumát.</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="588"/>
@@ -1270,7 +1270,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1776"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1796"/>
         <source>Select default program</source>
-        <translation>Beállítás alapértelmezett programként</translation>
+        <translation>Alapértelmezett program választása</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="956"/>
@@ -1304,7 +1304,7 @@
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="588"/>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1741"/>
         <source>Extract to current directory</source>
-        <translation>Kicsomagolás az aktuális könyvtárba</translation>
+        <translation>Kicsomagolás az aktuális mappába</translation>
     </message>
 </context>
 </TS>

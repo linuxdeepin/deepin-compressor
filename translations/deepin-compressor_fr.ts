@@ -154,7 +154,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="702"/>
         <source>Total size: %1</source>
-        <translation>Taille totale: %1</translation>
+        <translation>Taille totale : %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="801"/>
@@ -530,7 +530,7 @@
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2167"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2598"/>
         <source>Failed to open the archive: %1</source>
-        <translation>Échec de l&apos;ouverture de l&apos;archive: %1</translation>
+        <translation>Échec de l&apos;ouverture de l&apos;archive : %1</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2481"/>
@@ -905,7 +905,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/utils.cpp" line="178"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/utils.cpp" line="179"/>
@@ -1205,7 +1205,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="588"/>
         <source>Convert the format to:</source>
-        <translation>Convertir le format en: </translation>
+        <translation>Convertir le format en : </translation>
     </message>
 </context>
 <context>
@@ -1286,7 +1286,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1534"/>
         <source>Files have been changed. Do you want to update the changes to %1?</source>
-        <translation>Les fichiers ont été modifiés. Voulez-vous mettre à jour les modifications apportées à%1 ?</translation>
+        <translation>Les fichiers ont été modifiés. Voulez-vous mettre à jour les modifications apportées à %1 ?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1082"/>

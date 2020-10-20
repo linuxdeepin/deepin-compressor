@@ -200,7 +200,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="149"/>
         <source>New Archive</source>
-        <translation>新建歸檔文件</translation>
+        <translation>歸檔文件</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="317"/>
