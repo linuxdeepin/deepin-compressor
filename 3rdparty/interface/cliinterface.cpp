@@ -41,25 +41,29 @@ CliInterface::~CliInterface()
 
 }
 
-bool CliInterface::list()
+PluginFinishType CliInterface::list()
 {
+
     m_workStatus = WT_List;
 
     bool ret = false;
 
     ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, ""));
 
-    return ret;
+    return PT_Nomral;
+
 }
 
-bool CliInterface::testArchive()
+PluginFinishType CliInterface::testArchive()
 {
+
     m_workStatus = WT_Add;
 
-    return true;
+    return PT_Nomral;
+
 }
 
-bool CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
     m_workStatus = WT_Extract;
 
@@ -72,10 +76,12 @@ bool CliInterface::extractFiles(const QVector<FileEntry> &files, const Extractio
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
                       m_cliProps->extractArgs(m_strArchiveName, fileList, true, ""));
 
-    return ret;
+
+    return PT_Nomral;
+
 }
 
-bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     m_workStatus = WT_Add;
 
@@ -101,35 +107,46 @@ bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptio
                                                 fi.path());
 
     ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
-    return ret;
+
+    return ret == true ? PT_Nomral : PF_Error;
 }
 
-bool CliInterface::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+
     m_workStatus = WT_Add;
 
-    return true;
+
+    return PT_Nomral;
+
 }
 
-bool CliInterface::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+
     m_workStatus = WT_Add;
 
-    return true;
+    return PT_Nomral;
+
 }
 
-bool CliInterface::deleteFiles(const QVector<FileEntry> &files)
+PluginFinishType CliInterface::deleteFiles(const QVector<FileEntry> &files)
 {
+
     m_workStatus = WT_Add;
 
-    return true;
+
+    return PT_Nomral;
+
 }
 
-bool CliInterface::addComment(const QString &comment)
+PluginFinishType CliInterface::addComment(const QString &comment)
 {
+
     m_workStatus = WT_Add;
 
-    return true;
+
+    return PT_Nomral;
 }
 
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
@@ -219,5 +236,5 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     deleteProcess();
 
     emit signalprogress(1.0);
-    emit signalFinished(true);
+    emit signalFinished(PT_Nomral);
 }

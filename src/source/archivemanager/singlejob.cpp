@@ -49,7 +49,7 @@ void SingleJob::start()
 
     // 若插件指针为空，立即异常退出
     if (m_pInterface == nullptr) {
-        slotFinished(false);
+        slotFinished(PF_Error);
         return;
     }
 
@@ -68,13 +68,13 @@ void SingleJob::initConnections()
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName);
 }
 
-void SingleJob::slotFinished(bool bRight)
+void SingleJob::slotFinished(PluginFinishType eType)
 {
-    qDebug() << "Job finished, result:" << bRight << ", time:" << jobTimer.elapsed() << "ms";
+    qDebug() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
 
-    if (bRight) {
-        emit signalJobFinshed();
-    }
+
+    emit signalJobFinshed();
+
 }
 
 // 加载操作
@@ -82,6 +82,7 @@ LoadJob::LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
 {
     m_eJobType = JT_Load;
+    initConnections();
 }
 
 LoadJob::~LoadJob()
@@ -91,10 +92,10 @@ LoadJob::~LoadJob()
 
 void LoadJob::doWork()
 {
-    bool bResult = m_pInterface->list();
+    PluginFinishType eType = m_pInterface->list();
 
     if (!(m_pInterface->waitForFinished())) {
-        slotFinished(bResult);
+        slotFinished(eType);
     }
 }
 
@@ -104,6 +105,7 @@ AddJob::AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInter
     , m_vecFiles(files)
     , m_stCompressOptions(options)
 {
+    initConnections();
     m_eJobType = JT_Add;
 }
 
@@ -120,10 +122,10 @@ void AddJob::doWork()
         return;
     }
 
-    bool bResult = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+    PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
 
     if (!(pWriteInterface->waitForFinished())) {
-        slotFinished(bResult);
+        slotFinished(eType);
     }
 
 }
@@ -145,9 +147,9 @@ CreateJob::~CreateJob()
 void CreateJob::doWork()
 {
     m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
-//    connect(m_pAddJob, &AddJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
-//    connect(m_pAddJob, &AddJob::signalprogress, this, &CreateJob::signalprogress);
-//    connect(m_pAddJob, &AddJob::signalCurFileName, this, &CreateJob::signalCurFileName);
+    connect(m_pAddJob, &AddJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
+    connect(m_pAddJob, &AddJob::signalprogress, this, &CreateJob::signalprogress);
+    connect(m_pAddJob, &AddJob::signalCurFileName, this, &CreateJob::signalCurFileName);
     m_pAddJob->start();
 }
 
@@ -157,6 +159,7 @@ ExtractJob::ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface
     , m_vecFiles(files)
     , m_stExtractionOptions(options)
 {
+    initConnections();
     m_eJobType = JT_Extract;
 }
 
@@ -167,10 +170,10 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
-    bool bResult = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
+    PluginFinishType eType = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
 
     if (!(m_pInterface->waitForFinished())) {
-        slotFinished(bResult);
+        slotFinished(eType);
     }
 }
 
@@ -179,7 +182,7 @@ DeleteJob::DeleteJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
-
+    initConnections();
 }
 
 DeleteJob::~DeleteJob()
@@ -197,7 +200,7 @@ TempExtractJob::TempExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveI
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
-
+    initConnections();
 }
 
 TempExtractJob::~TempExtractJob()

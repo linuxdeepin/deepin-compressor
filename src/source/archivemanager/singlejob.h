@@ -69,17 +69,19 @@ public:
      */
     void start() override;
 
-private:
+protected:
     /**
      * @brief initConnections   初始化插件和job的信号槽连接
      */
     void initConnections();
 
 protected Q_SLOTS:
+
     /**
      * @brief slotFinished  操作结束处理
+     * @param eType 结束类型
      */
-    void slotFinished(bool bRight);
+    void slotFinished(PluginFinishType eType);
 
 protected:
     ReadOnlyArchiveInterface *m_pInterface;

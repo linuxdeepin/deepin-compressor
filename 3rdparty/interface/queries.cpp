@@ -23,7 +23,6 @@
 #include <DMainWindow>
 #include <DDialog>
 #include <DFontSizeManager>
-#include <DApplicationHelper>
 #include <DLabel>
 #include <DCheckBox>
 #include <DPasswordEdit>

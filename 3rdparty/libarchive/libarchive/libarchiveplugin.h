@@ -42,17 +42,17 @@ public:
 
     // ReadOnlyArchiveInterface interface
 public:
-    bool list() override;
-    bool testArchive() override;
-    bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
+    PluginFinishType list() override;
+    PluginFinishType testArchive() override;
+    PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
 
     // ReadWriteArchiveInterface interface
 public:
-    bool addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    bool moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    bool copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    bool deleteFiles(const QVector<FileEntry> &files) override;
-    bool addComment(const QString &comment) override;
+    PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType deleteFiles(const QVector<FileEntry> &files) override;
+    PluginFinishType addComment(const QString &comment) override;
 
 protected:
     /**
@@ -73,7 +73,7 @@ protected:
     ArchiveRead m_archiveReader;
 
 private:
-    bool list_New();
+    PluginFinishType list_New();
     QString convertCompressionName(const QString &method);
     /**
      * @brief emitEntryForIndex 构建压缩包内数据

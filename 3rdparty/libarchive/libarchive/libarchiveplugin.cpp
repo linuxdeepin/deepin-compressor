@@ -42,10 +42,10 @@ LibarchivePlugin::~LibarchivePlugin()
     deleteTempTarPkg(m_tars);
 }
 
-bool LibarchivePlugin::list()
+PluginFinishType LibarchivePlugin::list()
 {
     qDebug() << "LibarchivePlugin插件加载压缩包数据";
-    bool ret = false;
+    PluginFinishType eType;
     m_stArchiveData.reset();
 
     m_strOldArchiveName = m_strArchiveName; //保存原压缩包名
@@ -67,52 +67,52 @@ bool LibarchivePlugin::list()
             if (!m_tars.contains(tempFileName)) {
                 m_tars.push_back(tempFileName);
             }
-            ret = list_New();
+            eType = list_New();
         } else {
-            ret = false;
+            eType = PF_Error;
         }
     } else {
-        ret = list_New();
+        eType = list_New();
     }
-    emit signalFinished(ret);
-    return ret;
+    //emit signalFinished(eType);
+    return eType;
 }
 
-bool LibarchivePlugin::testArchive()
+PluginFinishType LibarchivePlugin::testArchive()
 {
-    return true;
+    return PT_Nomral;
 }
 
-bool LibarchivePlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType LibarchivePlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
-    return true;
+    return PT_Nomral;
 }
 
-bool LibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
-    return false;
+    return PF_Error;
 }
 
-bool LibarchivePlugin::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
-    return false;
+    return PF_Error;
 }
 
-bool LibarchivePlugin::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
-    return false;
+    return PF_Error;
 }
 
-bool LibarchivePlugin::deleteFiles(const QVector<FileEntry> &files)
+PluginFinishType LibarchivePlugin::deleteFiles(const QVector<FileEntry> &files)
 {
-    return false;
+    return PF_Error;
 }
 
-bool LibarchivePlugin::addComment(const QString &comment)
+PluginFinishType LibarchivePlugin::addComment(const QString &comment)
 {
-    return false;
+    return PF_Error;
 }
 
 bool LibarchivePlugin::initializeReader()
@@ -140,10 +140,10 @@ bool LibarchivePlugin::initializeReader()
     return true;
 }
 
-bool LibarchivePlugin::list_New()
+PluginFinishType LibarchivePlugin::list_New()
 {
     if (!initializeReader()) {
-        return false;
+        return PF_Error;
     }
 
     QString compMethod = convertCompressionName(QString::fromUtf8(archive_filter_name(m_archiveReader.data(), 0)));
@@ -176,7 +176,7 @@ bool LibarchivePlugin::list_New()
 //        archive_read_data_skip(m_archiveReader.data());
     }
 
-    return true;
+    return PT_Nomral;
 }
 
 QString LibarchivePlugin::convertCompressionName(const QString &method)

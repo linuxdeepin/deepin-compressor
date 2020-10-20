@@ -51,7 +51,7 @@ public:
 
     // ReadWriteArchiveInterface interface
 public:
-    bool addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
 //    bool moveFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
 //    bool copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
 //    bool deleteFiles(const QVector<FileEntry> &files) override;

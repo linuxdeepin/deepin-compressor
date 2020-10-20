@@ -51,7 +51,7 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 {
 }
 
-bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
     const bool creatingNewFile = !QFileInfo::exists(m_strArchiveName);
     if (options.strDestination.isEmpty()) { //压缩
@@ -78,11 +78,11 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
     m_writtenFiles.clear();
 
     if (!creatingNewFile && !initializeReader()) {
-        return false;
+        return PF_Error;
     }
 
     if (!initializeWriter(creatingNewFile, options)) {
-        return false;
+        return PF_Error;
     }
 
     // First write the new files.
@@ -111,7 +111,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
 
         if (!writeFileFromEntry(selectedFile.strFullPath, options.strDestination, selectedFile, info, bInternalDuty)) {
             finish(false);
-            return false;
+            return PF_Error;
         }
 
 
@@ -151,7 +151,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
 
                 if (!writeFileTodestination(path, options.strDestination, externalPath, info, bInternalDuty)) {
                     finish(false);
-                    return false;
+                    return PF_Error;
                 }
 
                 addedEntries++;
@@ -174,8 +174,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const 
 //    }
 
     finish(isSuccessful);
-    emit signalFinished(isSuccessful);
-    return isSuccessful;
+    emit signalFinished(PT_Nomral);
+    return PT_Nomral;
 }
 
 bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, const CompressOptions &options)

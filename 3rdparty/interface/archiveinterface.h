@@ -29,6 +29,9 @@
 #include <QString>
 #include <QMimeType>
 #include <QFileDevice>
+
+class Query;
+
 // 只读（查看和解压等）
 class ReadOnlyArchiveInterface : public QObject
 {
@@ -49,13 +52,13 @@ public:
      * @brief list      加载压缩包
      * @return
      */
-    virtual bool list() = 0;
+    virtual PluginFinishType list() = 0;
 
     /**
      * @brief testArchive   测试压缩包
      * @return
      */
-    virtual bool testArchive() = 0;
+    virtual PluginFinishType testArchive() = 0;
 
     /**
      * @brief extractFiles          解压
@@ -63,7 +66,7 @@ public:
      * @param options               解压参数
      * @return                      是否解压成功
      */
-    virtual bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) = 0;
+    virtual PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) = 0;
 
     /**
      * @brief waitForFinished   判断是否通过线程调用
@@ -94,9 +97,9 @@ protected:
 Q_SIGNALS:
     /**
      * @brief signalFinished    结束信号
-     * @param bNormal   是否正确结束
+     * @param eType   结束类型
      */
-    void signalFinished(bool bRight);
+    void signalFinished(PluginFinishType eType);
     void error(const QString &message = "", const QString &details = "");
 
     /**
@@ -111,6 +114,18 @@ Q_SIGNALS:
      */
     void signalCurFileName(const QString &filename);
 
+
+    /**
+     * @brief signalQuery   发送询问信号
+     * @param query 询问类型
+     */
+    void signalQuery(Query *query);
+
+    /**
+     * @brief signalCancel  取消信号
+     */
+    void signalCancel();
+
 public:
     Plugintype m_ePlugintype;
 
@@ -121,7 +136,9 @@ protected:
     QString m_strArchiveName; //1、压缩：最终的压缩包名 2、解压：加载的压缩包名
     QMimeType m_mimetype;
     Common *m_common = nullptr; // 通用工具类
-    ArchiveData m_stArchiveData;
+    ArchiveData m_stArchiveData;    // 压缩包数据
+    bool m_bOverwriteAll = false;        //是否全部覆盖
+    bool m_bSkipAll = false;             // 是否全部跳过
 };
 
 // 可读可写（可用来压缩、查看、解压等）
@@ -150,7 +167,7 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual bool addFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          移动压缩文件
@@ -158,7 +175,7 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual bool moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          拷贝压缩文件
@@ -166,21 +183,21 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual bool copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          删除压缩文件
      * @param files             待删除文件
      * @return
      */
-    virtual bool deleteFiles(const QVector<FileEntry> &files) = 0;
+    virtual PluginFinishType deleteFiles(const QVector<FileEntry> &files) = 0;
 
     /**
      * @brief addComment        添加注释
      * @param comment           注释内容
      * @return
      */
-    virtual bool addComment(const QString &comment) = 0;
+    virtual PluginFinishType addComment(const QString &comment) = 0;
 };
 
 #endif // ARCHIVEINTERFACE_H

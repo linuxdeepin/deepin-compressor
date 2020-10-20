@@ -22,6 +22,7 @@
 #define ARCHIVEJOB_H
 
 #include <QObject>
+#include "commonstruct.h"
 
 // 操作基类
 class ArchiveJob : public QObject
@@ -46,7 +47,8 @@ public:
 
 Q_SIGNALS:
     /**
-     * @brief signalJobFinshed  操作结束信号
+     * @brief slotFinished  操作结束处理
+     * @param eType 结束类型
      */
     void signalJobFinshed();
 

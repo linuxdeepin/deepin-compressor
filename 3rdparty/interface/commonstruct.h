@@ -27,10 +27,16 @@
 #include <QVector>
 #include <QMap>
 
+// 插件结束类型
+enum PluginFinishType {
+    PT_Nomral = 0,     // 正常退出
+    PF_Cancel,         // 取消
+    PF_Error,          // 错误
+};
+
 // 错误类型
 enum ErrorType {
     ET_NoError = 0,     // 无错误
-
 };
 
 //加密类型
