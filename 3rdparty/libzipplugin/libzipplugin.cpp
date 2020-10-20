@@ -124,6 +124,7 @@ bool LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const Extractio
 
             // 解压单个文件
             if (!extractEntry(archive, i, options, qExtractSize)) {
+                zip_close(archive);
                 return false;
             }
         }
@@ -423,9 +424,21 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
     QFile file(strDestFileName);
 
+    // 获取外部信息（权限）
+    zip_uint8_t opsys;
+    zip_uint32_t attributes;
+    if (zip_file_get_external_attributes(archive, zip_uint64_t(index), ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
+        emit error(("Failed to read metadata for entry: %1"));
+    }
+    mode_t value = attributes >> 16;
+    QFileDevice::Permissions per = getPermissions(value);
+
     if (bIsDirectory) {     // 文件夹
         QDir dir;
         dir.mkpath(strDestFileName);
+
+        // 文件夹加可执行权限
+        per = per | QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser ;
     } else {        // 普通文件
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
         if (zipFile == nullptr) {
@@ -474,6 +487,9 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
         file.close();
         zip_fclose(zipFile);
     }
+
+    // 设置文件/文件夹权限
+    file.setPermissions(per);
 
     return true;
 }

@@ -19,22 +19,23 @@ enum OverwriteQuery_Result {
     Result_SkipAll = 2,           // 全部跳过
     Result_Overwrite = 3,         // 替换
     Result_OverwriteAll = 4,      // 全部替换
-    Result_Resume = 5,
-    Result_ResumeAll = 6,
-    Result_Rename = 7,
-    Result_RenameAll = 8,
-    Result_Retry = 9
 };
 
+typedef QHash<QString, QVariant> QueryData;
+
+// 询问对话框
 class Query : public QObject
 {
     Q_OBJECT
 public:
-    virtual void execute() = 0;
-    //    int execDialog();
+    explicit Query(QObject *parent = nullptr);
+    ~Query() override;
 
+    /**
+     * @brief setParent     设置父窗口以居中显示
+     * @param pParent
+     */
     void setParent(QWidget *pParent);
-    QWidget *getParent();
 
     /**
      * @brief waitForResponse   等待对话框做出选择
@@ -42,156 +43,127 @@ public:
     void waitForResponse();
 
     /**
-     * @brief setResponse   对话框做出的选择
-     * @param response      对话框的选择
+     * @brief setResponse   设置对话框做出的选择
+     * @param response      选择值
      */
     void setResponse(const QVariant &response);
 
     /**
-     * @brief getResponse   获取对话框做出的选择
-     * @return
+     * @brief execute   创建对话框
      */
-    QVariant getResponse() const;
-
-    /**
-     * @brief toShortString     字符串过长时保留前后各8位，省略号替换未显示的字符
-     * @param strSrc            字符串
-     * @param limitCounts       保留字符长度最长为16
-     * @param left              左侧字符长度为8
-     * @return
-     */
-    static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
+    virtual void execute() = 0;
 
 protected:
-    Query();
-    virtual ~Query() {}
+    /**
+     * @brief toShortString     字符串转换
+     * @param strSrc
+     * @param limitCounts
+     * @param left
+     * @return
+     */
+    QString toShortString(QString strSrc, int limitCounts, int left);
 
-//    void colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
-//    void colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
-
+protected:
     QWidget *m_pParent = nullptr;
-    QHash<QString, QVariant> m_data;
+    QueryData m_data;
 
 private:
     QWaitCondition m_responseCondition;
     QMutex m_responseMutex;
 };
 
-/**
- * @brief The OverwriteQuery class    提示文件已存在，是否跳过或替换
- */
+// 询问重复文件对话框
 class OverwriteQuery : public Query
 {
     Q_OBJECT
 public:
-    explicit OverwriteQuery(const QString &filename);
+    explicit OverwriteQuery(const QString &filename, QObject *parent = nullptr);
+    ~OverwriteQuery() override;
+
+    /**
+     * @brief execute   创建对话框并显示
+     */
+
     void execute() override;
 
     /**
-     * @brief getExecuteReturn      获取当前提示框状态
+     * @brief responseCancelled     是否取消
      * @return
      */
-    int getExecuteReturn();
+    bool responseCancelled();
 
     /**
-     * @brief getResponseCancell      是否取消
+     * @brief responseSkip      是否跳过
      * @return
      */
-    bool getResponseCancell();
+    bool responseSkip();
 
     /**
-     * @brief getResponseOverwrite      是否替换
+     * @brief responseSkipAll      是否全部跳过
      * @return
      */
-    bool getResponseOverwrite();
+    bool responseSkipAll();
 
     /**
-     * @brief getResponseOverwriteAll   是否全部替换
+     * @brief responseOverwrite      是否覆盖
      * @return
      */
-    bool getResponseOverwriteAll();
+    bool responseOverwrite();
 
     /**
-     * @brief getResponseRename     是否重命名
+     * @brief responseOverwriteAll      是否全部覆盖
      * @return
      */
-    bool getResponseRename();
-
-    /**
-     * @brief getResponseSkip    是否跳过
-     * @return
-     */
-    bool getResponseSkip();
-
-    /**
-     * @brief getResponseSkipAll    是否全部跳过
-     * @return
-     */
-    bool getResponseSkipAll();
-
-    /**
-     * @brief getNewFilename    获取新的文件名
-     * @return
-     */
-    QString getNewFilename();
-
-//    void setNoRenameMode(bool enableNoRenameMode);
-//    bool getNoRenameMode();
-//    void setMultiMode(bool enableMultiMode);
-//    bool getMultiMode();
-
-    /**
-     * @brief applyAll    是否应用到全部
-     * @return
-     */
-    bool getApplyAll();
+    bool responseOverwriteAll();
 
 private:
-    bool m_noRenameMode;
-    bool m_multiMode;
-    int m_dialogMode;
-    bool m_applyAll;     // 是否勾选应用到全部
+    /**
+     * @brief setWidgetColor    设置面板颜色
+     * @param pWgt
+     * @param ct
+     * @param alphaF
+     */
+    void setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF);
+
+    /**
+     * @brief setWidgetType     设置面板类型颜色
+     * @param pWgt
+     * @param ct
+     * @param alphaF
+     */
+    void setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF);
 };
 
-/**
- * @brief The PasswordNeededQuery class    解压提示输入密码
- */
+// 密码输入框
 class PasswordNeededQuery : public Query
 {
     Q_OBJECT
 public:
-    explicit PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
-    void execute() override;
+    /**
+     * @brief PasswordNeededQuery
+     * @param strFileName       文件名（不含路径）
+     * @param parent
+     */
+    explicit PasswordNeededQuery(const QString &strFileName, QObject *parent = nullptr);
+    ~PasswordNeededQuery() override;
 
-//    bool responseCancelled();
-//    QString getInputPassword();
-};
-
-/**
- * @brief The AddCompressUsePasswordQuery class   追加压缩提示是否使用密码
- */
-class AddCompressUsePasswordQuery : public Query
-{
-    Q_OBJECT
-public:
-    explicit AddCompressUsePasswordQuery();
+    /**
+     * @brief execute   显示密码输入对话框
+     */
     void execute() override;
 
     /**
-     * @brief getIsUsePassword    获取是否使用密码
+     * @brief responseCancelled     是否取消
      * @return
      */
-    bool getIsUsePassword();
+    bool responseCancelled();
 
     /**
-     * @brief getPassword   获取密码
-     * @return
+     * @brief password  获取输入的密码
+     * @return 输入的密码
      */
-    QString getPassword();
-
-private:
-    bool m_isUsePassword = false;           // 是勾选否使用密码
-    QString m_password = "";            // 密码
+    QString password();
 };
+
 
 #endif // QUERIES_H

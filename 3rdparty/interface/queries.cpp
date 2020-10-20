@@ -68,8 +68,17 @@ static QPixmap renderSVG(const QString &filePath, const QSize &size)
     return pixmap;
 }
 
-Query::Query()
+
+
+Query::Query(QObject *parent)
+    : QObject(parent)
 {
+
+}
+
+Query::~Query()
+{
+
 }
 
 void Query::setParent(QWidget *pParent)
@@ -77,15 +86,10 @@ void Query::setParent(QWidget *pParent)
     m_pParent = pParent;
 }
 
-QWidget *Query::getParent()
-{
-    return m_pParent;
-}
-
 void Query::waitForResponse()
 {
     QMutexLocker locker(&m_responseMutex);
-    //if there is no response set yet, wait
+    // 如果没有任何选择，等待响应
     if (!m_data.contains(QStringLiteral("response"))) {
         m_responseCondition.wait(&m_responseMutex);
     }
@@ -93,13 +97,9 @@ void Query::waitForResponse()
 
 void Query::setResponse(const QVariant &response)
 {
+    // 唤醒响应
     m_data[QStringLiteral("response")] = response;
     m_responseCondition.wakeAll();
-}
-
-QVariant Query::getResponse() const
-{
-    return m_data.value(QStringLiteral("response"));
 }
 
 QString Query::toShortString(QString strSrc, int limitCounts, int left)
@@ -111,18 +111,24 @@ QString Query::toShortString(QString strSrc, int limitCounts, int left)
     return displayName;
 }
 
-OverwriteQuery::OverwriteQuery(const QString &filename)
-    : m_noRenameMode(false)
-    , m_multiMode(true)
+
+OverwriteQuery::OverwriteQuery(const QString &filename, QObject *parent)
+    : Query(parent)
 {
     m_data[QStringLiteral("filename")] = filename;
 }
 
+OverwriteQuery::~OverwriteQuery()
+{
+
+}
+
 void OverwriteQuery::execute()
 {
+    // 文件名处理
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
-    QString path = sourceUrl.toString();
 
+    QString path = sourceUrl.toString();
     if (path.contains("file://")) {
         path.remove("file://");
     }
@@ -133,52 +139,72 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
+    // 获取父窗口（居中显示）
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();
     }
 
     DDialog *dialog = new DDialog(m_pParent);
+    dialog->setAccessibleName("Overwrite_dialog");
     dialog->setMinimumSize(QSize(380, 190));
-    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+
+    // 设置对话框图标
+    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(280, 20));
-    strlabel->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
+    // 显示文件名
+    DLabel *pFileNameLbl = new DLabel;
+    pFileNameLbl->setMinimumSize(QSize(280, 20));
+    pFileNameLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Normal);
 
-    QString displayName = m_data[QStringLiteral("filename")].toString();
-    strlabel->setToolTip(displayName);
-    displayName = toShortString(displayName);
-    strlabel->setText(displayName);
+    int limitCounts = 16;
+    int left = 8, right = 8;
+    QString fileName = file.fileName();
+    QString displayName = "";
+    displayName = fileName.length() > limitCounts ? fileName.left(left) + "..." + fileName.right(right) : fileName;
+    pFileNameLbl->setText(displayName);
 
-    DLabel *strlabel2 = new DLabel;
-    strlabel2->setMinimumSize(QSize(154, 20));
-    strlabel2->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
-    strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
-    strlabel2->setForegroundRole(DPalette::ToolTipText);
+    // 显示提示语
+    DLabel *pTipLbl = new DLabel;
+    pTipLbl->setMinimumSize(QSize(154, 20));
+    pTipLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Medium);
+    pTipLbl->setText(QObject::tr("Another file with the same name already exists, replace it?"));
 
-    dialog->addButton(QObject::tr("Skip"));
-    dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
+    // 应用到全部勾选
+    DCheckBox *pApplyAllCkb = new DCheckBox;
+    pApplyAllCkb->setAccessibleName("Applyall_btn");
+    pApplyAllCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
-    DCheckBox *checkbox = new DCheckBox;
-    checkbox->setStyleSheet("QCheckBox::indicator {width: 14px; height: 14px;}");
+    DLabel *pApplyAllLbl = new DLabel(QObject::tr("Apply to all"));
+    pApplyAllLbl->setMinimumSize(QSize(98, 20));
+    DFontSizeManager::instance()->bind(pApplyAllLbl, DFontSizeManager::T6, QFont::Medium);
 
-    DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
-    checkLabel->setMinimumSize(QSize(98, 20));
-    DFontSizeManager::instance()->bind(checkLabel, DFontSizeManager::T6, QFont::Medium);
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
+    // 控件主题样式
+    if (themeType == DGuiApplicationHelper::LightType) {    // 浅色
+        setWidgetColor(pFileNameLbl, DPalette::ToolTipText, 0.7);
+        setWidgetColor(pTipLbl, DPalette::ToolTipText, 1);
+        setWidgetColor(pApplyAllCkb, DPalette::ToolTipText, 0.7);
+    } else if (themeType == DGuiApplicationHelper::DarkType) {  // 深色
+        setWidgetType(pFileNameLbl, DPalette::TextLively, 0.7);
+        setWidgetType(pTipLbl, DPalette::TextLively, 1);
+        setWidgetType(pApplyAllCkb, DPalette::TextLively, 0.7);
+    }
+
+    // 布局
     QHBoxLayout *checkLayout = new QHBoxLayout;
     checkLayout->addStretch();
-    checkLayout->addWidget(checkbox);
-    checkLayout->addWidget(checkLabel);
+    checkLayout->addWidget(pApplyAllCkb);
+    checkLayout->addWidget(pApplyAllLbl);
     checkLayout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pTipLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     mainlayout->addLayout(checkLayout);
     DWidget *widget = new DWidget(dialog);
@@ -186,234 +212,174 @@ void OverwriteQuery::execute()
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
 
+    // 操作结果
     const int mode = dialog->exec();
+
+    delete dialog;
+
     if (-1 == mode) {
         setResponse(Result_Cancel);
     } else if (0 == mode) {
-        if (checkbox->isChecked()) {
+        if (pApplyAllCkb->isChecked()) {
             setResponse(Result_SkipAll);
         } else {
             setResponse(Result_Skip);
         }
     } else if (1 == mode) {
-        if (checkbox->isChecked()) {
+        if (pApplyAllCkb->isChecked()) {
             setResponse(Result_OverwriteAll);
         } else {
             setResponse(Result_Overwrite);
         }
     }
-
-    m_dialogMode = mode;
-    m_applyAll = checkbox->isChecked();
-    delete dialog;
 }
 
-int OverwriteQuery::getExecuteReturn()
-{
-    return m_dialogMode;
-}
-
-bool OverwriteQuery::getResponseCancell()
+bool OverwriteQuery::responseCancelled()
 {
     return m_data.value(QStringLiteral("response")).toInt() == Result_Cancel;
 }
 
-bool OverwriteQuery::getResponseOverwrite()
-{
-    return m_data.value(QStringLiteral("response")).toInt() == Result_Overwrite;
-}
-
-bool OverwriteQuery::getResponseOverwriteAll()
-{
-    return m_data.value(QStringLiteral("response")).toInt() == Result_OverwriteAll;
-}
-
-bool OverwriteQuery::getResponseRename()
-{
-    return m_data.value(QStringLiteral("response")).toInt() ==  Result_Rename;
-}
-
-bool OverwriteQuery::getResponseSkip()
+bool OverwriteQuery::responseSkip()
 {
     return m_data.value(QStringLiteral("response")).toInt() == Result_Skip;
 }
 
-bool OverwriteQuery::getResponseSkipAll()
+bool OverwriteQuery::responseSkipAll()
 {
-    return m_data.value(QStringLiteral("response")).toInt() ==  Result_SkipAll;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_SkipAll;
 }
 
-QString OverwriteQuery::getNewFilename()
+bool OverwriteQuery::responseOverwrite()
 {
-    return m_data.value(QStringLiteral("newFilename")).toString();
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Overwrite;
 }
 
-bool OverwriteQuery::getApplyAll()
+bool OverwriteQuery::responseOverwriteAll()
 {
-    return m_applyAll;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_OverwriteAll;
 }
 
-PasswordNeededQuery::PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain)
+void OverwriteQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF)
 {
-    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
-    m_data[QStringLiteral("incorrectTryAgain")] = incorrectTryAgain;
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(pWgt, palette);
+}
+
+void OverwriteQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF)
+{
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(pWgt, palette);
+}
+
+
+
+PasswordNeededQuery::PasswordNeededQuery(const QString &strFileName, QObject *parent)
+    : Query(parent)
+{
+    m_data[QStringLiteral("fileName")] = strFileName;
+}
+
+PasswordNeededQuery::~PasswordNeededQuery()
+{
+
 }
 
 void PasswordNeededQuery::execute()
 {
-    qDebug() << m_data[QStringLiteral("archiveFilename")];
-
+    // 获取父窗口（居中显示）
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();
     }
 
     DDialog *dialog = new DDialog(m_pParent);
-    dialog->setMinimumSize(QSize(380, 180));
-    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setAccessibleName("PasswordNeeded_dialog");
+    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(293, 20));
-    strlabel->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setForegroundRole(DPalette::ToolTipText);
+    // 加密文件名显示
+    DLabel *pFileNameLbl = new DLabel(dialog);
+    pFileNameLbl->setFixedSize(300, 20);
+    pFileNameLbl->setForegroundRole(DPalette::WindowText);
+    pFileNameLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::DemiBold);
+    QString archiveFullPath = m_data[QStringLiteral("archiveFilename")].toString();
+    QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
+    pFileNameLbl->setText(fileName);
+    pFileNameLbl->setAlignment(Qt::AlignCenter);
+    pFileNameLbl->setToolTip(archiveFullPath);
 
-    QString displayName = m_data[QStringLiteral("archiveFilename")].toString();
-    strlabel->setToolTip(displayName);
-    displayName = toShortString(displayName);
-    strlabel->setText(tr("%1 is encrypted, please enter the decompression password").arg(displayName));
-    strlabel->setWordWrap(true);
+    // 提示语显示
+    DLabel *pTipLbl = new DLabel(dialog);
+    pTipLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
+    pTipLbl->setForegroundRole(DPalette::WindowText);
+    pTipLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Normal);
+    pTipLbl->setText(tr("Encrypted file, please enter the password"));
+    pTipLbl->setAlignment(Qt::AlignCenter);
 
-    DPasswordEdit *passwordEdit = new DPasswordEdit(dialog);
-    passwordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
-    passwordEdit->setFocusPolicy(Qt::StrongFocus);
-    passwordEdit->setMinimumSize(360, 36);
+    // 密码框
+    DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
+    passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
+    passwordedit->setFocusPolicy(Qt::StrongFocus);
+    passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("Cancel"));
-    dialog->addButton(QObject::tr("Confirm"), true, DDialog::ButtonRecommend);
-
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(passwordEdit, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-
-    DWidget *widget = new DWidget(dialog);
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
-
+    dialog->addButton(QObject::tr("OK"));
+    dialog->getButton(1)->setEnabled(false);
     //确保输入的密码不为空
-    connect(passwordEdit, &DPasswordEdit::textChanged, passwordEdit, [&]() {
-        if (passwordEdit->text().isEmpty()) {
-            dialog->getButton(0)->setEnabled(false);
+    connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [&]() {
+        if (passwordedit->text().isEmpty()) {
+            dialog->getButton(1)->setEnabled(false);
         } else {
-            dialog->getButton(0)->setEnabled(true);
+            dialog->getButton(1)->setEnabled(true);
         }
     });
 
     //隐藏密码时不能输入中文,显示密码时可以输入中文
-    connect(passwordEdit, &DPasswordEdit::echoModeChanged, passwordEdit, [&](bool echoOn) {
-        passwordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
+    connect(passwordedit, &DPasswordEdit::echoModeChanged, passwordedit, [&](bool echoOn) {
+        passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
     });
 
+    // 布局
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignCenter);
+    mainlayout->addWidget(pTipLbl, 0, Qt::AlignCenter);
+    mainlayout->addSpacing(10);
+    mainlayout->addWidget(passwordedit, 0, Qt::AlignCenter);
+    mainlayout->addSpacing(10);
+
+    DWidget *widget = new DWidget(dialog);
+
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+    QRect mainWindowGeometr = getMainWindow()->geometry();
+    dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - 50 + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
     const int mode = dialog->exec();
 
-    m_data[QStringLiteral("password")] = passwordEdit->text();
+    m_data[QStringLiteral("password")] = passwordedit->text();
 
-    if (-1 == mode) {
+    delete dialog;
+
+    if (-1 == mode || 0 == mode) {
         setResponse(Result_Cancel);
     } else {
         setResponse(Result_Skip);
     }
-
-    delete dialog;
 }
 
-AddCompressUsePasswordQuery::AddCompressUsePasswordQuery()
+bool PasswordNeededQuery::responseCancelled()
 {
-
+    return !m_data.value(QStringLiteral("response")).toBool();
 }
 
-void AddCompressUsePasswordQuery::execute()
+QString PasswordNeededQuery::password()
 {
-    if (m_pParent == nullptr) {
-        m_pParent = getMainWindow();
-    }
-
-    DDialog *dialog = new DDialog(m_pParent);
-    dialog->setMinimumSize(QSize(380, 165));
-    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-    dialog->setIcon(pixmap);
-
-    DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(293, 20));
-    strlabel->setText(tr("Add files to the current archive"));
-    strlabel->setWordWrap(true);
-    strlabel->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setForegroundRole(DPalette::ToolTipText);
-
-    DCheckBox *pwdCheckbox = new DCheckBox;
-    pwdCheckbox->setStyleSheet("QCheckBox::indicator {width: 14px; height: 14px;}");
-
-    DLabel *pwdCheckLabel = new DLabel(QObject::tr("Use password"));
-    pwdCheckLabel->setMinimumSize(QSize(56, 20));
-    DFontSizeManager::instance()->bind(pwdCheckLabel, DFontSizeManager::T6, QFont::Medium);
-
-    QHBoxLayout *usePwdLayout = new QHBoxLayout(dialog);
-    usePwdLayout->addStretch();
-    usePwdLayout->addWidget(pwdCheckbox);
-    usePwdLayout->addWidget(pwdCheckLabel);
-    usePwdLayout->addStretch();
-
-    dialog->addButton(QObject::tr("Cancel"));
-    dialog->addButton(QObject::tr("Confirm"), true, DDialog::ButtonRecommend);
-
-    DPasswordEdit *pwdLineEdit = new DPasswordEdit;
-    QLineEdit *edit = pwdLineEdit->lineEdit();
-    edit->setPlaceholderText(tr("Please input password"));
-    pwdLineEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
-    pwdLineEdit->setFocusPolicy(Qt::StrongFocus);
-    pwdLineEdit->setMinimumSize(360, 36);
-
-    QVBoxLayout *mainlayout = new QVBoxLayout(dialog);
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addLayout(usePwdLayout);
-
-    connect(pwdCheckbox, &DCheckBox::stateChanged, this, [ = ] {
-        if (pwdCheckbox->checkState() == Qt::Checked)
-        {
-            pwdLineEdit->setEnabled(true);
-            dialog->setMinimumSize(QSize(380, 216));
-            mainlayout->addWidget(pwdLineEdit);
-        } else
-        {
-            pwdLineEdit->setEnabled(false);
-        }
-    });
-
-    DWidget *widget = new DWidget(dialog);
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
-
-    const int mode = dialog->exec();
-
-    if (mode == DDialog::Accepted) {
-        if (pwdCheckbox->isChecked() && pwdLineEdit->text().size() > 0) {
-            m_isUsePassword = pwdCheckbox->isChecked();
-            m_password = pwdLineEdit->text();
-        }
-    }
-
-    delete dialog;
-}
-
-bool AddCompressUsePasswordQuery::getIsUsePassword()
-{
-    return m_isUsePassword;
-}
-
-QString AddCompressUsePasswordQuery::getPassword()
-{
-    return m_password;
+    return m_data.value(QStringLiteral("password")).toString();
 }

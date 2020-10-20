@@ -51,37 +51,6 @@ CompressPage::~CompressPage()
 
 void CompressPage::addCompressFiles(const QStringList &listFiles)
 {
-//    QStringList listExistFiles = m_pCompressView->getCompressFiles();
-
-//    int mode = 0;
-//    bool applyAll = false;
-
-//    // 对新添加的文件进行判重
-//    QStringList listSelFiles = listFiles;
-
-//    foreach (QString oldPath, listExistFiles) {
-//        QFileInfo oldFile(oldPath);  // 已存在的文件
-//        foreach (QString newPath, listFiles) {
-//            QFileInfo newFile(newPath);  // 新添加的文件
-//            if (oldFile.fileName() == newFile.fileName()) {  // 文件名相同的文件需要询问是否替换
-//                if (!applyAll) { // // 判断不是应用到全部文件，继续弹出询问对话框
-//                    OverwriteQueryDialog dialog(this);
-//                    dialog.showDialog(newFile.fileName());
-
-//                    mode = dialog.getDialogResult();
-//                    applyAll = dialog.getApplyAll();
-//                }
-
-//                if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
-//                    listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
-//                } else { // 替换
-//                    listExistFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
-//                }
-//            }
-//        }
-//    }
-
-
     m_pCompressView->addCompressFiles(listFiles);
 }
 

@@ -28,7 +28,7 @@
 #include <QObject>
 #include <QString>
 #include <QMimeType>
-
+#include <QFileDevice>
 // 只读（查看和解压等）
 class ReadOnlyArchiveInterface : public QObject
 {
@@ -83,6 +83,13 @@ protected:
      * Instead it will be necessary to call finished(bool) when the operation is actually finished.
      */
     void setWaitForFinishedSignal(bool value);
+
+    /**
+     * @brief getPermissions    权限转换
+     * @param perm              文件权限
+     * @return
+     */
+    QFileDevice::Permissions getPermissions(const mode_t &perm);
 
 Q_SIGNALS:
     /**
