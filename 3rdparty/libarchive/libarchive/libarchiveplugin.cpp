@@ -210,6 +210,8 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     FileEntry m_archiveEntryStat; //压缩包内文件数据
     // 文件名
     m_archiveEntryStat.strFullPath = m_common->trans2uft8(archive_entry_pathname(aentry));
+
+    // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
     m_archiveEntryStat.strFileName = pieces.last();
 
