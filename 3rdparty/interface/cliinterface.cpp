@@ -23,6 +23,7 @@
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDir>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -42,17 +43,36 @@ CliInterface::~CliInterface()
 
 bool CliInterface::list()
 {
-    return true;
+    m_workStatus = WT_List;
+
+    bool ret = false;
+
+    ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, ""));
+
+    return ret;
 }
 
 bool CliInterface::testArchive()
 {
+    m_workStatus = WT_Add;
+
     return true;
 }
 
 bool CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
-    return true;
+    m_workStatus = WT_Extract;
+
+    bool ret = false;
+    QStringList fileList;
+
+    // 设置解压目标路径
+    QDir::setCurrent(options.strTargetPath);
+
+    ret =  runProcess(m_cliProps->property("extractProgram").toString(),
+                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, ""));
+
+    return ret;
 }
 
 bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
@@ -86,21 +106,29 @@ bool CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptio
 
 bool CliInterface::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+    m_workStatus = WT_Add;
+
     return true;
 }
 
 bool CliInterface::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
+    m_workStatus = WT_Add;
+
     return true;
 }
 
 bool CliInterface::deleteFiles(const QVector<FileEntry> &files)
 {
+    m_workStatus = WT_Add;
+
     return true;
 }
 
 bool CliInterface::addComment(const QString &comment)
 {
+    m_workStatus = WT_Add;
+
     return true;
 }
 
@@ -121,7 +149,6 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         readStdout();
     });
-
 
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, &CliInterface::processFinished);
@@ -156,41 +183,24 @@ void CliInterface::readStdout(bool handleAll)
 {
     Q_ASSERT(m_process);
 
-    if (!m_process->bytesAvailable()) {
-        // if process has no more data, we can just bail out
+    if (!m_process->bytesAvailable()) { // 无数据
         return;
     }
 
+    // 获取命令行输出
     QByteArray dd = m_process->readAllStandardOutput();
     m_stdOutData += dd;
+
+    // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
-//    bool wrongPasswordMessage = isWrongPasswordMsg(QLatin1String(lines.last()));
-
-    if (m_process->program().length() > 2) {
-        if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")/* && !wrongPasswordMessage*/) {
-            handleAll = true; // 7z output has no \n
-        }
+    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")) {
+        handleAll = true; // 7z output has no \n
     }
 
-    // this is complex, here's an explanation:
-    // if there is no newline, then there is no guaranteed full line to
-    // handle in the output. The exception is that it is supposed to handle
-    // all the data, OR if there's been an error message found in the
-    // partial data.
-//    if (lines.size() == 1 && !handleAll) {
-//        return;
-//    }
+    m_stdOutData.clear();
 
-    if (handleAll) {
-        m_stdOutData.clear();
-    } else {
-        // because the last line might be incomplete we leave it for now
-        // note, this last line may be an empty string if the stdoutdata ends
-        // with a newline
-        m_stdOutData = lines.takeLast();
-    }
-
+    // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {
         if (!line.isEmpty()) {
             if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {

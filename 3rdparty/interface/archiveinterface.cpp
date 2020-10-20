@@ -34,7 +34,6 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
     m_metaData = args.at(1).value<KPluginMetaData>();
     m_mimetype = args.at(2).value<QMimeType>();
     m_common = new Common(this);
-
 }
 
 ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()

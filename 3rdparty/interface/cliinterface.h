@@ -19,6 +19,7 @@ public:
     bool testArchive() override;
     bool extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
 
+    virtual bool readListLine(const QString &line) = 0;
     virtual bool isPasswordPrompt(const QString &line) = 0;
     virtual bool isWrongPasswordMsg(const QString &line) = 0;
     virtual bool isCorruptArchiveMsg(const QString &line) = 0;
@@ -74,6 +75,7 @@ private:
     QByteArray m_stdOutData;
     int m_exitCode = 0;
     WorkType m_workStatus = WT_List;
+    QString m_extractDestionPath;
 };
 
 #endif // CLIINTERFACE_H

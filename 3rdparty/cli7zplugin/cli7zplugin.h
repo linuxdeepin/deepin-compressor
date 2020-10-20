@@ -23,6 +23,9 @@ public:
     explicit Cli7zPlugin(QObject *parent, const QVariantList &args);
     ~Cli7zPlugin() override;
 
+    bool isPasswordList();
+
+    bool readListLine(const QString &line) override;
     bool isPasswordPrompt(const QString &line) override;
     bool isWrongPasswordMsg(const QString &line) override;
     bool isCorruptArchiveMsg(const QString &line) override;
@@ -31,8 +34,31 @@ public:
     bool isFileExistsFileName(const QString &line) override;
 
 private:
+    enum ArchiveType {
+        ArchiveType7z = 0,
+        ArchiveTypeBZip2,
+        ArchiveTypeGZip,
+        ArchiveTypeXz,
+        ArchiveTypeTar,
+        ArchiveTypeZip,
+        ArchiveTypeRar,
+        ArchiveTypeUdf,
+        ArchiveTypeIso
+    } m_archiveType;
+
+    enum ParseState {
+        ParseStateTitle = 0,
+        ParseStateHeader,
+        ParseStateArchiveInformation,
+        ParseStateComment,
+        ParseStateEntryInformation
+    } m_parseState;
+
     void setupCliProperties();
     bool handleLine(const QString &line, WorkType workStatus) override;
+
+private:
+    FileEntry m_fileEntry;
 };
 
 #endif // CLI7ZPLUGIN_H
