@@ -122,13 +122,21 @@ private:
      */
     void emitProgress(double dPercentage);
 
+    /**
+     * @brief passwordUnicode   密码编码转换（中文密码）
+     * @param strPassword   密码
+     * @param iIndex    编码索引
+     * @return
+     */
+    const char *passwordUnicode(const QString &strPassword, int iIndex);
+
 Q_SIGNALS:
     //void error(const QString &message = "", const QString &details = "");
 
 private:
     int m_filesize;             // 压缩的文件数目
     zip_t *m_addarchive = nullptr;        // 压缩操作存储的压缩包
-
+    QStringList m_listCodecs;   // 中文编码格式
 };
 
 #endif // LIBZIPPLUGIN_H

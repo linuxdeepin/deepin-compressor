@@ -31,6 +31,7 @@
 #include <QDirIterator>
 #include <QTimer>
 #include <QDataStream>
+#include <QTextCodec>
 
 //#include <zlib.h>
 
@@ -51,6 +52,8 @@ LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
 {
     qDebug() << "LibzipPlugin";
     m_ePlugintype = PT_Libzip;
+    m_listCodecs.clear();
+    m_listCodecs << "UTF-8" << "GB18030" << "GBK" << "Big5" << "us-ascii";  // 初始化中文编码格式
 }
 
 LibzipPlugin::~LibzipPlugin()
@@ -143,12 +146,20 @@ PluginFinishType LibzipPlugin::extractFiles(const QVector<FileEntry> &files, con
                     emit signalQuery(&query);
                     query.waitForResponse();
 
-
-                    --i;
+                    if (query.responseCancelled()) {
+                        setPassword(QString());
+                        zip_close(archive);
+                        return PF_Cancel;
+                    } else {
+                        setPassword(query.password());
+                        zip_set_default_password(archive, m_strPassword.toUtf8().constData());
+                        i--;
+                    }
+                } else {
+                    zip_close(archive);
+                    return PF_Error;
                 }
 
-                zip_close(archive);
-                return PF_Error;
             }
         }
     } else { // 部分提取
@@ -470,29 +481,32 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     } else {        // 普通文件
 
         // 判断是否有同名文件
-        if (m_bSkipAll) {
-            return ET_NoError;
-        } else {
-            if (!m_bOverwriteAll) {
+        if (file.exists()) {
+            if (m_bSkipAll) {       // 全部跳过
+                return ET_NoError;
+            } else {
+                if (!m_bOverwriteAll) {     // 若不是全部覆盖，单条处理
 
-                OverwriteQuery query(strDestFileName);
+                    OverwriteQuery query(strDestFileName);
 
-                emit signalQuery(&query);
-                query.waitForResponse();
+                    emit signalQuery(&query);
+                    query.waitForResponse();
 
-                if (query.responseCancelled()) {
-                    emit signalCancel();
-                    return ET_UserCancelOpertion;
-                } else if (query.responseSkip()) {
-                    return ET_NoError;
-                } else if (query.responseSkipAll()) {
-                    m_bSkipAll = true;
-                    return ET_NoError;
-                }  else if (query.responseOverwriteAll()) {
-                    m_bOverwriteAll = true;
+                    if (query.responseCancelled()) {
+                        emit signalCancel();
+                        return ET_UserCancelOpertion;
+                    } else if (query.responseSkip()) {
+                        return ET_NoError;
+                    } else if (query.responseSkipAll()) {
+                        m_bSkipAll = true;
+                        return ET_NoError;
+                    }  else if (query.responseOverwriteAll()) {
+                        m_bOverwriteAll = true;
+                    }
                 }
             }
         }
+
 
         // 若文件存在且不是可写权限，重新创建一个文件
         if (file.exists() && !file.isWritable()) {
@@ -502,9 +516,40 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         }
 
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+        // 错误处理
         if (zipFile == nullptr) {
-            // 错误处理
+            int iErr = zip_error_code_zip(zip_get_error(archive));
+            if (iErr == ZIP_ER_WRONGPASSWD) {//密码错误
+
+                // 对密码编码的探测
+                bool bCheckFinished = false;
+                int iCodecIndex = 0;
+                while (zipFile == nullptr && bCheckFinished == false) {
+                    if (iCodecIndex == m_listCodecs.length()) {
+                        bCheckFinished = true;
+                        if (file.exists()) {
+                            file.remove();
+                        }
+
+                        return ET_WrongPassword;
+                    } else {
+                        iCodecIndex++;
+                        zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex));
+                        zip_error_clear(archive);
+                        zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+                        iErr = zip_error_code_zip(zip_get_error(archive));
+                        if (iErr != ZIP_ER_WRONGPASSWD && zipFile != nullptr) {//密码正确
+                            bCheckFinished = true;
+                        }
+                    }
+                }
+            } else if (iErr == ZIP_ER_NOPASSWD) {   // 无密码输入
+                return ET_NeedPassword;
+            } else {
+                return ET_FileOpenError;
+            }
         }
+
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
@@ -549,7 +594,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         zip_fclose(zipFile);
     }
 
-    // 设置文件/文件夹权限
+// 设置文件/文件夹权限
     file.setPermissions(per);
 
     return ET_NoError;
@@ -564,4 +609,42 @@ void LibzipPlugin::emitProgress(double dPercentage)
     }
 
     emit signalprogress(dPercentage * 100);
+}
+
+const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
+{
+    if (m_strArchiveName.endsWith(".zip")) {
+        // QStringList listCodecName = QStringList() << "UTF-8" << "GB18030" << "GBK" <<"Big5"<< "us-ascii";
+        int nCount = strPassword.count();
+        bool b = false;
+
+        // 检测密码是否含有中文
+        for (int i = 0 ; i < nCount ; i++) {
+            QChar cha = strPassword.at(i);
+            ushort uni = cha.unicode();
+            if (uni >= 0x4E00 && uni <= 0x9FA5) {   // 判断是否是中文
+                b = true;
+                break;
+            }
+        }
+
+        // chinese
+        if (b) {
+            QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
+            QTextCodec *gbk = QTextCodec::codecForName(m_listCodecs[iIndex].toUtf8().data());
+            // QTextCodec *gbk = QTextCodec::codecForName("UTF-8");
+
+            //utf8 -> 所需编码
+            //1. utf8 -> unicode
+            QString strUnicode = utf8->toUnicode(strPassword.toUtf8().data());
+            //2. unicode -> 所需编码, 得到QByteArray
+            QByteArray gb_bytes = gbk->fromUnicode(strUnicode);
+            return gb_bytes.data(); //获取其char *
+        } else {
+            return strPassword.toUtf8().constData();
+        }
+    } else {
+        return strPassword.toUtf8().constData();
+    }
+
 }

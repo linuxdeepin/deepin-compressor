@@ -51,6 +51,11 @@ void ReadOnlyArchiveInterface::getArchiveData(ArchiveData &stArchiveData)
     stArchiveData = m_stArchiveData;
 }
 
+void ReadOnlyArchiveInterface::setPassword(const QString &strPassword)
+{
+    m_strPassword = strPassword;
+}
+
 void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
 {
     m_bWaitForFinished = value;

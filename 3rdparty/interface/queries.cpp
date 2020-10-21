@@ -311,7 +311,7 @@ void PasswordNeededQuery::execute()
     pFileNameLbl->setForegroundRole(DPalette::WindowText);
     pFileNameLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::DemiBold);
-    QString archiveFullPath = m_data[QStringLiteral("archiveFilename")].toString();
+    QString archiveFullPath = m_data[QStringLiteral("fileName")].toString();
     QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
     pFileNameLbl->setText(fileName);
     pFileNameLbl->setAlignment(Qt::AlignCenter);

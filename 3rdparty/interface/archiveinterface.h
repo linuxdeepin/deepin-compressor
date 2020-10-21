@@ -80,6 +80,12 @@ public:
      */
     void getArchiveData(ArchiveData &stArchiveData);
 
+    /**
+     * @brief setPassword   设置解压密码
+     * @param strPassword   解压密码
+     */
+    void setPassword(const QString &strPassword);
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.
@@ -140,6 +146,7 @@ protected:
     bool m_bSkipAll = false;             // 是否全部跳过
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型
+    QString m_strPassword;
 };
 
 // 可读可写（可用来压缩、查看、解压等）
