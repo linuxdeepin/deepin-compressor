@@ -29,6 +29,7 @@
 DWIDGET_USE_NAMESPACE
 
 class DataModel;
+class TreeHeaderView;
 
 // treeview代理，用来设置高度和去掉部分样式
 class StyleTreeViewDelegate : public QStyledItemDelegate
@@ -54,6 +55,11 @@ public:
     explicit DataTreeView(QWidget *parent = nullptr);
     ~DataTreeView() override;
 
+    /**
+     * @brief resetLevel    重置根节点
+     */
+    void resetLevel();
+
 protected:
     void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const override;
     void focusInEvent(QFocusEvent *event) override;
@@ -73,7 +79,14 @@ protected:
      */
     void dropEvent(QDropEvent *) override;
 
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+
+    /**
+     * @brief setPreLblVisible  设置返回上一级是否可见
+     * @param bVisible          是否可见标志
+     * @param strPat            上一级路径
+     */
+    void setPreLblVisible(bool bVisible, const QString &strPat = "");
 
 private:
     /**
@@ -99,12 +112,20 @@ Q_SIGNALS:
      */
     void signalDragFiles(const QStringList &listFiles);
 
+protected Q_SLOTS:
+    /**
+     * @brief slotPreClicked    返回上一级
+     */
+    virtual void slotPreClicked() = 0;
+
 protected:
 
     DataModel *m_pModel;
 
     int m_iLevel = 0;       // 目录层级
     QString m_strCurrentPath;   // 当前目录
+
+    TreeHeaderView *m_pHeaderView;
 
 private:
     Qt::FocusReason m_reson;

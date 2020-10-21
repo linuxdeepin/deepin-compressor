@@ -146,6 +146,8 @@ void DataModel::sort(int column, Qt::SortOrder order)
         return;
     }
 
+    qDebug() << "更新排序";
+
     beginResetModel();//在开始添加此函数
     qSort(m_listEntry.begin(), m_listEntry.end(), [&](FileEntry entrya, FileEntry entryb) -> bool {
         //文件与目录分开排序,目录始终在前

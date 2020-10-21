@@ -149,6 +149,12 @@ DataTreeView::~DataTreeView()
 
 }
 
+void DataTreeView::resetLevel()
+{
+    m_iLevel = 0;
+    setPreLblVisible(false);
+}
+
 void DataTreeView::initUI()
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -158,16 +164,15 @@ void DataTreeView::initUI()
     setFrameShape(QFrame::NoFrame);     // 设置无边框
     resizeColumnWidth();
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setSortingEnabled(true);
 
     // 设置样式代理
     StyleTreeViewDelegate *pDelegate = new StyleTreeViewDelegate;
     setItemDelegate(pDelegate);
 
     // 设置表头
-    TreeHeaderView *pHeaderView = new TreeHeaderView(Qt::Horizontal, this);
-    pHeaderView->setStretchLastSection(true);
-    setHeader(pHeaderView);
+    m_pHeaderView = new TreeHeaderView(Qt::Horizontal, this);
+    m_pHeaderView->setStretchLastSection(true);
+    setHeader(m_pHeaderView);
 
     m_pModel = new DataModel(this);
     setModel(m_pModel);
@@ -178,7 +183,7 @@ void DataTreeView::initUI()
 
 void DataTreeView::initConnections()
 {
-
+    connect(m_pHeaderView->preLbl(), &PreviousLabel::doubleClickedSignal, this, &DataTreeView::slotPreClicked);
 }
 
 void DataTreeView::resizeColumnWidth()
@@ -312,4 +317,10 @@ void DataTreeView::dropEvent(QDropEvent *e)
 void DataTreeView::resizeEvent(QResizeEvent *event)
 {
     resizeColumnWidth();
+}
+
+void DataTreeView::setPreLblVisible(bool bVisible, const QString &strPath)
+{
+    m_pHeaderView->preLbl()->setPrePath(strPath);
+    m_pHeaderView->setPreLblVisible(bVisible);
 }

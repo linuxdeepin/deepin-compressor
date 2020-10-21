@@ -89,6 +89,13 @@ private:
      */
     void handleLevelChanged();
 
+    /**
+     * @brief getPrePathByLevel    根据层级获取父路径（相对）
+     * @param strPath              传入的绝对路径
+     * @return
+     */
+    QString getPrePathByLevel(const QString &strPath);
+
 signals:
     /**
      * @brief signalLevelChanged    目录层级变化
@@ -102,11 +109,6 @@ private slots:
      * @param pos   右键位置
      */
     void slotShowRightMenu(const QPoint &pos);
-
-    /**
-     * @brief slotBackToPre     返回到上一级
-     */
-    void slotBackToPre();
 
     /**
      * @brief slotDeleteFile    删除待压缩文件
@@ -123,6 +125,13 @@ private slots:
      * @param listFiles         外部拖拽文件
      */
     void slotDragFiles(const QStringList &listFiles);
+
+
+protected Q_SLOTS:
+    /**
+     * @brief slotPreClicked    返回上一级
+     */
+    virtual void slotPreClicked() override;
 
 private:
     QStringList m_listCompressFiles;    // 待压缩的文件

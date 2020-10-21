@@ -32,6 +32,7 @@ DWIDGET_USE_NAMESPACE
 // 解压列表
 class UnCompressView : public DataTreeView
 {
+    Q_OBJECT
 public:
     explicit UnCompressView(QWidget *parent = nullptr);
     ~UnCompressView() override;
@@ -66,6 +67,12 @@ private slots:
      * @param listFiles         外部拖拽文件
      */
     void slotDragFiles(const QStringList &listFiles);
+
+protected Q_SLOTS:
+    /**
+     * @brief slotPreClicked    返回上一级
+     */
+    virtual void slotPreClicked() override;
 
 private:
     //QMap<QString, FileEntry> m_mapEntry;        // 总数据

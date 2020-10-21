@@ -25,6 +25,7 @@
 #include "popupdialog.h"
 #include "mimetypes.h"
 #include "mimetypedisplaymanager.h"
+#include "treeheaderview.h"
 
 #include <DMenu>
 
@@ -109,7 +110,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
 
     resizeColumnWidth();
 
-
+    sortByColumn(0);
 }
 
 QStringList CompressView::getCompressFiles()
@@ -149,16 +150,22 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
 
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
+
+            if (m_iLevel == 0) {
+                setPreLblVisible(true, entry.strFullPath);
+            }
+
             m_iLevel++;
             m_strCurrentPath = entry.strFullPath;
-            qDebug() << "当前目录" << m_strCurrentPath;
+            m_pHeaderView->preLbl()->setPrePath(getPrePathByLevel(m_strCurrentPath));
             m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
             m_pModel->refreshFileEntry(getDirFiles(m_strCurrentPath));
 
             handleLevelChanged();
 
             resizeColumnWidth();
-            header()->setSortIndicator(0, Qt::AscendingOrder);
+            m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
+            sortByColumn(0);
 
         } else {    // 如果是文件，选择默认方式打开
 
@@ -204,6 +211,26 @@ void CompressView::handleLevelChanged()
     emit signalLevelChanged(bRoot);
 }
 
+QString CompressView::getPrePathByLevel(const QString &strPath)
+{
+    if (m_iLevel == 0) {
+        return "";
+    }
+
+    QString strResult = strPath;
+    QString strTempPath = strPath;
+    int iIndex = 0;
+
+    for (int i = 0; i < m_iLevel; ++i) {
+        iIndex = strTempPath.lastIndexOf(QDir::separator());
+        strTempPath = strTempPath.left(iIndex);
+    }
+    strTempPath += QDir::separator();
+
+
+    return strResult.remove(strTempPath);
+}
+
 void CompressView::slotShowRightMenu(const QPoint &pos)
 {
     QModelIndex index = indexAt(pos);
@@ -215,43 +242,11 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
         menu.addAction(tr("Open"));
         menu.addAction(tr("Delete"), this, &CompressView::slotDeleteFile);
 
-        if (m_iLevel > 0) {
-            QString strTemp;
-            if (m_iLevel == 1) {
-                strTemp = tr("Return") + "根目录";
-            } else {
-                strTemp = tr("Return") + "..";
-            }
-
-            menu.addAction(strTemp, this, &CompressView::slotBackToPre);
-        }
-
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
 
         menu.exec(QCursor::pos());
     }
-}
-
-void CompressView::slotBackToPre()
-{
-    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
-
-    m_iLevel--;
-    if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
-        m_strCurrentPath = "";
-        m_pModel->refreshFileEntry(m_listEntry);
-    } else {        // 否则传递上级目录
-        m_strCurrentPath += "/..";
-        m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
-        m_pModel->refreshFileEntry(getDirFiles(m_strCurrentPath));
-    }
-    qDebug() << "返回到上一级：" << m_iLevel << " 目录层级：" << m_strCurrentPath;
-
-    resizeColumnWidth();
-    header()->setSortIndicator(0, Qt::AscendingOrder);
-
-    handleLevelChanged();
 }
 
 void CompressView::slotDeleteFile()
@@ -285,7 +280,6 @@ void CompressView::slotDeleteFile()
                     FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
                     if (QFileInfo(entry.strFullPath).exists()) {
                         QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + entry.strFileName;
-                        qDebug() << "移除本地文件：" << entry.strFullPath << " 到回收站：" << newname << " 结果：" << QFile::rename(entry.strFullPath, newname);
                     }
                 }
             }
@@ -304,4 +298,29 @@ void CompressView::slotDirChanged()
 void CompressView::slotDragFiles(const QStringList &listFiles)
 {
     addCompressFiles(listFiles);
+}
+
+void CompressView::slotPreClicked()
+{
+    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
+
+    m_iLevel--;
+    if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
+        setPreLblVisible(false);
+        m_strCurrentPath = "";
+        m_pModel->refreshFileEntry(m_listEntry);
+    } else {        // 否则传递上级目录
+        int iIndex = m_strCurrentPath.lastIndexOf(QDir::separator());
+        m_strCurrentPath = m_strCurrentPath.left(iIndex);
+        m_pHeaderView->preLbl()->setPrePath(getPrePathByLevel(m_strCurrentPath));
+        m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
+        m_pModel->refreshFileEntry(getDirFiles(m_strCurrentPath));
+    }
+
+    resizeColumnWidth();
+
+    handleLevelChanged();
+
+    m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
+    sortByColumn(0);
 }

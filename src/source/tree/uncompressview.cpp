@@ -86,3 +86,8 @@ void UnCompressView::slotDragFiles(const QStringList &listFiles)
 {
 
 }
+
+void UnCompressView::slotPreClicked()
+{
+
+}
