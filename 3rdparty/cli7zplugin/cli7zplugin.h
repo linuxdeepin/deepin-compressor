@@ -23,8 +23,6 @@ public:
     explicit Cli7zPlugin(QObject *parent, const QVariantList &args);
     ~Cli7zPlugin() override;
 
-    bool isPasswordList();
-
     bool readListLine(const QString &line) override;
     bool isPasswordPrompt(const QString &line) override;
     bool isWrongPasswordMsg(const QString &line) override;

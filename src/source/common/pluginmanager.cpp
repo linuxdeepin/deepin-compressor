@@ -248,7 +248,7 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 {
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
-    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin *p1, Plugin *p2) {
+    std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
         return p1->priority() > p2->priority();
     });
 

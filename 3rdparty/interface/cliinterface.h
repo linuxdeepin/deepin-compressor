@@ -19,7 +19,13 @@ public:
     PluginFinishType testArchive() override;
     PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
 
+    /**
+     * @brief readListLine  解析加载压缩包的命令输出
+     * @param line 待解析内容
+     * @return
+     */
     virtual bool readListLine(const QString &line) = 0;
+
     virtual bool isPasswordPrompt(const QString &line) = 0;
     virtual bool isWrongPasswordMsg(const QString &line) = 0;
     virtual bool isCorruptArchiveMsg(const QString &line) = 0;
@@ -45,16 +51,21 @@ protected:
     bool runProcess(const QString &programName, const QStringList &arguments);
 
     /**
-     * Handles the given @p line.
-     * @return True if the line is ok. False if the line contains/triggers a "fatal" error
-     * or a canceled user query. If false is returned, the caller is supposed to call killProcess().
+     * @brief handleLine  处理命令行输出
+     * @param line  行内容
+     * @param workStatus 当前进程工作类型
+     * @return
      */
     virtual bool handleLine(const QString &line, WorkType workStatus) = 0;
 
+    /**
+     * @brief deleteProcess 删除进程
+     */
     void deleteProcess();
 
     /**
-     * Kill the running process. The finished signal is emitted according to @p emitFinished.
+     * @brief killProcess  结束进程
+     * @param emitFinished
      */
     void killProcess(bool emitFinished = true);
 
@@ -65,17 +76,21 @@ protected slots:
      */
     virtual void readStdout(bool handleAll = false);
 
+    /**
+     * @brief processFinished  进程结束
+     * @param exitCode   进程退出码
+     * @param exitStatus  结束状态
+     */
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 protected:
-    CliProperties *m_cliProps = nullptr;
-    KProcess *m_process = nullptr;
+    CliProperties *m_cliProps = nullptr;  // 命令属性
+    KProcess *m_process = nullptr;  // 工作进程
 
 private:
-    QByteArray m_stdOutData;
-    int m_exitCode = 0;
-    WorkType m_workStatus = WT_List;
-    QString m_extractDestionPath;
+    QByteArray m_stdOutData;  // 存储命令行输出数据
+//    int m_exitCode = 0;
+    WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
 };
 
 #endif // CLIINTERFACE_H

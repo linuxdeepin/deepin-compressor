@@ -43,7 +43,6 @@ CliInterface::~CliInterface()
 
 PluginFinishType CliInterface::list()
 {
-
     m_workStatus = WT_List;
 
     bool ret = false;
@@ -51,16 +50,13 @@ PluginFinishType CliInterface::list()
     ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, ""));
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::testArchive()
 {
-
     m_workStatus = WT_Add;
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
@@ -78,7 +74,6 @@ PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, con
 
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
@@ -113,38 +108,28 @@ PluginFinishType CliInterface::addFiles(const QVector<FileEntry> &files, const C
 
 PluginFinishType CliInterface::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
-
-    m_workStatus = WT_Add;
-
+//    m_workStatus = WT_Add;
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
 {
-
-    m_workStatus = WT_Add;
+//    m_workStatus = WT_Add;
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::deleteFiles(const QVector<FileEntry> &files)
 {
-
-    m_workStatus = WT_Add;
-
+//    m_workStatus = WT_Add;
 
     return PT_Nomral;
-
 }
 
 PluginFinishType CliInterface::addComment(const QString &comment)
 {
-
-    m_workStatus = WT_Add;
-
+//    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
@@ -230,7 +215,7 @@ void CliInterface::readStdout(bool handleAll)
 
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    m_exitCode = exitCode;
+//    m_exitCode = exitCode;
     qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();

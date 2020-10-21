@@ -38,7 +38,9 @@ Cli7zPluginFactory::~Cli7zPluginFactory()
 Cli7zPlugin::Cli7zPlugin(QObject *parent, const QVariantList &args)
     : CliInterface(parent, args)
 {
+    m_archiveType = ArchiveType7z;
     m_parseState = ParseStateTitle;
+
     setupCliProperties();
 }
 
@@ -47,24 +49,11 @@ Cli7zPlugin::~Cli7zPlugin()
 
 }
 
-bool Cli7zPlugin::isPasswordList()
-{
-    QStringList programLst = m_process->program();
-
-    foreach (auto str, programLst) {
-        if (str.startsWith("-p")) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool Cli7zPlugin::readListLine(const QString &line)
 {
-    static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+
-    static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04
-    static const QLatin1String entryInfoDelimiter("----------");
+    static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+  分隔符后面是压缩包信息
+    static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04 分隔符后面是压缩包信息
+    static const QLatin1String entryInfoDelimiter("----------"); // 分隔符后面是内部压缩文件信息
 
     const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
     QRegularExpressionMatch matchVersion;
@@ -72,25 +61,21 @@ bool Cli7zPlugin::readListLine(const QString &line)
     switch (m_parseState) {
     case ParseStateTitle:
         matchVersion = rxVersionLine.match(line);
-        if (matchVersion.hasMatch()) {
+        if (matchVersion.hasMatch()) {  // 7z信息读取完，开始读压缩包相关信息
             m_parseState = ParseStateHeader;
-            const QString p7zipVersion = matchVersion.captured(1);
+//            const QString p7zipVersion = matchVersion.captured(1);
         }
         break;
     case ParseStateHeader:
-        if (line.startsWith(QLatin1String("Listing archive:"))) {
-
-        } else if ((line == archiveInfoDelimiter1) || (line == archiveInfoDelimiter2)) {  // 开始读压缩包整体信息
-            m_stArchiveData.qComressSize = line.mid(14).trimmed().toInt();
+        if ((line == archiveInfoDelimiter1) || (line == archiveInfoDelimiter2)) {  // 开始读压缩包整体信息
+            m_stArchiveData.qComressSize = line.mid(14).trimmed().toInt(); // 压缩包大小
             m_parseState = ParseStateArchiveInformation;
-        } else if (line.contains(QLatin1String("Error: "))) {
-
         }
         break;
     case ParseStateArchiveInformation:
-        if (line == entryInfoDelimiter) {
+        if (line == entryInfoDelimiter) {  // 分隔压缩包信息和内部压缩文件信息
             m_parseState = ParseStateEntryInformation;
-        } else if (line.startsWith(QLatin1String("Type = "))) {
+        } else if (line.startsWith(QLatin1String("Type = "))) {  // 获取压缩包格式
             const QString type = line.mid(7).trimmed();
             if (type == QLatin1String("7z")) {
                 m_archiveType = ArchiveType7z;
@@ -118,35 +103,29 @@ bool Cli7zPlugin::readListLine(const QString &line)
             }
         }
         break;
-    case ParseStateComment:
-        if (line == entryInfoDelimiter) {
-            m_parseState = ParseStateEntryInformation;
-        }
-        break;
-    case ParseStateEntryInformation:  // 读压缩包内具体文件信息
+    case ParseStateEntryInformation:  // 读压缩包内文件具体信息
         if (line.startsWith(QLatin1String("Path = "))) {
             const QString entryFilename = QDir::fromNativeSeparators(line.mid(7).trimmed());
             m_fileEntry.strFullPath = entryFilename;   // 文件在压缩包内绝对路径路径
+
             const QStringList pieces = m_fileEntry.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
             m_fileEntry.strFileName = pieces.isEmpty() ? QString() : pieces.last();   // 文件名称
         } else if (line.startsWith(QLatin1String("Size = "))) {
             m_fileEntry.qSize = line.mid(7).trimmed().toInt();  // 文件实际大小
-            m_stArchiveData.qSize += line.mid(7).trimmed().toInt();  // 累加获取压缩包内所有文件总大小
-        } else if (line.startsWith(QLatin1String("Modified = "))) {
-            // 文件最后修改时间
+            m_stArchiveData.qSize += m_fileEntry.qSize;  // 累加获取压缩包内所有文件总大小
+        } else if (line.startsWith(QLatin1String("Modified = "))) {  // 文件最后修改时间
             m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
         } else if (line.startsWith(QLatin1String("Attributes = "))) {  // 文件权限
             const QString attributes = line.mid(13).trimmed();
-            if (attributes.contains(QLatin1Char('D'))) {  // D开头为文件夹
+            if (attributes.startsWith(QLatin1Char('D'))) {  // D开头为文件夹
                 m_fileEntry.isDirectory = true;
-                m_fileEntry.qSize = 0;
-                if (!m_fileEntry.strFullPath.endsWith("/")) {  // 如果是文件夹且路径最后没有分隔符，手动添加
-                    m_fileEntry.strFullPath = m_fileEntry.strFullPath + "/";
+                if (!m_fileEntry.strFullPath.endsWith(QLatin1Char('/'))) {  // 如果是文件夹且路径最后没有分隔符，手动添加
+                    m_fileEntry.strFullPath = m_fileEntry.strFullPath + QLatin1Char('/');
                 }
-            } else {
+            } else {  // 不是文件夹
                 m_fileEntry.isDirectory = false;
             }
-        } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {  // 单文件最后一行信息
+        } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {  // 文件的最后一行信息
             QString name = m_fileEntry.strFullPath;
             // 获取第一层数据
             if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
@@ -155,6 +134,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
 
             // 存储总数据
             m_stArchiveData.mapFileEntry[name] = m_fileEntry;
+
+            // clear m_fileEntry
+            m_fileEntry.strFullPath = "";
+            m_fileEntry.strFileName = "";
+            m_fileEntry.qSize = 0;
+            m_fileEntry.isDirectory = false;
+            m_fileEntry.uLastModifiedTime = 0;
         }
         break;
     }
@@ -245,8 +231,6 @@ bool Cli7zPlugin::isFileExistsFileName(const QString &line)
 
 bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 {
-    qDebug() << line;
-
     if (workStatus == WT_Add || workStatus == WT_Extract) {  // 压缩、解压进度
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
