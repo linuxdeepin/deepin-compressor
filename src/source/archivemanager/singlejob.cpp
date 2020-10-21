@@ -23,6 +23,7 @@
 #include <QThread>
 #include <QDebug>
 
+
 // 工作线程
 void SingleJobThread::run()
 {
@@ -35,7 +36,7 @@ SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     , m_pInterface(pInterface)
     , d(new SingleJobThread(this))
 {
-    initConnections();
+
 }
 
 SingleJob::~SingleJob()
@@ -63,9 +64,10 @@ void SingleJob::start()
 
 void SingleJob::initConnections()
 {
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
 }
 
 void SingleJob::slotFinished(PluginFinishType eType)

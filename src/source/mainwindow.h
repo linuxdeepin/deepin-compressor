@@ -23,6 +23,7 @@
 #define MAINWINDOW_H
 
 #include "uistruct.h"
+#include "queries.h"
 
 #include <DMainWindow>
 
@@ -40,6 +41,7 @@ class FailurePage;
 class SettingDialog;
 
 class ArchiveManager;
+
 
 DWIDGET_USE_NAMESPACE
 
@@ -145,6 +147,12 @@ private Q_SLOTS:
      * @param strName       当前文件名
      */
     void slotReceiveCurFileName(const QString &strName);
+
+    /**
+     * @brief slotQuery   发送询问信号
+     * @param query 询问类型
+     */
+    void slotQuery(Query *query);
 
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板

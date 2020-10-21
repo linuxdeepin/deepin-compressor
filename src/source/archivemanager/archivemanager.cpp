@@ -115,6 +115,8 @@ void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QStri
     connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
     connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
     connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+
 
     pExtractJob->start();
     m_pArchiveJob = pExtractJob;

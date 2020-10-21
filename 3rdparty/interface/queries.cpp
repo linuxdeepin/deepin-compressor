@@ -193,6 +193,10 @@ void OverwriteQuery::execute()
         setWidgetType(pApplyAllCkb, DPalette::TextLively, 0.7);
     }
 
+    // 按钮
+    dialog->addButton(QObject::tr("Skip"));
+    dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
+
     // 布局
     QHBoxLayout *checkLayout = new QHBoxLayout;
     checkLayout->addStretch();

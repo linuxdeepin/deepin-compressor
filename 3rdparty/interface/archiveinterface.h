@@ -114,7 +114,6 @@ Q_SIGNALS:
      */
     void signalCurFileName(const QString &filename);
 
-
     /**
      * @brief signalQuery   发送询问信号
      * @param query 询问类型
@@ -139,6 +138,8 @@ protected:
     ArchiveData m_stArchiveData;    // 压缩包数据
     bool m_bOverwriteAll = false;        //是否全部覆盖
     bool m_bSkipAll = false;             // 是否全部跳过
+
+    ErrorType m_eErrorType = ET_NoError;    // 错误类型
 };
 
 // 可读可写（可用来压缩、查看、解压等）

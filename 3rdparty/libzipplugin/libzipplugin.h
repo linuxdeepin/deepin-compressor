@@ -105,7 +105,16 @@ private:
      */
     void statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry &entry);
 
-    bool extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize);
+    /**
+     * @brief extractEntry  解压单文件
+     * @param archive       压缩包
+     * @param index         文件索引
+     * @param options       解压参数
+     * @param qExtractSize  已解压的大小\
+     * @param strFileName   当前解压的文件名
+     * @return              错误类型
+     */
+    ErrorType extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName);
 
     /**
      * @brief emitProgress  发送进度信号

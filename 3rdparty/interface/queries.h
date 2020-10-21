@@ -77,6 +77,11 @@ class OverwriteQuery : public Query
 {
     Q_OBJECT
 public:
+    /**
+     * @brief OverwriteQuery
+     * @param filename      文件名（包含路径）
+     * @param parent
+     */
     explicit OverwriteQuery(const QString &filename, QObject *parent = nullptr);
     ~OverwriteQuery() override;
 
@@ -141,7 +146,7 @@ class PasswordNeededQuery : public Query
 public:
     /**
      * @brief PasswordNeededQuery
-     * @param strFileName       文件名（不含路径）
+     * @param strFileName       文件名（含路径）
      * @param parent
      */
     explicit PasswordNeededQuery(const QString &strFileName, QObject *parent = nullptr);
@@ -164,6 +169,7 @@ public:
      */
     QString password();
 };
+
 
 
 #endif // QUERIES_H

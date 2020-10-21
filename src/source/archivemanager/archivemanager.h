@@ -25,6 +25,7 @@
 #include "archivejob.h"
 #include "archiveinterface.h"
 #include "plugin.h"
+#include "queries.h"
 
 #include <QObject>
 #include <QMimeType>
@@ -75,18 +76,6 @@ private:
 
 Q_SIGNALS:
     /**
-     * @brief signalPercent     进度信号
-     * @param iPercent          百分比
-     */
-    void signalPercent(int iPercent);
-
-    /**
-     * @brief signalCurrentFileName     发送当前正在操作的文件名
-     * @param strFileName               文件名
-     */
-    void signalCurrentFileName(const QString &strFileName);
-
-    /**
      * @brief signalError       错误信号
      * @param eErrorType        错误类型
      */
@@ -108,6 +97,12 @@ Q_SIGNALS:
      * @param strName   当前文件名
      */
     void signalCurFileName(const QString &strName);
+
+    /**
+     * @brief signalQuery   发送询问信号
+     * @param query 询问类型
+     */
+    void signalQuery(Query *query);
 
 private Q_SLOTS:
     /**

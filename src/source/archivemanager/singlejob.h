@@ -24,6 +24,7 @@
 #include "archivejob.h"
 #include "archiveinterface.h"
 #include "commonstruct.h"
+#include "queries.h"
 
 #include <QThread>
 #include <QElapsedTimer>
@@ -82,6 +83,9 @@ protected Q_SLOTS:
      * @param eType 结束类型
      */
     void slotFinished(PluginFinishType eType);
+
+//Q_SIGNALS:
+
 
 protected:
     ReadOnlyArchiveInterface *m_pInterface;

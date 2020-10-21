@@ -123,8 +123,30 @@ PluginFinishType LibzipPlugin::extractFiles(const QVector<FileEntry> &files, con
                 break;
             }
 
+            QString strFileName;
+
             // 解压单个文件
-            if (!extractEntry(archive, i, options, qExtractSize)) {
+            m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
+            qDebug() << strFileName;
+
+            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+                continue;
+            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+                zip_close(archive);
+                return PF_Cancel;
+            } else {    // 处理错误
+
+                // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
+                if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
+
+                    PasswordNeededQuery query(strFileName);
+                    emit signalQuery(&query);
+                    query.waitForResponse();
+
+
+                    --i;
+                }
+
                 zip_close(archive);
                 return PF_Error;
             }
@@ -413,14 +435,14 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
 
 }
 
-bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize)
+ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName)
 {
     zip_stat_t statBuffer;
-    if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer)) {
-        return false;
+    if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer) != 0) {
+        return ET_FileReadError;
     }
 
-    QString strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
+    strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
     emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
     bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
 
@@ -434,6 +456,8 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
     if (zip_file_get_external_attributes(archive, zip_uint64_t(index), ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
         emit error(("Failed to read metadata for entry: %1"));
     }
+
+    // 从压缩包中获取文件权限
     mode_t value = attributes >> 16;
     QFileDevice::Permissions per = getPermissions(value);
 
@@ -447,35 +471,35 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
 
         // 判断是否有同名文件
         if (m_bSkipAll) {
-            return true;
+            return ET_NoError;
         } else {
             if (!m_bOverwriteAll) {
 
-//               OverwriteQuery query(QFileInfo(strDestFileName).fileName());
-//               emit signalQuery(&query);
-//               query.waitForResponse();
+                OverwriteQuery query(strDestFileName);
 
-//                if (query.responseCancelled()) {
-//                    emit signalCancel();
-//                    return false;
-//                } else if (query.responseSkip()) {
-//                    return enum_extractEntryStatus::SUCCESS;
-//                } else if (query.responseAutoSkip()) {
-//                    m_skipAll = true;
-//                    return enum_extractEntryStatus::SUCCESS;
-//                } else if (query.responseRename()) {
-//                    const QString newName(query.newFilename());
-//                    destination = QFileInfo(destination).path() + QDir::separator() + QFileInfo(newName).fileName();
-//                    renamedEntry = QFileInfo(entry).path() + QDir::separator() + QFileInfo(newName).fileName();
-//                } else if (query.responseOverwriteAll()) {
-//                    m_overwriteAll = true;
-//                    break;
-//                } else if (query.responseOverwrite()) {
-//                    break;
-//                }
+                emit signalQuery(&query);
+                query.waitForResponse();
+
+                if (query.responseCancelled()) {
+                    emit signalCancel();
+                    return ET_UserCancelOpertion;
+                } else if (query.responseSkip()) {
+                    return ET_NoError;
+                } else if (query.responseSkipAll()) {
+                    m_bSkipAll = true;
+                    return ET_NoError;
+                }  else if (query.responseOverwriteAll()) {
+                    m_bOverwriteAll = true;
+                }
             }
         }
 
+        // 若文件存在且不是可写权限，重新创建一个文件
+        if (file.exists() && !file.isWritable()) {
+            file.remove();
+            file.setFileName(strDestFileName);
+            file.setPermissions(QFileDevice::WriteUser);
+        }
 
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
         if (zipFile == nullptr) {
@@ -484,7 +508,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
-            return false;
+            return ET_FileOpenError;
         }
 
         // 写文件
@@ -500,13 +524,13 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
 
                 file.close();
                 zip_fclose(zipFile);
-                return false;
+                return ET_FileWriteError;
             }
 
             if (out.writeRawData(buf, int(readBytes)) != readBytes) {
                 file.close();
                 zip_fclose(zipFile);
-                return false;
+                return ET_FileWriteError;
             }
 
             sum += readBytes;
@@ -528,7 +552,7 @@ bool LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Extract
     // 设置文件/文件夹权限
     file.setPermissions(per);
 
-    return true;
+    return ET_NoError;
 }
 
 void LibzipPlugin::emitProgress(double dPercentage)

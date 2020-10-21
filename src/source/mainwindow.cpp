@@ -152,6 +152,7 @@ void MainWindow::initConnections()
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(m_pArchiveManager, &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
+    connect(m_pArchiveManager, &ArchiveManager::signalQuery, this, &MainWindow::slotQuery, Qt::ConnectionType::DirectConnection);
 }
 
 void MainWindow::refreshPage()
@@ -526,4 +527,11 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
     m_pProgressPage->setCurrentFileName(strName);
+}
+
+void MainWindow::slotQuery(Query *query)
+{
+    qDebug() << " query->execute()";
+    query->setParent(this);
+    query->execute();
 }

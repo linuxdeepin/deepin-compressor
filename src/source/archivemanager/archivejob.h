@@ -24,6 +24,8 @@
 #include <QObject>
 #include "commonstruct.h"
 
+class Query;
+
 // 操作基类
 class ArchiveJob : public QObject
 {
@@ -63,6 +65,12 @@ Q_SIGNALS:
      * @param strName   当前文件名
      */
     void signalCurFileName(const QString &strName);
+
+    /**
+     * @brief signalQuery   发送询问信号
+     * @param query 询问类型
+     */
+    void signalQuery(Query *query);
 
 public:
     JobType m_eJobType;     // 操作类型
