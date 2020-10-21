@@ -5,6 +5,24 @@
 #include "cliproperties.h"
 #include "kprocess.h"
 
+enum WorkType {
+    WT_List,
+    WT_Extract,
+    WT_Add,
+    WT_Delete,
+    WT_Move,
+    WT_Copy,
+    WT_Comment,
+    WT_Test
+};
+
+enum ParseState {
+    ParseStateTitle = 0,
+    ParseStateHeader,
+    ParseStateArchiveInformation,
+    ParseStateEntryInformation
+};
+
 class CliInterface : public ReadWriteArchiveInterface
 {
     Q_OBJECT
@@ -18,13 +36,6 @@ public:
     PluginFinishType list() override;
     PluginFinishType testArchive() override;
     PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
-
-    /**
-     * @brief readListLine  解析加载压缩包的命令输出
-     * @param line 待解析内容
-     * @return
-     */
-    virtual bool readListLine(const QString &line) = 0;
 
     virtual bool isPasswordPrompt(const QString &line) = 0;
     virtual bool isWrongPasswordMsg(const QString &line) = 0;
@@ -42,6 +53,12 @@ public:
     PluginFinishType addComment(const QString &comment) override;
 
 protected:
+    /**
+     * @brief setListEmptyLines  需要解析空的命令行输出(rar格式含有注释的情况)
+     * @param emptyLines  默认不需要解析
+     */
+    void setListEmptyLines(bool emptyLines = false);
+
     /**
      * @brief runProcess  执行命令
      * @param programName  命令
@@ -88,6 +105,7 @@ protected:
     KProcess *m_process = nullptr;  // 工作进程
 
 private:
+    bool m_listEmptyLines = false;
     QByteArray m_stdOutData;  // 存储命令行输出数据
 //    int m_exitCode = 0;
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）

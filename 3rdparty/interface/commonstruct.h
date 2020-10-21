@@ -71,6 +71,15 @@ struct FileEntry {
         iIndex = -1;
     }
 
+    void reset()
+    {
+//        strFullPath = "";
+//        strFileName = "";
+        qSize = 0;
+        isDirectory = false;
+        uLastModifiedTime = 0;
+    }
+
     QString strFullPath;    // 文件名（含绝对路径：/../../xx.xx）
     QString strFileName;        // 文件名（不含绝对路径：xx.xx）
     //QString strType;        // 文件类型

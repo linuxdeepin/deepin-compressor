@@ -23,7 +23,7 @@ public:
     explicit Cli7zPlugin(QObject *parent, const QVariantList &args);
     ~Cli7zPlugin() override;
 
-    bool readListLine(const QString &line) override;
+
     bool isPasswordPrompt(const QString &line) override;
     bool isWrongPasswordMsg(const QString &line) override;
     bool isCorruptArchiveMsg(const QString &line) override;
@@ -44,18 +44,13 @@ private:
         ArchiveTypeIso
     } m_archiveType;
 
-    enum ParseState {
-        ParseStateTitle = 0,
-        ParseStateHeader,
-        ParseStateArchiveInformation,
-        ParseStateComment,
-        ParseStateEntryInformation
-    } m_parseState;
-
     void setupCliProperties();
+    bool readListLine(const QString &line)/* override*/;
     bool handleLine(const QString &line, WorkType workStatus) override;
 
+
 private:
+    ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;
 };
 

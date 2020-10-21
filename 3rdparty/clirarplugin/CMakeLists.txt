@@ -15,7 +15,7 @@ set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS "-std=c++11")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
- 
+
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
@@ -40,17 +40,17 @@ pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
 
-pkg_search_module(DtkGui REQUIRED dtkgui)	
+pkg_search_module(DtkGui REQUIRED dtkgui)
 include_directories(${DtkGui_INCLUDE_DIRS})
 
 
-set(LIBS_INCLUDE_DIRS 
-	${DtkWidget_LIBRARIES}
-	${DtkCore_LIBRARIES}
-	${GOBJECT_LIBRARIES}
-	${GIO_LIBRARIES}
-	${QTUDISKS2_LIBRARIES}
-	${DtkGui_LIBRARIES}
+set(LIBS_INCLUDE_DIRS
+        ${DtkWidget_LIBRARIES}
+        ${DtkCore_LIBRARIES}
+        ${GOBJECT_LIBRARIES}
+        ${GIO_LIBRARIES}
+        ${QTUDISKS2_LIBRARIES}
+        ${DtkGui_LIBRARIES}
 )
 
 

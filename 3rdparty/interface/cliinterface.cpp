@@ -43,6 +43,7 @@ CliInterface::~CliInterface()
 
 PluginFinishType CliInterface::list()
 {
+    m_stArchiveData.reset();
     m_workStatus = WT_List;
 
     bool ret = false;
@@ -134,6 +135,11 @@ PluginFinishType CliInterface::addComment(const QString &comment)
     return PT_Nomral;
 }
 
+void CliInterface::setListEmptyLines(bool emptyLines)
+{
+    m_listEmptyLines = emptyLines;
+}
+
 bool CliInterface::runProcess(const QString &programName, const QStringList &arguments)
 {
     Q_ASSERT(!m_process);
@@ -204,7 +210,7 @@ void CliInterface::readStdout(bool handleAll)
 
     // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {
-        if (!line.isEmpty()) {
+        if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
                 killProcess();
                 return;

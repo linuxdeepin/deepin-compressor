@@ -158,17 +158,6 @@ public:
     explicit ReadWriteArchiveInterface(QObject *parent, const QVariantList &args);
     ~ReadWriteArchiveInterface() override;
 
-    enum WorkType {
-        WT_List,
-        WT_Extract,
-        WT_Add,
-        WT_Delete,
-        WT_Move,
-        WT_Copy,
-        WT_Comment,
-        WT_Test
-    };
-
     /**
      * @brief addFiles          压缩文件
      * @param files             待压缩文件
