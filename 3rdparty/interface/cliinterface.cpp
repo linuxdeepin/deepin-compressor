@@ -206,7 +206,11 @@ void CliInterface::readStdout(bool handleAll)
         handleAll = true; // 7z output has no \n
     }
 
-    m_stdOutData.clear();
+    if (handleAll) {
+        m_stdOutData.clear();
+    } else {
+        m_stdOutData = lines.takeLast();
+    }
 
     // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {

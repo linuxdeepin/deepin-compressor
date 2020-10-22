@@ -220,13 +220,12 @@ bool Cli7zPlugin::readListLine(const QString &line)
             // 文件在压缩包内绝对路径路径
             const QString entryFilename = QDir::fromNativeSeparators(line.mid(7).trimmed());
             m_fileEntry.strFullPath = entryFilename;
-//            qDebug() << entryFilename;
 
             // 文件名称
             const QStringList pieces = entryFilename.split(QLatin1Char('/'), QString::SkipEmptyParts);
             m_fileEntry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
         } else if (line.startsWith(QLatin1String("Size = "))) {
-            // 文件实际大小
+            // 单文件实际大小
             m_fileEntry.qSize = line.mid(7).trimmed().toInt();
 
             // 压缩包内所有文件总大小

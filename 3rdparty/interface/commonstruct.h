@@ -73,8 +73,8 @@ struct FileEntry {
 
     void reset()
     {
-//        strFullPath = "";
-//        strFileName = "";
+        strFullPath = "";
+        strFileName = "";
         qSize = 0;
         isDirectory = false;
         uLastModifiedTime = 0;
