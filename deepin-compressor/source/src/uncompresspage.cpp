@@ -110,7 +110,7 @@ UnCompressPage::UnCompressPage(QWidget *parent)
  */
 void UnCompressPage::oneCompressPress()
 {
-    PERF_PRINT_BEGIN("POINT-04", "解压名:" + m_info.fileName() + "  解压大小:" + QString::number(m_info.size()) + "B"); //解压计时
+    PERF_PRINT_BEGIN("POINT-04", "filename=" + m_info.fileName() + " filesize=" + QString::number(m_info.size()) + "B"); //解压计时
     QFileInfo m_fileDestinationPath(m_pathstr);
     bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());
 
