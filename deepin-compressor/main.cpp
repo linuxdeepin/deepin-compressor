@@ -26,6 +26,7 @@
 #include "monitorInterface.h"
 #include "environments.h"
 #include "accessible.h"
+#include "DebugTimeManager.h"
 
 #include <DWidgetUtil>
 #include <DLog>
@@ -37,6 +38,7 @@
 
 int main(int argc, char *argv[])
 {
+    PERF_PRINT_BEGIN("POINT-01", ""); //启动计时
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     // load dtk xcb plugin.
@@ -194,6 +196,7 @@ int main(int argc, char *argv[])
                 QMetaObject::invokeMethod(&w, "onRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
             } else {
                 w.show();
+                PERF_PRINT_END("POINT-01");
             }
         }
     }

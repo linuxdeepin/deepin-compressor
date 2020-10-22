@@ -587,7 +587,7 @@ void CreateJob::doWork()
 
     if (m_addJob) {
         connect(m_addJob, &KJob::result, this, &CreateJob::emitResult);
-        connect(m_addJob, &KJob::result, this, &CreateJob::result);
+        //        connect(m_addJob, &KJob::result, this, &CreateJob::result);
         // Forward description signal from AddJob, we need to change the first argument ('this' needs to be a CreateJob).
         connect(m_addJob, &KJob::description, this, [ = ](KJob *, const QString & title, const QPair<QString, QString> &field1, const QPair<QString, QString> &) {
             emit description(this, title, field1);

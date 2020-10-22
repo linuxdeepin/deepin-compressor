@@ -24,6 +24,7 @@
 #include "DFontSizeManager"
 #include "utils.h"
 #include "customwidget.h"
+#include "DebugTimeManager.h"
 
 #include <DDialog>
 #include <DFileDialog>
@@ -341,6 +342,7 @@ void CompressSetting::showRightMenu(QMouseEvent * /*e*/)
  */
 void CompressSetting::onNextButoonClicked()
 {
+    PERF_PRINT_BEGIN("POINT-03", "压缩名:" + m_filename->text() + '.' + m_compresstype->text() + "  压缩大小:" + QString::number(m_getFileSize) + "B"); //压缩计时
     QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
     if (!checkfilename(name)) { // 检查文件名是否合法

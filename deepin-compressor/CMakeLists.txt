@@ -16,6 +16,10 @@ configure_file(environments.h.in environments.h @ONLY)
 #3.1 包含当前路径，使用*.ui文件时，需要加上这句，否则找不到头文件
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# 测试点
+option(PERF_ON "open the info of performance testing" ON)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 #3.3 打开全局moc
 set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS "-std=c++11")
@@ -96,8 +100,8 @@ include_directories(${PROJECT_SOURCE_DIR}/source/inc)
 include_directories(${PROJECT_SOURCE_DIR}/source/inc/openwithdialog)
 
 #8.主程序的源文件和头文件
-file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp accessible.h accessibledefine.h)
-file(GLOB_RECURSE h_files  source/*.h )
+file(GLOB_RECURSE c_files  source/*.cpp source/*.c main.cpp accessible.h accessibledefine.h DebugTimeManager.cpp)
+file(GLOB_RECURSE h_files  source/*.h DebugTimeManager.h)
 
 
 file(GLOB_RECURSE res_files *.qrc)

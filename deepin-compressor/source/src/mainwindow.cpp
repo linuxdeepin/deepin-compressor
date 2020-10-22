@@ -52,6 +52,7 @@
 #include "customwidget.h"
 #include "mimetypes.h"
 #include "logviewheaderview.h"
+#include "DebugTimeManager.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -310,6 +311,7 @@ void MainWindow::closeClean(QCloseEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    PERF_PRINT_BEGIN("POINT-02", ""); //关闭计时
     char options = OpenInfo::CLOSE;
     if (this->m_pCurAuxInfo != nullptr) {
         MainWindow_AuxInfo *curAuxInfo = this->m_pCurAuxInfo;
@@ -432,6 +434,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         slotquitApp();
     }
+    PERF_PRINT_END("POINT-02");
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -2629,6 +2632,7 @@ void MainWindow::slotExtractionDone(KJob *job)
                     m_ePageID = PAGE_UNZIP_SUCCESS;
                     m_pCompressSuccess->setstringinfo(tr("Extraction successful"));
                     refreshPage();
+                    PERF_PRINT_END("POINT-04");
                     return;
                 }
             }
@@ -4193,6 +4197,7 @@ void MainWindow::slotCompressFinished(KJob *job)
 
     refreshPage();
     deleteLaterJob();
+    PERF_PRINT_END("POINT-03");
 }
 void MainWindow::slotJobFinished(KJob *job)
 {
