@@ -91,7 +91,7 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
 
     // 连接槽函数
     connect(pLoadJob, &LoadJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-    connect(pLoadJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+    connect(pLoadJob, &LoadJob::signalQuery, this, &ArchiveManager::signalQuery);
 
     m_pArchiveJob = pLoadJob;
     pLoadJob->start();
