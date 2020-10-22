@@ -106,11 +106,11 @@ private:
     DSuggestButton *m_pPauseContinueButton; // 暂停继续按钮
 
     Progress_Type m_eType;      // 进度类型
-    qint64 m_qTotalSize;         // 文件大小
-    double m_dPerent;      // 进度值
+    qint64 m_qTotalSize = 0;         // 文件大小
+    double m_dPerent = 0.0;      // 进度值
 
     QElapsedTimer m_timer;
-    qint64 m_qConsumeTime; //消耗时间
+    qint64 m_qConsumeTime = 0; //消耗时间
 };
 
 #endif // COMPRESSPAGE_H
