@@ -1,9 +1,10 @@
 #ifndef CLIINTERFACE_H
 #define CLIINTERFACE_H
 
-#include "archiveinterface.h"
+//#include "archiveinterface.h"
 #include "cliproperties.h"
 #include "kprocess.h"
+
 
 enum WorkType {
     WT_List,
@@ -86,6 +87,26 @@ protected:
      */
     void killProcess(bool emitFinished = true);
 
+    /**
+     * @brief handlePassword  需要密码是弹出密码框
+     */
+    void handlePassword();
+
+    /**
+     * @brief handleFileExists 处理解压存在同名文件
+     * @param line
+     * @return
+     */
+    bool handleFileExists(const QString &line);
+
+private:
+
+    /**
+     * @brief writeToProcess 追加命令
+     * @param data
+     */
+    void writeToProcess(const QByteArray &data);
+
 protected slots:
     /**
      * @brief readStdout  读取命令行输出
@@ -107,8 +128,8 @@ protected:
 private:
     bool m_listEmptyLines = false;
     QByteArray m_stdOutData;  // 存储命令行输出数据
-//    int m_exitCode = 0;
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
+    QString m_parseName;  // 解析后的文件名
 };
 
 #endif // CLIINTERFACE_H

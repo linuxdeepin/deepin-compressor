@@ -23,7 +23,6 @@ public:
     explicit Cli7zPlugin(QObject *parent, const QVariantList &args);
     ~Cli7zPlugin() override;
 
-
     bool isPasswordPrompt(const QString &line) override;
     bool isWrongPasswordMsg(const QString &line) override;
     bool isCorruptArchiveMsg(const QString &line) override;
@@ -45,9 +44,21 @@ private:
     } m_archiveType;
 
     void setupCliProperties();
-    bool readListLine(const QString &line)/* override*/;
+
+    /**
+     * @brief readListLine  解析list的命令行输出
+     * @param line
+     * @return
+     */
+    bool readListLine(const QString &line);
+
     bool handleLine(const QString &line, WorkType workStatus) override;
 
+    /**
+     * @brief handleProgress  解析进度并发送进度信号
+     * @param line
+     */
+    void handleProgress(const QString &line);
 
 private:
     ParseState m_parseState = ParseStateTitle;

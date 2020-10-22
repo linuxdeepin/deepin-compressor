@@ -268,30 +268,49 @@ bool Cli7zPlugin::readListLine(const QString &line)
 
 bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 {
+    if (isPasswordPrompt(line)) {  // 提示需要输入密码
+        m_eErrorType = ET_NeedPassword;
+        return true;
+    }
+
+    if (isWrongPasswordMsg(line)) {  // 提示密码错误
+        m_eErrorType = ET_WrongPassword;
+        return false;
+    }
+
     if (workStatus == WT_Add || workStatus == WT_Extract) {  // 压缩、解压进度
-        int pos = line.indexOf(QLatin1Char('%'));
-        if (pos > 1) {
-            int percentage = line.midRef(pos - 3, 3).toInt();
-            if (percentage > 0) {
-                if (line.contains("\b\b\b\b") == true) {
-                    QStringRef strfilename;
-                    int count = line.indexOf("+");
-                    if (-1 == count) {
-                        count = line.indexOf("-");
-                    }
-
-                    if (count > 0) {
-                        strfilename = line.midRef(count + 2);
-                    }
-
-                    emit signalprogress(percentage);
-                    emit signalCurFileName(strfilename.toString());
-                }
-            }
+        if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
+            return true;
         }
+
+        handleProgress(line);
     } else if (workStatus == WT_List) {
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     }
 
     return true;
+}
+
+void Cli7zPlugin::handleProgress(const QString &line)
+{
+    int pos = line.indexOf(QLatin1Char('%'));
+    if (pos > 1) {
+        int percentage = line.midRef(pos - 3, 3).toInt();
+        if (percentage > 0) {
+            if (line.contains("\b\b\b\b") == true) {
+                QStringRef strfilename;
+                int count = line.indexOf("+");
+                if (-1 == count) {
+                    count = line.indexOf("-");
+                }
+
+                if (count > 0) {
+                    strfilename = line.midRef(count + 2);
+                }
+
+                emit signalprogress(percentage);
+                emit signalCurFileName(strfilename.toString());
+            }
+        }
+    }
 }

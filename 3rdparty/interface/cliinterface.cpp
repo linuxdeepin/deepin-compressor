@@ -19,11 +19,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cliinterface.h"
+#include "queries.h"
 
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
+#include <QRegularExpression>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -48,7 +50,7 @@ PluginFinishType CliInterface::list()
 
     bool ret = false;
 
-    ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, ""));
+    ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, m_strPassword));
 
     return PT_Nomral;
 }
@@ -71,8 +73,7 @@ PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, con
     QDir::setCurrent(options.strTargetPath);
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
-                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, ""));
-
+                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword));
 
     return PT_Nomral;
 }
@@ -187,6 +188,96 @@ void CliInterface::killProcess(bool emitFinished)
     m_process->kill();
 }
 
+void CliInterface::handlePassword()
+{
+    m_eErrorType = ET_NoError;
+
+    PasswordNeededQuery query(m_strArchiveName);
+    emit signalQuery(&query);
+    query.waitForResponse();
+
+    if (query.responseCancelled()) {
+        setPassword(QString());
+    } else {
+        setPassword(query.password());
+        writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
+    }
+}
+
+bool CliInterface::handleFileExists(const QString &line)
+{
+    if (isFileExistsFileName(line)) {   // 提示已存在的文件名，开始解析
+        const QStringList fileExistsFileNameRegExp = m_cliProps->property("fileExistsFileNameRegExp").toStringList();
+        for (const QString &pattern : fileExistsFileNameRegExp) {
+            const QRegularExpression rxFileNamePattern(pattern);
+            const QRegularExpressionMatch rxMatch = rxFileNamePattern.match(line);
+
+            if (rxMatch.hasMatch()) {
+                m_parseName = rxMatch.captured(1);
+            }
+        }
+    }
+
+    if (isFileExistsMsg(line)) {  // 提示是否替换已存在的文件
+        /*
+        Would you like to replace the existing file:
+          Path:     ./1.txt
+          Size:     48 bytes (1 KiB)
+          Modified: 2020-10-22 16:11:06
+        with the file from archive:
+          Path:     1.txt
+          Size:     48 bytes (1 KiB)
+          Modified: 2020-10-22 16:11:06
+        ? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit?
+        */
+        const QStringList choices = m_cliProps->property("fileExistsInput").toStringList();  // 提示选项
+        QString response;  // 选择结果
+
+        OverwriteQuery query(m_parseName);
+        emit signalQuery(&query);
+        query.waitForResponse();
+
+        if (query.responseCancelled()) {  // 取消
+            // (Q)uit
+            response = choices.at(4);
+            emit signalCancel();
+            m_eErrorType = ET_UserCancelOpertion;
+        } else if (query.responseSkip()) { // 跳过
+            // (N)o
+            response = choices.at(1);
+            m_eErrorType = ET_NoError;
+        } else if (query.responseSkipAll()) { // 全部跳过
+            // (S)kip all
+            response = choices.at(3);
+            m_eErrorType = ET_NoError;
+        } else if (query.responseOverwrite()) { // 替换
+            // (Y)es
+            response = choices.at(0);
+        } else if (query.responseOverwriteAll()) { // 全部替换
+            // (A)lways
+            response = choices.at(2);
+        }
+
+        Q_ASSERT(!response.isEmpty());
+
+        response += QLatin1Char('\n');
+        writeToProcess(response.toLocal8Bit());
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+void CliInterface::writeToProcess(const QByteArray &data)
+{
+    Q_ASSERT(m_process);
+    Q_ASSERT(!data.isNull());
+
+    qDebug() << "Writing ****** to the process";
+    m_process->write(data);
+}
+
 void CliInterface::readStdout(bool handleAll)
 {
     Q_ASSERT(m_process);
@@ -202,11 +293,13 @@ void CliInterface::readStdout(bool handleAll)
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
+    bool wrongPwd = isPasswordPrompt(lines.last());  // 7z列表加密的情况
+
     if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")) {
         handleAll = true; // 7z output has no \n
     }
 
-    if (handleAll) {
+    if (handleAll || wrongPwd) {
         m_stdOutData.clear();
     } else {
         m_stdOutData = lines.takeLast();
@@ -215,9 +308,14 @@ void CliInterface::readStdout(bool handleAll)
     // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
-            if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
+            bool ret = handleLine(QString::fromLocal8Bit(line), m_workStatus);
+            if (ret == false) {
                 killProcess();
                 return;
+            } else {
+                if (m_eErrorType == ET_NeedPassword) {
+                    handlePassword();
+                }
             }
         }
     }
