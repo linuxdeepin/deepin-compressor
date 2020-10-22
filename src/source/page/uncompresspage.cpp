@@ -23,6 +23,7 @@
 #include "uncompressview.h"
 #include "customwidget.h"
 #include "popupdialog.h"
+#include "DebugTimeManager.h"
 
 #include <DFontSizeManager>
 
@@ -61,9 +62,9 @@ void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
     m_pUncompressPathBtn->setText(tr("Extract to:") + strPath);
 }
 
-void UnCompressPage::setLoadData(const ArchiveData &stArchiveData)
+void UnCompressPage::setArchiveData(const ArchiveData &stArchiveData)
 {
-    m_pUnCompressView->setLoadData(stArchiveData);
+    m_pUnCompressView->setArchiveData(stArchiveData);
 }
 
 void UnCompressPage::initUI()
@@ -114,6 +115,9 @@ void UnCompressPage::initConnections()
 
 void UnCompressPage::slotUncompressClicked()
 {
+    QFileInfo file(m_strArchiveName);
+    PERF_PRINT_BEGIN("POINT-04", "压缩包名：" + file.fileName() + " 大小：" + QString::number(file.size()));
+
     // 判断解压路径是否有可执行权限或者路径是否存在进行解压创建文件
     QFileInfo m_fileDestinationPath(m_strUnCompressPath);
     bool m_permission = (m_fileDestinationPath.isWritable() && m_fileDestinationPath.isExecutable());

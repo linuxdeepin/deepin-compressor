@@ -9,19 +9,22 @@ project(${EXE_NAME})
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 
 # 添加c++ 11标准支持
-set( CMAKE_CXX_FLAGS "-std=c++11" )
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 
-#SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wl,-rpath=./
-SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wall
-SET(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O3 -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wall
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
+
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wl,-rpath=./
+else()
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1")
+endif()
+
 add_definitions("-DQT_MESSAGELOGCONTEXT")
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 #对DApplication 进行加速
-set(CMAKE_CXX_FLAGS "-Wl,--as-needed -fPIE")
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
 
 #龙芯特有编译参数 -start

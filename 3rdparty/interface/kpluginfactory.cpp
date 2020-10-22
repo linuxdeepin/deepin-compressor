@@ -66,7 +66,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
         if (superClass) {
             foreach (const KPluginFactoryPrivate::Plugin &plugin, clashes) {
                 for (const QMetaObject *otherSuper = plugin.first->superClass(); otherSuper;
-                     otherSuper = otherSuper->superClass()) {
+                        otherSuper = otherSuper->superClass()) {
                     if (superClass == otherSuper) {
                     }
                 }
@@ -77,7 +77,7 @@ void KPluginFactory::registerPlugin(const QString &keyword, const QMetaObject *m
             superClass = plugin.first->superClass();
             if (superClass) {
                 for (const QMetaObject *otherSuper = metaObject->superClass(); otherSuper;
-                     otherSuper = otherSuper->superClass()) {
+                        otherSuper = otherSuper->superClass()) {
                     if (superClass == otherSuper) {
                     }
                 }
@@ -137,11 +137,9 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
     foreach (const KPluginFactoryPrivate::Plugin &plugin, candidates) {
         for (const QMetaObject *current = plugin.first; current; current = current->superClass()) {
             if (0 == qstrcmp(iface, current->className())) {
-                if (obj) {
+                if (!obj) {
+                    obj = plugin.second(parentWidget, parent, args);
                 }
-                qDebug() << "111111111111111111";
-                obj = plugin.second(parentWidget, parent, args);
-                qDebug() << "222222222222222222";
                 break;
             }
         }

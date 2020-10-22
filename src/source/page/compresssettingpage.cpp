@@ -25,6 +25,7 @@
 #include "uitools.h"
 #include "uistruct.h"
 #include "popupdialog.h"
+#include "DebugTimeManager.h"
 
 #include <DApplication>
 #include <DFileDialog>
@@ -480,12 +481,15 @@ void CompressSettingPage::slotSplitEdtEnabled()
 
 void CompressSettingPage::slotCompressClicked()
 {
+
+    QString strName = m_pFileNameEdt->text() + "." + m_pCompressTypeLbl->text();   // 压缩包名称
+    PERF_PRINT_BEGIN("POINT-03", "压缩包名：" + strName + " 大小：" + QString::number(m_qFileSize));
     qDebug() << "点击了压缩按钮";
 
     CompressParameter compressInfo;
 
     compressInfo.strMimeType = m_strMimeType;       // 格式类型
-    compressInfo.strArchiveName = m_pFileNameEdt->text() + "." + m_pCompressTypeLbl->text();   // 压缩包名称
+    compressInfo.strArchiveName = strName;   // 压缩包名称
     compressInfo.strTargetPath = m_pSavePathEdt->text();    // 压缩包保存路径
     compressInfo.strPassword = m_pPasswordEdt->lineEdit()->text();
     compressInfo.bEncryption = !(compressInfo.strPassword.isEmpty());     // 是否加密

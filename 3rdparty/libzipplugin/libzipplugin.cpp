@@ -130,7 +130,6 @@ PluginFinishType LibzipPlugin::extractFiles(const QVector<FileEntry> &files, con
 
             // 解压单个文件
             m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
-            qDebug() << strFileName;
 
             if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
                 continue;

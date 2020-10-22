@@ -59,10 +59,10 @@ public:
     void setDefaultUncompressPath(const QString &strPath);
 
     /**
-     * @brief setLoadData   设置加载完之后的数据
+     * @brief setArchiveData   设置加载完之后的数据
      * @param stArchiveData 压缩包数据
      */
-    void setLoadData(const ArchiveData &stArchiveData);
+    void setArchiveData(const ArchiveData &stArchiveData);
 
 private:
     /**

@@ -23,6 +23,7 @@
 #include "mainwindow.h"
 #include "compressorapplication.h"
 #include "environments.h"
+#include "DebugTimeManager.h"
 
 #include <DWidgetUtil>
 #include <DLog>
@@ -36,6 +37,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    PERF_PRINT_BEGIN("POINT-01", "打开时间");
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     // 初始化DTK应用程序属性
@@ -75,6 +77,7 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+    PERF_PRINT_END("POINT-01");
 
     return app.exec();
 }

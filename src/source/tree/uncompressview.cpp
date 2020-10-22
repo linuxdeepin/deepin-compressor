@@ -35,7 +35,7 @@ UnCompressView::~UnCompressView()
 
 }
 
-void UnCompressView::setLoadData(const ArchiveData &stArchiveData)
+void UnCompressView::setArchiveData(const ArchiveData &stArchiveData)
 {
     m_stArchiveData = stArchiveData;
 

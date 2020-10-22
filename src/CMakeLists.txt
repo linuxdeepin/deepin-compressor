@@ -11,6 +11,9 @@ configure_file(environments.h.in environments.h @ONLY)
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 #SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+# 测试点
+option(PERF_ON "open the info of performance testing" ON)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 #3.项目相关设置
 #3.1 包含当前路径，使用*.ui文件时，需要加上这句，否则找不到头文件

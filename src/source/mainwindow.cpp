@@ -32,6 +32,7 @@
 #include "pluginmanager.h"
 #include "settingdialog.h"
 #include "archivemanager.h"
+#include "DebugTimeManager.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -356,6 +357,8 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
         m_pCompressPage->addCompressFiles(listFiles);       // 添加压缩文件
     } else {
         if (UiTools::isArchiveFile(listFiles[0])) {     // 压缩文件处理
+
+            PERF_PRINT_BEGIN("POINT-05", "加载时间");
             m_pUnCompressPage->setArchiveName(listFiles[0]);
 
             m_ePageID = PI_Loading;
@@ -480,7 +483,7 @@ void MainWindow::slotJobFinshed()
 
         ArchiveData stArchiveData;
         m_pArchiveManager->getLoadArchiveData(stArchiveData);
-        m_pUnCompressPage->setLoadData(stArchiveData);
+        m_pUnCompressPage->setArchiveData(stArchiveData);
     }
     break;
     case ArchiveJob::JT_Extract: {
@@ -491,6 +494,9 @@ void MainWindow::slotJobFinshed()
     }
 
     refreshPage();
+    PERF_PRINT_END("POINT-03");
+    PERF_PRINT_END("POINT-04");
+    PERF_PRINT_END("POINT-05");
 }
 
 void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
