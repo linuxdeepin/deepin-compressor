@@ -58,19 +58,8 @@ public:
 //    bool addComment(const QString &comment) override;
 
 private:
-    struct ArchiveWriteCustomDeleter {
-        static inline void cleanup(struct archive *a)
-        {
-            if (a) {
-                archive_write_free(a);
-            }
-        }
-    };
-
-    typedef QScopedPointer<struct archive, ArchiveWriteCustomDeleter> ArchiveWrite;
     QSaveFile m_tempFile;
     QStringList m_writtenFiles; //已经压缩完的文件
-    ArchiveRead m_archiveReadDisk;
     ArchiveWrite m_archiveWriter;
 
     bool initializeWriter(const bool creatingNewFile = false, const CompressOptions &options = CompressOptions());

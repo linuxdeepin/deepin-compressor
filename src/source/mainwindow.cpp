@@ -520,7 +520,7 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_UnCompress);
     m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName(), options.qSize);
-
+    m_pProgressPage->restartTimer(); // 重启计时器
     m_ePageID = PI_UnCompressProgress;
     refreshPage();
 }

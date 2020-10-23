@@ -17,6 +17,7 @@ find_package(Qt5Core REQUIRED)
 find_package(LibArchive REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
+pkg_search_module(DtkWidget REQUIRED dtkwidget)
 
 # Compile definitions for TerminalWidget
 # So we can use QT_VERSION_CHECK
@@ -26,6 +27,7 @@ set(TERMINALWIDGET_VERSION_PATCH "1")
 
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
+include_directories(${DtkWidget_INCLUDE_DIRS})
 
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)
 file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
@@ -34,8 +36,9 @@ add_library(${LIB_NAME} STATIC ${h_files} ${c_files})
 
 set(LINK_LIBS
     Qt5::Core
-    ${GOBJECT_LIBRARIES}
     ${LibArchive_LIBRARIES}
+    ${GOBJECT_LIBRARIES}
+    ${DtkWidget_LIBRARIES}
     compressor-interface
     compressor-ChardetDetector
 )

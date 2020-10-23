@@ -26,6 +26,21 @@
 
 #include <archive.h>
 
+/**
+ * @brief The HandleWorkingDir class
+ * change 用于更改应用所在当前路径及恢复
+ * ~HandleWorkingDir 析构时自动恢复应用所在当前路径
+ */
+class HandleWorkingDir
+{
+public:
+    HandleWorkingDir(QString *oldWorkingDir);
+    void change(const QString &newWorkingDir);
+    ~HandleWorkingDir();
+private:
+    QString *m_oldWorkingDir;
+};
+
 struct FileProgressInfo {
     float fileProgressProportion = 0.0; //内部百分值范围
     float fileProgressStart;            //上次的百分值
@@ -69,8 +84,30 @@ protected:
             }
         }
     };
+    struct ArchiveWriteCustomDeleter {
+        static inline void cleanup(struct archive *a)
+        {
+            if (a) {
+                archive_write_free(a);
+            }
+        }
+    };
+
+
     typedef QScopedPointer<struct archive, ArchiveReadCustomDeleter> ArchiveRead;
+    typedef QScopedPointer<struct archive, ArchiveWriteCustomDeleter> ArchiveWrite;
+
     ArchiveRead m_archiveReader;
+    ArchiveRead m_archiveReadDisk;
+
+    /**
+     * @brief copyDataFromSource 压缩包数据写到本地文件
+     * @param filename 本地文件名
+     * @param source 读句柄
+     * @param dest 写句柄
+     * @param bInternalDuty
+     */
+    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);
 
 private:
     PluginFinishType list_New();
@@ -85,12 +122,25 @@ private:
      * @param tars
      */
     void deleteTempTarPkg(const QStringList &tars);
+    /**
+     * @brief extractionFlags 选择要还原的属性
+     * @return
+     */
+    int extractionFlags() const;
+//    /**
+//     * @brief slotRestoreWorkingDir 还原应用工作目录
+//     */
+//    void slotRestoreWorkingDir();
 
 private:
     int m_ArchiveEntryCount = 0; //压缩包内文件(夹)总数量
     QString m_strOldArchiveName; //压缩包名(全路径)
     QStringList m_tars; //list时解压出来的临时tar包
     qlonglong m_extractedFilesSize; //压缩包内文件原始总大小
+    QString m_oldWorkingDir;
+    QString m_extractDestDir; //解压目的路径
+//    QString destDirName; //取消解压，需要该变量
+    qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
 };
 
 

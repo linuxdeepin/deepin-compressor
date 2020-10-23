@@ -43,8 +43,10 @@ ReadWriteLibarchivePluginFactory::~ReadWriteLibarchivePluginFactory()
 
 ReadWriteLibarchivePlugin::ReadWriteLibarchivePlugin(QObject *parent, const QVariantList &args)
     : LibarchivePlugin(parent, args)
-    , m_archiveReadDisk(archive_read_disk_new())
+//    , m_archiveReadDisk(archive_read_disk_new())
 {
+    m_archiveReadDisk.reset(archive_read_disk_new());
+    archive_read_disk_set_standard_lookup(m_archiveReadDisk.data());
 }
 
 ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()

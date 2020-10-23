@@ -116,6 +116,11 @@ void ProgressPage::resetProgress()
     m_qConsumeTime = 0;
 }
 
+void ProgressPage::restartTimer()
+{
+    m_timer.restart();
+}
+
 void ProgressPage::initUI()
 {
     // 初始化控件
@@ -190,11 +195,6 @@ void ProgressPage::initUI()
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);
-
-    // 临时测试界面
-    setArchiveName("新建归档文件.zip", 102400);
-    setProgress(50);
-    setCurrentFileName("55555.txt");
 }
 
 void ProgressPage::initConnections()
