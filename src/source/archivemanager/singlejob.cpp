@@ -150,8 +150,8 @@ void CreateJob::doWork()
 {
     m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
     connect(m_pAddJob, &AddJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
-    connect(m_pAddJob, &AddJob::signalprogress, this, &CreateJob::signalprogress);
-    connect(m_pAddJob, &AddJob::signalCurFileName, this, &CreateJob::signalCurFileName);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CreateJob::signalprogress);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &CreateJob::signalCurFileName, Qt::UniqueConnection);
     m_pAddJob->start();
 }
 

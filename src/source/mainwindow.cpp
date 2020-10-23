@@ -439,6 +439,7 @@ void MainWindow::slotCompress(const QVariant &val)
     options.bSplit = stCompressInfo.bSplit;
     options.iVolumeSize = stCompressInfo.iVolumeSize;
     options.iCompressionLevel = stCompressInfo.iCompressionLevel;
+    options.qTotalSize = m_qTotalSize;
     options.bTar_7z = stCompressInfo.bTar_7z;
 
     // 判断是否批量压缩（多路径）
@@ -453,7 +454,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
     m_pProgressPage->setProgressType(PT_Compress);
     m_pProgressPage->setArchiveName(stCompressInfo.strArchiveName, stCompressInfo.qSize);
-
+    m_pProgressPage->restartTimer();
 
     m_ePageID = PI_CompressProgress;
     refreshPage();
@@ -527,11 +528,13 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
+//    qDebug() << "Percentage=" << dPercentage;
     m_pProgressPage->setProgress(qRound(dPercentage));
 }
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
+//    qDebug() << "filename=" << strName;
     m_pProgressPage->setCurrentFileName(strName);
 }
 

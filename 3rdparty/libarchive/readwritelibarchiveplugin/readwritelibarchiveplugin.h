@@ -61,6 +61,7 @@ private:
     QSaveFile m_tempFile;
     QStringList m_writtenFiles; //已经压缩完的文件
     ArchiveWrite m_archiveWriter;
+    qlonglong m_currentAddFilesSize = 0;//当前已经压缩的文件大小（能展示出来的都已经压缩）
 
     bool initializeWriter(const bool creatingNewFile = false, const CompressOptions &options = CompressOptions());
     /**
@@ -80,29 +81,29 @@ private:
      * @param sourceFileFullPath
      * @param destination
      * @param externalPath 文件夹路径
-     * @param info
+     * @param totalsize 原文件总大小
      * @param partialprogress
      * @return
      */
-    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const FileProgressInfo &info, bool partialprogress = false);
+    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const qlonglong &totalsize, bool partialprogress = false);
     /**
      * @brief writeFileFromEntry 将文件写入压缩包
      * @param relativeName 本地文件(夹)(全路径)
      * @param destination 压缩包内路径
      * @param pEntry
-     * @param info
+     * @param totalsize 原文件总大小
      * @param bInternalDuty
      * @return
      */
-    bool writeFileFromEntry(const QString &relativeName, const QString destination, FileEntry &pEntry, const FileProgressInfo &info, bool bInternalDuty = false);
+    bool writeFileFromEntry(const QString &relativeName, const QString destination, FileEntry &pEntry, const qlonglong &totalsize, bool bInternalDuty = false);
     /**
      * @brief copyData 本地数据写入压缩包
      * @param filename 本地文件
      * @param dest 目标压缩包
-     * @param info
+     * @param totalsize 原文件总大小
      * @param bInternalDuty
      */
-    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty = true);
+    void copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
 
 };
 

@@ -128,18 +128,20 @@ struct CompressOptions {
         bSplit = false;
         iVolumeSize = 0;
         iCompressionLevel = -1;
+        qTotalSize = 0;
         bTar_7z = false;
     }
 
-    bool bEncryption;       // 是否加密
     QString strPassword;        // 密码
     QString strEncryptionMethod;    // 加密算法
     QString strCompressionMethod;    // 压缩算法
-    bool bHeaderEncryption;     // 是否列表加密
-    bool bSplit;        // 是否分卷
     int iVolumeSize;    // 分卷大小（kb）
     int iCompressionLevel;      // 压缩等级
+    qlonglong qTotalSize; // 源文件总大小
     QString strDestination; // 压缩上级目录（若为空，代表在根目录压缩文件）
+    bool bEncryption;       // 是否加密
+    bool bHeaderEncryption;     // 是否列表加密
+    bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
 };
 Q_DECLARE_METATYPE(CompressOptions)
@@ -155,12 +157,11 @@ struct ExtractionOptions {
     }
 
     QString strTargetPath;      // 解压目标路径
-    bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
     QString strDestination;         // 提取时的上级目录（若为空，代表提取的是根目录下的文件）
     qint64 qSize;                            // 原始大小
     qint64 qComressSize;                     // 压缩包大小
-
     bool bRightExtract;         // 是否是右键解压
+    bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

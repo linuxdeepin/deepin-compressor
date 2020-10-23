@@ -77,7 +77,6 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
         connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
 
-
         m_pArchiveJob = pCreateJob;
         pCreateJob->start();
     }
