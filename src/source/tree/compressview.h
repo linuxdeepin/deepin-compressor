@@ -126,6 +126,12 @@ private slots:
      */
     void slotDragFiles(const QStringList &listFiles);
 
+    /**
+     * @brief slotOpenStyleClicked  打开方式点击
+     */
+    void slotOpenStyleClicked();
+
+
 
 protected Q_SLOTS:
     /**
@@ -138,6 +144,8 @@ private:
     QList<FileEntry> m_listEntry;
 
     QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控
+
+    FileEntry m_stRightEntry;       // 右键点击的文件
 };
 
 #endif // COMPRESSVIEW_H

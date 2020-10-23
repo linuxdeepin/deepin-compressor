@@ -26,6 +26,7 @@
 #include "mimetypes.h"
 #include "mimetypedisplaymanager.h"
 #include "treeheaderview.h"
+#include "openwithdialog.h"
 
 #include <DMenu>
 
@@ -168,7 +169,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             sortByColumn(0);
 
         } else {    // 如果是文件，选择默认方式打开
-
+            OpenWithDialog::openWithProgram(entry.strFullPath);
         }
     }
 }
@@ -236,14 +237,31 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
     QModelIndex index = indexAt(pos);
 
     if (index.isValid()) {
+
+        m_stRightEntry = index.data(Qt::UserRole).value<FileEntry>();  // 获取文件数据
+
         DMenu menu(this);
 
         menu.setMinimumWidth(202);
-        menu.addAction(tr("Open"));
+        menu.addAction(tr("Open"), this, [ = ] {
+            OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath);
+        });
         menu.addAction(tr("Delete"), this, &CompressView::slotDeleteFile);
 
+        // 打开方式菜单
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
+
+        // 打开方式选项
+        QAction *pAction = nullptr;
+        QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
+        for (int i = 0; i < listOpenType.count(); ++i) {
+            pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+            pAction->setData(listOpenType[i].getExec());
+        }
+
+        // 选择默认应用程序
+        openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));
 
         menu.exec(QCursor::pos());
     }
@@ -298,6 +316,28 @@ void CompressView::slotDirChanged()
 void CompressView::slotDragFiles(const QStringList &listFiles)
 {
     addCompressFiles(listFiles);
+}
+
+void CompressView::slotOpenStyleClicked()
+{
+
+    QAction *pAction = qobject_cast<QAction *>(sender());
+    if (pAction == nullptr) {
+        return;
+    }
+
+    QString strText = pAction->text();
+
+    if (strText == tr("Select default program")) {
+        // 选择默认应用程序（弹出窗口）
+        qDebug() << "选择默认应用程序打开";
+        OpenWithDialog dialog(m_stRightEntry.strFullPath);
+        dialog.showOpenWithDialog(OpenWithDialog::OpenType);
+    } else {
+        // 用选择的应用程序打开
+        qDebug() << "选择打开方式：" << strText;
+        OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath, pAction->data().toString());
+    }
 }
 
 void CompressView::slotPreClicked()
