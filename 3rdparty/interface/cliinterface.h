@@ -107,7 +107,7 @@ private:
      */
     void writeToProcess(const QByteArray &data);
 
-protected slots:
+private slots:
     /**
      * @brief readStdout  读取命令行输出
      * @param handleAll
@@ -121,11 +121,24 @@ protected slots:
      */
     virtual void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
+    /**
+     * @brief extractProcessFinished 解压进程结束
+     * @param exitCode   进程退出码
+     * @param exitStatus  结束状态
+     */
+    void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+protected:
+    bool m_encryptedRar = false;   // 是加密rar文件
+    bool m_isRarFirstExtract = true;  // rar第一次解压（unrar x -kb -p-）
+
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     KProcess *m_process = nullptr;  // 工作进程
 
 private:
+    QVector<FileEntry> m_files;
+    ExtractionOptions m_options;
     bool m_listEmptyLines = false;
     QByteArray m_stdOutData;  // 存储命令行输出数据
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）

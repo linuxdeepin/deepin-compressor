@@ -65,6 +65,8 @@ PluginFinishType CliInterface::testArchive()
 PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
 {
     m_workStatus = WT_Extract;
+    m_files = files;
+    m_options = options;
 
     bool ret = false;
     QStringList fileList;
@@ -159,8 +161,18 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         readStdout();
     });
 
-    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            this, &CliInterface::processFinished);
+    if (m_workStatus == WT_Extract) {
+        // Extraction jobs need a dedicated post-processing function.
+        connect(m_process,
+                QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this,
+                &CliInterface::extractProcessFinished);
+    } else {
+        connect(m_process,
+                QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this,
+                &CliInterface::processFinished);
+    }
 
     m_stdOutData.clear();
     m_process->start();
@@ -192,15 +204,28 @@ void CliInterface::handlePassword()
 {
     m_eErrorType = ET_NoError;
 
-    PasswordNeededQuery query(m_strArchiveName);
-    emit signalQuery(&query);
-    query.waitForResponse();
+    if (m_encryptedRar && m_strArchiveName.endsWith(".rar")) {
+        PasswordNeededQuery query(m_strArchiveName);
+        emit signalQuery(&query);
+        query.waitForResponse();
 
-    if (query.responseCancelled()) {
-        setPassword(QString());
+        if (query.responseCancelled()) {
+            setPassword(QString());
+        } else {
+            setPassword(query.password());
+            extractFiles(m_files, m_options);
+        }
     } else {
-        setPassword(query.password());
-        writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
+        PasswordNeededQuery query(m_strArchiveName);
+        emit signalQuery(&query);
+        query.waitForResponse();
+
+        if (query.responseCancelled()) {
+            setPassword(QString());
+        } else {
+            setPassword(query.password());
+            writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
+        }
     }
 }
 
@@ -282,17 +307,18 @@ void CliInterface::readStdout(bool handleAll)
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
-    bool wrongPwd = isPasswordPrompt(lines.last());  // 7z列表加密的情况
+    bool wrongPwd = isWrongPasswordMsg(lines.last());  // 7z列表加密的情况;
 
-    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")) {
-        handleAll = true; // 7z output has no \n
+    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPwd) {
+        handleAll = true; // 7z加载会出现换行错误
     }
 
-    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x")) {
-        handleAll = true; // unrar output has no \n
+    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x"
+            && m_process->program().at(4).contains("-p")) && !wrongPwd) {
+        handleAll = true; // rar解压加密文件,密码正确开始解压，需要替换同名文件时会换行错误
     }
 
-    if (handleAll || wrongPwd) {
+    if (handleAll) {
         m_stdOutData.clear();
     } else {
         m_stdOutData = lines.takeLast();
@@ -300,6 +326,7 @@ void CliInterface::readStdout(bool handleAll)
 
     // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {
+        // 第二个判断条件是处理rar的list，当rar文件含有comment信息的时候需要根据空行解析
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             bool ret = handleLine(QString::fromLocal8Bit(line), m_workStatus);
             if (ret == false) {
@@ -320,6 +347,37 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();
+
+    emit signalprogress(1.0);
+    emit signalFinished(PT_Nomral);
+}
+
+void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    qDebug() << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
+
+    if (m_process) {
+        // Handle all the remaining data in the process.
+        readStdout(true);
+
+        delete m_process;
+        m_process = nullptr;
+    }
+
+    if (exitCode == 9 || exitCode == 11) {
+        setPassword(QString());
+        if (m_isRarFirstExtract == false || m_strArchiveName.endsWith(".rar")) {
+            if (m_encryptedRar) {
+                handlePassword();
+            }
+
+            m_isRarFirstExtract = true;
+//            emit signalFinished(PF_Error);
+            return;
+        }
+
+        return;
+    }
 
     emit signalprogress(1.0);
     emit signalFinished(PT_Nomral);

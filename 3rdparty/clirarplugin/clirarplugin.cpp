@@ -23,6 +23,7 @@
 #include <QRegularExpression>
 #include <QFileInfo>
 #include <QDir>
+#include <QDebug>
 
 CliRarPluginFactory::CliRarPluginFactory()
 {
@@ -229,6 +230,8 @@ bool CliRarPlugin::readListLine(const QString &line)
 
             // clear m_fileEntry
             m_fileEntry.reset();
+        } else if (parseLineLeft == QLatin1String("Flags")/* || parseLineLeft == QLatin1String("Compression")*/) {
+            m_encryptedRar = true;
         }
         break;
     }
@@ -244,13 +247,20 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
-        m_eErrorType = ET_WrongPassword;
-        return false;
+        if (m_strArchiveName.endsWith(".rar") && m_isRarFirstExtract) {
+            m_isRarFirstExtract = false;
+//            handlePassword();
+            return true;
+        } else {
+            m_eErrorType = ET_WrongPassword;
+            return false;
+        }
     }
 
     if (workStatus == WT_List) {
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Extract) {
+        qDebug() << "rrrrr" << line;
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
         }
