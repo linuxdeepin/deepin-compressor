@@ -238,31 +238,50 @@ bool CliRarPlugin::readListLine(const QString &line)
 
 bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 {
+    if (isPasswordPrompt(line)) {  // 提示需要输入密码
+        m_eErrorType = ET_NeedPassword;
+        return true;
+    }
+
+    if (isWrongPasswordMsg(line)) {  // 提示密码错误
+        m_eErrorType = ET_WrongPassword;
+        return false;
+    }
+
     if (workStatus == WT_List) {
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Extract) {
-        int pos = line.indexOf(QLatin1Char('%'));
-        if (pos > 1) {
-            int percentage = line.midRef(pos - 3, 3).toInt();
-            if (percentage > 0) {
-                if (line.contains("Extracting")) {
-                    QStringRef strfilename = line.midRef(12, pos - 24);
-                    QString fileName = strfilename.toString();
-                    for (int i = fileName.length() - 1; i > 0; i--) {
-                        if (fileName.at(i) == " ") {
-                            continue;
-                        } else {
-                            fileName = fileName.left(i + 1);
-                            break;
-                        }
-                    }
-
-                    emit signalprogress(percentage);
-                    emit signalCurFileName(fileName);
-                }
-            }
+        if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
+            return true;
         }
+
+        handleProgress(line);
     }
 
     return true;
+}
+
+void CliRarPlugin::handleProgress(const QString &line)
+{
+    int pos = line.indexOf(QLatin1Char('%'));
+    if (pos > 1) {
+        int percentage = line.midRef(pos - 3, 3).toInt();
+        if (percentage > 0) {
+            if (line.contains("Extracting")) {
+                QStringRef strfilename = line.midRef(12, pos - 24);
+                QString fileName = strfilename.toString();
+                for (int i = fileName.length() - 1; i > 0; i--) {
+                    if (fileName.at(i) == " ") {
+                        continue;
+                    } else {
+                        fileName = fileName.left(i + 1);
+                        break;
+                    }
+                }
+
+                emit signalprogress(percentage);
+                emit signalCurFileName(fileName);
+            }
+        }
+    }
 }

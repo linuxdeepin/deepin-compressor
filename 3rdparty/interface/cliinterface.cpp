@@ -219,17 +219,6 @@ bool CliInterface::handleFileExists(const QString &line)
     }
 
     if (isFileExistsMsg(line)) {  // 提示是否替换已存在的文件
-        /*
-        Would you like to replace the existing file:
-          Path:     ./1.txt
-          Size:     48 bytes (1 KiB)
-          Modified: 2020-10-22 16:11:06
-        with the file from archive:
-          Path:     1.txt
-          Size:     48 bytes (1 KiB)
-          Modified: 2020-10-22 16:11:06
-        ? (Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit?
-        */
         const QStringList choices = m_cliProps->property("fileExistsInput").toStringList();  // 提示选项
         QString response;  // 选择结果
 
@@ -247,14 +236,14 @@ bool CliInterface::handleFileExists(const QString &line)
             response = choices.at(1);
             m_eErrorType = ET_NoError;
         } else if (query.responseSkipAll()) { // 全部跳过
-            // (S)kip all
+            // (S)kip all  |  n[E]ver
             response = choices.at(3);
             m_eErrorType = ET_NoError;
         } else if (query.responseOverwrite()) { // 替换
             // (Y)es
             response = choices.at(0);
         } else if (query.responseOverwriteAll()) { // 全部替换
-            // (A)lways
+            // (A)lways  |  [A]ll
             response = choices.at(2);
         }
 
@@ -297,6 +286,10 @@ void CliInterface::readStdout(bool handleAll)
 
     if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l")) {
         handleAll = true; // 7z output has no \n
+    }
+
+    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x")) {
+        handleAll = true; // unrar output has no \n
     }
 
     if (handleAll || wrongPwd) {

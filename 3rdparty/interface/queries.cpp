@@ -218,8 +218,6 @@ void OverwriteQuery::execute()
     // 操作结果
     const int mode = dialog->exec();
 
-    delete dialog;
-
     if (-1 == mode) {
         setResponse(Result_Cancel);
     } else if (0 == mode) {
@@ -235,6 +233,8 @@ void OverwriteQuery::execute()
             setResponse(Result_Overwrite);
         }
     }
+
+    delete dialog;
 }
 
 bool OverwriteQuery::responseCancelled()
