@@ -291,7 +291,7 @@ bool CliRarPlugin::handleUnrar5Line(const QString &line)
 
 void CliRarPlugin::handleUnrar5Entry()
 {
-    Archive::Entry *e = new Archive::Entry(this);
+    Archive::Entry *e = new Archive::Entry(/*this*/);
 
     QString compressionRatio = m_unrar5Details.value(QStringLiteral("ratio"));
     compressionRatio.chop(1); // Remove the '%'
@@ -518,7 +518,7 @@ bool CliRarPlugin::handleUnrar4Line(const QString &line)
 
 void CliRarPlugin::handleUnrar4Entry()
 {
-    Archive::Entry *e = new Archive::Entry(this);
+    Archive::Entry *e = new Archive::Entry(/*this*/);
 
     QDateTime ts = QDateTime::fromString(QString(m_unrar4Details.at(4) + QLatin1Char(' ') + m_unrar4Details.at(5)), QStringLiteral("dd-MM-yy hh:mm"));
     // Unrar 3 & 4 output dates with a 2-digit year but QDateTime takes it as
@@ -665,7 +665,7 @@ void CliRarPlugin::setEntryVal(ReadOnlyArchiveInterface::archive_stat &archive)
 
 void CliRarPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive, bool isMutilFolderFile)
 {
-    Archive::Entry *e = new Archive::Entry(this);
+    Archive::Entry *e = new Archive::Entry(/*this*/);
 
     e->setProperty("ratio", m_fileStat.archive_ratio);
     e->setProperty("timestamp", m_fileStat.archive_timestamp);
@@ -696,7 +696,7 @@ void CliRarPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive,
 
 Archive::Entry *CliRarPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_stat &archive)
 {
-    Archive::Entry *e = new Archive::Entry(this);
+    Archive::Entry *e = new Archive::Entry(/*this*/);
 
     e->setProperty("ratio", archive.archive_ratio);
     e->setProperty("timestamp", archive.archive_timestamp);

@@ -2044,7 +2044,7 @@ bool LibzipPlugin::minizip_extractEntry(unzFile zipfile, unz_file_info file_info
     return true;
 }
 
-Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile)
+void LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
     auto e = new Archive::Entry(/*this*/);
 
@@ -2134,12 +2134,11 @@ Archive::Entry *LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglo
 
     emit entry(e);
 //    m_emittedEntries << e;
-    return e;
 }
 
 Archive::Entry *LibzipPlugin::setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name)
 {
-    auto e = new Archive::Entry(this);
+    auto e = new Archive::Entry(/*this*/);
 
     // e->setCompressIndex(index);
 

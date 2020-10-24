@@ -22,6 +22,7 @@
 #include "settingdialog.h"
 #include "kprocess.h"
 #include "customwidget.h"
+#include "utils.h"
 
 #include <DPushButton>
 #include <DApplicationHelper>
@@ -121,6 +122,12 @@ SettingDialog::SettingDialog(QWidget *parent):
     foreach (QString key, m_associtionlist) {
         m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
     }
+}
+
+SettingDialog::~SettingDialog()
+{
+    qDebug() << "SettingDialog::~SettingDialog()";
+    SAFE_DELETE_ELE(m_settings);
 }
 /**
  * @brief SettingDialog::initUI 初始化界面

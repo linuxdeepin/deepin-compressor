@@ -125,12 +125,23 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "MainWindow::~MainWindow()";
     if (m_windowcount == 0) {
         if (this->m_pMapGlobalWnd != nullptr) {
             this->m_pMapGlobalWnd->mMapGlobal.clear();
+            delete m_pMapGlobalWnd;
+            m_pMapGlobalWnd = nullptr;
         }
         if (this->m_pCurAuxInfo != nullptr) {
+            QMap<QString, OpenInfo *>::iterator iter;
+            for (iter = m_pCurAuxInfo->information.begin(); iter != m_pCurAuxInfo->information.end();) {
+                SAFE_DELETE_ELE(iter.value());
+                iter++; //指针移至下一个位置
+            }
+
             this->m_pCurAuxInfo->information.clear();
+            delete m_pCurAuxInfo;
+            m_pCurAuxInfo = nullptr;
         }
     }
 
@@ -780,7 +791,7 @@ void MainWindow::InitConnection()
 
 QMenu *MainWindow::createSettingsMenu()
 {
-    QMenu *menu = new QMenu();
+    QMenu *menu = new QMenu(this);
 
     // 创建打开Acticon
     m_pOpenAction = menu->addAction(tr("Open file"));
@@ -1609,9 +1620,9 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
                 Archive::Entry *pRootEntry = m_pArchiveModel->getRootEntry();
 
                 // 清空根结点数据
-                if (pRootEntry) {
-                    pRootEntry->clean();
-                }
+                //                if (pRootEntry) {
+                //                    pRootEntry->clean();
+                //                }
 
                 this->m_pArchiveModel->resetmparent();      // 重置父节点
             }
@@ -2376,7 +2387,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
     //m_compressDirFiles = CheckAllFiles(m_strPathStore);
 
     if (pSettingInfo == nullptr) {
-        pSettingInfo = new Settings_Extract_Info();
+        pSettingInfo = new Settings_Extract_Info(this);
     }
     // 是否为自动创建目录
     pSettingInfo->b_isAutoCreateDir = m_pSettingsDialog->isAutoCreatDir();
@@ -2959,7 +2970,7 @@ void MainWindow::ExtractPassword(QString password)
         ExtractionOptions options;
         options.setAutoCreatDir(m_pSettingsDialog->isAutoCreatDir()); // 设置是否自动创建文件夹
         if (pSettingInfo == nullptr) {
-            pSettingInfo = new Settings_Extract_Info();
+            pSettingInfo = new Settings_Extract_Info(this);
         }
 
         options.pSettingInfo = pSettingInfo;
@@ -3375,6 +3386,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     m_pCompressSuccess->setCompressPath(Args[QStringLiteral("localFilePath")]);
 
     ReadOnlyArchiveInterface *pIface = Archive::createInterface(m_strCreateCompressFile, fixedMimeType);
+    pIface->setParent(this);
     if (pIface == nullptr) {
         qDebug() << "init plugin failed.";
         return;

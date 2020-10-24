@@ -252,6 +252,8 @@ void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileNam
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
+    cmdprocess->waitForFinished();
+    delete cmdprocess;
 }
 
 QString OpenWithDialog::includePercentFile(const QString &file)
@@ -561,7 +563,8 @@ void OpenWithDialog::openFileByApp()
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
-
+    cmdprocess->waitForFinished();
+    delete cmdprocess;
     close();
 
 //    if (DFileService::instance()->openFileByApp(this, app, m_url))

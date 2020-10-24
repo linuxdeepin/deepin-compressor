@@ -427,7 +427,7 @@ void LibarchivePlugin::setEntryData(/*const */archive_stat &aentry, qlonglong in
     Q_UNUSED(index);
     Q_UNUSED(name);
 
-    Archive::Entry *pCurEntry = new Archive::Entry(this);
+    auto pCurEntry = new Archive::Entry(/*this*/);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);
@@ -450,7 +450,7 @@ Archive::Entry *LibarchivePlugin::setEntryDataA(/*const */archive_stat &aentry/*
 {
     //Q_UNUSED(index);
     Q_UNUSED(name);
-    Archive::Entry *pCurEntry = new Archive::Entry(this);
+    Archive::Entry *pCurEntry = new Archive::Entry(/*this*/);
 
     pCurEntry->setProperty("fullPath", aentry.archive_fullPath);
     pCurEntry->setProperty("owner", aentry.archive_owner);

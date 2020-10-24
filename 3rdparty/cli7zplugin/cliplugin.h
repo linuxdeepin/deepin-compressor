@@ -75,7 +75,7 @@ private:
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override; // 获取大小
 
     int m_linesComment;
-    Archive::Entry *m_currentArchiveEntry;
+    //    Archive::Entry *m_currentArchiveEntry = nullptr;
     bool m_isFirstInformationEntry;
 
 //    QMap<QString, archive_stat> m_listMap;

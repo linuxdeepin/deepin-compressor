@@ -39,6 +39,7 @@ class SettingDialog: public DSettingsDialog
     Q_OBJECT
 public:
     explicit SettingDialog(QWidget *parent = nullptr);
+    ~SettingDialog();
     /**
      * @brief initUI 初始化界面
      */
@@ -91,7 +92,7 @@ signals:
     void sigResetDeleteArchive();
 
 private:
-    DSettings *m_settings;
+    DSettings *m_settings = nullptr;
     KProcess *m_process = nullptr;
     QStringList m_associtionlist;
     QStringList m_recommendedList;

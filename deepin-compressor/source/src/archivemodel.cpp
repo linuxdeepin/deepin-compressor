@@ -66,6 +66,16 @@ ArchiveModel::~ArchiveModel()
 //    }
 
     m_archive.reset(nullptr);
+    // qDebug() << sizeof(s_previousPieces);
+    SAFE_DELETE_ELE(s_previousPieces);
+
+    // qint64 size = 0;
+    for (int i = 0; i < vecSameEntry.count(); i++) {
+        // size += sizeof(vecSameEntry[i]);
+        SAFE_DELETE_ELE(vecSameEntry[i]);
+    }
+    // qDebug() << vecSameEntry.count() << size;
+    vecSameEntry.clear();
 }
 
 QVariant ArchiveModel::data(const QModelIndex &index, int role) const
@@ -541,6 +551,9 @@ void ArchiveModel::slotEntryRemoved(const QString &path)
         m_entryIcons.remove(parent->entries().at(entry->row())->fullPath(NoTrailingSlash));
         parent->removeEntryAt(entry->row());
 
+        if (!vecSameEntry.contains(entry)) {
+            vecSameEntry.push_back(entry);
+        }
 
         if (m_plugin) {
             if (!m_plugin->isAllEntry()) {
@@ -572,7 +585,8 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
         parentPath = parentEntry->fullPath();
 
         if (m_plugin) {
-            if (!m_plugin->isAllEntry()) {
+            bool b = m_plugin->isAllEntry();
+            if (!b) {
                 parentEntry->setProperty("size", parentEntry->property("size").toLongLong() + 1);
             }
         }
@@ -633,6 +647,9 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
     if (entry) {
         entry->copyMetaData(receivedEntry);
         entry->setProperty("fullPath", entryFileName);
+        if (!vecSameEntry.contains(receivedEntry) && entry != receivedEntry) {
+            vecSameEntry.push_back(receivedEntry);
+        }
     } else {
         QString parentPath = QString(parent->property("fullPath").toString());
         QString childPath = QString(receivedEntry->property("fullPath").toString());
@@ -716,6 +733,9 @@ void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behav
         /*      if (!entry->isDir()) {
                   insertEntry(entry, behaviour);
               } */
+        if (!vecSameEntry.contains(receivedEntry) && entry != receivedEntry) {
+            vecSameEntry.push_back(receivedEntry);
+        }
     } else {
         QString parentPath = QString(parent->property("fullPath").toString());
         QString childPath = QString(receivedEntry->property("fullPath").toString());

@@ -558,7 +558,7 @@ void CliInterface::cleanIfCanceled()
 void CliInterface::watchDestFilesBegin()
 {
     if (this->pFileWatcherdd == nullptr) {
-        this->pFileWatcherdd = new FileWatcher(this);
+        this->pFileWatcherdd = new FileWatcher(/*this*/);
     }
 
     connect(this->pFileWatcherdd, &FileWatcher::sigFileChanged, this, &CliInterface::slotFilesWatchedChanged);

@@ -381,5 +381,7 @@ private:
     Archive::Entry *s_previousMatch = nullptr;
     QStringList *s_previousPieces = new QStringList();
     ReadOnlyArchiveInterface *m_plugin;
+
+    QVector<Archive::Entry *> vecSameEntry;
 };
 #endif // ARCHIVEMODEL_H

@@ -177,7 +177,7 @@ void Cli7zPlugin::setEntryVal(const ReadOnlyArchiveInterface::archive_stat &arch
 
 void Cli7zPlugin::setEntryData(const ReadOnlyArchiveInterface::archive_stat &archive, qlonglong index, const QString &name, bool isMutilFolderFile)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry(this);
+    Archive::Entry *pCurEntry = new Archive::Entry(/*this*/);
 
     pCurEntry->setProperty("fullPath", name/*archive.archive_fullPath*/);
     if (!isMutilFolderFile) {
@@ -208,7 +208,7 @@ void Cli7zPlugin::setEntryData(const ReadOnlyArchiveInterface::archive_stat &arc
 
 Archive::Entry *Cli7zPlugin::setEntryDataA(const ReadOnlyArchiveInterface:: archive_stat &archive, const QString &name)
 {
-    Archive::Entry *pCurEntry = new Archive::Entry(this);
+    Archive::Entry *pCurEntry = new Archive::Entry(/*this*/);
 
     pCurEntry->setProperty("fullPath", name/*archive.archive_fullPath*/);
     pCurEntry->setProperty("size", archive.archive_size);
@@ -426,51 +426,35 @@ bool Cli7zPlugin::readListLine(const QString &line)
     case ParseStateEntryInformation:
         if (m_isFirstInformationEntry) {
             m_isFirstInformationEntry = false;
-            m_currentArchiveEntry = new Archive::Entry(this);
-            m_currentArchiveEntry->compressedSizeIsSet = false;
         }
 
         if (line.startsWith(QLatin1String("Path = "))) {
             const QString entryFilename = QDir::fromNativeSeparators(line.mid(7).trimmed());
             m_fileStat.archive_fullPath = entryFilename;
-//            m_currentArchiveEntry->setProperty("fullPath", entryFilename);
         } else if (line.startsWith(QLatin1String("Size = "))) {
             m_fileStat.archive_size = line.mid(7).trimmed().toInt();
-//            m_currentArchiveEntry->setProperty("size", line.mid(7).trimmed());
         } else if (line.startsWith(QLatin1String("Packed Size = "))) {
             // #236696: 7z files only show a single Packed Size value
             //          corresponding to the whole archive.
             if (m_archiveType != ArchiveType7z) {
-                m_currentArchiveEntry->compressedSizeIsSet = true;
                 m_fileStat.archive_compressedSize = line.mid(14).trimmed().toInt();
-//                m_currentArchiveEntry->setProperty("compressedSize", line.mid(14).trimmed());
             }
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             m_fileStat.archive_timestamp = QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss"));
-//            m_currentArchiveEntry->setProperty("timestamp", QDateTime::fromString(line.mid(11).trimmed(), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
             if (ArchiveTypeIso == m_archiveType) {
                 m_isFirstInformationEntry = true;
                 emitEntryForIndex(m_fileStat);
-//                if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-//                    emit entry(m_currentArchiveEntry);
-//                } else {
-//                    delete m_currentArchiveEntry;
-//                }
-
-                m_currentArchiveEntry = nullptr;
             }
         } else if (line.startsWith(QLatin1String("Folder = "))) {
             const QString isDirectoryStr = line.mid(9).trimmed();
             Q_ASSERT(isDirectoryStr == QStringLiteral("+") || isDirectoryStr == QStringLiteral("-"));
             const bool isDirectory = isDirectoryStr.startsWith(QLatin1Char('+'));
             m_fileStat.archive_isDirectory = isDirectory;
-//            m_currentArchiveEntry->setProperty("isDirectory", isDirectory);
             fixDirectoryFullName();
         } else if (line.startsWith(QLatin1String("Attributes = "))) {
             const QString attributes = line.mid(13).trimmed();
             if (attributes.contains(QLatin1Char('D'))) {
                 m_fileStat.archive_isDirectory = true;
-//                m_currentArchiveEntry->setProperty("isDirectory", true);
                 fixDirectoryFullName();
             } else {
                 m_fileStat.archive_isDirectory = false;
@@ -479,18 +463,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
             if (attributes.contains(QLatin1Char('_'))) {
                 m_fileStat.archive_permissions = attributes.mid(attributes.indexOf(QLatin1Char(' ')) + 1);
                 // Unix attributes
-//                m_currentArchiveEntry->setProperty("permissions", attributes.mid(attributes.indexOf(QLatin1Char(' ')) + 1));
             } else {
                 m_fileStat.archive_permissions = attributes;
-                // FAT attributes
-//                m_currentArchiveEntry->setProperty("permissions", attributes);
             }
         } else if (line.startsWith(QLatin1String("CRC = "))) {
             m_fileStat.archive_CRC = line.mid(6).trimmed();
-//            m_currentArchiveEntry->setProperty("CRC", line.mid(6).trimmed());
         } else if (line.startsWith(QLatin1String("Method = "))) {
             m_fileStat.archive_method = line.mid(9).trimmed();
-//            m_currentArchiveEntry->setProperty("method", line.mid(9).trimmed());
             // For zip archives we need to check method for each entry.
             if (m_archiveType == ArchiveTypeZip) {
                 QStringList methods = line.section(QLatin1Char('='), 1).trimmed().split(QLatin1Char(' '), QString::SkipEmptyParts);
@@ -502,37 +481,15 @@ bool Cli7zPlugin::readListLine(const QString &line)
                 emit sigIsEncrypted();
                 m_isEncrypted = true;
             }
-//            m_currentArchiveEntry->setProperty("isPasswordProtected", line.at(12) == QLatin1Char('+'));
         } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {
             m_isFirstInformationEntry = true;
             emitEntryForIndex(m_fileStat);
-//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-//                emit entry(m_currentArchiveEntry);
-//            } else {
-//                delete m_currentArchiveEntry;
-//            }
-
-            m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Accessed = ")) && ArchiveTypeUdf == m_archiveType) {
             m_isFirstInformationEntry = true;
             emitEntryForIndex(m_fileStat);
-//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-//                emit entry(m_currentArchiveEntry);
-//            } else {
-//                delete m_currentArchiveEntry;
-//            }
-
-            m_currentArchiveEntry = nullptr;
         } else if (line.startsWith(QLatin1String("Hard Link =")) && ArchiveTypeTar == m_archiveType) {
             m_isFirstInformationEntry = true;
             emitEntryForIndex(m_fileStat);
-//            if (!m_currentArchiveEntry->fullPath().isEmpty()) {
-//                emit entry(m_currentArchiveEntry);
-//            } else {
-//                delete m_currentArchiveEntry;
-//            }
-
-            m_currentArchiveEntry = nullptr;
         }
 
         break;

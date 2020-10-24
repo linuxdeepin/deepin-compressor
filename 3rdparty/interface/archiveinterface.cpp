@@ -172,6 +172,7 @@ ReadWriteArchiveInterface::ReadWriteArchiveInterface(QObject *parent, const QVar
 
 ReadWriteArchiveInterface::~ReadWriteArchiveInterface()
 {
+    qDebug() << "~ReadWriteArchiveInterface";
 }
 
 bool ReadOnlyArchiveInterface::waitForFinishedSignal()

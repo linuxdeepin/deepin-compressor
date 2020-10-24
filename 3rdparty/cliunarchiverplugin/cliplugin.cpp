@@ -218,7 +218,7 @@ void CliPlugin::readJsonOutput()
     for (const QJsonValue &value : entries) {
         const QJsonObject currentEntryJson = value.toObject();
 
-        Archive::Entry *currentEntry = new Archive::Entry(this);
+        Archive::Entry *currentEntry = new Archive::Entry(/*this*/);
 
         QString filename = currentEntryJson.value(QStringLiteral("XADFileName")).toString();
 

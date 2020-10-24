@@ -45,6 +45,15 @@ Archive::Entry::~Entry()
 {
     count--;
     //qDebug() << "自减后count:" << count;
+
+    for (int i = 0; i < m_entries.count(); ++i) {
+        auto aa = m_entries[i];
+        if (aa) {
+            delete aa;
+            aa = nullptr;
+        }
+    }
+    m_entries.clear();
 }
 
 void Archive::Entry::copyMetaData(const Archive::Entry *sourceEntry)

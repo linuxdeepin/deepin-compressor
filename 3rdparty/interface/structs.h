@@ -30,7 +30,7 @@ public:
     qint64 getLeftTime(unsigned long percent, bool isConvert = false);
 
 private:
-    qint64 consumeTime; //消耗时间
+    qint64 consumeTime = 0; //消耗时间
     QElapsedTimer m_timer;
     unsigned long m_lastPercent = 0;
     qint64 m_totalFileSize = 0; //处理的文件总大小
@@ -42,7 +42,14 @@ private:
  * @author added by hsw 20200619
  */
 
-struct Settings_Extract_Info {
+class Settings_Extract_Info : public QObject
+{
+    Q_OBJECT
+public:
+    Settings_Extract_Info(QObject *parent = nullptr)
+        : QObject(parent)
+    {
+    }
     QString str_defaultPath = ""; // 默认解压路径
     /**
      * @see 如果是自动创建文件夹，并且解压的是多个目录，那么该值是自动创建的文件夹名

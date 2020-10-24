@@ -219,7 +219,7 @@ private:
      * @param isMutilFolderFile
      * @return
      */
-    Archive::Entry *setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile = false);
+    void setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile = false);
     Archive::Entry *setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name);
     void setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
 
