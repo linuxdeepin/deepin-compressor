@@ -27,6 +27,7 @@
 #include "mimetypedisplaymanager.h"
 #include "treeheaderview.h"
 #include "openwithdialog.h"
+#include "uitools.h"
 
 #include <DMenu>
 
@@ -74,6 +75,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
                     listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
                 } else { // 替换
                     m_listCompressFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
+                    //m_pCompressFileWatcher->removePath(oldPath);
                 }
             }
         }
@@ -81,7 +83,26 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
 
 
     m_listCompressFiles << listSelFiles;
+    //m_pCompressFileWatcher->addPaths(listFiles);
+
+    // 刷新待压缩数据
+    refreshCompressedFiles();
+}
+
+QStringList CompressView::getCompressFiles()
+{
+    return m_listCompressFiles;
+}
+
+void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileName)
+{
     m_listEntry.clear();
+
+    // 对变化的文件进行监控
+    if (bChanged && !QFile::exists(strFileName)) {
+        m_listCompressFiles.removeOne(strFileName);
+        //m_pCompressFileWatcher->removePath(strFileName);
+    }
 
     // 刷新待压缩数据
     foreach (QString strFile, m_listCompressFiles) {
@@ -100,8 +121,6 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
             entry.qSize = fileInfo.size(); //文件大小
         }
         MimeTypeDisplayManager m_mimetype;
-        //entry.strType = m_mimetype.displayName(mimetype.name()); // 文件类型
-        //entry.lastModifiedTime = fileInfo.lastModified();
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();
 
         m_listEntry << entry;
@@ -112,11 +131,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
     resizeColumnWidth();
 
     sortByColumn(0);
-}
-
-QStringList CompressView::getCompressFiles()
-{
-    return m_listCompressFiles;
+    resetLevel();
 }
 
 void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -131,6 +146,7 @@ void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
 void CompressView::initUI()
 {
     m_pFileWatcher = new QFileSystemWatcher(this);
+    //m_pCompressFileWatcher = new QFileSystemWatcher(this);
 
 }
 
@@ -138,6 +154,7 @@ void CompressView::initConnections()
 {
     connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles);
     connect(this, &CompressView::customContextMenuRequested, this, &CompressView::slotShowRightMenu);
+    // connect(m_pCompressFileWatcher, &QFileSystemWatcher::fileChanged, this, &CompressView::signalFileChanged); // 文件目录变化
     connect(m_pFileWatcher, &QFileSystemWatcher::directoryChanged, this, &CompressView::slotDirChanged); // 文件目录变化
 }
 

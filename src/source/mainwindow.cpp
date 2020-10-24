@@ -33,6 +33,7 @@
 #include "settingdialog.h"
 #include "archivemanager.h"
 #include "DebugTimeManager.h"
+#include "popupdialog.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -49,10 +50,20 @@ static QMutex mutex;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
-    initUI();
+
+    setWindowTitle(tr("Archive Manager"));
+
+    // 先构建初始界面
+    m_pMainWidget = new QStackedWidget(this);  // 中心面板
+    m_pHomePage = new HomePage(this);            // 首页
+    m_pMainWidget->addWidget(m_pHomePage);
+    setCentralWidget(m_pMainWidget);    // 设置中心面板
+    m_pMainWidget->setCurrentIndex(0);
+    setMinimumSize(620, 465);
+
     initTitleBar();
-    initConnections();
-    initData();
+
+    m_iInitUITimer = startTimer(500);
 }
 
 MainWindow::~MainWindow()
@@ -62,9 +73,8 @@ MainWindow::~MainWindow()
 void MainWindow::initUI()
 {
     // 初始化界面
-    m_pMainWidget = new QStackedWidget(this);  // 中心面板
     m_pLoadingPage = new LoadingPage(this);  // 加载界面
-    m_pHomePage = new HomePage(this);            // 首页
+
     m_pCompressPage = new CompressPage(this);    // 压缩列表界面
     m_pCompressSettingPage = new CompressSettingPage(this);  // 压缩设置界面
     m_pUnCompressPage = new UnCompressPage(this);    // 解压列表界面
@@ -77,7 +87,6 @@ void MainWindow::initUI()
     m_pArchiveManager = new ArchiveManager(this);
 
     // 添加界面至主界面
-    m_pMainWidget->addWidget(m_pHomePage);
     m_pMainWidget->addWidget(m_pCompressPage);
     m_pMainWidget->addWidget(m_pCompressSettingPage);
     m_pMainWidget->addWidget(m_pUnCompressPage);
@@ -86,10 +95,7 @@ void MainWindow::initUI()
     m_pMainWidget->addWidget(m_pFailurePage);
     m_pMainWidget->addWidget(m_pLoadingPage);
 
-    setCentralWidget(m_pMainWidget);    // 设置中心面板
 
-    m_pMainWidget->setCurrentIndex(0);
-    setMinimumSize(620, 465);
 }
 
 void MainWindow::initTitleBar()
@@ -165,10 +171,16 @@ void MainWindow::refreshPage()
     break;
     case PI_Compress: {
         m_pMainWidget->setCurrentIndex(1);
+        if (m_iCompressedWatchTimerID == 0) {
+            m_iCompressedWatchTimerID = startTimer(1);
+        }
     }
     break;
     case PI_CompressSetting: {
         m_pMainWidget->setCurrentIndex(2);
+        if (m_iCompressedWatchTimerID == 0) {
+            m_iCompressedWatchTimerID = startTimer(1);
+        }
     }
     break;
     case PI_UnCompress: {
@@ -202,6 +214,10 @@ void MainWindow::refreshPage()
     case PI_CompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
         m_pSuccessPage->setSuccessDes(tr("Compression successful"));
+        if (0 != m_iCompressedWatchTimerID) {
+            killTimer(m_iCompressedWatchTimerID);
+            m_iCompressedWatchTimerID = 0;
+        }
     }
     break;
     case PI_UnCompressSuccess: {
@@ -215,6 +231,10 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressFailure: {
         m_pMainWidget->setCurrentIndex(6);
+        if (0 != m_iCompressedWatchTimerID) {
+            killTimer(m_iCompressedWatchTimerID);
+            m_iCompressedWatchTimerID = 0;
+        }
     }
     break;
     case PI_UnCompressFailure: {
@@ -303,6 +323,37 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         if (index >= m_pMainWidget->count())
             index = 0;
         m_pMainWidget->setCurrentIndex(index);
+    }
+}
+
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    if (m_iInitUITimer == event->timerId()) {
+        // 初始化界面
+        qDebug() << "初始化界面";
+        initUI();
+        initConnections();
+        initData();
+
+        killTimer(m_iInitUITimer);
+        m_iInitUITimer = 0;
+    } else if (m_iCompressedWatchTimerID == event->timerId()) {
+        // 对压缩文件的监控
+        QStringList listFiles = m_pCompressPage->compressFiles();
+
+        for (int i = 0; i < listFiles.count(); i++) {
+            QFileInfo info(listFiles[i]);
+
+            if (!info.exists()) {
+                QString displayName = UiTools::toShortString(info.fileName());
+                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
+
+                TipDialog dialog(this);
+                dialog.showDialog(strTips, tr("OK"), DDialog::ButtonNormal);
+
+                m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
+            }
+        }
     }
 }
 
@@ -543,4 +594,15 @@ void MainWindow::slotQuery(Query *query)
     qDebug() << " query->execute()";
     query->setParent(this);
     query->execute();
+}
+
+void MainWindow::slotFileChanged(const QString &strFileName)
+{
+    QString displayName = UiTools::toShortString(QFileInfo(strFileName).fileName());
+    QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
+
+    TipDialog dialog(this);
+    dialog.showDialog(strTips, tr("OK"), DDialog::ButtonNormal);
+
+    m_pCompressPage->refreshCompressedFiles(true, strFileName);
 }

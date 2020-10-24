@@ -59,6 +59,11 @@ QStringList CompressPage::compressFiles()
     return m_pCompressView->getCompressFiles();
 }
 
+void CompressPage::refreshCompressedFiles(bool bChanged, const QString &strFileName)
+{
+    m_pCompressView->refreshCompressedFiles(bChanged, strFileName);
+}
+
 void CompressPage::initUI()
 {
     // 初始化相关变量

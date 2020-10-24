@@ -280,3 +280,12 @@ QString UiTools::readConf()
     confFile.close();
     return confValue;
 }
+
+QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
+{
+    left = (left >= limitCounts || left <= 0) ? limitCounts / 2 : left;
+    int right = limitCounts - left;
+    QString displayName = "";
+    displayName = strSrc.length() > limitCounts ? strSrc.left(left) + "..." + strSrc.right(right) : strSrc;
+    return displayName;
+}

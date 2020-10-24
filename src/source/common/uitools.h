@@ -26,28 +26,28 @@
 
 
 #define SAFE_DELETE_ELE( ptr ) \
-    if (ptr != NULL)      \
+    if (ptr != nullptr)      \
     {                     \
         delete ptr;       \
-        ptr = NULL;       \
+        ptr = nullptr;       \
     }
 
 #define SAFE_DELETE_ARRAY( ptr ) \
-    if (ptr != NULL)            \
+    if (ptr != nullptr)            \
     {                           \
         delete[] ptr;           \
-        ptr = NULL;             \
+        ptr = nullptr;             \
     }
 
 #define SAFE_DELETE_TABLE( ptr ) \
-    if (ptr != NULL)            \
+    if (ptr != nullptr)            \
     {                           \
         for (i = 0; i < row; i++)\
         {\
             SAFE_DELETE_ARRAY(ptr[i])\
             delete [] ptr;\
         }\
-        ptr = NULL; \
+        ptr = nullptr; \
     }
 
 // 界面通用工具
@@ -108,6 +108,15 @@ public:
      * @return  配置信息
      */
     static QString readConf();
+
+    /**
+     * @brief Utils::toShortString 将过长的字符串中间换成“...”代替
+     * @param strSrc
+     * @param limitCounts
+     * @param left
+     * @return
+     */
+    static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
 
 private:
     static QStringList m_associtionlist;

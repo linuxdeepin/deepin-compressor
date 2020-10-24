@@ -26,8 +26,10 @@
 #include "commonstruct.h"
 
 #include <DWidget>
+#include <DFileWatcher>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 
 class QFileSystemWatcher;
@@ -51,6 +53,13 @@ public:
      * @return      待压缩的文件
      */
     QStringList getCompressFiles();
+
+    /**
+     * @brief refreshCompressedFiles    刷新压缩文件
+     * @param bChanged                  是否有文件改变
+     * @param strFileName               改变的文件名
+     */
+    void refreshCompressedFiles(bool bChanged = false, const QString &strFileName = "");
 
 
 protected:
@@ -103,6 +112,12 @@ signals:
      */
     void signalLevelChanged(bool bRootIndex);
 
+    /**
+     * @brief signalFileChanged 压缩文件变化
+     * @param strFileName       文件名（含路径）
+     */
+    //void signalFileChanged(const QString &strFileName);
+
 private slots:
     /**
      * @brief slotShowRightMenu     显示右键菜单
@@ -143,7 +158,8 @@ private:
     QStringList m_listCompressFiles;    // 待压缩的文件
     QList<FileEntry> m_listEntry;
 
-    QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控
+    //DFileWatcher *m_pCompressFileWatcher; // 对待压缩文件进行监控
+    QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控(层级大于1时)
 
     FileEntry m_stRightEntry;       // 右键点击的文件
 };

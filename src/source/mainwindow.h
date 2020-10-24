@@ -93,9 +93,16 @@ private:
      */
     void calFileSizeByThread(const QString &path);
 
+
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+
+    /**
+     * @brief timerEvent    定时
+     */
+    void timerEvent(QTimerEvent *) override;
 
 private Q_SLOTS:
     /**
@@ -154,6 +161,13 @@ private Q_SLOTS:
      */
     void slotQuery(Query *query);
 
+    /**
+     * @brief slotFileChanged 压缩文件变化
+     * @param strFileName       文件名（含路径）
+     */
+    void slotFileChanged(const QString &strFileName);
+
+
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板
 
@@ -174,6 +188,9 @@ private:
     QSettings *m_pSettings;     // 默认配置信息
 
     Page_ID m_ePageID;      // 界面标识
+
+    int m_iInitUITimer = 0;                           // 初始化界面定时器
+    int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
     ArchiveManager *m_pArchiveManager;
 

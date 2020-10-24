@@ -49,6 +49,13 @@ public:
      */
     QStringList compressFiles();
 
+    /**
+     * @brief refreshCompressedFiles    刷新压缩文件
+     * @param bChanged                  是否有文件改变
+     * @param strFileName               改变的文件名
+     */
+    void refreshCompressedFiles(bool bChanged = false, const QString &strFileName = "");
+
 private:
     /**
      * @brief initUI    初始化界面
