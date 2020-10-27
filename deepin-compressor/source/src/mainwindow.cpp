@@ -63,6 +63,10 @@
 #include <DWidgetUtil>
 #include <DWindowCloseButton>
 #include <DWindowOptionButton>
+#include <DFrame>
+#include <DDrawer>
+#include <DArrowLineDrawer>
+#include <denhancedwidget.h>
 
 #include <QDebug>
 #include <QDir>
@@ -87,6 +91,8 @@
 #include <QDesktopWidget>
 #include <QFileSystemWatcher>
 #include <QtConcurrent/QtConcurrent>
+#include <QFormLayout>
+#include <QLabel>
 
 #include <unistd.h>
 
@@ -641,6 +647,7 @@ void MainWindow::InitConnection()
     connect(m_pCompressSuccess, &Compressor_Success::sigOpenConvertArchive, this, &MainWindow::slotReloadConvertArchive);
     connect(m_pCompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);
     connect(m_pTitleButton, &DPushButton::clicked, this, &MainWindow::onTitleButtonPressed);
+    connect(m_pTitleCommentButton, &DPushButton::clicked, this, &MainWindow::slotTitleCommentButtonPressed);
     connect(this, &MainWindow::sigZipSelectedFiles, m_pCompressPage, &CompressPage::onSelectedFilesSlot);
     connect(m_pArchiveModel, &ArchiveModel::loadingFinished, this, &MainWindow::slotLoadingFinished);
     connect(m_pUnCompressPage, &UnCompressPage::sigDecompressPress, this, &MainWindow::slotextractSelectedFilesTo);
@@ -859,19 +866,33 @@ void MainWindow::initTitleBar()
 
     // 添加左上角按钮
     m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
-    m_pTitleButton->setFixedSize(38, 38);
+    m_pTitleButton->setFixedSize(36, 36);
     m_pTitleButton->setVisible(false);
     m_pTitleButton->setObjectName("TitleButton");
     m_pTitleButton->setAccessibleName("Title_btn");
+
+    // 添加标题栏查看压缩文件注释按钮
+    m_pTitleCommentButton = new DIconButton(this);
+    m_pTitleCommentButton->setFixedSize(36, 36);
+
+    QIcon iconComment(":assets/icons/deepin/builtin/icons/information.svg");
+    m_pTitleCommentButton->setIcon(iconComment);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+
+    m_pTitleCommentButton->setVisible(false);
+    m_pTitleCommentButton->setObjectName("CommentButton");
+    m_pTitleCommentButton->setAccessibleName("Comment_btn");
 
     // 标题栏布局
     QHBoxLayout *leftLayout = new QHBoxLayout;
     leftLayout->addSpacing(6);
     leftLayout->addWidget(m_pTitleButton);
+    leftLayout->addSpacing(5);
+    leftLayout->addWidget(m_pTitleCommentButton);
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(6 + 38);
+    left_frame->setFixedWidth(6 + 36 + 36 + 12);
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
@@ -1299,6 +1320,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(true);
         setAcceptDrops(false);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
+        m_pTitleCommentButton->setVisible(true);
         titlebar()->setTitle(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(1);
         break;
@@ -5009,6 +5031,180 @@ void MainWindow::onTitleButtonPressed()
     return;
 }
 
+void MainWindow::slotTitleCommentButtonPressed()
+{
+    m_comment = m_pArchiveModel->getArchiveComment();
+    if (m_ePageID == PAGE_UNZIP) {
+        DDialog *dialog = new DDialog(this);
+        dialog->setFixedWidth(300);
+
+        // 整体布局
+        QVBoxLayout *mainLayout = new QVBoxLayout;
+
+        // 文件图标和名称布局
+        DWidget *fileWidget = new DWidget;
+        QVBoxLayout *fileLayout = new QVBoxLayout;
+
+        // 文件名
+        QFileInfo file(m_strLoadfile);
+
+        // 根据文件类型获取icon
+        QIcon icon(QIcon::fromTheme(determineMimeType(file.fileName()).iconName()).pixmap(128, 128));
+        if (icon.isNull()) {
+            icon = QIcon::fromTheme("empty").pixmap(128, 128);
+        }
+
+        // 文件图标lable
+        DLabel *fileIconLable = new DLabel;
+        fileIconLable->setPixmap(icon.pixmap(128, 128));
+        fileIconLable->setAlignment(Qt::AlignCenter);
+
+        // 文件名lable
+        DLabel *fileNameLable = new DLabel;
+        QString str1 = fontMetrics().elidedText(file.fileName(), Qt::ElideMiddle, 150);
+        fileNameLable->setText(str1);
+        fileNameLable->setToolTip(file.fileName());
+        fileNameLable->setAlignment(Qt::AlignCenter);
+        fileNameLable->setWordWrap(true);
+
+        fileLayout->addWidget(fileIconLable);
+        fileLayout->addWidget(fileNameLable);
+        fileWidget->setLayout(fileLayout);
+
+        QFont titleFont;
+        titleFont.setWeight(QFont::Medium);
+
+        QFont infoFont;
+        infoFont.setPixelSize(12);
+        infoFont.setWeight(QFont::Normal);
+
+        QList<DArrowLineDrawer *> expandGroup;
+
+        // DArrowLineDrawer设置Basic info标题
+        DArrowLineDrawer *basicInfoDrawer = new DArrowLineDrawer;
+        basicInfoDrawer->setFont(titleFont);
+        basicInfoDrawer->setTitle(tr("Basic info"));
+//        basicInfoDrawer->setFixedSize(280, 186);
+        basicInfoDrawer->setFixedHeight(30);
+        basicInfoDrawer->setExpand(true);
+        expandGroup.append(basicInfoDrawer);
+
+        // 基本信息Frame
+        DFrame *basicInforFrame = new DFrame;
+
+        // 基本信息具体内容布局
+        QFormLayout *basicInfoFormLayout = new QFormLayout;
+        basicInfoFormLayout->setHorizontalSpacing(35);
+        basicInfoFormLayout->setLabelAlignment(Qt::AlignLeft);
+
+        DLabel *left1 = new DLabel(tr("Size"));
+        DLabel *left2 = new DLabel(tr("Type"));
+        DLabel *left3 = new DLabel(tr("Location"));
+        DLabel *left4 = new DLabel(tr("Time created"));
+        DLabel *left5 = new DLabel(tr("Time accessed"));
+        DLabel *left6 = new DLabel(tr("Time modified"));
+
+        left1->setFont(infoFont);
+        left2->setFont(infoFont);
+        left3->setFont(infoFont);
+        left4->setFont(infoFont);
+        left5->setFont(infoFont);
+        left6->setFont(infoFont);
+
+        DLabel *right1 = new DLabel(Utils::humanReadableSize(file.size(), 1));
+        DLabel *right2 = new DLabel(tr("Archive"));
+        DLabel *right3 = new DLabel(file.filePath());
+        QString str2 = fontMetrics().elidedText(file.filePath(), Qt::ElideMiddle, 150);
+        right3->setText(str2);
+        right3->setToolTip(file.filePath());
+        DLabel *right4 = new DLabel(file.created().toString("yyyy/MM/dd hh:mm:ss"));
+        DLabel *right5 = new DLabel(file.lastRead().toString("yyyy/MM/dd hh:mm:ss"));
+        DLabel *right6 = new DLabel(file.lastModified().toString("yyyy/MM/dd hh:mm:ss"));
+
+        right1->setFont(infoFont);
+        right2->setFont(infoFont);
+        right3->setFont(infoFont);
+        right4->setFont(infoFont);
+        right5->setFont(infoFont);
+        right6->setFont(infoFont);
+
+        basicInfoFormLayout->addRow(left1, right1);
+        basicInfoFormLayout->addRow(left2, right2);
+        basicInfoFormLayout->addRow(left3, right3);
+        basicInfoFormLayout->addRow(left4, right4);
+        basicInfoFormLayout->addRow(left5, right5);
+        basicInfoFormLayout->addRow(left6, right6);
+
+        basicInforFrame->setLayout(basicInfoFormLayout);
+        basicInfoDrawer->setContent(basicInforFrame);
+
+        // DArrowLineDrawer设置Comment标题
+        DArrowLineDrawer *commentDrawer = new DArrowLineDrawer;
+        commentDrawer->setFont(titleFont);
+        commentDrawer->setTitle(tr("Comment"));
+//        basicInfoDrawer->setFixedSize(280, 126);
+        commentDrawer->setFixedHeight(30);
+        commentDrawer->setExpand(true);
+        expandGroup.append(commentDrawer);
+
+        // 注释Frame布局
+        DFrame *commentFrame = new DFrame;
+
+        DTextEdit *commentTextedit = new DTextEdit;
+        if (m_strLoadfile.endsWith(".rar")) { // rar格式不支持修改注释
+            commentTextedit->setEnabled(false);
+        }
+
+        commentTextedit->setPlaceholderText("最多输入1000个字符");
+//        commentTextedit->setFixedSize(260, 80);
+        commentTextedit->setFixedHeight(80);
+        commentTextedit->setText(m_comment);
+        commentTextedit->setFont(infoFont);
+
+        QString newComment = m_comment;
+        connect(commentTextedit, &DTextEdit::textChanged, this, [ & ] {
+            newComment = commentTextedit->toPlainText();
+        });
+
+        QVBoxLayout *commentLayout = new QVBoxLayout;
+        commentLayout->addWidget(commentTextedit, Qt::AlignCenter);
+
+        commentFrame->setLayout(commentLayout);
+        commentDrawer->setContent(commentFrame);
+
+        mainLayout->addWidget(fileWidget);
+        mainLayout->addWidget(basicInfoDrawer, 0, Qt::AlignTop);
+        mainLayout->addWidget(commentDrawer, 0, Qt::AlignTop);
+
+        DWidget *widget = new DWidget(dialog);
+        widget->setLayout(mainLayout);
+        dialog->addContent(widget);
+
+        // DArrowLineDrawer收缩展开设置大小
+        DEnhancedWidget *basicInfoWidget = new DEnhancedWidget(basicInfoDrawer, basicInfoDrawer);
+        connect(basicInfoWidget, &DEnhancedWidget::heightChanged, basicInfoWidget, [ = ]() {
+            QRect rc = dialog->geometry();
+            rc.setHeight(fileWidget->height() + basicInfoDrawer->height() + commentDrawer->height()
+                         + contentsMargins().top() + contentsMargins().bottom() + 100);
+            dialog->setGeometry(rc);
+        });
+
+        DEnhancedWidget *commentWidget = new DEnhancedWidget(commentDrawer, commentDrawer);
+        connect(commentWidget, &DEnhancedWidget::heightChanged, commentWidget, [ = ]() {
+            QRect rc = dialog->geometry();
+            rc.setHeight(fileWidget->height() + basicInfoDrawer->height() + commentDrawer->height()
+                         + contentsMargins().top() + contentsMargins().bottom() + 90);
+            dialog->setGeometry(rc);
+        });
+
+        int mode = dialog->exec();
+        if (mode == -1 && m_comment != newComment) {
+            m_comment = newComment;
+            updateArchiveComment();
+        }
+    }
+}
+
 void MainWindow::onCompressAddfileSlot(bool status)
 {
     if (false == status) {  // 压缩列表界面进入文件夹，不允许添加文件
@@ -5226,6 +5422,15 @@ void MainWindow::extractMkdir(const QStringList &files)
     m_ePageID = PAGE_UNZIPPROGRESS;
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
     refreshPage();
+}
+
+void MainWindow::updateArchiveComment()
+{
+    QString fixedMimetype = determineMimeType(m_strLoadfile).name();
+    // 创建解压需要的插件
+    ReadWriteArchiveInterface *pIface = dynamic_cast<ReadWriteArchiveInterface *>(m_pArchiveModel->getPlugin());
+    CommentJob *comentJob = new CommentJob(m_comment, pIface);
+    comentJob->start();
 }
 
 void MainWindow::autoDeleteSourceFile()

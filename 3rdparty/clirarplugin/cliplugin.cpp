@@ -689,6 +689,7 @@ void CliRarPlugin::setEntryData(ReadOnlyArchiveInterface::archive_stat &archive,
     e->setProperty("CRC", m_fileStat.archive_CRC);
     e->setProperty("BLAKE2", m_fileStat.archive_BLAKE2);
     e->setProperty("link", m_fileStat.archive_link);
+    e->setProperty("archiveComment", m_comment);
 
 //    m_unrar5Details.clear();
     emit entry(e);
@@ -711,6 +712,7 @@ Archive::Entry *CliRarPlugin::setEntryDataA(ReadOnlyArchiveInterface::archive_st
     e->setProperty("CRC", archive.archive_CRC);
     e->setProperty("BLAKE2", archive.archive_BLAKE2);
     e->setProperty("link", archive.archive_link);
+    e->setProperty("archiveComment", m_comment);
 
     return e;
 }

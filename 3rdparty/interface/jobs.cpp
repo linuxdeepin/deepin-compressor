@@ -22,6 +22,7 @@
 #include "jobs.h"
 //#include "archiveentry.h"
 #include "structs.h"
+
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>

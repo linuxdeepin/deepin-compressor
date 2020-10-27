@@ -673,8 +673,7 @@ void ArchiveModel::slotListEntry(Archive::Entry *entry)
 
 void ArchiveModel::newEntry(Archive::Entry *receivedEntry, InsertBehaviour behaviour)
 {
-
-
+    setArchiveComment(receivedEntry->property("archiveComment").toString());
     if (receivedEntry->fullPath().isEmpty()) {
         qDebug() << "Weird, received empty entry (no filename) - skipping";
         return;
@@ -1036,6 +1035,15 @@ void ArchiveModel::setPlugin(ReadOnlyArchiveInterface *interface)
     m_plugin = interface; // 返回插件指针
 }
 
+void ArchiveModel::setArchiveComment(const QString &comment)
+{
+    m_archiveComment = comment;
+}
+
+QString ArchiveModel::getArchiveComment()
+{
+    return m_archiveComment;
+}
 
 QList<int> ArchiveModel::shownColumns() const
 {

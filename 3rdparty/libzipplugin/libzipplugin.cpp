@@ -90,6 +90,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
     zip_t *archive = zip_open(QFile::encodeName(fileName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
     zip_error_init_with_code(&err, errcode);
     m_bAllEntry = false;
+    m_listArchive = archive;
 
     //某些特殊文件，如.crx用zip打不开，需要替换minizip
     if (!archive) {
@@ -2145,6 +2146,9 @@ void LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, c
             }
         }
     }
+
+    // 获取压缩包的注释信息
+    e->setProperty("archiveComment", m_common->trans2uft8(zip_get_archive_comment(m_listArchive, nullptr, ZIP_FL_ENC_RAW)));
 
     emit entry(e);
 //    m_emittedEntries << e;

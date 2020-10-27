@@ -251,6 +251,7 @@ private:
 
     bool m_bCancel = false;     // 是否取消
     Common *m_common = nullptr; // 通用工具类
+    zip_t *m_listArchive = nullptr;
 };
 
 #endif // LIBZIPPLUGIN_H

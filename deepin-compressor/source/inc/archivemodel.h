@@ -260,6 +260,8 @@ public:
      */
     ReadOnlyArchiveInterface *getPlugin();
 
+    QString getArchiveComment();
+
 Q_SIGNALS:
     void loadingStarted();
     void loadingFinished(KJob *);
@@ -357,6 +359,8 @@ private:
      */
     void setPlugin(ReadOnlyArchiveInterface *interface);
 
+    void setArchiveComment(const QString &comment);
+
 public:
     QMap<QString, Archive::Entry *> mapFilesUpdate; // 更新的文件
 
@@ -383,5 +387,6 @@ private:
     ReadOnlyArchiveInterface *m_plugin;
 
     QVector<Archive::Entry *> vecSameEntry;
+    QString m_archiveComment = "";
 };
 #endif // ARCHIVEMODEL_H

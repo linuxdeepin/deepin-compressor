@@ -404,6 +404,8 @@ private:
      */
     void extractMkdir(const QStringList &files);
 
+    void updateArchiveComment();
+
 
 protected:
     /**
@@ -597,6 +599,11 @@ private slots:
      * @brief onTitleButtonPressed  标题栏按钮点击
      */
     void onTitleButtonPressed();
+
+    /**
+     * @brief onTitleButtonPressed  标题栏按钮点击
+     */
+    void slotTitleCommentButtonPressed();
 
     /**
      * @brief onCompressAddfileSlot
@@ -817,6 +824,7 @@ private:
     OpenLoadingPage *m_pOpenLoadingPage = nullptr;          // 加载界面
 
     DIconButton *m_pTitleButton = nullptr;                  // 标题栏按钮（添加文件）
+    DIconButton *m_pTitleCommentButton = nullptr;                  // 标题栏按钮（添加文件）
     QAction *m_pOpenAction;                                 // 菜单 - 打开
     DSpinner *m_pSpinner = nullptr;                         // 转圈加载
 
@@ -889,6 +897,8 @@ private:
     bool m_isFileModified = false;                          // 监控文件是否已经发生改变
 
     QVector<Archive::Entry *> m_entries;
+    QString m_comment;
+//    DTextEdit *m_commentTextedit = nullptr;
 
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;

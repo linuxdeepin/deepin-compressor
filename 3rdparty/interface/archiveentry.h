@@ -52,6 +52,8 @@ class Archive::Entry : public QObject
     Q_PROPERTY(QDateTime timestamp MEMBER m_timestamp)
     Q_PROPERTY(bool isDirectory MEMBER m_isDirectory WRITE setIsDirectory)
     Q_PROPERTY(bool isPasswordProtected MEMBER m_isPasswordProtected)
+    Q_PROPERTY(QString archiveComment MEMBER m_archiveComment)
+
 
 public:
     static int count;
@@ -244,6 +246,7 @@ private:
 //    QDateTime m_timestamp;
     bool m_isDirectory;     // 是否是文件夹
     bool m_isPasswordProtected; // 是否加密
+    QString m_archiveComment; // 压缩包的注释信息
 
     // int m_iCompressIndex =  0;
 };
