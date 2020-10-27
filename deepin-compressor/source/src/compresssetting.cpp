@@ -165,11 +165,18 @@ void CompressSetting::InitUI()
     m_savepath->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     m_savepath->setMinimumSize(260, 36);
 
+    // 压缩方式
+    m_pCompressLevelCkb = new DComboBox(this);
+    m_pCompressLevelCkb->setMinimumSize(260, 36);
+
+    // 选项布局
     filelayout->addRow(tr("Name") + ":", m_filename);
     filelayout->addRow(tr("Save to") + ":", m_savepath);
+    filelayout->addRow(tr("Compress Level") + ":", m_pCompressLevelCkb);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
-    filelayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+    filelayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+
 
     // 高级选项
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
@@ -219,6 +226,10 @@ void CompressSetting::InitUI()
     m_splitnumedit->setValue(0.0);
     m_splitnumedit->setSpecialValueText(" ");
 
+    // 注释
+    m_pCommentLbl = new DLabel(tr("comment"), this);
+    m_pCommentEdt = new DTextEdit(this);
+
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
     typeLayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
@@ -234,6 +245,8 @@ void CompressSetting::InitUI()
     m_fileLayout->addLayout(m_file_secretlayout);
     m_fileLayout->addWidget(m_splitcompress);
     m_fileLayout->addWidget(m_splitnumedit);
+    m_fileLayout->addWidget(m_pCommentLbl);
+    m_fileLayout->addWidget(m_pCommentEdt);
     m_fileLayout->addStretch();
     m_fileLayout->setContentsMargins(0, 0, 50, 0);
 
@@ -275,11 +288,15 @@ void CompressSetting::InitUI()
     m_splitnumedit->setEnabled(false);
     m_password->setEnabled(true);
     m_file_secret->setEnabled(false);
+//    m_pCommentLbl->setEnabled(false);
+//    m_pCommentEdt->setEnabled(false);
 
     m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false);
 
     setBackgroundRole(DPalette::Base);
     setTabOrder(m_compresstype, m_filename);
+
+    refreshCompressLevel("zip");
 }
 
 void CompressSetting::InitConnection()
@@ -440,18 +457,14 @@ void CompressSetting::onNextButoonClicked()
     // 压缩类型
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
     // 压缩等级
-    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
-        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
-    } else if ("application/zip" == fixedMimeType) {
-        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 5:Standard
-
-        //        if (password.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
-        //            showWarningDialog(tr("The zip format does not support Chinese characters as compressed passwords"));
-        //            return;
-        //        }
-    } else {
-        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
-    }
+    m_openArgs[QStringLiteral("compressionLevel")] = QString::number(m_pCompressLevelCkb->currentData().toInt());
+//    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
+//        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
+//    } else if ("application/zip" == fixedMimeType) {
+//        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 5:Standard
+//    } else {
+//        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
+//    }
 
     qDebug() << m_splitnumedit->value();
     // 分卷压缩大小
@@ -552,6 +565,8 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(true);
         m_splitcompress->setVisible(true);
         m_splitnumedit->setVisible(true);
+        m_pCommentLbl->setVisible(true);
+        m_pCommentEdt->setVisible(true);
     } else { // 关闭高级选项设置
         m_encryptedlabel->setVisible(false);
         m_password->setVisible(false);
@@ -559,6 +574,8 @@ void CompressSetting::onAdvanceButtonClicked(bool status)
         m_file_secret->setVisible(false);
         m_splitcompress->setVisible(false);
         m_splitnumedit->setVisible(false);
+        m_pCommentLbl->setVisible(false);
+        m_pCommentEdt->setVisible(false);
         m_password->setText("");
         m_file_secret->setChecked(false);
         m_splitcompress->setChecked(false);
@@ -813,6 +830,8 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitnumedit->setEnabled(false);
         m_splitnumedit->setValue(0.0);
         isSplitChecked = false;
+        m_pCommentLbl->setEnabled(false);
+        m_pCommentEdt->setEnabled(false);
     } else if (0 == selectType.compare("7z")) {
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
@@ -823,6 +842,8 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_encryptedfilelistlabel->setEnabled(true);
         m_file_secret->setEnabled(true);
         m_splitcompress->setEnabled(true);
+        m_pCommentLbl->setEnabled(false);
+        m_pCommentEdt->setEnabled(false);
     } else if (0 == selectType.compare("zip")) {
         m_splitnumedit->setEnabled(false);
         m_encryptedlabel->setEnabled(true);
@@ -835,6 +856,8 @@ void CompressSetting::ontypeChanged(QAction *action)
         //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
         isSplitChecked = false;
+        m_pCommentLbl->setEnabled(true);
+        m_pCommentEdt->setEnabled(true);
     } else {
         m_splitnumedit->setEnabled(false);
         m_encryptedlabel->setEnabled(false);
@@ -847,7 +870,13 @@ void CompressSetting::ontypeChanged(QAction *action)
         //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
         isSplitChecked = false;
+        m_pCommentLbl->setEnabled(false);
+        m_pCommentEdt->setEnabled(false);
     }
+
+    // 压缩方式切换
+    refreshCompressLevel(selectType);
+
 }
 
 void CompressSetting::onThemeChanged()
@@ -1397,6 +1426,22 @@ bool CompressSetting::existSameFileName()
         return true;
     } else {
         return false;
+    }
+}
+
+void CompressSetting::refreshCompressLevel(const QString &strType)
+{
+    m_pCompressLevelCkb->clear();
+    if (0 == strType.compare("tar")) {
+        m_pCompressLevelCkb->addItem(tr("store"), 0);
+    } else {
+        m_pCompressLevelCkb->addItem(tr("store"), 0);
+        m_pCompressLevelCkb->addItem(tr("Fastest"), 1);
+        m_pCompressLevelCkb->addItem(tr("Faster"), 3);
+        m_pCompressLevelCkb->addItem(tr("standard"), 5);
+        m_pCompressLevelCkb->addItem(tr("better"), 7);
+        m_pCompressLevelCkb->addItem(tr("best"), 9);
+        m_pCompressLevelCkb->setCurrentIndex(2);
     }
 }
 

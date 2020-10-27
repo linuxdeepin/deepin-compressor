@@ -36,6 +36,7 @@
 #include <dfilechooseredit.h>
 #include <DSpinBox>
 #include <DMenu>
+#include <DTextEdit>
 
 #include <QVBoxLayout>
 
@@ -123,6 +124,12 @@ private:
     int showWarningDialog(const QString &msg, int index = 0, const QString &strTitle = "", DDialog *pDialogShow = nullptr);
     bool existSameFileName();
 
+    /**
+     * @brief refreshCompressLevel  刷新压缩方式
+     * @param strType               格式类型
+     */
+    void refreshCompressLevel(const QString &strType);
+
 private:
     CustomPushButton *m_nextbutton = nullptr;
     QPixmap m_compressicon;
@@ -155,6 +162,10 @@ private:
     bool filePermission = true;
     qint64 m_getFileSize;
     bool isSplitChecked = false;
+
+    DComboBox *m_pCompressLevelCkb;       // 压缩方式选择项
+    DLabel *m_pCommentLbl;
+    DTextEdit *m_pCommentEdt;       // 注释信息
 
 public:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
