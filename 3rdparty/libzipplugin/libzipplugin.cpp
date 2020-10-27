@@ -592,6 +592,8 @@ bool LibzipPlugin::addComment(const QString &comment)
     gettimeofday(&tv, nullptr);
     qint64 timer1 = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
+    zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
+
     if (zip_close(archive)) {
         emit error(("Failed to write archive."));
         return false;

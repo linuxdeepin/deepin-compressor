@@ -231,7 +231,7 @@ private:
     bool m_skipAll;             // 是否全部跳过
     bool m_listAfterAdd;        // 压缩之后是否list
     int m_filesize;             // 压缩的文件数目
-    zip_t *m_addarchive;        // 压缩包
+    zip_t *m_addarchive = nullptr; // 压缩包
     // QByteArray m_codecstr;
     QByteArray m_codecname;     // 探测编码
     ExtractionOptions m_extractionOptions;  // 解压参数

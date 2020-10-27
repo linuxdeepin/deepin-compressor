@@ -2498,7 +2498,9 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
-    //qDebug() << "m_lastPercent进度：" << m_lastPercent << " percent新进度：" << percent;
+    if (pCommentJob) {
+        qDebug() << "m_lastPercent进度：" << m_lastPercent << " percent新进度：" << percent;
+    }
     //calSpeedAndTime(percent);
     //m_pProgess->refreshSpeedAndTime(percent);
 
@@ -4218,10 +4220,17 @@ void MainWindow::slotCompressFinished(KJob *job)
         return;
     }
 
+    //zip格式添加注释
     if (!job->error() && (job->mType == KJob::BATCHCOMPRESSJOB || job->mType == KJob::CREATEJOB)) {
+        deleteLaterJob();
         qDebug() << "job type: " << job->mType;
         if (!m_pCompressSetting->getComment().isEmpty()) {
             pCommentJob = Archive::commentcreate(m_strCreateCompressFile, m_pCompressSetting->getComment());
+
+            // 信号槽
+            connect(pCommentJob, &KJob::result, this, &MainWindow::slotCompressFinished, Qt::ConnectionType::UniqueConnection);
+            //            connect(pCommentJob, &KJob::percent, this, &MainWindow::SlotProgress, Qt::ConnectionType::UniqueConnection);
+            connect(pCommentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
             pCommentJob->start();
             return;
         }
