@@ -111,6 +111,7 @@ public:
     ReadOnlyArchiveInterface *interface();
 
     bool hasMultipleTopLevelEntries() const;
+    static CommentJob *commentcreate(const QString &fileName, const QString strComment);
     //    static BatchExtractJob *batchExtract(const QString &fileName, const QString &destination, bool autoSubfolder, bool preservePaths, QObject *parent = nullptr);
     static CreateJob *create(const QString &fileName, const QString &mimeType, const QVector<Archive::Entry *> &entries, const CompressionOptions &options, QObject *parent = nullptr, bool useLibArchive = false, bool use7z = true);
     //static AddJob *add(Archive *pArchive, const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());

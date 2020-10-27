@@ -327,7 +327,7 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
             //            archiveInterface()->extractPsdStatus = ReadOnlyArchiveInterface::ExtractPsdStatus::Canceled;
             //this->extractPsdStatus;
             // Write the entry header and check return value.
-            const int returnCode = archive_write_header(writer.data(), entry);
+            const int returnCode = archive_write_header(writer.data(), entry); // 创建本地文件
             switch (returnCode) {
             case ARCHIVE_OK: {
                 // If the whole archive is extracted and the total filesize is

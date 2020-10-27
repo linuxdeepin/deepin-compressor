@@ -60,14 +60,18 @@ public:
     qint64 getfilesSize() const;
     void setFilesSize(const qint64 &filesSize);
 
+    QString getWriteComment() const;
+    void setWriteComment(const QString &writeComment);
+
 private:
     bool m_isTar7z = false;
-    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
     int m_compressionLevel = -1;
+    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
     ulong m_volumeSize = 0;
     QString m_compressionMethod;
     QString m_encryptionMethod;
     QString m_globalWorkDir;
+    QString m_writeComment; //注释内容
 };
 
 class Settings_Extract_Info;

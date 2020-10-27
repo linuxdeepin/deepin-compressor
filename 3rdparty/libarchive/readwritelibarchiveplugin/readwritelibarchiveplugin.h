@@ -74,6 +74,15 @@ private:
      */
     bool writeFile(const QString &relativeName, const QString &destination,  const FileProgressInfo &info, bool partialprogress = false);
     bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const FileProgressInfo &info, bool partialprogress = false);
+    /**
+     * @brief writeFileFromEntry 将文件写入压缩包
+     * @param relativeName 本地文件(全路径)
+     * @param destination 压缩包内路径
+     * @param pEntry
+     * @param info
+     * @param bInternalDuty
+     * @return
+     */
     bool writeFileFromEntry(const QString &relativeName, const QString destination, Archive::Entry *pEntry, const FileProgressInfo &info, bool bInternalDuty = false);
     QSaveFile m_tempFile;
     ArchiveWrite m_archiveWriter;

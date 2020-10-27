@@ -288,12 +288,11 @@ bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, con
         archive_write_set_format_pax_restricted(m_archiveWriter.data());
     }
 
-
-    if (creatingNewFile) {
+    if (creatingNewFile) { //压缩
         if (!initializeNewFileWriterFilters(options)) {
             return false;
         }
-    } else {
+    } else { //追加
         if (!initializeWriterFilters()) {
             return false;
         }
@@ -407,7 +406,6 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
         } else {
             ret = archive_write_set_filter_option(m_archiveWriter.data(), nullptr, "compression-level", QString::number(options.compressionLevel()).toUtf8().constData());
         }
-
 
         if (ret != ARCHIVE_OK) {
             emit error(("Could not set the compression level."));
@@ -662,7 +660,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         dir.mkpath(absoluteDestinationPath);//创建临时文件夹
         QString newFilePath = absoluteDestinationPath + pEntry->name();
         if (QFile::link(relativeName, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << relativeName;
+            //            qDebug() << "Symlink's created:" << destination << relativeName;
         } else {
             qDebug() << "Can't create symlink" << destination << relativeName;
             return false;
@@ -733,7 +731,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         dir.mkpath(absoluteDestinationPath);
         QString newFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
         if (QFile::link(sourceFileFullPath, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
+            //            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
         } else {
             qDebug() << "Can't create symlink" << destination << sourceFileFullPath;
             return false;

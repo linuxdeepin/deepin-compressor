@@ -1945,7 +1945,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         refreshPage();
 
-        // 选中多个压缩问价，执行批量解压
+        // 选中多个压缩文件，执行批量解压
         BatchExtract *batchJob = new BatchExtract();
         batchJob->setBatchTotalSize(size);
         batchJob->setAutoSubfolder(true);
@@ -4194,6 +4194,15 @@ void MainWindow::slotCompressFinished(KJob *job)
         m_ePageID = PAGE_ZIP_FAIL;
         refreshPage();
         return;
+    }
+
+    if (!job->error() && (job->mType == KJob::BATCHCOMPRESSJOB || job->mType == KJob::CREATEJOB)) {
+        qDebug() << "job type: " << job->mType;
+        if (!m_pCompressSetting->getComment().isEmpty()) {
+            pCommentJob = Archive::commentcreate(m_strCreateCompressFile, m_pCompressSetting->getComment());
+            pCommentJob->start();
+            return;
+        }
     }
 
     m_strCreateCompressFile.clear();

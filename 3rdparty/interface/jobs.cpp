@@ -22,7 +22,6 @@
 #include "jobs.h"
 //#include "archiveentry.h"
 #include "structs.h"
-
 #include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
@@ -232,7 +231,8 @@ void Job::onEntryRemoved(const QString &path)
 
 void Job::onFinished(bool result)
 {
-    qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms";
+    qDebug() << "Job finished, result:" << result << ", time:" << jobTimer.elapsed() << "ms"
+             << "，job类型:" << mType;
     if (m_archiveInterface && m_archiveInterface->isUserCancel()) {
         setError(KJob::CancelError);
     } else if (m_archiveInterface && !m_archiveInterface->isCheckPsw()) {
@@ -1041,6 +1041,7 @@ void CopyJob::doWork()
     bool ret = m_writeInterface->copyFiles(m_entries, m_destination, m_options);
 
     if (!archiveInterface()->waitForFinishedSignal()) {
+        // Run the job in another thread.
         onFinished(ret);
     }
 }
@@ -1098,11 +1099,10 @@ CommentJob::CommentJob(const QString &comment, ReadWriteArchiveInterface *interf
 
 void CommentJob::doWork()
 {
-    //emit description(this, tr("Adding comment"));
+    qDebug() << "Adding comment";
     emit description(this, "Adding comment");
 
-    ReadWriteArchiveInterface *m_writeInterface =
-        qobject_cast<ReadWriteArchiveInterface *>(archiveInterface());
+    ReadWriteArchiveInterface *m_writeInterface = dynamic_cast<ReadWriteArchiveInterface *>(archiveInterface());
 
     Q_ASSERT(m_writeInterface);
 
@@ -1110,6 +1110,7 @@ void CommentJob::doWork()
     bool ret = m_writeInterface->addComment(m_comment);
 
     if (!archiveInterface()->waitForFinishedSignal()) {
+        // Run the job in another thread.
         onFinished(ret);
     }
 }

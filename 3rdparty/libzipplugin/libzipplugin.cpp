@@ -26,6 +26,7 @@
 #include <KEncodingProber>
 #include <utime.h>
 #include <memory>
+#include <sys/time.h>
 
 //K_PLUGIN_CLASS_WITH_JSON(LibzipPlugin, "kerfuffle_libzip.json")
 
@@ -104,7 +105,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
 
     // Fetch archive comment.
     m_comment = QString::fromLocal8Bit(zip_get_archive_comment(archive, nullptr, ZIP_FL_ENC_RAW));
-
+    // qDebug() << "注释：" << m_comment.length() << m_comment;
     // Get number of archive entries.
     const auto nofEntries = zip_get_num_entries(archive, 0);
 
@@ -289,6 +290,9 @@ bool LibzipPlugin::addFiles(const QVector<Archive::Entry *> &files, const Archiv
     m_listAfterAdd = true;
 //    list();
 
+    // // 添加注释
+    // addComment(options.getWriteComment());
+
     return true;
 }
 
@@ -330,15 +334,17 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &file, const Archive
 {
     Q_ASSERT(archive);
 
-    QByteArray destFile;
-    if (destination) {
-        destFile = QString(destination->fullPath() + file).toUtf8();
-    } else {
-        destFile = file.toUtf8();
+    //    QByteArray destFile;
+    QString str;
+    if (destination) { //追加
+        //        QString tmp = file.mid(strRoot.length());
+        str = QString(destination->fullPath() + file.mid(strRoot.length()));
+    } else { //压缩
+        str = file.mid(strRoot.length());
     }
 
-    QString str = destFile.constData();
-    str = str.remove(0, strRoot.length());
+    //    QString str = destFile.constData();
+    //    str = str.remove(0, strRoot.length());
 
     qlonglong index;
     if (isDir) {
@@ -577,13 +583,21 @@ bool LibzipPlugin::addComment(const QString &comment)
 
     // Set archive comment.
     if (zip_set_archive_comment(archive, comment.toUtf8().constData(), comment.length())) {
+        qDebug() << "错误码：" << errcode;
         return false;
     }
+
+    struct timeval tv;
+    gettimeofday(&tv, nullptr);
+    qint64 timer1 = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
     if (zip_close(archive)) {
         emit error(("Failed to write archive."));
         return false;
     }
+
+    gettimeofday(&tv, nullptr);
+    qDebug() << "注释时间：" << tv.tv_sec * 1000 + tv.tv_usec / 1000 - timer1;
 
     return true;
 }

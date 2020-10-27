@@ -69,20 +69,6 @@ set(CMAKE_INSTALL_PREFIX /usr)
 #file(GLOB INSTALL_LIBS_FILES ${PROJECT_SOURCE_DIR}/lib/*.so)
 #install(FILES ${INSTALL_LIBS_FILES} DESTINATION lib/deepin-compressor/plugins/)
 
-#install(TARGETS compressor-interface LIBRARY DESTINATION lib)
-
-install(TARGETS compressor-interface DESTINATION bin/compressor-lib)
-install(TARGETS compressor-ChardetDetector DESTINATION bin/compressor-lib)
-install(TARGETS compressor-common DESTINATION bin/compressor-lib)
-install(TARGETS compressor-archive DESTINATION bin/compressor-lib)
-install(TARGETS compressor-singlefile DESTINATION bin/compressor-lib)
-
-#install(TARGETS compressor-interface DESTINATION lib)
-#install(TARGETS compressor-ChardetDetector DESTINATION lib)
-#install(TARGETS compressor-common DESTINATION lib)
-#install(TARGETS compressor-archive DESTINATION lib)
-#install(TARGETS compressor-singlefile DESTINATION lib)
-
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS cliunarchiverplugin DESTINATION lib/deepin-compressor/plugins/)
@@ -94,10 +80,10 @@ install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
 
-install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-common DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-common DESTINATION lib/deepin-compressor/plugins/)
+#install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
 
 

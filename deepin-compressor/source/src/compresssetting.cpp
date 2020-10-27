@@ -1445,6 +1445,11 @@ void CompressSetting::refreshCompressLevel(const QString &strType)
     }
 }
 
+QString CompressSetting::getComment() const
+{
+    return m_pCommentEdt->toPlainText();
+}
+
 bool CompressSetting::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_clicklabel) {

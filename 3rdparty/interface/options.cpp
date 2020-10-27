@@ -175,6 +175,16 @@ void CompressionOptions::setFilesSize(const qint64 &filesSize)
     }
 }
 
+QString CompressionOptions::getWriteComment() const
+{
+    return m_writeComment;
+}
+
+void CompressionOptions::setWriteComment(const QString &writeComment)
+{
+    m_writeComment = writeComment;
+}
+
 QDebug operator<<(QDebug d, const CompressionOptions &options)
 {
     d.nospace() << "(encryption hint: " << options.encryptedArchiveHint();

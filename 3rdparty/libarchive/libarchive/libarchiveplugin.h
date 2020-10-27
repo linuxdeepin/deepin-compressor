@@ -85,6 +85,10 @@ private Q_SLOTS:
     void slotRestoreWorkingDir();
 
 private:
+    /**
+     * @brief extractionFlags 选择要还原的属性
+     * @return
+     */
     int extractionFlags() const;
     QString convertCompressionName(const QString &method);
     bool list_New(bool isbatch = false);

@@ -78,6 +78,39 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
+CommentJob *Archive::commentcreate(const QString &fileName, const QString strComment)
+{
+    PluginManager pluginManager;
+    const QMimeType mimeType = QMimeDatabase().mimeTypeForName("application/zip");
+
+    QVector<Plugin *> offers = pluginManager.preferredWritePluginsFor(mimeType);
+    for (Plugin *plugin : offers) {
+        qDebug() << "plugin->metaData().name():" << plugin->metaData().name();
+        /* 对zip格式添加注释只使用libzip插件
+         * 对除zip格式外其他格式不支持添加注释功能
+         */
+        if (!plugin->metaData().name().contains("Libzip")) {
+            offers.removeOne(plugin);
+        }
+    }
+
+    if (offers.isEmpty()) {
+        qDebug() << "Could not find a plugin to add comment" << fileName;
+        return nullptr;
+    }
+
+    for (Plugin *plugin : offers) {
+        ReadWriteArchiveInterface *iface = dynamic_cast<ReadWriteArchiveInterface *>(createInterface(fileName, plugin));
+        if (iface == nullptr) {
+            return nullptr;
+        } else {
+            return new CommentJob(strComment, iface);
+        }
+    }
+    qDebug() << "Failed to find a usable plugin for" << fileName;
+    return nullptr;
+}
+
 Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent, bool useLibArchive, bool use7z)
 {
     PluginManager pluginManager;
