@@ -662,7 +662,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         dir.mkpath(absoluteDestinationPath);//创建临时文件夹
         QString newFilePath = absoluteDestinationPath + pEntry->name();
         if (QFile::link(relativeName, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << relativeName;
+            //            qDebug() << "Symlink's created:" << destination << relativeName;
         } else {
             qDebug() << "Can't create symlink" << destination << relativeName;
             return false;
@@ -733,7 +733,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         dir.mkpath(absoluteDestinationPath);
         QString newFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
         if (QFile::link(sourceFileFullPath, newFilePath)) {
-            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
+            //            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
         } else {
             qDebug() << "Can't create symlink" << destination << sourceFileFullPath;
             return false;
@@ -814,7 +814,7 @@ bool ReadWriteLibarchivePlugin::writeFile(const QString &relativeName, const QSt
     dir.mkpath(absoluteDestinationPath);
 
     if (QFile::link(destination, relativeName)) {
-        qDebug() << "Symlink's created:" << destination << relativeName;
+        //        qDebug() << "Symlink's created:" << destination << relativeName;
     } else {
         qDebug() << "Can't create symlink" << destination << relativeName;
         return false;

@@ -299,7 +299,7 @@ bool CliInterface::addFiles(const QVector<Archive::Entry *> &files, const Archiv
             const QString filePath = file->fullPath();
             const QString newFilePath = absoluteDestinationPath + file->name();
             if (QFile::link(filePath, newFilePath)) {
-                qDebug() << "Symlink's created:" << filePath << newFilePath;
+                //                qDebug() << "Symlink's created:" << filePath << newFilePath;
             } else {
                 qDebug() << "Can't create symlink" << filePath << newFilePath;
                 emit finished(false);
