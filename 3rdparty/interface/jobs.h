@@ -171,7 +171,7 @@ class CreateJob : public Job
 
 public:
     explicit CreateJob(Archive *archive, const QVector<Archive::Entry *> &entries, const CompressionOptions &options);
-    ~CreateJob();
+
     void enableEncryption(const QString &password, bool encryptHeader);
 
     void setMultiVolume(bool isMultiVolume);

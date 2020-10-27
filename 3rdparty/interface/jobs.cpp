@@ -549,14 +549,6 @@ CreateJob::CreateJob(Archive *archive, const QVector<Archive::Entry *> &entries,
     qDebug() << "Created job instance";
 }
 
-CreateJob::~CreateJob()
-{
-    if (m_addJob != nullptr) {
-        delete m_addJob;
-        m_addJob = nullptr;
-    }
-}
-
 void CreateJob::enableEncryption(const QString &password, bool encryptHeader)
 {
     archive()->encrypt(password, encryptHeader);
