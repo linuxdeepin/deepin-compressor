@@ -131,7 +131,12 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
  */
 bool Utils::isCompressed_file(const QString &filePath)
 {
-    QString mime = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
+//    QString mime = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
+    QMimeType mimeType = determineMimeType(filePath);
+    qDebug() << mimeType;
+    QString mime;
+    if (mimeType.name().contains("application/"))
+        mime = mimeType.name().remove("application/");
 
     bool ret = false;
 
@@ -683,6 +688,32 @@ bool Utils::existMimeType(QString mimetype)
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
         if (confList.at(i).contains("." + mimetype + ":")) {
+            if (confList.at(i).contains("true")) {
+                exist = true;
+                break;
+            } else {
+                exist = false;
+                continue;
+            }
+        }
+    }
+
+    return exist;
+}
+
+bool Utils::existArchiveType(QString mimetype, bool &bArchive)
+{
+    QString conf = readConf();
+    QStringList confList = conf.split("\n", QString::SkipEmptyParts);
+
+    for (int i = 0; i < confList.count(); i++) {
+        qDebug() << confList.at(i);
+    }
+    bool exist = false;
+    bArchive = false;
+    for (int i = 0; i < confList.count(); i++) {
+        if (confList.at(i).contains("." + mimetype + ":")) {
+            bArchive = true;
             if (confList.at(i).contains("true")) {
                 exist = true;
                 break;
