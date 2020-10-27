@@ -4001,35 +4001,30 @@ bool MainWindow::checkSettings(QString file)
 {
     QString fileMime;
 
-//    fileMime = Utils::judgeFileMime(file);
-//    bool hasSetting = true;
-//    bool existMime;
-//    if (fileMime.size() == 0) {
-//        existMime = true;
-//    } else {
-//        existMime = Utils::existMimeType(fileMime);
-
-//    }
-
     bool existMime = false;
     bool hasSetting = true;
-    if (Utils::judgeFileMime(file).isEmpty()) {
+    bool bArchive = false;
+
+    // 判断内容
+    if (file.isEmpty()) {
         existMime = true;
     } else {
         QMimeType mimeType = determineMimeType(file);
-        qDebug() << mimeType;
-        if (mimeType.name().contains("application/"))
-            fileMime = mimeType.name().remove("application/");
-        // = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
-
+        fileMime = mimeType.name();
+        qDebug() << fileMime;
+        if (fileMime.contains("application/"))
+            fileMime = fileMime.remove("application/");
 
         if (fileMime.size() > 0) {
-            existMime = Utils::existMimeType(fileMime);
+            existMime = Utils::existArchiveType(fileMime, bArchive);
+
+            // 如果在设置界面找到非压缩包的类型，置为true
+            if (!bArchive && !existMime)
+                existMime = true;
         } else {
             existMime = false;
         }
     }
-
 
 
     if (existMime) {

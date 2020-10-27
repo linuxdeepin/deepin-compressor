@@ -600,6 +600,32 @@ bool Utils::existMimeType(QString mimetype)
     return exist;
 }
 
+bool Utils::existArchiveType(QString mimetype, bool &bArchive)
+{
+    QString conf = readConf();
+    QStringList confList = conf.split("\n", QString::SkipEmptyParts);
+
+    for (int i = 0; i < confList.count(); i++) {
+        qDebug() << confList.at(i);
+    }
+    bool exist = false;
+    bArchive = false;
+    for (int i = 0; i < confList.count(); i++) {
+        if (confList.at(i).contains("." + mimetype + ":")) {
+            bArchive = true;
+            if (confList.at(i).contains("true")) {
+                exist = true;
+                break;
+            } else {
+                exist = false;
+                continue;
+            }
+        }
+    }
+
+    return exist;
+}
+
 QString Utils::judgeFileMime(QString file)
 {
     QString type = "";
