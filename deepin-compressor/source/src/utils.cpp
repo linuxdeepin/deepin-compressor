@@ -118,7 +118,12 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
 bool Utils::isCompressed_file(const QString &filePath)
 {
-    QString mime = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
+    QMimeType mimeType = determineMimeType(filePath);
+    qDebug() << mimeType;
+    QString mime;
+    if (mimeType.name().contains("application/"))
+        mime = mimeType.name().remove("application/");
+    // = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
 
     bool ret = false;
 

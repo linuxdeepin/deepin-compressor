@@ -49,6 +49,7 @@
 #include "monitorInterface.h"
 //#include "filewatcher.h"
 #include "monitorAdaptor.h"
+#include "mimetypes.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -3998,26 +3999,47 @@ void MainWindow::onCompressAddfileSlot(bool status)
 
 bool MainWindow::checkSettings(QString file)
 {
-    QString fileMime = Utils::judgeFileMime(file);
-    bool hasSetting = true;
+//    QString fileMime = Utils::judgeFileMime(file);
+//    bool hasSetting = true;
 
-    bool existMime;
-    if (fileMime.size() == 0) {
+//    bool existMime;
+//    if (fileMime.size() == 0) {
+//        existMime = true;
+//    } else {
+//        existMime = Utils::existMimeType(fileMime);
+//    }
+    bool existMime = false;
+    bool hasSetting = true;
+    QString mime;
+    if (file.isEmpty()) {
         existMime = true;
     } else {
-        existMime = Utils::existMimeType(fileMime);
+        QMimeType mimeType = determineMimeType(file);
+        qDebug() << mimeType;
+        if (mimeType.name().contains("application/"))
+            mime = mimeType.name().remove("application/");
+        // = judgeFileMime(filePath);         // 根据文件名（后缀）判断文件类型
+
+
+        if (mime.size() > 0) {
+            existMime = Utils::existMimeType(mime);
+        } else {
+            existMime = false;
+        }
     }
 
+
+
     if (existMime) {
-        QString defaultCompress = getDefaultApp(fileMime);
+        QString defaultCompress = getDefaultApp(mime);
 
         if (defaultCompress.startsWith("dde-open.desktop")) {
-            setDefaultApp(fileMime, "deepin-compressor.desktop");
+            setDefaultApp(mime, "deepin-compressor.desktop");
         }
     } else {
-        QString defaultCompress = getDefaultApp(fileMime);
+        QString defaultCompress = getDefaultApp(mime);
         if (defaultCompress.startsWith("deepin-compressor.desktop")) {
-            setDefaultApp(fileMime, "dde-open.desktop");
+            setDefaultApp(mime, "dde-open.desktop");
         }
 
         int re = promptDialog();
