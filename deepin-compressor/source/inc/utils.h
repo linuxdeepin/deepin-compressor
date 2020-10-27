@@ -94,6 +94,7 @@ public:
      * @return
      */
     static bool existMimeType(QString mimetype);
+    static bool existArchiveType(QString mimetype, bool &bArchive);
     static QString judgeFileMime(QString file);
 
 private:

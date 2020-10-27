@@ -5015,16 +5015,33 @@ void MainWindow::onCompressAddfileSlot(bool status)
 
 bool MainWindow::checkSettings(QString file)
 {
-    // 判断文件mimetype
-    QString fileMime = Utils::judgeFileMime(file);
-    bool hasSetting = true;
+    QString fileMime;
 
-    bool existMime;
-    if (fileMime.size() == 0) {
+    bool existMime = false;
+    bool hasSetting = true;
+    bool bArchive = false;
+
+    // 判断内容
+    if (file.isEmpty()) {
         existMime = true;
     } else {
-        existMime = Utils::existMimeType(fileMime); // 判断是否为归档管理器支持的压缩文件格式
+        QMimeType mimeType = determineMimeType(file);
+        fileMime = mimeType.name();
+        qDebug() << fileMime;
+        if (fileMime.contains("application/"))
+            fileMime = fileMime.remove("application/");
+
+        if (fileMime.size() > 0) {
+            existMime = Utils::existArchiveType(fileMime, bArchive);
+
+            // 如果在设置界面找到非压缩包的类型，置为true
+            if (!bArchive && !existMime)
+                existMime = true;
+        } else {
+            existMime = false;
+        }
     }
+
 
     if (existMime) {
         QString defaultCompress = getDefaultApp(fileMime); // 获取该类型文件的默认打开方式
