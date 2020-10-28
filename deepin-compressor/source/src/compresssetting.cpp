@@ -1459,7 +1459,8 @@ void CompressSetting::refreshCompressLevel(const QString &strType)
 
 QString CompressSetting::getComment() const
 {
-    return m_pCommentEdt->toPlainText();
+    // m_pCommentEdt不可用时就返回空字符串，表示该压缩格式(除zip格式外)不支持添加注释
+    return m_pCommentEdt->isEnabled() ? m_pCommentEdt->toPlainText() : QString("");
 }
 
 bool CompressSetting::eventFilter(QObject *watched, QEvent *event)

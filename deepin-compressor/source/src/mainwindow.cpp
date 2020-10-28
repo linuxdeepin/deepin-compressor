@@ -4226,14 +4226,20 @@ void MainWindow::slotCompressFinished(KJob *job)
     //zip格式添加注释
     if (!job->error() && (job->mType == KJob::BATCHCOMPRESSJOB || job->mType == KJob::CREATEJOB)) {
         deleteLaterJob();
+
         qDebug() << "job type: " << job->mType;
         if (!m_pCompressSetting->getComment().isEmpty()) {
             pCommentJob = Archive::commentcreate(m_strCreateCompressFile, m_pCompressSetting->getComment());
 
             // 信号槽
             connect(pCommentJob, &KJob::result, this, &MainWindow::slotCompressFinished, Qt::ConnectionType::UniqueConnection);
-            //            connect(pCommentJob, &KJob::percent, this, &MainWindow::SlotProgress, Qt::ConnectionType::UniqueConnection);
             connect(pCommentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
+
+            // 初始化前面的压缩进度，接着显示注释进度
+            slotResetPercentAndTime();
+            m_pProgess->setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE::OP_COMMENT);
+            m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMMENT);
+            m_pProgess->setProgressFilename(m_strCreateCompressFile);
             pCommentJob->start();
             return;
         }
@@ -4831,7 +4837,8 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     deleteCompressFile(/*m_compressDirFiles, CheckAllFiles(m_strPathStore)*/);
     deleteDecompressFile(destDirName);
 
-    if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) { // 取消压缩回到压缩列表界面
+    if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING // 取消压缩回到压缩列表界面
+        || compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { // 取消注释回到压缩列表界面
         m_ePageID = PAGE_ZIP;
     } else if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
         if (m_bIsRightMenu) { // 右键解压，点击取消解压窗口关闭
@@ -4852,7 +4859,6 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     m_bIsRightMenu = false;
     refreshPage();
     slotResetPercentAndTime();
-    m_pProgess->setprogress(0);
 }
 
 void MainWindow::onPauseProcess()
@@ -5410,6 +5416,10 @@ void MainWindow::deleteLaterJob()
     if (m_pJob) {
         m_pJob->deleteLater();
         m_pJob = nullptr;
+    }
+    if (pCommentJob) {
+        pCommentJob->deleteLater();
+        pCommentJob = nullptr;
     }
 }
 /**

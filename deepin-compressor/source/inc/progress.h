@@ -52,12 +52,13 @@ public:
      * @see 进度的类型
      */
     enum ENUM_PROGRESS_TYPE {
-        OP_NONE,            // 非进度界面
-        OP_COMPRESSING,     // 正常压缩进度
+        OP_NONE, // 非进度界面
+        OP_COMPRESSING, // 正常压缩进度
         OP_COMPRESSDRAGADD, // 拖拽添加压缩进度
-        OP_DECOMPRESSING,   // 解压缩进度
-        OP_DELETEING,       // 删除进度
-        OP_CONVERT          // 转换格式进度
+        OP_DECOMPRESSING, // 解压缩进度
+        OP_DELETEING, // 删除进度
+        OP_CONVERT, // 转换格式进度
+        OP_COMMENT // 压缩后添加注释进度
     };
 
     Progress(DWidget *parent = nullptr);

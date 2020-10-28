@@ -169,6 +169,12 @@ void Progress::setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE type)
     }
 
     m_restTimeLabel->setText(tr("Time left") + ": " + tr("Calculating...")); // 剩余时间计算中
+
+    if (type == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { // 压缩后添加注释进度
+        m_speedLabel->setText("");
+        m_restTimeLabel->setText("");
+    }
+
     qDebug() << "setspeedandtimetext";
 }
 
@@ -307,6 +313,8 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
 
     //add update speed and time label
+    // 设置剩余时间
+    m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         if (speed < 1024) {
             // 速度小于1024k， 显示速度单位为KB/S
@@ -350,10 +358,10 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
         } else {
             m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/S");
         }
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) {
+        m_speedLabel->setText("");
+        m_restTimeLabel->setText("");
     }
-
-    // 设置剩余时间
-    m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
 /**
@@ -403,6 +411,8 @@ void Progress::setProgressFilename(QString filename)
         m_progressfilelabel->setText(elideFont.elidedText(tr("Deleting") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Converting") + ": " + filename, Qt::ElideMiddle, 520));
+    } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { //注释进度
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Saving compressed file comment"), Qt::ElideMiddle, 520));
     } else {
         if (m_openType) {
             m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));

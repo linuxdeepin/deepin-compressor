@@ -170,7 +170,7 @@ private:
 public:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
     /**
-     * @brief getComment 获取注释内容
+     * @brief getComment 获取支持格式的注释内容
      * @return
      */
     QString getComment() const;

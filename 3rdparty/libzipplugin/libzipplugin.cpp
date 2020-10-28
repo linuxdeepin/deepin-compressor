@@ -582,8 +582,12 @@ bool LibzipPlugin::addComment(const QString &comment)
         return false;
     }
 
+    QByteArray tmp = comment.toUtf8();
+    const char *commentstr = tmp.constData();
+    //    const char *commentstr13 = comment.toUtf8().constData(); // 该写法不安全，会返回空字符串
+    zip_uint16_t commentlength = static_cast<zip_uint16_t>(strlen(commentstr));
     // Set archive comment.
-    if (zip_set_archive_comment(archive, comment.toUtf8().constData(), comment.length())) {
+    if (zip_set_archive_comment(archive, commentstr, commentlength)) {
         qDebug() << "错误码：" << errcode;
         return false;
     }
@@ -592,6 +596,7 @@ bool LibzipPlugin::addComment(const QString &comment)
     gettimeofday(&tv, nullptr);
     qint64 timer1 = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
+    // 注释进度
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
 
     if (zip_close(archive)) {
