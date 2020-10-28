@@ -201,7 +201,7 @@ void TreeHeaderView::paintEvent(QPaintEvent *e)
 {
     QPainter painter(viewport());
     painter.save();
-    /*
+
         DPalette::ColorGroup cg;
         //是否有为激活窗口状态
     #ifdef ENABLE_INACTIVE_DISPLAY
@@ -235,9 +235,9 @@ void TreeHeaderView::paintEvent(QPaintEvent *e)
         clipPath = clipPath.subtracted(subPath);
 
         painter.fillPath(clipPath, bgBrush);
-    */
 
-/*DHeaderView::paintEvent(e);
+
+DHeaderView::paintEvent(e);
 painter.restore();
 }
 */

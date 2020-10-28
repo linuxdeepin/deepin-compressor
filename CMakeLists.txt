@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=./compressor-lib:/usr/lib/deepin-compressor/plugins:/lib") #-Wl,-rpath=./
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb") #-Wl,-rpath=./
 else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1")
 endif()
@@ -59,13 +59,5 @@ install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS cliunarchiverplugin DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS clizipplugin DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
+
 

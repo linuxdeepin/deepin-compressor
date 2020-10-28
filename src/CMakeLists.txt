@@ -152,7 +152,7 @@ install(FILES ../output/deepin-compressor
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE)
 
-install(FILES  deepin-compressor.desktop
+install(FILES  desktop/deepin-compressor.desktop
         DESTINATION share/applications/
         PERMISSIONS OWNER_READ OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
