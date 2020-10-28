@@ -76,7 +76,9 @@ enum Archive_OperationType {
     Operation_TempExtract_Open, // 打开
     Operation_TempExtract_Open_Choose, // 选择打开
     Operation_DRAG, // 拖拽
-    Operation_CONVERT // 格式转换
+    Operation_CONVERT, // 格式转换
+    Operation_DELETE // 删除
+
 };
 
 /**

@@ -3331,6 +3331,7 @@ void MainWindow::addArchiveEntry(QMap<QString, QString> &Args, Archive::Entry *p
         sourceEntry = pWorkEntry->getParent();
     }
 
+    slotResetPercentAndTime();
     resetMainwindow();
 //    calSelectedTotalEntrySize(all_entries);
     qint64 size = 0;
@@ -3499,6 +3500,7 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
         sourceEntry = m_pArchiveModel->getParentEntry();
     }
 
+    slotResetPercentAndTime();
     resetMainwindow();
 
 //    m_entries = filesToAdd;
@@ -3561,6 +3563,7 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
 //        }
 //    }
 
+    slotResetPercentAndTime();
     if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
         if (pinterface->isAllEntry()) {
             foreach (Archive::Entry *p, vectorDel) {
@@ -3583,6 +3586,7 @@ void MainWindow::removeEntryVector(QVector<Archive::Entry *> &vectorDel, bool is
 
     m_ePageID = PAGE_DELETEPROGRESS;
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DELETEING);
+    m_operationtype = Operation_DELETE;
 
     //m_pProgess->settype(DECOMPRESSING);
     if (isManual) {
@@ -4396,6 +4400,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 //            m_pProgess->pInfo()->getTotalSize() += p->property("size").toLongLong();
 //        }
 //    }
+
 
     if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
         if (pinterface->isAllEntry()) { // 提取全部文件
