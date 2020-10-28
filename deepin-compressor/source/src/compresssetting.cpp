@@ -1431,16 +1431,28 @@ bool CompressSetting::existSameFileName()
 
 void CompressSetting::refreshCompressLevel(const QString &strType)
 {
-    m_pCompressLevelCkb->clear();
+    // bz2、lzo、z 1-9:取1、3、5、6、7、9
+    // 其它 0-9:取0、1、3、5、7、9
+    QStringList listCompressLevel;
+    QList<int> listLevel;
+
     if (0 == strType.compare("tar")) {
-        m_pCompressLevelCkb->addItem(tr("store"), 0);
+        listCompressLevel << tr("store");
+        listLevel << -1;
+    } else if (0 == strType.compare("tar.bz2") || 0 == strType.compare("tar.lzo") || 0 == strType.compare("tar.z")) {
+        listCompressLevel << tr("store") << tr("Fastest") << tr("Faster") << tr("standard") << tr("better") << tr("best");
+        listLevel << 1 << 3 << 5 << 6 << 7 << 9;
     } else {
-        m_pCompressLevelCkb->addItem(tr("store"), 0);
-        m_pCompressLevelCkb->addItem(tr("Fastest"), 1);
-        m_pCompressLevelCkb->addItem(tr("Faster"), 3);
-        m_pCompressLevelCkb->addItem(tr("standard"), 5);
-        m_pCompressLevelCkb->addItem(tr("better"), 7);
-        m_pCompressLevelCkb->addItem(tr("best"), 9);
+        listCompressLevel << tr("store") << tr("Fastest") << tr("Faster") << tr("standard") << tr("better") << tr("best");
+        listLevel << 0 << 1 << 3 << 5 << 7 << 9;
+    }
+
+    m_pCompressLevelCkb->clear();
+    for (int i = 0; i < listCompressLevel.count(); ++i) {
+        m_pCompressLevelCkb->addItem(listCompressLevel[i], listLevel[i]);
+    }
+
+    if (listCompressLevel.count() > 2) {
         m_pCompressLevelCkb->setCurrentIndex(2);
     }
 }
