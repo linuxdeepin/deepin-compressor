@@ -69,6 +69,12 @@ private slots:
      */
     void slotDragFiles(const QStringList &listFiles);
 
+    /**
+     * @brief slotShowRightMenu     显示右键菜单
+     * @param pos   右键位置
+     */
+    void slotShowRightMenu(const QPoint &pos);
+
 protected Q_SLOTS:
     /**
      * @brief slotPreClicked    返回上一级

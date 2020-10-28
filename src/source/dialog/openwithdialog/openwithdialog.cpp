@@ -230,6 +230,8 @@ void OpenWithDialog::openWithProgram(const QString &strFileName, const QString &
     cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     cmdprocess->setProgram(programPath, arguments);
     cmdprocess->start();
+    cmdprocess->waitForFinished();
+    delete  cmdprocess;
 }
 
 QString OpenWithDialog::showOpenWithDialog(OpenWithDialog::ShowType eType)

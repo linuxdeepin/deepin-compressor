@@ -57,6 +57,7 @@ void UnCompressView::initUI()
 void UnCompressView::initConnections()
 {
     connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles);
+    connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
 }
 
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
@@ -83,6 +84,11 @@ qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
 }
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
+{
+
+}
+
+void UnCompressView::slotShowRightMenu(const QPoint &pos)
 {
 
 }

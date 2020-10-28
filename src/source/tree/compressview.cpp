@@ -154,7 +154,6 @@ void CompressView::initConnections()
 {
     connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles);
     connect(this, &CompressView::customContextMenuRequested, this, &CompressView::slotShowRightMenu);
-    // connect(m_pCompressFileWatcher, &QFileSystemWatcher::fileChanged, this, &CompressView::signalFileChanged); // 文件目录变化
     connect(m_pFileWatcher, &QFileSystemWatcher::directoryChanged, this, &CompressView::slotDirChanged); // 文件目录变化
 }
 
