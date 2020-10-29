@@ -5115,6 +5115,8 @@ void MainWindow::slotTitleCommentButtonPressed()
         basicInfoDrawer->setTitle(tr("Basic info"));
         basicInfoDrawer->setFixedHeight(30);
         basicInfoDrawer->setExpand(true);
+        basicInfoDrawer->setSeparatorVisible(false);  // 无效！
+        basicInfoDrawer->setExpandedSeparatorVisible(false);
         expandGroup.append(basicInfoDrawer);
 
         // 基本信息Frame
@@ -5166,8 +5168,8 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         basicInforFrame->setLayout(basicInfoFormLayout);
         basicInfoDrawer->setContent(basicInforFrame);
-        basicInfoLayout->setContentsMargins(0, 0, 0, 5);
-        basicInfoLayout->addWidget(basicInfoDrawer, Qt::AlignCenter);
+        basicInfoLayout->setContentsMargins(0, 0, 0, 0);
+        basicInfoLayout->addWidget(basicInfoDrawer, Qt::AlignTop);
 
         // 注释的控件
         DArrowLineDrawer *commentDrawer = new DArrowLineDrawer;
@@ -5175,6 +5177,8 @@ void MainWindow::slotTitleCommentButtonPressed()
         commentDrawer->setTitle(tr("Comment"));
         commentDrawer->setFixedHeight(30);
         commentDrawer->setExpand(true);
+        commentDrawer->setSeparatorVisible(false);  // 无效！
+        commentDrawer->setExpandedSeparatorVisible(false);
         expandGroup.append(commentDrawer);
 
         // 注释Frame布局
@@ -5211,6 +5215,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         DWidget *widget = new DWidget;
         widget->setLayout(mainLayout);
+
         dialog->addContent(widget);
         dialog->move(this->geometry().topLeft().x() + this->width() / 2  - dialog->width() / 2,
                      this->geometry().topLeft().y() + this->height() / 2 - 200); // 200是dialog展开的高度的一半
@@ -5220,7 +5225,7 @@ void MainWindow::slotTitleCommentButtonPressed()
         connect(basicInfoWidget, &DEnhancedWidget::heightChanged, basicInfoWidget, [ = ]() {
             QRect rc = dialog->geometry();
             rc.setHeight(basicInfoDrawer->height() + commentDrawer->height()
-                         /*+ dialog->contentsMargins().top() + dialog->contentsMargins().bottom()*/);
+                         + widget->contentsMargins().top() + widget->contentsMargins().bottom());
             dialog->setGeometry(rc);
         });
 
@@ -5228,8 +5233,8 @@ void MainWindow::slotTitleCommentButtonPressed()
         DEnhancedWidget *commentWidget = new DEnhancedWidget(commentDrawer, commentDrawer);
         connect(commentWidget, &DEnhancedWidget::heightChanged, commentWidget, [ = ]() {
             QRect rc = dialog->geometry();
-            rc.setHeight(basicInfoDrawer->height() + commentDrawer->height()
-                         /*+ dialog->contentsMargins().top() + dialog->contentsMargins().bottom()*/);
+            rc.setHeight(basicInfoDrawer->height() + commentDrawer->height() + 70
+                         + dialog->contentsMargins().top() + dialog->contentsMargins().bottom());
             dialog->setGeometry(rc);
         });
 
