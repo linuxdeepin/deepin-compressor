@@ -336,7 +336,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         if (this->m_pMapGlobalWnd != nullptr) {
             while (it != curAuxInfo->information.end()) {
                 OpenInfo *pInfo = it.value();
-                it++;
+                ++it;
 
                 MainWindow *p = qobject_cast<MainWindow *>(this->m_pMapGlobalWnd->getOne(pInfo->strWinId));
                 if (p != nullptr) {
@@ -359,7 +359,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QString key;
         for (iter = curAuxInfo->information.begin(); iter != curAuxInfo->information.end();) {
             key = iter.key();
-            iter++;             //指针移至下一个位置
+            ++iter;             //指针移至下一个位置
             if (curAuxInfo->information[key]->option == OpenInfo::CLOSE) {
                 OpenInfo *p = curAuxInfo->information.take(key);
                 SAFE_DELETE_ELE(p);
@@ -2610,7 +2610,7 @@ void MainWindow::removeFromParentInfo(MainWindow *CurMainWnd)
                 //先存key
                 key = iter.key();
                 //指针移至下一个位置
-                iter++;
+                ++iter;
                 if (parentInfo->information[key]->strWinId == strWId) {
                     //删除当前位置数据
                     OpenInfo *p = parentInfo->information.take(key);
@@ -3776,12 +3776,10 @@ void MainWindow::transSplitFileName(QString &fileName)    // *.7z.003 -> *.7z.00
 void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
 {
     QString localname = filename;
-    int num = 2;
 
     if (m_pCompressSetting->onSplitChecked()) {   // 7z分卷压缩
         QFileInfo file(filename);
         bool isFirstFileExist = false;
-        bool isOtherFileExist = false;
 
         // 以文件名为1.7z.001验证
         // 过滤 该路径下 1*.7z.*的文件
@@ -3801,6 +3799,7 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
         }
 
         if (isFirstFileExist) {  // 1.7z文件已存在  文件名为1(2).7z ...
+            bool isOtherFileExist = false;
             for (int newCount = 0; newCount < files.count(); newCount++) {
                 if (newCount < 2) {
                     newCount += 2;
@@ -3835,6 +3834,7 @@ void MainWindow::renameCompress(QString &filename, QString fixedMimeType)
             }
         }
     } else {
+        int num = 2;
         while (QFileInfo::exists(filename)) {
             filename = localname.remove("." + QMimeDatabase().mimeTypeForName(fixedMimeType).preferredSuffix()) + "(" + "0"
                        + QString::number(num) + ")" + "."
@@ -4560,7 +4560,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
 
         if (size == size1) {
             m_mapFileHasModified[destEntryPath] = false;
-            QString programName = "xdg-open";
+            programName = "xdg-open";
             QString firstFileName = m_vecExtractSimpleFiles.at(0)->name();
             bool isCompressedFile = Utils::isCompressed_file(pDestEntry->fullPath());
 
@@ -4838,7 +4838,7 @@ void MainWindow::onCancelCompressPressed(Progress::ENUM_PROGRESS_TYPE compressTy
     deleteDecompressFile(destDirName);
 
     if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING // 取消压缩回到压缩列表界面
-        || compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { // 取消注释回到压缩列表界面
+            || compressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { // 取消注释回到压缩列表界面
         m_ePageID = PAGE_ZIP;
     } else if (compressType == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
         if (m_bIsRightMenu) { // 右键解压，点击取消解压窗口关闭

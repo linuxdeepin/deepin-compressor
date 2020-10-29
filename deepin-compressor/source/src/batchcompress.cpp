@@ -60,7 +60,7 @@ void BatchCompress::setCompressArgs(QMap<QString, QString> Args)
     QMap<QString, QString>::iterator it = Args.begin();
     while (it != Args.end()) {
         m_Args->insert(it.key(), it.value());
-        it++;
+        ++it;
     }
 
     m_bZipPasswordIsChinese = Utils::zipPasswordIsChinese(*m_Args);

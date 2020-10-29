@@ -186,7 +186,7 @@ void FirstRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     icon.paint(painter, decorationRect);
 
     //drawDisplay(painter, opt, displayRect, text);
-    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Normal : QPalette::Disabled;
     if (option.state & QStyle::State_Selected) {
         painter->setPen(option.palette.color(cg, QPalette::HighlightedText));
     } else {
@@ -259,7 +259,7 @@ void FirstRowDelegate::drawBackground(QPainter *painter, const QStyleOptionViewI
         focusPath.lineTo(focusRect.bottomRight());
     }
 
-    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Normal : QPalette::Disabled;
     if (option.state & QStyle::State_Selected) {
         //        qDebug() << index;
         //painter->setPen(Qt::red);
@@ -1326,14 +1326,14 @@ void fileViewer::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
     }
 }
 
-QString getShortName(QString &destFileName)
-{
-    int limitCounts = 8;
-    int left = 4, right = 4;
-    QString displayName = "";
-    displayName = destFileName.length() > limitCounts ? destFileName.left(left) + "..." + destFileName.right(right) : destFileName;
-    return displayName;
-}
+//QString getShortName(QString &destFileName)
+//{
+//    int limitCounts = 8;
+//    int left = 4, right = 4;
+//    QString displayName = "";
+//    displayName = destFileName.length() > limitCounts ? destFileName.left(left) + "..." + destFileName.right(right) : destFileName;
+//    return displayName;
+//}
 
 void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 {

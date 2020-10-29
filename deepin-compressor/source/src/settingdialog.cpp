@@ -168,7 +168,7 @@ void SettingDialog::initUI()
         return nullptr;
     });
     // 注册自定义pathbox信息，该信息在json配置文件中配置
-    this->widgetFactory()->registerWidget("pathbox", [this](QObject *obj) -> QWidget * {
+    this->widgetFactory()->registerWidget("pathbox", [this](QObject * obj) -> QWidget * {
         // 默认解压地址的下拉框设置
         m_comboboxoption = qobject_cast<DSettingsOption *>(obj);
         if (m_comboboxoption)
@@ -213,7 +213,7 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(this, &SettingDialog::sigResetPath, this, [=] {
+            connect(this, &SettingDialog::sigResetPath, this, [ = ] {
                 combobox->setCurrentIndex(0);
             });
 
@@ -314,7 +314,7 @@ void SettingDialog::initUI()
 
             widget->setLayout(layout);
 
-            connect(this, &SettingDialog::sigResetDeleteArchive, this, [=] {
+            connect(this, &SettingDialog::sigResetDeleteArchive, this, [ = ] {
                 combobox->setCurrentIndex(0);
             });
 
@@ -387,7 +387,7 @@ void SettingDialog::done(int status)
             startcmd(mimetype, m_valuelisttemp.at(loop));
         }
 
-        loop++;
+        ++loop;
     }
 
     m_valuelist = m_valuelisttemp;
@@ -462,7 +462,7 @@ void SettingDialog::writeToConfbf()
         it.key();
         QString content = it.key() + ":" + it.value().toString() + "\n";
         file.write(content.toUtf8());
-        it++;
+        ++it;
     }
 
     file.close();
@@ -560,7 +560,7 @@ void SettingDialog::recommandedPressed()
     QMap<QString, QVariant>::iterator it = m_data.begin();
     while (it != m_data.end()) {
         it.value() = QVariant(false);
-        it++;
+        ++it;
     }
 
     foreach (QString key, m_associtionlist) {

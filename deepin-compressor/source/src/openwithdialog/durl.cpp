@@ -629,11 +629,11 @@ DUrl DUrl::fromUserInput(const QString &userInput, QString workingDirectory,
 
         // NOTE(zccrs): 保证数据传入QUrl还能使用toString返回数据
         if (!url.isValid() || (url.scheme().isEmpty() && url.toString() != userInput)) {
-            DUrl url;
+            DUrl url1;
 
-            url.m_virtualPath = userInput;
+            url1.m_virtualPath = userInput;
 
-            return url;
+            return url1;
         }
 
         return url;

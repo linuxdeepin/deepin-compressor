@@ -98,8 +98,8 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
 //                return true;
 //            }
 
-            QCollator col;
-            if (col.compare(m_mimetype->displayName(mimeLeftType.name()), m_mimetype->displayName(mimeRightType.name())/*, Qt::CaseInsensitive*/) < 0) {
+            QCollator collator;
+            if (collator.compare(m_mimetype->displayName(mimeLeftType.name()), m_mimetype->displayName(mimeRightType.name())/*, Qt::CaseInsensitive*/) < 0) {
                 return false;
             } else {
                 return true;
@@ -110,8 +110,8 @@ bool ArchiveSortFilterModel::lessThan(const QModelIndex &leftIndex,
         case FullPath: {
             if (left->name().at(0).script() == QChar::Script_Han) {
                 if (right->name().at(0).script() == QChar::Script_Han) {
-                    QCollator col;
-                    if (col.compare(left->name(), right->name()) < 0) {
+                    QCollator collator;
+                    if (collator.compare(left->name(), right->name()) < 0) {
                         return true;
                     } else {
                         return false;

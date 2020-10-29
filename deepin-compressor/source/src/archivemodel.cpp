@@ -39,8 +39,8 @@ DWIDGET_USE_NAMESPACE
 
 ArchiveModel::ArchiveModel(QObject *parent)
     : QAbstractItemModel(parent)
-    //    , m_numberOfFiles(0)
-    //    , m_numberOfFolders(0)
+      //    , m_numberOfFiles(0)
+      //    , m_numberOfFolders(0)
     , m_fileEntryListed(false)
 {
     // 初始化根节点
@@ -296,7 +296,7 @@ Archive::Entry *ArchiveModel::isExists(QString fullPath)
             return entry;
         }
 
-        it++;
+        ++it;
     }
 
     return nullptr;
@@ -651,7 +651,7 @@ void ArchiveModel::slotAddEntry(Archive::Entry *receivedEntry)
             vecSameEntry.push_back(receivedEntry);
         }
     } else {
-        QString parentPath = QString(parent->property("fullPath").toString());
+        parentPath = QString(parent->property("fullPath").toString());
         QString childPath = QString(receivedEntry->property("fullPath").toString());
         if (parentPath != "" && childPath.contains(parentPath)) {
             qDebug() << parentPath;

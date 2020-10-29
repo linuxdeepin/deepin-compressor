@@ -258,10 +258,10 @@ void OpenWithDialog::chooseOpen(const QString &programma, const QString &fileNam
 
 QString OpenWithDialog::includePercentFile(const QString &file)
 {
-    int openTempFileLink = 0;
     QFileInfo fileInfo(file);
 
     if (fileInfo.fileName().contains("%")) {
+        int openTempFileLink = 0;
         QString tempFloder = TEMPDIR_NAME;
 
         QDir dir(tempFloder);
@@ -272,7 +272,7 @@ QString OpenWithDialog::includePercentFile(const QString &file)
         QProcess p;
 
         QString tempFileName = QString("%1").arg(openTempFileLink)  + "." + fileInfo.suffix();
-        openTempFileLink++;
+        //  openTempFileLink++;
         QString commandCreate = "ln";
 
         QStringList args;
