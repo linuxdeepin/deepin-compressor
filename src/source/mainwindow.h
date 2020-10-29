@@ -161,12 +161,6 @@ private Q_SLOTS:
      */
     void slotQuery(Query *query);
 
-    /**
-     * @brief slotFileChanged 压缩文件变化
-     * @param strFileName       文件名（含路径）
-     */
-    void slotFileChanged(const QString &strFileName);
-
 
 private:
     QStackedWidget *m_pMainWidget;  // 中心面板

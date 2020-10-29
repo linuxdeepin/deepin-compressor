@@ -28,6 +28,8 @@
 #include <DWidget>
 #include <DFileWatcher>
 
+#include <QFileInfo>
+
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 
@@ -81,17 +83,23 @@ private:
     void initConnections();
 
     /**
+     * @brief fileInfo2Entry    文件信息结构体转换
+     * @param fileInfo          本地文件信息
+     * @return
+     */
+    FileEntry fileInfo2Entry(const QFileInfo &fileInfo);
+
+    /**
      * @brief handleDoubleClick    处理双击事件
      * @param index 双击的index
      */
     void handleDoubleClick(const QModelIndex &index);
 
     /**
-     * @brief getDirFiles   获取某个路径下所有文件
-     * @param strPath   路径
+     * @brief getDirFiles   获取当前路径下所有文件
      * @return
      */
-    QList<FileEntry> getDirFiles(const QString &strPath);
+    QList<FileEntry> getCurrentDirFiles();
 
     /**
      * @brief handleLevelChanged    处理目录层级变化
@@ -105,18 +113,17 @@ private:
      */
     QString getPrePathByLevel(const QString &strPath);
 
+    /**
+     * @brief refreshDataByCurrentPath  根据当前路径刷新数据
+     */
+    void refreshDataByCurrentPath();
+
 signals:
     /**
      * @brief signalLevelChanged    目录层级变化
      * @param bRootIndex    是否是根目录
      */
     void signalLevelChanged(bool bRootIndex);
-
-    /**
-     * @brief signalFileChanged 压缩文件变化
-     * @param strFileName       文件名（含路径）
-     */
-    //void signalFileChanged(const QString &strFileName);
 
 private slots:
     /**
@@ -156,11 +163,8 @@ protected Q_SLOTS:
 
 private:
     QStringList m_listCompressFiles;    // 待压缩的文件
-    QList<FileEntry> m_listEntry;
-
-    //DFileWatcher *m_pCompressFileWatcher; // 对待压缩文件进行监控
+    QList<FileEntry> m_listEntry;       // 待待压缩的文件数据
     QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控(层级大于1时)
-
     FileEntry m_stRightEntry;       // 右键点击的文件
 };
 

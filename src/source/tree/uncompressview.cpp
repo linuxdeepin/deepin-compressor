@@ -49,6 +49,11 @@ void UnCompressView::setArchiveData(const ArchiveData &stArchiveData)
     m_pModel->refreshFileEntry(m_stArchiveData.listRootEntry);
 }
 
+void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+
+}
+
 void UnCompressView::initUI()
 {
 

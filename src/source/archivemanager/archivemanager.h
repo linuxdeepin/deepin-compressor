@@ -46,7 +46,7 @@ public:
      * @param options           压缩参数
      * @param bBatch            是否批量压缩（多路径）
      */
-    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive = false, bool bBatch = false);
+    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive = false/*, bool bBatch = false*/);
 
     /**
      * @brief loadArchive
@@ -113,7 +113,7 @@ private Q_SLOTS:
 private:
     ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针
 
-    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压以及后续使用）
+    ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
 
 };
 

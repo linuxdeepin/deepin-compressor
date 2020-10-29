@@ -56,30 +56,32 @@ ArchiveJob *ArchiveManager::archiveJob()
     return m_pArchiveJob;
 }
 
-void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive, bool bBatch)
+void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive/*, bool bBatch*/)
 {
     ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, true, useLibArchive);
 
-    if (bBatch) {       // 批量压缩（多路径）
-        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
+//    if (bBatch) {       // 批量压缩（多路径）
+//        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
-        // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+//        // 连接槽函数
+//        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+//        connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
+//        connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
 
 
-        m_pArchiveJob = pCreateJob;
-        pCreateJob->start();
-    } else {            // 单路径压缩
-        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
+//        m_pArchiveJob = pCreateJob;
+//        pCreateJob->start();
+//    } else {            // 单路径压缩
+    CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
 
-        // 连接槽函数
-        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-        connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
-        connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    // 连接槽函数
+    connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
 
-        m_pArchiveJob = pCreateJob;
-        pCreateJob->start();
-    }
+    m_pArchiveJob = pCreateJob;
+    pCreateJob->start();
+    //}
 }
 
 void ArchiveManager::loadArchive(const QString &strArchiveName)

@@ -43,6 +43,12 @@ public:
      */
     void setArchiveData(const ArchiveData &stArchiveData);
 
+protected:
+    /**
+     * @brief mouseDoubleClickEvent 鼠标双击事件
+     * @param event 双击事件
+     */
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     /**
@@ -82,11 +88,8 @@ protected Q_SLOTS:
     virtual void slotPreClicked() override;
 
 private:
-    //QMap<QString, FileEntry> m_mapEntry;        // 总数据
-    //
-
     ArchiveData m_stArchiveData;
-    //QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
+    QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
 };
 
 #endif // UNCOMPRESSVIEW_H

@@ -80,12 +80,10 @@ struct FileEntry {
         uLastModifiedTime = 0;
     }
 
-    QString strFullPath;    // 文件名（含绝对路径：/../../xx.xx）
-    QString strFileName;        // 文件名（不含绝对路径：xx.xx）
-    //QString strType;        // 文件类型
+    QString strFullPath;    // 文件全路径
+    QString strFileName;        // 文件名
     bool isDirectory;        // 是否为文件夹
     qlonglong qSize;        // 文件真实大小（文件夹显示项）
-    // QDateTime lastModifiedTime; // 文件最后修改时间
     uint uLastModifiedTime;      // 文件最后修改时间
 
     int iIndex;         // 文件在压缩包中的索引位置（目前是只有zip格式会用到，通过索引查找）

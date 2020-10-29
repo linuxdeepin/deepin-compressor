@@ -461,22 +461,22 @@ void MainWindow::slotCompress(const QVariant &val)
     QVector<FileEntry> vecFiles;
     QString strDestination;
     CompressOptions options;
-    bool bBatch = false;
+    //bool bBatch = false;
 
-    QSet< QString > globalWorkDirList;
+    //QSet< QString > globalWorkDirList;
     // 构建压缩文件数据
     foreach (QString strFile, listFiles) {
         FileEntry stFileEntry;
         stFileEntry.strFullPath = strFile;
         vecFiles.push_back(stFileEntry);
 
-        QString globalWorkDir = strFile;
-        if (globalWorkDir.right(1) == QLatin1String("/")) {
-            globalWorkDir.chop(1);
-        }
+//        QString globalWorkDir = strFile;
+//        if (globalWorkDir.right(1) == QLatin1String("/")) {
+//            globalWorkDir.chop(1);
+//        }
 
-        globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
-        globalWorkDirList.insert(globalWorkDir);
+//        globalWorkDir = QFileInfo(globalWorkDir).dir().absolutePath();
+//        globalWorkDirList.insert(globalWorkDir);
     }
 
     strDestination = stCompressInfo.strTargetPath + QDir::separator() + stCompressInfo.strArchiveName;
@@ -494,13 +494,13 @@ void MainWindow::slotCompress(const QVariant &val)
     options.bTar_7z = stCompressInfo.bTar_7z;
 
     // 判断是否批量压缩（多路径）
-    if (globalWorkDirList.count() == 1 || options.bTar_7z) {
-        bBatch = false;
-    } else {
-        bBatch = true;
-    }
+//    if (globalWorkDirList.count() == 1 || options.bTar_7z) {
+//        bBatch = false;
+//    } else {
+//        bBatch = true;
+//    }
 
-    m_pArchiveManager->createArchive(vecFiles, strDestination, options, false, bBatch);
+    m_pArchiveManager->createArchive(vecFiles, strDestination, options, false/*, bBatch*/);
 
 
     m_pProgressPage->setProgressType(PT_Compress);
@@ -579,13 +579,11 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
-//    qDebug() << "Percentage=" << dPercentage;
     m_pProgressPage->setProgress(qRound(dPercentage));
 }
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
-//    qDebug() << "filename=" << strName;
     m_pProgressPage->setCurrentFileName(strName);
 }
 
@@ -596,13 +594,3 @@ void MainWindow::slotQuery(Query *query)
     query->execute();
 }
 
-void MainWindow::slotFileChanged(const QString &strFileName)
-{
-    QString displayName = UiTools::toShortString(QFileInfo(strFileName).fileName());
-    QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
-
-    TipDialog dialog(this);
-    dialog.showDialog(strTips, tr("OK"), DDialog::ButtonNormal);
-
-    m_pCompressPage->refreshCompressedFiles(true, strFileName);
-}
