@@ -27,6 +27,7 @@
 #include <QBoxLayout>
 #include <QDebug>
 #include <QFileInfo>
+#include <QTimer>
 
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
@@ -204,4 +205,45 @@ void ProgressDialog::clearprocess()
 bool ProgressDialog::isshown()
 {
     return this->isVisible() || m_extractdialog->isVisible();
+}
+
+CommentProgressDialog::CommentProgressDialog(QWidget *parent):
+    DAbstractDialog(parent)
+{
+    initUI();
+}
+
+void CommentProgressDialog::initUI()
+{
+    setFixedSize(400, 79);
+    setWindowFlags((windowFlags() & ~ Qt::CustomizeWindowHint /*& ~Qt::Dialog*/) | Qt::Window);
+
+    DLabel *label = new DLabel(this);
+    label->setFixedHeight(20);
+    label->setText("Updating comment, please wait...");
+
+    m_progressBar = new DProgressBar(this);
+    m_progressBar->setFixedSize(350, 6);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(25, 20, 0, 20);
+    mainLayout->addWidget(label);
+    mainLayout->setSpacing(13);
+    mainLayout->addWidget(m_progressBar);
+}
+
+void CommentProgressDialog::showdialog()
+{
+    exec();
+}
+
+void CommentProgressDialog::setProgress(unsigned long value)
+{
+    m_progressBar->setValue(value);
+}
+
+void CommentProgressDialog::setFinished()
+{
+    m_progressBar->setValue(100);
+    QTimer::singleShot(100, this, [ = ] {hide();});
 }

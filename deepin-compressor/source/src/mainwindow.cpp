@@ -549,6 +549,7 @@ void MainWindow::InitUI()
     m_pCompressSuccess = new Compressor_Success(this);
     m_pCompressFail = new Compressor_Fail(this);
     m_pEncryptionpage = new EncryptionPage(this);
+    m_commentProgress = new CommentProgressDialog(this);
     m_pProgressdialog = new ProgressDialog(this);
     m_pSettingsDialog = new SettingDialog(this);
     //m_encodingpage = new EncodingPage(this);
@@ -1311,6 +1312,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(true);
         setAcceptDrops(true);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         titlebar()->setTitle("");
         m_pMainLayout->setCurrentIndex(0);
         m_isFileModified = false;
@@ -1329,6 +1331,8 @@ void MainWindow::refreshPage()
         titlebar()->setTitle(tr("Create New Archive"));
         m_pOpenAction->setEnabled(true);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
+        m_pTitleCommentButton->setVisible(true);
+        m_pTitleCommentButton->setEnabled(false);
         setAcceptDrops(true);
 
         if (m_iWatchTimerID == 0) {
@@ -1348,6 +1352,8 @@ void MainWindow::refreshPage()
         }
 
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_ArrowLeave);
+        m_pTitleCommentButton->setVisible(true);
+        m_pTitleCommentButton->setEnabled(false);
         m_pMainLayout->setCurrentIndex(3);
         m_pCompressSetting->getFilenameLineEdit()->lineEdit()->selectAll();
         m_pCompressSetting->getFilenameLineEdit()->lineEdit()->setFocus();
@@ -1368,6 +1374,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
         m_pProgess->pInfo()->startTimer();
@@ -1379,6 +1386,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         if (!m_pProgess->getType()) {
             titlebar()->setTitle(tr("Opening"));
         } else {
@@ -1396,6 +1404,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         titlebar()->setTitle(tr("Deleting"));
         m_pProgess->setFilename(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(4);
@@ -1408,6 +1417,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         titlebar()->setTitle(tr("Converting"));
         m_pProgess->setFilename(m_strConvertFileName);
         m_pMainLayout->setCurrentIndex(4);
@@ -1421,6 +1431,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(5);
         if (m_pSettingsDialog->isAutoDeleteFile()) {
             autoDeleteSourceFile();
@@ -1438,6 +1449,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(6);
         if (0 != m_iWatchTimerID && (!m_isFileModified)) {
             killTimer(m_iWatchTimerID);
@@ -1456,6 +1468,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(5);
         unzipSuccessOpenFileDir();
         if (0 != m_iWatchTimerID && (!m_isFileModified)) {
@@ -1470,6 +1483,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(6);
         if (0 != m_iWatchTimerID && (!m_isFileModified)) {
             killTimer(m_iWatchTimerID);
@@ -1483,6 +1497,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(5);
         break;
     case PAGE_ENCRYPTION:       // 解压输入密码界面
@@ -1490,6 +1505,7 @@ void MainWindow::refreshPage()
         m_pOpenAction->setEnabled(false);
         setAcceptDrops(false);
         setTitleButtonStyle(false);
+        m_pTitleCommentButton->setVisible(false);
         if (m_pProgressdialog->isshown()) {
             // m_pProgressdialog->reject();
             m_pProgressdialog->hide();
@@ -2567,6 +2583,15 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
             m_convertFirst = true; // 标志格式转换第一步解压完成
         }
     }
+}
+
+void MainWindow::slotCommentProgress(KJob */*job*/, unsigned long percent)
+{
+    if (!m_commentProgress->isVisible()) {
+        m_commentProgress->exec();
+    }
+
+    m_commentProgress->setProgress(percent);
 }
 
 /**
@@ -5051,58 +5076,42 @@ void MainWindow::onTitleButtonPressed()
 
 void MainWindow::slotTitleCommentButtonPressed()
 {
-    m_comment = m_pArchiveModel->getArchiveComment();
+    qDebug() << __FUNCTION__;
+    // 文件名
+    QFileInfo file(m_strLoadfile);
+
+    if (m_isFirstViewComment) {
+        // 记录修改前压缩包本身的注释
+        m_comment = m_pArchiveModel->getArchiveComment();
+    }
+
     if (m_ePageID == PAGE_UNZIP) {
         DDialog *dialog = new DDialog(this);
+        dialog->setWindowTitle(tr("File infomation"));
         dialog->setFixedWidth(300);
+        DFontSizeManager::instance()->bind(dialog, DFontSizeManager::T6, QFont::Medium);
 
         // 整体布局
         QVBoxLayout *mainLayout = new QVBoxLayout;
 
-        // 文件图标和名称布局
-        DWidget *fileWidget = new DWidget;
-        QVBoxLayout *fileLayout = new QVBoxLayout;
-
-        // 文件名
-        QFileInfo file(m_strLoadfile);
-
-        // 根据文件类型获取icon
-        QIcon icon(QIcon::fromTheme(determineMimeType(file.fileName()).iconName()).pixmap(128, 128));
-        if (icon.isNull()) {
-            icon = QIcon::fromTheme("empty").pixmap(128, 128);
-        }
-
-        // 文件图标lable
-        DLabel *fileIconLable = new DLabel;
-        fileIconLable->setPixmap(icon.pixmap(128, 128));
-        fileIconLable->setAlignment(Qt::AlignCenter);
-
-        // 文件名lable
-        DLabel *fileNameLable = new DLabel;
-        QString str1 = fontMetrics().elidedText(file.fileName(), Qt::ElideMiddle, 150);
-        fileNameLable->setText(str1);
-        fileNameLable->setToolTip(file.fileName());
-        fileNameLable->setAlignment(Qt::AlignCenter);
-        fileNameLable->setWordWrap(true);
-
-        fileLayout->addWidget(fileIconLable);
-        fileLayout->addWidget(fileNameLable);
-        fileWidget->setLayout(fileLayout);
-
+        // 控件标题的字体
         QFont titleFont;
         titleFont.setWeight(QFont::Medium);
 
+        // 压缩包具体信息内容的字体
         QFont infoFont;
         infoFont.setPixelSize(12);
         infoFont.setWeight(QFont::Normal);
 
         QList<DArrowLineDrawer *> expandGroup;
 
-        // DArrowLineDrawer设置Basic info标题
+        // 基本信息控件的布局
+        QVBoxLayout *basicInfoLayout = new QVBoxLayout;
+
+        // 基本信息控件
         DArrowLineDrawer *basicInfoDrawer = new DArrowLineDrawer;
         basicInfoDrawer->setFont(titleFont);
         basicInfoDrawer->setTitle(tr("Basic info"));
-//        basicInfoDrawer->setFixedSize(280, 186);
         basicInfoDrawer->setFixedHeight(30);
         basicInfoDrawer->setExpand(true);
         expandGroup.append(basicInfoDrawer);
@@ -5111,8 +5120,9 @@ void MainWindow::slotTitleCommentButtonPressed()
         DFrame *basicInforFrame = new DFrame;
 
         // 基本信息具体内容布局
-        QFormLayout *basicInfoFormLayout = new QFormLayout;
+        QFormLayout *basicInfoFormLayout = new QFormLayout(basicInfoDrawer);
         basicInfoFormLayout->setHorizontalSpacing(35);
+        basicInfoFormLayout->setVerticalSpacing(7);
         basicInfoFormLayout->setLabelAlignment(Qt::AlignLeft);
 
         DLabel *left1 = new DLabel(tr("Size"));
@@ -5155,12 +5165,13 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         basicInforFrame->setLayout(basicInfoFormLayout);
         basicInfoDrawer->setContent(basicInforFrame);
+        basicInfoLayout->setContentsMargins(0, 0, 0, 5);
+        basicInfoLayout->addWidget(basicInfoDrawer, Qt::AlignCenter);
 
-        // DArrowLineDrawer设置Comment标题
+        // 注释的控件
         DArrowLineDrawer *commentDrawer = new DArrowLineDrawer;
         commentDrawer->setFont(titleFont);
         commentDrawer->setTitle(tr("Comment"));
-//        basicInfoDrawer->setFixedSize(280, 126);
         commentDrawer->setFixedHeight(30);
         commentDrawer->setExpand(true);
         expandGroup.append(commentDrawer);
@@ -5168,13 +5179,16 @@ void MainWindow::slotTitleCommentButtonPressed()
         // 注释Frame布局
         DFrame *commentFrame = new DFrame;
 
-        DTextEdit *commentTextedit = new DTextEdit;
+        // 显示注释内容的布局
+        QVBoxLayout *texteditLayout = new QVBoxLayout;
+
+        // 显示注释内容的控件
+        DTextEdit *commentTextedit = new DTextEdit(commentDrawer);
         if (m_strLoadfile.endsWith(".rar")) { // rar格式不支持修改注释
             commentTextedit->setEnabled(false);
         }
 
-        commentTextedit->setPlaceholderText("最多输入1000个字符");
-//        commentTextedit->setFixedSize(260, 80);
+        commentTextedit->setPlaceholderText("Enter up to 1000 characters");
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);
@@ -5184,39 +5198,43 @@ void MainWindow::slotTitleCommentButtonPressed()
             newComment = commentTextedit->toPlainText();
         });
 
-        QVBoxLayout *commentLayout = new QVBoxLayout;
-        commentLayout->addWidget(commentTextedit, Qt::AlignCenter);
+        texteditLayout->setContentsMargins(10, 5, 10, 16);
+        texteditLayout->addWidget(commentTextedit, Qt::AlignCenter);
 
-        commentFrame->setLayout(commentLayout);
+        commentFrame->setLayout(texteditLayout);
         commentDrawer->setContent(commentFrame);
 
-        mainLayout->addWidget(fileWidget);
-        mainLayout->addWidget(basicInfoDrawer, 0, Qt::AlignTop);
-        mainLayout->addWidget(commentDrawer, 0, Qt::AlignTop);
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+        mainLayout->addLayout(basicInfoLayout);
+        mainLayout->addWidget(commentDrawer, 0,  Qt::AlignTop);
 
-        DWidget *widget = new DWidget(dialog);
+        DWidget *widget = new DWidget;
         widget->setLayout(mainLayout);
         dialog->addContent(widget);
+        dialog->move(this->geometry().topLeft().x() + this->width() / 2  - dialog->width() / 2,
+                     this->geometry().topLeft().y() + this->height() / 2 - 200); // 200是dialog展开的高度的一半
 
         // DArrowLineDrawer收缩展开设置大小
         DEnhancedWidget *basicInfoWidget = new DEnhancedWidget(basicInfoDrawer, basicInfoDrawer);
         connect(basicInfoWidget, &DEnhancedWidget::heightChanged, basicInfoWidget, [ = ]() {
             QRect rc = dialog->geometry();
-            rc.setHeight(fileWidget->height() + basicInfoDrawer->height() + commentDrawer->height()
-                         + contentsMargins().top() + contentsMargins().bottom() + 100);
+            rc.setHeight(basicInfoDrawer->height() + commentDrawer->height()
+                         /*+ dialog->contentsMargins().top() + dialog->contentsMargins().bottom()*/);
             dialog->setGeometry(rc);
         });
 
+        // comment布局加margin
         DEnhancedWidget *commentWidget = new DEnhancedWidget(commentDrawer, commentDrawer);
         connect(commentWidget, &DEnhancedWidget::heightChanged, commentWidget, [ = ]() {
             QRect rc = dialog->geometry();
-            rc.setHeight(fileWidget->height() + basicInfoDrawer->height() + commentDrawer->height()
-                         + contentsMargins().top() + contentsMargins().bottom() + 90);
+            rc.setHeight(basicInfoDrawer->height() + commentDrawer->height()
+                         /*+ dialog->contentsMargins().top() + dialog->contentsMargins().bottom()*/);
             dialog->setGeometry(rc);
         });
 
         int mode = dialog->exec();
         if (mode == -1 && m_comment != newComment) {
+            m_isFirstViewComment = false;
             m_comment = newComment;
             updateArchiveComment();
         }
@@ -5452,6 +5470,15 @@ void MainWindow::updateArchiveComment()
     // 创建解压需要的插件
     ReadWriteArchiveInterface *pIface = dynamic_cast<ReadWriteArchiveInterface *>(m_pArchiveModel->getPlugin());
     CommentJob *comentJob = new CommentJob(m_comment, pIface);
+
+    // 更新注释job结束
+    connect(comentJob, &KJob::result, this, [ = ] {
+        m_commentProgress->setFinished();
+    });
+
+    // 更新注释的进度
+    connect(comentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(slotCommentProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
+
     comentJob->start();
 }
 

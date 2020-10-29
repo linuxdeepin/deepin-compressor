@@ -61,6 +61,7 @@ class OpenLoadingPage;
 class QEventLoop;
 class CompressorApplication;
 class QFileSystemWatcher;
+class CommentProgressDialog;
 
 /**
  * @brief The MainWindow class  整个归档管理器窗口，不用类型的操作通过切换其中的界面实现
@@ -404,8 +405,10 @@ private:
      */
     void extractMkdir(const QStringList &files);
 
+    /**
+     * @brief updateArchiveComment 更新压缩包的注释
+     */
     void updateArchiveComment();
-
 
 protected:
     /**
@@ -643,6 +646,13 @@ private slots:
     void SlotProgress(KJob *job, unsigned long percent);
 
     /**
+     * @brief slotCommentProgress 更新注释进度
+     * @param job  工作类型
+     * @param percent 进度
+     */
+    void slotCommentProgress(KJob *job, unsigned long percent);
+
+    /**
      * @brief SlotProgressFile  文件显示
      * @param job   工作类型
      * @param filename  正在操作的文件
@@ -830,6 +840,7 @@ private:
 
     // 弹窗
     ProgressDialog *m_pProgressdialog = nullptr;            // 进度对话框
+    CommentProgressDialog *m_commentProgress = nullptr;     // 更新注释对话框
     SettingDialog *m_pSettingsDialog = nullptr;             // 设置对话框
 
     QString m_strPathStore;                                 // 解压/压缩目标路径
@@ -898,7 +909,7 @@ private:
 
     QVector<Archive::Entry *> m_entries;
     QString m_comment;
-//    DTextEdit *m_commentTextedit = nullptr;
+    bool m_isFirstViewComment = true;
 
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;

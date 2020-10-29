@@ -75,4 +75,18 @@ private:
 
 };
 
+class CommentProgressDialog: public DAbstractDialog
+{
+    Q_OBJECT
+public:
+    explicit CommentProgressDialog(QWidget *parent = nullptr);
+    void initUI();
+    void showdialog();
+    void setProgress(unsigned long  value);
+    void setFinished();
+
+private:
+    DProgressBar *m_progressBar = nullptr;
+};
+
 #endif // PROGRESSDIALOG_H
