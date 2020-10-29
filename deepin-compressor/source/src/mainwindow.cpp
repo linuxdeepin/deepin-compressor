@@ -4285,6 +4285,7 @@ void MainWindow::slotCompressFinished(KJob *job)
     deleteLaterJob();
     PERF_PRINT_END("POINT-03");
 }
+
 void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
@@ -5474,6 +5475,8 @@ void MainWindow::updateArchiveComment()
     // 更新注释job结束
     connect(comentJob, &KJob::result, this, [ = ] {
         m_commentProgress->setFinished();
+        QStringList list = QStringList() << m_pArchiveModel->archive()->fileName();
+        emit sigTipsWindowPopUp(SUBACTION_MODE::ACTION_COMMENT, list);
     });
 
     // 更新注释的进度
