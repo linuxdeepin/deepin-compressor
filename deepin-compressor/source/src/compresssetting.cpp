@@ -423,7 +423,6 @@ void CompressSetting::onNextButoonClicked()
         tmpCompresstype = "7z";
         strTar7z = ".tar";
         m_openArgs[QStringLiteral("createtar7z")] = QString("true");
-        m_openArgs[QStringLiteral("selectFilesSize")] = QString::number(m_getFileSize);
     }
 
 //    QString tmpCompresstype = (0 == QString("tar.7z").compare(m_compresstype->text(), Qt::CaseInsensitive)) ? QString("7z") : m_compresstype->text();
@@ -435,6 +434,8 @@ void CompressSetting::onNextButoonClicked()
         }
     }
 
+    // 待压缩文件总大小
+    m_openArgs[QStringLiteral("selectFilesSize")] = QString::number(m_getFileSize);
     // 创建压缩文件
     m_openArgs[QStringLiteral("createNewArchive")] = QStringLiteral("true");
     // 压缩类型

@@ -68,16 +68,15 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
 
     // First write the new files.
     uint addedEntries = 0;
-    qint64 sizeOfAdd = 0;
-    files[0]->calAllSize(sizeOfAdd);
-    bool bInternalDuty = false;
-    if (sizeOfAdd > MB300 && files[0]->isDir() == false) {//如果大于300M
-//        bool bInternalDuty  = totalCount < 6;//如果总文件数量小于6个，那么启动细分进度
-        bInternalDuty = true;
-    }
+    qint64 sizeOfAdd = options.getfilesSize() * 1024 * 1024;
+
+    bool bInternalDuty = true;
 
     // Recreate destination directory structure.
     QString destinationPath = (destination == nullptr) ? QString() : destination->fullPath();
+
+    // 开始压缩前，已压缩文件大小前初始化0
+    m_currentCompressFilesSize = 0;
 
     for (Archive::Entry *selectedFile : files) {
         if (QThread::currentThread()->isInterruptionRequested()) {
@@ -87,11 +86,8 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
         emit progress_filename(selectedFile->fullPath());
 
         FileProgressInfo info;
+        info.totalFileSize = sizeOfAdd;
 
-        if (bInternalDuty) {
-            info.fileProgressStart = static_cast<float>(addedEntries) / (static_cast<float>(totalCount));//记录当前进度值
-            info.fileProgressProportion = (float)1.0 / totalCount;//设定内度百分比范围,1表示对当前这一个压缩包进行内部进度细分分析
-        }
 
         if (!writeFileFromEntry(selectedFile->fullPath(), destinationPath, selectedFile, info, bInternalDuty)) {
             finish(false);
@@ -99,8 +95,7 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
         }
 
         addedEntries++;
-        emit progress(float(addedEntries) / float(totalCount));
-        //qDebug() << "front========" << "addedEntries:" << addedEntries << "totalCount:" << totalCount;
+
         // For directories, write all subfiles/folders.
         const QString &fullPath = selectedFile->fullPath();
         if (QFileInfo(fullPath).isDir()) {
@@ -121,15 +116,10 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                     continue;
                 }
 
-                bInternalDuty = false;
+
                 FileProgressInfo info;
-                if (it.fileInfo().size() > MB300 && it.fileInfo().isDir() == false) {//如果不是文件夹，且大小超过300M，则执行内部进度分析
-                    bInternalDuty = true;
-                }
-                if (bInternalDuty) {
-                    info.fileProgressStart = (float)addedEntries / totalCount; //记录当前进度值
-                    info.fileProgressProportion = (float)1.0 / totalCount;//设定内部百分比范围；1表示对当前这一个压缩包进行内部进度细分分析
-                }
+                info.totalFileSize = sizeOfAdd;
+
 
                 if (!writeFileTodestination(path, destinationPath, externalPath, info, bInternalDuty)) {
                     finish(false);
@@ -137,12 +127,6 @@ bool ReadWriteLibarchivePlugin::addFiles(const QVector<Archive::Entry *> &files,
                 }
 
                 addedEntries++;
-
-                if (bInternalDuty == false) {//如果不启动内部进度细分分析
-                    double percent = float(addedEntries) / totalCount;
-                    //qDebug() << "back=======percent:" << percent;
-                    emit progress(percent);
-                }
             }
             //qDebug() << "back========" << "addedEntries:" << addedEntries << "totalCount:" << totalCount;
         }
@@ -288,12 +272,11 @@ bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, con
         archive_write_set_format_pax_restricted(m_archiveWriter.data());
     }
 
-
-    if (creatingNewFile) {
+    if (creatingNewFile) { //压缩
         if (!initializeNewFileWriterFilters(options)) {
             return false;
         }
-    } else {
+    } else { //追加
         if (!initializeWriterFilters()) {
             return false;
         }
@@ -407,7 +390,6 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const Compression
         } else {
             ret = archive_write_set_filter_option(m_archiveWriter.data(), nullptr, "compression-level", QString::number(options.compressionLevel()).toUtf8().constData());
         }
-
 
         if (ret != ARCHIVE_OK) {
             emit error(("Could not set the compression level."));
@@ -662,7 +644,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         dir.mkpath(absoluteDestinationPath);//创建临时文件夹
         QString newFilePath = absoluteDestinationPath + pEntry->name();
         if (QFile::link(relativeName, newFilePath)) {
-            //            qDebug() << "Symlink's created:" << destination << relativeName;
+//            qDebug() << "Symlink's created:" << destination << relativeName;
         } else {
             qDebug() << "Can't create symlink" << destination << relativeName;
             return false;
