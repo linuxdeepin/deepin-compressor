@@ -329,6 +329,20 @@ void CompressSetting::InitConnection()
 
     });
 
+    connect(m_pCommentEdt, &DTextEdit::textChanged, this, [&]() {
+        const int maxlen = 10000;
+        QString savetext = m_pCommentEdt->toPlainText();
+        if (savetext.size() > maxlen) { //限制最多注释maxlen个字
+            // 保留前maxlen个注释字符
+            m_pCommentEdt->setText(savetext.left(maxlen));
+
+            //设定鼠标位置，将鼠标放到最后的地方
+            QTextCursor cursor = m_pCommentEdt->textCursor();
+            cursor.setPosition(maxlen);
+            m_pCommentEdt->setTextCursor(cursor);
+        }
+    });
+
     connect(typepixmap, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_compresstype, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));
     connect(m_clicklabel, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(showRightMenu(QMouseEvent *)));

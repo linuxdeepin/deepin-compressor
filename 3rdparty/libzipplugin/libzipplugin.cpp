@@ -586,9 +586,15 @@ bool LibzipPlugin::addComment(const QString &comment)
     const char *commentstr = tmp.constData();
     //    const char *commentstr13 = comment.toUtf8().constData(); // 该写法不安全，会返回空字符串
     zip_uint16_t commentlength = static_cast<zip_uint16_t>(strlen(commentstr));
-    // Set archive comment.
-    if (zip_set_archive_comment(archive, commentstr, commentlength)) {
-        qDebug() << "错误码：" << errcode;
+
+    /**
+      * Set archive comment.
+      * 1、If commentstr is NULL and len is 0, the archive commentstr will be removed.
+      * 2、commentstr must be encoded in ASCII or UTF-8.
+      */
+    errcode = zip_set_archive_comment(archive, commentstr, commentlength);
+    if (ZIP_ER_OK != errcode) {
+        qDebug() << "errcode:" << errcode;
         return false;
     }
 
