@@ -18,6 +18,8 @@ find_package(KF5Archive)
 
 include_directories(${PROJECT_SOURCE_DIR}/../libarchive)
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
 
 file(GLOB c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp )

@@ -52,6 +52,8 @@ set(LIBS_INCLUDE_DIRS
 
 include_directories(../ChardetDetector/)
 include_directories(../interface/)
+include_directories(../interface/archiveinterface)
+include_directories(../interface/plugin)
 
 include_directories(${PROJECT_SOURCE_DIR})
 

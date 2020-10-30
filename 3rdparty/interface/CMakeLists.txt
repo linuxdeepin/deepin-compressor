@@ -81,7 +81,10 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${DtkGUI_INCLUDE_DIRS}
                                               ${ATSPI2_INCLUDE_DIRS}
                                               ${GOBJECT_INCLUDE_DIRS})
-include_directories("src")
+
+include_directories(${PROJECT_SOURCE_DIR}/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/process)
 
 add_library(${LIB_NAME}   ${h_files} ${c_files}  )
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)

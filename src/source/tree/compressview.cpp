@@ -167,11 +167,6 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
 
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
-
-            if (m_iLevel == 0) {
-                setPreLblVisible(true, entry.strFullPath);
-            }
-
             m_iLevel++;
             m_strCurrentPath = entry.strFullPath;
             refreshDataByCurrentPath(); // 刷新数据
@@ -232,9 +227,17 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 
 void CompressView::refreshDataByCurrentPath()
 {
-    m_pHeaderView->preLbl()->setPrePath(getPrePathByLevel(m_strCurrentPath));   // 返回上一级按钮文字刷新
-    m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
-    m_pModel->refreshFileEntry(getCurrentDirFiles());  // 刷新数据显示
+    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
+
+    if (m_iLevel == 0) {
+        setPreLblVisible(false);
+        m_pModel->refreshFileEntry(m_listEntry);    // 数据模型刷新
+    } else {
+        m_pFileWatcher->addPath(m_strCurrentPath);      // 添加目录监听
+        setPreLblVisible(true, getPrePathByLevel(m_strCurrentPath));
+        m_pModel->refreshFileEntry(getCurrentDirFiles());  // 刷新数据显示
+    }
+
 }
 
 void CompressView::slotShowRightMenu(const QPoint &pos)
@@ -353,18 +356,16 @@ void CompressView::slotOpenStyleClicked()
 
 void CompressView::slotPreClicked()
 {
-    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
-
     m_iLevel--;     // 目录层级减1
     if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
-        setPreLblVisible(false);    // 设置上一级按钮隐藏
-        m_strCurrentPath = "";      // 当前路径置空
-        m_pModel->refreshFileEntry(m_listEntry);    // 数据模型刷新
+        resetLevel();
     } else {        // 否则传递上级目录
         int iIndex = m_strCurrentPath.lastIndexOf(QDir::separator());
         m_strCurrentPath = m_strCurrentPath.left(iIndex);   // 当前路径截掉最后一级目录
-        refreshDataByCurrentPath();     // 刷新数据
+
     }
+
+    refreshDataByCurrentPath();     // 刷新数据
 
     // 重置宽度
     resizeColumnWidth();

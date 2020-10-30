@@ -152,6 +152,7 @@ DataTreeView::~DataTreeView()
 void DataTreeView::resetLevel()
 {
     m_iLevel = 0;
+    m_strCurrentPath = "/";
     setPreLblVisible(false);
 }
 

@@ -12,7 +12,9 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5 REQUIRED Widgets)
 include(FindPkgConfig)
 
-
+include_directories(${PROJECT_SOURCE_DIR}/../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../interface/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/../interface/process)
 
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../interface)
 

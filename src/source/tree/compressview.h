@@ -96,7 +96,7 @@ private:
     void handleDoubleClick(const QModelIndex &index);
 
     /**
-     * @brief getDirFiles   获取当前路径下所有文件
+     * @brief getCurrentDirFiles   获取当前路径下所有文件
      * @return
      */
     QList<FileEntry> getCurrentDirFiles();

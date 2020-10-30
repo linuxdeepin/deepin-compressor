@@ -91,6 +91,9 @@ set(LIBS_INCLUDE_DIRS
 #6. 应用interface项目
 #interface的h文件
 include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface)
+include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/interface/process)
 #add_subdirectory(interface)
 
 #7.主程序的h文件

@@ -47,6 +47,8 @@ file(GLOB_RECURSE json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/../)
 
 add_library(${LIB_NAME} SHARED  ${c_files} ${h_files} ${json_files})

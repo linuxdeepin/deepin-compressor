@@ -27,6 +27,8 @@ set(TERMINALWIDGET_VERSION_PATCH "1")
 
 include_directories(${PROJECT_SOURCE_DIR}/../../interface)
 include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
 include_directories(${DtkWidget_INCLUDE_DIRS})
 
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)

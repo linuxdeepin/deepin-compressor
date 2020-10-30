@@ -534,7 +534,7 @@ QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
 
 void MimesAppsManager::initMimeTypeApps()
 {
-    qDebug() << "getMimeTypeApps in" << QThread::currentThread() << qApp->thread();
+    //qDebug() << "getMimeTypeApps in" << QThread::currentThread() << qApp->thread();
     DesktopFiles.clear();
     DesktopObjs.clear();
     DDE_MimeTypes.clear();
@@ -673,7 +673,7 @@ void MimesAppsManager::initMimeTypeApps()
 void MimesAppsManager::loadDDEMimeTypes()
 {
     QSettings settings(getDDEMimeTypeFile(), QSettings::IniFormat);
-    qDebug() << settings.childGroups();
+    //qDebug() << settings.childGroups();
 
     QFile file(getDDEMimeTypeFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

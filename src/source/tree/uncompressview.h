@@ -68,6 +68,31 @@ private:
      */
     qlonglong calDirItemCount(const QString &strFilePath);
 
+    /**
+     * @brief handleDoubleClick    处理双击事件
+     * @param index 双击的index
+     */
+    void handleDoubleClick(const QModelIndex &index);
+
+    /**
+     * @brief refreshDataByCurrentPath  根据当前路径刷新数据
+     */
+    void refreshDataByCurrentPath();
+
+    /**
+     * @brief getCurrentDirFiles   获取当前路径下所有文件
+     * @return
+     */
+    QList<FileEntry> getCurrentDirFiles();
+
+
+
+protected Q_SLOTS:
+    /**
+     * @brief slotPreClicked    返回上一级
+     */
+    virtual void slotPreClicked() override;
+
 private slots:
     /**
      * @brief slotDragFiles     外部文件拖拽至列表处理（追加压缩）
@@ -81,15 +106,35 @@ private slots:
      */
     void slotShowRightMenu(const QPoint &pos);
 
-protected Q_SLOTS:
     /**
-     * @brief slotPreClicked    返回上一级
+     * @brief slotExtract   右键提取操作
      */
-    virtual void slotPreClicked() override;
+    void slotExtract();
+
+    /**
+     * @brief slotExtract2Hera   右键提取到当前文件夹操作
+     */
+    void slotExtract2Here();
+
+    /**
+     * @brief slotDeleteFile    右键删除操作
+     */
+    void slotDeleteFile();
+
+    /**
+     * @brief slotDeleteFile    右键打开操作
+     */
+    void slotOpen();
+
+    /**
+     * @brief slotOpenStyleClicked  右键打开方式操作
+     */
+    void slotOpenStyleClicked();
 
 private:
     ArchiveData m_stArchiveData;
     QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
+    FileEntry m_stRightEntry;       // 右键点击的文件
 };
 
 #endif // UNCOMPRESSVIEW_H
