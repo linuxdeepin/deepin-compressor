@@ -103,9 +103,11 @@ void Progress::InitUI()
 
     //add speed and time label
     m_speedLabel = new DLabel(this);
+    m_speedLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_speedLabel, DFontSizeManager::T8);
 
     m_restTimeLabel = new DLabel(this);
+    m_restTimeLabel->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_restTimeLabel, DFontSizeManager::T8);
 
     QHBoxLayout *m_layout = new QHBoxLayout;
@@ -116,6 +118,7 @@ void Progress::InitUI()
     m_layout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
+    mainlayout->setSpacing(0);
     mainlayout->addStretch();
     mainlayout->addWidget(m_pixmaplabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addSpacing(5);
@@ -123,10 +126,11 @@ void Progress::InitUI()
     mainlayout->addSpacing(25);
     mainlayout->addWidget(m_progressbar, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_shadow, 0, Qt::AlignLeft | Qt::AlignTop);
-    mainlayout->addSpacing(5);
+    mainlayout->addSpacing(10);
     mainlayout->addWidget(m_progressfilelabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addSpacing(-2);
     //mainlayout->addStretch();
-    mainlayout->addSpacing(5);
+    //mainlayout->addSpacing(2);
 
     mainlayout->addLayout(m_layout);
     mainlayout->addStretch();
