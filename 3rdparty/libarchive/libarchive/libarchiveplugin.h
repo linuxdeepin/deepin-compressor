@@ -80,6 +80,7 @@ protected:
     void copyDataFromSourceAdd(const QString &filename, struct archive *source, struct archive *dest, struct archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty = true);
     ArchiveRead m_archiveReader;
     ArchiveRead m_archiveReadDisk;
+    qlonglong m_currentCompressFilesSize = 0;//当前已经压缩的文件大小（能展示出来的都已经压缩）
 
 private Q_SLOTS:
     void slotRestoreWorkingDir();

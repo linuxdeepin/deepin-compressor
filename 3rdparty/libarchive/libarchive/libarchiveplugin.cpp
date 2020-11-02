@@ -719,7 +719,6 @@ int LibarchivePlugin::extractionFlags() const
 
 void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty)
 {
-    m_currentExtractedFilesSize = 0;
     char buff[10240];
     QFile file(filename);
 
@@ -748,8 +747,8 @@ void LibarchivePlugin::copyData(const QString &filename, struct archive *dest, c
         }
 
         if (bInternalDuty) {
-            m_currentExtractedFilesSize += readBytes;
-            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;//根据内容写入比例，加上上次的进度值
+            m_currentCompressFilesSize += readBytes;
+            float currentProgress = (static_cast<float>(m_currentCompressFilesSize) / info.totalFileSize); //已压缩大小/待压缩文件总大小
             if (static_cast<int>(100 * currentProgress) != pastProgress) {
                 emit progress(static_cast<double>(currentProgress));
                 pastProgress = static_cast<int>(100 * currentProgress);
