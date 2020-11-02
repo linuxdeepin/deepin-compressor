@@ -639,14 +639,14 @@ private slots:
     void slotextractSelectedFilesTo(const QString &localPath, QString convertType = "");
 
     /**
-     * @brief SlotProgress  进度显示
+     * @brief SlotProgress  进度显示(界面显示)
      * @param job   工作类型
      * @param percent   进度
      */
     void SlotProgress(KJob *job, unsigned long percent);
 
     /**
-     * @brief slotCommentProgress 更新注释进度
+     * @brief slotCommentProgress 更新注释进度(对话框显示)
      * @param job  工作类型
      * @param percent 进度
      */
@@ -834,7 +834,7 @@ private:
     OpenLoadingPage *m_pOpenLoadingPage = nullptr;          // 加载界面
 
     DIconButton *m_pTitleButton = nullptr;                  // 标题栏按钮（添加文件）
-    DIconButton *m_pTitleCommentButton = nullptr;                  // 标题栏按钮（添加文件）
+    DIconButton *m_pTitleCommentButton = nullptr;                  // 标题栏按钮（注释）
     QAction *m_pOpenAction;                                 // 菜单 - 打开
     DSpinner *m_pSpinner = nullptr;                         // 转圈加载
 
@@ -883,7 +883,7 @@ private:
 
     // 界面<->插件
     KJob *m_pJob = nullptr;                                 // 指向所有Job派生类对象
-    CommentJob *pCommentJob = nullptr;
+    CommentJob *m_pCommentJob = nullptr;                    // 单独存放CommentJob对象
     Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
     WorkState m_eWorkStatus = WorkNone;                     // Job的工作状态
     JobType m_eJobType = JOB_NULL;                          // Job的类型

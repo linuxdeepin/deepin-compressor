@@ -1323,6 +1323,7 @@ void MainWindow::refreshPage()
         setAcceptDrops(false);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
         m_pTitleCommentButton->setVisible(true);
+        m_pTitleCommentButton->setEnabled(true);
         titlebar()->setTitle(m_strDecompressFileName);
         m_pMainLayout->setCurrentIndex(1);
         break;
@@ -2514,9 +2515,9 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
 
 void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
 {
-    if (pCommentJob) {
-        qDebug() << "m_lastPercent进度：" << m_lastPercent << " percent新进度：" << percent;
-    }
+//    if (m_pCommentJob) {
+//        qDebug() << "m_lastPercent进度：" << m_lastPercent << " percent新进度：" << percent;
+//    }
     //calSpeedAndTime(percent);
     //m_pProgess->refreshSpeedAndTime(percent);
 
@@ -4254,18 +4255,19 @@ void MainWindow::slotCompressFinished(KJob *job)
 
         qDebug() << "job type: " << job->mType;
         if (!m_pCompressSetting->getComment().isEmpty()) {
-            pCommentJob = Archive::commentcreate(m_strCreateCompressFile, m_pCompressSetting->getComment());
+            m_pCommentJob = Archive::commentcreate(m_strCreateCompressFile, m_pCompressSetting->getComment());
 
             // 信号槽
-            connect(pCommentJob, &KJob::result, this, &MainWindow::slotCompressFinished, Qt::ConnectionType::UniqueConnection);
-            connect(pCommentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
+            connect(m_pCommentJob, &KJob::result, this, &MainWindow::slotCompressFinished, Qt::ConnectionType::UniqueConnection);
+            connect(m_pCommentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
 
             // 初始化前面的压缩进度，接着显示注释进度
             slotResetPercentAndTime();
             m_pProgess->setSpeedAndTimeText(Progress::ENUM_PROGRESS_TYPE::OP_COMMENT);
+            m_pProgess->changeButtonState(false);
             m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_COMMENT);
             m_pProgess->setProgressFilename(m_strCreateCompressFile);
-            pCommentJob->start();
+            m_pCommentJob->start();
             return;
         }
     }
@@ -5077,7 +5079,7 @@ void MainWindow::onTitleButtonPressed()
 
 void MainWindow::slotTitleCommentButtonPressed()
 {
-    qDebug() << __FUNCTION__;
+//    qDebug() << __FUNCTION__;
     // 文件名
     QFileInfo file(m_strLoadfile);
 
@@ -5123,7 +5125,7 @@ void MainWindow::slotTitleCommentButtonPressed()
         DFrame *basicInforFrame = new DFrame;
 
         // 基本信息具体内容布局
-        QFormLayout *basicInfoFormLayout = new QFormLayout(basicInfoDrawer);
+        QFormLayout *basicInfoFormLayout = new QFormLayout;
         basicInfoFormLayout->setHorizontalSpacing(35);
         basicInfoFormLayout->setVerticalSpacing(7);
         basicInfoFormLayout->setLabelAlignment(Qt::AlignLeft);
@@ -5193,7 +5195,7 @@ void MainWindow::slotTitleCommentButtonPressed()
             commentTextedit->setEnabled(false);
         }
 
-        commentTextedit->setPlaceholderText("Enter up to 1000 characters");
+        commentTextedit->setPlaceholderText("Enter up to 10000 characters");
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);
@@ -5239,6 +5241,7 @@ void MainWindow::slotTitleCommentButtonPressed()
         });
 
         int mode = dialog->exec();
+        delete dialog;
         if (mode == -1 && m_comment != newComment) {
             m_isFirstViewComment = false;
             m_comment = newComment;
@@ -5441,9 +5444,9 @@ void MainWindow::deleteLaterJob()
         m_pJob->deleteLater();
         m_pJob = nullptr;
     }
-    if (pCommentJob) {
-        pCommentJob->deleteLater();
-        pCommentJob = nullptr;
+    if (m_pCommentJob) {
+        m_pCommentJob->deleteLater();
+        m_pCommentJob = nullptr;
     }
 }
 /**
@@ -5472,22 +5475,27 @@ void MainWindow::extractMkdir(const QStringList &files)
 
 void MainWindow::updateArchiveComment()
 {
+    if (m_pCommentJob) {
+        delete m_pCommentJob;
+        m_pCommentJob = nullptr;
+    }
+
     QString fixedMimetype = determineMimeType(m_strLoadfile).name();
     // 创建解压需要的插件
     ReadWriteArchiveInterface *pIface = dynamic_cast<ReadWriteArchiveInterface *>(m_pArchiveModel->getPlugin());
-    CommentJob *comentJob = new CommentJob(m_comment, pIface);
+    m_pCommentJob = new CommentJob(m_comment, pIface);
 
     // 更新注释job结束
-    connect(comentJob, &KJob::result, this, [ = ] {
+    connect(m_pCommentJob, &KJob::result, this, [ = ] {
         m_commentProgress->setFinished();
         QStringList list = QStringList() << m_pArchiveModel->archive()->fileName();
         emit sigTipsWindowPopUp(SUBACTION_MODE::ACTION_COMMENT, list);
     });
 
     // 更新注释的进度
-    connect(comentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(slotCommentProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
+    connect(m_pCommentJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(slotCommentProgress(KJob *, ulong)), Qt::ConnectionType::UniqueConnection);
 
-    comentJob->start();
+    m_pCommentJob->start();
 }
 
 void MainWindow::autoDeleteSourceFile()

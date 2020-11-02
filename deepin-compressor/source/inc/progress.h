@@ -93,6 +93,11 @@ public:
      * 故其他进度界面不显示该按钮
      */
     void hidePauseContinueButton();
+    /**
+     * @brief changeButtonState 控制取消按钮和暂停继续按钮是否可用
+     * @param state
+     */
+    void changeButtonState(bool state);
 
 signals:
     void sigCancelPressed(Progress::ENUM_PROGRESS_TYPE compressType);
