@@ -54,7 +54,7 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 {
 }
 
-PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     const bool creatingNewFile = !QFileInfo::exists(m_strArchiveName);
     if (options.strDestination.isEmpty()) { //压缩

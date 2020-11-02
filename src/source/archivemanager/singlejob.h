@@ -117,7 +117,7 @@ class AddJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
+    explicit AddJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~AddJob() override;
 
     /**
@@ -126,7 +126,7 @@ public:
     void doWork() override;
 
 private:
-    QVector<FileEntry> m_vecFiles; //待压缩文件(夹)
+    QList<FileEntry> m_vecFiles; //待压缩文件(夹)
     QString m_strDestination; //追加时当前压缩包内路径
     CompressOptions m_stCompressOptions; //压缩配置
 };
@@ -136,7 +136,7 @@ class CreateJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
+    explicit CreateJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent = nullptr);
     ~CreateJob() override;
 
     /**
@@ -145,7 +145,7 @@ public:
     void doWork() override;
 
 private:
-    QVector<FileEntry> m_vecFiles;
+    QList<FileEntry> m_vecFiles;
     AddJob *m_pAddJob;
     CompressOptions m_stCompressOptions;
 };
@@ -155,7 +155,7 @@ class ExtractJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent = nullptr);
+    explicit ExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent = nullptr);
     ~ExtractJob() override;
 
     /**
@@ -164,7 +164,7 @@ public:
     void doWork() override;
 
 private:
-    QVector<FileEntry> m_vecFiles;
+    QList<FileEntry> m_vecFiles;
     ExtractionOptions m_stExtractionOptions;
 };
 
@@ -173,7 +173,7 @@ class DeleteJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit DeleteJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
     ~DeleteJob() override;
 
     /**
@@ -182,7 +182,7 @@ public:
     void doWork() override;
 
 private:
-    QVector<FileEntry> m_vecFiles;
+    QList<FileEntry> m_vecFiles;
 
 };
 
@@ -191,7 +191,7 @@ class TempExtractJob : public SingleJob
 {
     Q_OBJECT
 public:
-    explicit TempExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit TempExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
     ~TempExtractJob() override;
 
     /**
@@ -200,7 +200,7 @@ public:
     void doWork() override;
 
 protected:
-    QVector<FileEntry> m_vecFiles;
+    QList<FileEntry> m_vecFiles;
 
 };
 
@@ -209,7 +209,7 @@ class OpenJob : public TempExtractJob
 {
     Q_OBJECT
 public:
-    explicit OpenJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit OpenJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
     ~OpenJob() override;
 };
 
@@ -218,7 +218,7 @@ class OpenWithJob : public TempExtractJob
 {
     Q_OBJECT
 public:
-    explicit OpenWithJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    explicit OpenWithJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
     ~OpenWithJob() override;
 };
 

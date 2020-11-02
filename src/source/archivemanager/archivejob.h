@@ -40,6 +40,7 @@ public:
         JT_Add,             // 添加压缩文件
         JT_Load,            // 加载压缩包
         JT_Extract,         // 解压
+        JT_Delete,         // 删除
     };
 
     /**

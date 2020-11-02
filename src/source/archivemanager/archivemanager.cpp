@@ -56,7 +56,7 @@ ArchiveJob *ArchiveManager::archiveJob()
     return m_pArchiveJob;
 }
 
-void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive/*, bool bBatch*/)
+void ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive/*, bool bBatch*/)
 {
     ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, true, useLibArchive);
 
@@ -72,7 +72,7 @@ void ArchiveManager::createArchive(const QVector<FileEntry> &files, const QStrin
 //        m_pArchiveJob = pCreateJob;
 //        pCreateJob->start();
 //    } else {            // 单路径压缩
-    CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
+    CreateJob *pCreateJob = new CreateJob(files, pInterface, stOptions, this);
 
     // 连接槽函数
     connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
@@ -105,13 +105,13 @@ void ArchiveManager::getLoadArchiveData(ArchiveData &stArchiveData)
     }
 }
 
-void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QString &strArchiveName, const ExtractionOptions &options)
+void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
         m_pInterface = createInterface(strArchiveName);
     }
 
-    ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, options);
+    ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
 
     // 连接槽函数
     connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
@@ -123,6 +123,53 @@ void ArchiveManager::extractArchive(const QVector<FileEntry> &files, const QStri
     pExtractJob->start();
     m_pArchiveJob = pExtractJob;
 }
+
+void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
+{
+    if (m_pInterface == nullptr) {
+        m_pInterface = createInterface(strArchiveName);
+    }
+
+    ExtractJob *pExtractJob = nullptr;
+    if (!(m_pInterface->waitForFinished())) {
+        pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
+    } else {
+        pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
+    }
+
+
+    // 连接槽函数
+    connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+
+
+    pExtractJob->start();
+    m_pArchiveJob = pExtractJob;
+}
+
+void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry)
+{
+    if (m_pInterface == nullptr) {
+        m_pInterface = createInterface(strArchiveName);
+    }
+    DeleteJob *pDeleteJob = nullptr;
+    if (!(m_pInterface->waitForFinished())) {
+        pDeleteJob = new DeleteJob(listAllEntry, m_pInterface);
+    } else {
+        pDeleteJob = new DeleteJob(listCurEntry, m_pInterface);
+    }
+    // 连接槽函数
+    connect(pDeleteJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pDeleteJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pDeleteJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pDeleteJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+
+    pDeleteJob->start();
+    m_pArchiveJob = pDeleteJob;
+}
+
 
 ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive)
 {

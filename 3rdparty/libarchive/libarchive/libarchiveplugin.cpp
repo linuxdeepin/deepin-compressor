@@ -84,7 +84,7 @@ PluginFinishType LibarchivePlugin::testArchive()
     return PT_Nomral;
 }
 
-PluginFinishType LibarchivePlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     if (!initializeReader()) {
         return PF_Error;
@@ -372,24 +372,24 @@ PluginFinishType LibarchivePlugin::extractFiles(const QVector<FileEntry> &files,
 
 }
 
-PluginFinishType LibarchivePlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
     return PF_Error;
 }
 
-PluginFinishType LibarchivePlugin::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     return PF_Error;
 }
 
-PluginFinishType LibarchivePlugin::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibarchivePlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     return PF_Error;
 }
 
-PluginFinishType LibarchivePlugin::deleteFiles(const QVector<FileEntry> &files)
+PluginFinishType LibarchivePlugin::deleteFiles(const QList<FileEntry> &files)
 {
     return PF_Error;
 }

@@ -57,9 +57,9 @@ QString UnCompressPage::archiveName()
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
-
     m_pUncompressPathBtn->setToolTip(strPath);
     m_pUncompressPathBtn->setText(tr("Extract to:") + strPath);
+    m_pUnCompressView->setDefaultUncompressPath(m_strUnCompressPath);
 }
 
 void UnCompressPage::setArchiveData(const ArchiveData &stArchiveData)
@@ -111,6 +111,8 @@ void UnCompressPage::initUI()
 void UnCompressPage::initConnections()
 {
     connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
+    connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
+    connect(m_pUnCompressView, &UnCompressView::signalDelFiels, this, &UnCompressPage::signalDelFiels);
 }
 
 void UnCompressPage::slotUncompressClicked()

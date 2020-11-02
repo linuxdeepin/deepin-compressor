@@ -36,7 +36,7 @@ public:
 public:
     PluginFinishType list() override;
     PluginFinishType testArchive() override;
-    PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
 
     virtual bool isPasswordPrompt(const QString &line) = 0;
     virtual bool isWrongPasswordMsg(const QString &line) = 0;
@@ -47,10 +47,10 @@ public:
 
     // ReadWriteArchiveInterface interface
 public:
-    PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType deleteFiles(const QVector<FileEntry> &files) override;
+    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
     PluginFinishType addComment(const QString &comment) override;
 
 protected:
@@ -137,7 +137,7 @@ protected:
     KProcess *m_process = nullptr;  // 工作进程
 
 private:
-    QVector<FileEntry> m_files;
+    QList<FileEntry> m_files;
     ExtractionOptions m_options;
     bool m_listEmptyLines = false;
     QByteArray m_stdOutData;  // 存储命令行输出数据

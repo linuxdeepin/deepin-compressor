@@ -151,7 +151,7 @@ QStringList CliProperties::commentArgs(const QString &archive, const QString &co
     return args;
 }
 
-QStringList CliProperties::deleteArgs(const QString &archive, const QVector<FileEntry> &files, const QString &password)
+QStringList CliProperties::deleteArgs(const QString &archive, const QList<FileEntry> &files, const QString &password)
 {
     QStringList args;
     return args;
@@ -199,7 +199,7 @@ QStringList CliProperties::listArgs(const QString &archive, const QString &passw
     return args;
 }
 
-QStringList CliProperties::moveArgs(const QString &archive, const QVector<FileEntry> &entries, QString &destination, const QString &password)
+QStringList CliProperties::moveArgs(const QString &archive, const QList<FileEntry> &entries, QString &destination, const QString &password)
 {
     QStringList args;
     return args;

@@ -101,7 +101,7 @@ PluginFinishType LibzipPlugin::testArchive()
     return PT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     qDebug() << "解压缩数据";
 
@@ -169,7 +169,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QVector<FileEntry> &files, con
     return PT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     qDebug() << "添加压缩包数据";
     int errcode = 0;
@@ -261,17 +261,17 @@ PluginFinishType LibzipPlugin::addFiles(const QVector<FileEntry> &files, const C
     return PT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibzipPlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     return PT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType LibzipPlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     return PT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::deleteFiles(const QVector<FileEntry> &files)
+PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 {
     return PT_Nomral;
 }

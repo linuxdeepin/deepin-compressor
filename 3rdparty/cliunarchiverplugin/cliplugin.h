@@ -24,7 +24,7 @@ public:
     ~CliPlugin() override;
 
     bool list(bool isbatch = false) override;
-    bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
+    bool extractFiles(const QList<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
     void resetParsing() override;
     bool readListLine(const QString &line) override;
     bool readExtractLine(const QString &line) override;

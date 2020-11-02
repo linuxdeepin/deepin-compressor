@@ -75,8 +75,33 @@ int main(int argc, char *argv[])
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
 
+    const QStringList fileList = parser.positionalArguments();
+    QStringList newfilelist;
+    foreach (QString file, fileList) {
+        if (file.contains("file://")) {
+            file.remove("file://");
+        }
+
+        newfilelist.append(file);
+    }
+
+    QStringList multilist;
+    if (newfilelist.count() > 0 && ((newfilelist.last() == QStringLiteral("extract_here_split_multi") || newfilelist.last() == QStringLiteral("extract_split_multi")))) {
+        multilist.append(newfilelist.at(0));
+        multilist.append(newfilelist.last().remove("_multi"));
+        newfilelist = multilist;
+    }
+
     MainWindow w;
-    w.show();
+    // w.show();
+
+    if (!newfilelist.isEmpty()) {
+        QMetaObject::invokeMethod(&w, "slotHandleRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
+    } else {
+        w.show();
+        PERF_PRINT_END("POINT-01");
+    }
+
     PERF_PRINT_END("POINT-01");
 
     return app.exec();

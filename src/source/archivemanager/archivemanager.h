@@ -46,7 +46,7 @@ public:
      * @param options           压缩参数
      * @param bBatch            是否批量压缩（多路径）
      */
-    void createArchive(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options, bool useLibArchive = false/*, bool bBatch = false*/);
+    void createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive = false/*, bool bBatch = false*/);
 
     /**
      * @brief loadArchive
@@ -61,12 +61,29 @@ public:
     void getLoadArchiveData(ArchiveData &stArchiveData);
 
     /**
-     * @brief extractArchive    解压文件
-     * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
+     * @brief extractFiles    解压文件
      * @param strArchiveName    压缩包名称
+     * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
      * @param options           解压参数
      */
-    void extractArchive(const QVector<FileEntry> &files, const QString &strArchiveName, const ExtractionOptions &options);
+    void extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
+
+    /**
+     * @brief extractFiles2Path     提取文件至指定目录
+     * @param strArchiveName        压缩包名称
+     * @param listCurEntry          选中的提取文件
+     * @param listAllEntry          所有待提取文件
+     * @param stOptions             提取参数
+     */
+    void extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+
+    /**
+     * @brief deleteFiles       删除压缩包中的文件
+     * @param strArchiveName    压缩包名称
+     * @param listCurEntry      当前选中的文件
+     * @param listAllEntr       所有待删除文件
+     */
+    void deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry);
 
 private:
     ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);

@@ -25,11 +25,15 @@
 #include "openwithdialog.h"
 
 #include <DMenu>
+#include <DFileDialog>
+#include <DFileDrag>
 
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QDebug>
 #include <QDateTime>
+#include <QApplication>
+#include <QMimeData>
 
 UnCompressView::UnCompressView(QWidget *parent)
     : DataTreeView(parent)
@@ -60,6 +64,78 @@ void UnCompressView::setArchiveData(const ArchiveData &stArchiveData)
 
     // 重置目录层级
     resetLevel();
+}
+
+void UnCompressView::setDefaultUncompressPath(const QString &strPath)
+{
+    m_strUnCompressPath = strPath;
+}
+
+void UnCompressView::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::MouseButton::LeftButton) {
+        m_dragPos = event->pos();
+    }
+
+    viewport()->update();
+
+    DataTreeView::mousePressEvent(event);
+}
+
+void UnCompressView::mouseMoveEvent(QMouseEvent *event)
+{
+    QModelIndexList listSel = selectedIndexes();
+
+    if (listSel.size() < 1) {
+        return;
+    }
+
+    if (!(event->buttons() & Qt::MouseButton::LeftButton) || m_pFileDragServer) {
+        return;
+    }
+
+    // 曼哈顿距离处理，避免误操作
+    if ((event->pos() - m_dragPos).manhattanLength() < QApplication::startDragDistance()) {
+        return;
+    }
+
+    // 创建文件拖拽服务，处理拖拽到文管操作
+    m_pFileDragServer = new DFileDragServer(this);
+    DFileDrag *drag = new DFileDrag(this, m_pFileDragServer);
+    QMimeData *m = new QMimeData();
+
+    QVariant value = listSel[0].data(Qt::DecorationRole);
+
+    if (value.isValid()) {
+        if (value.type() == QVariant::Pixmap) {
+            drag->setPixmap(qvariant_cast<QPixmap>(value));
+        } else if (value.type() == QVariant::Icon) {
+            drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
+        }
+    }
+
+    drag->setMimeData(m);
+
+    // 拖拽操作连接槽函数，返回目标路径
+    connect(drag, &DFileDrag::targetUrlChanged, this, &UnCompressView::slotDragPath);
+    Qt::DropAction result = drag->exec(Qt::CopyAction);
+
+    m_pFileDragServer->setProgress(100);
+    m_pFileDragServer->deleteLater();
+    m_pFileDragServer = nullptr;
+    qDebug() << "sigdragLeave";
+
+    if (result == Qt::DropAction::CopyAction) {
+        extract2Path(m_strSelUnCompressPath);
+    }
+
+    m_strSelUnCompressPath.clear();
+    DataTreeView::mouseMoveEvent(event);
+}
+
+void UnCompressView::mouseReleaseEvent(QMouseEvent *event)
+{
+    DataTreeView::mouseReleaseEvent(event);
 }
 
 void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -142,15 +218,16 @@ void UnCompressView::refreshDataByCurrentPath()
 
     // 若缓存中找不到下一层数据，从总数据中查找并同步更新到缓存数据中
     if (m_mapShowEntry.find(m_strCurrentPath) == m_mapShowEntry.end()) {
-        m_mapShowEntry[m_strCurrentPath] = getCurrentDirFiles();
+        m_mapShowEntry[m_strCurrentPath] = getCurPathFiles();
     }
 
     m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
 }
 
-QList<FileEntry> UnCompressView::getCurrentDirFiles()
+QList<FileEntry> UnCompressView::getCurPathFiles()
 {
     QList<FileEntry> listEntry;
+
     auto iter = m_stArchiveData.mapFileEntry.find(m_strCurrentPath);
     for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
         if (iter.key().left(m_strCurrentPath.size()) != m_strCurrentPath) {
@@ -162,8 +239,10 @@ QList<FileEntry> UnCompressView::getCurrentDirFiles()
                     FileEntry &entry = iter.value();
 
                     // 如果是文件夹，刷新大小（同步更新map压缩包中缓存数据）
-                    if (entry.isDirectory)
+                    if (entry.isDirectory) {
                         entry.qSize = calDirItemCount(entry.strFullPath);
+                    }
+
                     listEntry << iter.value();
                 }
             }
@@ -172,6 +251,66 @@ QList<FileEntry> UnCompressView::getCurrentDirFiles()
     }
 
     return listEntry;
+}
+
+void UnCompressView::getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize)
+{
+    listEntry.clear();
+    qSize = 0;
+
+    auto iter = m_stArchiveData.mapFileEntry.find(strFullPath);
+    for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
+
+        if (!iter.key().startsWith(strFullPath)) {
+            break;
+        } else {
+            if (!iter.key().endsWith("/")) {
+                qSize += iter.value().qSize; //文件大小
+            }
+
+            listEntry << iter.value();
+
+            ++iter;
+        }
+    }
+}
+
+QList<FileEntry> UnCompressView::getSelEntry()
+{
+    QList<FileEntry> listSelEntry;
+
+    QModelIndexList listModelIndex = selectionModel()->selectedRows();
+
+    foreach (QModelIndex index, listModelIndex) {
+        if (index.isValid()) {
+            FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();  // 获取文件数据
+            listSelEntry << entry;
+        }
+    }
+
+    return listSelEntry;
+}
+
+void UnCompressView::extract2Path(const QString &strPath)
+{
+    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待提取的文件数据
+    QList<FileEntry> listSelAllEntry;    // 待提取的文件数据
+    ExtractionOptions stOptions;    // 提取参数
+    stOptions.strTargetPath = strPath;
+    stOptions.strDestination = m_strCurrentPath;
+
+    // 获取所有文件数据
+    foreach (FileEntry entry, listSelCurEntry) {
+        if (entry.isDirectory) {
+            QList<FileEntry> listEntry;
+            listSelAllEntry << entry;
+            getAllFilesByParentPath(entry.strFullPath, listEntry, stOptions.qSize);
+            listSelAllEntry << listEntry;
+        }
+    }
+
+    // 发送提取信号
+    signalExtract2Path(listSelCurEntry, listSelAllEntry, stOptions);
 }
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
@@ -222,17 +361,49 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
 
 void UnCompressView::slotExtract()
 {
+    // 创建文件选择对话框
+    DFileDialog dialog(this);
+    dialog.setAcceptMode(DFileDialog::AcceptOpen);
+    dialog.setFileMode(DFileDialog::Directory);
+    dialog.setDirectory(m_strUnCompressPath);
+
+    const int mode = dialog.exec();
+
+    if (mode != QDialog::Accepted) {
+        return;
+    }
+
+    // 获取选择的路径
+    QList<QUrl> listUrl = dialog.selectedUrls();
+    if (listUrl.count() > 0) {
+        m_strSelUnCompressPath = listUrl.at(0).toLocalFile();
+        extract2Path(m_strSelUnCompressPath);
+    }
 
 }
 
 void UnCompressView::slotExtract2Here()
 {
-
+    extract2Path(m_strUnCompressPath);
 }
 
 void UnCompressView::slotDeleteFile()
 {
+    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待提取的文件数据
+    QList<FileEntry> listSelAllEntry;    // 待提取的文件数据
+    qint64 qSize = 0;
 
+    // 获取所有文件数据
+    foreach (FileEntry entry, listSelCurEntry) {
+        if (entry.isDirectory) {
+            QList<FileEntry> listEntry;
+            listSelAllEntry << entry;
+            getAllFilesByParentPath(entry.strFullPath, listEntry, qSize);
+            listSelAllEntry << listEntry;
+        }
+    }
+
+    emit signalDelFiels(listSelCurEntry, listSelAllEntry, qSize);
 }
 
 void UnCompressView::slotOpen()
@@ -243,6 +414,11 @@ void UnCompressView::slotOpen()
 void UnCompressView::slotOpenStyleClicked()
 {
 
+}
+
+void UnCompressView::slotDragPath(QUrl url)
+{
+    m_strSelUnCompressPath = url.toLocalFile(); // 获取拖拽提取目标路径
 }
 
 void UnCompressView::slotPreClicked()

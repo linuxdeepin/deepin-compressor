@@ -47,14 +47,14 @@ public:
     // ReadOnlyArchiveInterface interface
 public:
 //    bool testArchive() override;
-//    bool extractFiles(const QVector<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
+//    bool extractFiles(const QList<FileEntry> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
 
     // ReadWriteArchiveInterface interface
 public:
-    PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-//    bool moveFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
-//    bool copyFiles(const QVector<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
-//    bool deleteFiles(const QVector<FileEntry> &files) override;
+    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+//    bool moveFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
+//    bool copyFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
+//    bool deleteFiles(const QList<FileEntry> &files) override;
 //    bool addComment(const QString &comment) override;
 
 private:

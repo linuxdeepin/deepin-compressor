@@ -102,7 +102,7 @@ void LoadJob::doWork()
 }
 
 // 压缩操作
-AddJob::AddJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
+AddJob::AddJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stCompressOptions(options)
@@ -133,7 +133,7 @@ void AddJob::doWork()
 }
 
 // 创建压缩包操作
-CreateJob::CreateJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
+CreateJob::CreateJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const CompressOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stCompressOptions(options)
@@ -156,7 +156,7 @@ void CreateJob::doWork()
 }
 
 // 解压操作
-ExtractJob::ExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent)
+ExtractJob::ExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
     , m_stExtractionOptions(options)
@@ -180,7 +180,7 @@ void ExtractJob::doWork()
 }
 
 // 删除操作
-DeleteJob::DeleteJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+DeleteJob::DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
@@ -198,7 +198,7 @@ void DeleteJob::doWork()
 }
 
 // 临时解压操作
-TempExtractJob::TempExtractJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+TempExtractJob::TempExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
@@ -216,7 +216,7 @@ void TempExtractJob::doWork()
 }
 
 // 临时解压操作
-OpenJob::OpenJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+OpenJob::OpenJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : TempExtractJob(files, pInterface, parent)
 {
 
@@ -228,7 +228,7 @@ OpenJob::~OpenJob()
 }
 
 // 以...打开文件操作
-OpenWithJob::OpenWithJob(const QVector<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+OpenWithJob::OpenWithJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : TempExtractJob(files, pInterface, parent)
 {
 

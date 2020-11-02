@@ -154,7 +154,9 @@ void MainWindow::initConnections()
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
     connect(m_pCompressPage, &CompressPage::signalCompressNextClicked, this, &MainWindow::slotCompressNext);
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
-    connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressSlicked);
+    connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
+    connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
+    connect(m_pUnCompressPage, &UnCompressPage::signalDelFiels, this, &MainWindow::slotDelFiels);
 
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
@@ -329,11 +331,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     if (m_iInitUITimer == event->timerId()) {
-        // 初始化界面
-        qDebug() << "初始化界面";
-        initUI();
-        initConnections();
-        initData();
+        if (!m_initFlag) {
+            // 初始化界面
+            qDebug() << "初始化界面";
+            initUI();
+            initConnections();
+            initData();
+            m_initFlag = true;
+        }
+
 
         killTimer(m_iInitUITimer);
         m_iInitUITimer = 0;
@@ -355,6 +361,48 @@ void MainWindow::timerEvent(QTimerEvent *event)
             }
         }
     }
+}
+
+void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
+{
+    qDebug() << listParam;
+    if (!m_initFlag) {
+        // 初始化界面
+        qDebug() << "初始化界面";
+        initUI();
+        initConnections();
+        initData();
+        m_initFlag = true;
+    }
+
+    if (listParam.count() == 0) {
+        return;
+    }
+
+    QString strType = listParam.last();
+    qDebug() << strType;
+
+    if (listParam.count() == 1 && UiTools::isArchiveFile(listParam[0])) {
+        // 打开压缩包
+    } else if (strType == QStringLiteral("compress")) {
+        // 压缩
+    } else if (strType == QStringLiteral("extract")) {
+        // 解压单个文件
+    } else if (strType == QStringLiteral("extract_here")) {
+        // 解压单个文件到当前文件夹
+    } else if (strType == QStringLiteral("extract_split")) {
+        // 批量解压
+    } else if (strType == QStringLiteral("extract_here_split")) {
+        // 批量解压到当前文件夹
+    } else if (strType == QStringLiteral("compress_to_zip")) {
+        // 压缩成xx.zip
+    } else if (strType == QStringLiteral("compress_to_7z")) {
+        // 压缩成xx.7z
+    } else if (strType == QStringLiteral("extract_mkdir")) {
+        // 解压到xx文件夹
+    }
+
+    show();
 }
 
 void MainWindow::slotChoosefiles()
@@ -458,7 +506,7 @@ void MainWindow::slotCompress(const QVariant &val)
     }
 
     // 创建压缩所需相关数据，调用压缩参数
-    QVector<FileEntry> vecFiles;
+    QList<FileEntry> listEntry;
     QString strDestination;
     CompressOptions options;
     //bool bBatch = false;
@@ -468,7 +516,7 @@ void MainWindow::slotCompress(const QVariant &val)
     foreach (QString strFile, listFiles) {
         FileEntry stFileEntry;
         stFileEntry.strFullPath = strFile;
-        vecFiles.push_back(stFileEntry);
+        listEntry.push_back(stFileEntry);
 
 //        QString globalWorkDir = strFile;
 //        if (globalWorkDir.right(1) == QLatin1String("/")) {
@@ -500,7 +548,7 @@ void MainWindow::slotCompress(const QVariant &val)
 //        bBatch = true;
 //    }
 
-    m_pArchiveManager->createArchive(vecFiles, strDestination, options, false/*, bBatch*/);
+    m_pArchiveManager->createArchive(listEntry, strDestination, options, false/*, bBatch*/);
 
 
     m_pProgressPage->setProgressType(PT_Compress);
@@ -543,6 +591,11 @@ void MainWindow::slotJobFinshed()
         m_ePageID = PI_UnCompressSuccess;
     }
     break;
+    case ArchiveJob::JT_Delete: {
+        qDebug() << "删除结束";
+        m_ePageID = PI_UnCompress;
+    }
+    break;
     }
 
     refreshPage();
@@ -551,7 +604,7 @@ void MainWindow::slotJobFinshed()
     PERF_PRINT_END("POINT-05");
 }
 
-void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
+void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
     QString strArchiveName = m_pUnCompressPage->archiveName();
     ExtractionOptions options;
@@ -567,7 +620,7 @@ void MainWindow::slotUncompressSlicked(const QString &strUncompressPath)
     options.qComressSize = stArchiveData.qComressSize;
 
     // 调用解压函数
-    m_pArchiveManager->extractArchive(QVector<FileEntry>(), strArchiveName, options);
+    m_pArchiveManager->extractFiles(strArchiveName, QList<FileEntry>(), options);
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_UnCompress);
@@ -592,5 +645,27 @@ void MainWindow::slotQuery(Query *query)
     qDebug() << " query->execute()";
     query->setParent(this);
     query->execute();
+}
+
+void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
+{
+    qDebug() << "提取文件至:" << stOptions.strTargetPath;
+    QString strArchiveName = m_pUnCompressPage->archiveName();
+    m_pArchiveManager->extractFiles2Path(strArchiveName, listCurEntry, listAllEntry, stOptions);
+
+}
+
+void MainWindow::slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize)
+{
+    qDebug() << "删除文件:";
+    QString strArchiveName = m_pUnCompressPage->archiveName();
+    m_pArchiveManager->deleteFiles(strArchiveName, listCurEntry, listAllEntry);
+
+    // 设置进度界面参数
+    m_pProgressPage->setProgressType(PT_Delete);
+    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName(), qTotalSize);
+    m_pProgressPage->restartTimer(); // 重启计时器
+    m_ePageID = PI_DeleteProgress;
+    refreshPage();
 }
 

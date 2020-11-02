@@ -59,14 +59,14 @@ public:
 public:
     PluginFinishType list() override;
     PluginFinishType testArchive() override;
-    PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) override;
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
 
     // ReadWriteArchiveInterface interface
 public:
-    PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType deleteFiles(const QVector<FileEntry> &files) override;
+    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
     PluginFinishType addComment(const QString &comment) override;
 
 protected:

@@ -50,9 +50,9 @@ enum DataView_Column {
 // 界面标识
 enum Page_ID {
     PI_Home,                // 首页
-    PI_Compress,            // 压缩
+    PI_Compress,            // 压缩列表
     PI_CompressSetting,     // 压缩设置
-    PI_UnCompress,          // 解压
+    PI_UnCompress,          // 解压列表
     PI_CompressProgress,    // 压缩进度
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度

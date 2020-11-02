@@ -20,7 +20,7 @@
 */
 
 #include "uitools.h"
-//#include "mimetypes.h"
+#include "mimetypes.h"
 
 #include <DStandardPaths>
 
@@ -140,7 +140,11 @@ QString UiTools::humanReadableSize(const qint64 &size, int precision)
 
 bool UiTools::isArchiveFile(const QString &strFileName)
 {
-    QString mime = judgeFileMime(strFileName);         // 根据文件名（后缀）判断文件类型
+    QMimeType mimeType = determineMimeType(strFileName);
+    qDebug() << mimeType;
+    QString mime;
+    if (mimeType.name().contains("application/"))
+        mime = mimeType.name().remove("application/");
 
     bool ret = false;
 

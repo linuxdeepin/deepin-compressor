@@ -66,7 +66,7 @@ public:
      * @param options               解压参数
      * @return                      是否解压成功
      */
-    virtual PluginFinishType extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options) = 0;
+    virtual PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) = 0;
 
     /**
      * @brief waitForFinished   判断是否通过线程调用
@@ -164,7 +164,7 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual PluginFinishType addFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          移动压缩文件
@@ -172,7 +172,7 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual PluginFinishType moveFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          拷贝压缩文件
@@ -180,14 +180,14 @@ public:
      * @param options           压缩参数
      * @return
      */
-    virtual PluginFinishType copyFiles(const QVector<FileEntry> &files, const CompressOptions &options) = 0;
+    virtual PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) = 0;
 
     /**
      * @brief addFiles          删除压缩文件
      * @param files             待删除文件
      * @return
      */
-    virtual PluginFinishType deleteFiles(const QVector<FileEntry> &files) = 0;
+    virtual PluginFinishType deleteFiles(const QList<FileEntry> &files) = 0;
 
     /**
      * @brief addComment        添加注释

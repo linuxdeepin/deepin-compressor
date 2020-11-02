@@ -26,8 +26,10 @@
 #include "commonstruct.h"
 
 #include <DWidget>
+#include <DFileDragServer>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 // 解压列表
 class UnCompressView : public DataTreeView
@@ -43,7 +45,16 @@ public:
      */
     void setArchiveData(const ArchiveData &stArchiveData);
 
+    /**
+     * @brief setDefaultUncompressPath  设置默认解压路径
+     * @param strPath       路径
+     */
+    void setDefaultUncompressPath(const QString &strPath);
+
 protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     /**
      * @brief mouseDoubleClickEvent 鼠标双击事件
      * @param event 双击事件
@@ -83,9 +94,60 @@ private:
      * @brief getCurrentDirFiles   获取当前路径下所有文件
      * @return
      */
-    QList<FileEntry> getCurrentDirFiles();
+    /**
+     * @brief getFilesByParentPath  获取当前路径下文件数据
+     * @return
+     */
+    QList<FileEntry> getCurPathFiles();
 
+    /**
+     * @brief getAllFilesByParentPath   获取某路径下所有的文件
+     * @param strFullPath               路径名称
+     * @param listEntry                 子文件数据
+     * @param qSize                     总大小
+     */
+    void getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize);
 
+    /**
+     * @brief getSelEntry       获取当前选择的文件数据
+     */
+    QList<FileEntry> getSelEntry();
+
+    /**
+     * @brief extract2Path      提取选中的文件至指定路径
+     * @param strPath           指定的路径
+     */
+    void extract2Path(const QString &strPath);
+
+Q_SIGNALS:
+    /**
+     * @brief signalExtract2Path    提取压缩包中文件
+     * @param listCurEntry          当前选中的文件
+     * @param listAllEntry          所有待提取文件
+     * @param stOptions             提取参数
+     */
+    void signalExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+
+    /**
+     * @brief signalDeleteFiles     从删除包删除文件
+     * @param listEntry              待删除的数据
+     */
+    void signalDeleteFiles(const QList<FileEntry> &listEntry);
+
+    /**
+     * @brief signalOpenFile        打开压缩包中文件
+     * @param strProgram            应用程序名
+     * @param listEntry              待打开的文件数据
+     */
+    void signalOpenFile(const QString &strProgram, const QList<FileEntry> &listEntry);
+
+    /**
+     * @brief signalDelFiels    删除压缩包中文件
+     * @param listCurEntry      当前选中的文件
+     * @param listAllEntry      所有待删除文件
+     * @param qTotalSize        删除文件总大小
+     */
+    void signalDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
 
 protected Q_SLOTS:
     /**
@@ -131,10 +193,22 @@ private slots:
      */
     void slotOpenStyleClicked();
 
+    /**
+     * @brief slotDragPath  拖拽接收路径反馈
+     * @param url
+     */
+    void slotDragPath(QUrl url);
+
 private:
     ArchiveData m_stArchiveData;
     QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
     FileEntry m_stRightEntry;       // 右键点击的文件
+    QString m_strUnCompressPath;    // 默认解压路径
+    QPoint m_dragPos; // 鼠标拖拽点击位置
+    DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
+
+
+    QString m_strSelUnCompressPath;    // 选择的解压路径
 };
 
 #endif // UNCOMPRESSVIEW_H

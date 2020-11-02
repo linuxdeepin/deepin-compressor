@@ -62,7 +62,7 @@ PluginFinishType CliInterface::testArchive()
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     m_workStatus = WT_Extract;
     m_files = files;
@@ -80,13 +80,13 @@ PluginFinishType CliInterface::extractFiles(const QVector<FileEntry> &files, con
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::addFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     m_workStatus = WT_Add;
 
     bool ret = false;
     QFileInfo fi(m_strArchiveName);  // 压缩文件（全路径）
-    QVector<FileEntry> tempfiles = files;
+    QList<FileEntry> tempfiles = files;
     QStringList fileList;
     // 获取待压缩的文件
     for (int i = 0; i < tempfiles.size(); i++) {
@@ -110,21 +110,21 @@ PluginFinishType CliInterface::addFiles(const QVector<FileEntry> &files, const C
     return ret == true ? PT_Nomral : PF_Error;
 }
 
-PluginFinishType CliInterface::moveFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
 //    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::copyFiles(const QVector<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
 //    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::deleteFiles(const QVector<FileEntry> &files)
+PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
 {
 //    m_workStatus = WT_Add;
 

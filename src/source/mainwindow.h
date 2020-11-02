@@ -24,6 +24,7 @@
 
 #include "uistruct.h"
 #include "queries.h"
+#include "commonstruct.h"
 
 #include <DMainWindow>
 
@@ -106,6 +107,12 @@ protected:
 
 private Q_SLOTS:
     /**
+     * @brief slotHandleRightMenuSelected   处理文管操作
+     * @param listParam     参数
+     */
+    void slotHandleRightMenuSelected(const QStringList &listParam);
+
+    /**
      * @brief slotChoosefiles   选择本地文件
      */
     void slotChoosefiles();
@@ -138,10 +145,10 @@ private Q_SLOTS:
     void slotJobFinshed();
 
     /**
-     * @brief slotUncompressSlicked     解压按钮点击，执行解压操作
+     * @brief slotUncompressClicked     解压按钮点击，执行解压操作
      * @param strUncompressPath         解压路径
      */
-    void slotUncompressSlicked(const QString &strUncompressPath);
+    void slotUncompressClicked(const QString &strUncompressPath);
 
     /**
      * @brief slotReceiveProgress   进度信号处理
@@ -161,8 +168,25 @@ private Q_SLOTS:
      */
     void slotQuery(Query *query);
 
+    /**
+     * @brief slotExtract2Path  提取压缩包中文件
+     * @param listCurEntry      选中的提取文件
+     * @param listAllEntry      所有待提取文件
+     * @param stOptions         提取参数
+     */
+    void slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+
+    /**
+     * @brief slotDelFiels    删除压缩包中文件
+     * @param listCurEntry      当前选中的文件
+     * @param listAllEntry      所有待删除文件
+     * @param qTotalSize        删除文件总大小
+     */
+    void slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
 
 private:
+    bool m_initFlag = false;        // 界面是否初始化标志
+
     QStackedWidget *m_pMainWidget;  // 中心面板
 
     HomePage *m_pHomePage;            // 首页
@@ -183,12 +207,12 @@ private:
 
     Page_ID m_ePageID;      // 界面标识
 
-    int m_iInitUITimer = 0;                           // 初始化界面定时器
+    int m_iInitUITimer = 0;                       // 初始化界面定时器
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
-    ArchiveManager *m_pArchiveManager;
+    ArchiveManager *m_pArchiveManager;      // 插件和job管理
 
-    qint64 m_qTotalSize = 0;
+    qint64 m_qTotalSize = 0;            // 压缩文件总大小
 };
 
 #endif // MAINWINDOW_H
