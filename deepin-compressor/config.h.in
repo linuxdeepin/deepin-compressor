@@ -1,1 +1,2 @@
 #cmakedefine PERF_ON
+#cmakedefine ACCESSIBILITY_ON
