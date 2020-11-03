@@ -95,6 +95,10 @@ int main(int argc, char *argv[])
     MainWindow w;
     // w.show();
 
+    // 测试右键
+    //newfilelist.clear();
+    //newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";
+
     if (!newfilelist.isEmpty()) {
         QMetaObject::invokeMethod(&w, "slotHandleRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
     } else {

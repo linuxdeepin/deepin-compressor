@@ -46,11 +46,16 @@ public:
     void setProgressType(Progress_Type eType);
 
     /**
+     * @brief setTotalSize  设置总大小
+     * @param qTotalSize
+     */
+    void setTotalSize(qint64 qTotalSize);
+
+    /**
      * @brief setArchiveName    设置压缩包名称和文件总大小
      * @param strArchiveName    压缩包名称
-     * @param qTotalSize    总大小
      */
-    void setArchiveName(const QString &strArchiveName, qint64 qTotalSize);
+    void setArchiveName(const QString &strArchiveName);
 
     /**
      * @brief setProgress   设置当前进度

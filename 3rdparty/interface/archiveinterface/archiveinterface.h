@@ -86,6 +86,12 @@ public:
      */
     void setPassword(const QString &strPassword);
 
+    /**
+     * @brief errorType     获取错误类型
+     * @return
+     */
+    ErrorType errorType();
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.

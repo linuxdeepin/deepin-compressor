@@ -33,6 +33,7 @@ enum PluginFinishType {
     PF_Cancel,         // 取消
     PF_Error,          // 错误
 };
+Q_DECLARE_METATYPE(PluginFinishType)
 
 // 错误类型
 enum ErrorType {
@@ -154,6 +155,7 @@ struct ExtractionOptions {
         qComressSize = 0;
         bRightExtract = false;
         bAllExtract = false;
+        bBatchExtract = false;
     }
 
     QString strTargetPath;      // 解压目标路径
@@ -162,6 +164,7 @@ struct ExtractionOptions {
     qint64 qComressSize;        // 压缩包大小
     bool bRightExtract;         // 是否是右键解压
     bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
+    bool bBatchExtract;           // 是否批量解压
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

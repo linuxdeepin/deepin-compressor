@@ -59,10 +59,14 @@ void ProgressPage::setProgressType(Progress_Type eType)
     m_pRemainingTimeLbl->setText(tr("Time left") + ": " + tr("Calculating...")); // 剩余时间计算中
 }
 
-void ProgressPage::setArchiveName(const QString &strArchiveName, qint64 qTotalSize)
+void ProgressPage::setTotalSize(qint64 qTotalSize)
+{
+    m_qTotalSize = qTotalSize;
+}
+
+void ProgressPage::setArchiveName(const QString &strArchiveName)
 {
     m_pArchiveNameLbl->setText(strArchiveName);     // 设置压缩包名称
-    m_qTotalSize = qTotalSize;
 
     // 设置类型图片
     QFileInfo fileinfo(strArchiveName);

@@ -24,12 +24,13 @@
 #include "mimetypes.h"
 #include "pluginmanager.h"
 #include "singlejob.h"
+#include "batchjob.h"
+#include "uitools.h"
 
 #include <QMimeDatabase>
 #include <QFileInfo>
 #include <QDebug>
 
-Q_DECLARE_METATYPE(KPluginMetaData)
 
 ArchiveManager::ArchiveManager(QObject *parent)
     : QObject(parent)
@@ -58,7 +59,7 @@ ArchiveJob *ArchiveManager::archiveJob()
 
 void ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive/*, bool bBatch*/)
 {
-    ReadOnlyArchiveInterface *pInterface = createInterface(strDestination, true, useLibArchive);
+    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strDestination, true, useLibArchive);
 
 //    if (bBatch) {       // 批量压缩（多路径）
 //        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
@@ -86,7 +87,7 @@ void ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
 
 void ArchiveManager::loadArchive(const QString &strArchiveName)
 {
-    m_pInterface = createInterface(strArchiveName);
+    m_pInterface = UiTools::createInterface(strArchiveName);
 
     LoadJob *pLoadJob = new LoadJob(m_pInterface);
 
@@ -108,7 +109,7 @@ void ArchiveManager::getLoadArchiveData(ArchiveData &stArchiveData)
 void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveName);
     }
 
     ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
@@ -120,14 +121,14 @@ void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<Fil
     connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
 
-    pExtractJob->start();
     m_pArchiveJob = pExtractJob;
+    pExtractJob->start();
 }
 
 void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveName);
     }
 
     ExtractJob *pExtractJob = nullptr;
@@ -145,103 +146,48 @@ void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QLis
     connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
 
-    pExtractJob->start();
     m_pArchiveJob = pExtractJob;
+    pExtractJob->start();
 }
 
 void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveName);
     }
+
     DeleteJob *pDeleteJob = nullptr;
     if (!(m_pInterface->waitForFinished())) {
         pDeleteJob = new DeleteJob(listAllEntry, m_pInterface);
     } else {
         pDeleteJob = new DeleteJob(listCurEntry, m_pInterface);
     }
+
     // 连接槽函数
     connect(pDeleteJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
     connect(pDeleteJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
     connect(pDeleteJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
     connect(pDeleteJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
-    pDeleteJob->start();
     m_pArchiveJob = pDeleteJob;
+    pDeleteJob->start();
 }
 
-
-ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive)
+void ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir)
 {
-    QFileInfo fileinfo(fileName);
+    BatchExtractJob *pBatchExtractJob = new BatchExtractJob();
+    pBatchExtractJob->setExtractPath(strTargetPath, bAutoCreatDir);
+    pBatchExtractJob->setArchiveFiles(listFiles);
 
-    const QMimeType mimeType = determineMimeType(fileName);
+    // 连接槽函数
+    connect(pBatchExtractJob, &BatchExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pBatchExtractJob, &BatchExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pBatchExtractJob, &BatchExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pBatchExtractJob, &BatchExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+    connect(pBatchExtractJob, &BatchExtractJob::signalCurArchiveName, this, &ArchiveManager::signalCurArchiveName);
 
-    QVector<Plugin *> offers;
-    if (bWrite) {
-        offers = PluginManager::get_instance().preferredWritePluginsFor(mimeType);
-
-        if (bUseLibArchive == true && mimeType.name() == "application/zip") {
-            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
-                if (p1->metaData().name().contains("Libarchive")) {
-                    return true;
-                }
-                if (p2->metaData().name().contains("Libarchive")) {
-                    return false;
-                }
-
-                return p1->priority() > p2->priority();
-            });
-        }
-    } else {
-        offers = PluginManager::get_instance().preferredPluginsFor(mimeType);
-    }
-
-    if (offers.isEmpty()) {
-        qDebug() << "Could not find a plugin to handle" << fileName;
-        return nullptr;
-    }
-
-    //tar.lzo格式 由P7zip插件压缩mimeFromContent为"application/x-7z-compressed"，由Libarchive插件压缩mimeFromContent为"application/x-lzop"
-    //删除P7zip插件处理 mimeFromContent为"application/x-lzop" 的情况
-    QMimeDatabase db;
-    QMimeType mimeFromContent = db.mimeTypeForFile(fileName, QMimeDatabase::MatchContent);
-    bool remove7zFlag = "application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name();
-
-    ReadOnlyArchiveInterface *pIface = nullptr;
-    for (Plugin *plugin : offers) {
-        //删除P7zip插件
-        if (remove7zFlag && plugin->metaData().name().contains("P7zip")) {
-            offers.removeOne(plugin);
-            continue;
-        }
-
-        pIface = createInterface(fileName, mimeType, plugin);
-        // Use the first valid plugin, according to the priority sorting.
-        if (pIface) {
-            break;
-        }
-    }
-
-    return pIface;
-}
-
-ReadOnlyArchiveInterface *ArchiveManager::createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin)
-{
-    Q_ASSERT(plugin);
-
-    KPluginFactory *factory = KPluginLoader(plugin->metaData().fileName()).factory();
-    if (!factory) {
-        return nullptr;
-    }
-
-    const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
-                               QVariant().fromValue(plugin->metaData()),
-                               QVariant::fromValue(mimeType)
-                              };
-
-    ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
-    return iface;
+    m_pArchiveJob = pBatchExtractJob;
+    pBatchExtractJob->start();
 }
 
 void ArchiveManager::slotJobFinished()

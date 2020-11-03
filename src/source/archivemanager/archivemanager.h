@@ -29,6 +29,7 @@
 
 #include <QObject>
 #include <QMimeType>
+#include <QFileInfo>
 
 class ArchiveManager : public QObject
 {
@@ -85,11 +86,16 @@ public:
      */
     void deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry);
 
-private:
-    ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
-    ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
+    /**
+     * @brief batchExtractFiles 批量解压
+     * @param listFiles          压缩文件
+     * @param strTargetPath     解压路径
+     * @param bAutoCreatDir     是否自动创建文件夹
+     */
+    void batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir);
 
 private:
+
 
 Q_SIGNALS:
     /**
@@ -120,6 +126,12 @@ Q_SIGNALS:
      * @param query 询问类型
      */
     void signalQuery(Query *query);
+
+    /**
+     * @brief signalCurArchiveName  当前正在操作的压缩包信号
+     * @param strArchiveName        压缩包名称
+     */
+    void signalCurArchiveName(const QString &strArchiveName);
 
 private Q_SLOTS:
     /**

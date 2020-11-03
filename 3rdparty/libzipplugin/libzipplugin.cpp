@@ -456,6 +456,10 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
     bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
 
+    // 判断解压路径是否存在，不存在则创建文件夹
+    if (QDir().exists(options.strTargetPath) == false)
+        QDir().mkpath(options.strTargetPath);
+
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
     QFile file(strDestFileName);
@@ -581,10 +585,11 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             writeSize += readBytes;
 
             // 计算进度并显示（右键快捷解压使用压缩包大小，计算比例）
-            qExtractSize += readBytes;
             if (options.bRightExtract) {
-                emit signalprogress((double(qExtractSize * options.qComressSize / options.qSize)) / options.qComressSize * 100);
+                qExtractSize += readBytes * (double(statBuffer.comp_size) / statBuffer.size);
+                emit signalprogress((double(qExtractSize)) / options.qComressSize * 100);
             } else {
+                qExtractSize += readBytes;
                 emit signalprogress((double(qExtractSize)) / options.qSize * 100);
             }
         }

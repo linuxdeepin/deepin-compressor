@@ -22,6 +22,9 @@
 #ifndef UITOOLS_H
 #define UITOOLS_H
 
+#include "archiveinterface.h"
+#include "plugin.h"
+
 #include <QObject>
 
 
@@ -117,6 +120,16 @@ public:
      * @return
      */
     static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
+
+    /**
+     * @brief createInterface   创建插件
+     * @param fileName          压缩包名称
+     * @param bWrite            是否压缩
+     * @param bUseLibArchive    是否使用LibArchive
+     * @return
+     */
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
 private:
     static QStringList m_associtionlist;

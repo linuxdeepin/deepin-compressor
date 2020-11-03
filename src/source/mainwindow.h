@@ -94,6 +94,18 @@ private:
      */
     void calFileSizeByThread(const QString &path);
 
+    /**
+     * @brief setTitleButtonStyle   设置标题栏按钮样式以及显隐状态
+     * @param bVisible  显示/隐藏
+     * @param pixmap    图片样式
+     */
+    void setTitleButtonStyle(bool bVisible, DStyle::StandardPixmap pixmap = DStyle::StandardPixmap::SP_IncreaseElement);
+
+    /**
+     * @brief loadArchive       加载压缩包
+     * @param strArchiveName    压缩包名称（全路径）
+     */
+    void loadArchive(const QString &strArchiveName);
 
 
     // QWidget interface
@@ -113,7 +125,12 @@ private Q_SLOTS:
     void slotHandleRightMenuSelected(const QStringList &listParam);
 
     /**
-     * @brief slotChoosefiles   选择本地文件
+     * @brief slotTitleBtnClicked   标题栏按钮点击
+     */
+    void slotTitleBtnClicked();
+
+    /**
+     * @brief slotTitleBtnClicked   选择文件触发
      */
     void slotChoosefiles();
 
@@ -184,6 +201,12 @@ private Q_SLOTS:
      */
     void slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
 
+    /**
+     * @brief slotReceiveCurArchiveName  当前正在操作的压缩包名称显示
+     * @param strArchiveName        压缩包名称
+     */
+    void slotReceiveCurArchiveName(const QString &strArchiveName);
+
 private:
     bool m_initFlag = false;        // 界面是否初始化标志
 
@@ -205,7 +228,7 @@ private:
 
     QSettings *m_pSettings;     // 默认配置信息
 
-    Page_ID m_ePageID;      // 界面标识
+    Page_ID m_ePageID = PI_Home;      // 界面标识
 
     int m_iInitUITimer = 0;                       // 初始化界面定时器
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID

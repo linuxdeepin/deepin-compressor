@@ -73,7 +73,8 @@ void SingleJob::initConnections()
 void SingleJob::slotFinished(PluginFinishType eType)
 {
     qDebug() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
-
+    m_eFinishedType = eType;
+    m_eErrorType = m_pInterface->errorType();
 
     emit signalJobFinshed();
 

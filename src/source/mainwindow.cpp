@@ -117,9 +117,10 @@ void MainWindow::initTitleBar()
 
     // 添加左上角按钮
     m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
-    m_pTitleButton->setFixedSize(38, 38);
-    m_pTitleButton->setVisible(true);
+    m_pTitleButton->setFixedSize(36, 36);
+    m_pTitleButton->setVisible(false);
     m_pTitleButton->setObjectName("TitleButton");
+    m_pTitleButton->setAccessibleName("Title_btn");
 
     // 左上角按钮布局
     QHBoxLayout *leftLayout = new QHBoxLayout;
@@ -148,7 +149,7 @@ void MainWindow::initData()
 
 void MainWindow::initConnections()
 {
-    connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotChoosefiles);
+    connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotTitleBtnClicked);
     connect(m_pHomePage, &HomePage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pHomePage, &HomePage::signalDragFiles, this, &MainWindow::slotDragSelectedFiles);
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
@@ -161,7 +162,8 @@ void MainWindow::initConnections()
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(m_pArchiveManager, &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
-    connect(m_pArchiveManager, &ArchiveManager::signalQuery, this, &MainWindow::slotQuery, Qt::ConnectionType::DirectConnection);
+    connect(m_pArchiveManager, &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
+    connect(m_pArchiveManager, &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 }
 
 void MainWindow::refreshPage()
@@ -169,10 +171,12 @@ void MainWindow::refreshPage()
     switch (m_ePageID) {
     case PI_Home: {
         m_pMainWidget->setCurrentIndex(0);
+        setTitleButtonStyle(false);
     }
     break;
     case PI_Compress: {
         m_pMainWidget->setCurrentIndex(1);
+        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
@@ -180,6 +184,7 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressSetting: {
         m_pMainWidget->setCurrentIndex(2);
+        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_ArrowLeave);
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
@@ -187,28 +192,33 @@ void MainWindow::refreshPage()
     break;
     case PI_UnCompress: {
         m_pMainWidget->setCurrentIndex(3);
+        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
     }
     break;
     case PI_CompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Compressing"));
     }
     break;
     case PI_UnCompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Extracting"));
     }
     break;
     case PI_DeleteProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Deleting"));
     }
     break;
     case PI_ConvertProgress: {
         m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle("Converting");
     }
@@ -224,15 +234,18 @@ void MainWindow::refreshPage()
     break;
     case PI_UnCompressSuccess: {
         m_pMainWidget->setCurrentIndex(5);
+        setTitleButtonStyle(false);
         m_pSuccessPage->setSuccessDes(tr("Extraction successful"));
     }
     break;
     case PI_ConvertSuccess: {
         m_pMainWidget->setCurrentIndex(5);
+        setTitleButtonStyle(false);
     }
     break;
     case PI_CompressFailure: {
         m_pMainWidget->setCurrentIndex(6);
+        setTitleButtonStyle(false);
         if (0 != m_iCompressedWatchTimerID) {
             killTimer(m_iCompressedWatchTimerID);
             m_iCompressedWatchTimerID = 0;
@@ -241,14 +254,17 @@ void MainWindow::refreshPage()
     break;
     case PI_UnCompressFailure: {
         m_pMainWidget->setCurrentIndex(6);
+        setTitleButtonStyle(false);
     }
     break;
     case PI_ConvertFailure: {
         m_pMainWidget->setCurrentIndex(6);
+        setTitleButtonStyle(false);
     }
     break;
     case PI_Loading: {
         m_pMainWidget->setCurrentIndex(7);
+        setTitleButtonStyle(false);
     }
     break;
     }
@@ -317,6 +333,25 @@ void MainWindow::calFileSizeByThread(const QString &path)
     } while (i < list.size());
 }
 
+void MainWindow::setTitleButtonStyle(bool bVisible, DStyle::StandardPixmap pixmap)
+{
+    m_pTitleButton->setVisible(bVisible);
+
+    if (bVisible)
+        m_pTitleButton->setIcon(pixmap);
+}
+
+void MainWindow::loadArchive(const QString &strArchiveName)
+{
+    PERF_PRINT_BEGIN("POINT-05", "加载时间");
+
+    m_pUnCompressPage->setArchiveName(strArchiveName);      // 设置压缩包全路径
+    m_pUnCompressPage->setDefaultUncompressPath(QFileInfo(strArchiveName).absolutePath());  // 设置默认解压路径
+    m_pArchiveManager->loadArchive(strArchiveName);     // 加载操作
+    m_pLoadingPage->startLoading();     // 开始加载
+    m_ePageID = PI_Loading;
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     static int index = 0;
@@ -380,20 +415,57 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
     }
 
     QString strType = listParam.last();
-    qDebug() << strType;
+    qDebug() << listParam;
 
-    if (listParam.count() == 1 && UiTools::isArchiveFile(listParam[0])) {
-        // 打开压缩包
+    if ((listParam.count() == 1 && UiTools::isArchiveFile(listParam[0])) || strType == QStringLiteral("extract")) {
+        // 加载单个压缩包数据
+        loadArchive(listParam[0]);
     } else if (strType == QStringLiteral("compress")) {
         // 压缩
-    } else if (strType == QStringLiteral("extract")) {
-        // 解压单个文件
+        // 处理选中文件
+        QStringList listFiles = listParam;
+        listFiles.removeLast();
+        // 添加压缩文件至压缩列表
+        m_pCompressPage->addCompressFiles(listFiles);
+        m_pCompressSettingPage->setFileSize(listFiles, calSelectedTotalFileSize(listFiles));
+        m_pCompressSettingPage->refreshMenu();
+        // 设置界面标识为压缩设置界面
+        m_ePageID = PI_CompressSetting;
     } else if (strType == QStringLiteral("extract_here")) {
         // 解压单个文件到当前文件夹
-    } else if (strType == QStringLiteral("extract_split")) {
+        QFileInfo fileinfo(listParam.at(0));
+        ExtractionOptions options;
+        // 构建解压参数
+        options.strTargetPath = fileinfo.path();
+        options.bAllExtract = true;
+        options.bRightExtract = true;
+        options.qComressSize = fileinfo.size();
+        // 调用解压函数
+        m_pArchiveManager->extractFiles(listParam.at(0), QList<FileEntry>(), options);
+        // 设置进度界面参数
+        m_pProgressPage->setProgressType(PT_UnCompress);
+        m_pProgressPage->setTotalSize(options.qComressSize);
+        m_pProgressPage->setArchiveName(fileinfo.fileName());
+        m_pProgressPage->restartTimer(); // 重启计时器
+        m_ePageID = PI_UnCompressProgress;
+    } else if (strType == QStringLiteral("extract_multi")) {
         // 批量解压
-    } else if (strType == QStringLiteral("extract_here_split")) {
+    } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
+        // 处理选中文件
+        QStringList listFiles = listParam;
+        listFiles.removeLast();
+        m_pArchiveManager->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), false);
+        qint64 qSize = 0;
+        foreach (QString strFile, listFiles) {
+            qSize += QFile(strFile).size();
+        }
+        // 设置进度界面参数
+        m_pProgressPage->setProgressType(PT_UnCompress);
+        m_pProgressPage->setTotalSize(qSize);
+        m_pProgressPage->setArchiveName(QFileInfo(listFiles[0]).fileName());
+        m_pProgressPage->restartTimer(); // 重启计时器
+        m_ePageID = PI_UnCompressProgress;
     } else if (strType == QStringLiteral("compress_to_zip")) {
         // 压缩成xx.zip
     } else if (strType == QStringLiteral("compress_to_7z")) {
@@ -402,7 +474,22 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 解压到xx文件夹
     }
 
+    refreshPage();
     show();
+}
+
+void MainWindow::slotTitleBtnClicked()
+{
+    if (m_ePageID == PI_Home || m_ePageID == PI_Compress || m_ePageID == PI_UnCompress) {
+        // 通过文件选择对话框选择文件进行操作
+        slotChoosefiles();
+    } else if (m_ePageID == PI_CompressSetting) {
+        // 压缩设置界面点击 返回
+        m_ePageID = PI_Compress;
+        refreshPage();
+    }
+
+
 }
 
 void MainWindow::slotChoosefiles()
@@ -433,12 +520,28 @@ void MainWindow::slotChoosefiles()
         return;
     }
 
-    QStringList selectedFiles = dialog.selectedFiles();
-    qDebug() << "选择的文件：" << selectedFiles;
+    QStringList listSelFiles = dialog.selectedFiles();
+    if (listSelFiles.count() == 0)
+        return;
+    qDebug() << "选择的文件：" << listSelFiles;
 
-    if (m_ePageID == PI_Compress) {
-        m_pCompressPage->addCompressFiles(selectedFiles);       // 添加压缩文件
+    if (m_ePageID == PI_Home) {
+        if (listSelFiles.count() == 1 && UiTools::isArchiveFile(listSelFiles[0])) {
+            // 压缩包加载
+            loadArchive(listSelFiles[0]);
+        } else {
+            // 添加压缩文件
+            m_pCompressPage->addCompressFiles(listSelFiles);
+            m_ePageID = PI_Compress;
+        }
+        refreshPage();
+    } else if (m_ePageID == PI_Compress) {
+        // 添加压缩文件
+        m_pCompressPage->addCompressFiles(listSelFiles);
+    } else if (m_ePageID == PI_UnCompress) {
+        // 追加压缩
     }
+
 }
 
 void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
@@ -457,15 +560,7 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
     } else {
         if (UiTools::isArchiveFile(listFiles[0])) {     // 压缩文件处理
 
-            PERF_PRINT_BEGIN("POINT-05", "加载时间");
-            m_pUnCompressPage->setArchiveName(listFiles[0]);
-
-            m_ePageID = PI_Loading;
-            m_pLoadingPage->startLoading();
-            m_pArchiveManager->loadArchive(listFiles[0]);
-            m_pUnCompressPage->setDefaultUncompressPath(QFileInfo(listFiles[0]).absolutePath());
-
-
+            loadArchive(listFiles[0]);
         } else {        // 普通文件处理
             m_ePageID = PI_Compress;
             m_pCompressPage->addCompressFiles(listFiles);       // 添加压缩文件
@@ -483,7 +578,6 @@ void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 
 void MainWindow::slotCompressNext()
 {
-    m_qTotalSize = 0;
     QStringList listCompressFiles = m_pCompressPage->compressFiles();       // 获取待压缩的文件
     m_pCompressSettingPage->setFileSize(listCompressFiles, calSelectedTotalFileSize(listCompressFiles));
     m_pCompressSettingPage->refreshMenu();
@@ -552,7 +646,8 @@ void MainWindow::slotCompress(const QVariant &val)
 
 
     m_pProgressPage->setProgressType(PT_Compress);
-    m_pProgressPage->setArchiveName(stCompressInfo.strArchiveName, stCompressInfo.qSize);
+    m_pProgressPage->setTotalSize(stCompressInfo.qSize);
+    m_pProgressPage->setArchiveName(stCompressInfo.strArchiveName);
     m_pProgressPage->restartTimer();
 
     m_ePageID = PI_CompressProgress;
@@ -586,6 +681,7 @@ void MainWindow::slotJobFinshed()
         m_pUnCompressPage->setArchiveData(stArchiveData);
     }
     break;
+    case ArchiveJob::JT_BatchExtract:
     case ArchiveJob::JT_Extract: {
         qDebug() << "解压结束";
         m_ePageID = PI_UnCompressSuccess;
@@ -624,7 +720,8 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_UnCompress);
-    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName(), options.qSize);
+    m_pProgressPage->setTotalSize(options.qSize);
+    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName());
     m_pProgressPage->restartTimer(); // 重启计时器
     m_ePageID = PI_UnCompressProgress;
     refreshPage();
@@ -663,9 +760,15 @@ void MainWindow::slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_Delete);
-    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName(), qTotalSize);
+    m_pProgressPage->setTotalSize(qTotalSize);
+    m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName());
     m_pProgressPage->restartTimer(); // 重启计时器
     m_ePageID = PI_DeleteProgress;
     refreshPage();
+}
+
+void MainWindow::slotReceiveCurArchiveName(const QString &strArchiveName)
+{
+    m_pProgressPage->setArchiveName(strArchiveName);
 }
 

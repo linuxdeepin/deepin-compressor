@@ -70,6 +70,7 @@ public:
      */
     void start() override;
 
+
 protected:
     /**
      * @brief initConnections   初始化插件和job的信号槽连接

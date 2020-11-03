@@ -41,6 +41,7 @@ public:
         JT_Load,            // 加载压缩包
         JT_Extract,         // 解压
         JT_Delete,         // 删除
+        JT_BatchExtract,   // 批量解压
     };
 
     /**
@@ -75,7 +76,8 @@ Q_SIGNALS:
 
 public:
     JobType m_eJobType;     // 操作类型
-
+    PluginFinishType m_eFinishedType = PT_Nomral;
+    ErrorType m_eErrorType = ET_NoError;
 
 };
 
