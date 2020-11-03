@@ -71,18 +71,6 @@ set(CMAKE_INSTALL_PREFIX /usr)
 
 #install(TARGETS compressor-interface LIBRARY DESTINATION lib)
 
-install(TARGETS compressor-interface DESTINATION bin/compressor-lib)
-install(TARGETS compressor-ChardetDetector DESTINATION bin/compressor-lib)
-install(TARGETS compressor-common DESTINATION bin/compressor-lib)
-install(TARGETS compressor-archive DESTINATION bin/compressor-lib)
-install(TARGETS compressor-singlefile DESTINATION bin/compressor-lib)
-
-#install(TARGETS compressor-interface DESTINATION lib)
-#install(TARGETS compressor-ChardetDetector DESTINATION lib)
-#install(TARGETS compressor-common DESTINATION lib)
-#install(TARGETS compressor-archive DESTINATION lib)
-#install(TARGETS compressor-singlefile DESTINATION lib)
-
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS cliunarchiverplugin DESTINATION lib/deepin-compressor/plugins/)
