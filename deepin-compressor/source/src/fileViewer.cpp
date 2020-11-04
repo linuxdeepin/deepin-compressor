@@ -891,7 +891,7 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         m_pRightMenu->popup(pTableViewFile->viewport()->mapToGlobal(QPoint(x, y)));
     } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //回车键以默认方式打开文件(夹)
         if (PAGE_UNCOMPRESS == m_pagetype) {
-            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
+            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex().siblingAtColumn(0)); //使用第0列index才能获取父子关系
         } else {
             slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
         }
@@ -1591,7 +1591,7 @@ void fileViewer::onRightMenuClicked(QAction *action)
 //            qDebug() << fileList.at(0)->fullPath();
             emit sigextractfiles(fileList, EXTRACT_HEAR);
         } else if (action->text() == tr("Open")) {
-            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
+            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex().siblingAtColumn(0));
         } else if (action->text() == tr("Delete") || action->text() == tr("Delete", "slotDecompressRowDelete")) {
             isPromptDelete = true;
             if (DDialog::Accepted == popUpDialog(tr("Do you want to delete the selected file(s)?"))) {
