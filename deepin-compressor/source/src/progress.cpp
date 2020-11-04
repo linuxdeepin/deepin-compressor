@@ -551,6 +551,7 @@ void Progress::resetProgress()
  */
 void Progress::cancelbuttonPressedSlot()
 {
+    pauseContinueButtonPressedSlot(true); //暂停
     if (DDialog::Accepted == showConfirmDialog()) {
         m_timerTime->stop();
 //        m_timerProgress->stop();
@@ -558,6 +559,8 @@ void Progress::cancelbuttonPressedSlot()
         lastTimeLeft = 0;
         // 发送暂停信号，并且将进度的类型传递给页面。界面根据不同的进度类型进行处理。
         emit sigCancelPressed(m_ProgressType);
+    } else {
+        pauseContinueButtonPressedSlot(false); //继续
     }
 }
 
