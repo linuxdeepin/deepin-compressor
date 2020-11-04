@@ -891,7 +891,7 @@ void fileViewer::keyPressEvent(QKeyEvent *event)
         m_pRightMenu->popup(pTableViewFile->viewport()->mapToGlobal(QPoint(x, y)));
     } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) && pTableViewFile->selectionModel()->selectedRows().count() != 0) { //回车键以默认方式打开文件(夹)
         if (PAGE_UNCOMPRESS == m_pagetype) {
-            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex());
+            slotDecompressRowDoubleClicked(pTableViewFile->currentIndex().siblingAtColumn(0));
         } else {
             slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
         }
@@ -1604,7 +1604,7 @@ void fileViewer::onRightMenuClicked(QAction *action)
         }
     } else {
         if (action->text() == tr("Open")) {
-            slotCompressRowDoubleClicked(pTableViewFile->currentIndex());
+            slotCompressRowDoubleClicked(pTableViewFile->currentIndex().siblingAtColumn(0));
         }
 
         if (action->text() == tr("Delete")) {

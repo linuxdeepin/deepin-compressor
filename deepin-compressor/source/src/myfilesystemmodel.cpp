@@ -91,7 +91,7 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     //    if (0 != index.row()) {
     //        m_tableview->setRowHeight(index.row(), MyFileSystemDefine::gTableHeight);
     //    }
-    qDebug() << "chendu: " << index << role;
+
     if (index.isValid()) {
         QFileInfo file = fileInfo(index);
         switch (role) {
