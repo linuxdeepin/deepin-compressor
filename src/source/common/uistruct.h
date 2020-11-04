@@ -39,6 +39,25 @@ enum Progress_Type {
     PT_Convert,         // 转换格式进度
 };
 
+/**
+ * @brief The Archive_OperationType enum
+ * 针对压缩包的操作，比如解压、提取、打开内容等
+ * 不同的操作可能共用相同的job
+ */
+enum Archive_OperationType {
+    Operation_NULL, // 无操作
+    Operation_Load, // 加载
+    Operation_Extract, // 解压
+    Operation_SingleExtract, // 提取
+    Operation_ExtractHere, // 解压到当前
+    Operation_TempExtract, // 临时解压
+    Operation_TempExtract_Open, // 打开
+    Operation_TempExtract_Open_Choose, // 选择打开
+    Operation_DRAG, // 拖拽
+    Operation_CONVERT, // 格式转换
+    Operation_DELETE // 删除
+};
+
 // 压缩/解压列表的列号
 enum DataView_Column {
     DC_Name,            // 名称
@@ -66,7 +85,7 @@ enum Page_ID {
     PI_Loading,             // 加载
 };
 
-// 压缩参数
+// 压缩设置界面参数
 struct CompressParameter {
     CompressParameter()
     {
@@ -83,17 +102,15 @@ struct CompressParameter {
     QString strMimeType;    // 格式类型（application/x-tar）
     QString strArchiveName; // 压缩包名称(无路径)
     QString strTargetPath;  // 保存路径
-    bool bEncryption = false;       // 是否加密
     QString strPassword;        // 密码
     QString strEncryptionMethod;    // 加密算法
     QString strCompressionMethod; //压缩算法
+    bool bEncryption = false;       // 是否加密
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
+    bool bTar_7z;       // 是否是tar.7z格式（补充）
     int iVolumeSize;    // 分卷大小
     int iCompressionLevel;      // 压缩等级
-
-    bool bTar_7z;       // 是否是tar.7z格式（补充）
-
     qint64 qSize;       // 文件总大小
 };
 Q_DECLARE_METATYPE(CompressParameter)

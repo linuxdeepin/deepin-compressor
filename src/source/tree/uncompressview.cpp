@@ -23,6 +23,7 @@
 #include "datamodel.h"
 #include "treeheaderview.h"
 #include "openwithdialog.h"
+#include "DebugTimeManager.h";
 
 #include <DMenu>
 #include <DFileDialog>
@@ -303,14 +304,16 @@ void UnCompressView::extract2Path(const QString &strPath)
     foreach (FileEntry entry, listSelCurEntry) {
         if (entry.isDirectory) {
             QList<FileEntry> listEntry;
-            listSelAllEntry << entry;
             getAllFilesByParentPath(entry.strFullPath, listEntry, stOptions.qSize);
             listSelAllEntry << listEntry;
+        } else {
+            listSelAllEntry << entry;
+            stOptions.qSize += entry.qSize;
         }
     }
 
     // 发送提取信号
-    signalExtract2Path(listSelCurEntry, listSelAllEntry, stOptions);
+    emit signalExtract2Path(listSelCurEntry, listSelAllEntry, stOptions);
 }
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
@@ -397,9 +400,11 @@ void UnCompressView::slotDeleteFile()
     foreach (FileEntry entry, listSelCurEntry) {
         if (entry.isDirectory) {
             QList<FileEntry> listEntry;
-            listSelAllEntry << entry;
             getAllFilesByParentPath(entry.strFullPath, listEntry, qSize);
             listSelAllEntry << listEntry;
+        } else {
+            listSelAllEntry << entry;
+            qSize += entry.qSize;
         }
     }
 

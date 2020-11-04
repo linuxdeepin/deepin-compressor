@@ -33,7 +33,7 @@
 LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
-
+    m_bHandleCurEntry = true; //提取使用选中文件
 //    connect(this, &ReadOnlyArchiveInterface::error, this, &LibarchivePlugin::slotRestoreWorkingDir);
 //    connect(this, &ReadOnlyArchiveInterface::cancelled, this, &LibarchivePlugin::slotRestoreWorkingDir);
 }
@@ -98,7 +98,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     // 选择要保留的属性
     archive_write_disk_set_options(writer.data(), extractionFlags());
 
-    int totalEntriesCount = 0;
+    bool isAtRootPath = false; //是否提取首层目录下的文件
     const bool extractAll = files.isEmpty();//如果是双击解压，则为false;如果是按钮解压，则为true
     if (extractAll) {  //全部解压
         if (!m_ArchiveEntryCount) {
@@ -109,33 +109,27 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 //            list();
 //            m_emitNoEntries = false;
         }
-        totalEntriesCount = m_ArchiveEntryCount;
-    } else { //部分解压、提取 todo
-//        totalEntriesCount = files.size();
-//        this->m_pProgressInfo->resetProgress();
-//        this->m_pProgressInfo->setTotalSize(files[0]->getSize());//双击解压，设置解压总大小
+//        totalEntriesCount = m_ArchiveEntryCount;
+    } else { //部分解压、提取
+        const QString &rootNode = options.strDestination;
+        if (rootNode.isEmpty() || "/" == rootNode) {
+            isAtRootPath = true;
+        }
     }
 
 
-//    this->extractPsdStatus = ReadOnlyArchiveInterface::Default;
-//    ifReplaceTip = false; //默认没有替换提示
-
-    //更改应用工作目录
+    // 更改应用工作目录，结束时自动恢复原来路径
     HandleWorkingDir handleWorkingDir(&m_oldWorkingDir);
     handleWorkingDir.change(options.strTargetPath);
     m_extractDestDir = options.strTargetPath;
-    // Initialize variables.
-//    const bool preservePaths = options.preservePaths(); //是否保留路径
-//    const bool removeRootNode = options.isDragAndDropEnabled();
 
-//    bool dontPromptErrors = false; // Whether to prompt for errors
-//    m_currentExtractedFilesSize = 0;
+    m_currentExtractedFilesSize = 0;
     int extractedEntriesCount = 0; //记录已经解压的文件数量
-    int progressEntryCount = 0;
-    struct archive_entry *entry;
-    QString fileBeingRenamed;
+
+    struct archive_entry *entry = nullptr;
+
     QString extractDst;
-    qlonglong qExtractSize = 0; //记录已经解压的文件大小
+
 
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
@@ -144,23 +138,9 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             break;
         }
 
-        fileBeingRenamed.clear();
-        int index = -1;
+        const bool entryIsDir = S_ISDIR(archive_entry_mode(entry)); //该条entry是否是文件夹
 
-//        // Retry with renamed entry, fire an overwrite query again
-//        // if the new entry also exists.
-//    retry:
-        const bool entryIsDir = S_ISDIR(archive_entry_mode(entry));
-//        // Skip directories if not preserving paths.
-//        // 如果不保留路径，直接跳过目录
-//        if (!preservePaths && entryIsDir) { //preservePaths一直是true，只解压出文件，不要目录
-//            archive_read_data_skip(m_archiveReader.data());
-//            continue;
-//        }
-
-//        QString utf8path = m_common->trans2uft8(archive_entry_pathname(entry));
-//        QString entryName = QDir::fromNativeSeparators(utf8path);
-        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry));
+        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry)); //该条entry在压缩包内文件名(全路径)
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
         // 移除"./"开头的，例如rpm包
@@ -180,60 +160,57 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // For now we just can't handle absolute filenames in a tar archive.
         // TODO: find out what to do here!!
-        //目前，无法处理tar归档文件中的绝对文件名
+        // 目前，无法处理tar归档文件中的绝对文件名
         if (entryName.startsWith(QLatin1Char('/'))) {
             return PF_Error;
         }
 
-        if (0 == extractedEntriesCount) {
-            extractDst = entryName;
-//            destDirName = entryName;
-        } else if (extractDst.isEmpty() == false) {
-            if (entryName.startsWith(extractDst + (extractDst.endsWith("/") ? "" : "/")) == false) {
-                extractDst.clear();
+
+        // Should the entry be extracted?
+        // 解压:不需要过滤
+        // 提取:过滤选中的文件以及选中目录下所有文件
+        if (!extractAll) {
+            bool flag = false;
+            foreach (auto tmp, qAsConst(files)) {
+                if (tmp.isDirectory) {
+                    if (entryName.startsWith(tmp.strFullPath)) {
+                        flag = true;
+                        break;
+                    }
+                } else {
+                    if (0 == entryName.compare(tmp.strFullPath)) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            // If entry is not found, skip entry.
+            if (!flag) {
+                continue;
             }
         }
-
-
-//        // Should the entry be extracted?
-//        if (extractAll || m_listFileName.contains(entryName) || entryName == fileBeingRenamed) {
-//            // Find the index of entry.
-//            if (entryName != fileBeingRenamed) {
-//                index = m_listFileName.indexOf(entryName);
-//            }
-//            if (!extractAll && index == -1) {
-//                // If entry is not found in files, skip entry.
-//                continue;
-//            }
 
         // entryFI is the fileinfo pointing to where the file will be
         // written from the archive.
         QFileInfo entryFI(entryName);
-        emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+        emit signalCurFileName(entryFI.fileName()); // 发送当前正在解压的文件名
 
-        const QString fileWithoutPath(entryFI.fileName());
-//            // If we DON'T preserve paths, we cut the path and set the entryFI
-//            // fileinfo to the one without the path.
-//            if (!preservePaths) {
-//                // Empty filenames (ie dirs) should have been skipped already,
-//                // so asserting.
-//                Q_ASSERT(!fileWithoutPath.isEmpty());
-//                archive_entry_copy_pathname(entry, QFile::encodeName(fileWithoutPath).constData());
-//                entryFI = QFileInfo(fileWithoutPath);
+        // If the file has a rootNode attached, remove it from file path.
+        // 提取操作不需要保留上层目录
+        if (!extractAll && !options.strDestination.isEmpty()) { //提取
+            const QString &rootNode = options.strDestination;
+            if (isAtRootPath) { //提取首层目录下文件
+                archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
+            } else {
+                const QString truncatedFilename(entryName.remove(entryName.indexOf(rootNode), rootNode.size()));
+                archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
+                entryFI = QFileInfo(truncatedFilename);
+            }
+        } else {
+            archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
+        }
 
-//                // OR, if the file has a rootNode attached, remove it from file path.
-//            } else if (!extractAll && removeRootNode && entryName != fileBeingRenamed) { //提取
-//                const QString &rootNode = m_strRootNode/*files.at(index)->rootNode*/;
-//                if (!rootNode.isEmpty()) {
-//                    const QString truncatedFilename(entryName.remove(entryName.indexOf(rootNode), rootNode.size()));
-//                    archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
-//                    entryFI = QFileInfo(truncatedFilename);
-//                }
-//            } else {
-        archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
-//            }
-
-//        }
 
         // Check if the file about to be written already exists.
         if (!entryIsDir && entryFI.exists()) {
@@ -271,7 +248,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // If there is an already existing directory.
         if (entryIsDir && entryFI.exists()) {
-//            this->ifReplaceTip = true;
             if (entryFI.isWritable()) {
             } else {
                 archive_entry_clear(entry);
@@ -281,19 +257,19 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
 
         // Write the entry header and check return value.
-        const int returnCode = archive_write_header(writer.data(), entry);
+        const int returnCode = archive_write_header(writer.data(), entry); //创建文件
         switch (returnCode) {
         case ARCHIVE_OK: {
             // If the whole archive is extracted and the total filesize is
             // available, we use partial progress.
             if (extractAll == false) {
-//                copyDataFromSource_ArchiveEntry(files[0], m_archiveReader.data(), writer.data(), (m_extractedFilesSize));
+                copyDataFromSource_ArchiveEntry(entryName, m_archiveReader.data(), writer.data(), options.qSize);
             } else {
-                copyDataFromSource(entryName, m_archiveReader.data(), writer.data(), (extractAll && options.qSize));
+                copyDataFromSource(entryName, m_archiveReader.data(), writer.data());
             }
 
-//            // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
-//            // 文件权限设置
+            // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
+            // 文件权限设置
             QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
             if (entryIsDir) {
                 per |= QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser;
@@ -305,26 +281,11 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         case ARCHIVE_FAILED:
             emit error(("Filed error, extraction aborted."));
             return PF_Error;
-//            // If they user previously decided to ignore future errors,
-//            // don't bother prompting again.
-//            if (!dontPromptErrors) {
-//                // Ask the user if he wants to continue extraction despite an error for this entry.
-//                ContinueExtractionQuery query(QLatin1String(archive_error_string(writer.data())),
-//                                              entryName);
-//                emit userQuery(&query);
-//                query.waitForResponse();
-
-//                if (query.responseCancelled()) {
-//                    emit cancelled();
-//                    return false;
-//                }
-//                dontPromptErrors = query.dontAskAgain();
-//            }
-            break;
 
         case ARCHIVE_FATAL:
             emit error(("Fatal error, extraction aborted."));
             return PF_Error;
+
         default:
             break;
         }
@@ -424,11 +385,11 @@ bool LibarchivePlugin::initializeReader()
     return true;
 }
 
-void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest,  bool partialprogress)
+void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest)
 {
     char buff[10240]; //缓存大小
-//    qlonglong size = 0;
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
+
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
 //        if (m_isPause) { //解压暂停
 //            sleep(1);
@@ -441,20 +402,39 @@ void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archiv
             return;
         }
 
-//        if (partialprogress) {
-//            size += readBytes;
+
         // 解压百分比进度
         m_currentExtractedFilesSize += readBytes;
-        emit signalprogress((double(readBytes + m_currentExtractedFilesSize)) / m_extractedFilesSize * 100);
-//            emit progress(static_cast<double>(size + m_currentExtractedFilesSize) / m_extractedFilesSize);
-//            emit progress_filename(filename);
-//        }
+        emit signalprogress((double(m_currentExtractedFilesSize)) / m_stArchiveData.qSize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
     }
-//    if (partialprogress) {
-//        m_currentExtractedFilesSize  += size;
-//    }
+}
+
+void LibarchivePlugin::copyDataFromSource_ArchiveEntry(const QString &filename, archive *source, archive *dest, qint64 extractFileSize)
+{
+    char buff[10240];
+    auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
+
+    while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        //         TODO:提取暂停，暂时不支持
+        //        if (m_isPause) {
+        //            sleep(1);
+        //            qDebug() << "pause";
+        //            continue;
+        //        }
+
+        archive_write_data(dest, buff, static_cast<size_t>(readBytes));
+        if (archive_errno(dest) != ARCHIVE_OK) {
+            return;
+        }
+
+        // 解压百分比进度
+        m_currentExtractedFilesSize += readBytes;
+        emit signalprogress((double(m_currentExtractedFilesSize)) / extractFileSize * 100);
+
+        readBytes = archive_read_data(source, buff, sizeof(buff));
+    }
 }
 
 PluginFinishType LibarchivePlugin::list_New()
@@ -469,7 +449,6 @@ PluginFinishType LibarchivePlugin::list_New()
     }
 
     m_ArchiveEntryCount = 0;
-    m_extractedFilesSize = 0;
     m_numberOfEntries = 0;
     m_stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 压缩包大小
 
@@ -481,10 +460,6 @@ PluginFinishType LibarchivePlugin::list_New()
         emitEntryForIndex(aentry);
 //        m_listIndex++;
 //        }
-
-        m_extractedFilesSize += static_cast<qlonglong>(archive_entry_size(aentry));
-
-//        emit progress(static_cast<double>(archive_filter_bytes(m_archiveReader.data(), -1)) / compressedArchiveSize);
 
         m_ArchiveEntryCount++;
 

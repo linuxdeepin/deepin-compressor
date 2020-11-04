@@ -40,6 +40,7 @@ class ProgressPage;
 class SuccessPage;
 class FailurePage;
 class SettingDialog;
+class ProgressDialog;
 
 class ArchiveManager;
 
@@ -106,7 +107,11 @@ private:
      * @param strArchiveName    压缩包名称（全路径）
      */
     void loadArchive(const QString &strArchiveName);
-
+    /**
+     * @brief Extract2PathFinish 提取成功提示
+     * @param msg
+     */
+    void Extract2PathFinish(QString msg);
 
     // QWidget interface
 protected:
@@ -212,6 +217,7 @@ private:
 
     QStackedWidget *m_pMainWidget;  // 中心面板
 
+    // 界面页
     HomePage *m_pHomePage;            // 首页
     CompressPage *m_pCompressPage;    // 压缩列表界面
     CompressSettingPage *m_pCompressSettingPage;  // 压缩设置界面
@@ -224,6 +230,8 @@ private:
     DIconButton *m_pTitleButton;                  // 标题栏按钮（添加文件）
     QAction *m_pOpenAction;                                 // 菜单 - 打开
 
+    // 弹窗
+    ProgressDialog *m_pProgressdialog; // 进度对话框
     SettingDialog *m_pSettingDlg;       // 设置界面
 
     QSettings *m_pSettings;     // 默认配置信息
@@ -234,6 +242,7 @@ private:
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
     ArchiveManager *m_pArchiveManager;      // 插件和job管理
+    Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
 
     qint64 m_qTotalSize = 0;            // 压缩文件总大小
 };

@@ -140,8 +140,10 @@ Q_SIGNALS:
 public:
     Plugintype m_ePlugintype;
 
+    bool getHandleCurEntry() const;
+
 protected:
-    bool m_bWaitForFinished = false;    // 等待结束
+    bool m_bWaitForFinished = false;    // 等待结束 true:CLI false:调接口
     uint m_numberOfEntries; //原有的归档数量
     KPluginMetaData m_metaData;
     QString m_strArchiveName; //1、压缩：最终的压缩包名 2、解压：加载的压缩包名
@@ -150,6 +152,7 @@ protected:
     ArchiveData m_stArchiveData;    // 压缩包数据
     bool m_bOverwriteAll = false;        //是否全部覆盖
     bool m_bSkipAll = false;             // 是否全部跳过
+    bool m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型
     QString m_strPassword;

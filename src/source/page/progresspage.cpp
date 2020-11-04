@@ -81,7 +81,7 @@ void ProgressPage::setProgress(double dPercent)
         return ;
     }
     m_dPerent = dPercent;
-    m_pProgressBar->setValue(m_dPerent);     // 进度条刷新值
+    m_pProgressBar->setValue(qRound(m_dPerent));     // 进度条刷新值
     m_pProgressBar->update();
 
     // 刷新界面显示

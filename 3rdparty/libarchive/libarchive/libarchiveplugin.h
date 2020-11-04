@@ -105,9 +105,16 @@ protected:
      * @param filename 本地文件名
      * @param source 读句柄
      * @param dest 写句柄
-     * @param bInternalDuty
      */
-    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);
+    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest);
+    /**
+     * @brief copyDataFromSource_ArchiveEntry 压缩包数据写到本地文件(提取用)
+     * @param filename
+     * @param source
+     * @param dest
+     * @param extractFileSize 待提取文件总大小
+     */
+    void copyDataFromSource_ArchiveEntry(const QString &filename, struct archive *source, struct archive *dest, qint64 extractFileSize);
 
 private:
     PluginFinishType list_New();
@@ -127,16 +134,11 @@ private:
      * @return
      */
     int extractionFlags() const;
-//    /**
-//     * @brief slotRestoreWorkingDir 还原应用工作目录
-//     */
-//    void slotRestoreWorkingDir();
 
 private:
     int m_ArchiveEntryCount = 0; //压缩包内文件(夹)总数量
     QString m_strOldArchiveName; //压缩包名(全路径)
     QStringList m_tars; //list时解压出来的临时tar包
-    qlonglong m_extractedFilesSize; //压缩包内文件原始总大小
     QString m_oldWorkingDir;
     QString m_extractDestDir; //解压目的路径
 //    QString destDirName; //取消解压，需要该变量

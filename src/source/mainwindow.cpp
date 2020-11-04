@@ -34,6 +34,7 @@
 #include "archivemanager.h"
 #include "DebugTimeManager.h"
 #include "popupdialog.h"
+#include "progressdialog.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -82,6 +83,7 @@ void MainWindow::initUI()
     m_pSuccessPage = new SuccessPage(this);  // 成功界面
     m_pFailurePage = new FailurePage(this);  // 失败界面
 
+    m_pProgressdialog = new ProgressDialog(this); //进度弹窗
     m_pSettingDlg = new SettingDialog(this);
 
     m_pArchiveManager = new ArchiveManager(this);
@@ -683,8 +685,15 @@ void MainWindow::slotJobFinshed()
     break;
     case ArchiveJob::JT_BatchExtract:
     case ArchiveJob::JT_Extract: {
-        qDebug() << "解压结束";
-        m_ePageID = PI_UnCompressSuccess;
+        if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
+            qDebug() << "提取结束";
+            m_ePageID = PI_UnCompress;
+            Extract2PathFinish(tr("Extraction successful", "Operation_SingleExtract")); //提取成功
+            m_pProgressdialog->setFinished();
+        } else {
+            qDebug() << "解压结束";
+            m_ePageID = PI_UnCompressSuccess;
+        }
     }
     break;
     case ArchiveJob::JT_Delete: {
@@ -724,17 +733,31 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
     m_pProgressPage->setArchiveName(QFileInfo(strArchiveName).fileName());
     m_pProgressPage->restartTimer(); // 重启计时器
     m_ePageID = PI_UnCompressProgress;
+
+    m_operationtype = Operation_Extract; //解压操作
+
     refreshPage();
 }
 
 void MainWindow::slotReceiveProgress(double dPercentage)
 {
-    m_pProgressPage->setProgress(qRound(dPercentage));
+    if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
+        if (m_pProgressdialog->isHidden()) {
+            m_pProgressdialog->exec();
+        }
+        m_pProgressdialog->setProcess(qRound(dPercentage));
+    } else {
+        m_pProgressPage->setProgress(dPercentage);
+    }
 }
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
-    m_pProgressPage->setCurrentFileName(strName);
+    if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
+        m_pProgressdialog->setCurrentFile(strName);
+    } else {
+        m_pProgressPage->setCurrentFileName(strName);
+    }
 }
 
 void MainWindow::slotQuery(Query *query)
@@ -744,10 +767,44 @@ void MainWindow::slotQuery(Query *query)
     query->execute();
 }
 
+void MainWindow::Extract2PathFinish(QString msg)
+{
+    QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+    this->sendMessage(icon, msg);
+
+//    // 如果设置了自动打开，执行下列操作
+//    if (m_pSettingsDialog->isAutoOpen()) {
+//        QString fullpath = m_strDecompressFilePath + "/" + m_vecExtractSimpleFiles.at(0)->property("name").toString();
+//        qDebug() << fullpath;
+//        QFileInfo fileinfo(fullpath);
+
+//        // 如果文件/文件夹存在
+//        if (fileinfo.exists()) {
+//            //                if (fileinfo.isDir()) {
+//            //                    DDesktopServices::showFolder(fullpath);     // 如果是文件夹
+//            //                } else if (fileinfo.isFile()) {
+//            qDebug() << "DDesktopServices start:" << fullpath;
+//            m_DesktopServicesThread = new DDesktopServicesThread();
+//            connect(m_DesktopServicesThread, SIGNAL(finished()), this, SLOT(slotKillShowFoldItem()));
+//            m_DesktopServicesThread->m_path = fullpath;
+//            m_DesktopServicesThread->start();
+//            //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
+//            qDebug() << "DDesktopServices end:" << m_strDecompressFilePath;
+//            //  }
+//        }
+//    }
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
+    m_operationtype = Operation_SingleExtract; //提取操作
     QString strArchiveName = m_pUnCompressPage->archiveName();
+
+    // 提取删除操作使用小弹窗进度
+    m_pProgressdialog->clearprocess();
+    m_pProgressdialog->setCurrentTask(strArchiveName);
+
     m_pArchiveManager->extractFiles2Path(strArchiveName, listCurEntry, listAllEntry, stOptions);
 
 }

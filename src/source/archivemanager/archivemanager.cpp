@@ -132,9 +132,13 @@ void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QLis
     }
 
     ExtractJob *pExtractJob = nullptr;
-    if (!(m_pInterface->waitForFinished())) {
-        pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
-    } else {
+    if (!(m_pInterface->waitForFinished())) { //调函数
+        if (m_pInterface->getHandleCurEntry()) {
+            pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
+        } else {
+            pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
+        }
+    } else { //CLI
         pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
     }
 

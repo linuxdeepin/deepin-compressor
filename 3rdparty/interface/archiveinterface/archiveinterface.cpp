@@ -108,6 +108,11 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     return pers;
 }
 
+bool ReadOnlyArchiveInterface::getHandleCurEntry() const
+{
+    return m_bHandleCurEntry;
+}
+
 //void ReadOnlyArchiveInterface::getFileEntry(QList<FileEntry> &listRootEntry, QMap<QString, FileEntry> &mapEntry)
 //{
 //    listRootEntry.clear();
