@@ -132,16 +132,14 @@ void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QLis
     }
 
     ExtractJob *pExtractJob = nullptr;
-    if (!(m_pInterface->waitForFinished())) { //调函数
-        if (m_pInterface->getHandleCurEntry()) {
-            pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
-        } else {
-            pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
-        }
-    } else { //CLI
-        pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
-    }
 
+    if (m_pInterface->getHandleCurEntry()) {
+        // 部分插件需要传入第一层文件
+        pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
+    } else {
+        // 部分插件需要传入所有文件
+        pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
+    }
 
     // 连接槽函数
     connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
@@ -161,10 +159,13 @@ void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<File
     }
 
     DeleteJob *pDeleteJob = nullptr;
-    if (!(m_pInterface->waitForFinished())) {
-        pDeleteJob = new DeleteJob(listAllEntry, m_pInterface);
-    } else {
+
+    if (m_pInterface->getHandleCurEntry()) {
+        // 部分插件需要传入第一层文件
         pDeleteJob = new DeleteJob(listCurEntry, m_pInterface);
+    } else {
+        // 部分插件需要传入所有文件
+        pDeleteJob = new DeleteJob(listAllEntry, m_pInterface);
     }
 
     // 连接槽函数

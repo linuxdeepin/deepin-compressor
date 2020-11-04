@@ -66,19 +66,17 @@ enum PathFormat {
 struct FileEntry {
     FileEntry()
     {
-        qSize = 0;
-        isDirectory = false;
-        uLastModifiedTime = 0;
-        iIndex = -1;
+        reset();
     }
 
     void reset()
     {
         strFullPath = "";
         strFileName = "";
-        qSize = 0;
         isDirectory = false;
+        qSize = 0;
         uLastModifiedTime = 0;
+        iIndex = -1;
     }
 
     QString strFullPath;    // 文件全路径
@@ -95,12 +93,9 @@ Q_DECLARE_METATYPE(FileEntry)
 struct ArchiveData {
     ArchiveData()
     {
-        qSize = 0;
-        qComressSize = false;
-        strComment = "";
-        mapFileEntry.clear();
-        listRootEntry.clear();
+        reset();
     }
+
     void reset()
     {
         qSize = 0;

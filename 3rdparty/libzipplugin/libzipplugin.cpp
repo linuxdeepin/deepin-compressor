@@ -162,7 +162,57 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             }
         }
     } else { // 部分提取
+        qlonglong qExtractSize = 0;
+        QList<int> listExtractIndex;
+        // 筛选待提取文件/文件夹索引
+        foreach (FileEntry entry, files) {
+            if (entry.iIndex >= 0) {
+                listExtractIndex << entry.iIndex;
+            }
+        }
+        std::stable_sort(listExtractIndex.begin(), listExtractIndex.end()); // 升序排序
 
+        // 提取指定文件
+        for (int i = 0; i < listExtractIndex.count(); ++i) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
+
+            QString strFileName;
+
+            // 解压单个文件
+            m_eErrorType = extractEntry(archive, listExtractIndex[i], options, qExtractSize, strFileName);
+
+            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+                continue;
+            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+                zip_close(archive);
+                return PF_Cancel;
+            } else {    // 处理错误
+
+                // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
+                if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
+
+                    PasswordNeededQuery query(strFileName);
+                    emit signalQuery(&query);
+                    query.waitForResponse();
+
+                    if (query.responseCancelled()) {
+                        setPassword(QString());
+                        zip_close(archive);
+                        return PF_Cancel;
+                    } else {
+                        setPassword(query.password());
+                        zip_set_default_password(archive, m_strPassword.toUtf8().constData());
+                        i--;
+                    }
+                } else {
+                    zip_close(archive);
+                    return PF_Error;
+                }
+
+            }
+        }
     }
 
     zip_close(archive);
@@ -453,6 +503,10 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
+    // 提取
+    if (!options.strDestination.isEmpty()) {
+        strFileName = strFileName.remove(0, options.strDestination.size());
+    }
     emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
     bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
 

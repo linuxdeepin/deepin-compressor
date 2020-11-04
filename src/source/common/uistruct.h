@@ -49,7 +49,7 @@ enum Archive_OperationType {
     Operation_Load, // 加载
     Operation_Extract, // 解压
     Operation_SingleExtract, // 提取
-    Operation_ExtractHere, // 解压到当前
+    //Operation_ExtractHere, // 解压到当前
     Operation_TempExtract, // 临时解压
     Operation_TempExtract_Open, // 打开
     Operation_TempExtract_Open_Choose, // 选择打开

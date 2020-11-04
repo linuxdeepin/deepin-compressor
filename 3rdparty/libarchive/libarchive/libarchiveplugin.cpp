@@ -194,7 +194,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         // entryFI is the fileinfo pointing to where the file will be
         // written from the archive.
         QFileInfo entryFI(entryName);
-        emit signalCurFileName(entryFI.fileName()); // 发送当前正在解压的文件名
 
         // If the file has a rootNode attached, remove it from file path.
         // 提取操作不需要保留上层目录
@@ -210,7 +209,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         } else {
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
         }
-
+        emit signalCurFileName(entryName); // 发送当前正在解压的文件名
 
         // Check if the file about to be written already exists.
         if (!entryIsDir && entryFI.exists()) {

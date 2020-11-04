@@ -109,7 +109,9 @@ void ProgressDialog::setCurrentTask(const QString &file)
  */
 void ProgressDialog::setCurrentFile(const QString &file)
 {
-    m_filelable->setText(tr("Extracting") + ":" + file);
+    // 对字符串长度进行...划分
+    QFontMetrics elideFont(m_filelable->font());
+    m_filelable->setText(elideFont.elidedText(tr("Extracting") + ":" + file, Qt::ElideMiddle, 330));
 }
 
 /**

@@ -155,6 +155,8 @@ void ProgressPage::initUI()
     DFontSizeManager::instance()->bind(m_pFileNameLbl, DFontSizeManager::T8);
 
     // 设置速度和剩余时间样式
+    m_pSpeedLbl->setForegroundRole(DPalette::TextTips);
+    m_pRemainingTimeLbl->setForegroundRole(DPalette::TextTips);
     DFontSizeManager::instance()->bind(m_pSpeedLbl, DFontSizeManager::T8);
     DFontSizeManager::instance()->bind(m_pRemainingTimeLbl, DFontSizeManager::T8);
 
@@ -183,15 +185,16 @@ void ProgressPage::initUI()
 
     // 主布局
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
+    pMainLayout->setSpacing(0);
     pMainLayout->addStretch();
     pMainLayout->addWidget(m_pPixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pMainLayout->addSpacing(5);
     pMainLayout->addWidget(m_pArchiveNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pMainLayout->addSpacing(25);
     pMainLayout->addWidget(m_pProgressBar, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    pMainLayout->addSpacing(5);
+    pMainLayout->addSpacing(10);
     pMainLayout->addWidget(m_pFileNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    pMainLayout->addSpacing(5);
+    pMainLayout->addSpacing(-2);
     pMainLayout->addLayout(pSpeedLayout);
     pMainLayout->addStretch();
     pMainLayout->addLayout(pBtnLayout);
