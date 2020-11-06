@@ -254,7 +254,16 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
 
         // 右键-打开
         menu.addAction(tr("Open"), this, [ = ] {
-            OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath);
+            if (m_stRightEntry.isDirectory)
+            {
+                // 文件夹进入下一层
+                handleDoubleClick(index);
+            } else
+            {
+                // 文件使用默认应用打开
+                OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath);
+            }
+
         });
 
         // 右键-删除
@@ -264,18 +273,24 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
 
-        // 右键-打开方式选项
-        QAction *pAction = nullptr;
-        // 获取支持的打开方式列表
-        QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
-        // 添加菜单选项
-        for (int i = 0; i < listOpenType.count(); ++i) {
-            pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
-            pAction->setData(listOpenType[i].getExec());
-        }
+
 
         // 右键-选择默认应用程序
         openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));
+
+        if (m_stRightEntry.isDirectory) {
+            openMenu.setEnabled(false);
+        } else {
+            // 右键-打开方式选项
+            QAction *pAction = nullptr;
+            // 获取支持的打开方式列表
+            QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
+            // 添加菜单选项
+            for (int i = 0; i < listOpenType.count(); ++i) {
+                pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+                pAction->setData(listOpenType[i].getExec());
+            }
+        }
 
         menu.exec(QCursor::pos());
     }
@@ -334,7 +349,6 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
 
 void CompressView::slotOpenStyleClicked()
 {
-
     QAction *pAction = qobject_cast<QAction *>(sender());
     if (pAction == nullptr) {
         return;

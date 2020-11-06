@@ -43,7 +43,7 @@ class SettingDialog;
 class ProgressDialog;
 
 class ArchiveManager;
-
+class QFileSystemWatcher;
 
 DWIDGET_USE_NAMESPACE
 
@@ -112,6 +112,12 @@ private:
      * @param msg
      */
     void Extract2PathFinish(QString msg);
+
+    /**
+     * @brief createUUID    创建唯一标识
+     * @return
+     */
+    QString createUUID();
 
     // QWidget interface
 protected:
@@ -212,7 +218,21 @@ private Q_SLOTS:
      */
     void slotReceiveCurArchiveName(const QString &strArchiveName);
 
+    /**
+     * @brief slotOpenFile    打开压缩包中文件
+     * @param entry             待打开的文件
+     * @param strProgram        应用程序名（为空时，用默认应用程序打开）
+     */
+    void slotOpenFile(const FileEntry &entry, const QString &strProgram = "");
+
+    /**
+     * @brief slotOpenFileChanged   打开文件变化通知
+     * @param strPath               文件全路径
+     */
+    void slotOpenFileChanged(const QString &strPath);
+
 private:
+    QString m_strUUID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
 
     QStackedWidget *m_pMainWidget;  // 中心面板
@@ -245,6 +265,13 @@ private:
     Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
 
     qint64 m_qTotalSize = 0;            // 压缩文件总大小
+
+    // 打开压缩包文件
+    QFileSystemWatcher *m_pOpenFileWatcher;       // 对打开的文件监控
+    QList<FileEntry> m_listOpenFiles;      // 所有的打开的文件数据
+    QString m_strOpenFile;                 // 最后一次打开的文件（真实全路径 用来添加到文件监控中）
+    QMap<QString, bool> m_mapFileHasModified;   // 文件是否更改
+    QMap<QString, FileEntry> m_mapOpenFils;   // 本地文件 - 压缩包文件数据（方式同名文件寻找失败）
 };
 
 #endif // MAINWINDOW_H

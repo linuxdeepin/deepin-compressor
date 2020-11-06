@@ -51,6 +51,7 @@ static QMutex mutex;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
+    m_strUUID = createUUID();   // 生成应用唯一标识
 
     setWindowTitle(tr("Archive Manager"));
 
@@ -69,6 +70,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // 清除缓存数据
+    QProcess p;
+    QString command = "rm";
+    QStringList args;
+    args.append("-rf");
+    args.append(TEMPPATH + QDir::separator() + m_strUUID);
+    p.execute(command, args);
+    p.waitForFinished();
 }
 
 void MainWindow::initUI()
@@ -97,7 +106,8 @@ void MainWindow::initUI()
     m_pMainWidget->addWidget(m_pFailurePage);
     m_pMainWidget->addWidget(m_pLoadingPage);
 
-
+    // 创建打开文件监控
+    m_pOpenFileWatcher = new QFileSystemWatcher(this);
 }
 
 void MainWindow::initTitleBar()
@@ -141,6 +151,7 @@ void MainWindow::initTitleBar()
 
 void MainWindow::initData()
 {
+
     // 初始化数据配置
     m_pSettings = new QSettings(QDir(UiTools::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
 
@@ -160,12 +171,15 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiels, this, &MainWindow::slotDelFiels);
+    connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
 
     connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(m_pArchiveManager, &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
     connect(m_pArchiveManager, &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(m_pArchiveManager, &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
+
+    connect(m_pOpenFileWatcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
 }
 
 void MainWindow::refreshPage()
@@ -701,6 +715,24 @@ void MainWindow::slotJobFinshed()
         m_ePageID = PI_UnCompress;
     }
     break;
+    case ArchiveJob::JT_Open: {
+        qDebug() << "打开结束";
+
+        // 打开成功之后添加到文件监控
+        m_pOpenFileWatcher->addPath(m_strOpenFile);
+
+        if (m_mapFileHasModified.find(m_strOpenFile) != m_mapFileHasModified.end()) {
+            // 第一次默认文件未修改
+            m_mapFileHasModified[m_strOpenFile] = true;
+        } else {
+            // 若已存在此监控文件，修改为未修改
+            m_mapFileHasModified[m_strOpenFile] = false;
+        }
+
+        m_ePageID = PI_UnCompress;
+        m_pLoadingPage->stopLoading();
+    }
+    break;
     }
 
     refreshPage();
@@ -792,7 +824,16 @@ void MainWindow::Extract2PathFinish(QString msg)
 //            qDebug() << "DDesktopServices end:" << m_strDecompressFilePath;
 //            //  }
 //        }
-//    }
+    //    }
+}
+
+QString MainWindow::createUUID()
+{
+    QString strUUID = QUuid::createUuid().toString();   // 创建唯一标识符
+    // 移除左右大括号，防止执行命令时失败
+    strUUID.remove("{");
+    strUUID.remove("}");
+    return strUUID;
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
@@ -828,4 +869,44 @@ void MainWindow::slotReceiveCurArchiveName(const QString &strArchiveName)
 {
     m_pProgressPage->setArchiveName(strArchiveName);
 }
+
+void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
+{
+    //QTemporaryDir dir;
+    //qDebug() << dir.path();
+
+    m_listOpenFiles << entry;   // 添加此文件至解压文件中
+
+    // 设置解压临时路径
+    QString strArchiveName = m_pUnCompressPage->archiveName();
+    QString strTempExtractPath =  TEMPPATH + QDir::separator() + m_strUUID + QDir::separator() + createUUID();
+    m_strOpenFile = strTempExtractPath + QDir::separator() + entry.strFileName;
+    m_mapOpenFils[m_strOpenFile] = entry;
+    m_pArchiveManager->openFile(strArchiveName, entry, strTempExtractPath, strProgram);
+
+    // 进入打开加载界面
+    m_operationtype = Operation_TempExtract_Open;
+    m_pLoadingPage->startLoading();     // 开始加载
+    m_ePageID = PI_Loading;
+    refreshPage();
+}
+
+void MainWindow::slotOpenFileChanged(const QString &strPath)
+{
+    if ((m_mapFileHasModified.find(strPath) != m_mapFileHasModified.end()) && (!m_mapFileHasModified[strPath])) {
+        m_mapFileHasModified[strPath] = true;
+
+        QFileInfo file(strPath);
+        QString strTitle = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
+
+        SimpleQueryDialog dialog(this);
+        int iResult = dialog.showDialog(strTitle, tr("Discard"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
+        if (iResult == 1) {
+            // 更新压缩包数据
+            qDebug() << "更新压缩包中文件" << m_mapOpenFils[strPath].strFullPath;
+        }
+        m_mapFileHasModified[strPath] = false;
+    }
+}
+
 

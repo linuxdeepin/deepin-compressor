@@ -28,6 +28,7 @@
 #include <QDir>
 
 const QStringList g_listColumn = QStringList() << QObject::tr("Name") << QObject::tr("Time modified") << QObject::tr("Type") << QObject::tr("Size");
+#define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
 
 // 进度类型
 enum Progress_Type {
@@ -50,9 +51,9 @@ enum Archive_OperationType {
     Operation_Extract, // 解压
     Operation_SingleExtract, // 提取
     //Operation_ExtractHere, // 解压到当前
-    Operation_TempExtract, // 临时解压
+    //Operation_TempExtract, // 临时解压
     Operation_TempExtract_Open, // 打开
-    Operation_TempExtract_Open_Choose, // 选择打开
+    //Operation_TempExtract_Open_Choose, // 选择打开
     Operation_DRAG, // 拖拽
     Operation_CONVERT, // 格式转换
     Operation_DELETE // 删除

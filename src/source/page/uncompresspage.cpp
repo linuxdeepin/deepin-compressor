@@ -57,14 +57,19 @@ QString UnCompressPage::archiveName()
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
-    m_pUncompressPathBtn->setToolTip(strPath);
-    m_pUncompressPathBtn->setText(tr("Extract to:") + strPath);
+    m_pUncompressPathBtn->setToolTip(m_strUnCompressPath);      // 设置解压路径提示信息
+    m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));  // 截取解压路径显示
     m_pUnCompressView->setDefaultUncompressPath(m_strUnCompressPath);
 }
 
 void UnCompressPage::setArchiveData(const ArchiveData &stArchiveData)
 {
     m_pUnCompressView->setArchiveData(stArchiveData);
+}
+
+void UnCompressPage::resizeEvent(QResizeEvent *e)
+{
+    m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
 void UnCompressPage::initUI()
@@ -113,6 +118,19 @@ void UnCompressPage::initConnections()
     connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
     connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
     connect(m_pUnCompressView, &UnCompressView::signalDelFiels, this, &UnCompressPage::signalDelFiels);
+    connect(m_pUnCompressView, &UnCompressView::signalOpenFile, this, &UnCompressPage::signalOpenFile);
+}
+
+QString UnCompressPage::elidedExtractPath(const QString &strPath)
+{
+    QFontMetrics fontMetrics(this->font());
+    int fontSize = fontMetrics.width(strPath);//获取之前设置的字符串的像素大小
+    QString pathStr = strPath;
+    if (fontSize > width()) {
+        pathStr = fontMetrics.elidedText(strPath, Qt::ElideMiddle, width());//返回一个带有省略号的字符串
+    }
+
+    return pathStr;
 }
 
 void UnCompressPage::slotUncompressClicked()

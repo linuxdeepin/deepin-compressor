@@ -94,6 +94,15 @@ public:
      */
     void batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir);
 
+    /**
+     * @brief openFile          打开压缩包中文件
+     * @param strArchiveName    压缩包名称
+     * @param stEntry           待打开文件数据
+     * @param strTargetPath     临时解压路径
+     * @param strProgram        应用程序名
+     */
+    void openFile(const QString &strArchiveName, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
+
 private:
 
 

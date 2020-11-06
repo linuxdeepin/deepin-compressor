@@ -135,19 +135,19 @@ Q_SIGNALS:
     void signalDeleteFiles(const QList<FileEntry> &listEntry);
 
     /**
-     * @brief signalOpenFile        打开压缩包中文件
-     * @param strProgram            应用程序名
-     * @param listEntry              待打开的文件数据
-     */
-    void signalOpenFile(const QString &strProgram, const QList<FileEntry> &listEntry);
-
-    /**
      * @brief signalDelFiels    删除压缩包中文件
      * @param listCurEntry      当前选中的文件
      * @param listAllEntry      所有待删除文件
      * @param qTotalSize        删除文件总大小
      */
     void signalDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
+
+    /**
+     * @brief signalOpenFile    打开压缩包中文件
+     * @param entry             待打开的文件
+     * @param strProgram        应用程序名（为空时，用默认应用程序打开）
+     */
+    void signalOpenFile(const FileEntry &entry, const QString &strProgram = "");
 
 protected Q_SLOTS:
     /**

@@ -19,10 +19,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "singlejob.h"
+#include "kprocess.h"
+#include "openwithdialog.h"
 
 #include <QThread>
 #include <QDebug>
-
+#include <QDir>
 
 // 工作线程
 void SingleJobThread::run()
@@ -185,6 +187,7 @@ DeleteJob::DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pI
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
+    m_eJobType = JT_Delete;
     initConnections();
 }
 
@@ -198,29 +201,15 @@ void DeleteJob::doWork()
 
 }
 
-// 临时解压操作
-TempExtractJob::TempExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
-    , m_vecFiles(files)
+    , m_stEntry(stEntry)
+    , m_strTempExtractPath(strTempExtractPath)
+    , m_strProgram(strProgram)
 {
-    initConnections();
-}
-
-TempExtractJob::~TempExtractJob()
-{
-
-}
-
-void TempExtractJob::doWork()
-{
-
-}
-
-// 临时解压操作
-OpenJob::OpenJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
-    : TempExtractJob(files, pInterface, parent)
-{
-
+    m_eJobType = JT_Open;
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &OpenJob::slotFinished, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
 }
 
 OpenJob::~OpenJob()
@@ -228,14 +217,41 @@ OpenJob::~OpenJob()
 
 }
 
-// 以...打开文件操作
-OpenWithJob::OpenWithJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
-    : TempExtractJob(files, pInterface, parent)
+void OpenJob::doWork()
 {
+    // 构建解压参数
+    ExtractionOptions options;
+    options.strTargetPath = m_strTempExtractPath;
+    // 当作提取，去除父目录
+    if (m_stEntry.strFullPath.contains(QDir::separator())) {
+        int iIndex = m_stEntry.strFullPath.lastIndexOf(QDir::separator());
+        options.strDestination = m_stEntry.strFullPath.left(iIndex); // 当前路径截掉最后一级目录(不保留'/')
+    }
+    options.qSize = m_stEntry.qSize;
 
+    PluginFinishType eType = m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options);
+
+    if (!(m_pInterface->waitForFinished())) {
+        slotFinished(eType);
+    }
 }
 
-OpenWithJob::~OpenWithJob()
+void OpenJob::slotFinished(PluginFinishType eType)
 {
+
+    SingleJob::slotFinished(eType);
+
+    if (eType == PT_Nomral) {
+        KProcess *cmdprocess = new KProcess;
+        QStringList arguments;
+        arguments << m_strTempExtractPath + QDir::separator() + m_stEntry.strFileName;
+        QString programPath = OpenWithDialog::getProgramPathByExec(m_strProgram);
+        cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+        cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+        cmdprocess->setProgram(programPath, arguments);
+        cmdprocess->start();
+        cmdprocess->waitForFinished();
+        delete  cmdprocess;
+    }
 
 }

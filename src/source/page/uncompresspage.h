@@ -64,6 +64,13 @@ public:
      */
     void setArchiveData(const ArchiveData &stArchiveData);
 
+protected:
+    /**
+     * @brief resizeEvent   刷新解压路径显示
+     * @param e
+     */
+    void resizeEvent(QResizeEvent *e);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -74,6 +81,13 @@ private:
      * @brief initConnections   初始化信号槽
      */
     void initConnections();
+
+    /**
+     * @brief elidedExtractPath     对解压路径字符串进行截取（防止太长）
+     * @param strPath               解压路径
+     * @return
+     */
+    QString elidedExtractPath(const QString &strPath);
 
 Q_SIGNALS:
     /**
@@ -97,6 +111,13 @@ Q_SIGNALS:
      * @param qTotalSize        删除文件总大小
      */
     void signalDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
+
+    /**
+     * @brief signalOpenFile    打开压缩包中文件
+     * @param entry             待打开的文件
+     * @param strProgram        应用程序名（为空时，用默认应用程序打开）
+     */
+    void signalOpenFile(const FileEntry &entry, const QString &strProgram = "");
 
 private Q_SLOTS:
     /**

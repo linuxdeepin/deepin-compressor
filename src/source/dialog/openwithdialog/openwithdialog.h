@@ -102,18 +102,18 @@ public:
 
     QString showOpenWithDialog(ShowType eType);
 
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-    bool eventFilter(QObject *obj, QEvent *event) override;
-
-private:
     /**
      * @brief getProgramPathByExec  根据传入的应用程序名称获取应用程序路径
      * @param strExec
      * @return
      */
     static QString getProgramPathByExec(const QString &strExec);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
+private:
 
     /**
      * @brief init  初始化

@@ -187,40 +187,30 @@ private:
 
 };
 
-// 临时解压操作
-class TempExtractJob : public SingleJob
+// 打开操作
+class OpenJob: public SingleJob
 {
     Q_OBJECT
 public:
-    explicit TempExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
-    ~TempExtractJob() override;
+    explicit OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    ~OpenJob() override;
 
     /**
      * @brief doWork    执行操作
      */
     void doWork() override;
 
-protected:
-    QList<FileEntry> m_vecFiles;
+protected Q_SLOTS:
+    /**
+     * @brief slotFinished  操作结束处理
+     * @param eType 结束类型
+     */
+    void slotFinished(PluginFinishType eType);
 
+private:
+    FileEntry m_stEntry;            // 待打开文件
+    QString m_strTempExtractPath;   // 临时解压路径
+    QString m_strProgram;           // 应用程序
 };
 
-// 打开文件操作
-class OpenJob : public TempExtractJob
-{
-    Q_OBJECT
-public:
-    explicit OpenJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
-    ~OpenJob() override;
-};
-
-// 以...打开文件操作
-class OpenWithJob : public TempExtractJob
-{
-    Q_OBJECT
-public:
-    explicit OpenWithJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
-    ~OpenWithJob() override;
-};
-
-#endif // SINGLEJOB_H
+#endif

@@ -195,6 +195,25 @@ void ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
     pBatchExtractJob->start();
 }
 
+void ArchiveManager::openFile(const QString &strArchiveName, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
+{
+    if (m_pInterface == nullptr) {
+        m_pInterface = UiTools::createInterface(strArchiveName);
+    }
+
+    OpenJob *pOpenJob = nullptr;
+
+    pOpenJob = new OpenJob(stEntry, strTempExtractPath, strProgram, m_pInterface);
+
+    // 连接槽函数
+    connect(pOpenJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pOpenJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+
+
+    m_pArchiveJob = pOpenJob;
+    pOpenJob->start();
+}
+
 void ArchiveManager::slotJobFinished()
 {
     emit signalJobFinished();

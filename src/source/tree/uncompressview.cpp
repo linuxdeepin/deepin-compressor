@@ -200,7 +200,7 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
             sortByColumn(0);
         } else {    // 如果是文件，选择默认方式打开
-
+            slotOpen();
         }
     }
 }
@@ -344,19 +344,22 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
 
-        // 右键-打开方式选项
-        QAction *pAction = nullptr;
-        // 获取支持的打开方式列表
-        QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
-        // 添加菜单选项
-        for (int i = 0; i < listOpenType.count(); ++i) {
-            pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
-            pAction->setData(listOpenType[i].getExec());
-        }
-
         // 右键-选择默认应用程序
         openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));
 
+        if (m_stRightEntry.isDirectory) {
+            openMenu.setEnabled(false);
+        } else {
+            // 右键-打开方式选项
+            QAction *pAction = nullptr;
+            // 获取支持的打开方式列表
+            QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
+            // 添加菜单选项
+            for (int i = 0; i < listOpenType.count(); ++i) {
+                pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+                pAction->setData(listOpenType[i].getExec());
+            }
+        }
 
         menu.exec(QCursor::pos());
     }
@@ -413,12 +416,32 @@ void UnCompressView::slotDeleteFile()
 
 void UnCompressView::slotOpen()
 {
+    // 获取当前点击的文件
+    QModelIndex curIndex = currentIndex();
 
+    if (curIndex.isValid()) {
+        FileEntry entry = curIndex.data(Qt::UserRole).value<FileEntry>();
+
+        if (entry.isDirectory) {
+            // 文件夹进入下一层
+            handleDoubleClick(curIndex);
+        } else {
+            // 文件 解压再用默认应用程序打开
+            emit signalOpenFile(entry);
+        }
+
+    }
 }
 
 void UnCompressView::slotOpenStyleClicked()
 {
+    QAction *pAction = qobject_cast<QAction *>(sender());
+    if (pAction == nullptr) {
+        return;
+    }
 
+    // 发送打开信号（以xx应用打开）
+    emit signalOpenFile(m_stRightEntry, pAction->data().toString());
 }
 
 void UnCompressView::slotDragPath(QUrl url)

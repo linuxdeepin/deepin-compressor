@@ -42,6 +42,7 @@ public:
         JT_Extract,         // 解压
         JT_Delete,         // 删除
         JT_BatchExtract,   // 批量解压
+        JT_Open,   // 打开
     };
 
     /**
