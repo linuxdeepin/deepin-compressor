@@ -116,7 +116,7 @@ private:
 
     Progress_Type m_eType;      // 进度类型
     qint64 m_qTotalSize = 0;         // 文件大小
-    double m_dPerent = 0.0;      // 进度值
+    int m_iPerent = 0;      // 进度值
     QElapsedTimer m_timer;  //计时器
     qint64 m_qConsumeTime = 0; //消耗时间
 };

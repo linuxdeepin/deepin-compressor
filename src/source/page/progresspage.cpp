@@ -77,16 +77,17 @@ void ProgressPage::setArchiveName(const QString &strArchiveName)
 
 void ProgressPage::setProgress(double dPercent)
 {
-    if ((m_dPerent - dPercent) == 0.0 || (m_dPerent > dPercent)) {
+    int iPercent = qRound(dPercent);
+    if (m_iPerent >= iPercent) {
         return ;
     }
-    m_dPerent = dPercent;
-    m_pProgressBar->setValue(qRound(m_dPerent));     // 进度条刷新值
+    m_iPerent = iPercent;
+    m_pProgressBar->setValue(m_iPerent);     // 进度条刷新值
     m_pProgressBar->update();
 
     // 刷新界面显示
-    double dSpeed;
-    qint64 qRemainingTime;
+    double dSpeed = 0.0;
+    qint64 qRemainingTime = 0;
     calSpeedAndRemainingTime(dSpeed, qRemainingTime);
     m_timer.restart();      // 重启定时器
 
@@ -116,7 +117,7 @@ void ProgressPage::resetProgress()
     m_pProgressBar->setValue(0);
     m_pFileNameLbl->setText(tr("Calculating..."));
     m_timer.elapsed();
-    m_dPerent = 0;
+    m_iPerent = 0;
     m_qConsumeTime = 0;
 }
 
@@ -224,18 +225,18 @@ void ProgressPage::calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTi
         dSpeed = 0.0; //处理速度
     } else {
         if (m_eType == PT_Convert) {
-            dSpeed = 2 * (m_qTotalSize / 1024.0) * (m_dPerent / 100) / m_qConsumeTime * 1000;
+            dSpeed = 2 * (m_qTotalSize / 1024.0 * m_iPerent / 100) / m_qConsumeTime * 1000;
         } else {
-            dSpeed = (m_qTotalSize / 1024.0) * (m_dPerent / 100) / m_qConsumeTime * 1000;
+            dSpeed = (m_qTotalSize / 1024.0 * m_iPerent / 100) / m_qConsumeTime * 1000;
         }
     }
 
     // 计算剩余时间
     double sizeLeft = 0;
     if (m_eType == PT_Convert) {
-        sizeLeft = (m_qTotalSize * 2 / 1024.0) * (100 - m_dPerent) / 100; //剩余大小
+        sizeLeft = (m_qTotalSize * 2 / 1024.0) * (100 - m_iPerent) / 100; //剩余大小
     } else {
-        sizeLeft = (m_qTotalSize / 1024.0) * (100 - m_dPerent) / 100; //剩余大小
+        sizeLeft = (m_qTotalSize / 1024.0) * (100 - m_iPerent) / 100; //剩余大小
     }
 
     if (dSpeed != 0.0) {
