@@ -77,19 +77,17 @@ public:
     /**
      * @brief extractFiles2Path     提取文件至指定目录
      * @param strArchiveName        压缩包名称
-     * @param listCurEntry          选中的提取文件
-     * @param listAllEntry          所有待提取文件
+     * @param listSelEntry          选中的提取文件
      * @param stOptions             提取参数
      */
-    void extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+    void extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
 
     /**
      * @brief deleteFiles       删除压缩包中的文件
      * @param strArchiveName    压缩包名称
-     * @param listCurEntry      当前选中的文件
-     * @param listAllEntr       所有待删除文件
+     * @param listSelEntry      当前选中的文件
      */
-    void deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry);
+    void deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listSelEntry);
 
     /**
      * @brief batchExtractFiles 批量解压

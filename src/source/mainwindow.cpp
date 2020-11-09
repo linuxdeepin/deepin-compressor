@@ -169,7 +169,7 @@ void MainWindow::initConnections()
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
     connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
-    connect(m_pUnCompressPage, &UnCompressPage::signalDelFiels, this, &MainWindow::slotDelFiels);
+    connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
 
@@ -839,7 +839,7 @@ QString MainWindow::createUUID()
     return strUUID;
 }
 
-void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
+void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
     m_operationtype = Operation_SingleExtract; //提取操作
@@ -849,15 +849,16 @@ void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QL
     m_pProgressdialog->clearprocess();
     m_pProgressdialog->setCurrentTask(strArchiveName);
 
-    ArchiveManager::get_instance()->extractFiles2Path(strArchiveName, listCurEntry, listAllEntry, stOptions);
+    ArchiveManager::get_instance()->extractFiles2Path(strArchiveName, listSelEntry, stOptions);
 
 }
 
-void MainWindow::slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize)
+void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize)
 {
     qDebug() << "删除文件:";
+    m_operationtype = Operation_DELETE; //提取操作
     QString strArchiveName = m_pUnCompressPage->archiveName();
-    ArchiveManager::get_instance()->deleteFiles(strArchiveName, listCurEntry, listAllEntry);
+    ArchiveManager::get_instance()->deleteFiles(strArchiveName, listSelEntry);
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_Delete);

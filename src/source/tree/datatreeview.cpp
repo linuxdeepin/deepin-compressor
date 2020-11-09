@@ -165,6 +165,7 @@ void DataTreeView::initUI()
     setFrameShape(QFrame::NoFrame);     // 设置无边框
     resizeColumnWidth();
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setFocusPolicy(Qt::StrongFocus);
 
     // 设置样式代理
     StyleTreeViewDelegate *pDelegate = new StyleTreeViewDelegate;
@@ -273,23 +274,26 @@ void DataTreeView::focusInEvent(QFocusEvent *event)
 
 void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
+    qDebug() << "dragEnterEvent";
     const auto *mime = e->mimeData();
 
     // 判断是否有url
     if (!mime->hasUrls()) {
         e->ignore();
+    } else {
+        e->accept();
     }
-
-    e->accept();
 }
 
 void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 {
+    qDebug() << "dragMoveEvent";
     e->accept();
 }
 
 void DataTreeView::dropEvent(QDropEvent *e)
 {
+    qDebug() << "dropEvent";
     auto *const mime = e->mimeData();
 
     if (false == mime->hasUrls()) {

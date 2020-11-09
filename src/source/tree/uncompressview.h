@@ -113,7 +113,7 @@ private:
      * @param listEntry                 子文件数据
      * @param qSize                     总大小
      */
-    void getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize);
+    //void getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize);
 
     /**
      * @brief getSelEntry       获取当前选择的文件数据
@@ -126,28 +126,33 @@ private:
      */
     void extract2Path(const QString &strPath);
 
+    /**
+     * @brief calEntrySizeByParentPath  根据父节点计算所有子文件大小（所有层次）
+     * @param strFullPath   父节点路径
+     * @param qSize        大小
+     */
+    void calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize);
+
 Q_SIGNALS:
     /**
      * @brief signalExtract2Path    提取压缩包中文件
-     * @param listCurEntry          当前选中的文件
-     * @param listAllEntry          所有待提取文件
+     * @param listSelEntry          当前选中的文件
      * @param stOptions             提取参数
      */
-    void signalExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+    void signalExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
 
     /**
      * @brief signalDeleteFiles     从删除包删除文件
      * @param listEntry              待删除的数据
      */
-    void signalDeleteFiles(const QList<FileEntry> &listEntry);
+    //void signalDeleteFiles(const QList<FileEntry> &listEntry);
 
     /**
      * @brief signalDelFiels    删除压缩包中文件
-     * @param listCurEntry      当前选中的文件
-     * @param listAllEntry      所有待删除文件
+     * @param listSelEntry      当前选中的文件
      * @param qTotalSize        删除文件总大小
      */
-    void signalDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
+    void signalDelFiles(const QList<FileEntry> &listCurEntry, qint64 qTotalSize);
 
     /**
      * @brief signalOpenFile    打开压缩包中文件

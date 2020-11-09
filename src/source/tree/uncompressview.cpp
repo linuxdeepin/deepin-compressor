@@ -81,6 +81,7 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
 
     viewport()->update();
 
+    qDebug() << indexAt(m_dragPos).data(Qt::UserRole).value<FileEntry>().strFileName;
     DataTreeView::mousePressEvent(event);
 }
 
@@ -132,7 +133,7 @@ void UnCompressView::mouseMoveEvent(QMouseEvent *event)
     }
 
     m_strSelUnCompressPath.clear();
-    DataTreeView::mouseMoveEvent(event);
+    // DataTreeView::mouseMoveEvent(event);
 }
 
 void UnCompressView::mouseReleaseEvent(QMouseEvent *event)
@@ -293,28 +294,28 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
     return listEntry;
 }
 
-void UnCompressView::getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize)
-{
-    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
-    listEntry.clear();
-    qSize = 0;
+//void UnCompressView::getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize)
+//{
+//    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+//    listEntry.clear();
+//    qSize = 0;
 
-    auto iter = stArchiveData.mapFileEntry.find(strFullPath);
-    for (; iter != stArchiveData.mapFileEntry.end() ;) {
+//    auto iter = stArchiveData.mapFileEntry.find(strFullPath);
+//    for (; iter != stArchiveData.mapFileEntry.end() ;) {
 
-        if (!iter.key().startsWith(strFullPath)) {
-            break;
-        } else {
-            if (!iter.key().endsWith("/")) {
-                qSize += iter.value().qSize; //文件大小
-            }
+//        if (!iter.key().startsWith(strFullPath)) {
+//            break;
+//        } else {
+//            if (!iter.key().endsWith("/")) {
+//                qSize += iter.value().qSize; //文件大小
+//            }
 
-            listEntry << iter.value();
+//            listEntry << iter.value();
 
-            ++iter;
-        }
-    }
-}
+//            ++iter;
+//        }
+//    }
+//}
 
 QList<FileEntry> UnCompressView::getSelEntry()
 {
@@ -334,26 +335,42 @@ QList<FileEntry> UnCompressView::getSelEntry()
 
 void UnCompressView::extract2Path(const QString &strPath)
 {
-    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待提取的文件数据
-    QList<FileEntry> listSelAllEntry;    // 待提取的文件数据
+    QList<FileEntry> listSelEntry = getSelEntry();    // 待提取的文件数据
     ExtractionOptions stOptions;    // 提取参数
     stOptions.strTargetPath = strPath;
     stOptions.strDestination = m_strCurrentPath;
 
     // 获取所有文件数据
-    foreach (FileEntry entry, listSelCurEntry) {
+    foreach (FileEntry entry, listSelEntry) {
         if (entry.isDirectory) {
             QList<FileEntry> listEntry;
-            getAllFilesByParentPath(entry.strFullPath, listEntry, stOptions.qSize);
-            listSelAllEntry << listEntry;
+            calEntrySizeByParentPath(entry.strFullPath, stOptions.qSize);
         } else {
-            listSelAllEntry << entry;
             stOptions.qSize += entry.qSize;
         }
     }
 
     // 发送提取信号
-    emit signalExtract2Path(listSelCurEntry, listSelAllEntry, stOptions);
+    emit signalExtract2Path(listSelEntry, stOptions);
+}
+
+void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize)
+{
+    ArchiveData stArchiveData =  DataManager::get_instance().archiveData();
+    qSize = 0;
+
+    auto iter = stArchiveData.mapFileEntry.find(strFullPath);
+    for (; iter != stArchiveData.mapFileEntry.end() ;) {
+
+        if (!iter.key().startsWith(strFullPath)) {
+            break;
+        } else {
+            if (!iter.key().endsWith("/")) {
+                qSize += iter.value().qSize; //文件大小
+            }
+            ++iter;
+        }
+    }
 }
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
@@ -435,23 +452,20 @@ void UnCompressView::slotExtract2Here()
 
 void UnCompressView::slotDeleteFile()
 {
-    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待删除的文件数据
-    QList<FileEntry> listSelAllEntry;    // 待删除的文件数据
+    QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据
     qint64 qSize = 0;
 
     // 获取所有文件数据
-    foreach (FileEntry entry, listSelCurEntry) {
+    foreach (FileEntry entry, listSelEntry) {
         if (entry.isDirectory) {
             QList<FileEntry> listEntry;
-            getAllFilesByParentPath(entry.strFullPath, listEntry, qSize);
-            listSelAllEntry << listEntry;
+            calEntrySizeByParentPath(entry.strFullPath, qSize);
         } else {
-            listSelAllEntry << entry;
             qSize += entry.qSize;
         }
     }
 
-    emit signalDelFiels(listSelCurEntry, listSelAllEntry, qSize);
+    emit signalDelFiles(listSelEntry, qSize);
 }
 
 void UnCompressView::slotOpen()

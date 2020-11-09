@@ -142,21 +142,13 @@ void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<Fil
     pExtractJob->start();
 }
 
-void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions)
+void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
         m_pInterface = UiTools::createInterface(strArchiveName);
     }
 
-    ExtractJob *pExtractJob = nullptr;
-
-    if (m_pInterface->getHandleCurEntry()) {
-        // 部分插件需要传入第一层文件
-        pExtractJob = new ExtractJob(listCurEntry, m_pInterface, stOptions);
-    } else {
-        // 部分插件需要传入所有文件
-        pExtractJob = new ExtractJob(listAllEntry, m_pInterface, stOptions);
-    }
+    ExtractJob *pExtractJob = new ExtractJob(listSelEntry, m_pInterface, stOptions);
 
     // 连接槽函数
     connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
@@ -169,21 +161,13 @@ void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QLis
     pExtractJob->start();
 }
 
-void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry)
+void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listSelEntry)
 {
     if (m_pInterface == nullptr) {
         m_pInterface = UiTools::createInterface(strArchiveName);
     }
 
-    DeleteJob *pDeleteJob = nullptr;
-
-    if (m_pInterface->getHandleCurEntry()) {
-        // 部分插件需要传入第一层文件
-        pDeleteJob = new DeleteJob(listCurEntry, m_pInterface);
-    } else {
-        // 部分插件需要传入所有文件
-        pDeleteJob = new DeleteJob(listAllEntry, m_pInterface);
-    }
+    DeleteJob *pDeleteJob = new DeleteJob(listSelEntry, m_pInterface);
 
     // 连接槽函数
     connect(pDeleteJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);

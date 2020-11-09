@@ -198,19 +198,17 @@ private Q_SLOTS:
 
     /**
      * @brief slotExtract2Path  提取压缩包中文件
-     * @param listCurEntry      选中的提取文件
-     * @param listAllEntry      所有待提取文件
+     * @param listSelEntry      选中的提取文件
      * @param stOptions         提取参数
      */
-    void slotExtract2Path(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, const ExtractionOptions &stOptions);
+    void slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
 
     /**
      * @brief slotDelFiels    删除压缩包中文件
-     * @param listCurEntry      当前选中的文件
-     * @param listAllEntry      所有待删除文件
+     * @param listSelEntry      当前选中的文件
      * @param qTotalSize        删除文件总大小
      */
-    void slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<FileEntry> &listAllEntry, qint64 qTotalSize);
+    void slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize);
 
     /**
      * @brief slotReceiveCurArchiveName  当前正在操作的压缩包名称显示
