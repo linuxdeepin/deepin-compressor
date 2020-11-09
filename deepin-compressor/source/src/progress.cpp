@@ -428,7 +428,7 @@ void Progress::setProgressFilename(QString filename)
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         m_progressfilelabel->setText(elideFont.elidedText(tr("Converting") + ": " + filename, Qt::ElideMiddle, 520));
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) { //注释进度
-        m_progressfilelabel->setText(elideFont.elidedText(tr("Saving compressed file comment"), Qt::ElideMiddle, 520));
+        m_progressfilelabel->setText(elideFont.elidedText(tr("Updating the comment..."), Qt::ElideMiddle, 520));
     } else {
         if (m_openType) {
             m_progressfilelabel->setText(elideFont.elidedText(tr("Opening") + ": " + filename, Qt::ElideMiddle, 520));

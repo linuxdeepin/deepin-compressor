@@ -749,8 +749,8 @@ void MainWindow::InitConnection()
             dialog->addSpacing(12);
 
             // 按钮
-            dialog->addButton(QObject::tr("Discard"));
-            dialog->addButton(QObject::tr("Save"), true, DDialog::ButtonRecommend);
+            dialog->addButton(QObject::tr("Cancel"));
+            dialog->addButton(QObject::tr("Update"), true, DDialog::ButtonRecommend);
 
             int iMode = dialog->exec();
 
@@ -5090,7 +5090,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
     if (m_ePageID == PAGE_UNZIP) {
         DDialog *dialog = new DDialog(this);
-        dialog->setWindowTitle(tr("File infomation"));
+        dialog->setWindowTitle(tr("File info"));
         dialog->setFixedWidth(300);
         DFontSizeManager::instance()->bind(dialog, DFontSizeManager::T6, QFont::Medium);
 
@@ -5197,7 +5197,7 @@ void MainWindow::slotTitleCommentButtonPressed()
             commentTextedit->setEnabled(false);
         }
 
-        commentTextedit->setPlaceholderText("Enter up to 10000 characters");
+//        commentTextedit->setPlaceholderText("Enter up to 10000 characters");
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);

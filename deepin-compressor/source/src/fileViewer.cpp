@@ -1345,14 +1345,12 @@ void fileViewer::SubWindowDragMsgReceive(int mode, const QStringList &urls)
 
         QString destFile = urls[0];
         QStringList list = destFile.split(QDir::separator());
-        QString destPath = list.last();
-        QStringList destPathList = destPath.split(QDir::separator());
-        QString destFileName = destPathList.last();
+        QString destFileName = list.last();
         QString sourceArchive = m_decompressmodel->archive()->fileName();
         QStringList sourceArchiveList = sourceArchive.split(QDir::separator());
         QString sourceFileName = sourceArchiveList.last();
 
-        QString warningStr1 = QString(tr("Files have been changed. Do you want to update the changes to %1?")).arg(Utils::toShortString(sourceFileName));
+        QString warningStr1 = QString(tr("%1 changed. Do you want to save changes to the archive?")).arg(Utils::toShortString(destFileName));
 
         m_ActionInfo.mode = static_cast<SUBACTION_MODE>(mode);
         m_ActionInfo.archive = sourceArchive;

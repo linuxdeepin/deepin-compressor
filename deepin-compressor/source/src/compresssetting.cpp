@@ -172,7 +172,7 @@ void CompressSetting::InitUI()
     // 选项布局
     filelayout->addRow(tr("Name") + ":", m_filename);
     filelayout->addRow(tr("Save to") + ":", m_savepath);
-    filelayout->addRow(tr("Compress Level") + ":", m_pCompressLevelCkb);
+    filelayout->addRow(tr("Compression method") + ":", m_pCompressLevelCkb);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
     filelayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
@@ -227,7 +227,7 @@ void CompressSetting::InitUI()
     m_splitnumedit->setSpecialValueText(" ");
 
     // 注释
-    m_pCommentLbl = new DLabel(tr("comment"), this);
+    m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
@@ -1457,9 +1457,9 @@ void CompressSetting::refreshCompressLevel(const QString &strType)
     QStringList listCompressLevel;
 
     if (0 == strType.compare("tar")) {
-        listCompressLevel << tr("store");
+        listCompressLevel << tr("Store");
     } else {
-        listCompressLevel << tr("store") << tr("Fastest") << tr("Faster") << tr("standard") << tr("better") << tr("best");
+        listCompressLevel << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
     }
 
     bool bFirst = (m_pCompressLevelCkb->count()  == 0) ? true : false;
