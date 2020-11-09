@@ -105,7 +105,7 @@ struct ArchiveData {
         listRootEntry.clear();
     }
 
-    qlonglong qSize;                            // 原始大小
+    qlonglong qSize;                            // 原始总大小
     qlonglong qComressSize;                     // 压缩包大小
     QString strComment;                         // 压缩包注释信息
     QMap<QString, FileEntry>  mapFileEntry;     // 压缩包内所有文件

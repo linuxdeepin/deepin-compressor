@@ -63,6 +63,11 @@ public:
      * @param stArchiveData 压缩包数据
      */
     void setArchiveData(const ArchiveData &stArchiveData);
+    /**
+     * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
+     * @param stArchiveData
+     */
+    void refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData);
 
 protected:
     /**
@@ -127,8 +132,8 @@ private Q_SLOTS:
 
 private:
     UnCompressView *m_pUnCompressView;    // 压缩列表
-    CustomCommandLinkButton *m_pUncompressPathBtn;
-    CustomPushButton *m_pUnCompressBtn;   // 解压
+    CustomCommandLinkButton *m_pUncompressPathBtn; //解压目标路径按钮
+    CustomPushButton *m_pUnCompressBtn;   //解压按钮
 
     QString m_strArchiveName;       // 压缩包名称
     QString m_strUnCompressPath;    // 解压路径

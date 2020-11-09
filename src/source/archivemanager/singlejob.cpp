@@ -189,6 +189,7 @@ DeleteJob::DeleteJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pI
 {
     m_eJobType = JT_Delete;
     initConnections();
+    m_eJobType = JT_Delete;
 }
 
 DeleteJob::~DeleteJob()
@@ -198,7 +199,17 @@ DeleteJob::~DeleteJob()
 
 void DeleteJob::doWork()
 {
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
+    if (pWriteInterface == nullptr) {
+        return;
+    }
+
+    PluginFinishType eType = pWriteInterface->deleteFiles(m_vecFiles);
+
+    if (!(pWriteInterface->waitForFinished())) {
+        slotFinished(eType);
+    }
 }
 
 OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent)

@@ -50,6 +50,14 @@ public:
      * @param strPath       路径
      */
     void setDefaultUncompressPath(const QString &strPath);
+    /**
+     * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
+     * 处理流程:
+     * 1.删除当前目录m_mapShowEntry，并更新数据
+     * 2.删除上一级m_mapShowEntry后不作处理，当返回上一级目录时会自动更新
+     * @param stArchiveData
+     */
+    void refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

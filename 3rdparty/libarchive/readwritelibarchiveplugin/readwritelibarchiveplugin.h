@@ -54,7 +54,18 @@ public:
     PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
 //    bool moveFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
 //    bool copyFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
-//    bool deleteFiles(const QList<FileEntry> &files) override;
+    /**
+     * @brief deleteFiles 删除压缩包内指定文件
+     * 删除流程:
+     *  1.初始化
+     *  2.筛选是否是需要删除的文件
+     *  3.是:跳过; 否: 复制保留文件数据到新的压缩包中
+     *  4.更新存放压缩包信息的map
+     *  5.替换原压缩包
+     * @param files 选中的文件
+     * @return
+     */
+    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
 //    bool addComment(const QString &comment) override;
 
 private:
@@ -104,7 +115,19 @@ private:
      * @param bInternalDuty
      */
     void copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
-
+    /**
+     * @brief deleteEntry 具体删除操作
+     * 筛选是否是需要删除的文件，复制保留文件数据到新的压缩包中
+     * @param files 选中的文件
+     * @return
+     */
+    bool deleteEntry(const QList<FileEntry> &files);
+    /**
+     * @brief writeEntry 复制压缩包数据
+     * @param entry
+     * @return
+     */
+    bool writeEntry(struct archive_entry *entry);
 };
 
 

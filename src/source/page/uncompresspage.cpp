@@ -72,6 +72,11 @@ void UnCompressPage::resizeEvent(QResizeEvent *e)
     m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
+void UnCompressPage::refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData)
+{
+    m_pUnCompressView->refreshDataByCurrentPathDelete(stArchiveData);
+}
+
 void UnCompressPage::initUI()
 {
     m_strUnCompressPath = "~/Desktop";

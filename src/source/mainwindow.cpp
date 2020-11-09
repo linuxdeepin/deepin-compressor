@@ -713,6 +713,10 @@ void MainWindow::slotJobFinshed()
     case ArchiveJob::JT_Delete: {
         qDebug() << "删除结束";
         m_ePageID = PI_UnCompress;
+
+        ArchiveData stArchiveData;
+        m_pArchiveManager->getLoadArchiveData(stArchiveData);
+        m_pUnCompressPage->refreshDataByCurrentPathDelete(stArchiveData);
     }
     break;
     case ArchiveJob::JT_Open: {

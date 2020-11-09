@@ -225,6 +225,41 @@ void UnCompressView::refreshDataByCurrentPath()
     m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
 }
 
+void UnCompressView::refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData)
+{
+    if (0 == m_strCurrentPath.compare("/")) { //当前目录是第一层
+        m_mapShowEntry.clear();
+
+        setArchiveData(m_stArchiveData);
+    } else { //当前目录非第一层
+        m_stArchiveData = stArchiveData;
+
+        // 删除上一级m_mapShowEntry
+        if (1 == m_strCurrentPath.count("/")) { //当前目录是第二层
+            // 刷新第一层文件夹子项的数目
+            for (int i = 0; i < m_stArchiveData.listRootEntry.count(); ++i) {
+                if (m_stArchiveData.listRootEntry[i].isDirectory) {
+                    m_stArchiveData.listRootEntry[i].qSize = calDirItemCount(m_stArchiveData.listRootEntry[i].strFullPath);
+                }
+            }
+            m_mapShowEntry["/"] = m_stArchiveData.listRootEntry;
+        } else { //当前目录是第三层及之后
+            m_mapShowEntry.remove(m_strCurrentPath.left(m_strCurrentPath.lastIndexOf("/", -2) + 1));
+        }
+
+        // 更新当前目录m_mapShowEntry
+        foreach (auto &tmp, m_mapShowEntry.keys()) {
+            if (tmp.startsWith(m_strCurrentPath)) {
+                m_mapShowEntry.remove(tmp);
+            }
+        }
+        m_mapShowEntry[m_strCurrentPath] = getCurPathFiles();
+
+        // 刷新列表数据
+        m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
+    }
+}
+
 QList<FileEntry> UnCompressView::getCurPathFiles()
 {
     QList<FileEntry> listEntry;
@@ -395,8 +430,8 @@ void UnCompressView::slotExtract2Here()
 
 void UnCompressView::slotDeleteFile()
 {
-    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待提取的文件数据
-    QList<FileEntry> listSelAllEntry;    // 待提取的文件数据
+    QList<FileEntry> listSelCurEntry = getSelEntry();    // 待删除的文件数据
+    QList<FileEntry> listSelAllEntry;    // 待删除的文件数据
     qint64 qSize = 0;
 
     // 获取所有文件数据
