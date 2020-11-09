@@ -35,8 +35,13 @@ class ArchiveManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit ArchiveManager(QObject *parent = nullptr);
-    ~ArchiveManager() override;
+
+    /**
+     * @brief get_instance  获取单例实例对象
+     * @return
+     */
+    static ArchiveManager *get_instance(void);
+
 
     ArchiveJob *archiveJob();
 
@@ -59,7 +64,7 @@ public:
      * @brief getLoadArchiveData    获取加载完之后的压缩包数据
      * @param stArchiveData         压缩包数据
      */
-    void getLoadArchiveData(ArchiveData &stArchiveData);
+    //void getLoadArchiveData(ArchiveData &stArchiveData);
 
     /**
      * @brief extractFiles    解压文件
@@ -142,6 +147,10 @@ Q_SIGNALS:
      */
     void signalCurArchiveName(const QString &strArchiveName);
 
+private:
+    explicit ArchiveManager(QObject *parent = nullptr);
+    ~ArchiveManager() override;
+
 private Q_SLOTS:
     /**
      * @brief slotJobFinished
@@ -153,6 +162,8 @@ private:
 
     ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
 
+    static QMutex m_mutex;//实例互斥锁。
+    static QAtomicPointer<ArchiveManager> m_instance;/*!<使用原子指针,默认初始化为0。*/
 };
 
 #endif // ARCHIVEMANAGER_H

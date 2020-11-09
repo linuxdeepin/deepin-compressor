@@ -26,6 +26,7 @@
 
 #include <QMimeType>
 #include <QVector>
+#include <QMutex>
 
 class PluginManager : public QObject
 {
@@ -41,12 +42,12 @@ public:
 
     PluginManager(const PluginManager &) = delete;
     PluginManager &operator=(const PluginManager &) = delete;
-    static PluginManager &get_instance()
-    {
-        static PluginManager instance;
-        return instance;
+    static PluginManager &get_instance();
+//    {
+//        static PluginManager instance;
+//        return instance;
 
-    }
+//    }
 
     /**
     * @brief installedPlugins 获取已安装插件
@@ -89,6 +90,9 @@ private:
     QVector<Plugin *> m_plugins;
     QHash<QString, QVector<Plugin *>> m_preferredPluginsCache;
     qint64 m_filesize = 0;
+
+    static QMutex m_mutex;//实例互斥锁。
+    static QAtomicPointer<PluginManager> m_instance;/*!<使用原子指针,默认初始化为0。*/
 };
 
 #endif

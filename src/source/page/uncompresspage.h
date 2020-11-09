@@ -59,15 +59,14 @@ public:
     void setDefaultUncompressPath(const QString &strPath);
 
     /**
-     * @brief setArchiveData   设置加载完之后的数据
-     * @param stArchiveData 压缩包数据
+     * @brief refreshArchiveData    加载结束刷新数据
      */
-    void setArchiveData(const ArchiveData &stArchiveData);
+    void refreshArchiveData();
     /**
      * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
      * @param stArchiveData
      */
-    void refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData);
+    void refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/);
 
 protected:
     /**

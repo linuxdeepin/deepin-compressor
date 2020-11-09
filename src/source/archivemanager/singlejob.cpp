@@ -21,6 +21,7 @@
 #include "singlejob.h"
 #include "kprocess.h"
 #include "openwithdialog.h"
+#include "datamanager.h"
 
 #include <QThread>
 #include <QDebug>

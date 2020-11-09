@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "readwritelibarchiveplugin.h"
+#include "datamanager.h"
 
 #include <QFileInfo>
 #include <QThread>
@@ -571,6 +572,7 @@ void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
 
 bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
 {
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     struct archive_entry *entry;
     archive_filter_count(m_archiveReader.data());
 
@@ -584,12 +586,12 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
                     archive_read_data_skip(m_archiveReader.data()); //跳过该文件
 
                     // 更新压缩包数据
-                    m_stArchiveData.mapFileEntry.remove(entryName); //移除该entry
+                    stArchiveData.mapFileEntry.remove(entryName); //移除该entry
                     // 更新第一层数据中的文件夹
                     if (entryName.count(QDir::separator()) == 1 && entryName.endsWith(QDir::separator())) {
-                        for (int tmp = 0; tmp < m_stArchiveData.listRootEntry.count(); tmp++) {
-                            if (0 == m_stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
-                                m_stArchiveData.listRootEntry.removeAt(tmp);
+                        for (int tmp = 0; tmp < stArchiveData.listRootEntry.count(); tmp++) {
+                            if (0 == stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
+                                stArchiveData.listRootEntry.removeAt(tmp);
                                 break;
                             }
                         }
@@ -603,13 +605,13 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
                     archive_read_data_skip(m_archiveReader.data()); //跳过该文件
 
                     // 更新压缩包数据
-                    m_stArchiveData.mapFileEntry.remove(entryName); //移除该entry
-                    m_stArchiveData.qSize -= static_cast<qlonglong>(archive_entry_size(entry)); //更新原始总大小
+                    stArchiveData.mapFileEntry.remove(entryName); //移除该entry
+                    stArchiveData.qSize -= static_cast<qlonglong>(archive_entry_size(entry)); //更新原始总大小
                     // 更新第一层数据中的文件
                     if (!entryName.contains(QDir::separator())) {
-                        for (int tmp = 0; tmp < m_stArchiveData.listRootEntry.count(); tmp++) {
-                            if (0 == m_stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
-                                m_stArchiveData.listRootEntry.removeAt(tmp);
+                        for (int tmp = 0; tmp < stArchiveData.listRootEntry.count(); tmp++) {
+                            if (0 == stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
+                                stArchiveData.listRootEntry.removeAt(tmp);
                                 break;
                             }
                         }
@@ -639,7 +641,7 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
         }
     }
 
-    m_stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 更新新压缩包大小
+    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 更新新压缩包大小
 
     return !QThread::currentThread()->isInterruptionRequested();
 }

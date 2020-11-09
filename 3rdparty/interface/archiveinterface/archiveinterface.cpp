@@ -25,6 +25,7 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
+
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
     : QObject(parent)
 {
@@ -44,11 +45,6 @@ ReadOnlyArchiveInterface::~ReadOnlyArchiveInterface()
 bool ReadOnlyArchiveInterface::waitForFinished()
 {
     return m_bWaitForFinished;
-}
-
-void ReadOnlyArchiveInterface::getArchiveData(ArchiveData &stArchiveData)
-{
-    stArchiveData = m_stArchiveData;
 }
 
 void ReadOnlyArchiveInterface::setPassword(const QString &strPassword)

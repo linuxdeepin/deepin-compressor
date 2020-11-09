@@ -21,6 +21,7 @@
 #include "libzipplugin.h"
 #include "common.h"
 #include "queries.h"
+#include "datamanager.h"
 
 #include <QDebug>
 #include <QFile>
@@ -64,7 +65,7 @@ LibzipPlugin::~LibzipPlugin()
 PluginFinishType LibzipPlugin::list()
 {
     qDebug() << "LibzipPlugin插件加载压缩包数据";
-    m_stArchiveData.reset();
+    DataManager::get_instance().resetArchiveData();
 
     // 处理加载流程
     int errcode = 0;
@@ -91,6 +92,7 @@ PluginFinishType LibzipPlugin::list()
         handleArchiveData(archive, i);  // 构建数据
     }
 
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     zip_close(archive);
 
     return PT_Nomral;
@@ -453,11 +455,11 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
 
     // 获取第一层数据
     if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-        m_stArchiveData.listRootEntry.push_back(entry);
+        DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
     }
 
     // 存储总数据
-    m_stArchiveData.mapFileEntry[name] = entry;
+    DataManager::get_instance().archiveData().mapFileEntry[name] = entry;
 
     return true;
 }
@@ -481,8 +483,8 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
     if (statBuffer.valid & ZIP_STAT_SIZE) {
         if (!entry.isDirectory) {
             entry.qSize = qlonglong(statBuffer.size);
-            m_stArchiveData.qSize += statBuffer.size;
-            m_stArchiveData.qComressSize += statBuffer.comp_size;
+            DataManager::get_instance().archiveData().qSize += statBuffer.size;
+            DataManager::get_instance().archiveData().qComressSize += statBuffer.comp_size;
         } else {
             entry.qSize = 0;
         }

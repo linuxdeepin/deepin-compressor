@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cli7zplugin.h"
+#include "datamanager.h"
 
 #include <QDebug>
 #include <QRegularExpression>
@@ -133,6 +134,8 @@ bool Cli7zPlugin::isFileExistsFileName(const QString &line)
 
 bool Cli7zPlugin::readListLine(const QString &line)
 {
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+
     static const QLatin1String archiveInfoDelimiter1("--"); // 7z 9.13+  分隔符后面是压缩包信息
     static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04 分隔符后面是压缩包信息
     static const QLatin1String entryInfoDelimiter("----------"); // 分隔符后面是内部压缩文件信息
@@ -180,7 +183,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
     case ParseStateHeader:
         if ((line == archiveInfoDelimiter1) || (line == archiveInfoDelimiter2)) {  // 开始读压缩包整体信息
             // 压缩包大小
-            m_stArchiveData.qComressSize = line.mid(14).trimmed().toInt();
+            stArchiveData.qComressSize = line.mid(14).trimmed().toInt();
             m_parseState = ParseStateArchiveInformation;
         }
         break;
@@ -229,7 +232,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_fileEntry.qSize = line.mid(7).trimmed().toInt();
 
             // 压缩包内所有文件总大小
-            m_stArchiveData.qSize += m_fileEntry.qSize;
+            stArchiveData.qSize += m_fileEntry.qSize;
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             // 文件最后修改时间
             m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
@@ -251,11 +254,11 @@ bool Cli7zPlugin::readListLine(const QString &line)
             QString name = m_fileEntry.strFullPath;
             // 获取第一层数据
             if ((!name.contains(QDir::separator()) && name.size() > 0) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-                m_stArchiveData.listRootEntry.push_back(m_fileEntry);
+                stArchiveData.listRootEntry.push_back(m_fileEntry);
             }
 
             // 存储总数据
-            m_stArchiveData.mapFileEntry.insert(name, m_fileEntry);
+            stArchiveData.mapFileEntry.insert(name, m_fileEntry);
 
             // clear m_fileEntry
             m_fileEntry.reset();

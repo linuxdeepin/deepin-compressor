@@ -31,6 +31,9 @@
 #include <QFileInfo>
 #include <QDebug>
 
+//静态成员变量初始化。
+QMutex ArchiveManager::m_mutex;//一个线程可以多次锁同一个互斥量
+QAtomicPointer<ArchiveManager> ArchiveManager::m_instance = nullptr;//原子指针，默认初始化是0
 
 ArchiveManager::ArchiveManager(QObject *parent)
     : QObject(parent)
@@ -50,6 +53,27 @@ ArchiveManager::~ArchiveManager()
         m_pInterface = nullptr;
     }
 
+}
+
+ArchiveManager *ArchiveManager::get_instance()
+{
+#ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
+    if (!QAtomicPointer<ArchiveManager>::isTestAndSetNative()) //运行时检测
+        qDebug() << "Error: TestAndSetNative not supported!";
+#endif
+
+    //使用双重检测。
+
+    /*! testAndSetOrders操作保证在原子操作前和后的的内存访问
+     * 不会被重新排序。
+     */
+    if (m_instance.testAndSetOrdered(nullptr, nullptr)) { //第一次检测
+        QMutexLocker locker(&m_mutex);//加互斥锁。
+
+        m_instance.testAndSetOrdered(nullptr, new ArchiveManager);//第二次检测。
+    }
+
+    return m_instance;
 }
 
 ArchiveJob *ArchiveManager::archiveJob()
@@ -97,13 +121,6 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
 
     m_pArchiveJob = pLoadJob;
     pLoadJob->start();
-}
-
-void ArchiveManager::getLoadArchiveData(ArchiveData &stArchiveData)
-{
-    if (m_pInterface != nullptr) {
-        m_pInterface->getArchiveData(stArchiveData);
-    }
 }
 
 void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions)

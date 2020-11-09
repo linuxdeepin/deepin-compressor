@@ -35,6 +35,7 @@
 #include "DebugTimeManager.h"
 #include "popupdialog.h"
 #include "progressdialog.h"
+#include "datamanager.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -94,8 +95,6 @@ void MainWindow::initUI()
 
     m_pProgressdialog = new ProgressDialog(this); //进度弹窗
     m_pSettingDlg = new SettingDialog(this);
-
-    m_pArchiveManager = new ArchiveManager(this);
 
     // 添加界面至主界面
     m_pMainWidget->addWidget(m_pCompressPage);
@@ -172,12 +171,13 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiels, this, &MainWindow::slotDelFiels);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
+    connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
 
-    connect(m_pArchiveManager, &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
-    connect(m_pArchiveManager, &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
-    connect(m_pArchiveManager, &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
-    connect(m_pArchiveManager, &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
-    connect(m_pArchiveManager, &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
     connect(m_pOpenFileWatcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
 }
@@ -363,7 +363,7 @@ void MainWindow::loadArchive(const QString &strArchiveName)
 
     m_pUnCompressPage->setArchiveName(strArchiveName);      // 设置压缩包全路径
     m_pUnCompressPage->setDefaultUncompressPath(QFileInfo(strArchiveName).absolutePath());  // 设置默认解压路径
-    m_pArchiveManager->loadArchive(strArchiveName);     // 加载操作
+    ArchiveManager::get_instance()->loadArchive(strArchiveName);     // 加载操作
     m_pLoadingPage->startLoading();     // 开始加载
     m_ePageID = PI_Loading;
 }
@@ -457,7 +457,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         options.bRightExtract = true;
         options.qComressSize = fileinfo.size();
         // 调用解压函数
-        m_pArchiveManager->extractFiles(listParam.at(0), QList<FileEntry>(), options);
+        ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options);
         // 设置进度界面参数
         m_pProgressPage->setProgressType(PT_UnCompress);
         m_pProgressPage->setTotalSize(options.qComressSize);
@@ -471,7 +471,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
-        m_pArchiveManager->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), false);
+        ArchiveManager::get_instance()->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), false);
         qint64 qSize = 0;
         foreach (QString strFile, listFiles) {
             qSize += QFile(strFile).size();
@@ -658,7 +658,7 @@ void MainWindow::slotCompress(const QVariant &val)
 //        bBatch = true;
 //    }
 
-    m_pArchiveManager->createArchive(listEntry, strDestination, options, false/*, bBatch*/);
+    ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, false/*, bBatch*/);
 
 
     m_pProgressPage->setProgressType(PT_Compress);
@@ -672,7 +672,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
 void MainWindow::slotJobFinshed()
 {
-    ArchiveJob *pJob = m_pArchiveManager->archiveJob();
+    ArchiveJob *pJob = ArchiveManager::get_instance()->archiveJob();
     if (pJob == nullptr) {
         return;
     }
@@ -692,9 +692,7 @@ void MainWindow::slotJobFinshed()
         m_ePageID = PI_UnCompress;
         qDebug() << "加载结束";
 
-        ArchiveData stArchiveData;
-        m_pArchiveManager->getLoadArchiveData(stArchiveData);
-        m_pUnCompressPage->setArchiveData(stArchiveData);
+        m_pUnCompressPage->refreshArchiveData();
     }
     break;
     case ArchiveJob::JT_BatchExtract:
@@ -714,9 +712,9 @@ void MainWindow::slotJobFinshed()
         qDebug() << "删除结束";
         m_ePageID = PI_UnCompress;
 
-        ArchiveData stArchiveData;
-        m_pArchiveManager->getLoadArchiveData(stArchiveData);
-        m_pUnCompressPage->refreshDataByCurrentPathDelete(stArchiveData);
+        //ArchiveData stArchiveData;
+        //ArchiveManager::get_instance()->getLoadArchiveData(stArchiveData);
+        m_pUnCompressPage->refreshDataByCurrentPathDelete(/*stArchiveData*/);
     }
     break;
     case ArchiveJob::JT_Open: {
@@ -749,10 +747,10 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
     QString strArchiveName = m_pUnCompressPage->archiveName();
     ExtractionOptions options;
-    ArchiveData stArchiveData;
+    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
 
     // 获取压缩包数据
-    m_pArchiveManager->getLoadArchiveData(stArchiveData);
+    //ArchiveManager::get_instance()->getLoadArchiveData(stArchiveData);
 
     // 构建解压参数
     options.strTargetPath = strUncompressPath;
@@ -761,7 +759,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
     options.qComressSize = stArchiveData.qComressSize;
 
     // 调用解压函数
-    m_pArchiveManager->extractFiles(strArchiveName, QList<FileEntry>(), options);
+    ArchiveManager::get_instance()->extractFiles(strArchiveName, QList<FileEntry>(), options);
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_UnCompress);
@@ -851,7 +849,7 @@ void MainWindow::slotExtract2Path(const QList<FileEntry> &listCurEntry, const QL
     m_pProgressdialog->clearprocess();
     m_pProgressdialog->setCurrentTask(strArchiveName);
 
-    m_pArchiveManager->extractFiles2Path(strArchiveName, listCurEntry, listAllEntry, stOptions);
+    ArchiveManager::get_instance()->extractFiles2Path(strArchiveName, listCurEntry, listAllEntry, stOptions);
 
 }
 
@@ -859,7 +857,7 @@ void MainWindow::slotDelFiels(const QList<FileEntry> &listCurEntry, const QList<
 {
     qDebug() << "删除文件:";
     QString strArchiveName = m_pUnCompressPage->archiveName();
-    m_pArchiveManager->deleteFiles(strArchiveName, listCurEntry, listAllEntry);
+    ArchiveManager::get_instance()->deleteFiles(strArchiveName, listCurEntry, listAllEntry);
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_Delete);
@@ -887,7 +885,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     QString strTempExtractPath =  TEMPPATH + QDir::separator() + m_strUUID + QDir::separator() + createUUID();
     m_strOpenFile = strTempExtractPath + QDir::separator() + entry.strFileName;
     m_mapOpenFils[m_strOpenFile] = entry;
-    m_pArchiveManager->openFile(strArchiveName, entry, strTempExtractPath, strProgram);
+    ArchiveManager::get_instance()->openFile(strArchiveName, entry, strTempExtractPath, strProgram);
 
     // 进入打开加载界面
     m_operationtype = Operation_TempExtract_Open;
@@ -912,6 +910,12 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         }
         m_mapFileHasModified[strPath] = false;
     }
+}
+
+void MainWindow::slotSuccessReturn()
+{
+    m_ePageID = PI_Home;
+    refreshPage();
 }
 
 

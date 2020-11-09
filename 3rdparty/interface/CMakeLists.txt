@@ -86,7 +86,7 @@ include_directories(${PROJECT_SOURCE_DIR}/archiveinterface)
 include_directories(${PROJECT_SOURCE_DIR}/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/process)
 
-add_library(${LIB_NAME}   ${h_files} ${c_files}  )
+add_library(${LIB_NAME} SHARED  ${h_files} ${c_files}  )
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core KF5::Codecs)
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries(${LIB_NAME} compressor-ChardetDetector)

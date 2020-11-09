@@ -40,10 +40,9 @@ public:
     ~UnCompressView() override;
 
     /**
-     * @brief setArchiveData   设置加载完之后的数据
-     * @param stArchiveData 压缩包数据
+     * @brief refreshArchiveData   加载结束刷新数据
      */
-    void setArchiveData(const ArchiveData &stArchiveData);
+    void refreshArchiveData();
 
     /**
      * @brief setDefaultUncompressPath  设置默认解压路径
@@ -57,7 +56,7 @@ public:
      * 2.删除上一级m_mapShowEntry后不作处理，当返回上一级目录时会自动更新
      * @param stArchiveData
      */
-    void refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData);
+    void refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -208,7 +207,6 @@ private slots:
     void slotDragPath(QUrl url);
 
 private:
-    ArchiveData m_stArchiveData;
     QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
     FileEntry m_stRightEntry;       // 右键点击的文件
     QString m_strUnCompressPath;    // 默认解压路径

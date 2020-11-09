@@ -23,7 +23,8 @@
 #include "datamodel.h"
 #include "treeheaderview.h"
 #include "openwithdialog.h"
-#include "DebugTimeManager.h";
+#include "DebugTimeManager.h"
+#include "datamanager.h"
 
 #include <DMenu>
 #include <DFileDialog>
@@ -48,20 +49,20 @@ UnCompressView::~UnCompressView()
 
 }
 
-void UnCompressView::setArchiveData(const ArchiveData &stArchiveData)
+void UnCompressView::refreshArchiveData()
 {
-    m_stArchiveData = stArchiveData;
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
 
     // 刷新第一层级文件夹子项的数目
-    for (int i = 0; i < m_stArchiveData.listRootEntry.count(); ++i) {
-        if (m_stArchiveData.listRootEntry[i].isDirectory) {
-            m_stArchiveData.listRootEntry[i].qSize = calDirItemCount(m_stArchiveData.listRootEntry[i].strFullPath);
+    for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
+        if (stArchiveData.listRootEntry[i].isDirectory) {
+            stArchiveData.listRootEntry[i].qSize = calDirItemCount(stArchiveData.listRootEntry[i].strFullPath);
         }
     }
 
     // 刷新数据（显示第一层数据）
-    m_pModel->refreshFileEntry(m_stArchiveData.listRootEntry);
-    m_mapShowEntry["/"] = m_stArchiveData.listRootEntry;
+    m_pModel->refreshFileEntry(stArchiveData.listRootEntry);
+    m_mapShowEntry["/"] = stArchiveData.listRootEntry;
 
     // 重置目录层级
     resetLevel();
@@ -161,10 +162,11 @@ void UnCompressView::initConnections()
 
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
 {
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     qlonglong qItemCount = 0;
 
-    auto iter = m_stArchiveData.mapFileEntry.find(strFilePath);
-    for (; iter != m_stArchiveData.mapFileEntry.end();) {
+    auto iter = stArchiveData.mapFileEntry.find(strFilePath);
+    for (; iter != stArchiveData.mapFileEntry.end();) {
         // 找到以当前文件夹开头的数据，进行计算处理
         if (!iter.key().startsWith(strFilePath)) {
             break;
@@ -225,24 +227,25 @@ void UnCompressView::refreshDataByCurrentPath()
     m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
 }
 
-void UnCompressView::refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData)
+void UnCompressView::refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/)
 {
+
     if (0 == m_strCurrentPath.compare("/")) { //当前目录是第一层
         m_mapShowEntry.clear();
 
-        setArchiveData(m_stArchiveData);
+        refreshArchiveData();
     } else { //当前目录非第一层
-        m_stArchiveData = stArchiveData;
+        ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
 
         // 删除上一级m_mapShowEntry
         if (1 == m_strCurrentPath.count("/")) { //当前目录是第二层
             // 刷新第一层文件夹子项的数目
-            for (int i = 0; i < m_stArchiveData.listRootEntry.count(); ++i) {
-                if (m_stArchiveData.listRootEntry[i].isDirectory) {
-                    m_stArchiveData.listRootEntry[i].qSize = calDirItemCount(m_stArchiveData.listRootEntry[i].strFullPath);
+            for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
+                if (stArchiveData.listRootEntry[i].isDirectory) {
+                    stArchiveData.listRootEntry[i].qSize = calDirItemCount(stArchiveData.listRootEntry[i].strFullPath);
                 }
             }
-            m_mapShowEntry["/"] = m_stArchiveData.listRootEntry;
+            m_mapShowEntry["/"] = stArchiveData.listRootEntry;
         } else { //当前目录是第三层及之后
             m_mapShowEntry.remove(m_strCurrentPath.left(m_strCurrentPath.lastIndexOf("/", -2) + 1));
         }
@@ -262,10 +265,11 @@ void UnCompressView::refreshDataByCurrentPathDelete(const ArchiveData &stArchive
 
 QList<FileEntry> UnCompressView::getCurPathFiles()
 {
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     QList<FileEntry> listEntry;
 
-    auto iter = m_stArchiveData.mapFileEntry.find(m_strCurrentPath);
-    for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
+    auto iter = stArchiveData.mapFileEntry.find(m_strCurrentPath);
+    for (; iter != stArchiveData.mapFileEntry.end() ;) {
         if (iter.key().left(m_strCurrentPath.size()) != m_strCurrentPath) {
             break;
         } else {
@@ -291,11 +295,12 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
 
 void UnCompressView::getAllFilesByParentPath(const QString &strFullPath, QList<FileEntry> &listEntry, qint64 &qSize)
 {
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     listEntry.clear();
     qSize = 0;
 
-    auto iter = m_stArchiveData.mapFileEntry.find(strFullPath);
-    for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
+    auto iter = stArchiveData.mapFileEntry.find(strFullPath);
+    for (; iter != stArchiveData.mapFileEntry.end() ;) {
 
         if (!iter.key().startsWith(strFullPath)) {
             break;

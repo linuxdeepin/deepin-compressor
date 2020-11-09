@@ -62,9 +62,9 @@ void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
     m_pUnCompressView->setDefaultUncompressPath(m_strUnCompressPath);
 }
 
-void UnCompressPage::setArchiveData(const ArchiveData &stArchiveData)
+void UnCompressPage::refreshArchiveData()
 {
-    m_pUnCompressView->setArchiveData(stArchiveData);
+    m_pUnCompressView->refreshArchiveData();
 }
 
 void UnCompressPage::resizeEvent(QResizeEvent *e)
@@ -72,9 +72,9 @@ void UnCompressPage::resizeEvent(QResizeEvent *e)
     m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
-void UnCompressPage::refreshDataByCurrentPathDelete(const ArchiveData &stArchiveData)
+void UnCompressPage::refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/)
 {
-    m_pUnCompressView->refreshDataByCurrentPathDelete(stArchiveData);
+    m_pUnCompressView->refreshDataByCurrentPathDelete(/*stArchiveData*/);
 }
 
 void UnCompressPage::initUI()

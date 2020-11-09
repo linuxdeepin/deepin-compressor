@@ -231,6 +231,11 @@ private Q_SLOTS:
      */
     void slotOpenFileChanged(const QString &strPath);
 
+    /**
+     * @brief slotSuccessReturn     解压成功返回
+     */
+    void slotSuccessReturn();
+
 private:
     QString m_strUUID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
@@ -261,7 +266,6 @@ private:
     int m_iInitUITimer = 0;                       // 初始化界面定时器
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
-    ArchiveManager *m_pArchiveManager;      // 插件和job管理
     Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
 
     qint64 m_qTotalSize = 0;            // 压缩文件总大小

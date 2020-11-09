@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "clirarplugin.h"
+#include "datamanager.h"
 
 #include <QRegularExpression>
 #include <QFileInfo>
@@ -138,6 +139,8 @@ bool CliRarPlugin::isFileExistsFileName(const QString &line)
 
 bool CliRarPlugin::readListLine(const QString &line)
 {
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
+
     QRegularExpression rxVersionLine(QStringLiteral("^UNRAR (\\d+\\.\\d+)( beta \\d)? .*$"));
     QRegularExpressionMatch matchVersion = rxVersionLine.match(line);
 
@@ -152,11 +155,11 @@ bool CliRarPlugin::readListLine(const QString &line)
         if (line.startsWith(QLatin1String("Archive:"))) { // 压缩包全路径
             // 压缩包注释信息
             m_comment = m_comment.trimmed();
-            m_stArchiveData.strComment = m_comment;
+            stArchiveData.strComment = m_comment;
 
             // 通过压缩包全路径，获取压缩包大小
             QFileInfo file(line.mid(9).trimmed());
-            m_stArchiveData.qComressSize = file.size();
+            stArchiveData.qComressSize = file.size();
         } else if (line.startsWith(QLatin1String("Details:"))) {
             // 读完压缩包信息，开始读内部文件信息
             m_parseState = ParseStateEntryInformation;
@@ -195,7 +198,7 @@ bool CliRarPlugin::readListLine(const QString &line)
             m_fileEntry.qSize = parseLineRight.toInt();
 
             // 压缩包内所有文件总大小
-            m_stArchiveData.qSize += m_fileEntry.qSize;
+            stArchiveData.qSize += m_fileEntry.qSize;
         } else if (parseLineLeft == QLatin1String("mtime")) {
             QString time = line.left((line.length() - 10));
             // 文件最后修改时间
@@ -205,11 +208,11 @@ bool CliRarPlugin::readListLine(const QString &line)
             QString name = m_fileEntry.strFullPath;
             // 获取第一层数据
             if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-                m_stArchiveData.listRootEntry.push_back(m_fileEntry);
+                stArchiveData.listRootEntry.push_back(m_fileEntry);
             }
 
             // 存储总数据
-            m_stArchiveData.mapFileEntry.insert(name, m_fileEntry);
+            stArchiveData.mapFileEntry.insert(name, m_fileEntry);
 
             // clear m_fileEntry
             m_fileEntry.reset();

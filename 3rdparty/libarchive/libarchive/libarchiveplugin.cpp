@@ -20,6 +20,7 @@
 */
 #include "libarchiveplugin.h"
 #include "queries.h"
+#include "datamanager.h"
 
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -47,7 +48,7 @@ PluginFinishType LibarchivePlugin::list()
 {
     qDebug() << "LibarchivePlugin插件加载压缩包数据";
     PluginFinishType eType;
-    m_stArchiveData.reset();
+    DataManager::get_instance().archiveData().reset();
 
     m_strOldArchiveName = m_strArchiveName; //保存原压缩包名
     QFileInfo fInfo(m_strArchiveName);
@@ -404,7 +405,7 @@ void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archiv
 
         // 解压百分比进度
         m_currentExtractedFilesSize += readBytes;
-        emit signalprogress((double(m_currentExtractedFilesSize)) / m_stArchiveData.qSize * 100);
+        emit signalprogress((double(m_currentExtractedFilesSize)) / DataManager::get_instance().archiveData().qSize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
     }
@@ -438,6 +439,8 @@ void LibarchivePlugin::copyDataFromSource_ArchiveEntry(const QString &filename, 
 
 PluginFinishType LibarchivePlugin::list_New()
 {
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+
     if (!initializeReader()) {
         return PF_Error;
     }
@@ -449,7 +452,7 @@ PluginFinishType LibarchivePlugin::list_New()
 
     m_ArchiveEntryCount = 0;
     m_numberOfEntries = 0;
-    m_stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 压缩包大小
+    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 压缩包大小
 
     struct archive_entry *aentry;
     int result = ARCHIVE_RETRY;
@@ -498,6 +501,7 @@ QString LibarchivePlugin::convertCompressionName(const QString &method)
 
 void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
 {
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     FileEntry m_archiveEntryStat; //压缩包内文件数据
     // 文件名
     m_archiveEntryStat.strFullPath = m_common->trans2uft8(archive_entry_pathname(aentry));
@@ -522,12 +526,12 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     // 获取第一层数据
     if (!m_archiveEntryStat.strFullPath.contains(QDir::separator())
             || (m_archiveEntryStat.strFullPath.endsWith(QDir::separator()) && m_archiveEntryStat.strFullPath.count(QDir::separator()) == 1)) {
-        m_stArchiveData.listRootEntry.push_back(m_archiveEntryStat);
+        stArchiveData.listRootEntry.push_back(m_archiveEntryStat);
     }
     // 压缩包原始大小
-    m_stArchiveData.qSize += m_archiveEntryStat.qSize;
+    stArchiveData.qSize += m_archiveEntryStat.qSize;
     // 构建压缩包数据map
-    m_stArchiveData.mapFileEntry.insert(m_archiveEntryStat.strFullPath, m_archiveEntryStat);
+    stArchiveData.mapFileEntry.insert(m_archiveEntryStat.strFullPath, m_archiveEntryStat);
 }
 
 void LibarchivePlugin::deleteTempTarPkg(const QStringList &tars)

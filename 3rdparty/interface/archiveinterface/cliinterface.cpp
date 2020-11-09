@@ -20,6 +20,7 @@
 */
 #include "cliinterface.h"
 #include "queries.h"
+#include "datamanager.h"
 
 #include <QStandardPaths>
 #include <QFileInfo>
@@ -47,7 +48,6 @@ CliInterface::~CliInterface()
 
 PluginFinishType CliInterface::list()
 {
-    m_stArchiveData.reset();
     m_workStatus = WT_List;
 
     bool ret = false;
@@ -106,8 +106,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             // 提取文件夹需要在map里面查找文件夹下的文件，将文件从临时文件夹移除需要用到m_files
             if (entry.isDirectory) {
                 QList<FileEntry> listEntry;
-                auto iter = m_stArchiveData.mapFileEntry.find(entry.strFullPath);
-                for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
+                ArchiveData stArchiveData =  DataManager::get_instance().archiveData();
+                auto iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
+                for (; iter != stArchiveData.mapFileEntry.end() ;) {
                     if (!iter.key().startsWith(entry.strFullPath)) {
                         break;
                     } else {

@@ -75,12 +75,6 @@ public:
     bool waitForFinished();
 
     /**
-     * @brief getArchiveData    获取压缩包数据
-     * @param stArchiveData     压缩包数据
-     */
-    void getArchiveData(ArchiveData &stArchiveData);
-
-    /**
      * @brief setPassword   设置解压密码
      * @param strPassword   解压密码
      */
@@ -149,7 +143,6 @@ protected:
     QString m_strArchiveName; //1、压缩：最终的压缩包名 2、解压：加载的压缩包名
     QMimeType m_mimetype;
     Common *m_common = nullptr; // 通用工具类
-    ArchiveData m_stArchiveData;    // 压缩包数据
     bool m_bOverwriteAll = false;        //是否全部覆盖
     bool m_bSkipAll = false;             // 是否全部跳过
     bool m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件

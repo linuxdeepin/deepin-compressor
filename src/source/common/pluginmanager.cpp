@@ -34,10 +34,35 @@
 
 #include <algorithm>
 
+//静态成员变量初始化。
+QMutex PluginManager::m_mutex;//一个线程可以多次锁同一个互斥量
+QAtomicPointer<PluginManager> PluginManager::m_instance = nullptr;//原子指针，默认初始化是0
+
 PluginManager::PluginManager(QObject *parent)
     : QObject(parent)
 {
     loadPlugins();
+}
+
+PluginManager &PluginManager::get_instance()
+{
+#ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
+    if (!QAtomicPointer<PluginManager>::isTestAndSetNative()) //运行时检测
+        qDebug() << "Error: TestAndSetNative not supported!";
+#endif
+
+    //使用双重检测。
+
+    /*! testAndSetOrders操作保证在原子操作前和后的的内存访问
+     * 不会被重新排序。
+     */
+    if (m_instance.testAndSetOrdered(nullptr, nullptr)) { //第一次检测
+        QMutexLocker locker(&m_mutex);//加互斥锁。
+
+        m_instance.testAndSetOrdered(nullptr, new PluginManager);//第二次检测。
+    }
+
+    return *m_instance;
 }
 
 QVector<Plugin *> PluginManager::installedPlugins() const
