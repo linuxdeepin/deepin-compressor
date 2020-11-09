@@ -5191,7 +5191,9 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         // 显示注释内容的控件
         DTextEdit *commentTextedit = new DTextEdit(commentDrawer);
-        if (m_strLoadfile.endsWith(".rar")) { // rar格式不支持修改注释
+        if (determineMimeType(m_strLoadfile).name() == "application/zip") { // 只有zip格式支持修改注释
+            commentTextedit->setEnabled(true);
+        } else {
             commentTextedit->setEnabled(false);
         }
 
