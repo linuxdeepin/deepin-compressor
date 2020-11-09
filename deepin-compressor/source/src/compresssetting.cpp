@@ -472,14 +472,18 @@ void CompressSetting::onNextButoonClicked()
     // 压缩类型
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
     // 压缩等级
-    m_openArgs[QStringLiteral("compressionLevel")] = QString::number(m_pCompressLevelCkb->currentData().toInt());
-//    if ("application/x-tar" == fixedMimeType || "application/x-tarz" == fixedMimeType) {
-//        m_openArgs[QStringLiteral("compressionLevel")] = "-1";  //-1 is unuseful
-//    } else if ("application/zip" == fixedMimeType) {
-//        m_openArgs[QStringLiteral("compressionLevel")] = "3";  // 1:Extreme 3:Fast 5:Standard
-//    } else {
-//        m_openArgs[QStringLiteral("compressionLevel")] = "6";  // 6 is default
-//    }
+    // bz2、lzo、z 1-9:取1、3、5、6、7、9
+    // 其它 0-9:取0、1、3、5、7、9
+    QList<int> listLevel;
+    if (0 == tmpCompresstype.compare("tar")) {
+        listLevel << -1;
+    } else if (0 == tmpCompresstype.compare("tar.bz2") || 0 == tmpCompresstype.compare("tar.lzo") || 0 == tmpCompresstype.compare("tar.z")) {
+        listLevel << 1 << 3 << 5 << 6 << 7 << 9;
+    } else {
+        listLevel << 0 << 1 << 3 << 5 << 7 << 9;
+    }
+    m_openArgs[QStringLiteral("compressionLevel")] = QString::number(listLevel[m_pCompressLevelCkb->currentIndex()]);
+
 
     qDebug() << m_splitnumedit->value();
     // 分卷压缩大小
@@ -632,7 +636,8 @@ void CompressSetting::setDefaultName(QString name)
 {
     initWidget();
 
-    onAdvanceButtonClicked(m_moresetbutton->isChecked());
+    // 注释掉这一行，防止每次界面重置
+    //onAdvanceButtonClicked(m_moresetbutton->isChecked());
 //    name = name + "." + m_compresstype->text();
     m_filename->setText(name);
     QLineEdit *qfilename = m_filename->lineEdit();
@@ -847,6 +852,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         isSplitChecked = false;
         m_pCommentLbl->setEnabled(false);
         m_pCommentEdt->setEnabled(false);
+        m_pCommentEdt->clear();
     } else if (0 == selectType.compare("7z")) {
         if (m_splitcompress->isChecked()) {
             m_splitnumedit->setEnabled(true);
@@ -859,6 +865,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_splitcompress->setEnabled(true);
         m_pCommentLbl->setEnabled(false);
         m_pCommentEdt->setEnabled(false);
+        m_pCommentEdt->clear();
     } else if (0 == selectType.compare("zip")) {
         m_splitnumedit->setEnabled(false);
         m_encryptedlabel->setEnabled(true);
@@ -887,6 +894,7 @@ void CompressSetting::ontypeChanged(QAction *action)
         isSplitChecked = false;
         m_pCommentLbl->setEnabled(false);
         m_pCommentEdt->setEnabled(false);
+        m_pCommentEdt->clear();
     }
 
     // 压缩方式切换
@@ -1446,29 +1454,32 @@ bool CompressSetting::existSameFileName()
 
 void CompressSetting::refreshCompressLevel(const QString &strType)
 {
-    // bz2、lzo、z 1-9:取1、3、5、6、7、9
-    // 其它 0-9:取0、1、3、5、7、9
     QStringList listCompressLevel;
-    QList<int> listLevel;
 
     if (0 == strType.compare("tar")) {
         listCompressLevel << tr("store");
-        listLevel << -1;
-    } else if (0 == strType.compare("tar.bz2") || 0 == strType.compare("tar.lzo") || 0 == strType.compare("tar.z")) {
-        listCompressLevel << tr("store") << tr("Fastest") << tr("Faster") << tr("standard") << tr("better") << tr("best");
-        listLevel << 1 << 3 << 5 << 6 << 7 << 9;
     } else {
         listCompressLevel << tr("store") << tr("Fastest") << tr("Faster") << tr("standard") << tr("better") << tr("best");
-        listLevel << 0 << 1 << 3 << 5 << 7 << 9;
     }
 
-    m_pCompressLevelCkb->clear();
-    for (int i = 0; i < listCompressLevel.count(); ++i) {
-        m_pCompressLevelCkb->addItem(listCompressLevel[i], listLevel[i]);
+    bool bFirst = (m_pCompressLevelCkb->count()  == 0) ? true : false;
+    // 如果当前压缩方式数目和当前格式所支持的压缩方式不一致，则切换压缩方式
+    if (m_pCompressLevelCkb->count() != listCompressLevel.count()) {
+        m_pCompressLevelCkb->clear();
+        // 添加压缩方式
+        for (int i = 0; i < listCompressLevel.count(); ++i) {
+            m_pCompressLevelCkb->addItem(listCompressLevel[i]);
+        }
+
+
     }
 
-    if (listCompressLevel.count() > 2) {
-        m_pCompressLevelCkb->setCurrentIndex(2);
+    if (bFirst) {
+        // 若压缩方式数目为空，初始化设置
+        if (listCompressLevel.count() > 2) {
+            //  默认较快
+            m_pCompressLevelCkb->setCurrentIndex(2);
+        }
     }
 }
 
