@@ -368,13 +368,13 @@ void PasswordNeededQuery::execute()
 
     m_data[QStringLiteral("password")] = passwordedit->text();
 
-    delete dialog;
-
     if (-1 == mode || 0 == mode) {
         setResponse(Result_Cancel);
     } else {
         setResponse(Result_Skip);
     }
+
+    delete dialog;
 }
 
 bool PasswordNeededQuery::responseCancelled()

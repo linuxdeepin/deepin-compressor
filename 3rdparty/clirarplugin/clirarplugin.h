@@ -42,15 +42,31 @@ private:
     bool handleLine(const QString &line, WorkType workStatus) override;
 
     /**
-     * @brief handleProgress  解析进度并发送进度信号
+     * @brief handleEnterPwdLine 处理提示输入密码的命令行内容被截断
      * @param line
+     * @return
      */
-    void handleProgress(const QString &line);
+    bool handleEnterPwdLine(const QString &line);
+
+    /**
+     * @brief handleIncorrectPwdLine 处理提示密码错误的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handleIncorrectPwdLine(const QString &line);
+
+    /**
+     * @brief handleFileExistsLine 处理提示文件已存在是否替换的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handleFileExistsLine(const QString &line);
 
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;
     QString m_comment = "";  // 压缩包注释信息
+    QString m_replaceLine = ""; // 拼接被截断的命令行内容
 };
 
 #endif // CLIRARPLUGIN_H

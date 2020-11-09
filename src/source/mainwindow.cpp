@@ -781,6 +781,7 @@ void MainWindow::slotReceiveProgress(double dPercentage)
         if (m_pProgressdialog->isHidden()) {
             m_pProgressdialog->exec();
         }
+
         m_pProgressdialog->setProcess(qRound(dPercentage));
     } else {
         m_pProgressPage->setProgress(dPercentage);

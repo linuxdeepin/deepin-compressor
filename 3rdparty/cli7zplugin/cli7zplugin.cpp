@@ -290,27 +290,3 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 
     return true;
 }
-
-void Cli7zPlugin::handleProgress(const QString &line)
-{
-    int pos = line.indexOf(QLatin1Char('%'));
-    if (pos > 1) {
-        int percentage = line.midRef(pos - 3, 3).toInt();
-        if (percentage > 0) {
-            if (line.contains("\b\b\b\b") == true) {
-                QStringRef strfilename;
-                int count = line.indexOf("+");
-                if (-1 == count) {
-                    count = line.indexOf("-");
-                }
-
-                if (count > 0) {
-                    strfilename = line.midRef(count + 2);
-                }
-
-                emit signalprogress(percentage);
-                emit signalCurFileName(strfilename.toString());
-            }
-        }
-    }
-}

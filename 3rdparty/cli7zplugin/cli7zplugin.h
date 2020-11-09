@@ -54,12 +54,6 @@ private:
 
     bool handleLine(const QString &line, WorkType workStatus) override;
 
-    /**
-     * @brief handleProgress  解析进度并发送进度信号
-     * @param line
-     */
-    void handleProgress(const QString &line);
-
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;

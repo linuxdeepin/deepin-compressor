@@ -26,10 +26,12 @@
 #include <QDebug>
 #include <QDir>
 #include <QRegularExpression>
+#include <QUrl>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
+    m_bHandleCurEntry = true;
     setWaitForFinishedSignal(true);
     if (QMetaType::type("QProcess::ExitStatus") == 0) {
         qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
@@ -52,7 +54,7 @@ PluginFinishType CliInterface::list()
 
     ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, m_strPassword));
 
-    return PT_Nomral;
+    return ret ? PT_Nomral : PF_Error;
 }
 
 PluginFinishType CliInterface::testArchive()
@@ -67,17 +69,76 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     m_workStatus = WT_Extract;
     m_files = files;
     m_options = options;
+    QString destPath;
 
     bool ret = false;
+
     QStringList fileList;
+    foreach (FileEntry file, files) {
+        QString fileName = file.strFullPath;
+        // rar提取文件夹需要去掉尾部斜杠，否则会解出多层文件夹，7z有无斜杠无影响
+        if (fileName.endsWith(QLatin1Char('/'))) {
+            fileName.chop(1);
+        }
+
+        fileList << fileName;
+    }
 
     // 设置解压目标路径
-    QDir::setCurrent(options.strTargetPath);
+    destPath = options.strTargetPath;
+    if (destPath.endsWith("/")) {
+        destPath.chop(1);
+    }
+
+    qDebug() << "解压目标路径 --- " << destPath;
+    QDir::setCurrent(destPath);
+    if (!m_options.bAllExtract) {  // 提取部分文件
+        m_files.clear();
+        foreach (FileEntry entry, files) {
+            if (m_rootNode.isEmpty()) {  // 获取待提取文件的节点
+                if (entry.isDirectory) {
+                    m_rootNode = entry.strFullPath.left(entry.strFullPath.length() - entry.strFileName.length() - 1);
+                } else {
+                    m_rootNode = entry.strFullPath.right(entry.strFullPath.length() - entry.strFileName.length());
+                }
+            }
+
+            // 提取文件夹需要在map里面查找文件夹下的文件，将文件从临时文件夹移除需要用到m_files
+            if (entry.isDirectory) {
+                QList<FileEntry> listEntry;
+                auto iter = m_stArchiveData.mapFileEntry.find(entry.strFullPath);
+                for (; iter != m_stArchiveData.mapFileEntry.end() ;) {
+                    if (!iter.key().startsWith(entry.strFullPath)) {
+                        break;
+                    } else {
+                        listEntry << iter.value();
+                        ++iter;
+                    }
+                }
+
+                m_files << listEntry;
+            } else {
+                m_files << entry;
+            }
+        }
+
+        // 设置临时目录
+        m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
+        if (!m_extractTempDir->isValid()) {
+            qDebug() << "Creation of temporary directory failed.";
+            emit signalFinished(PF_Error);
+            return PF_Error;
+        }
+
+        destPath = m_extractTempDir->path();
+        qDebug() << "提取临时路径 --- " << destPath;
+        QDir::setCurrent(destPath);
+    }
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
                       m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword));
 
-    return PT_Nomral;
+    return ret ? PT_Nomral : PF_Error;
 }
 
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
@@ -107,31 +168,31 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
 
-    return ret == true ? PT_Nomral : PF_Error;
+    return ret ? PT_Nomral : PF_Error;
 }
 
-PluginFinishType CliInterface::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::moveFiles(const QList<FileEntry> &/*files*/, const CompressOptions &/*options*/)
 {
 //    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
+PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &/*files*/, const CompressOptions &/*options*/)
 {
 //    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
+PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &/*files*/)
 {
 //    m_workStatus = WT_Add;
 
     return PT_Nomral;
 }
 
-PluginFinishType CliInterface::addComment(const QString &comment)
+PluginFinishType CliInterface::addComment(const QString &/*comment*/)
 {
 //    m_workStatus = WT_Add;
 
@@ -152,26 +213,21 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         return false;
     }
 
-    m_process = new KProcess;
+    m_process = new KPtyProcess;
+    m_process->setPtyChannels(KPtyProcess::StdinChannel);
     m_process->setOutputChannelMode(KProcess::MergedChannels);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     m_process->setProgram(programPath, arguments);
 
-    connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+    connect(m_process, &QProcess::readyReadStandardOutput, this, [ = ] {
         readStdout();
     });
 
     if (m_workStatus == WT_Extract) {
         // Extraction jobs need a dedicated post-processing function.
-        connect(m_process,
-                QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this,
-                &CliInterface::extractProcessFinished);
+        connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(extractProcessFinished(int, QProcess::ExitStatus)));
     } else {
-        connect(m_process,
-                QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                this,
-                &CliInterface::processFinished);
+        connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
     }
 
     m_stdOutData.clear();
@@ -200,32 +256,66 @@ void CliInterface::killProcess(bool emitFinished)
     m_process->kill();
 }
 
+void CliInterface::handleProgress(const QString &line)
+{
+    if (m_process->program().at(0).contains("7z")) {  // 解析7z相关进度
+        int pos = line.indexOf(QLatin1Char('%'));
+        if (pos > 1) {
+            int percentage = line.midRef(pos - 3, 3).toInt();
+            if (percentage > 0) {
+                if (line.contains("\b\b\b\b") == true) {
+                    QStringRef strfilename;
+                    int count = line.indexOf("+");
+                    if (-1 == count) {
+                        count = line.indexOf("-");
+                    }
+
+                    if (count > 0) {
+                        strfilename = line.midRef(count + 2);
+                    }
+
+                    emit signalprogress(percentage);
+                    emit signalCurFileName(strfilename.toString());
+                }
+            }
+        }
+    } else if (m_process->program().at(0).contains("unrar")) { // 解析rar相关进度
+        int pos = line.indexOf(QLatin1Char('%'));
+        if (pos > 1) {
+            int percentage = line.midRef(pos - 3, 3).toInt();
+            emit signalprogress(percentage);
+        }
+
+        if (line.startsWith("Extracting")) {
+            QStringRef strfilename = line.midRef(12, pos - 24);
+            QString fileName = strfilename.toString();
+            for (int i = fileName.length() - 1; i > 0; i--) {
+                if (fileName.at(i) == " ") {
+                    continue;
+                } else {
+                    fileName = fileName.left(i + 1);
+                    break;
+                }
+            }
+
+            emit signalCurFileName(fileName);
+        }
+    }
+}
+
 void CliInterface::handlePassword()
 {
     m_eErrorType = ET_NoError;
 
-    if (m_encryptedRar && m_strArchiveName.endsWith(".rar")) {
-        PasswordNeededQuery query(m_strArchiveName);
-        emit signalQuery(&query);
-        query.waitForResponse();
+    PasswordNeededQuery query(m_strArchiveName);
+    emit signalQuery(&query);
+    query.waitForResponse();
 
-        if (query.responseCancelled()) {
-            setPassword(QString());
-        } else {
-            setPassword(query.password());
-            extractFiles(m_files, m_options);
-        }
+    if (query.responseCancelled()) {
+        setPassword(QString());
     } else {
-        PasswordNeededQuery query(m_strArchiveName);
-        emit signalQuery(&query);
-        query.waitForResponse();
-
-        if (query.responseCancelled()) {
-            setPassword(QString());
-        } else {
-            setPassword(query.password());
-            writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
-        }
+        setPassword(query.password());
+        writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
     }
 }
 
@@ -288,8 +378,84 @@ void CliInterface::writeToProcess(const QByteArray &data)
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
-    qDebug() << "Writing ****** to the process";
-    m_process->write(data);
+    qDebug() << "Writing data to the process: " << data;
+//    m_process->write(data);
+    m_process->pty()->write(data);
+}
+
+bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options)
+{
+    QDir finalDestDir(options.strTargetPath); // 提取目标路径
+    bool overwriteAll = false;  // 全部替换
+    bool skipAll = false;  // 全部跳过
+
+    // 循环待提取文件
+    foreach (const FileEntry entry, files) {
+        QString path = entry.strFullPath;
+        // 已经解压出的文件
+        QFileInfo extractEntry(path.remove(0, m_rootNode.length()));
+        // 已经解压到临时文件夹的文件(全路径)
+        QFileInfo etractEntryTemp(QDir::current().absolutePath() + QLatin1Char('/') + entry.strFullPath);
+        // 最终会提取出的文件
+        QFileInfo extractEntryDest(finalDestDir.path() + QLatin1Char('/') + extractEntry.filePath());
+
+        if (etractEntryTemp.isDir()) {
+            // 提取文件夹，创建目标文件夹路径
+            if (!finalDestDir.mkpath(extractEntry.filePath())) {
+                qDebug() << "Failed to create directory" << extractEntry.filePath() << "in final destination.";
+            }
+        } else {
+            // 目标路径下文件已经存在
+            if (extractEntryDest.exists()) {
+                qDebug() << "File" << extractEntryDest.absoluteFilePath() << "exists.";
+                if (!skipAll && !overwriteAll) {
+                    OverwriteQuery query(extractEntryDest.absoluteFilePath());
+                    emit signalQuery(&query);
+                    query.waitForResponse();
+
+                    if (query.responseOverwrite() || query.responseOverwriteAll()) {
+                        if (query.responseOverwriteAll()) { // 全部替换
+                            overwriteAll = true;
+                        }
+
+                        if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
+                            qDebug() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                        }
+                    } else if (query.responseSkip() || query.responseSkipAll()) {
+                        if (query.responseSkipAll()) { // 全部跳过
+                            skipAll = true;
+                        }
+
+                        continue;
+                    } else if (query.responseCancelled()) { // 取消
+                        emit signalCancel();
+                        emit signalFinished(PF_Cancel);
+                        return false;
+                    }
+                } else if (skipAll) { // 全部跳过
+                    return true;
+                } else if (overwriteAll) { // 全部替换
+                    if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
+                        qDebug() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                    }
+                }
+            }
+
+            // 创建文件夹路径
+            if (!finalDestDir.mkpath(extractEntry.path())) {
+                qDebug() << "Failed to create parent directory for file:" << extractEntryDest.filePath();
+            }
+
+            // 对临时文件夹内的文件进行rename操作，移到目标路径下
+            if (!QFile(etractEntryTemp.absoluteFilePath()).rename(extractEntryDest.absoluteFilePath())) {
+                qDebug() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
+                emit signalFinished(PF_Error);
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void CliInterface::readStdout(bool handleAll)
@@ -301,8 +467,7 @@ void CliInterface::readStdout(bool handleAll)
     }
 
     // 获取命令行输出
-    QByteArray dd = m_process->readAllStandardOutput();
-    m_stdOutData += dd;
+    m_stdOutData += m_process->readAllStandardOutput();
 
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
@@ -313,8 +478,7 @@ void CliInterface::readStdout(bool handleAll)
         handleAll = true; // 7z加载会出现换行错误
     }
 
-    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x"
-            && m_process->program().at(4).contains("-p")) && !wrongPwd) {
+    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x") && !wrongPwd) {
         handleAll = true; // rar解压加密文件,密码正确开始解压，需要替换同名文件时会换行错误
     }
 
@@ -330,8 +494,14 @@ void CliInterface::readStdout(bool handleAll)
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             bool ret = handleLine(QString::fromLocal8Bit(line), m_workStatus);
             if (ret == false) {
-                killProcess();
-                return;
+                if (m_strArchiveName.endsWith(".7z") || m_strArchiveName.contains(".7z.")) {
+                    killProcess();
+                    return;
+                } else {
+                    if (m_eErrorType == ET_NeedPassword) {
+                        handlePassword();
+                    }
+                }
             } else {
                 if (m_eErrorType == ET_NeedPassword) {
                     handlePassword();
@@ -343,12 +513,11 @@ void CliInterface::readStdout(bool handleAll)
 
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-//    m_exitCode = exitCode;
     qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();
 
-    emit signalprogress(1.0);
+    emit signalprogress(100);
     emit signalFinished(PT_Nomral);
 }
 
@@ -366,19 +535,19 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     if (exitCode == 9 || exitCode == 11) {
         setPassword(QString());
-        if (m_isRarFirstExtract == false || m_strArchiveName.endsWith(".rar")) {
-            if (m_encryptedRar) {
-                handlePassword();
-            }
-
-            m_isRarFirstExtract = true;
-//            emit signalFinished(PF_Error);
-            return;
-        }
-
         return;
     }
 
-    emit signalprogress(1.0);
+    if (!m_options.bAllExtract) { // 提取操作，将文件从临时文件夹内移出
+        bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_options);
+        if (!droppedFilesMoved) {
+            m_extractTempDir.reset();
+            return;
+        }
+
+        m_extractTempDir.reset();
+    }
+
+    emit signalprogress(100);
     emit signalFinished(PT_Nomral);
 }

@@ -3,8 +3,10 @@
 
 //#include "archiveinterface.h"
 #include "cliproperties.h"
-#include "kprocess.h"
+#include "kptyprocess.h"
 
+#include <QScopedPointer>
+#include <QTemporaryDir>
 
 enum WorkType {
     WT_List,
@@ -23,6 +25,8 @@ enum ParseState {
     ParseStateArchiveInformation,
     ParseStateEntryInformation
 };
+
+class PasswordNeededQuery;
 
 class CliInterface : public ReadWriteArchiveInterface
 {
@@ -88,6 +92,12 @@ protected:
     void killProcess(bool emitFinished = true);
 
     /**
+     * @brief handleProgress  解析进度并发送进度信号
+     * @param line
+     */
+    void handleProgress(const QString &line);
+
+    /**
      * @brief handlePassword  需要密码是弹出密码框
      */
     void handlePassword();
@@ -107,10 +117,18 @@ private:
      */
     void writeToProcess(const QByteArray &data);
 
+    /**
+     * @brief moveDroppedFilesToDest 提取文件后，将文件从临时目录移到目的路径
+     * @param files  文件
+     * @param options 解压选项
+     * @return
+     */
+    bool moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options);
+
 private slots:
     /**
      * @brief readStdout  读取命令行输出
-     * @param handleAll
+     * @param handleAll  是否读取结束，默认未结束
      */
     virtual void readStdout(bool handleAll = false);
 
@@ -129,20 +147,18 @@ private slots:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 protected:
-    bool m_encryptedRar = false;   // 是加密rar文件
-    bool m_isRarFirstExtract = true;  // rar第一次解压（unrar x -kb -p-）
-
-protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
-    KProcess *m_process = nullptr;  // 工作进程
+    /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
 
 private:
-    QList<FileEntry> m_files;
-    ExtractionOptions m_options;
-    bool m_listEmptyLines = false;
+    QList<FileEntry> m_files; // 待解压的文件
+    ExtractionOptions m_options; // 解压选项
+    bool m_listEmptyLines = false; // true:rar加载list， false:7z加载list
     QByteArray m_stdOutData;  // 存储命令行输出数据
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
     QString m_parseName;  // 解析后的文件名
+    QScopedPointer<QTemporaryDir> m_extractTempDir;  // 提取文件的临时文件夹
+    QString m_rootNode = ""; // 待提取文件的节点
 };
 
 #endif // CLIINTERFACE_H

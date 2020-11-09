@@ -60,11 +60,11 @@ void CliRarPlugin::setupCliProperties()
 
     m_cliProps->setProperty("extractProgram", QStringLiteral("unrar"));
     m_cliProps->setProperty("extractSwitch", QStringList{QStringLiteral("x"),
-                                                         QStringLiteral("-kb"),
-                                                         QStringLiteral("-p-")});
+                                                         QStringLiteral("-kb")/*,
+                                                         QStringLiteral("-p-")*/});
     m_cliProps->setProperty("extractSwitchNoPreserve", QStringList{QStringLiteral("e"),
-                                                                   QStringLiteral("-kb"),
-                                                                   QStringLiteral("-p-")});
+                                                                   QStringLiteral("-kb")/*,
+                                                                   QStringLiteral("-p-")*/});
 
     m_cliProps->setProperty("listProgram", QStringLiteral("unrar"));
     m_cliProps->setProperty("listSwitch", QStringList{QStringLiteral("vt"),
@@ -141,24 +141,6 @@ bool CliRarPlugin::readListLine(const QString &line)
     QRegularExpression rxVersionLine(QStringLiteral("^UNRAR (\\d+\\.\\d+)( beta \\d)? .*$"));
     QRegularExpressionMatch matchVersion = rxVersionLine.match(line);
 
-    /*
-    UNRAR 5.61 beta 1 freeware      Copyright (c) 1993-2018 Alexander Roshal
-
-    Archive: /home/chenglu/Desktop/out.rar
-    Details: RAR 5
-
-            Name: out.txt
-            Type: File
-            Size: 204190
-     Packed size: 17557
-           Ratio: 8%
-           mtime: 2020-08-25 15:37:56,000000000
-      Attributes: -rw-r--r--
-           CRC32: 530E5FD5
-         Host OS: Unix
-     Compression: RAR 5.0(v50) -m3 -md=256K
-     */
-
     switch (m_parseState) {
     case ParseStateHeader:
     case ParseStateTitle:
@@ -210,13 +192,14 @@ bool CliRarPlugin::readListLine(const QString &line)
             }
         } else if (parseLineLeft == QLatin1String("Size")) {
             // 单文件实际大小
-            m_fileEntry.qSize = line.section(QLatin1Char(':'), -1).trimmed().toInt();
+            m_fileEntry.qSize = parseLineRight.toInt();
 
             // 压缩包内所有文件总大小
             m_stArchiveData.qSize += m_fileEntry.qSize;
         } else if (parseLineLeft == QLatin1String("mtime")) {
+            QString time = line.left((line.length() - 10));
             // 文件最后修改时间
-            m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
+            m_fileEntry.uLastModifiedTime = QDateTime::fromString(time.right(time.length() - 14),
                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
 
             QString name = m_fileEntry.strFullPath;
@@ -230,9 +213,10 @@ bool CliRarPlugin::readListLine(const QString &line)
 
             // clear m_fileEntry
             m_fileEntry.reset();
-        } else if (parseLineLeft == QLatin1String("Flags")/* || parseLineLeft == QLatin1String("Compression")*/) {
-            m_encryptedRar = true;
         }
+//        else if (parseLineLeft == QLatin1String("Flags")/* || parseLineLeft == QLatin1String("Compression")*/) {
+//            m_encryptedRar = true;
+//        }
         break;
     }
 
@@ -241,28 +225,27 @@ bool CliRarPlugin::readListLine(const QString &line)
 
 bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 {
-    if (isPasswordPrompt(line)) {  // 提示需要输入密码
-        m_eErrorType = ET_NeedPassword;
-        return true;
-    }
-
-    if (isWrongPasswordMsg(line)) {  // 提示密码错误
-        if (m_strArchiveName.endsWith(".rar") && m_isRarFirstExtract) {
-            m_isRarFirstExtract = false;
-//            handlePassword();
-            return true;
-        } else {
-            m_eErrorType = ET_WrongPassword;
-            return false;
-        }
-    }
-
     if (workStatus == WT_List) {
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Extract) {
-        qDebug() << "rrrrr" << line;
-        if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
+        qDebug() << "rar extract line ---" << line;
+        if (handleEnterPwdLine(line)) {  // 提示需要输入密码、提示密码错误
+            m_replaceLine.clear();
+            m_eErrorType = ET_NeedPassword;
             return true;
+        }
+
+        if (handleIncorrectPwdLine(line)) {  // 提示密码错误
+            m_replaceLine.clear();
+            m_eErrorType = ET_WrongPassword;
+            return false;
+        }
+
+        if (handleFileExistsLine(line) || isFileExistsMsg(line)) {
+            if (handleFileExists(m_replaceLine) || handleFileExists(line)) {  // 判断解压是否存在同名文件
+                m_replaceLine.clear();
+                return true;
+            }
         }
 
         handleProgress(line);
@@ -271,27 +254,41 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
     return true;
 }
 
-void CliRarPlugin::handleProgress(const QString &line)
+bool CliRarPlugin::handleEnterPwdLine(const QString &line)
 {
-    int pos = line.indexOf(QLatin1Char('%'));
-    if (pos > 1) {
-        int percentage = line.midRef(pos - 3, 3).toInt();
-        if (percentage > 0) {
-            if (line.contains("Extracting")) {
-                QStringRef strfilename = line.midRef(12, pos - 24);
-                QString fileName = strfilename.toString();
-                for (int i = fileName.length() - 1; i > 0; i--) {
-                    if (fileName.at(i) == " ") {
-                        continue;
-                    } else {
-                        fileName = fileName.left(i + 1);
-                        break;
-                    }
-                }
+    if (!isPasswordPrompt(line) && ((line.contains("for ") && line.endsWith(": ")) || line.startsWith("Enter "))) {
+        m_replaceLine += line;
+    }
 
-                emit signalprogress(percentage);
-                emit signalCurFileName(fileName);
-            }
-        }
+    if (isPasswordPrompt(m_replaceLine) || isPasswordPrompt(line)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool CliRarPlugin::handleIncorrectPwdLine(const QString &line)
+{
+    if (!isWrongPasswordMsg(line) && (line.startsWith("The ") || line.endsWith("incorrect."))) {
+        m_replaceLine += line;
+    }
+
+    if (isWrongPasswordMsg(m_replaceLine) || isWrongPasswordMsg(line)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool CliRarPlugin::handleFileExistsLine(const QString &line)
+{
+    if (!isFileExistsFileName(line) && (line.startsWith("Would you like to") || line.contains("file "))) {
+        m_replaceLine += line;
+    }
+
+    if (isFileExistsFileName(m_replaceLine) || isFileExistsFileName(line)) {
+        return true;
+    } else {
+        return false;
     }
 }
