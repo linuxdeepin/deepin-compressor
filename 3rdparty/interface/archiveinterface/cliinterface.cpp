@@ -54,14 +54,14 @@ PluginFinishType CliInterface::list()
 
     ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, m_strPassword));
 
-    return ret ? PT_Nomral : PF_Error;
+    return ret ? PFT_Nomral : PFT_Error;
 }
 
 PluginFinishType CliInterface::testArchive()
 {
     m_workStatus = WT_Add;
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
@@ -127,8 +127,8 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
         if (!m_extractTempDir->isValid()) {
             qDebug() << "Creation of temporary directory failed.";
-            emit signalFinished(PF_Error);
-            return PF_Error;
+            emit signalFinished(PFT_Error);
+            return PFT_Error;
         }
 
         destPath = m_extractTempDir->path();
@@ -139,7 +139,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
                       m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword));
 
-    return ret ? PT_Nomral : PF_Error;
+    return ret ? PFT_Nomral : PFT_Error;
 }
 
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
@@ -169,35 +169,35 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
 
-    return ret ? PT_Nomral : PF_Error;
+    return ret ? PFT_Nomral : PFT_Error;
 }
 
 PluginFinishType CliInterface::moveFiles(const QList<FileEntry> &/*files*/, const CompressOptions &/*options*/)
 {
 //    m_workStatus = WT_Add;
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &/*files*/, const CompressOptions &/*options*/)
 {
 //    m_workStatus = WT_Add;
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &/*files*/)
 {
 //    m_workStatus = WT_Add;
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType CliInterface::addComment(const QString &/*comment*/)
 {
 //    m_workStatus = WT_Add;
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 void CliInterface::setListEmptyLines(bool emptyLines)
@@ -430,7 +430,7 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
                         continue;
                     } else if (query.responseCancelled()) { // 取消
                         emit signalCancel();
-                        emit signalFinished(PF_Cancel);
+                        emit signalFinished(PFT_Cancel);
                         return false;
                     }
                 } else if (skipAll) { // 全部跳过
@@ -450,7 +450,7 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
             // 对临时文件夹内的文件进行rename操作，移到目标路径下
             if (!QFile(etractEntryTemp.absoluteFilePath()).rename(extractEntryDest.absoluteFilePath())) {
                 qDebug() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
-                emit signalFinished(PF_Error);
+                emit signalFinished(PFT_Error);
                 return false;
             }
         }
@@ -519,7 +519,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     deleteProcess();
 
     emit signalprogress(100);
-    emit signalFinished(PT_Nomral);
+    emit signalFinished(PFT_Nomral);
 }
 
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -550,5 +550,5 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     emit signalprogress(100);
-    emit signalFinished(PT_Nomral);
+    emit signalFinished(PFT_Nomral);
 }

@@ -77,7 +77,7 @@ Q_SIGNALS:
 
 public:
     JobType m_eJobType;     // 操作类型
-    PluginFinishType m_eFinishedType = PT_Nomral;
+    PluginFinishType m_eFinishedType = PFT_Nomral;
     ErrorType m_eErrorType = ET_NoError;
 
 };

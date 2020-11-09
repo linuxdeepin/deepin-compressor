@@ -71,7 +71,7 @@ PluginFinishType LibarchivePlugin::list()
             }
             eType = list_New();
         } else {
-            eType = PF_Error;
+            eType = PFT_Error;
         }
     } else {
         eType = list_New();
@@ -82,18 +82,18 @@ PluginFinishType LibarchivePlugin::list()
 
 PluginFinishType LibarchivePlugin::testArchive()
 {
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     if (!initializeReader()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     ArchiveWrite writer(archive_write_disk_new());
     if (!writer.data()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     // 选择要保留的属性
@@ -163,7 +163,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         // TODO: find out what to do here!!
         // 目前，无法处理tar归档文件中的绝对文件名
         if (entryName.startsWith(QLatin1Char('/'))) {
-            return PF_Error;
+            return PFT_Error;
         }
 
 
@@ -228,7 +228,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                     archive_read_data_skip(m_archiveReader.data());
                     archive_entry_clear(entry);
                     m_eErrorType = ET_UserCancelOpertion;
-                    return PF_Cancel;
+                    return PFT_Cancel;
                 } else if (query.responseSkip()) { //跳过
                     archive_read_data_skip(m_archiveReader.data());
                     archive_entry_clear(entry);
@@ -280,11 +280,11 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         case ARCHIVE_FAILED:
             emit error(("Filed error, extraction aborted."));
-            return PF_Error;
+            return PFT_Error;
 
         case ARCHIVE_FATAL:
             emit error(("Fatal error, extraction aborted."));
-            return PF_Error;
+            return PFT_Error;
 
         default:
             break;
@@ -324,9 +324,9 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
 
     if (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) {
-        return PT_Nomral;
+        return PFT_Nomral;
     } else {
-        return PF_Error;
+        return PFT_Error;
     }
 
 
@@ -337,27 +337,27 @@ PluginFinishType LibarchivePlugin::addFiles(const QList<FileEntry> &files, const
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
-    return PF_Error;
+    return PFT_Error;
 }
 
 PluginFinishType LibarchivePlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
-    return PF_Error;
+    return PFT_Error;
 }
 
 PluginFinishType LibarchivePlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
-    return PF_Error;
+    return PFT_Error;
 }
 
 PluginFinishType LibarchivePlugin::deleteFiles(const QList<FileEntry> &files)
 {
-    return PF_Error;
+    return PFT_Error;
 }
 
 PluginFinishType LibarchivePlugin::addComment(const QString &comment)
 {
-    return PF_Error;
+    return PFT_Error;
 }
 
 bool LibarchivePlugin::initializeReader()
@@ -442,7 +442,7 @@ PluginFinishType LibarchivePlugin::list_New()
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
 
     if (!initializeReader()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     QString compMethod = convertCompressionName(QString::fromUtf8(archive_filter_name(m_archiveReader.data(), 0)));
@@ -470,7 +470,7 @@ PluginFinishType LibarchivePlugin::list_New()
 //        archive_read_data_skip(m_archiveReader.data());
     }
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 QString LibarchivePlugin::convertCompressionName(const QString &method)

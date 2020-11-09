@@ -48,6 +48,18 @@ public:
         PT_Libzip
     };
 
+    // 工作类型
+    enum WorkType {
+        WT_List,
+        WT_Extract,
+        WT_Add,
+        WT_Delete,
+        WT_Move,
+        WT_Copy,
+        WT_Comment,
+        WT_Test
+    };
+
     /**
      * @brief list      加载压缩包
      * @return
@@ -146,6 +158,7 @@ protected:
     bool m_bOverwriteAll = false;        //是否全部覆盖
     bool m_bSkipAll = false;             // 是否全部跳过
     bool m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
+    WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型
     QString m_strPassword;

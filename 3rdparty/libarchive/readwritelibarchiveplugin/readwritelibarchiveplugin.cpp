@@ -82,11 +82,11 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
     m_writtenFiles.clear();
 
     if (!creatingNewFile && !initializeReader()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     if (!initializeWriter(creatingNewFile, options)) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     // First write the new files.
@@ -115,7 +115,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
 
         if (!writeFileFromEntry(selectedFile.strFullPath, options.strDestination, selectedFile, options.qTotalSize, bInternalDuty)) {
             finish(false);
-            return PF_Error;
+            return PFT_Error;
         }
 
 
@@ -155,7 +155,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
 
                 if (!writeFileTodestination(path, options.strDestination, externalPath, options.qTotalSize, bInternalDuty)) {
                     finish(false);
-                    return PF_Error;
+                    return PFT_Error;
                 }
 
                 addedEntries++;
@@ -178,21 +178,21 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
 //    }
 
     finish(isSuccessful);
-    emit signalFinished(PT_Nomral);
-    return PT_Nomral;
+    emit signalFinished(PFT_Nomral);
+    return PFT_Nomral;
 }
 
 PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &files)
 {
     if (files.count() == 0) {
-        return PF_Error;
+        return PFT_Error;
     }
     if (!initializeReader()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     if (!initializeWriter()) {
-        return PF_Error;
+        return PFT_Error;
     }
 
     const bool isSuccessful = deleteEntry(files);
@@ -201,7 +201,7 @@ PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &
     //    }
 
     finish(isSuccessful);
-    return isSuccessful ? PT_Nomral : PF_Error;
+    return isSuccessful ? PFT_Nomral : PFT_Error;
 }
 
 bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, const CompressOptions &options)

@@ -53,7 +53,7 @@ void SingleJob::start()
 
     // 若插件指针为空，立即异常退出
     if (m_pInterface == nullptr) {
-        slotFinished(PF_Error);
+        slotFinished(PFT_Error);
         return;
     }
 
@@ -253,7 +253,7 @@ void OpenJob::slotFinished(PluginFinishType eType)
 
     SingleJob::slotFinished(eType);
 
-    if (eType == PT_Nomral) {
+    if (eType == PFT_Nomral) {
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
         arguments << m_strTempExtractPath + QDir::separator() + m_stEntry.strFileName;

@@ -94,12 +94,12 @@ PluginFinishType LibzipPlugin::list()
 
     zip_close(archive);
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::testArchive()
 {
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
@@ -136,7 +136,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 continue;
             } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
-                return PF_Cancel;
+                return PFT_Cancel;
             } else {    // 处理错误
 
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
@@ -149,7 +149,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                     if (query.responseCancelled()) {
                         setPassword(QString());
                         zip_close(archive);
-                        return PF_Cancel;
+                        return PFT_Cancel;
                     } else {
                         setPassword(query.password());
                         zip_set_default_password(archive, m_strPassword.toUtf8().constData());
@@ -157,40 +157,18 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                     }
                 } else {
                     zip_close(archive);
-                    return PF_Error;
+                    return PFT_Error;
                 }
 
             }
         }
     } else { // 部分提取
         qlonglong qExtractSize = 0;
-        QList<int> listExtractIndex;
-        ArchiveData stArchiveData = DataManager::get_instance().archiveData();
-        // 筛选待提取文件/文件夹索引
-        for (FileEntry entry : files) {
-            auto iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
-            for (; iter != stArchiveData.mapFileEntry.end();) {
-                if (!iter.key().startsWith(entry.strFullPath)) {
-                    break;
-                } else {
-                    // 获取有效索引
-                    if (iter.value().iIndex >= 0) {
-                        listExtractIndex << iter.value().iIndex;
-                    }
-
-                    ++iter;
-                    // 如果文件，直接跳过
-                    if (!entry.strFullPath.endsWith(QDir::separator())) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        std::stable_sort(listExtractIndex.begin(), listExtractIndex.end()); // 升序排序
+        m_listCurIndex.clear();
+        getIndexBySelEntry(files);    // 获取索引值
 
         // 提取指定文件
-        for (int i = 0; i < listExtractIndex.count(); ++i) {
+        for (int i = 0; i < m_listCurIndex.count(); ++i) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 break;
             }
@@ -198,13 +176,13 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             QString strFileName;
 
             // 解压单个文件
-            m_eErrorType = extractEntry(archive, listExtractIndex[i], options, qExtractSize, strFileName);
+            m_eErrorType = extractEntry(archive, m_listCurIndex[i], options, qExtractSize, strFileName);
 
             if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
                 continue;
             } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
-                return PF_Cancel;
+                return PFT_Cancel;
             } else {    // 处理错误
 
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
@@ -217,7 +195,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                     if (query.responseCancelled()) {
                         setPassword(QString());
                         zip_close(archive);
-                        return PF_Cancel;
+                        return PFT_Cancel;
                     } else {
                         setPassword(query.password());
                         zip_set_default_password(archive, m_strPassword.toUtf8().constData());
@@ -225,7 +203,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                     }
                 } else {
                     zip_close(archive);
-                    return PF_Error;
+                    return PFT_Error;
                 }
 
             }
@@ -233,11 +211,12 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     }
 
     zip_close(archive);
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    m_workStatus = WT_List;
     qDebug() << "添加压缩包数据";
     int errcode = 0;
     zip_error_t err;
@@ -247,10 +226,10 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
     zip_error_init_with_code(&err, errcode);
     if (!archive) {
         emit error(("Failed to open the archive: %1")); //ReadOnlyArchiveInterface::error
-        return PF_Error;
+        return PFT_Error;
     }
 
-    m_filesize = 0;
+    m_curFileCount = 0;
     for (const FileEntry &e : files) {
         // 过滤上级目录（不对全路径进行压缩）
         QString strPath = QFileInfo(e.strFullPath).absolutePath() + QDir::separator();
@@ -265,9 +244,9 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
             if (!writeEntry(archive, e.strFullPath, options, true, strPath)) {
                 if (zip_close(archive)) {
                     emit error(("Failed to write archive."));
-                    return PF_Error;
+                    return PFT_Error;
                 }
-                return PF_Error;
+                return PFT_Error;
             }
 
             QDirIterator it(e.strFullPath,
@@ -282,35 +261,35 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
                     if (!writeEntry(archive, path, options, true, strPath)) {
                         if (zip_close(archive)) {
                             emit error(("Failed to write archive."));
-                            return PF_Error;
+                            return PFT_Error;
                         }
-                        return PF_Error;
+                        return PFT_Error;
                     }
                 } else {
                     if (!writeEntry(archive, path, options, false, strPath)) {
                         if (zip_close(archive)) {
                             emit error(("Failed to write archive."));
-                            return PF_Error;
+                            return PFT_Error;
                         }
-                        return PF_Error;
+                        return PFT_Error;
                     }
                 }
-                ++m_filesize;
+                ++m_curFileCount;
             }
         } else {
             if (!writeEntry(archive, e.strFullPath, options, false, strPath)) {
                 if (zip_close(archive)) {
                     emit error(("Failed to write archive."));
-                    return PF_Error;
+                    return PFT_Error;
                 }
-                return PF_Error;
+                return PFT_Error;
             }
         }
-        ++m_filesize;
+        ++m_curFileCount;
     }
 
 
-    m_addarchive = archive;
+    m_pCurArchive = archive;
     // TODO:Register the callback function to get progress feedback.
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
     zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);
@@ -318,40 +297,74 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
     if (zip_close(archive)) {
         emit error(("Failed to write archive."));
 
-        return PF_Error;
+        return PFT_Error;
     }
 
     // We list the entire archive after adding files to ensure entry
     // properties are up-to-date.
 
 
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 {
-    Q_UNUSED(files)
-    return PT_Nomral;
+    // 初始化变量
+    m_workStatus = WT_Delete;
+    int errcode = 0;
+    zip_error_t err;
+
+    // 打开压缩包
+    char *fileName = QFile::encodeName(m_strArchiveName).data();
+    zip_t *archive = zip_open(fileName, 0, &errcode);
+    zip_error_init_with_code(&err, errcode);
+    if (errcode != ZIP_ER_OK || archive == nullptr) {
+        // 打开压缩包失败
+        emit error(("Failed to open the archive: %1"));
+        m_eErrorType = ET_FileOpenError;
+        return PFT_Error;
+    }
+
+    m_curFileCount = 0;
+    m_pCurArchive = archive; // 置空，防止进度处理
+    zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this); // 进度回调
+
+    m_listCurIndex.clear();
+    getIndexBySelEntry(files);    // 获取索引值
+
+    // 循环调用删除操作
+    for (int i = 0; i < m_listCurIndex.count(); i++) {
+        deleteEntry(m_listCurIndex[i], archive/*, i, count*/);        //delete from archive
+    }
+
+    if (zip_close(archive)) {
+        emit error(("Failed to write archive."));
+        m_eErrorType = ET_FileWriteError;
+        return PFT_Error;
+    }
+
+    // 对于zip格式，删除完毕之后需要重新加载数据，刷新index值
+    return list();
 }
 
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
     Q_UNUSED(comment)
-    return PT_Nomral;
+    return PFT_Nomral;
 }
 
 
@@ -684,12 +697,32 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
 void LibzipPlugin::emitProgress(double dPercentage)
 {
-    zip_uint64_t index = zip_uint64_t(m_filesize * dPercentage);
+    if (m_pCurArchive) {
+        if (m_workStatus == WT_Add) {
+            // 压缩操作显示当前正在压缩的文件名
+            zip_uint64_t index = zip_uint64_t(m_curFileCount * dPercentage);
+            // 发送当前文件名信号
+            emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW)));
+        } else if (m_workStatus == WT_Delete) {
+            // 删除操作显示当前正在删除的文件名
+            int iSpan = qRound(m_listCurName.count() * dPercentage);    // 获取占比
+            QString strCurFileName;
+            // 按照进度占比处理当前文件名
+            if (iSpan < 0) {
+                strCurFileName = m_listCurName[0];
+            } else if (iSpan >= m_listCurIndex.count()) {
+                strCurFileName = m_listCurName[m_listCurName.count() - 1];
+            } else {
+                strCurFileName = m_listCurName[iSpan];
+            }
 
-    if (m_addarchive) {
-        emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_addarchive, index, ZIP_FL_ENC_RAW)));
+            // 发送当前文件名信号
+            emit signalCurFileName(strCurFileName);
+        }
+
     }
 
+    // 发送进度信号
     emit signalprogress(dPercentage * 100);
 }
 
@@ -729,4 +762,61 @@ const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex
         return strPassword.toUtf8().constData();
     }
 
+}
+
+bool LibzipPlugin::deleteEntry(int index, zip_t *archive)
+{
+    // 事件循环
+    if (QThread::currentThread()->isInterruptionRequested()) {
+        if (zip_close(archive)) {
+            // 发送保存失败
+            emit error(("Failed to write archive."));
+            m_eErrorType = ET_FileWriteError;
+            return false;
+        }
+        return false;
+    }
+
+    int statusDel = zip_delete(archive, zip_uint64_t(index));   // 获取删除状态
+    if (statusDel == -1) {
+        // 删除失败
+        emit error(("Failed to delete entry: %1"));
+        m_eErrorType = ET_DeleteError;
+        return false;
+    }
+
+    return true;
+}
+
+void LibzipPlugin::getIndexBySelEntry(const QList<FileEntry> &listEntry)
+{
+    m_listCurIndex.clear();
+    m_listCurName.clear();
+    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+
+    // 筛选待提取文件/文件夹索引
+    for (FileEntry entry : listEntry) {
+        auto iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
+        for (; iter != stArchiveData.mapFileEntry.end();) {
+            if (!iter.key().startsWith(entry.strFullPath)) {
+                break;
+            } else {
+                // 获取有效索引
+                if (iter.value().iIndex >= 0) {
+                    m_listCurIndex << iter.value().iIndex;      // 保存文件索引
+                    m_listCurName << iter.value().strFullPath;  // 保存文件名
+                }
+
+                ++iter;
+
+                // 如果文件，直接跳过
+                if (!entry.strFullPath.endsWith(QDir::separator())) {
+                    break;
+                }
+            }
+        }
+    }
+
+    // 升序排序
+    std::stable_sort(m_listCurIndex.begin(), m_listCurIndex.end());
 }

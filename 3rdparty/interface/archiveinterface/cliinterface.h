@@ -8,16 +8,16 @@
 #include <QScopedPointer>
 #include <QTemporaryDir>
 
-enum WorkType {
-    WT_List,
-    WT_Extract,
-    WT_Add,
-    WT_Delete,
-    WT_Move,
-    WT_Copy,
-    WT_Comment,
-    WT_Test
-};
+//enum WorkType {
+//    WT_List,
+//    WT_Extract,
+//    WT_Add,
+//    WT_Delete,
+//    WT_Move,
+//    WT_Copy,
+//    WT_Comment,
+//    WT_Test
+//};
 
 enum ParseState {
     ParseStateTitle = 0,
@@ -155,7 +155,7 @@ private:
     ExtractionOptions m_options; // 解压选项
     bool m_listEmptyLines = false; // true:rar加载list， false:7z加载list
     QByteArray m_stdOutData;  // 存储命令行输出数据
-    WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
+    //WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
     QString m_parseName;  // 解析后的文件名
     QScopedPointer<QTemporaryDir> m_extractTempDir;  // 提取文件的临时文件夹
     QString m_rootNode = ""; // 待提取文件的节点

@@ -170,9 +170,9 @@ void BatchExtractJob::slotHandleSingleJobFinished()
             ++m_iCurArchiveIndex;
             QFileInfo curFileInfo(m_listFiles[m_iCurArchiveIndex]);
 
-            if (m_pCurJob->m_eFinishedType == PT_Nomral) {
+            if (m_pCurJob->m_eFinishedType == PFT_Nomral) {
                 // 正常结束
-            } else if (m_pCurJob->m_eFinishedType == PF_Cancel) {
+            } else if (m_pCurJob->m_eFinishedType == PFT_Cancel) {
                 // 取消
             } else {
                 // 错误

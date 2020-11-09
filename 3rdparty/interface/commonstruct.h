@@ -29,9 +29,9 @@
 
 // 插件结束类型
 enum PluginFinishType {
-    PT_Nomral = 0,     // 正常退出
-    PF_Cancel,         // 取消
-    PF_Error,          // 错误
+    PFT_Nomral = 0,     // 正常退出
+    PFT_Cancel,         // 取消
+    PFT_Error,          // 错误
 };
 Q_DECLARE_METATYPE(PluginFinishType)
 
@@ -44,6 +44,7 @@ enum ErrorType {
     ET_FileOpenError,     // 文件打开错误
     ET_FileReadError,     // 文件读取错误
     ET_FileWriteError,     // 文件写错误
+    ET_DeleteError,     // 文件写错误
 
     ET_UserCancelOpertion,     // 用户取消操作
 };

@@ -130,12 +130,29 @@ private:
      */
     const char *passwordUnicode(const QString &strPassword, int iIndex);
 
+    /**
+     * @brief deleteEntry   从压缩包中删除指定文件
+     * @param index     文件索引
+     * @param archive   压缩包数据
+     * @return
+     */
+    bool deleteEntry(int index, zip_t *archive);
+
+    /**
+     * @brief getIndexBySelEntry    根据选择的文件获取所有需要操作的entry
+     * @param listEntry             选择的文件
+     */
+    void getIndexBySelEntry(const QList<FileEntry> &listEntry);
+
+
 Q_SIGNALS:
     //void error(const QString &message = "", const QString &details = "");
 
 private:
-    int m_filesize;             // 压缩的文件数目
-    zip_t *m_addarchive = nullptr;        // 压缩操作存储的压缩包
+    int m_curFileCount = 0;             // 文件数目
+    zip_t *m_pCurArchive = nullptr;     // 当前正在操作的压缩包
+    QList<int> m_listCurIndex;      // 当前操作的所有文件索引
+    QStringList m_listCurName;      // 当前操作的所有文件索引
     QStringList m_listCodecs;   // 中文编码格式
 };
 
