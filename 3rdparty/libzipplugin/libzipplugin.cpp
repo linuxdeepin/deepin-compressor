@@ -92,7 +92,6 @@ PluginFinishType LibzipPlugin::list()
         handleArchiveData(archive, i);  // 构建数据
     }
 
-    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     zip_close(archive);
 
     return PT_Nomral;
@@ -166,12 +165,28 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     } else { // 部分提取
         qlonglong qExtractSize = 0;
         QList<int> listExtractIndex;
+        ArchiveData stArchiveData = DataManager::get_instance().archiveData();
         // 筛选待提取文件/文件夹索引
-        foreach (FileEntry entry, files) {
-            if (entry.iIndex >= 0) {
-                listExtractIndex << entry.iIndex;
+        for (FileEntry entry : files) {
+            auto iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
+            for (; iter != stArchiveData.mapFileEntry.end();) {
+                if (!iter.key().startsWith(entry.strFullPath)) {
+                    break;
+                } else {
+                    // 获取有效索引
+                    if (iter.value().iIndex >= 0) {
+                        listExtractIndex << iter.value().iIndex;
+                    }
+
+                    ++iter;
+                    // 如果文件，直接跳过
+                    if (!entry.strFullPath.endsWith(QDir::separator())) {
+                        break;
+                    }
+                }
             }
         }
+
         std::stable_sort(listExtractIndex.begin(), listExtractIndex.end()); // 升序排序
 
         // 提取指定文件
@@ -315,21 +330,27 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
 
 PluginFinishType LibzipPlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    Q_UNUSED(files)
+    Q_UNUSED(options)
     return PT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    Q_UNUSED(files)
+    Q_UNUSED(options)
     return PT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 {
+    Q_UNUSED(files)
     return PT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
+    Q_UNUSED(comment)
     return PT_Nomral;
 }
 
@@ -412,7 +433,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
 
     // 设置压缩等级
     const int compLevel = (options.iCompressionLevel != -1) ? options.iCompressionLevel : 6;
-    if (zip_set_file_compression(archive, uindex, compMethod, compLevel) != 0) {
+    if (zip_set_file_compression(archive, uindex, compMethod, zip_uint32_t(compLevel)) != 0) {
         emit error(("Failed to set compression options for entry: %1"));
         return false;
     }
@@ -430,6 +451,7 @@ void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 
 int LibzipPlugin::cancelCallback(zip_t *, void *that)
 {
+    Q_UNUSED(that)
     return 0;
     //return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
 }
@@ -619,7 +641,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         QDataStream out(&file);
         int kb = 1024;
         zip_int64_t sum = 0;
-        char buf[kb];
+        char buf[1024];
         int writeSize = 0;
         while (sum != zip_int64_t(statBuffer.size)) {
 
