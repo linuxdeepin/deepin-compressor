@@ -98,6 +98,12 @@ public:
      */
     ErrorType errorType();
 
+    /**
+     * @brief updateArchiveData   更新压缩包数据
+     * @return
+     */
+    virtual PluginFinishType updateArchiveData() = 0;
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.

@@ -170,10 +170,10 @@ void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<File
     DeleteJob *pDeleteJob = new DeleteJob(listSelEntry, m_pInterface);
 
     // 连接槽函数
-    connect(pDeleteJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-    connect(pDeleteJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
-    connect(pDeleteJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
-    connect(pDeleteJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+    connect(pDeleteJob, &DeleteJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pDeleteJob, &DeleteJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pDeleteJob, &DeleteJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pDeleteJob, &DeleteJob::signalQuery, this, &ArchiveManager::signalQuery);
 
     m_pArchiveJob = pDeleteJob;
     pDeleteJob->start();
@@ -217,8 +217,17 @@ void ArchiveManager::openFile(const QString &strArchiveName, const FileEntry &st
 
 void ArchiveManager::slotJobFinished()
 {
+    if (m_pArchiveJob != nullptr && m_pInterface != nullptr) {
+        // 如果是追加压缩或者删除压缩包数据，需要再次刷新数据
+        if (m_pArchiveJob->m_eJobType == ArchiveJob::JT_Add || m_pArchiveJob->m_eJobType == ArchiveJob::JT_Delete) {
+            m_pInterface->updateArchiveData();
+        }
+    }
+
+    // 发送结束信号
     emit signalJobFinished();
 
+    // 释放job
     if (m_pArchiveJob != nullptr) {
         m_pArchiveJob->deleteLater();
         m_pArchiveJob = nullptr;

@@ -357,13 +357,46 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
         return PFT_Error;
     }
 
-    // 对于zip格式，删除完毕之后需要重新加载数据，刷新index值
-    return list();
+    return PFT_Nomral;
 }
 
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
     Q_UNUSED(comment)
+    return PFT_Nomral;
+}
+
+PluginFinishType LibzipPlugin::updateArchiveData()
+{
+    DataManager::get_instance().resetArchiveData();
+
+    // 处理加载流程
+    int errcode = 0;
+    zip_error_t err;
+
+    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
+    zip_error_init_with_code(&err, errcode);
+
+    //某些特殊文件，如.crx用zip打不开，需要替换minizip
+    if (!archive) {
+//        m_bAllEntry = true;
+//        return minizip_list();
+    }
+
+    // 获取文件压缩包文件数目
+    const auto nofEntries = zip_get_num_entries(archive, 0);
+
+    // 循环构建数据
+    for (zip_int64_t i = 0; i < nofEntries; i++) {
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            break;
+        }
+
+        handleArchiveData(archive, i);  // 构建数据
+    }
+
+    zip_close(archive);
+
     return PFT_Nomral;
 }
 

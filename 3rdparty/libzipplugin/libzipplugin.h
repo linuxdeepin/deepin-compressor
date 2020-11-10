@@ -62,6 +62,7 @@ public:
     PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
     PluginFinishType addComment(const QString &comment) override;
+    PluginFinishType updateArchiveData() override;
 
 private:
     /**
@@ -154,6 +155,7 @@ private:
     QList<int> m_listCurIndex;      // 当前操作的所有文件索引
     QStringList m_listCurName;      // 当前操作的所有文件索引
     QStringList m_listCodecs;   // 中文编码格式
+
 };
 
 #endif // LIBZIPPLUGIN_H

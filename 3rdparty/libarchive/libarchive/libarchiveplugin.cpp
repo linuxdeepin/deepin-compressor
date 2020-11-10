@@ -360,6 +360,11 @@ PluginFinishType LibarchivePlugin::addComment(const QString &comment)
     return PFT_Error;
 }
 
+PluginFinishType LibarchivePlugin::updateArchiveData()
+{
+    return PFT_Nomral;
+}
+
 bool LibarchivePlugin::initializeReader()
 {
     m_archiveReader.reset(archive_read_new());

@@ -200,6 +200,11 @@ PluginFinishType CliInterface::addComment(const QString &/*comment*/)
     return PFT_Nomral;
 }
 
+PluginFinishType CliInterface::updateArchiveData()
+{
+    return PFT_Nomral;
+}
+
 void CliInterface::setListEmptyLines(bool emptyLines)
 {
     m_listEmptyLines = emptyLines;
