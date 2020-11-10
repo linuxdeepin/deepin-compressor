@@ -68,26 +68,26 @@ public:
 
     /**
      * @brief extractFiles    解压文件
-     * @param strArchiveName    压缩包名称
+     * @param strArchiveFullPath    压缩包全路径
      * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
      * @param options           解压参数
      */
-    void extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
+    void extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
 
     /**
      * @brief extractFiles2Path     提取文件至指定目录
-     * @param strArchiveName        压缩包名称
+     * @param strArchiveFullPath        压缩包全路径
      * @param listSelEntry          选中的提取文件
      * @param stOptions             提取参数
      */
-    void extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
+    void extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
 
     /**
      * @brief deleteFiles       删除压缩包中的文件
-     * @param strArchiveName    压缩包名称
+     * @param strArchiveFullPath    压缩包全路径
      * @param listSelEntry      当前选中的文件
      */
-    void deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listSelEntry);
+    void deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry);
 
     /**
      * @brief batchExtractFiles 批量解压
@@ -99,12 +99,12 @@ public:
 
     /**
      * @brief openFile          打开压缩包中文件
-     * @param strArchiveName    压缩包名称
+     * @param strArchiveFullPath    压缩包全路径
      * @param stEntry           待打开文件数据
      * @param strTargetPath     临时解压路径
      * @param strProgram        应用程序名
      */
-    void openFile(const QString &strArchiveName, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
+    void openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
 
 private:
 

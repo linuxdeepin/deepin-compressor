@@ -132,6 +132,12 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             // 解压单个文件
             m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
 
+            if (options.bRightExtract && i == 0) {
+                FileEntry entry;
+                entry.strFullPath = strFileName;
+                DataManager::get_instance().archiveData().listRootEntry << entry;
+            }
+
             if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
                 continue;
             } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志

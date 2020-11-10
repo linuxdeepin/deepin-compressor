@@ -41,7 +41,7 @@ class SuccessPage;
 class FailurePage;
 class SettingDialog;
 class ProgressDialog;
-
+class DDesktopServicesThread;
 class ArchiveManager;
 class QFileSystemWatcher;
 
@@ -78,6 +78,11 @@ private:
     void initConnections();
 
     /**
+     * @brief loadWindowState   加载状态
+     */
+    void loadWindowState();
+
+    /**
      * @brief refreshPage   刷新界面页
      */
     void refreshPage();
@@ -104,9 +109,9 @@ private:
 
     /**
      * @brief loadArchive       加载压缩包
-     * @param strArchiveName    压缩包名称（全路径）
+     * @param strArchiveFullPath    压缩包全路径
      */
-    void loadArchive(const QString &strArchiveName);
+    void loadArchive(const QString &strArchiveFullPath);
     /**
      * @brief Extract2PathFinish 提取成功提示
      * @param msg
@@ -118,6 +123,13 @@ private:
      * @return
      */
     QString createUUID();
+
+    /**
+     * @brief getExtractPath   根据设置选项是否自动创建文件夹获取解压路径
+     * @param strArchiveFullPath
+     * @return
+     */
+    QString getExtractPath(const QString &strArchiveFullPath);
 
     // QWidget interface
 protected:
@@ -260,13 +272,15 @@ private:
     QSettings *m_pSettings;     // 默认配置信息
 
     Page_ID m_ePageID = PI_Home;      // 界面标识
+    Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
 
     int m_iInitUITimer = 0;                       // 初始化界面定时器
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
-    Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
-
     qint64 m_qTotalSize = 0;            // 压缩文件总大小
+    QString m_strExtractPath;           // 解压路径
+    QList<QString> m_listExractFiles; // 存储提取文件,用来结束之后自动打开文件夹时选中
+    DDesktopServicesThread *m_pDDesktopServicesThread = nullptr;    // 打开文管界面线程服务
 
     // 打开压缩包文件
     QFileSystemWatcher *m_pOpenFileWatcher;       // 对打开的文件监控

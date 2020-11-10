@@ -27,6 +27,33 @@ SettingDialog::~SettingDialog()
 
 }
 
+QString SettingDialog::getDefaultExtractPath()
+{
+    return m_curpath;
+}
+
+bool SettingDialog::isAutoCreatDir()
+{
+    // 读取配置文件信息
+    return m_settings->value("base.decompress.create_folder").toBool();
+}
+
+bool SettingDialog::isAutoOpen()
+{
+    // 读取配置文件信息
+    return m_settings->value("base.decompress.open_folder").toBool();
+}
+
+bool SettingDialog::isAutoDeleteFile()
+{
+    return m_settings->value("base.file_management.delete_file").toBool();
+}
+
+QString SettingDialog::isAutoDeleteArchive()
+{
+    return m_deleteArchiveOption->value().toString();
+}
+
 void SettingDialog::initUI()
 {
     createSettingButton();

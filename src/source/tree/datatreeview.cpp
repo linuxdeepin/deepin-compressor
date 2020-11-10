@@ -34,6 +34,7 @@
 // #include <QDebug>
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
 {
 
 }
@@ -321,6 +322,7 @@ void DataTreeView::dropEvent(QDropEvent *e)
 
 void DataTreeView::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event)
     resizeColumnWidth();
 }
 

@@ -28,6 +28,7 @@
 #include <dfilechooseredit.h>
 #include <DPasswordEdit>
 #include <DDoubleSpinBox>
+#include <DTextEdit>
 
 DWIDGET_USE_NAMESPACE
 
@@ -127,6 +128,18 @@ private:
      */
     void setSplitEnabled(bool bEnabled);
 
+    /**
+     * @brief refreshCompressLevel  刷新压缩方式
+     * @param strType               格式类型
+     */
+    void refreshCompressLevel(const QString &strType);
+
+    /**
+     * @brief setCommentEnabled 设置注释是否可用
+     * @param bEnabled      是否可用
+     */
+    void setCommentEnabled(bool bEnabled);
+
 signals:
     void signalCompressClicked(const QVariant &val);
 
@@ -166,6 +179,11 @@ private slots:
      */
     void slotCompressClicked();
 
+    /**
+     * @brief slotCommentTextChanged    注释内容变化
+     */
+    void slotCommentTextChanged();
+
 private:
     // 左侧界面
     DLabel *m_pTypePixmapLbl;        // 类型图标
@@ -183,6 +201,10 @@ private:
     CustomSwitchButton *m_pListEncryptionBtn;  // 列表加密切换
     CustomCheckBox *m_pSplitCkb;    // 分卷压缩选择
     DDoubleSpinBox *m_pSplitValueEdt; // 分卷大小输入框
+
+    DComboBox *m_pCompressLevelCkb;       // 压缩方式选择项
+    DLabel *m_pCommentLbl;                  // 注释文字标签
+    DTextEdit *m_pCommentEdt;       // 注释信息
 
     // 压缩按钮
     CustomPushButton *m_pCompressBtn;

@@ -338,7 +338,7 @@ void UnCompressView::extract2Path(const QString &strPath)
     QList<FileEntry> listSelEntry = getSelEntry();    // 待提取的文件数据
     ExtractionOptions stOptions;    // 提取参数
     stOptions.strTargetPath = strPath;
-    stOptions.strDestination = m_strCurrentPath;
+    stOptions.strDestination = (m_iLevel == 0) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
 
     // 获取所有文件数据
     foreach (FileEntry entry, listSelEntry) {

@@ -17,6 +17,36 @@ public:
     explicit SettingDialog(QWidget *parent = nullptr);
     ~SettingDialog() override;
 
+    /**
+     * @brief getDefaultExtractPath 获取默认解压目录
+     * @return
+     */
+    QString getDefaultExtractPath();
+
+    /**
+     * @brief isAutoCreatDir    是否创建新的目录进行解压
+     * @return      true表示创建，false表示不创建
+     */
+    bool isAutoCreatDir();
+
+    /**
+     * @brief isAutoOpen    是否自动打开,到对应的文件目录
+     * @return      true表示自动打开，false表示不打开
+     */
+    bool isAutoOpen();
+
+    /**
+     * @brief isAutoDeleteFile 压缩成功是否自动删除文件
+     * @return true表示自动删除 false表示不自动删除
+     */
+    bool isAutoDeleteFile();
+
+    /**
+     * @brief isAutoDeleteArchive 解压成功是否自动删除压缩包
+     * @return 表示自动删除 false表示不自动删除
+     */
+    QString isAutoDeleteArchive();
+
 private:
     /**
      * @brief initUI    初始化界面

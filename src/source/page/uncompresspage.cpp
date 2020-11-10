@@ -26,6 +26,7 @@
 #include "DebugTimeManager.h"
 
 #include <DFontSizeManager>
+#include <DFileDialog>
 
 #include <QHBoxLayout>
 #include <QDebug>
@@ -43,15 +44,15 @@ UnCompressPage::~UnCompressPage()
 
 }
 
-void UnCompressPage::setArchiveName(const QString &strArchiveName)
+void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath)
 {
-    qDebug() << "加载压缩包：" << strArchiveName;
-    m_strArchiveName = strArchiveName;
+    qDebug() << "加载压缩包：" << strArchiveFullPath;
+    m_strArchiveFullPath = strArchiveFullPath;
 }
 
-QString UnCompressPage::archiveName()
+QString UnCompressPage::archiveFullPath()
 {
-    return m_strArchiveName;
+    return m_strArchiveFullPath;
 }
 
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
@@ -120,6 +121,7 @@ void UnCompressPage::initUI()
 
 void UnCompressPage::initConnections()
 {
+    connect(m_pUncompressPathBtn, &DPushButton::clicked, this, &UnCompressPage::slotUnCompressPathClicked);
     connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
     connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
     connect(m_pUnCompressView, &UnCompressView::signalDelFiles, this, &UnCompressPage::signalDelFiles);
@@ -140,7 +142,7 @@ QString UnCompressPage::elidedExtractPath(const QString &strPath)
 
 void UnCompressPage::slotUncompressClicked()
 {
-    QFileInfo file(m_strArchiveName);
+    QFileInfo file(m_strArchiveFullPath);
     PERF_PRINT_BEGIN("POINT-04", "压缩包名：" + file.fileName() + " 大小：" + QString::number(file.size()));
 
     // 判断解压路径是否有可执行权限或者路径是否存在进行解压创建文件
@@ -161,5 +163,27 @@ void UnCompressPage::slotUncompressClicked()
         return;
     } else { // 发送解压信号
         emit signalUncompress(m_strUnCompressPath);
+    }
+}
+
+void UnCompressPage::slotUnCompressPathClicked()
+{
+    // 创建文件选择对话框
+    DFileDialog dialog(this);
+    dialog.setAcceptMode(DFileDialog::AcceptOpen);
+    dialog.setFileMode(DFileDialog::Directory);
+    dialog.setWindowTitle(tr("Find directory"));
+    dialog.setDirectory(m_strUnCompressPath);
+
+    const int mode = dialog.exec();
+
+    if (mode != QDialog::Accepted) {
+        return;
+    }
+
+    // 设置默认解压路径为选中的目录
+    QList<QUrl> listUrl = dialog.selectedUrls();
+    if (listUrl.count() > 0) {
+        setDefaultUncompressPath(listUrl.at(0).toLocalFile());
     }
 }

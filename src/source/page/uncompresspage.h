@@ -41,16 +41,16 @@ public:
     ~UnCompressPage() override;
 
     /**
-     * @brief setArchiveName    设置压缩包名称
-     * @param strArchiveName    压缩包名称（含路径）
+     * @brief setArchiveFullPath    设置压缩包全路径
+     * @param strArchiveFullPath    压缩包全路径
      */
-    void setArchiveName(const QString &strArchiveName);
+    void setArchiveFullPath(const QString &strArchiveFullPath);
 
     /**
-     * @brief archiveName   获取压缩包名称
+     * @brief archiveFullPath   获取压缩包全路径
      * @return
      */
-    QString archiveName();
+    QString archiveFullPath();
 
     /**
      * @brief setDefaultUncompressPath  设置默认解压路径
@@ -73,7 +73,7 @@ protected:
      * @brief resizeEvent   刷新解压路径显示
      * @param e
      */
-    void resizeEvent(QResizeEvent *e);
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
     /**
@@ -127,12 +127,17 @@ private Q_SLOTS:
      */
     void slotUncompressClicked();
 
+    /**
+     * @brief slotUnCompressPathClicked     设置解压路径
+     */
+    void slotUnCompressPathClicked();
+
 private:
     UnCompressView *m_pUnCompressView;    // 压缩列表
     CustomCommandLinkButton *m_pUncompressPathBtn; //解压目标路径按钮
     CustomPushButton *m_pUnCompressBtn;   //解压按钮
 
-    QString m_strArchiveName;       // 压缩包名称
+    QString m_strArchiveFullPath;       // 压缩包名称
     QString m_strUnCompressPath;    // 解压路径
 };
 

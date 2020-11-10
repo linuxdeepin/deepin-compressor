@@ -123,10 +123,10 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
     pLoadJob->start();
 }
 
-void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<FileEntry> &files, const ExtractionOptions &stOptions)
+void ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = UiTools::createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
@@ -142,10 +142,10 @@ void ArchiveManager::extractFiles(const QString &strArchiveName, const QList<Fil
     pExtractJob->start();
 }
 
-void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
+void ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = UiTools::createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     ExtractJob *pExtractJob = new ExtractJob(listSelEntry, m_pInterface, stOptions);
@@ -161,10 +161,10 @@ void ArchiveManager::extractFiles2Path(const QString &strArchiveName, const QLis
     pExtractJob->start();
 }
 
-void ArchiveManager::deleteFiles(const QString &strArchiveName, const QList<FileEntry> &listSelEntry)
+void ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = UiTools::createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     DeleteJob *pDeleteJob = new DeleteJob(listSelEntry, m_pInterface);
@@ -196,10 +196,10 @@ void ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
     pBatchExtractJob->start();
 }
 
-void ArchiveManager::openFile(const QString &strArchiveName, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
+void ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = UiTools::createInterface(strArchiveName);
+        m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
     OpenJob *pOpenJob = nullptr;
