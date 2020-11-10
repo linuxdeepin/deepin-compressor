@@ -143,6 +143,8 @@ private:
     QString m_oldWorkingDir;
     QString m_extractDestDir; //解压目的路径
 //    QString destDirName; //取消解压，需要该变量
+
+protected:
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
 };
 

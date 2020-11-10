@@ -195,6 +195,8 @@ PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &
         return PFT_Error;
     }
 
+    m_currentExtractedFilesSize = 0; //初始化，删除进度使用
+
     const bool isSuccessful = deleteEntry(files);
     //    if (isSuccessful) {
     //        emit entryRemoved(files[0]->fullPath());
