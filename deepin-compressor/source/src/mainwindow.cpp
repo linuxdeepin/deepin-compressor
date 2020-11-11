@@ -2853,10 +2853,6 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if (Operation_NULL == m_operationtype) {
         qDebug() << "do nothing";
     } else {
-        if (errorCode == KJob::CancelError) {
-            slotquitApp();
-        }
-
         if (m_convertType.size() == 0) {
             m_ePageID = PAGE_UNZIP_SUCCESS; // 无错误信息，解压成功，显示解压成功界面
             if (errorCode == KJob::UserSkiped) {
@@ -2867,6 +2863,12 @@ void MainWindow::slotExtractionDone(KJob *job)
             }
 
             refreshPage();
+        }
+
+        // 文件已存在提示，点击右上角取消后，关闭应用
+        // gitcommitID: 11008e52
+        if (errorCode == KJob::CancelError) {
+            slotquitApp();
         }
 
 //        refreshPage();
