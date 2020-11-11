@@ -48,6 +48,8 @@ CliInterface::~CliInterface()
 
 PluginFinishType CliInterface::list()
 {
+    DataManager::get_instance().resetArchiveData();
+
     m_workStatus = WT_List;
 
     bool ret = false;
@@ -186,11 +188,17 @@ PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &/*files*/, cons
     return PFT_Nomral;
 }
 
-PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &/*files*/)
+PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
 {
-//    m_workStatus = WT_Add;
+    m_workStatus = WT_Delete;
+    m_files = files;
 
-    return PFT_Nomral;
+    bool ret = false;
+
+    ret = runProcess(m_cliProps->property("deleteProgram").toString(),
+                     m_cliProps->deleteArgs(m_strArchiveName, files, QString()));
+
+    return ret ? PFT_Nomral : PFT_Error;
 }
 
 PluginFinishType CliInterface::addComment(const QString &/*comment*/)
@@ -202,6 +210,39 @@ PluginFinishType CliInterface::addComment(const QString &/*comment*/)
 
 PluginFinishType CliInterface::updateArchiveData()
 {
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData tempStArchiveData = DataManager::get_instance().archiveData();
+
+    foreach (FileEntry file, m_files) {
+        if (file.isDirectory) { // 删除文件夹
+            foreach (FileEntry tempFile, tempStArchiveData.mapFileEntry) {
+                // 在map中查找该文件下的文件并删除
+                if (tempFile.strFullPath.startsWith(file.strFullPath)) {
+                    stArchiveData.mapFileEntry.remove(tempFile.strFullPath);
+                }
+            }
+
+            // 文件夹是第一层的数据
+            if (file.strFullPath.endsWith(QLatin1Char('/')) && file.strFullPath.count(QLatin1Char('/')) == 1) {
+                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                    if (stArchiveData.listRootEntry.at(i).strFullPath == file.strFullPath) {
+                        stArchiveData.listRootEntry.removeAt(i);
+                    }
+                }
+            }
+        } else { // 删除文件
+            stArchiveData.mapFileEntry.remove(file.strFullPath); //在map中删除该文件
+            // 文件是第一层的数据
+            if (!file.strFullPath.contains(QLatin1Char('/'))) {
+                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                    if (stArchiveData.listRootEntry.at(i).strFullPath == file.strFullPath) {
+                        stArchiveData.listRootEntry.removeAt(i);
+                    }
+                }
+            }
+        }
+    }
+
     return PFT_Nomral;
 }
 
@@ -270,18 +311,26 @@ void CliInterface::handleProgress(const QString &line)
             int percentage = line.midRef(pos - 3, 3).toInt();
             if (percentage > 0) {
                 if (line.contains("\b\b\b\b") == true) {
-                    QStringRef strfilename;
-                    int count = line.indexOf("+");
-                    if (-1 == count) {
-                        count = line.indexOf("-");
-                    }
+                    QString strfilename;
+                    if (m_workStatus == WT_Extract) {
+                        int count = line.indexOf("+");
+                        if (-1 == count) {
+                            count = line.indexOf("-");
+                        }
 
-                    if (count > 0) {
-                        strfilename = line.midRef(count + 2);
+                        if (count > 0) {
+                            strfilename = line.midRef(count + 2).toString();
+                        }
+                    } else {
+                        if (line.contains("% = ")) {
+                            strfilename = line.right(line.length() - line.indexOf(QLatin1Char('=')) - 2);
+                        } else if (line.contains("% R ")) {
+                            strfilename = line.right(line.length() - line.indexOf(QLatin1Char('R')) - 2);
+                        }
                     }
 
                     emit signalprogress(percentage);
-                    emit signalCurFileName(strfilename.toString());
+                    emit signalCurFileName(strfilename);
                 }
             }
         }
@@ -478,7 +527,7 @@ void CliInterface::readStdout(bool handleAll)
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
-    bool wrongPwd = isWrongPasswordMsg(lines.last());  // 7z列表加密的情况;
+    bool wrongPwd = isWrongPasswordMsg(lines.last());  // 列表加密的情况;
 
     if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPwd) {
         handleAll = true; // 7z加载会出现换行错误
@@ -486,6 +535,12 @@ void CliInterface::readStdout(bool handleAll)
 
     if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x") && !wrongPwd) {
         handleAll = true; // rar解压加密文件,密码正确开始解压，需要替换同名文件时会换行错误
+    }
+
+    bool foundErrorMessage = (wrongPwd || isPasswordPrompt(lines.last()));
+
+    if (foundErrorMessage) {
+        handleAll = true;
     }
 
     if (handleAll) {

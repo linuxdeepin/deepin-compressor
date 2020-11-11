@@ -143,36 +143,6 @@ bool Cli7zPlugin::readListLine(const QString &line)
     const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
     QRegularExpressionMatch matchVersion;
 
-    /*
-    7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
-    p7zip Version 16.02 (locale=zh_CN.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs Intel(R) Core(TM) i3-9100F CPU @ 3.60GHz (906EB),ASM,AES-NI)
-
-    Scanning the drive for archives:
-    1 file, 290493878 bytes (278 MiB)
-
-    Listing archive: /home/chenglu/Desktop/2.7z
-
-    --
-    Path = /home/chenglu/Desktop/2.7z
-    Type = 7z
-    Physical Size = 290493878
-    Headers Size = 114
-    Method = LZMA2:25
-    Solid = -
-    Blocks = 1
-
-    ----------
-    Path = 2.mp4
-    Size = 293056000
-    Packed Size = 290493764
-    Modified = 2020-01-10 10:35:48
-    Attributes = A_ -rw-r--r--
-    CRC = 85DD54C3
-    Encrypted = -
-    Method = LZMA2:25
-    Block = 0
-    */
-
     switch (m_parseState) {
     case ParseStateTitle:
         matchVersion = rxVersionLine.match(line);
@@ -281,14 +251,14 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         return false;
     }
 
-    if (workStatus == WT_Add || workStatus == WT_Extract) {  // 压缩、解压进度
+    if (workStatus == WT_List) {
+        return readListLine(line);   // 加载压缩文件，处理命令行内容
+    } else if (workStatus == WT_Add || workStatus == WT_Extract || workStatus == WT_Delete) { // 压缩、解压、删除进度
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
         }
 
         handleProgress(line);
-    } else if (workStatus == WT_List) {
-        return readListLine(line);   // 加载压缩文件，处理命令行内容
     }
 
     return true;

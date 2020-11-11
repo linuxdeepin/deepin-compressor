@@ -31,7 +31,7 @@
 #include <QPainter>
 #include <QHeaderView>
 #include <QMimeData>
-// #include <QDebug>
+#include <QDebug>
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)

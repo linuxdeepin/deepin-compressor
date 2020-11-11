@@ -154,7 +154,29 @@ QStringList CliProperties::commentArgs(const QString &archive, const QString &co
 QStringList CliProperties::deleteArgs(const QString &archive, const QList<FileEntry> &files, const QString &password)
 {
     QStringList args;
+    args << m_deleteSwitch;
+
+    if (!m_progressarg.isEmpty()) {
+        args << m_progressarg;
+    }
+
+    if (!password.isEmpty()) {
+        args << substitutePasswordSwitch(password);
+    }
+
+    args << archive;
+    for (const FileEntry &e : files) {
+        QString path = e.strFullPath;
+        if (path.endsWith(QLatin1Char('/'))) {
+            path.chop(1);
+        }
+
+        args << path;
+    }
+
+    args.removeAll(QString());
     return args;
+
 }
 
 QStringList CliProperties::extractArgs(const QString &archive, const QStringList &files, bool preservePaths, const QString &password)

@@ -229,6 +229,18 @@ bool CliRarPlugin::readListLine(const QString &line)
 bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 {
     if (workStatus == WT_List) {
+//        if (handleEnterPwdLine(line)) {  // 列表解密我文件，加载提示需要输入密码
+//            m_replaceLine.clear();
+//            m_eErrorType = ET_NeedPassword;
+//            return true;
+//        }
+
+//        if (handleIncorrectPwdLine(line)) {  // 提示密码错误
+//            m_replaceLine.clear();
+//            m_eErrorType = ET_WrongPassword;
+//            return false;
+//        }
+
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Extract) {
         qDebug() << "rar extract line ---" << line;
