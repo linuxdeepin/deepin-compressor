@@ -66,6 +66,11 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    // //打印输入参数
+    // for (int i = 0; i < argc; ++i) {
+    //     qDebug() << QString("argv[%1]:").arg(i) << argv[i];
+    // }
+
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
     if (appIcon.isNull()) {

@@ -83,6 +83,7 @@ enum Page_ID {
     PI_CompressFailure,     // 压缩失败
     PI_UnCompressFailure,   // 解压失败
     PI_ConvertFailure,      // 转换失败
+    PI_LoadedFailure,       // 加载失败
     PI_Loading,             // 加载
 };
 

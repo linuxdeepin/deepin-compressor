@@ -146,7 +146,6 @@ struct ExtractionOptions {
     ExtractionOptions()
     {
         bAllExtract = true;
-        bRightExtract = false;
         qSize = 0;
         qComressSize = 0;
         bRightExtract = false;

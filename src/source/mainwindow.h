@@ -131,6 +131,12 @@ private:
      */
     QString getExtractPath(const QString &strArchiveFullPath);
 
+    /**
+     * @brief transSplitFileName 处理7z、rar分卷压缩包名称
+     * @param fileName 原始名称
+     */
+    void transSplitFileName(QString &fileName); // *.7z.003 -> *.7z.001
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
