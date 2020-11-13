@@ -48,9 +48,9 @@ include_directories(../../../../../3rdparty/libarchive/libarchive)
 include_directories( ../../../../../3rdparty/libarchive/readonlylibarchiveplugin)
 include_directories(../../../../../3rdparty/libarchive/readwritelibarchiveplugin)
 
-include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest/googlemock/include)
-include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest/googletest/include)
+#include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+#include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest/googlemock/include)
+#include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/googletest/googletest/include)
 
 
 
@@ -75,7 +75,7 @@ file(GLOB_RECURSE
 add_executable(${EXE_NAME}_test  ${h_files} ${c_files}  ${json_files} )
 
 target_link_libraries(${EXE_NAME}_test  Qt5::Widgets Qt5::Core KF5::Codecs)
-target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
+#target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
 target_link_libraries(${EXE_NAME}_test ${LIBS_INCLUDE_DIRS})
 target_link_libraries(${EXE_NAME}_test  compressor-interface)
 target_link_libraries(${EXE_NAME}_test  compressor-common)
@@ -88,3 +88,8 @@ target_include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/liba
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/libarchive/libarchive)
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/libarchive/readonlylibarchiveplugin)
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../../3rdparty/libarchive/readwritelibarchiveplugin)
+target_link_libraries(${EXE_NAME}_test
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+)

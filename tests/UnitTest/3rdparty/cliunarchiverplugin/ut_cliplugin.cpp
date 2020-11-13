@@ -90,19 +90,19 @@ bool myHasMatch()
     return true;
 }
 
-TEST(CliPlugin_readListLine,CliPlugin_readListLine_UT002)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
-    QString line = "Failed! ";
-    Stub *stub = new Stub;
-    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myHasMatch);
-    bool isOK = cliPlugin->readListLine(line);
-    EXPECT_FALSE(isOK);
-    delete cliPlugin;
-    delete  stub;
-}
+//TEST(CliPlugin_readListLine,CliPlugin_readListLine_UT002)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
+//    QString line = "Failed! ";
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myHasMatch);
+//    bool isOK = cliPlugin->readListLine(line);
+//    EXPECT_FALSE(isOK);
+//    delete cliPlugin;
+//    delete  stub;
+//}
 
 TEST(CliPlugin_readExtractLine,CliPlugin_readExtractLine_UT001)
 {
@@ -116,19 +116,19 @@ TEST(CliPlugin_readExtractLine,CliPlugin_readExtractLine_UT001)
 }
 
 
-TEST(CliPlugin_readExtractLine,CliPlugin_readExtractLine_UT002)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
-    QString line = "Failed! ";
-    Stub *stub = new Stub;
-    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myHasMatch);
-    bool isOK = cliPlugin->readExtractLine(line);
-    EXPECT_FALSE(isOK);
-    delete cliPlugin;
-    delete  stub;
-}
+//TEST(CliPlugin_readExtractLine,CliPlugin_readExtractLine_UT002)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
+//    QString line = "Failed! ";
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myHasMatch);
+//    bool isOK = cliPlugin->readExtractLine(line);
+//    EXPECT_FALSE(isOK);
+//    delete cliPlugin;
+//    delete  stub;
+//}
 
 TEST(CliPlugin_setJsonOutput,CliPlugin_setJsonOutput_UT001)
 {
@@ -193,26 +193,26 @@ TEST(CliPlugin_handleLine,CliPlugin_handleLine_UT002)
 
 }
 
-TEST(CliPlugin_processFinished,CliPlugin_processFinished_UT001)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
-    cliPlugin->m_abortingOperation = true;
-    cliPlugin->processFinished(1,QProcess::ExitStatus::CrashExit);
-    delete cliPlugin;
-}
+//TEST(CliPlugin_processFinished,CliPlugin_processFinished_UT001)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
+//    cliPlugin->m_abortingOperation = true;
+//    cliPlugin->processFinished(1,QProcess::ExitStatus::CrashExit);
+//    delete cliPlugin;
+//}
 
-TEST(CliPlugin_processFinished,CliPlugin_processFinished_UT002)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
-    cliPlugin->m_abortingOperation = false;
-    cliPlugin->m_password = "";
-    cliPlugin->processFinished(2,QProcess::ExitStatus::CrashExit);
-    delete cliPlugin;
-}
+//TEST(CliPlugin_processFinished,CliPlugin_processFinished_UT002)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliPlugin *cliPlugin = new CliPlugin(nullptr,list);
+//    cliPlugin->m_abortingOperation = false;
+//    cliPlugin->m_password = "";
+//    cliPlugin->processFinished(2,QProcess::ExitStatus::CrashExit);
+//    delete cliPlugin;
+//}
 
 TEST(CliPlugin_readJsonOutput,CliPlugin_readJsonOutput_UT001)
 {

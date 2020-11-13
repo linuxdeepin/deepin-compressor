@@ -40,9 +40,9 @@ set(LIBS_INCLUDE_DIRS
   ${DtkCore_LIBRARIES}
 )
 
-include_directories(../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(../../../../3rdparty/googletest/googlemock/include)
-include_directories(../../../../3rdparty/googletest/googletest/include)
+#include_directories(../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+#include_directories(../../../../3rdparty/googletest/googlemock/include)
+#include_directories(../../../../3rdparty/googletest/googletest/include)
 include_directories(../../../../3rdparty/interface)
 include_directories(../../../../3rdparty/common)
 
@@ -84,7 +84,12 @@ file(GLOB_RECURSE
 add_executable(${EXE_NAME}_test ${c_files} ${h_files}  )
 
 target_link_libraries(${EXE_NAME}_test Qt5::Widgets Qt5::Core )
-target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
+#target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
 target_link_libraries(${EXE_NAME}_test ${LIBS_INCLUDE_DIRS})
 
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface )
+target_link_libraries(${EXE_NAME}_test
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+)

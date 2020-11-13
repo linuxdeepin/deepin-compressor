@@ -4,16 +4,14 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME tests)
 project(${EXE_NAME})
 
-add_subdirectory(../3rdparty/common common.out)
+#add_subdirectory(../3rdparty/common common.out)
 
-add_subdirectory(../3rdparty/interface interface.out)
+#add_subdirectory(../3rdparty/interface interface.out)
 
-add_subdirectory(../3rdparty/ChardetDetector ChardetDetector.out)
+#add_subdirectory(../3rdparty/ChardetDetector ChardetDetector.out)
 
 
 add_subdirectory(UnitTest)
-
-add_subdirectory(../3rdparty/googletest googletest.out)
 
 #add_subdirectory(ChardetDetector)
 

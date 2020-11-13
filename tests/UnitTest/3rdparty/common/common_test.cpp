@@ -307,27 +307,27 @@ TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT001)
     ASSERT_STREQ(str.c_str(), "UTF-8");
 }
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT002)
-{
-    QTextCodec *(*mycodecForUtfText)(void *, const QByteArray &, QTextCodec *) =
-        [](void *job, const QByteArray &ba, QTextCodec *defaultCodec) -> QTextCodec * {
-        Q_UNUSED(job);
-        Q_UNUSED(ba);
-        Q_UNUSED(defaultCodec);
-        return QTextCodec::codecForName("Big5");
-    };
-    typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
-    fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
-    Stub *stub = new Stub;
-    stub->set(A_foo, mycodecForUtfText);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT002)
+//{
+//    QTextCodec *(*mycodecForUtfText)(void *, const QByteArray &, QTextCodec *) =
+//        [](void *job, const QByteArray &ba, QTextCodec *defaultCodec) -> QTextCodec * {
+//        Q_UNUSED(job);
+//        Q_UNUSED(ba);
+//        Q_UNUSED(defaultCodec);
+//        return QTextCodec::codecForName("Big5");
+//    };
+//    typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
+//    fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
+//    Stub *stub = new Stub;
+//    stub->set(A_foo, mycodecForUtfText);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect("古风", "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect("古风", "").toStdString();
 
-    stub->reset(A_foo);
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "Big5");
-}
+//    stub->reset(A_foo);
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "Big5");
+//}
 
 TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT003)
 {
@@ -348,222 +348,222 @@ QString mycaptured(void *obj, const QString &name)
     return "";
 }
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT004)
-{
-    strCaptured = "charset";
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT004)
+//{
+//    strCaptured = "charset";
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "test");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "test");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT005)
-{
-    strCaptured = "language";
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT005)
+//{
+//    strCaptured = "language";
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "UTF-8");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "UTF-8");
+//}
 
 QLocale::Script myscript()
 {
     return myScript;
 }
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT006)
-{
-    strCaptured = "language";
-    myScript = QLocale::ArabicScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT006)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::ArabicScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT007)
-{
-    strCaptured = "language";
-    myScript = QLocale::SimplifiedChineseScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT007)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::SimplifiedChineseScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT008)
-{
-    strCaptured = "language";
-    myScript = QLocale::TraditionalChineseScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT008)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::TraditionalChineseScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT009)
-{
-    strCaptured = "language";
-    myScript = QLocale::CyrillicScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT009)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::CyrillicScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT010)
-{
-    strCaptured = "language";
-    myScript = QLocale::GreekScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT010)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::GreekScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT011)
-{
-    strCaptured = "language";
-    myScript = QLocale::HebrewScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT011)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::HebrewScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT012)
-{
-    strCaptured = "language";
-    myScript = QLocale::JapaneseScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT012)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::JapaneseScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT013)
-{
-    strCaptured = "language";
-    myScript = QLocale::KoreanScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT013)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::KoreanScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT014)
-{
-    strCaptured = "language";
-    myScript = QLocale::ThaiScript;
-    Stub *stub = new Stub;
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
-    stub->set(ADDR(QLocale, script), myscript);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT014)
+//{
+//    strCaptured = "language";
+//    myScript = QLocale::ThaiScript;
+//    Stub *stub = new Stub;
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//    stub->set(ADDR(QLocale, script), myscript);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    stub->reset(ADDR(QLocale, script));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "gb18030");
-}
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    stub->reset(ADDR(QLocale, script));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "gb18030");
+//}
 
 QString myname()
 {
     return "text/x-python";
 }
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT015)
-{
-    Stub *stub = new Stub;
-    stub->set(ADDR(QMimeType, name), myname);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT015)
+//{
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QMimeType, name), myname);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset(ADDR(QMimeType, name));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "UTF-8");
-}
+//    stub->reset(ADDR(QMimeType, name));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "UTF-8");
+//}
 
-TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT016)
-{
-    strCaptured = "coding";
-    Stub *stub = new Stub;
-    stub->set(ADDR(QMimeType, name), myname);
-    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
+//TEST(Common_textCodecDetect_UT, Common_textCodecDetect_UT016)
+//{
+//    strCaptured = "coding";
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QMimeType, name), myname);
+//    stub->set((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured), mycaptured);
 
-    Common common(nullptr);
-    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
+//    Common common(nullptr);
+//    std::string str = common.textCodecDetect(QString("<html></html>").toLatin1(), "").toStdString();
 
-    stub->reset(ADDR(QMimeType, name));
-    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
-    delete stub;
-    ASSERT_STREQ(str.c_str(), "coding");
-}
+//    stub->reset(ADDR(QMimeType, name));
+//    stub->reset((QString(QRegularExpressionMatch::*)(const QString &) const)ADDR(QRegularExpressionMatch, captured));
+//    delete stub;
+//    ASSERT_STREQ(str.c_str(), "coding");
+//}

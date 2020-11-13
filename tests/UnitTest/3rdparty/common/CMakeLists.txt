@@ -11,9 +11,9 @@ find_package(Qt5Core REQUIRED)
 find_package(KF5Codecs REQUIRED)
 
 
-include_directories(../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(../../../../3rdparty/googletest/googlemock/include)
-include_directories(../../../../3rdparty/googletest/googletest/include)
+#include_directories(../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+#include_directories(../../../../3rdparty/googletest/googlemock/include)
+#include_directories(../../../../3rdparty/googletest/googletest/include)
 
 file(GLOB_RECURSE
     c_files
@@ -33,6 +33,11 @@ target_link_libraries(${EXE_NAME}_test
     compressor-common
 )
 
-target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
+#target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
 
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/common)
+target_link_libraries(${EXE_NAME}_test
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+)

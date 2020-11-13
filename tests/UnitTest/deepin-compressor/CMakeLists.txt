@@ -88,26 +88,34 @@ message(${PROJECT_SOURCE_DIR})
 #7.主程序的h文件
 include_directories(${PROJECT_SOURCE_DIR}/../deepin-compressor/source/inc)
 include_directories(${PROJECT_SOURCE_DIR}/../deepin-compressor/source/inc/openwithdialog)
+include_directories(${PROJECT_SOURCE_DIR}/../../../deepin-compressor/)
+#include_directories(${CMAKE_CURRENT_BINARY_DIR}/../../config.h)
+configure_file(${PROJECT_SOURCE_DIR}/../../../deepin-compressor/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 #8.主程序的源文件和头文件
 file(GLOB_RECURSE c_files
     ../../../deepin-compressor/source/*.cpp
     ../../../deepin-compressor/source/*.c
-    ./source/src/*.cpp ./source/src/*.c
+    ../../../deepin-compressor/DebugTimeManager.cpp
+    ./source/src/*.cpp
+    ./source/src/*.c
     )
 #foreach(i  ${c_files})
 #    message(${i})
 #endforeach()
 message(${PROJECT_SOURCE_DIR})
 
-file(GLOB_RECURSE h_files  ../../../deepin-compressor/source/*.h )
+file(GLOB_RECURSE h_files
+    ../../../deepin-compressor/source/*.h
+    ../../../deepin-compressor/DebugTimeManager.cpp
+    )
 
 #foreach(i  ${h_files})
 #    message(${i})
 #endforeach()
-include_directories(../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(../../../3rdparty/googletest/googlemock/include)
-include_directories(../../../3rdparty/googletest/googletest/include)
+#include_directories(../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+#include_directories(../../../3rdparty/googletest/googlemock/include)
+#include_directories(../../../3rdparty/googletest/googletest/include)
 
 include_directories(../../../deepin-compressor/source/inc)
 include_directories(../../../deepin-compressor/source/inc/openwithdialog)
@@ -144,16 +152,16 @@ FILE (GLOB allTestSource
 add_executable(${PROJECT_NAME_TEST}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_FILES} ${APP_QM_FILES})
 
 # 生成测试可执行程序的依赖库
-target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
+#target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
 
 set_target_properties(${PROJECT_NAME_TEST} PROPERTIES AUTOMOC TRUE)
 qt5_use_modules(${PROJECT_NAME_TEST}  Core  Widgets  Gui )
 
 target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../../deepin-compressor/source/inc )
 target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../../deepin-compressor/source/inc/openwithdialog )
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googlemock/include)
-target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googletest/include)
+#target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
+#target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googlemock/include)
+#target_include_directories(${PROJECT_NAME_TEST} PRIVATE ../../../3rdparty/googletest/googletest/include)
 
 target_link_libraries(${PROJECT_NAME_TEST}  ${LIBS_INCLUDE_DIRS})
 #message(${LIBS_INCLUDE_DIRS})
@@ -162,4 +170,9 @@ target_link_libraries(${PROJECT_NAME_TEST}  Qt5::Widgets Qt5::Core Qt5::Gui Qt5:
 
 target_link_libraries(${PROJECT_NAME_TEST}  compressor-interface)
 target_link_libraries(${PROJECT_NAME_TEST}  compressor-ChardetDetector)
+target_link_libraries(${PROJECT_NAME_TEST}
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+)
 

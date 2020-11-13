@@ -296,36 +296,36 @@ bool myhasMatch()
 {
     return true;
 }
-TEST(CliRarPlugin_handleUnrar4Line,CliRarPlugin_handleUnrar4Line_UT003)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliRarPlugin *crar = new CliRarPlugin(nullptr,list);
-    crar->m_parseState = CliRarPlugin::ParseState::ParseStateComment;
-    crar->m_isMultiVolume = false;
-    QString line = "Volume (Solid Volume) ";
-    Stub *stub = new Stub;
-    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myhasMatch);
-    bool isOk = crar->handleUnrar4Line(line);
-    EXPECT_TRUE(isOk);
-    delete  crar;
-    delete  stub;
-}
-TEST(CliRarPlugin_handleUnrar4Line,CliRarPlugin_handleUnrar4Line_UT004)
-{
-    QVariantList list;
-    list << "1" << "2";
-    CliRarPlugin *crar = new CliRarPlugin(nullptr,list);
-    crar->m_parseState = CliRarPlugin::ParseState::ParseStateComment;
-    crar->m_isMultiVolume = false;
-    QString line = "Solid archive Volume (Solid Volume) ";
-    Stub *stub = new Stub;
-    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myhasMatch);
-    bool isOk = crar->handleUnrar4Line(line);
-    EXPECT_TRUE(isOk);
-    delete  crar;
-    delete  stub;
-}
+//TEST(CliRarPlugin_handleUnrar4Line,CliRarPlugin_handleUnrar4Line_UT003)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliRarPlugin *crar = new CliRarPlugin(nullptr,list);
+//    crar->m_parseState = CliRarPlugin::ParseState::ParseStateComment;
+//    crar->m_isMultiVolume = false;
+//    QString line = "Volume (Solid Volume) ";
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myhasMatch);
+//    bool isOk = crar->handleUnrar4Line(line);
+//    EXPECT_TRUE(isOk);
+//    delete  crar;
+//    delete  stub;
+//}
+//TEST(CliRarPlugin_handleUnrar4Line,CliRarPlugin_handleUnrar4Line_UT004)
+//{
+//    QVariantList list;
+//    list << "1" << "2";
+//    CliRarPlugin *crar = new CliRarPlugin(nullptr,list);
+//    crar->m_parseState = CliRarPlugin::ParseState::ParseStateComment;
+//    crar->m_isMultiVolume = false;
+//    QString line = "Solid archive Volume (Solid Volume) ";
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(QRegularExpressionMatch,hasMatch),myhasMatch);
+//    bool isOk = crar->handleUnrar4Line(line);
+//    EXPECT_TRUE(isOk);
+//    delete  crar;
+//    delete  stub;
+//}
 
 TEST(CliRarPlugin_handleUnrar4Line,CliRarPlugin_handleUnrar4Line_UT005)
 {

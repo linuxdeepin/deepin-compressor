@@ -18,9 +18,6 @@ include(FindPkgConfig)
 include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/common)
 include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface)
 include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/cli7zplugin)
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/googletest/googlemock/include)
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/googletest/googletest/include)
 
 
 
@@ -42,8 +39,12 @@ file(GLOB_RECURSE j
 add_executable(${EXE_NAME}_test  ${h_files} ${c_files}  ${json_files} )
 
 target_link_libraries(${EXE_NAME}_test Qt5::Widgets Qt5::Core )
-target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
 target_link_libraries(${EXE_NAME}_test ${LIBS_INCLUDE_DIRS})
 target_link_libraries(${EXE_NAME}_test  compressor-interface)
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/cli7zplugin)
 target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface)
+target_link_libraries(${EXE_NAME}_test
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+)

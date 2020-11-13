@@ -44,42 +44,42 @@ Qt::SortOrder MyDescendingOrder()
 {
     return Qt::SortOrder::DescendingOrder;
 }
-TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT004)
-{
-    ArchiveModel *armodel = new ArchiveModel(nullptr);
-    //armodel->setItemData()
-    ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
-    QModelIndex leftModel;
-    QModelIndex rightModel;
-    Archive::Entry *leftEntry = new Archive::Entry();
-    Archive::Entry *rightEntry = new Archive::Entry();
-    leftEntry->m_isDirectory = true;
-    rightEntry->m_isDirectory = false;
-    armodel->m_showColumns.push_back(10);
-    // model->sort(1,Qt::DescendingOrder);
-    model->setSourceModel(armodel);
-    leftModel.r = 1;
-    leftModel.c = 1;
-    leftModel.m = armodel;
-    leftModel.i = (quintptr)leftEntry;
-    rightModel.r = 2;
-    rightModel.c = 1;
-    rightModel.m = armodel;
-    rightModel.i = (quintptr)rightEntry;
-    model->sort(1, Qt::SortOrder::DescendingOrder);
-    Stub *stub = new Stub;
-    stub->set(ADDR(ArchiveSortFilterModel, sortOrder), MyDescendingOrder);
-    armodel->m_showColumns.push_back(1);
-    bool res = model->lessThan(leftModel, rightModel);
-    stub->reset(ADDR(ArchiveSortFilterModel, sortOrder));
-    //  rightModel.c = -1;
-    ASSERT_FALSE(res);
-    delete armodel;
-    delete model;
-    delete leftEntry;
-    delete rightEntry;
-    delete stub;
-}
+//TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT004)
+//{
+//    ArchiveModel *armodel = new ArchiveModel(nullptr);
+//    //armodel->setItemData()
+//    ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
+//    QModelIndex leftModel;
+//    QModelIndex rightModel;
+//    Archive::Entry *leftEntry = new Archive::Entry();
+//    Archive::Entry *rightEntry = new Archive::Entry();
+//    leftEntry->m_isDirectory = true;
+//    rightEntry->m_isDirectory = false;
+//    armodel->m_showColumns.push_back(10);
+//    // model->sort(1,Qt::DescendingOrder);
+//    model->setSourceModel(armodel);
+//    leftModel.r = 1;
+//    leftModel.c = 1;
+//    leftModel.m = armodel;
+//    leftModel.i = (quintptr)leftEntry;
+//    rightModel.r = 2;
+//    rightModel.c = 1;
+//    rightModel.m = armodel;
+//    rightModel.i = (quintptr)rightEntry;
+//    model->sort(1, Qt::SortOrder::DescendingOrder);
+//    Stub *stub = new Stub;
+//    stub->set(ADDR(ArchiveSortFilterModel, sortOrder), MyDescendingOrder);
+//    armodel->m_showColumns.push_back(1);
+//    bool res = model->lessThan(leftModel, rightModel);
+//    stub->reset(ADDR(ArchiveSortFilterModel, sortOrder));
+//    //  rightModel.c = -1;
+//    ASSERT_FALSE(res);
+//    delete armodel;
+//    delete model;
+//    delete leftEntry;
+//    delete rightEntry;
+//    delete stub;
+//}
 // 52 return true;
 TEST(ArchiveSortFilterModel_lessThan_UT, ArchiveModel_ArchiveSortFilterModel_UT005)
 {

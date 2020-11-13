@@ -41,14 +41,14 @@ bool isDefault()
 {
     return false;
 }
-TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT007)
-{
+//TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT007)
+//{
 
-   Stub *stub = new Stub;
-   stub->set(ADDR(QMimeType, isDefault), isDefault);
-   determineMimeType("../UnitTest/regress/test.iso");
-   delete stub;
-   stub = nullptr;
-}
+//   Stub *stub = new Stub;
+//   stub->set(ADDR(QMimeType, isDefault), isDefault);
+//   determineMimeType("../UnitTest/regress/test.iso");
+//   delete stub;
+//   stub = nullptr;
+//}
 
 

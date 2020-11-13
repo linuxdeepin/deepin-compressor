@@ -61,6 +61,11 @@ add_subdirectory(3rdparty)
 
 add_subdirectory(deepin-compressor)
 
+option(USE_TEST "UT" OFF)
+if (USE_TEST)
+    add_subdirectory(tests)
+endif(USE_TEST)
+
 set(CMAKE_INSTALL_PREFIX /usr)
 
 #file(GLOB INSTALL_DESKTOP_FILES deepin-compressor/*.desktop)

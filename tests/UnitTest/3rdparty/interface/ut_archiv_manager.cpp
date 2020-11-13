@@ -673,15 +673,15 @@ TEST(ArchiveManager_onAddFinished_UT, Archive_onAddFinished_UT001)
     delete archive;
 }
 
-TEST(ArchiveManager_multiVolumeName_UT, Archive_multiVolumeName_UT001)
-{
-    QString fileName;
-    QString mimeType = "7z";
-    fileName ="../UnitTest/regress/windows.rar.rar";
-    Archive *archive =  Archive::createEmpty(fileName,mimeType);
-    archive->multiVolumeName();
-    delete archive;
-}
+//TEST(ArchiveManager_multiVolumeName_UT, Archive_multiVolumeName_UT001)
+//{
+//    QString fileName;
+//    QString mimeType = "7z";
+//    fileName ="../UnitTest/regress/windows.rar.rar";
+//    Archive *archive =  Archive::createEmpty(fileName,mimeType);
+//    archive->multiVolumeName();
+//    delete archive;
+//}
 
 TEST(ArchiveManager_interface_UT, Archive_interface_UT001)
 {

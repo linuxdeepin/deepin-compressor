@@ -35,7 +35,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
+//#include <gmock/gmock-matchers.h>
 #include <QApplication>
 #include <iostream>
 int main(int argc, char *argv[])
