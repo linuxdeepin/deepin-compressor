@@ -514,6 +514,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                     setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
                 }
 
+                deleteCompressFile();       // 删除之前的压缩文件
                 dialog->exec();
 
                 // 从文件列表中删除已经不存在的文件
@@ -3148,6 +3149,7 @@ void MainWindow::onCompressPressed(QMap< QString, QString > &Args)
     m_pProgressdialog->setProcess(0);
     m_pProgess->setprogress(0);
     m_bIsAddArchive = false;
+    m_isFileModified = false;   // 重置文件监听状态
 
     QStringList filesToAdd = m_pCompressPage->getCompressFilelist();
 
