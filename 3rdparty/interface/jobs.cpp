@@ -193,7 +193,7 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
-    } else if (message == "Canceal when batchextract.") {
+    } else if (message == "Cancel when batchextract.") {
         setError(KJob::CancelError);
         setErrorText(message);
         emitResult();

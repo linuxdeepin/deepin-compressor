@@ -34,9 +34,11 @@ public:
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
     bool isLocked() const override;
+    bool isPromptMultiPassword(const QString &line) override;
 
     virtual void showEntryListFirstLevel(const QString &directory) override;
     virtual void RefreshEntryFileCount(Archive::Entry *file) override;
+
 private:
 
     enum ParseState {
@@ -62,6 +64,32 @@ private:
     Archive::Entry *setEntryDataA(archive_stat &archive);
     virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
 
+    /**
+     * @brief handleEnterPwdLine 处理提示输入密码的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handleEnterPwdLine(const QString &line);
+
+    /**
+     * @brief handleIncorrectPwdLine 处理提示密码错误的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handleIncorrectPwdLine(const QString &line);
+
+    /**
+     * @brief handleFileExistsLine 处理提示文件已存在是否替换的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handleFileExistsLine(const QString &line);
+
+    bool isPromptEnterPwdLine(const QString &line);  // 提示需要输入密码
+    bool isPromptIncorrectPwdLine(const QString &line);  // 提示密码错误
+    bool isPromptFileExistsLine(const QString &line);  // 提示已存在同名文件
+
+private:
     QStringList m_unrar4Details;
     QHash<QString, QString> m_unrar5Details;
 
@@ -78,6 +106,7 @@ private:
 //    QMap<QString, archive_stat> m_listMap;
     Archive::Entry *m_rarArchiveEntry;
     archive_stat m_fileStat;
+//    QString m_replaceLine = ""; // 拼接被截断的命令行内容
 };
 
 #endif // CLIPLUGIN_H

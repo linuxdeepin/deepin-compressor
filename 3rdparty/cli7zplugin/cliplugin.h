@@ -34,6 +34,7 @@ public:
     bool isDiskFullMsg(const QString &line) override;
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
+    bool isPromptMultiPassword(const QString &line) override;
     void watchFileList(QStringList *strList)override;
 
     virtual void showEntryListFirstLevel(const QString &directory) override;

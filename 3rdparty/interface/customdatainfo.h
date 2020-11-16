@@ -58,6 +58,7 @@ enum Page_ID {
     PAGE_DELETEPROGRESS, // 删除进度界面
     //PAGE_MAX,             //
     PAGE_LOADING, // 加载转圈界面
+    PAGE_LOADING_FAIL, // 加载失败界面
     PAGE_CONVERTPROGRESS, // 格式转换界面
     PAGE_CONVERT_SUCCESS // 格式转换成功界面
 };

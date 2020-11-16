@@ -549,7 +549,7 @@ void MainWindow::InitUI()
     m_pProgess = new Progress(this);
     m_pCompressSuccess = new Compressor_Success(this);
     m_pCompressFail = new Compressor_Fail(this);
-    m_pEncryptionpage = new EncryptionPage(this);
+//    m_pEncryptionpage = new EncryptionPage(this);
     m_commentProgress = new CommentProgressDialog(this);
     m_pProgressdialog = new ProgressDialog(this);
     m_pSettingsDialog = new SettingDialog(this);
@@ -568,7 +568,7 @@ void MainWindow::InitUI()
     m_pMainLayout->addWidget(m_pProgess);
     m_pMainLayout->addWidget(m_pCompressSuccess);
     m_pMainLayout->addWidget(m_pCompressFail);
-    m_pMainLayout->addWidget(m_pEncryptionpage);
+//    m_pMainLayout->addWidget(m_pEncryptionpage);
     //m_pMainLayout->addWidget(m_encodingpage);
     m_pMainLayout->addWidget(m_pOpenLoadingPage);
     m_pUnCompressPage->setAutoFillBackground(true);
@@ -577,7 +577,7 @@ void MainWindow::InitUI()
     m_pProgess->setAutoFillBackground(true);
     m_pCompressSuccess->setAutoFillBackground(true);
     m_pCompressFail->setAutoFillBackground(true);
-    m_pEncryptionpage->setAutoFillBackground(true);
+//    m_pEncryptionpage->setAutoFillBackground(true);
     //m_encodingpage->setAutoFillBackground(true);
 }
 
@@ -656,7 +656,7 @@ void MainWindow::InitConnection()
 //    connect(m_pUnCompressPage, &UnCompressPage::sigRefreshFileList, this, &MainWindow::slotUncompressCalDeleteRefreshTotalFileSize);
     connect(m_pUnCompressPage, &UnCompressPage::sigRefreshEntryVector, this, &MainWindow::slotUncompressCalDeleteRefreshTotoalSize);
     connect(m_pUnCompressPage, &UnCompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
-    connect(m_pEncryptionpage, &EncryptionPage::sigExtractPassword, this, &MainWindow::SlotExtractPassword);
+//    connect(m_pEncryptionpage, &EncryptionPage::sigExtractPassword, this, &MainWindow::SlotExtractPassword);
     connect(m_pUnCompressPage, &UnCompressPage::sigextractfiles, this, &MainWindow::slotExtractSimpleFiles);
 //    connect(this, &MainWindow::sigTipsWindowPopUp, m_pUnCompressPage, &UnCompressPage::subWindowTipsPopSig);
     connect(m_pUnCompressPage, &UnCompressPage::sigAutoCompress, m_pCompressSetting, &CompressSetting::autoCompress);
@@ -1296,7 +1296,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 
 void MainWindow::refreshPage()
 {
-    m_pEncryptionpage->resetPage();
+//    m_pEncryptionpage->resetPage();
     qDebug() << "m_ePageID: " << m_ePageID;
 
     if (focusWidget()) {
@@ -1502,25 +1502,28 @@ void MainWindow::refreshPage()
         m_pTitleCommentButton->setVisible(false);
         m_pMainLayout->setCurrentIndex(5);
         break;
-    case PAGE_ENCRYPTION:       // 解压输入密码界面
-        titlebar()->setTitle(m_strDecompressFileName);
-        m_pOpenAction->setEnabled(false);
-        setAcceptDrops(false);
-        setTitleButtonStyle(false);
-        m_pTitleCommentButton->setVisible(false);
-        if (m_pProgressdialog->isshown()) {
-            // m_pProgressdialog->reject();
-            m_pProgressdialog->hide();
-            m_pProgressdialog->m_extractdialog->reject();
-        }
-        //        m_pProgressdialog->reject();
-        //        m_pProgressdialog->m_extractdialog->reject();
-        m_pMainLayout->setCurrentIndex(7);
-        m_pEncryptionpage->setPassowrdFocus();
-        break;
+//    case PAGE_ENCRYPTION:       // 解压输入密码界面
+//        titlebar()->setTitle(m_strDecompressFileName);
+//        m_pOpenAction->setEnabled(false);
+//        setAcceptDrops(false);
+//        setTitleButtonStyle(false);
+//        m_pTitleCommentButton->setVisible(false);
+//        if (m_pProgressdialog->isshown()) {
+//            // m_pProgressdialog->reject();
+//            m_pProgressdialog->hide();
+//            m_pProgressdialog->m_extractdialog->reject();
+//        }
+//        //        m_pProgressdialog->reject();
+//        //        m_pProgressdialog->m_extractdialog->reject();
+//        m_pMainLayout->setCurrentIndex(7);
+//        m_pEncryptionpage->setPassowrdFocus();
+//        break;
     case PAGE_LOADING:      // 加载界面
-        m_pMainLayout->setCurrentIndex(8);
+        m_pMainLayout->setCurrentIndex(7/*8*/);
         m_pOpenLoadingPage->start();
+        break;
+    case PAGE_LOADING_FAIL:
+        m_pMainLayout->setCurrentIndex(6);
         break;
     default:
         break;
@@ -2250,7 +2253,7 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
     connect(pExtractJob, SIGNAL(percent(KJob *, ulong)), this, SLOT(SlotProgress(KJob *, ulong)));
     connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
 
     connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
@@ -2287,6 +2290,13 @@ void MainWindow::slotLoadingFinished(KJob *job)
                 m_ePageID = PAGE_UNZIP_FAIL;
                 refreshPage();
             }
+        } else if (errorCode == KJob::CancelError) {
+            m_pOpenLoadingPage->stop();
+            m_ePageID = PAGE_LOADING_FAIL;
+            m_pCompressFail->setFailStr(tr("Open failed"));
+            m_pCompressFail->setFailStrDetail(""/*tr("Wrong password")*/);
+
+            refreshPage();
         } else {
             // 设置失败详细信息
             m_pCompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
@@ -2341,6 +2351,7 @@ void MainWindow::loadArchive(const QString &files)
     LoadJob *pLoadJob = dynamic_cast<LoadJob *>(m_pJob);
     connect(pLoadJob, &LoadJob::sigLodJobPassword, this, &MainWindow::SlotNeedPassword);
     connect(pLoadJob, &LoadJob::sigWrongPassword, this, &MainWindow::SlotNeedPassword);
+//    connect(pLoadJob, &LoadJob::sigCancelled, this, &MainWindow::SLotCancelListPassWord);
 
     m_pJob->start();
     //m_pHomePage->spinnerStart(this, static_cast<pMember_callback>(&MainWindow::isWorkProcess));
@@ -2388,10 +2399,10 @@ void MainWindow::WatcherFile(const QString &files)
 
 void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString convertType)
 {
-//    m_ePageID = PAGE_UNZIPPROGRESS;
-//    refreshPage();
-//    m_pProgressdialog->setProcess(0);
-//    m_pProgess->setprogress(0);
+    m_ePageID = PAGE_UNZIPPROGRESS;
+    refreshPage();
+    m_pProgressdialog->setProcess(0);
+    m_pProgess->setprogress(0);
     m_pProgess->pInfo()->setTotalSize(0); //初始化大小
     calSelectedTotalFileSize(QStringList() << m_strLoadfile); //计算压缩包大小供解压进度使用
     qDebug() << QString("decompressedfile size: %1B").arg(m_pProgess->pInfo()->getTotalSize());
@@ -2497,7 +2508,7 @@ void MainWindow::slotextractSelectedFilesTo(const QString &localPath, QString co
     // 绑定测试如果压缩包解压需要密码，会提示界面需要密码。
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
     // 密码输入错误给出，提示。
-    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
     // 点击密码确认，激活解压进度页面
     connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     // 文件进度展示
@@ -2853,6 +2864,12 @@ void MainWindow::slotExtractionDone(KJob *job)
         refreshPage();
     } else if (Operation_NULL == m_operationtype) {
         qDebug() << "do nothing";
+    } else if (m_ePageID == PAGE_UNZIPPROGRESS && errorCode == KJob::CancelError && m_operationtype == Operation_Extract) {
+        if (!m_bIsRightMenu) {
+            m_ePageID = PAGE_UNZIP;
+            refreshPage();
+            return;
+        }
     } else {
         if (m_convertType.size() == 0) {
             m_ePageID = PAGE_UNZIP_SUCCESS; // 无错误信息，解压成功，显示解压成功界面
@@ -2948,11 +2965,21 @@ void MainWindow::SlotNeedPassword()
     }
 
     // 判断如果当前界面不是密码框界面，则显示密码框
-    if (PAGE_ENCRYPTION != m_ePageID) {
-        m_ePageID = PAGE_ENCRYPTION;
-        refreshPage();
-    }
+//    if (PAGE_ENCRYPTION != m_ePageID) {
+//        m_ePageID = PAGE_ENCRYPTION;
+//        refreshPage();
+    //    }
 }
+
+//void MainWindow::SLotCancelListPassWord()
+//{
+//    m_pOpenLoadingPage->stop();
+//    m_ePageID = PAGE_LOADING_FAIL;
+//    m_pCompressFail->setFailStr("Open failed");
+//    m_pCompressFail->setFailStrDetail("Wrong password");
+
+//    refreshPage();
+//}
 
 void MainWindow::SlotExtractPassword(QString password)
 {
@@ -3000,7 +3027,7 @@ void MainWindow::ExtractSinglePassword(QString password)
         connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
         connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword);
-        connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//        connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
         connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
         connect(pExtractJob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
 
@@ -3038,7 +3065,7 @@ void MainWindow::ExtractPassword(QString password)
         connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
         connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
         connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword);
-        connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//        connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
         connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
         connect(pExtractJob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
         connect(pExtractJob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
@@ -3071,7 +3098,7 @@ void MainWindow::rightMenuExtractPassword(QString password)
     connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword);
-    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
     connect(pExtractJob, &ExtractJob::sigCancelled, this, &MainWindow::slotClearTempfile);
     connect(pExtractJob, &ExtractJob::updateDestFile, this, &MainWindow::onUpdateDestFile);
@@ -4644,7 +4671,7 @@ void MainWindow::slotExtractSimpleFiles(QVector< Archive::Entry * > fileList, QS
     connect(pExtractJob, &KJob::result, this, &MainWindow::slotExtractionDone);
     connect(pExtractJob, &ExtractJob::sigExtractJobPwdCheckDown, this, &MainWindow::slotShowPageUnzipProgress);
     connect(pExtractJob, &ExtractJob::sigExtractJobPassword, this, &MainWindow::SlotNeedPassword, Qt::QueuedConnection);
-    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
+//    connect(pExtractJob, &ExtractJob::sigExtractJobPassword, m_pEncryptionpage, &EncryptionPage::wrongPassWordSlot);
     connect(pExtractJob, SIGNAL(percentfilename(KJob *, const QString &)), this, SLOT(SlotProgressFile(KJob *, const QString &)));
 
     pExtractJob->start();
@@ -4804,14 +4831,21 @@ void MainWindow::closeExtractJobSafe()
 
 void MainWindow::slotLoadWrongPassWord()
 {
-    if (Operation_Load == m_operationtype) {
-        m_pOpenLoadingPage->stop();
-        m_ePageID = PAGE_ENCRYPTION;
-        m_pMainLayout->setCurrentIndex(7);
-    }
+//    if (m_operationtype == Operation_Load) {
+//        m_pOpenLoadingPage->stop();
+//        m_ePageID = PAGE_LOADING_FAIL;
+//        m_pCompressFail->setFailStr("Wrong Password");
+//    }
 
-    m_pEncryptionpage->setInputflag(true);
-    m_pEncryptionpage->wrongPassWordSlot();
+//    refreshPage();
+//    if (Operation_Load == m_operationtype) {
+//        m_pOpenLoadingPage->stop();
+//        m_ePageID = PAGE_ENCRYPTION;
+//        m_pMainLayout->setCurrentIndex(7);
+//    }
+
+//    m_pEncryptionpage->setInputflag(true);
+//    m_pEncryptionpage->wrongPassWordSlot();
 }
 
 //void MainWindow::addToArchive(const QStringList &files, const QString &archive)
@@ -5004,7 +5038,7 @@ void MainWindow::slotBackButtonClicked()
     m_convertFirst = false;
     slotResetPercentAndTime();
 
-    m_pEncryptionpage->resetPage();
+//    m_pEncryptionpage->resetPage();
     m_pCompressSuccess->clear();
 
     if (m_ePageID == PAGE_ZIP_SUCCESS || m_ePageID == PAGE_UNZIP_SUCCESS) {
@@ -5643,7 +5677,7 @@ void MainWindow::safeDelete()
     qDebug() << "开始safeDelete：m_pCompressFail";
     SAFE_DELETE_ELE(m_pCompressFail);
     qDebug() << "开始safeDelete：m_pEncryptionpage";
-    SAFE_DELETE_ELE(m_pEncryptionpage);
+//    SAFE_DELETE_ELE(m_pEncryptionpage);
     qDebug() << "开始safeDelete：m_pProgressdialog";
     SAFE_DELETE_ELE(m_pProgressdialog);
     qDebug() << "开始safeDelete：m_pSettingsDialog";

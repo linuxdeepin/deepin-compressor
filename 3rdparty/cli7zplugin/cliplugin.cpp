@@ -588,6 +588,12 @@ bool Cli7zPlugin::isFileExistsFileName(const QString &line)
             line.startsWith(QLatin1String("  Path:     ./")));
 }
 
+bool Cli7zPlugin::isPromptMultiPassword(const QString &line)
+{
+    Q_UNUSED(line);
+    return false;
+}
+
 void Cli7zPlugin::watchFileList(QStringList *strList)
 {
     CliInterface::watchFileList(strList);

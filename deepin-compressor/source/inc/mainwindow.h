@@ -665,6 +665,11 @@ private slots:
     void SlotNeedPassword();
 
     /**
+     * @brief SLotCancelListPassWord  列表加密文件，点击x关闭密码框
+     */
+//    void SLotCancelListPassWord();
+
+    /**
      * @brief SlotExtractPassword   带密码解压
      * @param password  输入的密码
      */
@@ -830,7 +835,7 @@ private:
     Progress *m_pProgess = nullptr;                         // 进度界面
     Compressor_Success *m_pCompressSuccess = nullptr;       // 压缩成功界面
     Compressor_Fail *m_pCompressFail = nullptr;             // 压缩失败界面
-    EncryptionPage *m_pEncryptionpage = nullptr;            // 解压输入密码界面
+//    EncryptionPage *m_pEncryptionpage = nullptr;            // 解压输入密码界面
     OpenLoadingPage *m_pOpenLoadingPage = nullptr;          // 加载界面
 
     DIconButton *m_pTitleButton = nullptr;                  // 标题栏按钮（添加文件）

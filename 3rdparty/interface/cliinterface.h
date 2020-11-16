@@ -25,6 +25,7 @@
 #include "archiveinterface.h"
 #include "archiveentry.h"
 #include "cliproperties.h"
+#include "kptyprocess.h"
 
 #include <QProcess>
 #include <QRegularExpression>
@@ -68,6 +69,7 @@ public:
     virtual bool isDiskFullMsg(const QString &line);
     virtual bool isFileExistsMsg(const QString &line);
     virtual bool isFileExistsFileName(const QString &line);
+    virtual bool isPromptMultiPassword(const QString &line);
     bool doKill() override;
 
     /**
@@ -150,7 +152,7 @@ protected:
     Archive::Entry *m_passedDestination = nullptr;
     CompressionOptions m_passedOptions;
 
-    KProcess *m_process = nullptr;
+    /*KProcess*/KPtyProcess *m_process = nullptr;
     qint64 m_processid = 0;
     QVector<qint64> m_childprocessid;
     //    bool m_abortingOperation = false;
@@ -240,7 +242,7 @@ private:
     int m_allfilenumber = 0;
     QString extractDst7z_;
 
-    AnalyseHelp *pAnalyseHelp = nullptr;
+//    AnalyseHelp *pAnalyseHelp = nullptr;
     FileWatcher *pFileWatcherdd = nullptr;
     bool m_isPasswordPrompt = false;
     bool m_isBatchExtractWrongPsd = false;
