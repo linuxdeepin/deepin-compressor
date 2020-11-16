@@ -580,7 +580,8 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
 
     while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
 //        const QString file = QFile::decodeName(archive_entry_pathname(entry));
-        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry)); //该条entry在压缩包内文件名(全路径)
+        QByteArray strCode;
+        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry), strCode); //该条entry在压缩包内文件名(全路径)
         bool flag = false;
         foreach (const FileEntry &tmp, files) {
             if (tmp.isDirectory) { //跳过该文件夹以及子文件

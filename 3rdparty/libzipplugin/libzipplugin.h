@@ -156,6 +156,8 @@ private:
     QStringList m_listCurName;      // 当前操作的所有文件索引
     QStringList m_listCodecs;   // 中文编码格式
 
+    QMap<zip_int64_t, QByteArray> m_mapFileCode;   // 存储文件编码
+
 };
 
 #endif // LIBZIPPLUGIN_H

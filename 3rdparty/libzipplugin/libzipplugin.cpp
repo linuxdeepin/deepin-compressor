@@ -65,6 +65,7 @@ LibzipPlugin::~LibzipPlugin()
 PluginFinishType LibzipPlugin::list()
 {
     qDebug() << "LibzipPlugin插件加载压缩包数据";
+    m_mapFileCode.clear();
     DataManager::get_instance().resetArchiveData();
 
     // 处理加载流程
@@ -374,6 +375,7 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
 
 PluginFinishType LibzipPlugin::updateArchiveData()
 {
+    m_mapFileCode.clear();
     DataManager::get_instance().resetArchiveData();
 
     // 处理加载流程
@@ -519,8 +521,11 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
         return false;
     }
 
+
+    QByteArray strCode;
     // 对文件名进行编码探测并转码
-    QString name = m_common->trans2uft8(statBuffer.name);
+    QString name = m_common->trans2uft8(statBuffer.name, strCode);
+    m_mapFileCode[index] = strCode;
 
     FileEntry entry;
     entry.iIndex = int(index);
@@ -578,7 +583,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         return ET_FileReadError;
     }
 
-    strFileName = m_common->trans2uft8(statBuffer.name);    // 解压文件名（压缩包中）
+    strFileName = m_common->trans2uft8(statBuffer.name, m_mapFileCode[index]);    // 解压文件名（压缩包中）
     // 提取
     if (!options.strDestination.isEmpty()) {
         strFileName = strFileName.remove(0, options.strDestination.size());
@@ -741,7 +746,7 @@ void LibzipPlugin::emitProgress(double dPercentage)
             // 压缩操作显示当前正在压缩的文件名
             zip_uint64_t index = zip_uint64_t(m_curFileCount * dPercentage);
             // 发送当前文件名信号
-            emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW)));
+            emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(index)]));
         } else if (m_workStatus == WT_Delete) {
             // 删除操作显示当前正在删除的文件名
             int iSpan = qRound(m_listCurName.count() * dPercentage);    // 获取占比

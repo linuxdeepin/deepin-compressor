@@ -141,7 +141,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry)); //该条entry是否是文件夹
 
-        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry)); //该条entry在压缩包内文件名(全路径)
+        QByteArray strCode;
+        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry), strCode); //该条entry在压缩包内文件名(全路径)
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
         // 移除"./"开头的，例如rpm包
@@ -509,7 +510,8 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     FileEntry m_archiveEntryStat; //压缩包内文件数据
     // 文件名
-    m_archiveEntryStat.strFullPath = m_common->trans2uft8(archive_entry_pathname(aentry));
+    QByteArray strCode;
+    m_archiveEntryStat.strFullPath = m_common->trans2uft8(archive_entry_pathname(aentry), strCode);
 
     // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
