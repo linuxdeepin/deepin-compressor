@@ -531,12 +531,52 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         }
     } else if (strType == QStringLiteral("extract_multi")) {
         // 批量解压
+        // 处理选中文件
+        QStringList listFiles = listParam;
+        listFiles.removeLast();
+        // 获取默认路径
+        QString strDefaultPath;
+        QFileInfo fileinfo(listFiles.at(0));
+        // 根据设置选项设置默认解压路径
+        if ("" != m_pSettingDlg->getDefaultExtractPath()) {
+            strDefaultPath = m_pSettingDlg->getDefaultExtractPath();
+        } else {
+            strDefaultPath = fileinfo.path();
+        }
+        // 弹出文件选择对话框，选择解压路径
+        DFileDialog dialog;
+        dialog.setAcceptMode(DFileDialog::AcceptOpen);
+        dialog.setFileMode(DFileDialog::Directory);
+        dialog.setWindowTitle(tr("Find directory"));
+        dialog.setDirectory(strDefaultPath);
+        // 处理操作
+        const int mode = dialog.exec();
+
+        if (mode != QDialog::Accepted) {
+            // 不选取任何路径，不做处理直接返回
+            return;
+        }
+        // 获取解压路径
+        QList< QUrl > listSelectpath = dialog.selectedUrls();
+        QString strExtractPath = listSelectpath.at(0).toLocalFile();
+        // 调用批量解压
+        ArchiveManager::get_instance()->batchExtractFiles(listFiles, strExtractPath, m_pSettingDlg->isAutoCreatDir());
+        qint64 qSize = 0;
+        foreach (QString strFile, listFiles) {
+            qSize += QFile(strFile).size();
+        }
+        // 设置进度界面参数
+        m_pProgressPage->setProgressType(PT_UnCompress);
+        m_pProgressPage->setTotalSize(qSize);
+        m_pProgressPage->setArchiveName(QFileInfo(listFiles[0]).fileName());
+        m_pProgressPage->restartTimer(); // 重启计时器
+        m_ePageID = PI_UnCompressProgress;
     } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
-        ArchiveManager::get_instance()->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), false);
+        ArchiveManager::get_instance()->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), m_pSettingDlg->isAutoCreatDir());
         qint64 qSize = 0;
         foreach (QString strFile, listFiles) {
             qSize += QFile(strFile).size();
@@ -555,29 +595,29 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 解压到xx文件夹
     } else if (strType == QStringLiteral("extract_here_split")) { // 右键选择7z压缩分卷文件，解压到当前文件夹
         // if (listParam.at(0).contains(".7z.")) {
-            QString filepath = listParam.at(0);
-            transSplitFileName(filepath);
+        QString filepath = listParam.at(0);
+        transSplitFileName(filepath);
 
-            QFileInfo fileinfo(filepath);
-            if (fileinfo.exists()) {
-                ExtractionOptions options;
-                // 构建解压参数
-                options.strTargetPath = fileinfo.path();
-                options.bAllExtract = true;
-                options.bRightExtract = true;
-                options.qComressSize = fileinfo.size();
-                // 调用解压函数
-                ArchiveManager::get_instance()->extractFiles(filepath, QList<FileEntry>(), options);
-                // 设置进度界面参数
-                m_pProgressPage->setProgressType(PT_UnCompress);
-                m_pProgressPage->setTotalSize(options.qComressSize);
-                m_pProgressPage->setArchiveName(fileinfo.fileName());
-                m_pProgressPage->restartTimer(); // 重启计时器
-                m_ePageID = PI_UnCompressProgress;
-            } else {
-                // 可能分卷文件缺失，所以解压到当前文件夹失败
-                m_ePageID = PI_UnCompressFailure;
-            }
+        QFileInfo fileinfo(filepath);
+        if (fileinfo.exists()) {
+            ExtractionOptions options;
+            // 构建解压参数
+            options.strTargetPath = fileinfo.path();
+            options.bAllExtract = true;
+            options.bRightExtract = true;
+            options.qComressSize = fileinfo.size();
+            // 调用解压函数
+            ArchiveManager::get_instance()->extractFiles(filepath, QList<FileEntry>(), options);
+            // 设置进度界面参数
+            m_pProgressPage->setProgressType(PT_UnCompress);
+            m_pProgressPage->setTotalSize(options.qComressSize);
+            m_pProgressPage->setArchiveName(fileinfo.fileName());
+            m_pProgressPage->restartTimer(); // 重启计时器
+            m_ePageID = PI_UnCompressProgress;
+        } else {
+            // 可能分卷文件缺失，所以解压到当前文件夹失败
+            m_ePageID = PI_UnCompressFailure;
+        }
         // }
     }
 

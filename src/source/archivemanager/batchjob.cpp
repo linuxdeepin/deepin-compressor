@@ -125,7 +125,7 @@ void BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 {
     // 创建解压参数
     ExtractionOptions stOptions;
-    stOptions.strTargetPath = fileInfo.path();
+    stOptions.strTargetPath = m_strExtractPath;
     if (m_bAutoCreatDir)
         stOptions.strTargetPath += QDir::separator() + fileInfo.completeBaseName();
     stOptions.qComressSize = fileInfo.size();
