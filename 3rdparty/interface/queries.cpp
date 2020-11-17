@@ -231,6 +231,10 @@ void OverwriteQuery::execute()
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
 
+    //setTabOrder需放在布局最后，否则不生效
+    dialog->setTabOrder(checkbox, dialog->getButton(0));
+    dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
+
     const int mode = dialog->exec();
     ret = mode;
     if (-1 == mode) {
