@@ -76,6 +76,12 @@ public:
     //提示是否转换压缩文件格式
     QStringList convertArchiveDialog();
 
+    /**
+     * @brief addPasseord   获取追加输入的密码
+     * @return
+     */
+    QString getAddPasseord();
+
 signals:
     void sigDecompressPress(const QString &localPath, QString conVert = "");
     void sigextractfiles(QVector<Archive::Entry *>, QString path, EXTRACT_TYPE type);
@@ -120,6 +126,19 @@ public slots:
 
 private:
     QString getAndDisplayPath(QString path);
+
+    /**
+     * @brief handleAddFiles   处理追加压缩文件
+     * @param listPath          待追加的文件
+     * @return
+     */
+    void handleAddFiles(const QStringList &listPath);
+
+    /**
+     * @brief showEncryptionDialog  显示加密选项对话框
+     * @return  是否接受操作
+     */
+    int showEncryptionDialog();
 private:
     //文件列表
     fileViewer *m_fileviewer;
@@ -137,5 +156,6 @@ private:
     int m_iWidth;
     //存放追加、修改、删除的文件
     QStringList m_inputlist;
+    QString m_strAddPassword;   // 追加压缩时添加的密码（只针对zip有效）
 };
 #endif

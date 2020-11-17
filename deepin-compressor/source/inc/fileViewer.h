@@ -327,6 +327,11 @@ public:
      */
     void setLoadFilePath(const QString &);
 
+    /**
+     * @brief getLoadFilePath   获取加载的压缩包路径
+     */
+    QString getLoadFilePath();
+
 public slots:
     /**
      * @brief showPlable    显示表头和上一级按钮

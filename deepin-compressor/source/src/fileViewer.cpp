@@ -1094,6 +1094,11 @@ void fileViewer::setLoadFilePath(const QString &path)
     this->m_loadPath = path;
 }
 
+QString fileViewer::getLoadFilePath()
+{
+    return m_loadPath;
+}
+
 int fileViewer::getPathIndex()
 {
     return m_pathindex;

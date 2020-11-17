@@ -3592,6 +3592,11 @@ void MainWindow::addArchive(QMap<QString, QString> &Args)
     }
 
     AddJob *pAddJob = dynamic_cast<AddJob *>(m_pJob);
+
+    // 设置追加压缩的密码
+    if (!m_pUnCompressPage->getAddPasseord().isEmpty())
+        pAddJob->archiveInterface()->setPassword(m_pUnCompressPage->getAddPasseord());
+
     if (pAddJob->archiveInterface()->mType == ReadOnlyArchiveInterface::ENUM_PLUGINTYPE::PLUGIN_CLIINTERFACE) {//7z的计算目标大小
         calSelectedTotalEntrySize(all_entries);
     } else {

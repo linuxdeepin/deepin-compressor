@@ -28,12 +28,14 @@
 #include "queries.h"
 #include "customwidget.h"
 #include "DebugTimeManager.h"
+#include "mimetypes.h"
 
 #include <DStandardPaths>
 #include <DMessageManager>
 #include <DDialog>
 #include <DFontSizeManager>
 #include <DRadioButton>
+#include <DPasswordEdit>
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -351,6 +353,146 @@ QString UnCompressPage::getAndDisplayPath(QString path)
     return pathStr;
 }
 
+void UnCompressPage::handleAddFiles(const QStringList &listPath)
+{
+    // 初始化变量
+    m_inputlist.clear();
+    QVector<Archive::Entry *> vectorEntry;
+
+    // 获取数据模型
+    ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
+
+    //int mode = 0;
+    int mode = 0;
+    bool bAll = false;
+
+    // 处理重复文件
+    foreach (QString strPath, listPath) {
+        Archive::Entry *entry = pModel->isExists(strPath);
+
+        if (entry != nullptr) {
+            // 存在此文件
+            if (!bAll) {
+                // 显示替换/覆盖对话框
+                OverwriteQuery query(strPath);
+                query.setParent(this);
+                query.execute();
+                mode = query.getExecuteReturn();
+
+                bAll = query.applyAll();    // 是否全部应用
+            }
+
+            if (1 == mode) { //替换
+                vectorEntry.push_back(entry);
+                m_inputlist.push_back(strPath);
+            }
+        } else {
+            // 不存在此文件
+            m_inputlist.push_back(strPath);
+        }
+    }
+
+    m_model->refreshNow();
+    if (vectorEntry.count() > 0) {
+        // 如有需要替换的，先删除再追加
+        emit onRefreshEntryList(vectorEntry, false);
+    } else {
+        // 若没有需要替换的，直接追加
+        if (m_inputlist.count() > 0) {
+            if (m_info.filePath().endsWith(".rar")) {
+                // rar格式提示转换
+                convertArchive();
+            } else {
+                // 其余格式直接压缩
+                emit sigAutoCompress(m_info.filePath(), m_inputlist);
+            }
+        }
+
+        m_inputlist.clear();
+    }
+}
+
+int UnCompressPage::showEncryptionDialog()
+{
+    m_strAddPassword.clear();
+
+    // 创建对话框
+    DDialog dialog(this);
+    dialog.setFixedSize(QSize(380, 184));
+    dialog.setAccessibleName("PasswordNeeded_dialog");
+    QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog.setIcon(pixmap);
+
+    // 标题
+    DLabel *pTitleLbl = new DLabel(&dialog);
+    pTitleLbl->setFixedSize(300, 20);
+    pTitleLbl->setForegroundRole(DPalette::WindowText);
+    pTitleLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::DemiBold);
+    pTitleLbl->setText(tr("Add files to the current archive"));
+    pTitleLbl->setAlignment(Qt::AlignCenter);
+
+    // 勾选密码
+    DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), &dialog);
+    pSelCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
+
+    // 密码输入框
+    DPasswordEdit *pPasswordEdit = new DPasswordEdit(&dialog);
+    pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
+    pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
+    pPasswordEdit->setFixedWidth(280);
+    pPasswordEdit->setFixedHeight(36);
+    pPasswordEdit->setVisible(false);
+
+    //隐藏密码时不能输入中文,显示密码时可以输入中文
+    connect(pPasswordEdit, &DPasswordEdit::echoModeChanged, pPasswordEdit, [&](bool echoOn) {
+        pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
+    });
+
+
+    if (determineMimeType(m_fileviewer->getLoadFilePath()).name() != "application/zip") {
+        // 非zip格式不可以勾选密码框
+        pSelCkb->setEnabled(false);
+    }
+
+    // 布局
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(pTitleLbl, 0, Qt::AlignCenter);
+    mainlayout->addSpacing(10);
+    mainlayout->addWidget(pSelCkb, 0, Qt::AlignCenter);
+    mainlayout->addSpacing(10);
+    mainlayout->addWidget(pPasswordEdit, 0, Qt::AlignCenter);
+    mainlayout->addStretch();
+
+    // 密码选择框勾选之后显示密码输入框
+    connect(pSelCkb, &DCheckBox::clicked, this, [ & ]() {
+        if (pSelCkb->checkState() == Qt::Checked) {
+            dialog.setFixedSize(QSize(380, 230));
+            pPasswordEdit->setVisible(true);
+        } else {
+            dialog.setFixedSize(QSize(380, 184));
+            pPasswordEdit->setVisible(false);
+        }
+    });
+
+    // 中心面板
+    DWidget *widget = new DWidget(&dialog);
+    widget->setLayout(mainlayout);
+    dialog.addContent(widget);
+
+    dialog.addButton(QObject::tr("Cancel"));
+    dialog.addButton(QObject::tr("OK"));
+
+    int iMode = dialog.exec();
+
+    // 接收加密
+    if (iMode == 1) {
+        m_strAddPassword = pPasswordEdit->text();
+    }
+
+    return iMode;
+}
 /**
  * @brief UnCompressPage::slotCompressedAddFile 解压列表界面添加文件进行追加压缩
  */
@@ -368,51 +510,50 @@ void UnCompressPage::slotCompressedAddFile()
         return;
     }
 
-    QVector<Archive::Entry *> vectorEntry;
-    m_inputlist.clear();
-    ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
-    int responseValue = 0;
-    foreach (QString strPath, dialog.selectedFiles()) {
-        Archive::Entry *entry = pModel->isExists(strPath);
-        if (entry != nullptr) {
-            int mode = showReplaceDialog(strPath, responseValue);
-            if (1 == mode) {
-                vectorEntry.push_back(entry);
-                m_inputlist.push_back(strPath);
-            }
-        } else {
-            m_inputlist.push_back(strPath);
-        }
+    // 弹出加密选项对话框
+    int iResult = showEncryptionDialog();
+
+    // 不进行追加操作
+    if (iResult != 1) {
+        return;
     }
+    // 处理重复文件
+    handleAddFiles(dialog.selectedFiles());
+
+//    QVector<Archive::Entry *> vectorEntry;
+//    m_inputlist.clear();
+//    ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
+//    int responseValue = 0;
+//    foreach (QString strPath, dialog.selectedFiles()) {
+//        Archive::Entry *entry = pModel->isExists(strPath);
+//        if (entry != nullptr) {
+//            int mode = showReplaceDialog(strPath, responseValue);
+//            if (1 == mode) {
+//                vectorEntry.push_back(entry);
+//                m_inputlist.push_back(strPath);
+//            }
+//        } else {
+//            m_inputlist.push_back(strPath);
+//        }
+//    }
 
 //    m_model->refreshNow();
 //    if (vectorEntry.count() > 0) {
 //        emit onRefreshEntryList(vectorEntry, false);
 //    } else {
-//        if (m_inputlist.count() > 0)
-//            emit sigAutoCompress(m_info.filePath(), m_inputlist);
-//        //emit onAutoCompress(m_inputlist);
+//        if (m_inputlist.count() > 0) {
+//            if (m_info.filePath().endsWith(".rar")) { // 如果是rar文件，需要进行格式转换
+//                convertArchive();
+//            } else {
+//                emit sigAutoCompress(m_info.filePath(), m_inputlist);
+//            }
+//        }
 
+//        //emit onAutoCompress(m_inputlist);
 //        m_inputlist.clear();
 //    }
 
-    m_model->refreshNow();
-    if (vectorEntry.count() > 0) {
-        emit onRefreshEntryList(vectorEntry, false);
-    } else {
-        if (m_inputlist.count() > 0) {
-            if (m_info.filePath().endsWith(".rar")) { // 如果是rar文件，需要进行格式转换
-                convertArchive();
-            } else {
-                emit sigAutoCompress(m_info.filePath(), m_inputlist);
-            }
-        }
-
-        //emit onAutoCompress(m_inputlist);
-        m_inputlist.clear();
-    }
-
-    //emit sigAutoCompress(m_info.filePath(), dialog.selectedFiles());
+//    //emit sigAutoCompress(m_info.filePath(), dialog.selectedFiles());
 }
 
 fileViewer *UnCompressPage::getFileViewer()
@@ -527,7 +668,7 @@ void UnCompressPage::onextractfilesOpenSlot(const QVector<Archive::Entry *> &fil
  */
 void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWorkEntry)
 {
-    m_inputlist.clear();
+
 
     if (!m_fileviewer->isDropAdd()) {
         //m_inputlist = path;
@@ -535,49 +676,60 @@ void UnCompressPage::onAutoCompress(const QStringList &path, Archive::Entry *pWo
         return;
     }
 
-    ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
-    QVector<Archive::Entry *> vectorEntry;
-    //int mode = 0;
-    int mode = 0;
-    bool bAll = false;
-//    int responseValue = Result_Cancel;
-    foreach (QString strPath, path) {
-        Archive::Entry *entry = pModel->isExists(strPath);
+    // 弹出加密选项对话框
+    int iResult = showEncryptionDialog();
 
-        if (entry != nullptr) {
-            if (!bAll) {
-                OverwriteQuery query(strPath);
-                query.setParent(this);
-                query.execute();
-                mode = query.getExecuteReturn();
-
-                bAll = query.applyAll();
-            }
-
-            if (1 == mode) { //替换
-                vectorEntry.push_back(entry);
-                m_inputlist.push_back(strPath);
-            }
-        } else {
-            m_inputlist.push_back(strPath);
-        }
+    // 不进行追加操作
+    if (iResult != 1) {
+        return;
     }
 
-    m_model->refreshNow();
-    if (vectorEntry.count() > 0) {
-        emit onRefreshEntryList(vectorEntry, false);
-    } else {
-        if (m_inputlist.count() > 0) {
-            if (m_info.filePath().endsWith(".rar")) {
-                convertArchive();
-            } else {
-                emit sigAutoCompress(m_info.filePath(), m_inputlist);
-            }
-        }
+    // 处理重复文件
+    handleAddFiles(path);
 
-        //emit onAutoCompress(m_inputlist);
-        m_inputlist.clear();
-    }
+//    ArchiveModel *pModel = dynamic_cast<ArchiveModel *>(m_model->sourceModel());
+//    QVector<Archive::Entry *> vectorEntry;
+//    //int mode = 0;
+//    int mode = 0;
+//    bool bAll = false;
+////    int responseValue = Result_Cancel;
+//    foreach (QString strPath, path) {
+//        Archive::Entry *entry = pModel->isExists(strPath);
+
+//        if (entry != nullptr) {
+//            if (!bAll) {
+//                OverwriteQuery query(strPath);
+//                query.setParent(this);
+//                query.execute();
+//                mode = query.getExecuteReturn();
+
+//                bAll = query.applyAll();
+//            }
+
+//            if (1 == mode) { //替换
+//                vectorEntry.push_back(entry);
+//                m_inputlist.push_back(strPath);
+//            }
+//        } else {
+//            m_inputlist.push_back(strPath);
+//        }
+//    }
+
+//    m_model->refreshNow();
+//    if (vectorEntry.count() > 0) {
+//        emit onRefreshEntryList(vectorEntry, false);
+//    } else {
+//        if (m_inputlist.count() > 0) {
+//            if (m_info.filePath().endsWith(".rar")) {
+//                convertArchive();
+//            } else {
+//                emit sigAutoCompress(m_info.filePath(), m_inputlist);
+//            }
+//        }
+
+//        //emit onAutoCompress(m_inputlist);
+//        m_inputlist.clear();
+//    }
 }
 
 void UnCompressPage::slotSubWindowTipsPopSig(int mode, const QStringList &args)
@@ -718,4 +870,15 @@ QStringList UnCompressPage::convertArchiveDialog()
     }
 
     return typeList;
+}
+
+QString UnCompressPage::getAddPasseord()
+{
+    // 若不是zip格式，清空密码
+    if (determineMimeType(m_fileviewer->getLoadFilePath()).name() != "application/zip") {
+        m_strAddPassword.clear();
+    }
+
+    // 返回输入的密码
+    return m_strAddPassword;
 }
