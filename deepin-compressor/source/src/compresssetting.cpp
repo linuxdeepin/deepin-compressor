@@ -166,7 +166,7 @@ void CompressSetting::InitUI()
     m_savepath->setMinimumSize(260, 36);
 
     // 压缩方式
-    m_pCompressLevelCkb = new DComboBox(this);
+    m_pCompressLevelCkb = new CustomCombobox(this);
     m_pCompressLevelCkb->setMinimumSize(260, 36);
 
     // 选项布局

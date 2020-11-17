@@ -49,6 +49,7 @@ DWIDGET_USE_NAMESPACE
 class CustomPushButton;
 class CustomSwitchButton;
 class CustomCheckBox;
+class CustomCombobox;
 
 class TypeLabel: public DLabel
 {
@@ -163,7 +164,7 @@ private:
     qint64 m_getFileSize;
     bool isSplitChecked = false;
 
-    DComboBox *m_pCompressLevelCkb;       // 压缩方式选择项
+    CustomCombobox *m_pCompressLevelCkb;       // 压缩方式选择项
     DLabel *m_pCommentLbl;
     DTextEdit *m_pCommentEdt;       // 注释信息
 
