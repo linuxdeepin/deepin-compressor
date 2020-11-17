@@ -884,18 +884,18 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
     // Get number of archive entries.
     const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : m_listExtractIndex.size();
-    //首次检测密码
-    bool status = true;
-    if (extractAll == true) {
-        status = checkArchivePsd(archive, iCodecIndex);
-    } else {
-        status = checkEntriesPsd(archive, m_listExtractIndex);
-    }
+//    //首次检测密码
+//    bool status = true;
+//    if (extractAll == true) {
+//        status = checkArchivePsd(archive, iCodecIndex);
+//    } else {
+//        status = checkEntriesPsd(archive, m_listExtractIndex);
+//    }
 
-    if (status == false) {
-        return false;
-    }
-    //检测完毕,如果密码正确或不需要密码，发送此信号，通知开始解压
+//    if (status == false) {
+//        return false;
+//    }
+//    //检测完毕,如果密码正确或不需要密码，发送此信号，通知开始解压
 
     emit sigExtractPwdCheckDown();
 
@@ -957,7 +957,9 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 if (query.responseCancelled()) {
                     setPassword(QString());
                     zip_close(archive);
-                    emit error("Wrong password.");
+//                    emit error("Wrong password.");
+                    emit cancelled();
+                    emit finished(false);
                     return false;
                 } else {
                     setPassword(query.password());
@@ -1107,6 +1109,115 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
     if (!isDirectory) {
         // Handle existing destination files.
         QString renamedEntry = entry;
+//        while (!m_overwriteAll && QFileInfo::exists(destination)) {
+//            if (m_skipAll) {
+//                return enum_extractEntryStatus::SUCCESS;
+//            } else {
+//                OverwriteQuery query(renamedEntry);
+//                emit userQuery(&query);
+//                query.waitForResponse();
+//                ifReplaceTip = true;
+
+//                if (query.responseCancelled()) {
+//                    userCancel = true;
+//                    emit cancelled();
+//                    return enum_extractEntryStatus::FAIL;
+//                } else if (query.responseSkip()) {
+//                    return enum_extractEntryStatus::SUCCESS;
+//                } else if (query.responseAutoSkip()) {
+//                    m_skipAll = true;
+//                    return enum_extractEntryStatus::SUCCESS;
+//                } else if (query.responseRename()) {
+//                    const QString newName(query.newFilename());
+//                    destination = QFileInfo(destination).path() + QDir::separator() + QFileInfo(newName).fileName();
+//                    renamedEntry = QFileInfo(entry).path() + QDir::separator() + QFileInfo(newName).fileName();
+//                } else if (query.responseOverwriteAll()) {
+//                    m_overwriteAll = true;
+//                    break;
+//                } else if (query.responseOverwrite()) {
+//                    break;
+//                }
+//            }
+//        }
+
+        m_extractFile = destination;
+
+        QString strtmp = destination;
+        if (strtmp.endsWith(QDir::separator())) {
+            strtmp.chop(1);
+        }
+
+        int i = strtmp.lastIndexOf(QDir::separator());
+        if (strtmp.mid(i + 1).toUtf8().length() > NAME_MAX) { //Is the file name too long
+            emit error("Filename is too long");
+            return enum_extractEntryStatus::FAIL;
+        }
+
+        QFile file(destination);
+//        if (file.exists() && !file.isWritable()) {
+//            file.remove();
+//            file.setFileName(destination);
+//            file.setPermissions(QFileDevice::WriteUser);
+//        }
+
+//        if (file.open(QIODevice::WriteOnly) == false) {
+//            emit error(("Failed to open file for writing: %1"));
+//            return enum_extractEntryStatus::FAIL;
+//       }
+
+        QDataStream out(&file);
+
+        // Write archive entry to file. We use a read/write buffer of 1024 chars.
+        int kb = 1024;
+        qulonglong sum = 0;
+        char buf[kb];
+
+        if (pi.fileProgressProportion > 0) {
+            emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
+        }
+
+        // check entry psd begin : 1st clean error, 2nd fopen, 3rd get error
+        zip_error_clear(archive);
+        zip_file_t *zipFile = zip_fopen_index(archive, index, 0);
+        if (zipFile == nullptr) {
+            int iErr = zip_error_code_zip(zip_get_error(archive));
+            if (iErr == ZIP_ER_WRONGPASSWD || iErr == ZIP_ER_NOPASSWD) {// 密码错误或者提示需要输入密码
+                file.close();
+                return enum_extractEntryStatus::PSD_NEED;
+
+//                bool bCheckFinished = false;
+//                int iCodecIndex = 0;
+//                while (zipFile == nullptr && bCheckFinished == false) {
+//                    if (iCodecIndex == m_listCodecs.length()) {
+//                        bCheckFinished = true;
+//                        if (file.exists()) {
+//                            file.remove();
+//                        }
+
+//                        file.close();
+//                        return enum_extractEntryStatus::PSD_NEED;
+//                    } else {
+//                        iCodecIndex++;
+//                        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
+//                        zip_error_clear(archive);
+//                        zipFile = zip_fopen_index(archive, index, 0);
+//                        iErr = zip_error_code_zip(zip_get_error(archive));
+//                        if (iErr != ZIP_ER_WRONGPASSWD && zipFile != nullptr) {//密码正确
+//                            bCheckFinished = true;
+//                        }
+//                    }
+//                }
+            } /*else if (iErr == ZIP_ER_NOPASSWD) {
+                file.close();
+                return enum_extractEntryStatus::PSD_NEED;
+            }*/ else {
+                emit error(("Failed to read data for entry: %1"));
+                file.close();
+                return enum_extractEntryStatus::FAIL;
+            }
+        }
+        // check entry psd end .
+
         while (!m_overwriteAll && QFileInfo::exists(destination)) {
             if (m_skipAll) {
                 return enum_extractEntryStatus::SUCCESS;
@@ -1138,20 +1249,6 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
             }
         }
 
-        m_extractFile = destination;
-
-        QString strtmp = destination;
-        if (strtmp.endsWith(QDir::separator())) {
-            strtmp.chop(1);
-        }
-
-        int i = strtmp.lastIndexOf(QDir::separator());
-        if (strtmp.mid(i + 1).toUtf8().length() > NAME_MAX) { //Is the file name too long
-            emit error("Filename is too long");
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        QFile file(destination);
         if (file.exists() && !file.isWritable()) {
             file.remove();
             file.setFileName(destination);
@@ -1162,56 +1259,6 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
             emit error(("Failed to open file for writing: %1"));
             return enum_extractEntryStatus::FAIL;
         }
-
-        QDataStream out(&file);
-
-        // Write archive entry to file. We use a read/write buffer of 1024 chars.
-        int kb = 1024;
-        qulonglong sum = 0;
-        char buf[kb];
-
-        if (pi.fileProgressProportion > 0) {
-            emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
-        }
-
-        // check entry psd begin : 1st clean error, 2nd fopen, 3rd get error
-        zip_error_clear(archive);
-        zip_file_t *zipFile = zip_fopen_index(archive, index, 0);
-        if (zipFile == nullptr) {
-            int iErr = zip_error_code_zip(zip_get_error(archive));
-            if (iErr == ZIP_ER_WRONGPASSWD) {//密码错误
-                bool bCheckFinished = false;
-                int iCodecIndex = 0;
-                while (zipFile == nullptr && bCheckFinished == false) {
-                    if (iCodecIndex == m_listCodecs.length()) {
-                        bCheckFinished = true;
-                        if (file.exists()) {
-                            file.remove();
-                        }
-
-                        file.close();
-                        return enum_extractEntryStatus::PSD_NEED;
-                    } else {
-                        iCodecIndex++;
-                        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
-                        zip_error_clear(archive);
-                        zipFile = zip_fopen_index(archive, index, 0);
-                        iErr = zip_error_code_zip(zip_get_error(archive));
-                        if (iErr != ZIP_ER_WRONGPASSWD && zipFile != nullptr) {//密码正确
-                            bCheckFinished = true;
-                        }
-                    }
-                }
-            } else if (iErr == ZIP_ER_NOPASSWD) {
-                file.close();
-                return enum_extractEntryStatus::PSD_NEED;
-            } else {
-                emit error(("Failed to read data for entry: %1"));
-                file.close();
-                return enum_extractEntryStatus::FAIL;
-            }
-        }
-        // check entry psd end .
 
         int writeSize = 0;
         while (sum != statBuffer.size) {
