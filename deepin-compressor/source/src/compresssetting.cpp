@@ -357,6 +357,9 @@ void CompressSetting::initWidget()
 
         InitUI();
         InitConnection();
+
+        //第一次进压缩设置界面，高级设置关闭
+        onAdvanceButtonClicked(m_moresetbutton->isChecked());
     }
 }
 

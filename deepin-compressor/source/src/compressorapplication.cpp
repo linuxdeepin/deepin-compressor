@@ -56,7 +56,7 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
         int keyOfEvent = keyEvent->key();
         if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
             //checkbox响应"回车键"
-            qDebug() << watched->metaObject()->className();
+//            qDebug() << watched->metaObject()->className();
             if (watched->metaObject()->className() == QStringLiteral("QCheckBox")) {
                 DCheckBox *checkBox = static_cast<DCheckBox *>(watched);
                 // 模拟空格键按下事件
