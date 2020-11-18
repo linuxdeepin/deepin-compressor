@@ -1,5 +1,5 @@
 #include <DSettings>
-/*
+
 void GenerateSettingTranslate()
 {
     auto setting_Text = QObject::tr("General");  //设置
@@ -11,4 +11,4 @@ void GenerateSettingTranslate()
     auto file_association = QObject::tr("Files Associated");  //关联文件
     auto file_type = QObject::tr("File Type");  //文件类型
 }
-*/
+

@@ -214,8 +214,8 @@ void CompressSetting::InitUI()
     // 分卷压缩
     m_splitcompress = new CustomCheckBox(tr("Split to volumes") + ":", this);
     m_splitcompress->setAccessibleName("Split_cbox");
-    m_splitcompress->setEnabled(false);
-    m_splitcompress->setToolTip(tr("Support 7z type only"));
+    m_splitcompress->setEnabled(true);
+    m_splitcompress->setToolTip(tr("Support 7z/zip type only"));
 
     m_splitnumedit = new DDoubleSpinBox(this);
     m_splitnumedit->setMinimumSize(260, 36);
@@ -229,6 +229,7 @@ void CompressSetting::InitUI()
     // 注释
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
+    m_pCommentEdt->setPlaceholderText(tr("Enter up to 10000 characters"));
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
@@ -377,6 +378,16 @@ void CompressSetting::showRightMenu(QMouseEvent * /*e*/)
 void CompressSetting::onNextButoonClicked()
 {
     PERF_PRINT_BEGIN("POINT-03", "filename=" + m_filename->text() + '.' + m_compresstype->text() + " filesize=" + QString::number(m_getFileSize) + "B"); //压缩计时
+
+    //压缩zip分卷不支持中文密码
+    m_password->text();
+    if (m_splitcompress->isChecked()
+            && "zip" == m_compresstype->text()
+            && (!m_password->text().isEmpty() && m_password->text().contains(QRegExp("[\\x4e00-\\x9fa5]+")))) {
+        showWarningDialog(tr("zip split to volumes does not support Chinese password"));
+        return;
+    }
+
     QDir dir(m_savepath->text());
     QString name = m_filename->text().remove(" ");
     if (!checkfilename(name)) { // 检查文件名是否合法
@@ -441,7 +452,9 @@ void CompressSetting::onNextButoonClicked()
     }
 
     // 分卷数量不能多于10 卷
-    if ((((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10) && m_compresstype->text().contains("7z") && m_splitcompress->isChecked()) {
+    if ((((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10)
+            && (m_compresstype->text().contains("7z") || m_compresstype->text().contains("zip"))
+            && m_splitcompress->isChecked()) {
         showWarningDialog(tr("Too many volumes, please change and retry"));
         //  Up to 10 volumes, please change and retry
         return;
@@ -815,7 +828,7 @@ void CompressSetting::setFilepath(QStringList pathlist)
  */
 void CompressSetting::onSplitChanged(int /*status*/)
 {
-    if (m_splitcompress->isChecked() && "7z" == m_compresstype->text()) { // 分卷压缩
+    if (m_splitcompress->isChecked() && ("7z" == m_compresstype->text() || "zip" == m_compresstype->text())) { // 分卷压缩
         m_splitnumedit->setEnabled(true);
 //        if ((m_getFileSize / 1024 / 1024) >= 1) { //1M以上的文件
 //            m_splitnumedit->setValue(m_getFileSize / 1024.0 / 1024.0 / 2.0 + 0.1);
@@ -870,17 +883,17 @@ void CompressSetting::ontypeChanged(QAction *action)
         m_pCommentEdt->setEnabled(false);
         m_pCommentEdt->clear();
     } else if (0 == selectType.compare("zip")) {
-        m_splitnumedit->setEnabled(false);
+        if (m_splitcompress->isChecked()) { //分卷选项
+            m_splitnumedit->setEnabled(true); //分卷大小
+        }
         m_encryptedlabel->setEnabled(true);
         m_password->setEnabled(true);
         m_encryptedfilelistlabel->setEnabled(false);
         m_file_secret->setEnabled(false);
         m_file_secret->setChecked(false);
-        m_splitcompress->setEnabled(false);
-        m_splitcompress->setChecked(false);
+        m_splitcompress->setEnabled(true);
         //m_splitnumedit->setRange(0.0, 1000000);
         m_splitnumedit->setValue(0.0);
-        isSplitChecked = false;
         m_pCommentLbl->setEnabled(true);
         m_pCommentEdt->setEnabled(true);
     } else {

@@ -5118,7 +5118,6 @@ void MainWindow::onTitleButtonPressed()
         break;
     case PAGE_ZIPSET: // 压缩设置界面， 点击‘<’，返回到压缩列表界面
         emit sigZipReturn();
-        m_pCompressSetting->clickTitleBtnResetAdvancedOptions();
         m_ePageID = PAGE_ZIP;
         refreshPage();
         break;
@@ -5271,7 +5270,7 @@ void MainWindow::slotTitleCommentButtonPressed()
             commentTextedit->setReadOnly(true);
         }
 
-//        commentTextedit->setPlaceholderText("Enter up to 10000 characters");
+        commentTextedit->setPlaceholderText(tr("Enter up to 10000 characters"));
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);
