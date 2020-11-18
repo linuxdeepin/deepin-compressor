@@ -5235,9 +5235,9 @@ void MainWindow::slotTitleCommentButtonPressed()
         // 显示注释内容的控件
         DTextEdit *commentTextedit = new DTextEdit(commentDrawer);
         if (determineMimeType(m_strLoadfile).name() == "application/zip") { // 只有zip格式支持修改注释
-            commentTextedit->setEnabled(true);
+            commentTextedit->setReadOnly(false);
         } else {
-            commentTextedit->setEnabled(false);
+            commentTextedit->setReadOnly(true);
         }
 
 //        commentTextedit->setPlaceholderText("Enter up to 10000 characters");
