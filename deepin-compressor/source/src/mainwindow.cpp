@@ -5270,7 +5270,7 @@ void MainWindow::slotTitleCommentButtonPressed()
             commentTextedit->setReadOnly(true);
         }
 
-        commentTextedit->setPlaceholderText(tr("Enter up to 10000 characters"));
+        commentTextedit->setPlaceholderText(tr("No more than 10000 characters please"));
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);

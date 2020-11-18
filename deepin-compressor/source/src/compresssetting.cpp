@@ -229,7 +229,7 @@ void CompressSetting::InitUI()
     // 注释
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
-    m_pCommentEdt->setPlaceholderText(tr("Enter up to 10000 characters"));
+    m_pCommentEdt->setPlaceholderText(tr("No more than 10000 characters please"));
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
@@ -384,7 +384,7 @@ void CompressSetting::onNextButoonClicked()
     if (m_splitcompress->isChecked()
             && "zip" == m_compresstype->text()
             && (!m_password->text().isEmpty() && m_password->text().contains(QRegExp("[\\x4e00-\\x9fa5]+")))) {
-        showWarningDialog(tr("zip split to volumes does not support Chinese password"));
+        showWarningDialog(tr("The password for ZIP volumes cannot be in Chinese"));
         return;
     }
 
