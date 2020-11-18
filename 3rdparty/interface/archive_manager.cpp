@@ -37,7 +37,7 @@ Archive *Archive::create(const QString &fileName, QObject *parent)
     return create(fileName, QString(), parent);
 }
 
-Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, QObject *parent)
+Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, QObject *parent, SpecialFileAttributes *attributes)
 {
     PluginManager pluginManager;
     QFileInfo fileinfo(fileName);
@@ -47,7 +47,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
 
     const QMimeType mimeType = fixedMimeType.isEmpty() ? determineMimeType(fileName) : QMimeDatabase().mimeTypeForName(fixedMimeType);
 
-    QVector<Plugin *> offers = pluginManager.preferredPluginsFor(mimeType);
+    QVector<Plugin *> offers = pluginManager.preferredPluginsFor(mimeType, attributes);
     if (offers.isEmpty()) {
         qDebug() << "Could not find a plugin to handle" << fileName;
         return new Archive(NoPlugin, parent);
@@ -126,7 +126,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
         offers = pluginManager.preferredWritePluginsFor(mimeType);
 
         if (useLibArchive == true && mimeType.name() == "application/zip") {
-            std::sort(offers.begin(), offers.end(), [](Plugin *p1, Plugin *p2) {
+            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
                 if (p1->metaData().name().contains("Libarchive")) {
                     return true;
                 }
@@ -167,7 +167,7 @@ Archive *Archive::create(const QString &fileName, const QString &fixedMimeType, 
     return archive;
 }
 
-ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere)
+ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere, SpecialFileAttributes *attributes)
 {
     PluginManager pluginManager;
 
@@ -194,7 +194,7 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, cons
         offers = pluginManager.preferredWritePluginsFor(mimeType);
 
         if (useLibArchive == true && mimeType.name() == "application/zip") {
-            std::sort(offers.begin(), offers.end(), [](Plugin *p1, Plugin *p2) {
+            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
                 if (p1->metaData().name().contains("Libarchive")) {
                     return true;
                 }
@@ -206,7 +206,7 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, cons
             });
         }
     } else {
-        offers = pluginManager.preferredPluginsFor(mimeType);
+        offers = pluginManager.preferredPluginsFor(mimeType, attributes);
     }
 
     if (offers.isEmpty()) {
@@ -248,7 +248,8 @@ ReadOnlyArchiveInterface *Archive::createInterface(const QString &fileName, Plug
     }
 
     const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
-                               QVariant().fromValue(plugin->metaData())};
+                               QVariant().fromValue(plugin->metaData())
+                              };
 
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     return iface;
@@ -264,7 +265,8 @@ Archive *Archive::create(const QString &fileName, Plugin *plugin, QObject *paren
     }
 
     const QVariantList args = {QVariant(QFileInfo(fileName).absoluteFilePath()),
-                               QVariant().fromValue(plugin->metaData())};
+                               QVariant().fromValue(plugin->metaData())
+                              };
 
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     if (!iface) {
@@ -351,8 +353,8 @@ void Archive::CreateEntry(QString path, Entry *&parent, QString externalPath, QH
         QMimeDatabase db;
         QIcon icon;
         entry->isDir()
-            ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
-            : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
+        ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
+                 : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
         // set Icon end
         map->insert(entry->fullPath(NoTrailingSlash), icon);
         i++;
@@ -415,8 +417,8 @@ void Archive::CreateEntryNew(QString path, Archive::Entry *&parent, QString exte
 
         QIcon icon;
         entry->isDir()
-            ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
-            : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
+        ? icon = QIcon::fromTheme(db.mimeTypeForName(QStringLiteral("inode/directory")).iconName()).pixmap(24, 24)
+                 : icon = QIcon::fromTheme(db.mimeTypeForFile(entry->fullPath()).iconName()).pixmap(24, 24);
         // set Icon end
         map->insert(entry->fullPath(NoTrailingSlash), icon);
 
@@ -449,9 +451,9 @@ LoadJob *Archive::load(const QString &fileName, QObject *parent)
     return load(fileName, QString(), parent);
 }
 
-LoadJob *Archive::load(const QString &fileName, const QString &mimeType, QObject *parent)
+LoadJob *Archive::load(const QString &fileName, const QString &mimeType, QObject *parent, SpecialFileAttributes *attributes)
 {
-    auto archive = create(fileName, mimeType, parent);
+    auto archive = create(fileName, mimeType, parent, attributes);
     auto loadJob = new LoadJob(archive);
 
     return loadJob;

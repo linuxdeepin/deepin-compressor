@@ -23,6 +23,7 @@
 #include "jobs.h"
 #include "mimetypes.h"
 #include "utils.h"
+//#include "customdatainfo.h"
 
 #include <DPalette>
 #include <DFontSizeManager>
@@ -842,12 +843,12 @@ void ArchiveModel::reset()
     endResetModel();
 }
 
-KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QObject *parent)
+KJob *ArchiveModel::loadArchive(const QString &path, const QString &mimeType, QObject *parent, SpecialFileAttributes *attributes)
 {
     reset();
 
     // 创建加载操作，加载压缩包数据
-    auto loadJob = Archive::load(path, mimeType, parent);
+    auto loadJob = Archive::load(path, mimeType, parent, attributes);
     connect(loadJob, &KJob::result, this, &ArchiveModel::slotLoadingFinished);
     connect(loadJob, &Job::newEntry, this, &ArchiveModel::slotListEntry);
     connect(loadJob, &Job::userQuery, this, &ArchiveModel::signalUserQuery);

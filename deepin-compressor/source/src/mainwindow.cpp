@@ -1670,7 +1670,8 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
                 this->m_pArchiveModel->resetmparent();      // 重置父节点
             }
 
-            transSplitFileName(strFileName);    // 对7z分卷进行额外处理
+            SpecialFileAttributes attributes;
+            transSplitFileName(strFileName, &attributes);   // 对7z分卷进行额外处理
 
             QFileInfo fileinfo(strFileName);
             m_strDecompressFileName = fileinfo.fileName();     // 压缩包名称
@@ -1690,7 +1691,7 @@ void MainWindow::onSelected(const QStringList &listSelFiles)
 
             m_pUnCompressPage->getFileViewer()->setRootPathIndex();  //added by hsw 20200612 重置m_pathindex
             m_ePageID = PAGE_LOADING;
-            loadArchive(strFileName);
+            loadArchive(strFileName, &attributes);
         } else {        // 若已存在文件，则提示是添加压缩还是打开新的归档管理器进行解压查看
             DDialog *dialog = new DDialog(this);
             dialog->setFixedWidth(440);
@@ -1811,8 +1812,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         QStringList transFiles;
         for (const QString &url : qAsConst(pathList)) {
             QString transFile = url;
+            SpecialFileAttributes attributes;
             // 解析7z、rar分卷文件名
-            transSplitFileName(transFile);
+            transSplitFileName(transFile, &attributes);
             if (!transFiles.contains(transFile)) { //为了不重复解压
                 transFiles.append(transFile);
             }
@@ -1901,8 +1903,9 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
             m_pUnCompressPage->setdefaultpath(fileinfo.path());
         }
 
+        SpecialFileAttributes attributes;
         // 加载压缩文件
-        loadArchive(files.at(0));
+        loadArchive(files.at(0), &attributes);
         // 设置进度类型
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         show();
@@ -2129,7 +2132,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
         //            filename = filename.left(filename.length() - 3) + "001";
         //        }
 
-        transSplitFileName(filename); // 解析文件名
+        SpecialFileAttributes attributes;
+        transSplitFileName(filename, &attributes); // 解析文件名
 
         QFileInfo fileinfo(filename);
         m_strDecompressFileName = fileinfo.fileName();
@@ -2148,7 +2152,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 
         // 切换到加载文件界面
         m_ePageID = Page_ID::PAGE_LOADING;
-        loadArchive(filename);
+        loadArchive(filename, &attributes);
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING);
         show();
     } else if (files.last() == QStringLiteral("extract_mkdir")) { // 解压到新的文件目录
@@ -2166,7 +2170,8 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
 void MainWindow::rightMenuExtractHere(const QString &localPath)
 {
     QString transFile = localPath;
-    transSplitFileName(transFile);      // 对文件名进行转换（分卷处理）
+    SpecialFileAttributes attributes;
+    transSplitFileName(transFile, &attributes);     // 对文件名进行转换（分卷处理）
     WatcherFile(localPath);
     m_strLoadfile = transFile;
 
@@ -2217,6 +2222,8 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
             detectedSubfolder = detectedSubfolder.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
         } else if (fi.filePath().contains(".part1.rar")) {
             detectedSubfolder = detectedSubfolder.remove(".part1"); // tar分卷文件，创建文件夹的时候移除.part1
+        } else if (fi.filePath().contains(".zip.")) {
+            detectedSubfolder = detectedSubfolder.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
         }
 
         pSettingInfo->str_CreateFolder = detectedSubfolder;
@@ -2245,7 +2252,7 @@ void MainWindow::rightMenuExtractHere(const QString &localPath)
     // 获取压缩文件mimetype
     QString fixedMimetype = determineMimeType(transFile).name();
     // 创建解压需要的插件
-    ReadOnlyArchiveInterface *pIface = Archive::createInterface(transFile, fixedMimetype, true);
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(transFile, fixedMimetype, true, &attributes);
 
     ExtractJob *pExtractJob = new ExtractJob(files, destinationDirectory, options, pIface);
     m_pJob = pExtractJob;
@@ -2328,10 +2335,10 @@ bool MainWindow::isWorkProcess()
     return m_eWorkStatus == WorkProcess; // 解压或压缩进度状态
 }
 
-void MainWindow::loadArchive(const QString &files)
+void MainWindow::loadArchive(const QString &files, SpecialFileAttributes *attributes)
 {
     QString transFile = files;
-    transSplitFileName(transFile);
+    transSplitFileName(transFile, attributes);
 
     // 监听本地压缩包文件的变化
     WatcherFile(transFile);
@@ -2342,7 +2349,7 @@ void MainWindow::loadArchive(const QString &files)
     m_pUnCompressPage->getFileViewer()->setLoadFilePath(m_strLoadfile);
     m_operationtype = Operation_Load;
     m_ePageID = PAGE_LOADING;
-    m_pJob = m_pArchiveModel->loadArchive(transFile, "", m_pArchiveModel);
+    m_pJob = m_pArchiveModel->loadArchive(transFile, "", m_pArchiveModel, attributes);
 
     if (m_pJob == nullptr) {
         return;
@@ -3809,7 +3816,7 @@ void MainWindow::moveToArchive(QMap<QString, QString> &Args)
     m_eWorkStatus = WorkProcess;
 }
 
-void MainWindow::transSplitFileName(QString &fileName)    // *.7z.003 -> *.7z.001
+void MainWindow::transSplitFileName(QString &fileName, SpecialFileAttributes *attributes)    // *.7z.003 -> *.7z.001
 {
     if (fileName.contains(".7z.")) {
         QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
@@ -3831,6 +3838,30 @@ void MainWindow::transSplitFileName(QString &fileName)    // *.7z.003 -> *.7z.00
             fileName.replace(x, y - x, "part01");
         } else {
             fileName.replace(x, y - x, "part1");
+        }
+    } else if (fileName.contains(".zip.")) {
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        if (reg.exactMatch(fileName) == false) {
+            return;
+        }
+        QFileInfo fi(reg.cap(1) + "001");
+        if (fi.exists() == true) {
+            fileName = reg.cap(1) + "001";
+        }
+
+        if (nullptr != attributes) {
+            attributes->b_isZipSplit = true;
+        }
+    } else if (fileName.endsWith(".zip")) {
+        /**
+         * 例如123.zip文件，检测123.z01文件是否存在
+         * 如果存在，则认定123.zip是分卷包
+         */
+        QFileInfo tmp(fileName.left(fileName.length() - 2) + "01");
+        if (tmp.exists()) {
+            if (nullptr != attributes) {
+                attributes->b_isZipSplit = true;
+            }
         }
     }
 }

@@ -51,6 +51,12 @@ private Q_SLOTS:
     void slotStartJob();
 
     void SlotProgressFile(KJob *job, const QString &name);
+public:
+    /**
+     * @brief transSplitFileName 处理7z、rar分卷压缩包名称
+     * @param fileName 原始名称
+     */
+    void transSplitFileName(QString &fileName, SpecialFileAttributes *attributes = nullptr); // *.7z.003 -> *.7z.001
 
 private:
     int m_initialJobCount;

@@ -21,6 +21,7 @@
  */
 #include "pluginmanager.h"
 #include "kpluginloader.h"
+#include "customdatainfo.h"
 
 #include <QPluginLoader>
 #include <QCoreApplication>
@@ -82,14 +83,14 @@ QVector<Plugin *> PluginManager::enabledPlugins() const
     return enabledPlugins;
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType)
+QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, SpecialFileAttributes *attributes)
 {
     const auto mimeName = mimeType.name();
     if (m_preferredPluginsCache.contains(mimeName)) {
         return m_preferredPluginsCache.value(mimeName);
     }
 
-    const auto plugins = preferredPluginsFor(mimeType, false);
+    const auto plugins = preferredPluginsFor(mimeType, false, attributes);
     m_preferredPluginsCache.insert(mimeName, plugins);
     return plugins;
 }
@@ -244,8 +245,9 @@ void PluginManager::loadPlugins()
     }
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const
+QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite, SpecialFileAttributes *attributes) const
 {
+
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 
     std::sort(preferredPlugins.begin(), preferredPlugins.end(), [](Plugin * p1, Plugin * p2) {
@@ -271,7 +273,8 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, 
 
     if ((!readWrite) && (mimeType.name() == QString("application/zip") || mimeType.name() == QString("application/x-tar"))) {
         foreach (Plugin *plugin, preferredPlugins) {
-            if (plugin->metaData().name().contains("7zip")) {
+            if (plugin->metaData().name().contains("7zip")
+                    && !((nullptr != attributes) && attributes->b_isZipSplit)) {
                 preferredPlugins.removeOne(plugin);
                 break;
             }

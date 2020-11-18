@@ -30,6 +30,7 @@
 #include <QTableView>
 
 class Query;
+struct SpecialFileAttributes;
 
 /**
  * Meta data related to one entry in a compressed archive.
@@ -89,7 +90,7 @@ public:
      * @param parent    父节点
      * @return job
      */
-    KJob *loadArchive(const QString &path, const QString &mimeType, QObject *parent);
+    KJob *loadArchive(const QString &path, const QString &mimeType, QObject *parent, SpecialFileAttributes *attributes = nullptr);
 
     /**
      * @brief archive   返回管理接口类

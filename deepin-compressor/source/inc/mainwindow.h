@@ -108,7 +108,7 @@ public:
      * @brief loadArchive   加载压缩包
      * @param files 压缩包文件名（含路径）
      */
-    void loadArchive(const QString &files);
+    void loadArchive(const QString &files, SpecialFileAttributes *attributes = nullptr);
 
     /**
      * @brief creatArchive  创建压缩包（单路径）
@@ -160,7 +160,7 @@ public:
      * @brief transSplitFileName    处理7z、rar分卷压缩包名称
      * @param fileName  原始名称
      */
-    void transSplitFileName(QString &fileName); // *.7z.003 -> *.7z.001
+    void transSplitFileName(QString &fileName, SpecialFileAttributes *attributes = nullptr); // *.7z.003 -> *.7z.001
 
     /**
      * @brief ExtractPassword   加密解压

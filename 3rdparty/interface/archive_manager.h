@@ -45,6 +45,7 @@ class Plugin;
 class PreviewJob;
 class Query;
 class ReadOnlyArchiveInterface;
+struct SpecialFileAttributes;
 
 enum ArchiveError {
     NoError = 0,
@@ -117,10 +118,10 @@ public:
     //static AddJob *add(Archive *pArchive, const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options = CompressionOptions());
     static Archive *createEmpty(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, QObject *parent = nullptr);
-    static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr);
+    static LoadJob *load(const QString &fileName, const QString &mimeType, QObject *parent = nullptr, SpecialFileAttributes *attributes = nullptr);
     static LoadJob *load(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
     static LoadJob *load(const QString &fileName, bool isbatch = false, QObject *parent = nullptr);
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere = false);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QString &fixedMimeType, bool isRightMenuExtractHere = false, SpecialFileAttributes *attributes = nullptr);
     static void CreateEntry(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map); //废弃
     static void CreateEntryNew(QString path, Archive::Entry *&parent, QString externalPath, QHash<QString, QIcon> *&map); //added by hsw
 
@@ -153,7 +154,7 @@ private:
     Archive(ArchiveError errorCode, QObject *parent = nullptr);
 
     static Archive *create(const QString &fileName, QObject *parent = nullptr);
-    static Archive *create(const QString &fileName, const QString &fixedMimeType, QObject *parent = nullptr);
+    static Archive *create(const QString &fileName, const QString &fixedMimeType, QObject *parent = nullptr, SpecialFileAttributes *attributes = nullptr);
     static Archive *create(const QString &fileName, Plugin *plugin, QObject *parent = nullptr);
     static Archive *create(const QString &fileName, const QString &fixedMimeType, bool write, QObject *parent = nullptr, bool useLibArchive = false, bool use7z = true);
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, Plugin *plugin);

@@ -27,6 +27,8 @@
 #include <QMimeType>
 #include <QVector>
 
+struct SpecialFileAttributes;
+
 class PluginManager : public QObject
 {
     Q_OBJECT
@@ -58,7 +60,7 @@ public:
     /**
     * @brief preferredPluginsFor 根据类型获取使用的插件
     */
-    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType);
+    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, SpecialFileAttributes *attributes = nullptr);
 
     /**
     * @brief preferredWritePluginsFor 根据压缩类型获取可写插件
@@ -73,7 +75,7 @@ public:
 
 private:
     void loadPlugins();
-    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const;
+    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite, SpecialFileAttributes *attributes = nullptr) const;
     static QStringList sortByComment(const QSet<QString> &mimeTypes);
     static bool libarchiveHasLzo();
 

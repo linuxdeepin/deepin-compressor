@@ -74,6 +74,8 @@ void BatchExtract::addExtraction(const QUrl &url)
             detectedSubfolder = detectedSubfolder.remove(".part01");
         } else if (fi.filePath().contains(".part1.rar")) {
             detectedSubfolder = detectedSubfolder.remove(".part1");
+        } else if (fi.filePath().contains(".zip.")) {
+            detectedSubfolder = detectedSubfolder.remove(".zip");
         }
 
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
@@ -90,9 +92,12 @@ void BatchExtract::addExtraction(const QUrl &url)
 //        destination = userDestination;
         m_pSettingInfo->str_CreateFolder = detectedSubfolder;
     }
+    QString transFile = url.toLocalFile();
+    SpecialFileAttributes attributes;
+    transSplitFileName(transFile, &attributes);     // 对文件名进行转换（分卷处理）
 
     QString fixedMimetype = determineMimeType(url.toLocalFile()).name();
-    ReadOnlyArchiveInterface *pIface = Archive::createInterface(url.toLocalFile(), fixedMimetype, true);
+    ReadOnlyArchiveInterface *pIface = Archive::createInterface(url.toLocalFile(), fixedMimetype, true, &attributes);
     ExtractJob *job = new ExtractJob(files, destination, options, pIface);
     qDebug() << QString(QStringLiteral("Registering job from archive %1, to %2, preservePaths %3")).arg(url.toLocalFile(), destination, QString::number(preservePaths()));
 
@@ -129,6 +134,56 @@ void BatchExtract::addExtraction(const QUrl &url)
 void BatchExtract::SlotProgressFile(KJob *job, const QString &name)
 {
     emit batchFilenameProgress(job, name);
+}
+
+void BatchExtract::transSplitFileName(QString &fileName, SpecialFileAttributes *attributes)
+{
+    if (fileName.contains(".7z.")) {
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
+
+        if (reg.exactMatch(fileName) == false) {
+            return;
+        }
+
+        QFileInfo fi(reg.cap(1) + "001");
+
+        if (fi.exists() == true) {
+            fileName = reg.cap(1) + "001";
+        }
+    } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
+        int x = fileName.lastIndexOf("part");
+        int y = fileName.lastIndexOf(".");
+
+        if ((y - x) > 5) {
+            fileName.replace(x, y - x, "part01");
+        } else {
+            fileName.replace(x, y - x, "part1");
+        }
+    } else if (fileName.contains(".zip.")) {
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        if (reg.exactMatch(fileName) == false) {
+            return;
+        }
+        QFileInfo fi(reg.cap(1) + "001");
+        if (fi.exists() == true) {
+            fileName = reg.cap(1) + "001";
+        }
+
+        if (nullptr != attributes) {
+            attributes->b_isZipSplit = true;
+        }
+    } else if (fileName.endsWith(".zip")) {
+        /**
+         * 例如123.zip文件，检测123.z01文件是否存在
+         * 如果存在，则认定123.zip是分卷包
+         */
+        QFileInfo tmp(fileName.left(fileName.length() - 2) + "01");
+        if (tmp.exists()) {
+            if (nullptr != attributes) {
+                attributes->b_isZipSplit = true;
+            }
+        }
+    }
 }
 
 bool BatchExtract::doKill()

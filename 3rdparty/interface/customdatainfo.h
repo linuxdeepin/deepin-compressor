@@ -187,4 +187,12 @@ struct MainWindow_AuxInfo {
     MainWindow_AuxInfo *parentAuxInfo = nullptr;
 };
 
+/**
+ * @brief The SpecialFileAttributes struct
+ * @see 文件的特殊属性，例如是否是zip分卷
+ */
+struct SpecialFileAttributes {
+    bool b_isZipSplit = false; //false: 分卷zip压缩包
+};
+
 #endif // CUSTOMDATAINFO_H
