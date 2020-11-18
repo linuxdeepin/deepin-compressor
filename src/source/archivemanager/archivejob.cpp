@@ -30,3 +30,22 @@ ArchiveJob::~ArchiveJob()
 {
 
 }
+
+void ArchiveJob::kill()
+{
+    if (doKill()) {
+        m_eErrorType = ET_UserCancelOpertion;
+        finishJob();
+    }
+}
+
+void ArchiveJob::finishJob()
+{
+    emit signalJobFinshed();
+    deleteLater();
+}
+
+bool ArchiveJob::doKill()
+{
+    return false;
+}

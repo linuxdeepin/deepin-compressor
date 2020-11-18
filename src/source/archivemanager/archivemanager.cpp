@@ -215,6 +215,31 @@ void ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
     pOpenJob->start();
 }
 
+void ArchiveManager::pauseOperation()
+{
+    // 调用job暂停接口
+    if (m_pArchiveJob) {
+        m_pArchiveJob->doPause();
+    }
+}
+
+void ArchiveManager::continueOperation()
+{
+    // 调用job继续接口
+    if (m_pArchiveJob) {
+        m_pArchiveJob->doContinue();
+    }
+}
+
+void ArchiveManager::cancelOperation()
+{
+    // 调用job取消接口
+    if (m_pArchiveJob) {
+        m_pArchiveJob->kill();
+        m_pArchiveJob = nullptr;
+    }
+}
+
 void ArchiveManager::slotJobFinished()
 {
     if (m_pArchiveJob != nullptr && m_pInterface != nullptr) {

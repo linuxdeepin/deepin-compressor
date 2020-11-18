@@ -35,6 +35,7 @@ DWIDGET_USE_NAMESPACE
 // 进度界面
 class ProgressPage : public DWidget
 {
+    Q_OBJECT
 public:
     explicit ProgressPage(QWidget *parent = nullptr);
     ~ProgressPage() override;
@@ -103,6 +104,35 @@ private:
      * @param timeLeft              剩余时间
      */
     void displaySpeedAndTime(double dSpeed, qint64 qRemainingTime);
+
+Q_SIGNALS:
+    /**
+     * @brief signalPause       暂停
+     * @param eType             操作类型
+     */
+    void signalPause(Progress_Type eType);
+
+    /**
+     * @brief signalContinue    继续
+     */
+    void signalContinue();
+
+    /**
+     * @brief signalCancel       取消
+     * @param eType             操作类型
+     */
+    void signalCancel(Progress_Type eType);
+
+private Q_SLOTS:
+    /**
+     * @brief slotPauseClicked  点击暂停
+     */
+    void slotPauseClicked(bool bChecked);
+
+    /**
+     * @brief slotCancelClicked 点击取消
+     */
+    void slotCancelClicked();
 
 private:
     DLabel *m_pPixmapLbl;       // 类型图片

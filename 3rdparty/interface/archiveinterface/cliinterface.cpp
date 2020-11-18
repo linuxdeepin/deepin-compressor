@@ -144,6 +144,27 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     return ret ? PFT_Nomral : PFT_Error;
 }
 
+void CliInterface::pauseOperation()
+{
+
+}
+
+void CliInterface::continueOperation()
+{
+
+}
+
+bool CliInterface::doKill()
+{
+    if (m_process) {
+        killProcess(false);
+        return true;
+    }
+
+    return false;
+
+}
+
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     m_workStatus = WT_Add;

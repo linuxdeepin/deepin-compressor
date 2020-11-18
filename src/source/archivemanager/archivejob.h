@@ -50,6 +50,38 @@ public:
      */
     virtual void start() = 0;
 
+    /**
+     * @brief doPause   暂停
+     */
+    virtual void doPause() {}
+
+    /**
+     * @brief doContinue    继续
+     */
+    virtual void doContinue() {}
+
+    /**
+     * @brief doCancel  取消
+     */
+    virtual void doCancel() {}
+
+    /**
+     * @brief kill  强行结束job
+     */
+    virtual void kill();
+
+private:
+    /**
+     * @brief finishJob 结束job
+     */
+    void finishJob();
+
+protected:
+    /**
+     * @brief doKill  强行结束job
+     */
+    virtual bool doKill();
+
 Q_SIGNALS:
     /**
      * @brief slotFinished  操作结束处理

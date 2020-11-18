@@ -104,6 +104,22 @@ public:
      */
     virtual PluginFinishType updateArchiveData() = 0;
 
+    /**
+     * @brief pauseOperation    暂停操作
+     */
+    virtual void pauseOperation() = 0;
+
+    /**
+     * @brief continueOperation 继续操作
+     */
+    virtual void continueOperation() = 0;
+
+    /**
+     * @brief doKill    强杀操作
+     * @return
+     */
+    virtual bool doKill();
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.

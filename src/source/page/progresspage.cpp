@@ -20,6 +20,7 @@
 */
 
 #include "progresspage.h"
+#include "popupdialog.h"
 
 #include <DFontSizeManager>
 
@@ -207,7 +208,8 @@ void ProgressPage::initUI()
 
 void ProgressPage::initConnections()
 {
-
+    connect(m_pPauseContinueButton, &DSuggestButton::clicked, this, &ProgressPage::slotPauseClicked);
+    connect(m_pCancelBtn, &DPushButton::clicked, this, &ProgressPage::slotCancelClicked);
 }
 
 void ProgressPage::calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTime)
@@ -300,4 +302,51 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
 
     // 设置剩余时间
     m_pRemainingTimeLbl->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
+}
+
+void ProgressPage::slotPauseClicked(bool bChecked)
+{
+    if (bChecked) {
+        // 暂停操作
+        m_pPauseContinueButton->setText(tr("Continue"));
+        emit signalPause(m_eType);
+    } else {
+        // 继续操作
+        m_pPauseContinueButton->setText(tr("Pause"));
+        emit signalContinue();
+    }
+}
+
+void ProgressPage::slotCancelClicked()
+{
+    // 先暂停
+    m_pPauseContinueButton->setText(tr("Continue"));
+    emit signalPause(m_eType);
+
+    // 对话框文字描述
+    QString strDesText;
+    if (m_eType == PT_Compress) {
+        strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止压缩
+    } else if (m_eType == PT_UnCompress) {
+        strDesText = tr("Are you sure you want to stop the extraction?");      // 是否停止解压
+    } else if (m_eType == PT_Delete) {
+        strDesText = tr("Are you sure you want to stop the delete?");      // 是否停止删除
+    } else if (m_eType == PT_CompressAdd) {
+        strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止追加
+    } else if (m_eType == PT_Convert) {
+        strDesText = tr("Are you sure you want to stop the conversion?");      // 是否停止转换
+    } else {
+
+    }
+    // 弹出取消询问对话框
+    SimpleQueryDialog dialog(this);
+    int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+    if (iResult == 1) {
+        // 取消操作
+        emit signalCancel(m_eType);
+    } else {
+        // 继续操作
+        m_pPauseContinueButton->setText(tr("Pause"));
+        emit signalContinue();
+    }
 }

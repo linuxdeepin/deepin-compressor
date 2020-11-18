@@ -76,6 +76,21 @@ void BatchJob::clearSubjobs()
     m_listSubjobs.clear();
 }
 
+void BatchJob::doPause()
+{
+    // 调用子job暂停接口
+    if (m_pCurJob) {
+        m_pCurJob->doPause();
+    }
+}
+
+void BatchJob::doContinue()
+{
+    // 调用子job继续接口
+    if (m_pCurJob) {
+        m_pCurJob->doContinue();
+    }
+}
 
 
 BatchExtractJob::BatchExtractJob(QObject *parent)

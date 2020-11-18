@@ -57,6 +57,11 @@ ErrorType ReadOnlyArchiveInterface::errorType()
     return m_eErrorType;
 }
 
+bool ReadOnlyArchiveInterface::doKill()
+{
+    return true;
+}
+
 void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
 {
     m_bWaitForFinished = value;

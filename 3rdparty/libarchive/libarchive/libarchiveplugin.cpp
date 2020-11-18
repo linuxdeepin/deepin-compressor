@@ -366,6 +366,21 @@ PluginFinishType LibarchivePlugin::updateArchiveData()
     return PFT_Nomral;
 }
 
+void LibarchivePlugin::pauseOperation()
+{
+
+}
+
+void LibarchivePlugin::continueOperation()
+{
+
+}
+
+bool LibarchivePlugin::doKill()
+{
+    return true;
+}
+
 bool LibarchivePlugin::initializeReader()
 {
     m_archiveReader.reset(archive_read_new());

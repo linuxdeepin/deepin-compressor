@@ -106,6 +106,21 @@ public:
      */
     void openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
 
+    /**
+     * @brief pauseOperation    暂停操作
+     */
+    void pauseOperation();
+
+    /**
+     * @brief continueOperation 继续操作
+     */
+    void continueOperation();
+
+    /**
+     * @brief cancelOperation   取消操作
+     */
+    void cancelOperation();
+
 private:
 
 

@@ -100,6 +100,7 @@ PluginFinishType LibzipPlugin::list()
 
 PluginFinishType LibzipPlugin::testArchive()
 {
+    m_workStatus = WT_Test;
     return PFT_Nomral;
 }
 
@@ -107,6 +108,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 {
     qDebug() << "解压缩数据";
 
+    m_workStatus = WT_Extract;
     int errcode = 0;
     zip_error_t err;
 
@@ -223,7 +225,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 
 PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
-    m_workStatus = WT_List;
+    m_workStatus = WT_Add;
     qDebug() << "添加压缩包数据";
     int errcode = 0;
     zip_error_t err;
@@ -318,6 +320,7 @@ PluginFinishType LibzipPlugin::moveFiles(const QList<FileEntry> &files, const Co
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
+    m_workStatus = WT_Move;
     return PFT_Nomral;
 }
 
@@ -325,6 +328,7 @@ PluginFinishType LibzipPlugin::copyFiles(const QList<FileEntry> &files, const Co
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
+    m_workStatus = WT_Copy;
     return PFT_Nomral;
 }
 
@@ -370,6 +374,7 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
     Q_UNUSED(comment)
+    m_workStatus = WT_Comment;
     return PFT_Nomral;
 }
 
@@ -408,6 +413,20 @@ PluginFinishType LibzipPlugin::updateArchiveData()
     return PFT_Nomral;
 }
 
+void LibzipPlugin::pauseOperation()
+{
+    qDebug() << "暂停";
+}
+
+void LibzipPlugin::continueOperation()
+{
+    qDebug() << "继续";
+}
+
+bool LibzipPlugin::doKill()
+{
+    return true;
+}
 
 bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir, const QString &strRoot)
 {

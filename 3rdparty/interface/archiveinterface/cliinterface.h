@@ -49,6 +49,21 @@ public:
     virtual bool isFileExistsMsg(const QString &line) = 0;
     virtual bool isFileExistsFileName(const QString &line) = 0;
 
+    /**
+     * @brief pauseOperation    暂停操作
+     */
+    void pauseOperation() override;
+
+    /**
+     * @brief continueOperation 继续操作
+     */
+    void continueOperation() override;
+
+    /**
+     * @brief doKill 强行取消
+     */
+    bool doKill() override;
+
     // ReadWriteArchiveInterface interface
 public:
     PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;

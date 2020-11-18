@@ -70,12 +70,26 @@ public:
      */
     void start() override;
 
+    /**
+     * @brief doPause   暂停
+     */
+    void doPause() override;
+
+    /**
+     * @brief doContinue    继续
+     */
+    void doContinue() override;
 
 protected:
     /**
      * @brief initConnections   初始化插件和job的信号槽连接
      */
     void initConnections();
+
+    /**
+     * @brief doKill  强行结束job
+     */
+    bool doKill() override;
 
 protected Q_SLOTS:
 

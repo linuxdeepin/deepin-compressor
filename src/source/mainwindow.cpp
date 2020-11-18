@@ -84,6 +84,8 @@ MainWindow::~MainWindow()
     args.append(TEMPPATH + QDir::separator() + m_strUUID);
     p.execute(command, args);
     p.waitForFinished();
+
+    qDebug() << "应用正常退出";
 }
 
 void MainWindow::initUI()
@@ -179,6 +181,9 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
+    connect(m_pProgressPage, &ProgressPage::signalPause, this, &MainWindow::slotPause);
+    connect(m_pProgressPage, &ProgressPage::signalContinue, this, &MainWindow::slotContinue);
+    connect(m_pProgressPage, &ProgressPage::signalCancel, this, &MainWindow::slotCancel);
 
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
@@ -496,6 +501,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         m_ePageID = PI_CompressSetting;
     } else if (strType == QStringLiteral("extract_here")) {
         // 解压单个文件到当前文件夹
+        m_bRightOperation = true;
         QString filepath = listParam.at(0);
         transSplitFileName(filepath);
 
@@ -573,6 +579,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         m_ePageID = PI_UnCompressProgress;
     } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
+        m_bRightOperation = true;
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
@@ -595,6 +602,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 解压到xx文件夹
     } else if (strType == QStringLiteral("extract_here_split")) { // 右键选择7z压缩分卷文件，解压到当前文件夹
         // if (listParam.at(0).contains(".7z.")) {
+        m_bRightOperation = true;
         QString filepath = listParam.at(0);
         transSplitFileName(filepath);
 
@@ -807,6 +815,8 @@ void MainWindow::slotJobFinshed()
     if (pJob == nullptr) {
         return;
     }
+
+    m_bRightOperation = false;
 
     switch (pJob->m_eJobType) {
     case ArchiveJob::JT_Create: {
@@ -1115,10 +1125,10 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         m_mapFileHasModified[strPath] = true;
 
         QFileInfo file(strPath);
-        QString strTitle = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
+        QString strDesText = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
 
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(strTitle, tr("Discard"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
+        int iResult = dialog.showDialog(strDesText, tr("Discard"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             // 更新压缩包数据
             qDebug() << "更新压缩包中文件" << m_mapOpenFils[strPath].strFullPath;
@@ -1130,6 +1140,65 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 void MainWindow::slotSuccessReturn()
 {
     m_ePageID = PI_Home;
+    refreshPage();
+}
+
+void MainWindow::slotPause(Progress_Type eType)
+{
+    ArchiveManager::get_instance()->pauseOperation();
+}
+
+void MainWindow::slotContinue()
+{
+    ArchiveManager::get_instance()->continueOperation();
+}
+
+void MainWindow::slotCancel(Progress_Type eType)
+{
+    ArchiveManager::get_instance()->cancelOperation();
+
+    switch (eType) {
+    // 压缩取消
+    case PT_Compress: {
+        // 切换到压缩列表界面，再执行相关操作
+        m_ePageID = PI_Compress;
+    }
+    break;
+    // 解压取消
+    case PT_UnCompress: {
+        if (m_bRightOperation) {
+            // 直接关闭应用
+            close();
+        } else {
+            // 切换到解压列表界面，再执行相关操作
+            m_ePageID = PI_UnCompress;
+        }
+    }
+    break;
+    // 删除取消
+    case PT_Delete: {
+        // 切换到解压列表界面，再执行相关操作
+        m_ePageID = PI_UnCompress;
+    }
+    break;
+    // 追加取消
+    case PT_CompressAdd: {
+        // 切换到解压列表界面，再执行相关操作
+        m_ePageID = PI_UnCompress;
+    }
+    break;
+    // 转换取消
+    case PT_Convert: {
+        // 切换到解压列表界面，再执行相关操作
+        m_ePageID = PI_UnCompress;
+    }
+    break;
+    // 默认
+    default:
+        break;
+    }
+
+    // 刷新页
     refreshPage();
 }
 

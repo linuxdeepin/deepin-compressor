@@ -64,8 +64,22 @@ protected:
      */
     void clearSubjobs();
 
+    /**
+     * @brief doPause       暂停
+     */
+    void doPause() override;
+
+    /**
+     * @brief doContinue    继续
+     */
+    void doContinue() override;
+
+protected:
+    ArchiveJob *m_pCurJob = nullptr;              // 当前操作
+
 private:
     QList<ArchiveJob *> m_listSubjobs;  // 所有子操作
+
 };
 
 class BatchExtractJob : public BatchJob
@@ -134,7 +148,6 @@ private:
     int m_iCurArchiveIndex;         // 当前正在操作的压缩包索引
     double m_dLastPercentage = 0;       // 最后进度
 
-    ArchiveJob *m_pCurJob = nullptr;              // 当前操作
 };
 
 #endif // BATCHJOB_H

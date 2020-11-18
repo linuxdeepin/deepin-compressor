@@ -65,6 +65,38 @@ void SingleJob::start()
     }
 }
 
+void SingleJob::doPause()
+{
+    // 调用插件暂停接口
+    if (m_pInterface) {
+        m_pInterface->pauseOperation();
+    }
+}
+
+void SingleJob::doContinue()
+{
+    // 调用插件继续接口
+    if (m_pInterface) {
+        m_pInterface->continueOperation();
+    }
+}
+
+bool SingleJob::doKill()
+{
+    const bool killed = m_pInterface->doKill();
+    if (killed) {
+        return true;
+    }
+
+    if (d->isRunning()) { //Returns true if the thread is running
+        qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
+        d->requestInterruption(); //请求中断线程(建议性)
+        d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
+    }
+
+    return true;
+}
+
 void SingleJob::initConnections()
 {
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished, Qt::ConnectionType::UniqueConnection);
