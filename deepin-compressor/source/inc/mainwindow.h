@@ -34,6 +34,7 @@
 #include <DIconButton>
 
 #include <QEvent>
+#include <QPointer>
 
 static QVector<qint64> m_gTempProcessId;                 // 临时进程ID
 
@@ -888,7 +889,7 @@ private:
 
     // 界面<->插件
     KJob *m_pJob = nullptr;                                 // 指向所有Job派生类对象
-    CommentJob *m_pCommentJob = nullptr;                    // 单独存放CommentJob对象
+    QPointer<CommentJob> m_pCommentJob;                     // 单独存放CommentJob对象
     Archive_OperationType m_operationtype = Operation_NULL; // 操作类型
     WorkState m_eWorkStatus = WorkNone;                     // Job的工作状态
     JobType m_eJobType = JOB_NULL;                          // Job的类型

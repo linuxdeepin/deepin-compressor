@@ -5489,9 +5489,8 @@ void MainWindow::deleteLaterJob()
         m_pJob->deleteLater();
         m_pJob = nullptr;
     }
-    if (m_pCommentJob) {
+    if (!m_pCommentJob.isNull()) {
         m_pCommentJob->deleteLater();
-        m_pCommentJob = nullptr;
     }
 }
 /**
@@ -5520,9 +5519,8 @@ void MainWindow::extractMkdir(const QStringList &files)
 
 void MainWindow::updateArchiveComment()
 {
-    if (m_pCommentJob) {
+    if (!m_pCommentJob.isNull()) {
         delete m_pCommentJob;
-        m_pCommentJob = nullptr;
     }
 
     QString fixedMimetype = determineMimeType(m_strLoadfile).name();
