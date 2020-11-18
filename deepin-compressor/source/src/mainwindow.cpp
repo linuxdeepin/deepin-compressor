@@ -5248,6 +5248,18 @@ void MainWindow::slotTitleCommentButtonPressed()
         QString newComment = m_comment;
         connect(commentTextedit, &DTextEdit::textChanged, this, [ & ] {
             newComment = commentTextedit->toPlainText();
+
+            const int maxlen = 10000;
+            if (newComment.size() > maxlen)   //限制最多注释maxlen个字
+            {
+                // 保留前maxlen个注释字符
+                commentTextedit->setText(newComment.left(maxlen));
+
+                //设定鼠标位置，将鼠标放到最后的地方
+                QTextCursor cursor = commentTextedit->textCursor();
+                cursor.setPosition(maxlen);
+                commentTextedit->setTextCursor(cursor);
+            }
         });
 
         texteditLayout->setContentsMargins(10, 5, 10, 16);
