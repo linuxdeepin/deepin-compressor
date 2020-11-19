@@ -233,6 +233,7 @@ void ArchiveManager::continueOperation()
 
 void ArchiveManager::cancelOperation()
 {
+    m_bCancel = true;   // 设置取消标志位
     // 调用job取消接口
     if (m_pArchiveJob) {
         m_pArchiveJob->kill();
@@ -244,7 +245,7 @@ void ArchiveManager::slotJobFinished()
 {
     if (m_pArchiveJob != nullptr && m_pInterface != nullptr) {
         // 如果是追加压缩或者删除压缩包数据，需要再次刷新数据
-        if (m_pArchiveJob->m_eJobType == ArchiveJob::JT_Add || m_pArchiveJob->m_eJobType == ArchiveJob::JT_Delete) {
+        if ((m_pArchiveJob->m_eJobType == ArchiveJob::JT_Add || m_pArchiveJob->m_eJobType == ArchiveJob::JT_Delete) && (!m_bCancel)) {
             m_pInterface->updateArchiveData();
         }
     }
@@ -257,4 +258,6 @@ void ArchiveManager::slotJobFinished()
         m_pArchiveJob->deleteLater();
         m_pArchiveJob = nullptr;
     }
+
+    m_bCancel = false;
 }

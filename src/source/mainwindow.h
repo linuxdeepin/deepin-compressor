@@ -25,6 +25,7 @@
 #include "uistruct.h"
 #include "queries.h"
 #include "commonstruct.h"
+#include "archivejob.h"
 
 #include <DMainWindow>
 
@@ -136,6 +137,25 @@ private:
      * @param fileName 原始名称
      */
     void transSplitFileName(QString &fileName); // *.7z.003 -> *.7z.001
+
+    /**
+     * @brief handleJobNormalFinished   处理job正常结束
+     * @param eType     job类型
+     */
+    void handleJobNormalFinished(ArchiveJob::JobType eType);
+
+    /**
+     * @brief handleJobCancelFinished   处理job取消结束
+     * @param eType     job类型
+     */
+    void handleJobCancelFinished(ArchiveJob::JobType eType);
+
+    /**
+     * @brief handleJobErrorFinished   处理job错误结束
+     * @param eJobType      job类型
+     * @param eErrorType    错误类型
+     */
+    void handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType eErrorType);
 
     // QWidget interface
 protected:

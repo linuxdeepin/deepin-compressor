@@ -136,6 +136,12 @@ private:
     void emitProgress(double dPercentage);
 
     /**
+     * @brief cancelResult  取消结果
+     * @return
+     */
+    int cancelResult();
+
+    /**
      * @brief passwordUnicode   密码编码转换（中文密码）
      * @param strPassword   密码
      * @param iIndex    编码索引

@@ -127,6 +127,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 
         for (zip_int64_t i = 0; i < nofEntries; ++i) {
             if (QThread::currentThread()->isInterruptionRequested()) {
+                m_bCancel = false;      // 重置标志位
                 break;
             }
 
@@ -340,10 +341,10 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
     zip_error_t err;
 
     // 打开压缩包
-    char *fileName = QFile::encodeName(m_strArchiveName).data();
-    zip_t *archive = zip_open(fileName, 0, &errcode);
+    // Open archive.
+    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
-    if (errcode != ZIP_ER_OK || archive == nullptr) {
+    if (archive == nullptr) {
         // 打开压缩包失败
         emit error(("Failed to open the archive: %1"));
         m_eErrorType = ET_FileOpenError;
@@ -353,6 +354,7 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
     m_curFileCount = 0;
     m_pCurArchive = archive; // 置空，防止进度处理
     zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this); // 进度回调
+    zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);        // 取消回调
 
     m_listCurIndex.clear();
     getIndexBySelEntry(files);    // 获取索引值
@@ -415,17 +417,19 @@ PluginFinishType LibzipPlugin::updateArchiveData()
 
 void LibzipPlugin::pauseOperation()
 {
-    qDebug() << "暂停";
+    m_bPause = true;
 }
 
 void LibzipPlugin::continueOperation()
 {
-    qDebug() << "继续";
+    m_bPause = false;
 }
 
 bool LibzipPlugin::doKill()
 {
-    return true;
+    m_bPause = false;
+    m_bCancel = true;
+    return false;
 }
 
 bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir, const QString &strRoot)
@@ -517,16 +521,13 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
 
 void LibzipPlugin::progressCallback(zip_t *, double progress, void *that)
 {
-    //qDebug() << progress;
     static_cast<LibzipPlugin *>(that)->emitProgress(progress);      // 进度回调
 }
 
 
 int LibzipPlugin::cancelCallback(zip_t *, void *that)
 {
-    Q_UNUSED(that)
-    return 0;
-    //return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
+    return static_cast<LibzipPlugin *>(that)->cancelResult();       // 取消回调
 }
 
 bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
@@ -721,6 +722,12 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         int writeSize = 0;
         while (sum != zip_int64_t(statBuffer.size)) {
 
+            if (m_bPause) { //解压暂停
+                sleep(1);
+                qDebug() << "pause";
+                continue;
+            }
+
             const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(kb));
             if (readBytes < 0) {
 
@@ -760,33 +767,61 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
 void LibzipPlugin::emitProgress(double dPercentage)
 {
-    if (m_pCurArchive) {
-        if (m_workStatus == WT_Add) {
-            // 压缩操作显示当前正在压缩的文件名
-            zip_uint64_t index = zip_uint64_t(m_curFileCount * dPercentage);
-            // 发送当前文件名信号
-            emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(index)]));
-        } else if (m_workStatus == WT_Delete) {
-            // 删除操作显示当前正在删除的文件名
-            int iSpan = qRound(m_listCurName.count() * dPercentage);    // 获取占比
-            QString strCurFileName;
-            // 按照进度占比处理当前文件名
-            if (iSpan < 0) {
-                strCurFileName = m_listCurName[0];
-            } else if (iSpan >= m_listCurIndex.count()) {
-                strCurFileName = m_listCurName[m_listCurName.count() - 1];
-            } else {
-                strCurFileName = m_listCurName[iSpan];
-            }
-
-            // 发送当前文件名信号
-            emit signalCurFileName(strCurFileName);
+    bool flag = true;
+    while (flag) {
+        if (QThread::currentThread()->isInterruptionRequested()) { //线程结束
+            break;
         }
 
+        // 暂停
+        if (m_bPause) {
+            sleep(1);
+            continue;
+        }
+
+        // 处理当前文件名
+        if (m_pCurArchive) {
+            if (m_workStatus == WT_Add) {
+                // 压缩操作显示当前正在压缩的文件名
+                zip_uint64_t index = zip_uint64_t(m_curFileCount * dPercentage);
+                // 发送当前文件名信号
+                emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(index)]));
+            } else if (m_workStatus == WT_Delete) {
+                // 删除操作显示当前正在删除的文件名
+                int iSpan = qRound(m_listCurName.count() * dPercentage);    // 获取占比
+                QString strCurFileName;
+                // 按照进度占比处理当前文件名
+                if (iSpan < 0) {
+                    strCurFileName = m_listCurName[0];
+                } else if (iSpan >= m_listCurIndex.count()) {
+                    strCurFileName = m_listCurName[m_listCurName.count() - 1];
+                } else {
+                    strCurFileName = m_listCurName[iSpan];
+                }
+
+                // 发送当前文件名信号
+                emit signalCurFileName(strCurFileName);
+            }
+
+        }
+
+        // 发送进度信号
+        emit signalprogress(dPercentage * 100);
+
+        flag = false;
     }
 
-    // 发送进度信号
-    emit signalprogress(dPercentage * 100);
+    m_bPause = false;
+}
+
+int LibzipPlugin::cancelResult()
+{
+    if (m_bCancel) {
+        m_bCancel = false;
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)

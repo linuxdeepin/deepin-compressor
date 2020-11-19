@@ -120,6 +120,8 @@ public:
      */
     virtual bool doKill();
 
+    bool isUserCancel() {return m_bCancel;}
+
 protected:
     /**
      * Setting this option to true will NOT run the functions in their own thread.
@@ -183,7 +185,10 @@ protected:
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型
-    QString m_strPassword;
+    QString m_strPassword;          // 密码
+
+    bool m_bCancel = false;     // 是否取消
+    bool m_bPause = false;      // 是否暂停
 };
 
 // 可读可写（可用来压缩、查看、解压等）

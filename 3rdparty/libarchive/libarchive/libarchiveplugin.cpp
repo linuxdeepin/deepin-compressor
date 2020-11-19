@@ -378,7 +378,7 @@ void LibarchivePlugin::continueOperation()
 
 bool LibarchivePlugin::doKill()
 {
-    return true;
+    return false;
 }
 
 bool LibarchivePlugin::initializeReader()

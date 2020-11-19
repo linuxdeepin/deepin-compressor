@@ -176,7 +176,9 @@ private:
     ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
 
     static QMutex m_mutex;//实例互斥锁。
-    static QAtomicPointer<ArchiveManager> m_instance;/*!<使用原子指针,默认初始化为0。*/
+    static QAtomicPointer<ArchiveManager> m_instance;   /*!<使用原子指针,默认初始化为0。*/
+
+    bool m_bCancel = false;     // 是否取消
 };
 
 #endif // ARCHIVEMANAGER_H

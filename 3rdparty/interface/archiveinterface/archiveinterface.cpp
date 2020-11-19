@@ -59,7 +59,7 @@ ErrorType ReadOnlyArchiveInterface::errorType()
 
 bool ReadOnlyArchiveInterface::doKill()
 {
-    return true;
+    return false;   // 修改默认为未取消
 }
 
 void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
