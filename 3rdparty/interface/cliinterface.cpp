@@ -1487,6 +1487,10 @@ bool CliInterface::handleLine(const QString &line)
         if (isWrongPasswordMsg(line)) {
             m_replaceLine.clear();
             setPassword(QString());
+            if (m_process && m_process->program().at(0).contains("7z")) {
+                emit error("Wrong password.");
+                emit finished(false);
+            }
         }
 
         return readExtractLine(line);
@@ -1538,6 +1542,8 @@ bool CliInterface::handleLine(const QString &line)
             }
 
             setWrongPassword(true);
+            emit error("Wrong password.");
+            emit finished(false);
             return false;
         }
 

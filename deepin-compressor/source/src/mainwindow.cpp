@@ -2301,7 +2301,14 @@ void MainWindow::slotLoadingFinished(KJob *job)
             m_pOpenLoadingPage->stop();
             m_ePageID = PAGE_LOADING_FAIL;
             m_pCompressFail->setFailStr(tr("Open failed"));
-            m_pCompressFail->setFailStrDetail(""/*tr("Wrong password")*/);
+            m_pCompressFail->setFailStrDetail(QString());
+
+            refreshPage();
+        } else if (errorCode == KJob::WrongPsdError) {
+            m_pOpenLoadingPage->stop();
+            m_ePageID = PAGE_LOADING_FAIL;
+            m_pCompressFail->setFailStr(tr("Open failed"));
+            m_pCompressFail->setFailStrDetail(tr("Wrong password"));
 
             refreshPage();
         } else {
