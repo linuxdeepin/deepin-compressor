@@ -5271,11 +5271,26 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         // 显示注释内容的控件
         DTextEdit *commentTextedit = new DTextEdit(commentDrawer);
-        if (determineMimeType(m_strLoadfile).name() == "application/zip") { // 只有zip格式支持修改注释
-            commentTextedit->setReadOnly(false);
+        bool isReadOnly = false;
+        if (determineMimeType(m_strLoadfile).name() == "application/zip") { // 只有zip格式支持修改注释(注:zip分卷也不支持修改注释)
+            if (m_strLoadfile.endsWith(".zip")) {
+                /**
+                 * 例如123.zip文件，检测123.z01文件是否存在
+                 * 如果存在，则认定123.zip是分卷包
+                 */
+                QFileInfo tmp(m_strLoadfile.left(m_strLoadfile.length() - 2) + "01");
+                if (tmp.exists()) {
+                    isReadOnly = true;
+                }
+            } else if (m_strLoadfile.endsWith(".zip.001")) {
+                isReadOnly = true;
+            } else {
+                isReadOnly = false;
+            }
         } else {
-            commentTextedit->setReadOnly(true);
+            isReadOnly = true;
         }
+        commentTextedit->setReadOnly(isReadOnly);
 
         commentTextedit->setPlaceholderText(tr("No more than 10000 characters please"));
         commentTextedit->setFixedHeight(80);

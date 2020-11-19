@@ -838,9 +838,13 @@ void CompressSetting::onSplitChanged(int /*status*/)
         QString size = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小（包含单位）
         m_splitnumedit->setToolTip(tr("Total size: %1").arg(size));
         isSplitChecked = true;
+        m_pCommentEdt->setEnabled(false); //分卷不支持注释
     } else {
         m_splitnumedit->setEnabled(false);
         m_splitnumedit->clear();
+        if ("zip" == m_compresstype->text()) {
+            m_pCommentEdt->setEnabled(true); //取消分卷，只有zip格式支持注释
+        }
     }
 }
 
