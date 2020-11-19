@@ -20,6 +20,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 option(PERF_ON "open the info of performance testing" ON)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
+# Accessibility自动化
+option(ACCESSIBILITY_ON "Support automated test" ON)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 #3.3 打开全局moc
 set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS "-std=c++11")
