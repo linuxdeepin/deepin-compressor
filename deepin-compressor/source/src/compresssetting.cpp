@@ -25,6 +25,7 @@
 #include "utils.h"
 #include "customwidget.h"
 #include "DebugTimeManager.h"
+#include "customdatainfo.h"
 
 #include <DDialog>
 #include <DFileDialog>
@@ -231,7 +232,7 @@ void CompressSetting::InitUI()
     // 注释
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
-    m_pCommentEdt->setPlaceholderText(tr("No more than 10000 characters please"));
+//    m_pCommentEdt->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
 
     QVBoxLayout *typeLayout = new QVBoxLayout;
     typeLayout->addSpacing(65);
@@ -333,15 +334,14 @@ void CompressSetting::InitConnection()
     });
 
     connect(m_pCommentEdt, &DTextEdit::textChanged, this, [&]() {
-        const int maxlen = 10000;
         QString savetext = m_pCommentEdt->toPlainText();
-        if (savetext.size() > maxlen) { //限制最多注释maxlen个字
-            // 保留前maxlen个注释字符
-            m_pCommentEdt->setText(savetext.left(maxlen));
+        if (savetext.size() > MAXCOMMENTLEN) { //限制最多注释MAXCOMMENTLEN个字
+            // 保留前MAXCOMMENTLEN个注释字符
+            m_pCommentEdt->setText(savetext.left(MAXCOMMENTLEN));
 
             //设定鼠标位置，将鼠标放到最后的地方
             QTextCursor cursor = m_pCommentEdt->textCursor();
-            cursor.setPosition(maxlen);
+            cursor.setPosition(MAXCOMMENTLEN);
             m_pCommentEdt->setTextCursor(cursor);
         }
     });

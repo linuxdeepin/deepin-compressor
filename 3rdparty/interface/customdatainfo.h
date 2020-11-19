@@ -38,6 +38,7 @@ DCORE_USE_NAMESPACE
 #define AUTO_DELETE_ALWAYS "Always" //解压后删除源压缩文件
 #define TEMPDIR_NAME DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles" /* + QDir::separator()*/ // 临时文件夹路径
 #define PATH_SEP QDir::separator() // 文件夹结尾符号
+#define MAXCOMMENTLEN 1000 // 注释最大字数限制
 
 /**
  * @brief The Page_ID enum

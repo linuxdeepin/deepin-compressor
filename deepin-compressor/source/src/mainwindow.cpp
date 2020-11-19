@@ -5292,7 +5292,7 @@ void MainWindow::slotTitleCommentButtonPressed()
         }
         commentTextedit->setReadOnly(isReadOnly);
 
-        commentTextedit->setPlaceholderText(tr("No more than 10000 characters please"));
+//        commentTextedit->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);
@@ -5301,15 +5301,14 @@ void MainWindow::slotTitleCommentButtonPressed()
         connect(commentTextedit, &DTextEdit::textChanged, this, [ & ] {
             newComment = commentTextedit->toPlainText();
 
-            const int maxlen = 10000;
-            if (newComment.size() > maxlen)   //限制最多注释maxlen个字
+            if (newComment.size() > MAXCOMMENTLEN)   //限制最多注释MAXCOMMENTLEN个字
             {
-                // 保留前maxlen个注释字符
-                commentTextedit->setText(newComment.left(maxlen));
+                // 保留前MAXCOMMENTLEN个注释字符
+                commentTextedit->setText(newComment.left(MAXCOMMENTLEN));
 
                 //设定鼠标位置，将鼠标放到最后的地方
                 QTextCursor cursor = commentTextedit->textCursor();
-                cursor.setPosition(maxlen);
+                cursor.setPosition(MAXCOMMENTLEN);
                 commentTextedit->setTextCursor(cursor);
             }
         });
