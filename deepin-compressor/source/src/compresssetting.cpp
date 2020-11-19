@@ -44,6 +44,8 @@
 #include <QKeyEvent>
 #include <QRegExp>
 
+#include <cmath>
+
 TypeLabel::TypeLabel(QWidget *parent) : DLabel(parent)
 {
 }
@@ -452,9 +454,10 @@ void CompressSetting::onNextButoonClicked()
     }
 
     // 分卷数量不能多于10 卷
-    if ((((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10)
-            && (m_compresstype->text().contains("7z") || m_compresstype->text().contains("zip"))
-            && m_splitcompress->isChecked()) {
+    if (m_splitcompress->isChecked()
+            && (fabs(m_splitnumedit->value()) < std::numeric_limits<double>::epsilon()
+                || (((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10))
+            && (m_compresstype->text().contains("7z") || m_compresstype->text().contains("zip"))) {
         showWarningDialog(tr("Too many volumes, please change and retry"));
         //  Up to 10 volumes, please change and retry
         return;
@@ -842,6 +845,7 @@ void CompressSetting::onSplitChanged(int /*status*/)
     } else {
         m_splitnumedit->setEnabled(false);
         m_splitnumedit->clear();
+        m_splitnumedit->setValue(0.0);
         if ("zip" == m_compresstype->text()) {
             m_pCommentEdt->setEnabled(true); //取消分卷，只有zip格式支持注释
         }
