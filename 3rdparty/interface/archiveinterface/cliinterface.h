@@ -162,6 +162,13 @@ private slots:
      */
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
+    /**
+     * @brief getChildProcessIdTar7z  对于压缩成tar.7z，bash管道命令会创建多个子进程
+     * @param processid   运行bash命令的进程号(QString类型)
+     * @param childprocessid  存储子进程号的容器
+     */
+    void getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid);
+
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
@@ -169,12 +176,17 @@ protected:
 private:
     QList<FileEntry> m_files; // 待解压的文件
     ExtractionOptions m_options; // 解压选项
+
     bool m_listEmptyLines = false; // true:rar加载list， false:7z加载list
     QByteArray m_stdOutData;  // 存储命令行输出数据
-    //WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
     QString m_parseName;  // 解析后的文件名
     QScopedPointer<QTemporaryDir> m_extractTempDir;  // 提取文件的临时文件夹
     QString m_rootNode = ""; // 待提取文件的节点
+
+    qint64  m_processId;  // 进程Id
+    bool m_isTar7z = false; // 是否是tar.7z文件
+    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
+    QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
 };
 
 #endif // CLIINTERFACE_H

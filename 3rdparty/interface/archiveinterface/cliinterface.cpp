@@ -146,12 +146,32 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
 
 void CliInterface::pauseOperation()
 {
+    if (!m_childProcessId.empty()) {
+        for (int i = m_childProcessId.size() - 1; i >= 0; i--) {
+            if (m_childProcessId[i] > 0) {
+                kill(static_cast<__pid_t>(m_childProcessId[i]), SIGSTOP);
+            }
+        }
+    }
 
+    if (m_processId > 0) {
+        kill(static_cast<__pid_t>(m_processId), SIGSTOP);
+    }
 }
 
 void CliInterface::continueOperation()
 {
+    if (!m_childProcessId.empty()) {
+        for (int i = m_childProcessId.size() - 1; i >= 0; i--) {
+            if (m_childProcessId[i] > 0) {
+                kill(static_cast<__pid_t>(m_childProcessId[i]), SIGCONT);
+            }
+        }
+    }
 
+    if (m_processId > 0) {
+        kill(static_cast<__pid_t>(m_processId), SIGCONT);
+    }
 }
 
 bool CliInterface::doKill()
@@ -168,6 +188,7 @@ bool CliInterface::doKill()
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
     m_workStatus = WT_Add;
+    m_isTar7z = false;
 
     bool ret = false;
     QFileInfo fi(m_strArchiveName);  // 压缩文件（全路径）
@@ -190,7 +211,14 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
                                                 options.bTar_7z,
                                                 fi.path());
 
-    ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+    if (options.bTar_7z) {
+        m_isTar7z = true;
+        m_filesSize = options.qTotalSize;
+        QString strProgram = QStandardPaths::findExecutable("bash");
+        ret = runProcess(strProgram, arguments);
+    } else {
+        ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+    }
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -301,6 +329,17 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     m_stdOutData.clear();
     m_process->start();
 
+    if (m_process->waitForStarted()) {
+        m_childProcessId.clear();
+        m_processId = m_process->processId();
+
+        if (m_isTar7z) {
+            getChildProcessIdTar7z(QString::number(m_processId), m_childProcessId);
+        }
+
+        return true;
+    }
+
     return true;
 }
 
@@ -326,14 +365,14 @@ void CliInterface::killProcess(bool emitFinished)
 
 void CliInterface::handleProgress(const QString &line)
 {
-    if (m_process->program().at(0).contains("7z")) {  // 解析7z相关进度
+    if (m_process->program().at(0).contains("7z")) {  // 解析7z相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
             if (percentage > 0) {
                 if (line.contains("\b\b\b\b") == true) {
                     QString strfilename;
-                    if (m_workStatus == WT_Extract) {
+                    if (m_workStatus == WT_Extract || m_workStatus == WT_Add) { // 解压、压缩解析文件名
                         int count = line.indexOf("+");
                         if (-1 == count) {
                             count = line.indexOf("-");
@@ -342,7 +381,7 @@ void CliInterface::handleProgress(const QString &line)
                         if (count > 0) {
                             strfilename = line.midRef(count + 2).toString();
                         }
-                    } else {
+                    } else { // 删除解析文件名
                         if (line.contains("% = ")) {
                             strfilename = line.right(line.length() - line.indexOf(QLatin1Char('=')) - 2);
                         } else if (line.contains("% R ")) {
@@ -355,7 +394,7 @@ void CliInterface::handleProgress(const QString &line)
                 }
             }
         }
-    } else if (m_process->program().at(0).contains("unrar")) { // 解析rar相关进度
+    } else if (m_process->program().at(0).contains("unrar")) { // 解析rar相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
@@ -632,4 +671,42 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
     emit signalprogress(100);
     emit signalFinished(PFT_Nomral);
+}
+
+void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid)
+{
+    //使用pstree命令获取子进程号，如pstree -np 17251，子进程号为17252、17253
+    /*bash(17251)-+-tar(17252)
+     *            `-7z(17253)-+-{7z}(17254)
+     *                        |-{7z}(17255)
+     *                        |-{7z}(17257)
+     *                        |-{7z}(17258)
+     *                        |-{7z}(17259)
+     *                        |-{7z}(17260)
+     */
+    QProcess p;
+    p.setProgram("pstree");
+    p.setArguments(QStringList() << "-np" << processid);
+    p.start();
+    if (p.waitForReadyRead()) {
+        QByteArray dd = p.readAllStandardOutput();
+        QList<QByteArray> lines = dd.split('\n');
+        if (lines[0].contains(processid.toUtf8())) {
+            for (const QByteArray &line : qAsConst(lines)) {
+                int a, b;
+                qDebug() << line;
+                if (0 < (a = line.indexOf("-tar(")) && 0 < (b = line.indexOf(")", a))) {
+                    qDebug() << a << b << line.mid(a + 5, b - a - 5).toInt();
+                    childprocessid.append(line.mid(a + 5, b - a - 5).toInt());
+                }
+                if (0 < (a = line.indexOf("-7z(")) && 0 < (b = line.indexOf(")", a))) {
+                    qDebug() << a << b << line.mid(a + 4, b - a - 4).toInt();
+                    childprocessid.append(line.mid(a + 4, b - a - 4).toInt());
+                    break;
+                }
+            }
+        }
+    }
+
+    p.close();
 }
