@@ -135,7 +135,7 @@ void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize
             m_pFileNameEdt->setText(fileinfobase.completeBaseName()); // 如果是文件，压缩包名为完整的文件名
         }
     } else {
-        m_pFileNameEdt->setText(tr("Create New Archive"));            // 如果是多文件，压缩包名为新建归档文件
+        m_pFileNameEdt->setText(tr("New Archive"));            // 如果是多文件，压缩包名为新建归档文件
     }
 }
 

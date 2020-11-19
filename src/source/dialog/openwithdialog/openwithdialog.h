@@ -98,8 +98,11 @@ public:
      */
     static void openWithProgram(const QString &strFileName, const QString &strProgram = "");
 
-
-
+    /**
+     * @brief showOpenWithDialog    显示选择应用程序对话框
+     * @param eType         显示类型
+     * @return      选择的应用程序
+     */
     QString showOpenWithDialog(ShowType eType);
 
     /**
@@ -174,7 +177,9 @@ private:
     OpenWithDialogListItem *m_pCheckedItem = nullptr;
 
     ShowType m_showType;
-    QString m_strAppDisplayName;
+    QString m_strAppExecName;       // 应用程序名
+
+    bool m_bOk = false; // 是否确定
 };
 
 #endif // OPENWITHDIALOG_H

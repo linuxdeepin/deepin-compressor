@@ -501,8 +501,21 @@ void UnCompressView::slotOpenStyleClicked()
         return;
     }
 
-    // 发送打开信号（以xx应用打开）
-    emit signalOpenFile(m_stRightEntry, pAction->data().toString());
+    QString strText = pAction->text();
+
+    if (strText == tr("Select default program")) {
+        // 用选择的应用程序打开
+        OpenWithDialog dialog(m_stRightEntry.strFullPath);
+        QString str = dialog.showOpenWithDialog(OpenWithDialog::SelectType);
+        if (!str.isEmpty())
+            // 发送打开信号（以xx应用打开）
+            emit signalOpenFile(m_stRightEntry, str);
+    } else {
+        // 发送打开信号（以xx应用打开）
+        emit signalOpenFile(m_stRightEntry, pAction->data().toString());
+    }
+
+
 }
 
 void UnCompressView::slotDragPath(QUrl url)

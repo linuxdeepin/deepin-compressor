@@ -238,6 +238,10 @@ QString OpenWithDialog::showOpenWithDialog(OpenWithDialog::ShowType eType)
 {
     exec();
 
+    // 若未点击确定，不操作
+    if (!m_bOk) {
+        return "";
+    }
     const QString &app = m_pCheckedItem->property("app").toString();
 
     if (m_pSetToDefaultCheckBox->isChecked()) {
@@ -245,11 +249,10 @@ QString OpenWithDialog::showOpenWithDialog(OpenWithDialog::ShowType eType)
     }
 
     if (eType == OpenType) {
-
-        openWithProgram(m_strFileName, m_pCheckedItem->property("exec").toString());
+        openWithProgram(m_strFileName, m_strAppExecName);
     }
 
-    return m_strAppDisplayName;
+    return m_strAppExecName;
 
 }
 
@@ -504,6 +507,7 @@ void OpenWithDialog::slotOpenFileByApp()
     if (!m_pCheckedItem)
         return;
 
-    m_strAppDisplayName = m_pCheckedItem->text();
+    m_bOk = true;
+    m_strAppExecName = m_pCheckedItem->property("exec").toString();
     close();
 }
