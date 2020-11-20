@@ -1262,6 +1262,9 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
             addFiles2Archive(QStringList() << strPath);
         }
         m_mapFileHasModified[strPath] = false;
+
+        // 这里需要再次添加文件监控，因为某些应用修改文件是先删除再创建，所以需要再次监听
+        m_pOpenFileWatcher->addPath(strPath);
     }
 }
 
