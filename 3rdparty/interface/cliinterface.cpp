@@ -1297,7 +1297,7 @@ void CliInterface::getChildProcessidTar7z(const QString &processid, QVector<qint
 
 bool CliInterface::handleLine(const QString &line)
 {
-    //qDebug() << "#####" << line;
+//    qDebug() << "#####" << line;
 
     // 处理rar进度
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
@@ -1417,6 +1417,7 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         if (isPasswordPrompt(line)) {
+            qDebug() << "#####" << m_replaceLine;
             if (m_extractionOptions.isBatchExtract()) {
                 qDebug() << "Found a password prompt";
 
@@ -1445,6 +1446,12 @@ bool CliInterface::handleLine(const QString &line)
 //                } else {
 //                    name = line.left(line.length() - 2);
 //                }
+                // rar只弹两次密码框
+                if (m_process && m_process->program().at(0).contains("unrar") && m_rarExtractCount == 2) {
+                    m_rarExtractCount = 0;
+                    emit error("Wrong password.");
+                    return false;
+                }
 
                 QString name = line.left(line.length() - 2);  // 使用文件名？使用压缩包名
                 name = name.right(name.length() - 40);
@@ -1458,6 +1465,7 @@ bool CliInterface::handleLine(const QString &line)
                     return false;
                 }
 
+                ++m_rarExtractCount;
                 setPassword(query.password());
 
                 const QString response(password() + QLatin1Char('\n'));
