@@ -55,16 +55,17 @@ public:
     void createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive = false/*, bool bBatch = false*/);
 
     /**
-     * @brief loadArchive
-     * @param strArchiveName
+     * @brief loadArchive           加载压缩包数据
+     * @param strArchiveFullPath    压缩包全路径
      */
-    void loadArchive(const QString &strArchiveName);
+    void loadArchive(const QString &strArchiveFullPath);
 
     /**
-     * @brief getLoadArchiveData    获取加载完之后的压缩包数据
-     * @param stArchiveData         压缩包数据
+     * @brief addFiles              向压缩包中添加文件
+     * @param strArchiveFullPath    压缩包全路径
+     * @param listSelEntry          压缩参数
      */
-    //void getLoadArchiveData(ArchiveData &stArchiveData);
+    void addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions);
 
     /**
      * @brief extractFiles    解压文件

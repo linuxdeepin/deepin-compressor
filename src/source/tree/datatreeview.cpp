@@ -275,7 +275,6 @@ void DataTreeView::focusInEvent(QFocusEvent *event)
 
 void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
-    qDebug() << "dragEnterEvent";
     const auto *mime = e->mimeData();
 
     // 判断是否有url
@@ -288,13 +287,11 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 
 void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 {
-    qDebug() << "dragMoveEvent";
     e->accept();
 }
 
 void DataTreeView::dropEvent(QDropEvent *e)
 {
-    qDebug() << "dropEvent";
     auto *const mime = e->mimeData();
 
     if (false == mime->hasUrls()) {

@@ -180,6 +180,7 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
+    connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
     connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
     connect(m_pProgressPage, &ProgressPage::signalPause, this, &MainWindow::slotPause);
     connect(m_pProgressPage, &ProgressPage::signalContinue, this, &MainWindow::slotContinue);
@@ -238,6 +239,13 @@ void MainWindow::refreshPage()
         m_pMainWidget->setCurrentIndex(3);
         setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
         titlebar()->setTitle(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName());
+    }
+    break;
+    case PI_AddCompressProgress: {
+        m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false);
+        m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Adding files to %1").arg(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName()));
     }
     break;
     case PI_CompressProgress: {
@@ -414,6 +422,10 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     }
 
     m_pUnCompressPage->setArchiveFullPath(transFile);      // 设置压缩包全路径
+
+    // 根据是否可修改压缩包标志位设置打开文件选项是否可用
+    m_pTitleButton->setEnabled(m_pUnCompressPage->isModifiable());
+    m_pOpenAction->setEnabled(m_pUnCompressPage->isModifiable());
 
     // 设置默认解压路径
     if (m_pSettingDlg->getDefaultExtractPath().isEmpty()) {
@@ -689,7 +701,6 @@ void MainWindow::slotChoosefiles()
     QStringList listSelFiles = dialog.selectedFiles();
     if (listSelFiles.count() == 0)
         return;
-    qDebug() << "选择的文件：" << listSelFiles;
 
     if (m_ePageID == PI_Home) {
         if (listSelFiles.count() == 1 && UiTools::isArchiveFile(listSelFiles[0])) {
@@ -706,6 +717,7 @@ void MainWindow::slotChoosefiles()
         m_pCompressPage->addCompressFiles(listSelFiles);
     } else if (m_ePageID == PI_UnCompress) {
         // 追加压缩
+        m_pUnCompressPage->addNewFiles(listSelFiles);
     }
 
 }
@@ -810,7 +822,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
     ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, false/*, bBatch*/);
 
-
+    // 切换进度界面
     m_pProgressPage->setProgressType(PT_Compress);
     m_pProgressPage->setTotalSize(stCompressInfo.qSize);
     m_pProgressPage->setArchiveName(stCompressInfo.strArchiveName);
@@ -1004,6 +1016,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
         qDebug() << "添加结束";
+        m_ePageID = PI_UnCompress;
+        m_pUnCompressPage->refreshDataByCurrentPathDelete();
     }
     break;
     // 加载压缩包数据
@@ -1073,15 +1087,18 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Open: {
         qDebug() << "打开结束";
 
-        // 打开成功之后添加到文件监控
-        m_pOpenFileWatcher->addPath(m_strOpenFile);
+        // 若压缩包文件可更改，打开文件之后对文件进行监控
+        if (m_pUnCompressPage->isModifiable()) {
+            // 打开成功之后添加到文件监控
+            m_pOpenFileWatcher->addPath(m_strOpenFile);
 
-        if (m_mapFileHasModified.find(m_strOpenFile) != m_mapFileHasModified.end()) {
-            // 第一次默认文件未修改
-            m_mapFileHasModified[m_strOpenFile] = true;
-        } else {
-            // 若已存在此监控文件，修改为未修改
-            m_mapFileHasModified[m_strOpenFile] = false;
+            if (m_mapFileHasModified.find(m_strOpenFile) != m_mapFileHasModified.end()) {
+                // 第一次默认文件未修改
+                m_mapFileHasModified[m_strOpenFile] = true;
+            } else {
+                // 若已存在此监控文件，修改为未修改
+                m_mapFileHasModified[m_strOpenFile] = false;
+            }
         }
 
         m_ePageID = PI_UnCompress;
@@ -1135,6 +1152,37 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
 void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType eErrorType)
 {
 
+}
+
+void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &strPassword)
+{
+    qDebug() << "向压缩包中添加文件";
+
+    QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();  // 获取压缩包全路径
+    CompressOptions options;
+    QList<FileEntry> listEntry;
+
+    options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
+    options.strPassword = strPassword;
+
+    // 构建压缩文件数据
+    foreach (QString strFile, listFiles) {
+        FileEntry stFileEntry;
+        stFileEntry.strFullPath = strFile;
+        listEntry.push_back(stFileEntry);
+    }
+
+    // 调用添加文件接口
+    ArchiveManager::get_instance()->addFiles(strArchiveFullPath, listEntry, options);
+
+    // 切换进度界面
+    m_pProgressPage->setProgressType(PT_CompressAdd);
+    m_pProgressPage->setTotalSize(calSelectedTotalFileSize(listFiles));
+    m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
+    m_pProgressPage->restartTimer();
+
+    m_ePageID = PI_AddCompressProgress;
+    refreshPage();
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
@@ -1211,6 +1259,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         if (iResult == 1) {
             // 更新压缩包数据
             qDebug() << "更新压缩包中文件" << m_mapOpenFils[strPath].strFullPath;
+            addFiles2Archive(QStringList() << strPath);
         }
         m_mapFileHasModified[strPath] = false;
     }
@@ -1237,6 +1286,12 @@ void MainWindow::slotCancel(Progress_Type eType)
 {
     Q_UNUSED(eType)
     ArchiveManager::get_instance()->cancelOperation();
+}
+
+void MainWindow::slotAddFiles(const QStringList &listFiles, const QString &strPassword)
+{
+    // 向压缩包中添加文件
+    addFiles2Archive(listFiles, strPassword);
 }
 
 

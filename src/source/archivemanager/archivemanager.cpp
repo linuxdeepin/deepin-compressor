@@ -109,9 +109,9 @@ void ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
     //}
 }
 
-void ArchiveManager::loadArchive(const QString &strArchiveName)
+void ArchiveManager::loadArchive(const QString &strArchiveFullPath)
 {
-    m_pInterface = UiTools::createInterface(strArchiveName);
+    m_pInterface = UiTools::createInterface(strArchiveFullPath);
 
     LoadJob *pLoadJob = new LoadJob(m_pInterface);
 
@@ -121,6 +121,21 @@ void ArchiveManager::loadArchive(const QString &strArchiveName)
 
     m_pArchiveJob = pLoadJob;
     pLoadJob->start();
+}
+
+void ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions)
+{
+    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath, true);
+
+    AddJob *pAddJob = new AddJob(listAddEntry, pInterface, stOptions);
+
+    // 连接槽函数
+    connect(pAddJob, &AddJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pAddJob, &AddJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pAddJob, &AddJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+
+    m_pArchiveJob = pAddJob;
+    pAddJob->start();
 }
 
 void ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions)

@@ -24,6 +24,8 @@
 #include "customwidget.h"
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
+#include "mimetypes.h"
+#include "pluginmanager.h"
 
 #include <DFontSizeManager>
 #include <DFileDialog>
@@ -48,6 +50,12 @@ void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath)
 {
     qDebug() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
+
+    QMimeType mimeType = determineMimeType(m_strArchiveFullPath);
+    QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
+
+    // 若压缩包属于支持的压缩类型，就可以增/删/改，否则屏蔽这些操作
+    m_pUnCompressView->setModifiable(listSupportedMimeTypes.contains(mimeType.name()));
 }
 
 QString UnCompressPage::archiveFullPath()
@@ -73,9 +81,24 @@ void UnCompressPage::resizeEvent(QResizeEvent *e)
     m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
-void UnCompressPage::refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/)
+void UnCompressPage::refreshDataByCurrentPathDelete()
 {
-    m_pUnCompressView->refreshDataByCurrentPathDelete(/*stArchiveData*/);
+    m_pUnCompressView->refreshDataByCurrentPathDelete();
+}
+
+void UnCompressPage::addNewFiles(const QStringList &listFiles)
+{
+    m_pUnCompressView->addNewFiles(listFiles);
+}
+
+QString UnCompressPage::getCurPath()
+{
+    return m_pUnCompressView->getCurPath();
+}
+
+bool UnCompressPage::isModifiable()
+{
+    return m_pUnCompressView->isModifiable();
 }
 
 void UnCompressPage::initUI()
@@ -126,6 +149,7 @@ void UnCompressPage::initConnections()
     connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
     connect(m_pUnCompressView, &UnCompressView::signalDelFiles, this, &UnCompressPage::signalDelFiles);
     connect(m_pUnCompressView, &UnCompressView::signalOpenFile, this, &UnCompressPage::signalOpenFile);
+    connect(m_pUnCompressView, &UnCompressView::signalAddFiles2Archive, this, &UnCompressPage::signalAddFiles2Archive);
 }
 
 QString UnCompressPage::elidedExtractPath(const QString &strPath)

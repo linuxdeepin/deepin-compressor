@@ -229,7 +229,7 @@ void UnCompressView::refreshDataByCurrentPath()
     m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
 }
 
-void UnCompressView::refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/)
+void UnCompressView::refreshDataByCurrentPathDelete()
 {
     if (0 == m_strCurrentPath.compare("/")) { //当前目录是第一层
         m_mapShowEntry.clear();
@@ -262,6 +262,31 @@ void UnCompressView::refreshDataByCurrentPathDelete(/*const ArchiveData &stArchi
         // 刷新列表数据
         m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
     }
+}
+
+void UnCompressView::addNewFiles(const QStringList &listFiles)
+{
+    QString strPassword;
+
+    // 发送追加信号
+    emit signalAddFiles2Archive(listFiles, strPassword);
+}
+
+QString UnCompressView::getCurPath()
+{
+    return (m_iLevel == 0) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
+}
+
+void UnCompressView::setModifiable(bool bModifiable)
+{
+    m_bModifiable = bModifiable;
+
+    setAcceptDrops(m_bModifiable);
+}
+
+bool UnCompressView::isModifiable()
+{
+    return m_bModifiable;
 }
 
 QList<FileEntry> UnCompressView::getCurPathFiles()
@@ -375,7 +400,7 @@ void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
 {
-
+    addNewFiles(listFiles);
 }
 
 void UnCompressView::slotShowRightMenu(const QPoint &pos)

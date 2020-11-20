@@ -64,9 +64,26 @@ public:
     void refreshArchiveData();
     /**
      * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
-     * @param stArchiveData
      */
-    void refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/);
+    void refreshDataByCurrentPathDelete();
+
+    /**
+     * @brief addNewFiles   追加新文件
+     * @param listFiles     新文件
+     */
+    void addNewFiles(const QStringList &listFiles);
+
+    /**
+     * @brief getCurPath    获取当前层级路径
+     * @return
+     */
+    QString getCurPath();
+
+    /**
+     * @brief isModifiable     获取压缩包数据是否可以更改
+     * @return    是否可更改
+     */
+    bool isModifiable();
 
 protected:
     /**
@@ -120,6 +137,13 @@ Q_SIGNALS:
      * @param strProgram        应用程序名（为空时，用默认应用程序打开）
      */
     void signalOpenFile(const FileEntry &entry, const QString &strProgram = "");
+
+    /**
+     * @brief signalAddFiles2Archive    向压缩包中添加文件
+     * @param listFiles                 待添加的文件
+     * @param strPassword               密码
+     */
+    void signalAddFiles2Archive(const QStringList &listFiles, const QString &strPassword);
 
 private Q_SLOTS:
     /**

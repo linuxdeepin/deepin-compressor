@@ -74,6 +74,7 @@ enum Page_ID {
     PI_CompressSetting,     // 压缩设置
     PI_UnCompress,          // 解压列表
     PI_CompressProgress,    // 压缩进度
+    PI_AddCompressProgress,    // 追加进度
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度
     PI_ConvertProgress,     // 转换进度

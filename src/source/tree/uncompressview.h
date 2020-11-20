@@ -54,9 +54,32 @@ public:
      * 处理流程:
      * 1.删除当前目录m_mapShowEntry，并更新数据
      * 2.删除上一级m_mapShowEntry后不作处理，当返回上一级目录时会自动更新
-     * @param stArchiveData
      */
-    void refreshDataByCurrentPathDelete(/*const ArchiveData &stArchiveData*/);
+    void refreshDataByCurrentPathDelete();
+
+    /**
+     * @brief addNewFiles   追加新文件
+     * @param listFiles     新文件
+     */
+    void addNewFiles(const QStringList &listFiles);
+
+    /**
+     * @brief getCurPath    获取当前层级路径
+     * @return
+     */
+    QString getCurPath();
+
+    /**
+     * @brief setModifiable     设置压缩包数据是否可以更改
+     * @param bModifiable   是否可更改
+     */
+    void setModifiable(bool bModifiable);
+
+    /**
+     * @brief isModifiable     获取压缩包数据是否可以更改
+     * @return    是否可更改
+     */
+    bool isModifiable();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -161,6 +184,13 @@ Q_SIGNALS:
      */
     void signalOpenFile(const FileEntry &entry, const QString &strProgram = "");
 
+    /**
+     * @brief signalAddFiles2Archive    向压缩包中添加文件
+     * @param listFiles                 待添加的文件
+     * @param strPassword               密码
+     */
+    void signalAddFiles2Archive(const QStringList &listFiles, const QString &strPassword);
+
 protected Q_SLOTS:
     /**
      * @brief slotPreClicked    返回上一级
@@ -217,9 +247,8 @@ private:
     QString m_strUnCompressPath;    // 默认解压路径
     QPoint m_dragPos; // 鼠标拖拽点击位置
     DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
-
-
     QString m_strSelUnCompressPath;    // 选择的解压路径
+    bool m_bModifiable;     // 压缩包数据是否可更改（增、删、改）
 };
 
 #endif // UNCOMPRESSVIEW_H

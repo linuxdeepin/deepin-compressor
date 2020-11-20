@@ -157,6 +157,13 @@ private:
      */
     void handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType eErrorType);
 
+    /**
+     * @brief addFiles2Archive  向压缩包中添加文件
+     * @param listFiles         需要添加的文件
+     * @param strPassword       密码
+     */
+    void addFiles2Archive(const QStringList &listFiles, const QString &strPassword = QString());
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -288,6 +295,13 @@ private Q_SLOTS:
      * @param eType             操作类型
      */
     void slotCancel(Progress_Type eType);
+
+    /**
+     * @brief slotAddFiles      追加压缩
+     * @param listFiles         需要追加压缩的文件
+     * @param strPassword       加密选项
+     */
+    void slotAddFiles(const QStringList &listFiles, const QString &strPassword);
 
 private:
     QString m_strUUID;              // 应用唯一标识（用于退出应用时清除缓存文件）
