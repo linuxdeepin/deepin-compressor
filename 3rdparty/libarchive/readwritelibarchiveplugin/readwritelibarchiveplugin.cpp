@@ -544,11 +544,11 @@ void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
 
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
-//        if (m_isPause) { //压缩暂停
-//            sleep(1);
-//            //            qDebug() << "pause";
-//            continue;
-//        }
+        if (m_bPause) { //压缩暂停
+            sleep(1);
+//            qDebug() << "pause";
+            continue;
+        }
 
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {

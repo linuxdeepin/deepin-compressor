@@ -118,6 +118,13 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
     }
 
+    // 判断解压路径是否存在，不存在则创建文件夹
+    if (QDir().exists(options.strTargetPath) == false) {
+        if (!QDir().mkpath(options.strTargetPath)) {
+            qDebug() << "Failed to create extractDestDir";
+            return PFT_Error;
+        }
+    }
 
     // 更改应用工作目录，结束时自动恢复原来路径
     HandleWorkingDir handleWorkingDir(&m_oldWorkingDir);
@@ -368,16 +375,17 @@ PluginFinishType LibarchivePlugin::updateArchiveData()
 
 void LibarchivePlugin::pauseOperation()
 {
-
+    m_bPause = true;
 }
 
 void LibarchivePlugin::continueOperation()
 {
-
+    m_bPause = false;
 }
 
 bool LibarchivePlugin::doKill()
 {
+    m_bPause = false;
     return false;
 }
 
@@ -412,11 +420,11 @@ void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archiv
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
 
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
-//        if (m_isPause) { //解压暂停
-//            sleep(1);
-//            //            qDebug() << "pause";
-//            continue;
-//        }
+        if (m_bPause) { //解压暂停
+            sleep(1);
+//            qDebug() << "pause";
+            continue;
+        }
 
         archive_write_data(dest, buff, static_cast<size_t>(readBytes)); //写数据
         if (archive_errno(dest) != ARCHIVE_OK) {
