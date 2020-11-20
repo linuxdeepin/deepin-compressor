@@ -43,8 +43,9 @@ public:
     /**
      * @brief setArchiveFullPath    设置压缩包全路径
      * @param strArchiveFullPath    压缩包全路径
+     * @param bool    是否是分卷压缩包
      */
-    void setArchiveFullPath(const QString &strArchiveFullPath);
+    void setArchiveFullPath(const QString &strArchiveFullPath, bool bSplit);
 
     /**
      * @brief archiveFullPath   获取压缩包全路径

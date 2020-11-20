@@ -431,8 +431,13 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         menu.addAction(tr("Extract to current directory"), this, &UnCompressView::slotExtract2Here);
         // 右键-打开
         menu.addAction(tr("Open"), this, &UnCompressView::slotOpen);
+
         // 右键-删除
-        menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
+        QAction *pAction = menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
+
+        if (!isModifiable()) {
+            pAction->setEnabled(false); // 若压缩包数据不能更改，深处按钮设置成不可用
+        }
 
         // 右键-打开方式
         DMenu openMenu(tr("Open with"), this);

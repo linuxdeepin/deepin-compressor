@@ -413,7 +413,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
-    transSplitFileName(transFile);
+    bool bSplit = transSplitFileName(transFile);
 
     QFileInfo fileinfo(transFile);
     if (!fileinfo.exists()) {
@@ -421,7 +421,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         return;
     }
 
-    m_pUnCompressPage->setArchiveFullPath(transFile);      // 设置压缩包全路径
+    m_pUnCompressPage->setArchiveFullPath(transFile, bSplit);      // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
     m_pTitleButton->setEnabled(m_pUnCompressPage->isModifiable());
@@ -984,16 +984,21 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     return strpath;
 }
 
-void MainWindow::transSplitFileName(QString &fileName)
+bool MainWindow::transSplitFileName(QString &fileName)
 {
+    bool bSplit = false;    // 是否是分卷
+
     if (fileName.contains(".7z.")) {
+        // 7z分卷处理
         QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
         if (reg.exactMatch(fileName) == false) {
-            return;
+            return false;
         }
+        bSplit = true;
         fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
     } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
+        // rar分卷处理
         int x = fileName.lastIndexOf("part");
         int y = fileName.lastIndexOf(".");
 
@@ -1002,7 +1007,11 @@ void MainWindow::transSplitFileName(QString &fileName)
         } else {
             fileName.replace(x, y - x, "part1");
         }
+
+        bSplit = true;
     }
+
+    return bSplit;
 }
 
 void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)

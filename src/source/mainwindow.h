@@ -135,8 +135,9 @@ private:
     /**
      * @brief transSplitFileName 处理7z、rar分卷压缩包名称
      * @param fileName 原始名称
+     * * @return    是否是分卷压缩包
      */
-    void transSplitFileName(QString &fileName); // *.7z.003 -> *.7z.001
+    bool transSplitFileName(QString &fileName);
 
     /**
      * @brief handleJobNormalFinished   处理job正常结束
