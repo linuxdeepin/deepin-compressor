@@ -85,6 +85,11 @@ public:
      */
     bool isModifiable();
 
+    /**
+     * @brief clear 清空数据
+     */
+    void clear();
+
 protected:
     /**
      * @brief resizeEvent   刷新解压路径显示

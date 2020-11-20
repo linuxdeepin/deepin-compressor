@@ -56,6 +56,11 @@ public:
      */
     void refreshCompressedFiles(bool bChanged = false, const QString &strFileName = "");
 
+    /**
+     * @brief clear 清空数据
+     */
+    void clear();
+
 private:
     /**
      * @brief initUI    初始化界面

@@ -25,6 +25,7 @@
 #include <DTreeView>
 
 #include <QStyledItemDelegate>
+#include <QDir>
 
 DWIDGET_USE_NAMESPACE
 
@@ -123,7 +124,7 @@ protected:
     DataModel *m_pModel;
 
     int m_iLevel = 0;       // 目录层级
-    QString m_strCurrentPath = "/";   // 当前目录
+    QString m_strCurrentPath = QDir::separator();   // 当前目录
 
     TreeHeaderView *m_pHeaderView;
 

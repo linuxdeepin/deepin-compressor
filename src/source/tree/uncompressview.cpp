@@ -289,6 +289,18 @@ bool UnCompressView::isModifiable()
     return m_bModifiable;
 }
 
+void UnCompressView::clear()
+{
+    // 重置数据
+    m_stRightEntry = FileEntry();
+    m_mapShowEntry.clear();
+    DataManager::get_instance().resetArchiveData();
+    resetLevel();
+    m_strUnCompressPath = "";
+    m_strSelUnCompressPath = "";
+    m_bModifiable = false;
+}
+
 QList<FileEntry> UnCompressView::getCurPathFiles()
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();

@@ -115,6 +115,15 @@ void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileN
     resetLevel();   // 重置目录层级
 }
 
+void CompressView::clear()
+{
+    // 重置数据
+    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
+    m_listCompressFiles.clear();
+    m_listEntry.clear();
+    resetLevel();
+}
+
 void CompressView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::MouseButton::LeftButton) {

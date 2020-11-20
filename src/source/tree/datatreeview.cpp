@@ -153,7 +153,7 @@ DataTreeView::~DataTreeView()
 void DataTreeView::resetLevel()
 {
     m_iLevel = 0;
-    m_strCurrentPath = "/";
+    m_strCurrentPath = QDir::separator();
     setPreLblVisible(false);
 }
 

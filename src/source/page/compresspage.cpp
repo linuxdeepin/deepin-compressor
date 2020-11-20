@@ -64,6 +64,11 @@ void CompressPage::refreshCompressedFiles(bool bChanged, const QString &strFileN
     m_pCompressView->refreshCompressedFiles(bChanged, strFileName);
 }
 
+void CompressPage::clear()
+{
+    m_pCompressView->clear();
+}
+
 void CompressPage::initUI()
 {
     // 初始化相关变量

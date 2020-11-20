@@ -101,6 +101,11 @@ bool UnCompressPage::isModifiable()
     return m_pUnCompressView->isModifiable();
 }
 
+void UnCompressPage::clear()
+{
+    m_pUnCompressView->clear();
+}
+
 void UnCompressPage::initUI()
 {
     m_strUnCompressPath = "~/Desktop";

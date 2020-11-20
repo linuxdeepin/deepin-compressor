@@ -174,6 +174,7 @@ CreateJob::CreateJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pI
     , m_vecFiles(files)
     , m_stCompressOptions(options)
 {
+    initConnections();
     m_eJobType = JT_Create;
 }
 
@@ -184,11 +185,19 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
-    m_pAddJob = new AddJob(m_vecFiles, m_pInterface, m_stCompressOptions, nullptr);
-    connect(m_pAddJob, &AddJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CreateJob::signalprogress);
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &CreateJob::signalCurFileName, Qt::UniqueConnection);
-    m_pAddJob->start();
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
+
+    if (pWriteInterface == nullptr) {
+        return;
+    }
+
+    // 调用压缩接口
+    PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+
+    if (!(pWriteInterface->waitForFinished())) {
+        slotFinished(eType);
+    }
+
 }
 
 // 解压操作

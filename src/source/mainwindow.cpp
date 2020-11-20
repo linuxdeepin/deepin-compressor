@@ -1267,6 +1267,26 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 
 void MainWindow::slotSuccessReturn()
 {
+    switch (m_ePageID) {
+    // 压缩成功
+    case PI_CompressSuccess: {
+        m_pCompressPage->clear();   // 清空压缩界面
+    }
+    break;
+    // 解压成功
+    case PI_UnCompressSuccess: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    // 转换成功
+    case PI_ConvertSuccess: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    default:
+        break;
+    }
+
     m_ePageID = PI_Home;
     refreshPage();
 }

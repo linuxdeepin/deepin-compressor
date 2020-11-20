@@ -63,6 +63,10 @@ public:
      */
     void refreshCompressedFiles(bool bChanged = false, const QString &strFileName = "");
 
+    /**
+     * @brief clear 清空数据
+     */
+    void clear();
 
 protected:
     /**
