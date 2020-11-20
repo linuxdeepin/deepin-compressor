@@ -28,7 +28,7 @@
 #include <QDir>
 
 const QStringList g_listColumn = QStringList() << QObject::tr("Name") << QObject::tr("Time modified") << QObject::tr("Type") << QObject::tr("Size");
-#define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "tempfiles"
+#define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::TempLocation)
 
 // 进度类型
 enum Progress_Type {

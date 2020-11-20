@@ -164,6 +164,11 @@ private:
      */
     void addFiles2Archive(const QStringList &listFiles, const QString &strPassword = QString());
 
+    /**
+     * @brief resetMainwindow   重置界面（刷新数据）
+     */
+    void resetMainwindow();
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -304,7 +309,7 @@ private Q_SLOTS:
     void slotAddFiles(const QStringList &listFiles, const QString &strPassword);
 
 private:
-    QString m_strUUID;              // 应用唯一标识（用于退出应用时清除缓存文件）
+    QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
 
     QStackedWidget *m_pMainWidget;  // 中心面板

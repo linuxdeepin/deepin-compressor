@@ -53,7 +53,7 @@ static QMutex mutex;
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
-    m_strUUID = createUUID();   // 生成应用唯一标识
+    m_strProcessID = QString::number(QCoreApplication::applicationPid());   // 获取应用进程号
 
     setWindowTitle(tr("Archive Manager"));
 
@@ -81,7 +81,7 @@ MainWindow::~MainWindow()
     QString command = "rm";
     QStringList args;
     args.append("-rf");
-    args.append(TEMPPATH + QDir::separator() + m_strUUID);
+    args.append(TEMPPATH + QDir::separator() + m_strProcessID);
     p.execute(command, args);
     p.waitForFinished();
 
@@ -956,11 +956,11 @@ void MainWindow::Extract2PathFinish(QString msg)
 
 QString MainWindow::createUUID()
 {
-    QString strUUID = QUuid::createUuid().toString();   // 创建唯一标识符
-    // 移除左右大括号，防止执行命令时失败
-    strUUID.remove("{");
-    strUUID.remove("}");
-    return strUUID;
+    // 创建临时路径
+    QTemporaryDir dir;
+    QString strTempPath =  dir.path();
+    strTempPath = strTempPath.remove(TEMPPATH);     // 移除/tmp
+    return strTempPath;
 }
 
 QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
@@ -1105,6 +1105,11 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pLoadingPage->stopLoading();
     }
     break;
+    // 格式转换
+    case ArchiveJob::JT_Convert: {
+        //m_ePageID = PI_CompressSuccess;
+    }
+    break;
     }
 }
 
@@ -1185,6 +1190,21 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
     refreshPage();
 }
 
+void MainWindow::resetMainwindow()
+{
+    m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
+    m_qTotalSize = 0;                   // 初始化压缩文件大小
+    m_pProgressPage->resetProgress();   // 重置进度
+    m_strExtractPath.clear();           // 清空解压路径
+    m_listExractFiles.clear();          // 清空提取文件
+    m_pOpenFileWatcher->removePaths(m_pOpenFileWatcher->files());   // 重置文件监控
+    m_listOpenFiles.clear();    // 清空打开文件
+    m_strOpenFile.clear();      // 清空当前打开的文件名
+    m_mapFileHasModified.clear();   // 清空文件监控状态
+    m_mapOpenFils.clear();      // 清空打开的文件映射
+    m_bRightOperation = false;  // 重置右键
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
@@ -1234,9 +1254,9 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
-    QString strTempExtractPath =  TEMPPATH + QDir::separator() + m_strUUID + QDir::separator() + createUUID();
-    m_strOpenFile = strTempExtractPath + QDir::separator() + entry.strFileName;
-    m_mapOpenFils[m_strOpenFile] = entry;
+    QString strTempExtractPath =  TEMPPATH + QDir::separator() + m_strProcessID + createUUID();     // 拼接临时路径
+    m_strOpenFile = strTempExtractPath + QDir::separator() + entry.strFileName;     // 设置打开文件全路径
+    m_mapOpenFils[m_strOpenFile] = entry;   // 存储打开文件数据
     ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram);
 
     // 进入打开加载界面
@@ -1270,6 +1290,8 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 
 void MainWindow::slotSuccessReturn()
 {
+    resetMainwindow();
+
     switch (m_ePageID) {
     // 压缩成功
     case PI_CompressSuccess: {
@@ -1292,6 +1314,7 @@ void MainWindow::slotSuccessReturn()
 
     m_ePageID = PI_Home;
     refreshPage();
+
 }
 
 void MainWindow::slotPause(Progress_Type eType)
