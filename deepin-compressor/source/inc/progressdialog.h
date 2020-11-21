@@ -55,6 +55,8 @@ signals:
     void stopExtract();
     void extractSuccess(QString msg);
     void sigResetPercentAndTime();
+    void sigPauseProcess();
+    void sigContinueProcess();
 
 public slots:
     void slotextractpress(int index);

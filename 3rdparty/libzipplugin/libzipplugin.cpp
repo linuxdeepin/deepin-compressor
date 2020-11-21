@@ -665,6 +665,7 @@ bool LibzipPlugin::testArchive()
 bool LibzipPlugin::doKill()
 {
     m_bCancel = true;
+    m_isPause = false;
     return false;
 }
 

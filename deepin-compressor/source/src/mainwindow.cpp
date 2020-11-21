@@ -645,6 +645,8 @@ void MainWindow::InitConnection()
     connect(m_pProgess, &Progress::sigCancelPressed, this, &MainWindow::onCancelCompressPressed);
     connect(m_pProgess, &Progress::sigPauseProcess, this, &MainWindow::onPauseProcess);
     connect(m_pProgess, &Progress::sigContinueProcess, this, &MainWindow::onContinueProcess);
+    connect(m_pProgressdialog, &ProgressDialog::sigPauseProcess, this, &MainWindow::onPauseProcess);
+    connect(m_pProgressdialog, &ProgressDialog::sigContinueProcess, this, &MainWindow::onContinueProcess);
     connect(m_pCompressSuccess, &Compressor_Success::sigQuitApp, this, &MainWindow::slotquitApp);
     connect(m_pCompressSuccess, &Compressor_Success::sigOpenConvertArchive, this, &MainWindow::slotReloadConvertArchive);
     connect(m_pCompressSuccess, &Compressor_Success::sigBackButtonClicked, this, &MainWindow::slotBackButtonClicked);

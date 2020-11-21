@@ -104,12 +104,14 @@ void ProgressDialog::slotextractpress(int index)
         emit stopExtract();
         emit sigResetPercentAndTime();
     } else {
+        emit sigContinueProcess();
         exec();
     }
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
+    emit sigPauseProcess(); //暂停
     if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
         accept();
         m_extractdialog->move(this->geometry().topLeft()); //解决提取时取消提示框不居中显示
