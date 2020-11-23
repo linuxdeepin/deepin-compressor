@@ -104,8 +104,6 @@ protected Q_SLOTS:
 
 protected:
     ReadOnlyArchiveInterface *m_pInterface;
-
-private:
     SingleJobThread *const d;   // 线程
     QElapsedTimer jobTimer;     // 操作计时
 };
@@ -159,9 +157,17 @@ public:
      */
     void doWork() override;
 
+protected:
+    bool doKill() override;
+
+private:
+    /**
+     * @brief cleanCompressFileCancel 压缩取消时删除临时压缩包
+     */
+    void cleanCompressFileCancel();
+
 private:
     QList<FileEntry> m_vecFiles;
-    AddJob *m_pAddJob;
     CompressOptions m_stCompressOptions;
 };
 

@@ -135,3 +135,8 @@ ReadWriteArchiveInterface::~ReadWriteArchiveInterface()
 {
 
 }
+
+QString ReadWriteArchiveInterface::getArchiveName()
+{
+    return m_strArchiveName;
+}

@@ -237,6 +237,12 @@ public:
      * @return
      */
     virtual PluginFinishType addComment(const QString &comment) = 0;
+
+    /**
+     * @brief getArchiveName 获取最终的压缩包名，提供给压缩取消删除使用
+     * @return
+     */
+    QString getArchiveName();
 };
 
 #endif // ARCHIVEINTERFACE_H

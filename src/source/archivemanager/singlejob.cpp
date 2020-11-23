@@ -200,6 +200,49 @@ void CreateJob::doWork()
 
 }
 
+bool CreateJob::doKill()
+{
+    const bool killed = m_pInterface->doKill();
+    if (killed) {
+        cleanCompressFileCancel();
+        return true;
+    }
+
+    if (d->isRunning()) { //Returns true if the thread is running
+        qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
+        d->requestInterruption(); //请求中断线程(建议性)
+        d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
+    }
+    cleanCompressFileCancel();
+    return true;
+}
+
+void CreateJob::cleanCompressFileCancel()
+{
+    if (m_stCompressOptions.bSplit) {
+        // 判断 7z分卷压缩的 文件名
+        QFileInfo file(dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface)->getArchiveName());
+        QStringList nameFilters;
+        nameFilters << file.fileName() + ".0*";
+        QDir dir(file.path());
+        QFileInfoList files = dir.entryInfoList(nameFilters, QDir::Files | QDir::Readable, QDir::Name);
+
+        foreach (QFileInfo fi, files) {
+            QFile fiRemove(fi.filePath());
+            if (fiRemove.exists()) {
+                qDebug() << "取消时删除:" << fiRemove.fileName();
+                fiRemove.remove();
+            }
+        }
+    } else {
+        QFile fiRemove(dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface)->getArchiveName());  // 没有判断 7z分卷压缩的 文件名
+        if (fiRemove.exists()) {
+            qDebug() << "取消时删除:" << fiRemove.fileName();
+            fiRemove.remove();
+        }
+    }
+}
+
 // 解压操作
 ExtractJob::ExtractJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, const ExtractionOptions &options, QObject *parent)
     : SingleJob(pInterface, parent)
@@ -291,7 +334,6 @@ void OpenJob::doWork()
 
 void OpenJob::slotFinished(PluginFinishType eType)
 {
-
     SingleJob::slotFinished(eType);
 
     if (eType == PFT_Nomral) {
