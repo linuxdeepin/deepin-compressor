@@ -95,8 +95,9 @@ public:
     /**
      * @brief showDialog    显示对话框
      * @param file   同名文件名
+     * @param bDir   是否是文件夹
      */
-    void showDialog(QString file);
+    void showDialog(QString file, bool bDir = false);
 
     /**
      * @brief getDialogResult  返回对话框状态

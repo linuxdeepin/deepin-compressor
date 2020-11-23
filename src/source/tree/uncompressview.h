@@ -72,8 +72,9 @@ public:
     /**
      * @brief setModifiable     设置压缩包数据是否可以更改
      * @param bModifiable   是否可更改
+     * @param bMultiplePassword   追加是否可以多密码
      */
-    void setModifiable(bool bModifiable);
+    void setModifiable(bool bModifiable, bool bMultiplePassword = false);
 
     /**
      * @brief isModifiable     获取压缩包数据是否可以更改
@@ -160,6 +161,15 @@ private:
      * @param qSize        大小
      */
     void calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize);
+
+//    /**
+//     * @brief handleAddFiles    处理追加压缩文件
+//     * @param fileInfo          文件数据
+//     * @param strFilePath       文件路径
+//     * @param bApplyAll         是否全部应用
+//     * @param bOverwrite        是否替换
+//     */
+//    void handleAddFiles(const QFileInfo &fileInfo, const QString &strFilePath, bool &bApplyAll, bool &bOverwrite);
 
 Q_SIGNALS:
     /**
@@ -254,6 +264,7 @@ private:
     DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
     QString m_strSelUnCompressPath;    // 选择的解压路径
     bool m_bModifiable = false;     // 压缩包数据是否可更改（增、删、改）
+    bool m_bMultiplePassword = false;     // 追加是否可以多密码
 };
 
 #endif // UNCOMPRESSVIEW_H

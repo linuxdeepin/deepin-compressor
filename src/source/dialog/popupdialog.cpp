@@ -132,19 +132,16 @@ OverwriteQueryDialog::~OverwriteQueryDialog()
 
 }
 
-void OverwriteQueryDialog::showDialog(QString file)
+void OverwriteQueryDialog::showDialog(QString file, bool bDir)
 {
     DLabel *strlabel = new DLabel;
     strlabel->setMinimumSize(QSize(280, 20));
     strlabel->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
 
-    int limitCounts = 16;
-    int left = 8, right = 8;
-    QString fileName = file;
-    QString displayName = "";
-    displayName = fileName.length() > limitCounts ? fileName.left(left) + "..." + fileName.right(right) : fileName;
-    strlabel->setText(displayName);
+    // 字符串太长的情况下用中间使用...
+    QFontMetrics elideFont(strlabel->font());
+    strlabel->setText(elideFont.elidedText(file, Qt::ElideMiddle, 280));
 
     DLabel *strlabel2 = new DLabel;
     strlabel2->setMinimumSize(QSize(154, 20));
@@ -152,10 +149,18 @@ void OverwriteQueryDialog::showDialog(QString file)
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
     strlabel2->setForegroundRole(DPalette::ToolTipText);
 
-    strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
+    if (bDir) {
+        // 文件夹提示
+        strlabel2->setText(QObject::tr("Another folder with the same name already exists, replace it?"));
+        addButton(QObject::tr("Skip"));
+        addButton(QObject::tr("overwrite"), true, DDialog::ButtonWarning);
+    } else {
+        // 文件提示
+        strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
+        addButton(QObject::tr("Skip"));
+        addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
+    }
 
-    addButton(QObject::tr("Skip"));
-    addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
 
     DCheckBox *checkbox = new DCheckBox;
     checkbox->setAccessibleName("Applyall_btn");
@@ -200,10 +205,6 @@ void OverwriteQueryDialog::showDialog(QString file)
             m_retType = OR_Overwrite;  // 替换
         }
     }
-
-    qDebug() << "mode" << mode;
-    qDebug() << "applyall" << m_applyAll;
-    qDebug() << "retType" << m_retType;
 }
 
 int OverwriteQueryDialog::getDialogResult()

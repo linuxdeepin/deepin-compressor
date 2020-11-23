@@ -58,10 +58,10 @@ void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, bool 
         // 若是分卷压缩包，不支持增/删/改
         m_pUnCompressView->setModifiable(false);
     } else {
+        bool bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
         // 若不是分卷压缩包，按照支持的压缩类型，设置是否增/删/改，否则屏蔽这些操作
-        m_pUnCompressView->setModifiable(listSupportedMimeTypes.contains(mimeType.name()));
+        m_pUnCompressView->setModifiable(listSupportedMimeTypes.contains(mimeType.name()), bMultiplePassword);
     }
-
 }
 
 QString UnCompressPage::archiveFullPath()
@@ -171,7 +171,6 @@ QString UnCompressPage::elidedExtractPath(const QString &strPath)
     if (fontSize > width()) {
         pathStr = fontMetrics.elidedText(strPath, Qt::ElideMiddle, width());//返回一个带有省略号的字符串
     }
-
     return pathStr;
 }
 
