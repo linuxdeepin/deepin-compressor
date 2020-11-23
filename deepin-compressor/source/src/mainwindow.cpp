@@ -3174,7 +3174,7 @@ void MainWindow::setCompressDefaultPath()
             m_pCompressSetting->setDefaultName(fileinfobase.completeBaseName()); // 如果是文件，压缩包名为完整的文件名
         }
     } else {
-        m_pCompressSetting->setDefaultName(tr("Create New Archive"));            // 如果是多文件，压缩包名为新建归档文件
+        m_pCompressSetting->setDefaultName(tr("New Archive"));            // 如果是多文件，压缩包名为新建归档文件
     }
 }
 
