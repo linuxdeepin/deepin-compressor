@@ -29,6 +29,7 @@
 #include <DPasswordEdit>
 #include <DDoubleSpinBox>
 #include <DTextEdit>
+#include <DDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -139,6 +140,14 @@ private:
      * @param bEnabled      是否可用
      */
     void setCommentEnabled(bool bEnabled);
+
+    /**
+     * @brief showWarningDialog 通用的警告对话框
+     * @param msg
+     * @param strTitle
+     * @return
+     */
+    int showWarningDialog(const QString &msg, const QString &strTitle = "");
 
 signals:
     void signalCompressClicked(const QVariant &val);

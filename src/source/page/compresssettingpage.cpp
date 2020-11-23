@@ -97,6 +97,7 @@ CompressSettingPage::CompressSettingPage(QWidget *parent)
 {
     initUI();
     initConnections();
+    slotAdvancedEnabled(m_pAdvancedBtn->isChecked());
 }
 
 CompressSettingPage::~CompressSettingPage()
@@ -352,7 +353,7 @@ bool CompressSettingPage::checkFileNameVaild(const QString strText)
         return false;
     }
 
-    // 如果文件名中包干"/"，返回错误
+    // 如果文件名中包含"/"，返回错误
     if (strText.contains(QDir::separator())) {
         return false;
     }
@@ -441,6 +442,71 @@ void CompressSettingPage::setCommentEnabled(bool bEnabled)
     // 注释不可用时,清除注释
     if (!bEnabled)
         m_pCommentEdt->clear();
+}
+
+int CompressSettingPage::showWarningDialog(const QString &msg, const QString &strTitle)
+{
+    DDialog *dialog = new DDialog(this);
+
+    QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
+    dialog->setIcon(pixmap);
+    // dialog->addSpacing(32);
+    int wMin = 380;
+    dialog->setMinimumSize(wMin, 140);
+    dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
+
+    DPalette pa;
+
+    DWidget *pWidget = new DWidget(dialog);
+    QVBoxLayout *pLayout = new QVBoxLayout(pWidget);
+    pLayout->setContentsMargins(0, 0, 0, 0);
+
+    if (!strTitle.isEmpty()) {
+        //dialog->setMinimumSize(wMin, 180);
+        DLabel *pTitle = new DLabel(strTitle/*, dialog*/);
+        pTitle->setMinimumSize(QSize(154, 20));
+        pTitle->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+        pa = DApplicationHelper::instance()->palette(pTitle);
+        pa.setBrush(DPalette::Text, pa.color(DPalette::ToolTipText));
+        DFontSizeManager::instance()->bind(pTitle, DFontSizeManager::T5, QFont::Medium);
+        pTitle->setMinimumWidth(dialog->width());
+        //pTitle->move(dialog->width() / 2 - pTitle->width() / 2, 60);
+
+        DPalette palette = DApplicationHelper::instance()->palette(pTitle);
+        QColor color;
+        if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+            color = palette.color(DPalette::ToolTipText);
+        } else {
+            color = palette.color(DPalette::TextLively);
+        }
+
+        color.setAlphaF(1);
+        palette.setColor(DPalette::Foreground, color);
+        DApplicationHelper::instance()->setPalette(pTitle, palette);
+
+        pLayout->addWidget(pTitle, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    }
+
+    DLabel *pContent = new DLabel(msg/*, dialog*/);
+    pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    pa = DApplicationHelper::instance()->palette(pContent);
+    pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
+    DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
+    pContent->setMinimumWidth(dialog->width());
+    //pContent->move(dialog->width() / 2 - pContent->width() / 2, /*dialog->height() / 2 - pContent->height() / 2 - 10 */iMoveY);
+
+    pLayout->addWidget(pContent, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    pWidget->setLayout(pLayout);
+    dialog->addContent(pWidget);
+
+    if (isMinimized()) {
+        setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    }
+
+    int res = dialog->exec();
+    delete dialog;
+
+    return res;
 }
 
 void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
@@ -544,6 +610,11 @@ void CompressSettingPage::slotSplitEdtEnabled()
 
 void CompressSettingPage::slotCompressClicked()
 {
+    if (!checkFileNameVaild(m_pFileNameEdt->text())) {
+        showWarningDialog(tr("Invalid file name"));
+        return;
+    }
+
     QString strTmpCompresstype = m_pCompressTypeLbl->text();        // 压缩格式
     QString strName = m_pFileNameEdt->text() + "." + strTmpCompresstype;   // 压缩包名称
     PERF_PRINT_BEGIN("POINT-03", "压缩包名：" + strName + " 大小：" + QString::number(m_qFileSize));
