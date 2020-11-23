@@ -37,6 +37,7 @@
 #include "progressdialog.h"
 #include "datamanager.h"
 #include "ddesktopservicesthread.h"
+#include "openFileWatcher.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -113,7 +114,7 @@ void MainWindow::initUI()
     m_pMainWidget->addWidget(m_pLoadingPage);
 
     // 创建打开文件监控
-    m_pOpenFileWatcher = new QFileSystemWatcher(this);
+    m_pOpenFileWatcher = new OpenFileWatcher(this);
 }
 
 void MainWindow::initTitleBar()
@@ -192,7 +193,7 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
-    connect(m_pOpenFileWatcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
+    connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
 }
 
 void MainWindow::loadWindowState()
@@ -464,7 +465,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
             m_initFlag = true;
         }
 
-
         killTimer(m_iInitUITimer);
         m_iInitUITimer = 0;
     } else if (m_iCompressedWatchTimerID == event->timerId()) {
@@ -666,8 +666,6 @@ void MainWindow::slotTitleBtnClicked()
         m_ePageID = PI_Compress;
         refreshPage();
     }
-
-
 }
 
 void MainWindow::slotChoosefiles()
@@ -719,7 +717,6 @@ void MainWindow::slotChoosefiles()
         // 追加压缩
         m_pUnCompressPage->addNewFiles(listSelFiles);
     }
-
 }
 
 void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
@@ -931,27 +928,17 @@ void MainWindow::Extract2PathFinish(QString msg)
     QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
     this->sendMessage(icon, msg);
 
-//    // 如果设置了自动打开，执行下列操作
-//    if (m_pSettingsDialog->isAutoOpen()) {
-//        QString fullpath = m_strDecompressFilePath + "/" + m_vecExtractSimpleFiles.at(0)->property("name").toString();
-//        qDebug() << fullpath;
-//        QFileInfo fileinfo(fullpath);
+    // 设置了自动打开文件夹处理流程
+    if (m_pSettingDlg->isAutoOpen()) {
+        if (m_pDDesktopServicesThread == nullptr) {
+            m_pDDesktopServicesThread = new DDesktopServicesThread(this);
+        }
 
-//        // 如果文件/文件夹存在
-//        if (fileinfo.exists()) {
-//            //                if (fileinfo.isDir()) {
-//            //                    DDesktopServices::showFolder(fullpath);     // 如果是文件夹
-//            //                } else if (fileinfo.isFile()) {
-//            qDebug() << "DDesktopServices start:" << fullpath;
-//            m_DesktopServicesThread = new DDesktopServicesThread();
-//            connect(m_DesktopServicesThread, SIGNAL(finished()), this, SLOT(slotKillShowFoldItem()));
-//            m_DesktopServicesThread->m_path = fullpath;
-//            m_DesktopServicesThread->start();
-//            //DDesktopServices::showFileItem(fullpath);   // 如果是单个文件 原BUG使用该函数，解压到桌面但文件，会出现30妙等待
-//            qDebug() << "DDesktopServices end:" << m_strDecompressFilePath;
-//            //  }
-//        }
-    //    }
+        // 打开选中第一个提取的文件/文件夹
+        if (m_listExractFiles.count() > 0)
+            m_pDDesktopServicesThread->setOpenFile(m_listExractFiles[0]);
+        m_pDDesktopServicesThread->start();
+    }
 }
 
 QString MainWindow::createUUID()
@@ -1047,18 +1034,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             m_ePageID = PI_UnCompress;
             Extract2PathFinish(tr("Extraction successful", "Operation_SingleExtract")); //提取成功
             m_pProgressdialog->setFinished();
-
-            // 设置了自动打开文件夹处理流程
-            if (m_pSettingDlg->isAutoOpen()) {
-                if (m_pDDesktopServicesThread == nullptr) {
-                    m_pDDesktopServicesThread = new DDesktopServicesThread(this);
-                }
-
-                // 打开选中第一个提取的文件/文件夹
-                if (m_listOpenFiles.count() > 0)
-                    m_pDDesktopServicesThread->setOpenFile(m_listExractFiles[0]);
-                m_pDDesktopServicesThread->start();
-            }
         } else {
             qDebug() << "解压结束";
             m_ePageID = PI_UnCompressSuccess;
@@ -1098,16 +1073,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
 
         // 若压缩包文件可更改，打开文件之后对文件进行监控
         if (m_pUnCompressPage->isModifiable()) {
-            // 打开成功之后添加到文件监控
-            m_pOpenFileWatcher->addPath(m_strOpenFile);
-
-            if (m_mapFileHasModified.find(m_strOpenFile) != m_mapFileHasModified.end()) {
-                // 第一次默认文件未修改
-                m_mapFileHasModified[m_strOpenFile] = true;
-            } else {
-                // 若已存在此监控文件，修改为未修改
-                m_mapFileHasModified[m_strOpenFile] = false;
-            }
+            // 打开成功之后添加当前打开文件至文件监控中
+            m_pOpenFileWatcher->addCurOpenWatchFile();
         }
 
         m_ePageID = PI_UnCompress;
@@ -1206,11 +1173,7 @@ void MainWindow::resetMainwindow()
     m_pProgressPage->resetProgress();   // 重置进度
     m_strExtractPath.clear();           // 清空解压路径
     m_listExractFiles.clear();          // 清空提取文件
-    m_pOpenFileWatcher->removePaths(m_pOpenFileWatcher->files());   // 重置文件监控
-    m_listOpenFiles.clear();    // 清空打开文件
-    m_strOpenFile.clear();      // 清空当前打开的文件名
-    m_mapFileHasModified.clear();   // 清空文件监控状态
-    m_mapOpenFils.clear();      // 清空打开的文件映射
+    m_pOpenFileWatcher->reset();
     m_bRightOperation = false;  // 重置右键
 }
 
@@ -1259,13 +1222,11 @@ void MainWindow::slotReceiveCurArchiveName(const QString &strArchiveName)
 
 void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 {
-    m_listOpenFiles << entry;   // 添加此文件至解压文件中
-
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
-    QString strTempExtractPath =  TEMPPATH + QDir::separator() + m_strProcessID + createUUID();     // 拼接临时路径
-    m_strOpenFile = strTempExtractPath + QDir::separator() + entry.strFileName;     // 设置打开文件全路径
-    m_mapOpenFils[m_strOpenFile] = entry;   // 存储打开文件数据
+    QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createUUID();  // 拼接临时路径
+    QString strOpenFile =  strTempExtractPath + QDir::separator() + entry.strFileName;     // 临时解压文件全路径
+    m_pOpenFileWatcher->setCurOpenFile(strOpenFile);
     ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram);
 
     // 进入打开加载界面
@@ -1277,8 +1238,10 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 
 void MainWindow::slotOpenFileChanged(const QString &strPath)
 {
-    if ((m_mapFileHasModified.find(strPath) != m_mapFileHasModified.end()) && (!m_mapFileHasModified[strPath])) {
-        m_mapFileHasModified[strPath] = true;
+    QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
+
+    if ((mapStatus.find(strPath) != mapStatus.end()) && (!mapStatus[strPath])) {
+        mapStatus[strPath] = true;
 
         QFileInfo file(strPath);
         QString strDesText = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
@@ -1287,13 +1250,12 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         int iResult = dialog.showDialog(strDesText, tr("Discard"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             // 更新压缩包数据
-            qDebug() << "更新压缩包中文件" << m_mapOpenFils[strPath].strFullPath;
             addFiles2Archive(QStringList() << strPath);
         }
-        m_mapFileHasModified[strPath] = false;
+        mapStatus[strPath] = false;
 
         // 这里需要再次添加文件监控，因为某些应用修改文件是先删除再创建，所以需要再次监听
-        m_pOpenFileWatcher->addPath(strPath);
+        m_pOpenFileWatcher->addWatchFile(strPath);
     }
 }
 
@@ -1323,7 +1285,6 @@ void MainWindow::slotSuccessReturn()
 
     m_ePageID = PI_Home;
     refreshPage();
-
 }
 
 void MainWindow::slotPause(Progress_Type eType)
