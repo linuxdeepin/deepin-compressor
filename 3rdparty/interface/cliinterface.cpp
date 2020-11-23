@@ -110,7 +110,7 @@ bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QS
                                 const ExtractionOptions &options)
 {
     qDebug() << "destination directory:" << destinationDirectory;
-    this->extractPsdStatus = NotChecked;
+//    this->extractPsdStatus = NotChecked;
 
     return this->extractFF(files, destinationDirectory, options);
 }
@@ -155,9 +155,9 @@ void CliInterface::continueProcess()
 
 bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
-    if (this->extractPsdStatus == ReadOnlyArchiveInterface::WrongPsd) {
-        return false;
-    }
+//    if (this->extractPsdStatus == ReadOnlyArchiveInterface::WrongPsd) {
+//        return false;
+//    }
 
 //    if (pAnalyseHelp != nullptr) {
 //        delete pAnalyseHelp;
@@ -176,7 +176,7 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
 
 //    } else {
     destPath = destinationDirectory;
-    this->extractPsdStatus = Checked;
+//    this->extractPsdStatus = Checked;
 //}
 
     if (m_extractionOptions.isBatchExtract()) {
@@ -469,7 +469,6 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     //        delete m_process;
     //        m_process = nullptr;
     //    }
-
     deleteProcess();
 
     //    // #193908 - #222392
@@ -637,18 +636,18 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         }
     }
 
-    if (this->extractPsdStatus == Reextract) {
-//        if (m_extractionOptions.isBatchExtract()) {
-//        } else {
-//            qDebug() << this->destDirName;
-//            if (this->pAnalyseHelp != nullptr) {
-//                this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
-//                //qDebug()<<"==========直接解压文件";
-//                return;
-//            }
-//        }
-    } else if (this->extractPsdStatus == Checked) {
-    } else if (this->extractPsdStatus == Canceled) {
+    /*    if (this->extractPsdStatus == Reextract) {
+    //        if (m_extractionOptions.isBatchExtract()) {
+    //        } else {
+    //            qDebug() << this->destDirName;
+    //            if (this->pAnalyseHelp != nullptr) {
+    //                this->extractFF(m_extractedFiles, this->pAnalyseHelp->getDestDir(), m_extractionOptions);
+    //                //qDebug()<<"==========直接解压文件";
+    //                return;
+    //            }
+    //        }
+        } else if (this->extractPsdStatus == Checked) {
+        } else */if (this->extractPsdStatus == Canceled) {
         if (ifReplaceTip == false) {
             //            qDebug()<<"==========删除临时文件";
             if (this->m_extractDestDir == "" || this->destDirName == "") {
@@ -1601,7 +1600,7 @@ bool CliInterface::handleLine(const QString &line)
             m_removedFiles.clear();
             emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));
             return false;
-        } else if (line.startsWith(QLatin1String("Enter password (will not be echoed):"))) {
+        } else if (isPasswordPrompt(line)) {
             qDebug() << "Found a password prompt";
 
             PasswordNeededQuery query(filename());
@@ -1609,10 +1608,11 @@ bool CliInterface::handleLine(const QString &line)
             query.waitForResponse();
 
             if (query.responseCancelled()) {
-                const QString response(QLatin1Char('\n'));
-                writeToProcess(response.toLocal8Bit());
-                //                emit cancelled();
-                //                return false;
+//                const QString response(QLatin1Char('\n'));
+//                writeToProcess(response.toLocal8Bit());
+                m_removedFiles.clear();
+                emit cancelled();
+                return false;
             } else {
                 setPassword(query.password());
 
@@ -1621,6 +1621,11 @@ bool CliInterface::handleLine(const QString &line)
 
                 //return true;
             }
+        } else if (isWrongPasswordMsg(line)) {
+            m_removedFiles.clear();
+            emit error("Wrong password.");
+//            emit finished(false);
+            return false;
         } else if (line.startsWith(QLatin1String("E_FAIL"))) {
             m_removedFiles.clear();
             emit error(("Delete operation failed. Try upgrading p7zip or disabling the p7zip plugin in the configuration dialog."));

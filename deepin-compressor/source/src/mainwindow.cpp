@@ -138,6 +138,7 @@ MainWindow::~MainWindow()
             delete m_pMapGlobalWnd;
             m_pMapGlobalWnd = nullptr;
         }
+      
         if (this->m_pCurAuxInfo != nullptr) {
             QMap<QString, OpenInfo *>::iterator iter;
             for (iter = m_pCurAuxInfo->information.begin(); iter != m_pCurAuxInfo->information.end();) {
@@ -4367,16 +4368,6 @@ void MainWindow::slotCompressFinished(KJob *job)
 void MainWindow::slotJobFinished(KJob *job)
 {
     if (m_eJobType == JOB_DELETE || m_eJobType == JOB_DELETE_MANUAL || m_eJobType == JOB_ADD) {
-//        if (m_pArchiveModel->archive()->fileName().endsWith(".zip") || m_pArchiveModel->archive()->fileName().endsWith(".jar")
-//                || m_pArchiveModel->archive()->fileName().endsWith(".tar") || m_pArchiveModel->archive()->fileName().endsWith(".7z")
-//                || m_pArchiveModel->archive()->fileName().endsWith(".rar")) {
-//            if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
-//                if (!pinterface->isAllEntry()) {
-//                    pinterface->updateListMap();
-//                }
-//            }
-//        }
-
         if (ReadOnlyArchiveInterface *pinterface = m_pArchiveModel->getPlugin()) {
             if (!pinterface->isAllEntry()) {
                 pinterface->updateListMap(m_entries, m_eJobType);
@@ -4384,11 +4375,12 @@ void MainWindow::slotJobFinished(KJob *job)
         }
     }
 
-    qDebug() << "job finished" << job->error();
+    int errCode = job->error();
+    qDebug() << "job finished" << errCode;
 
     m_eWorkStatus = WorkNone;
     m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_NONE);
-    if (job->error() && (job->error() != KJob::KilledJobError && job->error() != KJob::CancelError)) {
+    if (job->error() && (job->error() != KJob::KilledJobError && job->error() != KJob::CancelError && job->error() != KJob::WrongPsdError)) {
         if (m_strPathStore.left(6) == "/media") {
             if (getMediaFreeSpace() <= 50) {
                 m_pCompressFail->setFailStrDetail(tr("Insufficient space, please clear and retry"));
@@ -4410,6 +4402,16 @@ void MainWindow::slotJobFinished(KJob *job)
         }
 
         refreshPage();
+        return;
+    } else if (errCode == KJob::CancelError) {
+        m_ePageID = PAGE_UNZIP;
+        refreshPage();
+        return;
+    } else if (errCode == KJob::WrongPsdError) {
+        m_ePageID = PAGE_UNZIP;
+        refreshPage();
+        QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+        sendMessage(icon, tr("Wrong password"));
         return;
     }
 
