@@ -382,11 +382,11 @@ void CompressSetting::onNextButoonClicked()
     PERF_PRINT_BEGIN("POINT-03", "filename=" + m_filename->text() + '.' + m_compresstype->text() + " filesize=" + QString::number(m_getFileSize) + "B"); //压缩计时
 
     //压缩zip分卷不支持中文密码
-    m_password->text();
     if (m_splitcompress->isChecked()
             && "zip" == m_compresstype->text()
             && (!m_password->text().isEmpty() && m_password->text().contains(QRegExp("[\\x4e00-\\x9fa5]+")))) {
-        showWarningDialog(tr("The password for ZIP volumes cannot be in Chinese"));
+//        showWarningDialog(tr("The password for ZIP volumes cannot be in Chinese"));
+        m_password->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
         return;
     }
 
