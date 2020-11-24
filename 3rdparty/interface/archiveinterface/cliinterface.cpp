@@ -125,9 +125,13 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             }
         }
 
-        if (!(destPath.startsWith("/tmp") && destPath.contains("/deepin-compressor-"))) {  // 判断不是打开解压列表文件的临时目录，设置提取的临时目录
+        if (destPath.startsWith("/tmp") && destPath.contains("/deepin-compressor-")) { // 打开解压列表文件
+            if (!QDir(destPath).exists()) {
+                QDir(destPath).mkpath(destPath);
+            }
+        } else {  // 判断不是打开解压列表文件的临时目录，设置提取的临时目录
             // 设置临时目录
-            m_extractTempDir.reset(new QTemporaryDir(/*destPath*/QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
+            m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
             if (!m_extractTempDir->isValid()) {
                 qDebug() << "Creation of temporary directory failed.";
                 emit signalFinished(PFT_Error);
@@ -135,9 +139,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             }
 
             destPath = m_extractTempDir->path();
-            qDebug() << "提取临时路径 --- " << destPath;
-            QDir::setCurrent(destPath);
         }
+
+        qDebug() << "提取临时路径 --- " << destPath;
+        QDir::setCurrent(destPath);
     }
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
@@ -645,21 +650,24 @@ void CliInterface::updateArchiveEntry(FileEntry &entry)
         if (tmpFile.isDir()) { // 追加压缩文件夹
             QFileInfoList lisfInfo = QDir(entry.strFullPath).entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden); // 获取当前目录下所有子文件
 
+            // 设置entry属性
             entry.strFullPath = destinationPath + m_rootEntry + tmpFile.fileName() + QDir::separator(); // entry全路径
-            if (stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) { // map中没有当前entry
-                // 设置entry属性
-                entry.isDirectory = true;
-                entry.qSize = lisfInfo.count();
-                entry.uLastModifiedTime = tmpFile.lastModified().toTime_t();
-                entry.strFileName = tmpFile.fileName();
+            entry.isDirectory = true;
+            entry.qSize = lisfInfo.count();
+            entry.uLastModifiedTime = tmpFile.lastModified().toTime_t();
+            entry.strFileName = tmpFile.fileName();
 
-                stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
-                if (destinationPath.isEmpty()) { // 追加压缩到第一层数据
+            if (destinationPath.isEmpty() && entry.strFullPath.count('/') == 1 && entry.strFullPath.endsWith('/')) {
+                if (stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) {
+                    // 追加压缩到第一层数据
                     stArchiveData.listRootEntry.push_back(entry);
                 }
             }
 
-            foreach (QFileInfo info, lisfInfo) {
+            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
+//            updateArchiveEntry(entry); // 继续刷新文件夹内数据
+
+            foreach (QFileInfo info, lisfInfo) { // 插入文件夹下子文件数据
                 FileEntry tmpEntry;
                 tmpEntry.strFullPath = destinationPath + m_rootEntry + tmpFile.fileName() + QDir::separator() + info.fileName(); // 文件在压缩包内全路径
                 tmpEntry.strFileName = info.fileName(); // 文件名
@@ -669,11 +677,10 @@ void CliInterface::updateArchiveEntry(FileEntry &entry)
                 if (tmpEntry.isDirectory) { // 文件夹
                     // 文件夹显示子文件数目
                     m_rootEntry = tmpFile.fileName() + QDir::separator(); // 记录当前entry的上一层节点
-                    tmpEntry.strFullPath += QDir::separator(); // 路径末尾添加‘/’
+                    tmpEntry.strFullPath += QDir::separator(); // 路径末尾添加'/'
                     tmpEntry.qSize = QDir(info.filePath()).entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden).count(); //目录下文件数
-                    if (stArchiveData.mapFileEntry.find(tmpEntry.strFullPath) == stArchiveData.mapFileEntry.end()) { // 插入数据
-                        stArchiveData.mapFileEntry.insert(tmpEntry.strFullPath, tmpEntry);
-                    }
+
+                    stArchiveData.mapFileEntry.insert(tmpEntry.strFullPath, tmpEntry);
 
                     FileEntry dirEntry;
                     dirEntry.strFullPath = info.filePath();
@@ -691,12 +698,12 @@ void CliInterface::updateArchiveEntry(FileEntry &entry)
             entry.strFileName = tmpFile.fileName();
             entry.strFullPath = destinationPath + tmpFile.fileName();
 
-            if (stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) { // map中没有当前entry
-                stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
-                if (destinationPath.isEmpty()) { // 追加压缩到第一层数据
-                    stArchiveData.listRootEntry.push_back(entry);
-                }
+            if (destinationPath.isEmpty() && stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) {
+                // 追加压缩到第一层数据
+                stArchiveData.listRootEntry.push_back(entry);
             }
+
+            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
         }
     }
 
@@ -793,7 +800,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         return;
     }
 
-    if (!m_extractOptions.bAllExtract) { // 提取操作，将文件从临时文件夹内移出
+    if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp") && m_extractOptions.strTargetPath.contains("/deepin-compressor-") && m_extractOptions.strDestination.isEmpty()))) {
+        // 提取操作和打开解压列表文件非第一层的文件
+        // 将文件从临时文件夹内移出
         bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
         if (!droppedFilesMoved) {
             m_extractTempDir.reset();
