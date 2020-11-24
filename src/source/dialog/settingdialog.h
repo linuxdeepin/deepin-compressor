@@ -10,6 +10,10 @@
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+#define AUTO_DELETE_NEVER "Never" //解压后不删除源压缩文件
+#define AUTO_DELETE_ASK "Ask for confirmation" //解压后询问是否删除源压缩文件
+#define AUTO_DELETE_ALWAYS "Always" //解压后删除源压缩文件
+
 class SettingDialog: public DSettingsDialog
 {
     Q_OBJECT

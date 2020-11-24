@@ -88,7 +88,7 @@ enum Page_ID {
     PI_Loading,             // 加载
 };
 
-// 压缩设置界面参数
+// 压缩参数
 struct CompressParameter {
     CompressParameter()
     {
@@ -118,5 +118,25 @@ struct CompressParameter {
 };
 Q_DECLARE_METATYPE(CompressParameter)
 
+// 解压参数
+struct UnCompressParameter {
+    UnCompressParameter()
+    {
+        bRightOperation = false;
+        bSplitVolume = false;
+        bSplitVolume = false;
+        qSize = 0;
+        listExractFiles.clear();
+    }
+
+    QString strFullPath;        // 压缩包全路径
+    QString strExtractPath;     // 解压路径
+    bool bRightOperation;       // 是否右键快捷操作
+    bool bSplitVolume;          // 是否分卷包
+    qint64 qSize;               // 压缩包大小
+    QList<QString> listExractFiles; // 存储提取文件,用来结束之后自动打开文件夹时选中
+
+};
+Q_DECLARE_METATYPE(UnCompressParameter)
 
 #endif // CUSTOMDATAINFO_H

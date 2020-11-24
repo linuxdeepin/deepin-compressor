@@ -170,6 +170,12 @@ private:
      */
     void resetMainwindow();
 
+    /**
+     * @brief deleteWhenJobFinish   压缩/解压完成之后删除源文件
+     * @param eType     job类型（压缩/解压）
+     */
+    void deleteWhenJobFinish(ArchiveJob::JobType eType);
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -340,15 +346,11 @@ private:
     int m_iInitUITimer = 0;                       // 初始化界面定时器
     int m_iCompressedWatchTimerID = 0;            // 压缩文件监视定时器ID
 
-    qint64 m_qTotalSize = 0;            // 压缩文件总大小
-    QString m_strExtractPath;           // 解压路径
-    QList<QString> m_listExractFiles; // 存储提取文件,用来结束之后自动打开文件夹时选中
     DDesktopServicesThread *m_pDDesktopServicesThread = nullptr;    // 打开文管界面线程服务
+    OpenFileWatcher *m_pOpenFileWatcher;    // 打开压缩包文件监控
 
-    // 打开压缩包文件监控
-    OpenFileWatcher *m_pOpenFileWatcher;
-
-    bool m_bRightOperation = false;     // 右键快捷解压
+    CompressParameter m_stCompressParameter;        // 压缩参数（压缩、追加压缩等）
+    UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
 };
 
 #endif // MAINWINDOW_H
