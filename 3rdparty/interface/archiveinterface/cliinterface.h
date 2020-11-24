@@ -141,6 +141,17 @@ private:
      */
     bool moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options);
 
+    /**
+     * @brief updateArchive 追加、删除之后更新压缩包数据
+     */
+    void updateArchive();
+
+    /**
+     * @brief updateArchiveEntry 更新追加压缩、删除之后的每一项
+     * @param file 文件
+     */
+    void updateArchiveEntry(FileEntry &file);
+
 private slots:
     /**
      * @brief readStdout  读取命令行输出
@@ -174,19 +185,21 @@ protected:
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
 
 private:
-    QList<FileEntry> m_files; // 待解压的文件
-    ExtractionOptions m_options; // 解压选项
+    QList<FileEntry> m_files; // 文件
+    ExtractionOptions m_extractOptions; // 解压选项
+    CompressOptions m_compressOptions; // 压缩选项
 
     bool m_listEmptyLines = false; // true:rar加载list， false:7z加载list
     QByteArray m_stdOutData;  // 存储命令行输出数据
     QString m_parseName;  // 解析后的文件名
-    QScopedPointer<QTemporaryDir> m_extractTempDir;  // 提取文件的临时文件夹
+    QScopedPointer<QTemporaryDir> m_extractTempDir;  // 临时文件夹
     QString m_rootNode = ""; // 待提取文件的节点
 
     qint64  m_processId;  // 进程Id
     bool m_isTar7z = false; // 是否是tar.7z文件
-    qint64 m_filesSize = 1; //选择需要压缩的文件大小，默认1M
+    qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
     QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
+    QString m_rootEntry = QString(); // 追加压缩文件夹的时候记录上一层节点
 };
 
 #endif // CLIINTERFACE_H
