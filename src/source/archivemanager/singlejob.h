@@ -233,4 +233,21 @@ private:
     QString m_strProgram;           // 应用程序
 };
 
+// 更新操作（压缩包修改完之后更新缓存数据）
+class UpdateJob: public SingleJob
+{
+    Q_OBJECT
+public:
+    explicit UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    ~UpdateJob() override;
+
+    /**
+     * @brief doWork    执行操作
+     */
+    void doWork() override;
+
+private:
+    UpdateOptions m_stOptions;      // 更新选项
+};
+
 #endif

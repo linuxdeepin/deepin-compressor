@@ -44,6 +44,7 @@ public:
         JT_BatchExtract,   // 批量解压
         JT_Open,            // 打开
         JT_Convert,         // 转换
+        JT_Update,         // 转换
     };
 
     /**

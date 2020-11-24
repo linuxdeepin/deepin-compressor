@@ -99,12 +99,6 @@ public:
     ErrorType errorType();
 
     /**
-     * @brief updateArchiveData   更新压缩包数据
-     * @return
-     */
-    virtual PluginFinishType updateArchiveData() = 0;
-
-    /**
      * @brief pauseOperation    暂停操作
      */
     virtual void pauseOperation() = 0;
@@ -243,6 +237,12 @@ public:
      * @return
      */
     QString getArchiveName();
+
+    /**
+     * @brief updateArchiveData   更新压缩包数据
+     * @return
+     */
+    virtual PluginFinishType updateArchiveData(const UpdateOptions &options) = 0;
 };
 
 #endif // ARCHIVEINTERFACE_H

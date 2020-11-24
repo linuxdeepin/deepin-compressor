@@ -217,9 +217,7 @@ void ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
-    OpenJob *pOpenJob = nullptr;
-
-    pOpenJob = new OpenJob(stEntry, strTempExtractPath, strProgram, m_pInterface);
+    OpenJob *pOpenJob = new OpenJob(stEntry, strTempExtractPath, strProgram, m_pInterface);
 
     // 连接槽函数
     connect(pOpenJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
@@ -228,6 +226,19 @@ void ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
 
     m_pArchiveJob = pOpenJob;
     pOpenJob->start();
+}
+
+void ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
+{
+    if (m_pInterface) {
+        UpdateJob *pUpdateJob = new UpdateJob(stOptions, m_pInterface);
+
+        // 连接槽函数
+        connect(pUpdateJob, &UpdateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+
+        m_pArchiveJob = pUpdateJob;
+        pUpdateJob->start();
+    }
 }
 
 void ArchiveManager::pauseOperation()
@@ -248,7 +259,6 @@ void ArchiveManager::continueOperation()
 
 void ArchiveManager::cancelOperation()
 {
-    m_bCancel = true;   // 设置取消标志位
     // 调用job取消接口
     if (m_pArchiveJob) {
         m_pArchiveJob->kill();
@@ -258,21 +268,15 @@ void ArchiveManager::cancelOperation()
 
 void ArchiveManager::slotJobFinished()
 {
-    if (m_pArchiveJob != nullptr && m_pInterface != nullptr) {
-        // 如果是追加压缩或者删除压缩包数据，需要再次刷新数据
-        if ((m_pArchiveJob->m_eJobType == ArchiveJob::JT_Add || m_pArchiveJob->m_eJobType == ArchiveJob::JT_Delete) && (!m_bCancel)) {
-            m_pInterface->updateArchiveData();
-        }
-    }
+    // 先用临时的指针记录job，然后信号处理结束之后释放，防止中途m_pArchiveJob改变了
+    ArchiveJob *pTempJob = m_pArchiveJob;
 
     // 发送结束信号
     emit signalJobFinished();
 
     // 释放job
-    if (m_pArchiveJob != nullptr) {
-        m_pArchiveJob->deleteLater();
-        m_pArchiveJob = nullptr;
+    if (pTempJob != nullptr) {
+        pTempJob->deleteLater();
+        pTempJob = nullptr;
     }
-
-    m_bCancel = false;
 }

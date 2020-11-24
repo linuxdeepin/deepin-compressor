@@ -380,7 +380,7 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     return PFT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::updateArchiveData()
+PluginFinishType LibzipPlugin::updateArchiveData(const UpdateOptions &options)
 {
     m_mapFileCode.clear();
     DataManager::get_instance().resetArchiveData();

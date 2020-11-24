@@ -59,7 +59,7 @@ public:
     PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
     PluginFinishType addComment(const QString &comment) override;
-    PluginFinishType updateArchiveData() override;
+    PluginFinishType updateArchiveData(const UpdateOptions &options) override;
 
     /**
      * @brief pauseOperation    暂停操作

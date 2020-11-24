@@ -24,6 +24,7 @@
 
 #include <DWidget>
 #include <DSpinner>
+#include <DLabel>
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,6 +45,12 @@ public:
      */
     void stopLoading();
 
+    /**
+     * @brief setDes    设置描述
+     * @param strDes    描述内容
+     */
+    void setDes(const QString &strDes);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -52,7 +59,7 @@ private:
 
 private:
     DSpinner *m_pSpinner;   // 加载效果
-
+    DLabel *m_pTextLbl;
 };
 
 #endif // LOADINGPAGE_H

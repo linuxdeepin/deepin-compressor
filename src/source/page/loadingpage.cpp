@@ -48,6 +48,11 @@ void LoadingPage::stopLoading()
     m_pSpinner->stop();
 }
 
+void LoadingPage::setDes(const QString &strDes)
+{
+    m_pTextLbl->setText(strDes);
+}
+
 void LoadingPage::initUI()
 {
     // 初始化加载动画
@@ -55,14 +60,14 @@ void LoadingPage::initUI()
     m_pSpinner->setMinimumSize(32, 32);
 
     // 初始化加载提示
-    DLabel *pTextLbl = new DLabel(this);
-    pTextLbl->setMinimumSize(293, 20);
-    pTextLbl->setText(tr("Loading, please wait..."));
-    DFontSizeManager::instance()->bind(pTextLbl, DFontSizeManager::T6, QFont::Medium);  // 设置字体
-    DPalette pa = DApplicationHelper::instance()->palette(pTextLbl);
+    m_pTextLbl = new DLabel(this);
+    m_pTextLbl->setMinimumSize(293, 20);
+    m_pTextLbl->setText(tr("Loading, please wait..."));
+    DFontSizeManager::instance()->bind(m_pTextLbl, DFontSizeManager::T6, QFont::Medium);  // 设置字体
+    DPalette pa = DApplicationHelper::instance()->palette(m_pTextLbl);
     pa.setBrush(DPalette::ButtonText, pa.color(DPalette::TextTitle));   // 设置颜色
-    DApplicationHelper::instance()->setPalette(pTextLbl, pa);
-    pTextLbl->setAlignment(Qt::AlignCenter);
+    DApplicationHelper::instance()->setPalette(m_pTextLbl, pa);
+    m_pTextLbl->setAlignment(Qt::AlignCenter);
 
     // 加载布局
     QHBoxLayout *pSpinnerLayout = new QHBoxLayout;
@@ -74,7 +79,7 @@ void LoadingPage::initUI()
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
     pMainLayout->addStretch();
     pMainLayout->addLayout(pSpinnerLayout);
-    pMainLayout->addWidget(pTextLbl);
+    pMainLayout->addWidget(m_pTextLbl);
     pMainLayout->addStretch();
     pMainLayout->setAlignment(Qt::AlignCenter);
 

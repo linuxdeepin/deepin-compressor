@@ -301,7 +301,7 @@ PluginFinishType CliInterface::addComment(const QString &/*comment*/)
     return PFT_Nomral;
 }
 
-PluginFinishType CliInterface::updateArchiveData()
+PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
 {
     m_rootEntry = QString();
     return PFT_Nomral;

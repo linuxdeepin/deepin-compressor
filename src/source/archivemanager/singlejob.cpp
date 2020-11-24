@@ -350,3 +350,30 @@ void OpenJob::slotFinished(PluginFinishType eType)
     }
 
 }
+
+UpdateJob::UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+    : SingleJob(pInterface, parent)
+    , m_stOptions(options)
+{
+    m_eJobType = JT_Update;
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &UpdateJob::slotFinished, Qt::ConnectionType::UniqueConnection);
+}
+
+UpdateJob::~UpdateJob()
+{
+
+}
+
+void UpdateJob::doWork()
+{
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
+
+    if (pWriteInterface) {
+        // 调用更新函数
+        PluginFinishType eType = pWriteInterface->updateArchiveData(m_stOptions);
+
+        if (!(pWriteInterface->waitForFinished())) {
+            slotFinished(eType);
+        }
+    }
+}

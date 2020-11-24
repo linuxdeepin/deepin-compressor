@@ -1013,8 +1013,14 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
         qDebug() << "添加结束";
-        m_ePageID = PI_UnCompress;
-        m_pUnCompressPage->refreshDataByCurrentPathDelete();
+
+        // 追加完成更新压缩包数据
+        ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions);
+        // 开始更新
+        m_pLoadingPage->setDes(tr("Updating, please wait..."));
+        m_pLoadingPage->startLoading();     // 开始加载
+        m_ePageID = PI_Loading;
+        refreshPage();
     }
     break;
     // 加载压缩包数据
@@ -1077,9 +1083,13 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 删除
     case ArchiveJob::JT_Delete: {
         qDebug() << "删除结束";
-        m_ePageID = PI_UnCompress;
-
-        m_pUnCompressPage->refreshDataByCurrentPathDelete();
+        // 追加完成更新压缩包数据
+        ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions);
+        // 开始更新
+        m_pLoadingPage->setDes(tr("Updating, please wait..."));
+        m_pLoadingPage->startLoading();
+        m_ePageID = PI_Loading;
+        refreshPage();
     }
     break;
     // 打开
@@ -1093,12 +1103,19 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
 
         m_ePageID = PI_UnCompress;
-        m_pLoadingPage->stopLoading();
+        m_pLoadingPage->stopLoading();      // 停止更新
     }
     break;
     // 格式转换
     case ArchiveJob::JT_Convert: {
         //m_ePageID = PI_CompressSuccess;
+    }
+    break;
+    // 追加/删除更新
+    case ArchiveJob::JT_Update: {
+        m_pLoadingPage->stopLoading();      // 停止更新
+        m_ePageID = PI_UnCompress;
+        m_pUnCompressPage->refreshDataByCurrentPathDelete();
     }
     break;
     }
@@ -1173,12 +1190,18 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
     // 切换进度界面
     m_pProgressPage->setProgressType(PT_CompressAdd);
-    m_pProgressPage->setTotalSize(calSelectedTotalFileSize(listFiles));
     m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
-    m_pProgressPage->restartTimer();
 
     m_ePageID = PI_AddCompressProgress;
     refreshPage();
+
+    // 设置更新选项
+    m_stUpdateOptions.reset();
+    m_stUpdateOptions.eType = UpdateOptions::Add;
+    ConstructAddOptions(listFiles);
+
+    m_pProgressPage->setTotalSize(m_stUpdateOptions.qSize);
+    m_pProgressPage->restartTimer();
 }
 
 void MainWindow::resetMainwindow()
@@ -1231,6 +1254,77 @@ void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
     }
 }
 
+void MainWindow::ConstructAddOptions(const QStringList &files)
+{
+    foreach (QString file, files) {
+        QFileInfo fileInfo(file);
+        QFile ss;
+        ss.size();
+        fileInfo.lastModified().toTime_t();
+
+        FileEntry entry;
+        entry.strFullPath = fileInfo.filePath();    // 文件全路径
+        entry.strFileName = fileInfo.fileName();    // 文件名
+        entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
+        entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+        m_stUpdateOptions.listEntry << entry;
+
+        if (fileInfo.isFile()) {  // 如果为文件，直接获取大小
+            qint64 curFileSize = fileInfo.size();
+            m_stUpdateOptions.qSize += curFileSize;
+        } else if (fileInfo.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
+        }
+    }
+
+    // 等待线程池结束
+    QThreadPool::globalInstance()->waitForDone();
+
+
+}
+
+void MainWindow::ConstructAddOptionsByThread(const QString &path)
+{
+    QDir dir(path);
+    if (!dir.exists())
+        return;
+    // 获得文件夹中的文件列表
+    QFileInfoList list = dir.entryInfoList();
+    int i = 0;
+    do {
+        QFileInfo fileInfo = list.at(i);
+        if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") {
+            i++;
+            continue;
+        }
+
+        FileEntry entry;
+        entry.strFullPath = fileInfo.filePath();    // 文件全路径
+        entry.strFileName = fileInfo.fileName();    // 文件名
+        entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
+        entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+        m_stUpdateOptions.listEntry << entry;
+
+        if (entry.isDirectory) {
+            // 如果是文件夹 则将此文件夹放入线程池中进行计算
+            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
+        } else {
+            mutex.lock();
+            // 如果是文件则直接计算大小
+            qint64 curFileSize = fileInfo.size();
+#ifdef __aarch64__
+            if (maxFileSize_ < curFileSize) {
+                maxFileSize_ = curFileSize;
+            }
+#endif
+            m_stUpdateOptions.qSize += curFileSize;
+            mutex.unlock();
+        }
+
+        i++;
+    } while (i < list.size());
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
@@ -1259,6 +1353,12 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
     m_operationtype = Operation_DELETE; //提取操作
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     ArchiveManager::get_instance()->deleteFiles(strArchiveFullPath, listSelEntry);
+
+    // 设置更新选项
+    m_stUpdateOptions.reset();
+    m_stUpdateOptions.eType = UpdateOptions::Delete;
+    m_stUpdateOptions.listEntry << listSelEntry;
+    m_stUpdateOptions.qSize = qTotalSize;
 
     // 设置进度界面参数
     m_pProgressPage->setProgressType(PT_Delete);

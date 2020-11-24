@@ -368,7 +368,7 @@ PluginFinishType LibarchivePlugin::addComment(const QString &comment)
     return PFT_Error;
 }
 
-PluginFinishType LibarchivePlugin::updateArchiveData()
+PluginFinishType LibarchivePlugin::updateArchiveData(const UpdateOptions &options)
 {
     return PFT_Nomral;
 }

@@ -108,6 +108,12 @@ public:
     void openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
 
     /**
+     * @brief updateArchiveCacheData    更新本地压缩包缓存数据
+     * @param stOptions     更新选项
+     */
+    void updateArchiveCacheData(const UpdateOptions &stOptions);
+
+    /**
      * @brief pauseOperation    暂停操作
      */
     void pauseOperation();

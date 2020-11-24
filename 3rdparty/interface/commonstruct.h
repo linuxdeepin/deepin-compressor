@@ -163,5 +163,30 @@ struct ExtractionOptions {
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 
+// 更新选项
+struct UpdateOptions {
+    enum Type {
+        Delete,     // 删除
+        Add         // 追加
+    };
+
+    UpdateOptions()
+    {
+        reset();
+    }
+
+    void reset()
+    {
+        eType = Delete;
+        strParentPath.clear();
+        listEntry.clear();
+        qSize = 0;
+    }
+
+    Type eType;                     // 更新类型
+    QString strParentPath;          // 父目录（若为空，代表操作的是根目录下的文件）
+    QList<FileEntry> listEntry;     // 操作的文件（删除：存储选中的文件     追加：存储本地所有文件）
+    qint64 qSize;                  // 操作的文件大小
+};
 
 #endif // COMMONSTRUCT_H

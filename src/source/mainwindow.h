@@ -176,6 +176,18 @@ private:
      */
     void deleteWhenJobFinish(ArchiveJob::JobType eType);
 
+    /**
+     * @brief ConstructAddOptions  构造追加压缩选项
+     * @param files 选择文件
+     */
+    void ConstructAddOptions(const QStringList &files);
+
+    /**
+     * @brief ConstructAddOptionsByThread  用多线程的方式构造追加压缩选项
+     * @param path 文件或文件夹路径
+     */
+    void ConstructAddOptionsByThread(const QString &path);
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -351,6 +363,8 @@ private:
 
     CompressParameter m_stCompressParameter;        // 压缩参数（压缩、追加压缩等）
     UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
+
+    UpdateOptions m_stUpdateOptions;        // 更新压缩包时选项
 };
 
 #endif // MAINWINDOW_H
