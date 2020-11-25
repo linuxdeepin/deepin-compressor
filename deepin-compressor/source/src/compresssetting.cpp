@@ -169,17 +169,24 @@ void CompressSetting::InitUI()
     m_savepath->setMinimumSize(260, 36);
 
     // 压缩方式
-    m_pCompressLevelCkb = new CustomCombobox(this);
-    m_pCompressLevelCkb->setMinimumSize(260, 36);
+    m_pCompressLevelLbl = new DLabel(tr("Compression method:"), this);
+    m_pCompressLevelCmb = new CustomCombobox(this);
+    m_pCompressLevelCmb->setMinimumSize(260, 36);
 
+    // 设置压缩方式选项
+    QStringList listCompressLevel = QStringList() << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
+    // 添加压缩方式
+    for (int i = 0; i < listCompressLevel.count(); ++i) {
+        m_pCompressLevelCmb->addItem(listCompressLevel[i]);
+    }
+    m_pCompressLevelCmb->setCurrentIndex(2);
     // 选项布局
     filelayout->addRow(tr("Name") + ":", m_filename);
     filelayout->addRow(tr("Save to") + ":", m_savepath);
-    filelayout->addRow(tr("Compression method") + ":", m_pCompressLevelCkb);
+    filelayout->addRow(m_pCompressLevelLbl, m_pCompressLevelCmb);
     filelayout->setLabelAlignment(Qt::AlignLeft);
     filelayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
     filelayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
-
 
     // 高级选项
     DLabel *moresetlabel = new DLabel(tr("Advanced Options"), this);
@@ -491,17 +498,21 @@ void CompressSetting::onNextButoonClicked()
     // 压缩类型
     m_openArgs[QStringLiteral("fixedMimeType")] = fixedMimeType;
     // 压缩等级
-    // bz2、lzo、z 1-9:取1、3、5、6、7、9
+    // tar、tar.Z:使用默认压缩方式
+    // bz2、lzo 1-9:取1、3、5、6、7、9
     // 其它 0-9:取0、1、3、5、7、9
     QList<int> listLevel;
-    if (0 == tmpCompresstype.compare("tar")) {
-        listLevel << -1;
-    } else if (0 == tmpCompresstype.compare("tar.bz2") || 0 == tmpCompresstype.compare("tar.lzo") || 0 == tmpCompresstype.compare("tar.z")) {
-        listLevel << 1 << 3 << 5 << 6 << 7 << 9;
+    int iLevel = 0;
+    if (0 == tmpCompresstype.compare("tar") || 0 == tmpCompresstype.compare("tar.Z")) {
+        iLevel = -1;    // -1为不设置压缩方式，使用默认压缩方式
+    } else if (0 == tmpCompresstype.compare("tar.bz2") || 0 == tmpCompresstype.compare("tar.lzo")) {
+        listLevel << 1 << 3 << 5 << 6 << 7 << 9;    // 为tar.bz2、tar.lzo设置6种压缩方式
+        iLevel = listLevel[m_pCompressLevelCmb->currentIndex()];
     } else {
-        listLevel << 0 << 1 << 3 << 5 << 7 << 9;
+        listLevel << 0 << 1 << 3 << 5 << 7 << 9;    // 其余格式设置6种压缩方式
+        iLevel = listLevel[m_pCompressLevelCmb->currentIndex()];
     }
-    m_openArgs[QStringLiteral("compressionLevel")] = QString::number(listLevel[m_pCompressLevelCkb->currentIndex()]);
+    m_openArgs[QStringLiteral("compressionLevel")] = QString::number(iLevel);
 
 
     qDebug() << m_splitnumedit->value();
@@ -1478,32 +1489,23 @@ bool CompressSetting::existSameFileName()
 
 void CompressSetting::refreshCompressLevel(const QString &strType)
 {
-    QStringList listCompressLevel;
-
     if (0 == strType.compare("tar")) {
-        listCompressLevel << tr("Store");
+        // tar只有存储功能
+        m_pCompressLevelCmb->setCurrentIndex(0);
+        // 设置压缩方式不可用
+        m_pCompressLevelCmb->setEnabled(false);
+        m_pCompressLevelLbl->setEnabled(false);
+    } else if (0 == strType.compare("tar.Z")) {
+        // tar.Z无压缩方式，使用默认，即标准
+        m_pCompressLevelCmb->setCurrentIndex(3);
+        // 设置压缩方式不可用
+        m_pCompressLevelCmb->setEnabled(false);
+        m_pCompressLevelLbl->setEnabled(false);
     } else {
-        listCompressLevel << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
-    }
-
-    bool bFirst = (m_pCompressLevelCkb->count()  == 0) ? true : false;
-    // 如果当前压缩方式数目和当前格式所支持的压缩方式不一致，则切换压缩方式
-    if (m_pCompressLevelCkb->count() != listCompressLevel.count()) {
-        m_pCompressLevelCkb->clear();
-        // 添加压缩方式
-        for (int i = 0; i < listCompressLevel.count(); ++i) {
-            m_pCompressLevelCkb->addItem(listCompressLevel[i]);
-        }
-
-
-    }
-
-    if (bFirst) {
-        // 若压缩方式数目为空，初始化设置
-        if (listCompressLevel.count() > 2) {
-            //  默认较快
-            m_pCompressLevelCkb->setCurrentIndex(2);
-        }
+        // 其余格式支持设置压缩方式
+        // 设置压缩方式可用
+        m_pCompressLevelCmb->setEnabled(true);
+        m_pCompressLevelLbl->setEnabled(true);
     }
 }
 

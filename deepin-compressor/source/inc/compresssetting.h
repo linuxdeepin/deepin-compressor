@@ -164,7 +164,8 @@ private:
     qint64 m_getFileSize;
     bool isSplitChecked = false;
 
-    CustomCombobox *m_pCompressLevelCkb;       // 压缩方式选择项
+    DLabel *m_pCompressLevelLbl;       // 压缩方式选择项
+    CustomCombobox *m_pCompressLevelCmb;       // 压缩方式选择项
     DLabel *m_pCommentLbl;
     DTextEdit *m_pCommentEdt;       // 注释信息
 
