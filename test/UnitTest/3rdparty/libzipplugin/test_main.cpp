@@ -31,6 +31,7 @@
 int main(int argc, char *argv[])
 {
     std::cout << "Starting UnitTest" << std::endl;
+    qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();

@@ -32,22 +32,11 @@
 int main(int argc, char *argv[])
 {
 
-    QApplication a(argc,argv);
+    QApplication a(argc, argv);
     std::cout << "Starting UnitTest" << std::endl;
+    qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
-    RUN_ALL_TESTS();
-   // a.exec();
-    return 0;
+
+    return RUN_ALL_TESTS();
 }
 
-/*#include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
-#include <QApplication>
-#include <iostream>
-
-int main(int argc, char *argv[])
-{
-    std::cout << "Starting UnitTest" << std::endl;
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}*/

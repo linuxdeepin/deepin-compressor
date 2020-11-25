@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
         QString lastStr = argv[argc - 1];
         QSet<QString> fstList;
         if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
-            && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
-            && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
-            && lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
+                && lastStr != "compress" && lastStr != "compress_to_zip" && lastStr != "compress_to_7z" && lastStr != "extract_here_split"
+                && lastStr != "extract_split" && lastStr != "extract_here_split_multi" && lastStr != "extract_split_multi"
+                && lastStr != "extract_mkdir" && lastStr != "extract_mkdir_multi" && lastStr != "extract_mkdir_split" && lastStr != "extract_mkdir_split_multi") {
             isMutlWindows = true;
 
             for (int i = 1; i < argc; i++) {
@@ -194,19 +194,8 @@ int main(int argc, char *argv[])
         }
     }
     std::cout << "Starting UnitTest" << std::endl;
+    qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
     RUN_ALL_TESTS();
     return app.exec();
 }
-
-/*#include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
-#include <QApplication>
-#include <iostream>
-
-int main(int argc, char *argv[])
-{
-    std::cout << "Starting UnitTest" << std::endl;
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}*/
