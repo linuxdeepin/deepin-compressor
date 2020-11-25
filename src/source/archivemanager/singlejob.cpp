@@ -356,12 +356,25 @@ UpdateJob::UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pIn
     , m_stOptions(options)
 {
     m_eJobType = JT_Update;
-    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &UpdateJob::slotFinished, Qt::ConnectionType::UniqueConnection);
+    //connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &UpdateJob::slotFinished, Qt::ConnectionType::UniqueConnection);
 }
 
 UpdateJob::~UpdateJob()
 {
 
+}
+
+void UpdateJob::start()
+{
+    jobTimer.start();
+
+    // 若插件指针为空，立即异常退出
+    if (m_pInterface == nullptr) {
+        slotFinished(PFT_Error);
+        return;
+    }
+
+    d->start(); // 开启线程，执行操作
 }
 
 void UpdateJob::doWork()
@@ -372,8 +385,8 @@ void UpdateJob::doWork()
         // 调用更新函数
         PluginFinishType eType = pWriteInterface->updateArchiveData(m_stOptions);
 
-        if (!(pWriteInterface->waitForFinished())) {
-            slotFinished(eType);
-        }
+        //if (!(pWriteInterface->waitForFinished())) {
+        slotFinished(eType);
+        //}
     }
 }

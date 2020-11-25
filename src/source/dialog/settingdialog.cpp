@@ -18,6 +18,36 @@ DGUI_USE_NAMESPACE
 SettingDialog::SettingDialog(QWidget *parent):
     DSettingsDialog(parent)
 {
+    m_associtionList << "file_association.file_association_type.x-7z-compressed"
+                     << "file_association.file_association_type.x-archive"
+                     << "file_association.file_association_type.x-bcpio"
+                     << "file_association.file_association_type.x-bzip"
+                     << "file_association.file_association_type.x-cpio"
+                     << "file_association.file_association_type.x-cpio-compressed"
+                     << "file_association.file_association_type.vnd.debian.binary-package"
+                     << "file_association.file_association_type.gzip"
+                     << "file_association.file_association_type.x-java-archive"
+                     << "file_association.file_association_type.x-lzma"
+                     << "file_association.file_association_type.vnd.ms-cab-compressed"
+                     << "file_association.file_association_type.vnd.rar"
+                     << "file_association.file_association_type.x-rpm"
+                     << "file_association.file_association_type.x-sv4cpio"
+                     << "file_association.file_association_type.x-sv4crc"
+                     << "file_association.file_association_type.x-tar"
+                     << "file_association.file_association_type.x-bzip-compressed-tar"
+                     << "file_association.file_association_type.x-compressed-tar"
+                     << "file_association.file_association_type.x-lzip-compressed-tar"
+                     << "file_association.file_association_type.x-lzma-compressed-tar"
+                     << "file_association.file_association_type.x-tzo"
+                     << "file_association.file_association_type.x-xz-compressed-tar"
+                     << "file_association.file_association_type.x-tarz"
+                     << "file_association.file_association_type.x-xar"
+                     << "file_association.file_association_type.x-xz"
+                     << "file_association.file_association_type.zip"
+                     << "file_association.file_association_type.x-cd-image"
+                     << "file_association.file_association_type.x-iso9660-appimage"
+                     << "file_association.file_association_type.x-source-rpm";
+
     initUI();
     initConnections();
 }
@@ -54,6 +84,11 @@ QString SettingDialog::isAutoDeleteArchive()
     return m_deleteArchiveOption->value().toString();
 }
 
+bool SettingDialog::isAssociatedType(QString mime)
+{
+    return m_settings->option("file_association.file_association_type." + mime.remove("application/"))->value().toBool();
+}
+
 void SettingDialog::initUI()
 {
     createSettingButton();
@@ -63,19 +98,13 @@ void SettingDialog::initUI()
     // 通过json文件创建DSettings对象
     m_settings = DSettings::fromJsonFile(":assets/data/deepin-compressor.json");
 
-    // 其他路径好像无效...
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    //    const QString confDir = "/home/chenglu/Desktop/refactor";
+
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
-    //    QDir dir(confDir);
-    //    if (!dir.exists()) {
-    //        dir.mkpath(confDir);
-    //    }
 
     // 创建设置项存储后端
     auto backend = new QSettingBackend(confPath, this);
     m_settings->setBackend(backend);
-
 
     // 通过DSettings对象构建设置界面
     updateSettings(m_settings);
@@ -296,21 +325,33 @@ void SettingDialog::createDeleteBox()
 
 void SettingDialog::slotSettingsChanged(const QString &key, const QVariant &value)
 {
-    qDebug() << "click reset button";
+    qDebug() << "slotSettingsChanged:  " << key;
+    qDebug() << value;
 }
 
 void SettingDialog::slotClickSelectAllButton()
 {
-    qDebug() << "click select all button";
+    foreach (QString key, m_associtionList) {
+        m_settings->setOption(key, true);
+    }
 }
 
 void SettingDialog::slotClickCancelSelectAllButton()
 {
-    qDebug() << "click cancel select all button";
+    foreach (QString key, m_associtionList) {
+        m_settings->setOption(key, false);
+    }
 }
 
 void SettingDialog::slotClickRecommendedButton()
 {
-    qDebug() << "click recommended button";
+    foreach (QString key, m_associtionList) {
+        if (key == "file_association.file_association_type.x-cd-image"
+                || key == "file_association.file_association_type.x-iso9660-appimage"
+                || key == "file_association.file_association_type.x-source-rpm") {
+            m_settings->setOption(key, false);
+        } else {
+            m_settings->setOption(key, true);
+        }
+    }
 }
-

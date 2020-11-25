@@ -141,17 +141,6 @@ private:
      */
     bool moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options);
 
-    /**
-     * @brief updateArchive 追加、删除之后更新压缩包数据
-     */
-    void updateArchive();
-
-    /**
-     * @brief updateArchiveEntry 更新追加压缩、删除之后的每一项
-     * @param file 文件
-     */
-    void updateArchiveEntry(FileEntry &file);
-
 private slots:
     /**
      * @brief readStdout  读取命令行输出
@@ -199,7 +188,7 @@ private:
     bool m_isTar7z = false; // 是否是tar.7z文件
     qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
     QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
-    QString m_rootEntry = QString(); // 追加压缩文件夹的时候记录上一层节点
+    QString m_rootEntry; // 追加压缩文件夹的时候记录上一层节点
 };
 
 #endif // CLIINTERFACE_H

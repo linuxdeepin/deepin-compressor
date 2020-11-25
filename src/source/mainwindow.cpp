@@ -370,7 +370,7 @@ void MainWindow::calFileSizeByThread(const QString &path)
     if (!dir.exists())
         return;
     // 获得文件夹中的文件列表
-    QFileInfoList list = dir.entryInfoList();
+    QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
     int i = 0;
     do {
         QFileInfo fileInfo = list.at(i);
@@ -846,6 +846,7 @@ void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType e
     }
 
     refreshPage();
+
     PERF_PRINT_END("POINT-03");
     PERF_PRINT_END("POINT-04");
     PERF_PRINT_END("POINT-05");
@@ -1015,7 +1016,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pLoadingPage->setDes(tr("Updating, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
-        refreshPage();
     }
     break;
     // 加载压缩包数据
@@ -1084,7 +1084,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pLoadingPage->setDes(tr("Updating, please wait..."));
         m_pLoadingPage->startLoading();
         m_ePageID = PI_Loading;
-        refreshPage();
     }
     break;
     // 打开
@@ -1108,6 +1107,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     break;
     // 追加/删除更新
     case ArchiveJob::JT_Update: {
+        qDebug() << "更新结束";
         m_pLoadingPage->stopLoading();      // 停止更新
         m_ePageID = PI_UnCompress;
         m_pUnCompressPage->refreshDataByCurrentPathDelete();
@@ -1192,6 +1192,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
     // 设置更新选项
     m_stUpdateOptions.reset();
+    m_stUpdateOptions.strParentPath = options.strDestination;
     m_stUpdateOptions.eType = UpdateOptions::Add;
     ConstructAddOptions(listFiles);
 
@@ -1253,22 +1254,21 @@ void MainWindow::ConstructAddOptions(const QStringList &files)
 {
     foreach (QString file, files) {
         QFileInfo fileInfo(file);
-        QFile ss;
-        ss.size();
-        fileInfo.lastModified().toTime_t();
 
         FileEntry entry;
         entry.strFullPath = fileInfo.filePath();    // 文件全路径
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
+        entry.qSize = fileInfo.size();   // 大小
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+
         m_stUpdateOptions.listEntry << entry;
 
-        if (fileInfo.isFile()) {  // 如果为文件，直接获取大小
-            qint64 curFileSize = fileInfo.size();
+        if (!entry.isDirectory) {  // 如果为文件，直接获取大小
+            qint64 curFileSize = entry.qSize;
             m_stUpdateOptions.qSize += curFileSize;
-        } else if (fileInfo.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
-            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
+        } else {    // 如果是文件夹，递归获取所有子文件大小总和
+            QtConcurrent::run(this, &MainWindow::ConstructAddOptionsByThread, file);
         }
     }
 
@@ -1284,7 +1284,7 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
     if (!dir.exists())
         return;
     // 获得文件夹中的文件列表
-    QFileInfoList list = dir.entryInfoList();
+    QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
     int i = 0;
     do {
         QFileInfo fileInfo = list.at(i);
@@ -1297,22 +1297,21 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
         entry.strFullPath = fileInfo.filePath();    // 文件全路径
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
+        entry.qSize = fileInfo.size();   // 大小
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
-        m_stUpdateOptions.listEntry << entry;
 
         if (entry.isDirectory) {
+            mutex.lock();
+            m_stUpdateOptions.listEntry << entry;
+            mutex.unlock();
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
-            QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
+            QtConcurrent::run(this, &MainWindow::ConstructAddOptionsByThread, entry.strFullPath);
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小
-            qint64 curFileSize = fileInfo.size();
-#ifdef __aarch64__
-            if (maxFileSize_ < curFileSize) {
-                maxFileSize_ = curFileSize;
-            }
-#endif
+            qint64 curFileSize = entry.qSize;
             m_stUpdateOptions.qSize += curFileSize;
+            m_stUpdateOptions.listEntry << entry;
             mutex.unlock();
         }
 

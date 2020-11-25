@@ -90,10 +90,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     destPath = options.strTargetPath;
     if (destPath.endsWith("/")) {
         destPath.chop(1);
+        qDebug() << "解压目标路径 --- " << destPath;
     }
 
-    qDebug() << "解压目标路径 --- " << destPath;
-    QDir::setCurrent(destPath);
     if (!m_extractOptions.bAllExtract) {  // 提取部分文件
         m_files.clear();
         foreach (FileEntry entry, files) {
@@ -139,11 +138,16 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             }
 
             destPath = m_extractTempDir->path();
+            qDebug() << "提取临时路径 --- " << destPath;
         }
 
-        qDebug() << "提取临时路径 --- " << destPath;
-        QDir::setCurrent(destPath);
+    } else {
+        if (!QDir(destPath).exists()) {
+            QDir(destPath).mkpath(destPath);
+        }
     }
+
+    QDir::setCurrent(destPath);
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
                       m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword));
@@ -303,7 +307,75 @@ PluginFinishType CliInterface::addComment(const QString &/*comment*/)
 
 PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
 {
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    ArchiveData tempStArchiveData = DataManager::get_instance().archiveData();
+
     m_rootEntry = QString();
+    foreach (FileEntry entry, options.listEntry) {
+        if (options.eType == UpdateOptions::Delete) { // 删除
+            if (entry.isDirectory) { // 删除文件夹
+                foreach (FileEntry tempFile, tempStArchiveData.mapFileEntry) {
+                    // 在map中查找该文件下的文件并删除
+                    if (tempFile.strFullPath.startsWith(entry.strFullPath)) {
+                        stArchiveData.mapFileEntry.remove(tempFile.strFullPath);
+                    }
+                }
+
+                // 文件夹是第一层的数据
+                if (entry.strFullPath.endsWith(QLatin1Char('/')) && entry.strFullPath.count(QLatin1Char('/')) == 1) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
+                            stArchiveData.listRootEntry.removeAt(i);
+                        }
+                    }
+                }
+            } else { // 删除文件
+                stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中删除该文件
+                // 文件是第一层的数据
+                if (!entry.strFullPath.contains(QLatin1Char('/'))) {
+                    for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                        if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
+                            stArchiveData.listRootEntry.removeAt(i);
+                        }
+                    }
+                }
+            }
+        } else { // 追加压缩
+            QString destinationPath = options.strParentPath; // 追加目标路径
+            QFileInfo file(entry.strFullPath);
+
+            if (m_rootEntry == "") { // 获取所有追加文件的父目录
+                m_rootEntry = file.filePath().left(file.filePath().size() - file.fileName().size());
+            }
+
+            entry.strFullPath = destinationPath + entry.strFullPath.remove(m_rootEntry); // entry在压缩包中的全路径
+            if (file.isDir()) { // 文件夹
+                entry.strFullPath = entry.strFullPath + QDir::separator(); // 手动添加'/'
+                //entry.qSize = QDir(entry.strFullPath).entryInfoList().count(); // 获取文件夹大小为遍历文件夹获取文件夹下子文件的数目
+            } else {
+                entry.qSize = file.size(); // 文件大小
+            }
+
+            // 判断是否追加到第一层数据
+            if (destinationPath == "" && ((entry.strFullPath.count('/') == 1 && entry.strFullPath.endsWith('/')) || entry.strFullPath.count('/') == 0)) {
+                bool flag = true;
+                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
+                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一层数据中找到entry，不添加数据
+                        flag = false;
+                    }
+                }
+
+                if (flag) { // 在第一层数据中没有找到entry，在第一层数据中添加entry
+                    stArchiveData.listRootEntry.push_back(entry);
+                }
+            }
+
+            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 在map中插入数据
+        }
+    }
+
+    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 更新压缩包大小
+
     return PFT_Nomral;
 }
 
@@ -603,113 +675,6 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
     return true;
 }
 
-void CliInterface::updateArchive()
-{
-    foreach (FileEntry file, m_files) {
-        updateArchiveEntry(file);
-    }
-}
-
-void CliInterface::updateArchiveEntry(FileEntry &entry)
-{
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
-    ArchiveData tempStArchiveData = DataManager::get_instance().archiveData();
-
-    if (m_workStatus == WT_Delete) { // 删除
-        if (entry.isDirectory) { // 删除文件夹
-            foreach (FileEntry tempFile, tempStArchiveData.mapFileEntry) {
-                // 在map中查找该文件下的文件并删除
-                if (tempFile.strFullPath.startsWith(entry.strFullPath)) {
-                    stArchiveData.mapFileEntry.remove(tempFile.strFullPath);
-                }
-            }
-
-            // 文件夹是第一层的数据
-            if (entry.strFullPath.endsWith(QLatin1Char('/')) && entry.strFullPath.count(QLatin1Char('/')) == 1) {
-                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
-                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) {
-                        stArchiveData.listRootEntry.removeAt(i);
-                    }
-                }
-            }
-        } else { // 删除文件
-            stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中删除该文件
-            // 文件是第一层的数据
-            if (!entry.strFullPath.contains(QLatin1Char('/'))) {
-                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
-                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) {
-                        stArchiveData.listRootEntry.removeAt(i);
-                    }
-                }
-            }
-        }
-    } else {  // 追加压缩
-        QString destinationPath = (m_compressOptions.strDestination == nullptr) ? QString() : m_compressOptions.strDestination;
-        QFileInfo tmpFile(entry.strFullPath);
-
-        if (tmpFile.isDir()) { // 追加压缩文件夹
-            QFileInfoList lisfInfo = QDir(entry.strFullPath).entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden); // 获取当前目录下所有子文件
-
-            // 设置entry属性
-            entry.strFullPath = destinationPath + m_rootEntry + tmpFile.fileName() + QDir::separator(); // entry全路径
-            entry.isDirectory = true;
-            entry.qSize = lisfInfo.count();
-            entry.uLastModifiedTime = tmpFile.lastModified().toTime_t();
-            entry.strFileName = tmpFile.fileName();
-
-            if (destinationPath.isEmpty() && entry.strFullPath.count('/') == 1 && entry.strFullPath.endsWith('/')) {
-                if (stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) {
-                    // 追加压缩到第一层数据
-                    stArchiveData.listRootEntry.push_back(entry);
-                }
-            }
-
-            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
-//            updateArchiveEntry(entry); // 继续刷新文件夹内数据
-
-            foreach (QFileInfo info, lisfInfo) { // 插入文件夹下子文件数据
-                FileEntry tmpEntry;
-                tmpEntry.strFullPath = destinationPath + m_rootEntry + tmpFile.fileName() + QDir::separator() + info.fileName(); // 文件在压缩包内全路径
-                tmpEntry.strFileName = info.fileName(); // 文件名
-                tmpEntry.isDirectory = info.isDir();   // 是否是文件夹
-                tmpEntry.uLastModifiedTime = info.lastModified().toTime_t(); // 最后一次修改时间
-
-                if (tmpEntry.isDirectory) { // 文件夹
-                    // 文件夹显示子文件数目
-                    m_rootEntry = tmpFile.fileName() + QDir::separator(); // 记录当前entry的上一层节点
-                    tmpEntry.strFullPath += QDir::separator(); // 路径末尾添加'/'
-                    tmpEntry.qSize = QDir(info.filePath()).entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden).count(); //目录下文件数
-
-                    stArchiveData.mapFileEntry.insert(tmpEntry.strFullPath, tmpEntry);
-
-                    FileEntry dirEntry;
-                    dirEntry.strFullPath = info.filePath();
-                    updateArchiveEntry(dirEntry); // 继续刷新文件夹内数据
-                } else { // 文件
-                    // 文件直接显示大小
-                    tmpEntry.qSize = info.size();
-                    stArchiveData.mapFileEntry.insert(tmpEntry.strFullPath, tmpEntry); // 插入数据
-                }
-            }
-        } else {  // 追加压缩文件
-            entry.isDirectory = false;
-            entry.qSize = tmpFile.size();
-            entry.uLastModifiedTime = tmpFile.lastModified().toTime_t();
-            entry.strFileName = tmpFile.fileName();
-            entry.strFullPath = destinationPath + tmpFile.fileName();
-
-            if (destinationPath.isEmpty() && stArchiveData.mapFileEntry.find(entry.strFullPath) == stArchiveData.mapFileEntry.end()) {
-                // 追加压缩到第一层数据
-                stArchiveData.listRootEntry.push_back(entry);
-            }
-
-            stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 插入数据
-        }
-    }
-
-    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size();
-}
-
 void CliInterface::readStdout(bool handleAll)
 {
     Q_ASSERT(m_process);
@@ -772,10 +737,6 @@ void CliInterface::readStdout(bool handleAll)
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
-
-    if ((m_workStatus == WT_Add && m_process->program().length() < 7) || m_workStatus == WT_Delete) { // 追加压缩、删除之后更新数据
-        updateArchive();
-    }
 
     deleteProcess();
 

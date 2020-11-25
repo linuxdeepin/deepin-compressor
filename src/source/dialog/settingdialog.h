@@ -10,7 +10,7 @@
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-#define AUTO_DELETE_NEVER "Never" //解压后不删除源压缩文件
+#define AUTO_DELETE_NEVER "Never" //解压后不删除源压缩文件 QT_TR_NOOP("")
 #define AUTO_DELETE_ASK "Ask for confirmation" //解压后询问是否删除源压缩文件
 #define AUTO_DELETE_ALWAYS "Always" //解压后删除源压缩文件
 
@@ -50,6 +50,13 @@ public:
      * @return 表示自动删除 false表示不自动删除
      */
     QString isAutoDeleteArchive();
+
+    /**
+     * @brief isAssociatedType  是否是被关联压缩文件类型
+     * @param mime  压缩文件的mimetype
+     * @return
+     */
+    bool isAssociatedType(QString mime);
 
 private:
     /**
@@ -122,5 +129,4 @@ private:
     QString m_curpath;
     int m_index_last;
     QString m_autoDeleteArchive;    // 解压后删除压缩文件方式
-
 };

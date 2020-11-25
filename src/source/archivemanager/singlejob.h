@@ -242,6 +242,11 @@ public:
     ~UpdateJob() override;
 
     /**
+     * @brief start     开始
+     */
+    void start() override;
+
+    /**
      * @brief doWork    执行操作
      */
     void doWork() override;
