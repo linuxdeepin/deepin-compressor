@@ -827,26 +827,21 @@ void MainWindow::slotCompress(const QVariant &val)
     refreshPage();
 }
 
-void MainWindow::slotJobFinshed()
+void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
-    ArchiveJob *pJob = ArchiveManager::get_instance()->archiveJob();
-    if (pJob == nullptr) {
-        return;
-    }
+    qDebug() << "结束类型：" << eFinishType << "****错误类型" << eErrorType;
 
-    qDebug() << "结束类型：" << pJob->m_eFinishedType << "****错误类型" << pJob->m_eErrorType;
-
-    switch (pJob->m_eFinishedType) {
+    switch (eFinishType) {
     case PFT_Nomral:
-        handleJobNormalFinished(pJob->m_eJobType);  // 处理job正常结束
+        handleJobNormalFinished(eJobType);  // 处理job正常结束
         break;
     // 用户取消操作
     case PFT_Cancel:
-        handleJobCancelFinished(pJob->m_eJobType);  // 处理job取消结束
+        handleJobCancelFinished(eJobType);  // 处理job取消结束
         break;
     // 错误处理
     case PFT_Error:
-        handleJobErrorFinished(pJob->m_eJobType, pJob->m_eErrorType);   // 处理job错误结束
+        handleJobErrorFinished(eJobType, eErrorType);   // 处理job错误结束
         break;
     }
 

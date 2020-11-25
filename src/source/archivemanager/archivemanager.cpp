@@ -76,10 +76,6 @@ ArchiveManager *ArchiveManager::get_instance()
     return m_instance;
 }
 
-ArchiveJob *ArchiveManager::archiveJob()
-{
-    return m_pArchiveJob;
-}
 
 void ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive/*, bool bBatch*/)
 {
@@ -268,15 +264,17 @@ void ArchiveManager::cancelOperation()
 
 void ArchiveManager::slotJobFinished()
 {
-    // 先用临时的指针记录job，然后信号处理结束之后释放，防止中途m_pArchiveJob改变了
-    ArchiveJob *pTempJob = m_pArchiveJob;
+    if (m_pArchiveJob) {
+        // 获取结束结果
+        ArchiveJob::JobType eJobType = m_pArchiveJob->m_eJobType;
+        PluginFinishType eFinishType = m_pArchiveJob->m_eFinishedType;
+        ErrorType eErrorType = m_pArchiveJob->m_eErrorType;
 
-    // 发送结束信号
-    emit signalJobFinished();
+        // 释放job
+        m_pArchiveJob->deleteLater();
+        m_pArchiveJob = nullptr;
 
-    // 释放job
-    if (pTempJob != nullptr) {
-        pTempJob->deleteLater();
-        pTempJob = nullptr;
+        // 发送结束信号
+        emit signalJobFinished(eJobType, eFinishType, eErrorType);
     }
 }

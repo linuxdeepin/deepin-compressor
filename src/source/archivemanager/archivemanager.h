@@ -42,9 +42,6 @@ public:
      */
     static ArchiveManager *get_instance(void);
 
-
-    ArchiveJob *archiveJob();
-
     /**
      * @brief createArchive     创建压缩包
      * @param files             待压缩文件
@@ -139,9 +136,12 @@ Q_SIGNALS:
     void signalError(ErrorType eErrorType);
 
     /**
-     * @brief signalFinished    操作结束信号
+     * @brief signalJobFinished     操作结束信号
+     * @param eJobType            job类型
+     * @param eFinishType           结束类型
+     * @param eErrorType            错误类型
      */
-    void signalJobFinished();
+    void signalJobFinished(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType);
 
     /**
      * @brief signalprogress    进度信号

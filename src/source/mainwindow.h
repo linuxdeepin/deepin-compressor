@@ -238,8 +238,11 @@ private Q_SLOTS:
 
     /**
      * @brief slotJobFinshed    操作结束处理
+     * @param eJobType            job类型
+     * @param eFinishType           结束类型
+     * @param eErrorType            错误类型
      */
-    void slotJobFinshed();
+    void slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType);
 
     /**
      * @brief slotUncompressClicked     解压按钮点击，执行解压操作
