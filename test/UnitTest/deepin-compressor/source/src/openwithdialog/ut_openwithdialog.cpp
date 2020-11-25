@@ -31,7 +31,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString str = "../tests/UnitTest/regress/new.zip";
+        QString str = "../test/UnitTest/regress/new.zip";
         m_tester = new OpenWithDialog(DUrl(str));
         m_tester->exec();
     }
@@ -52,22 +52,22 @@ TEST_F(TestOpenWithDialog, initTest)
 TEST_F(TestOpenWithDialog, testaddMenuOpenAction)
 {
     QMenu menu;
-    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../tests/UnitTest/regress/new.zip", &menu);
+    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
 }
 
 TEST_F(TestOpenWithDialog, testchooseOpen)
 {
     QMenu menu;
-    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../tests/UnitTest/regress/new.zip", &menu);
+    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
 
     if (listAction.count() > 0) {
-        OpenWithDialog::chooseOpen(listAction[0]->text(), "../tests/UnitTest/regress/new.zip");
+        OpenWithDialog::chooseOpen(listAction[0]->text(), "../test/UnitTest/regress/new.zip");
     }
 }
 
 TEST_F(TestOpenWithDialog, testincludePercentFile)
 {
-    OpenWithDialog::includePercentFile("../tests/UnitTest/regress/new.zip");
+    OpenWithDialog::includePercentFile("../test/UnitTest/regress/new.zip");
 }
 
 TEST_F(TestOpenWithDialog, testSetShowType)

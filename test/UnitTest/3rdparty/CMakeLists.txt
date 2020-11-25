@@ -7,7 +7,7 @@ project(${EXE_NAME}_test)
 ADD_COMPILE_OPTIONS(-fno-access-control)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 
-add_subdirectory(cli7zplugin)
+#add_subdirectory(cli7zplugin)
 
 add_subdirectory(clirarplugin)
 

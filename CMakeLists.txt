@@ -61,9 +61,9 @@ add_subdirectory(3rdparty)
 
 add_subdirectory(deepin-compressor)
 
-option(USE_TEST "UT" OFF)
+option(USE_TEST "UT" ON)
 if (USE_TEST)
-    add_subdirectory(tests)
+    add_subdirectory(test)
 endif(USE_TEST)
 
 set(CMAKE_INSTALL_PREFIX /usr)

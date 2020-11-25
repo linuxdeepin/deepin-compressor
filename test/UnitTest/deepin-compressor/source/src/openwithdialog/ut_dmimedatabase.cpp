@@ -51,12 +51,12 @@ TEST_F(TestDMimeDatabase, initTest)
 
 TEST_F(TestDMimeDatabase, testmimeTypeForFile001)
 {
-    QString strFileName = "../tests/UnitTest/regress/new.zip";
+    QString strFileName = "../test/UnitTest/regress/new.zip";
     m_tester->mimeTypeForFile(strFileName);
 }
 
 TEST_F(TestDMimeDatabase, testmimeTypeForFile002)
 {
-    QString strFileName = "../tests/UnitTest/regress/new.zip";
+    QString strFileName = "../test/UnitTest/regress/new.zip";
     m_tester->mimeTypeForFile(QFileInfo(strFileName));
 }
