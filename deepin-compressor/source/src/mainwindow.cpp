@@ -1490,6 +1490,7 @@ void MainWindow::refreshPage()
 //add calculate size of selected files
 void MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
+    m_pProgess->pInfo()->getTotalSize() = 0;
     // 循环选中文件，计算文件总大小
     foreach (QString file, files) {
         QFileInfo fi(file);

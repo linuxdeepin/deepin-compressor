@@ -698,6 +698,10 @@ bool CompressSetting::checkFilePermission(const QString &path)
 void CompressSetting::setSelectedFileSize(qint64 size)
 {
     m_getFileSize = size;
+    if (m_splitnumedit != nullptr) {
+        QString strSize = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小（包含单位）
+        m_splitnumedit->setToolTip(tr("Total size: %1").arg(strSize));
+    }
 }
 
 /**
