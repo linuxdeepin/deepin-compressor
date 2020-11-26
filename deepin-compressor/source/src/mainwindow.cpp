@@ -2791,7 +2791,18 @@ void MainWindow::slotExtractionDone(KJob *job)
         } else if (KJob::OpenFailedError == errorCode) {
             m_pCompressFail->setFailStrDetail(tr("Failed to open the archive: %1")); // 无法打开压缩文件
         } else if (KJob::WrongPsdError == errorCode) {
-            m_pCompressFail->setFailStrDetail(tr("Wrong password") + "," + tr("Unable to extract")); // 密码错误
+            if (m_ePageID == PAGE_LOADING && m_operationtype == Operation_TempExtract) {
+		// 打开解压列表加密文件密码错误使用tips提示密码错误
+                if (errorCode == KJob::WrongPsdError) {
+                    m_ePageID = PAGE_UNZIP; // 回到解压列表界面
+                    refreshPage();
+                    QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+                    this->sendMessage(icon, tr("Wrong password"));
+                    return;
+                }
+            } else {
+                m_pCompressFail->setFailStrDetail(tr("Wrong password") + "," + tr("Unable to extract")); // 密码错误
+            }
         }
 
         m_ePageID = PAGE_UNZIP_FAIL;

@@ -803,7 +803,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
                         continue;
                     } else if (query.responseCancelled()) {
                         emit cancelled();
-                        emit finished(true);
+//                        emit finished(true);
                         return false;
                     }
                 } else if (skipAll) {
@@ -1427,7 +1427,8 @@ bool CliInterface::handleLine(const QString &line)
     // 处理命令行输出提示
     if (m_operationMode == Extract) {
         if (isPromptMultiPassword(line)) { // rar多密码，提示是否使用上一次输入的密码
-            writeToProcess(QString("N" + QLatin1Char('\n')).toLocal8Bit()); // 选择N，不使用上一次的密码
+            writeToProcess(QString("Y" + QLatin1Char('\n')).toLocal8Bit()); // 选择Y，使用上一次的密码
+            m_replaceLine.clear();
         }
 
         if (isPasswordPrompt(line)) {
