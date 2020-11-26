@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
         if (file.contains("file://")) {
             file.remove("file://");
         }
-
         newfilelist.append(file);
     }
 
@@ -151,6 +150,7 @@ int main(int argc, char *argv[])
     app.setProductIcon(QIcon::fromTheme("deepin-compressor"));
     app.setApplicationVersion(VERSION);
     app.setProductName(DApplication::translate("Main", "Archive Manager"));
+    app.setApplicationDisplayName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
     DApplicationSettings settings(&app);
 
