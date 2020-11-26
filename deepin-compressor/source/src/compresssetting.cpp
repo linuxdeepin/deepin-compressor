@@ -239,6 +239,7 @@ void CompressSetting::InitUI()
     // 注释
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
+    m_pCommentEdt->setTabChangesFocus(true); //使用tab按键切换焦点功能
 //    m_pCommentEdt->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
 
     QVBoxLayout *typeLayout = new QVBoxLayout;

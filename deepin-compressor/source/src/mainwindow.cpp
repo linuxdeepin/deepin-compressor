@@ -5286,6 +5286,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         // 显示注释内容的控件
         DTextEdit *commentTextedit = new DTextEdit(commentDrawer);
+        commentTextedit->setTabChangesFocus(true); //使用tab按键切换焦点功能
         bool isReadOnly = false;
         if (determineMimeType(m_strLoadfile).name() == "application/zip") { // 只有zip格式支持修改注释(注:zip分卷也不支持修改注释)
             if (m_strLoadfile.endsWith(".zip")) {
