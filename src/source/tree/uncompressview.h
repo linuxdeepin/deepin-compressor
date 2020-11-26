@@ -162,15 +162,6 @@ private:
      */
     void calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize);
 
-//    /**
-//     * @brief handleAddFiles    处理追加压缩文件
-//     * @param fileInfo          文件数据
-//     * @param strFilePath       文件路径
-//     * @param bApplyAll         是否全部应用
-//     * @param bOverwrite        是否替换
-//     */
-//    void handleAddFiles(const QFileInfo &fileInfo, const QString &strFilePath, bool &bApplyAll, bool &bOverwrite);
-
 Q_SIGNALS:
     /**
      * @brief signalExtract2Path    提取压缩包中文件

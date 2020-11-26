@@ -198,8 +198,8 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
             m_iLevel++;
             m_strCurrentPath = entry.strFullPath;
-            refreshDataByCurrentPath(); 	// 刷新数据
-            resizeColumnWidth();        	// 重置列宽
+            refreshDataByCurrentPath();     // 刷新数据
+            resizeColumnWidth();            // 重置列宽
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
             sortByColumn(0);
@@ -474,27 +474,6 @@ void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64
         }
     }
 }
-
-//void UnCompressView::handleAddFiles(const QFileInfo &fileInfo, const QString &strFilePath, bool &bApplyAll, bool &bOverwrite)
-//{
-//    if (fileInfo.isDir()) {
-//        // 文件夹处理所有子文件
-//        QFileInfoList listChild = QDir(fileInfo.filePath()).entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
-//        for (int i = 0; i < listChild.count(); ++i) {
-//            handleAddFiles(QFileInfo(listChild[i]), strFilePath, bApplyAll, bOverwrite);
-//        }
-//    } else {
-//        // 文件判断是否有同名存在
-//        QString strLocalFile = fileInfo.filePath();
-//        QString strTempName = getCurPath() + strLocalFile.remove(0, strFilePath.length() + 1);
-
-//        ArchiveData stArchiveData = DataManager::get_instance().archiveData();
-//        if (stArchiveData.mapFileEntry.find(strTempName) != stArchiveData.mapFileEntry.end()) {
-//            OverwriteQueryDialog dialog(this);
-//            dialog.showDialog(strTempName);
-//        }
-//    }
-//}
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
 {

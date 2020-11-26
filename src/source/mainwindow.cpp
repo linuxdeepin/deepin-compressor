@@ -371,16 +371,11 @@ void MainWindow::calFileSizeByThread(const QString &path)
         return;
     // 获得文件夹中的文件列表
     QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
-    int i = 0;
-    do {
-        QFileInfo fileInfo = list.at(i);
-        if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") {
-            i++;
-            continue;
-        }
 
-        bool bisDir = fileInfo.isDir();
-        if (bisDir) {
+    for (int i = 0; i < list.count(); ++i) {
+        QFileInfo fileInfo = list.at(i);
+
+        if (fileInfo.isDir()) {
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
         } else {
@@ -395,9 +390,7 @@ void MainWindow::calFileSizeByThread(const QString &path)
             m_stCompressParameter.qSize += curFileSize;
             mutex.unlock();
         }
-
-        i++;
-    } while (i < list.size());
+    }
 }
 
 void MainWindow::setTitleButtonStyle(bool bVisible, DStyle::StandardPixmap pixmap)
@@ -1285,13 +1278,9 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
         return;
     // 获得文件夹中的文件列表
     QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
-    int i = 0;
-    do {
+
+    for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);
-        if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") {
-            i++;
-            continue;
-        }
 
         FileEntry entry;
         entry.strFullPath = fileInfo.filePath();    // 文件全路径
@@ -1309,14 +1298,11 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小
-            qint64 curFileSize = entry.qSize;
-            m_stUpdateOptions.qSize += curFileSize;
+            m_stUpdateOptions.qSize += entry.qSize;
             m_stUpdateOptions.listEntry << entry;
             mutex.unlock();
         }
-
-        i++;
-    } while (i < list.size());
+    }
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
