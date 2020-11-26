@@ -2760,6 +2760,9 @@ void MainWindow::slotExtractionDone(KJob *job)
         if (m_operationtype == Operation_SingleExtract || m_operationtype == Operation_DRAG) { // 如果是提取或者拖拽
             if (errorCode == KJob::UserSkiped) {
                 m_pCompressSuccess->setstringinfo(tr("Skip all files")); // 跳过所有文件
+            } else if (errorCode == KJob::WrongPsdError) { // 密码错误，tips提示密码错误
+                QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+                this->sendMessage(icon, tr("Wrong password"));
             } else {
                 m_pProgressdialog->setFinished(m_strDecompressFilePath);
             }

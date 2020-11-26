@@ -788,6 +788,20 @@ bool CliRarPlugin::handleFileExistsLine(const QString &line)
     }
 }
 
+bool CliRarPlugin::handlePromptMultiPasswordLine(const QString &line)
+{
+    // 拼接命令行内容
+    if (!isPromptMultiPasswordLine(line) && (line.contains("- u") || line.endsWith("[A]ll ")/* || (line.length() > 1 && line.length() < 6)*/)) {
+        m_replaceLine += line;
+    }
+
+    if (isPromptMultiPasswordLine(m_replaceLine) || isPromptMultiPasswordLine(line)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool CliRarPlugin::isPromptEnterPwdLine(const QString &line)
 {
     return line.startsWith(QLatin1String("Enter password (will not be echoed) for"));
@@ -804,6 +818,11 @@ bool CliRarPlugin::isPromptFileExistsLine(const QString &line)
     return (line.startsWith(QLatin1String("Would you like to replace the existing file ")) || // unrar 5
             line.contains(QLatin1String(" already exists. Overwrite it"))); // unrar 3 & 4
 
+}
+
+bool CliRarPlugin::isPromptMultiPasswordLine(const QString &line)
+{
+    return line.contains("use current password ? [Y]es, [N]o, [A]ll");
 }
 
 bool CliRarPlugin::isPasswordPrompt(const QString &line)
@@ -875,7 +894,18 @@ bool CliRarPlugin::isLocked() const
 
 bool CliRarPlugin::isPromptMultiPassword(const QString &line)
 {
-    return line.contains("use current password ? [Y]es, [N]o, [A]ll");
+//    return line.contains("use current password ? [Y]es, [N]o, [A]ll");
+    if (handlePromptMultiPasswordLine(line)) {
+//        if (m_operationMode == Extract) {
+//            qDebug() << "line  " << line;
+//            qDebug() << "m_replaceLine " << m_replaceLine;
+//        }
+
+//        m_replaceLine.clear();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void CliRarPlugin::showEntryListFirstLevel(const QString &directory)

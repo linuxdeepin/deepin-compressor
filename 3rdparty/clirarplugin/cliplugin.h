@@ -85,9 +85,17 @@ private:
      */
     bool handleFileExistsLine(const QString &line);
 
+    /**
+     * @brief handlePromptMultiPasswordLine 处理提示多密码是否使用上一次输入密码的命令行内容被截断
+     * @param line
+     * @return
+     */
+    bool handlePromptMultiPasswordLine(const QString &line);
+
     bool isPromptEnterPwdLine(const QString &line);  // 提示需要输入密码
     bool isPromptIncorrectPwdLine(const QString &line);  // 提示密码错误
     bool isPromptFileExistsLine(const QString &line);  // 提示已存在同名文件
+    bool isPromptMultiPasswordLine(const QString &line);  // 提示多密码是否使用上一次密码
 
 private:
     QStringList m_unrar4Details;

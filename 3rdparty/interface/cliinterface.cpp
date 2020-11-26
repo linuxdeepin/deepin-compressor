@@ -647,7 +647,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     //            }
     //        }
         } else if (this->extractPsdStatus == Checked) {
-        } else */if (this->extractPsdStatus == Canceled) {
+        } else */
+    if (this->extractPsdStatus == Canceled) {
         if (ifReplaceTip == false) {
             //            qDebug()<<"==========删除临时文件";
             if (this->m_extractDestDir == "" || this->destDirName == "") {
@@ -659,6 +660,18 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
                 }
             }
         }
+    }
+
+    if (m_extractionOptions.isDragAndDropEnabled()) { // 提取或是解压列表向外拖拽文件
+        const bool droppedFilesMoved = moveDroppedFilesToDest(m_extractedFiles, m_extractDestDir); // 提取操作，将提取到临时路径的文件移动到提取目标路径
+        if (!droppedFilesMoved) {
+            cleanUpExtracting();
+            emit error("Wrong password.");
+//            emit finished(false);
+            return;
+        }
+
+        cleanUpExtracting();
     }
 
     if (m_exitCode == 2 || m_exitCode == 3 || m_exitCode == 255) {
@@ -701,15 +714,15 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         }
     }
 
-    if (m_extractionOptions.isDragAndDropEnabled()) {
-        const bool droppedFilesMoved = moveDroppedFilesToDest(m_extractedFiles, m_extractDestDir);
-        if (!droppedFilesMoved) {
-            cleanUpExtracting();
-            return;
-        }
+//    if (m_extractionOptions.isDragAndDropEnabled()) {
+//        const bool droppedFilesMoved = moveDroppedFilesToDest(m_extractedFiles, m_extractDestDir);
+//        if (!droppedFilesMoved) {
+//            cleanUpExtracting();
+//            return;
+//        }
 
-        cleanUpExtracting();
-    }
+//        cleanUpExtracting();
+//    }
 
     // #395939: make sure we *always* restore the old working dir.
     restoreWorkingDirExtraction();
@@ -749,6 +762,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
     QDir finalDestDir(finalDest);
     qDebug() << "Setting final dir to" << finalDest;
 
+    bool moveSuccess = true;
     bool overwriteAll = false;
     bool skipAll = false;
 
@@ -765,7 +779,7 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
             }
         } else {
             // If destination file exists, prompt the user.
-            if (absDestEntry.exists()) {
+            if (absDestEntry.exists() && absSourceEntry.exists()) {
                 qDebug() << "File" << absDestEntry.absoluteFilePath() << "exists.";
                 if (!skipAll && !overwriteAll) {
                     OverwriteQuery query(absDestEntry.absoluteFilePath());
@@ -810,14 +824,15 @@ bool CliInterface::moveDroppedFilesToDest(const QVector<Archive::Entry *> &files
             if (!QFile(absSourceEntry.absoluteFilePath()).rename(absDestEntry.absoluteFilePath())) {
                 qDebug() << "Failed to move file" << absSourceEntry.filePath() << "to final destination.";
                 //emit error(tr("Could not move the extracted file to the destination directory."));
-                emit error("Could not move the extracted file to the destination directory.");
-                emit finished(false);
-                return false;
+                //                emit error("Could not move the extracted file to the destination directory.");
+                //                emit finished(false);
+                //                return false;
+                moveSuccess = false;
             }
         }
     }
 
-    return true;
+    return moveSuccess;
 }
 
 bool CliInterface::isEmptyDir(const QDir &dir)
@@ -1494,10 +1509,10 @@ bool CliInterface::handleLine(const QString &line)
         if (isWrongPasswordMsg(line)) {
             m_replaceLine.clear();
             setPassword(QString());
-            if (m_process && m_process->program().at(0).contains("7z")) {
-                emit error("Wrong password.");
-                emit finished(false);
-            }
+//            if (m_process && m_process->program().at(0).contains("7z")) {
+//                emit error("Wrong password.");
+//                emit finished(false);
+//            }
         }
 
         return readExtractLine(line);
