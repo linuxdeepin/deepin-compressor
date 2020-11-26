@@ -138,7 +138,7 @@ MainWindow::~MainWindow()
             delete m_pMapGlobalWnd;
             m_pMapGlobalWnd = nullptr;
         }
-      
+
         if (this->m_pCurAuxInfo != nullptr) {
             QMap<QString, OpenInfo *>::iterator iter;
             for (iter = m_pCurAuxInfo->information.begin(); iter != m_pCurAuxInfo->information.end();) {
@@ -903,6 +903,7 @@ void MainWindow::initTitleBar()
 
     titlebar()->addWidget(left_frame, Qt::AlignLeft);
     titlebar()->setContentsMargins(0, 0, 0, 0);
+    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
 }
 
 //void MainWindow::setQLabelText(QLabel *label, const QString &text)
@@ -1157,13 +1158,20 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
     if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
         DWindowCloseButton *closebtn = this->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
         if (obj == this->titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
-            if (m_pTitleButton->isVisible()) {
+            if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
                 m_pTitleButton->setFocus(Qt::TabFocusReason);
+                return true;
+            } if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
+                m_pTitleCommentButton->setFocus(Qt::TabFocusReason);
                 return true;
             } else {
                 return false;
             }
-        } else if (obj->objectName() == "TitleButton") { //焦点顺序：标题栏按钮->标题栏设置按钮
+        } else if (obj->objectName() == "CommentButton") { //焦点顺序：标题栏按钮->标题栏设置按钮
+            titlebar()->setFocus(Qt::TabFocusReason);
+            //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
+            //  return  true;
+        } else if (obj->objectName() == "TitleButton" && !(m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled())) { //焦点顺序：标题栏按钮->标题栏设置按钮
             titlebar()->setFocus(Qt::TabFocusReason);
             //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
             //  return  true;
@@ -1218,7 +1226,10 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
     } else if (Qt::Key_Backtab == keyOfEvent) { //shift+tab 焦点顺序，与tab焦点顺序相反
         DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
         if (obj == optionbtn) {
-            if (m_pTitleButton->isVisible()) {
+            if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
+                m_pTitleCommentButton->setFocus(Qt::BacktabFocusReason);
+                return true;
+            } else if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
                 m_pTitleButton->setFocus(Qt::BacktabFocusReason);
                 return true;
             } else {
