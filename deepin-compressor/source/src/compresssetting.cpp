@@ -169,7 +169,7 @@ void CompressSetting::InitUI()
     m_savepath->setMinimumSize(260, 36);
 
     // 压缩方式
-    m_pCompressLevelLbl = new DLabel(tr("Compression method:"), this);
+    m_pCompressLevelLbl = new DLabel(tr("Compression method") + ":", this);
     m_pCompressLevelCmb = new CustomCombobox(this);
     m_pCompressLevelCmb->setMinimumSize(260, 36);
 

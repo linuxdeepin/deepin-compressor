@@ -222,7 +222,7 @@ void CommentProgressDialog::initUI()
 
     DLabel *label = new DLabel(this);
     label->setFixedHeight(20);
-    label->setText("Updating comment, please wait...");
+    label->setText(tr("Updating the comment..."));
 
     m_progressBar = new DProgressBar(this);
     m_progressBar->setFixedSize(350, 6);
