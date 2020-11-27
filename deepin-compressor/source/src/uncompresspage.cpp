@@ -444,10 +444,11 @@ int UnCompressPage::showEncryptionDialog()
     pPasswordEdit->setFixedHeight(36);
     pPasswordEdit->setVisible(false);
 
-    //隐藏密码时不能输入中文,显示密码时可以输入中文
-    connect(pPasswordEdit, &DPasswordEdit::echoModeChanged, pPasswordEdit, [&](bool echoOn) {
-        pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
-    });
+    // 暂时屏蔽明码时的输入法
+//    //隐藏密码时不能输入中文,显示密码时可以输入中文
+//    connect(pPasswordEdit, &DPasswordEdit::echoModeChanged, pPasswordEdit, [&](bool echoOn) {
+//        pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
+//    });
 
 
     if (determineMimeType(m_fileviewer->getLoadFilePath()).name() != "application/zip") {
