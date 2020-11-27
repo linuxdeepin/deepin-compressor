@@ -2792,7 +2792,7 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_pCompressFail->setFailStrDetail(tr("Failed to open the archive: %1")); // 无法打开压缩文件
         } else if (KJob::WrongPsdError == errorCode) {
             if (m_ePageID == PAGE_LOADING && m_operationtype == Operation_TempExtract) {
-		// 打开解压列表加密文件密码错误使用tips提示密码错误
+                // 打开解压列表加密文件密码错误使用tips提示密码错误
                 if (errorCode == KJob::WrongPsdError) {
                     m_ePageID = PAGE_UNZIP; // 回到解压列表界面
                     refreshPage();
@@ -2907,11 +2907,14 @@ void MainWindow::slotExtractionDone(KJob *job)
     } else if (Operation_NULL == m_operationtype) {
         qDebug() << "do nothing";
     } else if (m_ePageID == PAGE_UNZIPPROGRESS && errorCode == KJob::CancelError && m_operationtype == Operation_Extract) {
-        if (!m_bIsRightMenu) {
+        if (m_bIsRightMenu) {
+            slotquitApp(); // 右键解压到当前文件夹，关闭提示框退出应用
+        } else {
             m_ePageID = PAGE_UNZIP;
             refreshPage();
-            return;
         }
+
+        return;
     } else {
         if (m_convertType.size() == 0) {
             m_ePageID = PAGE_UNZIP_SUCCESS; // 无错误信息，解压成功，显示解压成功界面
@@ -2927,9 +2930,9 @@ void MainWindow::slotExtractionDone(KJob *job)
 
         // 文件已存在提示，点击右上角取消后，关闭应用
         // gitcommitID: 11008e52
-        if (errorCode == KJob::CancelError) {
-            slotquitApp();
-        }
+//        if (errorCode == KJob::CancelError) {
+//            slotquitApp();
+//        }
 
 //        refreshPage();
     }
