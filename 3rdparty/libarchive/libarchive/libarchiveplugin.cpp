@@ -130,7 +130,7 @@ bool LibarchivePlugin::doKill()
 
 bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
 {
-    emit sigExtractPwdCheckDown();
+    emit sigChangeExtractProgressPage();
     calDecompressSize();
 
     if (!initializeReader()) {

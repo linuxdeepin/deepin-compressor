@@ -614,7 +614,7 @@ ExtractJob::ExtractJob(const QVector<Archive::Entry *> &entries, const QString &
     mType = Job::ENUM_JOBTYPE::EXTRACTJOB;
     qDebug() << "ExtractJob job instance";
     connect(interface, &ReadOnlyArchiveInterface::sigExtractNeedPassword, this, &ExtractJob::sigExtractJobPassword, Qt::QueuedConnection);
-    connect(interface, &ReadOnlyArchiveInterface::sigExtractPwdCheckDown, this, &ExtractJob::slotExtractJobPwdCheckDown, Qt::QueuedConnection);
+    connect(interface, &ReadOnlyArchiveInterface::sigChangeExtractProgressPage, this, &ExtractJob::slotExtractJobPwdCheckDown, Qt::QueuedConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress, this, &ExtractJob::onProgress, Qt::ConnectionType::UniqueConnection);
     connect(interface, &ReadOnlyArchiveInterface::progress_filename, this, &ExtractJob::onProgressFilename, Qt::ConnectionType::UniqueConnection);
     connect(interface, &ReadOnlyArchiveInterface::userQuery, this, &ExtractJob::signalUserQuery);

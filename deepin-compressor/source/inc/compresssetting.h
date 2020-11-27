@@ -164,10 +164,10 @@ private:
     qint64 m_getFileSize;
     bool isSplitChecked = false;
 
-    DLabel *m_pCompressLevelLbl;       // 压缩方式选择项
-    CustomCombobox *m_pCompressLevelCmb;       // 压缩方式选择项
-    DLabel *m_pCommentLbl;
-    DTextEdit *m_pCommentEdt;       // 注释信息
+    DLabel *m_pCompressLevelLbl = nullptr;      // 压缩方式选择项
+    CustomCombobox *m_pCompressLevelCmb = nullptr;      // 压缩方式选择项
+    DLabel *m_pCommentLbl = nullptr;
+    DTextEdit *m_pCommentEdt = nullptr;     // 注释信息
 
 public:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;

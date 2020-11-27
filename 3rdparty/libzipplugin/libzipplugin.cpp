@@ -898,7 +898,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 //    }
 //    //检测完毕,如果密码正确或不需要密码，发送此信号，通知开始解压
 
-    emit sigExtractPwdCheckDown();
+    emit sigChangeExtractProgressPage();
 
     m_isckeckpsd = true;
     // Extract entries.

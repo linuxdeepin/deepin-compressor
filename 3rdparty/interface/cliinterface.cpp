@@ -109,6 +109,7 @@ bool CliInterface::list(bool isbatch)
 bool CliInterface::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory,
                                 const ExtractionOptions &options)
 {
+    emit sigChangeExtractProgressPage();
     qDebug() << "destination directory:" << destinationDirectory;
 //    this->extractPsdStatus = NotChecked;
 
@@ -204,11 +205,11 @@ bool CliInterface::extractFF(const QVector<Archive::Entry *> &files, const QStri
 //    bool ifNeedPsd = options.encryptedArchiveHint();
 
 //    if (!ifNeedPsd) {
-//        emit sigExtractPwdCheckDown();
+//        emit sigChangeExtractProgressPage();
 //    }
 
 //    if (options.isRightMenuExtractHere()) {
-//        //emit sigExtractPwdCheckDown();
+//        //emit sigChangeExtractProgressPage();
 //    } else {
 //        if (ifNeedPsd == false) {
 //            //don't need psd
