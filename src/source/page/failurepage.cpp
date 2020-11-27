@@ -39,6 +39,16 @@ FailurePage::~FailurePage()
 
 }
 
+void FailurePage::setFailuerDes(const QString &strDes)
+{
+    m_pFailureLbl->setText(strDes);
+}
+
+void FailurePage::setFailureDetail(const QString &strDetail)
+{
+    m_pDetailLbl->setText(strDetail);
+}
+
 void FailurePage::initUI()
 {
     //失败图标

@@ -188,6 +188,18 @@ private:
      */
     void ConstructAddOptionsByThread(const QString &path);
 
+    /**
+     * @brief showSuccessInfo   显示成功信息
+     * @param eSuccessInfo      成功信息
+     */
+    void showSuccessInfo(SuccessInfo eSuccessInfo);
+
+    /**
+     * @brief showErrorMessage  显示错误信息
+     * @param eErrorInfo        错误信息
+     */
+    void showErrorMessage(ErrorInfo eErrorInfo);
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;

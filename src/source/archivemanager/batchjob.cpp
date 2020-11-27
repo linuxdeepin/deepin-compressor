@@ -121,42 +121,55 @@ void BatchExtractJob::setExtractPath(const QString &strPath, bool bAutoCreatDir)
     m_bAutoCreatDir = bAutoCreatDir;
 }
 
-void BatchExtractJob::setArchiveFiles(const QStringList &listFile)
+bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
 {
     m_listFiles = listFile;
     m_qBatchTotalSize = 0;
     m_iArchiveCount = m_listFiles.count();
 
+    bool bResult = false;
     // 创建解压元素
     foreach (QString strFileName, listFile) {
         QFileInfo fileInfo(strFileName);
-        addExtractItem(fileInfo);
-        // 计算压缩包总大小
-        m_qBatchTotalSize += fileInfo.size();
+        if (addExtractItem(fileInfo)) {
+            bResult = true;
+            // 计算压缩包总大小
+            m_qBatchTotalSize += fileInfo.size();
+        }
     }
+
+    return bResult;
 }
 
-void BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
+bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 {
-    // 创建解压参数
-    ExtractionOptions stOptions;
-    stOptions.strTargetPath = m_strExtractPath;
-    if (m_bAutoCreatDir)
-        stOptions.strTargetPath += QDir::separator() + fileInfo.completeBaseName();
-    stOptions.qComressSize = fileInfo.size();
-    stOptions.bRightExtract = true;
-    stOptions.bAllExtract = true;
-    stOptions.bBatchExtract = true;
-
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.filePath());
-    ExtractJob *pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
-    connect(pExtractJob, &ExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
-    connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
-    connect(pExtractJob, &ExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
-    connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
 
-    addSubjob(pExtractJob);
+    if (pIface) {
+        // 创建解压参数
+        ExtractionOptions stOptions;
+        stOptions.strTargetPath = m_strExtractPath;
+        if (m_bAutoCreatDir)
+            stOptions.strTargetPath += QDir::separator() + fileInfo.completeBaseName();
+        stOptions.qComressSize = fileInfo.size();
+        stOptions.bRightExtract = true;
+        stOptions.bAllExtract = true;
+        stOptions.bBatchExtract = true;
 
+        pIface->setParent(this);    // 跟随BatchExtractJob释放
+        ExtractJob *pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
+        connect(pExtractJob, &ExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
+        connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
+        connect(pExtractJob, &ExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
+        connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
+
+        addSubjob(pExtractJob);
+
+        return true;
+    } 
+  
+    return false;
+    
 }
 
 void BatchExtractJob::slotHandleSingleJobProgress(double dPercentage)

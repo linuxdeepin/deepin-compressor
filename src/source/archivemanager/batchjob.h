@@ -104,15 +104,17 @@ public:
     /**
      * @brief setArchiveFiles       设置批量解压文件（先调用setExtractPath，再调用此函数）
      * @param listFile              文件名（全路径）
+     * @return                      返回结果
      */
-    void setArchiveFiles(const QStringList &listFile);
+    bool setArchiveFiles(const QStringList &listFile);
 
 private:
     /**
      * @brief addExtractItem    添加解压元素
      * @param fileInfo          压缩包文件数据
+     * @return                  返回结果
      */
-    void addExtractItem(const QFileInfo &fileInfo);
+    bool addExtractItem(const QFileInfo &fileInfo);
 
 Q_SIGNALS:
     /**

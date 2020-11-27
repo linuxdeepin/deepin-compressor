@@ -48,6 +48,7 @@ enum Progress_Type {
 enum Archive_OperationType {
     Operation_NULL, // 无操作
     Operation_Load, // 加载
+    Operation_Create, // 创建压缩包
     Operation_Extract, // 解压
     Operation_SingleExtract, // 提取
     //Operation_ExtractHere, // 解压到当前
@@ -78,13 +79,8 @@ enum Page_ID {
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度
     PI_ConvertProgress,     // 转换进度
-    PI_CompressSuccess,     // 压缩成功
-    PI_UnCompressSuccess,   // 解压成功
-    PI_ConvertSuccess,      // 转换成功
-    PI_CompressFailure,     // 压缩失败
-    PI_UnCompressFailure,   // 解压失败
-    PI_ConvertFailure,      // 转换失败
-    PI_LoadedFailure,       // 加载失败
+    PI_Success,             // 成功
+    PI_Failure,             // 失败
     PI_Loading,             // 加载
 };
 
@@ -138,5 +134,23 @@ struct UnCompressParameter {
 
 };
 Q_DECLARE_METATYPE(UnCompressParameter)
+
+// 成功界面显示的信息
+enum SuccessInfo {
+    SI_Compress,    // 压缩成功
+    SI_UnCompress,  // 解压成功
+};
+
+// 错误界面显示的信息
+enum ErrorInfo {
+    EI_NoPlugin,            // 无可用插件
+    EI_ArchiveOpenFailed,   // 压缩包打开失败
+    EI_ArchiveDamaged,   // 压缩包损坏
+    EI_ArchiveMissingVolume,   // 分卷包缺失
+    EI_WrongPasswordWhenLoad,       // 加载密码错误
+    EI_WrongPasswordWhenUnCompress,       // 解压密码错误
+    EI_LongFileName,        // 文件名过长
+    EI_CreatFileFailed,     // 创建文件失败
+};
 
 #endif // CUSTOMDATAINFO_H

@@ -48,52 +48,59 @@ public:
      * @param strDestination    文件存储在压缩包的路径（为空时，处于根目录）
      * @param options           压缩参数
      * @param bBatch            是否批量压缩（多路径）
+     * @return                  是否调用成功
      */
-    void createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive = false/*, bool bBatch = false*/);
+    bool createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive = false/*, bool bBatch = false*/);
 
     /**
      * @brief loadArchive           加载压缩包数据
      * @param strArchiveFullPath    压缩包全路径
+     * @return                      是否调用成功
      */
-    void loadArchive(const QString &strArchiveFullPath);
+    bool loadArchive(const QString &strArchiveFullPath);
 
     /**
      * @brief addFiles              向压缩包中添加文件
      * @param strArchiveFullPath    压缩包全路径
      * @param listSelEntry          压缩参数
+     * @return                      是否调用成功
      */
-    void addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions);
+    bool addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions);
 
     /**
      * @brief extractFiles    解压文件
      * @param strArchiveFullPath    压缩包全路径
      * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
      * @param options           解压参数
+     * @return                      是否调用成功
      */
-    void extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
+    bool extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
 
     /**
      * @brief extractFiles2Path     提取文件至指定目录
      * @param strArchiveFullPath        压缩包全路径
      * @param listSelEntry          选中的提取文件
      * @param stOptions             提取参数
+     * @return                      是否调用成功
      */
-    void extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
+    bool extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions);
 
     /**
      * @brief deleteFiles       删除压缩包中的文件
      * @param strArchiveFullPath    压缩包全路径
      * @param listSelEntry      当前选中的文件
+     * @return                      是否调用成功
      */
-    void deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry);
+    bool deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry);
 
     /**
      * @brief batchExtractFiles 批量解压
      * @param listFiles          压缩文件
      * @param strTargetPath     解压路径
      * @param bAutoCreatDir     是否自动创建文件夹
+     * @return                      是否调用成功
      */
-    void batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir);
+    bool batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir);
 
     /**
      * @brief openFile          打开压缩包中文件
@@ -101,29 +108,34 @@ public:
      * @param stEntry           待打开文件数据
      * @param strTargetPath     临时解压路径
      * @param strProgram        应用程序名
+     * @return                      是否调用成功
      */
-    void openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
+    bool openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram);
 
     /**
      * @brief updateArchiveCacheData    更新本地压缩包缓存数据
      * @param stOptions     更新选项
+     * @return                      是否调用成功
      */
-    void updateArchiveCacheData(const UpdateOptions &stOptions);
+    bool updateArchiveCacheData(const UpdateOptions &stOptions);
 
     /**
      * @brief pauseOperation    暂停操作
+     * @return                      是否调用成功
      */
-    void pauseOperation();
+    bool pauseOperation();
 
     /**
      * @brief continueOperation 继续操作
+     * @return                      是否调用成功
      */
-    void continueOperation();
+    bool continueOperation();
 
     /**
      * @brief cancelOperation   取消操作
+     * @return                      是否调用成功
      */
-    void cancelOperation();
+    bool cancelOperation();
 
 private:
 
@@ -181,6 +193,7 @@ private:
     ArchiveJob *m_pArchiveJob = nullptr;     // 当前操作指针
 
     ReadOnlyArchiveInterface *m_pInterface = nullptr;   // 当前插件指针（只存储load操作的interface，方便解压等操作）
+    ReadOnlyArchiveInterface *m_pTempInterface = nullptr;   // 存储job结束即需要删除的interface
 
     static QMutex m_mutex;//实例互斥锁。
     static QAtomicPointer<ArchiveManager> m_instance;   /*!<使用原子指针,默认初始化为0。*/

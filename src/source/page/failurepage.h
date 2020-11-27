@@ -37,6 +37,18 @@ public:
     explicit FailurePage(QWidget *parent = nullptr);
     ~FailurePage() override;
 
+    /**
+     * @brief setFailuerDes     设置失败描述
+     * @param strDes            描述内容
+     */
+    void setFailuerDes(const QString &strDes);
+
+    /**
+     * @brief setFailureDetail  设置失败先详细信息
+     * @param strDetail         失败详细信息
+     */
+    void setFailureDetail(const QString &strDetail);
+
 private:
     /**
      * @brief initUI    初始化界面

@@ -76,9 +76,11 @@ PluginFinishType LibzipPlugin::list()
     zip_error_init_with_code(&err, errcode);
 
     //某些特殊文件，如.crx用zip打不开，需要替换minizip
-    if (!archive) {
+    if (archive == nullptr) {
 //        m_bAllEntry = true;
 //        return minizip_list();
+        m_eErrorType = ET_ArchiveOpenError;
+        return PFT_Error;
     }
 
     // 获取文件压缩包文件数目
@@ -118,6 +120,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     if (archive == nullptr) {
         // 特殊包操作
         // return minizip_extractFiles(files, options);
+        m_eErrorType = ET_ArchiveOpenError;
+        return PFT_Error;
     }
 
     // 执行解压操作
