@@ -474,6 +474,7 @@ int UnCompressPage::showEncryptionDialog()
         } else {
             dialog.setFixedSize(QSize(380, 184));
             pPasswordEdit->setVisible(false);
+            pPasswordEdit->clear();     // 不勾选加密时，清空密码
         }
     });
 
