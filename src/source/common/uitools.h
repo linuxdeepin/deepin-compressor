@@ -131,7 +131,7 @@ public:
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
-private:
+public:
     static QStringList m_associtionlist;
 };
 

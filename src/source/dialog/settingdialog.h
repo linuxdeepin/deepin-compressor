@@ -84,6 +84,8 @@ private:
      */
     void createDeleteBox();
 
+    void writeConfbf();
+
 signals:
     /**
      * @brief sigResetPath    点击恢复默认按钮，恢复默认解压路径设置的信号
@@ -120,7 +122,7 @@ private slots:
 
 private:
     DSettings *m_settings;          //
-    QStringList m_associtionList;   //
+//    QStringList m_associtionList;   //
 
     DSettingsOption *m_customButtonOption;   // 按钮选项
     DSettingsOption *m_extractPathOption;     // 默认解压路径选项
@@ -129,4 +131,6 @@ private:
     QString m_curpath;
     int m_index_last;
     QString m_autoDeleteArchive;    // 解压后删除压缩文件方式
+
+    QMap<QString, QVariant> m_data;
 };

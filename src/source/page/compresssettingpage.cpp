@@ -42,6 +42,8 @@
 #include <QMimeDatabase>
 #include <QDebug>
 
+#include <cmath>
+
 TypeLabel::TypeLabel(QWidget *parent)
     : DLabel(parent)
 {
@@ -234,6 +236,15 @@ void CompressSettingPage::initUI()
     m_pListEncryptionLbl->setToolTip(tr("Support 7z type only"));   // 设置列表加密提示语
     m_pListEncryptionLbl->setEnabled(false);
 
+    // 待确认
+    m_pSplitValueEdt->setMinimumSize(260, 36);
+//    m_pSplitValueEdt->setSuffix("MB");
+    m_pSplitValueEdt->setRange(0.0, 1000000);
+    m_pSplitValueEdt->setSingleStep(0.1);
+    m_pSplitValueEdt->setDecimals(1);
+    m_pSplitValueEdt->setValue(0.0);
+    m_pSplitValueEdt->setSpecialValueText("");
+
     m_pCompressBtn->setMinimumSize(340, 36);    // 设置压缩按钮最小尺寸
 
     // 左侧布局
@@ -422,8 +433,6 @@ void CompressSettingPage::refreshCompressLevel(const QString &strType)
         for (int i = 0; i < listCompressLevel.count(); ++i) {
             m_pCompressLevelCkb->addItem(listCompressLevel[i]);
         }
-
-
     }
 
     if (bFirst) {
@@ -442,6 +451,92 @@ void CompressSettingPage::setCommentEnabled(bool bEnabled)
     // 注释不可用时,清除注释
     if (!bEnabled)
         m_pCommentEdt->clear();
+}
+
+bool CompressSettingPage::checkCompressOptionValid()
+{
+    if (!checkFileNameVaild(m_pFileNameEdt->text())) { // 检查文件名是否有效
+        showWarningDialog(tr("Invalid file name"));
+        return false;
+    }
+
+    QFileInfo fInfo(m_pSavePathEdt->text());
+    if ((m_pSavePathEdt->text().remove(" ")).isEmpty()) { // 检查是否已经选择保存路径
+        showWarningDialog(tr("Please enter the path"));
+        return false;
+    }
+
+    if (!fInfo.exists()) { // 检查选择保存路径是否存在
+        showWarningDialog(tr("The path does not exist, please retry"));
+        return false;
+    }
+
+    if (!(fInfo.isWritable() && fInfo.isExecutable())) { // 检查一选择保存路径是否有权限
+        showWarningDialog(tr("You do not have permission to save files here, please change and retry"));
+        return false;
+    }
+
+    if (m_pSplitCkb->isChecked()
+            && (fabs(m_pSplitValueEdt->value()) < std::numeric_limits<double>::epsilon()
+                || (((m_qFileSize / 1024 / 1024) / (m_pSplitValueEdt->value())) > 10))
+            && (m_strMimeType.contains("7z") || m_strMimeType.contains("zip"))) { // 最多允许分卷数量为200卷
+        showWarningDialog(tr("Too many volumes, please change and retry"));
+        return false;
+    }
+
+    bool filePermission;
+    for (int i = 0; i < m_listFiles.count(); i++) {
+        QFileInfo file(m_listFiles.at(i));
+        if (!file.exists()) {  // 待压缩文件已经不存在
+            filePermission = false;
+            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(UiTools::toShortString(file.fileName())));
+            return false;
+        }
+
+        if (file.isFile()) { // 检查文件是否可读
+            if (!file.isReadable()) {
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.fileName())));
+                return false;
+            }
+        } else if (file.isDir()) { // 检查文件夹和文件夹下子文件是否可读
+            if (!file.isReadable()) { // 文件夹
+                filePermission = false;
+                showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.fileName())));
+                return false;
+            } else { // 子文件
+                filePermission = checkFilePermission(file.absoluteFilePath());
+                if (!filePermission) {
+                    showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.fileName())));
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CompressSettingPage::checkFilePermission(const QString &path)
+{
+    bool permissionValid = true;
+    QDir dir(path);
+    QFileInfo fileInfo;
+
+    // 循环判断文件夹下的子文件是否可读
+    foreach (fileInfo, dir.entryInfoList()) {
+        if (!fileInfo.isReadable()) { // 文件不可读
+            permissionValid = false;
+            return permissionValid;
+        }
+    }
+
+    // 遍历文件夹下的子文件夹
+    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        permissionValid = checkFilePermission(path + QDir::separator() + subDir);
+    }
+
+    return permissionValid;
 }
 
 int CompressSettingPage::showWarningDialog(const QString &msg, const QString &strTitle)
@@ -489,6 +584,8 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
 
     DLabel *pContent = new DLabel(msg/*, dialog*/);
     pContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+    pContent->setWordWrap(true);
+
     pa = DApplicationHelper::instance()->palette(pContent);
     pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
     DFontSizeManager::instance()->bind(pContent, DFontSizeManager::T6, QFont::Medium);
@@ -610,8 +707,7 @@ void CompressSettingPage::slotSplitEdtEnabled()
 
 void CompressSettingPage::slotCompressClicked()
 {
-    if (!checkFileNameVaild(m_pFileNameEdt->text())) {
-        showWarningDialog(tr("Invalid file name"));
+    if (!checkCompressOptionValid()) {
         return;
     }
 
@@ -661,7 +757,6 @@ void CompressSettingPage::slotCompressClicked()
     }
 
     emit signalCompressClicked(QVariant::fromValue(compressInfo));
-
 }
 
 void CompressSettingPage::slotCommentTextChanged()
@@ -677,5 +772,4 @@ void CompressSettingPage::slotCommentTextChanged()
         cursor.setPosition(maxlen);
         m_pCommentEdt->setTextCursor(cursor);
     }
-
 }

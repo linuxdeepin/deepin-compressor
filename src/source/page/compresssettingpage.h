@@ -142,6 +142,19 @@ private:
     void setCommentEnabled(bool bEnabled);
 
     /**
+     * @brief checkCompressOptionValid 检查压缩设置选项是否有效
+     * @return
+     */
+    bool checkCompressOptionValid();
+
+    /**
+     * @brief CompressSetting::checkFilePermission 检查文件权限
+     * @param path
+     * @return
+     */
+    bool checkFilePermission(const QString &path);
+
+    /**
      * @brief showWarningDialog 通用的警告对话框
      * @param msg
      * @param strTitle
