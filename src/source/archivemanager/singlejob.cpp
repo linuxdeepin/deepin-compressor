@@ -22,6 +22,7 @@
 #include "kprocess.h"
 #include "openwithdialog.h"
 #include "datamanager.h"
+#include "uitools.h"
 
 #include <QThread>
 #include <QDebug>
@@ -388,5 +389,105 @@ void UpdateJob::doWork()
         //if (!(pWriteInterface->waitForFinished())) {
         slotFinished(eType);
         //}
+    }
+}
+
+CommentJob::CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+    : SingleJob(pInterface, parent)
+    , m_strComment(strComment)
+{
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &CommentJob::slotFinished, Qt::ConnectionType::UniqueConnection);
+    connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CommentJob::signalprogress, Qt::ConnectionType::UniqueConnection);
+}
+
+CommentJob::~CommentJob()
+{
+    if (m_pInterface) {
+        delete  m_pInterface;
+        m_pInterface = nullptr;
+    }
+}
+
+void CommentJob::doWork()
+{
+    qInfo() << "Adding comment";
+
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
+
+    if (pWriteInterface) {
+        PluginFinishType eType = pWriteInterface->addComment(m_strComment);
+        if (!(pWriteInterface->waitForFinished())) {
+            slotFinished(eType);
+        }
+    }
+}
+
+ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, QObject *parent)
+    : ArchiveJob(parent)
+    , m_strOriginalArchiveFullPath(strOriginalArchiveFullPath)
+    , m_strTargetFullPath(strTargetFullPath)
+{
+
+}
+
+ConvertJob::~ConvertJob()
+{
+
+}
+
+void ConvertJob::start()
+{
+    ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath);
+
+    if (pIface) {
+        // 创建解压参数
+        QFileInfo file(m_strOriginalArchiveFullPath);
+        ExtractionOptions stOptions;
+        stOptions.strTargetPath = file.filePath();
+        stOptions.qComressSize = file.size();
+        stOptions.bAllExtract = true;
+        // 创建解压操作
+        m_pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
+        connect(m_pExtractJob, &ExtractJob::signalprogress, this, &ConvertJob::slotHandleSingleJobProgress);
+        connect(m_pExtractJob, &ExtractJob::signalCurFileName, this, &ConvertJob::slotHandleSingleJobCurFileName);
+        connect(m_pExtractJob, &ExtractJob::signalQuery, this, &ConvertJob::signalQuery);
+        connect(m_pExtractJob, &ExtractJob::signalJobFinshed, this, &ConvertJob::slotHandleExtractFinished);
+
+        m_pExtractJob->doWork();
+    }
+
+}
+
+void ConvertJob::slotHandleSingleJobProgress(double dPercentage)
+{
+
+}
+
+void ConvertJob::slotHandleSingleJobCurFileName(const QString &strName)
+{
+
+}
+
+void ConvertJob::slotHandleExtractFinished()
+{
+    // 解压结束
+    if (m_pExtractJob) {
+        m_eFinishedType = m_pExtractJob->m_eFinishedType;
+        m_eErrorType = m_pExtractJob->m_eErrorType;
+
+        switch (m_eFinishedType) {
+        // 正常结束之后，进行压缩操作
+        case PFT_Nomral: {
+        }
+        break;
+        // 用户取消之后，不进行压缩
+        case PFT_Cancel: {
+        }
+        break;
+        // 出现错误的情况，提示用户
+        case PFT_Error: {
+        }
+        break;
+        }
     }
 }

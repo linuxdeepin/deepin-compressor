@@ -348,10 +348,10 @@ void UnCompressView::setModifiable(bool bModifiable, bool bMultiplePassword)
     setAcceptDrops(m_bModifiable);
 }
 
-bool UnCompressView::isModifiable()
-{
-    return m_bModifiable;
-}
+//bool UnCompressView::isModifiable()
+//{
+//    return m_bModifiable;
+//}
 
 void UnCompressView::clear()
 {
@@ -500,7 +500,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         // 右键-删除
         QAction *pAction = menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
 
-        if (!isModifiable()) {
+        if (!m_bModifiable) {
             pAction->setEnabled(false); // 若压缩包数据不能更改，深处按钮设置成不可用
         }
 

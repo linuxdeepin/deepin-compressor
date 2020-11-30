@@ -38,6 +38,7 @@
 #include "datamanager.h"
 #include "ddesktopservicesthread.h"
 #include "openFileWatcher.h"
+#include "mimetypes.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -368,7 +369,13 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
+    QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
+    QMimeType mimeType = determineMimeType(transFile);
+    // 构建压缩包加载之后的数据
     m_stUnCompressParameter.bSplitVolume = transSplitFileName(transFile);
+    m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
+    m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
+    m_stUnCompressParameter.bModifiable = listSupportedMimeTypes.contains(mimeType.name());
 
     QFileInfo fileinfo(transFile);
     if (!fileinfo.exists()) {
@@ -378,11 +385,11 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         return;
     }
 
-    m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter.bSplitVolume);      // 设置压缩包全路径和是否分卷
+    m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter.bSplitVolume, m_stUnCompressParameter.bMultiplePassword, m_stUnCompressParameter.bModifiable);     // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
-    m_pTitleButton->setEnabled(m_pUnCompressPage->isModifiable());
-    m_pOpenAction->setEnabled(m_pUnCompressPage->isModifiable());
+    m_pTitleButton->setEnabled(m_stUnCompressParameter.bModifiable);
+    m_pOpenAction->setEnabled(m_stUnCompressParameter.bModifiable);
 
     // 设置默认解压路径
     if (m_pSettingDlg->getDefaultExtractPath().isEmpty()) {
@@ -487,9 +494,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         m_ePageID = PI_CompressSetting;
     } else if (strType == QStringLiteral("extract_here")) {
         // 解压单个文件到当前文件夹
-        m_stUnCompressParameter.bRightOperation = true;
-        //m_bRightOperation = true;
         QString filepath = listParam.at(0);
+        m_stUnCompressParameter.bRightOperation = true;
         m_stUnCompressParameter.bSplitVolume = transSplitFileName(filepath);
 
         QFileInfo fileinfo(filepath);
@@ -606,8 +612,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
     } else if (strType == QStringLiteral("extract_mkdir")) {
         // 解压到xx文件夹
     } else if (strType == QStringLiteral("extract_here_split")) { // 右键选择7z压缩分卷文件，解压到当前文件夹
-        m_stUnCompressParameter.bRightOperation = true;
         QString filepath = listParam.at(0);
+        m_stUnCompressParameter.bRightOperation = true;
         m_stUnCompressParameter.bSplitVolume = transSplitFileName(filepath);
 
         QFileInfo fileinfo(filepath);
@@ -1110,7 +1116,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         qDebug() << "打开结束";
 
         // 若压缩包文件可更改，打开文件之后对文件进行监控
-        if (m_pUnCompressPage->isModifiable()) {
+        if (m_stUnCompressParameter.bModifiable) {
             // 打开成功之后添加当前打开文件至文件监控中
             m_pOpenFileWatcher->addCurOpenWatchFile();
         }

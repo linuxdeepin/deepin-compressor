@@ -120,6 +120,22 @@ public:
     bool updateArchiveCacheData(const UpdateOptions &stOptions);
 
     /**
+     * @brief updateArchiveComment  更新压缩包注释信息
+     * @param strArchiveFullPath    压缩包全路径
+     * @param strComment            注释
+     * @return
+     */
+    bool updateArchiveComment(const QString &strArchiveFullPath, const QString &strComment);
+
+    /**
+     * @brief convertArchive                压缩包格式转换
+     * @param strOriginalArchiveFullPath    原始压缩包全路径
+     * @param strTargetFullPath             转换之后的压缩包全路径
+     * @return
+     */
+    bool convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath);
+
+    /**
      * @brief pauseOperation    暂停操作
      * @return                      是否调用成功
      */

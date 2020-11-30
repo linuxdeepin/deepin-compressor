@@ -43,9 +43,11 @@ public:
     /**
      * @brief setArchiveFullPath    设置压缩包全路径
      * @param strArchiveFullPath    压缩包全路径
-     * @param bool    是否是分卷压缩包
+     * @param bSplit    是否是分卷压缩包
+     * @param bMultiplePassword 是否支持多密码追加
+     * @param bModifiable 是否支持更改数据
      */
-    void setArchiveFullPath(const QString &strArchiveFullPath, bool bSplit);
+    void setArchiveFullPath(const QString &strArchiveFullPath, bool bSplit, bool bMultiplePassword, bool bModifiable);
 
     /**
      * @brief archiveFullPath   获取压缩包全路径
@@ -80,11 +82,11 @@ public:
      */
     QString getCurPath();
 
-    /**
-     * @brief isModifiable     获取压缩包数据是否可以更改
-     * @return    是否可更改
-     */
-    bool isModifiable();
+//    /**
+//     * @brief isModifiable     获取压缩包数据是否可以更改
+//     * @return    是否可更改
+//     */
+//    bool isModifiable();
 
     /**
      * @brief clear 清空数据

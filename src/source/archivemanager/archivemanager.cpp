@@ -72,6 +72,12 @@ ArchiveManager *ArchiveManager::get_instance()
 
 bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive/*, bool bBatch*/)
 {
+    // 重新创建压缩包首先释放之前的interface
+    if (m_pInterface != nullptr) {
+        delete m_pInterface;
+        m_pInterface = nullptr;
+    }
+
     m_pTempInterface = UiTools::createInterface(strDestination, true, useLibArchive);
 
 //    if (bBatch) {       // 批量压缩（多路径）
@@ -98,9 +104,9 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
         pCreateJob->start();
 
         return true;
-    } 
-  
-    return false;   
+    }
+
+    return false;
 }
 
 bool ArchiveManager::loadArchive(const QString &strArchiveFullPath)
@@ -124,8 +130,8 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath)
         pLoadJob->start();
 
         return true;
-    } 
-    
+    }
+
     return false;
 }
 
@@ -145,8 +151,8 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         pAddJob->start();
 
         return true;
-    } 
-        
+    }
+
     return false;
 }
 
@@ -170,8 +176,8 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
         pExtractJob->start();
 
         return true;
-    } 
-    
+    }
+
     return false;
 }
 
@@ -195,9 +201,9 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
         pExtractJob->start();
 
         return true;
-    } 
+    }
 
-    return false;    
+    return false;
 }
 
 bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
@@ -219,7 +225,7 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
         pDeleteJob->start();
 
         return true;
-    } 
+    }
 
     return false;
 }
@@ -241,8 +247,8 @@ bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
         pBatchExtractJob->start();
 
         return true;
-    } 
-        
+    }
+
     SAFE_DELETE_ELE(pBatchExtractJob);
     return false;
 }
@@ -265,8 +271,8 @@ bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
         pOpenJob->start();
 
         return true;
-    } 
-  
+    }
+
     return false;
 }
 
@@ -282,9 +288,37 @@ bool ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
         pUpdateJob->start();
 
         return true;
-    } 
-	
+    }
+
     return false;
+}
+
+bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, const QString &strComment)
+{
+    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath);
+
+    if (pInterface) {
+        CommentJob *pCommentJob = new CommentJob(strComment, pInterface);
+
+        // 连接槽函数
+        connect(pCommentJob, &UpdateJob::signalprogress, this, &ArchiveManager::signalprogress);
+        connect(pCommentJob, &UpdateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+
+        m_pArchiveJob = pCommentJob;
+        pCommentJob->start();
+
+        return true;
+    }
+
+    return false;
+}
+
+bool ArchiveManager::convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath)
+{
+    ConvertJob *pConvertJob = new ConvertJob(strOriginalArchiveFullPath, strTargetFullPath);
+    m_pArchiveJob = pConvertJob;
+    pConvertJob->start();
+    return true;
 }
 
 bool ArchiveManager::pauseOperation()
@@ -294,8 +328,8 @@ bool ArchiveManager::pauseOperation()
         m_pArchiveJob->doPause();
 
         return true;
-    } 
-  
+    }
+
     return false;
 }
 
@@ -306,7 +340,7 @@ bool ArchiveManager::continueOperation()
         m_pArchiveJob->doContinue();
 
         return true;
-    } 
+    }
 
     return false;
 }

@@ -114,13 +114,16 @@ struct CompressParameter {
 };
 Q_DECLARE_METATYPE(CompressParameter)
 
-// 解压参数
+// 解压参数（选择压缩包之后分析的数据）
 struct UnCompressParameter {
     UnCompressParameter()
     {
         bRightOperation = false;
         bSplitVolume = false;
         bSplitVolume = false;
+        bMultiplePassword = false;
+        bModifiable = false;
+        bCommentModifiable = false;
         qSize = 0;
         listExractFiles.clear();
     }
@@ -129,6 +132,9 @@ struct UnCompressParameter {
     QString strExtractPath;     // 解压路径
     bool bRightOperation;       // 是否右键快捷操作
     bool bSplitVolume;          // 是否分卷包
+    bool bMultiplePassword;     // 是否支持多密码追加
+    bool bModifiable;           // 是否更改压缩包数据
+    bool bCommentModifiable;    // 是否支持注释更改
     qint64 qSize;               // 压缩包大小
     QList<QString> listExractFiles; // 存储提取文件,用来结束之后自动打开文件夹时选中
 

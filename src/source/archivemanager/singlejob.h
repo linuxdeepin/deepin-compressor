@@ -255,4 +255,59 @@ private:
     UpdateOptions m_stOptions;      // 更新选项
 };
 
+// 更新操作（压缩包修改完之后更新缓存数据）
+class CommentJob: public SingleJob
+{
+    Q_OBJECT
+public:
+    explicit CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    ~CommentJob() override;
+
+    /**
+     * @brief doWork    执行操作
+     */
+    void doWork() override;
+
+private:
+    QString m_strComment;      // 注释
+};
+
+// 转换操作
+class ConvertJob: public ArchiveJob
+{
+    Q_OBJECT
+public:
+    explicit ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, QObject *parent = nullptr);
+    ~ConvertJob() override;
+
+    /**
+     * @brief start     开始
+     */
+    void start() override;
+
+private Q_SLOTS:
+    /**
+     * @brief slotHandleSingleJobProgress       处理单个压缩包解压进度
+     * @param dPercentage
+     */
+    void slotHandleSingleJobProgress(double dPercentage);
+
+    /**
+     * @brief slotHandleSingleJobCurFileName       处理单个压缩包当前解压文件名
+     * @param strName
+     */
+    void slotHandleSingleJobCurFileName(const QString &strName);
+
+    /**
+     * @brief slotHandleExtractFinished       处理解压结束
+     */
+    void slotHandleExtractFinished();
+
+private:
+    ExtractJob *m_pExtractJob;  // 先解压
+    CreateJob *m_pCreateJob;    // 再压缩成想要的格式
+    QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
+    QString m_strTargetFullPath;                // 转换目标全路径
+};
+
 #endif

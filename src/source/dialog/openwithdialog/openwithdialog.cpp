@@ -180,9 +180,9 @@ QList<DesktopFile> OpenWithDialog::getOpenStyle(const QString &strFileName)
     for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
 
-        if (desktop_info.getFileName().contains("deepin-compressor")) {
-            continue;
-        }
+//        if (desktop_info.getFileName().contains("deepin-compressor")) {
+//            continue;
+//        }
 
         listType << desktop_info;
     }
