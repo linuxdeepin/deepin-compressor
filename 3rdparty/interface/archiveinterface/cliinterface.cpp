@@ -54,7 +54,7 @@ PluginFinishType CliInterface::list()
 
     bool ret = false;
 
-    ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, m_strPassword));
+    ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, DataManager::get_instance().archiveData().strPassword));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -150,7 +150,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     QDir::setCurrent(destPath);
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
-                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword));
+                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, DataManager::get_instance().archiveData().strPassword));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -247,10 +247,12 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         }
     }
 
+    QString password = DataManager::get_instance().archiveData().strPassword; // 对列表加密文件进行追加压缩的时候使用压缩包的密码
+
     // 压缩命令的参数
     QStringList arguments = m_cliProps->addArgs(m_strArchiveName,
                                                 fileList,
-                                                options.strPassword,
+                                                DataManager::get_instance().archiveData().isListEncrypted ? password : options.strPassword,
                                                 options.bHeaderEncryption,
                                                 options.iCompressionLevel,
                                                 options.strCompressionMethod,
@@ -529,8 +531,10 @@ void CliInterface::handlePassword()
     query.waitForResponse();
 
     if (query.responseCancelled()) {
-        setPassword(QString());
+        DataManager::get_instance().archiveData().strPassword = QString();
+        setPassword(QString()); // 函数暂时保留
     } else {
+        DataManager::get_instance().archiveData().strPassword = query.password();
         setPassword(query.password());
         writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
     }
@@ -757,6 +761,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     if (exitCode == 9 || exitCode == 11) {
+        DataManager::get_instance().archiveData().strPassword = QString();
         setPassword(QString());
         return;
     }

@@ -105,6 +105,9 @@ struct ArchiveData {
         strComment = "";
         mapFileEntry.clear();
         listRootEntry.clear();
+
+        isListEncrypted = false;
+        strPassword.clear();
     }
 
     qlonglong qSize;                            // 原始总大小
@@ -112,6 +115,9 @@ struct ArchiveData {
     QString strComment;                         // 压缩包注释信息
     QMap<QString, FileEntry>  mapFileEntry;     // 压缩包内所有文件
     QList<FileEntry> listRootEntry;             // 第一层数据
+
+    bool isListEncrypted;                       // 压缩包是否为列表加密
+    QString strPassword;                        // 压缩包密码
 };
 Q_DECLARE_METATYPE(ArchiveData)
 

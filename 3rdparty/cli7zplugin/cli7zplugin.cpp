@@ -242,6 +242,10 @@ bool Cli7zPlugin::readListLine(const QString &line)
 bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 {
     if (isPasswordPrompt(line)) {  // 提示需要输入密码
+        if (workStatus == WT_List) {
+            DataManager::get_instance().archiveData().isListEncrypted = true; // 列表加密文件
+        }
+
         m_eErrorType = ET_NeedPassword;
         return true;
     }
