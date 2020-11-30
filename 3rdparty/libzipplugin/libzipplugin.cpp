@@ -379,8 +379,46 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
-    Q_UNUSED(comment)
     m_workStatus = WT_Comment;
+
+    // 初始化变量
+    int errcode = 0;
+    zip_error_t err;
+
+    // Open archive.
+    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
+    zip_error_init_with_code(&err, errcode);
+    if (!archive) {
+        return PFT_Error;
+    }
+
+    // 注释字符串转换
+    QByteArray tmp = comment.toUtf8();
+    const char *commentstr = tmp.constData();
+    //    const char *commentstr13 = comment.toUtf8().constData(); // 该写法不安全，会返回空字符串
+    zip_uint16_t commentlength = static_cast<zip_uint16_t>(strlen(commentstr));     // 获取注释长度
+
+    /**
+      * 设置压缩包注释
+      * 如果注释为空，原注释会被移除掉
+      * 注释编码必须为ASCII或者UTF-8
+      */
+    errcode = zip_set_archive_comment(archive, commentstr, commentlength);
+
+    // 结果判断
+    if (ZIP_ER_OK != errcode) {
+        return PFT_Error;
+    }
+
+    // 注册进度回调
+    zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this);
+
+    // 关闭保存
+    if (zip_close(archive)) {
+        m_eErrorType = ET_FileWriteError;
+        return PFT_Error;
+    }
+
     return PFT_Nomral;
 }
 

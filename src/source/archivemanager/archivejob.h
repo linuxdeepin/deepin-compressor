@@ -43,8 +43,9 @@ public:
         JT_Delete,         // 删除
         JT_BatchExtract,   // 批量解压
         JT_Open,            // 打开
+        JT_Update,         // 更新
+        JT_Comment,         // 注释
         JT_Convert,         // 转换
-        JT_Update,         // 转换
     };
 
     /**

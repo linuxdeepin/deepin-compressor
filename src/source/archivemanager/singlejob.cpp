@@ -396,6 +396,9 @@ CommentJob::CommentJob(const QString &strComment, ReadOnlyArchiveInterface *pInt
     : SingleJob(pInterface, parent)
     , m_strComment(strComment)
 {
+    m_eJobType = JT_Comment;
+
+    // 进度和结束处理
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &CommentJob::slotFinished, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &CommentJob::signalprogress, Qt::ConnectionType::UniqueConnection);
 }
@@ -427,7 +430,7 @@ ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString s
     , m_strOriginalArchiveFullPath(strOriginalArchiveFullPath)
     , m_strTargetFullPath(strTargetFullPath)
 {
-
+    m_eJobType = JT_Convert;
 }
 
 ConvertJob::~ConvertJob()
