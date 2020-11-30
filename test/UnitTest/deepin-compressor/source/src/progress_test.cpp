@@ -343,42 +343,42 @@ TEST(Progress_getOpenType_UT, Progress_getOpenType_UT001)
     bool opentype = progress->getOpenType();
 }
 
-TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT001)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING;
-    progress->showConfirmDialog();
-}
+//TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT001)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING;
+//    progress->showConfirmDialog();
+//}
 
-TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT002)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_DELETEING;
-    progress->showConfirmDialog();
-}
+//TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT002)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_DELETEING;
+//    progress->showConfirmDialog();
+//}
 
-TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT003)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_CONVERT;
-    progress->showConfirmDialog();
-}
+//TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT003)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_CONVERT;
+//    progress->showConfirmDialog();
+//}
 
-TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT004)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_NONE;
-    progress->m_openType = true;
-    progress->showConfirmDialog();
-}
+//TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT004)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_NONE;
+//    progress->m_openType = true;
+//    progress->showConfirmDialog();
+//}
 
-TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT005)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_NONE;
-    progress->m_openType = false;
-    progress->showConfirmDialog();
-}
+//TEST(Progress_showConfirmDialog_UT, Progress_gshowConfirmDialog_UT005)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->m_ProgressType = Progress::ENUM_PROGRESS_TYPE::OP_NONE;
+//    progress->m_openType = false;
+//    progress->showConfirmDialog();
+//}
 
 TEST(Progress_resetProgress_UT, Progress_resetProgress_UT001)
 {
@@ -386,11 +386,11 @@ TEST(Progress_resetProgress_UT, Progress_resetProgress_UT001)
     progress->resetProgress();
 }
 
-TEST(Progress_cancelbuttonPressedSlot_UT, Progress_cancelbuttonPressedSlot_UT001)
-{
-    Progress *progress = new Progress(nullptr);
-    progress->cancelbuttonPressedSlot();
-}
+//TEST(Progress_cancelbuttonPressedSlot_UT, Progress_cancelbuttonPressedSlot_UT001)
+//{
+//    Progress *progress = new Progress(nullptr);
+//    progress->cancelbuttonPressedSlot();
+//}
 
 TEST(Progress_pauseContinueButtonPressedSlot_UT, Progress_pauseContinueButtonPressedSlot_UT001)
 {

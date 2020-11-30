@@ -27,12 +27,12 @@ TEST(EncryptionPage_setInputflag_UT, EncryptionPage_setInputflag_UT001)
     encryptionPage->setInputflag(true);
 }
 
-TEST(EncryptionPage_getPasswordEdit_UT, EncryptionPage_getPasswordEdit_UT001)
-{
-    EncryptionPage *encryptionPage = new EncryptionPage(nullptr);
-    DPasswordEdit *pwdEdit = encryptionPage->getPasswordEdit();
-    ASSERT_EQ(pwdEdit, nullptr);
-}
+//TEST(EncryptionPage_getPasswordEdit_UT, EncryptionPage_getPasswordEdit_UT001)
+//{
+//    EncryptionPage *encryptionPage = new EncryptionPage(nullptr);
+//    DPasswordEdit *pwdEdit = encryptionPage->getPasswordEdit();
+//    ASSERT_EQ(pwdEdit, nullptr);
+//}
 
 TEST(EncryptionPage_getPasswordEdit_UT, EncryptionPage_getPasswordEdit_UT002)
 {

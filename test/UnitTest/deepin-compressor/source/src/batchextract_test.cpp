@@ -41,28 +41,28 @@ TEST(BatchExtract_SlotProgressFile_UT, BatchExtract_SlotProgressFile_UT003)
     batchExtract->SlotProgressFile(nullptr, "pic.png");
 }
 
-TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT001)
-{
-    BatchExtract *batchExtract = new BatchExtract(nullptr);
-    bool kill = batchExtract->doKill();
-    EXPECT_EQ(kill, true);
-}
+//TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT001)
+//{
+//    BatchExtract *batchExtract = new BatchExtract(nullptr);
+//    bool kill = batchExtract->doKill();
+//    EXPECT_EQ(kill, true);
+//}
 
-TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT002)
-{
-    BatchExtract *batchExtract = new BatchExtract(nullptr);
-    batchExtract->addExtraction(QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001"));
-    bool kill = batchExtract->doKill();
-    EXPECT_EQ(kill, false);
-}
+//TEST(BatchExtract_doKill_UT, BatchExtract_doKill_UT002)
+//{
+//    BatchExtract *batchExtract = new BatchExtract(nullptr);
+//    batchExtract->addExtraction(QUrl::fromLocalFile("/home/chenglu/Desktop/1.7z.001"));
+//    bool kill = batchExtract->doKill();
+//    EXPECT_EQ(kill, false);
+//}
 
-TEST(BatchExtract_autoSubfolder_UT, BatchExtract_autoSubfolder_UT001)
-{
-    //该函数实际未被调用
-    BatchExtract *batchExtract = new BatchExtract(nullptr);
-    bool autoSubfolder = batchExtract->autoSubfolder();
-    ASSERT_TRUE(autoSubfolder);
-}
+//TEST(BatchExtract_autoSubfolder_UT, BatchExtract_autoSubfolder_UT001)
+//{
+//    //该函数实际未被调用
+//    BatchExtract *batchExtract = new BatchExtract(nullptr);
+//    bool autoSubfolder = batchExtract->autoSubfolder();
+//    ASSERT_TRUE(autoSubfolder);
+//}
 
 TEST(BatchExtract_setAutoSubfolder_UT, BatchExtract_setAutoSubfolder_UT001)
 {
@@ -225,13 +225,13 @@ TEST(BatchExtract_addInput_UT, BatchExtract_addInput_UT002)
     batchExtract->addInput(QUrl::fromLocalFile("/home/chenglu/Desktop/2.7z.001"));
 }
 
-TEST(BatchExtract_openDestinationAfterExtraction_UT, BatchExtract_openDestinationAfterExtraction_UT001)
-{
-    //该函数实际未被调用
-    BatchExtract *batchExtract = new BatchExtract(nullptr);
-    bool open = batchExtract->openDestinationAfterExtraction();
-    ASSERT_EQ(open, true);
-}
+//TEST(BatchExtract_openDestinationAfterExtraction_UT, BatchExtract_openDestinationAfterExtraction_UT001)
+//{
+//    //该函数实际未被调用
+//    BatchExtract *batchExtract = new BatchExtract(nullptr);
+//    bool open = batchExtract->openDestinationAfterExtraction();
+//    ASSERT_EQ(open, true);
+//}
 
 TEST(BatchExtract_openDestinationAfterExtraction_UT, BatchExtract_openDestinationAfterExtraction_UT002)
 {
@@ -256,13 +256,13 @@ TEST(BatchExtract_destinationFolder_UT, BatchExtract_destinationFolder_UT001)
     ASSERT_STREQ(desFolder.toStdString().c_str(), "/home/chenglu/Desktop/special");
 }
 
-TEST(BatchExtract_destinationFolder_UT, BatchExtract_destinationFolder_UT002)
-{
-    BatchExtract *batchExtract = new BatchExtract(nullptr);
-    batchExtract->m_destinationFolder = "";
-    QString desFolder = batchExtract->destinationFolder();
-    ASSERT_STREQ(desFolder.toStdString().c_str(), "");
-}
+//TEST(BatchExtract_destinationFolder_UT, BatchExtract_destinationFolder_UT002)
+//{
+//    BatchExtract *batchExtract = new BatchExtract(nullptr);
+//    batchExtract->m_destinationFolder = "";
+//    QString desFolder = batchExtract->destinationFolder();
+//    ASSERT_STREQ(desFolder.toStdString().c_str(), "");
+//}
 
 TEST(BatchExtract_setDestinationFolder_UT, BatchExtract_setDestinationFolder_UT001)
 {

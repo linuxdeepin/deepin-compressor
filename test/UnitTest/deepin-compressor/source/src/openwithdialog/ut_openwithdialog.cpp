@@ -45,37 +45,37 @@ protected:
     OpenWithDialog *m_tester;
 };
 
-TEST_F(TestOpenWithDialog, initTest)
-{
-}
+//TEST_F(TestOpenWithDialog, initTest)
+//{
+//}
 
-TEST_F(TestOpenWithDialog, testaddMenuOpenAction)
-{
-    QMenu menu;
-    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
-}
+//TEST_F(TestOpenWithDialog, testaddMenuOpenAction)
+//{
+//    QMenu menu;
+//    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
+//}
 
-TEST_F(TestOpenWithDialog, testchooseOpen)
-{
-    QMenu menu;
-    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
+//TEST_F(TestOpenWithDialog, testchooseOpen)
+//{
+//    QMenu menu;
+//    QList<QAction *> listAction = OpenWithDialog::addMenuOpenAction("../test/UnitTest/regress/new.zip", &menu);
 
-    if (listAction.count() > 0) {
-        OpenWithDialog::chooseOpen(listAction[0]->text(), "../test/UnitTest/regress/new.zip");
-    }
-}
+//    if (listAction.count() > 0) {
+//        OpenWithDialog::chooseOpen(listAction[0]->text(), "../test/UnitTest/regress/new.zip");
+//    }
+//}
 
-TEST_F(TestOpenWithDialog, testincludePercentFile)
-{
-    OpenWithDialog::includePercentFile("../test/UnitTest/regress/new.zip");
-}
+//TEST_F(TestOpenWithDialog, testincludePercentFile)
+//{
+//    OpenWithDialog::includePercentFile("../test/UnitTest/regress/new.zip");
+//}
 
-TEST_F(TestOpenWithDialog, testSetShowType)
-{
-    m_tester->SetShowType(SelApp);
-}
+//TEST_F(TestOpenWithDialog, testSetShowType)
+//{
+//    m_tester->SetShowType(SelApp);
+//}
 
-TEST_F(TestOpenWithDialog, testAppDisplayName)
-{
-    m_tester->AppDisplayName();
-}
+//TEST_F(TestOpenWithDialog, testAppDisplayName)
+//{
+//    m_tester->AppDisplayName();
+//}

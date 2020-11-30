@@ -50,30 +50,30 @@ TEST_F(TestDesktopFile, initTest)
 {
 }
 
-TEST_F(TestDesktopFile, testgetFileName)
-{
-    ASSERT_STREQ(m_tester->getFileName().toStdString().c_str(), "/usr/share/applications//usr/share/applications/com.oray.sunlogin.client.desktop");
-}
+//TEST_F(TestDesktopFile, testgetFileName)
+//{
+//    ASSERT_STREQ(m_tester->getFileName().toStdString().c_str(), "/usr/share/applications//usr/share/applications/com.oray.sunlogin.client.desktop");
+//}
 
-TEST_F(TestDesktopFile, testgetPureFileName)
-{
-    ASSERT_STREQ(m_tester->getPureFileName().toStdString().c_str(), "/usr/share/applications/com.oray.sunlogin.client");
-}
+//TEST_F(TestDesktopFile, testgetPureFileName)
+//{
+//    ASSERT_STREQ(m_tester->getPureFileName().toStdString().c_str(), "/usr/share/applications/com.oray.sunlogin.client");
+//}
 
-TEST_F(TestDesktopFile, testgetName)
-{
-    ASSERT_STREQ(m_tester->getName().toStdString().c_str(), "Sunlogin Client");
-}
+//TEST_F(TestDesktopFile, testgetName)
+//{
+//    ASSERT_STREQ(m_tester->getName().toStdString().c_str(), "Sunlogin Client");
+//}
 
 TEST_F(TestDesktopFile, testgetLocalName)
 {
     ASSERT_STREQ(m_tester->getLocalName().toStdString().c_str(), "");
 }
 
-TEST_F(TestDesktopFile, testgetDisplayName)
-{
-    ASSERT_STREQ(m_tester->getDisplayName().toStdString().c_str(), "Sunlogin Client");
-}
+//TEST_F(TestDesktopFile, testgetDisplayName)
+//{
+//    ASSERT_STREQ(m_tester->getDisplayName().toStdString().c_str(), "Sunlogin Client");
+//}
 
 TEST_F(TestDesktopFile, testgetExec)
 {

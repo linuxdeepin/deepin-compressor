@@ -217,55 +217,55 @@ TEST(BatchCompress_slotResult_UT, BatchCompress_slotResult_UT002)
     batchCompress->slotResult(job);
 }
 
-TEST(BatchCompress_forwardProgress_UT, BatchCompress_forwardProgress_UT001)
-{
-    BatchCompress *batchCompress = new BatchCompress(nullptr);
-    QStringList files;
-    files << "/home/chenglu/Desktop/error.log";
-    const QStringList filesToAdd = files;
-    const QString fixedMimeType = (*(batchCompress->m_Args))[QStringLiteral("fixedMimeType")];
-    const QString password = (*(batchCompress->m_Args))[QStringLiteral("encryptionPassword")];
-    const QString enableHeaderEncryption = (*(batchCompress->m_Args))[QStringLiteral("encryptHeader")];
-    QString filename = (*(batchCompress->m_Args))[QStringLiteral("localFilePath")] + QDir::separator() + (*(batchCompress->m_Args))[QStringLiteral("filename")];
+//TEST(BatchCompress_forwardProgress_UT, BatchCompress_forwardProgress_UT001)
+//{
+//    BatchCompress *batchCompress = new BatchCompress(nullptr);
+//    QStringList files;
+//    files << "/home/chenglu/Desktop/error.log";
+//    const QStringList filesToAdd = files;
+//    const QString fixedMimeType = (*(batchCompress->m_Args))[QStringLiteral("fixedMimeType")];
+//    const QString password = (*(batchCompress->m_Args))[QStringLiteral("encryptionPassword")];
+//    const QString enableHeaderEncryption = (*(batchCompress->m_Args))[QStringLiteral("encryptHeader")];
+//    QString filename = (*(batchCompress->m_Args))[QStringLiteral("localFilePath")] + QDir::separator() + (*(batchCompress->m_Args))[QStringLiteral("filename")];
 
-    CompressionOptions options;
-    options.setCompressionLevel((*(batchCompress->m_Args))[QStringLiteral("compressionLevel")].toInt());
-    options.setEncryptionMethod((*(batchCompress->m_Args))[QStringLiteral("encryptionMethod")]);
-    options.setVolumeSize((*(batchCompress->m_Args))[QStringLiteral("volumeSize")].toULongLong());
+//    CompressionOptions options;
+//    options.setCompressionLevel((*(batchCompress->m_Args))[QStringLiteral("compressionLevel")].toInt());
+//    options.setEncryptionMethod((*(batchCompress->m_Args))[QStringLiteral("encryptionMethod")]);
+//    options.setVolumeSize((*(batchCompress->m_Args))[QStringLiteral("volumeSize")].toULongLong());
 
-    QVector<Archive::Entry *> all_entries;
-    CreateJob *job = Archive::create(filename, fixedMimeType, all_entries, options, nullptr, false, false);
-    batchCompress->addSubjob(job);
-    batchCompress->forwardProgress(job, 100);
-}
+//    QVector<Archive::Entry *> all_entries;
+//    CreateJob *job = Archive::create(filename, fixedMimeType, all_entries, options, nullptr, false, false);
+//    batchCompress->addSubjob(job);
+//    batchCompress->forwardProgress(job, 100);
+//}
 
-TEST(BatchCompress_addInput_UT, BatchCompress_addInput_UT001)
-{
-    BatchCompress *batchCompress = new BatchCompress(nullptr);
-    QStringList files;
-    files.append("/home/chenglu/Desktop/error.log");
-    batchCompress->addInput(files);
-}
+//TEST(BatchCompress_addInput_UT, BatchCompress_addInput_UT001)
+//{
+//    BatchCompress *batchCompress = new BatchCompress(nullptr);
+//    QStringList files;
+//    files.append("/home/chenglu/Desktop/error.log");
+//    batchCompress->addInput(files);
+//}
 
-TEST(BatchCompress_SlotCreateJobFinished_UT, BatchCompress_SlotCreateJobFinished_UT001)
-{
-    BatchCompress *batchCompress = new BatchCompress(nullptr);
-    QStringList files;
-    files << "/home/chenglu/Desktop/error.log";
-    const QStringList filesToAdd = files;
-    const QString fixedMimeType = (*(batchCompress->m_Args))[QStringLiteral("fixedMimeType")];
-    const QString password = (*(batchCompress->m_Args))[QStringLiteral("encryptionPassword")];
-    const QString enableHeaderEncryption = (*(batchCompress->m_Args))[QStringLiteral("encryptHeader")];
-    QString filename = (*(batchCompress->m_Args))[QStringLiteral("localFilePath")] + QDir::separator() + (*(batchCompress->m_Args))[QStringLiteral("filename")];
+//TEST(BatchCompress_SlotCreateJobFinished_UT, BatchCompress_SlotCreateJobFinished_UT001)
+//{
+//    BatchCompress *batchCompress = new BatchCompress(nullptr);
+//    QStringList files;
+//    files << "/home/chenglu/Desktop/error.log";
+//    const QStringList filesToAdd = files;
+//    const QString fixedMimeType = (*(batchCompress->m_Args))[QStringLiteral("fixedMimeType")];
+//    const QString password = (*(batchCompress->m_Args))[QStringLiteral("encryptionPassword")];
+//    const QString enableHeaderEncryption = (*(batchCompress->m_Args))[QStringLiteral("encryptHeader")];
+//    QString filename = (*(batchCompress->m_Args))[QStringLiteral("localFilePath")] + QDir::separator() + (*(batchCompress->m_Args))[QStringLiteral("filename")];
 
-    CompressionOptions options;
-    options.setCompressionLevel((*(batchCompress->m_Args))[QStringLiteral("compressionLevel")].toInt());
-    options.setEncryptionMethod((*(batchCompress->m_Args))[QStringLiteral("encryptionMethod")]);
-    options.setVolumeSize((*(batchCompress->m_Args))[QStringLiteral("volumeSize")].toULongLong());
+//    CompressionOptions options;
+//    options.setCompressionLevel((*(batchCompress->m_Args))[QStringLiteral("compressionLevel")].toInt());
+//    options.setEncryptionMethod((*(batchCompress->m_Args))[QStringLiteral("encryptionMethod")]);
+//    options.setVolumeSize((*(batchCompress->m_Args))[QStringLiteral("volumeSize")].toULongLong());
 
-    QVector<Archive::Entry *> all_entries;
-    CreateJob *job = Archive::create(filename, fixedMimeType, all_entries, options, nullptr, false, false);
-    batchCompress->addSubjob(job);
-    job->setError(8);
-    batchCompress->SlotCreateJobFinished(job);
-}
+//    QVector<Archive::Entry *> all_entries;
+//    CreateJob *job = Archive::create(filename, fixedMimeType, all_entries, options, nullptr, false, false);
+//    batchCompress->addSubjob(job);
+//    job->setError(8);
+//    batchCompress->SlotCreateJobFinished(job);
+//}

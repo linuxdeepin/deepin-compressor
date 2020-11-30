@@ -4,7 +4,7 @@
 
 #include <QFileInfo>
 #include "kprocess.h"
-#include "kprocess_p.h"
+//#include "kprocess_p.h"
 #include "cliplugin.h"
 #include "mimetypes.h"
 #include "pluginmanager.h"
@@ -624,134 +624,134 @@ TEST(Cli7zPlugin_extractSize_UT, Cli7zPlugin_extractSize_UT019)
 
 }
 
-TEST(Cli7zPlugin_isPasswordList_UT, Cli7zPlugin_isPasswordList_UT020)
-{
+//TEST(Cli7zPlugin_isPasswordList_UT, Cli7zPlugin_isPasswordList_UT020)
+//{
 
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "";
-    Cli7zPlugin1->m_process  = new KProcess;
-    bool rsize = Cli7zPlugin1->isPasswordList();
-    ASSERT_EQ(rsize, false);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "";
+//    Cli7zPlugin1->m_process  = new KProcess;
+//    bool rsize = Cli7zPlugin1->isPasswordList();
+//    ASSERT_EQ(rsize, false);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
 
-}
+//}
 
-TEST(Cli7zPlugin_isPasswordList_UT, Cli7zPlugin_isPasswordList_UT021)
-{
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
+//TEST(Cli7zPlugin_isPasswordList_UT, Cli7zPlugin_isPasswordList_UT021)
+//{
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
 
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "-p";
-    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "-p";
+//    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
 
-    //Cli7zPlugin1->m_process->setProgram(programPath, arguments);
-    bool rsize = Cli7zPlugin1->isPasswordList();
-    ASSERT_EQ(rsize, true);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
-}
+//    //Cli7zPlugin1->m_process->setProgram(programPath, arguments);
+//    bool rsize = Cli7zPlugin1->isPasswordList();
+//    ASSERT_EQ(rsize, true);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
+//}
 
-TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT001)
-{
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "-p";
-    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
+//TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT001)
+//{
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "-p";
+//    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
 
-    bool r = Cli7zPlugin1->readListLine("Open ERROR: Can not open the file as [7z] archive");
-    ASSERT_EQ(r, true);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
-}
+//    bool r = Cli7zPlugin1->readListLine("Open ERROR: Can not open the file as [7z] archive");
+//    ASSERT_EQ(r, true);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
+//}
 
-TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT002)
-{
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "s";
-    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
+//TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT002)
+//{
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "s";
+//    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
 
-    bool r = Cli7zPlugin1->readListLine("Open ERROR: Can not open the file as [7z] archive");
-    ASSERT_EQ(r, false);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
-}
+//    bool r = Cli7zPlugin1->readListLine("Open ERROR: Can not open the file as [7z] archive");
+//    ASSERT_EQ(r, false);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
+//}
 
-TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT003)
-{
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "-p";
-    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
+//TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT003)
+//{
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "-p";
+//    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
 
-    bool r = Cli7zPlugin1->readListLine("ERROR:Can not open the file as archive");
-    ASSERT_EQ(r, true);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
-}
+//    bool r = Cli7zPlugin1->readListLine("ERROR:Can not open the file as archive");
+//    ASSERT_EQ(r, true);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
+//}
 
-TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT004)
-{
-    // QWidget *qman = new QWidget();
-    KPluginMetaData ss;
-    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
-                               QVariant().fromValue(ss)
-                              };
-    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
-    KProcess *p = new KProcess;
-    KProcessPrivate *d = new  KProcessPrivate(p);
-    d->args << "ff";
-    d->prog = "s";
-    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
+//TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT004)
+//{
+//    // QWidget *qman = new QWidget();
+//    KPluginMetaData ss;
+//    const QVariantList args = {QVariant(QFileInfo("/home/lx777/Desktop/googletest.7z").absoluteFilePath()),
+//                               QVariant().fromValue(ss)
+//                              };
+//    Cli7zPlugin *Cli7zPlugin1 = new Cli7zPlugin(nullptr, args);
+//    KProcess *p = new KProcess;
+//    KProcessPrivate *d = new  KProcessPrivate(p);
+//    d->args << "ff";
+//    d->prog = "s";
+//    Cli7zPlugin1->m_process  = new KProcess(d, nullptr);
 
-    bool r = Cli7zPlugin1->readListLine("ERROR:Can not open the file as archive");
-    ASSERT_EQ(r, false);
-    delete d;
-    delete p;
-    delete Cli7zPlugin1;
-}
+//    bool r = Cli7zPlugin1->readListLine("ERROR:Can not open the file as archive");
+//    ASSERT_EQ(r, false);
+//    delete d;
+//    delete p;
+//    delete Cli7zPlugin1;
+//}
 
 // ParseStateTitleff分支
 TEST(Cli7zPlugin_readListLine_UT, Cli7zPlugin_readListLine_UT005)

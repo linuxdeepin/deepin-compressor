@@ -15,18 +15,18 @@ TEST(Progressdialog_slotextractpress_UT, Progressdialog_slotextractpress_UT001)
     progressDialog->slotextractpress(1);
 }
 
-TEST(Progressdialog_slotextractpress_UT, Progressdialog_slotextractpress_UT002)
-{
-    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
-    progressDialog->slotextractpress(0);
-}
+//TEST(Progressdialog_slotextractpress_UT, Progressdialog_slotextractpress_UT002)
+//{
+//    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
+//    progressDialog->slotextractpress(0);
+//}
 
-TEST(Progressdialog_closeEvent_UT, Progressdialog_closeEvent_UT001)
-{
-    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
-    progressDialog->m_circleprogress->setValue(50);
-    progressDialog->closeEvent(nullptr);
-}
+//TEST(Progressdialog_closeEvent_UT, Progressdialog_closeEvent_UT001)
+//{
+//    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
+//    progressDialog->m_circleprogress->setValue(50);
+//    progressDialog->closeEvent(nullptr);
+//}
 
 TEST(Progressdialog_setCurrentTask_UT, Progressdialog_setCurrentTask_UT001)
 {
@@ -75,18 +75,18 @@ TEST(Progressdialog_clearprocess_UT, Progressdialog_clearprocess_UT001)
     ASSERT_EQ(progressDialog->m_circleprogress->value(), 0);
 }
 
-TEST(Progressdialog_showdialog_UT, Progressdialog_showdialog_UT001)
-{
-    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
-    progressDialog->showdialog();
-}
+//TEST(Progressdialog_showdialog_UT, Progressdialog_showdialog_UT001)
+//{
+//    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
+//    progressDialog->showdialog();
+//}
 
-TEST(Progressdialog_isshown_UT, Progressdialog_isshown_UT001)
-{
-    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
-    bool isshow = progressDialog->isshown();
-    ASSERT_EQ(isshow, true);
-}
+//TEST(Progressdialog_isshown_UT, Progressdialog_isshown_UT001)
+//{
+//    ProgressDialog *progressDialog = new ProgressDialog(nullptr);
+//    bool isshow = progressDialog->isshown();
+//    ASSERT_EQ(isshow, true);
+//}
 
 TEST(Progressdialog_isshown_UT, Progressdialog_isshown_UT002)
 {
