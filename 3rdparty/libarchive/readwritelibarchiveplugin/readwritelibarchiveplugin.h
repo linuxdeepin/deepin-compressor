@@ -25,6 +25,7 @@
 #include "kpluginfactory.h"
 
 #include <QSaveFile>
+#include <QSet>
 
 #include <archive.h>
 
@@ -70,7 +71,7 @@ public:
 
 private:
     QSaveFile m_tempFile;
-    QStringList m_writtenFiles; //已经压缩完的文件
+    QSet<QString> m_writtenFilesSet; //已经压缩完的文件(使用QSet查找性能更佳)
     ArchiveWrite m_archiveWriter;
     qlonglong m_currentAddFilesSize = 0;//当前已经压缩的文件大小（能展示出来的都已经压缩）
 
@@ -116,6 +117,16 @@ private:
      */
     void copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
     /**
+     * @brief copyDataFromSourceAdd
+     * @param filename
+     * @param source
+     * @param dest
+     * @param sourceEntry
+     * @param info
+     * @param bInternalDuty
+     */
+    void copyDataFromSourceAdd(const QString &filename, struct archive *source, struct archive *dest, struct archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty = true);
+    /**
      * @brief deleteEntry 具体删除操作
      * 筛选是否是需要删除的文件，复制保留文件数据到新的压缩包中
      * @param files 选中的文件
@@ -128,6 +139,22 @@ private:
      * @return
      */
     bool writeEntry(struct archive_entry *entry);
+    /**
+    * @brief writeEntry_Add
+    * @param entry
+    * @param info
+    * @param bInternalDuty
+    * @return
+    */
+    bool writeEntry_Add(struct archive_entry *entry, FileProgressInfo &info, bool bInternalDuty);
+    /**
+     * @brief processOldEntries_Add 处理需要保留的entry
+     * @param entriesCounter
+     * @param mode
+     * @param totalCount
+     * @return
+     */
+    bool processOldEntries_Add(uint &entriesCounter, uint totalCount);
 };
 
 

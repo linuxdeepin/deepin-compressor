@@ -79,7 +79,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
     //          总数量     = 原有的归档数量      + 新添加的文件数量
 //    const uint totalCount = m_numberOfEntries + numberOfEntriesToAdd;
 
-    m_writtenFiles.clear();
+    m_writtenFilesSet.clear();
 
     if (!creatingNewFile && !initializeReader()) {
         return PFT_Error;
@@ -158,6 +158,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
                     return PFT_Error;
                 }
 
+
                 addedEntries++;
 
                 if (bInternalDuty == false) {//如果不启动内部进度细分分析
@@ -171,15 +172,16 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
     }
 
     bool isSuccessful = true;
-//    // If we have old archive entries.
-//    if (!creatingNewFile) {
-//        m_filesPaths = m_writtenFiles;
-//        isSuccessful = processOldEntries_Add(addedEntries, Add, totalCount);
-//    }
+    // If we have old archive entries.
+    if (!creatingNewFile) {
+        isSuccessful = processOldEntries_Add(addedEntries, 10);
+    }
 
     finish(isSuccessful);
-    emit signalFinished(PFT_Nomral);
-    return PFT_Nomral;
+
+    emit signalFinished(isSuccessful ? PFT_Nomral : PFT_Error);
+
+    return isSuccessful ? PFT_Nomral : PFT_Error;
 }
 
 PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &files)
@@ -445,8 +447,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         return false;
     }
 
-    m_writtenFiles.push_back(destinationFilename);
-
+    m_writtenFilesSet.insert(destinationFilename);
 //    emitEntryFromArchiveEntry(entry);//屏蔽by hsw 20200528
 
     archive_entry_free(entry);
@@ -517,8 +518,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         return false;
     }
 
-    m_writtenFiles.push_back(destinationFilename);
-
+    m_writtenFilesSet.insert(destinationFilename);
     //    emitEntryFromArchiveEntry(entry);//这句不需要添加，因为在MainWindow::addArchive函数中已经建立了Archive::Entry在ArchiveModel的树
 
     archive_entry_free(entry);
@@ -572,9 +572,30 @@ void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
     file.close();
 }
 
+void ReadWriteLibarchivePlugin::copyDataFromSourceAdd(const QString &filename, archive *source, archive *dest, archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty)
+{
+    char buff[10240];
+    m_currentExtractedFilesSize = 0;
+    float entrySize = archive_entry_size(sourceEntry);
+    auto readBytes = archive_read_data(source, buff, sizeof(buff));
+    while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
+        archive_write_data(dest, buff, static_cast<size_t>(readBytes));
+        if (archive_errno(dest) != ARCHIVE_OK) {
+            return;
+        }
+
+        if (bInternalDuty) {
+            m_currentExtractedFilesSize += readBytes;
+            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / entrySize) * info.fileProgressProportion + info.fileProgressStart;//根据内容写入比例，加上上次的进度值
+//            emit progress(static_cast<double>(currentProgress));
+            //emit progress_filename(file.fileName());
+        }
+        readBytes = archive_read_data(source, buff, sizeof(buff));
+    }
+}
+
 bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
 {
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     struct archive_entry *entry;
     archive_filter_count(m_archiveReader.data());
 
@@ -583,42 +604,17 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
         QByteArray strCode;
         QString entryName = m_common->trans2uft8(archive_entry_pathname(entry), strCode); //该条entry在压缩包内文件名(全路径)
         bool flag = false;
-        foreach (const FileEntry &tmp, files) {
-            if (tmp.isDirectory) { //跳过该文件夹以及子文件
-                if (entryName.startsWith(tmp.strFullPath)) {
+        foreach (const FileEntry &tmpFileEntry, files) {
+            if (tmpFileEntry.isDirectory) { //跳过该文件夹以及子文件
+                if (entryName.startsWith(tmpFileEntry.strFullPath)) {
                     archive_read_data_skip(m_archiveReader.data()); //跳过该文件
-
-                    // 更新压缩包数据
-                    stArchiveData.mapFileEntry.remove(entryName); //移除该entry
-                    // 更新第一层数据中的文件夹
-                    if (entryName.count(QDir::separator()) == 1 && entryName.endsWith(QDir::separator())) {
-                        for (int tmp = 0; tmp < stArchiveData.listRootEntry.count(); tmp++) {
-                            if (0 == stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
-                                stArchiveData.listRootEntry.removeAt(tmp);
-                                break;
-                            }
-                        }
-                    }
 
                     flag = true;
                     break;
                 }
             } else {
-                if (0 == entryName.compare(tmp.strFullPath)) {
+                if (0 == entryName.compare(tmpFileEntry.strFullPath)) {
                     archive_read_data_skip(m_archiveReader.data()); //跳过该文件
-
-                    // 更新压缩包数据
-                    stArchiveData.mapFileEntry.remove(entryName); //移除该entry
-                    stArchiveData.qSize -= static_cast<qlonglong>(archive_entry_size(entry)); //更新原始总大小
-                    // 更新第一层数据中的文件
-                    if (!entryName.contains(QDir::separator())) {
-                        for (int tmp = 0; tmp < stArchiveData.listRootEntry.count(); tmp++) {
-                            if (0 == stArchiveData.listRootEntry[tmp].strFullPath.compare(entryName)) {
-                                stArchiveData.listRootEntry.removeAt(tmp);
-                                break;
-                            }
-                        }
-                    }
 
                     flag = true;
                     break;
@@ -644,8 +640,6 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
         }
     }
 
-    stArchiveData.qComressSize = QFileInfo(m_strArchiveName).size(); // 更新新压缩包大小
-
     return !QThread::currentThread()->isInterruptionRequested();
 }
 
@@ -667,4 +661,82 @@ bool ReadWriteLibarchivePlugin::writeEntry(struct archive_entry *entry)
     }
 
     return true;
+}
+
+bool ReadWriteLibarchivePlugin::writeEntry_Add(archive_entry *entry, FileProgressInfo &info, bool bInternalDuty)
+{
+    const int returnCode = archive_write_header(m_archiveWriter.data(), entry);
+    switch (returnCode) {
+    case ARCHIVE_OK:
+        // If the whole archive is extracted and the total filesize is
+        // available, we use partial progress.
+        copyDataFromSourceAdd(QLatin1String(archive_entry_pathname(entry)), m_archiveReader.data(), m_archiveWriter.data(), entry, info, bInternalDuty);
+        break;
+    case ARCHIVE_FAILED:
+    case ARCHIVE_FATAL:
+        emit error(("Could not compress entry, operation aborted."));
+        return false;
+    default:
+        break;
+    }
+
+    return true;
+}
+
+bool ReadWriteLibarchivePlugin::processOldEntries_Add(uint &entriesCounter, uint totalCount)
+{
+    const uint newEntries = entriesCounter;
+    entriesCounter = 0;
+
+    // Create a map that contains old path as key and new path as value.
+    QMap<QString, QString> pathMap;
+    struct archive_entry *entry;
+
+    while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
+        const QString file = QFile::decodeName(archive_entry_pathname(entry));
+//        emit progress_filename(file);
+
+        if (m_writtenFilesSet.contains(file.endsWith('/') ? file.chopped(1) : file)) {
+            archive_read_data_skip(m_archiveReader.data());
+//            switch (mode) {
+//            case Add:
+//                // When overwriting entries, we need to decrement the counter manually,
+//                // because entry was emitted.
+//                m_numberOfEntries--;
+//                break;
+//            default:
+//                Q_ASSERT(false);
+//            }
+            continue;
+        }
+
+        // Write old entries.
+        FileProgressInfo info;
+        float entrySize = archive_entry_size(entry);
+        bool bInternalDuty = false;
+        if (entrySize > MB300) { //如果大于300M
+            bInternalDuty = true;
+            info.fileProgressStart = (newEntries + entriesCounter) * 1.0 / (totalCount); //记录当前进度值
+            info.fileProgressProportion = (float)1.0 / totalCount;//设定内度百分比范围,1表示对当前这一个压缩包进行内部进度细分分析
+        }
+
+
+//        if (writeEntry(entry)) {
+        if (writeEntry_Add(entry, info, bInternalDuty)) {
+//            if (mode == Add) {
+//                entriesCounter++;
+//            }
+        } else {
+            return false;
+        }
+
+        if (bInternalDuty == false) {
+            double percent = float(newEntries + entriesCounter) / totalCount;
+            //qDebug() << "add========" << "newEntries:" << newEntries << ",entriesCounter:" << entriesCounter << ",totalCount:" << totalCount << ",percent:" << percent;
+//            emit progress(percent);
+        }
+
+    }
+
+    return !QThread::currentThread()->isInterruptionRequested();
 }

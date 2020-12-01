@@ -310,16 +310,21 @@ PluginFinishType CliInterface::addComment(const QString &/*comment*/)
 PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
 {
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
-    ArchiveData tempStArchiveData = DataManager::get_instance().archiveData();
 
     m_rootEntry = QString();
     foreach (FileEntry entry, options.listEntry) {
         if (options.eType == UpdateOptions::Delete) { // 删除
             if (entry.isDirectory) { // 删除文件夹
-                foreach (FileEntry tempFile, tempStArchiveData.mapFileEntry) {
-                    // 在map中查找该文件下的文件并删除
-                    if (tempFile.strFullPath.startsWith(entry.strFullPath)) {
-                        stArchiveData.mapFileEntry.remove(tempFile.strFullPath);
+                // 在map中查找该文件夹下的文件并删除
+                QMap<QString, FileEntry>::iterator itor = stArchiveData.mapFileEntry.begin();
+                while (itor != stArchiveData.mapFileEntry.end()) {
+                    if (itor->strFullPath.startsWith(entry.strFullPath)) {
+                        if (!itor->isDirectory) {
+                            stArchiveData.qSize -= itor->qSize; // 更新压缩包内文件原始总大小
+                        }
+                        itor = stArchiveData.mapFileEntry.erase(itor);
+                    } else {
+                        ++itor;
                     }
                 }
 
@@ -328,21 +333,24 @@ PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
                     for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
                         if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
                             stArchiveData.listRootEntry.removeAt(i);
+                            break;
                         }
                     }
                 }
             } else { // 删除文件
+                stArchiveData.qSize -= entry.qSize; // 更新压缩包内文件原始总大小
                 stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中删除该文件
                 // 文件是第一层的数据
                 if (!entry.strFullPath.contains(QLatin1Char('/'))) {
                     for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
                         if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
                             stArchiveData.listRootEntry.removeAt(i);
+                            break;
                         }
                     }
                 }
             }
-        } else { // 追加压缩
+        } else if (options.eType == UpdateOptions::Add) { // 追加压缩
             QString destinationPath = options.strParentPath; // 追加目标路径
             QFileInfo file(entry.strFullPath);
 
@@ -355,21 +363,23 @@ PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
                 entry.strFullPath = entry.strFullPath + QDir::separator(); // 手动添加'/'
                 //entry.qSize = QDir(entry.strFullPath).entryInfoList().count(); // 获取文件夹大小为遍历文件夹获取文件夹下子文件的数目
             } else {
-                entry.qSize = file.size(); // 文件大小
+//                entry.qSize = file.size(); // 文件大小
+                // 更新压缩包内文件原始总大小
+                stArchiveData.qSize -= stArchiveData.mapFileEntry.value(entry.strFullPath).qSize;
+                stArchiveData.qSize += entry.qSize;
             }
 
             // 判断是否追加到第一层数据
             if (destinationPath == "" && ((entry.strFullPath.count('/') == 1 && entry.strFullPath.endsWith('/')) || entry.strFullPath.count('/') == 0)) {
-                bool flag = true;
                 for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
                     if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一层数据中找到entry，不添加数据
-                        flag = false;
+                        stArchiveData.listRootEntry.removeAt(i);
+                        break;
                     }
                 }
 
-                if (flag) { // 在第一层数据中没有找到entry，在第一层数据中添加entry
-                    stArchiveData.listRootEntry.push_back(entry);
-                }
+                // 在第一层数据中没有找到entry，在第一层数据中添加entry
+                stArchiveData.listRootEntry.push_back(entry);
             }
 
             stArchiveData.mapFileEntry.insert(entry.strFullPath, entry); // 在map中插入数据

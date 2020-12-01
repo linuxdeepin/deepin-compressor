@@ -191,7 +191,7 @@ struct UpdateOptions {
     }
 
     Type eType;                     // 更新类型
-    QString strParentPath;          // 父目录（若为空，代表操作的是根目录下的文件）
+    QString strParentPath;          // 父目录（若为空，代表操作的是压缩包首层目录下的文件）
     QList<FileEntry> listEntry;     // 操作的文件（删除：存储选中的文件     追加：存储本地所有文件）
     qint64 qSize;                  // 操作的文件大小
 };
