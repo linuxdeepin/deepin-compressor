@@ -68,16 +68,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 初始化标题栏
     initTitleBar();
-
+    initData();
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
 
-    // 加载界面保存属性
-    loadWindowState();
 }
 
 MainWindow::~MainWindow()
 {
+    //如果窗体状态不是最大最小状态，则记录此时窗口尺寸到配置文件里，方便下次打开时恢复大小
+    if (windowState() == Qt::WindowNoState) {
+        saveConfigWinSize(width(), height());
+    }
+
     // 清除缓存数据
     QProcess p;
     QString command = "rm";
@@ -116,6 +119,9 @@ void MainWindow::initUI()
 
     // 创建打开文件监控
     m_pOpenFileWatcher = new OpenFileWatcher(this);
+
+    // 刷新压缩设置界面格式选项
+    m_pCompressSettingPage->refreshMenu();
 }
 
 void MainWindow::initTitleBar()
@@ -159,15 +165,15 @@ void MainWindow::initTitleBar()
 
 void MainWindow::initData()
 {
-    // 刷新压缩设置界面格式选项
-    m_pCompressSettingPage->refreshMenu();
-
     // 初始化数据配置
     m_pSettings = new QSettings(QDir(UiTools::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
 
     if (m_pSettings->value("dir").toString().isEmpty()) {
         m_pSettings->setValue("dir", "");
     }
+
+    resize(getConfigWinSize()); // 设置窗口尺寸
+    setMinimumSize(620, 465);   // 设置最小大小
 }
 
 void MainWindow::initConnections()
@@ -200,18 +206,6 @@ void MainWindow::initConnections()
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
 }
 
-void MainWindow::loadWindowState()
-{
-    QSettings settings(objectName());
-    const QByteArray geometry = settings.value("geometry").toByteArray();
-    if (!geometry.isEmpty()) {
-        restoreGeometry(geometry);
-    } else {
-        resize(620, 465);
-    }
-
-    setMinimumSize(620, 465);
-}
 
 void MainWindow::refreshPage()
 {
@@ -435,7 +429,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
             qDebug() << "初始化界面";
             initUI();
             initConnections();
-            initData();
             m_initFlag = true;
         }
 
@@ -469,7 +462,6 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         qDebug() << "初始化界面";
         initUI();
         initConnections();
-        initData();
         m_initFlag = true;
     }
 
@@ -1525,6 +1517,40 @@ void MainWindow::showErrorMessage(ErrorInfo eErrorInfo)
     }
     break;
     }
+}
+
+QSize MainWindow::getConfigWinSize()
+{
+    // 获取界面宽、高
+    QVariant tempWidth = m_pSettings->value(MAINWINDOW_WIDTH_NAME);
+    QVariant tempHeight = m_pSettings->value(MAINWINDOW_HEIGHT_NAME);
+    int winWidth = MAINWINDOW_DEFAULTW;
+    int winHeight = MAINWINDOW_DEFAULTH;
+
+    // 设置界面宽度
+    if (tempWidth.isValid()) {
+
+        winWidth = tempWidth.toInt();
+        winWidth = winWidth > MAINWINDOW_DEFAULTW ? winWidth : MAINWINDOW_DEFAULTW;
+    }
+
+    // 设置界面高度
+    if (tempHeight.isValid()) {
+
+        winHeight = tempHeight.toInt();
+        winHeight = winHeight > MAINWINDOW_DEFAULTH ? winHeight : MAINWINDOW_DEFAULTH;
+    }
+
+    return QSize(winWidth, winHeight);
+}
+
+void MainWindow::saveConfigWinSize(int w, int h)
+{
+    int winWidth = w > MAINWINDOW_DEFAULTW ? w : MAINWINDOW_DEFAULTW;
+    int winHeight = h > MAINWINDOW_DEFAULTH ? h : MAINWINDOW_DEFAULTH;
+    m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, winHeight);
+    m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, winWidth);
+    m_pSettings->sync();
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)

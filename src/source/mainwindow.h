@@ -81,7 +81,7 @@ private:
     /**
      * @brief loadWindowState   加载状态
      */
-    void loadWindowState();
+    //void loadWindowState();
 
     /**
      * @brief refreshPage   刷新界面页
@@ -199,6 +199,19 @@ private:
      * @param eErrorInfo        错误信息
      */
     void showErrorMessage(ErrorInfo eErrorInfo);
+
+    /**
+     * @brief getConfigWinSize  通过配置文件获取之前保存的窗口大小
+     * @return  之前保存的窗口大小
+     */
+    QSize getConfigWinSize();
+
+    /**
+     * @brief saveConfigWinSize     保存窗口尺寸
+     * @param w     宽度
+     * @param h     高度
+     */
+    void saveConfigWinSize(int w, int h);
 
     // QWidget interface
 protected:

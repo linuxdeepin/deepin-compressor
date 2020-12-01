@@ -110,6 +110,7 @@ int main(int argc, char *argv[])
         w.show();
         PERF_PRINT_END("POINT-01");
     }
+    Dtk::Widget::moveToCenter(&w);  // 居中显示
 
     PERF_PRINT_END("POINT-01");
 
