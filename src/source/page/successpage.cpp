@@ -95,11 +95,11 @@ void SuccessPage::initUI()
 
 void SuccessPage::initConnections()
 {
-    connect(m_pShowFileBtn, &DPushButton::clicked, this, &SuccessPage::slotShowfiledirSlot);
+    connect(m_pShowFileBtn, &DPushButton::clicked, this, &SuccessPage::signalViewFile);
     connect(m_pReturnBtn, &DCommandLinkButton::clicked, this, &SuccessPage::sigBackButtonClicked);
 }
 
-void SuccessPage::slotShowfiledirSlot(bool iIsUrl)
-{
+//void SuccessPage::slotShowfiledirSlot()
+//{
 
-}
+//}

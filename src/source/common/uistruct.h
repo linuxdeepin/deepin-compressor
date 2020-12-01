@@ -130,7 +130,7 @@ struct UnCompressParameter {
 
     QString strFullPath;        // 压缩包全路径
     QString strExtractPath;     // 解压路径
-    bool bRightOperation;       // 是否右键快捷操作
+    bool bRightOperation;       // 是否右键快捷操作（解压到当前文件夹）
     bool bSplitVolume;          // 是否分卷包
     bool bMultiplePassword;     // 是否支持多密码追加
     bool bModifiable;           // 是否更改压缩包数据

@@ -183,10 +183,13 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
-    connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
     connect(m_pProgressPage, &ProgressPage::signalPause, this, &MainWindow::slotPause);
     connect(m_pProgressPage, &ProgressPage::signalContinue, this, &MainWindow::slotContinue);
     connect(m_pProgressPage, &ProgressPage::signalCancel, this, &MainWindow::slotCancel);
+    connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
+    connect(m_pSuccessPage, &SuccessPage::signalViewFile, this, &MainWindow::slotSuccessView);
+    connect(m_pFailurePage, &FailurePage::sigFailRetry, this, &MainWindow::slotFailureRetry);
+    connect(m_pFailurePage, &FailurePage::sigBackButtonClickedOnFail, this, &MainWindow::slotFailureReturn);
 
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
@@ -512,7 +515,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             if (!strAutoPath.isEmpty()) {
                 options.strTargetPath += QDir::separator() + strAutoPath;
             }
-            m_stUnCompressParameter.strExtractPath = options.strTargetPath;
+            m_stUnCompressParameter.strExtractPath = options.strTargetPath; // 解压路径
+            m_stUnCompressParameter.strFullPath = filepath;     // 压缩包全路径
 
             // 调用解压函数
             if (ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options)) {
@@ -1017,6 +1021,15 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         if (m_pSettingDlg->isAutoDeleteFile()) {
             deleteWhenJobFinish(ArchiveJob::JT_Create);
         }
+
+        // 初始化文件服务
+        if (m_pDDesktopServicesThread == nullptr) {
+            m_pDDesktopServicesThread = new DDesktopServicesThread(this);
+        }
+
+        // 设置需要查看的文件为压缩包
+        m_pDDesktopServicesThread->setOpenFile(m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName);
+
     }
     break;
     // 添加文件至压缩包
@@ -1059,22 +1072,25 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             qDebug() << "解压结束";
             m_ePageID = PI_Success;
             showSuccessInfo(SI_Compress);   // 解压成功
+
+            // 初始化服务
+            if (m_pDDesktopServicesThread == nullptr) {
+                m_pDDesktopServicesThread = new DDesktopServicesThread(this);
+            }
+
+            // 构建需要查看的本地文件
+            if (m_pSettingDlg->isAutoCreatDir()) {
+                // 若设置了自动创建文件夹,显示解压路径
+                m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath);
+            } else {
+                // 否则显示解压第一个文件/文件夹所在目录
+                ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+                if (stArchiveData.listRootEntry.count() > 0)
+                    m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[0].strFullPath);
+            }
+
             // 设置了自动打开文件夹处理流程
             if (m_pSettingDlg->isAutoOpen()) {
-                if (m_pDDesktopServicesThread == nullptr) {
-                    m_pDDesktopServicesThread = new DDesktopServicesThread(this);
-                }
-
-                if (m_pSettingDlg->isAutoCreatDir()) {
-                    // 若设置了自动创建文件夹,显示解压路径
-                    m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath);
-                } else {
-                    // 否则显示解压第一个文件/文件夹所在目录
-                    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
-                    if (stArchiveData.listRootEntry.count() > 0)
-                        m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[0].strFullPath);
-                }
-
                 m_pDDesktopServicesThread->start();
             }
 
@@ -1138,6 +1154,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pUnCompressPage->refreshDataByCurrentPathDelete();
     }
     break;
+    default:
+        break;
     }
 }
 
@@ -1278,6 +1296,8 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 更新压缩包数据错误
     case ArchiveJob::JT_Update:
 
+        break;
+    default:
         break;
     }
 }
@@ -1609,34 +1629,6 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
     }
 }
 
-void MainWindow::slotSuccessReturn()
-{
-
-    switch (m_operationtype) {
-    // 压缩成功
-    case Operation_Create: {
-        m_pCompressPage->clear();   // 清空压缩界面
-    }
-    break;
-    // 解压成功
-    case Operation_Extract: {
-        m_pUnCompressPage->clear(); // 清空解压界面
-    }
-    break;
-    // 转换成功
-    case Operation_CONVERT: {
-        m_pUnCompressPage->clear(); // 清空解压界面
-    }
-    break;
-    default:
-        break;
-    }
-
-    resetMainwindow();
-    m_ePageID = PI_Home;
-    refreshPage();
-}
-
 void MainWindow::slotPause(Progress_Type eType)
 {
     Q_UNUSED(eType)
@@ -1670,6 +1662,94 @@ void MainWindow::slotAddFiles(const QStringList &listFiles, const QString &strPa
 {
     // 向压缩包中添加文件
     addFiles2Archive(listFiles, strPassword);
+}
+
+void MainWindow::slotSuccessView()
+{
+    // 若文件服务线程不为空，查看相应的文件
+    if (m_pDDesktopServicesThread)
+        m_pDDesktopServicesThread->start();
+}
+
+void MainWindow::slotSuccessReturn()
+{
+    switch (m_operationtype) {
+    // 压缩成功
+    case Operation_Create: {
+        m_pCompressPage->clear();   // 清空压缩界面
+    }
+    break;
+    // 解压成功
+    case Operation_Extract: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    // 转换成功
+    case Operation_CONVERT: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    default:
+        break;
+    }
+
+    resetMainwindow();
+    m_ePageID = PI_Home;
+    refreshPage();
+}
+
+void MainWindow::slotFailureRetry()
+{
+    switch (m_operationtype) {
+    // 压缩失败
+    case Operation_Create: {
+
+    }
+    break;
+    // 解压失败
+    case Operation_Extract: {
+        if (m_stUnCompressParameter.bRightOperation) {
+            // 右键解压到当前文件夹
+        } else {
+            // 普通加载解压
+        }
+    }
+    break;
+    // 转换失败
+    case Operation_CONVERT: {
+
+    }
+    break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::slotFailureReturn()
+{
+    switch (m_operationtype) {
+    // 压缩失败
+    case Operation_Create: {
+        m_pCompressPage->clear();   // 清空压缩界面
+    }
+    break;
+    // 解压失败
+    case Operation_Extract: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    // 转换失败
+    case Operation_CONVERT: {
+        m_pUnCompressPage->clear(); // 清空解压界面
+    }
+    break;
+    default:
+        break;
+    }
+
+    resetMainwindow();
+    m_ePageID = PI_Home;
+    refreshPage();
 }
 
 

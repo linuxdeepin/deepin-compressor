@@ -62,10 +62,19 @@ private:
     void initConnections();
 
 signals:
+    /**
+     * @brief signalViewFile    查看信号
+     */
+    void signalViewFile();
+
+    /**
+     * @brief sigBackButtonClicked  返回信号
+     */
     void sigBackButtonClicked();
 
+
 public slots:
-    void slotShowfiledirSlot(bool iIsUrl = true);
+    //void slotShowfiledirSlot();
 
 private:
     DLabel *m_pSuccessPixmapLbl; //成功图片显示

@@ -314,11 +314,6 @@ private Q_SLOTS:
     void slotOpenFileChanged(const QString &strPath);
 
     /**
-     * @brief slotSuccessReturn     解压成功返回
-     */
-    void slotSuccessReturn();
-
-    /**
      * @brief slotPause       暂停
      * @param eType             操作类型
      */
@@ -341,6 +336,26 @@ private Q_SLOTS:
      * @param strPassword       加密选项
      */
     void slotAddFiles(const QStringList &listFiles, const QString &strPassword);
+
+    /**
+     * @brief slotSuccessView   成功之后查看操作
+     */
+    void slotSuccessView();
+
+    /**
+     * @brief slotSuccessReturn     解压成功返回
+     */
+    void slotSuccessReturn();
+
+    /**
+     * @brief slotFailureRetry  错误重试
+     */
+    void slotFailureRetry();
+
+    /**
+     * @brief slotFailureReturn 错误返回
+     */
+    void slotFailureReturn();
 
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
