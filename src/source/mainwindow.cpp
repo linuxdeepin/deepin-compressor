@@ -502,6 +502,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             options.bAllExtract = true;
             options.bRightExtract = true;
             options.qComressSize = fileinfo.size();
+            options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
             QString strAutoPath = getExtractPath(fileinfo.fileName());
             // 根据是否自动创建文件夹处理解压路径
             if (!strAutoPath.isEmpty()) {
