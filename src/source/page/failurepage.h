@@ -49,6 +49,12 @@ public:
      */
     void setFailureDetail(const QString &strDetail);
 
+    /**
+     * @brief setRetryEnable    设置重试按钮是否可用
+     * @param bEnable           是否可用
+     */
+    void setRetryEnable(bool bEnable);
+
 private:
     /**
      * @brief initUI    初始化界面

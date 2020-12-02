@@ -49,6 +49,11 @@ void FailurePage::setFailureDetail(const QString &strDetail)
     m_pDetailLbl->setText(strDetail);
 }
 
+void FailurePage::setRetryEnable(bool bEnable)
+{
+    m_pRetrybutton->setEnabled(bEnable);
+}
+
 void FailurePage::initUI()
 {
     //失败图标

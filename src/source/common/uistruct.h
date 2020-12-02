@@ -162,6 +162,7 @@ enum ErrorInfo {
     EI_WrongPasswordWhenUnCompress,       // 解压密码错误
     EI_LongFileName,        // 文件名过长
     EI_CreatFileFailed,     // 创建文件失败
+    EI_CreatArchiveFailed,     // 创建压缩文件失败
 };
 
 #endif // CUSTOMDATAINFO_H
