@@ -102,15 +102,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     bool isAtRootPath = false; //是否提取首层目录下的文件
     const bool extractAll = files.isEmpty();//如果是双击解压，则为false;如果是按钮解压，则为true
     if (extractAll) {  //全部解压
-        if (!m_ArchiveEntryCount) {
-//            emit progress(0);
-//            //TODO: once information progress has been implemented, send
-//            //feedback here that the archive is being read
-//            m_emitNoEntries = true;
-//            list();
-//            m_emitNoEntries = false;
-        }
-//        totalEntriesCount = m_ArchiveEntryCount;
+
     } else { //部分解压、提取
         const QString &rootNode = options.strDestination;
         if (rootNode.isEmpty() || "/" == rootNode) {
@@ -271,9 +263,9 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             // If the whole archive is extracted and the total filesize is
             // available, we use partial progress.
             if (extractAll == false) {
-                copyDataFromSource_ArchiveEntry(entryName, m_archiveReader.data(), writer.data(), options.qSize);
+                copyDataFromSource_ArchiveEntry(m_archiveReader.data(), writer.data(), options.qSize);
             } else {
-                copyDataFromSource(entryName, m_archiveReader.data(), writer.data());
+                copyDataFromSource(m_archiveReader.data(), writer.data(), options.qSize);
             }
 
             // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
@@ -494,7 +486,7 @@ bool LibarchivePlugin::initializeReader()
     return true;
 }
 
-void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest)
+void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive *dest, const qlonglong &totalSize)
 {
     char buff[10240]; //缓存大小
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
@@ -514,13 +506,13 @@ void LibarchivePlugin::copyDataFromSource(const QString &filename, struct archiv
 
         // 解压百分比进度
         m_currentExtractedFilesSize += readBytes;
-        emit signalprogress((double(m_currentExtractedFilesSize)) / DataManager::get_instance().archiveData().qSize * 100);
+        emit signalprogress((double(m_currentExtractedFilesSize)) / totalSize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
     }
 }
 
-void LibarchivePlugin::copyDataFromSource_ArchiveEntry(const QString &filename, archive *source, archive *dest, qint64 extractFileSize)
+void LibarchivePlugin::copyDataFromSource_ArchiveEntry(archive *source, archive *dest, qint64 extractFileSize)
 {
     char buff[10240];
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff

@@ -52,6 +52,17 @@ public:
 
     // ReadWriteArchiveInterface interface
 public:
+    /**
+     * @brief addFiles 压缩追加操作
+     * 压缩：
+     *  1.生成新压缩包
+     * 追加:
+     *  1.生成新压缩包
+     *  2.保留原压缩包中未覆盖的文件，并将其复制到新压缩包中
+     * @param files
+     * @param options
+     * @return
+     */
     PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
 //    bool moveFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
 //    bool copyFiles(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &options) override;
@@ -94,20 +105,18 @@ private:
      * @param destination
      * @param externalPath 文件夹路径
      * @param totalsize 原文件总大小
-     * @param partialprogress
      * @return
      */
-    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const qlonglong &totalsize, bool partialprogress = false);
+    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const qlonglong &totalsize);
     /**
      * @brief writeFileFromEntry 将文件写入压缩包
      * @param relativeName 本地文件(夹)(全路径)
      * @param destination 压缩包内路径
      * @param pEntry
      * @param totalsize 原文件总大小
-     * @param bInternalDuty
      * @return
      */
-    bool writeFileFromEntry(const QString &relativeName, const QString destination, FileEntry &pEntry, const qlonglong &totalsize, bool bInternalDuty = false);
+    bool writeFileFromEntry(const QString &relativeName, const QString destination, FileEntry &pEntry, const qlonglong &totalsize);
     /**
      * @brief copyData 本地数据写入压缩包
      * @param filename 本地文件
@@ -117,15 +126,12 @@ private:
      */
     void copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
     /**
-     * @brief copyDataFromSourceAdd
-     * @param filename
+     * @brief copyDataFromSourceAdd 追加操作复制原压缩包中保留的数据
      * @param source
      * @param dest
-     * @param sourceEntry
-     * @param info
-     * @param bInternalDuty
+     * @param totalsize 压缩包原文件总大小-被追加文件覆盖的文件大小
      */
-    void copyDataFromSourceAdd(const QString &filename, struct archive *source, struct archive *dest, struct archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty = true);
+    void copyDataFromSourceAdd(struct archive *source, struct archive *dest, const qlonglong &totalsize);
     /**
      * @brief deleteEntry 具体删除操作
      * 筛选是否是需要删除的文件，复制保留文件数据到新的压缩包中
@@ -134,27 +140,25 @@ private:
      */
     bool deleteEntry(const QList<FileEntry> &files);
     /**
-     * @brief writeEntry 复制压缩包数据
+     * @brief writeEntryDelete 删除操作，复制压缩包保留文件数据
      * @param entry
+     * @param totalSize
      * @return
      */
-    bool writeEntry(struct archive_entry *entry);
+    bool writeEntryDelete(struct archive_entry *entry, const qlonglong &totalSize);
     /**
-    * @brief writeEntry_Add
+    * @brief writeEntryAdd 追加操作数据处理
     * @param entry
-    * @param info
-    * @param bInternalDuty
+    * @param totalSize 压缩包原文件总大小-被追加文件覆盖的文件大小
     * @return
     */
-    bool writeEntry_Add(struct archive_entry *entry, FileProgressInfo &info, bool bInternalDuty);
+    bool writeEntryAdd(struct archive_entry *entry, const qlonglong &totalSize);
     /**
      * @brief processOldEntries_Add 处理需要保留的entry
-     * @param entriesCounter
-     * @param mode
-     * @param totalCount
+     * @param totalCount 压缩包原文件总大小
      * @return
      */
-    bool processOldEntries_Add(uint &entriesCounter, uint totalCount);
+    bool processOldEntries_Add(qlonglong &totalCount);
 };
 
 

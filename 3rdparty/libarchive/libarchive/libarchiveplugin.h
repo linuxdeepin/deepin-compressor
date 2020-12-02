@@ -119,19 +119,17 @@ protected:
 
     /**
      * @brief copyDataFromSource 压缩包数据写到本地文件
-     * @param filename 本地文件名
      * @param source 读句柄
      * @param dest 写句柄
      */
-    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest);
+    void copyDataFromSource(struct archive *source, struct archive *dest, const qlonglong &totalSize);
     /**
      * @brief copyDataFromSource_ArchiveEntry 压缩包数据写到本地文件(提取用)
-     * @param filename
      * @param source
      * @param dest
      * @param extractFileSize 待提取文件总大小
      */
-    void copyDataFromSource_ArchiveEntry(const QString &filename, struct archive *source, struct archive *dest, qint64 extractFileSize);
+    void copyDataFromSource_ArchiveEntry(struct archive *source, struct archive *dest, qint64 extractFileSize);
 
 private:
     PluginFinishType list_New();

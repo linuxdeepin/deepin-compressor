@@ -1304,11 +1304,16 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
     options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
     options.strPassword = strPassword;
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    options.qTotalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
 
     // 构建压缩文件数据
     foreach (QString strFile, listFiles) {
         FileEntry stFileEntry;
         stFileEntry.strFullPath = strFile;
+        if (!QFileInfo(strFile).isDir()) {
+            stFileEntry.qSize = QFileInfo(strFile).size(); // 原文件大小，供libarchive追加进度使用
+        }
         listEntry.push_back(stFileEntry);
     }
 
