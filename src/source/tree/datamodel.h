@@ -28,6 +28,7 @@
 #include <QDir>
 
 class MimeTypeDisplayManager;
+class QItemSelection;
 
 class DataModel : public QAbstractTableModel
 {
@@ -49,6 +50,12 @@ public:
      * @param listEntry     需要显示的数据
      */
     void refreshFileEntry(const QList<FileEntry> &listEntry);
+
+    /**
+     * @brief getSelectIndex    根据传入的名称获取选中的多行
+     * @param listName          需要选中名称
+     */
+    QItemSelection getSelectItem(const QStringList &listName = QStringList());
 
 private:
     QList<FileEntry> m_listEntry;       // 显示的数据

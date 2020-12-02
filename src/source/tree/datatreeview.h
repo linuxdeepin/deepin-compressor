@@ -22,6 +22,8 @@
 #ifndef DATATREEVIEW_H
 #define DATATREEVIEW_H
 
+#include "uistruct.h"
+
 #include <DTreeView>
 
 #include <QStyledItemDelegate>

@@ -50,7 +50,6 @@ public:
 private:
     DataManager();//防止构造函数
     DataManager(const DataManager &);//防止拷贝构造函数
-    DataManager &operator=(const DataManager &); //防止赋值拷贝构造函数
 
     ArchiveData m_stArchiveData;        // 存储当前操作的压缩包数据
 

@@ -66,9 +66,9 @@ public:
      */
     void refreshArchiveData();
     /**
-     * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
+     * @brief refreshDataByCurrentPathChanged 刷新删除后的显示数据
      */
-    void refreshDataByCurrentPathDelete();
+    void refreshDataByCurrentPathChanged();
 
     /**
      * @brief addNewFiles   追加新文件

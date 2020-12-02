@@ -39,6 +39,13 @@ public:
     explicit UnCompressView(QWidget *parent = nullptr);
     ~UnCompressView() override;
 
+    // 对压缩包数据更改的操作类型
+    enum ChangeType {
+        CT_None,        // 未做任何更改
+        CT_Delete,      // 删除文件
+        CT_Add,         // 追加文件
+    };
+
     /**
      * @brief refreshArchiveData   加载结束刷新数据
      */
@@ -50,12 +57,12 @@ public:
      */
     void setDefaultUncompressPath(const QString &strPath);
     /**
-     * @brief refreshDataByCurrentPathDelete 刷新删除后的显示数据
+     * @brief refreshDataByCurrentPathChanged 刷新删除/追加的显示数据
      * 处理流程:
      * 1.删除当前目录m_mapShowEntry，并更新数据
      * 2.删除上一级m_mapShowEntry后不作处理，当返回上一级目录时会自动更新
      */
-    void refreshDataByCurrentPathDelete();
+    void refreshDataByCurrentPathChanged();
 
     /**
      * @brief addNewFiles   追加新文件
@@ -256,6 +263,9 @@ private:
     QString m_strSelUnCompressPath;    // 选择的解压路径
     bool m_bModifiable = false;     // 压缩包数据是否可更改（增、删、改）
     bool m_bMultiplePassword = false;     // 追加是否可以多密码
+
+    ChangeType m_eChangeType = CT_None;
+    QStringList m_listAddFiles;     // 追加的文件
 };
 
 #endif // UNCOMPRESSVIEW_H

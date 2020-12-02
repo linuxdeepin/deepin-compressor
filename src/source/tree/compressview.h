@@ -170,6 +170,8 @@ private:
     QList<FileEntry> m_listEntry;       // 待待压缩的文件数据
     QFileSystemWatcher *m_pFileWatcher; // 对当前目录进行监控(层级大于1时)
     FileEntry m_stRightEntry;       // 右键点击的文件
+
+    QStringList m_listSelFiles;         // 新添加的文件
 };
 
 #endif // COMPRESSVIEW_H

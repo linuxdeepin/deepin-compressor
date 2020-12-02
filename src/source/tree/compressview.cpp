@@ -56,7 +56,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
     bool applyAll = false;
 
     // 对新添加的文件进行判重
-    QStringList listSelFiles = listFiles;
+    m_listSelFiles = listFiles;
 
     foreach (QString oldPath, m_listCompressFiles) {
         QFileInfo oldFile(oldPath);  // 已存在的文件
@@ -72,7 +72,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
                 }
 
                 if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
-                    listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
+                    m_listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
                 } else { // 替换
                     m_listCompressFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
                 }
@@ -81,7 +81,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
     }
 
 
-    m_listCompressFiles << listSelFiles;
+    m_listCompressFiles << m_listSelFiles;
 
     // 刷新待压缩数据
     refreshCompressedFiles();
@@ -111,8 +111,24 @@ void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileN
 
     resizeColumnWidth();
 
-    sortByColumn(0);
+    // 重置排序
+    m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
+    sortByColumn(DC_Name);
     resetLevel();   // 重置目录层级
+
+    // 选中新加的文件
+    // 获取所有的追加文件的文件名
+    QStringList listSelName;
+    foreach (QString strFile, m_listSelFiles) {
+        listSelName.push_back(QFileInfo(strFile).fileName());
+    }
+
+    // 设置多选
+    QItemSelectionModel *pSelectionModel = selectionModel();
+    pSelectionModel->select(m_pModel->getSelectItem(listSelName), QItemSelectionModel::SelectCurrent);
+
+    m_listSelFiles.clear(); // 刷新完之后清空追加的文件数据
+
 }
 
 void CompressView::clear()
@@ -183,7 +199,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             resizeColumnWidth();        // 重置列宽
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-            sortByColumn(0);
+            sortByColumn(DC_Name);
 
         } else {    // 如果是文件，选择默认方式打开
             OpenWithDialog::openWithProgram(entry.strFullPath);
@@ -396,5 +412,5 @@ void CompressView::slotPreClicked()
     handleLevelChanged();
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(0);
+    sortByColumn(DC_Name);
 }

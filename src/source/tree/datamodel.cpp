@@ -30,6 +30,7 @@
 #include <QIcon>
 #include <QCollator>
 #include <QElapsedTimer>
+#include <QItemSelection>
 
 DataModel::DataModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -141,6 +142,24 @@ void DataModel::refreshFileEntry(const QList<FileEntry> &listEntry)
     endResetModel();  //在结束前添加此函数
 }
 
+QItemSelection DataModel::getSelectItem(const QStringList &listName)
+{
+    QItemSelection selection;
+
+    for (int i = 0; i < m_listEntry.size(); ++i) {
+        QModelIndex index = this->index(i, DC_Name);
+        // 处理是否需要选中的文件
+        if (listName.contains(index.data(Qt::DisplayRole).toString())) {
+            QModelIndex left = this->index(index.row(), DC_Name);
+            QModelIndex right = this->index(index.row(), DC_Size);
+            QItemSelection sel(left, right);
+            selection.merge(sel, QItemSelectionModel::Select);  // 多选合并
+        }
+    }
+
+    return selection;
+}
+
 void DataModel::sort(int column, Qt::SortOrder order)
 {
     if (0 > column || 3 < column) {
@@ -165,8 +184,8 @@ void DataModel::sort(int column, Qt::SortOrder order)
         {
         case DC_Name: {
             if (order == Qt::AscendingOrder) { //升序
-                if (QChar::Script_Han == entrya.strFileName.at(0).script()) { //左侧第一个是汉字
-                    if (QChar::Script_Han == entryb.strFileName.at(0).script()) { //右侧第一个是汉字
+                if (entrya.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {       // 左侧包含汉字
+                    if (entryb.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {   // 右侧包含汉字
                         QCollator col;
                         return (col.compare(entrya.strFileName, entryb.strFileName) < 0);
                     } else {
@@ -175,9 +194,9 @@ void DataModel::sort(int column, Qt::SortOrder order)
                 }
                 return QString::compare(entrya.strFileName, entryb.strFileName, Qt::CaseInsensitive) < 0;
             } else { //降序
-                if (QChar::Script_Han == entrya.strFileName.at(0).script()) {
-                    //左侧第一个是汉字
-                    if (QChar::Script_Han == entryb.strFileName.at(0).script()) { //右侧第一个是汉字
+                if (entrya.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+                    // 左侧包含汉字
+                    if (entryb.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) { // 右侧包含汉字
                         QCollator col;
                         return (col.compare(entrya.strFileName, entryb.strFileName) > 0);
                     } else {

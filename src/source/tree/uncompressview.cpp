@@ -37,6 +37,7 @@
 #include <QDateTime>
 #include <QApplication>
 #include <QMimeData>
+#include <QItemSelectionModel>
 
 UnCompressView::UnCompressView(QWidget *parent)
     : DataTreeView(parent)
@@ -65,8 +66,10 @@ void UnCompressView::refreshArchiveData()
     m_pModel->refreshFileEntry(stArchiveData.listRootEntry);
     m_mapShowEntry["/"] = stArchiveData.listRootEntry;
 
-    // 重置目录层级
-    resetLevel();
+    // 重置排序
+    m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
+    sortByColumn(DC_Name);
+    resetLevel();       // 重置目录层级
 }
 
 void UnCompressView::setDefaultUncompressPath(const QString &strPath)
@@ -202,7 +205,7 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             resizeColumnWidth();            // 重置列宽
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-            sortByColumn(0);
+            sortByColumn(DC_Name);
         } else {    // 如果是文件，选择默认方式打开
             slotOpen();
         }
@@ -229,7 +232,7 @@ void UnCompressView::refreshDataByCurrentPath()
     m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
 }
 
-void UnCompressView::refreshDataByCurrentPathDelete()
+void UnCompressView::refreshDataByCurrentPathChanged()
 {
     if (0 == m_strCurrentPath.compare("/")) { //当前目录是第一层
         m_mapShowEntry.clear();
@@ -262,12 +265,33 @@ void UnCompressView::refreshDataByCurrentPathDelete()
         // 刷新列表数据
         m_pModel->refreshFileEntry(m_mapShowEntry[m_strCurrentPath]);
     }
+
+    // 重置排序
+    m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
+    sortByColumn(DC_Name);
+
+    // 追加时需要选中追加的文件
+    if (m_eChangeType == CT_Add) {
+        // 获取所有的追加文件的文件名
+        QStringList listSelName;
+        foreach (QString strFile, m_listAddFiles) {
+            listSelName.push_back(QFileInfo(strFile).fileName());
+        }
+
+        // 设置多选
+        QItemSelectionModel *pSelectionModel = selectionModel();
+        pSelectionModel->select(m_pModel->getSelectItem(listSelName), QItemSelectionModel::SelectCurrent);
+
+        m_listAddFiles.clear(); // 刷新完之后清空追加的文件数据
+    }
+
+    m_eChangeType = CT_None;    // 重置操作类型
 }
 
 void UnCompressView::addNewFiles(const QStringList &listFiles)
 {
     QString strPassword;
-    QStringList listAddFiles;
+    m_listAddFiles.clear();
 
     // 追加选项判断
 
@@ -295,7 +319,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
             if (bApplyAll) {
                 // 全部应用处理
                 if (bOverwrite) {
-                    listAddFiles = listFiles;   // 若全部替换，追加所有文件
+                    m_listAddFiles = listFiles;   // 若全部替换，追加所有文件
                     break;
                 } else {
                     continue;       // 若全部跳过，重复文件不处理
@@ -321,18 +345,19 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
                 // 追加此文件/文件夹
                 default:
                     bOverwrite = true;
-                    listAddFiles << listFiles[i];
+                    m_listAddFiles << listFiles[i];
                     break;
                 }
             }
         } else {
             // 不存在重复文件
-            listAddFiles << listFiles[i];
+            m_listAddFiles << listFiles[i];
         }
     }
 
     // 发送追加信号
-    emit signalAddFiles2Archive(listAddFiles, strPassword);
+    m_eChangeType = CT_Add;
+    emit signalAddFiles2Archive(m_listAddFiles, strPassword);
 }
 
 QString UnCompressView::getCurPath()
@@ -578,6 +603,7 @@ void UnCompressView::slotDeleteFile()
         }
 
         // 发送删除信号
+        m_eChangeType = CT_Delete;
         emit signalDelFiles(listSelEntry, qSize);
     }
 }
@@ -648,7 +674,8 @@ void UnCompressView::slotPreClicked()
 
     // 重置宽度
     resizeColumnWidth();
+
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(0);
+    sortByColumn(DC_Name);
 }

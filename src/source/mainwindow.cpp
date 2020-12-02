@@ -1143,7 +1143,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         qDebug() << "更新结束";
         m_pLoadingPage->stopLoading();      // 停止更新
         m_ePageID = PI_UnCompress;
-        m_pUnCompressPage->refreshDataByCurrentPathDelete();
+        m_pUnCompressPage->refreshDataByCurrentPathChanged();
     }
     break;
     default:

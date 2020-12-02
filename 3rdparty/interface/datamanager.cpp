@@ -49,11 +49,6 @@ DataManager::DataManager(const DataManager &)
 
 }
 
-DataManager &DataManager::operator=(const DataManager &)
-{
-
-}
-
 DataManager &DataManager::get_instance(void)
 {
 

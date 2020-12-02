@@ -83,9 +83,9 @@ void UnCompressPage::resizeEvent(QResizeEvent *e)
     m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
-void UnCompressPage::refreshDataByCurrentPathDelete()
+void UnCompressPage::refreshDataByCurrentPathChanged()
 {
-    m_pUnCompressView->refreshDataByCurrentPathDelete();
+    m_pUnCompressView->refreshDataByCurrentPathChanged();
 }
 
 void UnCompressPage::addNewFiles(const QStringList &listFiles)
