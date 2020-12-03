@@ -385,11 +385,6 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     QString transFile = strArchiveFullPath;
     QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     QMimeType mimeType = determineMimeType(transFile);
-    // 构建压缩包加载之后的数据
-    m_stUnCompressParameter.bSplitVolume = transSplitFileName(transFile);
-    m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
-    m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
-    m_stUnCompressParameter.bModifiable = listSupportedMimeTypes.contains(mimeType.name());
 
     QFileInfo fileinfo(transFile);
     if (!fileinfo.exists()) {
@@ -398,6 +393,12 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         showErrorMessage(EI_ArchiveMissingVolume);
         return;
     }
+
+    // 构建压缩包加载之后的数据
+    m_stUnCompressParameter.bSplitVolume = transSplitFileName(transFile);
+    m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
+    m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
+    m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable());  // 支持压缩且文件可写的格式才能修改数据
 
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter.bSplitVolume, m_stUnCompressParameter.bMultiplePassword, m_stUnCompressParameter.bModifiable);     // 设置压缩包全路径和是否分卷
 
@@ -871,7 +872,15 @@ void MainWindow::slotCompress(const QVariant &val)
 //        bBatch = true;
 //    }
 
-    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, false/*, bBatch*/)) {
+    bool bUseLibarchive = false;
+#ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
+    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
+    bUseLibarchive = maxFileSizeProportion > 0.6;
+#else
+    bUseLibarchive = false;
+#endif
+
+    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, bUseLibarchive/*, bBatch*/)) {
         // 切换进度界面
         m_pProgressPage->setProgressType(PT_Compress);
         m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);
@@ -1401,6 +1410,10 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
 
 void MainWindow::resetMainwindow()
 {
+#ifdef __aarch64__
+    maxFileSize_ = 0;
+#endif
+
     m_operationtype = Operation_NULL;   // 重置操作类型
     m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
     m_pProgressPage->resetProgress();   // 重置进度

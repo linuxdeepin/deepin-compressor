@@ -437,6 +437,11 @@ private:
     UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
 
     UpdateOptions m_stUpdateOptions;        // 更新压缩包时选项
+
+    // 适配arm平台
+#ifdef __aarch64__
+    qint64 maxFileSize_ = 0;
+#endif
 };
 
 #endif // MAINWINDOW_H
