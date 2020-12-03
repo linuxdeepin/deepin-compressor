@@ -4786,8 +4786,10 @@ void MainWindow::slotFailRetry()
         m_ePageID = PAGE_HOME;
         refreshPage();
         loadArchive(m_strLoadfile);
-    } else if (Operation_Extract == m_operationtype) { // 解压失败点击重试重新解压
-        slotextractSelectedFilesTo(m_pUnCompressPage->getDecompressPath());
+    } else if (Operation_Extract == m_operationtype) { // 解压失败点击重试回到解压列表界面
+        //slotextractSelectedFilesTo(m_pUnCompressPage->getDecompressPath());
+        m_ePageID = PAGE_UNZIP;
+        refreshPage();
     } else if (Operation_SingleExtract == m_operationtype) {
     }
 }
