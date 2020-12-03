@@ -69,7 +69,7 @@ void SettingDialog::initUI()
     // 通过json文件创建DSettings对象
     m_settings = DSettings::fromJsonFile(":assets/data/deepin-compressor.json");
 
-    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation); // ～～～换了枚举值，待验证
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation); // 换了枚举值，待验证
 
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.conf";
 
@@ -80,11 +80,7 @@ void SettingDialog::initUI()
     // 通过DSettings对象构建设置界面
     updateSettings(m_settings);
 
-//    foreach (QString key, UiTools::m_associtionlist) {
-//        m_settings->setOption(key, m_data[key].toBool()); //update dsetting from m_data
-//    }
-
-//    writeConfbf();  // 具体功能待验证
+    writeConfbf();  // 在应用被打开的时候，写新的config文件 具体功能待验证
 }
 
 void SettingDialog::initConnections()
@@ -308,23 +304,13 @@ void SettingDialog::writeConfbf()
 
     // 打开配置文件
     QFile file(confPath);
-    if (!file.exists()) {
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-    }
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
 
     // 写配置
-//    foreach (QString key, m_data/*UiTools::m_associtionlist*/) {
-//        QString bValue = m_settings->option(key)->value().toString();
-//        QString content = key + ":" + bValue + "\n";
-//        file.write(content.toUtf8());
-//    }
-    QMap<QString, QVariant>::iterator it = m_data.begin();
-    // 写配置
-    while (it != m_data.end()) {
-        it.key();
-        QString content = it.key() + ":" + it.value().toString() + "\n";
+    foreach (QString key, UiTools::m_associtionlist) {
+        QString bValue = m_settings->option(key)->value().toString();
+        QString content = key + ":" + bValue + "\n";
         file.write(content.toUtf8());
-        ++it;
     }
 
     file.close();
@@ -332,10 +318,9 @@ void SettingDialog::writeConfbf()
 
 void SettingDialog::slotSettingsChanged(const QString &key, const QVariant &value)
 {
-    // 设置界面点击恢复默认选项
-    qDebug() << "slotSettingsChanged:  " << key  << value; // 具体功能待确认、完善
-//    m_data[key] = value;
-//    writeConfbf();
+    // 设置界面点击恢复默认选项  具体功能待确认、完善
+    qDebug() << "slotSettingsChanged:  " << key  << value;
+    writeConfbf();
 }
 
 void SettingDialog::slotClickSelectAllButton()

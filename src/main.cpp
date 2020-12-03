@@ -100,6 +100,11 @@ int main(int argc, char *argv[])
     MainWindow w;
     // w.show();
 
+    if (argc >= 2 && !w.checkSettings(argv[1])) {
+        app.exit();
+        return 0;
+    }
+
     // 测试右键
     //newfilelist.clear();
     //newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";

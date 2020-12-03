@@ -64,6 +64,13 @@ public:
      */
     bool checkHerePath(const QString &strPath);
 
+    /**
+     * @brief checkSettings 检测目标文件合法性
+     * @param file  文件名
+     * @return
+     */
+    bool checkSettings(QString file);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -220,6 +227,20 @@ private:
      * @param h     高度
      */
     void saveConfigWinSize(int w, int h);
+
+    /**
+     * @brief getDefaultApp 根据文件类型获取默认打开的应用的程序
+     * @param mimetype  文件类型
+     * @return 应用程序
+     */
+    QString getDefaultApp(QString mimetype);
+
+    /**
+     * @brief setDefaultApp 设置默认应用程序
+     * @param mimetype  文件类型
+     * @param desktop   应用程序
+     */
+    void setDefaultApp(QString mimetype, QString desktop);
 
     // QWidget interface
 protected:

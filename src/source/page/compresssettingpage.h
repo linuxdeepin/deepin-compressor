@@ -80,7 +80,6 @@ public:
      */
     void refreshMenu();
 
-
 private:
     /**
      * @brief initUI    初始化界面

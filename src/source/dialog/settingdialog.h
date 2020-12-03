@@ -131,6 +131,4 @@ private:
     QString m_curpath;
     int m_index_last;
     QString m_autoDeleteArchive;    // 解压后删除压缩文件方式
-
-    QMap<QString, QVariant> m_data;
 };

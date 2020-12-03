@@ -469,6 +469,62 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 }
 
+bool MainWindow::checkSettings(QString file)
+{
+    QString fileMime;
+
+    bool existMime = false; // 在设置界面是否被勾选
+    bool bArchive = false; // 是否是应用支持解压的格式
+    bool mimeIsChecked = true; // 默认该格式被勾选
+
+    // 判断内容
+    if (file.isEmpty()) {
+        existMime = true;
+    } else {
+        fileMime = determineMimeType(file).name();
+
+        if (fileMime.contains("application/"))
+            fileMime = fileMime.remove("application/");
+
+        if (fileMime.size() > 0) {
+            existMime = UiTools::isExistMimeType(fileMime, bArchive);
+
+            // 如果在设置界面找到非压缩包的类型，置为true
+            if (!bArchive && !existMime) // ？
+                existMime = true;
+        } else {
+            existMime = false;
+        }
+    }
+
+    if (existMime) { // 已经是关联解压类型
+        QString defaultCompress = getDefaultApp(fileMime); // 获取该类型文件的默认打开方式
+
+        if (defaultCompress.startsWith("dde-open.desktop")) {
+            // 如果默认打开方式不是归档管理器， 设置归档管理器我为默认打开方式
+            setDefaultApp(fileMime, "deepin-compressor.desktop");
+        }
+    } else { // 不是关联解压类型
+        // 如果不是归档管理器支持的压缩文件格式，设置默认打开方式为选择默认打开程序对话框
+        QString defaultCompress = getDefaultApp(fileMime);
+        if (defaultCompress.startsWith("deepin-compressor.desktop")) {
+            setDefaultApp(fileMime, "dde-open.desktop");
+        }
+
+        TipDialog dialog;
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenRect =  screen->availableVirtualGeometry();
+        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+
+        int re = dialog.showDialog(tr("Please check the file association type in the settings of Archive Manager"), tr("OK"), DDialog::ButtonNormal);
+        if (re != 1) { // ？
+            mimeIsChecked = false;
+        }
+    }
+
+    return mimeIsChecked;
+}
+
 void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
 {
     qDebug() << listParam;
@@ -873,6 +929,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
     if (!strAutoPath.isEmpty()) {
         options.strTargetPath += QDir::separator() + strAutoPath;
     }
+
     m_stUnCompressParameter.strExtractPath = options.strTargetPath;
 
     // 调用解压函数
@@ -982,6 +1039,7 @@ bool MainWindow::transSplitFileName(QString &fileName)
         if (reg.exactMatch(fileName) == false) {
             return false;
         }
+
         bSplit = true;
         fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
     } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
@@ -1566,6 +1624,26 @@ void MainWindow::saveConfigWinSize(int w, int h)
     m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, winHeight);
     m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, winWidth);
     m_pSettings->sync();
+}
+
+QString MainWindow::getDefaultApp(QString mimetype)
+{
+    QString outInfo;
+    QProcess p;
+    QString command3 = "xdg-mime query default %1"; // eg: xdg-mime query default application/vnd.rar
+    p.start(command3.arg("application/" + mimetype));
+    p.waitForFinished();
+    outInfo = QString::fromLocal8Bit(p.readAllStandardOutput());
+
+    return  outInfo;
+}
+
+void MainWindow::setDefaultApp(QString mimetype, QString desktop)
+{
+    QProcess p;
+    QString command3 = "xdg-mime default %1 %2"; // eg: xdg-mime default deepin-compressor.desktop application/vnd.rar
+    p.start(command3.arg(desktop).arg("application/" + mimetype));
+    p.waitForFinished();
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)

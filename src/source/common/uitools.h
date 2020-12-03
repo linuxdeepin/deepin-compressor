@@ -104,7 +104,7 @@ public:
      * @param strMimeType      文件类型
      * @return
      */
-    static bool isExistMimeType(const QString &strMimeType);
+    static bool isExistMimeType(const QString &strMimeType, bool &bArchive);
 
     /**
      * @brief readConf   读取配置信息

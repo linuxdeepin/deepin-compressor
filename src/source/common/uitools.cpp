@@ -151,9 +151,10 @@ bool UiTools::isArchiveFile(const QString &strFileName)
         mime = mimeType.name().remove("application/");
 
     bool ret = false;
+    bool bArchive = false;
 
     if (mime.size() > 0) {
-        ret = isExistMimeType(mime); // 判断是否是归档管理器支持的压缩文件格式
+        ret = isExistMimeType(mime, bArchive); // 判断是否是归档管理器支持的压缩文件格式
     } else {
         ret = false;
     }
@@ -235,7 +236,7 @@ QString UiTools::judgeFileMime(const QString &strFileName)
     return type;
 }
 
-bool UiTools::isExistMimeType(const QString &strMimeType)
+bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
 {
     QString conf = readConf();
     QStringList confList = conf.split("\n", QString::SkipEmptyParts);
@@ -243,6 +244,7 @@ bool UiTools::isExistMimeType(const QString &strMimeType)
     bool exist = false;
     for (int i = 0; i < confList.count(); i++) {
         if (confList.at(i).contains("." + strMimeType + ":")) {
+            bArchive = true;
             if (confList.at(i).contains("true")) {
                 exist = true;
                 break;
@@ -258,7 +260,7 @@ bool UiTools::isExistMimeType(const QString &strMimeType)
 
 QString UiTools::readConf()
 {
-    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     QDir dir;
     if (!dir.exists(confDir + QDir::separator())) {
         dir.mkpath(confDir + QDir::separator());
