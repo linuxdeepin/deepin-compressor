@@ -4440,7 +4440,7 @@ void MainWindow::slotJobFinished(KJob *job)
         refreshPage();
         QIcon icon = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         sendMessage(icon, tr("Wrong password"));
-        return;
+//        return;
     }
 
     switch (m_eJobType) {
@@ -5581,7 +5581,7 @@ void MainWindow::slotReloadConvertArchive(QString path)
 
 void MainWindow::deleteLaterJob()
 {
-    if (m_pJob) {
+    if (m_pJob && m_pJob->mType != KJob::NONE) { // None表示该Job尚未new或者已经delete
         m_pJob->deleteLater();
         m_pJob = nullptr;
     }
