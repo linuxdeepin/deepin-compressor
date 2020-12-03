@@ -49,6 +49,7 @@
 #include <QDebug>
 #include <QThreadPool>
 #include <QtConcurrent/QtConcurrent>
+#include <QScreen>
 
 static QMutex mutex;
 
@@ -91,6 +92,22 @@ MainWindow::~MainWindow()
     p.waitForFinished();
 
     qDebug() << "应用正常退出";
+}
+
+bool MainWindow::checkHerePath(const QString &strPath)
+{
+    QFileInfo info(strPath);
+    if (!(info.isWritable() && info.isExecutable())) { // 检查一选择保存路径是否有权限
+        TipDialog dialog(this);
+        // 屏幕居中显示
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenRect =  screen->availableVirtualGeometry();
+        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+        dialog.showDialog(tr("You do not have permission to save files here, please change and retry"), tr("OK"), DDialog::ButtonNormal);
+        return false;
+    }
+
+    return true;
 }
 
 void MainWindow::initUI()

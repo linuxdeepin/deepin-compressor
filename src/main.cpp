@@ -105,6 +105,16 @@ int main(int argc, char *argv[])
     //newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";
 
     if (!newfilelist.isEmpty()) {
+        // 检查解压到当前文件夹路径是否有权限，若没有权限，给出提示并退出应用
+        QString strType = newfilelist.last();
+        if (strType == QStringLiteral("extract_here") || strType == QStringLiteral("extract_multi")
+                || strType == QStringLiteral("extract_here_multi") || strType == QStringLiteral("extract_here_split")) {
+            if (!w.checkHerePath(QFileInfo(newfilelist[0]).path())) {
+                app.quit();
+                return 0;
+            }
+        }
+
         QMetaObject::invokeMethod(&w, "slotHandleRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
     } else {
         w.show();

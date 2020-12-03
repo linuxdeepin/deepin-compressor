@@ -57,6 +57,13 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    /**
+     * @brief checkHerePath 检查目标路径是否可写/可执行
+     * @param strPath       全路径
+     * @return
+     */
+    bool checkHerePath(const QString &strPath);
+
 private:
     /**
      * @brief initUI    初始化界面
