@@ -461,13 +461,13 @@ void CompressSetting::onNextButoonClicked()
         return;
     }
 
-    // 分卷数量不能多于10 卷
+    // 分卷数量不能多于200 卷
     if (m_splitcompress->isChecked()
             && (fabs(m_splitnumedit->value()) < std::numeric_limits<double>::epsilon()
-                || (((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 10))
+                || (((m_getFileSize / 1024 / 1024) / (m_splitnumedit->value())) > 200))
             && (m_compresstype->text().contains("7z") || m_compresstype->text().contains("zip"))) {
         showWarningDialog(tr("Too many volumes, please change and retry"));
-        //  Up to 10 volumes, please change and retry
+        //  Up to 200 volumes, please change and retry
         return;
     }
 
@@ -765,6 +765,10 @@ bool CompressSetting::checkFilePermission(const QString &path)
 void CompressSetting::setSelectedFileSize(qint64 size)
 {
     m_getFileSize = size;
+    if (m_splitnumedit != nullptr) {
+        QString strSize = Utils::humanReadableSize(m_getFileSize, 1); // 获取文件大小（包含单位）
+        m_splitnumedit->setToolTip(tr("Total size: %1").arg(strSize));
+    }
 }
 
 /**
