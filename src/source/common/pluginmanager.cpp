@@ -313,7 +313,7 @@ QStringList PluginManager::sortByComment(const QSet<QString> &mimeTypes)
     // Initialize the QMap to sort by comment.
     for (const QString &mimeType : mimeTypes) {
         QMimeType mime(QMimeDatabase().mimeTypeForName(mimeType));
-        map[mime.comment().toLower()] = mime.name();
+        map[mime.preferredSuffix().toLower()] = mime.name();
     }
 
     // Convert to sorted QStringList.

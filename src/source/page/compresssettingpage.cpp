@@ -478,7 +478,7 @@ bool CompressSettingPage::checkCompressOptionValid()
 
     if (m_pSplitCkb->isChecked()
             && (fabs(m_pSplitValueEdt->value()) < std::numeric_limits<double>::epsilon()
-                || (((m_qFileSize / 1024 / 1024) / (m_pSplitValueEdt->value())) > 10))
+                || (((m_qFileSize / 1024 / 1024) / (m_pSplitValueEdt->value())) > 200))
             && (m_strMimeType.contains("7z") || m_strMimeType.contains("zip"))) { // 最多允许分卷数量为200卷
         showWarningDialog(tr("Too many volumes, please change and retry"));
         return false;
