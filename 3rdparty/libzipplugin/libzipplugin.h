@@ -252,6 +252,8 @@ private:
     bool m_bCancel = false;     // 是否取消
     Common *m_common = nullptr; // 通用工具类
     zip_t *m_listArchive = nullptr;
+
+    QMap<zip_int64_t, QByteArray> m_mapFileCode;   // 存储文件编码
 };
 
 #endif // LIBZIPPLUGIN_H

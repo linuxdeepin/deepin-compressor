@@ -45,7 +45,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT002)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     file_encoding(buf, 0, code, code_mime, type);
@@ -62,7 +63,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT003)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -115,7 +117,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT004)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -131,7 +134,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT005)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -149,7 +153,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT006)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -166,7 +171,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT007)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -183,7 +189,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT008)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -200,7 +207,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT009)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -218,7 +226,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT010)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -254,7 +263,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT011)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -272,7 +282,8 @@ TEST(detectencoding_file_encoding_UT, detectencoding_file_encoding_UT012)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
 
@@ -297,7 +308,8 @@ TEST(detectencoding_looks_ascii_UT, detectencoding_looks_ascii_UT001)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -313,7 +325,8 @@ TEST(detectencoding_looks_utf8_with_BOM_UT, detectencoding_looks_utf8_with_BOM_U
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -329,7 +342,8 @@ TEST(detectencoding_looks_utf7_UT, detectencoding_looks_utf7_UT001)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -345,7 +359,8 @@ TEST(detectencoding_looks_ucs16_UT, detectencoding_looks_ucs16_UT001)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -361,7 +376,8 @@ TEST(detectencoding_looks_ucs16_UT, detectencoding_looks_ucs16_UT002)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -376,7 +392,8 @@ TEST(detectencoding_looks_latin1_UT, detectencoding_looks_latin1_UT001)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -391,7 +408,8 @@ TEST(detectencoding_looks_latin1_UT, detectencoding_looks_latin1_UT002)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -405,7 +423,8 @@ TEST(detectencoding_looks_extended_UT, detectencoding_looks_extended_UT001)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -420,7 +439,8 @@ TEST(detectencoding_looks_extended_UT, detectencoding_looks_extended_UT002)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("1234g");
+    QByteArray strCode;
+    QString a = common.trans2uft8("1234g", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unichar *ubuf = (unichar *)ba.data();
@@ -437,7 +457,8 @@ TEST(detectencoding_from_ebcdic_utf8_UT, detectencoding_from_ebcdic_UT002)
     QString code_mime; QString type;
 
     Common common(nullptr);
-    QString a = common.trans2uft8("110xxxxx");
+    QByteArray strCode;
+    QString a = common.trans2uft8("110xxxxx", strCode);
     QByteArray ba = a.toLatin1();
     unsigned char *buf = (unsigned char *)ba.data();
     unsigned char *ubuf = (unsigned char *)ba.data();

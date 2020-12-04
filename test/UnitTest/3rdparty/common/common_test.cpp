@@ -34,7 +34,8 @@ QLocale::Script myScript = QLocale::ArabicScript;
 TEST(Common_trans2uft8_UT, Common_trans2uft8_UT001)
 {
     Common common(nullptr);
-    QString str = common.trans2uft8("古风");
+    QByteArray strCode;
+    QString str = common.trans2uft8("古风", strCode);
     int ret = str.compare("古风");
 
     ASSERT_EQ(ret, 0);
@@ -42,8 +43,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT001)
 
 TEST(Common_trans2uft8_UT, Common_trans2uft8_UT002)
 {
-    QByteArray (*mydetectEncode)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mydetectEncode)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "gb18030";
@@ -53,7 +54,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT002)
     stub->set(ADDR(Common, detectEncode), mydetectEncode);
 
     Common common(nullptr);
-    QString str = common.trans2uft8("你好");
+    QByteArray strCode;
+    QString str = common.trans2uft8("你好", strCode);
     int ret = str.compare("浣犲ソ");
 
     stub->reset(ADDR(Common, detectEncode));
@@ -63,8 +65,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT002)
 
 TEST(Common_trans2uft8_UT, Common_trans2uft8_UT003)
 {
-    QByteArray (*mydetectEncode)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mydetectEncode)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "windows";
@@ -74,7 +76,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT003)
     stub->set(ADDR(Common, detectEncode), mydetectEncode);
 
     Common common(nullptr);
-    QString str = common.trans2uft8("你好");
+    QByteArray strCode;
+    QString str = common.trans2uft8("你好", strCode);
     int ret = str.compare("浣犲ソ");
 
     stub->reset(ADDR(Common, detectEncode));
@@ -84,8 +87,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT003)
 
 TEST(Common_trans2uft8_UT, Common_trans2uft8_UT004)
 {
-    QByteArray (*mydetectEncode)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mydetectEncode)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "KOI8-R";
@@ -95,7 +98,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT004)
     stub->set(ADDR(Common, detectEncode), mydetectEncode);
 
     Common common(nullptr);
-    QString str = common.trans2uft8("你好");
+    QByteArray strCode;
+    QString str = common.trans2uft8("你好", strCode);
     int ret = str.compare("Д╫═Е╔╫");
 
     stub->reset(ADDR(Common, detectEncode));
@@ -105,8 +109,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT004)
 
 TEST(Common_trans2uft8_UT, Common_trans2uft8_UT005)
 {
-    QByteArray (*mydetectEncode)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mydetectEncode)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "UTF";
@@ -116,7 +120,8 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT005)
     stub->set(ADDR(Common, detectEncode), mydetectEncode);
 
     Common common(nullptr);
-    QString str = common.trans2uft8("你好");
+    QByteArray strCode;
+    QString str = common.trans2uft8("你好", strCode);
     int ret = str.compare("你好");
 
     stub->reset(ADDR(Common, detectEncode));
@@ -126,14 +131,14 @@ TEST(Common_trans2uft8_UT, Common_trans2uft8_UT005)
 
 TEST(Common_detectEncode_UT, Common_detectEncode_UT001)
 {
-    QByteArray (*mydetectEncode)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mydetectEncode)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "test";
     };
-    QByteArray (*mytextCodecDetect)(const QByteArray &, const QString &) =
-        [](const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mytextCodecDetect)(const QByteArray &, const QString &) =
+    [](const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(data);
         Q_UNUSED(fileName)
         return "test";
@@ -154,7 +159,7 @@ TEST(Common_detectEncode_UT, Common_detectEncode_UT001)
 TEST(Common_detectEncode_UT, Common_detectEncode_UT002)
 {
     int (*myChartDet_DetectingTextCoding)(void *, const char *, QString &, float &) =
-        [](void *obj, const char *str, QString &encoding, float &confidence) -> int {
+    [](void *obj, const char *str, QString & encoding, float & confidence) -> int {
         Q_UNUSED(obj);
         Q_UNUSED(str);
         Q_UNUSED(confidence);
@@ -175,7 +180,7 @@ TEST(Common_detectEncode_UT, Common_detectEncode_UT002)
 TEST(Common_detectEncode_UT, Common_detectEncode_UT003)
 {
     int (*myChartDet_DetectingTextCoding)(void *, const char *, QString &, float &) =
-        [](void *obj, const char *str, QString &encoding, float &confidence) -> int {
+    [](void *obj, const char *str, QString & encoding, float & confidence) -> int {
         Q_UNUSED(obj);
         Q_UNUSED(str);
         Q_UNUSED(confidence);
@@ -196,15 +201,15 @@ TEST(Common_detectEncode_UT, Common_detectEncode_UT003)
 TEST(Common_detectEncode_UT, Common_detectEncode_UT004)
 {
     int (*myChartDet_DetectingTextCoding)(void *, const char *, QString &, float &) =
-        [](void *obj, const char *str, QString &encoding, float &confidence) -> int {
+    [](void *obj, const char *str, QString & encoding, float & confidence) -> int {
         Q_UNUSED(obj);
         Q_UNUSED(str);
         Q_UNUSED(confidence);
         encoding = QString("test");
         return 0;
     };
-    QByteArray (*mytextCodecDetect)(void *, const QByteArray &, const QString &) =
-        [](void *obj, const QByteArray &data, const QString &fileName) -> QByteArray {
+    QByteArray(*mytextCodecDetect)(void *, const QByteArray &, const QString &) =
+    [](void *obj, const QByteArray & data, const QString & fileName) -> QByteArray {
         Q_UNUSED(obj);
         Q_UNUSED(data);
         Q_UNUSED(fileName);
@@ -226,7 +231,7 @@ TEST(Common_detectEncode_UT, Common_detectEncode_UT004)
 TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding_UT001)
 {
     DetectObj *(*mydetect_obj_init)(void) =
-        []() -> DetectObj * {
+    []() -> DetectObj * {
         return nullptr;
     };
     Stub *stub = new Stub();
@@ -245,7 +250,7 @@ TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding
 TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding_UT002)
 {
     short (*mydetect)(const char *, DetectObj **) =
-        [](const char *buf, DetectObj **obj) -> short {
+    [](const char *buf, DetectObj **obj) -> short {
         return CHARDET_OUT_OF_MEMORY;
     };
     Stub *stub = new Stub();
@@ -264,7 +269,7 @@ TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding
 TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding_UT003)
 {
     short (*mydetect)(const char *, DetectObj **) =
-        [](const char *buf, DetectObj **obj) -> short {
+    [](const char *buf, DetectObj **obj) -> short {
         return CHARDET_NULL_OBJECT;
     };
     Stub *stub = new Stub();
@@ -283,7 +288,7 @@ TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding
 TEST(Common_ChartDet_DetectingTextCoding_UT, Common_ChartDet_DetectingTextCoding_UT004)
 {
     short (*mydetect)(const char *, DetectObj **) =
-        [](const char *buf, DetectObj **obj) -> short {
+    [](const char *buf, DetectObj **obj) -> short {
         return CHARDET_SUCCESS;
     };
     Stub *stub = new Stub();

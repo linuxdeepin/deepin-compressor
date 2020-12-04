@@ -97,25 +97,26 @@
     return qMax(0.0f, c);
 }
 
-QString Common::trans2uft8(const char *str)
+QString Common::trans2uft8(const char *str, QByteArray &strCode)
 {
-    QByteArray codec_name = detectEncode(str);
+    if (strCode.isEmpty())
+        strCode = detectEncode(str);
 
-    if (codec_name.isEmpty()) {
+    if (strCode.isEmpty()) {
         return str;
-    } else if ("gb18030" == codec_name) {
-        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-        m_codecStr = codec_name;
+    } else if ("gb18030" == strCode) {
+        QTextCodec *codec = QTextCodec::codecForName(strCode);
+        m_codecStr = strCode;
         return codec->toUnicode(str);
-    } else if (((QString)codec_name).contains("windows", Qt::CaseInsensitive) || ((QString)codec_name).contains("IBM", Qt::CaseInsensitive)
-               || ((QString)codec_name).contains("x-mac", Qt::CaseInsensitive) || ((QString)codec_name).contains("Big5", Qt::CaseInsensitive)
-               || ((QString)codec_name).contains("iso", Qt::CaseInsensitive)) {
+    } else if (((QString)strCode).contains("windows", Qt::CaseInsensitive) || ((QString)strCode).contains("IBM", Qt::CaseInsensitive)
+               || ((QString)strCode).contains("x-mac", Qt::CaseInsensitive) || ((QString)strCode).contains("Big5", Qt::CaseInsensitive)
+               || ((QString)strCode).contains("iso", Qt::CaseInsensitive)) {
         QTextCodec *codec = QTextCodec::codecForName("GBK");
-        m_codecStr = codec_name;
+        m_codecStr = strCode;
         return codec->toUnicode(str);
-    } else if (!((QString)codec_name).contains("UTF", Qt::CaseInsensitive)) {
-        QTextCodec *codec = QTextCodec::codecForName(codec_name);
-        m_codecStr = codec_name;
+    } else if (!((QString)strCode).contains("UTF", Qt::CaseInsensitive)) {
+        QTextCodec *codec = QTextCodec::codecForName(strCode);
+        m_codecStr = strCode;
         return codec->toUnicode(str);
     } else {
         m_codecStr = "UTF-8";

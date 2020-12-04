@@ -208,7 +208,8 @@ bool LibarchivePlugin::extractFiles(const QVector<Archive::Entry *> &files, cons
         //        QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(entry)));
         //        QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
         //        QString nameunicode = codec->toUnicode(archive_entry_pathname(entry));
-        QString utf8path = m_common->trans2uft8(archive_entry_pathname(entry));
+        QByteArray strCode;
+        QString utf8path = m_common->trans2uft8(archive_entry_pathname(entry), strCode);
         QString entryName = QDir::fromNativeSeparators(utf8path);
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
@@ -615,7 +616,8 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry, qlonglong index)
 {
 //    archive_stat *entry = nullptr;
 //    archive_stat entry;
-    m_archiveEntryStat.archive_fullPath = m_common->trans2uft8(archive_entry_pathname(aentry));
+    QByteArray strCode;
+    m_archiveEntryStat.archive_fullPath = m_common->trans2uft8(archive_entry_pathname(aentry), strCode);
     m_archiveEntryStat.archive_owner = QString::fromLatin1(archive_entry_uname(aentry));
     m_archiveEntryStat.archive_group = QString::fromLatin1(archive_entry_gname(aentry));
     if (archive_entry_symlink(aentry)) {
@@ -670,7 +672,8 @@ void LibarchivePlugin::emitEntryFromArchiveEntry(struct archive_entry *aentry)
     //    QTextCodec *codec = QTextCodec::codecForName(detectEncode(archive_entry_pathname(aentry)));
     //    QTextCodec *codecutf8 = QTextCodec::codecForName("utf-8");
     //    QString nameunicode = codec->toUnicode(archive_entry_pathname(aentry));
-    QString utf8path = m_common->trans2uft8(archive_entry_pathname(aentry));
+    QByteArray strCode;
+    QString utf8path = m_common->trans2uft8(archive_entry_pathname(aentry), strCode);
 
     pCurEntry->setProperty("fullPath", QDir::fromNativeSeparators(utf8path));
 

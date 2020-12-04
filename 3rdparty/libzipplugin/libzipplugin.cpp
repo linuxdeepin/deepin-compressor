@@ -81,6 +81,7 @@ bool LibzipPlugin::list(bool /*isbatch*/)
 {
     //    m_fileNameEncodeMap.clear();
     m_numberOfEntries = 0;
+    m_mapFileCode.clear();
 
     int errcode = 0;
     zip_error_t err;
@@ -312,7 +313,7 @@ void LibzipPlugin::emitProgress(double percentage)
 
         int i = m_filesize * percentage;
         if (m_addarchive) {
-            emit progress_filename(m_common->trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW)));
+            emit progress_filename(m_common->trans2uft8(zip_get_name(m_addarchive, i, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(i)]));
         }
 
         // Go from 0 to 50%. The second half is the subsequent listing.
@@ -427,7 +428,9 @@ bool LibzipPlugin::emitEntryForIndex(zip_t *archive, qlonglong index)
         }
     }
 
-    QString name = m_common->trans2uft8(statBuffer.name);
+    QByteArray strCode;
+    QString name = m_common->trans2uft8(statBuffer.name, strCode);
+    m_mapFileCode[index] = strCode;
 //    m_fileNameEncodeMap.insert(statBuffer.name, name);
     setEntryVal(statBuffer, m_indexCount, name, m_DirRecord);
     //    if (m_fileNameEncodeMap.find(name) == m_fileNameEncodeMap.end()) {
@@ -474,7 +477,7 @@ bool LibzipPlugin::deleteFiles(const QVector<Archive::Entry *> &files)
     //        }
     //    }
     for (int i = 0; i < m_listExtractIndex.count(); i++) {
-        QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+        QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(i)]);
         bool status = this->deleteEntry(strFilePath, m_listExtractIndex[i], archive/*, i, count*/);        //delete from archive
         if (status == true) {
             emit entryRemoved(/*files.at(i)->fullPath()*/strFilePath);      //delete from model
@@ -682,7 +685,7 @@ bool LibzipPlugin::checkArchivePsd(zip_t *archive, int &iCodecIndex)
             }
 
             QString entry;
-            entry = QDir::fromNativeSeparators(m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW)));
+            entry = QDir::fromNativeSeparators(m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(i)]));
             const bool isDirectory = entry.endsWith(QDir::separator());
             if (isDirectory) {
                 if (i == nofEntries - 1) {
@@ -770,7 +773,7 @@ void LibzipPlugin::checkEntryPsd(zip_t *archive, int iIndex, enum_checkEntryPsd 
         return;
     }
 
-    QString strFileName = m_common->trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW));
+    QString strFileName = m_common->trans2uft8(zip_get_name(archive, iIndex, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(iIndex)]);
 
     if (strFileName.endsWith(QDir::separator()) || iIndex == -1) {
         return;
@@ -876,27 +879,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
         return minizip_extractFiles(files, destinationDirectory, options);
     }
 
-    int iCodecIndex = 0;
-
-    // 若密码不为空，先设置密码
-    if (!password().isEmpty()) {
-        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
-    }
-
     // Get number of archive entries.
     const qlonglong nofEntries = extractAll ? zip_get_num_entries(archive, 0) : m_listExtractIndex.size();
-//    //首次检测密码
-//    bool status = true;
-//    if (extractAll == true) {
-//        status = checkArchivePsd(archive, iCodecIndex);
-//    } else {
-//        status = checkEntriesPsd(archive, m_listExtractIndex);
-//    }
-
-//    if (status == false) {
-//        return false;
-//    }
-//    //检测完毕,如果密码正确或不需要密码，发送此信号，通知开始解压
 
     emit sigChangeExtractProgressPage();
 
@@ -912,7 +896,8 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 break;
             }
 
-            QString strfileNameTemp = m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW));
+            QString strfileNameTemp = m_common->trans2uft8(zip_get_name(archive, i, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(i)]);
+
             //QString strfileNameTemp = zip_get_name(archive, i, ZIP_FL_ENC_RAW);
 
             if (i == 0) {
@@ -983,7 +968,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
             FileProgressInfo pi;
 
-            QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW));
+            QString strFilePath = m_common->trans2uft8(zip_get_name(archive, m_listExtractIndex[i], ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(m_listExtractIndex[i])]);
             const QStringList pieces = strFilePath.split(QLatin1Char('/'), QString::SkipEmptyParts);
             QString strName = pieces.isEmpty() ? QString() : pieces.last();
             emit progress_filename(strName);
@@ -1008,7 +993,7 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
                 zip_close(archive);
                 return false;
             } else if (enumRes == enum_extractEntryStatus::SUCCESS) {
-                emit progress(float(i + 1) / nofEntries);
+                //emit progress(float(i + 1) / nofEntries);
             } else if (enumRes == enum_extractEntryStatus::PSD_NEED) {// need input psd and extractEntry again, added by hsw 20200613
                 PasswordNeededQuery query(entryName);
                 emit userQuery(&query);
@@ -1034,19 +1019,19 @@ bool LibzipPlugin::extractFiles(const QVector<Archive::Entry *> &files, const QS
 
 enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi)
 {
-    //extract = false;
-
     userCancel = false;
 
-    const bool isDirectory = entry.endsWith(QDir::separator());
+    zip_stat_t statBuffer;
+    if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer) != 0) {
+        return enum_extractEntryStatus::FAIL;
+    }
 
-    // Add trailing slash to destDir if not present.
+    const bool isDirectory = entry.endsWith(QDir::separator());
     QString destDirCorrected(destDir);
     if (!destDir.endsWith(QDir::separator())) {
         destDirCorrected.append(QDir::separator());
     }
-
-    // Remove rootnode if supplied and set destination path.
+    // 提取
     QString destination;
     if (preservePaths) {
         if (!removeRootNode || rootNode.isEmpty()) {
@@ -1064,224 +1049,134 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
         destination = destDirCorrected + QFileInfo(entry).fileName();
     }
 
-    // Store parent mtime.
-    QString parentDir;
-    QFileInfo fileInfo = QFileInfo(destination);
-    if (isDirectory) {
-        QDir pDir = fileInfo.dir();
-        pDir.cdUp();
-        parentDir = pDir.path();
-    } else {
-        parentDir = fileInfo.path();
-    }
-    // For top-level items, don't restore parent dir mtime.
-
-    const bool restoreParentMtime = (parentDir + QDir::separator() != destDirCorrected);
-
-    time_t parent_mtime = time_t();
-    if (restoreParentMtime) {
-        parent_mtime = QFileInfo(parentDir).lastModified().toMSecsSinceEpoch() / 1000;
-    }
-
-    // Create parent directories for files. For directories create them.
-    if (QDir().exists(fileInfo.path()) == false) {
-        //extract = true;
-        if (!QDir().mkpath(fileInfo.path())) {
-            emit error(("Failed to create directory: %1"));
-            return enum_extractEntryStatus::FAIL;
-        }
-
+    // 判断解压路径是否存在，不存在则创建文件夹
+    if (QDir().exists(destDirCorrected) == false) {
+        QDir().mkpath(destDirCorrected);
         bAnyFileExtracted = true;
     }
 
-    // Get statistic for entry. Used to get entry size and mtime.
-    zip_stat_t statBuffer;
+    // 解压完整文件名（含路径）
+    QString strDestFileName = destination;
+    QFile file(strDestFileName);
 
-    int errcode2 = ZIP_ER_OK;
-    errcode2 = zip_error_code_zip(zip_get_error(archive));
-    if (zip_stat_index(archive, index, 0, &statBuffer) != 0) {
-        if (isDirectory && errcode2 == ZIP_ER_NOENT) {
-            return enum_extractEntryStatus::SUCCESS;
-        }
-
-        return enum_extractEntryStatus::FAIL;
+    // 获取外部信息（权限）
+    zip_uint8_t opsys;
+    zip_uint32_t attributes;
+    if (zip_file_get_external_attributes(archive, zip_uint64_t(index), ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
+        emit error(("Failed to read metadata for entry: %1"));
     }
 
-    if (!isDirectory) {
-        // Handle existing destination files.
-        QString renamedEntry = entry;
-//        while (!m_overwriteAll && QFileInfo::exists(destination)) {
-//            if (m_skipAll) {
-//                return enum_extractEntryStatus::SUCCESS;
-//            } else {
-//                OverwriteQuery query(renamedEntry);
-//                emit userQuery(&query);
-//                query.waitForResponse();
-//                ifReplaceTip = true;
+    // 从压缩包中获取文件权限
+    mode_t value = attributes >> 16;
+    QFileDevice::Permissions per = getPermissions(value);
 
-//                if (query.responseCancelled()) {
-//                    userCancel = true;
-//                    emit cancelled();
-//                    return enum_extractEntryStatus::FAIL;
-//                } else if (query.responseSkip()) {
-//                    return enum_extractEntryStatus::SUCCESS;
-//                } else if (query.responseAutoSkip()) {
-//                    m_skipAll = true;
-//                    return enum_extractEntryStatus::SUCCESS;
-//                } else if (query.responseRename()) {
-//                    const QString newName(query.newFilename());
-//                    destination = QFileInfo(destination).path() + QDir::separator() + QFileInfo(newName).fileName();
-//                    renamedEntry = QFileInfo(entry).path() + QDir::separator() + QFileInfo(newName).fileName();
-//                } else if (query.responseOverwriteAll()) {
-//                    m_overwriteAll = true;
-//                    break;
-//                } else if (query.responseOverwrite()) {
-//                    break;
-//                }
-//            }
-//        }
+    if (isDirectory) {     // 文件夹
+        QDir dir;
+        dir.mkpath(strDestFileName);
 
-        m_extractFile = destination;
+        // 文件夹加可执行权限
+        per = per | QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser ;
+    } else {        // 普通文件
 
-        QString strtmp = destination;
-        if (strtmp.endsWith(QDir::separator())) {
-            strtmp.chop(1);
-        }
-
-        int i = strtmp.lastIndexOf(QDir::separator());
-        if (strtmp.mid(i + 1).toUtf8().length() > NAME_MAX) { //Is the file name too long
-            emit error("Filename is too long");
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        QFile file(destination);
-//        if (file.exists() && !file.isWritable()) {
-//            file.remove();
-//            file.setFileName(destination);
-//            file.setPermissions(QFileDevice::WriteUser);
-//        }
-
-//        if (file.open(QIODevice::WriteOnly) == false) {
-//            emit error(("Failed to open file for writing: %1"));
-//            return enum_extractEntryStatus::FAIL;
-//       }
-
-        QDataStream out(&file);
-
-        // Write archive entry to file. We use a read/write buffer of 1024 chars.
-        int kb = 1024;
-        qulonglong sum = 0;
-        char buf[kb];
-
-        if (pi.fileProgressProportion > 0) {
-            emit progress(pi.fileProgressStart + pi.fileProgressProportion * 0.01);
-        }
-
-        // check entry psd begin : 1st clean error, 2nd fopen, 3rd get error
-        zip_error_clear(archive);
-        zip_file_t *zipFile = zip_fopen_index(archive, index, 0);
-        if (zipFile == nullptr) {
-            int iErr = zip_error_code_zip(zip_get_error(archive));
-            if (iErr == ZIP_ER_WRONGPASSWD || iErr == ZIP_ER_NOPASSWD) {// 密码错误或者提示需要输入密码
-                file.close();
-                return enum_extractEntryStatus::PSD_NEED;
-
-//                bool bCheckFinished = false;
-//                int iCodecIndex = 0;
-//                while (zipFile == nullptr && bCheckFinished == false) {
-//                    if (iCodecIndex == m_listCodecs.length()) {
-//                        bCheckFinished = true;
-//                        if (file.exists()) {
-//                            file.remove();
-//                        }
-
-//                        file.close();
-//                        return enum_extractEntryStatus::PSD_NEED;
-//                    } else {
-//                        iCodecIndex++;
-//                        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
-//                        zip_error_clear(archive);
-//                        zipFile = zip_fopen_index(archive, index, 0);
-//                        iErr = zip_error_code_zip(zip_get_error(archive));
-//                        if (iErr != ZIP_ER_WRONGPASSWD && zipFile != nullptr) {//密码正确
-//                            bCheckFinished = true;
-//                        }
-//                    }
-//                }
-            } /*else if (iErr == ZIP_ER_NOPASSWD) {
-                file.close();
-                return enum_extractEntryStatus::PSD_NEED;
-            }*/ else {
-                emit error(("Failed to read data for entry: %1"));
-                file.close();
-                return enum_extractEntryStatus::FAIL;
-            }
-        }
-        // check entry psd end .
-
-        while (!m_overwriteAll && QFileInfo::exists(destination)) {
-            if (m_skipAll) {
+        // 判断是否有同名文件
+        if (file.exists()) {
+            if (m_skipAll) {       // 全部跳过
                 return enum_extractEntryStatus::SUCCESS;
             } else {
-                OverwriteQuery query(renamedEntry);
-                emit userQuery(&query);
-                query.waitForResponse();
-                ifReplaceTip = true;
+                if (!m_overwriteAll) {     // 若不是全部覆盖，单条处理
 
-                if (query.responseCancelled()) {
-                    userCancel = true;
-                    emit cancelled();
-                    return enum_extractEntryStatus::FAIL;
-                } else if (query.responseSkip()) {
-                    return enum_extractEntryStatus::SUCCESS;
-                } else if (query.responseAutoSkip()) {
-                    m_skipAll = true;
-                    return enum_extractEntryStatus::SUCCESS;
-                } else if (query.responseRename()) {
-                    const QString newName(query.newFilename());
-                    destination = QFileInfo(destination).path() + QDir::separator() + QFileInfo(newName).fileName();
-                    renamedEntry = QFileInfo(entry).path() + QDir::separator() + QFileInfo(newName).fileName();
-                } else if (query.responseOverwriteAll()) {
-                    m_overwriteAll = true;
-                    break;
-                } else if (query.responseOverwrite()) {
-                    break;
+                    OverwriteQuery query(strDestFileName);
+
+                    emit userQuery(&query);
+                    query.waitForResponse();
+
+                    if (query.responseCancelled()) {
+                        emit cancelled();
+                        return enum_extractEntryStatus::FAIL;
+                    } else if (query.responseSkip()) {
+                        return enum_extractEntryStatus::SUCCESS;
+                    } else if (query.responseAutoSkip()) {
+                        m_skipAll = true;
+                        return enum_extractEntryStatus::SUCCESS;
+                    }  else if (query.responseOverwriteAll()) {
+                        m_overwriteAll = true;
+                    }
                 }
             }
         }
 
+
+        // 若文件存在且不是可写权限，重新创建一个文件
         if (file.exists() && !file.isWritable()) {
             file.remove();
-            file.setFileName(destination);
+            file.setFileName(strDestFileName);
             file.setPermissions(QFileDevice::WriteUser);
         }
 
+        zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+        // 错误处理
+        if (zipFile == nullptr) {
+            int iErr = zip_error_code_zip(zip_get_error(archive));
+            if (iErr == ZIP_ER_WRONGPASSWD) {//密码错误
+
+                // 对密码编码的探测
+                bool bCheckFinished = false;
+                int iCodecIndex = 0;
+                while (zipFile == nullptr && bCheckFinished == false) {
+                    if (iCodecIndex == m_listCodecs.length()) {
+                        bCheckFinished = true;
+                        if (file.exists()) {
+                            file.remove();
+                        }
+
+                        return enum_extractEntryStatus::PSD_NEED;
+                    } else {
+                        iCodecIndex++;
+                        zip_set_default_password(archive, passwordUnicode(password(), iCodecIndex));
+                        zip_error_clear(archive);
+                        zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+                        iErr = zip_error_code_zip(zip_get_error(archive));
+                        if (iErr != ZIP_ER_WRONGPASSWD && zipFile != nullptr) {//密码正确
+                            bCheckFinished = true;
+                        }
+                    }
+                }
+            } else if (iErr == ZIP_ER_NOPASSWD) {   // 无密码输入
+                return enum_extractEntryStatus::PSD_NEED;
+            } else {
+                return enum_extractEntryStatus::FAIL;
+            }
+        }
+
+
+        // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
-            emit error(("Failed to open file for writing: %1"));
             return enum_extractEntryStatus::FAIL;
         }
 
+        // 写文件
+        QDataStream out(&file);
+        int kb = 1024;
+        zip_int64_t sum = 0;
+        char buf[1024];
         int writeSize = 0;
-        while (sum != statBuffer.size) {
-            if (this->extractPsdStatus == ReadOnlyArchiveInterface::Canceled) { //if have canceled the extraction,so break.
-                break;
-            }
+        while (sum != zip_int64_t(statBuffer.size)) {
+
             if (m_isPause) { //解压暂停
                 sleep(1);
                 qDebug() << "pause";
                 continue;
             }
 
-            const auto readBytes = zip_fread(zipFile, buf, kb);
+            const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(kb));
             if (readBytes < 0) {
-                emit error(("Failed to read data for entry: %1"));
+
                 file.close();
                 zip_fclose(zipFile);
                 return enum_extractEntryStatus::FAIL;
             }
 
-            if (out.writeRawData(buf, readBytes) != readBytes) {
-                emit error(("Failed to write data for entry: %1"));
+            if (out.writeRawData(buf, int(readBytes)) != readBytes) {
                 file.close();
                 zip_fclose(zipFile);
                 return enum_extractEntryStatus::FAIL;
@@ -1297,75 +1192,13 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
             }
         }
 
-        slotRestoreWorkingDir();
-
-        //const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
-        if (index == -1) {
-            emit error(("Failed to locate entry: %1"));
-            file.close();
-            zip_fclose(zipFile);
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        zip_uint8_t opsys;
-        zip_uint32_t attributes;
-        if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-            emit error(("Failed to read metadata for entry: %1"));
-            file.close();
-            zip_fclose(zipFile);
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        // Inspired by fuse-zip source code: fuse-zip/lib/fileNode.cpp
-        switch (opsys) {
-        case ZIP_OPSYS_UNIX:
-            // Unix permissions are stored in the leftmost 16 bits of the external file attribute.
-//            file.setPermissions(KIO::convertPermissions(attributes >> 16)); //TODO_DS
-            break;
-        default:    // TODO: non-UNIX.
-            break;
-        }
-
-        file.close();
-        file.setPermissions(getPermissions(attributes >> 16));
-        //extract = true;
         bAnyFileExtracted = true;
-
         file.close();
         zip_fclose(zipFile);
-    } else {
-        //const auto index = zip_name_locate(archive, name.constData(), ZIP_FL_ENC_RAW);
-        if (index == -1) {
-            emit error(("Failed to locate entry: %1"));
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        zip_uint8_t opsys;
-        zip_uint32_t attributes;
-        if (zip_file_get_external_attributes(archive, index, ZIP_FL_UNCHANGED, &opsys, &attributes) == -1) {
-            emit error(("Failed to read metadata for entry: %1"));
-            return enum_extractEntryStatus::FAIL;
-        }
-
-        mode_t value = attributes >> 16;
-        QFileDevice::Permissions per = getPermissions(value);
-        //if (value == 0)
-        per = per | QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser ;
-        QFile::setPermissions(destination, per);
     }
 
-    // Set mtime for entry.
-    utimbuf times = utimbuf();
-    times.modtime = statBuffer.mtime;
-    if (utime(destination.toUtf8().constData(), &times) != 0) {
-    }
-
-    if (restoreParentMtime) {
-        // Restore mtime for parent dir.
-        times.modtime = parent_mtime;
-        if (utime(parentDir.toUtf8().constData(), &times) != 0) {
-        }
-    }
+    // 设置文件/文件夹权限
+    file.setPermissions(per);
 
     return enum_extractEntryStatus::SUCCESS;
 }
@@ -1732,7 +1565,8 @@ bool LibzipPlugin::minizip_emitEntryForIndex(unzFile zipfile)
     datetime.setDate(QDate(file_info.tmu_date.tm_year, file_info.tmu_date.tm_mon + 1, file_info.tmu_date.tm_mday));
     datetime.setTime(QTime(file_info.tmu_date.tm_hour, file_info.tmu_date.tm_min, file_info.tmu_date.tm_sec));
     //qDebug() << i << filename << datetime.toString("yyyy-MM-dd hh:mm:ss") << file_info.flag << file_info.uncompressed_size;
-    e->setFullPath(m_common->trans2uft8(filename));
+    QByteArray strCode;
+    e->setFullPath(m_common->trans2uft8(filename, strCode));
     e->setProperty("isDirectory", strFileName.endsWith(QDir::separator()));
     e->setProperty("timestamp", datetime);
     e->setProperty("size", (qulonglong)file_info.uncompressed_size);
@@ -1815,7 +1649,8 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
                 return false;
             }
 
-            QString strfileNameTemp = m_common->trans2uft8(filename);
+            QByteArray strCode;
+            QString strfileNameTemp = m_common->trans2uft8(filename, strCode);
 
             if (i == 0) {
                 extractDst = QDir::fromNativeSeparators(strfileNameTemp);
@@ -1876,7 +1711,8 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
 //            QString strFileName = files[0]->fullPath();
 //            if (files[0]->fullPath().endsWith(QDir::separator()))
 //                strFileName.chop(1);
-            qDebug() << unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[0]->fullPath().toUtf8().data()).toLatin1(), 0);
+            QByteArray strCode;
+            qDebug() << unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[0]->fullPath().toUtf8().data(), strCode).toLatin1(), 0);
         }
 
         for (const Archive::Entry *e : vecFiles) {
@@ -1914,7 +1750,8 @@ bool LibzipPlugin::minizip_extractFiles(const QVector<Archive::Entry *> &files, 
 //                QString strFileName = files[i]->fullPath();
 //                if (files[i]->fullPath().endsWith(QDir::separator()))
 //                    strFileName.chop(1);
-                int error = unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[i]->fullPath().toUtf8().data()).toLatin1(), 0);
+                QByteArray strCode;
+                int error = unzLocateFile(zipfile, m_common->trans2uft8(vecFiles[i]->fullPath().toUtf8().data(), strCode).toLatin1(), 0);
                 if (error != UNZ_OK) {
 //                    qDebug() << "cound not read next file\n";
 //                    unzClose(zipfile);
@@ -2209,7 +2046,8 @@ void LibzipPlugin::setEntryData(const zip_stat_t &statBuffer, qlonglong index, c
     }
 
     // 获取压缩包的注释信息
-    e->setProperty("archiveComment", m_common->trans2uft8(zip_get_archive_comment(m_listArchive, nullptr, ZIP_FL_ENC_RAW)));
+    QByteArray strCode;
+    e->setProperty("archiveComment", m_common->trans2uft8(zip_get_archive_comment(m_listArchive, nullptr, ZIP_FL_ENC_RAW), strCode));
 
     emit entry(e);
 //    m_emittedEntries << e;
@@ -2368,6 +2206,7 @@ void LibzipPlugin::setEntryVal(const zip_stat_t &statBuffer, int &index, const Q
 void LibzipPlugin::updateListMap(QVector<Archive::Entry *> &files, int type)
 {
     m_listMap.clear();
+    m_mapFileCode.clear();
 
     int errcode = 0;
     // Open archive.
@@ -2387,7 +2226,9 @@ void LibzipPlugin::updateListMap(QVector<Archive::Entry *> &files, int type)
             continue;
         }
 
-        QString name = m_common->trans2uft8(statBuffer.name);
+        QByteArray strCode;
+        QString name = m_common->trans2uft8(statBuffer.name, strCode);
+        m_mapFileCode[i] = strCode;
         setEntryVal1(statBuffer, m_indexCount, name, m_DirRecord);
 
         if (m_listMap.find(name) == m_listMap.end()) {
