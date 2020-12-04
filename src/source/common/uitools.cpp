@@ -300,7 +300,7 @@ QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
     return displayName;
 }
 
-ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, bool bUseLibArchive)
+ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
 {
     QFileInfo fileinfo(fileName);
 
@@ -310,18 +310,18 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
     if (bWrite) {
         offers = PluginManager::get_instance().preferredWritePluginsFor(mimeType);
 
-        if (bUseLibArchive == true && mimeType.name() == "application/zip") {
-            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
-                if (p1->metaData().name().contains("Libarchive")) {
-                    return true;
-                }
-                if (p2->metaData().name().contains("Libarchive")) {
-                    return false;
-                }
+//        if (bUseLibArchive == true && mimeType.name() == "application/zip") {
+//            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
+//                if (p1->metaData().name().contains("Libarchive")) {
+//                    return true;
+//                }
+//                if (p2->metaData().name().contains("Libarchive")) {
+//                    return false;
+//                }
 
-                return p1->priority() > p2->priority();
-            });
-        }
+//                return p1->priority() > p2->priority();
+//            });
+//        }
     } else {
         offers = PluginManager::get_instance().preferredPluginsFor(mimeType);
     }
@@ -340,14 +340,40 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
     ReadOnlyArchiveInterface *pIface = nullptr;
     for (Plugin *plugin : offers) {
         //删除P7zip插件
-        if (remove7zFlag && plugin->metaData().name().contains("P7zip")) {
+        if (remove7zFlag && plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
             offers.removeOne(plugin);
             continue;
         }
 
-        pIface = createInterface(fileName, mimeType, plugin);
+        switch (eType) {
+        // 自动识别
+        case APT_Auto:
+            pIface = createInterface(fileName, mimeType, plugin);
+            break;
+        // cli7zplugin
+        case APT_Cli7z:
+            if (plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
+                pIface = createInterface(fileName, mimeType, plugin);
+            }
+            break;
+        // libarchive
+        case APT_Libarchive:
+            if (plugin->metaData().name().contains("libarchive", Qt::CaseInsensitive)) {
+                pIface = createInterface(fileName, mimeType, plugin);
+            }
+            break;
+        // libzipplugin
+        case APT_Libzip:
+            if (plugin->metaData().name().contains("libzip", Qt::CaseInsensitive)) {
+                pIface = createInterface(fileName, mimeType, plugin);
+            }
+            break;
+        }
+
+
         // Use the first valid plugin, according to the priority sorting.
         if (pIface) {
+            qDebug() << "选用插件：" << plugin->metaData().pluginId();
             break;
         }
     }

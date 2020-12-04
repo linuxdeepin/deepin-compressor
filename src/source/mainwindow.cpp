@@ -28,7 +28,6 @@
 #include "progresspage.h"
 #include "successpage.h"
 #include "failurepage.h"
-#include "uitools.h"
 #include "pluginmanager.h"
 #include "settingdialog.h"
 #include "archivemanager.h"
@@ -880,7 +879,9 @@ void MainWindow::slotCompress(const QVariant &val)
     bUseLibarchive = false;
 #endif
 
-    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, bUseLibarchive/*, bBatch*/)) {
+    UiTools::AssignPluginType eType = (bUseLibarchive == true) ? UiTools::APT_Libarchive : UiTools::APT_Auto;
+
+    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType/*, bBatch*/)) {
         // 切换进度界面
         m_pProgressPage->setProgressType(PT_Compress);
         m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);

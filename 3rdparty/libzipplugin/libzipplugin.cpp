@@ -801,7 +801,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         zip_fclose(zipFile);
     }
 
-// 设置文件/文件夹权限
+    // 设置文件/文件夹权限
     file.setPermissions(per);
 
     return ET_NoError;

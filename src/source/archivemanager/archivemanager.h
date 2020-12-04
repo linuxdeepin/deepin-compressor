@@ -26,6 +26,7 @@
 #include "archiveinterface.h"
 #include "plugin.h"
 #include "queries.h"
+#include "uitools.h"
 
 #include <QObject>
 #include <QMimeType>
@@ -46,11 +47,11 @@ public:
      * @brief createArchive     创建压缩包
      * @param files             待压缩文件
      * @param strDestination    文件存储在压缩包的路径（为空时，处于根目录）
-     * @param options           压缩参数
-     * @param bBatch            是否批量压缩（多路径）
+     * @param stOptions           压缩参数
+     * @param eType            插件选择
      * @return                  是否调用成功
      */
-    bool createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive = false/*, bool bBatch = false*/);
+    bool createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType/*, bool useLibArchive = false, bool bBatch = false*/);
 
     /**
      * @brief loadArchive           加载压缩包数据

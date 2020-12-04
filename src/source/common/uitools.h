@@ -62,6 +62,13 @@ public:
     UiTools(QObject *parent = nullptr);
     ~UiTools();
 
+    enum AssignPluginType {
+        APT_Auto,           // 自动识别
+        APT_Cli7z,          // cli7zplugin
+        APT_Libarchive,     // libarchive
+        APT_Libzip          // libzipplugin
+    };
+
     /**
      * @brief getConfigPath 获取配置路径
      * @return
@@ -128,7 +135,7 @@ public:
      * @param bUseLibArchive    是否使用LibArchive
      * @return
      */
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, bool bUseLibArchive = false);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, AssignPluginType eType = APT_Auto/*bool bUseLibArchive = false*/);
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
 
 public:

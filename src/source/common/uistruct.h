@@ -28,7 +28,7 @@
 #include <QDir>
 
 const QStringList g_listColumn = QStringList() << QObject::tr("Name") << QObject::tr("Time modified") << QObject::tr("Type") << QObject::tr("Size");
-#define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::TempLocation)
+#define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::TempLocation)     // 临时路径（打开等操作）
 #define MAINWINDOW_WIDTH_NAME "MainWindowWidthName"      // 主界宽
 #define MAINWINDOW_HEIGHT_NAME "MainWindowHeightName"    // 主界面高
 #define HISTORY_DIR_NAME "dir"      // 历史打开路径

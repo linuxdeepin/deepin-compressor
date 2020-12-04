@@ -25,7 +25,6 @@
 #include "pluginmanager.h"
 #include "singlejob.h"
 #include "batchjob.h"
-#include "uitools.h"
 
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -70,7 +69,7 @@ ArchiveManager *ArchiveManager::get_instance()
 }
 
 
-bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, bool useLibArchive/*, bool bBatch*/)
+bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType/*, bool useLibArchive, bool bBatch*/)
 {
     // 重新创建压缩包首先释放之前的interface
     if (m_pInterface != nullptr) {
@@ -78,7 +77,7 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
         m_pInterface = nullptr;
     }
 
-    m_pTempInterface = UiTools::createInterface(strDestination, true, useLibArchive);
+    m_pTempInterface = UiTools::createInterface(strDestination, true, eType);
 
 //    if (bBatch) {       // 批量压缩（多路径）
 //        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
