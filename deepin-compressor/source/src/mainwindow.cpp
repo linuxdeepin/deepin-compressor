@@ -2621,6 +2621,7 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         m_pProgess->setprogress(m_lastPercent);
         m_pProgess->settype(Progress::ENUM_PROGRESS_TYPE::OP_CONVERT);
         if (percent == 100) {
+            m_lastPercent = 0;
             m_convertFirst = true; // 标志格式转换第一步解压完成
         }
     }

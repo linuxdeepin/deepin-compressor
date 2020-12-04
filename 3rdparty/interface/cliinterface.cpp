@@ -1011,7 +1011,7 @@ QStringList CliInterface::extractFilesList(const QVector<Archive::Entry *> &entr
     return filesList;
 }
 
-void CliInterface::killProcess(bool emitFinished)
+void CliInterface::killProcess(bool /*emitFinished*/)
 {
     // TODO: Would be good to unit test #304764/#304178.
     if (!m_process) {
@@ -1105,28 +1105,17 @@ void CliInterface::readStdout(bool handleAll)
         return;
     }
 
-    // 不添加打印，偶现rar多密码文件解压不会弹出密码框。。。
-//    qDebug() << __FUNCTION__ << " readStdout";
-
     Q_ASSERT(m_process);
-
-//    qDebug() << __FUNCTION__ << " readStdout";
 
     if (!m_process->bytesAvailable()) {
         // if process has no more data, we can just bail out
         return;
     }
 
-//    QByteArray dd = m_process->readAllStandardOutput();
-//    m_stdOutData = dd;
-    m_stdOutData += m_process->readAllStandardOutput();
+    QByteArray dd = m_process->readAllStandardOutput();
+    m_stdOutData += dd;
 
     QList<QByteArray> lines = m_stdOutData.split('\n');
-    if (Extract == m_operationMode) {
-        for (const QByteArray &line : qAsConst(lines)) {
-            qDebug() << line;
-        }
-    }
 
     // The reason for this check is that archivers often do not end
     // queries (such as file exists, wrong password) on a new line, but
@@ -1145,23 +1134,21 @@ void CliInterface::readStdout(bool handleAll)
             handleAll = true; // 7z output has no \n
         }
 
-        if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) != "vt") && !wrongPasswordMessage) {
-            handleAll = true; // 7z output has no \n
-        }
+//        if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) != "vt") && !wrongPasswordMessage) {
+//            handleAll = true; // 7z output has no \n
+//        }
 
         if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !wrongPasswordMessage) {
             handleAll = true; // compress .tar.7z output has no \n
         }
 
-        if (m_process->program().length() > 4) {
-            if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x"/* && m_process->program().at(3) == "-p-" && m_process->program().at(4).contains("-p")*/) && !wrongPasswordMessage) {
-                handleAll = true; // unrar output has no \n
-            }
-        }
+//        if (m_process->program().length() > 4) {
+//            if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x"/* && m_process->program().at(3) == "-p-" && m_process->program().at(4).contains("-p")*/) && !wrongPasswordMessage) {
+//                handleAll = true; // unrar output has no \n
+//            }
+//        }
     }
 
-    //qDebug() << m_process->program();
-    //qDebug() << "handleAll***************" << handleAll;
     bool foundErrorMessage = (wrongPasswordMessage || isDiskFullMsg(QLatin1String(lines.last()))
                               || isFileExistsMsg(QLatin1String(lines.last())))
                              || isPasswordPrompt(QLatin1String(lines.last()));
@@ -1187,9 +1174,9 @@ void CliInterface::readStdout(bool handleAll)
     // handle in the output. The exception is that it is supposed to handle
     // all the data, OR if there's been an error message found in the
     // partial data.
-    if (lines.size() == 1 && !handleAll) {
-        return;
-    }
+//    if (lines.size() == 1 && !handleAll) {
+//        return;
+//    }
 
     if (handleAll) {
         m_stdOutData.clear();
@@ -1197,10 +1184,23 @@ void CliInterface::readStdout(bool handleAll)
         // because the last line might be incomplete we leave it for now
         // note, this last line may be an empty string if the stdoutdata ends
         // with a newline
-        m_stdOutData = lines.takeLast();
+        if (m_process->program().at(0).contains("unrar")) { // 针对unrar的命令行截取
+            m_stdOutData.clear();
+            if (lines.count() > 0) {
+                if (!(lines[lines.count() - 1].endsWith("%") || lines[lines.count() - 1].endsWith("OK "))) {
+                    if (isPromptMultiPassword(lines[lines.count() - 1]) || isFileExistsMsg(lines[lines.count() - 1]) || isPasswordPrompt(lines[lines.count() - 1])) {
+                    } else {
+                        m_stdOutData = lines.takeLast();
+                    }
+                }
+            }
+        } else {
+            if (lines.size() == 1)
+                return;
+            m_stdOutData = lines.takeLast();
+        }
     }
 
-    //qDebug() << "#############################################" << lines;
     for (const QByteArray &line : qAsConst(lines)) {
         if (!line.isEmpty() || (m_listEmptyLines && m_operationMode == List)) {
             if (!handleLine(QString::fromLocal8Bit(line))) {
@@ -1223,6 +1223,7 @@ bool CliInterface::setAddedFiles()
 
         m_tempAddedFiles << new Archive::Entry(nullptr, file->name());
     }
+
     return true;
 }
 
@@ -1312,8 +1313,6 @@ void CliInterface::getChildProcessidTar7z(const QString &processid, QVector<qint
 
 bool CliInterface::handleLine(const QString &line)
 {
-//    qDebug() << "#####" << line;
-
     // 处理rar进度
     if ((m_operationMode == Extract || m_operationMode == Add) && m_cliProps->property("captureProgress").toBool()) {
         // read the percentage
@@ -1429,11 +1428,9 @@ bool CliInterface::handleLine(const QString &line)
     if (m_operationMode == Extract) {
         if (isPromptMultiPassword(line)) { // rar多密码，提示是否使用上一次输入的密码
             writeToProcess(QString("Y" + QLatin1Char('\n')).toLocal8Bit()); // 选择Y，使用上一次的密码
-            m_replaceLine.clear();
         }
 
         if (isPasswordPrompt(line)) {
-            qDebug() << "#####" << m_replaceLine;
             if (m_extractionOptions.isBatchExtract()) {
                 qDebug() << "Found a password prompt";
 
@@ -1462,12 +1459,6 @@ bool CliInterface::handleLine(const QString &line)
 //                } else {
 //                    name = line.left(line.length() - 2);
 //                }
-                // rar只弹两次密码框
-                if (m_process && m_process->program().at(0).contains("unrar") && m_rarExtractCount == 2) {
-                    m_rarExtractCount = 0;
-                    emit error("Wrong password.");
-                    return false;
-                }
 
                 QString name = line.left(line.length() - 2);  // 使用文件名？使用压缩包名
                 name = name.right(name.length() - 40);
@@ -1481,14 +1472,10 @@ bool CliInterface::handleLine(const QString &line)
                     return false;
                 }
 
-                ++m_rarExtractCount;
                 setPassword(query.password());
-
                 const QString response(password() + QLatin1Char('\n'));
                 writeToProcess(response.toLocal8Bit());
             }
-
-            m_replaceLine.clear();
         }
 
         if (isDiskFullMsg(line)) {
@@ -1503,13 +1490,11 @@ bool CliInterface::handleLine(const QString &line)
         }
 
         if (handleFileExistsMessage(line)) {
-            m_replaceLine.clear();
             ifReplaceTip = true;
             return true;
         }
 
         if (isWrongPasswordMsg(line)) {
-            m_replaceLine.clear();
             setPassword(QString());
 //            if (m_process && m_process->program().at(0).contains("7z")) {
 //                emit error("Wrong password.");

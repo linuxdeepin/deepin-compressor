@@ -431,8 +431,6 @@ Q_SIGNALS:
 
 protected:
     OperationMode m_operationMode = NoOperation;
-    QString m_replaceLine = ""; // 拼接被截断的命令行内容
-//    bool m_isIncomplete = false;
 
 private Q_SLOTS:
     void onEntryRemoved(const QString &path);

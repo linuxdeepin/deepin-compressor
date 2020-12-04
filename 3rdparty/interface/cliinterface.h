@@ -250,8 +250,6 @@ private:
 
     bool m_bRarNeedPassword = false;
 
-    int m_rarExtractCount = 0; // 记录rar弹密码框的次数
-
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void continueCopying(bool result);
