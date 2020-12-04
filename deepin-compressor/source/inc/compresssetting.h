@@ -155,10 +155,10 @@ private:
     DLabel *m_encryptedlabel = nullptr;
     CustomCheckBox *m_splitcompress = nullptr;
     DLabel *m_encryptedfilelistlabel = nullptr;
-    DMenu *m_typemenu = nullptr;
+    DMenu *m_typemenu = nullptr; // 压缩格式选项
 
     PluginManager m_pluginManger;
-    QStringList m_supportedMimeTypes;
+    QStringList m_supportedMimeTypes; // 获取支持压缩的类型
     QStringList m_pathlist;
     bool filePermission = true;
     qint64 m_getFileSize;
