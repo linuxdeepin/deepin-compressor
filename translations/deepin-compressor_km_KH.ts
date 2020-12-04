@@ -40,7 +40,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="225"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished"></translation>
+        <translation>កំពុងធ្វើបច្ចុប្បន្នភាពមតិយោបល់...</translation>
     </message>
 </context>
 <context>
@@ -70,7 +70,7 @@
 <context>
     <name>CompressSetting</name>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="287"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="288"/>
         <source>Compress</source>
         <translation>បង្រួម</translation>
     </message>
@@ -122,132 +122,133 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="228"/>
         <source>Support 7z/zip type only</source>
-        <translation type="unfinished"></translation>
+        <translation>គាំទ្រប្រភេទ 7z/zip តែប៉ុណ្ណោះ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="396"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="397"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>លេខសម្ងាត់សម្រាប់ ZIP មិនអាចជាភាសាចិនបានទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="421"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1013"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1149"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1282"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="422"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1018"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1154"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1287"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 ត្រូវបានផ្លាស់ប្ដូរនៅលើឌីស សូមនាំចូលម្តងទៀត។</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="439"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="445"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="450"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1020"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1026"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="440"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="446"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="451"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1025"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1031"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1156"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1162"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1036"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1161"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1167"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1289"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1295"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1172"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1294"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1300"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1305"/>
         <source>You do not have permission to compress %1</source>
         <translation>អ្នកគ្មានសិទ្ធិបង្រួម %1 ទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="459"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1040"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1176"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="460"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1045"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1181"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>អ្នកមិនមានសិទ្ធិរក្សាទុកឯកសារនៅទីនេះទេ សូមផ្លាស់ប្តូរហើយព្យាយាមម្តងទៀត</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="468"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="469"/>
         <source>Too many volumes, please change and retry</source>
         <translation>បរិមាណច្រើនពេក សូមប្តូរហើយព្យាយាមម្តងទៀត</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="583"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="584"/>
         <source>Files that begin with &apos;@&apos; cannot be compressed</source>
         <translation>ឯកសារដែលចាប់ផ្តើមជាមួយ @ មិនអាចបង្រួមបានទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="853"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="770"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="858"/>
         <source>Total size: %1</source>
         <translation>ទំហំសរុប៖ %1</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="984"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1120"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1253"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="989"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1125"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1258"/>
         <source>You cannot add the archive to itself</source>
         <translation>អ្នកមិនអាចបន្ថែមប័ណ្ណសារទៅខ្លួនវាបានទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1467"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1472"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ឯកសារមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយជំនួសវា?</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation>ហាង</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="172"/>
         <source>Compression method</source>
-        <translation type="unfinished"></translation>
+        <translation>វិធីសាស្ត្របង្ហាប់</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Fast</source>
-        <translation type="unfinished"></translation>
+        <translation>លឿន</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>ធម្មតា</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Good</source>
-        <translation type="unfinished"></translation>
+        <translation>ល្អ</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>ល្អបំផុត</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
         <source>Fastest</source>
-        <translation type="unfinished"></translation>
+        <translation>លឿនបំផុត</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="983"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="988"/>
         <source>Close</source>
         <translation>បិទ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1119"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1386"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1391"/>
         <source>OK</source>
         <translation>យល់ព្រម</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1469"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1474"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1470"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1475"/>
         <source>Replace</source>
         <translation>ជំនួស</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="408"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1000"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1136"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1269"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="409"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1005"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1141"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1274"/>
         <source>Please enter the path</source>
         <translation>សូមបញ្ចូលទីតាំង</translation>
     </message>
@@ -259,21 +260,21 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="240"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>យោបល់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="403"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="995"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1131"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1264"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="404"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1000"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1136"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1269"/>
         <source>Invalid file name</source>
         <translation>ឈ្មោះឯកសារមិនត្រឹមត្រូវ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="413"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1005"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1141"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1274"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="414"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1010"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1146"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1279"/>
         <source>The path does not exist, please retry</source>
         <translation>ទីតាំងមិនមានទេសូមព្យាយាមម្តងទៀត</translation>
     </message>
@@ -477,30 +478,30 @@
         <translation>ការបង្ហាប់បានជោគជ័យ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5188"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5209"/>
         <source>File info</source>
-        <translation type="unfinished"></translation>
+        <translation>ព័ត៌មានឯកសារ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5708"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5730"/>
         <source>Confirm</source>
         <translation>បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5711"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5733"/>
         <source>Do you want to delete the archive?</source>
         <translation>តើអ្នកចង់លុបប័ណ្ណសារទេ?</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2762"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2866"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2906"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2764"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2882"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2925"/>
         <source>Skip all files</source>
         <translation>រំលងឯកសារទាំងអស់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2734"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2908"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2736"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2927"/>
         <source>Extraction successful</source>
         <translation>ការស្រង់ចេញបានជោគជ័យ</translation>
     </message>
@@ -510,7 +511,7 @@
         <translation>%1 ត្រូវបានផ្លាស់ប្ដូរនៅលើឌីស សូមនាំចូលម្តងទៀត។</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1714"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1716"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>តើអ្នកចង់បន្ថែមប័ណ្ណសារទៅក្នុងបញ្ជីឬបើកវានៅក្នុងបង្អួចថ្មីទេ?</translation>
     </message>
@@ -521,8 +522,8 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="262"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1715"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5707"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1717"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5729"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
@@ -533,8 +534,8 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="497"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2405"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5470"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2407"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5492"/>
         <source>OK</source>
         <translation>យល់ព្រម</translation>
     </message>
@@ -574,105 +575,107 @@
         <translation>ការបំលែងជោគជ័យ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1716"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1718"/>
         <source>Add</source>
         <translation>បន្ថែម</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1717"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1719"/>
         <source>Open in new window</source>
         <translation>បើកនៅក្នុងបង្អួចថ្មី</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1953"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1955"/>
         <source>Find directory</source>
         <translation>រកថតឯកសារ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2309"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2789"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2311"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2794"/>
         <source>Failed to open the archive: %1</source>
         <translation>បានបរាជ័យក្នុងការបើកប័ណ្ណសារ៖ %1</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2317"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2324"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2319"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2326"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation>ការបើកបានបរាជ័យ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2325"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2662"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2791"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4425"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2327"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2664"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2767"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2802"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2806"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4444"/>
         <source>Wrong password</source>
         <translation>លេខសំងាត់​ខុស</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2884"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2900"/>
         <source>Select default program</source>
         <translation>ជ្រើសរើសកម្មវិធីលំនាំដើម</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="3189"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="3208"/>
         <source>New Archive</source>
-        <translation type="unfinished">ប័ណ្ណសារថ្មី</translation>
+        <translation>ប័ណ្ណសារថ្មី</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5212"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5233"/>
         <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <translation>ព័ត៌មានមូលដ្ឋាន</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5228"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5249"/>
         <source>Size</source>
         <translation>ទំហំ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5229"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5250"/>
         <source>Type</source>
         <translation>ប្រភេទ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5230"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5251"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>ទីតាំង</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5231"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5252"/>
         <source>Time created</source>
-        <translation type="unfinished"></translation>
+        <translation>ពេលវេលាបានបង្កើត</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5232"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5253"/>
         <source>Time accessed</source>
-        <translation type="unfinished"></translation>
+        <translation>ពេលវេលាបានចូល</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5233"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5254"/>
         <source>Time modified</source>
         <translation>ពេលវេលាកែប្រែ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5243"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5264"/>
         <source>Archive</source>
         <translation>ប័ណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5274"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5295"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>យោបល់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5472"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5494"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>សូមពិនិត្យមើលប្រភេទឯកសារនៅក្នុងការកំណត់របស់អ្នកគ្រប់គ្រងប័ណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2110"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2135"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2330"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2783"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2112"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2137"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2332"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2788"/>
         <source>Damaged file, unable to extract</source>
         <translation>ឯកសារខូច មិនអាចដកស្រង់បានទេ</translation>
     </message>
@@ -682,35 +685,35 @@
         <translation>តើអ្នកពិតជាចង់បញ្ឈប់កិច្ចការដែលកំពុងដំណើរការមែនទេ?</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2404"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2406"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>ប័ណ្ណសារត្រូវបានផ្លាស់ប្តូរនៅលើឌីស សូមនាំចូលម្តងទៀត។</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2779"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2781"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4322"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4328"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4397"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4403"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2784"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2786"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4341"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4347"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4416"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4422"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>ទំហំមិនគ្រប់គ្រាន់ សូមសម្អាតហើយព្យាយាមម្តងទៀត</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2787"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2792"/>
         <source>File name too long, unable to extract</source>
         <translation>ឈ្មោះឯកសារវែងពេក មិនអាចដកស្រង់បានទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2791"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2806"/>
         <source>Unable to extract</source>
         <translation>មិនអាចដកស្រង់បានទេ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4324"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4330"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4399"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4405"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4343"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4349"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4418"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4424"/>
         <source>Damaged file</source>
         <translation>ឯកសារខូច</translation>
     </message>
@@ -917,7 +920,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="431"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished"></translation>
+        <translation>កំពុងធ្វើបច្ចុប្បន្នភាពមតិយោបល់...</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/progress.cpp" line="434"/>
@@ -1126,7 +1129,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1379"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="756"/>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="484"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="486"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
@@ -1171,7 +1174,7 @@
         <translation>ប្រភេទឯកសារ</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="485"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="487"/>
         <location filename="../3rdparty/interface/queries.cpp" line="375"/>
         <location filename="../3rdparty/interface/queries.cpp" line="465"/>
         <source>OK</source>
@@ -1309,30 +1312,30 @@
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="432"/>
         <source>Add files to the current archive</source>
-        <translation type="unfinished"></translation>
+        <translation>បន្ថែមឯកសារទៅប័ណ្ណសារបច្ចុប្បន្ន</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="436"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation>ប្រើពាក្យសម្ងាត់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="786"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="788"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="787"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="789"/>
         <source>Convert</source>
         <translation>បំលែង</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="796"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="798"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>ការផ្លាស់ប្តូរប័ណ្ណសារក្នុងប្រភេទឯកសារនេះមិនត្រូវបានគាំទ្រទេ។ សូមបំលែងទ្រង់ទ្រាយប័ណ្ណសារដើម្បីរក្សាទុកការផ្លាស់ប្តូរ។</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="814"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="816"/>
         <source>Convert the format to:</source>
         <translation>បំលែងទ្រង់ទ្រាយទៅជាៈ</translation>
     </message>

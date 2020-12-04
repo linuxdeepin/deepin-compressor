@@ -40,7 +40,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/progressdialog.cpp" line="225"/>
         <source>Updating the comment...</source>
-        <translation type="unfinished">注釋更新中，請稍候...</translation>
+        <translation>注釋更新中，請稍候...</translation>
     </message>
 </context>
 <context>
@@ -70,7 +70,7 @@
 <context>
     <name>CompressSetting</name>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="287"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="288"/>
         <source>Compress</source>
         <translation>壓縮</translation>
     </message>
@@ -125,65 +125,66 @@
         <translation>僅支持7z, zip格式</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="396"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="397"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
         <translation>zip分卷不支持中文密碼</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="421"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1013"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1149"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1282"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="422"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1018"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1154"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1287"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>“%1”已經發生變化，請重新導入文件。</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="439"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="445"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="450"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1020"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1026"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="440"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="446"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="451"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1025"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1031"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1156"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1162"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1036"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1161"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1167"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1289"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1295"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1172"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1294"/>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1300"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1305"/>
         <source>You do not have permission to compress %1</source>
         <translation>您沒有權限壓縮“%1”文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="459"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1040"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1176"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="460"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1045"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1181"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>您沒有權限在此路徑保存文件，請重試</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="468"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="469"/>
         <source>Too many volumes, please change and retry</source>
         <translation>分卷過多，請修改分卷卷數後重試</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="583"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="584"/>
         <source>Files that begin with &apos;@&apos; cannot be compressed</source>
         <translation>不能壓縮以@開頭的文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="853"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="770"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="858"/>
         <source>Total size: %1</source>
         <translation>文件總大小：%1</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="984"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1120"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1253"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="989"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1125"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1258"/>
         <source>You cannot add the archive to itself</source>
         <translation>無法將壓縮文件添加到自身</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1467"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1472"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
@@ -195,7 +196,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="172"/>
         <source>Compression method</source>
-        <translation type="unfinished"></translation>
+        <translation>壓縮方式</translation>
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="177"/>
@@ -223,31 +224,31 @@
         <translation>最快</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="983"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="988"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1119"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1386"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1124"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1391"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1469"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1474"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1470"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1475"/>
         <source>Replace</source>
         <translation>替換</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="408"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1000"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1136"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1269"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="409"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1005"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1141"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1274"/>
         <source>Please enter the path</source>
         <translation>請填寫保存路徑</translation>
     </message>
@@ -262,18 +263,18 @@
         <translation>注釋</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="403"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="995"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1131"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1264"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="404"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1000"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1136"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1269"/>
         <source>Invalid file name</source>
         <translation>請輸入有效的文件名</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="413"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1005"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1141"/>
-        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1274"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="414"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1010"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1146"/>
+        <location filename="../deepin-compressor/source/src/compresssetting.cpp" line="1279"/>
         <source>The path does not exist, please retry</source>
         <translation>當前路徑不存在，請重試</translation>
     </message>
@@ -477,30 +478,30 @@
         <translation>壓縮成功</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5188"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5209"/>
         <source>File info</source>
         <translation>文件訊息</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5708"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5730"/>
         <source>Confirm</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5711"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5733"/>
         <source>Do you want to delete the archive?</source>
         <translation>您是否要刪除此壓縮文件？</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2762"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2866"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2906"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2764"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2882"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2925"/>
         <source>Skip all files</source>
         <translation>跳過所有文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2734"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2908"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2736"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2927"/>
         <source>Extraction successful</source>
         <translation>解壓成功</translation>
     </message>
@@ -510,7 +511,7 @@
         <translation>“%1”已經發生變化，請重新導入文件。</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1714"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1716"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>添加壓縮文件到目錄或在新窗口中打開該文件？</translation>
     </message>
@@ -521,8 +522,8 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="262"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1715"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5707"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1717"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5729"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -533,8 +534,8 @@
     </message>
     <message>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="497"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2405"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5470"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2407"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5492"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
@@ -574,105 +575,107 @@
         <translation>轉換成功</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1716"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1718"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1717"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1719"/>
         <source>Open in new window</source>
         <translation>在新窗口中打開</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1953"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="1955"/>
         <source>Find directory</source>
         <translation>解壓到目錄</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2309"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2789"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2311"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2794"/>
         <source>Failed to open the archive: %1</source>
         <translation>打開壓縮文件&quot;%1&quot;失敗</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2317"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2324"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2319"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2326"/>
         <source>Open failed</source>
         <translation>打開失敗</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2325"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2662"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2791"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4425"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2327"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2664"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2767"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2802"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2806"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4444"/>
         <source>Wrong password</source>
         <translation>密碼錯誤</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2884"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2900"/>
         <source>Select default program</source>
         <translation>選擇默認程序</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="3189"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="3208"/>
         <source>New Archive</source>
-        <translation type="unfinished">歸檔文件</translation>
+        <translation>歸檔文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5212"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5233"/>
         <source>Basic info</source>
         <translation>基本訊息</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5228"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5249"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5229"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5250"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5230"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5251"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5231"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5252"/>
         <source>Time created</source>
         <translation>創建時間</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5232"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5253"/>
         <source>Time accessed</source>
         <translation>訪問時間</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5233"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5254"/>
         <source>Time modified</source>
         <translation>修改時間</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5243"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5264"/>
         <source>Archive</source>
         <translation>壓縮文件</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5274"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5295"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5472"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="5494"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>請在歸檔管理器的設置中勾選此文件類型</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2110"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2135"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2330"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2783"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2112"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2137"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2332"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2788"/>
         <source>Damaged file, unable to extract</source>
         <translation>文件損壞，無法解壓</translation>
     </message>
@@ -682,35 +685,35 @@
         <translation>您確定要停止正在進行的任務嗎？</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2404"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2406"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>當前壓縮文件已經發生變化，請重新導入文件。</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2779"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2781"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4322"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4328"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4397"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4403"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2784"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2786"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4341"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4347"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4416"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4422"/>
         <source>Insufficient space, please clear and retry</source>
         <translation>空間不足，請清理後重試</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2787"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2792"/>
         <source>File name too long, unable to extract</source>
         <translation>文件名過長，無法解壓</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2791"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="2806"/>
         <source>Unable to extract</source>
         <translation>無法解壓</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4324"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4330"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4399"/>
-        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4405"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4343"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4349"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4418"/>
+        <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="4424"/>
         <source>Damaged file</source>
         <translation>原始文件已損壞</translation>
     </message>
@@ -1126,7 +1129,7 @@
     <message>
         <location filename="../deepin-compressor/source/src/fileViewer.cpp" line="1379"/>
         <location filename="../deepin-compressor/source/src/mainwindow.cpp" line="756"/>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="484"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="486"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -1171,7 +1174,7 @@
         <translation>文件類型</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="485"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="487"/>
         <location filename="../3rdparty/interface/queries.cpp" line="375"/>
         <location filename="../3rdparty/interface/queries.cpp" line="465"/>
         <source>OK</source>
@@ -1317,22 +1320,22 @@
         <translation>使用密碼</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="786"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="788"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="787"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="789"/>
         <source>Convert</source>
         <translation>轉換</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="796"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="798"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>不支持對該壓縮格式的修改。為了保持對該文件的修改，建議您進行壓縮格式轉換。</translation>
     </message>
     <message>
-        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="814"/>
+        <location filename="../deepin-compressor/source/src/uncompresspage.cpp" line="816"/>
         <source>Convert the format to:</source>
         <translation>轉換壓縮格式為：</translation>
     </message>
