@@ -332,16 +332,24 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
     }
 
     //tar.lzo格式 由P7zip插件压缩mimeFromContent为"application/x-7z-compressed"，由Libarchive插件压缩mimeFromContent为"application/x-lzop"
+    // 若未指定使用cli7z插件，则需要对zip和tar格式的解压屏蔽7z，选用libzip或libarchive插件
     //删除P7zip插件处理 mimeFromContent为"application/x-lzop" 的情况
     QMimeDatabase db;
     QMimeType mimeFromContent = db.mimeTypeForFile(fileName, QMimeDatabase::MatchContent);
-    bool remove7zFlag = "application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name();
+    bool remove7zFlag = false;
 
+    if (eType != APT_Cli7z) {
+        if (((!bWrite) && (mimeType.name() == QString("application/zip") || mimeType.name() == QString("application/x-tar")))
+                || ("application/x-tzo" == mimeType.name() && "application/x-lzop" == mimeFromContent.name())) {
+            remove7zFlag = true;
+        }
+    }
+
+    // 创建插件
     ReadOnlyArchiveInterface *pIface = nullptr;
     for (Plugin *plugin : offers) {
         //删除P7zip插件
         if (remove7zFlag && plugin->metaData().name().contains("7zip", Qt::CaseInsensitive)) {
-            offers.removeOne(plugin);
             continue;
         }
 

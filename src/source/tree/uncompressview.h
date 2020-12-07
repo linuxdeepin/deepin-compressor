@@ -56,6 +56,7 @@ public:
      * @param strPath       路径
      */
     void setDefaultUncompressPath(const QString &strPath);
+
     /**
      * @brief refreshDataByCurrentPathChanged 刷新删除/追加的显示数据
      * 处理流程:
@@ -168,6 +169,13 @@ private:
      * @param qSize        大小
      */
     void calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize);
+
+    /**
+     * @brief showEncryptionDialog  显示加密选项对话框
+     * @param strPassword   密码
+     * @return  是否接受操作
+     */
+    int showEncryptionDialog(QString &strPassword);
 
 Q_SIGNALS:
     /**
