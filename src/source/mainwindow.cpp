@@ -879,7 +879,22 @@ void MainWindow::slotCompress(const QVariant &val)
     bUseLibarchive = false;
 #endif
 
-    UiTools::AssignPluginType eType = (bUseLibarchive == true) ? UiTools::APT_Libarchive : UiTools::APT_Auto;
+    // 判断zip格式是否使用了中文加密
+    bool zipPasswordIsChinese = false;
+    if (m_stCompressParameter.strMimeType == "application/zip") {
+        if (m_stCompressParameter.strPassword.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+            zipPasswordIsChinese = true;
+        }
+    }
+
+    UiTools::AssignPluginType eType = UiTools::APT_Auto;        // 默认自动选择插件
+    if (zipPasswordIsChinese == true) {
+        // 对zip的中文加密使用libzip插件
+        eType = UiTools::APT_Libzip;
+    } else if (bUseLibarchive == true) {
+        // 华为ARM单线程场景下使用libarchive
+        eType = UiTools::APT_Libarchive;
+    }
 
     if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType/*, bBatch*/)) {
         // 切换进度界面
