@@ -45,7 +45,8 @@ public:
     enum Plugintype {
         PT_Cliinterface,
         PT_LibArchive,
-        PT_Libzip
+        PT_Libzip,
+        PT_Libminizip
     };
 
     // 工作类型

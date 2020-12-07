@@ -57,7 +57,9 @@ set(CMAKE_INSTALL_PREFIX /usr)
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
 
 

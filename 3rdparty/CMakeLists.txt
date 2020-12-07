@@ -22,6 +22,8 @@ add_subdirectory(libarchive)
 
 add_subdirectory(libzipplugin)
 
+add_subdirectory(libminizipplugin)
+
 
 
 

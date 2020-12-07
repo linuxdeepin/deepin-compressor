@@ -72,13 +72,12 @@ PluginFinishType LibzipPlugin::list()
     int errcode = 0;
     zip_error_t err;
 
+    // 打开压缩包文件
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
     zip_error_init_with_code(&err, errcode);
 
-    //某些特殊文件，如.crx用zip打不开，需要替换minizip
+    // 若打开失败，返回错误
     if (archive == nullptr) {
-//        m_bAllEntry = true;
-//        return minizip_list();
         m_eErrorType = ET_ArchiveOpenError;
         return PFT_Error;
     }
@@ -198,7 +197,6 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
-
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
 
@@ -771,8 +769,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             }
 
             const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(kb));
-            if (readBytes < 0) {
 
+            if (readBytes < 0) {
                 file.close();
                 zip_fclose(zipFile);
                 return ET_FileWriteError;
@@ -949,7 +947,7 @@ void LibzipPlugin::getIndexBySelEntry(const QList<FileEntry> &listEntry)
 
                 ++iter;
 
-                // 如果文件，直接跳过
+                // 如果文件夹，直接跳过
                 if (!entry.strFullPath.endsWith(QDir::separator())) {
                     break;
                 }
