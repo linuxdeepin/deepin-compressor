@@ -223,7 +223,8 @@ private:
     CustomCheckBox *m_pSplitCkb;    // 分卷压缩选择
     DDoubleSpinBox *m_pSplitValueEdt; // 分卷大小输入框
 
-    DComboBox *m_pCompressLevelCkb;       // 压缩方式选择项
+    DLabel *m_pCompressLevelLbl;      // 压缩方式选择项标签
+    DComboBox *m_pCompressLevelCmb;       // 压缩方式选择项
     DLabel *m_pCommentLbl;                  // 注释文字标签
     DTextEdit *m_pCommentEdt;       // 注释信息
 
