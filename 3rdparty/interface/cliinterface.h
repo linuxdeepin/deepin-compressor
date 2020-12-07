@@ -249,6 +249,7 @@ private:
     bool m_isTar7z = false;
 
     bool m_bRarNeedPassword = false;
+    int m_rarExtractCount = 0;
 
 private Q_SLOTS:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
