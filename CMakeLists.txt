@@ -61,5 +61,7 @@ install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
-
+install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
 

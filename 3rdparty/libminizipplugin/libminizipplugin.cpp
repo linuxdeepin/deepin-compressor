@@ -51,7 +51,7 @@ LibminizipPluginFactory::~LibminizipPluginFactory()
 
 
 LibminizipPlugin::LibminizipPlugin(QObject *parent, const QVariantList &args)
-    : ReadWriteArchiveInterface(parent, args)
+    : ReadOnlyArchiveInterface(parent, args)
 {
     qDebug() << "LibminizipPlugin";
     m_ePlugintype = PT_Libminizip;
@@ -215,54 +215,6 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
         }
     }
 
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
-{
-    Q_UNUSED(files)
-    Q_UNUSED(options)
-
-    m_workStatus = WT_Add;
-    qDebug() << "添加压缩包数据";
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::moveFiles(const QList<FileEntry> &files, const CompressOptions &options)
-{
-    Q_UNUSED(files)
-    Q_UNUSED(options)
-    m_workStatus = WT_Move;
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::copyFiles(const QList<FileEntry> &files, const CompressOptions &options)
-{
-    Q_UNUSED(files)
-    Q_UNUSED(options)
-    m_workStatus = WT_Copy;
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::deleteFiles(const QList<FileEntry> &files)
-{
-    Q_UNUSED(files)
-    // 初始化变量
-    m_workStatus = WT_Delete;
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::addComment(const QString &comment)
-{
-    Q_UNUSED(comment)
-    m_workStatus = WT_Comment;
-
-    return PFT_Nomral;
-}
-
-PluginFinishType LibminizipPlugin::updateArchiveData(const UpdateOptions &options)
-{
-    Q_UNUSED(options)
     return PFT_Nomral;
 }
 

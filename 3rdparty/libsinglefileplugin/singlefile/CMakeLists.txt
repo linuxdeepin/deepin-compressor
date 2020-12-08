@@ -77,16 +77,17 @@ include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
                                               ${ATSPI2_INCLUDE_DIRS}
                                               ${GOBJECT_INCLUDE_DIRS})
 include_directories(./)
-include_directories(../../common/)
-include_directories(../../ChardetDetector)
-include_directories(../../interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../common/)
+include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
 
-add_library(${LIB_NAME} SHARED  ${h_files} ${c_files})
+add_library(${LIB_NAME} STATIC  ${h_files} ${c_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core )
 target_link_libraries(${LIB_NAME} KF5::Archive)
 target_link_libraries(${LIB_NAME} ${LINK_LIBS})
 target_link_libraries(${LIB_NAME} ${LIBS_INCLUDE_DIRS})
 target_link_libraries( ${LIB_NAME} compressor-interface)
 target_link_libraries( ${LIB_NAME} compressor-ChardetDetector)
-target_link_libraries( ${LIB_NAME} compressor-common)
 

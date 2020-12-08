@@ -24,8 +24,8 @@
  */
 
 #include "singlefileplugin.h"
-
 #include "queries.h"
+#include "datamanager.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -42,56 +42,90 @@ LibSingleFileInterface::~LibSingleFileInterface()
 {
 }
 
-bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options)
+PluginFinishType LibSingleFileInterface::list()
+{
+    DataManager::get_instance().resetArchiveData();
+
+    FileEntry entry;
+    entry.strFullPath = uncompressedFileName();
+    entry.strFileName = entry.strFullPath;
+    entry.qSize = QFileInfo(m_strArchiveName).size();
+
+    DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+}
+
+PluginFinishType LibSingleFileInterface::testArchive()
+{
+    m_workStatus = WT_Test;
+    return PFT_Nomral;
+}
+
+PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     Q_UNUSED(files)
     Q_UNUSED(options)
 
-    bAnyFileExtracted = false;
+    QString strFileName = uncompressedFileName();       // 获取文件名
 
-    QString outputFileName = destinationDirectory;
-    if (!destinationDirectory.endsWith(QLatin1Char('/'))) {
+    // 若自动创建文件夹，祛除以文件名结尾的字符串，方式解压时文件名包含“xx.xx“，导致解压失败
+    QString outputFileName = options.strTargetPath;
+    if (outputFileName.endsWith(uncompressedFileName()))
+        outputFileName.chop(strFileName.length());
+
+    // 解压路径
+    if (!outputFileName.endsWith(QLatin1Char('/'))) {
         outputFileName += QLatin1Char('/');
     }
-    outputFileName += uncompressedFileName();
+    outputFileName += uncompressedFileName();   // 完整文件路径
 
-    outputFileName = overwriteFileName(outputFileName);
-    if (outputFileName.isEmpty()) {
-        return true;
+    // 对重复文件进行询问判断
+    if (QFile::exists(outputFileName)) {
+        OverwriteQuery query(outputFileName);
+
+        emit signalQuery(&query);
+        query.waitForResponse();
+
+        if (query.responseCancelled()) {
+            emit signalCancel();
+            return PFT_Cancel;
+        } else if (query.responseSkip()) {
+            return PFT_Cancel;
+        } else if (query.responseSkipAll()) {
+            m_bSkipAll = true;
+            return PFT_Cancel;
+        }  else if (query.responseOverwriteAll()) {
+            m_bOverwriteAll = true;
+        }
     }
 
     qDebug() << "Extracting to" << outputFileName;
 
+    // 写文件
     QFile outputFile(outputFileName);
     if (!outputFile.open(QIODevice::WriteOnly)) {
-        qDebug() << "Failed to open output file" << outputFile.errorString();
-        //emit error(xi18nc("@info", "Ark could not extract <filename>%1</filename>.", outputFile.fileName()));
-        emit error(QString("@info Ark could not extract <filename>%1</filename>.").arg(outputFile.fileName()));
-
-        return false;
+        m_eErrorType = ET_FileWriteError;
+        return PFT_Error;
     }
 
-    KCompressionDevice *device = new KCompressionDevice(filename(), KFilterDev::compressionTypeForMimeType(m_mimeType));
+    // 打开压缩设备，写入数据
+    KCompressionDevice *device = new KCompressionDevice(m_strArchiveName, KFilterDev::compressionTypeForMimeType(m_mimeType));
     if (!device) {
-        qDebug() << "Could not create KCompressionDevice";
-        //emit error(xi18nc("@info", "Ark could not open <filename>%1</filename> for extraction.", filename()));
-        emit error(QString("@info Ark could not open <filename>%1</filename> for extraction.").arg(filename()));
-
-
-        return false;
+        m_eErrorType = ET_FileWriteError;
+        return PFT_Error;
     }
 
-    device->open(QIODevice::ReadOnly);
+    device->open(QIODevice::ReadOnly);  // 以只读方式打开
 
     qint64 bytesRead;
     QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
 
+    // 写数据
     while (true) {
         bytesRead = device->read(dataChunk.data(), dataChunk.size());
 
         if (bytesRead == -1) {
-            //emit error(xi18nc("@info", "There was an error while reading <filename>%1</filename> during extraction.", filename()));
-            emit error(QString("@info There was an error while reading <filename>%1</filename> during extraction.").arg(filename()));
+            m_eErrorType = ET_FileWriteError;
             break;
         } else if (bytesRead == 0) {
             break;
@@ -100,51 +134,31 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
         outputFile.write(dataChunk.data(), bytesRead);
     }
 
+    outputFile.close();
+    device->close();
     delete device;
 
-    bAnyFileExtracted = true;
-
-    return true;
+    return PFT_Nomral;
 }
 
-bool LibSingleFileInterface::list(bool /*isbatch*/)
+void LibSingleFileInterface::pauseOperation()
 {
 
-    Archive::Entry *e = new Archive::Entry();
-    connect(this, &QObject::destroyed, e, &QObject::deleteLater);
-    e->setProperty("fullPath", uncompressedFileName());
-    e->setProperty("compressedSize", QFileInfo(filename()).size());
-    emit entry(e);
-
-    return true;
 }
 
-QString LibSingleFileInterface::overwriteFileName(QString &filename)
+void LibSingleFileInterface::continueOperation()
 {
-    QString newFileName(filename);
 
-    while (QFile::exists(newFileName)) {
-        OverwriteQuery query(newFileName);
+}
 
-        query.setMultiMode(false);
-        emit userQuery(&query);
-        query.waitForResponse();
+bool LibSingleFileInterface::doKill()
+{
 
-        if ((query.responseCancelled()) || (query.responseSkip()) || (query.responseAutoSkip())) {
-            return QString();
-        } else if (query.responseOverwrite() || query.responseOverwriteAll()) {
-            break;
-        } else if (query.responseRename()) {
-            newFileName = query.newFilename();
-        }
-    }
-
-    return newFileName;
 }
 
 const QString LibSingleFileInterface::uncompressedFileName() const
 {
-    QString uncompressedName(QFileInfo(filename()).fileName());
+    QString uncompressedName(QFileInfo(m_strArchiveName).fileName());
 
     // Bug 252701: For .svgz just remove the terminal "z".
     if (uncompressedName.endsWith(QLatin1String(".svgz"), Qt::CaseInsensitive)) {
@@ -163,17 +177,4 @@ const QString LibSingleFileInterface::uncompressedFileName() const
     return uncompressedName + QStringLiteral(".uncompressed");
 }
 
-bool LibSingleFileInterface::testArchive()
-{
-    return false;
-}
 
-void LibSingleFileInterface::cleanIfCanceled()
-{
-
-}
-
-void LibSingleFileInterface::watchFileList(QStringList */*strList*/)
-{
-
-}

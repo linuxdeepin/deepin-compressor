@@ -56,6 +56,8 @@ set(LIBS_INCLUDE_DIRS
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/../)
 set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../interface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
 include_directories(${PROJECT_SOURCE_DIR}/../singlefile)
 include_directories(${INTERFACE_LNCLUDE_DIR})
 

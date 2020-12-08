@@ -2,7 +2,6 @@
 #define SINGLEFILEPLUGIN_H
 
 #include "archiveinterface.h"
-#include "libsinglefileplugin_global.h"
 
 class  LibSingleFileInterface : public ReadOnlyArchiveInterface
 {
@@ -12,17 +11,23 @@ public:
     LibSingleFileInterface(QObject *parent, const QVariantList &args);
     ~LibSingleFileInterface() ;
 
-    bool list(bool isbatch = false) ;
-    bool testArchive() ;
-    bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) ;
-    void cleanIfCanceled()override;
-    void watchFileList(QStringList *strList)override;
+    PluginFinishType list() override;
+    PluginFinishType testArchive() override;
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
+    void pauseOperation() override;
+    void continueOperation() override;
+    bool doKill() override;
+
 protected:
+    /**
+     * @brief uncompressedFileName  获取解压文件名
+     * @return
+     */
     const QString uncompressedFileName() const;
-    QString overwriteFileName(QString &filename);
 
     QString m_mimeType;
     QStringList m_possibleExtensions;
+
 };
 
 #endif // SINGLEFILEPLUGIN_H

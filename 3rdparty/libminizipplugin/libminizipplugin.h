@@ -40,7 +40,7 @@ public:
     ~LibminizipPluginFactory() override;
 };
 
-class LibminizipPlugin : public ReadWriteArchiveInterface
+class LibminizipPlugin : public ReadOnlyArchiveInterface
 {
     Q_OBJECT
 
@@ -54,26 +54,8 @@ public:
     PluginFinishType list() override;
     PluginFinishType testArchive() override;
     PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
-    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
-    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
-    PluginFinishType addComment(const QString &comment) override;
-    PluginFinishType updateArchiveData(const UpdateOptions &options) override;
-
-    /**
-     * @brief pauseOperation    暂停操作
-     */
     void pauseOperation() override;
-
-    /**
-     * @brief continueOperation 继续操作
-     */
     void continueOperation() override;
-
-    /**
-     * @brief doKill 强行取消
-     */
     bool doKill() override;
 
 private:
