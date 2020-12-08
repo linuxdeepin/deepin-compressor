@@ -175,7 +175,7 @@ private:
     QStringList m_listCodecs;   // 中文编码格式
 
     QMap<zip_int64_t, QByteArray> m_mapFileCode;   // 存储文件编码
-
+    double m_dScaleSize = 0.0;   // 100/总大小
 };
 
 #endif // LIBZIPPLUGIN_H

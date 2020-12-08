@@ -35,6 +35,7 @@
 #include <QTextCodec>
 
 //#include <zlib.h>
+#define READBYTES 10240			// 每次读取文件大小
 
 LibzipPluginFactory::LibzipPluginFactory()
 {
@@ -121,6 +122,13 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
         // return minizip_extractFiles(files, options);
         m_eErrorType = ET_ArchiveOpenError;
         return PFT_Error;
+    }
+
+    // 右键解压时按照按照压缩包大小计算
+    if (options.bRightExtract) {
+        m_dScaleSize = 100.0 / options.qComressSize;
+    } else {
+        m_dScaleSize = 100.0 / options.qSize;
     }
 
     // 执行解压操作
@@ -754,10 +762,14 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         // 写文件
         QDataStream out(&file);
-        int kb = 1024;
         zip_int64_t sum = 0;
-        char buf[1024];
+        char buf[READBYTES];
         int writeSize = 0;
+        double dScale = 1;
+        // 右键解压时按照文件比例计算大小
+        if (options.bRightExtract) {
+            dScale = double(statBuffer.comp_size) / statBuffer.size;
+        }
         while (sum != zip_int64_t(statBuffer.size)) {
 
             if (m_bPause) { //解压暂停
@@ -766,7 +778,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
                 continue;
             }
 
-            const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(kb));
+            const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(READBYTES));
 
             if (readBytes < 0) {
                 file.close();
@@ -784,13 +796,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             writeSize += readBytes;
 
             // 计算进度并显示（右键快捷解压使用压缩包大小，计算比例）
-            if (options.bRightExtract) {
-                qExtractSize += readBytes * (double(statBuffer.comp_size) / statBuffer.size);
-                emit signalprogress((double(qExtractSize)) / options.qComressSize * 100);
-            } else {
-                qExtractSize += readBytes;
-                emit signalprogress((double(qExtractSize)) / options.qSize * 100);
-            }
+            qExtractSize += readBytes * dScale;
+            emit signalprogress((double(qExtractSize)) * m_dScaleSize);
         }
 
         file.close();
