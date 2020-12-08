@@ -35,28 +35,31 @@ QString SettingDialog::getDefaultExtractPath()
 
 bool SettingDialog::isAutoCreatDir()
 {
-    // 读取配置文件信息
+    // 读取配置文件信息 是否自动创建文件夹
     return m_settings->value("base.decompress.create_folder").toBool();
 }
 
 bool SettingDialog::isAutoOpen()
 {
-    // 读取配置文件信息
+    // 读取配置文件信息 是否自动打开文件夹
     return m_settings->value("base.decompress.open_folder").toBool();
 }
 
 bool SettingDialog::isAutoDeleteFile()
 {
+    // 读取配置文件信息 压缩后是否删除源文件
     return m_settings->value("base.file_management.delete_file").toBool();
 }
 
 QString SettingDialog::isAutoDeleteArchive()
 {
+    // 读取配置文件信息 解压后是否删除压缩文件
     return m_deleteArchiveOption->value().toString();
 }
 
-bool SettingDialog::isAssociatedType(QString mime)
+bool SettingDialog::isAssociatedType(QString mime) // 暂时未被调用
 {
+    // 读取配置文件信息 是否是解压缩关联文件类型
     return m_settings->option("file_association.file_association_type." + mime.remove("application/"))->value().toBool();
 }
 

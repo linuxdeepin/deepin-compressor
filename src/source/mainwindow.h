@@ -242,6 +242,12 @@ private:
      */
     void setDefaultApp(QString mimetype, QString desktop);
 
+    /**
+     * @brief convertArchive 格式转换
+     * @param convertType 转换后的文件类型
+     */
+    void convertArchive(/*const QStringList &listFiles, */QString convertType);
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;

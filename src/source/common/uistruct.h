@@ -150,6 +150,7 @@ Q_DECLARE_METATYPE(UnCompressParameter)
 enum SuccessInfo {
     SI_Compress,    // 压缩成功
     SI_UnCompress,  // 解压成功
+    SI_Convert      // 转换成功
 };
 
 // 错误界面显示的信息

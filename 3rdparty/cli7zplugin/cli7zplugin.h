@@ -29,6 +29,7 @@ public:
     bool isDiskFullMsg(const QString &line) override;
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
+    bool isMultiPasswordPrompt(const QString &line) override;
 
 private:
     enum ArchiveType {

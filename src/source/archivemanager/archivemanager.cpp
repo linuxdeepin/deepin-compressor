@@ -312,10 +312,16 @@ bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, con
     return false;
 }
 
-bool ArchiveManager::convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath)
+bool ArchiveManager::convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath)
 {
-    ConvertJob *pConvertJob = new ConvertJob(strOriginalArchiveFullPath, strTargetFullPath);
+    ConvertJob *pConvertJob = new ConvertJob(strOriginalArchiveFullPath, strTargetFullPath, strNewArchiveFullPath);
     m_pArchiveJob = pConvertJob;
+
+    // 连接槽函数
+    connect(pConvertJob, &AddJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pConvertJob, &AddJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pConvertJob, &AddJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+
     pConvertJob->start();
     return true;
 }

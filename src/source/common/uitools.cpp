@@ -302,7 +302,7 @@ QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
 
 ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
 {
-    QFileInfo fileinfo(fileName);
+//    QFileInfo fileinfo(fileName); // 未使用该变量
 
     const QMimeType mimeType = determineMimeType(fileName);
 

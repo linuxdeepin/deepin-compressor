@@ -35,7 +35,7 @@ void ArchiveJob::kill()
 {
     if (doKill()) {
         // 设置结束标志
-        m_eFinishedType = PFT_Cancel;       
+        m_eFinishedType = PFT_Cancel;
         m_eErrorType = ET_UserCancelOpertion;
         finishJob();
     }

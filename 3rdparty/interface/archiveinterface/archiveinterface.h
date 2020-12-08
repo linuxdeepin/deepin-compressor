@@ -49,17 +49,17 @@ public:
         PT_Libminizip
     };
 
-    // 工作类型
-    enum WorkType {
-        WT_List,
-        WT_Extract,
-        WT_Add,
-        WT_Delete,
-        WT_Move,
-        WT_Copy,
-        WT_Comment,
-        WT_Test
-    };
+//    // 工作类型
+//    enum WorkType {
+//        WT_List,
+//        WT_Extract,
+//        WT_Add,
+//        WT_Delete,
+//        WT_Move,
+//        WT_Copy,
+//        WT_Comment,
+//        WT_Test
+//    };
 
     /**
      * @brief list      加载压缩包

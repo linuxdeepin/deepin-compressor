@@ -82,6 +82,7 @@ void ProgressPage::setProgress(double dPercent)
     if (m_iPerent >= iPercent) {
         return ;
     }
+
     m_iPerent = iPercent;
     m_pProgressBar->setValue(m_iPerent);     // 进度条刷新值
     m_pProgressBar->update();

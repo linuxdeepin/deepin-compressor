@@ -49,7 +49,6 @@ public:
 
 private:
     SingleJob *q;
-
 };
 
 // 单个操作
@@ -100,7 +99,6 @@ protected Q_SLOTS:
     void slotFinished(PluginFinishType eType);
 
 //Q_SIGNALS:
-
 
 protected:
     ReadOnlyArchiveInterface *m_pInterface;
@@ -277,13 +275,23 @@ class ConvertJob: public ArchiveJob
 {
     Q_OBJECT
 public:
-    explicit ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, QObject *parent = nullptr);
+    explicit ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent = nullptr);
     ~ConvertJob() override;
 
     /**
      * @brief start     开始
      */
     void start() override;
+
+    /**
+     * @brief doPause   暂停
+     */
+    void doPause() override;
+
+    /**
+     * @brief doContinue    继续
+     */
+    void doContinue() override;
 
 private Q_SLOTS:
     /**
@@ -304,10 +312,13 @@ private Q_SLOTS:
     void slotHandleExtractFinished();
 
 private:
+    ReadOnlyArchiveInterface *m_pIface = nullptr;
     ExtractJob *m_pExtractJob;  // 先解压
     CreateJob *m_pCreateJob;    // 再压缩成想要的格式
     QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
     QString m_strTargetFullPath;                // 转换目标全路径
+    QString m_strNewArchiveFullPath;   // 格式转换后压缩包全路径
+    WorkType m_workType = WT_Convert;
 };
 
 #endif

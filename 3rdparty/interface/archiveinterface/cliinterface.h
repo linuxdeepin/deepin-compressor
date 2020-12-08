@@ -48,6 +48,7 @@ public:
     virtual bool isDiskFullMsg(const QString &line) = 0;
     virtual bool isFileExistsMsg(const QString &line) = 0;
     virtual bool isFileExistsFileName(const QString &line) = 0;
+    virtual bool isMultiPasswordPrompt(const QString &line) = 0;
 
     /**
      * @brief pauseOperation    暂停操作
@@ -116,7 +117,7 @@ protected:
     /**
      * @brief handlePassword  需要密码是弹出密码框
      */
-    void handlePassword();
+    PluginFinishType handlePassword();
 
     /**
      * @brief handleFileExists 处理解压存在同名文件
@@ -125,14 +126,13 @@ protected:
      */
     bool handleFileExists(const QString &line);
 
-private:
-
     /**
      * @brief writeToProcess 追加命令
      * @param data
      */
     void writeToProcess(const QByteArray &data);
 
+private:
     /**
      * @brief moveDroppedFilesToDest 提取文件后，将文件从临时目录移到目的路径
      * @param files  文件
@@ -172,6 +172,7 @@ private slots:
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
+    PluginFinishType m_finishType = PFT_Nomral;
 
 private:
     QList<FileEntry> m_files; // 文件

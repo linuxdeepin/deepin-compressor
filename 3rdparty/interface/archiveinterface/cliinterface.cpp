@@ -207,7 +207,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
     QStringList fileList;
 
     // 压缩目标路径
-    const QString destinationPath = (options.strDestination == nullptr) ? QString() : options.strDestination;
+    const QString destinationPath = (options.strDestination == QString()) ? QString() : options.strDestination;
     qDebug() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
 
     if (!destinationPath.isEmpty()) { // 向压缩包非第一层文件里面追加压缩
@@ -456,6 +456,14 @@ void CliInterface::killProcess(bool emitFinished)
         return;
     }
 
+    if (!m_childProcessId.empty()) {
+        for (int i = m_childProcessId.size() - 1; i >= 0; i--) {
+            if (m_childProcessId[i] > 0) {
+                kill(static_cast<__pid_t>(m_childProcessId[i]), SIGKILL);
+            }
+        }
+    }
+
     m_process->kill();
 }
 
@@ -532,7 +540,7 @@ void CliInterface::handleProgress(const QString &line)
     }
 }
 
-void CliInterface::handlePassword()
+PluginFinishType CliInterface::handlePassword()
 {
     m_eErrorType = ET_NoError;
 
@@ -543,11 +551,14 @@ void CliInterface::handlePassword()
     if (query.responseCancelled()) {
         DataManager::get_instance().archiveData().strPassword = QString();
         setPassword(QString()); // 函数暂时保留
-    } else {
-        DataManager::get_instance().archiveData().strPassword = query.password();
-        setPassword(query.password());
-        writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
+        return PFT_Cancel;
     }
+
+    DataManager::get_instance().archiveData().strPassword = query.password();
+    setPassword(query.password());
+    writeToProcess((query.password() + QLatin1Char('\n')).toLocal8Bit());
+
+    return PFT_Nomral;
 }
 
 bool CliInterface::handleFileExists(const QString &line)
@@ -698,22 +709,25 @@ void CliInterface::readStdout(bool handleAll)
     }
 
     // 获取命令行输出
-    m_stdOutData += m_process->readAllStandardOutput();
+    QByteArray dd = m_process->readAllStandardOutput();
+    m_stdOutData += dd;
 
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
-    bool wrongPwd = isWrongPasswordMsg(lines.last());  // 列表加密的情况;
+    bool isWrongPwd = isWrongPasswordMsg(lines.last());
 
-    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !wrongPwd) {
-        handleAll = true; // 7z加载会出现换行错误
+    if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !isWrongPwd) {
+        handleAll = true; // 7z进度行结束无\n
     }
 
-    if ((m_process->program().at(0).contains("unrar") && m_process->program().at(1) == "x") && !wrongPwd) {
-        handleAll = true; // rar解压加密文件,密码正确开始解压，需要替换同名文件时会换行错误
+    if ((m_process->program().at(0).contains("bash") && m_process->program().at(2).contains("7z")) && !isWrongPwd) {
+        handleAll = true; // compress .tar.7z progressline has no \n
     }
 
-    bool foundErrorMessage = (wrongPwd || isPasswordPrompt(lines.last()));
+    bool foundErrorMessage = (isWrongPwd || isDiskFullMsg(QLatin1String(lines.last()))
+                              || isFileExistsMsg(QLatin1String(lines.last())))
+                             || isPasswordPrompt(QLatin1String(lines.last()));
 
     if (foundErrorMessage) {
         handleAll = true;
@@ -722,27 +736,33 @@ void CliInterface::readStdout(bool handleAll)
     if (handleAll) {
         m_stdOutData.clear();
     } else {
-        m_stdOutData = lines.takeLast();
+        // because the last line might be incomplete we leave it for now
+        // note, this last line may be an empty string if the stdoutdata ends
+        // with a newline
+        if (m_process->program().at(0).contains("unrar")) { // 针对unrar的命令行截取
+            m_stdOutData.clear();
+            if (lines.count() > 0) {
+                if (!(lines[lines.count() - 1].endsWith("%") || lines[lines.count() - 1].endsWith("OK "))) {
+                    if (isMultiPasswordPrompt(lines[lines.count() - 1]) || isFileExistsMsg(lines[lines.count() - 1]) || isPasswordPrompt(lines[lines.count() - 1])) {
+                    } else {
+                        m_stdOutData = lines.takeLast();
+                    }
+                }
+            }
+        } else {
+            if (lines.size() == 1)
+                return;
+            m_stdOutData = lines.takeLast();
+        }
     }
 
     // 处理命令行输出
     for (const QByteArray &line : qAsConst(lines)) {
         // 第二个判断条件是处理rar的list，当rar文件含有comment信息的时候需要根据空行解析
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
-            bool ret = handleLine(QString::fromLocal8Bit(line), m_workStatus);
-            if (ret == false) {
-                if (m_strArchiveName.endsWith(".7z") || m_strArchiveName.contains(".7z.")) {
-                    killProcess();
-                    return;
-                } else {
-                    if (m_eErrorType == ET_NeedPassword) {
-                        handlePassword();
-                    }
-                }
-            } else {
-                if (m_eErrorType == ET_NeedPassword) {
-                    handlePassword();
-                }
+            if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
+                killProcess();
+                return;
             }
         }
     }
@@ -755,7 +775,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     deleteProcess();
 
     emit signalprogress(100);
-    emit signalFinished(PFT_Nomral);
+    emit signalFinished(m_finishType);
 }
 
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -770,13 +790,15 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         m_process = nullptr;
     }
 
-    if (exitCode == 9 || exitCode == 11) {
-        DataManager::get_instance().archiveData().strPassword = QString();
-        setPassword(QString());
-        return;
-    }
+//    if (exitCode == 9 || exitCode == 11) {
+//        DataManager::get_instance().archiveData().strPassword = QString();
+//        setPassword(QString());
+//        return;
+//    }
 
-    if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp") && m_extractOptions.strTargetPath.contains("/deepin-compressor-") && m_extractOptions.strDestination.isEmpty()))) {
+    if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp")
+                                            && m_extractOptions.strTargetPath.contains("/deepin-compressor-")
+                                            && m_extractOptions.strDestination.isEmpty()))) {
         // 提取操作和打开解压列表文件非第一层的文件
         // 将文件从临时文件夹内移出
         bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
@@ -789,7 +811,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     }
 
     emit signalprogress(100);
-    emit signalFinished(PFT_Nomral);
+    emit signalFinished(m_finishType);
 }
 
 void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid)

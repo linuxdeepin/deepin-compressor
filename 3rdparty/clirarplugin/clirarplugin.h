@@ -28,6 +28,7 @@ public:
     bool isDiskFullMsg(const QString &line) override;
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
+    bool isMultiPasswordPrompt(const QString &line) override;
 
 private:
     void setupCliProperties();
@@ -40,27 +41,6 @@ private:
     bool readListLine(const QString &line);
 
     bool handleLine(const QString &line, WorkType workStatus) override;
-
-    /**
-     * @brief handleEnterPwdLine 处理提示输入密码的命令行内容被截断
-     * @param line
-     * @return
-     */
-    bool handleEnterPwdLine(const QString &line);
-
-    /**
-     * @brief handleIncorrectPwdLine 处理提示密码错误的命令行内容被截断
-     * @param line
-     * @return
-     */
-    bool handleIncorrectPwdLine(const QString &line);
-
-    /**
-     * @brief handleFileExistsLine 处理提示文件已存在是否替换的命令行内容被截断
-     * @param line
-     * @return
-     */
-    bool handleFileExistsLine(const QString &line);
 
 private:
     ParseState m_parseState = ParseStateTitle;

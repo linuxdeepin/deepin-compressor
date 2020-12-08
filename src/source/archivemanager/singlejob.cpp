@@ -425,17 +425,21 @@ void CommentJob::doWork()
     }
 }
 
-ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, QObject *parent)
+ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent)
     : ArchiveJob(parent)
     , m_strOriginalArchiveFullPath(strOriginalArchiveFullPath)
     , m_strTargetFullPath(strTargetFullPath)
+    , m_strNewArchiveFullPath(strNewArchiveFullPath)
 {
     m_eJobType = JT_Convert;
 }
 
 ConvertJob::~ConvertJob()
 {
-
+    if (m_pIface) {
+        delete  m_pIface;
+        m_pIface = nullptr;
+    }
 }
 
 void ConvertJob::start()
@@ -443,12 +447,17 @@ void ConvertJob::start()
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath);
 
     if (pIface) {
+        qDebug() << "格式转换开始解压";
+        m_pIface = pIface;
+        m_workType = WT_Extract;
+
         // 创建解压参数
         QFileInfo file(m_strOriginalArchiveFullPath);
         ExtractionOptions stOptions;
-        stOptions.strTargetPath = file.filePath();
+        stOptions.strTargetPath = m_strTargetFullPath;
         stOptions.qComressSize = file.size();
         stOptions.bAllExtract = true;
+
         // 创建解压操作
         m_pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
         connect(m_pExtractJob, &ExtractJob::signalprogress, this, &ConvertJob::slotHandleSingleJobProgress);
@@ -458,17 +467,36 @@ void ConvertJob::start()
 
         m_pExtractJob->doWork();
     }
+}
 
+void ConvertJob::doPause()
+{
+    // 调用插件暂停接口
+    if (m_pIface) {
+        m_pIface->pauseOperation();
+    }
+}
+
+void ConvertJob::doContinue()
+{
+    // 调用插件继续接口
+    if (m_pIface) {
+        m_pIface->continueOperation();
+    }
 }
 
 void ConvertJob::slotHandleSingleJobProgress(double dPercentage)
 {
-
+    if (m_workType == WT_Extract) { // 解压进度
+        emit signalprogress(dPercentage * 0.3);
+    } else { // 压缩进度
+        emit signalprogress(30 + dPercentage * 0.7);
+    }
 }
 
 void ConvertJob::slotHandleSingleJobCurFileName(const QString &strName)
 {
-
+    emit signalCurFileName(strName);
 }
 
 void ConvertJob::slotHandleExtractFinished()
@@ -481,14 +509,47 @@ void ConvertJob::slotHandleExtractFinished()
         switch (m_eFinishedType) {
         // 正常结束之后，进行压缩操作
         case PFT_Nomral: {
+            qDebug() << "格式转换开始压缩";
+            m_workType = WT_Add;
+
+            ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strNewArchiveFullPath, true);
+
+            if (pIface) {
+                m_pIface = pIface;
+                QList<FileEntry> listEntry;
+                // 在临时路径里面获取待压缩文件
+                QDir dir(m_strTargetFullPath);
+                QFileInfoList fileList = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
+
+                foreach (QFileInfo strFile, fileList) {
+                    FileEntry stFileEntry;
+                    stFileEntry.strFullPath = strFile.filePath();
+                    listEntry.push_back(stFileEntry);
+                }
+
+                // 构建压缩参数
+                CompressOptions options;
+                options.iCompressionLevel = 3; // 默认压缩等级为3，其余参数均为默认选项
+                options.qTotalSize = DataManager::get_instance().archiveData().qSize; // list压缩包时存储的压缩包内文件实际总大小
+
+                // 创建压缩操作
+                m_pCreateJob = new CreateJob(listEntry, pIface, options);
+                connect(m_pCreateJob, &CreateJob::signalprogress, this, &ConvertJob::slotHandleSingleJobProgress);
+                connect(m_pCreateJob, &CreateJob::signalCurFileName, this, &ConvertJob::slotHandleSingleJobCurFileName);
+                connect(m_pCreateJob, &CreateJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
+
+                m_pCreateJob->doWork();
+            }
         }
         break;
         // 用户取消之后，不进行压缩
         case PFT_Cancel: {
+            qDebug() << "取消格式转换";
         }
         break;
         // 出现错误的情况，提示用户
         case PFT_Error: {
+            qDebug() << "格式转换错误";
         }
         break;
         }

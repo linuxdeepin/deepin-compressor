@@ -29,6 +29,7 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QDebug>
 
 #include <KFilterDev>
 //#include <KLocalizedString>
@@ -53,6 +54,8 @@ PluginFinishType LibSingleFileInterface::list()
 
     DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
     DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+
+    return PFT_Nomral;
 }
 
 PluginFinishType LibSingleFileInterface::testArchive()
@@ -153,7 +156,7 @@ void LibSingleFileInterface::continueOperation()
 
 bool LibSingleFileInterface::doKill()
 {
-
+    return false;
 }
 
 const QString LibSingleFileInterface::uncompressedFileName() const
@@ -176,5 +179,3 @@ const QString LibSingleFileInterface::uncompressedFileName() const
 
     return uncompressedName + QStringLiteral(".uncompressed");
 }
-
-

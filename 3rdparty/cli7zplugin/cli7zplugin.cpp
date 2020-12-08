@@ -132,6 +132,12 @@ bool Cli7zPlugin::isFileExistsFileName(const QString &line)
             line.startsWith(QLatin1String("  Path:     ./")));
 }
 
+bool Cli7zPlugin::isMultiPasswordPrompt(const QString &line)
+{
+    Q_UNUSED(line);
+    return false;
+}
+
 bool Cli7zPlugin::readListLine(const QString &line)
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
@@ -247,11 +253,22 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         }
 
         m_eErrorType = ET_NeedPassword;
+        if (handlePassword() == PFT_Cancel) {
+            m_finishType = PFT_Cancel;
+            return false;
+        }
+
         return true;
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
         m_eErrorType = ET_WrongPassword;
+        m_finishType = PFT_Error;
+        return false;
+    }
+
+    if (isDiskFullMsg(line)) {
+//        m_eErrorType = ;
         return false;
     }
 

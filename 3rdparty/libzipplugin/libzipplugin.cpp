@@ -151,10 +151,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
-
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
-
                     PasswordNeededQuery query(strFileName);
                     emit signalQuery(&query);
                     query.waitForResponse();

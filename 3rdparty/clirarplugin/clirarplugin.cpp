@@ -137,6 +137,11 @@ bool CliRarPlugin::isFileExistsFileName(const QString &line)
     return (line.startsWith(QLatin1String("Would you like to replace the existing file ")));
 }
 
+bool CliRarPlugin::isMultiPasswordPrompt(const QString &line)
+{
+    return line.contains("use current password ? [Y]es, [N]o, [A]ll");
+}
+
 bool CliRarPlugin::readListLine(const QString &line)
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
@@ -217,9 +222,7 @@ bool CliRarPlugin::readListLine(const QString &line)
             // clear m_fileEntry
             m_fileEntry.reset();
         }
-//        else if (parseLineLeft == QLatin1String("Flags")/* || parseLineLeft == QLatin1String("Compression")*/) {
-//            m_encryptedRar = true;
-//        }
+
         break;
     }
 
@@ -228,82 +231,38 @@ bool CliRarPlugin::readListLine(const QString &line)
 
 bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 {
+    if (isPasswordPrompt(line)) {  // 提示需要输入密码 提示密码错误
+        if (workStatus == WT_List) {
+            DataManager::get_instance().archiveData().isListEncrypted = true; // 列表加密文件
+        }
+
+        m_eErrorType = ET_NeedPassword;
+        if (handlePassword() == PFT_Cancel) {
+            m_finishType = PFT_Cancel;
+            return false;
+        }
+
+        return true;
+    }
+
+    if (isWrongPasswordMsg(line)) {  // 提示密码错误
+        m_eErrorType = ET_WrongPassword;
+        return true;
+    }
+
     if (workStatus == WT_List) {
-        if (handleEnterPwdLine(line)) {  // 列表解密我文件，加载提示需要输入密码
-            m_replaceLine.clear();
-            m_eErrorType = ET_NeedPassword;
-            return true;
-        }
-
-        if (handleIncorrectPwdLine(line)) {  // 提示密码错误
-            m_replaceLine.clear();
-            m_eErrorType = ET_WrongPassword;
-            return false;
-        }
-
         return readListLine(line);   // 加载压缩文件，处理命令行内容
-    } else if (workStatus == WT_Extract) {
-        qDebug() << "rar extract line ---" << line;
-        if (handleEnterPwdLine(line)) {  // 提示需要输入密码、提示密码错误
-            m_replaceLine.clear();
-            m_eErrorType = ET_NeedPassword;
+    } else if (workStatus == WT_Extract) { // 解压进度
+        if (isMultiPasswordPrompt(line)) { // rar多密码文件解压提示是否使用上一次输入的密码
+            writeToProcess(QString("Y" + QLatin1Char('\n')).toLocal8Bit()); // 选择Y，使用上一次的密码
+        }
+
+        if (handleFileExists(line)) {  // 判断解压是否存在同名文件
             return true;
-        }
-
-        if (handleIncorrectPwdLine(line)) {  // 提示密码错误
-            m_replaceLine.clear();
-            m_eErrorType = ET_WrongPassword;
-            return false;
-        }
-
-        if (handleFileExistsLine(line) || isFileExistsMsg(line)) {
-            if (handleFileExists(m_replaceLine) || handleFileExists(line)) {  // 判断解压是否存在同名文件
-                m_replaceLine.clear();
-                return true;
-            }
         }
 
         handleProgress(line);
     }
 
     return true;
-}
-
-bool CliRarPlugin::handleEnterPwdLine(const QString &line)
-{
-    if (!isPasswordPrompt(line) && ((line.contains("for ") && line.endsWith(": ")) || line.startsWith("Enter "))) {
-        m_replaceLine += line;
-    }
-
-    if (isPasswordPrompt(m_replaceLine) || isPasswordPrompt(line)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool CliRarPlugin::handleIncorrectPwdLine(const QString &line)
-{
-    if (!isWrongPasswordMsg(line) && (line.startsWith("The ") || line.endsWith("incorrect."))) {
-        m_replaceLine += line;
-    }
-
-    if (isWrongPasswordMsg(m_replaceLine) || isWrongPasswordMsg(line)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool CliRarPlugin::handleFileExistsLine(const QString &line)
-{
-    if (!isFileExistsFileName(line) && (line.startsWith("Would you like to") || line.contains("file "))) {
-        m_replaceLine += line;
-    }
-
-    if (isFileExistsFileName(m_replaceLine) || isFileExistsFileName(line)) {
-        return true;
-    } else {
-        return false;
-    }
 }

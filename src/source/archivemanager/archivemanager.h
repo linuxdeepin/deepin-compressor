@@ -131,10 +131,11 @@ public:
     /**
      * @brief convertArchive                压缩包格式转换
      * @param strOriginalArchiveFullPath    原始压缩包全路径
-     * @param strTargetFullPath             转换之后的压缩包全路径
+     * @param strTargetFullPath             压缩包解压的临时路径
+     * @param strNewArchiveFullPath         转换之后的压缩包全路径
      * @return
      */
-    bool convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath);
+    bool convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath);
 
     /**
      * @brief pauseOperation    暂停操作
@@ -153,9 +154,6 @@ public:
      * @return                      是否调用成功
      */
     bool cancelOperation();
-
-private:
-
 
 Q_SIGNALS:
     /**

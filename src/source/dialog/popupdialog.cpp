@@ -25,6 +25,7 @@
 #include <DWidget>
 #include <DFontSizeManager>
 #include <DCheckBox>
+#include <DRadioButton>
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -220,4 +221,104 @@ int OverwriteQueryDialog::getQueryResult()
 bool OverwriteQueryDialog::getApplyAll()
 {
     return m_applyAll;
+}
+
+ConvertDialog::ConvertDialog(QWidget *parent)
+    : DDialog(parent)
+{
+    setMinimumSize(QSize(380, 180));
+
+    QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    setIcon(pixmap);
+}
+
+ConvertDialog::~ConvertDialog()
+{
+
+}
+
+QStringList ConvertDialog::showDialog()
+{
+    // 添加取消和转换按钮
+    addButton(tr("Cancel"));
+    addButton(tr("Convert"), true, DDialog::ButtonRecommend);
+
+    DLabel *strlabel = new DLabel;
+    strlabel->setMinimumSize(QSize(308, 40));
+    strlabel->setText(tr("Changes to archives in this file type are not supported. Please convert the archive format to save the changes."));
+    strlabel->setWordWrap(true);
+    strlabel->setAlignment(Qt::AlignCenter);
+    strlabel->setForegroundRole(DPalette::ToolTipText);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
+
+    QHBoxLayout *textLayout = new QHBoxLayout;
+    textLayout->setSpacing(36);
+    textLayout->addWidget(strlabel/*, Qt::AlignHCenter | Qt::AlignVCenter*/);
+    textLayout->setSpacing(36);
+
+    DLabel *strlabel2 = new DLabel;
+    strlabel2->setMinimumSize(QSize(112, 20));
+    strlabel2->setText(tr("Convert the format to:"));
+    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
+
+    DRadioButton *zipBtn = new DRadioButton("ZIP");
+    zipBtn->setChecked(true);
+    DRadioButton *_7zBtn = new DRadioButton("7Z");
+    _7zBtn->setChecked(false);
+
+    QHBoxLayout *labelLayout = new QHBoxLayout;
+    labelLayout->addStretch();
+    labelLayout->addWidget(strlabel2);
+    labelLayout->setSpacing(20);
+    labelLayout->addWidget(zipBtn);
+    labelLayout->setSpacing(20);
+    labelLayout->addWidget(_7zBtn);
+    labelLayout->addStretch();
+
+    DWidget *widget = new DWidget(this);
+
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->addWidget(strlabel);
+    mainlayout->addStretch();
+    mainlayout->addLayout(labelLayout);
+
+    widget->setLayout(mainlayout);
+
+    addContent(widget);
+    setTabOrder(zipBtn, _7zBtn);
+    setTabOrder(_7zBtn, getButton(0));
+    setTabOrder(getButton(0), getButton(1));
+
+    QStringList typeList;
+    typeList << "false" << "";
+    bool isZipConvert = true;
+    bool is7zConvert = false;
+    QString convertType;
+
+    // 转换zip格式
+    connect(zipBtn, &DRadioButton::toggled, this, [ =, &isZipConvert]() {
+        isZipConvert = zipBtn->isChecked();
+        qDebug() << "zip" << isZipConvert;
+    });
+
+    // 转换为7z格式
+    connect(_7zBtn, &DRadioButton::toggled, this, [ =, &is7zConvert]() {
+        is7zConvert = _7zBtn->isChecked();
+        qDebug() << "7z" << is7zConvert;
+    });
+
+    const int mode = exec();
+
+    if (mode == QDialog::Accepted) {
+        typeList.clear();
+        if (isZipConvert) {
+            typeList << "true" << "zip";
+        } else if (is7zConvert) {
+            typeList << "true" << "7z";
+        }
+    } else {
+        typeList << "false" << "none";
+    }
+
+    return typeList;
 }

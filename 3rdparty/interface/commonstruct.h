@@ -63,6 +63,18 @@ enum PathFormat {
     WithTrailingSlash
 };
 
+// 工作类型
+enum WorkType {
+    WT_List,
+    WT_Extract,
+    WT_Add,
+    WT_Delete,
+    WT_Move,
+    WT_Copy,
+    WT_Comment,
+    WT_Test,
+    WT_Convert
+};
 
 // 文件数据
 struct FileEntry {

@@ -46,6 +46,16 @@ public:
     int showDialog(const QString &strDesText = "", const QString btnMsg = "", ButtonType btnType = ButtonNormal);
 };
 
+class ConvertDialog : public DDialog
+{
+    Q_OBJECT
+public:
+    explicit ConvertDialog(QWidget *parent = nullptr);
+    ~ConvertDialog() override;
+
+    QStringList showDialog();
+};
+
 
 // 简单询问对话框（描述 + 多个按钮）
 class SimpleQueryDialog : public DDialog
