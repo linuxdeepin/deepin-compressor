@@ -1105,13 +1105,16 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
             }
         }
 
-
         // 若文件存在且不是可写权限，重新创建一个文件
         if (file.exists() && !file.isWritable()) {
             file.remove();
             file.setFileName(strDestFileName);
             file.setPermissions(QFileDevice::WriteUser);
         }
+
+        // 对文件路径做判断，防止特殊包未先解压出文件夹，导致解压失败
+        if (QDir().exists(QFileInfo(strDestFileName).path()) == false)
+            QDir().mkpath(QFileInfo(strDestFileName).path());
 
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
         // 错误处理
