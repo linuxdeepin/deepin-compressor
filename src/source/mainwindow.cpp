@@ -141,6 +141,7 @@ void MainWindow::initUI()
 
     // 创建打开文件监控
     m_pOpenFileWatcher = new OpenFileWatcher(this);
+    m_pArchiveFileWatcher = new QFileSystemWatcher(this);
 
     // 刷新压缩设置界面格式选项
     m_pCompressSettingPage->refreshMenu();
@@ -241,6 +242,7 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
+    connect(m_pArchiveFileWatcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::slotArchiveChanged);
 }
 
 
@@ -420,6 +422,9 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable());  // 支持压缩且文件可写的格式才能修改数据
+
+    // 监听压缩包
+    watcherArchiveFile(transFile);
 
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter.bSplitVolume, m_stUnCompressParameter.bMultiplePassword, m_stUnCompressParameter.bModifiable);     // 设置压缩包全路径和是否分卷
 
@@ -1605,6 +1610,9 @@ void MainWindow::resetMainwindow()
     // 重置数据
     m_stCompressParameter = CompressParameter();
     m_stUnCompressParameter = UnCompressParameter();
+
+    // 清空压缩包监听数据
+    m_pArchiveFileWatcher->removePaths(m_pArchiveFileWatcher->files());
 }
 
 void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
@@ -1878,6 +1886,15 @@ void MainWindow::convertArchive(QString convertType)
     }
 }
 
+void MainWindow::watcherArchiveFile(const QString &strFullPath)
+{
+    // 清空压缩包监听数据再重新监听最新的数据
+    m_mapArchiveFileWatcher.clear();
+    m_mapArchiveFileWatcher[strFullPath] = false;    // 初始监控状态
+    m_pArchiveFileWatcher->removePaths(m_pArchiveFileWatcher->files());
+    m_pArchiveFileWatcher->addPath(strFullPath);
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
@@ -2108,4 +2125,24 @@ void MainWindow::slotFailureReturn()
     resetMainwindow();
     m_ePageID = PI_Home;
     refreshPage();
+}
+
+void MainWindow::slotArchiveChanged(const QString &strPath)
+{
+    if ((m_mapArchiveFileWatcher.find(strPath) != m_mapArchiveFileWatcher.end()) && (!m_mapArchiveFileWatcher[strPath])) {
+        m_mapArchiveFileWatcher[strPath] = true;
+
+        // 显示提示对话框
+        TipDialog dialog(this);
+        dialog.showDialog(tr("Please add files"), tr("OK"));
+
+        // 重置数据
+        m_pArchiveFileWatcher->removePath(strPath);
+        resetMainwindow();
+        m_ePageID = PI_Home;
+        refreshPage();
+
+        // 重置状态，防止多次提示
+        m_mapArchiveFileWatcher[strPath] = false;
+    }
 }

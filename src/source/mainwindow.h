@@ -45,6 +45,7 @@ class ProgressDialog;
 class DDesktopServicesThread;
 class ArchiveManager;
 class OpenFileWatcher;
+class QFileSystemWatcher;
 
 DWIDGET_USE_NAMESPACE
 
@@ -258,6 +259,12 @@ private:
      */
     void convertArchive(/*const QStringList &listFiles, */QString convertType);
 
+    /**
+     * @brief watcherArchiveFile   监听本地压缩包
+     * @param strFullPath 压缩包名称（全路径）
+     */
+    void watcherArchiveFile(const QString &strFullPath);
+
     // QWidget interface
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -415,6 +422,12 @@ private Q_SLOTS:
      */
     void slotFailureReturn();
 
+    /**
+     * @brief slotArchiveChanged    监听压缩包数据
+     * @param strPath               路径名
+     */
+    void slotArchiveChanged(const QString &strPath);
+
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
@@ -454,6 +467,9 @@ private:
     UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
 
     UpdateOptions m_stUpdateOptions;        // 更新压缩包时选项
+
+    QFileSystemWatcher *m_pArchiveFileWatcher = nullptr;                 // 文件监控
+    QMap<QString, bool> m_mapArchiveFileWatcher;
 
     // 适配arm平台
 #ifdef __aarch64__

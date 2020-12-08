@@ -663,10 +663,6 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
 
-    // 对文件路径做判断，防止特殊包未先解压出文件夹，导致解压失败
-    if (QDir().exists(QFileInfo(strDestFileName).path()) == false)
-        QDir().mkpath(QFileInfo(strDestFileName).path());
-
     QFile file(strDestFileName);
 
     // 获取外部信息（权限）
@@ -723,6 +719,10 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             file.setPermissions(QFileDevice::WriteUser);
         }
 
+        // 对文件路径做判断，防止特殊包未先解压出文件夹，导致解压失败
+        if (QDir().exists(QFileInfo(strDestFileName).path()) == false)
+            QDir().mkpath(QFileInfo(strDestFileName).path());
+
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
         // 错误处理
         if (zipFile == nullptr) {
@@ -761,7 +761,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
-            return ET_FileOpenError;
+            return ET_FileWriteError;
         }
 
         // 写文件
