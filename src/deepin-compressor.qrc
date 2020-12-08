@@ -9,5 +9,6 @@
         <file>assets/icons/deepin/builtin/icons/compress_success_128px.svg</file>
         <file>assets/icons/deepin/builtin/icons/compress_warning_32px.svg</file>
         <file>assets/icons/deepin/builtin/icons/deepin-compressor.svg</file>
+        <file>assets/icons/deepin/builtin/icons/compress_information_15px.svg</file>
     </qresource>
 </RCC>

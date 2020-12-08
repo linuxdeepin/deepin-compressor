@@ -182,7 +182,7 @@ int TreeHeaderView::sectionSizeHint(int logicalIndex) const
     }
 }
 
-PreviousLabel *TreeHeaderView::preLbl()
+PreviousLabel *TreeHeaderView::getpreLbl()
 {
     return m_pPreLbl;
 }

@@ -38,9 +38,15 @@
 #include "ddesktopservicesthread.h"
 #include "openFileWatcher.h"
 #include "mimetypes.h"
+#include "customwidget.h"
+#include "treeheaderview.h"
+#include "compressview.h"
+#include "uncompressview.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
+#include <DWindowCloseButton>
+#include <DWindowOptionButton>
 
 #include <QStackedWidget>
 #include <QKeyEvent>
@@ -164,19 +170,34 @@ void MainWindow::initTitleBar()
     m_pTitleButton->setObjectName("TitleButton");
     m_pTitleButton->setAccessibleName("Title_btn");
 
+    // 左上角注释信息
+    m_pTitleCommentButton = new DIconButton(this);
+    m_pTitleCommentButton->setFixedSize(36, 36);
+    QIcon iconComment(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    m_pTitleCommentButton->setIcon(iconComment);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+    m_pTitleCommentButton->setVisible(true);
+    m_pTitleCommentButton->setObjectName("CommentButton");
+    m_pTitleCommentButton->setAccessibleName("Comment_btn");
+
     // 左上角按钮布局
     QHBoxLayout *leftLayout = new QHBoxLayout;
     leftLayout->addSpacing(6);
     leftLayout->addWidget(m_pTitleButton);
+    leftLayout->addSpacing(5);
+    leftLayout->addWidget(m_pTitleCommentButton);
+    leftLayout->addSpacing(6);
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(6 + 38);
+    left_frame->setFixedWidth(6 + 36 + 5 + 36 + 6);
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
     titlebar()->addWidget(left_frame, Qt::AlignLeft);
     titlebar()->setContentsMargins(0, 0, 0, 0);
+
+    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
 }
 
 void MainWindow::initData()
@@ -524,6 +545,148 @@ bool MainWindow::checkSettings(QString file)
     }
 
     return mimeIsChecked;
+}
+
+bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
+{
+    if (!m_pUnCompressPage || !m_pCompressPage /*|| !m_pCompressSetting*/) {
+        return false;
+    }
+    int keyOfEvent = evt->key();
+    if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
+        DWindowCloseButton *closebtn = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+        if (obj == titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
+            if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
+                m_pTitleButton->setFocus(Qt::TabFocusReason);
+                return true;
+            } if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
+                m_pTitleCommentButton->setFocus(Qt::TabFocusReason);
+                return true;
+            } else {
+                return false;
+            }
+        } else if (obj->objectName() == "CommentButton") { //焦点顺序：标题栏按钮->标题栏设置按钮
+            titlebar()->setFocus(Qt::TabFocusReason);
+            //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
+            //  return  true;
+        } else if (obj->objectName() == "TitleButton" && !(m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled())) { //焦点顺序：标题栏按钮->标题栏设置按钮
+            titlebar()->setFocus(Qt::TabFocusReason);
+            //titlebar不截获屏蔽掉,因为让他继续往下一menubutton发送tab
+            //  return  true;
+        } else if (obj->objectName() == "gotoPreviousLabel") { //焦点顺序：返回上一页->文件列表
+            switch (m_ePageID) {
+            case PI_UnCompress:
+                m_pUnCompressPage->getUnCompressView()->setFocus(Qt::TabFocusReason);
+                break;
+            case PI_Compress:
+                m_pCompressPage->getCompressView()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
+        } else if (obj->objectName() == "TableViewFile") { //焦点顺序：文件列表->解压路径按钮/下一步按钮
+            switch (m_ePageID) {
+            case PI_UnCompress:
+                m_pUnCompressPage->getUncompressPathBtn()->setFocus(Qt::TabFocusReason);
+                break;
+            case PI_Compress:
+                m_pCompressPage->getNextBtn()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
+        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
+            switch (m_ePageID) {
+            case PI_UnCompress:
+                if (m_pUnCompressPage->getUnCompressView()->getHeaderView()->getpreLbl()->isVisible()) {
+                    m_pUnCompressPage->getUnCompressView()->getHeaderView()->getpreLbl()->setFocus(Qt::TabFocusReason);
+                } else {
+                    m_pUnCompressPage->getUnCompressView()->setFocus(Qt::TabFocusReason);
+                }
+                break;
+            case PI_Compress:
+                if (m_pCompressPage->getCompressView()->getHeaderView()->getpreLbl()->isVisible()) {
+                    m_pCompressPage->getCompressView()->getHeaderView()->getpreLbl()->setFocus(Qt::TabFocusReason);
+                } else {
+                    m_pCompressPage->getCompressView()->setFocus(Qt::TabFocusReason);
+                }
+                break;
+            case PI_CompressSetting:
+                m_pCompressSettingPage->getClickLbl()->setFocus(Qt::TabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
+        }
+    } else if (Qt::Key_Backtab == keyOfEvent) { //shift+tab 焦点顺序，与tab焦点顺序相反
+        DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
+        if (obj == optionbtn) {
+            if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
+                m_pTitleCommentButton->setFocus(Qt::BacktabFocusReason);
+                return true;
+            } else if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
+                m_pTitleButton->setFocus(Qt::BacktabFocusReason);
+                return true;
+            } else {
+                return false;
+            }
+        } else if (obj->objectName() == "TitleButton") {
+            switch (m_ePageID) {
+            case PI_UnCompress:
+                m_pUnCompressPage->getUnCompressBtn()->setFocus(Qt::BacktabFocusReason);
+                break;
+            case PI_Compress:
+                m_pCompressPage->getNextBtn()->setFocus(Qt::TabFocusReason);
+                break;
+            case PI_CompressSetting:
+                m_pCompressSettingPage->getCompressBtn()->setFocus(Qt::BacktabFocusReason);
+                break;
+            default:
+                return false;
+            }
+            return true;
+        } else if (obj->objectName() == "TableViewFile") {
+            if (nullptr != qobject_cast<DataTreeView *>(obj) && qobject_cast<DataTreeView *>(obj)->getHeaderView()->getpreLbl()->isVisible()) {
+                qobject_cast<DataTreeView *>(obj)->getHeaderView()->getpreLbl()->setFocus(Qt::BacktabFocusReason);
+            } else {
+                DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+                if (nullptr != closeButton) {
+                    closeButton->setFocus(Qt::BacktabFocusReason);
+                }
+            }
+            return true;
+        } else if (obj->objectName() == "ClickTypeLabel" || obj->objectName() == "gotoPreviousLabel") {
+            DWindowCloseButton *closeButton = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+            if (closeButton) {
+                closeButton->setFocus(Qt::BacktabFocusReason);
+            }
+            return  true;
+        } else if (obj == m_pCompressPage->getNextBtn()) {
+            m_pCompressPage->getCompressView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } /*else if (obj == m_pUnCompressPage->getNextbutton()) {
+            m_pUnCompressPage->getPathCommandLinkButton()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        }*/ else if (obj == m_pUnCompressPage->getUncompressPathBtn()) {
+            m_pUnCompressPage->getUnCompressView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        }
+    } else if (Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) { //Key_Left、Key_Up几处顺序特殊处理*/
+        if (obj == m_pCompressPage->getNextBtn()) {
+            m_pCompressPage->getCompressView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getUnCompressBtn()) {
+            m_pUnCompressPage->getUncompressPathBtn()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        } else if (obj == m_pUnCompressPage->getUncompressPathBtn()) {
+            m_pUnCompressPage->getUnCompressView()->setFocus(Qt::BacktabFocusReason);
+            return true;
+        }
+    }
+    return false;
 }
 
 void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)

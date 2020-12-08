@@ -133,12 +133,12 @@ void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize
     // 设置默认压缩包名称
     if (1 == m_listFiles.count()) {       // 若是单文件
         if (fileinfobase.isDir()) {
-            m_pFileNameEdt->setText(fileinfobase.fileName());         // 如果是文件夹，压缩包名为文件夹
+            setDefaultName(fileinfobase.fileName());         // 如果是文件夹，压缩包名为文件夹
         } else {
-            m_pFileNameEdt->setText(fileinfobase.completeBaseName()); // 如果是文件，压缩包名为完整的文件名
+            setDefaultName(fileinfobase.completeBaseName()); // 如果是文件，压缩包名为完整的文件名
         }
     } else {
-        m_pFileNameEdt->setText(tr("New Archive"));            // 如果是多文件，压缩包名为新建归档文件
+        setDefaultName(tr("New Archive"));            // 如果是多文件，压缩包名为新建归档文件
     }
 }
 
@@ -253,6 +253,8 @@ void CompressSettingPage::initUI()
     m_pSplitValueEdt->setDecimals(1);
     m_pSplitValueEdt->setValue(0.0);
     m_pSplitValueEdt->setSpecialValueText("");
+
+    m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
 
     m_pCompressBtn->setMinimumSize(340, 36);    // 设置压缩按钮最小尺寸
 
@@ -546,6 +548,20 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
     return dialog.showDialog(msg, tr("OK"), DDialog::ButtonNormal);
 }
 
+void CompressSettingPage::setDefaultName(QString name)
+{
+//    initWidget();
+
+    // 注释掉这一行，防止每次界面重置
+    //onAdvanceButtonClicked(m_moresetbutton->isChecked());
+//    name = name + "." + m_compresstype->text();
+
+    m_pFileNameEdt->setText(name);
+    QLineEdit *qfilename = m_pFileNameEdt->lineEdit();
+    qfilename->selectAll();
+    qfilename->setFocus();
+}
+
 void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 {
     Q_UNUSED(e)
@@ -717,4 +733,14 @@ void CompressSettingPage::slotCommentTextChanged()
         cursor.setPosition(maxlen);
         m_pCommentEdt->setTextCursor(cursor);
     }
+}
+
+CustomPushButton *CompressSettingPage::getCompressBtn() const
+{
+    return m_pCompressBtn;
+}
+
+TypeLabel *CompressSettingPage::getClickLbl() const
+{
+    return m_pClickLbl;
 }

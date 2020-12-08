@@ -127,3 +127,13 @@ void CompressPage::slotCompressLevelChanged(bool bRootIndex)
 
     setAcceptDrops(bRootIndex);
 }
+
+CustomPushButton *CompressPage::getNextBtn() const
+{
+    return m_pNextBtn;
+}
+
+CompressView *CompressPage::getCompressView()
+{
+    return m_pCompressView;
+}

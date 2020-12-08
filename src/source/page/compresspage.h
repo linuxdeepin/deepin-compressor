@@ -61,10 +61,18 @@ public:
      */
     void clear();
 
+    /**
+     * @brief getCompressView
+     * @return
+     */
+    CompressView *getCompressView();
+
+    CustomPushButton *getNextBtn() const;
+
 private:
     /**
-     * @brief initUI    初始化界面
-     */
+    * @brief initUI    初始化界面
+    */
     void initUI();
 
     /**

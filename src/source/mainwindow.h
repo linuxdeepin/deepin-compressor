@@ -71,6 +71,16 @@ public:
      */
     bool checkSettings(QString file);
 
+    /**
+    * @brief LogCollectorMain::handleApplicationTabEventNotify
+    * 处理application中notify的tab keyevent ,直接在dapplication中调用
+    * 只调整我们需要调整的顺序,其他的默认
+    * @param obj 接收事件的对象
+    * @param evt 对象接收的键盘事件
+    * @return true处理并屏蔽事件 false交给application的notify处理
+     */
+    bool handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt);
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -421,7 +431,8 @@ private:
     FailurePage *m_pFailurePage;  // 失败界面
     LoadingPage *m_pLoadingPage;  // 加载界面
 
-    DIconButton *m_pTitleButton;                  // 标题栏按钮（添加文件）
+    DIconButton *m_pTitleButton; // 标题栏按钮（添加文件）
+    DIconButton *m_pTitleCommentButton = nullptr; // 标题栏按钮（注释信息）
     QAction *m_pOpenAction;                                 // 菜单 - 打开
 
     // 弹窗

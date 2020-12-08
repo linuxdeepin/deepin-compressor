@@ -32,12 +32,7 @@ class CompressorApplication: public DApplication
     Q_OBJECT
 public:
     CompressorApplication(int &argc, char **argv);
-
-protected:
-
-
-private:
-
+    bool notify(QObject *watched, QEvent *event) override;
 };
 
 #endif // COMPRESSORAPPLICATION_H

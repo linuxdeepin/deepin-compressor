@@ -159,6 +159,7 @@ void DataTreeView::resetLevel()
 
 void DataTreeView::initUI()
 {
+    setObjectName("TableViewFile");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setIconSize(QSize(36, 36));
     setViewportMargins(10, 10, 10, 0);
@@ -182,11 +183,13 @@ void DataTreeView::initUI()
     setSortingEnabled(true);
     setContextMenuPolicy(Qt::CustomContextMenu);    // 设置自定义右键菜单
     setAcceptDrops(true);
+
+    m_selectionModel = selectionModel();
 }
 
 void DataTreeView::initConnections()
 {
-    connect(m_pHeaderView->preLbl(), &PreviousLabel::doubleClickedSignal, this, &DataTreeView::slotPreClicked);
+    connect(m_pHeaderView->getpreLbl(), &PreviousLabel::doubleClickedSignal, this, &DataTreeView::slotPreClicked);
 }
 
 void DataTreeView::resizeColumnWidth()
@@ -195,6 +198,11 @@ void DataTreeView::resizeColumnWidth()
     setColumnWidth(1, width() * 17 / 58);
     setColumnWidth(2, width() * 8 / 58);
     setColumnWidth(3, width() * 8 / 58);
+}
+
+TreeHeaderView *DataTreeView::getHeaderView() const
+{
+    return m_pHeaderView;
 }
 
 void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const
@@ -237,7 +245,7 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
         background = palette.color(cg, DPalette::Base);
     }
     if (options.state & DStyle::State_Enabled) {
-        if (selectionModel()->isSelected(index)) {
+        if (m_selectionModel->isSelected(index)) {
             background = palette.color(cg, DPalette::Highlight);
         }
     }
@@ -270,6 +278,18 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 void DataTreeView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
+    // qDebug() << m_reson << model()->rowCount() << currentIndex();
+    if (Qt::BacktabFocusReason == m_reson || Qt::TabFocusReason == m_reson) { // 修复不能多选删除
+        if (model()->rowCount() > 0) {
+            if (currentIndex().isValid()) {
+                m_selectionModel->select(currentIndex(), QItemSelectionModel::Select | QItemSelectionModel::Rows);
+            } else {
+                QModelIndex firstModelIndex = model()->index(0, 0);
+                m_selectionModel->select(firstModelIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+            }
+        }
+    }
+
     DTreeView::focusInEvent(event);
 }
 
@@ -325,6 +345,6 @@ void DataTreeView::resizeEvent(QResizeEvent *event)
 
 void DataTreeView::setPreLblVisible(bool bVisible, const QString &strPath)
 {
-    m_pHeaderView->preLbl()->setPrePath(strPath);
+    m_pHeaderView->getpreLbl()->setPrePath(strPath);
     m_pHeaderView->setPreLblVisible(bVisible);
 }

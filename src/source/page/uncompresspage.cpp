@@ -217,3 +217,18 @@ void UnCompressPage::slotUnCompressPathClicked()
         setDefaultUncompressPath(listUrl.at(0).toLocalFile());
     }
 }
+
+CustomCommandLinkButton *UnCompressPage::getUncompressPathBtn() const
+{
+    return m_pUncompressPathBtn;
+}
+
+CustomPushButton *UnCompressPage::getUnCompressBtn() const
+{
+    return m_pUnCompressBtn;
+}
+
+UnCompressView *UnCompressPage::getUnCompressView() const
+{
+    return m_pUnCompressView;
+}

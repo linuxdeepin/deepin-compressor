@@ -80,6 +80,10 @@ public:
      */
     void refreshMenu();
 
+    TypeLabel *getClickLbl() const;
+
+    CustomPushButton *getCompressBtn() const;
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -160,6 +164,8 @@ private:
      * @return
      */
     int showWarningDialog(const QString &msg, const QString &strTitle = "");
+
+    void setDefaultName(QString name);
 
 signals:
     void signalCompressClicked(const QVariant &val);

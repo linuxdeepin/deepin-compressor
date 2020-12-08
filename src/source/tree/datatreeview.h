@@ -63,6 +63,8 @@ public:
      */
     void resetLevel();
 
+    TreeHeaderView *getHeaderView() const;
+
 protected:
     void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const override;
     void focusInEvent(QFocusEvent *event) override;
@@ -128,10 +130,11 @@ protected:
     int m_iLevel = 0;       // 目录层级
     QString m_strCurrentPath = QDir::separator();   // 当前目录
 
-    TreeHeaderView *m_pHeaderView;
+    TreeHeaderView *m_pHeaderView; // 表头
 
 private:
     Qt::FocusReason m_reson;
+    QItemSelectionModel *m_selectionModel =  nullptr;
 
 };
 

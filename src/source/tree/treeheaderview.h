@@ -78,10 +78,10 @@ public:
     inline void setSpacing(int spacing) { m_spacing = spacing; }
 
     /**
-     * @brief preLbl    获取上一级指针
+     * @brief getpreLbl    获取上一级指针
      * @return
      */
-    PreviousLabel *preLbl();
+    PreviousLabel *getpreLbl();
 
 //    /**
 //     * @brief setPrePath    设置上一级路径

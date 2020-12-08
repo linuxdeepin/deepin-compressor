@@ -93,6 +93,12 @@ public:
      */
     void clear();
 
+    UnCompressView *getUnCompressView() const;
+
+    CustomPushButton *getUnCompressBtn() const;
+
+    CustomCommandLinkButton *getUncompressPathBtn() const;
+
 protected:
     /**
      * @brief resizeEvent   刷新解压路径显示
