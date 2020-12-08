@@ -29,6 +29,7 @@
 #include <QString>
 #include <QMimeType>
 #include <QFileDevice>
+#include <QSet>
 
 class Query;
 
@@ -131,6 +132,12 @@ protected:
      */
     QFileDevice::Permissions getPermissions(const mode_t &perm);
 
+    /**
+     * @brief handleEntry       处理文件数据（主要针对加载时未列出文件夹的情况）
+     * @param entry             文件数据
+     */
+    void handleEntry(const FileEntry &entry);
+
 Q_SIGNALS:
     /**
      * @brief signalFinished    结束信号
@@ -184,6 +191,9 @@ protected:
 
     bool m_bCancel = false;     // 是否取消
     bool m_bPause = false;      // 是否暂停
+
+    QSet<QString> m_setHasRootDirs;  // 存储list时已经处理过的文件夹名称
+    QSet<QString> m_setHasHandlesDirs;  // 存储list时已经处理过的文件夹名称
 };
 
 // 可读可写（可用来压缩、查看、解压等）

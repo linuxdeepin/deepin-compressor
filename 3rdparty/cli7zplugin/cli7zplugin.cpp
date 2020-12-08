@@ -228,10 +228,12 @@ bool Cli7zPlugin::readListLine(const QString &line)
             }
         } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {  // 文件的最后一行信息
             QString name = m_fileEntry.strFullPath;
+
+            handleEntry(m_fileEntry);
             // 获取第一层数据
-            if ((!name.contains(QDir::separator()) && name.size() > 0) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-                stArchiveData.listRootEntry.push_back(m_fileEntry);
-            }
+//            if ((!name.contains(QDir::separator()) && name.size() > 0) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
+//                stArchiveData.listRootEntry.push_back(m_fileEntry);
+//            }
 
             // 存储总数据
             stArchiveData.mapFileEntry.insert(name, m_fileEntry);

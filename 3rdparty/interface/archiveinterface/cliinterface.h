@@ -7,6 +7,7 @@
 
 #include <QScopedPointer>
 #include <QTemporaryDir>
+#include <QSet>
 
 //enum WorkType {
 //    WT_List,
@@ -173,6 +174,9 @@ protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
     PluginFinishType m_finishType = PFT_Nomral;
+
+    QSet<QString> m_setHasRootDirs;  // 存储list时已经处理过的文件夹名称
+    QSet<QString> m_setHasHandlesDirs;  // 存储list时已经处理过的文件夹名称
 
 private:
     QList<FileEntry> m_files; // 文件

@@ -25,6 +25,7 @@
 #include "archiveinterface.h"
 
 #include <QObject>
+#include <QSet>
 
 #include <zip.h>
 
@@ -176,6 +177,9 @@ private:
 
     QMap<zip_int64_t, QByteArray> m_mapFileCode;   // 存储文件编码
     double m_dScaleSize = 0.0;   // 100/总大小
+
+    QSet<QString> m_setHasRootDirs;  // 存储list时已经处理过的文件夹名称
+    QSet<QString> m_setHasHandlesDirs;  // 存储list时已经处理过的文件夹名称
 };
 
 #endif // LIBZIPPLUGIN_H

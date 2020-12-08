@@ -49,6 +49,8 @@ PluginFinishType LibarchivePlugin::list()
     qDebug() << "LibarchivePlugin插件加载压缩包数据";
     PluginFinishType eType;
     DataManager::get_instance().archiveData().reset();
+    m_setHasHandlesDirs.clear();
+    m_setHasRootDirs.clear();
 
     m_strOldArchiveName = m_strArchiveName; //保存原压缩包名
     QFileInfo fInfo(m_strArchiveName);
@@ -625,11 +627,8 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     // 文件最后修改时间
     m_archiveEntryStat.uLastModifiedTime = static_cast<uint>(archive_entry_mtime(aentry));
 
-    // 获取第一层数据
-    if (!m_archiveEntryStat.strFullPath.contains(QDir::separator())
-            || (m_archiveEntryStat.strFullPath.endsWith(QDir::separator()) && m_archiveEntryStat.strFullPath.count(QDir::separator()) == 1)) {
-        stArchiveData.listRootEntry.push_back(m_archiveEntryStat);
-    }
+    handleEntry(m_archiveEntryStat);
+
     // 压缩包原始大小
     stArchiveData.qSize += m_archiveEntryStat.qSize;
     // 构建压缩包数据map
@@ -663,7 +662,6 @@ int LibarchivePlugin::extractionFlags() const
 
     return result;
 }
-
 
 HandleWorkingDir::HandleWorkingDir(QString *oldWorkingDir)
     : m_oldWorkingDir(oldWorkingDir)

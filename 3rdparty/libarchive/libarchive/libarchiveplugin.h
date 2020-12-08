@@ -25,6 +25,7 @@
 #include "commonstruct.h"
 
 #include <archive.h>
+#include <QSet>
 
 /**
  * @brief The HandleWorkingDir class
@@ -160,6 +161,9 @@ private:
 
 protected:
     qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
+
+    QSet<QString> m_setHasRootDirs;  // 存储list时已经处理过的文件夹名称
+    QSet<QString> m_setHasHandlesDirs;  // 存储list时已经处理过的文件夹名称
 };
 
 

@@ -211,10 +211,12 @@ bool CliRarPlugin::readListLine(const QString &line)
                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
 
             QString name = m_fileEntry.strFullPath;
+
+            handleEntry(m_fileEntry);
             // 获取第一层数据
-            if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-                stArchiveData.listRootEntry.push_back(m_fileEntry);
-            }
+//            if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
+//                stArchiveData.listRootEntry.push_back(m_fileEntry);
+//            }
 
             // 存储总数据
             stArchiveData.mapFileEntry.insert(name, m_fileEntry);

@@ -427,6 +427,7 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
         }
     }
 
+    int iiii = 0;
     return listEntry;
 }
 

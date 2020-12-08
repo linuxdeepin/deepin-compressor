@@ -8,8 +8,8 @@ class  LibSingleFileInterface : public ReadOnlyArchiveInterface
     Q_OBJECT
 
 public:
-    LibSingleFileInterface(QObject *parent, const QVariantList &args);
-    ~LibSingleFileInterface() ;
+    explicit LibSingleFileInterface(QObject *parent, const QVariantList &args);
+    ~LibSingleFileInterface() override;
 
     PluginFinishType list() override;
     PluginFinishType testArchive() override;

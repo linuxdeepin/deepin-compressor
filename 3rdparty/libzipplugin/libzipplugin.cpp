@@ -35,7 +35,7 @@
 #include <QTextCodec>
 
 //#include <zlib.h>
-#define READBYTES 10240			// 每次读取文件大小
+#define READBYTES 10240         // 每次读取文件大小
 
 LibzipPluginFactory::LibzipPluginFactory()
 {
@@ -67,6 +67,8 @@ PluginFinishType LibzipPlugin::list()
 {
     qDebug() << "LibzipPlugin插件加载压缩包数据";
     m_mapFileCode.clear();
+    m_setHasHandlesDirs.clear();
+    m_setHasRootDirs.clear();
     DataManager::get_instance().resetArchiveData();
 
     // 处理加载流程
@@ -598,10 +600,7 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
     entry.strFullPath = name;
     statBuffer2FileEntry(statBuffer, entry);
 
-    // 获取第一层数据
-    if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-        DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
-    }
+    handleEntry(entry);
 
     // 存储总数据
     DataManager::get_instance().archiveData().mapFileEntry[name] = entry;
@@ -663,6 +662,11 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
+
+    // 对文件路径做判断，防止特殊包未先解压出文件夹，导致解压失败
+    if (QDir().exists(QFileInfo(strDestFileName).path()) == false)
+        QDir().mkpath(QFileInfo(strDestFileName).path());
+
     QFile file(strDestFileName);
 
     // 获取外部信息（权限）

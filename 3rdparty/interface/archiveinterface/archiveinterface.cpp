@@ -19,9 +19,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "archiveinterface.h"
+#include "datamanager.h"
 
 #include <QDebug>
 #include <sys/stat.h>
+#include <QDir>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -107,6 +109,56 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
     }
 
     return pers;
+}
+
+void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
+{
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    if (!entry.strFullPath.contains(QDir::separator()) || (entry.strFullPath.count(QDir::separator()) == 1 && entry.strFullPath.endsWith(QDir::separator()))) {
+        if (m_setHasRootDirs.contains(entry.strFullPath)) {
+            // 先清除，再追加，保证数据和压缩包数据一致
+            for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
+                if (stArchiveData.listRootEntry[i].strFullPath == entry.strFullPath) {
+                    stArchiveData.listRootEntry.reserve(i);
+                    break;
+                }
+            }
+        } else {
+            // 获取第一层数据（不包含'/'或者只有末尾一个'/'）
+            stArchiveData.listRootEntry.push_back(entry);
+            m_setHasRootDirs.insert(entry.strFullPath);
+        }
+    } else {
+        // 多层数据，处理加载时不出现文件夹的情况
+        int iIndex = entry.strFullPath.lastIndexOf(QDir::separator());
+        QString strDir = entry.strFullPath.left(iIndex + 1);
+
+        // 若此路径未处理过，进行分割处理
+        if (!m_setHasHandlesDirs.contains(strDir)) {
+            m_setHasHandlesDirs.insert(strDir);
+            // 对全路径进行分割，获取所有文件夹名称
+            QStringList fileDirs = entry.strFullPath.split(QDir::separator());
+            QString folderAppendStr = "";
+            for (int i = 0 ; i < fileDirs.size() - 1; ++i) {
+                folderAppendStr += fileDirs[i] + QDir::separator();
+
+                // 构建文件数据
+                FileEntry entryDir;
+                entryDir.strFullPath = folderAppendStr;
+                entryDir.strFileName = fileDirs[i];
+                entryDir.isDirectory = true;
+
+                // 若第一层数据中未包含此文件夹，写入第一层数据
+                if (i == 0 && !m_setHasRootDirs.contains(folderAppendStr)) {
+                    stArchiveData.listRootEntry.push_back(entryDir);
+                    m_setHasRootDirs.insert(folderAppendStr);
+                }
+
+                // 写入数据全集中
+                stArchiveData.mapFileEntry[entryDir.strFullPath] = entryDir;
+            }
+        }
+    }
 }
 
 bool ReadOnlyArchiveInterface::getHandleCurEntry() const

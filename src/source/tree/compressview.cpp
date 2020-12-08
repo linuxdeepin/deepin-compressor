@@ -192,6 +192,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
 
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
+            m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
             m_iLevel++;
             m_strCurrentPath = entry.strFullPath;
             refreshDataByCurrentPath(); // 刷新数据
@@ -252,8 +253,6 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 
 void CompressView::refreshDataByCurrentPath()
 {
-    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
-
     if (m_iLevel == 0) {
         setPreLblVisible(false);
         m_pModel->refreshFileEntry(m_listEntry);    // 数据模型刷新
@@ -350,8 +349,9 @@ void CompressView::slotDeleteFile()
             foreach (QModelIndex index, selectedIndex) {
                 if (index.isValid()) {
                     FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
-                    if (QFileInfo(entry.strFullPath).exists()) {
-                        QString newname = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + QLatin1String("/.local/share/Trash/files/") + QDateTime::currentDateTime().toString("yyyyMMddhhmmss-") + entry.strFileName;
+                    QFile fi(entry.strFullPath);
+                    if (fi.exists()) {
+                        fi.remove();
                     }
                 }
             }
@@ -395,7 +395,9 @@ void CompressView::slotOpenStyleClicked()
 
 void CompressView::slotPreClicked()
 {
+    m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
     m_iLevel--;     // 目录层级减1
+
     if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
         resetLevel();
     } else {        // 否则传递上级目录

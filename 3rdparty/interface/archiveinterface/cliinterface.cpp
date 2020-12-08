@@ -49,6 +49,8 @@ CliInterface::~CliInterface()
 PluginFinishType CliInterface::list()
 {
     DataManager::get_instance().resetArchiveData();
+    m_setHasRootDirs.clear();
+    m_setHasHandlesDirs.clear();
 
     m_workStatus = WT_List;
 

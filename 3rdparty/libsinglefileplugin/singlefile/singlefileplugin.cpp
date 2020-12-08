@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDir>
 
 #include <KFilterDev>
 //#include <KLocalizedString>
@@ -80,6 +81,11 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     if (!outputFileName.endsWith(QLatin1Char('/'))) {
         outputFileName += QLatin1Char('/');
     }
+
+    // 判断解压路径是否存在，不存在则创建文件夹
+    if (QDir().exists(outputFileName) == false)
+        QDir().mkpath(outputFileName);
+
     outputFileName += uncompressedFileName();   // 完整文件路径
 
     // 对重复文件进行询问判断
@@ -103,6 +109,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     }
 
     qDebug() << "Extracting to" << outputFileName;
+
 
     // 写文件
     QFile outputFile(outputFileName);
