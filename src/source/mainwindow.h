@@ -28,6 +28,7 @@
 #include "archivejob.h"
 
 #include <DMainWindow>
+#include <DFileWatcher>
 
 class QStackedWidget;
 class QSettings;
@@ -49,6 +50,7 @@ class OpenFileWatcher;
 class QFileSystemWatcher;
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 // 主界面
 class MainWindow : public DMainWindow
@@ -429,13 +431,10 @@ private Q_SLOTS:
      */
     void slotFailureReturn();
 
-    void slotTitleCommentButtonPressed();
-
     /**
-     * @brief slotArchiveChanged    监听压缩包数据
-     * @param strPath               路径名
+     * @brief slotTitleCommentButtonPressed 注释按钮点击
      */
-    void slotArchiveChanged(const QString &strPath);
+    void slotTitleCommentButtonPressed();
 
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
@@ -481,8 +480,7 @@ private:
     QString m_comment;
     bool m_isFirstViewComment = true;
 
-    QFileSystemWatcher *m_pArchiveFileWatcher = nullptr;                 // 文件监控
-    QMap<QString, bool> m_mapArchiveFileWatcher;
+    DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
 
     // 适配arm平台
 #ifdef __aarch64__
