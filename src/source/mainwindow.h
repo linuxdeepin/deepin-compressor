@@ -42,6 +42,7 @@ class SuccessPage;
 class FailurePage;
 class SettingDialog;
 class ProgressDialog;
+class CommentProgressDialog;
 class DDesktopServicesThread;
 class ArchiveManager;
 class OpenFileWatcher;
@@ -258,7 +259,12 @@ private:
      * @brief convertArchive 格式转换
      * @param convertType 转换后的文件类型
      */
-    void convertArchive(/*const QStringList &listFiles, */QString convertType);
+    void convertArchive(QString convertType);
+
+    /**
+     * @brief updateArchiveComment 更新压缩包的注释
+     */
+    void updateArchiveComment();
 
     /**
      * @brief watcherArchiveFile   监听本地压缩包
@@ -423,6 +429,8 @@ private Q_SLOTS:
      */
     void slotFailureReturn();
 
+    void slotTitleCommentButtonPressed();
+
     /**
      * @brief slotArchiveChanged    监听压缩包数据
      * @param strPath               路径名
@@ -468,6 +476,10 @@ private:
     UnCompressParameter m_stUnCompressParameter;    // 解压参数（加载、解压等）
 
     UpdateOptions m_stUpdateOptions;        // 更新压缩包时选项
+
+    CommentProgressDialog *m_commentProgressDialog;
+    QString m_comment;
+    bool m_isFirstViewComment = true;
 
     QFileSystemWatcher *m_pArchiveFileWatcher = nullptr;                 // 文件监控
     QMap<QString, bool> m_mapArchiveFileWatcher;

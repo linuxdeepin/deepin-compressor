@@ -119,7 +119,7 @@ void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
             // 先清除，再追加，保证数据和压缩包数据一致
             for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
                 if (stArchiveData.listRootEntry[i].strFullPath == entry.strFullPath) {
-                    stArchiveData.listRootEntry.reserve(i);
+                    stArchiveData.listRootEntry[i] = entry;
                     break;
                 }
             }

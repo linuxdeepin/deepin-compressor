@@ -213,6 +213,21 @@ bool Cli7zPlugin::readListLine(const QString &line)
             // 文件最后修改时间
             m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
+            if (ArchiveTypeIso == m_archiveType) { // 读取的压缩包是iso文件，读到Modified的时候已经结束了
+                QString name = m_fileEntry.strFullPath;
+
+                handleEntry(m_fileEntry);
+                // 获取第一层数据
+//                if ((!name.contains(QDir::separator()) && name.size() > 0) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
+//                    stArchiveData.listRootEntry.push_back(m_fileEntry);
+//                }
+
+                // 存储总数据
+                stArchiveData.mapFileEntry.insert(name, m_fileEntry);
+
+                // clear m_fileEntry
+                m_fileEntry.reset();
+            }
         } else if (line.startsWith(QLatin1String("Attributes = "))) {  // 文件权限
             const QString attributes = line.mid(13).trimmed();
 

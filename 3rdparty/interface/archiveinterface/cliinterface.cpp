@@ -95,6 +95,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         qDebug() << "解压目标路径 --- " << destPath;
     }
 
+    QDir::setCurrent(destPath);
     if (!m_extractOptions.bAllExtract) {  // 提取部分文件
         m_files.clear();
         foreach (FileEntry entry, files) {
@@ -471,7 +472,7 @@ void CliInterface::killProcess(bool emitFinished)
 
 void CliInterface::handleProgress(const QString &line)
 {
-    if (m_process->program().at(0).contains("7z")) {  // 解析7z相关进度、文件名
+    if (m_process && m_process->program().at(0).contains("7z")) {  // 解析7z相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
@@ -500,7 +501,7 @@ void CliInterface::handleProgress(const QString &line)
                 }
             }
         }
-    } else if (m_process->program().at(0).contains("unrar")) { // 解析rar相关进度、文件名
+    } else if (m_process && m_process->program().at(0).contains("unrar")) { // 解析rar相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
             int percentage = line.midRef(pos - 3, 3).toInt();
@@ -537,7 +538,7 @@ void CliInterface::handleProgress(const QString &line)
 
             emit signalprogress(percentage);
             // 无法获取正在压缩的某个文件名
-//            emit signalCurFileName();
+            //            emit signalCurFileName();
         }
     }
 }

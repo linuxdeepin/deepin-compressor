@@ -34,6 +34,7 @@ const QStringList g_listColumn = QStringList() << QObject::tr("Name") << QObject
 #define HISTORY_DIR_NAME "dir"      // 历史打开路径
 #define MAINWINDOW_DEFAULTW 620     // 默认宽度
 #define MAINWINDOW_DEFAULTH 465     // 默认高度
+#define MAXCOMMENTLEN 10000         // 压缩包注释内容字数限制
 
 // 进度类型
 enum Progress_Type {
@@ -62,7 +63,8 @@ enum Archive_OperationType {
     //Operation_TempExtract_Open_Choose, // 选择打开
     Operation_DRAG, // 拖拽
     Operation_CONVERT, // 格式转换
-    Operation_DELETE // 删除
+    Operation_DELETE, // 删除
+    Operation_Update_Comment // 更新压缩包注释
 };
 
 // 压缩/解压列表的列号

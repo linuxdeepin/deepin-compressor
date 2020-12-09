@@ -88,6 +88,10 @@ PluginFinishType LibzipPlugin::list()
     // 获取文件压缩包文件数目
     const auto nofEntries = zip_get_num_entries(archive, 0);
 
+    // 获取压缩包的注释内容
+    QByteArray strCode;
+    m_strComment = m_common->trans2uft8(zip_get_archive_comment(archive, nullptr, ZIP_FL_ENC_RAW), strCode);
+
     // 循环构建数据
     for (zip_int64_t i = 0; i < nofEntries; i++) {
         if (QThread::currentThread()->isInterruptionRequested()) {
@@ -428,9 +432,11 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     return PFT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::updateArchiveData(const UpdateOptions &options)
+PluginFinishType LibzipPlugin::updateArchiveData(const UpdateOptions &/*options*/)
 {
     m_mapFileCode.clear();
+    m_setHasHandlesDirs.clear();
+    m_setHasRootDirs.clear();
     DataManager::get_instance().resetArchiveData();
 
     // 处理加载流程
@@ -589,7 +595,6 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
         return false;
     }
 
-
     QByteArray strCode;
     // 对文件名进行编码探测并转码
     QString name = m_common->trans2uft8(statBuffer.name, strCode);
@@ -639,6 +644,7 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
         entry.uLastModifiedTime = uint(statBuffer.mtime);
     }
 
+    DataManager::get_instance().archiveData().strComment = m_strComment;
 }
 
 ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName)

@@ -182,3 +182,45 @@ void ProgressDialog::slotextractpress(int index)
         exec();
     }
 }
+
+CommentProgressDialog::CommentProgressDialog(QWidget *parent):
+    DAbstractDialog(parent)
+{
+    initUI();
+}
+
+void CommentProgressDialog::initUI()
+{
+    setFixedSize(400, 79);
+    setWindowFlags((windowFlags() & ~ Qt::CustomizeWindowHint) | Qt::Window);
+
+    // 布局
+    DLabel *label = new DLabel(this);
+    label->setFixedHeight(20);
+    label->setText(tr("Updating the comment..."));
+
+    m_progressBar = new DProgressBar(this);
+    m_progressBar->setFixedSize(350, 6);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(25, 20, 0, 20);
+    mainLayout->addWidget(label);
+    mainLayout->setSpacing(13);
+    mainLayout->addWidget(m_progressBar);
+}
+
+void CommentProgressDialog::showdialog()
+{
+    exec();
+}
+
+void CommentProgressDialog::setProgress(double value)
+{
+    m_progressBar->setValue(static_cast<int>(value));
+}
+
+void CommentProgressDialog::setFinished()
+{
+    m_progressBar->setValue(100);
+    QTimer::singleShot(100, this, [ = ] {hide();}); // 手动延时100ms再关闭
+}

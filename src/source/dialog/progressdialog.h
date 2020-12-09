@@ -85,7 +85,28 @@ public:
 
 private:
     DTitlebar *m_titlebar;
+};
 
+/**
+ * @brief The CommentProgressDialog class  更新注释进度弹窗
+ */
+class CommentProgressDialog: public DAbstractDialog
+{
+    Q_OBJECT
+public:
+    explicit CommentProgressDialog(QWidget *parent = nullptr);
+    void initUI();
+    void showdialog();
+
+    /**
+     * @brief setProgress   设置进度值
+     * @param value         进度值
+     */
+    void setProgress(double value);
+    void setFinished();
+
+private:
+    DProgressBar *m_progressBar = nullptr;
 };
 
 #endif // PROGRESSDIALOG_H

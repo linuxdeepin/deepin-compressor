@@ -175,7 +175,6 @@ void CompressSettingPage::refreshMenu()
     if (pAction != nullptr) {
         slotTypeChanged(pAction);
     }
-
 }
 
 void CompressSettingPage::initUI()
@@ -233,6 +232,7 @@ void CompressSettingPage::initUI()
     for (int i = 0; i < listCompressLevel.count(); ++i) {
         m_pCompressLevelCmb->addItem(listCompressLevel[i]);
     }
+
     m_pCompressLevelCmb->setCurrentIndex(2);
 
     pAdvancedLbl->setForegroundRole(DPalette::WindowText);
