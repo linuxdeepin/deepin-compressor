@@ -1497,6 +1497,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             showErrorMessage(EI_WrongPasswordWhenLoad);
             break;
         default:
+            showErrorMessage(EI_ArchiveOpenFailed);
             break;
         }
     }
@@ -1771,6 +1772,7 @@ void MainWindow::showErrorMessage(ErrorInfo eErrorInfo, bool bShowRetry)
     break;
     // 压缩包打开失败
     case EI_ArchiveOpenFailed: {
+        m_pLoadingPage->stopLoading();
         m_pFailurePage->setFailuerDes(tr("Open failed"));
         m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
     }

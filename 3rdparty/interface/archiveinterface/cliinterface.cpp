@@ -718,6 +718,13 @@ void CliInterface::readStdout(bool handleAll)
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
 
+    // 打印调试
+//    if (WT_List == m_workStatus) {
+//        foreach (auto tmp, lines) {
+//            qDebug() << tmp.constData();
+//        }
+//    }
+
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
 
     if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !isWrongPwd) {
