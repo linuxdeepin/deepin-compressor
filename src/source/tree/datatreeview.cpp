@@ -343,6 +343,24 @@ void DataTreeView::resizeEvent(QResizeEvent *event)
     resizeColumnWidth();
 }
 
+void DataTreeView::keyPressEvent(QKeyEvent *event)
+{
+    if (Qt::Key_Delete == event->key() && m_selectionModel->selectedRows().count() > 0) { //删除键
+        slotDeleteFile();
+    } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
+               && m_selectionModel->selectedRows().count() > 0) { //Alt+M组合键调用右键菜单
+        int y =   36 * currentIndex().row() + 36 / 2; //获取选中行y坐标+行高/2,列表行高36
+        int x = static_cast<int>(width() * 0.618); //比较合适的x坐标
+
+        slotShowRightMenu(QPoint(x, y));
+    } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key())
+               && m_selectionModel->selectedRows().count() > 0) { //回车键以默认方式打开文件(夹)
+        handleDoubleClick(currentIndex());
+    } else {
+        DTreeView::keyPressEvent(event);
+    }
+}
+
 void DataTreeView::setPreLblVisible(bool bVisible, const QString &strPath)
 {
     m_pHeaderView->getpreLbl()->setPrePath(strPath);

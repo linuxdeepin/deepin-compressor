@@ -125,7 +125,7 @@ void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileN
 
     // 设置多选
     QItemSelectionModel *pSelectionModel = selectionModel();
-    pSelectionModel->select(m_pModel->getSelectItem(listSelName), QItemSelectionModel::SelectCurrent);
+    pSelectionModel->select(m_pModel->getSelectItem(listSelName), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 
     m_listSelFiles.clear(); // 刷新完之后清空追加的文件数据
 
@@ -202,6 +202,12 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
             sortByColumn(DC_Name);
 
+            m_vPre.push_back(entry.strFileName);
+            // 自动选中第一行
+            QModelIndex tmpindex = model()->index(0, 0, index);
+            if (tmpindex.isValid()) {
+                setCurrentIndex(tmpindex);
+            }
         } else {    // 如果是文件，选择默认方式打开
             OpenWithDialog::openWithProgram(entry.strFullPath);
         }
@@ -316,7 +322,7 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
             }
         }
 
-        menu.exec(QCursor::pos());
+        menu.exec(viewport()->mapToGlobal(pos));
     }
 }
 
@@ -415,4 +421,12 @@ void CompressView::slotPreClicked()
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
     sortByColumn(DC_Name);
+
+    //自动选中第一行
+    QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex
+    m_vPre.pop_back();
+    if (tmpindex.isValid()) {
+        setCurrentIndex(tmpindex);
+        setFocus(); //焦点丢失，需手动设置焦点
+    }
 }

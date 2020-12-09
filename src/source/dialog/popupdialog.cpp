@@ -187,6 +187,10 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
     widget->setLayout(mainlayout);
     addContent(widget);
 
+    //setTabOrder需放在布局最后，否则不生效
+    this->setTabOrder(checkbox, this->getButton(0));
+    this->setTabOrder(this->getButton(0), this->getButton(1));
+
     const int mode = exec();
     m_ret = mode;
     m_applyAll = checkbox->isChecked();  // 是否应用到全部文件

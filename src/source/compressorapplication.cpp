@@ -39,11 +39,11 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
     if (QEvent::KeyPress == event->type()) {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
         int keyOfEvent = keyEvent->key();
-        /*if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
+        if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
             //checkbox响应"回车键"
-        //            qDebug() << watched->metaObject()->className();
+//            qDebug() << watched->metaObject()->className();
             if (watched->metaObject()->className() == QStringLiteral("QCheckBox")) {
-                DCheckBox *checkBox = static_cast<DCheckBox *>(watched);
+                DCheckBox *checkBox = qobject_cast<DCheckBox *>(watched);
                 // 模拟空格键按下事件
                 QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
                 QApplication::sendEvent(checkBox, &pressSpace);
@@ -55,22 +55,9 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
                 });
 
                 return true;
-            } else if (watched->metaObject()->className() == QStringLiteral("Dtk::Widget::DSuggestButton")) {
-                DSuggestButton *btn = static_cast<DSuggestButton *>(watched);
-                // 模拟空格键按下事件
-                QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
-                QApplication::sendEvent(btn, &pressSpace);
-                // 设置定时
-                QTimer::singleShot(80, this, [btn]() {
-                    // 模拟空格键松开事件
-                    QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
-                    QApplication::sendEvent(btn, &releaseSpace);
-                });
-
-                return true;
             }
-        } else */if (Qt::Key_Tab == keyOfEvent || Qt::Key_Backtab == keyOfEvent
-                     || Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) {
+        } else if (Qt::Key_Tab == keyOfEvent || Qt::Key_Backtab == keyOfEvent
+                   || Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) {
             QWidget *pWgt = activeWindow();
             MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
             if (pWindow) {

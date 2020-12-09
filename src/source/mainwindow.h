@@ -128,10 +128,11 @@ private:
 
     /**
      * @brief setTitleButtonStyle   设置标题栏按钮样式以及显隐状态
-     * @param bVisible  显示/隐藏
+     * @param bVisible  显示/隐藏添加按钮
+     * @param bVisible2  显示/隐藏文件信息按钮
      * @param pixmap    图片样式
      */
-    void setTitleButtonStyle(bool bVisible, DStyle::StandardPixmap pixmap = DStyle::StandardPixmap::SP_IncreaseElement);
+    void setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap = DStyle::StandardPixmap::SP_IncreaseElement);
 
     /**
      * @brief loadArchive       加载压缩包

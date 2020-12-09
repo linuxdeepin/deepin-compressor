@@ -57,6 +57,12 @@ public:
      */
     QItemSelection getSelectItem(const QStringList &listName = QStringList());
 
+    /**
+     * @brief getListEntryIndex 获取对应文件名的QModelIndex
+     * @param listName
+     * @return
+     */
+    QModelIndex getListEntryIndex(const QString &listName);
 private:
     QList<FileEntry> m_listEntry;       // 显示的数据
     MimeTypeDisplayManager *m_pMimetype; // 类型管理

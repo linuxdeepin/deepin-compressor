@@ -21,6 +21,7 @@
 
 #include "progresspage.h"
 #include "popupdialog.h"
+#include "customwidget.h"
 
 #include <DFontSizeManager>
 
@@ -137,8 +138,8 @@ void ProgressPage::initUI()
     m_pFileNameLbl = new DLabel(this);
     m_pSpeedLbl = new DLabel(this);
     m_pRemainingTimeLbl = new DLabel(this);
-    m_pCancelBtn = new DPushButton(tr("Cancel"), this);
-    m_pPauseContinueButton = new DSuggestButton(tr("Pause"), this);
+    m_pCancelBtn = new CustomPushButton(tr("Cancel"), this);
+    m_pPauseContinueButton = new CustomSuggestButton(tr("Pause"), this);
 
     // 初始化压缩包名称样式
     DFontSizeManager::instance()->bind(m_pArchiveNameLbl, DFontSizeManager::T5, QFont::DemiBold);

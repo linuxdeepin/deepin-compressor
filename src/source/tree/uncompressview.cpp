@@ -210,6 +210,13 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
             sortByColumn(DC_Name);
+
+            m_vPre.push_back(entry.strFileName); // 保存进入的文件夹名
+            // 自动选中第一行
+            QModelIndex tmpindex = model()->index(0, 0, index);
+            if (tmpindex.isValid()) {
+                setCurrentIndex(tmpindex);
+            }
         } else {    // 如果是文件，选择默认方式打开
             slotOpen();
         }
@@ -223,7 +230,7 @@ void UnCompressView::refreshDataByCurrentPath()
     } else {
         QString strTempPath = m_strCurrentPath;
         int iIndex = strTempPath.lastIndexOf(QDir::separator());
-        if (iIndex > 1)
+        if (iIndex > 0)
             strTempPath = strTempPath.left(iIndex);
         setPreLblVisible(true, strTempPath);
     }
@@ -642,7 +649,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
             }
         }
 
-        menu.exec(QCursor::pos());
+        menu.exec(viewport()->mapToGlobal(pos));
     }
 }
 
@@ -770,4 +777,12 @@ void UnCompressView::slotPreClicked()
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
     sortByColumn(DC_Name);
+
+    //自动选中第一行
+    QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex
+    m_vPre.pop_back();
+    if (tmpindex.isValid()) {
+        setCurrentIndex(tmpindex);
+        setFocus(); //焦点丢失，需手动设置焦点
+    }
 }

@@ -32,6 +32,9 @@
 
 DWIDGET_USE_NAMESPACE
 
+class CustomSuggestButton;
+class CustomPushButton;
+
 // 进度界面
 class ProgressPage : public DWidget
 {
@@ -141,8 +144,8 @@ private:
     DLabel *m_pFileNameLbl;     // 文件名称
     DLabel *m_pSpeedLbl;        // 速度
     DLabel *m_pRemainingTimeLbl;    // 剩余时间
-    DPushButton *m_pCancelBtn;      // 取消按钮
-    DSuggestButton *m_pPauseContinueButton; // 暂停继续按钮
+    CustomPushButton *m_pCancelBtn;      // 取消按钮
+    CustomSuggestButton *m_pPauseContinueButton; // 暂停继续按钮
 
     Progress_Type m_eType;      // 进度类型
     qint64 m_qTotalSize = 0;         // 文件大小kB

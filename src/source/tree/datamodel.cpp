@@ -160,6 +160,19 @@ QItemSelection DataModel::getSelectItem(const QStringList &listName)
     return selection;
 }
 
+QModelIndex DataModel::getListEntryIndex(const QString &listName)
+{
+    for (int i = 0; i < m_listEntry.size(); ++i) {
+        QModelIndex index = this->index(i, DC_Name);
+        // 处理是否需要选中的文件
+        if (listName == (index.data(Qt::DisplayRole).toString())) {
+            return index;
+        }
+    }
+
+    return  QModelIndex();
+}
+
 void DataModel::sort(int column, Qt::SortOrder order)
 {
     if (0 > column || 3 < column) {

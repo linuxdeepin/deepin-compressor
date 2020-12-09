@@ -87,6 +87,12 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
     /**
+     * @brief keyPressEvent 键盘事件 delete、enter、Alt+M
+     * @param event
+     */
+    void keyPressEvent(QKeyEvent *event) override;
+
+    /**
      * @brief setPreLblVisible  设置返回上一级是否可见
      * @param bVisible          是否可见标志
      * @param strPat            上一级路径
@@ -122,6 +128,20 @@ protected Q_SLOTS:
      * @brief slotPreClicked    返回上一级
      */
     virtual void slotPreClicked() = 0;
+    /**
+     * @brief slotShowRightMenu     显示右键菜单
+     * @param pos   右键位置
+     */
+    virtual void slotShowRightMenu(const QPoint &pos) = 0;
+    /**
+     * @brief handleDoubleClick    处理双击事件
+     * @param index 双击的index
+     */
+    virtual void handleDoubleClick(const QModelIndex &index) = 0;
+    /**
+     * @brief slotDeleteFile    删除待压缩文件
+     */
+    virtual void slotDeleteFile() = 0;
 
 protected:
 
@@ -131,11 +151,11 @@ protected:
     QString m_strCurrentPath = QDir::separator();   // 当前目录
 
     TreeHeaderView *m_pHeaderView; // 表头
+    QVector<QString> m_vPre; // 记录上层文件夹名，用于返回上一级焦点设置
 
 private:
     Qt::FocusReason m_reson;
     QItemSelectionModel *m_selectionModel =  nullptr;
-
 };
 
 #endif // DATATREEVIEW_H

@@ -177,7 +177,7 @@ void MainWindow::initTitleBar()
     QIcon iconComment(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
     m_pTitleCommentButton->setIcon(iconComment);
     m_pTitleCommentButton->setIconSize(QSize(15, 15));
-    m_pTitleCommentButton->setVisible(true);
+    m_pTitleCommentButton->setVisible(false);
     m_pTitleCommentButton->setObjectName("CommentButton");
     m_pTitleCommentButton->setAccessibleName("Comment_btn");
 
@@ -187,7 +187,7 @@ void MainWindow::initTitleBar()
     leftLayout->addWidget(m_pTitleButton);
     leftLayout->addSpacing(5);
     leftLayout->addWidget(m_pTitleCommentButton);
-    leftLayout->addSpacing(6);
+    leftLayout->addStretch();
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame(this);
@@ -251,13 +251,13 @@ void MainWindow::refreshPage()
     switch (m_ePageID) {
     case PI_Home: {
         m_pMainWidget->setCurrentIndex(0);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Compress: {
         m_pMainWidget->setCurrentIndex(1);
-        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
+        setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_IncreaseElement);
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
@@ -266,7 +266,7 @@ void MainWindow::refreshPage()
     break;
     case PI_CompressSetting: {
         m_pMainWidget->setCurrentIndex(2);
-        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_ArrowLeave);
+        setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_ArrowLeave);
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
@@ -275,60 +275,60 @@ void MainWindow::refreshPage()
     break;
     case PI_UnCompress: {
         m_pMainWidget->setCurrentIndex(3);
-        setTitleButtonStyle(true, DStyle::StandardPixmap::SP_IncreaseElement);
+        setTitleButtonStyle(true, true, DStyle::StandardPixmap::SP_IncreaseElement);
         titlebar()->setTitle(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName());
     }
     break;
     case PI_AddCompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Adding files to %1").arg(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName()));
     }
     break;
     case PI_CompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Compressing"));
     }
     break;
     case PI_UnCompressProgress: {
         m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Extracting"));
     }
     break;
     case PI_DeleteProgress: {
         m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Deleting"));
     }
     break;
     case PI_ConvertProgress: {
         m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle("Converting");
     }
     break;
     case PI_Success: {
         m_pMainWidget->setCurrentIndex(5);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Failure: {
         m_pMainWidget->setCurrentIndex(6);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Loading: {
         m_pMainWidget->setCurrentIndex(7);
-        setTitleButtonStyle(false);
+        setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
@@ -391,12 +391,14 @@ void MainWindow::calFileSizeByThread(const QString &path)
     }
 }
 
-void MainWindow::setTitleButtonStyle(bool bVisible, DStyle::StandardPixmap pixmap)
+void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
     m_pTitleButton->setVisible(bVisible);
 
     if (bVisible)
         m_pTitleButton->setIcon(pixmap);
+
+    m_pTitleCommentButton->setVisible(bVisible2);
 }
 
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
