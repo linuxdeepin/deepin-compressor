@@ -51,6 +51,7 @@ PluginFinishType LibarchivePlugin::list()
     DataManager::get_instance().archiveData().reset();
     m_setHasHandlesDirs.clear();
     m_setHasRootDirs.clear();
+    m_mapCode.clear();
 
     m_strOldArchiveName = m_strArchiveName; //保存原压缩包名
     QFileInfo fInfo(m_strArchiveName);
@@ -132,7 +133,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
     QString extractDst;
 
-
     // Iterate through all entries in archive.
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
         // 空压缩包直接跳过
@@ -142,8 +142,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         const bool entryIsDir = S_ISDIR(archive_entry_mode(entry)); //该条entry是否是文件夹
 
-        QByteArray strCode;
-        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry), strCode); //该条entry在压缩包内文件名(全路径)
+        const char *name = archive_entry_pathname(entry);
+        QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
         // 移除"./"开头的，例如rpm包
@@ -607,8 +607,8 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     FileEntry m_archiveEntryStat; //压缩包内文件数据
     // 文件名
-    QByteArray strCode;
-    m_archiveEntryStat.strFullPath = m_common->trans2uft8(archive_entry_pathname(aentry), strCode);
+    const char *name = archive_entry_pathname(aentry);
+    m_archiveEntryStat.strFullPath = m_common->trans2uft8(name, m_mapCode[QString(name)]);
 
     // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);

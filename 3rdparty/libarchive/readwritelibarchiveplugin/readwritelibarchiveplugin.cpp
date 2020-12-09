@@ -403,6 +403,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
 
 bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, const QString destination, FileEntry &pEntry, const qlonglong &totalsize)
 {
+    Q_UNUSED(pEntry)
     //如果是文件夹，采用软链接的形式
     QString newFilePath = relativeName;
     QString absoluteDestinationPath = "";
@@ -474,6 +475,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
 
 void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest, const qlonglong &totalsize, bool bInternalDuty)
 {
+    Q_UNUSED(bInternalDuty)
 //    m_currentExtractedFilesSize = 0;
     char buff[10240];
     QFile file(filename);
@@ -482,11 +484,11 @@ void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
         return;
     }
 
-    static int pastProgress = -1;
+    //static int pastProgress = -1;
 
-    pastProgress = -1;
+    //pastProgress = -1;
 
-    float fileSize = static_cast<float>(file.size());//filesize in the disk
+    //float fileSize = static_cast<float>(file.size());//filesize in the disk
 
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
@@ -545,8 +547,8 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
 
     while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
 //        const QString file = QFile::decodeName(archive_entry_pathname(entry));
-        QByteArray strCode;
-        QString entryName = m_common->trans2uft8(archive_entry_pathname(entry), strCode); //该条entry在压缩包内文件名(全路径)
+        const char *name = archive_entry_pathname(entry);
+        QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
         bool flag = false;
         foreach (const FileEntry &tmpFileEntry, files) {
             if (tmpFileEntry.isDirectory) { //跳过该文件夹以及子文件
