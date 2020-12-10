@@ -2577,7 +2577,9 @@ void MainWindow::SlotProgress(KJob * /*job*/, unsigned long percent)
         if (m_lastPercent > 0) {
             m_pProgess->refreshSpeedAndTime(m_lastPercent, true);   // 刷新进度显示
         }
-    } else {
+    } else if (Operation_Load != m_operationtype && Operation_TempExtract != m_operationtype
+               && Operation_TempExtract_Open != m_operationtype && Operation_TempExtract_Open_Choose != m_operationtype) {
+        // 打开压缩包里面的文件不需要进度值
         if (percent > 0) {
             m_lastPercent = percent; // 记录上一次接收到的进度值
             m_pProgess->refreshSpeedAndTime(percent, true); // 刷新进度显示
