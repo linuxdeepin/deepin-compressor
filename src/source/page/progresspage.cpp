@@ -54,6 +54,8 @@ void ProgressPage::setProgressType(Progress_Type eType)
         m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
     }  else if (m_eType == PT_Convert) { // 格式转换
         m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
+    } else if (m_eType == PT_Comment) { // 压缩后添加注释进度
+        m_pSpeedLbl->setText("");
     } else { // 解压
         m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + tr("Calculating..."));
     }
@@ -109,6 +111,8 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Deleting") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (m_eType == PT_Convert) {     // 转换
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Converting") + ": " + strFileName, Qt::ElideMiddle, 520));
+    } else if (m_eType == PT_Comment) {     // 注释进度
+        m_pFileNameLbl->setText(elideFont.elidedText(tr("Updating the comment..."), Qt::ElideMiddle, 520));
     } else {    // 解压
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Extracting") + ": " + strFileName, Qt::ElideMiddle, 520));
     }
@@ -118,7 +122,11 @@ void ProgressPage::resetProgress()
 {
     // 重置相关参数
     m_pProgressBar->setValue(0);
-    m_pFileNameLbl->setText(tr("Calculating..."));
+    if (PT_Comment == m_eType) {
+        m_pFileNameLbl->setText(tr("Updating the comment..."));
+    } else {
+        m_pFileNameLbl->setText(tr("Calculating..."));
+    }
     m_timer.elapsed();
     m_iPerent = 0;
     m_qConsumeTime = 0;
@@ -266,6 +274,8 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
     QString ss = QString("%1").arg(seconds, 2, 10, QLatin1Char('0'));
 
     //add update speed and time label
+    // 设置剩余时间
+    m_pRemainingTimeLbl->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
     if (m_eType == PT_Compress || m_eType == PT_CompressAdd) {
         if (dSpeed < 1024) {
             // 速度小于1024k， 显示速度单位为KB/S
@@ -300,10 +310,10 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         } else {
             m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + ">300MB/S");
         }
+    } else if (m_eType == PT_Comment) {
+        m_pSpeedLbl->setText("");
+        m_pRemainingTimeLbl->setText("");
     }
-
-    // 设置剩余时间
-    m_pRemainingTimeLbl->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
 }
 
 void ProgressPage::slotPauseClicked(bool bChecked)
@@ -337,9 +347,8 @@ void ProgressPage::slotCancelClicked()
         strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止追加
     } else if (m_eType == PT_Convert) {
         strDesText = tr("Are you sure you want to stop the conversion?");      // 是否停止转换
-    } else {
-
     }
+
     // 弹出取消询问对话框
     SimpleQueryDialog dialog(this);
     int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);

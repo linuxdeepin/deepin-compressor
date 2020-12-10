@@ -315,7 +315,14 @@ void MainWindow::refreshPage()
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
-        titlebar()->setTitle("Converting");
+        titlebar()->setTitle(tr("Converting"));
+    }
+    break;
+    case PI_CommentProgress: {
+        m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false, false);
+        m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Commenting"));
     }
     break;
     case PI_Success: {
@@ -1072,7 +1079,7 @@ void MainWindow::slotCompress(const QVariant &val)
 
 void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
-    qDebug() << "结束类型：" << eFinishType << "****错误类型" << eErrorType;
+    qDebug() << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
 
     switch (eFinishType) {
     case PFT_Nomral:
@@ -1272,6 +1279,9 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
 
         // 设置需要查看的文件为压缩包
         m_pDDesktopServicesThread->setOpenFile(m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName);
+
+        // zip压缩包添加注释
+        addArchiveComment();
     }
     break;
     // 添加文件至压缩包
@@ -1395,8 +1405,14 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     break;
     // 更新压缩包注释
     case ArchiveJob::JT_Comment: {
-        qDebug() << "更新注释结束";
-        m_commentProgressDialog->setFinished();
+        if (Operation_Update_Comment == m_operationtype) {
+            qDebug() << "更新注释结束";
+            m_commentProgressDialog->setFinished();
+        } else if (Operation_Add_Comment == m_operationtype) {
+            qDebug() << "添加zip注释结束";
+            m_ePageID = PI_Success;
+            showSuccessInfo(SI_Compress);   // 显示压缩成功
+        }
     }
     break;
 //    default:
@@ -1954,6 +1970,18 @@ void MainWindow::updateArchiveComment()
     }
 }
 
+void MainWindow::addArchiveComment()
+{
+    if (!m_pCompressSettingPage->getComment().isEmpty()) {
+        if (ArchiveManager::get_instance()->updateArchiveComment(m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName, m_pCompressSettingPage->getComment())) {
+            m_operationtype = Operation_Add_Comment;
+            m_ePageID = PI_CommentProgress;
+            m_pProgressPage->setProgressType(PT_Comment);
+            qDebug() << "添加zip压缩包的注释信息";
+        }
+    }
+}
+
 void MainWindow::watcherArchiveFile(const QString &strFullPath)
 {
     SAFE_DELETE_ELE(m_pFileWatcher);
@@ -2115,7 +2143,8 @@ void MainWindow::slotSuccessReturn()
 {
     switch (m_operationtype) {
     // 压缩成功
-    case Operation_Create: {
+    case Operation_Create:
+    case Operation_Add_Comment: {
         m_pCompressPage->clear();   // 清空压缩界面
     }
     break;
@@ -2142,7 +2171,8 @@ void MainWindow::slotFailureRetry()
 {
     switch (m_operationtype) {
     // 压缩失败
-    case Operation_Create: {
+    case Operation_Create:
+    case Operation_Add_Comment: {
         m_ePageID = PI_CompressSetting;  // 返回到列表设置界面
     }
     break;
@@ -2172,7 +2202,8 @@ void MainWindow::slotFailureReturn()
 {
     switch (m_operationtype) {
     // 压缩失败
-    case Operation_Create: {
+    case Operation_Create:
+    case Operation_Add_Comment: {
         m_pCompressPage->clear();   // 清空压缩界面
     }
     break;

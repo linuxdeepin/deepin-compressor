@@ -84,6 +84,12 @@ public:
 
     CustomPushButton *getCompressBtn() const;
 
+    /**
+     * @brief getComment 获取支持格式的注释内容
+     * @return
+     */
+    QString getComment() const;
+
 private:
     /**
      * @brief initUI    初始化界面

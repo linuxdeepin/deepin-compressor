@@ -573,6 +573,9 @@ PluginFinishType LibarchivePlugin::list_New()
 //        archive_read_data_skip(m_archiveReader.data());
     }
 
+    // 恢复原压缩包名，如果不恢复，tar.bz2、tar.lzma、tar.Z对tmpFilleName处理
+    m_strArchiveName = m_strOldArchiveName;
+
     return PFT_Nomral;
 }
 

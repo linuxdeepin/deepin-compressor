@@ -254,6 +254,7 @@ void CompressSettingPage::initUI()
     m_pSplitValueEdt->setValue(0.0);
     m_pSplitValueEdt->setSpecialValueText("");
 
+//    m_pCommentEdt->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
     m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
 
     m_pCompressBtn->setMinimumSize(340, 36);    // 设置压缩按钮最小尺寸
@@ -722,15 +723,14 @@ void CompressSettingPage::slotCompressClicked()
 
 void CompressSettingPage::slotCommentTextChanged()
 {
-    const int maxlen = 10000;
     QString savetext = m_pCommentEdt->toPlainText();
-    if (savetext.size() > maxlen) { //限制最多注释maxlen个字
-        // 保留前maxlen个注释字符
-        m_pCommentEdt->setText(savetext.left(maxlen));
+    if (savetext.size() > MAXCOMMENTLEN) { //限制最多注释MAXCOMMENTLEN个字
+        // 保留前MAXCOMMENTLEN个注释字符
+        m_pCommentEdt->setText(savetext.left(MAXCOMMENTLEN));
 
         //设定鼠标位置，将鼠标放到最后的地方
         QTextCursor cursor = m_pCommentEdt->textCursor();
-        cursor.setPosition(maxlen);
+        cursor.setPosition(MAXCOMMENTLEN);
         m_pCommentEdt->setTextCursor(cursor);
     }
 }
@@ -738,6 +738,16 @@ void CompressSettingPage::slotCommentTextChanged()
 CustomPushButton *CompressSettingPage::getCompressBtn() const
 {
     return m_pCompressBtn;
+}
+
+QString CompressSettingPage::getComment() const
+{
+    // m_pCommentEdt不可用时就返回空字符串，表示该压缩格式(除zip格式外)不支持添加注释
+    if (nullptr != m_pCommentEdt) {
+        return m_pCommentEdt->isEnabled() ? m_pCommentEdt->toPlainText() : QString("");
+    } else {
+        return QString("");
+    }
 }
 
 TypeLabel *CompressSettingPage::getClickLbl() const

@@ -405,7 +405,7 @@ PluginFinishType LibzipPlugin::addComment(const QString &comment)
     // 注释字符串转换
     QByteArray tmp = comment.toUtf8();
     const char *commentstr = tmp.constData();
-    //    const char *commentstr13 = comment.toUtf8().constData(); // 该写法不安全，会返回空字符串
+//    const char *commentstr13 = comment.toUtf8().constData(); // 该写法不安全，会返回空字符串
     zip_uint16_t commentlength = static_cast<zip_uint16_t>(strlen(commentstr));     // 获取注释长度
 
     /**

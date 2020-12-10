@@ -44,6 +44,7 @@ enum Progress_Type {
     PT_Delete,       // 删除进度
     PT_CompressAdd, // 追加压缩进度
     PT_Convert,         // 转换格式进度
+    PT_Comment,  // 压缩后添加注释进度
 };
 
 /**
@@ -64,7 +65,8 @@ enum Archive_OperationType {
     Operation_DRAG, // 拖拽
     Operation_CONVERT, // 格式转换
     Operation_DELETE, // 删除
-    Operation_Update_Comment // 更新压缩包注释
+    Operation_Update_Comment, // 更新压缩包注释
+    Operation_Add_Comment // 添加zip压缩包注释
 };
 
 // 压缩/解压列表的列号
@@ -82,13 +84,14 @@ enum Page_ID {
     PI_CompressSetting,     // 压缩设置
     PI_UnCompress,          // 解压列表
     PI_CompressProgress,    // 压缩进度
-    PI_AddCompressProgress,    // 追加进度
+    PI_AddCompressProgress, // 追加进度
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度
     PI_ConvertProgress,     // 转换进度
+    PI_CommentProgress,     // 添加zip注释进度
     PI_Success,             // 成功
     PI_Failure,             // 失败
-    PI_Loading,             // 加载
+    PI_Loading              // 加载
 };
 
 // 压缩参数

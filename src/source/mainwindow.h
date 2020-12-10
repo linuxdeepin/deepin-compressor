@@ -267,7 +267,10 @@ private:
      * @brief updateArchiveComment 更新压缩包的注释
      */
     void updateArchiveComment();
-
+    /**
+     * @brief addArchiveComment 压缩后添zip压缩包的注释
+     */
+    void addArchiveComment();
     /**
      * @brief watcherArchiveFile   监听本地压缩包
      * @param strFullPath 压缩包名称（全路径）

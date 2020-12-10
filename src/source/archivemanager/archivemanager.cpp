@@ -294,14 +294,14 @@ bool ArchiveManager::updateArchiveCacheData(const UpdateOptions &stOptions)
 
 bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, const QString &strComment)
 {
-    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath);
+    ReadOnlyArchiveInterface *pInterface = UiTools::createInterface(strArchiveFullPath, true, UiTools::APT_Libzip); // zip添加注释使用libzipplugin
 
     if (pInterface) {
         CommentJob *pCommentJob = new CommentJob(strComment, pInterface);
 
         // 连接槽函数
-        connect(pCommentJob, &UpdateJob::signalprogress, this, &ArchiveManager::signalprogress);
-        connect(pCommentJob, &UpdateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+        connect(pCommentJob, &CommentJob::signalprogress, this, &ArchiveManager::signalprogress);
+        connect(pCommentJob, &CommentJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
 
         m_pArchiveJob = pCommentJob;
         pCommentJob->start();
