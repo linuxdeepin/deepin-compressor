@@ -1444,6 +1444,10 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
         m_ePageID = PI_UnCompress;
     }
     break;
+    case ArchiveJob::JT_Open: {
+        m_ePageID = PI_UnCompress;
+    }
+    break;
     // 转换
     case ArchiveJob::JT_Convert: {
         m_ePageID = PI_UnCompress;
@@ -1491,7 +1495,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 解压错误
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
-            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
             // 提取出错
             switch (eErrorType) {
             // 压缩包打开失败
@@ -1542,7 +1546,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 删除错误
     case ArchiveJob::JT_Delete: {
         m_ePageID = PI_UnCompress;
-        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         switch (eErrorType) {
         // 压缩包打开失败
         case ET_ArchiveOpenError:
@@ -1583,7 +1587,13 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     break;
     // 打开压缩包中的文件错误
     case ArchiveJob::JT_Open:
-
+        if (Archive_OperationType::Operation_TempExtract_Open == m_operationtype) {
+            m_ePageID = PI_UnCompress;
+            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+            if (eErrorType == ET_WrongPassword) { // 打开压缩包中文件密码错误
+                sendMessage(icon, tr("Wrong password"));
+            }
+        }
         break;
     // 转换错误
     case ArchiveJob::JT_Convert:
@@ -2387,4 +2397,3 @@ void MainWindow::slotTitleCommentButtonPressed()
         }
     }
 }
-

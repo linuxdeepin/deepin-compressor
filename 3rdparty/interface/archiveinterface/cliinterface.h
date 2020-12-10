@@ -174,6 +174,8 @@ protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
     PluginFinishType m_finishType = PFT_Nomral;
+    QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
+    bool m_isProcessKilled = false;
 
 private:
     QList<FileEntry> m_files; // 文件

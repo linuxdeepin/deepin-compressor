@@ -107,7 +107,7 @@ void CliRarPlugin::setupCliProperties()
 
 bool CliRarPlugin::isPasswordPrompt(const QString &line)
 {
-    return line.startsWith(QLatin1String("Enter password (will not be echoed) for"));
+    return line.startsWith(QLatin1String("Enter password (will not be echoed) for ")) && line.endsWith(": ");
 }
 
 bool CliRarPlugin::isWrongPasswordMsg(const QString &line)
@@ -235,7 +235,10 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 {
     if (isPasswordPrompt(line)) {  // 提示需要输入密码 提示密码错误
         if (workStatus == WT_List) {
+            m_strEncryptedFileName = m_strArchiveName; // list时文件名为压缩包名
             DataManager::get_instance().archiveData().isListEncrypted = true; // 列表加密文件
+        } else { // 解压时的文件名通过解析命令行获取
+            m_strEncryptedFileName = line.right(line.length() - 40).remove(": ");
         }
 
         m_eErrorType = ET_NeedPassword;
@@ -256,14 +259,14 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Extract) { // 解压进度
         if (isMultiPasswordPrompt(line)) { // rar多密码文件解压提示是否使用上一次输入的密码
-            writeToProcess(QString("Y" + QLatin1Char('\n')).toLocal8Bit()); // 选择Y，使用上一次的密码
+            writeToProcess(QString("Y" + QLatin1Char('\n')).toLocal8Bit()); // 默认选择Y，使用上一次的密码
         }
 
         if (handleFileExists(line)) {  // 判断解压是否存在同名文件
             return true;
         }
 
-        handleProgress(line);
+        handleProgress(line); // 处理进度
     }
 
     return true;

@@ -278,10 +278,12 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         return true;
     }
 
-    if (isWrongPasswordMsg(line)) {  // 提示密码错误
+    if (isWrongPasswordMsg(line)) {  // 提示密码错误 // ------区分删除操作密码错误的处理------
         m_eErrorType = ET_WrongPassword;
-        m_finishType = PFT_Error;
-        return false;
+        if (workStatus != WT_Delete) {
+            m_finishType = PFT_Error;
+            return false;
+        }
     }
 
     if (isDiskFullMsg(line)) {
@@ -294,6 +296,12 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     } else if (workStatus == WT_Add || workStatus == WT_Extract || workStatus == WT_Delete) { // 压缩、解压、删除进度
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
+        }
+
+        // ------区分删除操作密码错误的处理------ 当读取到命令行最后一行 "E_FAIL" 的时候再killprocess
+        if (workStatus == WT_Delete && m_eErrorType == ET_WrongPassword && line.startsWith("E_FAIL")) {
+            m_finishType = PFT_Error;
+            return false;
         }
 
         handleProgress(line);

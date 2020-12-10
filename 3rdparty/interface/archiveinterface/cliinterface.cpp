@@ -153,7 +153,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     QDir::setCurrent(destPath);
 
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
-                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, DataManager::get_instance().archiveData().strPassword));
+                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword/*DataManager::get_instance().archiveData().strPassword*/));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -426,6 +426,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     }
 
     m_stdOutData.clear();
+    m_isProcessKilled = false;
     m_process->start();
 
     if (m_process->waitForStarted()) {
@@ -468,6 +469,15 @@ void CliInterface::killProcess(bool emitFinished)
     }
 
     m_process->kill();
+    m_isProcessKilled = true;
+
+    //取消删除操作时，删除掉临时文件
+    if (m_workStatus == WT_Delete) {
+        QFile fi(m_strArchiveName + ".tmp");
+        if (fi.exists()) {
+            fi.remove();
+        }
+    }
 }
 
 void CliInterface::handleProgress(const QString &line)
@@ -547,7 +557,18 @@ PluginFinishType CliInterface::handlePassword()
 {
     m_eErrorType = ET_NoError;
 
-    PasswordNeededQuery query(m_strArchiveName);
+    QString name;
+    if (m_process && m_process->program().at(0).contains("unrar")) { // rar解压会提示加密的文件名
+        name = m_strEncryptedFileName;
+    } else { // 7z不会提示加密的文件名
+        if (m_files.count() == 1) { // 选则压缩包中的一个文件进行提取操作
+            name = m_files.at(0).strFileName;
+        } else { // 解压或是选择压缩包内多个文件进行提取操作
+            name = m_strArchiveName;
+        }
+    }
+
+    PasswordNeededQuery query(name);
     emit signalQuery(&query);
     query.waitForResponse();
 
@@ -705,6 +726,11 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
 
 void CliInterface::readStdout(bool handleAll)
 {
+    //进程结束，不再对后面命令行缓存数据处理
+    if (m_isProcessKilled) {
+        return;
+    }
+
     Q_ASSERT(m_process);
 
     if (!m_process->bytesAvailable()) { // 无数据
@@ -717,13 +743,6 @@ void CliInterface::readStdout(bool handleAll)
 
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
-
-    // 打印调试
-//    if (WT_List == m_workStatus) {
-//        foreach (auto tmp, lines) {
-//            qDebug() << tmp.constData();
-//        }
-//    }
 
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
 
@@ -784,6 +803,12 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
     deleteProcess();
 
+    if (exitCode == 0) { // job正常结束
+        m_finishType = PFT_Nomral;
+    }
+
+    setPassword(QString());
+
     emit signalprogress(100);
     emit signalFinished(m_finishType);
 }
@@ -800,9 +825,13 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         m_process = nullptr;
     }
 
+    if (exitCode == 0) { // job正常结束
+        m_finishType = PFT_Nomral;
+    }
+
 //    if (exitCode == 9 || exitCode == 11) {
 //        DataManager::get_instance().archiveData().strPassword = QString();
-//        setPassword(QString());
+    setPassword(QString());
 //        return;
 //    }
 
