@@ -1453,15 +1453,21 @@ bool CliInterface::handleLine(const QString &line)
 
                 return true;
             } else {
-//                QString name;
-//                if (line.startsWith(QLatin1String("Enter password (will not be echoed) for"))) {
-//                    name = m_replaceLine.left(m_replaceLine.length() - 2);
-//                } else {
-//                    name = line.left(line.length() - 2);
-//                }
-                QString name = line.left(line.length() - 2);  // 使用文件名？使用压缩包名
-                name = name.right(name.length() - 40);
-                PasswordNeededQuery query(filename()); // 压缩包名
+                QString name;
+                if (m_process->program().at(0).contains("unrar")) {
+                    name = line.right(line.length() - 40).remove(": "); // rar使用文件名
+                } else {
+                    if (m_extractedFiles.count() == 1) { // 7z选择单个文件操作使用文件名
+                        name = m_extractedFiles.at(0)->name();
+                    } else {
+                        name = filename(); // 7z使用压缩包名
+                    }
+                }
+
+//                QString name = line.left(line.length() - 2);  // 使用文件名？使用压缩包名
+//                name = name.right(name.length() - 40);
+//                PasswordNeededQuery query(filename()); // 压缩包名
+                PasswordNeededQuery query(name);
                 emit userQuery(&query);
                 query.waitForResponse();
 
@@ -1604,7 +1610,18 @@ bool CliInterface::handleLine(const QString &line)
         } else if (isPasswordPrompt(line)) {
             qDebug() << "Found a password prompt";
 
-            PasswordNeededQuery query(filename());
+            QString name;
+            if (m_process->program().at(0).contains("unrar")) {
+                name = line.right(line.length() - 40).remove(": "); // rar使用文件名
+            } else {
+                if (m_removedFiles.count() == 1) {
+                    name = m_removedFiles.at(0)->name();
+                } else {
+                    name = filename(); // 7z使用压缩包名
+                }
+            }
+
+            PasswordNeededQuery query(name);
             emit userQuery(&query);
             query.waitForResponse();
 

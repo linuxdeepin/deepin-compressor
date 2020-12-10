@@ -748,7 +748,7 @@ qint64 CliRarPlugin::extractSize(const QVector<Archive::Entry *> &files)
 
 bool CliRarPlugin::isPasswordPrompt(const QString &line)
 {
-    return line.startsWith(QLatin1String("Enter password (will not be echoed) for"));
+    return line.startsWith(QLatin1String("Enter password (will not be echoed) for")) && line.endsWith(": ");
 }
 
 bool CliRarPlugin::isWrongPasswordMsg(const QString &line)
