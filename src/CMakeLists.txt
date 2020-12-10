@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 3.9.5)
 #2.设置项目名称
 set(EXE_NAME deepin-compressor)
+
+set(APP_TRANS_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/translate_generation.sh")
 project(${EXE_NAME})
 
 #配置版本号
@@ -25,6 +27,9 @@ set(CMAKE_AUTOMOC ON)
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
+#Generate the qm file
+execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
+                    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
 #demo start
 set(CMAKE_CXX_STANDARD 11)

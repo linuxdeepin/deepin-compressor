@@ -7,6 +7,8 @@ project(${EXE_NAME})
 
 #SET(CMAKE_BUILD_TYPE "Debug")  
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+set(APP_RES_DIR "src")
+set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 
 # 添加c++ 11标准支持
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
@@ -47,6 +49,10 @@ endif()
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
+
+#Generate the qm file
+execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
+                    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
 add_subdirectory(3rdparty) 
 
