@@ -9,3 +9,6 @@ do
     printf "\nprocess ${ts}\n"
     lrelease "${ts}"
 done
+
+#lupdate ./ -ts ../translations/*.ts -no-obsolete 
+#lrelease ../translations/*.ts

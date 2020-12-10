@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME compressor)
 project(${EXE_NAME})
 
+set(APP_RES_DIR "deepin-compressor")
+set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
+
 #SET(CMAKE_BUILD_TYPE "Debug")
 message("CXXFLAGS: $ENV{CXXFLAGS}\nCMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
@@ -52,6 +55,11 @@ set(CMAKE_AUTORCC ON)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
 #3.2 设置可执行程序输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
+
+
+#Generate the qm file
+execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
+                    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
 #add_subdirectory(3rdparty/interface)
 

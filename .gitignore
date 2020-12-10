@@ -102,3 +102,4 @@ compile_commands.json
 output
 so(cmake).sh
 test/test_output
+translations/*.qm
