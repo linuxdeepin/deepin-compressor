@@ -66,6 +66,9 @@ public:
 private:
     QList<FileEntry> m_listEntry;       // 显示的数据
     MimeTypeDisplayManager *m_pMimetype; // 类型管理
+
+    // 表头
+    QStringList m_listColumn = QStringList() << QObject::tr("Name") << QObject::tr("Time modified") << QObject::tr("Type") << QObject::tr("Size");
 };
 
 #endif // DATAMODEL_H

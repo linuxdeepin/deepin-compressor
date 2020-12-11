@@ -459,6 +459,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     // 加载操作
     if (ArchiveManager::get_instance()->loadArchive(transFile)) {
+        m_pLoadingPage->setDes(tr("Loading, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
     } else {
@@ -466,17 +467,6 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         showErrorMessage(EI_NoPlugin);
     }
 
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    static int index = 0;
-    if (event->key() == Qt::Key_Space) {
-        index++;
-        if (index >= m_pMainWidget->count())
-            index = 0;
-        m_pMainWidget->setCurrentIndex(index);
-    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -1810,7 +1800,7 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
         m_pSuccessPage->setSuccessDes(tr("Extraction successful"));
         break;
     case SI_Convert:
-        m_pSuccessPage->setSuccessDes(tr("Convertion successful"));
+        m_pSuccessPage->setSuccessDes(tr("Conversion successful"));
         break;
     }
 }
@@ -2068,6 +2058,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     if (ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram)) {
         // 进入打开加载界面
         m_operationtype = Operation_TempExtract_Open;
+        m_pLoadingPage->setDes(tr("Loading, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
         refreshPage();

@@ -279,8 +279,6 @@ private:
 
     // QWidget interface
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
-
     /**
      * @brief timerEvent    定时
      */

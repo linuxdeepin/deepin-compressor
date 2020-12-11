@@ -48,7 +48,7 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
     Q_UNUSED(orientation)
 
     if (role == Qt::DisplayRole) {
-        return g_listColumn[section];           // 返回表头对应列的内容
+        return m_listColumn[section];           // 返回表头对应列的内容
     } else if (role == Qt::TextAlignmentRole) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);  // 表头左对齐
     }
@@ -132,7 +132,7 @@ int DataModel::rowCount(const QModelIndex &parent) const
 int DataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return g_listColumn.count();
+    return m_listColumn.count();
 }
 
 void DataModel::refreshFileEntry(const QList<FileEntry> &listEntry)

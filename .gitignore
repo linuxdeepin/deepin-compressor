@@ -103,3 +103,4 @@ output
 so(cmake).sh
 tests/test_output
 translations/*.qm
+translations/deepin-compressor_zh_CN.qm
