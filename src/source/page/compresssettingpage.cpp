@@ -595,11 +595,11 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         setListEncryptionEnabled(true);
         setSplitEnabled(true);
         setCommentEnabled(false);
-    } else if (0 == selectType.compare("zip")) {    // zip支持普通加密，不支持列表加密，不支持分卷
+    } else if (0 == selectType.compare("zip")) {    // zip支持普通加密，不支持列表加密，支持分卷，支持注释，但不同时支持分卷和注释
         setEncryptedEnabled(true);
         setListEncryptionEnabled(false);
-        setSplitEnabled(false);
-        setCommentEnabled(true);
+        setSplitEnabled(true);
+        setCommentEnabled(!m_pSplitCkb->isChecked()); // 不同时支持分卷和注释
     } else {                                // 其余格式不支持加密，不支持分卷
         setEncryptedEnabled(false);
         setListEncryptionEnabled(false);
@@ -659,6 +659,10 @@ void CompressSettingPage::slotSplitEdtEnabled()
         m_pSplitValueEdt->setToolTip(tr("Total size: %1").arg(size));
     } else {
         m_pSplitValueEdt->clear();
+    }
+
+    if (m_strMimeType.contains("zip")) {
+        setCommentEnabled(!m_pSplitCkb->isChecked()); // 不能同时支持zip分卷和注释
     }
 }
 

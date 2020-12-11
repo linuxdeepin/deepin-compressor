@@ -164,9 +164,10 @@ private:
     /**
      * @brief transSplitFileName 处理7z、rar分卷压缩包名称
      * @param fileName 原始名称
+     * @param unCompressPar 解压参数
      * * @return    是否是分卷压缩包
      */
-    bool transSplitFileName(QString &fileName);
+    void transSplitFileName(QString &fileName, UnCompressParameter &unCompressPar);
 
     /**
      * @brief handleJobNormalFinished   处理job正常结束

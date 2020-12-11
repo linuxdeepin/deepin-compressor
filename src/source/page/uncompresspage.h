@@ -31,6 +31,7 @@ DWIDGET_USE_NAMESPACE
 class UnCompressView;
 class CustomCommandLinkButton;
 class CustomPushButton;
+struct UnCompressParameter;
 
 // 解压界面（列表）
 class UnCompressPage : public DWidget
@@ -43,11 +44,9 @@ public:
     /**
      * @brief setArchiveFullPath    设置压缩包全路径
      * @param strArchiveFullPath    压缩包全路径
-     * @param bSplit    是否是分卷压缩包
-     * @param bMultiplePassword 是否支持多密码追加
-     * @param bModifiable 是否支持更改数据
+     * @param unCompressPar         压缩参数
      */
-    void setArchiveFullPath(const QString &strArchiveFullPath, bool bSplit, bool bMultiplePassword, bool bModifiable);
+    void setArchiveFullPath(const QString &strArchiveFullPath, UnCompressParameter &unCompressPar);
 
     /**
      * @brief archiveFullPath   获取压缩包全路径

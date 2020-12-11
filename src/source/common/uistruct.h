@@ -125,11 +125,16 @@ Q_DECLARE_METATYPE(CompressParameter)
 
 // 解压参数（选择压缩包之后分析的数据）
 struct UnCompressParameter {
+    // 分卷类型
+    enum SplitType {
+        ST_No, // 非分卷
+        ST_Zip, // zip分卷
+        ST_Other // 其他分卷
+    };
     UnCompressParameter()
     {
         bRightOperation = false;
-        bSplitVolume = false;
-        bSplitVolume = false;
+        eSplitVolume = ST_No;
         bMultiplePassword = false;
         bModifiable = false;
         bCommentModifiable = false;
@@ -140,7 +145,7 @@ struct UnCompressParameter {
     QString strFullPath;        // 压缩包全路径
     QString strExtractPath;     // 解压路径
     bool bRightOperation;       // 是否右键快捷操作（解压到当前文件夹）
-    bool bSplitVolume;          // 是否分卷包
+    SplitType eSplitVolume;          // 分卷包类型
     bool bMultiplePassword;     // 是否支持多密码追加
     bool bModifiable;           // 是否更改压缩包数据
     bool bCommentModifiable;    // 是否支持注释更改

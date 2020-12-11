@@ -56,7 +56,7 @@ public:
     void setTotalSize(qint64 qTotalSize);
 
     /**
-     * @brief setArchiveName    设置压缩包名称和文件总大小
+     * @brief setArchiveName    设置压缩包名称和文件总大小、显示图标
      * @param strArchiveName    压缩包名称
      */
     void setArchiveName(const QString &strArchiveName);

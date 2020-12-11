@@ -108,7 +108,7 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
     return false;
 }
 
-bool ArchiveManager::loadArchive(const QString &strArchiveFullPath)
+bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType)
 {
     // 重新加载首先释放之前的interface
     if (m_pInterface != nullptr) {
@@ -116,7 +116,7 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath)
         m_pInterface = nullptr;
     }
 
-    m_pInterface = UiTools::createInterface(strArchiveFullPath);
+    m_pInterface = UiTools::createInterface(strArchiveFullPath, eType);
 
     if (m_pInterface) {
         LoadJob *pLoadJob = new LoadJob(m_pInterface);
@@ -155,10 +155,10 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
     return false;
 }
 
-bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions)
+bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions, UiTools::AssignPluginType eType)
 {
     if (m_pInterface == nullptr) {
-        m_pInterface = UiTools::createInterface(strArchiveFullPath);
+        m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
     }
 
     if (m_pInterface) {

@@ -46,17 +46,17 @@ UnCompressPage::~UnCompressPage()
 
 }
 
-void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, bool bSplit, bool bMultiplePassword, bool bModifiable)
+void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, UnCompressParameter &unCompressPar)
 {
     qDebug() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
 
-    if (bSplit) {
+    if (UnCompressParameter::ST_No != unCompressPar.eSplitVolume) {
         // 若是分卷压缩包，不支持增/删/改
         m_pUnCompressView->setModifiable(false);
     } else {
         // 若不是分卷压缩包，按照支持的压缩类型，设置是否增/删/改，否则屏蔽这些操作
-        m_pUnCompressView->setModifiable(bModifiable, bMultiplePassword);
+        m_pUnCompressView->setModifiable(unCompressPar.bModifiable, unCompressPar.bMultiplePassword);
     }
 }
 

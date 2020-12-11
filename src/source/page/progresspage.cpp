@@ -75,7 +75,7 @@ void ProgressPage::setArchiveName(const QString &strArchiveName)
     // 设置类型图片
     QFileInfo fileinfo(strArchiveName);
     QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp." + fileinfo.completeSuffix()));
+    QIcon icon = provider.icon(fileinfo);
     m_pPixmapLbl->setPixmap(icon.pixmap(128, 128));
 }
 

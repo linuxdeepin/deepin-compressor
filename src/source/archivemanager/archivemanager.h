@@ -56,9 +56,10 @@ public:
     /**
      * @brief loadArchive           加载压缩包数据
      * @param strArchiveFullPath    压缩包全路径
+     * @param eType                 插件选择
      * @return                      是否调用成功
      */
-    bool loadArchive(const QString &strArchiveFullPath);
+    bool loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto);
 
     /**
      * @brief addFiles              向压缩包中添加文件
@@ -73,9 +74,10 @@ public:
      * @param strArchiveFullPath    压缩包全路径
      * @param files             待解压的文件（若数目为空，属于全部解压，否则为提取）
      * @param options           解压参数
+     * @param eType             插件选择
      * @return                      是否调用成功
      */
-    bool extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions);
+    bool extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions, UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto);
 
     /**
      * @brief extractFiles2Path     提取文件至指定目录

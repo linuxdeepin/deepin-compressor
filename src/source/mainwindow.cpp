@@ -424,25 +424,26 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     QMimeType mimeType = determineMimeType(transFile);
 
+    // 构建压缩包加载之后的数据
+    m_stUnCompressParameter.strFullPath = strArchiveFullPath;
+    transSplitFileName(transFile, m_stUnCompressParameter);
     QFileInfo fileinfo(transFile);
     if (!fileinfo.exists()) {
         // 分卷不完整（损坏）
+        // 比如打开1.7z.002时，1.7z.001不存在
         m_ePageID = PI_Failure;
         showErrorMessage(EI_ArchiveMissingVolume);
         return;
     }
-
-    // 构建压缩包加载之后的数据
-    m_stUnCompressParameter.strFullPath = strArchiveFullPath;
-    m_stUnCompressParameter.bSplitVolume = transSplitFileName(transFile);
     m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
-    m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable());  // 支持压缩且文件可写的格式才能修改数据
+    m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
+                                           && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
 
     // 监听压缩包
     watcherArchiveFile(transFile);
 
-    m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter.bSplitVolume, m_stUnCompressParameter.bMultiplePassword, m_stUnCompressParameter.bModifiable);     // 设置压缩包全路径和是否分卷
+    m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter);     // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
     m_pTitleButton->setEnabled(m_stUnCompressParameter.bModifiable);
@@ -457,8 +458,11 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         m_pUnCompressPage->setDefaultUncompressPath(m_pSettingDlg->getDefaultExtractPath());  // 设置默认解压路径
     }
 
+    // zip分卷指定使用cli7zplugin
+    UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
+                                      (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
     // 加载操作
-    if (ArchiveManager::get_instance()->loadArchive(transFile)) {
+    if (ArchiveManager::get_instance()->loadArchive(transFile, eType)) {
         m_pLoadingPage->setDes(tr("Loading, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
@@ -737,8 +741,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 解压单个文件到当前文件夹
         QString filepath = listParam.at(0);
         m_stUnCompressParameter.bRightOperation = true;
-        m_stUnCompressParameter.bSplitVolume = transSplitFileName(filepath);
-
+        transSplitFileName(filepath, m_stUnCompressParameter);
         QFileInfo fileinfo(filepath);
         if (fileinfo.exists()) {
             // QFileInfo fileinfo(listParam.at(0));
@@ -757,8 +760,11 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             m_stUnCompressParameter.strExtractPath = options.strTargetPath; // 解压路径
             m_stUnCompressParameter.strFullPath = filepath;     // 压缩包全路径
 
+            // zip分卷指定使用cli7zplugin
+            UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
+                                              (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
             // 调用解压函数
-            if (ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options)) {
+            if (ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options, eType)) {
                 // 设置进度界面参数
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(options.qComressSize);
@@ -851,7 +857,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
     } else if (strType == QStringLiteral("extract_here_split")) { // 右键选择7z压缩分卷文件，解压到当前文件夹
         QString filepath = listParam.at(0);
         m_stUnCompressParameter.bRightOperation = true;
-        m_stUnCompressParameter.bSplitVolume = transSplitFileName(filepath);
+        transSplitFileName(filepath, m_stUnCompressParameter);
 
         QFileInfo fileinfo(filepath);
         if (fileinfo.exists()) {
@@ -1217,20 +1223,16 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     return strpath;
 }
 
-bool MainWindow::transSplitFileName(QString &fileName)
+void MainWindow::transSplitFileName(QString &fileName, UnCompressParameter &unCompressPar)
 {
-    bool bSplit = false;    // 是否是分卷
-
     if (fileName.contains(".7z.")) {
         // 7z分卷处理
         QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
-        if (reg.exactMatch(fileName) == false) {
-            return false;
+        if (reg.exactMatch(fileName)) {
+            fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
+            unCompressPar.eSplitVolume = UnCompressParameter::ST_Other;
         }
-
-        bSplit = true;
-        fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
     } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
         // rar分卷处理
         int x = fileName.lastIndexOf("part");
@@ -1242,10 +1244,26 @@ bool MainWindow::transSplitFileName(QString &fileName)
             fileName.replace(x, y - x, "part1");
         }
 
-        bSplit = true;
+        unCompressPar.eSplitVolume = UnCompressParameter::ST_Other;
+    } else if (fileName.contains(".zip.")) { // 1.zip.001格式
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        if (reg.exactMatch(fileName)) {
+            QFileInfo fi(reg.cap(1) + "001");
+            if (fi.exists() == true) {
+                fileName = reg.cap(1) + "001";
+                unCompressPar.eSplitVolume = UnCompressParameter::ST_Zip;
+            }
+        }
+    } else if (fileName.endsWith(".zip")) { //1.zip 1.01格式
+        /**
+         * 例如123.zip文件，检测123.z01文件是否存在
+         * 如果存在，则认定123.zip是分卷包
+         */
+        QFileInfo tmp(fileName.left(fileName.length() - 2) + "01");
+        if (tmp.exists()) {
+            unCompressPar.eSplitVolume = UnCompressParameter::ST_Zip;
+        }
     }
-
-    return bSplit;
 }
 
 void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
@@ -1373,7 +1391,10 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         qDebug() << "打开结束";
 
         // 若压缩包文件可更改，打开文件之后对文件进行监控
-        /*if (m_stUnCompressParameter.bModifiable)*/ {
+        // 非分卷的rar可以进行格式转换
+        if ((m_stUnCompressParameter.bModifiable) ||
+                ((m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No)
+                 && (determineMimeType(m_stUnCompressParameter.strFullPath).name() == "application/vnd.rar"))) {
             // 打开成功之后添加当前打开文件至文件监控中
             m_pOpenFileWatcher->addCurOpenWatchFile();
         }

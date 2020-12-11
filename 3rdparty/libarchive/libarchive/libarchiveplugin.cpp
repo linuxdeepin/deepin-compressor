@@ -576,7 +576,11 @@ PluginFinishType LibarchivePlugin::list_New()
     // 恢复原压缩包名，如果不恢复，tar.bz2、tar.lzma、tar.Z对tmpFilleName处理
     m_strArchiveName = m_strOldArchiveName;
 
-    return PFT_Nomral;
+    if (result != ARCHIVE_EOF) {
+        return PFT_Error;
+    }
+
+    return (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) ? PFT_Nomral : PFT_Error;
 }
 
 QString LibarchivePlugin::convertCompressionName(const QString &method)
