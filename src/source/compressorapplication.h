@@ -33,6 +33,9 @@ class CompressorApplication: public DApplication
 public:
     CompressorApplication(int &argc, char **argv);
     bool notify(QObject *watched, QEvent *event) override;
+
+protected:
+    void handleQuitAction() override;
 };
 
 #endif // COMPRESSORAPPLICATION_H

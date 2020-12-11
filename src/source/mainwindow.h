@@ -85,6 +85,11 @@ public:
      */
     bool handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt);
 
+    /**
+     * @brief handleQuit    处理退出
+     */
+    void handleQuit();
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -285,6 +290,11 @@ protected:
      */
     void timerEvent(QTimerEvent *) override;
 
+    /**
+     * @brief closeEvent    关闭
+     */
+    void closeEvent(QCloseEvent *) override;
+
 private Q_SLOTS:
     /**
      * @brief slotHandleRightMenuSelected   处理文管操作
@@ -391,9 +401,8 @@ private Q_SLOTS:
 
     /**
      * @brief slotPause       暂停
-     * @param eType             操作类型
      */
-    void slotPause(Progress_Type eType);
+    void slotPause();
 
     /**
      * @brief slotContinue    继续
@@ -402,9 +411,8 @@ private Q_SLOTS:
 
     /**
      * @brief slotCancel       取消
-     * @param eType             操作类型
      */
-    void slotCancel(Progress_Type eType);
+    void slotCancel();
 
     /**
      * @brief slotAddFiles      追加压缩

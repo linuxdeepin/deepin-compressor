@@ -418,6 +418,7 @@ void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::Stan
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
 {
     PERF_PRINT_BEGIN("POINT-05", "加载时间");
+    m_operationtype = Operation_Load;
 
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
@@ -503,6 +504,27 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
             }
         }
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (m_operationtype != Operation_NULL) {
+        // 当前还有操作正在进行
+        slotPause();    // 先暂停当前操作
+        // 创建询问关闭对话框
+        SimpleQueryDialog dialog(this);
+        int iResult = dialog.showDialog(tr("Are you sure you want to stop the ongoing task?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+        // 点击确认时，停止当前操作，关闭应用
+        if (iResult == QDialog::Accepted) {
+            slotCancel();       // 执行取消操作
+            event->accept();
+        } else {
+            slotContinue();    // 继续之前的操作
+            event->ignore();    // 忽略退出
+        }
+    } else {
+        event->accept();    // 忽略退出
     }
 }
 
@@ -704,6 +726,12 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
     return false;
 }
 
+void MainWindow::handleQuit()
+{
+    // 关闭处理
+    close();
+}
+
 void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
 {
     qDebug() << listParam;
@@ -760,9 +788,12 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             m_stUnCompressParameter.strExtractPath = options.strTargetPath; // 解压路径
             m_stUnCompressParameter.strFullPath = filepath;     // 压缩包全路径
 
+            m_operationtype = Operation_Extract;
+
             // zip分卷指定使用cli7zplugin
             UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
                                               (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
+
             // 调用解压函数
             if (ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options, eType)) {
                 // 设置进度界面参数
@@ -810,6 +841,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 获取解压路径
         QList< QUrl > listSelectpath = dialog.selectedUrls();
         QString strExtractPath = listSelectpath.at(0).toLocalFile();
+
+        m_operationtype = Operation_Extract;
         // 调用批量解压
         if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, strExtractPath, m_pSettingDlg->isAutoCreatDir())) {
             qint64 qSize = 0;
@@ -833,6 +866,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
+
+        m_operationtype = Operation_Extract;
         if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), m_pSettingDlg->isAutoCreatDir())) {
             qint64 qSize = 0;
             foreach (QString strFile, listFiles) {
@@ -867,6 +902,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             options.bAllExtract = true;
             options.bRightExtract = true;
             options.qComressSize = fileinfo.size();
+
+            m_operationtype = Operation_Extract;
             // 调用解压函数
             if (ArchiveManager::get_instance()->extractFiles(filepath, QList<FileEntry>(), options)) {
                 // 设置进度界面参数
@@ -1000,6 +1037,7 @@ void MainWindow::slotCompressNext()
 void MainWindow::slotCompress(const QVariant &val)
 {
     qDebug() << "点击了压缩按钮";
+    m_operationtype = Operation_Create;
 
     m_stCompressParameter = val.value<CompressParameter>();    // 获取压缩参数
     QStringList listFiles = m_pCompressPage->compressFiles();   // 获取待压缩文件
@@ -1079,6 +1117,7 @@ void MainWindow::slotCompress(const QVariant &val)
 void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
     qDebug() << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
+    m_operationtype = Operation_NULL;   // 重置操作类型
 
     switch (eFinishType) {
     case PFT_Nomral:
@@ -1103,6 +1142,8 @@ void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType e
 
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
+    m_operationtype = Operation_Extract; //解压操作
+
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     ExtractionOptions options;
     ArchiveData stArchiveData = DataManager::get_instance().archiveData();
@@ -1129,8 +1170,6 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
         m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
         m_pProgressPage->restartTimer(); // 重启计时器
         m_ePageID = PI_UnCompressProgress;
-
-        m_operationtype = Operation_Extract; //解压操作
 
         refreshPage();
     } else {
@@ -1300,6 +1339,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         qDebug() << "添加结束";
 
         // 追加完成更新压缩包数据
+        m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
             // 开始更新
             m_pLoadingPage->setDes(tr("Updating, please wait..."));
@@ -1375,6 +1415,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Delete: {
         qDebug() << "删除结束";
         // 追加完成更新压缩包数据
+        m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
             // 开始更新
             m_pLoadingPage->setDes(tr("Updating, please wait..."));
@@ -1641,6 +1682,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
 void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &strPassword)
 {
     qDebug() << "向压缩包中添加文件";
+    m_operationtype = Operation_Add;
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();  // 获取压缩包全路径
     CompressOptions options;
@@ -1950,6 +1992,7 @@ void MainWindow::setDefaultApp(QString mimetype, QString desktop)
 void MainWindow::convertArchive(QString convertType)
 {
     qDebug() << "对压缩包进行格式转换" << convertType;
+    m_operationtype = Operation_CONVERT;
 
     QString oldArchivePath = m_stUnCompressParameter.strFullPath; // 需要进行格式转换的压缩包的全路径
     QFileInfo oldArchive(oldArchivePath);
@@ -1970,7 +2013,6 @@ void MainWindow::convertArchive(QString convertType)
         m_pProgressPage->setArchiveName(QFileInfo(newArchivePath).fileName());
         m_pProgressPage->restartTimer();
 
-        m_operationtype = Operation_CONVERT;
         m_ePageID = PI_ConvertProgress;
         refreshPage();
     }
@@ -1978,14 +2020,15 @@ void MainWindow::convertArchive(QString convertType)
 
 void MainWindow::updateArchiveComment()
 {
+    m_operationtype = Operation_Update_Comment;
     if (ArchiveManager::get_instance()->updateArchiveComment(m_stUnCompressParameter.strFullPath, m_comment)) {
-        m_operationtype = Operation_Update_Comment;
         qDebug() << "更新压缩包的注释信息";
     }
 }
 
 void MainWindow::addArchiveComment()
 {
+    m_operationtype = Operation_Add_Comment;
     if (!m_pCompressSettingPage->getComment().isEmpty()) {
         if (ArchiveManager::get_instance()->updateArchiveComment(m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName, m_pCompressSettingPage->getComment())) {
             m_operationtype = Operation_Add_Comment;
@@ -2071,6 +2114,7 @@ void MainWindow::slotReceiveCurArchiveName(const QString &strArchiveName)
 
 void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 {
+    m_operationtype = Operation_TempExtract_Open;
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
     QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createUUID();  // 拼接临时路径
@@ -2078,7 +2122,6 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     m_pOpenFileWatcher->setCurOpenFile(strOpenFile);
     if (ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram)) {
         // 进入打开加载界面
-        m_operationtype = Operation_TempExtract_Open;
         m_pLoadingPage->setDes(tr("Loading, please wait..."));
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
@@ -2124,9 +2167,8 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
     }
 }
 
-void MainWindow::slotPause(Progress_Type eType)
+void MainWindow::slotPause()
 {
-    Q_UNUSED(eType)
     ArchiveManager::get_instance()->pauseOperation();
 }
 
@@ -2135,9 +2177,8 @@ void MainWindow::slotContinue()
     ArchiveManager::get_instance()->continueOperation();
 }
 
-void MainWindow::slotCancel(Progress_Type eType)
+void MainWindow::slotCancel()
 {
-    Q_UNUSED(eType)
     ArchiveManager::get_instance()->cancelOperation();
 }
 

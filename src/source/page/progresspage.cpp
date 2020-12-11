@@ -321,7 +321,7 @@ void ProgressPage::slotPauseClicked(bool bChecked)
     if (bChecked) {
         // 暂停操作
         m_pPauseContinueButton->setText(tr("Continue"));
-        emit signalPause(m_eType);
+        emit signalPause();
     } else {
         // 继续操作
         m_pPauseContinueButton->setText(tr("Pause"));
@@ -333,7 +333,7 @@ void ProgressPage::slotCancelClicked()
 {
     // 先暂停
     m_pPauseContinueButton->setText(tr("Continue"));
-    emit signalPause(m_eType);
+    emit signalPause();
 
     // 对话框文字描述
     QString strDesText;
@@ -354,7 +354,7 @@ void ProgressPage::slotCancelClicked()
     int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
     if (iResult == 1) {
         // 取消操作
-        emit signalCancel(m_eType);
+        emit signalCancel();
     } else {
         // 继续操作
         m_pPauseContinueButton->setText(tr("Pause"));

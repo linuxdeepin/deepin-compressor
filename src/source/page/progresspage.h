@@ -113,7 +113,7 @@ Q_SIGNALS:
      * @brief signalPause       暂停
      * @param eType             操作类型
      */
-    void signalPause(Progress_Type eType);
+    void signalPause();
 
     /**
      * @brief signalContinue    继续
@@ -124,7 +124,7 @@ Q_SIGNALS:
      * @brief signalCancel       取消
      * @param eType             操作类型
      */
-    void signalCancel(Progress_Type eType);
+    void signalCancel();
 
 private Q_SLOTS:
     /**

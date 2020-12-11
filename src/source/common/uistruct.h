@@ -57,15 +57,14 @@ enum Archive_OperationType {
     Operation_Create, // 创建压缩包
     Operation_Extract, // 解压
     Operation_SingleExtract, // 提取
-    //Operation_ExtractHere, // 解压到当前
-    //Operation_TempExtract, // 临时解压
     Operation_TempExtract_Open, // 打开
-    //Operation_TempExtract_Open_Choose, // 选择打开
     Operation_DRAG, // 拖拽
     Operation_CONVERT, // 格式转换
+    Operation_Add, // 追加
     Operation_DELETE, // 删除
     Operation_Update_Comment, // 更新压缩包注释
-    Operation_Add_Comment // 添加zip压缩包注释
+    Operation_Add_Comment, // 添加zip压缩包注释
+    Operation_UpdateData // 更新压缩包数据
 };
 
 // 压缩/解压列表的列号

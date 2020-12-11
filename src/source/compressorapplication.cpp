@@ -72,3 +72,13 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
     return DApplication::notify(watched, event);
 
 }
+
+void CompressorApplication::handleQuitAction()
+{
+    QWidget *pWgt = activeWindow();
+    MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
+
+    // 处理点击退出事件
+    if (pWindow)
+        pWindow->handleQuit();
+}
