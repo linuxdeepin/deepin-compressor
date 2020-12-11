@@ -51,8 +51,7 @@ bool LibarchivePlugin::list(bool /*isbatch*/)
 
     QFileInfo fInfo(filename());
     QString fileName = fInfo.fileName();
-    if (fileName.endsWith("tar.bz2") || fileName.endsWith("tar.lzma") || fileName.endsWith("tar.Z")) {
-        QString fileName = fInfo.fileName();
+    if (fileName.endsWith(".tar.bz2") || fileName.endsWith(".tar.lzma") || fileName.endsWith(".tar.Z")) {
         QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
         QString tempFileName = tempFilePath + QDir::separator() + fileName.left(fileName.size() - fInfo.suffix().size() - 1);
 

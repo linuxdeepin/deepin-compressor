@@ -386,8 +386,7 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
  */
 void Progress::setFilename(QString filename)
 {
-    QFileInfo fileinfo(filename);
-    setTypeImage(fileinfo.completeSuffix());
+    setTypeImage(filename);
 
     QString displayName = Utils::toShortString(filename); //文件名过长，中间用...代替
     m_filenamelabel->setText(displayName);
@@ -397,10 +396,10 @@ void Progress::setFilename(QString filename)
  * @brief Progress::setTypeImage 根据文件类型设置显示图片
  * @param type 文件类型
  */
-void Progress::setTypeImage(QString type)
+void Progress::setTypeImage(QString &filename)
 {
     QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo("temp." + type));
+    QIcon icon = provider.icon(QFileInfo(filename));
     m_pixmaplabel->setPixmap(icon.pixmap(128, 128));
 }
 

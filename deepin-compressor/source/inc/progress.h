@@ -72,7 +72,7 @@ public:
     Progress::ENUM_PROGRESS_TYPE getType();
     void setopentype(bool type);
     bool getOpenType();
-    void setTypeImage(QString type);
+    void setTypeImage(QString &filename);
     DPushButton *getCancelbutton();
 
     int showConfirmDialog();

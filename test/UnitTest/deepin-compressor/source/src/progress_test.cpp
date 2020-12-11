@@ -238,7 +238,8 @@ TEST(Progress_setFilename_UT, Progress_setFilename_UT001)
 TEST(Progress_setTypeImage_UT, Progress_setTypeImage_UT001)
 {
     Progress *progress = new Progress(nullptr);
-    progress->setTypeImage("rar");
+    QString str("1.rar");
+    progress->setTypeImage(str);
 }
 
 TEST(Progress_getCancelbutton_UT, Progress_getCancelbutton_UT001)
