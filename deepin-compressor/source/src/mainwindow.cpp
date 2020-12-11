@@ -632,6 +632,7 @@ QJsonObject MainWindow::creatShorcutJson()
 void MainWindow::InitConnection()
 {
     // connect the signals to the slot function.
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
     connect(m_pHomePage, &HomePage::fileSelected, this, &MainWindow::onSelected);
     connect(m_pCompressPage, &CompressPage::sigFilelistIsEmpty, this, &MainWindow::onCompressPageFilelistIsEmpty);
     connect(m_pCompressPage, &CompressPage::sigselectedFiles, this, &MainWindow::onSelected);
@@ -879,10 +880,10 @@ void MainWindow::initTitleBar()
     // 添加标题栏查看压缩文件注释按钮
     m_pTitleCommentButton = new DIconButton(this);
     m_pTitleCommentButton->setFixedSize(36, 36);
+    slotThemeChanged();
 
-    QIcon iconComment(":assets/icons/deepin/builtin/icons/information.svg");
-    m_pTitleCommentButton->setIcon(iconComment);
-    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+//    m_pTitleCommentButton->setIcon(m_commentIcon);
+//    m_pTitleCommentButton->setIconSize(QSize(15, 15));
 
     m_pTitleCommentButton->setVisible(false);
     m_pTitleCommentButton->setObjectName("CommentButton");
@@ -5584,6 +5585,21 @@ void MainWindow::slotReloadConvertArchive(QString path)
     QFileInfo fi(path);
     m_pUnCompressPage->SetDefaultFile(fi);
     loadArchive(path);
+}
+
+void MainWindow::slotThemeChanged()
+{
+    QIcon icon;
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        icon.addFile(":assets/icons/deepin/builtin/icons/information.svg");
+    } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        icon.addFile(":assets/icons/deepin/builtin/icons/information_dark.svg");
+    } else {
+        icon.addFile(":assets/icons/deepin/builtin/icons/information.svg");
+    }
+
+    m_pTitleCommentButton->setIcon(icon);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
 }
 
 void MainWindow::deleteLaterJob()

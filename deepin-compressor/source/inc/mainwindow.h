@@ -819,6 +819,11 @@ private slots:
      */
     void slotReloadConvertArchive(QString path);
 
+    /**
+     * @brief slotThemeChanged 主题改变
+     */
+    void slotThemeChanged();
+
 public:
     static int m_windowcount;                               // 窗口数目
     OpenInfo::ENUM_OPTION m_eOption = OpenInfo::OPEN;       // 窗口打开标志

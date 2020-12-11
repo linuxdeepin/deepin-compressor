@@ -52,7 +52,7 @@ signals:
      */
     void fileSelected(const QStringList files) const;
 
-public slots:
+private slots:
     /**
      * @brief themeChanged 主题改变
      */
