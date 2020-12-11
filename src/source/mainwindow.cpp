@@ -178,9 +178,11 @@ void MainWindow::initTitleBar()
     // 左上角注释信息
     m_pTitleCommentButton = new DIconButton(this);
     m_pTitleCommentButton->setFixedSize(36, 36);
-    QIcon commentIcon(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    m_pTitleCommentButton->setIcon(commentIcon);
-    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+    slotThemeChanged();
+
+//    m_pTitleCommentButton->setIcon(commentIcon);
+//    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+
     m_pTitleCommentButton->setVisible(false);
     m_pTitleCommentButton->setObjectName("CommentButton");
     m_pTitleCommentButton->setAccessibleName("Comment_btn");
@@ -220,6 +222,7 @@ void MainWindow::initData()
 
 void MainWindow::initConnections()
 {
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
     connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotTitleBtnClicked);
     connect(m_pTitleCommentButton, &DPushButton::clicked, this, &MainWindow::slotTitleCommentButtonPressed);
     connect(m_pHomePage, &HomePage::signalFileChoose, this, &MainWindow::slotChoosefiles);
@@ -2427,4 +2430,20 @@ void MainWindow::slotTitleCommentButtonPressed()
             updateArchiveComment();
         }
     }
+}
+
+void MainWindow::slotThemeChanged()
+{
+    QIcon icon;
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if (themeType == DGuiApplicationHelper::LightType) {    // 浅色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    } else if (themeType == DGuiApplicationHelper::DarkType) {  // 深色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
+    } else {        // 其它默认
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    }
+
+    m_pTitleCommentButton->setIcon(icon);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
 }

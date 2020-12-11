@@ -439,6 +439,11 @@ private Q_SLOTS:
      */
     void slotTitleCommentButtonPressed();
 
+    /**
+     * @brief slotThemeChanged 系统主题变化
+     */
+    void slotThemeChanged();
+
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
