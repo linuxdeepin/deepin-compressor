@@ -484,6 +484,11 @@ void ConvertJob::doContinue()
     }
 }
 
+bool ConvertJob::doKill()
+{
+    return m_pIface->doKill();
+}
+
 void ConvertJob::slotHandleSingleJobProgress(double dPercentage)
 {
     if (m_workType == WT_Extract) { // 解压进度

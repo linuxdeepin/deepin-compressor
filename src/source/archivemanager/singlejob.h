@@ -293,6 +293,11 @@ public:
      */
     void doContinue() override;
 
+    /**
+     * @brief doKill  强行结束job
+     */
+    bool doKill() override;
+
 private Q_SLOTS:
     /**
      * @brief slotHandleSingleJobProgress       处理单个压缩包解压进度

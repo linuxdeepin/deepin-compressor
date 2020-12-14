@@ -436,6 +436,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         showErrorMessage(EI_ArchiveMissingVolume);
         return;
     }
+
     m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bMultiplePassword = (mimeType.name() == "application/zip") ? true : false;
     m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
@@ -471,7 +472,6 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         // 无可用插件
         showErrorMessage(EI_NoPlugin);
     }
-
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -1117,7 +1117,6 @@ void MainWindow::slotCompress(const QVariant &val)
 void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
     qDebug() << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
-    m_operationtype = Operation_NULL;   // 重置操作类型
 
     switch (eFinishType) {
     case PFT_Nomral:
@@ -1132,7 +1131,8 @@ void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType e
         handleJobErrorFinished(eJobType, eErrorType);   // 处理job错误结束
         break;
     }
-
+  
+    m_operationtype = Operation_NULL;   // 重置操作类型
     refreshPage();
 
     PERF_PRINT_END("POINT-03");
@@ -1853,6 +1853,8 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
 
 void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
 {
+    m_pSuccessPage->setSuccessType(eSuccessInfo);
+
     switch (eSuccessInfo) {
     // 压缩成功
     case SI_Compress:
@@ -1988,7 +1990,7 @@ void MainWindow::setDefaultApp(QString mimetype, QString desktop)
     p.start(command3.arg(desktop).arg("application/" + mimetype)); // 设置默认打开方式
     p.waitForFinished();
 }
-// listFiles无用，格式转换不保存对之前压缩文件的修改
+
 void MainWindow::convertArchive(QString convertType)
 {
     qDebug() << "对压缩包进行格式转换" << convertType;
@@ -2006,7 +2008,7 @@ void MainWindow::convertArchive(QString convertType)
         num++;
     }
 
-    m_stUnCompressParameter.strFullPath = newArchivePath;
+    m_strFinalConvertFile = newArchivePath;  // 记录格式转换后的文件名，在转换成功之后打开文件使用
 
     // 创建格式转换的job
     if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createUUID(), newArchivePath)) {
@@ -2192,8 +2194,8 @@ void MainWindow::slotAddFiles(const QStringList &listFiles, const QString &strPa
 
 void MainWindow::slotSuccessView()
 {
-    if (Operation_CONVERT == m_operationtype) { // 格式转换点击查看文件重新加载转换后的压缩文件
-        loadArchive(m_stUnCompressParameter.strFullPath);
+    if (m_pSuccessPage->getSuccessType() == SI_Convert) { // 格式转换点击查看文件重新加载转换后的压缩文件
+        loadArchive(m_strFinalConvertFile);
     } else {
         // 若文件服务线程不为空，查看相应的文件
         if (m_pDDesktopServicesThread)

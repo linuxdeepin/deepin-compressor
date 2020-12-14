@@ -22,6 +22,8 @@
 #ifndef SUCCESSPAGE_H
 #define SUCCESSPAGE_H
 
+#include "uistruct.h"
+
 #include <DWidget>
 #include <DLabel>
 
@@ -49,6 +51,18 @@ public:
      * @param strDes    描述内容
      */
     void setSuccessDes(const QString &strDes);
+
+    /**
+     * @brief setSuccessType 设置成功界面类型
+     * @param successInfo
+     */
+    void setSuccessType(SuccessInfo successInfo);
+
+    /**
+     * @brief getSuccessType 获取成功界面类型
+     * @return
+     */
+    SuccessInfo getSuccessType();
 
 private:
     /**
@@ -82,6 +96,7 @@ private:
     CustomPushButton *m_pShowFileBtn; // 查看文件按钮
     CustomCommandLinkButton *m_pReturnBtn; // 返回按钮
     QString m_strFullPath;  // 压缩地址
+    SuccessInfo m_successInfoType = SI_Compress; // 成功界面类型
 };
 
 #endif //SUCCESSPAGE_H

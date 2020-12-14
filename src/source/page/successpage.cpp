@@ -50,6 +50,16 @@ void SuccessPage::setSuccessDes(const QString &strDes)
     m_pSuccessLbl->setText(strDes);
 }
 
+void SuccessPage::setSuccessType(SuccessInfo successInfo)
+{
+    m_successInfoType = successInfo;
+}
+
+SuccessInfo SuccessPage::getSuccessType()
+{
+    return m_successInfoType;
+}
+
 void SuccessPage::initUI()
 {
     //成功图标
@@ -77,14 +87,17 @@ void SuccessPage::initUI()
     mainlayout->addWidget(m_pSuccessPixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_pSuccessLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
+
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
     commandLinkButtonLayout->addStretch();
     commandLinkButtonLayout->addWidget(m_pReturnBtn);
     commandLinkButtonLayout->addStretch();
+
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;
     buttonHBoxLayout->addStretch(1);
     buttonHBoxLayout->addWidget(m_pShowFileBtn, 2);
     buttonHBoxLayout->addStretch(1);
+
     mainlayout->addLayout(buttonHBoxLayout);
     mainlayout->addLayout(commandLinkButtonLayout);
     mainlayout->setContentsMargins(12, 6, 20, 20);

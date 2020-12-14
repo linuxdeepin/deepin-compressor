@@ -496,6 +496,7 @@ private:
     bool m_isFirstViewComment = true;
 
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
+    QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
 
     // 适配arm平台
 #ifdef __aarch64__
