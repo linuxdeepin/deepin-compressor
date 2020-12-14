@@ -586,8 +586,8 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
     widget->setLayout(mainlayout);
     dialog.addContent(widget);
 
-    dialog.addButton(QObject::tr("Cancel"));
-    dialog.addButton(QObject::tr("OK"));
+    dialog.addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
+    dialog.addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
 
     int iMode = dialog.exec();
 

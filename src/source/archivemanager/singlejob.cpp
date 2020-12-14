@@ -113,7 +113,6 @@ void SingleJob::slotFinished(PluginFinishType eType)
     m_eErrorType = m_pInterface->errorType();
 
     emit signalJobFinshed();
-
 }
 
 // 加载操作
@@ -536,7 +535,7 @@ void ConvertJob::slotHandleExtractFinished()
                 m_pCreateJob = new CreateJob(listEntry, pIface, options);
                 connect(m_pCreateJob, &CreateJob::signalprogress, this, &ConvertJob::slotHandleSingleJobProgress);
                 connect(m_pCreateJob, &CreateJob::signalCurFileName, this, &ConvertJob::slotHandleSingleJobCurFileName);
-                connect(m_pCreateJob, &CreateJob::signalJobFinshed, this, &CreateJob::signalJobFinshed);
+                connect(m_pCreateJob, &CreateJob::signalJobFinshed, this, &ConvertJob::signalJobFinshed);
 
                 m_pCreateJob->doWork();
             }
@@ -545,6 +544,7 @@ void ConvertJob::slotHandleExtractFinished()
         // 用户取消之后，不进行压缩
         case PFT_Cancel: {
             qDebug() << "取消格式转换";
+            emit signalJobFinshed();
         }
         break;
         // 出现错误的情况，提示用户

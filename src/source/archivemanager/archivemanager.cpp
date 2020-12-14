@@ -170,7 +170,6 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
         connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
-
         m_pArchiveJob = pExtractJob;
         pExtractJob->start();
 
@@ -318,9 +317,10 @@ bool ArchiveManager::convertArchive(const QString strOriginalArchiveFullPath, co
     m_pArchiveJob = pConvertJob;
 
     // 连接槽函数
-    connect(pConvertJob, &AddJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-    connect(pConvertJob, &AddJob::signalprogress, this, &ArchiveManager::signalprogress);
-    connect(pConvertJob, &AddJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pConvertJob, &ConvertJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+    connect(pConvertJob, &ConvertJob::signalprogress, this, &ArchiveManager::signalprogress);
+    connect(pConvertJob, &ConvertJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+    connect(pConvertJob, &ConvertJob::signalQuery, this, &ArchiveManager::signalQuery);
 
     pConvertJob->start();
     return true;

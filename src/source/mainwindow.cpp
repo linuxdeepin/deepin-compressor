@@ -2006,6 +2006,8 @@ void MainWindow::convertArchive(QString convertType)
         num++;
     }
 
+    m_stUnCompressParameter.strFullPath = newArchivePath;
+
     // 创建格式转换的job
     if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createUUID(), newArchivePath)) {
         m_pProgressPage->setProgressType(PT_Convert);
@@ -2190,9 +2192,13 @@ void MainWindow::slotAddFiles(const QStringList &listFiles, const QString &strPa
 
 void MainWindow::slotSuccessView()
 {
-    // 若文件服务线程不为空，查看相应的文件
-    if (m_pDDesktopServicesThread)
-        m_pDDesktopServicesThread->start();
+    if (Operation_CONVERT == m_operationtype) { // 格式转换点击查看文件重新加载转换后的压缩文件
+        loadArchive(m_stUnCompressParameter.strFullPath);
+    } else {
+        // 若文件服务线程不为空，查看相应的文件
+        if (m_pDDesktopServicesThread)
+            m_pDDesktopServicesThread->start();
+    }
 }
 
 void MainWindow::slotSuccessReturn()

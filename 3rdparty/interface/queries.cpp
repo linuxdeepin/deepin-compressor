@@ -336,8 +336,8 @@ void PasswordNeededQuery::execute()
     passwordedit->setFocusPolicy(Qt::StrongFocus);
     passwordedit->setFixedWidth(280);
 
-    dialog->addButton(QObject::tr("Cancel"));
-    dialog->addButton(QObject::tr("OK"));
+    dialog->addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
+    dialog->addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
     dialog->getButton(1)->setEnabled(false);
     //确保输入的密码不为空
     connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [&]() {
