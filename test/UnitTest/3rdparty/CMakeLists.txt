@@ -1,0 +1,20 @@
+#1.定义cmake版本
+cmake_minimum_required(VERSION 3.9.5)
+#2.设置项目名称
+set(EXE_NAME 3rdparty)
+project(${EXE_NAME}_test)
+
+ADD_COMPILE_OPTIONS(-fno-access-control)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+
+add_subdirectory(cli7zplugin)
+
+add_subdirectory(clirarplugin)
+
+add_subdirectory(interface)
+
+add_subdirectory(libarchive)
+
+add_subdirectory(libminizipplugin)
+
+add_subdirectory(libzipplugin)

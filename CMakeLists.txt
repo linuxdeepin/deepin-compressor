@@ -54,9 +54,16 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
 execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
                     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
-add_subdirectory(3rdparty) 
+add_subdirectory(3rdparty)
 
 add_subdirectory(src)
+
+option(USE_TEST "UT" ON)
+if (USE_TEST)
+    if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+        add_subdirectory(test)
+    endif()
+endif(USE_TEST)
 
 set(CMAKE_INSTALL_PREFIX /usr)
 

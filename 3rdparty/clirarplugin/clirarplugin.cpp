@@ -1,14 +1,15 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+* ark -- archiver for the KDE project
 *
-* Author:     gaoxiang <gaoxiang@uniontech.com>
+* Copyright (C) 2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+* Copyright (C) 2010-2011,2014 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+* Copyright (C) 2015-2016 Ragnar Thomsen <rthomsen6@gmail.com>
+* Copyright (c) 2016 Vladyslav Batyrenko <mvlabat@gmail.com>
 *
-* Maintainer: gaoxiang <gaoxiang@uniontech.com>
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +17,11 @@
 * GNU General Public License for more details.
 *
 * You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*
 */
+
 #include "clirarplugin.h"
 #include "datamanager.h"
 
