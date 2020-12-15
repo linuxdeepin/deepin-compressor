@@ -337,9 +337,17 @@ void OpenJob::slotFinished(PluginFinishType eType)
     SingleJob::slotFinished(eType);
 
     if (eType == PFT_Nomral) {
+        QString name = m_stEntry.strFileName;
+        if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
+            name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;
+            if (!QFile::link(m_stEntry.strFileName, name)) { // 创建链接
+                return;
+            }
+        }
+
         KProcess *cmdprocess = new KProcess;
         QStringList arguments;
-        arguments << m_strTempExtractPath + QDir::separator() + m_stEntry.strFileName;
+        arguments << name;
         QString programPath = OpenWithDialog::getProgramPathByExec(m_strProgram);
         cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
         cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
@@ -348,7 +356,6 @@ void OpenJob::slotFinished(PluginFinishType eType)
         cmdprocess->waitForFinished();
         delete  cmdprocess;
     }
-
 }
 
 UpdateJob::UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent)

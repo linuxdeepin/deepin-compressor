@@ -340,7 +340,7 @@ private Q_SLOTS:
      * @param eFinishType           结束类型
      * @param eErrorType            错误类型
      */
-    void slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType);
+    void slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType);
 
     /**
      * @brief slotUncompressClicked     解压按钮点击，执行解压操作

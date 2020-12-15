@@ -81,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
     initData();
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
-
 }
 
 MainWindow::~MainWindow()
@@ -243,7 +242,7 @@ void MainWindow::initConnections()
     connect(m_pFailurePage, &FailurePage::sigFailRetry, this, &MainWindow::slotFailureRetry);
     connect(m_pFailurePage, &FailurePage::sigBackButtonClickedOnFail, this, &MainWindow::slotFailureReturn);
 
-    connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinshed);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinished);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
@@ -251,7 +250,6 @@ void MainWindow::initConnections()
 
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
 }
-
 
 void MainWindow::refreshPage()
 {
@@ -502,6 +500,10 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 dialog.showDialog(strTips, tr("OK"), DDialog::ButtonNormal);
 
                 m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
+
+                resetMainwindow();
+                m_ePageID = PI_Home;
+                refreshPage();
             }
         }
     }
@@ -589,6 +591,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
     if (!m_pUnCompressPage || !m_pCompressPage /*|| !m_pCompressSetting*/) {
         return false;
     }
+
     int keyOfEvent = evt->key();
     if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
         DWindowCloseButton *closebtn = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
@@ -723,6 +726,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             return true;
         }
     }
+
     return false;
 }
 
@@ -785,6 +789,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             if (!strAutoPath.isEmpty()) {
                 options.strTargetPath += QDir::separator() + strAutoPath;
             }
+
             m_stUnCompressParameter.strExtractPath = options.strTargetPath; // 解压路径
             m_stUnCompressParameter.strFullPath = filepath;     // 压缩包全路径
 
@@ -859,7 +864,6 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             // 无可用插件
             showErrorMessage(EI_NoPlugin);
         }
-
     } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
         m_stUnCompressParameter.bRightOperation = true;
@@ -916,7 +920,6 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
                 // 无可用插件
                 showErrorMessage(EI_NoPlugin);
             }
-
         } else {
             // 可能分卷文件缺失，所以解压到当前文件夹失败
             m_ePageID = PI_Failure;
@@ -1114,7 +1117,7 @@ void MainWindow::slotCompress(const QVariant &val)
     }
 }
 
-void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
+void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType)
 {
     qDebug() << "操作类型：" << eJobType << "****结束类型：" << eFinishType << "****错误类型" << eErrorType;
 
@@ -1131,7 +1134,7 @@ void MainWindow::slotJobFinshed(ArchiveJob::JobType eJobType, PluginFinishType e
         handleJobErrorFinished(eJobType, eErrorType);   // 处理job错误结束
         break;
     }
-  
+
     m_operationtype = Operation_NULL;   // 重置操作类型
     refreshPage();
 
@@ -1430,7 +1433,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 打开
     case ArchiveJob::JT_Open: {
         qDebug() << "打开结束";
-
         // 若压缩包文件可更改，打开文件之后对文件进行监控
         // 非分卷的rar可以进行格式转换
         if ((m_stUnCompressParameter.bModifiable) ||
@@ -1463,7 +1465,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         if (Operation_Update_Comment == m_operationtype) {
             qDebug() << "更新注释结束";
             m_commentProgressDialog->setFinished();
-        } else if (Operation_Add_Comment == m_operationtype) {
+        } else { /* if (Operation_Add_Comment == m_operationtype)*/ // creatjob结束的时候工作类型已经置为Operation_NULL
             qDebug() << "添加zip注释结束";
             m_ePageID = PI_Success;
             showSuccessInfo(SI_Compress);   // 显示压缩成功
@@ -1611,7 +1613,6 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
         }
-
     }
     break;
     // 删除错误
@@ -1700,6 +1701,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
         if (!QFileInfo(strFile).isDir()) {
             stFileEntry.qSize = QFileInfo(strFile).size(); // 原文件大小，供libarchive追加进度使用
         }
+
         listEntry.push_back(stFileEntry);
     }
 

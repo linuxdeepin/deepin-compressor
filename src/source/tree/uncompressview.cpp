@@ -271,6 +271,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
                 m_mapShowEntry.remove(tmp);
             }
         }
+
         m_mapShowEntry[m_strCurrentPath] = getCurPathFiles();
 
         // 刷新列表数据
@@ -505,7 +506,6 @@ void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64
 
     auto iter = stArchiveData.mapFileEntry.find(strFullPath);
     for (; iter != stArchiveData.mapFileEntry.end() ;) {
-
         if (!iter.key().startsWith(strFullPath)) {
             break;
         } else {
@@ -673,7 +673,6 @@ void UnCompressView::slotExtract()
         m_strSelUnCompressPath = listUrl.at(0).toLocalFile();
         extract2Path(m_strSelUnCompressPath);
     }
-
 }
 
 void UnCompressView::slotExtract2Here()
@@ -685,7 +684,7 @@ void UnCompressView::slotDeleteFile()
 {
     // 询问删除对话框
     SimpleQueryDialog dialog(this);
-    int iResult = dialog.showDialog("Do you want to delete the selected file(s)?", tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+    int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
     if (iResult == 1) {
         // 删除压缩包数据
         QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据
@@ -722,7 +721,6 @@ void UnCompressView::slotOpen()
             // 文件 解压再用默认应用程序打开
             emit signalOpenFile(entry);
         }
-
     }
 }
 
