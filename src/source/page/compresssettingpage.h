@@ -90,6 +90,14 @@ public:
      */
     QString getComment() const;
 
+    /**
+     * @brief eventFilter 事件过滤，处理键盘事件等
+     * @param watched
+     * @param event
+     * @return
+     */
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
     /**
      * @brief initUI    初始化界面

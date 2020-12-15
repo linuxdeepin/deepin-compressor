@@ -568,10 +568,7 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
     Q_UNUSED(e)
 
     // 设置菜单弹出位置
-    QPoint pos;
-    pos.setX(window()->x() + m_pTypePixmapLbl->x() + 60);
-    pos.setY(window()->y() + m_pTypePixmapLbl->y() + 240);
-    m_pTypeMenu->popup(pos);
+    m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(m_pCompressTypeLbl->pos()));
 }
 
 void CompressSettingPage::slotTypeChanged(QAction *action)
@@ -751,6 +748,27 @@ QString CompressSettingPage::getComment() const
         return m_pCommentEdt->isEnabled() ? m_pCommentEdt->toPlainText() : QString("");
     } else {
         return QString("");
+    }
+}
+
+bool CompressSettingPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_pClickLbl) {
+        if (QEvent::KeyPress == event->type()) {
+            QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
+            if (Qt::Key_Enter == keyEvent->key() || Qt::Key_Return == keyEvent->key()) { //响应"回车键"
+                m_pTypeMenu->popup(m_pCompressTypeLbl->mapToGlobal(m_pCompressTypeLbl->pos())); // 设置菜单弹出位置
+                m_pTypeMenu->setFocus(); // 切换焦点
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        // pass the event on to the parent class
+        return DWidget::eventFilter(watched, event);
     }
 }
 

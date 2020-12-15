@@ -568,7 +568,8 @@ PluginFinishType LibarchivePlugin::list_New()
     struct archive_entry *aentry;
     int result = ARCHIVE_RETRY;
 
-    while (!QThread::currentThread()->isInterruptionRequested() && (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
+    while (!QThread::currentThread()->isInterruptionRequested() &&
+            (result = archive_read_next_header(m_archiveReader.data(), &aentry)) == ARCHIVE_OK) {
 //        if (!m_emitNoEntries) {
         emitEntryForIndex(aentry);
 //        m_listIndex++;
@@ -584,7 +585,7 @@ PluginFinishType LibarchivePlugin::list_New()
     // 恢复原压缩包名，如果不恢复，tar.bz2、tar.lzma、tar.Z对tmpFilleName处理
     m_strArchiveName = m_strOldArchiveName;
 
-    if (result != ARCHIVE_EOF) {
+    if (result != ARCHIVE_EOF && result != ARCHIVE_WARN) {
         return PFT_Error;
     }
 
