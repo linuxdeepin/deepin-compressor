@@ -4,6 +4,9 @@
 //#define private public
 #include <gtest/gtest.h>
 #include "archivemodel.h"
+#include "kpluginloader.h"
+#include "pluginmanager.h"
+
 #include <gtest/src/stub.h>
 #include <iostream>
 #include <QList>
@@ -93,12 +96,37 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT005)
     delete entry;
     delete model;
 }
+
+void loadPlugins_stub(void *obj)
+{
+    PluginManager *o = (PluginManager *)obj;
+
+    QCoreApplication::addLibraryPath("../output/");
+    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("compressor-lib/"));
+    QSet<QString> addedPlugins;
+    for (const KPluginMetaData &metaData : plugins) {
+        const auto pluginId = metaData.pluginId();
+        // Filter out duplicate plugins.
+        if (addedPlugins.contains(pluginId)) {
+            continue;
+        }
+
+        Plugin *plugin = new Plugin(o, metaData);
+        plugin->setEnabled(true);
+        addedPlugins << pluginId;
+        o->m_plugins << plugin;
+    }
+}
+
 // 1. Qt::DisplayRole分支
 // 2. Size 分支 119行
 TEST(ArchiveModel_data_UT, ArchiveModel_data_UT006)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = true;
@@ -125,6 +153,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT007)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -149,6 +180,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT008)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
@@ -175,6 +209,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT009)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
@@ -203,6 +240,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT010)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -229,6 +269,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT011)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
@@ -257,6 +300,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT012)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -284,6 +330,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT013)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -309,6 +358,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT014)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
@@ -336,6 +388,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT015)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -362,6 +417,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT016)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
 
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -387,6 +445,9 @@ TEST(ArchiveModel_data_UT, ArchiveModel_data_UT017)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *entry = new Archive::Entry();
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
 
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
@@ -882,6 +943,10 @@ TEST(ArchiveMohandel_dropMimeData_UT, ArchiveModel_dropMimeData_UT001)
     QObject *parent = new QObject;
     QString path;
     QString mimeType;
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     Archive *temp = Archive::createEmpty(path, mimeType, parent);
 
     model->m_archive.reset(temp);
@@ -905,6 +970,10 @@ TEST(ArchivehandeMol_dropMimeData_UT, ArchiveModel_dropMimeData_UT002)
     QObject *parent = new QObject;
     QString path;
     QString mimeType;
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
     Archive *temp = Archive::createEmpty(path, mimeType, parent);
     temp->m_encryptionType = Archive::HeaderEncrypted;
     temp->m_iface->m_password = "adsf";
@@ -1084,8 +1153,6 @@ TEST(ArchivehandeMol_slotEntryRemoved_UT, ArchiveModel_slotEntryRemoved_UT002)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *rootEntry = new Archive::Entry;
-    // Stub *stub = new Stub;
-    // stub->set(ADDR(Archive::Entry, findByPath), getEntry_slotEntryRemoved);
     rootEntry->setFullPath("/");
     rootEntry->setIsDirectory(true);
     Archive::Entry *SubEntry = new Archive::Entry(rootEntry);
@@ -1096,6 +1163,9 @@ TEST(ArchivehandeMol_slotEntryRemoved_UT, ArchiveModel_slotEntryRemoved_UT002)
     rootEntry->appendEntry(SubEntry);
 
     model->m_rootEntry.reset(rootEntry);
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     model->setPlugin(interface);
@@ -1148,6 +1218,8 @@ TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT003)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *rootEntry = new Archive::Entry;
     Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
     ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
     interface->m_bAllEntry = false;
     subEntry->setFullPath("./");
@@ -1157,41 +1229,49 @@ TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT003)
     delete interface;
     delete model;
 }
-//TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT004)
-//{
-//    ArchiveModel *model = new ArchiveModel(nullptr);
-//    Archive::Entry *rootEntry = new Archive::Entry;
-//    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
-//    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
-//    interface->m_bAllEntry = false;
-//    subEntry->setFullPath("./home");
-//    subEntry->setIsDirectory(true);
-//    model->setPlugin(interface);
-//    model->slotAddEntry(subEntry);
-//    delete rootEntry;
-//    delete interface;
-//    delete model;
-//}
-// 测试如果总数据中存在了该节点，需要跳过
-//TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT005)
-//{
-//    ArchiveModel *model = new ArchiveModel(nullptr);
-//    Archive::Entry *rootEntry = new Archive::Entry;
-//    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT004)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
 
-//    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
-//    interface->m_bAllEntry = false;
-//    subEntry->setFullPath("./home");
-//    subEntry->setIsDirectory(true);
-//    model->setPlugin(interface);
-//    model->slotAddEntry(subEntry);
-//    model->slotAddEntry(subEntry);
-//    delete subEntry;
-//    delete rootEntry;
-//    delete interface;
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./home");
+    subEntry->setIsDirectory(true);
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    delete rootEntry;
+    delete interface;
+//    delete model;
+}
+
+//测试如果总数据中存在了该节点，需要跳过
+TEST(ArchivehandeMol_slotAddEntry_UT, ArchiveModel_slotAddEntry_UT005)
+{
+    ArchiveModel *model = new ArchiveModel(nullptr);
+    Archive::Entry *rootEntry = new Archive::Entry;
+    Archive::Entry *subEntry = new Archive::Entry(rootEntry);
+
+    Stub stub;
+    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+
+    ReadOnlyArchiveInterface *interface = Archive::createInterface("", "7z");
+    interface->m_bAllEntry = false;
+    subEntry->setFullPath("./home");
+    subEntry->setIsDirectory(true);
+    model->setPlugin(interface);
+    model->slotAddEntry(subEntry);
+    model->slotAddEntry(subEntry);
+    delete subEntry;
+    delete rootEntry;
+    delete interface;
 
 //    delete model;
-//}
+}
 static int ifind_slotAddEntry = 0;
 Archive::Entry *find_slotAddEntry()
 {
@@ -1335,7 +1415,7 @@ TEST(ArchivehandeMol_reset_UT, ArchiveModel_reset_UT001)
 TEST(ArchivehandeMol_createEmptyArchive_UT, ArchiveModel_createEmptyArchive_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
- //   model->createEmptyArchive("", "7z", nullptr);
+//   model->createEmptyArchive("", "7z", nullptr);
     delete model;
 }
 
@@ -1351,8 +1431,8 @@ TEST(ArchivehandeMol_extractFile_UT, ArchiveModel_extractFile_UT001)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *file = new Archive::Entry();
     ExtractionOptions option;
-   // model->createEmptyArchive("", "7z", nullptr);
-  //  model->extractFile(file, "/home", option);
+    // model->createEmptyArchive("", "7z", nullptr);
+    //  model->extractFile(file, "/home", option);
     delete file;
     delete model;
 }
@@ -1360,13 +1440,13 @@ TEST(ArchivehandeMol_extractFile_UT, ArchiveModel_extractFile_UT001)
 TEST(ArchivehandeMol_extractFiles_UT, ArchiveModel_extractFiles_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
-   // model->loadArchive("asdf","7z",nullptr);
+    // model->loadArchive("asdf","7z",nullptr);
     Archive::Entry *file = new Archive::Entry();
     ExtractionOptions option;
-  //  model->createEmptyArchive("", "7z", nullptr);
+    //  model->createEmptyArchive("", "7z", nullptr);
 
     //model->archive()->encrypt("asd", Archive::Encrypted);
-   // model->extractFile(file, "/home", option);
+    // model->extractFile(file, "/home", option);
     delete file;
     delete model;
 }
@@ -1376,8 +1456,8 @@ TEST(ArchivehandeMol_preview_UT, ArchiveModel_preview_UT001)
     ArchiveModel *model = new ArchiveModel(nullptr);
     Archive::Entry *file = new Archive::Entry();
     ExtractionOptions option;
-   // model->createEmptyArchive("", "7z", nullptr);
-   // model->preview(file);
+    // model->createEmptyArchive("", "7z", nullptr);
+    // model->preview(file);
     delete file;
     delete model;
 }
@@ -1388,7 +1468,7 @@ TEST(ArchivehandeMol_open_UT, ArchiveModel_open_UT001)
     Archive::Entry *file = new Archive::Entry();
     ExtractionOptions option;
     //model->createEmptyArchive("", "7z", nullptr);
-   // model->open(file);
+    // model->open(file);
     delete file;
     delete model;
 }
@@ -1399,7 +1479,7 @@ TEST(ArchivehandeMol_openWith_UT, ArchiveModel_openWith_UT001)
     Archive::Entry *file = new Archive::Entry();
     ExtractionOptions option;
     //model->createEmptyArchive("", "7z", nullptr);
-   // model->open(file);
+    // model->open(file);
     delete file;
     delete model;
 }
@@ -1418,7 +1498,7 @@ TEST(ArchivehandeMol_addFiles_UT, ArchiveModel_addFiles_UT001)
 TEST(ArchivehandeMol_countEntriesAndSize_UT, ArchiveModel_countEntriesAndSize_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
-  //  model->countEntriesAndSize();
+    //  model->countEntriesAndSize();
     delete model;
 }
 
@@ -1437,7 +1517,7 @@ TEST(ArchivehandeMol_setPlugin_UT, ArchiveModel_setPlugin_UT001)
 TEST(ArchivehandeMol_numberOfFiles_UT, ArchiveModel_numberOfFiles_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
-  //  model->numberOfFiles();
+    //  model->numberOfFiles();
     delete model;
 }
 
@@ -1451,7 +1531,7 @@ TEST(ArchivehandeMol_numberOfFolders_UT, ArchiveModel_numberOfFolders_UT001)
 TEST(ArchivehandeMol_uncompressedSize_UT, ArchiveModel_uncompressedSize_UT001)
 {
     ArchiveModel *model = new ArchiveModel(nullptr);
- //   model->uncompressedSize();
+//   model->uncompressedSize();
     delete model;
 }
 

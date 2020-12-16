@@ -71,7 +71,10 @@ add_subdirectory(deepin-compressor)
 
 option(USE_TEST "UT" ON)
 if (USE_TEST)
-    add_subdirectory(test)
+    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+        message(STATUS "this system is x86_64, add ut_test\n")
+        add_subdirectory(test)
+    endif()
 endif(USE_TEST)
 
 set(CMAKE_INSTALL_PREFIX /usr)
