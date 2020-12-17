@@ -528,12 +528,11 @@ void LibarchivePlugin::copyDataFromSource_ArchiveEntry(archive *source, archive 
     auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
 
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
-        //         TODO:提取暂停，暂时不支持
-        //        if (m_isPause) {
-        //            sleep(1);
-        //            qDebug() << "pause";
-        //            continue;
-        //        }
+        if (m_bPause) { //提取暂停
+            sleep(1);
+//            qDebug() << "pause";
+            continue;
+        }
 
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {

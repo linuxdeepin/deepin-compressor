@@ -30,22 +30,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-class ExtractPauseDialog: public Dtk::Widget::DDialog
-{
-    Q_OBJECT
-//public:
-    explicit ExtractPauseDialog(QWidget *parent = nullptr);
-//    void initUI();
-//    void initConnect();
-
-//public slots:
-//    void clickedSlot(int index, const QString &text);
-//    void closeEvent(QCloseEvent *event) override;
-
-//signals:
-//    void sigbuttonpress(int index);
-};
-
 class ProgressDialog: public DAbstractDialog
 {
     Q_OBJECT
@@ -63,10 +47,24 @@ public:
 protected:
     void closeEvent(QCloseEvent *) override;
 
-signals:
+Q_SIGNALS:
     void stopExtract();
     void extractSuccess(QString msg);
     void sigResetPercentAndTime();
+    /**
+     * @brief signalPause 暂停信号
+     */
+    void signalPause();
+
+    /**
+     * @brief signalContinue    继续信号
+     */
+    void signalContinue();
+
+    /**
+     * @brief signalCancel       取消信号
+     */
+    void signalCancel();
 
 public slots:
     void slotextractpress(int index);
@@ -79,9 +77,6 @@ private:
     DLabel *m_tasklable;
     DLabel *m_filelable;
     DProgressBar *m_circleprogress;
-
-public:
-//    ExtractPauseDialog *m_extractdialog;
 
 private:
     DTitlebar *m_titlebar;

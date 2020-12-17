@@ -361,9 +361,12 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
         }
 
         while (sum != file_info.uncompressed_size) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
             if (m_bPause) { //解压暂停
                 sleep(1);
-                qDebug() << "pause";
+//                qDebug() << "pause";
                 continue;
             }
 

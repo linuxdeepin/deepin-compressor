@@ -237,6 +237,9 @@ void MainWindow::initConnections()
     connect(m_pProgressPage, &ProgressPage::signalPause, this, &MainWindow::slotPause);
     connect(m_pProgressPage, &ProgressPage::signalContinue, this, &MainWindow::slotContinue);
     connect(m_pProgressPage, &ProgressPage::signalCancel, this, &MainWindow::slotCancel);
+    connect(m_pProgressdialog, &ProgressDialog::signalPause, this, &MainWindow::slotPause);
+    connect(m_pProgressdialog, &ProgressDialog::signalContinue, this, &MainWindow::slotContinue);
+    connect(m_pProgressdialog, &ProgressDialog::signalCancel, this, &MainWindow::slotCancel);
     connect(m_pSuccessPage, &SuccessPage::sigBackButtonClicked, this, &MainWindow::slotSuccessReturn);
     connect(m_pSuccessPage, &SuccessPage::signalViewFile, this, &MainWindow::slotSuccessView);
     connect(m_pFailurePage, &FailurePage::sigFailRetry, this, &MainWindow::slotFailureRetry);

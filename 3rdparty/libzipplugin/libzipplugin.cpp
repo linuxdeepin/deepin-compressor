@@ -786,10 +786,12 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             dScale = double(statBuffer.comp_size) / statBuffer.size;
         }
         while (sum != zip_int64_t(statBuffer.size)) {
+            if (QThread::currentThread()->isInterruptionRequested()) {
+                break;
+            }
 
             if (m_bPause) { //解压暂停
                 sleep(1);
-                qDebug() << "pause";
                 continue;
             }
 

@@ -110,8 +110,7 @@ private:
 
 Q_SIGNALS:
     /**
-     * @brief signalPause       暂停
-     * @param eType             操作类型
+     * @brief signalPause 暂停信号
      */
     void signalPause();
 
@@ -122,7 +121,6 @@ Q_SIGNALS:
 
     /**
      * @brief signalCancel       取消
-     * @param eType             操作类型
      */
     void signalCancel();
 

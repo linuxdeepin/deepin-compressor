@@ -19,6 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "progressdialog.h"
+#include "popupdialog.h"
 
 #include <DFontSizeManager>
 
@@ -85,12 +86,11 @@ void ProgressDialog::initUI()
     mainlayout->addLayout(contentlayout);
 
     setLayout(mainlayout);
-//    m_extractdialog = new ExtractPauseDialog(this);
 }
 
 void ProgressDialog::initConnect()
 {
-//    connect(m_extractdialog, &ExtractPauseDialog::sigbuttonpress, this, &ProgressDialog::slotextractpress);
+
 }
 
 /**
@@ -161,11 +161,22 @@ void ProgressDialog::clearprocess()
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-//    if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
-//        accept();
-//        m_extractdialog->move(this->geometry().topLeft()); //解决提取时取消提示框不居中显示
-//        m_extractdialog->exec();
-//    }
+    if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
+        // 先暂停
+        emit signalPause();
+
+        // 显示取消提示框
+        QString strDesText = tr("Are you sure you want to stop the singleextraction?"); // 是否停止提取
+        SimpleQueryDialog dialog(this);
+        int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+        if (iResult == 1) {
+            // 取消操作
+            emit signalCancel();
+        } else {
+            // 继续操作
+            emit signalContinue();
+        }
+    }
 }
 
 /**

@@ -31,9 +31,12 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
+#include <QThread>>
 
 #include <KFilterDev>
 //#include <KLocalizedString>
+
+#include <unistd.h>
 
 LibSingleFileInterface::LibSingleFileInterface(QObject *parent, const QVariantList &args)
     : ReadOnlyArchiveInterface(parent, args)
@@ -47,14 +50,17 @@ LibSingleFileInterface::~LibSingleFileInterface()
 PluginFinishType LibSingleFileInterface::list()
 {
     DataManager::get_instance().resetArchiveData();
+    ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
 
     FileEntry entry;
     entry.strFullPath = uncompressedFileName();
     entry.strFileName = entry.strFullPath;
-    entry.qSize = QFileInfo(m_strArchiveName).size();
+    entry.qSize = QFileInfo(m_strArchiveName).size(); // 只能获取到压缩后大小
 
-    DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
-    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    stArchiveData.qSize = entry.qSize;
+    stArchiveData.qComressSize = entry.qSize;
+    stArchiveData.listRootEntry.push_back(entry);
+    stArchiveData.mapFileEntry[entry.strFullPath] = entry;
 
     return PFT_Nomral;
 }
@@ -68,13 +74,12 @@ PluginFinishType LibSingleFileInterface::testArchive()
 PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     Q_UNUSED(files)
-    Q_UNUSED(options)
 
     QString strFileName = uncompressedFileName();       // 获取文件名
 
     // 若自动创建文件夹，祛除以文件名结尾的字符串，方式解压时文件名包含“xx.xx“，导致解压失败
     QString outputFileName = options.strTargetPath;
-    if (outputFileName.endsWith(uncompressedFileName()))
+    if (outputFileName.endsWith(strFileName))
         outputFileName.chop(strFileName.length());
 
     // 解压路径
@@ -86,7 +91,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     if (QDir().exists(outputFileName) == false)
         QDir().mkpath(outputFileName);
 
-    outputFileName += uncompressedFileName();   // 完整文件路径
+    outputFileName += strFileName;   // 完整文件路径
 
     // 对重复文件进行询问判断
     if (QFile::exists(outputFileName)) {
@@ -129,10 +134,26 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
 
     qint64 bytesRead;
     QByteArray dataChunk(1024 * 16, '\0'); // 16Kb
+    m_currentExtractedFilesSize = 0; // 清零
+
+    emit signalCurFileName(strFileName);
 
     // 写数据
     while (true) {
+        if (QThread::currentThread()->isInterruptionRequested()) { // 线程结束
+            break;
+        }
+
+        if (m_bPause) { //解压暂停
+            sleep(1);
+            continue;
+        }
+
         bytesRead = device->read(dataChunk.data(), dataChunk.size());
+
+        // 解压百分比进度
+        m_currentExtractedFilesSize += bytesRead;
+        emit signalprogress((double(m_currentExtractedFilesSize)) / options.qSize * 100); // 因为获取不到原文件大小，所以用压缩包大小代替
 
         if (bytesRead == -1) {
             m_eErrorType = ET_FileWriteError;
@@ -153,16 +174,17 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
 
 void LibSingleFileInterface::pauseOperation()
 {
-
+    m_bPause = true;
 }
 
 void LibSingleFileInterface::continueOperation()
 {
-
+    m_bPause = false;
 }
 
 bool LibSingleFileInterface::doKill()
 {
+    m_bPause = false;
     return false;
 }
 
