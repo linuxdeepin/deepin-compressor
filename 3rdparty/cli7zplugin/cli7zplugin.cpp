@@ -151,6 +151,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
     const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
     QRegularExpressionMatch matchVersion;
 
+    // 加载时7z分卷文件不完整的情况
+    if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
+        m_eErrorType = ET_ArchiveOpenError;
+        m_finishType = PFT_Error;
+        return false;
+    }
+
     switch (m_parseState) {
     case ParseStateTitle:
         matchVersion = rxVersionLine.match(line);
@@ -296,6 +303,12 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     if (workStatus == WT_List) {
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Add || workStatus == WT_Extract || workStatus == WT_Delete) { // 压缩、解压、删除进度
+        if (isCorruptArchiveMsg(line) && workStatus == WT_Extract) {  // 解压分卷不完整的情况下出现
+            m_eErrorType = ET_MissingVolume;
+            m_finishType = PFT_Error;
+            return false;
+        }
+
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
         }

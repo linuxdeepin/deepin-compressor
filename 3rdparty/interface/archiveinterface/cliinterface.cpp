@@ -481,7 +481,7 @@ void CliInterface::killProcess(bool emitFinished)
     m_isProcessKilled = true;
 
     //取消删除操作时，删除掉临时文件
-    if (m_workStatus == WT_Delete) {
+    if (m_workStatus == WT_Delete || m_workStatus == WT_Add) {
         QFile fi(m_strArchiveName + ".tmp");
         if (fi.exists()) {
             fi.remove();
@@ -570,7 +570,7 @@ PluginFinishType CliInterface::handlePassword()
     if (m_process && m_process->program().at(0).contains("unrar")) { // rar解压会提示加密的文件名
         name = m_strEncryptedFileName;
     } else { // 7z不会提示加密的文件名
-        if (m_files.count() == 1) { // 选则压缩包中的一个文件进行提取操作
+        if (m_files.count() == 1 && m_workStatus != WT_Add) { // 选则压缩包中的一个文件进行提取操作
             name = m_files.at(0).strFileName;
         } else { // 解压或是选择压缩包内多个文件进行提取操作
             name = m_strArchiveName;

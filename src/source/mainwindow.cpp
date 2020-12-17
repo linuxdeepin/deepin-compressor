@@ -1545,9 +1545,19 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     }
     break;
     // 压缩包追加文件错误
-    case ArchiveJob::JT_Add:
-
-        break;
+    case ArchiveJob::JT_Add: {
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+        switch (eErrorType) {
+        // 密码错误
+        case ET_WrongPassword:
+            m_ePageID = PI_UnCompress;
+            sendMessage(icon, tr("Wrong password"));
+            break;
+        default:
+            break;
+        }
+    }
+    break;
     // 加载压缩包错误
     case ArchiveJob::JT_Load: {
         switch (eErrorType) {
@@ -1608,6 +1618,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             // 创建文件失败
             case ET_FileWriteError:
                 showErrorMessage(EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
+                break;
+            case ET_MissingVolume:
+                showErrorMessage(EI_ArchiveMissingVolume, !m_stUnCompressParameter.bRightOperation);
                 break;
             default:
                 break;
@@ -2207,25 +2220,24 @@ void MainWindow::slotSuccessView()
 
 void MainWindow::slotSuccessReturn()
 {
-    switch (m_operationtype) {
+    switch (m_pSuccessPage->getSuccessType()) {
     // 压缩成功
-    case Operation_Create:
-    case Operation_Add_Comment: {
+    case SI_Compress: {
         m_pCompressPage->clear();   // 清空压缩界面
     }
     break;
     // 解压成功
-    case Operation_Extract: {
+    case SI_UnCompress: {
         m_pUnCompressPage->clear(); // 清空解压界面
     }
     break;
     // 转换成功
-    case Operation_CONVERT: {
+    case SI_Convert: {
         m_pUnCompressPage->clear(); // 清空解压界面
     }
     break;
-    default:
-        break;
+//    default:
+//        break;
     }
 
     resetMainwindow();

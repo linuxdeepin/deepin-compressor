@@ -247,12 +247,12 @@ void CompressSettingPage::initUI()
 
     // 待确认
     m_pSplitValueEdt->setMinimumSize(260, 36);
-//    m_pSplitValueEdt->setSuffix("MB");
+    m_pSplitValueEdt->setSuffix("MB");
     m_pSplitValueEdt->setRange(0.0, 1000000);
     m_pSplitValueEdt->setSingleStep(0.1);
     m_pSplitValueEdt->setDecimals(1);
     m_pSplitValueEdt->setValue(0.0);
-    m_pSplitValueEdt->setSpecialValueText("");
+    m_pSplitValueEdt->setSpecialValueText(" ");
 
 //    m_pCommentEdt->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
     m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
@@ -420,6 +420,7 @@ void CompressSettingPage::setSplitEnabled(bool bEnabled)
         m_pSplitCkb->setCheckState(Qt::Unchecked);
         m_pSplitValueEdt->setEnabled(bEnabled);
         m_pSplitValueEdt->clear();
+        m_pSplitValueEdt->setValue(0.0);
     } else {
         m_pSplitValueEdt->setEnabled(m_pSplitCkb->isChecked());
     }
@@ -643,6 +644,7 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pListEncryptionBtn->setChecked(false);
         m_pSplitCkb->setChecked(false);
         m_pSplitValueEdt->clear();
+        m_pSplitValueEdt->setValue(0.0);
     }
 }
 
@@ -656,6 +658,7 @@ void CompressSettingPage::slotSplitEdtEnabled()
         m_pSplitValueEdt->setToolTip(tr("Total size: %1").arg(size));
     } else {
         m_pSplitValueEdt->clear();
+        m_pSplitValueEdt->setValue(0.0);
     }
 
     if (m_strMimeType.contains("zip")) {

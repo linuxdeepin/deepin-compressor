@@ -145,6 +145,7 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
         connect(pAddJob, &AddJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pAddJob, &AddJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pAddJob, &AddJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+        connect(pAddJob, &AddJob::signalQuery, this, &ArchiveManager::signalQuery);
 
         m_pArchiveJob = pAddJob;
         pAddJob->start();

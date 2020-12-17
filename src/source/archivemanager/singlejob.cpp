@@ -343,6 +343,8 @@ void OpenJob::slotFinished(PluginFinishType eType)
             if (!QFile::link(m_stEntry.strFileName, name)) { // 创建链接
                 return;
             }
+        } else {
+            name = m_strTempExtractPath + QDir::separator() + name;
         }
 
         KProcess *cmdprocess = new KProcess;

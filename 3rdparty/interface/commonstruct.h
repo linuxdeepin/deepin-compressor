@@ -46,6 +46,7 @@ enum ErrorType {
     ET_FileReadError,     // 文件读取错误
     ET_FileWriteError,     // 文件写错误
     ET_DeleteError,         // 文件写错误
+    ET_MissingVolume,    // 分卷缺失
 
     ET_UserCancelOpertion,     // 用户取消操作
 };
