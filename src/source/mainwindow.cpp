@@ -1506,6 +1506,8 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
             sendMessage(icon, tr("User Cancel"));
         } else {
             if (m_stUnCompressParameter.bRightOperation) {
+                // 避免重复提示停止任务
+                m_operationtype = Operation_NULL;
                 // 直接关闭应用
                 close();
             } else {

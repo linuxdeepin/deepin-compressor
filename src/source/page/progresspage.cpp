@@ -120,6 +120,14 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
 
 void ProgressPage::resetProgress()
 {
+    // 修复取消按键默认有焦点效果
+    m_pCancelBtn->clearFocus();
+    m_pPauseContinueButton->clearFocus();
+
+    // 修复暂停状态返回列表后再切换到进度界面状态混乱
+    m_pPauseContinueButton->setText(tr("Pause"));
+    m_pPauseContinueButton->setChecked(false);
+
     // 重置相关参数
     m_pProgressBar->setValue(0);
     if (PT_Comment == m_eType) {
@@ -331,9 +339,11 @@ void ProgressPage::slotPauseClicked(bool bChecked)
 
 void ProgressPage::slotCancelClicked()
 {
-    // 先暂停
-    m_pPauseContinueButton->setText(tr("Continue"));
-    emit signalPause();
+    // 若不是暂停状态，先暂停
+    bool CheckedFlag = m_pPauseContinueButton->isChecked();
+    if (!CheckedFlag) { // 原来是运行状态
+        emit m_pPauseContinueButton->clicked(true);
+    }
 
     // 对话框文字描述
     QString strDesText;
@@ -356,8 +366,9 @@ void ProgressPage::slotCancelClicked()
         // 取消操作
         emit signalCancel();
     } else {
-        // 继续操作
-        m_pPauseContinueButton->setText(tr("Pause"));
-        emit signalContinue();
+        // 恢复原来状态
+        if (!CheckedFlag) { // 原来是运行状态
+            emit m_pPauseContinueButton->clicked(false);
+        }
     }
 }

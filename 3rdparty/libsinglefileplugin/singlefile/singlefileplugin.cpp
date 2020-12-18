@@ -31,7 +31,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
-#include <QThread>>
+#include <QThread>
 
 #include <KFilterDev>
 //#include <KLocalizedString>

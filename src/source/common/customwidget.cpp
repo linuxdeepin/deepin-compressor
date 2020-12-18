@@ -176,7 +176,7 @@ void CustomPushButton::keyReleaseEvent(QKeyEvent *event)
 CustomSwitchButton::CustomSwitchButton(QWidget *parent)
     : DSwitchButton(parent)
 {
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Qt::TabFocus);
 }
 
 void CustomSwitchButton::keyPressEvent(QKeyEvent *event)
