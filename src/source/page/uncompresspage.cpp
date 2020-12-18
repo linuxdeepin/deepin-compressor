@@ -26,6 +26,7 @@
 #include "DebugTimeManager.h"
 #include "mimetypes.h"
 #include "pluginmanager.h"
+#include "datamanager.h"
 
 #include <DFontSizeManager>
 #include <DFileDialog>
@@ -174,6 +175,14 @@ void UnCompressPage::slotUncompressClicked()
 {
     QFileInfo file(m_strArchiveFullPath);
     PERF_PRINT_BEGIN("POINT-04", "压缩包名：" + file.fileName() + " 大小：" + QString::number(file.size()));
+
+    // 压缩包无数据时，提示用户，且不进行解压
+    if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
+        TipDialog dialog(this);
+        dialog.showDialog(tr("Archive has no data"), tr("OK"), DDialog::ButtonNormal);
+
+        return;
+    }
 
     // 判断解压路径是否有可执行权限或者路径是否存在进行解压创建文件
     QFileInfo m_fileDestinationPath(m_strUnCompressPath);

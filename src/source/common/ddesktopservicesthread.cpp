@@ -13,6 +13,11 @@ void DDesktopServicesThread::setOpenFile(const QString &strFullPath)
     m_strFullPath = strFullPath;
 }
 
+bool DDesktopServicesThread::hasFiles()
+{
+    return !m_strFullPath.isEmpty();
+}
+
 void DDesktopServicesThread::run()
 {
     QFileInfo info(m_strFullPath);

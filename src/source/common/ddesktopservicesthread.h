@@ -20,6 +20,12 @@ public:
      */
     void setOpenFile(const QString &strFullPath);
 
+    /**
+     * @brief hasFiles      判断是否有文件
+     * @return
+     */
+    bool hasFiles();
+
 protected:
     /**
      * @brief run   运行

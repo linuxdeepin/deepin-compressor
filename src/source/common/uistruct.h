@@ -180,6 +180,7 @@ enum ErrorInfo {
     EI_LongFileName,            // 文件名过长
     EI_CreatFileFailed,         // 创建文件失败
     EI_CreatArchiveFailed,      // 创建压缩文件失败
+    EI_ArchiveNoData,           // 压缩包无数据
 };
 
 #endif // CUSTOMDATAINFO_H
