@@ -32,6 +32,7 @@
 
 class QStackedWidget;
 class QSettings;
+class QShortcut;
 
 class LoadingPage;
 class HomePage;
@@ -283,6 +284,12 @@ private:
      */
     void watcherArchiveFile(const QString &strFullPath);
 
+    /**
+     * @brief creatShorcutJson  创建快捷键配置
+     * @return
+     */
+    QJsonObject creatShorcutJson();
+
     // QWidget interface
 protected:
     /**
@@ -451,6 +458,11 @@ private Q_SLOTS:
      */
     void slotThemeChanged();
 
+    /**
+     * @brief slotShowShortcutTip 显示快捷键提示
+     */
+    void slotShowShortcutTip();
+
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
@@ -476,6 +488,7 @@ private:
     SettingDialog *m_pSettingDlg;       // 设置界面
 
     QSettings *m_pSettings;     // 默认配置信息
+    QShortcut *m_openkey; // Ctrl+Shift+? 显示快捷键提示的快捷键
 
     Page_ID m_ePageID = PI_Home;      // 界面标识
     Archive_OperationType m_operationtype = Operation_NULL; // 操作类型

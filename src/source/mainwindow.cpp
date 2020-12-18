@@ -59,6 +59,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QScreen>
 #include <QFormLayout>
+#include <QShortcut>
 
 static QMutex mutex;
 
@@ -75,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_pMainWidget->addWidget(m_pHomePage);
     setCentralWidget(m_pMainWidget);    // 设置中心面板
     m_pMainWidget->setCurrentIndex(0);
+
+    m_openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this); // Ctrl+Shift+/
+    m_openkey->setContext(Qt::ApplicationShortcut);
 
     // 初始化标题栏
     initTitleBar();
@@ -252,6 +256,8 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
+
+    connect(m_openkey, &QShortcut::activated, this, &MainWindow::slotShowShortcutTip);
 }
 
 void MainWindow::refreshPage()
@@ -2103,6 +2109,53 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
     });
 }
 
+QJsonObject MainWindow::creatShorcutJson()
+{
+    QJsonObject shortcut1;
+    shortcut1.insert("name", tr("Close"));
+    shortcut1.insert("value", "Alt+F4");
+
+    QJsonObject shortcut2;
+    shortcut2.insert("name", tr("Help"));
+    shortcut2.insert("value", "F1");
+
+    QJsonObject shortcut3;
+    shortcut3.insert("name", tr("Select the file"));
+    shortcut3.insert("value", "Ctrl+O");
+
+    QJsonObject shortcut4;
+    shortcut4.insert("name", tr("Delete"));
+    shortcut4.insert("value", "Delete");
+
+    //    QJsonObject shortcut5;
+    //    shortcut5.insert("name", tr("Rename"));
+    //    shortcut5.insert("value", "F2");
+
+    QJsonObject shortcut6;
+    shortcut6.insert("name", tr("Display shortcuts"));
+    shortcut6.insert("value", "Ctrl+Shift+?");
+
+    QJsonArray shortcutArray;
+    shortcutArray.append(shortcut1);
+    shortcutArray.append(shortcut2);
+    shortcutArray.append(shortcut3);
+    shortcutArray.append(shortcut4);
+    // shortcutArray.append(shortcut5);
+    shortcutArray.append(shortcut6);
+
+    QJsonObject shortcut_group;
+    shortcut_group.insert("groupName", tr("Shortcuts"));
+    shortcut_group.insert("groupItems", shortcutArray);
+
+    QJsonArray shortcutArrayall;
+    shortcutArrayall.append(shortcut_group);
+
+    QJsonObject main_shortcut;
+    main_shortcut.insert("shortcut", shortcutArrayall);
+
+    return main_shortcut;
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qDebug() << "提取文件至:" << stOptions.strTargetPath;
@@ -2540,4 +2593,23 @@ void MainWindow::slotThemeChanged()
 
     m_pTitleCommentButton->setIcon(icon);
     m_pTitleCommentButton->setIconSize(QSize(15, 15));
+}
+
+void MainWindow::slotShowShortcutTip()
+{
+    const QRect &rect = window()->geometry();
+
+    QPoint pos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+
+    QStringList shortcutString;
+    QJsonObject json = creatShorcutJson();
+
+    QString param1 = "-j=" + QString(QJsonDocument(json).toJson());
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+    shortcutString << param1 << param2;
+
+    QProcess *shortcutViewProcess = new QProcess(this);
+    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
