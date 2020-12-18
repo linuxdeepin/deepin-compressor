@@ -22,6 +22,8 @@
 #ifndef FAILUREPAGE_H
 #define FAILUREPAGE_H
 
+#include "uistruct.h"
+
 #include <DWidget>
 #include <DLabel>
 
@@ -55,6 +57,18 @@ public:
      */
     void setRetryEnable(bool bEnable);
 
+    /**
+     * @brief setFailureInfo  // 设置失败信息
+     * @param failureInfo
+     */
+    void setFailureInfo(FailureInfo failureInfo);
+
+    /**
+     * @brief getFailureInfo  获取失败信息
+     * @return
+     */
+    FailureInfo getFailureInfo();
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -72,6 +86,7 @@ private:
     DLabel *m_pDetailLbl; //错误原因
     CustomPushButton *m_pRetrybutton; // 重试按钮
     CustomCommandLinkButton *commandLinkBackButton; //返回按钮
+    FailureInfo m_failureInfo = FI_Compress;  // 失败信息
 
 signals:
     void sigBackButtonClickedOnFail();

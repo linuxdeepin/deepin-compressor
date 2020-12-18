@@ -152,7 +152,6 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             destPath = m_extractTempDir->path();
             qDebug() << "提取临时路径 --- " << destPath;
         }
-
     } else {
         if (!QDir(destPath).exists()) {
             QDir(destPath).mkpath(destPath);
@@ -161,8 +160,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
 
     QDir::setCurrent(destPath);
 
+    // 对列表加密文件进行追加解压的时候使用压缩包的密码
+    QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
-                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, m_strPassword/*DataManager::get_instance().archiveData().strPassword*/));
+                      m_cliProps->extractArgs(m_strArchiveName, fileList, true, password));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -259,12 +260,12 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         }
     }
 
-    QString password = DataManager::get_instance().archiveData().strPassword; // 对列表加密文件进行追加压缩的时候使用压缩包的密码
-
+    // 对列表加密文件进行追加压缩的时候使用压缩包的密码
+    QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : options.strPassword;
     // 压缩命令的参数
     QStringList arguments = m_cliProps->addArgs(m_strArchiveName,
                                                 fileList,
-                                                DataManager::get_instance().archiveData().isListEncrypted ? password : options.strPassword,
+                                                password,
                                                 options.bHeaderEncryption,
                                                 options.iCompressionLevel,
                                                 options.strCompressionMethod,
@@ -306,8 +307,10 @@ PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
 
     bool ret = false;
 
+    // 对列表加密文件进行追加删除的时候使用压缩包的密码
+    QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
     ret = runProcess(m_cliProps->property("deleteProgram").toString(),
-                     m_cliProps->deleteArgs(m_strArchiveName, files, QString()));
+                     m_cliProps->deleteArgs(m_strArchiveName, files, password));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -663,6 +666,7 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
     QDir finalDestDir(options.strTargetPath); // 提取目标路径
     bool overwriteAll = false;  // 全部替换
     bool skipAll = false;  // 全部跳过
+    bool moveSuccess = true;
 
     // 循环待提取文件
     foreach (const FileEntry entry, files) {
@@ -724,13 +728,14 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
             // 对临时文件夹内的文件进行rename操作，移到目标路径下
             if (!QFile(etractEntryTemp.absoluteFilePath()).rename(extractEntryDest.absoluteFilePath())) {
                 qDebug() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
-                emit signalFinished(PFT_Error);
-                return false;
+//                emit signalFinished(PFT_Error);
+                moveSuccess = false;
+//                return false;
             }
         }
     }
 
-    return true;
+    return moveSuccess;
 }
 
 void CliInterface::readStdout(bool handleAll)
@@ -852,6 +857,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
         if (!droppedFilesMoved) {
             m_extractTempDir.reset();
+            emit signalFinished(m_finishType);
             return;
         }
 

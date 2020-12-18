@@ -161,17 +161,25 @@ enum SuccessInfo {
     SI_Convert      // 转换成功
 };
 
+enum FailureInfo {
+    FI_Compress,     // 压缩失败
+    FI_Load,         // 打开失败
+    FI_Uncompress,   // 解压失败（包括解压、提取、打开文件）
+    FI_Add,          // 追加失败
+    FI_Delete,       // 删除失败
+    FI_Convert       // 转换失败
+};
+
 // 错误界面显示的信息
 enum ErrorInfo {
-    EI_NoPlugin,            // 无可用插件
-    EI_ArchiveOpenFailed,   // 压缩包打开失败
-    EI_ArchiveDamaged,   // 压缩包损坏
-    EI_ArchiveMissingVolume,   // 分卷包缺失
-    EI_WrongPasswordWhenLoad,       // 加载密码错误
-    EI_WrongPasswordWhenUnCompress,       // 解压密码错误
-    EI_LongFileName,        // 文件名过长
-    EI_CreatFileFailed,     // 创建文件失败
-    EI_CreatArchiveFailed,     // 创建压缩文件失败
+    EI_NoPlugin,                // 无可用插件
+    EI_ArchiveOpenFailed,       // 压缩包打开失败
+    EI_ArchiveDamaged,          // 压缩包损坏
+    EI_ArchiveMissingVolume,    // 分卷包缺失
+    EI_WrongPassword,           // 密码错误
+    EI_LongFileName,            // 文件名过长
+    EI_CreatFileFailed,         // 创建文件失败
+    EI_CreatArchiveFailed,      // 创建压缩文件失败
 };
 
 #endif // CUSTOMDATAINFO_H

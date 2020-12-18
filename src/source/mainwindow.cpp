@@ -434,7 +434,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         // 分卷不完整（损坏）
         // 比如打开1.7z.002时，1.7z.001不存在
         m_ePageID = PI_Failure;
-        showErrorMessage(EI_ArchiveMissingVolume);
+        showErrorMessage(FI_Load, EI_ArchiveMissingVolume);
         return;
     }
 
@@ -471,7 +471,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         m_ePageID = PI_Loading;
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Load, EI_NoPlugin);
     }
 }
 
@@ -812,12 +812,12 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
                 m_ePageID = PI_UnCompressProgress;
             } else {
                 // 无可用插件
-                showErrorMessage(EI_NoPlugin);
+                showErrorMessage(FI_Uncompress, EI_NoPlugin);
             }
         } else {
             // 可能分卷文件缺失，所以解压到当前文件夹失败
             m_ePageID = PI_Failure;
-            showErrorMessage(EI_ArchiveMissingVolume);
+            showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume);
         }
     } else if (strType == QStringLiteral("extract_multi")) {
         // 批量解压
@@ -865,7 +865,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             m_ePageID = PI_UnCompressProgress;
         } else {
             // 无可用插件
-            showErrorMessage(EI_NoPlugin);
+            showErrorMessage(FI_Uncompress, EI_NoPlugin);
         }
     } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
@@ -888,7 +888,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             m_ePageID = PI_UnCompressProgress;
         } else {
             // 无可用插件
-            showErrorMessage(EI_NoPlugin);
+            showErrorMessage(FI_Uncompress, EI_NoPlugin);
         }
     } else if (strType == QStringLiteral("compress_to_zip")) {
         // 压缩成xx.zip
@@ -921,12 +921,12 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
                 m_ePageID = PI_UnCompressProgress;
             } else {
                 // 无可用插件
-                showErrorMessage(EI_NoPlugin);
+                showErrorMessage(FI_Uncompress, EI_NoPlugin);
             }
         } else {
             // 可能分卷文件缺失，所以解压到当前文件夹失败
             m_ePageID = PI_Failure;
-            showErrorMessage(EI_ArchiveMissingVolume);
+            showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume);
         }
     }
 
@@ -1116,7 +1116,7 @@ void MainWindow::slotCompress(const QVariant &val)
         refreshPage();
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Compress, EI_NoPlugin);
     }
 }
 
@@ -1180,7 +1180,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
         refreshPage();
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Uncompress, EI_NoPlugin);
     }
 }
 
@@ -1353,7 +1353,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             m_ePageID = PI_Loading;
         } else {
             // 无可用插件
-            showErrorMessage(EI_NoPlugin);
+            showErrorMessage(FI_Add, EI_NoPlugin);
         }
     }
     break;
@@ -1429,7 +1429,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             m_ePageID = PI_Loading;
         } else {
             // 无可用插件
-            showErrorMessage(EI_NoPlugin);
+            showErrorMessage(FI_Delete, EI_NoPlugin);
         }
     }
     break;
@@ -1494,7 +1494,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     }
     break;
     case ArchiveJob::JT_Load: {
-        showErrorMessage(EI_ArchiveOpenFailed);
+        showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
     }
     break;
     // 批量解压
@@ -1544,7 +1544,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             killTimer(m_iCompressedWatchTimerID);
             m_iCompressedWatchTimerID = 0;
         }
-        showErrorMessage(EI_CreatArchiveFailed, true);
+        showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
     }
     break;
     // 压缩包追加文件错误
@@ -1566,14 +1566,14 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         switch (eErrorType) {
         // 压缩包打开失败
         case ET_ArchiveOpenError:
-            showErrorMessage(EI_ArchiveOpenFailed);
+            showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
             break;
         // 密码错误
         case ET_WrongPassword:
-            showErrorMessage(EI_WrongPasswordWhenLoad);
+            showErrorMessage(FI_Load, EI_WrongPassword);
             break;
         default:
-            showErrorMessage(EI_ArchiveOpenFailed);
+            showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
             break;
         }
     }
@@ -1608,22 +1608,22 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             switch (eErrorType) {
             // 压缩包打开失败
             case ET_ArchiveOpenError:
-                showErrorMessage(EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
                 break;
             // 密码错误
             case ET_WrongPassword:
-                showErrorMessage(EI_WrongPasswordWhenUnCompress, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_WrongPassword, !m_stUnCompressParameter.bRightOperation);
                 break;
             // 文件名过长
             case ET_LongNameError:
-                showErrorMessage(EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
                 break;
             // 创建文件失败
             case ET_FileWriteError:
-                showErrorMessage(EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
                 break;
             case ET_MissingVolume:
-                showErrorMessage(EI_ArchiveMissingVolume, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume, !m_stUnCompressParameter.bRightOperation);
                 break;
             default:
                 break;
@@ -1654,19 +1654,19 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         switch (eErrorType) {
         // 压缩包打开失败
         case ET_ArchiveOpenError:
-            showErrorMessage(EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
             break;
         // 密码错误
         case ET_WrongPassword:
-            showErrorMessage(EI_WrongPasswordWhenUnCompress, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_WrongPassword, !m_stUnCompressParameter.bRightOperation);
             break;
         // 文件名过长
         case ET_LongNameError:
-            showErrorMessage(EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
             break;
         // 创建文件失败
         case ET_FileWriteError:
-            showErrorMessage(EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
             break;
         default:
             break;
@@ -1741,7 +1741,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
         m_pProgressPage->restartTimer();
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Add, EI_NoPlugin);
     }
 }
 
@@ -1888,66 +1888,94 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
     }
 }
 
-void MainWindow::showErrorMessage(ErrorInfo eErrorInfo, bool bShowRetry)
+void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo, bool bShowRetry)
 {
     m_pFailurePage->setRetryEnable(bShowRetry);     // 设置重试按钮是否可用
+    m_pFailurePage->setFailureInfo(fFailureInfo);   // 设置失败信息
 
-    switch (eErrorInfo) {
-    // 无可用插件
-    case EI_NoPlugin: {
-        m_pFailurePage->setFailuerDes(tr("Plugin failed to load"));
-        m_pFailurePage->setFailureDetail(tr("No plugin available"));
+    switch (fFailureInfo) {
+    // 压缩失败
+    case FI_Compress: {
+        m_pFailurePage->setFailuerDes(tr("Compression failed"));
+        switch (eErrorInfo) {
+        case EI_NoPlugin: {
+            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+        }
+        break;
+        case EI_CreatArchiveFailed: {
+            m_pFailurePage->setFailureDetail(tr("Failed to create file"));
+        }
+        break;
+        default:
+            break;
+        }
     }
     break;
-    // 压缩包打开失败
-    case EI_ArchiveOpenFailed: {
+    // 加载失败
+    case FI_Load: {
         m_pLoadingPage->stopLoading();
         m_pFailurePage->setFailuerDes(tr("Open failed"));
-        m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
+        switch (eErrorInfo) {
+        case EI_NoPlugin: {
+            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+        }
+        break;
+        case EI_ArchiveOpenFailed: {
+            m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
+        }
+        break;
+        case EI_WrongPassword: {
+            m_pFailurePage->setFailureDetail(tr("Wrong password"));
+        }
+        break;
+        case EI_ArchiveMissingVolume: {
+            m_pFailurePage->setFailureDetail(tr("Missing volume"));
+        }
+        break;
+        default:
+            break;
+        }
     }
     break;
-    // 压缩包损坏
-    case EI_ArchiveDamaged: {
-        m_pFailurePage->setFailuerDes(tr("Open failed"));
-        m_pFailurePage->setFailureDetail(tr("Damaged file"));
-    }
-    break;
-    // 分卷包缺失
-    case EI_ArchiveMissingVolume: {
-        m_pFailurePage->setFailuerDes(tr("Open failed"));
-        m_pFailurePage->setFailureDetail(tr("Missing volume"));
-    }
-    break;
-    // 加载密码错误
-    case EI_WrongPasswordWhenLoad: {
-        m_pFailurePage->setFailuerDes(tr("Open failed"));
-        m_pFailurePage->setFailureDetail(tr("Wrong password"));
-    }
-    break;
-    // 解压密码错误
-    case EI_WrongPasswordWhenUnCompress: {
+    // 解压失败
+    case FI_Uncompress: {
         m_pFailurePage->setFailuerDes(tr("Extraction failed"));
-        m_pFailurePage->setFailureDetail(tr("Wrong password"));
+        switch (eErrorInfo) {
+        case EI_NoPlugin: {
+            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+        }
+        break;
+        case EI_ArchiveOpenFailed: {
+            m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
+        }
+        break;
+        case EI_ArchiveDamaged: {
+            m_pFailurePage->setFailureDetail(tr("Damaged file"));
+        }
+        break;
+        case EI_ArchiveMissingVolume: {
+            m_pFailurePage->setFailureDetail(tr("Missing volume"));
+        }
+        break;
+        case EI_WrongPassword: {
+            m_pFailurePage->setFailureDetail(tr("Wrong password"));
+        }
+        break;
+        case EI_LongFileName: {
+            m_pFailurePage->setFailureDetail(tr("File name too long, unable to extract"));
+        }
+        break;
+        case EI_CreatFileFailed: {
+            m_pFailurePage->setFailureDetail(tr("Failed to create file"));
+        }
+        break;
+        default:
+            break;
+        }
     }
     break;
-    // 文件名过长
-    case EI_LongFileName: {
-        m_pFailurePage->setFailuerDes(tr("Extraction failed"));
-        m_pFailurePage->setFailureDetail(tr("File name too long, unable to extract"));
-    }
-    break;
-    // 创建文件失败
-    case EI_CreatFileFailed: {
-        m_pFailurePage->setFailuerDes(tr("Extraction failed"));
-        m_pFailurePage->setFailureDetail(tr("Failed to create file"));
-    }
-    break;
-    // 创建文件失败
-    case EI_CreatArchiveFailed: {
-        m_pFailurePage->setFailuerDes(tr("Compression failed"));
-        m_pFailurePage->setFailureDetail(tr("Failed to create file"));
-    }
-    break;
+    default:
+        break;
     }
 
     // 刷新错误界面显示
@@ -2099,7 +2127,7 @@ void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const Ex
 
     if (!ArchiveManager::get_instance()->extractFiles2Path(strArchiveFullPath, listSelEntry, stOptions)) {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Uncompress, EI_NoPlugin);
     }
 }
 
@@ -2124,7 +2152,7 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
         refreshPage();
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Delete, EI_NoPlugin);
     }
 
 }
@@ -2150,7 +2178,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
         refreshPage();
     } else {
         // 无可用插件
-        showErrorMessage(EI_NoPlugin);
+        showErrorMessage(FI_Uncompress, EI_NoPlugin);
     }
 }
 
@@ -2250,15 +2278,12 @@ void MainWindow::slotSuccessReturn()
 
 void MainWindow::slotFailureRetry()
 {
-    switch (m_operationtype) {
-    // 压缩失败
-    case Operation_Create:
-    case Operation_Add_Comment: {
+    switch (m_pFailurePage->getFailureInfo()) {
+    case FI_Compress: {
         m_ePageID = PI_CompressSetting;  // 返回到列表设置界面
     }
     break;
-    // 解压失败
-    case Operation_Extract: {
+    case FI_Uncompress: {
         if (m_stUnCompressParameter.bRightOperation) {
             // 右键解压到当前文件夹
         } else {
@@ -2267,8 +2292,7 @@ void MainWindow::slotFailureRetry()
         }
     }
     break;
-    // 转换失败
-    case Operation_CONVERT: {
+    case FI_Convert: {
         m_ePageID = PI_UnCompress;  // 返回到列表界面
     }
     break;
@@ -2281,20 +2305,16 @@ void MainWindow::slotFailureRetry()
 
 void MainWindow::slotFailureReturn()
 {
-    switch (m_operationtype) {
-    // 压缩失败
-    case Operation_Create:
-    case Operation_Add_Comment: {
+    switch (m_pFailurePage->getFailureInfo()) {
+    case FI_Compress: {
         m_pCompressPage->clear();   // 清空压缩界面
     }
     break;
-    // 解压失败
-    case Operation_Extract: {
+    case FI_Uncompress: {
         m_pUnCompressPage->clear(); // 清空解压界面
     }
     break;
-    // 转换失败
-    case Operation_CONVERT: {
+    case FI_Convert: {
         m_pUnCompressPage->clear(); // 清空解压界面
     }
     break;

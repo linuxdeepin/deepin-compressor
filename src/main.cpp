@@ -105,9 +105,24 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+//    if (argc >= 3) { // 桌面右键同时打开多个压缩文件
+//        foreach (QString file, newfilelist) {
+//            QProcess p;
+//            QString command = "xdg-open";
+//            QStringList args;
+//            args.append(file);
+//            p.start(command, args);
+//            p.waitForFinished();
+//        }
+
+//        app.quit();
+//        return 0;
+//    }
+
     // 测试右键
-    //newfilelist.clear();
-    //newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";
+//    newfilelist.clear();
+//    newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";
+//    newfilelist << "/home/chenglu/Desktop/1/1.7z" << "extract_here";
 
     if (!newfilelist.isEmpty()) {
         // 检查解压到当前文件夹路径是否有权限，若没有权限，给出提示并退出应用

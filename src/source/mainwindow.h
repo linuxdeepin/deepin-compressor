@@ -234,7 +234,7 @@ private:
      * @param eErrorInfo        错误信息
      * @param bShowRetry        是否显示重试按钮
      */
-    void showErrorMessage(ErrorInfo eErrorInfo, bool bShowRetry = false);
+    void showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo, bool bShowRetry = false);
 
     /**
      * @brief getConfigWinSize  通过配置文件获取之前保存的窗口大小

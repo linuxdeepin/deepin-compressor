@@ -28,6 +28,7 @@
 #include "treeheaderview.h"
 #include "openwithdialog.h"
 #include "uitools.h"
+#include "kprocess.h"
 
 #include <DMenu>
 
@@ -79,7 +80,6 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
             }
         }
     }
-
 
     m_listCompressFiles << m_listSelFiles;
 
@@ -375,7 +375,29 @@ void CompressView::slotDirChanged()
 
 void CompressView::slotDragFiles(const QStringList &listFiles)
 {
-    addCompressFiles(listFiles);
+    // 在压缩列表添加一个压缩文件
+    if (listFiles.count() == 1 && UiTools::isArchiveFile(listFiles.at(0)) && m_listCompressFiles.count() > 0) {
+        SimpleQueryDialog dialog;  // 询问添加压缩文件到压缩目录或者在新窗口打开压缩文件
+        int ret = dialog.showDialog(tr("Do you want to add the archive to the list or open it in new window?"),
+                                    tr("Cancel"),  DDialog::ButtonNormal,
+                                    tr("Add"), DDialog::ButtonNormal,
+                                    tr("Open in new window"), DDialog::ButtonRecommend);
+
+        if (ret == 1) { // 添加压缩文件到目录
+            addCompressFiles(listFiles);
+        } else if (ret == 2) { // 在新窗口打开压缩文件
+            KProcess *cmdprocess = new KProcess;
+            QString programPath = OpenWithDialog::getProgramPathByExec("deepin-compressor");
+            cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
+            cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+            cmdprocess->setProgram(programPath, listFiles);
+            cmdprocess->start();
+            cmdprocess->waitForFinished();
+            delete  cmdprocess;
+        }
+    } else {
+        addCompressFiles(listFiles);
+    }
 }
 
 void CompressView::slotOpenStyleClicked()

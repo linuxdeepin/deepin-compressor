@@ -54,6 +54,16 @@ void FailurePage::setRetryEnable(bool bEnable)
     m_pRetrybutton->setEnabled(bEnable);
 }
 
+void FailurePage::setFailureInfo(FailureInfo failureInfo)
+{
+    m_failureInfo = failureInfo;
+}
+
+FailureInfo FailurePage::getFailureInfo()
+{
+    return m_failureInfo;
+}
+
 void FailurePage::initUI()
 {
     //失败图标
