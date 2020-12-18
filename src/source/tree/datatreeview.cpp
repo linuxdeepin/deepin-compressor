@@ -116,15 +116,20 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         return;
     }
     }
+
     //绘制图标
-    QRect iconRect = rect;
     if (opt.viewItemPosition == QStyleOptionViewItem::Beginning &&
             index.data(Qt::DecorationRole).isValid()) {
-        QIcon ic = index.data(Qt::DecorationRole).value<QIcon>();
-        iconRect.setX(rect.x() - margin);
-        iconRect.setWidth(56);
-        ic.paint(painter, iconRect);
+        // icon size
+        auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
+        QRect iconRect = rect;
+        iconRect.setX(rect.x() + margin);
+        iconRect.setWidth(iconSize);
+        // 缩放大小并绘制
+        auto diff = (iconRect.height() - iconSize) / 2;
+        opt.icon.paint(painter, iconRect.adjusted(0, diff, 0, -diff));
     }
+
     //绘制文字
     textRect = rect;
     if (index.column() == 0) {
@@ -161,7 +166,7 @@ void DataTreeView::initUI()
 {
     setObjectName("TableViewFile");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setIconSize(QSize(36, 36));
+    setIconSize(QSize(24, 24));
     setViewportMargins(10, 10, 10, 0);
     setIndentation(0);
     setFrameShape(QFrame::NoFrame);     // 设置无边框

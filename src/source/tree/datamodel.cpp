@@ -83,10 +83,9 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         }
         case DC_Time: {
             return QDateTime::fromTime_t(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
-            // return QLocale().toString(entry.lastModifiedTime, tr("yyyy/MM/dd hh:mm:ss")); // 第二列绑定修改时间格式
         }
         case DC_Type: {
-            QMimeType mimetype = entry.isDirectory ? determineMimeType(entry.strFullPath) : determineMimeType(entry.strFileName);
+            QMimeType mimetype = determineMimeType(entry.strFullPath);  // 根据全路径获取类型
             return m_pMimetype->displayName(mimetype.name());
         }
         case DC_Size: {
@@ -196,28 +195,21 @@ void DataModel::sort(int column, Qt::SortOrder order)
         switch (column)
         {
         case DC_Name: {
-            if (order == Qt::AscendingOrder) { //升序
-                if (entrya.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {       // 左侧包含汉字
-                    if (entryb.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {   // 右侧包含汉字
-                        QCollator col;
-                        return (col.compare(entrya.strFileName, entryb.strFileName) < 0);
-                    } else {
-                        return false; //右侧第一个不是汉字
-                    }
+            QCollator sortCollator;
+            sortCollator.setNumericMode(true);  // 打开数字排序模式
+            sortCollator.setCaseSensitivity(Qt::CaseInsensitive);
+
+            // 对首字母是汉字进行额外处理
+            if (entrya.strFileName.at(0).script() == QChar::Script_Han) {
+                if (entryb.strFileName.at(0).script() != QChar::Script_Han) {
+                    return order == Qt::DescendingOrder;
                 }
-                return QString::compare(entrya.strFileName, entryb.strFileName, Qt::CaseInsensitive) < 0;
-            } else { //降序
-                if (entrya.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
-                    // 左侧包含汉字
-                    if (entryb.strFileName.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) { // 右侧包含汉字
-                        QCollator col;
-                        return (col.compare(entrya.strFileName, entryb.strFileName) > 0);
-                    } else {
-                        return true; //右侧第一个不是汉字
-                    }
-                }
-                return QString::compare(entrya.strFileName, entryb.strFileName, Qt::CaseInsensitive) > 0;
+            } else if (entryb.strFileName.at(0).script() == QChar::Script_Han) {
+                return order != Qt::DescendingOrder;
             }
+
+            // 默认排序
+            return ((order == Qt::DescendingOrder) ^ (sortCollator.compare(entrya.strFileName, entryb.strFileName) < 0)) == 0x01;
         }
         case DC_Time: {
             // 比较文件最后一次修改时间
