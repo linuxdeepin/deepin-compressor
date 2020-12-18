@@ -57,6 +57,7 @@ CliInterface::~CliInterface()
 
 PluginFinishType CliInterface::list()
 {
+    setPassword(QString());
     DataManager::get_instance().resetArchiveData();
     m_setHasRootDirs.clear();
     m_setHasHandlesDirs.clear();
@@ -79,6 +80,7 @@ PluginFinishType CliInterface::testArchive()
 
 PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
+    setPassword(QString());
     m_workStatus = WT_Extract;
     m_files = files;
     m_extractOptions = options;
@@ -210,6 +212,7 @@ bool CliInterface::doKill()
 
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    setPassword(QString());
     m_workStatus = WT_Add;
     m_files = files;
     m_compressOptions = options;
@@ -302,6 +305,7 @@ PluginFinishType CliInterface::copyFiles(const QList<FileEntry> &/*files*/, cons
 
 PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
 {
+    setPassword(QString());
     m_workStatus = WT_Delete;
     m_files = files;
 
@@ -821,7 +825,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
         m_finishType = PFT_Nomral;
     }
 
-    setPassword(QString());
+//    setPassword(QString());
 
     emit signalprogress(100);
     emit signalFinished(m_finishType);
@@ -845,7 +849,7 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 
 //    if (exitCode == 9 || exitCode == 11) {
 //        DataManager::get_instance().archiveData().strPassword = QString();
-    setPassword(QString());
+//    setPassword(QString());
 //        return;
 //    }
 

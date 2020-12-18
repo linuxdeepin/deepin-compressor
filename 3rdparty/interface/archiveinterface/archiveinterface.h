@@ -103,6 +103,12 @@ public:
     void setPassword(const QString &strPassword);
 
     /**
+     * @brief getPassword   获取当前文件密码
+     * @return      当前文件密码
+     */
+    QString getPassword();
+
+    /**
      * @brief errorType     获取错误类型
      * @return
      */

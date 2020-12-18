@@ -71,6 +71,7 @@ LibzipPlugin::~LibzipPlugin()
 PluginFinishType LibzipPlugin::list()
 {
     qDebug() << "LibzipPlugin插件加载压缩包数据";
+    setPassword(QString());
     m_mapFileCode.clear();
     m_setHasHandlesDirs.clear();
     m_setHasRootDirs.clear();
@@ -121,6 +122,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 {
     qDebug() << "解压缩数据";
 
+    setPassword(QString());
     m_workStatus = WT_Extract;
     int errcode = 0;
     zip_error_t err;
@@ -245,6 +247,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 
 PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    setPassword(QString());
     m_workStatus = WT_Add;
     qDebug() << "添加压缩包数据";
     int errcode = 0;
@@ -355,6 +358,7 @@ PluginFinishType LibzipPlugin::copyFiles(const QList<FileEntry> &files, const Co
 PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 {
     // 初始化变量
+    setPassword(QString());
     m_workStatus = WT_Delete;
     int errcode = 0;
     zip_error_t err;
@@ -394,6 +398,7 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
 
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
+    setPassword(QString());
     m_workStatus = WT_Comment;
 
     // 初始化变量

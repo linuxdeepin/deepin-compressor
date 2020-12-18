@@ -42,6 +42,7 @@ void OpenFileWatcher::reset()
     m_listOpenFiles.clear();
     m_strOpenFile.clear();
     m_mapFileHasModified.clear();
+    m_mapFilePassword.clear();
 }
 
 void OpenFileWatcher::setCurOpenFile(const QString &strCurOpenFile)
@@ -68,4 +69,14 @@ void OpenFileWatcher::addWatchFile(const QString &strFile)
 QMap<QString, bool> &OpenFileWatcher::getFileHasModified()
 {
     return m_mapFileHasModified;
+}
+
+void OpenFileWatcher::setCurFilePassword(const QString &strPassword)
+{
+    m_mapFilePassword[m_strOpenFile] = strPassword;
+}
+
+QMap<QString, QString> OpenFileWatcher::getFilePassword()
+{
+    return m_mapFilePassword;
 }

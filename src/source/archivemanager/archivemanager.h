@@ -157,6 +157,12 @@ public:
      */
     bool cancelOperation();
 
+    /**
+     * @brief getCurFilePassword    获取当前文件密码
+     * @return      当前文件密码
+     */
+    QString getCurFilePassword();
+
 Q_SIGNALS:
     /**
      * @brief signalError       错误信号

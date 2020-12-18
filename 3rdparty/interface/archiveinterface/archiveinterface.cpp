@@ -62,6 +62,12 @@ void ReadOnlyArchiveInterface::setPassword(const QString &strPassword)
     m_strPassword = strPassword;
 }
 
+
+QString ReadOnlyArchiveInterface::getPassword()
+{
+    return m_strPassword;
+}
+
 ErrorType ReadOnlyArchiveInterface::errorType()
 {
     return m_eErrorType;

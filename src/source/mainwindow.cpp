@@ -1443,6 +1443,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                  && (determineMimeType(m_stUnCompressParameter.strFullPath).name() == "application/vnd.rar"))) {
             // 打开成功之后添加当前打开文件至文件监控中
             m_pOpenFileWatcher->addCurOpenWatchFile();
+            m_pOpenFileWatcher->setCurFilePassword(ArchiveManager::get_instance()->getCurFilePassword());
         }
 
         m_ePageID = PI_UnCompress;
@@ -1494,7 +1495,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     }
     break;
     case ArchiveJob::JT_Load: {
-        showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
+        m_ePageID = PI_Home;
     }
     break;
     // 批量解压
@@ -2234,6 +2235,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
 void MainWindow::slotOpenFileChanged(const QString &strPath)
 {
     QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
+    QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
 
     if ((mapStatus.find(strPath) != mapStatus.end()) && (!mapStatus[strPath])) {
         mapStatus[strPath] = true;
@@ -2256,7 +2258,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
             }
 
             // 更新压缩包数据
-            addFiles2Archive(QStringList() << strPath);
+            addFiles2Archive(QStringList() << strPath, mapPassword[strPath]);
         }
 
         mapStatus[strPath] = false;

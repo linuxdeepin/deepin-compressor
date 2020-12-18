@@ -364,6 +364,15 @@ bool ArchiveManager::cancelOperation()
     return false;
 }
 
+QString ArchiveManager::getCurFilePassword()
+{
+    if (m_pInterface) {
+        return m_pInterface->getPassword();
+    }
+
+    return "";
+}
+
 void ArchiveManager::slotJobFinished()
 {
     if (m_pArchiveJob) {

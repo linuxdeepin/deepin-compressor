@@ -70,6 +70,11 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     QString lastStr = argv[argc - 1];
+
+    for (int i = 0; i < argc; i++) {
+        qDebug() << "*********************" << argv[i];
+    }
+
     if (argc >= 2) {
         if (argc >= 3) {
             if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
@@ -86,9 +91,13 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (!w.checkSettings(argv[1])) {
-            app.exit();
-            return 0;
+        // 不对压缩逻辑进行格式处理
+        if (lastStr != "compress") {
+            // 对文件类型进行检查处理
+            if (!w.checkSettings(argv[1])) {
+                app.exit();
+                return 0;
+            }
         }
     }
 
