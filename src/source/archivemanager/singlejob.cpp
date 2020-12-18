@@ -19,7 +19,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "singlejob.h"
-#include "kprocess.h"
+#include "processopenthread.h"
 #include "openwithdialog.h"
 #include "datamanager.h"
 #include "uitools.h"
@@ -347,16 +347,11 @@ void OpenJob::slotFinished(PluginFinishType eType)
             name = m_strTempExtractPath + QDir::separator() + name;
         }
 
-        KProcess *cmdprocess = new KProcess;
-        QStringList arguments;
-        arguments << name;
-        QString programPath = OpenWithDialog::getProgramPathByExec(m_strProgram);
-        cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-        cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-        cmdprocess->setProgram(programPath, arguments);
-        cmdprocess->start();
-        cmdprocess->waitForFinished();
-        delete  cmdprocess;
+        // 在线程中执行外部应用打开的命令
+        ProcessOpenThread *p = new ProcessOpenThread;
+        p->setProgramPath(OpenWithDialog::getProgramPathByExec(m_strProgram));
+        p->setArguments(QStringList() << name);
+        p->start();
     }
 }
 

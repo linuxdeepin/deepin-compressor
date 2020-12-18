@@ -20,7 +20,7 @@
 */
 #include "openwithdialog.h"
 #include "dmimedatabase.h"
-#include "kprocess.h"
+#include "processopenthread.h"
 #include "properties.h"
 
 #include <QStandardPaths>
@@ -222,16 +222,11 @@ bool OpenWithDialog::eventFilter(QObject *obj, QEvent *event)
 
 void OpenWithDialog::openWithProgram(const QString &strFileName, const QString &strExec)
 {
-    KProcess *cmdprocess = new KProcess;
-    QStringList arguments;
-    arguments << strFileName;
-    QString programPath = getProgramPathByExec(strExec);
-    cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-    cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-    cmdprocess->setProgram(programPath, arguments);
-    cmdprocess->start();
-    cmdprocess->waitForFinished();
-    delete  cmdprocess;
+    // 在线程中执行外部应用打开的命令
+    ProcessOpenThread *p = new ProcessOpenThread;
+    p->setProgramPath(getProgramPathByExec(strExec));
+    p->setArguments(QStringList() << strFileName);
+    p->start();
 }
 
 QString OpenWithDialog::showOpenWithDialog(OpenWithDialog::ShowType eType)

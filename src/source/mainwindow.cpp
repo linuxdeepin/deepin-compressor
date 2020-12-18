@@ -552,35 +552,29 @@ bool MainWindow::checkSettings(QString file)
 
         if (fileMime.size() > 0) {
             existMime = UiTools::isExistMimeType(fileMime, bArchive);
-
-            // 如果在设置界面找到非压缩包的类型，置为true
-            if (!bArchive && !existMime) // ？
-                existMime = true;
         } else {
             existMime = false;
         }
     }
 
-    if (existMime) { // 已经是关联解压类型
-        QString defaultCompress = getDefaultApp(fileMime); // 获取该类型文件的默认打开方式
-
-        if (defaultCompress.startsWith("dde-open.desktop")) {
-            // 如果默认打开方式不是归档管理器， 设置归档管理器我为默认打开方式
-            setDefaultApp(fileMime, "deepin-compressor.desktop");
-        }
-    } else { // 不是关联解压类型
-        // 如果不是归档管理器支持的压缩文件格式，设置默认打开方式为选择默认打开程序对话框
-        QString defaultCompress = getDefaultApp(fileMime);
-        if (defaultCompress.startsWith("deepin-compressor.desktop")) {
-            setDefaultApp(fileMime, "dde-open.desktop");
+    // 若在关联类型中没有找到勾选的此格式
+    if (!existMime) {
+        QString str;
+        if (bArchive) {
+            // 如果是压缩包，提示勾选关联类型
+            str = tr("Please check the file association type in the settings of Archive Manager");
+        } else {
+            // 如果不是压缩包，提示非支持的压缩格式
+            str = tr("Cannot open this file as a compressed file");
         }
 
+        // 弹出提示对话框
         TipDialog dialog;
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenRect =  screen->availableVirtualGeometry();
         dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
 
-        int re = dialog.showDialog(tr("Please check the file association type in the settings of Archive Manager"), tr("OK"), DDialog::ButtonNormal);
+        int re = dialog.showDialog(str, tr("OK"), DDialog::ButtonNormal);
         if (re != 1) { // ？
             mimeIsChecked = false;
         }

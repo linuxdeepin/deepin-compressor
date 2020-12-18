@@ -24,6 +24,7 @@
 #include "compressorapplication.h"
 #include "environments.h"
 #include "DebugTimeManager.h"
+#include "processopenthread.h"
 
 #include <DWidgetUtil>
 #include <DLog>
@@ -66,10 +67,31 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
-    // //打印输入参数
-    // for (int i = 0; i < argc; ++i) {
-    //     qDebug() << QString("argv[%1]:").arg(i) << argv[i];
-    // }
+    MainWindow w;
+
+    QString lastStr = argv[argc - 1];
+    if (argc >= 2) {
+        if (argc >= 3) {
+            if (lastStr != "extract_here" && lastStr != "extract_here_multi" && lastStr != "extract" && lastStr != "extract_multi"
+                    && lastStr != "compress" && lastStr != "extract_here_split" && lastStr != "extract_split" && lastStr != "extract_here_split_multi"\
+                    && lastStr != "extract_split_multi") {
+                for (int i = 1; i < argc; i++) {
+                    // 在线程中执行外部应用打开的命令
+                    ProcessOpenThread *p = new ProcessOpenThread;
+                    p->setProgramPath(QStandardPaths::findExecutable("deepin-compressor"));
+                    p->setArguments(QStringList() << argv[i]);
+                    p->start();
+                }
+                return 0;
+            }
+        }
+
+        if (!w.checkSettings(argv[1])) {
+            app.exit();
+            return 0;
+        }
+    }
+
 
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
@@ -79,6 +101,11 @@ int main(int argc, char *argv[])
 
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
+
+    if (app.setSingleInstance("deepin-compressor")) {
+        Dtk::Widget::moveToCenter(&w);
+    }
+
 
     const QStringList fileList = parser.positionalArguments();
     QStringList newfilelist;
@@ -97,33 +124,6 @@ int main(int argc, char *argv[])
         newfilelist = multilist;
     }
 
-    MainWindow w;
-    // w.show();
-
-    if (argc >= 2 && !w.checkSettings(argv[1])) {
-        app.exit();
-        return 0;
-    }
-
-//    if (argc >= 3) { // 桌面右键同时打开多个压缩文件
-//        foreach (QString file, newfilelist) {
-//            QProcess p;
-//            QString command = "xdg-open";
-//            QStringList args;
-//            args.append(file);
-//            p.start(command, args);
-//            p.waitForFinished();
-//        }
-
-//        app.quit();
-//        return 0;
-//    }
-
-    // 测试右键
-//    newfilelist.clear();
-//    newfilelist << "/home/gaoxiang/Desktop/new/1.zip" << "/home/gaoxiang/Desktop/new/2.zip" << "extract_here_multi";
-//    newfilelist << "/home/chenglu/Desktop/1/1.7z" << "extract_here";
-
     if (!newfilelist.isEmpty()) {
         // 检查解压到当前文件夹路径是否有权限，若没有权限，给出提示并退出应用
         QString strType = newfilelist.last();
@@ -140,9 +140,12 @@ int main(int argc, char *argv[])
         w.show();
         PERF_PRINT_END("POINT-01");
     }
-    Dtk::Widget::moveToCenter(&w);  // 居中显示
+    //Dtk::Widget::moveToCenter(&w);  // 居中显示
 
     PERF_PRINT_END("POINT-01");
+
+
+
 
     return app.exec();
 }

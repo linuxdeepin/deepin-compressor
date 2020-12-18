@@ -78,9 +78,9 @@ void CompressPage::initUI()
 
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
-    pBtnLayout->addStretch();
-    pBtnLayout->addWidget(m_pNextBtn);
-    pBtnLayout->addStretch();
+    pBtnLayout->addStretch(1);
+    pBtnLayout->addWidget(m_pNextBtn, 2);   // 按照比例缩放
+    pBtnLayout->addStretch(1);
 
     // 主界面布局
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);

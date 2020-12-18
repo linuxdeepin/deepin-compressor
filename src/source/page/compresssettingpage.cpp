@@ -203,7 +203,7 @@ void CompressSettingPage::initUI()
     m_pFileNameEdt = new DLineEdit(this);
     m_pSavePathEdt = new DFileChooserEdit(this);
     m_pCompressLevelLbl = new DLabel(tr("Compression method") + ":", this);
-    m_pCompressLevelCmb = new DComboBox(this);
+    m_pCompressLevelCmb = new CustomCombobox(this);
     m_pAdvancedBtn = new CustomSwitchButton(this);
     m_pEncryptedLbl = new DLabel(tr("Encrypt the archive") + ":", this);
     m_pPasswordEdt = new DPasswordEdit(this);
@@ -225,6 +225,7 @@ void CompressSettingPage::initUI()
     m_pSavePathEdt->setMinimumSize(260, 36);
 
     m_pCompressLevelCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
+    m_pCompressLevelCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
 
     // 设置压缩方式选项
     QStringList listCompressLevel = QStringList() << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
