@@ -9,7 +9,7 @@
 #include <QDebug>
 
 #include <KEncodingProber>
-#include "../ChardetDetector/chardet.h"
+#include "chardet.h"
 
 //QByteArray m_codecStr;
 /*static */float Common::codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)

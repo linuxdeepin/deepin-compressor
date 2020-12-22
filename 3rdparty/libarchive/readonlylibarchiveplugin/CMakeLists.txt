@@ -1,41 +1,37 @@
+#定义cmake版本
 cmake_minimum_required(VERSION 3.9.5)
 
+#设置项目名称
 set(LIB_NAME readonlylibarchiveplugin)
 project(${LIB_NAME})
 
-#3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
-
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Concurrent)
+#查找依赖关系的包信息
+find_package(Qt5Widgets REQUIRED)
 find_package(KF5Codecs REQUIRED)
 find_package(KF5Archive)
 
-#添加dtk库
-#find_package(PkgConfig REQUIRED)
-#pkg_search_module(DtkWidget REQUIRED dtkwidget)
-#include_directories(${DtkWidget_INCLUDE_DIRS})
+#指定头文件路径
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${HFILES_OUTPUT_PATH})
 
-include_directories(${PROJECT_SOURCE_DIR}/../libarchive)
-include_directories(${PROJECT_SOURCE_DIR}/../../interface)
-include_directories(${PROJECT_SOURCE_DIR}/../../interface/archiveinterface)
-include_directories(${PROJECT_SOURCE_DIR}/../../interface/plugin)
-include_directories(${PROJECT_SOURCE_DIR}/../../ChardetDetector)
+#链接库路径
+link_directories(${LIBRARY_OUTPUT_PATH})
 
-file(GLOB c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp )
-file(GLOB h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h )
-file(GLOB json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
+#源文件、头文件和资源文件
+file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
+file(GLOB_RECURSE json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
 
+#生成动静态库
 add_library(${LIB_NAME} SHARED ${c_files} ${h_files} ${json_files})
 
-set(LINK_LIBS
-    Qt5::Core
+#链接动静态库
+target_link_libraries(${LIB_NAME}
+    Qt5::Widgets
     KF5::Archive
     KF5::Codecs
     compressor-archive
-    compressor-interface
-    compressor-ChardetDetector
 )
-target_link_libraries(${LIB_NAME} ${LINK_LIBS})
+
 
 

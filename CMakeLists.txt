@@ -7,16 +7,15 @@ project(${EXE_NAME})
 
 #SET(CMAKE_BUILD_TYPE "Debug")  
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
-set(APP_RES_DIR "src")
-set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
+
 
 # 添加c++ 11标准支持
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=/usr/lib/deepin-compressor/plugins") #-Wl,-rpath=./s
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:/usr/lib/deepin-compressor/plugins")
 else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins")
 endif()
@@ -25,6 +24,16 @@ add_definitions("-DQT_MESSAGELOGCONTEXT")
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_VERBOSE_MAKEFILE ON) #要显示执行构建过程中详细的信息(比如为了得到更详细的出错信息)
+set(CMAKE_AUTOMOC ON) #打开全局moc
+set(CMAKE_AUTORCC ON)
+
 
 #对DApplication 进行加速
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
@@ -46,23 +55,27 @@ endif()
 #模糊测试设置 -end
 
 #3.1 设置lib输出目录
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/compressor-lib)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 #3.2 设置可执行程序输出目录
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/output/)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+#导出头文件路径
+set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
+
 
 #Generate the qm file
+set(APP_RES_DIR "src")
+set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
-                    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
+
 
 add_subdirectory(3rdparty)
-
 add_subdirectory(src)
 
+#单元测试开关
 option(USE_TEST "UT" ON)
 if (USE_TEST)
-    if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
-        add_subdirectory(test)
-    endif()
+    add_subdirectory(test)
 endif(USE_TEST)
 
 set(CMAKE_INSTALL_PREFIX /usr)
