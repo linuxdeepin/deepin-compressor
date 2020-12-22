@@ -169,7 +169,9 @@ void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
                 }
 
                 // 写入数据全集中
-                stArchiveData.mapFileEntry[entryDir.strFullPath] = entryDir;
+                if (stArchiveData.mapFileEntry.find(entryDir.strFullPath) == stArchiveData.mapFileEntry.end()) {
+                    stArchiveData.mapFileEntry[entryDir.strFullPath] = entryDir;
+                }
             }
         }
     }

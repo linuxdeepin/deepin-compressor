@@ -52,6 +52,12 @@ public:
     void refreshArchiveData();
 
     /**
+     * @brief setArchivePath    设置压缩包路径
+     * @param strPath
+     */
+    void setArchivePath(const QString &strPath);
+
+    /**
      * @brief setDefaultUncompressPath  设置默认解压路径
      * @param strPath       路径
      */
@@ -127,7 +133,7 @@ private:
      * @brief handleDoubleClick    处理双击事件
      * @param index 双击的index
      */
-    void handleDoubleClick(const QModelIndex &index);
+    void handleDoubleClick(const QModelIndex &index) override;
 
     /**
      * @brief refreshDataByCurrentPath  根据当前路径刷新数据
@@ -229,7 +235,7 @@ private slots:
      * @brief slotShowRightMenu     显示右键菜单
      * @param pos   右键位置
      */
-    void slotShowRightMenu(const QPoint &pos);
+    void slotShowRightMenu(const QPoint &pos) override;
 
     /**
      * @brief slotExtract   右键提取操作
@@ -244,7 +250,7 @@ private slots:
     /**
      * @brief slotDeleteFile    右键删除操作
      */
-    void slotDeleteFile();
+    void slotDeleteFile() override;
 
     /**
      * @brief slotDeleteFile    右键打开操作
@@ -269,6 +275,7 @@ private:
     QPoint m_dragPos; // 鼠标拖拽点击位置
     DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
     QString m_strSelUnCompressPath;    // 选择的解压路径
+    QString m_strArchivePath;       // 压缩包所在路径
     bool m_bModifiable = false;     // 压缩包数据是否可更改（增、删、改）
     bool m_bMultiplePassword = false;     // 追加是否可以多密码
 

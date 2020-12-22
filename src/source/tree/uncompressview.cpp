@@ -76,6 +76,11 @@ void UnCompressView::refreshArchiveData()
     resetLevel();       // 重置目录层级
 }
 
+void UnCompressView::setArchivePath(const QString &strPath)
+{
+    m_strArchivePath = strPath;
+}
+
 void UnCompressView::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
@@ -677,7 +682,7 @@ void UnCompressView::slotExtract()
 
 void UnCompressView::slotExtract2Here()
 {
-    extract2Path(m_strUnCompressPath);
+    extract2Path(m_strArchivePath);
 }
 
 void UnCompressView::slotDeleteFile()

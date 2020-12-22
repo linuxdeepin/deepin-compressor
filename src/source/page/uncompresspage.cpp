@@ -52,6 +52,7 @@ void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, UnCom
     qDebug() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
 
+    m_pUnCompressView->setArchivePath(QFileInfo(m_strArchiveFullPath).path());  // 设置压缩包路径
     if (UnCompressParameter::ST_No != unCompressPar.eSplitVolume) {
         // 若是分卷压缩包，不支持增/删/改
         m_pUnCompressView->setModifiable(false);

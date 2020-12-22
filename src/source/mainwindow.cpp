@@ -1396,39 +1396,40 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                     });
                 }
 
+
+                // 初始化服务
+                if (m_pDDesktopServicesThread == nullptr) {
+                    m_pDDesktopServicesThread = new DDesktopServicesThread(this);
+                }
+
+                // 构建需要查看的本地文件
+                if (m_pSettingDlg->isAutoCreatDir()) {
+                    // 若设置了自动创建文件夹,显示解压路径
+                    m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath);
+                } else {
+                    // 否则显示解压第一个文件/文件夹所在目录
+                    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
+                    if (stArchiveData.listRootEntry.count() > 0) {
+                        m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[0].strFullPath);
+                    }
+                }
+
                 // 设置了自动打开文件夹
                 if (m_pSettingDlg->isAutoOpen()) {
-                    // 初始化服务
-                    if (m_pDDesktopServicesThread == nullptr) {
-                        m_pDDesktopServicesThread = new DDesktopServicesThread(this);
-                    }
-
-                    // 构建需要查看的本地文件
-                    if (m_pSettingDlg->isAutoCreatDir()) {
-                        // 若设置了自动创建文件夹,显示解压路径
-                        m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath);
-                    } else {
-                        // 否则显示解压第一个文件/文件夹所在目录
-                        ArchiveData stArchiveData = DataManager::get_instance().archiveData();
-                        if (stArchiveData.listRootEntry.count() > 0) {
-                            m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[0].strFullPath);
-                        }
-                    }
-
                     m_pDDesktopServicesThread->start();
+                }
 
-                    // 设置了解压完成自动删除原压缩包
-                    if (m_pSettingDlg->isAutoDeleteArchive() == AUTO_DELETE_ALWAYS) {
-                        // 总是自动删除原压缩包
+                // 设置了解压完成自动删除原压缩包
+                if (m_pSettingDlg->isAutoDeleteArchive() == AUTO_DELETE_ALWAYS) {
+                    // 总是自动删除原压缩包
+                    deleteWhenJobFinish(ArchiveJob::JT_Extract);
+                } else if (m_pSettingDlg->isAutoDeleteArchive() == AUTO_DELETE_ASK) {
+                    // 创建询问删除对话框
+                    SimpleQueryDialog dialog(this);
+                    int iResult = dialog.showDialog(tr("Do you want to delete the archive?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+                    // 点击确认时，删除原压缩包
+                    if (iResult == QDialog::Accepted) {
                         deleteWhenJobFinish(ArchiveJob::JT_Extract);
-                    } else if (m_pSettingDlg->isAutoDeleteArchive() == AUTO_DELETE_ASK) {
-                        // 创建询问删除对话框
-                        SimpleQueryDialog dialog(this);
-                        int iResult = dialog.showDialog(tr("Do you want to delete the archive?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
-                        // 点击确认时，删除原压缩包
-                        if (iResult == QDialog::Accepted) {
-                            deleteWhenJobFinish(ArchiveJob::JT_Extract);
-                        }
                     }
                 }
             }
