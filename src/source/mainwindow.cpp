@@ -802,8 +802,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
                                               (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
 
-            // 调用解压函数
-            if (ArchiveManager::get_instance()->extractFiles(listParam.at(0), QList<FileEntry>(), options, eType)) {
+            // 调用解压函数-----------------------------------7z非001卷解压到当前文件夹需要使用处理后的文件名
+            if (ArchiveManager::get_instance()->extractFiles(filepath, QList<FileEntry>(), options, eType)) {
                 // 设置进度界面参数
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(options.qComressSize);
@@ -1334,7 +1334,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
 
         // 设置需要查看的文件为压缩包
-        m_pDDesktopServicesThread->setOpenFile(m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName);
+        QString name = m_stCompressParameter.bSplit ? m_stCompressParameter.strArchiveName + ".001" : m_stCompressParameter.strArchiveName;
+        m_pDDesktopServicesThread->setOpenFile(m_stCompressParameter.strTargetPath + QDir::separator() + name);
 
         // zip压缩包添加注释
         addArchiveComment();
@@ -1377,7 +1378,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             m_pProgressdialog->setFinished();
         } else {
             qDebug() << "解压结束";
-
             ArchiveData stArchiveData = DataManager::get_instance().archiveData();
 
             if (stArchiveData.listRootEntry.count() == 0) {
@@ -1921,6 +1921,7 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
 
 void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo, bool bShowRetry)
 {
+    m_operationtype = Operation_NULL;   // 重置操作类型
     m_pFailurePage->setRetryEnable(bShowRetry);     // 设置重试按钮是否可用
     m_pFailurePage->setFailureInfo(fFailureInfo);   // 设置失败信息
 

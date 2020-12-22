@@ -513,6 +513,13 @@ void CliInterface::handleProgress(const QString &line)
 
                         if (count > 0) {
                             strfilename = line.midRef(count + 2).toString();
+                            // 右键 解压到当前文件夹
+                            if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract
+                                    && DataManager::get_instance().archiveData().listRootEntry.isEmpty()) {
+                                FileEntry entry;
+                                entry.strFullPath = strfilename;
+                                DataManager::get_instance().archiveData().listRootEntry << entry;
+                            }
                         }
                     } else { // 删除解析文件名
                         if (line.contains("% = ")) {
@@ -544,6 +551,19 @@ void CliInterface::handleProgress(const QString &line)
                     fileName = fileName.left(i + 1);
                     break;
                 }
+            }
+
+            // 右键 解压到当前文件夹
+            if (m_extractOptions.bRightExtract && DataManager::get_instance().archiveData().listRootEntry.isEmpty() && fileName.count('/') <= 1) {
+                FileEntry entry;
+                if (fileName.count('/') == 0) { // 压缩包内第一层的文件
+                    entry.strFullPath = fileName;
+                } else { // 压缩包内第一层的文件夹
+                    QString name = fileName.left(fileName.indexOf(QLatin1Char('/')));
+                    entry.strFullPath = name;
+                }
+
+                DataManager::get_instance().archiveData().listRootEntry << entry;
             }
 
             emit signalCurFileName(fileName);

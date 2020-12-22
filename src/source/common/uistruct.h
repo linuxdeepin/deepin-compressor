@@ -105,7 +105,6 @@ struct CompressParameter {
         qSize = 0;
     }
 
-
     QString strMimeType;    // 格式类型（application/x-tar）
     QString strArchiveName; // 压缩包名称(无路径)
     QString strTargetPath;  // 保存路径
@@ -130,6 +129,7 @@ struct UnCompressParameter {
         ST_Zip, // zip分卷
         ST_Other // 其他分卷
     };
+
     UnCompressParameter()
     {
         bRightOperation = false;
@@ -161,6 +161,7 @@ enum SuccessInfo {
     SI_Convert      // 转换成功
 };
 
+// 失败界面信息
 enum FailureInfo {
     FI_Compress,     // 压缩失败
     FI_Load,         // 打开失败

@@ -153,9 +153,5 @@ int main(int argc, char *argv[])
 
     PERF_PRINT_END("POINT-01");
 
-
-
-
     return app.exec();
 }
-

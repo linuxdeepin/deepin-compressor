@@ -148,15 +148,15 @@ bool Cli7zPlugin::readListLine(const QString &line)
     static const QLatin1String archiveInfoDelimiter2("----"); // 7z 9.04 分隔符后面是压缩包信息
     static const QLatin1String entryInfoDelimiter("----------"); // 分隔符后面是内部压缩文件信息
 
-    const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
-    QRegularExpressionMatch matchVersion;
-
     // 加载时7z分卷文件不完整的情况
     if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
         m_eErrorType = ET_ArchiveOpenError;
         m_finishType = PFT_Error;
         return false;
     }
+
+    const QRegularExpression rxVersionLine(QStringLiteral("^p7zip Version ([\\d\\.]+) .*$"));
+    QRegularExpressionMatch matchVersion;
 
     switch (m_parseState) {
     case ParseStateTitle:
@@ -287,9 +287,9 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         return true;
     }
 
-    if (isWrongPasswordMsg(line)) {  // 提示密码错误 // ------区分删除操作密码错误的处理------
+    if (isWrongPasswordMsg(line)) {  // 提示密码错误
         m_eErrorType = ET_WrongPassword;
-        if (workStatus != WT_Delete) {
+        if (workStatus != WT_Delete) { // 区分删除操作密码错误的处理
             m_finishType = PFT_Error;
             return false;
         }
@@ -313,7 +313,7 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             return true;
         }
 
-        // ------区分删除操作密码错误的处理------ 当读取到命令行最后一行 "E_FAIL" 的时候再killprocess
+        // ------区分删除操作密码错误的处理------ 当读取到命令行最后一行 "E_FAIL" 的时候再killprocess，否则进程是CrashExit
         if (workStatus == WT_Delete && m_eErrorType == ET_WrongPassword && line.startsWith("E_FAIL")) {
             m_finishType = PFT_Error;
             return false;

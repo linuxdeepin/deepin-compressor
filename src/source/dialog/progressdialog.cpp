@@ -28,8 +28,6 @@
 #include <QFileInfo>
 #include <QTimer>
 
-
-
 ProgressDialog::ProgressDialog(QWidget *parent):
     DAbstractDialog(parent)
 {

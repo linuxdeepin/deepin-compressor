@@ -70,7 +70,8 @@ void ProgressPage::setTotalSize(qint64 qTotalSize)
 
 void ProgressPage::setArchiveName(const QString &strArchiveName)
 {
-    m_pArchiveNameLbl->setText(strArchiveName);     // 设置压缩包名称
+    QFontMetrics elideFont(m_pArchiveNameLbl->font());
+    m_pArchiveNameLbl->setText(elideFont.elidedText(strArchiveName, Qt::ElideMiddle, 160));     // 设置压缩包名称
 
     // 设置类型图片
     QFileInfo fileinfo(strArchiveName);
@@ -98,7 +99,6 @@ void ProgressPage::setProgress(double dPercent)
 
     // 显示速度个剩余时间
     displaySpeedAndTime(dSpeed, qRemainingTime);
-
 }
 
 void ProgressPage::setCurrentFileName(const QString &strFileName)

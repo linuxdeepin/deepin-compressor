@@ -223,7 +223,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             // Check whether the mimetype inherits from a supported mimetype.
             const QStringList mimeTypes = plugin->metaData().mimeTypes();
             for (const QString &mime : mimeTypes) {
-                if (mimeType.inherits(mime)) {
+                if (mimeType.inherits(mime) && (mime != "application/octet-stream")) {
                     filteredPlugins << plugin;
                 }
             }

@@ -87,6 +87,7 @@ PluginFinishType LibarchivePlugin::list()
     } else {
         eType = list_New();
     }
+
     //emit signalFinished(eType);
     return eType;
 }
@@ -153,6 +154,13 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         const char *name = archive_entry_pathname(entry);
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
 
+        // 右键解压到当前文件夹
+        if (options.bRightExtract && DataManager::get_instance().archiveData().listRootEntry.isEmpty()) {
+            FileEntry entry;
+            entry.strFullPath = entryName;
+            DataManager::get_instance().archiveData().listRootEntry << entry;
+        }
+
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
         // 移除"./"开头的，例如rpm包
         if (entryName.startsWith(QLatin1String("./"))) {
@@ -175,7 +183,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         if (entryName.startsWith(QLatin1Char('/'))) {
             return PFT_Error;
         }
-
 
         // Should the entry be extracted?
         // 解压:不需要过滤
@@ -220,6 +227,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         } else {
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
         }
+
         emit signalCurFileName(entryName); // 发送当前正在解压的文件名
 
         // Check if the file about to be written already exists.
@@ -287,11 +295,9 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             QFile::setPermissions(/*destinationDirectory + QDir::separator() + */entryName, per);
         }
         break;
-
         case ARCHIVE_FAILED:
             emit error(("Filed error, extraction aborted."));
             return PFT_Error;
-
         case ARCHIVE_FATAL:
             emit error(("Fatal error, extraction aborted."));
             return PFT_Error;
@@ -315,13 +321,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 //        // Archive entry not among selected files, skip it.
 //        archive_read_data_skip(m_archiveReader.data());
 //    }
-
-
-
-
-
-
-
     }
 
 //    if (extractDst.isEmpty() == false) {
@@ -331,16 +330,11 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 //    slotRestoreWorkingDir();
 //return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
 
-
-
     if (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) {
         return PFT_Nomral;
     } else {
         return PFT_Error;
     }
-
-
-
 }
 
 PluginFinishType LibarchivePlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
@@ -512,7 +506,6 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
         if (archive_errno(dest) != ARCHIVE_OK) {
             return;
         }
-
 
         // 解压百分比进度
         m_currentExtractedFilesSize += readBytes;

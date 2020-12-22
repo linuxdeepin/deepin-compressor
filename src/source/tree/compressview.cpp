@@ -28,7 +28,7 @@
 #include "treeheaderview.h"
 #include "openwithdialog.h"
 #include "uitools.h"
-#include "kprocess.h"
+#include "processopenthread.h"
 
 #include <DMenu>
 
@@ -386,14 +386,10 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
         if (ret == 1) { // 添加压缩文件到目录
             addCompressFiles(listFiles);
         } else if (ret == 2) { // 在新窗口打开压缩文件
-            KProcess *cmdprocess = new KProcess;
-            QString programPath = OpenWithDialog::getProgramPathByExec("deepin-compressor");
-            cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
-            cmdprocess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
-            cmdprocess->setProgram(programPath, listFiles);
-            cmdprocess->start();
-            cmdprocess->waitForFinished();
-            delete  cmdprocess;
+            ProcessOpenThread *p = new ProcessOpenThread;
+            p->setProgramPath(OpenWithDialog::getProgramPathByExec("deepin-compressor"));
+            p->setArguments(QStringList() << listFiles.at(0));
+            p->start();
         }
     } else {
         addCompressFiles(listFiles);

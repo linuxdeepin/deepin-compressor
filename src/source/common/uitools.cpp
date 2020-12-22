@@ -378,7 +378,6 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
             break;
         }
 
-
         // Use the first valid plugin, according to the priority sorting.
         if (pIface) {
             qDebug() << "选用插件：" << plugin->metaData().pluginId();
