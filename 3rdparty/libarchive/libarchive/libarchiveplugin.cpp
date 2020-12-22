@@ -143,6 +143,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     QString extractDst;
 
     // Iterate through all entries in archive.
+    int iIndex = 0;     // 存储索引值
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
         // 空压缩包直接跳过
         if (!extractAll && 0 == m_ArchiveEntryCount) {
@@ -155,11 +156,12 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
 
         // 右键解压到当前文件夹
-        if (options.bRightExtract && DataManager::get_instance().archiveData().listRootEntry.isEmpty()) {
+        if (options.bRightExtract && iIndex == 0) {
             FileEntry entry;
             entry.strFullPath = entryName;
             DataManager::get_instance().archiveData().listRootEntry << entry;
         }
+        iIndex++;
 
         // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
         // 移除"./"开头的，例如rpm包

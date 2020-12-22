@@ -850,6 +850,12 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         QList< QUrl > listSelectpath = dialog.selectedUrls();
         QString strExtractPath = listSelectpath.at(0).toLocalFile();
 
+        // 构建批量解压参数
+        m_stUnCompressParameter.bRightOperation = true;
+        m_stUnCompressParameter.bBatch = true;
+        m_stUnCompressParameter.listBatchFiles = listFiles;
+        m_stUnCompressParameter.strExtractPath = strExtractPath;
+
         m_operationtype = Operation_Extract;
         // 调用批量解压
         if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, strExtractPath, m_pSettingDlg->isAutoCreatDir())) {
@@ -869,13 +875,18 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         }
     } else if (strType == QStringLiteral("extract_here_multi")) {
         // 批量解压到当前文件夹
-        m_stUnCompressParameter.bRightOperation = true;
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
 
+        // 构建批量解压参数
+        m_stUnCompressParameter.bRightOperation = true;
+        m_stUnCompressParameter.bBatch = true;
+        m_stUnCompressParameter.listBatchFiles = listFiles;
+        m_stUnCompressParameter.strExtractPath = QFileInfo(listFiles[0]).path();
+
         m_operationtype = Operation_Extract;
-        if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, QFileInfo(listFiles[0]).path(), m_pSettingDlg->isAutoCreatDir())) {
+        if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, m_stUnCompressParameter.strExtractPath, m_pSettingDlg->isAutoCreatDir())) {
             qint64 qSize = 0;
             foreach (QString strFile, listFiles) {
                 qSize += QFile(strFile).size();
@@ -1233,7 +1244,7 @@ void MainWindow::Extract2PathFinish(QString msg)
 
         // 打开选中第一个提取的文件/文件夹
         if (m_stUnCompressParameter.listExractFiles.count() > 0)
-            m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.listExractFiles[0]);
+            m_pDDesktopServicesThread->setOpenFiles(QStringList() << m_stUnCompressParameter.listExractFiles[0]);
         m_pDDesktopServicesThread->start();
     }
 }
@@ -1335,7 +1346,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
 
         // 设置需要查看的文件为压缩包
         QString name = m_stCompressParameter.bSplit ? m_stCompressParameter.strArchiveName + ".001" : m_stCompressParameter.strArchiveName;
-        m_pDDesktopServicesThread->setOpenFile(m_stCompressParameter.strTargetPath + QDir::separator() + name);
+        m_pDDesktopServicesThread->setOpenFiles(QStringList() << m_stCompressParameter.strTargetPath + QDir::separator() + name);
 
         // zip压缩包添加注释
         addArchiveComment();
@@ -1402,16 +1413,33 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                     m_pDDesktopServicesThread = new DDesktopServicesThread(this);
                 }
 
-                // 构建需要查看的本地文件
-                if (m_pSettingDlg->isAutoCreatDir()) {
-                    // 若设置了自动创建文件夹,显示解压路径
-                    m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath);
-                } else {
-                    // 否则显示解压第一个文件/文件夹所在目录
-                    ArchiveData stArchiveData = DataManager::get_instance().archiveData();
-                    if (stArchiveData.listRootEntry.count() > 0) {
-                        m_pDDesktopServicesThread->setOpenFile(m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[0].strFullPath);
+                if (m_stUnCompressParameter.bBatch) {
+                    // 批量解压
+                    QStringList listFiles;
+                    QString strFile = m_stUnCompressParameter.strExtractPath;
+                    if (m_pSettingDlg->isAutoCreatDir()) {
+                        // 自动创建文件夹的情况下显示创建的文件夹内容
+                        for (int i = 0; i < m_stUnCompressParameter.listBatchFiles.count(); ++i) {
+                            listFiles << m_stUnCompressParameter.strExtractPath + QDir::separator() + QFileInfo(m_stUnCompressParameter.listBatchFiles[i]).completeBaseName();
+                        }
+                    } else {
+                        // 未自动创建文件夹的情况下，显示每个压缩包解压出的第一个文件
+                        for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
+                            listFiles << m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[i].strFullPath;
+                            qDebug() << "**********" << m_stUnCompressParameter.strExtractPath + QDir::separator() + stArchiveData.listRootEntry[i].strFullPath;
+                        }
                     }
+                    // 设置最终需要打开的文件
+                    m_pDDesktopServicesThread->setOpenFiles(listFiles);
+                } else {
+                    // 单压缩包解压
+                    QString strFile = m_stUnCompressParameter.strExtractPath;
+                    // 未自动创建文件夹且有解压出数据的情况
+                    if (!m_pSettingDlg->isAutoCreatDir() && stArchiveData.listRootEntry.count() > 0)
+                        strFile += QDir::separator() + stArchiveData.listRootEntry[0].strFullPath;
+                    // 设置最终需要打开的文件
+                    qDebug() << "单压缩包解压 设置最终需要打开的文件*********************" << strFile;
+                    m_pDDesktopServicesThread->setOpenFiles(QStringList() << strFile);
                 }
 
                 // 设置了自动打开文件夹
@@ -1436,7 +1464,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
     }
     break;
-    // 删除
+// 删除
     case ArchiveJob::JT_Delete: {
         qDebug() << "删除结束";
         // 追加完成更新压缩包数据
@@ -1452,7 +1480,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
     }
     break;
-    // 打开
+// 打开
     case ArchiveJob::JT_Open: {
         qDebug() << "打开结束";
         // 若压缩包文件可更改，打开文件之后对文件进行监控
@@ -1469,13 +1497,13 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pLoadingPage->stopLoading();      // 停止更新
     }
     break;
-    // 格式转换
+// 格式转换
     case ArchiveJob::JT_Convert: {
         m_ePageID = PI_Success;
         showSuccessInfo(SI_Convert);   // 显示压缩成功
     }
     break;
-    // 追加/删除更新
+// 追加/删除更新
     case ArchiveJob::JT_Update: {
         qDebug() << "更新结束";
         m_pLoadingPage->stopLoading();      // 停止更新
@@ -1493,7 +1521,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
 
     }
     break;
-    // 更新压缩包注释
+// 更新压缩包注释
     case ArchiveJob::JT_Comment: {
         if (Operation_Update_Comment == m_operationtype) {
             qDebug() << "更新注释结束";
@@ -1523,6 +1551,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
         m_ePageID = PI_UnCompress;
     }
     break;
+    // 打开压缩包
     case ArchiveJob::JT_Load: {
         m_ePageID = PI_Home;
     }

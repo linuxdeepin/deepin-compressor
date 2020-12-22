@@ -321,7 +321,8 @@ void OpenJob::doWork()
     // 当作提取，去除父目录
     if (m_stEntry.strFullPath.contains(QDir::separator())) {
         int iIndex = m_stEntry.strFullPath.lastIndexOf(QDir::separator());
-        options.strDestination = m_stEntry.strFullPath.left(iIndex); // 当前路径截掉最后一级目录(不保留'/')
+        if (iIndex > 0)
+            options.strDestination = m_stEntry.strFullPath.left(iIndex + 1); // 当前路径截掉最后一级目录(保留'/')
     }
     options.qSize = m_stEntry.qSize;
 

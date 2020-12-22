@@ -8,24 +8,26 @@ DDesktopServicesThread::DDesktopServicesThread(QObject *parent)
 
 }
 
-void DDesktopServicesThread::setOpenFile(const QString &strFullPath)
+void DDesktopServicesThread::setOpenFiles(const QStringList &listFiles)
 {
-    m_strFullPath = strFullPath;
+    m_listFiles = listFiles;
 }
 
 bool DDesktopServicesThread::hasFiles()
 {
-    return !m_strFullPath.isEmpty();
+    return !m_listFiles.isEmpty();
 }
 
 void DDesktopServicesThread::run()
 {
-    QFileInfo info(m_strFullPath);
-    if (info.isDir()) {
-        // 如果是文件夹
-        DDesktopServices::showFolder(m_strFullPath);
-    } else {
-        // 如果是文件
-        DDesktopServices::showFileItem(m_strFullPath);
+    for (int i = 0; i < m_listFiles.count(); ++i) {
+        QFileInfo info(m_listFiles[i]);
+        if (info.isDir()) {
+            // 如果是文件夹
+            DDesktopServices::showFolder(m_listFiles[i]);
+        } else {
+            // 如果是文件
+            DDesktopServices::showFileItem(m_listFiles[i]);
+        }
     }
 }

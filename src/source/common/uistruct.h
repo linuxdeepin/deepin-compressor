@@ -139,6 +139,8 @@ struct UnCompressParameter {
         bCommentModifiable = false;
         qSize = 0;
         listExractFiles.clear();
+        listBatchFiles.clear();
+        bBatch = false;
     }
 
     QString strFullPath;        // 压缩包全路径
@@ -150,6 +152,9 @@ struct UnCompressParameter {
     bool bCommentModifiable;    // 是否支持注释更改
     qint64 qSize;               // 压缩包大小
     QList<QString> listExractFiles; // 存储提取文件,用来结束之后自动打开文件夹时选中
+
+    QStringList listBatchFiles; // 批量解压压缩包全路径
+    bool bBatch;       // 是否批量
 
 };
 Q_DECLARE_METATYPE(UnCompressParameter)

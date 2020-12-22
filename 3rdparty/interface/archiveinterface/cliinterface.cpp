@@ -880,11 +880,13 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         // 将文件从临时文件夹内移出
         bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
         if (!droppedFilesMoved) {
+            m_rootNode.clear(); // 清空缓存数据
             m_extractTempDir.reset();
             emit signalFinished(m_finishType);
             return;
         }
 
+        m_rootNode.clear(); // 清空缓存数据
         m_extractTempDir.reset();
     }
 

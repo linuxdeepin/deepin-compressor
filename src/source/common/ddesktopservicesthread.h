@@ -15,10 +15,10 @@ public:
     explicit DDesktopServicesThread(QObject *parent = nullptr);
 
     /**
-     * @brief setOpenFile   设置打开路径或文件
-     * @param strFullPath   打开目录
+     * @brief setOpenFiles   设置打开路径或文件
+     * @param listFiles     打开的文件目录
      */
-    void setOpenFile(const QString &strFullPath);
+    void setOpenFiles(const QStringList &listFiles);
 
     /**
      * @brief hasFiles      判断是否有文件
@@ -33,7 +33,7 @@ protected:
     void run();
 
 private:
-    QString m_strFullPath;      // 打开目录
+    QStringList m_listFiles;    // 需要打开的文件路径
 };
 
 #endif // DDESKTOPSERVICESTHREAD_H
