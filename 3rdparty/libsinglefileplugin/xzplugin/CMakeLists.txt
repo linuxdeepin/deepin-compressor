@@ -9,7 +9,7 @@ project(${LIB_NAME})
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(KF5Codecs REQUIRED)
-find_package(KF5Archive)
+#find_package(KF5Archive)
 include(FindPkgConfig)
 
 #指定头文件路径

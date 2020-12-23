@@ -12,7 +12,7 @@ configure_file(environments.h.in environments.h @ONLY)
 
 #测试点
 option(PERF_ON "open the info of performance testing" ON)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${HFILES_OUTPUT_PATH}/config.h)
 
 #项目相关设置
 #3.1 包含当前路径，使用*.ui文件时，需要加上这句，否则找不到头文件
@@ -43,6 +43,7 @@ pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
 #指定头文件路径
+include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/source)
 include_directories(${PROJECT_SOURCE_DIR}/source/archivemanager)
 include_directories(${PROJECT_SOURCE_DIR}/source/common)
@@ -54,7 +55,7 @@ include_directories(${HFILES_OUTPUT_PATH})
 
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c main.cpp)
-file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h )
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 
 #添加资源文件

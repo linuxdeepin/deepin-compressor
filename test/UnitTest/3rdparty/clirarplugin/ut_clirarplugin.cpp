@@ -1,9 +1,9 @@
 /*
 * Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     gaoxiang <gaoxiang@uniontech.com>
+* Author:     chendu <chendu@uniontech.com>
 *
-* Maintainer: gaoxiang <gaoxiang@uniontech.com>
+* Maintainer: chendu <chendu@uniontech.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,13 @@
 */
 
 #include <gtest/gtest.h>
-//#include <gmock/gmock-matchers.h>
-#include <QApplication>
-#include <iostream>
 
-int main(int argc, char *argv[])
+#include <gtest/src/stub.h>
+#include "clirarplugin.h"
+
+TEST(CliRarPlugin_CliRarPlugin_UT, CliRarPlugin_CliRarPlugin_UT001)
 {
-    std::cout << "Starting UnitTest" << std::endl;
-    qputenv("QT_QPA_PLATFORM", "offscreen");
-    testing::InitGoogleTest(&argc, argv);
-    QApplication a(argc, argv);
-
-    return RUN_ALL_TESTS();
+    CliRarPlugin *libzipPlugin = nullptr;
+    //  ArchiveSortFilterModel *model = new ArchiveSortFilterModel();
+    ASSERT_EQ(libzipPlugin, nullptr);
 }

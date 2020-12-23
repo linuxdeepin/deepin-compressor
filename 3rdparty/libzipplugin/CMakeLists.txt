@@ -30,6 +30,7 @@ file(GLOB_RECURSE json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
 #生成动静态库
 add_library(${LIB_NAME} SHARED ${c_files} ${json_files} ${h_files})
 
+#链接动静态库
 target_link_libraries(${LIB_NAME}
     Qt5::Widgets
     KF5::Codecs

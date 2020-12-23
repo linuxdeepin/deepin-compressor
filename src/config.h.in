@@ -1,1 +1,6 @@
+#ifndef __CONFIG_H_
+#define __CONFIG_H_
+
 #cmakedefine PERF_ON
+
+#endif // __CONFIG_H_

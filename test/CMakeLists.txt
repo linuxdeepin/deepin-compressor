@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME test)
 project(${EXE_NAME})
 
-
 add_subdirectory(UnitTest)
 
 add_custom_target(test

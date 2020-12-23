@@ -1,97 +1,69 @@
 #1.定义cmake版本
 cmake_minimum_required(VERSION 3.9.5)
+
 #2.设置项目名称
 set(EXE_NAME interface)
 project(${EXE_NAME}_test)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-ADD_COMPILE_OPTIONS(-fno-access-control)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage")
-
+#查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Core REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Network REQUIRED)
 find_package(KF5Codecs REQUIRED)
 include(FindPkgConfig)
 
-
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
-pkg_search_module(DtkGui REQUIRED dtkgui)
-pkg_search_module(DtkCore REQUIRED dtkcore)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 
 
-# Compile definitions for TerminalWidget
-# So we can use QT_VERSION_CHECK
-set(TERMINALWIDGET_VERSION_MAJOR "0")
-set(TERMINALWIDGET_VERSION_MINOR "14")
-set(TERMINALWIDGET_VERSION_PATCH "1")
-
-
+#指定头文件路径
 include_directories(${DtkWidget_INCLUDE_DIRS})
-include_directories(${DtkGui_INCLUDE_DIRS})
-include_directories(${DtkCore_INCLUDE_DIRS})
-set(LIBS_INCLUDE_DIRS
-  ${DtkWidget_LIBRARIES}
-  ${DtkCore_LIBRARIES}
-  ${DtkCore_LIBRARIES}
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${KF5Codecs_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/process)
+include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/process)
+
+#链接库路径
+link_directories(${LIBRARY_OUTPUT_PATH})
+
+#源文件、头文件和资源文件
+file(GLOB_RECURSE c_files
+    ${3RDPARTYRELATIVEPATH}/interface/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/archiveinterface/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/plugin/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/process/*.cpp
+    ./*.cpp
+    ./archiveinterface/*.cpp
+    ./plugin/*.cpp
+    ./process/*.cpp
 )
 
-#include_directories(../../../../3rdparty/googletest)                           #一下三行添加包含以便测试用例代码的编写
-#include_directories(../../../../3rdparty/googletest/googlemock/include)
-#include_directories(../../../../3rdparty/googletest/googletest/include)
-include_directories(../../../../3rdparty/interface)
-include_directories(../../../../3rdparty/interface/archiveinterface)
-include_directories(../../../../3rdparty/interface/plugin)
-include_directories(../../../../3rdparty/interface/process)
-include_directories(../../../../3rdparty/chardetDetector)
-
-set(LINK_LIBS
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Widgets
-    Qt5::WidgetsPrivate
-    Qt5::Network
-
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
-    ${ATSPI2_LIBRARIES}
-    ${GOBJECT_LIBRARIES}
+file(GLOB_RECURSE h_files
+    ${3RDPARTYRELATIVEPATH}/interface/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/archiveinterface/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/plugin/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/process/*.h
+    ./*.h
+    ./archiveinterface/*.h
+    ./plugin/*.h
+    ./process/*.h
 )
 
-include_directories(${LIB_NAME} PUBLIC ${Qt5Widgets_LIBRARIES}
-                                              ${Qt5DBus_LIBRARIES}
-                                              ${Qt5Widgets_PRIVATE_INCLUDE_DIRS}
-                                              ${Qt5Core_PRIVATE_INCLUDE_DIRS}
-                                              ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-                                              ${PROJECT_BINARY_DIR}
-                                              ${DtkWidget_INCLUDE_DIRS}
-                                              ${DtkCore_LIBRARIES}
-                                              ${DtkGUI_INCLUDE_DIRS}
-                                              ${ATSPI2_INCLUDE_DIRS}
-                                              ${GOBJECT_INCLUDE_DIRS})
-file(GLOB_RECURSE
-    c_files
-    *.cpp
-    )
-file(GLOB_RECURSE
-    h_files
-    )
+#生成可执行文件
+add_executable(${EXE_NAME}_test ${c_files} ${h_files})
 
-add_executable(${EXE_NAME}_test ${c_files} ${h_files}  )
-
-target_link_libraries(${EXE_NAME}_test Qt5::Widgets Qt5::Core KF5::Codecs)
-#target_link_libraries(${EXE_NAME}_test gmock gmock_main gtest gtest_main)
-target_link_libraries(${EXE_NAME}_test ${LIBS_INCLUDE_DIRS})
-
-target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface )
-target_link_libraries(${EXE_NAME}_test  compressor-ChardetDetector)
+#链接动静态库
 target_link_libraries(${EXE_NAME}_test
+    Qt5::Widgets
+    KF5::Codecs
+    ${DtkWidget_LIBRARIES}
+    compressor-ChardetDetector
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread
