@@ -275,6 +275,7 @@ private:
     QPoint m_dragPos; // 鼠标拖拽点击位置
     DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
     QString m_strSelUnCompressPath;    // 选择的解压路径
+    QString m_strArchive;   // 压缩包全路径
     QString m_strArchivePath;       // 压缩包所在路径
     bool m_bModifiable = false;     // 压缩包数据是否可更改（增、删、改）
     bool m_bMultiplePassword = false;     // 追加是否可以多密码

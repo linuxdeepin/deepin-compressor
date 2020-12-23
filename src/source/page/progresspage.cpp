@@ -72,6 +72,7 @@ void ProgressPage::setArchiveName(const QString &strArchiveName)
 {
     QFontMetrics elideFont(m_pArchiveNameLbl->font());
     m_pArchiveNameLbl->setText(elideFont.elidedText(strArchiveName, Qt::ElideMiddle, 160));     // 设置压缩包名称
+    m_pArchiveNameLbl->setToolTip(strArchiveName);
 
     // 设置类型图片
     QFileInfo fileinfo(strArchiveName);

@@ -47,7 +47,10 @@ PreviousLabel::~PreviousLabel()
 
 void PreviousLabel::setPrePath(const QString &strPath)
 {
-    setText("     .. " + tr("Back: ") + strPath);
+    setToolTip(strPath);
+    QFontMetrics elideFont(strPath);
+    QString str = elideFont.elidedText(strPath, Qt::ElideMiddle, width() - 15);
+    setText("     .. " + tr("Back: ") + str);
 }
 
 void PreviousLabel::paintEvent(QPaintEvent *e)

@@ -309,6 +309,11 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             return false;
         }
 
+        // 压缩包内没有数据
+        if (isNoFilesArchive(line) && workStatus == WT_Extract && m_isEmptyArchive == false) {
+            m_isEmptyArchive = true;
+        }
+
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
         }
@@ -323,4 +328,9 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     return true;
+}
+
+bool Cli7zPlugin::isNoFilesArchive(const QString &line)
+{
+    return line.startsWith(QLatin1String("No files to process"));
 }

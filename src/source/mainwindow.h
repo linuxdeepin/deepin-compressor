@@ -58,6 +58,12 @@ class MainWindow : public DMainWindow
 {
     Q_OBJECT
 
+signals:
+    /**
+     * @brief sigquitApp    应用程序退出信号
+     */
+    void sigquitApp();
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;

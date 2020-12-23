@@ -28,6 +28,7 @@ DWIDGET_USE_NAMESPACE
 
 class CompressView;
 class CustomPushButton;
+class QShortcut;
 
 // 压缩界面（列表）
 class CompressPage : public DWidget

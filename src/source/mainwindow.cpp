@@ -177,10 +177,12 @@ void MainWindow::initTitleBar()
     m_pTitleButton->setVisible(false);
     m_pTitleButton->setObjectName("TitleButton");
     m_pTitleButton->setAccessibleName("Title_btn");
+    m_pTitleButton->setToolTip(tr("Open file"));
 
     // 左上角注释信息
     m_pTitleCommentButton = new DIconButton(this);
     m_pTitleCommentButton->setFixedSize(36, 36);
+    m_pTitleCommentButton->setToolTip(tr("File info"));
     slotThemeChanged();
 
 //    m_pTitleCommentButton->setIcon(commentIcon);
@@ -226,12 +228,14 @@ void MainWindow::initData()
 void MainWindow::initConnections()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
+
     connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotTitleBtnClicked);
     connect(m_pTitleCommentButton, &DPushButton::clicked, this, &MainWindow::slotTitleCommentButtonPressed);
     connect(m_pHomePage, &HomePage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pHomePage, &HomePage::signalDragFiles, this, &MainWindow::slotDragSelectedFiles);
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
     connect(m_pCompressPage, &CompressPage::signalCompressNextClicked, this, &MainWindow::slotCompressNext);
+    connect(m_pCompressPage, &CompressPage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pCompressSettingPage, &CompressSettingPage::signalCompressClicked, this, &MainWindow::slotCompress);
     connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
@@ -275,6 +279,7 @@ void MainWindow::refreshPage()
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
+
         titlebar()->setTitle(tr("Create New Archive"));
     }
     break;
@@ -284,6 +289,7 @@ void MainWindow::refreshPage()
         if (m_iCompressedWatchTimerID == 0) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
+
         titlebar()->setTitle(tr("Create New Archive"));
     }
     break;
@@ -362,7 +368,6 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 
     foreach (QString file, files) {
         QFileInfo fi(file);
-
         if (fi.isFile()) {  // 如果为文件，直接获取大小
             qint64 curFileSize = fi.size();
 
@@ -388,12 +393,12 @@ void MainWindow::calFileSizeByThread(const QString &path)
     QDir dir(path);
     if (!dir.exists())
         return;
+
     // 获得文件夹中的文件列表
     QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
 
     for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);
-
         if (fileInfo.isDir()) {
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
@@ -414,6 +419,17 @@ void MainWindow::calFileSizeByThread(const QString &path)
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
+    switch (pixmap) {
+    case DStyle::SP_IncreaseElement: // 列表界面
+        m_pTitleButton->setToolTip(tr("Open file"));
+        break;
+    case DStyle::SP_ArrowLeave:  // 压缩设置界面
+        m_pTitleButton->setToolTip(tr("Back"));
+        break;
+    default:
+        break;
+    }
+
     m_pTitleButton->setVisible(bVisible);
 
     if (bVisible)
@@ -552,7 +568,6 @@ bool MainWindow::checkSettings(QString file)
         existMime = true;
     } else {
         fileMime = determineMimeType(file).name();
-
         if (fileMime.contains("application/"))
             fileMime = fileMime.remove("application/");
 
@@ -842,8 +857,11 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 处理操作
         const int mode = dialog.exec();
 
-        if (mode != QDialog::Accepted) {
-            // 不选取任何路径，不做处理直接返回
+        if (mode != QDialog::Accepted) { // 没有选择解压路径
+            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
+                emit sigquitApp();
+            });
+
             return;
         }
         // 获取解压路径
@@ -1407,7 +1425,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                     });
                 }
 
-
                 // 初始化服务
                 if (m_pDDesktopServicesThread == nullptr) {
                     m_pDDesktopServicesThread = new DDesktopServicesThread(this);
@@ -1518,7 +1535,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             m_ePageID = PI_UnCompress;
             m_pUnCompressPage->refreshDataByCurrentPathChanged();
         }
-
     }
     break;
 // 更新压缩包注释
@@ -2066,7 +2082,6 @@ QSize MainWindow::getConfigWinSize()
 
     // 设置界面高度
     if (tempHeight.isValid()) {
-
         winHeight = tempHeight.toInt();
         winHeight = winHeight > MAINWINDOW_DEFAULTH ? winHeight : MAINWINDOW_DEFAULTH;
     }
@@ -2267,7 +2282,6 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
         // 无可用插件
         showErrorMessage(FI_Delete, EI_NoPlugin);
     }
-
 }
 
 void MainWindow::slotReceiveCurArchiveName(const QString &strArchiveName)

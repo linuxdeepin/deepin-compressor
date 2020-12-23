@@ -512,10 +512,10 @@ void CliInterface::handleProgress(const QString &line)
                         }
 
                         if (count > 0) {
-                            strfilename = line.midRef(count + 2).toString();
+                            strfilename = line.midRef(count + 2).toString();  // 文件名
                             // 右键 解压到当前文件夹
-                            if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract
-                                    && DataManager::get_instance().archiveData().listRootEntry.isEmpty()) {
+                            if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0) {
+                                m_indexOfListRootEntry++;
                                 FileEntry entry;
                                 entry.strFullPath = strfilename;
                                 DataManager::get_instance().archiveData().listRootEntry << entry;
@@ -531,6 +531,14 @@ void CliInterface::handleProgress(const QString &line)
 
                     emit signalprogress(percentage);
                     emit signalCurFileName(strfilename);
+                }
+            } else {
+                // 7z解压小文件无法获取文件名添加一个空的entry
+                if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0 && m_isEmptyArchive == false) {
+                    m_indexOfListRootEntry++;
+                    FileEntry entry;
+                    entry.strFullPath = QString();
+                    DataManager::get_instance().archiveData().listRootEntry << entry;
                 }
             }
         }
@@ -554,7 +562,8 @@ void CliInterface::handleProgress(const QString &line)
             }
 
             // 右键 解压到当前文件夹
-            if (m_extractOptions.bRightExtract && DataManager::get_instance().archiveData().listRootEntry.isEmpty() && fileName.count('/') <= 1) {
+            if (m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0 && fileName.count('/') <= 1) {
+                m_indexOfListRootEntry++;
                 FileEntry entry;
                 if (fileName.count('/') == 0) { // 压缩包内第一层的文件
                     entry.strFullPath = fileName;
@@ -867,11 +876,8 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
         m_finishType = PFT_Nomral;
     }
 
-//    if (exitCode == 9 || exitCode == 11) {
-//        DataManager::get_instance().archiveData().strPassword = QString();
-//    setPassword(QString());
-//        return;
-//    }
+    m_indexOfListRootEntry = 0;
+    m_isEmptyArchive = false;
 
     if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp")
                                             && m_extractOptions.strTargetPath.contains("/deepin-compressor-")

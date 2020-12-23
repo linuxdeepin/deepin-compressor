@@ -78,7 +78,8 @@ void UnCompressView::refreshArchiveData()
 
 void UnCompressView::setArchivePath(const QString &strPath)
 {
-    m_strArchivePath = strPath;
+    m_strArchive = strPath;
+    m_strArchivePath = QFileInfo(strPath).path();
 }
 
 void UnCompressView::setDefaultUncompressPath(const QString &strPath)
@@ -323,6 +324,12 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     bool bApplyAll = false;
     bool bOverwrite = false;
     for (int i = 0; i < listFiles.count(); ++i) {
+        if (listFiles[i] == m_strArchive) { // 追加的文件含有压缩包本身
+            TipDialog dialog;
+            dialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
+            return;
+        }
+
         // 初始化数据
         QFileInfo fileInfo(listFiles[i]);
         QString strLocalFile = fileInfo.filePath();
@@ -557,7 +564,6 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
 //    connect(pPasswordEdit, &DPasswordEdit::echoModeChanged, pPasswordEdit, [&](bool echoOn) {
 //        pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
 //    });
-
 
     // 不支持多密码的格式不可以勾选密码框
     if (!m_bMultiplePassword) {

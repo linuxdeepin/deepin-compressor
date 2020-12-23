@@ -204,7 +204,8 @@ protected:
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
     PluginFinishType m_finishType = PFT_Nomral;
     QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
-    bool m_isProcessKilled = false;
+    bool m_isProcessKilled = false;  // 进程已经结束
+    bool m_isEmptyArchive = false;  // 压缩包内无数据
 
 private:
     QList<FileEntry> m_files; // 文件
@@ -222,6 +223,7 @@ private:
     qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
     QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
     QString m_rootEntry; // 追加压缩文件夹的时候记录上一层节点
+    int m_indexOfListRootEntry = 0; // 右键解压到当前文件夹时的数据
 };
 
 #endif // CLIINTERFACE_H

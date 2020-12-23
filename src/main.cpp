@@ -19,7 +19,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "mainwindow.h"
 #include "compressorapplication.h"
 #include "environments.h"
@@ -101,7 +100,6 @@ int main(int argc, char *argv[])
         }
     }
 
-
     QIcon appIcon = QIcon::fromTheme("deepin-compressor");
 
     if (appIcon.isNull()) {
@@ -114,7 +112,6 @@ int main(int argc, char *argv[])
     if (app.setSingleInstance("deepin-compressor")) {
         Dtk::Widget::moveToCenter(&w);
     }
-
 
     const QStringList fileList = parser.positionalArguments();
     QStringList newfilelist;
@@ -144,6 +141,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        QObject::connect(&w, &MainWindow::sigquitApp, &app, &DApplication::quit);
         QMetaObject::invokeMethod(&w, "slotHandleRightMenuSelected", Qt::DirectConnection, Q_ARG(QStringList, newfilelist));
     } else {
         w.show();

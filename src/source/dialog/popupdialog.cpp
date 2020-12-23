@@ -154,14 +154,13 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
         // 文件夹提示
         strlabel2->setText(QObject::tr("Another folder with the same name already exists, replace it?"));
         addButton(QObject::tr("Skip"));
-        addButton(QObject::tr("overwrite"), true, DDialog::ButtonWarning);
+        addButton(QObject::tr("Merge"), true, DDialog::ButtonWarning);
     } else {
         // 文件提示
         strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
         addButton(QObject::tr("Skip"));
         addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
     }
-
 
     DCheckBox *checkbox = new DCheckBox;
     checkbox->setAccessibleName("Applyall_btn");

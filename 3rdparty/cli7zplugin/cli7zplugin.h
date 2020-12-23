@@ -78,6 +78,8 @@ private:
 
     bool handleLine(const QString &line, WorkType workStatus) override;
 
+    bool isNoFilesArchive(const QString &line);  // 压缩包内没有数据
+
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;
