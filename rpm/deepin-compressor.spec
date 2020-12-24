@@ -4,7 +4,7 @@
 %endif
 
 Name:           deepin-compressor
-Version:        5.8.0.14
+Version:        5.9.0.9
 Release:        %{specrelease}
 Summary:        A fast and lightweight application for creating and extracting archives
 License:        GPLv3+
