@@ -20,6 +20,7 @@ set(SRCRELATIVEPATH ../../../src) #相对于源码路径
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent)
+find_package(Qt5Test)
 find_package(KF5Codecs REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 include(FindPkgConfig)
@@ -114,11 +115,12 @@ add_executable(${PROJECT_NAME_TEST}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_F
 #target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
 
 set_target_properties(${PROJECT_NAME_TEST} PROPERTIES AUTOMOC TRUE)
-qt5_use_modules(${PROJECT_NAME_TEST}  Core  Widgets  Gui )
+qt5_use_modules(${PROJECT_NAME_TEST}  Core  Widgets  Gui)
 
 #链接动静态库
 target_link_libraries(${PROJECT_NAME_TEST}
     Qt5::Widgets
+    Qt5::Test
     KF5::Codecs
     ${DtkWidget_LIBRARIES}
     ${GOBJECT_LIBRARIES}
