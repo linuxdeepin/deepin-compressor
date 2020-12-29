@@ -7,6 +7,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-acce
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/test_output/)
 
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=${LIBRARY_OUTPUT_PATH}:/usr/lib/deepin-compressor/plugins")
+else()
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${LIBRARY_OUTPUT_PATH}:/usr/lib/deepin-compressor/plugins")
+endif()
+
 #查找依赖关系的包信息
 find_package(GTest REQUIRED)
 

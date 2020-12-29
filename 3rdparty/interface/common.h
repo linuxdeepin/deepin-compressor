@@ -8,7 +8,7 @@ class Common: public QObject
 {
     Q_OBJECT
 public:
-    Common(QObject *parent)
+    Common(QObject *parent = nullptr)
         : QObject(parent) {}
 
 public:

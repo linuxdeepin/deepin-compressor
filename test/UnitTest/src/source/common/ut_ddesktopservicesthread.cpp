@@ -20,9 +20,12 @@
 */
 
 #include "ddesktopservicesthread.h"
+#include "gtest/src/stub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <DDesktopServices>
+#include <QString>
 
 class TestDDesktopServicesThread : public ::testing::Test
 {
@@ -33,6 +36,7 @@ public:
     virtual void SetUp()
     {
         m_tester = new DDesktopServicesThread;
+        m_tester->setOpenFiles(m_listTempFile);
     }
 
     virtual void TearDown()
@@ -42,6 +46,7 @@ public:
 
 protected:
     DDesktopServicesThread *m_tester;
+    QStringList m_listTempFile = QStringList() << "../UnitTest/test_sources/test.zip/testDir" << "../UnitTest/test_sources/test.zip/test.txt";
 };
 
 
@@ -53,17 +58,49 @@ TEST_F(TestDDesktopServicesThread, initTest)
 
 TEST_F(TestDDesktopServicesThread, testsetOpenFiles)
 {
-    m_tester->setOpenFiles(QStringList() << "5555");
+    bool bEqual = true;
+
+    for (int i = 0; i < m_listTempFile.count(); ++i) {
+        if (m_tester->m_listFiles.count() > i) {
+            if (m_listTempFile[i] != m_tester->m_listFiles[i]) {
+                bEqual = false;
+                break;
+            }
+        } else {
+            bEqual = false;
+            break;
+        }
+    }
+    ASSERT_EQ(bEqual, true);
 }
 
 TEST_F(TestDDesktopServicesThread, testhasFiles)
 {
-//    QTest::keyPress(m_tester, Qt::Key_Delete);
-//    ASSERT_NE(m_tester, nullptr);
+    ASSERT_EQ(m_tester->hasFiles(), true);
+}
+
+bool showFolder_stub(QString localFilePath, const QString &startupId = QString())
+{
+    QFileInfo info(localFilePath);
+    return info.isDir();
+}
+
+bool showFileItem_stub(QString localFilePath, const QString &startupId = QString())
+{
+    QFileInfo info(localFilePath);
+    return info.isFile();
 }
 
 TEST_F(TestDDesktopServicesThread, testrun)
 {
-//    QTest::keyPress(m_tester, Qt::Key_Delete);
-//    ASSERT_NE(m_tester, nullptr);
+    typedef bool (*fptr)(QString, const QString &);
+    fptr A_foo = (fptr)(&DDesktopServices::showFolder);
+    fptr B_foo = (fptr)(&DDesktopServices::showFileItem);
+    Stub stub;
+    stub.set(A_foo, showFolder_stub);
+    stub.set(B_foo, showFolder_stub);
+
+    m_tester->run();
+
+    ASSERT_EQ(m_tester->hasFiles(), true);
 }

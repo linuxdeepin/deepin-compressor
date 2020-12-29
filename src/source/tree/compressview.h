@@ -97,7 +97,7 @@ private:
      * @brief handleDoubleClick    处理双击事件
      * @param index 双击的index
      */
-    void handleDoubleClick(const QModelIndex &index);
+    void handleDoubleClick(const QModelIndex &index) override;
 
     /**
      * @brief getCurrentDirFiles   获取当前路径下所有文件
@@ -134,12 +134,12 @@ private slots:
      * @brief slotShowRightMenu     显示右键菜单
      * @param pos   右键位置
      */
-    void slotShowRightMenu(const QPoint &pos);
+    void slotShowRightMenu(const QPoint &pos) override;
 
     /**
      * @brief slotDeleteFile    删除待压缩文件
      */
-    void slotDeleteFile();
+    void slotDeleteFile() override;
 
     /**
      * @brief slotDirChanged   监听当前目录变化

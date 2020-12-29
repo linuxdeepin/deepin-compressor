@@ -10,8 +10,6 @@ project(${EXE_NAME}_test)
 
 set(3RDPARTYRELATIVEPATH ../../../../3rdparty) #相对于源码路径
 
-add_subdirectory(ChardetDetector)
-
 add_subdirectory(interface)
 
 add_subdirectory(cli7zplugin)
