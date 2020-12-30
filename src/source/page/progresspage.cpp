@@ -136,6 +136,7 @@ void ProgressPage::resetProgress()
     } else {
         m_pFileNameLbl->setText(tr("Calculating..."));
     }
+
     m_timer.elapsed();
     m_iPerent = 0;
     m_qConsumeTime = 0;
@@ -236,6 +237,7 @@ void ProgressPage::calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTi
     if (m_qConsumeTime < 0) {
         m_timer.start();
     }
+
     m_qConsumeTime += m_timer.elapsed();
 
     if (m_qConsumeTime < 0)
@@ -302,7 +304,6 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         } else {
             m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
         }
-
     } else if (m_eType == PT_UnCompress) {
         if (dSpeed < 1024) {
             m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");

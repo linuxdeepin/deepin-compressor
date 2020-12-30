@@ -155,6 +155,7 @@ void CompressSettingPage::refreshMenu()
         if (QMimeDatabase().mimeTypeForName(type).preferredSuffix() == "7z") {
             bHas7z = true;
         }
+
         pAction = new QAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix(), m_pTypeMenu);
         pAction->setData(type);
         m_pTypeMenu->addAction(pAction);

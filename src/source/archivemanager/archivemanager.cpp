@@ -68,7 +68,6 @@ ArchiveManager *ArchiveManager::get_instance()
     return m_instance;
 }
 
-
 bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType/*, bool useLibArchive, bool bBatch*/)
 {
     // 重新创建压缩包首先释放之前的interface
@@ -194,7 +193,6 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
         connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
         connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
-
 
         m_pArchiveJob = pExtractJob;
         pExtractJob->start();

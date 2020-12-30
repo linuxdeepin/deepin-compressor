@@ -169,6 +169,7 @@ QString UnCompressPage::elidedExtractPath(const QString &strPath)
     if (fontSize > width()) {
         pathStr = fontMetrics.elidedText(strPath, Qt::ElideMiddle, width());//返回一个带有省略号的字符串
     }
+
     return pathStr;
 }
 

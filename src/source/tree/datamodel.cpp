@@ -58,7 +58,6 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
-
     int iRow = index.row();
     int iColumn = index.column();
 
@@ -114,12 +113,12 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
 
             return icon;
         }
+
         return QVariant();
     }
     }
 
     return QVariant();
-
 }
 
 int DataModel::rowCount(const QModelIndex &parent) const

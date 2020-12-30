@@ -92,7 +92,6 @@ void BatchJob::doContinue()
     }
 }
 
-
 BatchExtractJob::BatchExtractJob(QObject *parent)
     : BatchJob(parent)
 {
@@ -166,10 +165,9 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
         addSubjob(pExtractJob);
 
         return true;
-    } 
-  
+    }
+
     return false;
-    
 }
 
 void BatchExtractJob::slotHandleSingleJobProgress(double dPercentage)

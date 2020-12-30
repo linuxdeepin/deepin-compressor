@@ -119,8 +119,9 @@ void ProgressDialog::setCurrentFile(const QString &file)
 void ProgressDialog::setProcess(int value)
 {
     if ((m_dPerent - value) == 0 || (m_dPerent > value)) {
-        return ;
+        return;
     }
+
     m_dPerent = value;
 
     if (100 != m_circleprogress->value()) {
