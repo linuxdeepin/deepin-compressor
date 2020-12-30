@@ -889,6 +889,8 @@ private:
 
     QVector<Archive::Entry *> m_entries;
 
+    bool m_bRightCompress = false;                          // 是否是右键压缩
+
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif

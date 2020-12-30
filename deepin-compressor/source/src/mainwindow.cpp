@@ -63,6 +63,7 @@
 #include <DWidgetUtil>
 #include <DWindowCloseButton>
 #include <DWindowOptionButton>
+#include <DSysInfo>
 
 #include <QDebug>
 #include <QDir>
@@ -1993,6 +1994,7 @@ void MainWindow::onRightMenuSelected(const QStringList &files)
     } else if (files.last() == QStringLiteral("compress")) { // 右键选择多个文件进行压缩
         QStringList pathlist = files;
         pathlist.removeLast();
+        m_bRightCompress = true;
 
         emit sigZipSelectedFiles(pathlist);
         // 切换到压缩设置界面
@@ -4215,6 +4217,20 @@ void MainWindow::slotCompressFinished(KJob *job)
     refreshPage();
     deleteLaterJob();
     PERF_PRINT_END("POINT-03");
+
+    // 如果是右键压缩，压缩完毕自动关闭界面
+    if (m_bRightCompress) {
+        Dtk::Core::DSysInfo::UosEdition edition =  Dtk::Core::DSysInfo::uosEditionType();
+        //等于服务器行业版或欧拉版(centos)
+        bool isCentos = Dtk::Core::DSysInfo::UosEuler == edition || Dtk::Core::DSysInfo::UosEnterpriseC == edition;
+
+        if (isCentos) {
+            QTimer::singleShot(100, this, [ = ]() {
+                close();;
+            });
+        }
+
+    }
 }
 void MainWindow::slotJobFinished(KJob *job)
 {
