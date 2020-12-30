@@ -1,7 +1,7 @@
 #执行测试程序
 #!/bin/bash
 
-project_path=$(cd `dirname $0`; pwd)
+project_path=$(cd `dirname $0`; pwd) #当前Shell程序的目录
 executable1=${project_path}/test_output/bz2plugin_test #可执行程序的文件名
 executable2=${project_path}/test_output/cli7zplugin_test
 executable3=${project_path}/test_output/clirarplugin_test

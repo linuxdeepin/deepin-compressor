@@ -98,7 +98,7 @@ file(GLOB_RECURSE h_files
 
 file(GLOB_RECURSE res_files ${SRCRELATIVEPATH}/*.qrc)
 QT5_ADD_RESOURCES(QRC_MOC ${res_files})
-message("chendu ${res_files}")
+
 #INCLUDE(${QT_USE_FILE})
 #ADD_DEFINITIONS(${QT_DEFINITIONS})
 

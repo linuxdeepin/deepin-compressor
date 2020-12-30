@@ -123,16 +123,9 @@ QString UiTools::humanReadableSize(const qint64 &size, int precision)
 
     double sizeAsDouble = size;
     static QStringList measures;
-    if (measures.isEmpty())
-        measures << QCoreApplication::translate("QInstaller", "B")
-                 << QCoreApplication::translate("QInstaller", "KB")
-                 << QCoreApplication::translate("QInstaller", "MB")
-                 << QCoreApplication::translate("QInstaller", "GB")
-                 << QCoreApplication::translate("QInstaller", "TB")
-                 << QCoreApplication::translate("QInstaller", "PB")
-                 << QCoreApplication::translate("QInstaller", "EB")
-                 << QCoreApplication::translate("QInstaller", "ZB")
-                 << QCoreApplication::translate("QInstaller", "YB");
+    if (measures.isEmpty()) {
+        measures <<  "B" << "KB" << "MB" << "GB" << "TB" << "PB" << "EB" << "ZB" << "YB";
+    }
     QStringListIterator it(measures);
     QString measure(it.next());
     while (sizeAsDouble >= 1024.0 && it.hasNext()) {
