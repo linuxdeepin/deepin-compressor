@@ -95,6 +95,7 @@ TEST_F(TestLibzipPlugin, initTest)
 
 TEST_F(TestLibzipPlugin, testlist)
 {
+    qDebug() << "*gaoxiang*" << m_tester->m_strArchiveName;
     PluginFinishType eFinishType = m_tester->list();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
     ASSERT_EQ(bResult, true);
@@ -157,7 +158,7 @@ TEST_F(TestLibzipPlugin, testextractFiles_AllExtract)
     QList<FileEntry> files;
     ExtractionOptions options;
     options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath();
+    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -169,6 +170,9 @@ TEST_F(TestLibzipPlugin, testextractFiles_AllExtract)
     PluginFinishType eFinishType = m_tester->extractFiles(files, options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
     ASSERT_EQ(bResult, true);
+
+    QDir dir(options.strTargetPath);
+    dir.removeRecursively();
 }
 
 TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
@@ -179,7 +183,7 @@ TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
     ExtractionOptions options;
     files << stData.listRootEntry[0];
     options.bAllExtract = false;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath();
+    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -191,6 +195,9 @@ TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
     PluginFinishType eFinishType = m_tester->extractFiles(files, options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
     ASSERT_EQ(bResult, true);
+
+    QDir dir(options.strTargetPath);
+    dir.removeRecursively();
 }
 
 TEST_F(TestLibzipPlugin, testaddFiles)
@@ -212,6 +219,8 @@ TEST_F(TestLibzipPlugin, testaddFiles)
     PluginFinishType eFinishType = m_tester->addFiles(files, options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
     ASSERT_EQ(bResult, true);
+
+    QFile::remove(m_tester->m_strArchiveName);
 }
 
 TEST_F(TestLibzipPlugin, testmoveFiles)
@@ -290,7 +299,7 @@ TEST_F(TestLibzipPlugin, testdoKill)
 
 TEST_F(TestLibzipPlugin, testwriteEntry)
 {
-    m_tester->m_strArchiveName = QFileInfo("../UnitTest/test_sources/zip/compress/test1.zip").absoluteFilePath();
+    m_tester->m_strArchiveName = QFileInfo("../UnitTest/test_sources/zip/compress/temp/test1.zip").absoluteFilePath();
     QList<FileEntry> files;
     CompressOptions options;
     FileEntry entry;
@@ -311,6 +320,7 @@ TEST_F(TestLibzipPlugin, testwriteEntry)
     zip_close(archive);
     ASSERT_EQ(bResult, true);
 
+    QFile::remove(m_tester->m_strArchiveName);
 }
 
 TEST_F(TestLibzipPlugin, testprogressCallback)
@@ -385,7 +395,7 @@ TEST_F(TestLibzipPlugin, testextractEntry)
     if (archive) {
         ExtractionOptions options;
         options.bAllExtract = true;
-        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath();
+        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
         qlonglong qExtractSize = 0;
         QString strFileName;
 
@@ -398,6 +408,9 @@ TEST_F(TestLibzipPlugin, testextractEntry)
 
         ErrorType eType = m_tester->extractEntry(archive, 0, options, qExtractSize, strFileName);
         bResult = (eType == ET_NoError) ? true : false;
+
+        QDir dir(options.strTargetPath);
+        dir.removeRecursively();
     }
 
     ASSERT_EQ(bResult, true);
