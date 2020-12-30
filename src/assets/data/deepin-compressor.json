@@ -262,6 +262,13 @@
                             "default": true
                         },
                         {
+                            "key": "octet-stream",
+                            "name": " ",
+                            "type": "checkbox",
+                            "text": "octet-stream(crx)",
+                            "default": true
+                        },
+                        {
                             "key": "style",
                             "name": "Font Style",
                             "type": "custom-button",

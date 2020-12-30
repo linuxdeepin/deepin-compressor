@@ -76,7 +76,8 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.zip"
                                         << "file_association.file_association_type.x-cd-image"
                                         << "file_association.file_association_type.x-iso9660-appimage"
-                                        << "file_association.file_association_type.x-source-rpm";
+                                        << "file_association.file_association_type.x-source-rpm"
+                                        << "file_association.file_association_type.octet-stream";
 
 UiTools::UiTools(QObject *parent)
     : QObject(parent)
