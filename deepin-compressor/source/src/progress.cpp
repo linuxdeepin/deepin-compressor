@@ -333,46 +333,46 @@ void Progress::displaySpeedAndTime(double speed, qint64 timeLeft)
     m_restTimeLabel->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
     if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSING) {
         if (speed < 1024) {
-            // 速度小于1024k， 显示速度单位为KB/S
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+            // 速度小于1024k， 显示速度单位为KB/s
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/s");
         } else if (speed > 1024 && speed < 1024 * 300) {
-            // 速度大于1M/S，且小于300MB/S， 显示速度单位为MB/S
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+            // 速度大于1M/S，且小于300MB/s， 显示速度单位为MB/s
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/s");
         } else {
-            // 速度大于300MB/S，显示速度为>300MB/S
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+            // 速度大于300MB/s，显示速度为>300MB/s
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/s");
         }
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DELETEING) {
         if (speed < 1024) {
-            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number(speed, 'f', 2) + "KB/s");
         } else {
-            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+            m_speedLabel->setText(tr("Speed", "delete") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/s");
         }
 
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMPRESSDRAGADD) {
 //        m_speedLabel->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
         if (speed < 1024) {
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number(speed, 'f', 2) + "KB/s");
         } else if (speed > 1024 && speed < 1024 * 300) {
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/s");
         } else {
-            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+            m_speedLabel->setText(tr("Speed", "compress") + ": " + ">300MB/s");
         }
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_DECOMPRESSING) {
         if (speed < 1024) {
-            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number(speed, 'f', 2) + "KB/s");
         } else if (speed > 1024 && speed < 1024 * 300) {
-            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/s");
         } else {
-            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
+            m_speedLabel->setText(tr("Speed", "uncompress") + ": " + ">300MB/s");
         }
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_CONVERT) {
         if (speed < 1024) {
-            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number(speed, 'f', 2) + "KB/S");
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number(speed, 'f', 2) + "KB/s");
         } else if (speed > 1024 && speed < 1024 * 300) {
-            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/S");
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + QString::number((speed / 1024), 'f', 2) + "MB/s");
         } else {
-            m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/S");
+            m_speedLabel->setText(tr("Speed", "convert") + ": " + ">300MB/s");
         }
     } else if (m_ProgressType == Progress::ENUM_PROGRESS_TYPE::OP_COMMENT) {
         m_speedLabel->setText("");
