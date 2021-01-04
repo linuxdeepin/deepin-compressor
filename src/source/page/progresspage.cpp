@@ -289,36 +289,36 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
     m_pRemainingTimeLbl->setText(tr("Time left") + ": " + hh + ":" + mm + ":" + ss);
     if (m_eType == PT_Compress || m_eType == PT_CompressAdd) {
         if (dSpeed < 1024) {
-            // 速度小于1024k， 显示速度单位为KB/S
-            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+            // 速度小于1024k， 显示速度单位为KB/s
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
         } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
-            // 速度大于1M/S，且小于300MB/S， 显示速度单位为MB/S
-            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+            // 速度大于1M/S，且小于300MB/s， 显示速度单位为MB/s
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
-            // 速度大于300MB/S，显示速度为>300MB/S
-            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + ">300MB/S");
+            // 速度大于300MB/s，显示速度为>300MB/s
+            m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + ">300MB/s");
         }
     } else if (m_eType == PT_Delete) {
         if (dSpeed < 1024) {
-            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
         } else {
-            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+            m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         }
     } else if (m_eType == PT_UnCompress) {
         if (dSpeed < 1024) {
-            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
         } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
-            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
-            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + ">300MB/S");
+            m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + ">300MB/s");
         }
     } else if (m_eType == PT_Convert) {
         if (dSpeed < 1024) {
-            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/S");
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
         } else if (dSpeed > 1024 && dSpeed < 1024 * 300) {
-            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/S");
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         } else {
-            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + ">300MB/S");
+            m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + ">300MB/s");
         }
     } else if (m_eType == PT_Comment) {
         m_pSpeedLbl->setText("");

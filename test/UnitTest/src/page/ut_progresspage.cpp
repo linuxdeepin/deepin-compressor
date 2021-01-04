@@ -236,7 +236,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime1)
     m_tester->m_eType = PT_Compress;
     m_tester->displaySpeedAndTime(1000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime2)
@@ -244,7 +244,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime2)
     m_tester->m_eType = PT_Compress;
     m_tester->displaySpeedAndTime(10240, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime3)
@@ -252,7 +252,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime3)
     m_tester->m_eType = PT_Compress;
     m_tester->displaySpeedAndTime(400000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime4)
@@ -260,7 +260,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime4)
     m_tester->m_eType = PT_Delete;
     m_tester->displaySpeedAndTime(1000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime5)
@@ -268,7 +268,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime5)
     m_tester->m_eType = PT_Delete;
     m_tester->displaySpeedAndTime(10240, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime6)
@@ -276,7 +276,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime6)
     m_tester->m_eType = PT_UnCompress;
     m_tester->displaySpeedAndTime(1000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime7)
@@ -284,7 +284,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime7)
     m_tester->m_eType = PT_UnCompress;
     m_tester->displaySpeedAndTime(10240, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime8)
@@ -292,7 +292,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime8)
     m_tester->m_eType = PT_UnCompress;
     m_tester->displaySpeedAndTime(400000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime9)
@@ -300,7 +300,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime9)
     m_tester->m_eType = PT_Convert;
     m_tester->displaySpeedAndTime(1000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("1000.00KB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime10)
@@ -308,7 +308,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime10)
     m_tester->m_eType = PT_Convert;
     m_tester->displaySpeedAndTime(10240, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith("10.00MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime11)
@@ -316,7 +316,7 @@ TEST_F(TestProgressPage, displaySpeedAndTime11)
     m_tester->m_eType = PT_Convert;
     m_tester->displaySpeedAndTime(400000, 100);
     EXPECT_EQ(m_tester->m_pRemainingTimeLbl->text().endsWith("00:01:40"), true);
-    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/S"), true);
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text().endsWith(">300MB/s"), true);
 }
 
 TEST_F(TestProgressPage, displaySpeedAndTime12)
