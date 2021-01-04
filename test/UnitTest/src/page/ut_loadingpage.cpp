@@ -21,12 +21,6 @@
 
 #include "loadingpage.h"
 
-#include <DLabel>
-#include <DFontSizeManager>
-#include <DApplicationHelper>
-
-#include <QHBoxLayout>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

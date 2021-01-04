@@ -76,6 +76,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             cg = DPalette::Active;
         }
     }
+
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
     //设置高亮文字色
@@ -88,6 +89,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
             forground.setColor(palette.color(cg, DPalette::HighlightedText));
         }
     }
+
     painter->setPen(forground);
     QRect rect = opt.rect;
     QFontMetrics fm(opt.font);
@@ -137,11 +139,11 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     } else {
         textRect.setX(textRect.x() + margin - 2);
     }
+
     QString text = fm.elidedText(opt.text, opt.textElideMode, textRect.width());
     painter->drawText(textRect, Qt::TextSingleLine | static_cast<int>(opt.displayAlignment), text);
     painter->restore();
 }
-
 
 DataTreeView::DataTreeView(QWidget *parent)
     : DTreeView(parent)

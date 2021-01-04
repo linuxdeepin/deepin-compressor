@@ -23,14 +23,6 @@
 #include "popupdialog.h"
 #include "customwidget.h"
 
-#include <DFontSizeManager>
-
-#include <QHBoxLayout>
-#include <QFileIconProvider>
-#include <QTimer>
-#include <QDebug>
-#include <QCoreApplication>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

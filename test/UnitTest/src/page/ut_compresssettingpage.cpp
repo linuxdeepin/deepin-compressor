@@ -27,23 +27,16 @@
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
 
-#include <DApplication>
-#include <DFileDialog>
-#include <DFontSizeManager>
-#include <DApplicationHelper>
-
 #include <QStandardPaths>
 #include <QFocusEvent>
-#include <QHBoxLayout>
 #include <QScrollArea>
-#include <QFormLayout>
 #include <QFileIconProvider>
 #include <QMenu>
 #include <QMimeDatabase>
-#include <QDebug>
 
 #include <cmath>
 
+#include "gtest/src/stub.h"
 #include <gtest/gtest.h>
 #include <QTest>
 
@@ -112,6 +105,21 @@ protected:
     CompressSettingPage *m_tester;
 };
 
+int length_stub()
+{
+    return 30000;
+}
+
+bool isChecked_true_stub()
+{
+    return true;
+}
+
+bool isChecked_false_stub()
+{
+    return false;
+}
+
 TEST_F(TestCompressSettingPage, initTest)
 {
 
@@ -166,8 +174,10 @@ TEST_F(TestCompressSettingPage, checkFileNameVaild1)
 TEST_F(TestCompressSettingPage, checkFileNameVaild2)
 {
     // 文件名过长返回错误
-//    bool ret = m_tester->checkFileNameVaild("");
-//    EXPECT_EQ(ret, false);
+    Stub stub;
+    stub.set(ADDR(QString, length), length_stub);
+    bool ret = m_tester->checkFileNameVaild("文件名过长");
+    EXPECT_EQ(ret, false);
 }
 
 TEST_F(TestCompressSettingPage, checkFileNameVaild3)
@@ -224,7 +234,13 @@ TEST_F(TestCompressSettingPage, setCommentEnabled)
 
 TEST_F(TestCompressSettingPage, checkCompressOptionValid)
 {
-
+//    m_tester->m_pFileNameEdt->setText("utTest");
+//    m_tester->m_pSavePathEdt->setText("/home/chenglu/Desktop/ut");
+//    m_tester->m_listFiles << "/home/chenglu/Desktop/ut/3.txt";
+//    Stub stub;
+//    stub.set(ADDR(CustomCheckBox, isChecked), isChecked_false_stub());
+//    bool ret = m_tester->checkCompressOptionValid();
+//    EXPECT_EQ(ret, true);
 }
 
 TEST_F(TestCompressSettingPage, checkFilePermission)
@@ -328,27 +344,106 @@ TEST_F(TestCompressSettingPage, slotAdvancedEnabled)
 
 TEST_F(TestCompressSettingPage, slotSplitEdtEnabled)
 {
-
+    Stub stub;
+    stub.set(ADDR(CustomCheckBox, isChecked), isChecked_true_stub);
+    m_tester->m_strMimeType = "zip";
+    m_tester->slotSplitEdtEnabled();
 }
 
-TEST_F(TestCompressSettingPage, slotCompressClicked)
+TEST_F(TestCompressSettingPage, slotSplitEdtEnabled2)
 {
-
+    Stub stub;
+    stub.set(ADDR(CustomCheckBox, isChecked), isChecked_false_stub);
+    m_tester->m_strMimeType = "zip";
+    m_tester->slotSplitEdtEnabled();
 }
 
-TEST_F(TestCompressSettingPage, slotCommentTextChanged)
+void compressParameter_stub()
 {
+    CompressParameter compressInfo;
+    compressInfo.strTargetPath = "/home/chenglu/Desktop/ut";
+    compressInfo.strArchiveName = "slotCompressClicked.zip";
+//    return compressInfo;
+}
 
+bool checkCompressOptionValid_true_stub()
+{
+    return true;
+}
+
+bool checkCompressOptionValid_false_stub()
+{
+    return false;
+}
+
+TEST_F(TestCompressSettingPage, slotCompressClicked1)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_false_stub);
+    m_tester->slotCompressClicked();
+}
+
+TEST_F(TestCompressSettingPage, slotCompressClicked2)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_true_stub);
+
+    m_tester->m_pFileNameEdt->setText("/home/chenglu/Desktop/ut/3.txt");
+    m_tester->m_pCompressTypeLbl->setText("tar");
+    m_tester->slotCompressClicked();
+}
+
+TEST_F(TestCompressSettingPage, slotCompressClicked3)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_true_stub);
+
+    m_tester->m_pFileNameEdt->setText("/home/chenglu/Desktop/ut/3.txt");
+    m_tester->m_pCompressTypeLbl->setText("tar.bz2");
+    m_tester->slotCompressClicked();
+}
+
+TEST_F(TestCompressSettingPage, slotCompressClicked4)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_true_stub);
+
+    m_tester->m_pFileNameEdt->setText("/home/chenglu/Desktop/ut/3.txt");
+    m_tester->m_pCompressTypeLbl->setText("zip");
+    m_tester->slotCompressClicked();
+}
+
+TEST_F(TestCompressSettingPage, slotCommentTextChanged1)
+{
+//    Stub stub;
+//    stub.set(ADDR(QString, size), length_stub);
+
+//    m_tester->slotCommentTextChanged();
+}
+
+TEST_F(TestCompressSettingPage, slotCommentTextChanged2)
+{
+    m_tester->slotCommentTextChanged();
 }
 
 TEST_F(TestCompressSettingPage, getCompressBtn)
 {
-
+    CustomPushButton *ret = m_tester->getCompressBtn();
+    ASSERT_NE(ret, nullptr);
+    delete ret;
 }
 
-TEST_F(TestCompressSettingPage, getComment)
+TEST_F(TestCompressSettingPage, getComment1)
 {
+    m_tester->m_pCommentEdt = nullptr;
+    QString ret = m_tester->getComment();
+    EXPECT_EQ(ret, "");
+}
 
+TEST_F(TestCompressSettingPage, getComment2)
+{
+    m_tester->m_pCommentEdt = new DTextEdit(m_tester);
+    m_tester->getComment();
 }
 
 TEST_F(TestCompressSettingPage, eventFilter)
@@ -358,5 +453,7 @@ TEST_F(TestCompressSettingPage, eventFilter)
 
 TEST_F(TestCompressSettingPage, getClickLbl)
 {
-
+    TypeLabel *ret = m_tester->getClickLbl();
+    ASSERT_NE(ret, nullptr);
+    delete ret;
 }

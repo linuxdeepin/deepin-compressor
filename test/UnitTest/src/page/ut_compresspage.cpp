@@ -25,16 +25,6 @@
 #include "uitools.h"
 #include "popupdialog.h"
 
-#include <DDialog>
-#include <DPalette>
-
-#include <QHBoxLayout>
-#include <QShortcut>
-#include <QDragEnterEvent>
-#include <QMimeData>
-#include <QDebug>
-#include <QFileInfo>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

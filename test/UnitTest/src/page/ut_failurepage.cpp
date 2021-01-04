@@ -23,10 +23,6 @@
 #include "customwidget.h"
 #include "uitools.h"
 
-#include <DFontSizeManager>
-
-#include <QVBoxLayout>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

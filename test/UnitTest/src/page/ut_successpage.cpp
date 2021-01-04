@@ -23,11 +23,6 @@
 #include "uitools.h"
 #include "customwidget.h"
 
-#include <DFontSizeManager>
-
-#include <QHBoxLayout>
-#include <QDebug>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

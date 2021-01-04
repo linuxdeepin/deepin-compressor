@@ -23,17 +23,6 @@
 #include "customwidget.h"
 #include "uitools.h"
 
-#include <DFileDialog>
-#include <DFontSizeManager>
-#include <DGuiApplicationHelper>
-
-#include <QVBoxLayout>
-#include <QSettings>
-#include <QSettings>
-#include <QShortcut>
-#include <QDragEnterEvent>
-#include <QMimeData>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

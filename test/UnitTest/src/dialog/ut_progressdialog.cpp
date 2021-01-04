@@ -22,13 +22,6 @@
 #include "progressdialog.h"
 #include "popupdialog.h"
 
-#include <DFontSizeManager>
-
-#include <QBoxLayout>
-#include <QDebug>
-#include <QFileInfo>
-#include <QTimer>
-
 #include <gtest/gtest.h>
 #include <QTest>
 

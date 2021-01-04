@@ -242,6 +242,6 @@ void DataModel::sort(int column, Qt::SortOrder order)
             return true;
         }
     });
-    endResetModel();  //在结束前添加此函数
 
+    endResetModel();  //在结束前添加此函数
 }

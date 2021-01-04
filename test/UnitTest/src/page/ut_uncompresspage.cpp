@@ -28,13 +28,6 @@
 #include "pluginmanager.h"
 #include "datamanager.h"
 
-#include <DFontSizeManager>
-#include <DFileDialog>
-
-#include <QHBoxLayout>
-#include <QDebug>
-#include <QFileInfo>
-
 #include <gtest/gtest.h>
 #include <QTest>
 
