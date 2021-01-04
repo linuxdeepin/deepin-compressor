@@ -116,17 +116,25 @@ TEST_F(TestUiTools, testHumanReadableSize1)
 //    return 1;
 //}
 
-//bool isExistMimeType_stub(const QString &strMimeType, bool &bArchive)
-//{
-//    return true;
-//}
+bool isExistMimeType_stub(const QString &strMimeType, bool &bArchive)
+{
+    return true;
+}
 TEST_F(TestUiTools, testIsArchiveFile)
 {
+    Stub stub;
+    stub.set(ADDR(UiTools, isExistMimeType), isExistMimeType_stub);
     ASSERT_EQ(UiTools::isArchiveFile("test.zip"), true);
 }
 
+bool isExistMimeType_stub2(const QString &strMimeType, bool &bArchive)
+{
+    return false;
+}
 TEST_F(TestUiTools, testIsArchiveFile1)
 {
+    Stub stub;
+    stub.set(ADDR(UiTools, isExistMimeType), isExistMimeType_stub2);
     ASSERT_EQ(UiTools::isArchiveFile("test.txt"), false);
 }
 
@@ -140,8 +148,15 @@ TEST_F(TestUiTools, testJudgeFileMime)
     ASSERT_EQ(UiTools::judgeFileMime("test.appimage"), "x-iso9660-appimage");
 }
 
+QString readConf_stub()
+{
+    return QLatin1String("file_association.file_association_type.x-bcpio:true\nfile_association.file_association_type.zip:true\n");
+}
 TEST_F(TestUiTools, testIsExistMimeType)
 {
+    Stub stub;
+    stub.set(ADDR(UiTools, readConf), readConf_stub);
+
     const QString strMimeType = "zip";
     bool bArchive = true;
     ASSERT_EQ(UiTools::isExistMimeType(strMimeType, bArchive), true);
@@ -157,7 +172,9 @@ TEST_F(TestUiTools, testReadConf)
 {
     Stub stub;
     stub.set(ADDR(QIODevice, readAll), readAll_stub);
-    ASSERT_EQ(UiTools::readConf(), "success");
+    QString ret("success");
+    QString ret1 = UiTools::readConf();
+    ASSERT_EQ(ret1.toStdString(), ret.toStdString());
 }
 
 TEST_F(TestUiTools, testToShortString)
@@ -168,15 +185,15 @@ TEST_F(TestUiTools, testToShortString)
 TEST_F(TestUiTools, testCreateInterface)
 {
     const QString &fileName = "test.zip";
-    ASSERT_EQ(QString(UiTools::createInterface(fileName, true, UiTools::APT_Auto)->metaObject()->className()), "Cli7zPlugin"); //Cli7zPlugin
-
+    const char *ret = "Cli7zPlugin";
+    ASSERT_STREQ(UiTools::createInterface(fileName, true, UiTools::APT_Cli7z)->metaObject()->className(), ret); //Cli7zPlugin
 }
 
 TEST_F(TestUiTools, testCreateInterface1)
 {
     const QString &fileName = "test.zip";
-    ASSERT_EQ(QString(UiTools::createInterface(fileName, false, UiTools::APT_Auto)->metaObject()->className()), "LibzipPlugin"); //LibzipPlugin
-
+    const char *ret = "LibzipPlugin";
+    ASSERT_STREQ(UiTools::createInterface(fileName, false, UiTools::APT_Auto)->metaObject()->className(), ret); //LibzipPlugin
 }
 
 bool isEmpty_stub()
@@ -189,13 +206,16 @@ TEST_F(TestUiTools, testCreateInterface2)
     stub.set(ADDR(QVector<Plugin *>, isEmpty), isEmpty_stub);
 
     const QString &fileName = "test.zip";
-    ASSERT_EQ(UiTools::createInterface(fileName, false, UiTools::APT_Auto), nullptr); //nullptr
-
+    bool ret = false;
+    if (nullptr == UiTools::createInterface(fileName, false, UiTools::APT_Auto)) {
+        ret = true;
+    }
+    ASSERT_EQ(ret, true); //nullptr
 }
 
 TEST_F(TestUiTools, testCreateInterface3)
 {
     const QString &fileName = "test.zip";
-    ASSERT_EQ(QString(UiTools::createInterface(fileName, false, UiTools::APT_Libarchive)->metaObject()->className()), "LibarchivePlugin"); //LibarchivePlugin
-
+    const char *ret = "LibarchivePlugin";
+    ASSERT_STREQ(UiTools::createInterface(fileName, false, UiTools::APT_Libarchive)->metaObject()->className(), ret); //LibarchivePlugin
 }
