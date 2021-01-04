@@ -46,7 +46,7 @@ public:
 
 protected:
     DDesktopServicesThread *m_tester;
-    QStringList m_listTempFile = QStringList() << "../UnitTest/test_sources/test.zip/testDir" << "../UnitTest/test_sources/test.zip/test.txt";
+    QStringList m_listTempFile = QStringList() << QFileInfo("../UnitTest/test_sources/test.zip/testDir").absoluteFilePath() << QFileInfo("../UnitTest/test_sources/test.zip/test.txt").absoluteFilePath();
 };
 
 
