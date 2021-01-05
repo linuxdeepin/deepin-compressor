@@ -1,49 +1,47 @@
 #1.定义cmake版本
 cmake_minimum_required(VERSION 3.9.5)
+
 #2.设置项目名称
 set(EXE_NAME cli7zplugin)
 project(${EXE_NAME}_test)
-#3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
 
-
-
+#查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5 REQUIRED Widgets)
-find_package(Qt5Core REQUIRED)
+find_package(KF5Codecs REQUIRED)
 include(FindPkgConfig)
 
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/common)
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface)
-include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/cli7zplugin)
+#指定头文件路径
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/cli7zplugin)
 
+#链接库路径
+link_directories(${LIBRARY_OUTPUT_PATH})
 
+#源文件、头文件和资源文件
+file(GLOB_RECURSE c_files
+    ${3RDPARTYRELATIVEPATH}/cli7zplugin/*.cpp
+    ./*.cpp
+)
 
-file(GLOB_RECURSE
-  c_files
-  *.cpp
-  ../../../../3rdparty/cli7zplugin/*.cpp
+file(GLOB_RECURSE h_files
+    ${3RDPARTYRELATIVEPATH}//cli7zplugin/*.h
+    ./*.h
+)
 
-  )
-file(GLOB_RECURSE
-  h_files
-  ../../../../3rdparty/cli7zplugin/*.h
-  )
-file(GLOB_RECURSE j
-    son_files
-    ../../../../3rdparty/cli7zplugin/*.json)
+file(GLOB_RECURSE json_files
+    ${3RDPARTYRELATIVEPATH}//cli7zplugin/*.json
+)
 
+#生成可执行文件
+add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 
-add_executable(${EXE_NAME}_test  ${h_files} ${c_files}  ${json_files} )
-
-target_link_libraries(${EXE_NAME}_test Qt5::Widgets Qt5::Core )
-target_link_libraries(${EXE_NAME}_test ${LIBS_INCLUDE_DIRS})
-target_link_libraries(${EXE_NAME}_test  compressor-interface)
-target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/cli7zplugin)
-target_include_directories(${EXE_NAME}_test PRIVATE ../../../../3rdparty/interface)
+#链接动静态库
 target_link_libraries(${EXE_NAME}_test
+    Qt5::Widgets
+    KF5::Codecs
+    compressor-interface
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread

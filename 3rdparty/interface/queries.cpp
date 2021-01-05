@@ -1,42 +1,39 @@
 /*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
- *
- * Author:     dongsen <dongsen@deepin.com>
- *
- * Maintainer: dongsen <dongsen@deepin.com>
- *             AaronZhang <ya.zhang@archermind.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     gaoxiang <gaoxiang@uniontech.com>
+*
+* Maintainer: gaoxiang <gaoxiang@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "queries.h"
 
-#include <DDialog>
-#include <DPasswordEdit>
-#include <DFontSizeManager>
-#include <DApplicationHelper>
-#include <DLabel>
 #include <DMainWindow>
+#include <DDialog>
+#include <DFontSizeManager>
+#include <DLabel>
+#include <DCheckBox>
+#include <DPasswordEdit>
 
 #include <QApplication>
-#include <QDir>
-#include <QMessageBox>
-#include <QPointer>
-#include <QUrl>
-#include <QBoxLayout>
 #include <QImageReader>
+#include <QLayout>
+#include <QUrl>
+#include <QDir>
+#include <QFileInfo>
 #include <QDebug>
-#include <QMainWindow>
 
 DMainWindow *getMainWindow()
 {
@@ -70,24 +67,38 @@ static QPixmap renderSVG(const QString &filePath, const QSize &size)
     return pixmap;
 }
 
-Query::Query()
+
+
+Query::Query(QObject *parent)
+    : QObject(parent)
 {
+
 }
 
-QVariant Query::response() const
+Query::~Query()
 {
-    return m_data.value(QStringLiteral("response"));
-}
 
-int Query::execDialog()
-{
-    //todo 20191125
-    return 0;
 }
 
 void Query::setParent(QWidget *pParent)
 {
     m_pParent = pParent;
+}
+
+void Query::waitForResponse()
+{
+    QMutexLocker locker(&m_responseMutex);
+    // 如果没有任何选择，等待响应
+    if (!m_data.contains(QStringLiteral("response"))) {
+        m_responseCondition.wait(&m_responseMutex);
+    }
+}
+
+void Query::setResponse(const QVariant &response)
+{
+    // 唤醒响应
+    m_data[QStringLiteral("response")] = response;
+    m_responseCondition.wakeAll();
 }
 
 QString Query::toShortString(QString strSrc, int limitCounts, int left)
@@ -99,53 +110,21 @@ QString Query::toShortString(QString strSrc, int limitCounts, int left)
     return displayName;
 }
 
-void Query::waitForResponse()
-{
-    QMutexLocker locker(&m_responseMutex);
-    //if there is no response set yet, wait
-    if (!m_data.contains(QStringLiteral("response"))) {
-        m_responseCondition.wait(&m_responseMutex);
-    }
-}
 
-void Query::setResponse(const QVariant &response)
-{
-    m_data[QStringLiteral("response")] = response;
-    m_responseCondition.wakeAll();
-}
-
-OverwriteQuery::OverwriteQuery(const QString &filename)
-    : m_noRenameMode(false)
-    , m_multiMode(true)
+OverwriteQuery::OverwriteQuery(const QString &filename, QObject *parent)
+    : Query(parent)
 {
     m_data[QStringLiteral("filename")] = filename;
 }
 
-void OverwriteQuery::colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF)
+OverwriteQuery::~OverwriteQuery()
 {
-    DPalette palette = DApplicationHelper::instance()->palette(widget);
-    QColor color = palette.color(ct);
-    color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground, color);
-    DApplicationHelper::instance()->setPalette(widget, palette);
-}
 
-void OverwriteQuery::colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF)
-{
-    DPalette palette = DApplicationHelper::instance()->palette(widget);
-    QColor color = palette.color(ct);
-    color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground, color);
-    DApplicationHelper::instance()->setPalette(widget, palette);
-}
-
-bool OverwriteQuery::applyAll()
-{
-    return m_bApplyAll;
 }
 
 void OverwriteQuery::execute()
 {
+    // 文件名处理
     QUrl sourceUrl = QUrl::fromLocalFile(QDir::cleanPath(m_data.value(QStringLiteral("filename")).toString()));
 
     QString path = sourceUrl.toString();
@@ -159,186 +138,168 @@ void OverwriteQuery::execute()
 
     QFileInfo file(path);
 
+    // 获取父窗口（居中显示）
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();
     }
 
     DDialog *dialog = new DDialog(m_pParent);
     dialog->setAccessibleName("Overwrite_dialog");
-
     dialog->setMinimumSize(QSize(380, 190));
+
+    // 设置对话框图标
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(280, 20));
-    strlabel->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
+    // 显示文件名
+    DLabel *pFileNameLbl = new DLabel;
+    pFileNameLbl->setMinimumSize(QSize(280, 20));
+    pFileNameLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Normal);
 
     int limitCounts = 16;
     int left = 8, right = 8;
     QString fileName = file.fileName();
     QString displayName = "";
     displayName = fileName.length() > limitCounts ? fileName.left(left) + "..." + fileName.right(right) : fileName;
-    strlabel->setText(displayName);
+    pFileNameLbl->setText(displayName);
 
-    DLabel *strlabel2 = new DLabel;
-    strlabel2->setMinimumSize(QSize(154, 20));
-    strlabel2->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
-    strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
+    // 显示提示语
+    DLabel *pTipLbl = new DLabel;
+    pTipLbl->setMinimumSize(QSize(154, 20));
+    pTipLbl->setAlignment(Qt::AlignCenter);
+    DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Medium);
+    pTipLbl->setText(QObject::tr("Another file with the same name already exists, replace it?"));
 
+    // 应用到全部勾选
+    DCheckBox *pApplyAllCkb = new DCheckBox;
+    pApplyAllCkb->setAccessibleName("Applyall_btn");
+    pApplyAllCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
+
+    DLabel *pApplyAllLbl = new DLabel(QObject::tr("Apply to all"));
+    pApplyAllLbl->setMinimumSize(QSize(98, 20));
+    DFontSizeManager::instance()->bind(pApplyAllLbl, DFontSizeManager::T6, QFont::Medium);
+
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+
+    // 控件主题样式
+    if (themeType == DGuiApplicationHelper::LightType) {    // 浅色
+        setWidgetColor(pFileNameLbl, DPalette::ToolTipText, 0.7);
+        setWidgetColor(pTipLbl, DPalette::ToolTipText, 1);
+        setWidgetColor(pApplyAllCkb, DPalette::ToolTipText, 0.7);
+    } else if (themeType == DGuiApplicationHelper::DarkType) {  // 深色
+        setWidgetType(pFileNameLbl, DPalette::TextLively, 0.7);
+        setWidgetType(pTipLbl, DPalette::TextLively, 1);
+        setWidgetType(pApplyAllCkb, DPalette::TextLively, 0.7);
+    }
+
+    // 按钮
     dialog->addButton(QObject::tr("Skip"));
     dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
 
-    DCheckBox *checkbox = new DCheckBox;
-    checkbox->setAccessibleName("Applyall_btn");
-    checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
-
-    DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
-    checkLabel->setMinimumSize(QSize(98, 20));
-    DFontSizeManager::instance()->bind(checkLabel, DFontSizeManager::T6, QFont::Medium);
-
-    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
-        colorRoleChange(strlabel, DPalette::ToolTipText, 0.7);
-        colorRoleChange(strlabel2, DPalette::ToolTipText, 1);
-        colorRoleChange(checkLabel, DPalette::Text, 1);
-        colorRoleChange(checkbox, DPalette::ToolTipText, 0.7);
-    }
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        colorTypeChange(strlabel, DPalette::TextLively, 0.7);
-        colorTypeChange(strlabel2, DPalette::TextLively, 1);
-        colorRoleChange(checkLabel, DPalette::Text, 1);
-        colorTypeChange(checkbox, DPalette::TextLively, 0.7);
-    }
-
+    // 布局
     QHBoxLayout *checkLayout = new QHBoxLayout;
     checkLayout->addStretch();
-    checkLayout->addWidget(checkbox);
-    checkLayout->addWidget(checkLabel);
+    checkLayout->addWidget(pApplyAllCkb);
+    checkLayout->addWidget(pApplyAllLbl);
     checkLayout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pTipLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    //    mainlayout->addWidget(checkbox, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addLayout(checkLayout);
-    //    mainlayout->SetFixedSize(QSize());
     DWidget *widget = new DWidget(dialog);
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
 
     //setTabOrder需放在布局最后，否则不生效
-    dialog->setTabOrder(checkbox, dialog->getButton(0));
+    dialog->setTabOrder(pApplyAllCkb, dialog->getButton(0));
     dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
 
+    // 操作结果
     const int mode = dialog->exec();
-    ret = mode;
+
     if (-1 == mode) {
         setResponse(Result_Cancel);
     } else if (0 == mode) {
-        if (checkbox->isChecked()) {
-            setResponse(Result_AutoSkip);
+        if (pApplyAllCkb->isChecked()) {
+            setResponse(Result_SkipAll);
         } else {
             setResponse(Result_Skip);
         }
     } else if (1 == mode) {
-        if (checkbox->isChecked()) {
+        if (pApplyAllCkb->isChecked()) {
             setResponse(Result_OverwriteAll);
         } else {
             setResponse(Result_Overwrite);
         }
     }
 
-    m_bApplyAll = checkbox->isChecked();
-
     delete dialog;
-    //QApplication::restoreOverrideCursor();
 }
-int OverwriteQuery::getExecuteReturn()
-{
-    return ret;
-}
+
 bool OverwriteQuery::responseCancelled()
 {
-    return m_data.value(QStringLiteral("response")).toInt() == R_CANCEL;
-}
-bool OverwriteQuery::responseOverwriteAll()
-{
-    return m_data.value(QStringLiteral("response")).toInt() == R_OVERWRITE_ALL;
-}
-bool OverwriteQuery::responseOverwrite()
-{
-    return m_data.value(QStringLiteral("response")).toInt() == R_OVERWRITE;
-}
-
-bool OverwriteQuery::responseRename()
-{
-    return m_data.value(QStringLiteral("response")).toInt() == R_RENAME;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Cancel;
 }
 
 bool OverwriteQuery::responseSkip()
 {
-    return m_data.value(QStringLiteral("response")).toInt() == R_SKIP;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Skip;
 }
 
-bool OverwriteQuery::responseAutoSkip()
+bool OverwriteQuery::responseSkipAll()
 {
-    return m_data.value(QStringLiteral("response")).toInt() == R_AUTO_SKIP;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_SkipAll;
 }
 
-QString OverwriteQuery::newFilename()
+bool OverwriteQuery::responseOverwrite()
 {
-    return m_data.value(QStringLiteral("newFilename")).toString();
+    return m_data.value(QStringLiteral("response")).toInt() == Result_Overwrite;
 }
 
-void OverwriteQuery::setNoRenameMode(bool enableNoRenameMode)
+bool OverwriteQuery::responseOverwriteAll()
 {
-    m_noRenameMode = enableNoRenameMode;
+    return m_data.value(QStringLiteral("response")).toInt() == Result_OverwriteAll;
 }
 
-bool OverwriteQuery::noRenameMode()
+void OverwriteQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF)
 {
-    return m_noRenameMode;
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(pWgt, palette);
 }
 
-void OverwriteQuery::setMultiMode(bool enableMultiMode)
+void OverwriteQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF)
 {
-    m_multiMode = enableMultiMode;
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
+    color.setAlphaF(alphaF);
+    palette.setColor(DPalette::Foreground, color);
+    DApplicationHelper::instance()->setPalette(pWgt, palette);
 }
 
-bool OverwriteQuery::multiMode()
+
+
+PasswordNeededQuery::PasswordNeededQuery(const QString &strFileName, QObject *parent)
+    : Query(parent)
 {
-    return m_multiMode;
+    m_data[QStringLiteral("fileName")] = strFileName;
 }
 
-PasswordNeededQuery::PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain)
+PasswordNeededQuery::~PasswordNeededQuery()
 {
-    //    setObjectName("PasswordNeededQuery");
-    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
-    m_data[QStringLiteral("incorrectTryAgain")] = incorrectTryAgain;
+
 }
 
 void PasswordNeededQuery::execute()
 {
-    // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
-    // at the moment (#231974)
-    //    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-
-    //    DDialog* dlg = new DDialog;
-    //    dlg->setMessage(QObject::tr("This file is encrypted, please enter the password"));
-
-    //    const bool notCancelled = dlg->exec();
-    //    const QString password = "";
-
-    //    m_data[QStringLiteral("password")] = password;
-    //    setResponse(notCancelled && !password.isEmpty());
-
-    qDebug() << m_data[QStringLiteral("archiveFilename")];
-
+    // 获取父窗口（居中显示）
     if (m_pParent == nullptr) {
         m_pParent = getMainWindow();
     }
@@ -348,38 +309,42 @@ void PasswordNeededQuery::execute()
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
 
-    DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedSize(300, 20);
-    strlabel->setForegroundRole(DPalette::WindowText);
-    strlabel->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::DemiBold);
-    QString archiveFullPath = m_data[QStringLiteral("archiveFilename")].toString();
+    // 加密文件名显示
+    DLabel *pFileNameLbl = new DLabel(dialog);
+    pFileNameLbl->setFixedSize(300, 20);
+    pFileNameLbl->setForegroundRole(DPalette::WindowText);
+    pFileNameLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::DemiBold);
+    QString archiveFullPath = m_data[QStringLiteral("fileName")].toString();
     QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
-    strlabel->setText(fileName);
-    strlabel->setAlignment(Qt::AlignCenter);
-    strlabel->setToolTip(archiveFullPath);
+    pFileNameLbl->setText(fileName);
+    pFileNameLbl->setAlignment(Qt::AlignCenter);
+    pFileNameLbl->setToolTip(archiveFullPath);
 
-    DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedWidth(340); //修复英文环境下提示语显示不全
-    strlabel2->setForegroundRole(DPalette::WindowText);
-    strlabel2->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Normal);
-    strlabel2->setText(tr("Encrypted file, please enter the password"));
-    strlabel2->setAlignment(Qt::AlignCenter);
+    // 提示语显示
+    DLabel *pTipLbl = new DLabel(dialog);
+    pTipLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
+    pTipLbl->setForegroundRole(DPalette::WindowText);
+    pTipLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Normal);
+    pTipLbl->setText(tr("Encrypted file, please enter the password"));
+    pTipLbl->setAlignment(Qt::AlignCenter);
 
+    // 密码框
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     passwordedit->setFocusPolicy(Qt::StrongFocus);
     passwordedit->setFixedWidth(280);
 
-    dialog->addButton(QObject::tr("OK"));
-    dialog->getButton(0)->setEnabled(false);
+    dialog->addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
+    dialog->addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
+    dialog->getButton(1)->setEnabled(false);
     //确保输入的密码不为空
     connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [&]() {
         if (passwordedit->text().isEmpty()) {
-            dialog->getButton(0)->setEnabled(false);
+            dialog->getButton(1)->setEnabled(false);
         } else {
-            dialog->getButton(0)->setEnabled(true);
+            dialog->getButton(1)->setEnabled(true);
         }
     });
 
@@ -388,10 +353,11 @@ void PasswordNeededQuery::execute()
         passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
     });
 
+    // 布局
     QVBoxLayout *mainlayout = new QVBoxLayout;
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignCenter);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignCenter);
+    mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignCenter);
+    mainlayout->addWidget(pTipLbl, 0, Qt::AlignCenter);
     mainlayout->addSpacing(10);
     mainlayout->addWidget(passwordedit, 0, Qt::AlignCenter);
     mainlayout->addSpacing(10);
@@ -401,23 +367,18 @@ void PasswordNeededQuery::execute()
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
     QRect mainWindowGeometr = getMainWindow()->geometry();
-    dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - TITLE_FIXED_HEIGHT + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
+    dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - 50 + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
     const int mode = dialog->exec();
 
     m_data[QStringLiteral("password")] = passwordedit->text();
 
-    delete dialog;
-
-    if (-1 == mode) {
+    if (-1 == mode || 0 == mode) {
         setResponse(Result_Cancel);
     } else {
         setResponse(Result_Skip);
     }
-}
 
-QString PasswordNeededQuery::password()
-{
-    return m_data.value(QStringLiteral("password")).toString();
+    delete dialog;
 }
 
 bool PasswordNeededQuery::responseCancelled()
@@ -425,106 +386,7 @@ bool PasswordNeededQuery::responseCancelled()
     return !m_data.value(QStringLiteral("response")).toBool();
 }
 
-WrongPasswordQuery::WrongPasswordQuery(const QString &archiveFilename, bool incorrectTryAgain)
-{
-    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
-    m_data[QStringLiteral("incorrectTryAgain")] = incorrectTryAgain;
-}
-
-void WrongPasswordQuery::execute()
-{
-    // If we are being called from the KPart, the cursor is probably Qt::WaitCursor
-    // at the moment (#231974)
-
-    qDebug() << m_data[QStringLiteral("archiveFilename")];
-    QFileInfo file(m_data[QStringLiteral("archiveFilename")].toString());
-
-    if (m_pParent == nullptr) {
-        m_pParent = getMainWindow();
-    }
-
-    DDialog *dialog = new DDialog(m_pParent);
-    dialog->setAccessibleName("WrongPassword_dialog");
-    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
-    dialog->setIcon(pixmap);
-
-    DLabel *strlabel = new DLabel(dialog);
-    strlabel->setFixedHeight(20);
-    strlabel->setForegroundRole(DPalette::TextTitle);
-
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
-    strlabel->setText(file.fileName());
-
-    DLabel *strlabel2 = new DLabel(dialog);
-    strlabel2->setFixedHeight(20);
-    strlabel2->setForegroundRole(DPalette::TextWarning);
-
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Normal);
-    strlabel2->setText(QObject::tr("Wrong password"));
-
-    dialog->addButton(QObject::tr("OK"));
-
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addSpacing(10);
-
-    DWidget *widget = new DWidget(dialog);
-
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
-
-    dialog->exec();
-    delete dialog;
-
-    setResponse(Result_Cancel);
-}
-
-QString WrongPasswordQuery::password()
+QString PasswordNeededQuery::password()
 {
     return m_data.value(QStringLiteral("password")).toString();
-}
-
-bool WrongPasswordQuery::responseCancelled()
-{
-    return !m_data.value(QStringLiteral("response")).toBool();
-}
-
-LoadCorruptQuery::LoadCorruptQuery(const QString &archiveFilename)
-{
-    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
-}
-
-void LoadCorruptQuery::execute()
-{
-}
-
-bool LoadCorruptQuery::responseYes()
-{
-    return true;
-}
-
-ContinueExtractionQuery::ContinueExtractionQuery(const QString &error, const QString &archiveEntry)
-    : m_chkDontAskAgain("Don't ask again.")
-{
-    m_data[QStringLiteral("error")] = error;
-    m_data[QStringLiteral("archiveEntry")] = archiveEntry;
-}
-
-void ContinueExtractionQuery::execute()
-{
-    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
-
-    QApplication::restoreOverrideCursor();
-}
-
-bool ContinueExtractionQuery::responseCancelled()
-{
-    return (m_data.value(QStringLiteral("response")).toInt() == QMessageBox::Cancel);
-}
-
-bool ContinueExtractionQuery::dontAskAgain()
-{
-    return m_chkDontAskAgain.isChecked();
 }

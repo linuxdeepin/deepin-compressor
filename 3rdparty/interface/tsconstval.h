@@ -1,6 +1,0 @@
-#ifndef TSCONSTVAL_H
-#define TSCONSTVAL_H
-
-#define EXTRACT_READBYTE_SIZE 1024
-
-#endif // TSCONSTVAL_H

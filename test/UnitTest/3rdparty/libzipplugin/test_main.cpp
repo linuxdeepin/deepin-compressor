@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
  *

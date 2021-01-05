@@ -1,0 +1,7 @@
+#ifndef __CONFIG_H_
+#define __CONFIG_H_
+
+#cmakedefine PERF_ON
+#cmakedefine BUILD_PATH "@BUILD_PATH@"
+
+#endif // __CONFIG_H_

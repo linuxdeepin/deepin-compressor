@@ -1,27 +1,34 @@
-project(cli7zplugin)
-
+#定义cmake版本
 cmake_minimum_required(VERSION 3.9.5)
 
+#设置项目名称
 set(LIB_NAME cli7zplugin)
-#3.3 打开全局moc
-set(CMAKE_AUTOMOC ON)
+project(${LIB_NAME})
 
+#查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5 REQUIRED Widgets)
+find_package(KF5Codecs REQUIRED)
 include(FindPkgConfig)
 
+#指定头文件路径
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${HFILES_OUTPUT_PATH})
 
+#链接库路径
+link_directories(${LIBRARY_OUTPUT_PATH})
 
-set(INTERFACE_LNCLUDE_DIR ${PROJECT_SOURCE_DIR}/../interface)
+#源文件、头文件和资源文件
+file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)
+file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
+file(GLOB_RECURSE json_files RELATIVE ${PROJECT_SOURCE_DIR} *.json)
 
-include_directories(${INTERFACE_LNCLUDE_DIR})
-file(GLOB_RECURSE c_files  *.cpp)
-file(GLOB_RECURSE h_files  *.h)
-file(GLOB_RECURSE json_files  *.json)
-
+#生成动静态库
 add_library(${LIB_NAME} SHARED ${c_files} ${json_files} ${h_files})
 
-target_link_libraries( ${LIB_NAME} ${LIBS_INCLUDE_DIRS} )
-target_link_libraries( ${LIB_NAME} compressor-interface)
+#链接动静态库
+target_link_libraries(${LIB_NAME}
+    Qt5::Widgets
+    KF5::Codecs
+    compressor-interface
+)

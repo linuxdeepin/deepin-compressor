@@ -4,19 +4,26 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME 3rdparty)
 project(${EXE_NAME}_test)
 
-ADD_COMPILE_OPTIONS(-fno-access-control)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+#ADD_COMPILE_OPTIONS(-fno-access-control)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+
+
+set(3RDPARTYRELATIVEPATH ../../../../3rdparty) #相对于源码路径
+
+add_subdirectory(interface)
 
 add_subdirectory(cli7zplugin)
 
 add_subdirectory(clirarplugin)
 
-add_subdirectory(cliunarchiverplugin)
-
-add_subdirectory(common)
-
-add_subdirectory(interface)
-
 add_subdirectory(libarchive)
 
+add_subdirectory(libsinglefileplugin)
+
 add_subdirectory(libzipplugin)
+
+add_subdirectory(libminizipplugin)
+
+##add_subdirectory(cliunarchiverplugin) #不可用
+
+##add_subdirectory(clizipplugin) #不可用

@@ -1,38 +1,40 @@
+/*
+ * Copyright (c) 2017 Ragnar Thomsen <rthomsen6@gmail.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ( INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION ) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * ( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #ifndef LIBZIPPLUGIN_H
 #define LIBZIPPLUGIN_H
 
-#include "archiveinterface.h"
 #include "kpluginfactory.h"
-#include "../common/common.h"
+#include "archiveinterface.h"
 
-#include <QFileDevice>
+#include <QObject>
+#include <QSet>
 
 #include <zip.h>
-#include <minizip/unzip.h>
 
-
-struct FileProgressInfo {
-    float fileProgressProportion = 0.0;
-    float fileProgressStart;
-    QString fileName;
-};
-
-/**
- * @brief The enum_extractEntryStatus enum
- * @see 解压单个entry的三种可能结果
- */
-enum enum_extractEntryStatus {
-    FAIL,//解压失败
-    SUCCESS,//解压成功
-    PSD_NEED//需要密码
-};
-
-enum enum_checkEntryPsd {
-    NOTCHECK,//未检测
-    PSDWRONG,//密码错误
-    RIGHT,//打开正确
-    PSDNEED//需要输入密码
-};
+class Common;
 
 class LibzipPluginFactory : public KPluginFactory
 {
@@ -41,7 +43,7 @@ class LibzipPluginFactory : public KPluginFactory
     Q_INTERFACES(KPluginFactory)
 public:
     explicit LibzipPluginFactory();
-    ~LibzipPluginFactory();
+    ~LibzipPluginFactory() override;
 };
 
 class LibzipPlugin : public ReadWriteArchiveInterface
@@ -52,126 +54,46 @@ public:
     explicit LibzipPlugin(QObject *parent, const QVariantList &args);
     ~LibzipPlugin() override;
 
-    bool list(bool isbatch = false) override;
+
+    // ReadOnlyArchiveInterface interface
+public:
+    PluginFinishType list() override;
+    PluginFinishType testArchive() override;
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
+    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
+    PluginFinishType addComment(const QString &comment) override;
+    PluginFinishType updateArchiveData(const UpdateOptions &options) override;
+
+    /**
+     * @brief pauseOperation    暂停操作
+     */
+    void pauseOperation() override;
+
+    /**
+     * @brief continueOperation 继续操作
+     */
+    void continueOperation() override;
+
+    /**
+     * @brief doKill 强行取消
+     */
     bool doKill() override;
-    bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
-    bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
-    bool deleteFiles(const QVector<Archive::Entry *> &files) override;
-    bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool addComment(const QString &comment) override;
-    bool testArchive() override;
-    void cleanIfCanceled()override;
-    void watchFileList(QStringList *strList)override;
-
-    /**
-     * @brief checkArchivePsd:首次解压Archive需要判断一次密码
-     * @param archive:归档对象
-     * @return 如果返回false，结束当前解压
-     */
-    bool checkArchivePsd(zip_t *archive, int &iCodecIndex);
-
-    /**
-     * @brief checkEntriesPsd:首次提取Entry树需要判断一次密码
-     * @param archive
-     * @param selectedEnV:选中的Entry树
-     * @return 如果返回false，结束当前解压
-     */
-    //bool checkEntriesPsd(zip_t *archive, const QVector<Archive::Entry *> &selectedEnV);
-    bool checkEntriesPsd(zip_t *archive, QList<int> listExtractIndex);
-
-    /**
-     * @brief checkEntryPsd
-     * @param archive:归档对象
-     * @param pCur:检测密码的Entry节点
-     * @param stop:是否停止当前job
-     */
-    //void checkEntryPsd(zip_t *archive, Archive::Entry *pCur, enum_checkEntryPsd &status);
-    void checkEntryPsd(zip_t *archive, int iIndex, enum_checkEntryPsd &status);
-
-    //int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
-
-    /**
-    * show the package first level entry
-    * @brief the input param is entry full path
-    */
-    virtual void showEntryListFirstLevel(const QString &directory) override;
-
-    /**
-     * current directory entry file count
-     * @brief the input param is entry file
-     */
-    virtual void RefreshEntryFileCount(Archive::Entry *file) override;
-
-    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
-    virtual void updateListMap(QVector<Archive::Entry *> &files, int type) override;
-
-private Q_SLOTS:
-    void slotRestoreWorkingDir();
 
 private:
-//    bool deleteEntry(Archive::Entry *pEntry, zip_t *archive/*, int &curNo, int count = -1*/);
-    /**
-     * @brief deleteEntry   从压缩包中删除指定文件
-     * @param file      文件名
-     * @param index     文件索引
-     * @param archive   压缩包数据
-     * @return
-     */
-    bool deleteEntry(QString file, int index/*Archive::Entry *pCurEntry*/, zip_t *archive/*, int &curNo, int count = -1*/);
-
-    /**
-     * @brief extractEntry  解压指定文件
-     * @param archive   压缩包数据
-     * @param index     文件索引
-     * @param entry     文件名
-     * @param rootNode  父目录
-     * @param destDir   解压路径
-     * @param preservePaths
-     * @param removeRootNode    是否移除父目录
-     * @param pi    进度信息
-     * @return
-     */
-    enum_extractEntryStatus extractEntry(zip_t *archive, int index, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
-
     /**
      * @brief writeEntry 添加新的Entry
      * @param archive 压缩包数据
      * @param entry 新文件
-     * @param destination
+     * @param strDestination 压缩包内路径
      * @param options 压缩配置参数
      * @param isDir
-     * @param strRoot
+     * @param strRoot 文件前缀路径
      * @return
      */
-    bool writeEntry(zip_t *archive, const QString &entry, const Archive::Entry *destination, const CompressionOptions &options, bool isDir = false, const QString &strRoot = "");
-
-    /**
-     * @brief emitEntryForIndex     发送指定索引的数据
-     * @param archive   压缩包数据
-     * @param index 索引
-     * @return
-     */
-    bool emitEntryForIndex(zip_t *archive, qlonglong index);
-
-    /**
-     * @brief emitProgress  发送进度信号
-     * @param percentage    百分比
-     */
-    void emitProgress(double percentage);
-
-    /**
-     * @brief cancelResult  取消结果
-     * @return
-     */
-    int cancelResult();
-
-    /**
-     * @brief permissionsToString   权限转换
-     * @param perm  权限数据
-     * @return
-     */
-    QString permissionsToString(const mode_t &perm);
+    bool writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir = false, const QString &strRoot = "");
 
     /**
      * @brief progressCallback  进度回调函数
@@ -186,16 +108,44 @@ private:
      * @return
      */
     static int cancelCallback(zip_t *, void *that);
-    //QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-    //QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
 
     /**
-     * @brief detectAllfile 探测压缩包数据
-     * @param archive
-     * @param num
+     * @brief handleArchiveData 处理压缩包数据
+     * @param archive   压缩包
+     * @param index 索引
+     * * @return
      */
-    void detectAllfile(zip_t *archive, int num);
-//    QString  trans2uft8(const char *str);
+    bool handleArchiveData(zip_t *archive, zip_int64_t index);
+
+    /**
+     * @brief statBuffer2FileEntry  数据转换
+     * @param statBuffer    压缩包中结构体数据
+     * @return      通用结构体
+     */
+    void statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry &entry);
+
+    /**
+     * @brief extractEntry  解压单文件
+     * @param archive       压缩包
+     * @param index         文件索引
+     * @param options       解压参数
+     * @param qExtractSize  已解压的大小\
+     * @param strFileName   当前解压的文件名
+     * @return              错误类型
+     */
+    ErrorType extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName);
+
+    /**
+     * @brief emitProgress  发送进度信号
+     * @param dPercentage    百分比
+     */
+    void emitProgress(double dPercentage);
+
+    /**
+     * @brief cancelResult  取消结果
+     * @return
+     */
+    int cancelResult();
 
     /**
      * @brief passwordUnicode   密码编码转换（中文密码）
@@ -205,55 +155,35 @@ private:
      */
     const char *passwordUnicode(const QString &strPassword, int iIndex);
 
-    /*user minizip*/
-    bool minizip_list(bool isbatch = false);
-    bool minizip_emitEntryForIndex(unzFile zipfile);
-    bool minizip_extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options);
-    bool minizip_extractEntry(unzFile zipfile, unz_file_info file_info, const QString &entry, const QString &rootNode, const QString &destDir, bool preservePaths, bool removeRootNode, FileProgressInfo &pi);
-
     /**
-     * @brief setEntryData  设置Entry数据
-     * @param statBuffer    文件数据信息
+     * @brief deleteEntry   从压缩包中删除指定文件
      * @param index     文件索引
-     * @param name      文件名
-     * @param isMutilFolderFile
+     * @param archive   压缩包数据
      * @return
      */
-    void setEntryData(const zip_stat_t &statBuffer, qlonglong index, const QString &name, bool isMutilFolderFile = false);
-    Archive::Entry *setEntryDataA(const zip_stat_t &statBuffer, qlonglong index, const QString &name);
-    void setEntryVal(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
+    bool deleteEntry(int index, zip_t *archive);
 
-    void setEntryVal1(const zip_stat_t &statBuffer, int &index, const QString &name, QString &dirRecord);
+    /**
+     * @brief getIndexBySelEntry    根据选择的文件获取所有需要操作的entry
+     * @param listEntry             选择的文件
+     */
+    void getIndexBySelEntry(const QList<FileEntry> &listEntry);
+
+
+Q_SIGNALS:
+    //void error(const QString &message = "", const QString &details = "");
 
 private:
-    QVector<Archive::Entry *> m_emittedEntries;     // 存储entry
-    bool m_overwriteAll;        //是否全部覆盖
-    bool m_skipAll;             // 是否全部跳过
-    bool m_listAfterAdd;        // 压缩之后是否list
-    int m_filesize;             // 压缩的文件数目
-    zip_t *m_addarchive = nullptr; // 压缩包
-    // QByteArray m_codecstr;
-    QByteArray m_codecname;     // 探测编码
-    ExtractionOptions m_extractionOptions;  // 解压参数
-    //bool isWrongPassword = false;
-    QString m_extractDestDir;   // 解压路径
-    QString m_extractFile;      // 解压文件名
-
+    int m_curFileCount = 0;             // 文件数目
+    zip_t *m_pCurArchive = nullptr;     // 当前正在操作的压缩包
+    QList<int> m_listCurIndex;      // 当前操作的所有文件索引
+    QStringList m_listCurName;      // 当前操作的所有文件索引
     QStringList m_listCodecs;   // 中文编码格式
-    QMap<QString, QPair<zip_stat_t, qlonglong>> m_listMap;  // 压缩包数据存储
-    QString m_DirRecord;
-    QString m_SigDirRecord;
-    int m_indexCount = 0;
-
-    QList<int> m_listExtractIndex;  // 需要解压的文件索引
-    QString m_strRootNode;  // 父节点
-    //    QMap<QString, QString> m_fileNameEncodeMap;
-
-    bool m_bCancel = false;     // 是否取消
-    Common *m_common = nullptr; // 通用工具类
-    zip_t *m_listArchive = nullptr;
 
     QMap<zip_int64_t, QByteArray> m_mapFileCode;   // 存储文件编码
+    double m_dScaleSize = 0.0;   // 100/总大小
+    QString m_strComment = QString();
+
 };
 
 #endif // LIBZIPPLUGIN_H

@@ -1,14 +1,53 @@
+/*
+ * Copyright (c) 2007 Henrique Pinto <henrique.pinto@kdemail.net>
+ * Copyright (c) 2008-2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+ * Copyright (c) 2016 Vladyslav Batyrenko <mvlabat@gmail.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ( INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION ) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * ( INCLUDING NEGLIGENCE OR OTHERWISE ) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #ifndef LIBARCHIVEPLUGIN_H
 #define LIBARCHIVEPLUGIN_H
 
 #include "archiveinterface.h"
-
-#include <QScopedPointer>
-#include <QProcess>
+#include "commonstruct.h"
 
 #include <archive.h>
+#include <QSet>
 
-class Common;
+/**
+ * @brief The HandleWorkingDir class
+ * change 用于更改应用所在当前路径及恢复
+ * ~HandleWorkingDir 析构时自动恢复应用所在当前路径
+ */
+class HandleWorkingDir
+{
+public:
+    HandleWorkingDir(QString *oldWorkingDir);
+    void change(const QString &newWorkingDir);
+    ~HandleWorkingDir();
+private:
+    QString *m_oldWorkingDir;
+};
 
 struct FileProgressInfo {
     float fileProgressProportion = 0.0; //内部百分值范围
@@ -24,24 +63,44 @@ public:
     explicit LibarchivePlugin(QObject *parent, const QVariantList &args);
     ~LibarchivePlugin() override;
 
-    bool list(bool isbatch = false) override;
+    // ReadOnlyArchiveInterface interface
+public:
+    PluginFinishType list() override;
+    PluginFinishType testArchive() override;
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options) override;
+    PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
+    PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
+    PluginFinishType addComment(const QString &comment) override;
+    /**
+     * @brief updateArchiveData   更新压缩包数据
+     * @return
+     */
+    PluginFinishType updateArchiveData(const UpdateOptions &options) override;
+
+    /**
+     * @brief pauseOperation    暂停操作
+     */
+    void pauseOperation() override;
+
+    /**
+     * @brief continueOperation 继续操作
+     */
+    void continueOperation() override;
+
+    /**
+     * @brief doKill 强行取消
+     */
     bool doKill() override;
-    bool extractFiles(const QVector<Archive::Entry *> &files, const QString &destinationDirectory, const ExtractionOptions &options) override;
-
-    bool addFiles(const QVector<Archive::Entry *> &files, const Archive::Entry *destination, const CompressionOptions &options, uint numberOfEntriesToAdd = 0) override;
-    bool moveFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool copyFiles(const QVector<Archive::Entry *> &files, Archive::Entry *destination, const CompressionOptions &options) override;
-    bool deleteFiles(const QVector<Archive::Entry *> &files) override;
-    bool addComment(const QString &comment) override;
-    bool testArchive() override;
-    bool hasBatchExtractionProgress() const override;
-    virtual void cleanIfCanceled()override;
-    virtual void watchFileList(QStringList *strList)override;
-
-    virtual void showEntryListFirstLevel(const QString &directory) override;
-    virtual void RefreshEntryFileCount(Archive::Entry *file) override;
 
 protected:
+    /**
+     * @brief initializeReader 读取压缩包数据之前一系列操作
+     * @return
+     */
+    bool initializeReader();
+
     struct ArchiveReadCustomDeleter {
         static inline void cleanup(struct archive *a)
         {
@@ -50,7 +109,6 @@ protected:
             }
         }
     };
-
     struct ArchiveWriteCustomDeleter {
         static inline void cleanup(struct archive *a)
         {
@@ -60,63 +118,61 @@ protected:
         }
     };
 
+
     typedef QScopedPointer<struct archive, ArchiveReadCustomDeleter> ArchiveRead;
     typedef QScopedPointer<struct archive, ArchiveWriteCustomDeleter> ArchiveWrite;
 
-    bool initializeReader();
-    void createEntry(const QString &externalPath, struct archive_entry *entry);
-    void setEntryData(/*const */archive_stat &aentry, qlonglong index, const QString &name, bool isMutilFolderFile = false);
-    Archive::Entry *setEntryDataA(/*const */archive_stat &aentry/*, qlonglong index*/, const QString &name);
-    void setEntryVal(/*const */archive_stat &aentry, int &index, const QString &name, QString &dirRecord);
-    virtual void updateListMap(QVector<Archive::Entry *> &files, int type) override;
-    void updateListMap(Archive::Entry *entry, int type);
-
-    void emitEntryForIndex(archive_entry *aentry, qlonglong index);
-    virtual qint64 extractSize(const QVector<Archive::Entry *> &files) override;
-    void emitEntryFromArchiveEntry(struct archive_entry *entry);
-    void copyData(const QString &filename, struct archive *dest, const FileProgressInfo &info, bool bInternalDuty = true);
-    void copyDataFromSource(const QString &filename, struct archive *source, struct archive *dest, bool bInternalDuty = true);
-    void copyDataFromSource_ArchiveEntry(Archive::Entry *pSourceEntry, struct archive *source, struct archive *dest, bool bInternalDuty = true);
-    void copyDataFromSourceAdd(const QString &filename, struct archive *source, struct archive *dest, struct archive_entry *sourceEntry, FileProgressInfo &info, bool bInternalDuty = true);
     ArchiveRead m_archiveReader;
     ArchiveRead m_archiveReadDisk;
-    qlonglong m_currentCompressFilesSize = 0;//当前已经压缩的文件大小（能展示出来的都已经压缩）
 
-private Q_SLOTS:
-    void slotRestoreWorkingDir();
+    /**
+     * @brief copyDataFromSource 压缩包数据写到本地文件
+     * @param source 读句柄
+     * @param dest 写句柄
+     */
+    void copyDataFromSource(struct archive *source, struct archive *dest, const qlonglong &totalSize);
+    /**
+     * @brief copyDataFromSource_ArchiveEntry 压缩包数据写到本地文件(提取用)
+     * @param source
+     * @param dest
+     * @param extractFileSize 待提取文件总大小
+     */
+    void copyDataFromSource_ArchiveEntry(struct archive *source, struct archive *dest, qint64 extractFileSize);
 
 private:
+    PluginFinishType list_New();
+    QString convertCompressionName(const QString &method);
+    /**
+     * @brief emitEntryForIndex 构建压缩包内数据
+     * @param aentry
+     */
+    void emitEntryForIndex(archive_entry *aentry);
+    /**
+     * @brief deleteTempTarPkg 删除list时解压出来的临时tar包
+     * @param tars
+     */
+    void deleteTempTarPkg(const QStringList &tars);
     /**
      * @brief extractionFlags 选择要还原的属性
      * @return
      */
     int extractionFlags() const;
-    QString convertCompressionName(const QString &method);
-    bool list_New(bool isbatch = false);
-    void deleteTempTarPkg(const QStringList &tars);
-    qlonglong calDecompressSize();
 
-    int m_cachedArchiveEntryCount;
-    qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
-    bool m_emitNoEntries;
-    qlonglong m_extractedFilesSize;
-    QMap<QString, /*QPair<*/archive_stat/*, qlonglong>*/> m_listMap;
-    archive_stat m_archiveEntryStat;
-    QString m_DirRecord;
-    QString m_SigDirRecord;
-    int m_indexCount = 0;
-
-    //QVector<Archive::Entry *> m_emittedEntries;
+private:
+    int m_ArchiveEntryCount = 0; //压缩包内文件(夹)总数量
+    QString m_strOldArchiveName; //压缩包名(全路径)
+    QStringList m_tars; //list时解压出来的临时tar包
     QString m_oldWorkingDir;
-    QString m_extractDestDir;
-    QStringList m_tars;
+    QString m_extractDestDir; //解压目的路径
+//    QString destDirName; //取消解压，需要该变量
 
-    QString strOldFileName;
-    int m_listIndex = 0;
-
-    QString m_strRootNode;
-    QStringList m_listFileName;
-    Common *m_common = nullptr;
+protected:
+    qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
+    QMap<QString, QByteArray> m_mapCode;   // 存储文件名-编码（解压无需再次探测，提高解压速率）
 };
+
+
+
+
 
 #endif // LIBARCHIVEPLUGIN_H

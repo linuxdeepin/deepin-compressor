@@ -1,94 +1,69 @@
-/*
- * Copyright (C) 2019 ~ 2019 Deepin Technology Co., Ltd.
- *
- * Author:     dongsen <dongsen@deepin.com>
- *
- * Maintainer: dongsen <dongsen@deepin.com>
- *             AaronZhang <ya.zhang@archermind.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #ifndef QUERIES_H
 #define QUERIES_H
 
-#include "customdatainfo.h"
-
 #include <DApplicationHelper>
-#include <DCheckBox>
-#include <DMainWindow>
+#include <DDialog>
 
-#include <QString>
-#include <QHash>
-#include <QWaitCondition>
 #include <QMutex>
 #include <QVariant>
+#include <QWaitCondition>
 
-//#define TITLE_FIXED_HEIGHT 50               // 标题栏高度
 DWIDGET_USE_NAMESPACE
 
-enum RenameDialog_Result {
-    Result_Cancel = 0,
-
-    Result_Skip = 1,
-    Result_AutoSkip = 2,
-    Result_Overwrite = 3,
-    Result_OverwriteAll = 4,
-    Result_Resume = 5,
-    Result_ResumeAll = 6,
-    Result_AutoRename = 7,
-    Result_Retry = 8,
-    Result_Rename = 9,
-
-    // @deprecated since 5.0, use the RenameDialog_Option enum values
-    R_CANCEL = Result_Cancel,
-    R_RENAME = Result_Rename,
-    R_SKIP = Result_Skip,
-    R_AUTO_SKIP = Result_AutoSkip,
-    R_OVERWRITE = Result_Overwrite,
-    R_OVERWRITE_ALL = Result_OverwriteAll,
-    R_RESUME = Result_Resume,
-    R_RESUME_ALL = Result_ResumeAll,
-    R_AUTO_RENAME = Result_AutoRename,
-    R_RETRY = Result_Retry,
-
-    S_CANCEL = Result_Cancel,
-    S_SKIP = Result_Skip,
-    S_AUTO_SKIP = Result_AutoSkip,
-    S_RETRY = Result_Retry
+/**
+ * @brief The OverwriteQuery_Result enum   处理文件已存在时的选项
+ */
+enum OverwriteQuery_Result {
+    Result_Cancel = 0,            // 取消
+    Result_Skip = 1,              // 跳过
+    Result_SkipAll = 2,           // 全部跳过
+    Result_Overwrite = 3,         // 替换
+    Result_OverwriteAll = 4,      // 全部替换
 };
 
 typedef QHash<QString, QVariant> QueryData;
 
+// 询问对话框
 class Query : public QObject
 {
     Q_OBJECT
 public:
-    static QString toShortString(QString strSrc, int limitCounts = 16, int left = 8);
+    explicit Query(QObject *parent = nullptr);
+    ~Query() override;
 
-    virtual void execute() = 0;
-    void waitForResponse();
-    void setResponse(const QVariant &response);
-    QVariant response() const;
-
-    int execDialog();
-
+    /**
+     * @brief setParent     设置父窗口以居中显示
+     * @param pParent
+     */
     void setParent(QWidget *pParent);
 
-protected:
-    Query();
-    virtual ~Query() {}
+    /**
+     * @brief waitForResponse   等待对话框做出选择
+     */
+    void waitForResponse();
 
+    /**
+     * @brief setResponse   设置对话框做出的选择
+     * @param response      选择值
+     */
+    void setResponse(const QVariant &response);
+
+    /**
+     * @brief execute   创建对话框
+     */
+    virtual void execute() = 0;
+
+protected:
+    /**
+     * @brief toShortString     字符串转换
+     * @param strSrc
+     * @param limitCounts
+     * @param left
+     * @return
+     */
+    QString toShortString(QString strSrc, int limitCounts, int left);
+
+protected:
     QWidget *m_pParent = nullptr;
     QueryData m_data;
 
@@ -97,98 +72,104 @@ private:
     QMutex m_responseMutex;
 };
 
-/* *****************************************************************
- * Used to query the user if an existing file should be overwritten.
- * *****************************************************************
- */
+// 询问重复文件对话框
 class OverwriteQuery : public Query
 {
     Q_OBJECT
 public:
-    explicit OverwriteQuery(const QString &filename);
+    /**
+     * @brief OverwriteQuery
+     * @param filename      文件名（包含路径）
+     * @param parent
+     */
+    explicit OverwriteQuery(const QString &filename, QObject *parent = nullptr);
+    ~OverwriteQuery() override;
+
+    /**
+     * @brief execute   创建对话框并显示
+     */
+
     void execute() override;
-    int getExecuteReturn();
+
+    /**
+     * @brief responseCancelled     是否取消
+     * @return
+     */
     bool responseCancelled();
-    bool responseOverwriteAll();
-    bool responseOverwrite();
-    bool responseRename();
+
+    /**
+     * @brief responseSkip      是否跳过
+     * @return
+     */
     bool responseSkip();
-    bool responseAutoSkip();
-    QString newFilename();
 
-    void setNoRenameMode(bool enableNoRenameMode);
-    bool noRenameMode();
-    void setMultiMode(bool enableMultiMode);
-    bool multiMode();
+    /**
+     * @brief responseSkipAll      是否全部跳过
+     * @return
+     */
+    bool responseSkipAll();
 
-    void colorRoleChange(QWidget *widget, DPalette::ColorRole ct, double alphaF);
-    void colorTypeChange(QWidget *widget, DPalette::ColorType ct, double alphaF);
+    /**
+     * @brief responseOverwrite      是否覆盖
+     * @return
+     */
+    bool responseOverwrite();
 
-    bool applyAll();
+    /**
+     * @brief responseOverwriteAll      是否全部覆盖
+     * @return
+     */
+    bool responseOverwriteAll();
 
 private:
-    bool m_noRenameMode;
-    bool m_multiMode;
-    int ret;
-    bool m_bApplyAll;
+    /**
+     * @brief setWidgetColor    设置面板颜色
+     * @param pWgt
+     * @param ct
+     * @param alphaF
+     */
+    void setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF);
+
+    /**
+     * @brief setWidgetType     设置面板类型颜色
+     * @param pWgt
+     * @param ct
+     * @param alphaF
+     */
+    void setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF);
 };
 
-/* **************************************
- * Used to query the user for a password.
- * **************************************
- */
+// 密码输入框
 class PasswordNeededQuery : public Query
 {
     Q_OBJECT
 public:
-    explicit PasswordNeededQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
+    /**
+     * @brief PasswordNeededQuery
+     * @param strFileName       文件名（含路径）
+     * @param parent
+     */
+    explicit PasswordNeededQuery(const QString &strFileName, QObject *parent = nullptr);
+    ~PasswordNeededQuery() override;
+
+    /**
+     * @brief execute   显示密码输入对话框
+     */
     void execute() override;
 
+    /**
+     * @brief responseCancelled     是否取消
+     * @return
+     */
     bool responseCancelled();
+
+    /**
+     * @brief password  获取输入的密码
+     * @return 输入的密码
+     */
     QString password();
 };
 
-/* **************************************
- * Used to query the user for a password.
- * **************************************
- */
-class WrongPasswordQuery : public Query
-{
-    Q_OBJECT
-public:
-    explicit WrongPasswordQuery(const QString &archiveFilename, bool incorrectTryAgain = false);
-    void execute() override;
 
-    bool responseCancelled();
-    QString password();
-};
 
-/* *************************************************************
- * Used to query the user if a corrupt archive should be loaded.
- * *************************************************************
- */
-class LoadCorruptQuery : public Query
-{
-    Q_OBJECT
-public:
-    explicit LoadCorruptQuery(const QString &archiveFilename);
-    void execute() override;
-
-    bool responseYes();
-};
-
-class ContinueExtractionQuery : public Query
-{
-    Q_OBJECT
-public:
-    explicit ContinueExtractionQuery(const QString &error, const QString &archiveEntry);
-    void execute() override;
-
-    bool responseCancelled();
-    bool dontAskAgain();
-
-private:
-    QCheckBox m_chkDontAskAgain;
-};
-
-#endif /* ifndef QUERIES_H */
+#endif // QUERIES_H
