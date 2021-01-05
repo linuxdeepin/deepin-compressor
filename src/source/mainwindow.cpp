@@ -1389,11 +1389,22 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     break;
     // 加载压缩包数据
     case ArchiveJob::JT_Load: {
-        m_pLoadingPage->stopLoading();
-        m_ePageID = PI_UnCompress;
         qDebug() << "加载结束";
+        m_pLoadingPage->stopLoading();
 
-        m_pUnCompressPage->refreshArchiveData();
+        // 判断压缩包是否有数据
+        if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
+            // 回到首页
+            m_ePageID = PI_Home;
+            m_pMainWidget->setCurrentIndex(0);
+            // 提示用户无数据
+            TipDialog dialog(this);
+            dialog.showDialog(tr("Archive has no data"), tr("OK"), DDialog::ButtonNormal);
+        } else {
+            // 有数据的情况下切换到解压列表界面，刷新数据
+            m_ePageID = PI_UnCompress;
+            m_pUnCompressPage->refreshArchiveData();
+        }
     }
     break;
     // 批量解压
@@ -1526,8 +1537,9 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         m_pLoadingPage->stopLoading();      // 停止更新
 
         if (DataManager::get_instance().archiveData().listRootEntry.count() == 0) {
+            QFile::remove(m_stUnCompressParameter.strFullPath); // 删除原始压缩包
             m_pUnCompressPage->clear(); // 清空解压界面
-            // 压缩包数据为空时，回到首页
+            // 压缩包数据为空时，回到首页，且删除原始压缩包
             resetMainwindow();
             m_ePageID = PI_Home;
         } else {
