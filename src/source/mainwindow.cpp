@@ -586,7 +586,7 @@ bool MainWindow::checkSettings(QString file)
             str = tr("Please check the file association type in the settings of Archive Manager");
         } else {
             // 如果不是压缩包，提示非支持的压缩格式
-            str = tr("Cannot open this file as a compressed file");
+            str = tr("The file format is not supported by Archive Manager");
         }
 
         // 弹出提示对话框
@@ -2321,7 +2321,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         QString strDesText = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
 
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(strDesText, tr("Discard"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
+        int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             if (!m_stUnCompressParameter.bModifiable) { // 不支持修改文件的压缩包
                 ConvertDialog dialog(this); // 询问是否进行格式转换
