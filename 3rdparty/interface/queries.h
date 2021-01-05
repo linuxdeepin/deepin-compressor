@@ -19,6 +19,7 @@ enum OverwriteQuery_Result {
     Result_SkipAll = 2,           // 全部跳过
     Result_Overwrite = 3,         // 替换
     Result_OverwriteAll = 4,      // 全部替换
+    Result_Readonly = 5           // 以只读方式打开，例如损坏的分卷包
 };
 
 typedef QHash<QString, QVariant> QueryData;
@@ -170,6 +171,16 @@ public:
     QString password();
 };
 
+// 加载非致命损坏对话框
+class LoadCorruptQuery : public Query
+{
+    Q_OBJECT
+public:
+    explicit LoadCorruptQuery(const QString &archiveFilename, QObject *parent = nullptr);
+    ~LoadCorruptQuery() override;
+    void execute() override;
 
+    bool responseYes();
+};
 
 #endif // QUERIES_H

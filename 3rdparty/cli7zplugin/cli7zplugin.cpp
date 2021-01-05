@@ -113,7 +113,8 @@ bool Cli7zPlugin::isWrongPasswordMsg(const QString &line)
 
 bool Cli7zPlugin::isCorruptArchiveMsg(const QString &line)
 {
-    return (line == QLatin1String("Unexpected end of archive") ||
+    return (line == QLatin1String("Unexpected end of archive") || // 1.zip.001... 分卷包缺失
+            line.startsWith(QLatin1String("ERROR = Missing volume :")) || // 1.zip 1.z01... 分卷包缺失
             line == QLatin1String("Headers Error"));
 }
 
@@ -301,12 +302,18 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (workStatus == WT_List) {
+        if (isCorruptArchiveMsg(line) && (handleCorrupt() == PFT_Error)) { // 解压分卷不完整的情况下出现，只读方式打开
+            m_eErrorType = ET_MissingVolume;
+            m_finishType = PFT_Cancel; // 取消打开或加载文件，界面停留在初始界面
+            return false;
+        }
+
         return readListLine(line);   // 加载压缩文件，处理命令行内容
     } else if (workStatus == WT_Add || workStatus == WT_Extract || workStatus == WT_Delete) { // 压缩、解压、删除进度
         if (isCorruptArchiveMsg(line) && workStatus == WT_Extract) {  // 解压分卷不完整的情况下出现
             m_eErrorType = ET_MissingVolume;
             m_finishType = PFT_Error;
-            return false;
+//            return false; // 这里不return，直到解压完成
         }
 
         // 压缩包内没有数据

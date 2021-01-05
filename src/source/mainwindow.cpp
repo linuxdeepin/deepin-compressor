@@ -268,6 +268,7 @@ void MainWindow::refreshPage()
 {
     switch (m_ePageID) {
     case PI_Home: {
+        resetMainwindow();
         m_pMainWidget->setCurrentIndex(0);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
@@ -492,8 +493,13 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         m_pLoadingPage->startLoading();     // 开始加载
         m_ePageID = PI_Loading;
     } else {
-        // 无可用插件
-        showErrorMessage(FI_Load, EI_NoPlugin);
+        // 无可用插件，回到首页
+        m_ePageID = PI_Home;
+        refreshPage();
+        show();
+        // 提示无插件
+        TipDialog dialog(this);
+        dialog.showDialog(tr("Plugin error"), tr("OK"), DDialog::ButtonNormal);
     }
 }
 
@@ -1397,9 +1403,10 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             // 回到首页
             m_ePageID = PI_Home;
             m_pMainWidget->setCurrentIndex(0);
+            resetMainwindow();
             // 提示用户无数据
             TipDialog dialog(this);
-            dialog.showDialog(tr("Archive has no data"), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("No data in it"), tr("OK"), DDialog::ButtonNormal);
         } else {
             // 有数据的情况下切换到解压列表界面，刷新数据
             m_ePageID = PI_UnCompress;
@@ -1414,7 +1421,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             qDebug() << "提取结束";
             m_ePageID = PI_UnCompress;
-            Extract2PathFinish(tr("SingleExtraction successful")); //提取成功
+            Extract2PathFinish(tr("Extraction successful")); //提取成功
             m_pProgressdialog->setFinished();
         } else {
             qDebug() << "解压结束";
@@ -1590,7 +1597,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-            sendMessage(icon, tr("User Cancel"));
+            sendMessage(icon, tr("Extraction canceled"));
         } else {
             if (m_stUnCompressParameter.bRightOperation) {
                 // 避免重复提示停止任务
@@ -1671,6 +1678,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+#if 0 // 提取失败详细提示
             // 提取出错
             switch (eErrorType) {
             // 压缩包打开失败
@@ -1692,6 +1700,8 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             default:
                 break;
             }
+#endif
+            sendMessage(icon, tr("Extraction failed")); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -1989,7 +1999,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         m_pFailurePage->setFailuerDes(tr("Compression failed"));
         switch (eErrorInfo) {
         case EI_NoPlugin: {
-            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+            m_pFailurePage->setFailureDetail(tr("Plugin error"));
         }
         break;
         case EI_CreatArchiveFailed: {
@@ -2007,7 +2017,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         m_pFailurePage->setFailuerDes(tr("Open failed"));
         switch (eErrorInfo) {
         case EI_NoPlugin: {
-            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+            m_pFailurePage->setFailureDetail(tr("Plugin error"));
         }
         break;
         case EI_ArchiveOpenFailed: {
@@ -2032,7 +2042,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         m_pFailurePage->setFailuerDes(tr("Extraction failed"));
         switch (eErrorInfo) {
         case EI_NoPlugin: {
-            m_pFailurePage->setFailureDetail(tr("No plugin available"));
+            m_pFailurePage->setFailureDetail(tr("Plugin error"));
         }
         break;
         case EI_ArchiveOpenFailed: {
@@ -2060,7 +2070,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_ArchiveNoData: {
-            m_pFailurePage->setFailureDetail(tr("Archive has no data"));
+            m_pFailurePage->setFailureDetail(tr("No data in it"));
         }
         break;
         default:

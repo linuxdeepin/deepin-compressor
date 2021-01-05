@@ -390,3 +390,64 @@ QString PasswordNeededQuery::password()
 {
     return m_data.value(QStringLiteral("password")).toString();
 }
+
+LoadCorruptQuery::LoadCorruptQuery(const QString &archiveFilename, QObject *parent)
+{
+    m_data[QStringLiteral("archiveFilename")] = archiveFilename;
+}
+
+LoadCorruptQuery::~LoadCorruptQuery()
+{
+
+}
+
+void LoadCorruptQuery::execute()
+{
+    qInfo() << "Executing prompt";
+
+    if (m_pParent == nullptr) {
+        m_pParent = getMainWindow();
+    }
+
+    // 控件
+    DDialog *dialog = new DDialog(m_pParent);
+    dialog->setAccessibleName("LoadCorruptQuery_dialog");
+    dialog->setMinimumSize(QSize(380, 190));
+    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog->setIcon(pixmap);
+
+    DLabel *strlabel = new DLabel;
+    strlabel->setMinimumSize(QSize(300, 20));
+    strlabel->setAlignment(Qt::AlignCenter);
+    strlabel->setWordWrap(true);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::DemiBold);
+    strlabel->setText(tr("The archive is damaged"));
+
+    dialog->addButton(tr("Open as read-only"));
+    dialog->addButton(tr("Cancel"), true, DDialog::ButtonRecommend);
+
+    //布局
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+
+    DWidget *widget = new DWidget(dialog);
+    widget->setLayout(mainlayout);
+    dialog->addContent(widget);
+
+    // 选择
+    const int mode = dialog->exec();
+    if (0 == mode) {
+        setResponse(Result_Readonly);
+    } else {
+        setResponse(Result_Cancel);
+    }
+
+    delete dialog;
+    dialog = nullptr;
+}
+
+bool LoadCorruptQuery::responseYes()
+{
+    return (m_data.value(QStringLiteral("response")).toInt() == Result_Readonly);
+}

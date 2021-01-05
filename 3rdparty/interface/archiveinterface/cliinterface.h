@@ -157,6 +157,12 @@ protected:
     bool handleFileExists(const QString &line);
 
     /**
+     * @brief handleCorrupt 处理非致命损坏文件
+     * @return
+     */
+    PluginFinishType handleCorrupt();
+
+    /**
      * @brief writeToProcess 追加命令
      * @param data
      */
@@ -202,7 +208,7 @@ private slots:
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
-    PluginFinishType m_finishType = PFT_Nomral;
+    PluginFinishType m_finishType = PFT_Nomral; // 插件结束类型
     QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
     bool m_isProcessKilled = false;  // 进程已经结束
     bool m_isEmptyArchive = false;  // 压缩包内无数据

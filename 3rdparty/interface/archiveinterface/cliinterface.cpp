@@ -684,6 +684,23 @@ bool CliInterface::handleFileExists(const QString &line)
     return true;
 }
 
+PluginFinishType CliInterface::handleCorrupt()
+{
+    LoadCorruptQuery query(m_strArchiveName);
+    emit signalQuery(&query);
+    query.waitForResponse();
+
+    /**
+      * 对于一些损坏的包，没有致命错误的，可以选择以只读方式打开或提示打开失败
+      * 例如：zip分卷缺失也是可以打开的
+      */
+    if (!query.responseYes()) {
+        return PFT_Error;
+    } else {
+        return PFT_Nomral;
+    }
+}
+
 void CliInterface::writeToProcess(const QByteArray &data)
 {
     Q_ASSERT(m_process);
