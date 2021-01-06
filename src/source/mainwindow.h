@@ -374,6 +374,12 @@ private Q_SLOTS:
     void slotReceiveCurFileName(const QString &strName);
 
     /**
+     * @brief slotReceiveFileWriteErrorName    创建失败的文件处理
+     * @param strName       当前文件名
+     */
+    void slotReceiveFileWriteErrorName(const QString &strName);
+
+    /**
      * @brief slotQuery   发送询问信号
      * @param query 询问类型
      */
@@ -516,6 +522,7 @@ private:
 
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
+    QString m_fileWriteErrorName;     // 创建失败的文件名
 
     bool m_bRightCompress = false;      // 是否是右键压缩
 

@@ -119,6 +119,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     // 写文件
     QFile outputFile(outputFileName);
     if (!outputFile.open(QIODevice::WriteOnly)) {
+        emit signalFileWriteErrorName(QFileInfo(outputFile.fileName()).fileName());
         m_eErrorType = ET_FileWriteError;
         return PFT_Error;
     }
@@ -126,6 +127,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     // 打开压缩设备，写入数据
     KCompressionDevice *device = new KCompressionDevice(m_strArchiveName, KFilterDev::compressionTypeForMimeType(m_mimeType));
     if (!device) {
+        emit signalFileWriteErrorName(QFileInfo(outputFile.fileName()).fileName());
         m_eErrorType = ET_FileWriteError;
         return PFT_Error;
     }
@@ -156,6 +158,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
         emit signalprogress((double(m_currentExtractedFilesSize)) / options.qSize * 100); // 因为获取不到原文件大小，所以用压缩包大小代替
 
         if (bytesRead == -1) {
+            emit signalFileWriteErrorName(QFileInfo(outputFile.fileName()).fileName());
             m_eErrorType = ET_FileWriteError;
             break;
         } else if (bytesRead == 0) {

@@ -28,6 +28,7 @@
 #include <DSwitchButton>
 #include <DCheckBox>
 #include <DCommandLinkButton>
+#include <DFloatingMessage>
 
 DWIDGET_USE_NAMESPACE
 
@@ -112,4 +113,21 @@ protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 };
+
+class CustomFloatingMessage: public DFloatingMessage
+{
+    Q_OBJECT
+public:
+    /**
+     * @brief CustomFloatingMessage 自定义浮动消息
+     * @param ico 图标
+     * @param str 显示的消息
+     * @param msec 消息显示的毫秒数, 默认是4000毫秒
+     * @param notifyType
+     * @param parent
+     */
+    explicit CustomFloatingMessage(const QIcon &ico, const QString &str, int msec = 4000,
+                                   QWidget *parent = nullptr, MessageType notifyType = MessageType::TransientType);
+};
+
 #endif // CUSTOMWIDGET_H

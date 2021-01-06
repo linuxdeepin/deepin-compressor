@@ -168,6 +168,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
         connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
         connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
         connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+        connect(pExtractJob, &ExtractJob::signalFileWriteErrorName, this, &ArchiveManager::signalFileWriteErrorName);
         connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
         m_pArchiveJob = pExtractJob;

@@ -173,6 +173,12 @@ Q_SIGNALS:
     void signalCurFileName(const QString &filename);
 
     /**
+     * @brief signalFileWriteErrorName 发送创建失败的文件名
+     * @param filename      文件名
+     */
+    void signalFileWriteErrorName(const QString &filename);
+
+    /**
      * @brief signalQuery   发送询问信号
      * @param query 询问类型
      */

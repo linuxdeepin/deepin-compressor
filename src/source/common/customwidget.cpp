@@ -296,3 +296,12 @@ void CustomCommandLinkButton::keyReleaseEvent(QKeyEvent *event)
         DCommandLinkButton::keyReleaseEvent(event);
     }
 }
+
+CustomFloatingMessage::CustomFloatingMessage(const QIcon &ico, const QString &str, int msec,
+                                             QWidget *parent, MessageType notifyType)
+    : DFloatingMessage(notifyType, parent)
+{
+    setIcon(ico);
+    setMessage(str);
+    setDuration(msec);
+}

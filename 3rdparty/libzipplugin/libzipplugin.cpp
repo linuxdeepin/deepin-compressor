@@ -805,12 +805,14 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             if (readBytes < 0) {
                 file.close();
                 zip_fclose(zipFile);
+                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
                 return ET_FileWriteError;
             }
 
             if (out.writeRawData(buf, int(readBytes)) != readBytes) {
                 file.close();
                 zip_fclose(zipFile);
+                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
                 return ET_FileWriteError;
             }
 

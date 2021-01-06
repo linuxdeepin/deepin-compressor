@@ -373,11 +373,13 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
             const auto readBytes = unzReadCurrentFile(zipfile, buf, kb);
             if (readBytes < 0) {
                 file.close();
+                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
                 return ET_FileWriteError;
             }
 
             if (out.writeRawData(buf, readBytes) != readBytes) {
                 file.close();
+                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
                 return ET_FileWriteError;
             }
 

@@ -257,6 +257,7 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalJobFinished, this, &MainWindow::slotJobFinished);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalprogress, this, &MainWindow::slotReceiveProgress);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurFileName, this, &MainWindow::slotReceiveCurFileName);
+    connect(ArchiveManager::get_instance(), &ArchiveManager::signalFileWriteErrorName, this, &MainWindow::slotReceiveFileWriteErrorName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalCurArchiveName, this, &MainWindow::slotReceiveCurArchiveName);
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
@@ -1176,6 +1177,8 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
     }
 
     m_operationtype = Operation_NULL;   // 重置操作类型
+    m_fileWriteErrorName.clear();    // 清空记录的创建失败文件
+
     refreshPage();
 
     // 如果是右键压缩，压缩完毕自动关闭界面
@@ -1263,6 +1266,11 @@ void MainWindow::slotReceiveCurFileName(const QString &strName)
     }
 }
 
+void MainWindow::slotReceiveFileWriteErrorName(const QString &strName)
+{
+    m_fileWriteErrorName = strName;
+}
+
 void MainWindow::slotQuery(Query *query)
 {
     qDebug() << " query->execute()";
@@ -1273,7 +1281,7 @@ void MainWindow::slotQuery(Query *query)
 void MainWindow::Extract2PathFinish(QString msg)
 {
     QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-    sendMessage(icon, msg);
+    sendMessage(new CustomFloatingMessage(icon, msg, 1000, this));
 
     // 设置了自动打开文件夹处理流程
     if (m_pSettingDlg->isAutoOpen()) {
@@ -1394,6 +1402,10 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
         qDebug() << "添加结束";
+
+        // 追加成功tip提示
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+        sendMessage(new CustomFloatingMessage(icon, tr("Adding successful"), 1000, this));
 
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
@@ -1599,6 +1611,8 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
         m_ePageID = PI_UnCompress;
+        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+        sendMessage(new CustomFloatingMessage(icon, tr("Adding canceled"), 1000, this));
     }
     break;
     // 打开压缩包
@@ -1612,7 +1626,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-            sendMessage(icon, tr("Extraction canceled"));
+            sendMessage(new CustomFloatingMessage(icon, tr("Extraction canceled"), 1000, this));
         } else {
             if (m_stUnCompressParameter.bRightOperation) {
                 // 避免重复提示停止任务
@@ -1660,15 +1674,18 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     break;
     // 压缩包追加文件错误
     case ArchiveJob::JT_Add: {
+        m_ePageID = PI_UnCompress;
         QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         switch (eErrorType) {
         // 密码错误
-        case ET_WrongPassword:
-            m_ePageID = PI_UnCompress;
-            sendMessage(icon, tr("Wrong password"));
+        case ET_WrongPassword: {
+            sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
             break;
-        default:
+        }
+        default: {
+            sendMessage(new CustomFloatingMessage(icon, tr("Adding failed"), 1000, this));
             break;
+        }
         }
     }
     break;
@@ -1697,26 +1714,30 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             // 提取出错
             switch (eErrorType) {
             // 压缩包打开失败
-            case ET_ArchiveOpenError:
-                sendMessage(icon, tr("Failed to open compressed package"));
+            case ET_ArchiveOpenError: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Failed to open compressed package"), 1000, this));
                 break;
+            }
             // 密码错误
-            case ET_WrongPassword:
-                sendMessage(icon, tr("Wrong password"));
+            case ET_WrongPassword: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
                 break;
+            }
             // 文件名过长
-            case ET_LongNameError:
-                sendMessage(icon, tr("File name too long"));
+            case ET_LongNameError: {
+                sendMessage(new CustomFloatingMessage(icon, tr("File name too long"), 1000, this));
                 break;
+            }
             // 创建文件失败
-            case ET_FileWriteError:
-                sendMessage(icon, tr("Failed to create file"));
+            case ET_FileWriteError: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Failed to create \"%1\"").arg(m_fileWriteErrorName), 1000, this));
                 break;
+            }
             default:
                 break;
             }
 #endif
-            sendMessage(icon, tr("Extraction failed")); // 提取失败提示
+            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed"), 1000, this)); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -1751,13 +1772,15 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         switch (eErrorType) {
         // 压缩包打开失败
-        case ET_ArchiveOpenError:
-            sendMessage(icon, tr("Failed to open compressed package"));
+        case ET_ArchiveOpenError: {
+            sendMessage(new CustomFloatingMessage(icon, tr("Failed to open compressed package"), 1000, this));
             break;
+        }
         // 密码错误
-        case ET_WrongPassword:
-            sendMessage(icon, tr("Wrong password"));
+        case ET_WrongPassword: {
+            sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
             break;
+        }
         default:
             break;
         }
@@ -1793,7 +1816,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             m_ePageID = PI_UnCompress;
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
             if (eErrorType == ET_WrongPassword) { // 打开压缩包中文件密码错误
-                sendMessage(icon, tr("Wrong password"));
+                sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
             }
         }
         break;
@@ -2079,15 +2102,15 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_WrongPassword: {
-            m_pFailurePage->setFailureDetail(tr("Wrong password"));
+            m_pFailurePage->setFailureDetail(tr("Wrong password, please retry")); // 解压密码错误，请重试
         }
         break;
         case EI_LongFileName: {
-            m_pFailurePage->setFailureDetail(tr("File name too long, unable to extract"));
+            m_pFailurePage->setFailureDetail(tr("File name too long")); // 文件名过长
         }
         break;
         case EI_CreatFileFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to create file"));
+            m_pFailurePage->setFailureDetail(tr("Failed to create \"%1\"").arg(m_fileWriteErrorName));
         }
         break;
         case EI_ArchiveNoData: {
