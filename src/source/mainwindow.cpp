@@ -50,6 +50,7 @@
 #include <DArrowLineDrawer>
 #include <DFontSizeManager>
 #include <denhancedwidget.h>
+#include <DSysInfo>
 
 #include <QStackedWidget>
 #include <QKeyEvent>
@@ -785,6 +786,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         loadArchive(listParam[0]);
     } else if (strType == QStringLiteral("compress")) {
         // 压缩
+        m_bRightCompress = true;
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
@@ -1175,6 +1177,19 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
     m_operationtype = Operation_NULL;   // 重置操作类型
     refreshPage();
+
+    // 如果是右键压缩，压缩完毕自动关闭界面
+    if (m_bRightCompress && eFinishType == PFT_Nomral) {
+        Dtk::Core::DSysInfo::UosEdition edition =  Dtk::Core::DSysInfo::uosEditionType();
+        //等于服务器行业版或欧拉版(centos)
+        bool isCentos = Dtk::Core::DSysInfo::UosEuler == edition || Dtk::Core::DSysInfo::UosEnterpriseC == edition;
+
+        if (isCentos) {
+            QTimer::singleShot(100, this, [ = ]() {
+                close();;
+            });
+        }
+    }
 
     PERF_PRINT_END("POINT-03");
     PERF_PRINT_END("POINT-04");
@@ -1850,14 +1865,20 @@ void MainWindow::resetMainwindow()
     maxFileSize_ = 0;
 #endif
 
+    m_ePageID = PI_Home;
     m_operationtype = Operation_NULL;   // 重置操作类型
     m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
     m_pProgressPage->resetProgress();   // 重置进度
     m_pOpenFileWatcher->reset();
 
     // 重置数据
+    m_stUpdateOptions = UpdateOptions();
     m_stCompressParameter = CompressParameter();
     m_stUnCompressParameter = UnCompressParameter();
+    m_comment.clear();
+    m_isFirstViewComment = true;
+    m_strFinalConvertFile.clear();
+    m_bRightCompress = false;
 
     // 清空压缩包监听数据
     SAFE_DELETE_ELE(m_pFileWatcher);

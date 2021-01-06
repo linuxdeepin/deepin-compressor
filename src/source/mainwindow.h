@@ -517,6 +517,8 @@ private:
     DFileWatcher *m_pFileWatcher = nullptr;                 // 文件监控
     QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
 
+    bool m_bRightCompress = false;      // 是否是右键压缩
+
     // 适配arm平台
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;

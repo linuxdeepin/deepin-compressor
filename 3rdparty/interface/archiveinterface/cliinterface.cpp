@@ -657,6 +657,7 @@ bool CliInterface::handleFileExists(const QString &line)
             response = choices.at(4);
             emit signalCancel();
             m_eErrorType = ET_UserCancelOpertion;
+            emit signalFinished(PFT_Cancel);
         } else if (query.responseSkip()) { // 跳过
             // (N)o
             response = choices.at(1);
