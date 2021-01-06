@@ -174,9 +174,9 @@ TEST_F(TestCompressSettingPage, checkFileNameVaild1)
 TEST_F(TestCompressSettingPage, checkFileNameVaild2)
 {
     // 文件名过长返回错误
-    Stub stub;
-    stub.set(ADDR(QString, length), length_stub);
-    bool ret = m_tester->checkFileNameVaild("文件名过长");
+//    Stub stub;
+//    stub.set(ADDR(QString, length), length_stub);
+    bool ret = m_tester->checkFileNameVaild("dfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfgdfgdgdfgfg");
     EXPECT_EQ(ret, false);
 }
 
