@@ -423,11 +423,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="344"/>
-        <source>Commenting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="430"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
@@ -474,14 +469,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1731"/>
-        <location filename="../src/source/mainwindow.cpp" line="1798"/>
-        <location filename="../src/source/mainwindow.cpp" line="2103"/>
-        <location filename="../src/source/mainwindow.cpp" line="2128"/>
-        <source>Failed to open compressed package</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="1741"/>
         <location filename="../src/source/mainwindow.cpp" line="2144"/>
         <source>File name too long</source>
@@ -495,12 +482,6 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2053"/>
         <source>Compression successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
-        <location filename="../src/source/mainwindow.cpp" line="2136"/>
-        <source>Missing volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -570,11 +551,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2307"/>
-        <source>Select the file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2311"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
@@ -601,6 +577,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="344"/>
+        <source>Updating comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1438"/>
         <location filename="../src/source/mainwindow.cpp" line="2152"/>
         <source>No data in it</source>
@@ -622,14 +603,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1731"/>
+        <location filename="../src/source/mainwindow.cpp" line="1798"/>
+        <location filename="../src/source/mainwindow.cpp" line="2103"/>
+        <location filename="../src/source/mainwindow.cpp" line="2128"/>
+        <source>Failed to open the archive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1746"/>
         <location filename="../src/source/mainwindow.cpp" line="2148"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2111"/>
+        <location filename="../src/source/mainwindow.cpp" line="2136"/>
+        <source>Some volumes are missing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2140"/>
         <source>Wrong password, please retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2307"/>
+        <source>Select file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -801,8 +801,8 @@
 <context>
     <name>PreviousLabel</name>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="53"/>
-        <source>Back: </source>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
+        <source>Back to: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -827,7 +827,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="168"/>
-        <source>Are you sure you want to stop the singleextraction?</source>
+        <source>Are you sure you want to stop the extraction?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -927,6 +927,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/page/progresspage.cpp" line="355"/>
+        <source>Are you sure you want to stop the decompression?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/progresspage.cpp" line="357"/>
+        <source>Are you sure you want to stop the deletion?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/page/progresspage.cpp" line="129"/>
         <location filename="../src/source/page/progresspage.cpp" line="160"/>
         <location filename="../src/source/page/progresspage.cpp" line="337"/>
@@ -942,16 +952,6 @@
         <location filename="../src/source/page/progresspage.cpp" line="353"/>
         <location filename="../src/source/page/progresspage.cpp" line="359"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/progresspage.cpp" line="355"/>
-        <source>Are you sure you want to stop the extraction?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/progresspage.cpp" line="357"/>
-        <source>Are you sure you want to stop the delete?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1077,6 +1077,16 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
         <source>File Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="390"/>
+        <source>Open file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="396"/>
+        <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

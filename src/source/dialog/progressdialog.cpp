@@ -165,7 +165,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
         emit signalPause();
 
         // 显示取消提示框
-        QString strDesText = tr("Are you sure you want to stop the singleextraction?"); // 是否停止提取
+        QString strDesText = tr("Are you sure you want to stop the extraction?"); // 是否停止提取
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
         if (iResult == 1) {

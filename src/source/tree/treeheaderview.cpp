@@ -47,10 +47,16 @@ PreviousLabel::~PreviousLabel()
 
 void PreviousLabel::setPrePath(const QString &strPath)
 {
-    setToolTip(strPath);
-    QFontMetrics elideFont(strPath);
-    QString str = elideFont.elidedText(strPath, Qt::ElideMiddle, width() - 15);
-    setText("     .. " + tr("Back: ") + str);
+    setToolTip(strPath); // 悬停提示
+
+    QString tmp = '/' + strPath;
+    tmp = tmp.left(tmp.lastIndexOf('/'));
+    if (tmp.isEmpty()) {
+        tmp.push_front('/');
+    }
+    QFontMetrics elideFont(tmp);
+    QString str = elideFont.elidedText(tmp, Qt::ElideMiddle, width() - 15);
+    setText("     .. " + tr("Back to: %1").arg(str));
 }
 
 void PreviousLabel::paintEvent(QPaintEvent *e)
@@ -189,11 +195,6 @@ PreviousLabel *TreeHeaderView::getpreLbl()
 {
     return m_pPreLbl;
 }
-
-//void TreeHeaderView::setPrePath(const QString &strPath)
-//{
-//    m_pPreLbl->setText("     .. " + tr("Back:") + strPath);
-//}
 
 void TreeHeaderView::setPreLblVisible(bool bVisible)
 {

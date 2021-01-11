@@ -352,9 +352,9 @@ void ProgressPage::slotCancelClicked()
     if (m_eType == PT_Compress) {
         strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止压缩
     } else if (m_eType == PT_UnCompress) {
-        strDesText = tr("Are you sure you want to stop the extraction?");      // 是否停止解压
+        strDesText = tr("Are you sure you want to stop the decompression?");      // 是否停止解压
     } else if (m_eType == PT_Delete) {
-        strDesText = tr("Are you sure you want to stop the delete?");      // 是否停止删除
+        strDesText = tr("Are you sure you want to stop the deletion?");      // 是否停止删除
     } else if (m_eType == PT_CompressAdd) {
         strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止追加
     } else if (m_eType == PT_Convert) {

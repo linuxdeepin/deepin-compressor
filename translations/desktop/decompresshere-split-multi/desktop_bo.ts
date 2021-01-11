@@ -1,0 +1,1 @@
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1"><context><name>desktop</name><message><location filename="Desktop Entry]GenericName" line="0"/><location filename="Desktop Entry]Name" line="0"/><source>Extract here</source><translation>མིག་སྔའི་ཡིག་ཁུག་ཏུ་བསྡུས་འགྲོལ་ལམ་གནོན་བཙིར་བྱ་རྒྱུ། </translation></message></context></TS>

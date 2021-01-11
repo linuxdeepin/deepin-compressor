@@ -341,7 +341,7 @@ void MainWindow::refreshPage()
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
-        titlebar()->setTitle(tr("Commenting"));
+        titlebar()->setTitle(tr("Updating comments")); // 正在更新注释
     }
     break;
     case PI_Success: {
@@ -1728,7 +1728,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             switch (eErrorType) {
             // 压缩包打开失败
             case ET_ArchiveOpenError: {
-                sendMessage(new CustomFloatingMessage(icon, tr("Failed to open compressed package"), 1000, this));
+                sendMessage(new CustomFloatingMessage(icon, tr("Failed to open the archive"), 1000, this));
                 break;
             }
             // 密码错误
@@ -1795,7 +1795,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         switch (eErrorType) {
         // 压缩包打开失败
         case ET_ArchiveOpenError: {
-            sendMessage(new CustomFloatingMessage(icon, tr("Failed to open compressed package"), 1000, this));
+            sendMessage(new CustomFloatingMessage(icon, tr("Failed to open the archive"), 1000, this));
             break;
         }
         // 密码错误
@@ -2100,7 +2100,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_ArchiveOpenFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
+            m_pFailurePage->setFailureDetail(tr("Failed to open the archive"));
         }
         break;
         case EI_WrongPassword: {
@@ -2108,7 +2108,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_ArchiveMissingVolume: {
-            m_pFailurePage->setFailureDetail(tr("Missing volume"));
+            m_pFailurePage->setFailureDetail(tr("Some volumes are missing"));
         }
         break;
         default:
@@ -2125,7 +2125,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_ArchiveOpenFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to open compressed package"));
+            m_pFailurePage->setFailureDetail(tr("Failed to open the archive"));
         }
         break;
         case EI_ArchiveDamaged: {
@@ -2133,7 +2133,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_ArchiveMissingVolume: {
-            m_pFailurePage->setFailureDetail(tr("Missing volume"));
+            m_pFailurePage->setFailureDetail(tr("Some volumes are missing"));
         }
         break;
         case EI_WrongPassword: {
@@ -2304,7 +2304,7 @@ QJsonObject MainWindow::creatShorcutJson()
     shortcut2.insert("value", "F1");
 
     QJsonObject shortcut3;
-    shortcut3.insert("name", tr("Select the file"));
+    shortcut3.insert("name", tr("Select file"));
     shortcut3.insert("value", "Ctrl+O");
 
     QJsonObject shortcut4;
