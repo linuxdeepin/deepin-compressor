@@ -131,7 +131,7 @@ private:
      * @param totalsize 原文件总大小
      * @param bInternalDuty
      */
-    void copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
+    bool copyData(const QString &filename, struct archive *dest, const qlonglong &totalsize, bool bInternalDuty = true);
     /**
      * @brief copyDataFromSourceAdd 追加操作复制原压缩包中保留的数据
      * @param source

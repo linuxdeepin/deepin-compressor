@@ -165,14 +165,19 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
             break;
         }
 
-        outputFile.write(dataChunk.data(), bytesRead);
+        if (outputFile.write(dataChunk.data(), bytesRead) != bytesRead) {
+            if (isInsufficientDiskSpace(options.strTargetPath, bytesRead)) { // 小于bytesRead作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+            }
+            break;
+        }
     }
 
     outputFile.close();
     device->close();
     delete device;
 
-    return PFT_Nomral;
+    return m_eErrorType == ET_NoError ? PFT_Nomral : PFT_Error;
 }
 
 void LibSingleFileInterface::pauseOperation()

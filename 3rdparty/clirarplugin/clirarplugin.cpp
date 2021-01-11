@@ -128,7 +128,9 @@ bool CliRarPlugin::isCorruptArchiveMsg(const QString &line)
 
 bool CliRarPlugin::isDiskFullMsg(const QString &line)
 {
-    return line.contains(QLatin1String("No space left on device"));
+    return line.contains(QLatin1String("No space left on device")) ||
+           (line.startsWith(QLatin1String("Write error in the file"))
+            && line.endsWith(QLatin1String("[R]etry, [A]bort ")));
 }
 
 bool CliRarPlugin::isFileExistsMsg(const QString &line)
@@ -268,6 +270,17 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
 
         if (handleFileExists(line)) {  // 判断解压是否存在同名文件
             return true;
+        }
+
+        if (isDiskFullMsg(line)) {
+            if (line.startsWith(QLatin1String("Write error in the file"))) {
+                writeToProcess(QString("A" + QLatin1Char('\n')).toLocal8Bit()); // 默认选择A，终止解压
+            }
+            if (isInsufficientDiskSpace(getTargetPath(), 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+                emit signalFinished(PFT_Error);
+                return false;
+            }
         }
 
         handleProgress(line); // 处理进度

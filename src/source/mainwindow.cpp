@@ -534,9 +534,11 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
                 m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
 
-                resetMainwindow();
-                m_ePageID = PI_Home;
-                refreshPage();
+                // 如果待压缩文件列表数目为空，回到首页
+                if (m_pCompressPage->compressFiles().count() == 0) {
+                    m_ePageID = PI_Home;
+                    refreshPage();
+                }
             }
         }
     }
@@ -834,10 +836,10 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
                 m_pProgressPage->setArchiveName(fileinfo.fileName());
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
-            } else {
+            } /*else {
                 // 无可用插件
                 showErrorMessage(FI_Uncompress, EI_NoPlugin);
-            }
+            }*/
         } else {
             // 可能分卷文件缺失，所以解压到当前文件夹失败
             m_ePageID = PI_Failure;
@@ -957,10 +959,10 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
                 m_pProgressPage->setArchiveName(fileinfo.fileName());
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
-            } else {
+            } /*else {
                 // 无可用插件
                 showErrorMessage(FI_Uncompress, EI_NoPlugin);
-            }
+            }*/
         } else {
             // 可能分卷文件缺失，所以解压到当前文件夹失败
             m_ePageID = PI_Failure;
@@ -1231,10 +1233,10 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
         m_ePageID = PI_UnCompressProgress;
 
         refreshPage();
-    } else {
+    } /*else {
         // 无可用插件
         showErrorMessage(FI_Uncompress, EI_NoPlugin);
-    }
+    }*/
 }
 
 void MainWindow::slotReceiveProgress(double dPercentage)
@@ -1669,7 +1671,18 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             killTimer(m_iCompressedWatchTimerID);
             m_iCompressedWatchTimerID = 0;
         }
-        showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
+
+        switch (eErrorType) {
+        case ET_InsufficientDiskSpace: {
+            showErrorMessage(FI_Compress, EI_InsufficientDiskSpace, true);
+            break;
+        }
+        default: {
+            showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
+            break;
+        }
+        }
+
     }
     break;
     // 压缩包追加文件错误
@@ -1730,7 +1743,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             }
             // 创建文件失败
             case ET_FileWriteError: {
-                sendMessage(new CustomFloatingMessage(icon, tr("Failed to create \"%1\"").arg(m_fileWriteErrorName), 1000, this));
+                sendMessage(new CustomFloatingMessage(icon, tr("Failed to create \"%1\"").arg(UiTools::toShortString(m_fileWriteErrorName)), 1000, this));
                 break;
             }
             default:
@@ -1760,6 +1773,15 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             case ET_MissingVolume:
                 showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume, !m_stUnCompressParameter.bRightOperation);
                 break;
+            case ET_InsufficientDiskSpace: {
+                showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace, !m_stUnCompressParameter.bRightOperation);
+                break;
+            }
+            case ET_PluginError: {
+                // 无可用插件
+                showErrorMessage(FI_Uncompress, EI_NoPlugin);
+                break;
+            }
             default:
                 break;
             }
@@ -1805,6 +1827,15 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         case ET_FileWriteError:
             showErrorMessage(FI_Uncompress, EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
             break;
+        case ET_InsufficientDiskSpace: {
+            showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace, !m_stUnCompressParameter.bRightOperation);
+            break;
+        }
+        case ET_PluginError: {
+            // 无可用插件
+            showErrorMessage(FI_Uncompress, EI_NoPlugin);
+            break;
+        }
         default:
             break;
         }
@@ -2050,6 +2081,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Failed to create file"));
         }
         break;
+        case EI_InsufficientDiskSpace: {
+            m_pFailurePage->setFailureDetail(tr("Insufficient disk space"));
+        }
+        break;
         default:
             break;
         }
@@ -2110,11 +2145,15 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_CreatFileFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to create \"%1\"").arg(m_fileWriteErrorName));
+            m_pFailurePage->setFailureDetail(tr("Failed to create \"%1\"").arg(UiTools::toShortString(m_fileWriteErrorName)));
         }
         break;
         case EI_ArchiveNoData: {
             m_pFailurePage->setFailureDetail(tr("No data in it"));
+        }
+        break;
+        case EI_InsufficientDiskSpace: {
+            m_pFailurePage->setFailureDetail(tr("Insufficient disk space"));
         }
         break;
         default:
@@ -2658,7 +2697,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         commentTextedit->setReadOnly(isReadOnly);
 
-        //        commentTextedit->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
+        commentTextedit->setPlaceholderText(tr("Enter up to %1 characters").arg(MAXCOMMENTLEN)); // 注释内容不得超过MAXCOMMENTLEN字符
         commentTextedit->setFixedHeight(80);
         commentTextedit->setText(m_comment);
         commentTextedit->setFont(infoFont);

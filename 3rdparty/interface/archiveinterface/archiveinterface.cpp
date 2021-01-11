@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <sys/stat.h>
 #include <QDir>
+#include <QStorageInfo>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -174,6 +175,17 @@ void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
                 }
             }
         }
+    }
+}
+
+bool ReadOnlyArchiveInterface::isInsufficientDiskSpace(QString diskPath, qint64 standard)
+{
+    QStorageInfo storage(QFileInfo(diskPath).absolutePath());
+    qDebug() << "Available DiskSpace:" << diskPath << storage << storage.bytesAvailable();
+    if (storage.isValid() && storage.bytesAvailable() < standard) {
+        return true;
+    } else {
+        return false;
     }
 }
 

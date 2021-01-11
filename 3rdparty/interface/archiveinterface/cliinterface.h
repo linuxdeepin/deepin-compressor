@@ -168,6 +168,12 @@ protected:
      */
     void writeToProcess(const QByteArray &data);
 
+    /**
+     * @brief getTargetPath 获取解压目标路径
+     * @return
+     */
+    QString getTargetPath();
+
 private:
     /**
      * @brief moveDroppedFilesToDest 提取文件后，将文件从临时目录移到目的路径

@@ -256,7 +256,7 @@ void CompressSettingPage::initUI()
     m_pSplitValueEdt->setValue(0.0);
     m_pSplitValueEdt->setSpecialValueText(" ");
 
-//    m_pCommentEdt->setPlaceholderText(tr("No more than %1 characters please").arg(MAXCOMMENTLEN));
+    m_pCommentEdt->setPlaceholderText(tr("Enter up to %1 characters").arg(MAXCOMMENTLEN));
     m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
 
     m_pCompressBtn->setMinimumSize(340, 36);    // 设置压缩按钮最小尺寸

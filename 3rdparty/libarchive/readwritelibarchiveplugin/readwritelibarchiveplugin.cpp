@@ -380,14 +380,18 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
     if (returnCode == ARCHIVE_OK) {
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
-        copyData(absoluteFilename, m_archiveWriter.data(), totalsize);
+        if (!copyData(absoluteFilename, m_archiveWriter.data(), totalsize)) {
+            if (sourceFileInfo.isDir()) {
+                QDir::cleanPath(absoluteDestinationPath);
+            }
+            archive_entry_free(entry);
+            return false;
+        }
         if (sourceFileInfo.isDir()) {
             QDir::cleanPath(absoluteDestinationPath);
         }
     } else {
-
         emit error(("Could not compress entry."));
-
         archive_entry_free(entry);
 
         if (sourceFileInfo.isDir()) {
@@ -453,7 +457,13 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     if (returnCode == ARCHIVE_OK) {
         // If the whole archive is extracted and the total filesize is
         // available, we use partial progress.
-        copyData(absoluteFilename, m_archiveWriter.data(), totalsize);
+        if (!copyData(absoluteFilename, m_archiveWriter.data(), totalsize)) {
+            if (QFileInfo(relativeName).isDir()) {
+                QDir::cleanPath(absoluteDestinationPath);
+            }
+            archive_entry_free(entry);
+            return false;
+        }
         if (QFileInfo(relativeName).isDir()) {//clean temp path;
             QDir::cleanPath(absoluteDestinationPath);
         }
@@ -481,22 +491,23 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     return true;
 }
 
-void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest, const qlonglong &totalsize, bool bInternalDuty)
+bool ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest, const qlonglong &totalsize, bool bInternalDuty)
 {
     Q_UNUSED(bInternalDuty)
-//    m_currentExtractedFilesSize = 0;
     char buff[10240];
     QFile file(filename);
 
-    if (!file.open(QIODevice::ReadOnly)) {
-        return;
+    if (QFileInfo(filename).isDir()) {
+        if (QFileInfo(filename).isReadable()) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if (!file.open(QIODevice::ReadOnly)) {
+            return false;
+        }
     }
-
-    //static int pastProgress = -1;
-
-    //pastProgress = -1;
-
-    //float fileSize = static_cast<float>(file.size());//filesize in the disk
 
     auto readBytes = file.read(buff, sizeof(buff));
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
@@ -509,23 +520,22 @@ void ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
         archive_write_data(dest, buff, static_cast<size_t>(readBytes));
         if (archive_errno(dest) != ARCHIVE_OK) {
             file.close();
-            return;
+
+            //ENOSPC /* No space left on device */
+            if (archive_errno(dest) == ENOSPC) {
+                m_eErrorType = ET_InsufficientDiskSpace;
+            }
+
+            return false;
         }
 
-//        if (bInternalDuty) {
         m_currentAddFilesSize += readBytes;
-//            float currentProgress = (static_cast<float>(m_currentExtractedFilesSize) / fileSize) * info.fileProgressProportion + info.fileProgressStart;//根据内容写入比例，加上上次的进度值
-//            if (static_cast<int>(100 * currentProgress) != pastProgress) {
-//                emit progress(static_cast<double>(currentProgress));
-//                pastProgress = static_cast<int>(100 * currentProgress);
-//            }
-//            //emit progress_filename(file.fileName());
-//        }
         emit signalprogress((double(m_currentAddFilesSize)) / totalsize * 100);
         readBytes = file.read(buff, sizeof(buff));
     }
 
     file.close();
+    return true;
 }
 
 void ReadWriteLibarchivePlugin::copyDataFromSourceAdd(archive *source, archive *dest, const qlonglong &totalsize)

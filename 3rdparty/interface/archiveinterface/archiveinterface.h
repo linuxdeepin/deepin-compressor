@@ -152,6 +152,14 @@ protected:
      */
     void handleEntry(const FileEntry &entry);
 
+    /**
+     * @brief isInsufficientDiskSpace 判断磁盘空间是否不足
+     * @param diskPath 压缩或解压目的路径
+     * @param 暂取小于10M作为磁盘空间不足的判断标准
+     * @return true:磁盘空间不足 false:磁盘空间充足
+     */
+    bool isInsufficientDiskSpace(QString diskPath, qint64 standard = 10 * 1024 * 1024);
+
 Q_SIGNALS:
     /**
      * @brief signalFinished    结束信号

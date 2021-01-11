@@ -186,6 +186,17 @@ void BatchExtractJob::slotHandleSingleJobCurFileName(const QString &strName)
 void BatchExtractJob::slotHandleSingleJobFinished()
 {
     if (m_pCurJob != nullptr) {
+        if (m_pCurJob->m_eFinishedType == PFT_Error || m_pCurJob->m_eFinishedType == PFT_Cancel) {
+            // 获取结束结果
+            m_eJobType = m_pCurJob->m_eJobType;
+            m_eFinishedType = m_pCurJob->m_eFinishedType;
+            m_eErrorType = m_pCurJob->m_eErrorType;
+
+            // 子job错误或取消，发送结束信号
+            emit signalJobFinshed();
+            return;
+        }
+
         // 移除当前job
         removeSubjob(m_pCurJob);
 
@@ -195,14 +206,6 @@ void BatchExtractJob::slotHandleSingleJobFinished()
         } else {
             ++m_iCurArchiveIndex;
             QFileInfo curFileInfo(m_listFiles[m_iCurArchiveIndex]);
-
-            if (m_pCurJob->m_eFinishedType == PFT_Nomral) {
-                // 正常结束
-            } else if (m_pCurJob->m_eFinishedType == PFT_Cancel) {
-                // 取消
-            } else {
-                // 错误
-            }
 
             // 还存在子job，执行子job操作
 

@@ -155,8 +155,14 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             qDebug() << "提取临时路径 --- " << destPath;
         }
     } else {
-        if (!QDir(destPath).exists()) {
-            QDir(destPath).mkpath(destPath);
+        if (!QDir(destPath).exists() && !QDir(destPath).mkpath(destPath)) {
+            if (isInsufficientDiskSpace(destPath, 10 * 1024 * 1024)) {  // 暂取小于10M作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+            } else {
+                m_eErrorType = ET_FileWriteError;
+            }
+            emit signalFinished(PFT_Error);
+            return PFT_Error;
         }
     }
 
@@ -808,7 +814,11 @@ void CliInterface::readStdout(bool handleAll)
 
     // 换行分割
     QList<QByteArray> lines = m_stdOutData.split('\n');
-
+//    if (m_workStatus == WT_Add || m_workStatus == WT_Extract) {
+//        foreach (auto line, lines) {
+//            qDebug() << line;
+//        }
+//    }
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
 
     if ((m_process->program().at(0).contains("7z") && m_process->program().at(1) != "l") && !isWrongPwd) {
@@ -954,4 +964,9 @@ void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint
     }
 
     p.close();
+}
+
+QString CliInterface::getTargetPath()
+{
+    return m_extractOptions.strTargetPath;
 }

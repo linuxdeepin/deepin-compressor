@@ -38,6 +38,7 @@ Q_DECLARE_METATYPE(PluginFinishType)
 // 错误类型
 enum ErrorType {
     ET_NoError = 0,     // 无错误
+    ET_PluginError,        // 插件错误
     ET_WrongPassword,     // 输入的密码错误
     ET_NeedPassword,     // 需要密码
     ET_LongNameError,     // 文件名过长错误
@@ -45,8 +46,9 @@ enum ErrorType {
     ET_FileOpenError,     // 文件打开错误
     ET_FileReadError,     // 文件读取错误
     ET_FileWriteError,     // 文件写错误
-    ET_DeleteError,         // 文件写错误
+    ET_DeleteError,         // 文件删除错误
     ET_MissingVolume,    // 分卷缺失
+    ET_InsufficientDiskSpace,   // 磁盘空间不足
 
     ET_UserCancelOpertion,     // 用户取消操作
 };

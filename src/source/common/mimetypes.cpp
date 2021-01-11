@@ -119,7 +119,8 @@ QMimeType determineMimeType(const QString &filename)
     }
 
     if (mimeFromExtension != mimeFromContent) {
-        if (mimeFromContent.isDefault()) {
+        // 判断后缀类型是否为zip，避免谷歌插件后后缀虽然为zip，但是实际上类型得按照application/octet-stream
+        if (mimeFromContent.isDefault() && (mimeFromExtension.name() != "application/zip")) {
             return mimeFromExtension;
         }
 

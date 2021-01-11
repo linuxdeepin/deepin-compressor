@@ -182,6 +182,8 @@ public:
      */
     void doWork() override;
 
+    bool errorcode = true;
+
 private:
     QList<FileEntry> m_vecFiles;
     ExtractionOptions m_stExtractionOptions;

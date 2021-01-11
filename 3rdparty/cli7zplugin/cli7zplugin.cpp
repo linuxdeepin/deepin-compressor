@@ -325,6 +325,23 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             return true;
         }
 
+        // ------磁盘空间不足------ 当读取到命令行最后一行 "E_FAIL" 的时候，检测磁盘空间是否不足
+        if ((workStatus == WT_Add && line.startsWith("E_FAIL")) || (workStatus == WT_Extract && line.startsWith("ERROR: E_FAIL"))) {
+            m_finishType = PFT_Error;
+
+            QString diskPath; // 压缩或解压目的路径
+            if (workStatus == WT_Add) {
+                diskPath = m_strArchiveName;
+            } else if (workStatus == WT_Extract) {
+                diskPath = getTargetPath();
+            }
+            if (isInsufficientDiskSpace(diskPath, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+            }
+
+            return false;
+        }
+
         // ------区分删除操作密码错误的处理------ 当读取到命令行最后一行 "E_FAIL" 的时候再killprocess，否则进程是CrashExit
         if (workStatus == WT_Delete && m_eErrorType == ET_WrongPassword && line.startsWith("E_FAIL")) {
             m_finishType = PFT_Error;

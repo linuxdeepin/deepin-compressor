@@ -328,6 +328,11 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
 
     if (zip_close(archive)) {
         emit error(("Failed to write archive."));
+        // ZIP_ER_WRITE    /* S Write error */
+        // ENOSPC          /* No space left on device */
+        if (zip_error_code_zip(zip_get_error(archive)) == ZIP_ER_WRITE && zip_error_code_system(zip_get_error(archive)) == ENOSPC) {
+            m_eErrorType = ET_InsufficientDiskSpace;
+        }
 
         return PFT_Error;
     }
@@ -812,8 +817,13 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             if (out.writeRawData(buf, int(readBytes)) != readBytes) {
                 file.close();
                 zip_fclose(zipFile);
-                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
-                return ET_FileWriteError;
+
+                if (isInsufficientDiskSpace(options.strTargetPath, static_cast<qint64>(readBytes))) {  // 小于readBytes作为磁盘空间不足的判断标准
+                    return ET_InsufficientDiskSpace;
+                } else {
+                    emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
+                    return ET_FileWriteError;
+                }
             }
 
             sum += readBytes;

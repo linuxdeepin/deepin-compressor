@@ -174,9 +174,11 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
         m_pArchiveJob = pExtractJob;
         pExtractJob->start();
 
-        return true;
+        return pExtractJob->errorcode;
     }
 
+    // 发送结束信号
+    emit signalJobFinished(ArchiveJob::JT_Extract, PFT_Error, ET_PluginError);
     return false;
 }
 

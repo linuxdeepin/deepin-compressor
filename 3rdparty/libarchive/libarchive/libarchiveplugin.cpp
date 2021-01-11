@@ -301,6 +301,10 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             emit error(("Filed error, extraction aborted."));
             return PFT_Error;
         case ARCHIVE_FATAL:
+            if (isInsufficientDiskSpace(m_extractDestDir, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+            }
+
             emit error(("Fatal error, extraction aborted."));
             return PFT_Error;
 

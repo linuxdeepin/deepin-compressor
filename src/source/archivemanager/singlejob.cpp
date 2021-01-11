@@ -265,6 +265,10 @@ void ExtractJob::doWork()
 
     if (!(m_pInterface->waitForFinished())) {
         slotFinished(eType);
+    } else {
+        if (eType == PFT_Error) {
+            errorcode = false;
+        }
     }
 }
 
