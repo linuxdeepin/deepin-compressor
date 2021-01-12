@@ -27,6 +27,7 @@
 #include <QRegularExpression>
 #include <QDir>
 #include <QDateTime>
+#include <linux/limits.h>
 
 Cli7zPluginFactory::Cli7zPluginFactory()
 {
@@ -139,6 +140,12 @@ bool Cli7zPlugin::isMultiPasswordPrompt(const QString &line)
 {
     Q_UNUSED(line);
     return false;
+}
+
+bool Cli7zPlugin::isOpenFileFailed(const QString &line)
+{
+    // 文件名过长情况下会输出
+    return line.contains("ERROR: Can not open output file :");
 }
 
 bool Cli7zPlugin::readListLine(const QString &line)
@@ -323,6 +330,21 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
 
         if (handleFileExists(line) && workStatus == WT_Extract) {  // 判断解压是否存在同名文件
             return true;
+        }
+
+        //-------文件名过长-------
+        if (workStatus == WT_Extract && isOpenFileFailed(line)) {
+            QByteArray diskPath = line.toLocal8Bit();
+            diskPath = diskPath.mid(diskPath.indexOf(':', diskPath.indexOf(':', line.indexOf(':') + 1) + 1) + 2);
+            QList<QByteArray> entryNameList = diskPath.split('/');
+            foreach (auto &tmp, entryNameList) {
+                // 判断文件名是否过长
+                if (NAME_MAX < tmp.length()) {
+                    m_finishType = PFT_Error;
+                    m_eErrorType = ET_LongNameError;
+                    return false;
+                }
+            }
         }
 
         // ------磁盘空间不足------ 当读取到命令行最后一行 "E_FAIL" 的时候，检测磁盘空间是否不足

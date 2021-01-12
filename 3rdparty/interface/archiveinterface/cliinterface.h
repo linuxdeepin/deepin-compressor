@@ -79,6 +79,7 @@ public:
     virtual bool isFileExistsMsg(const QString &line) = 0;
     virtual bool isFileExistsFileName(const QString &line) = 0;
     virtual bool isMultiPasswordPrompt(const QString &line) = 0;
+    virtual bool isOpenFileFailed(const QString &line) = 0;
 
     /**
      * @brief pauseOperation    暂停操作

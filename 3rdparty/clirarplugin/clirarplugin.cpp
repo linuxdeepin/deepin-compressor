@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
+#include <linux/limits.h>
 
 CliRarPluginFactory::CliRarPluginFactory()
 {
@@ -146,6 +147,12 @@ bool CliRarPlugin::isFileExistsFileName(const QString &line)
 bool CliRarPlugin::isMultiPasswordPrompt(const QString &line)
 {
     return line.contains("use current password ? [Y]es, [N]o, [A]ll");
+}
+
+bool CliRarPlugin::isOpenFileFailed(const QString &line)
+{
+    // 文件名过长情况下会输出
+    return line.startsWith("Cannot create ");
 }
 
 bool CliRarPlugin::readListLine(const QString &line)
@@ -272,6 +279,22 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
             return true;
         }
 
+        //-------文件名过长-------
+        if (isOpenFileFailed(line)) {
+            QByteArray diskPath = line.toLocal8Bit();
+            diskPath = diskPath.mid(QString("Cannot create ").length());
+            QList<QByteArray> entryNameList = diskPath.split('/');
+            foreach (auto &tmp, entryNameList) {
+                // 判断文件名是否过长
+                if (NAME_MAX < tmp.length()) {
+                    m_finishType = PFT_Error;
+                    m_eErrorType = ET_LongNameError;
+                    return false;
+                }
+            }
+        }
+
+        // ------磁盘空间不足------
         if (isDiskFullMsg(line)) {
             if (line.startsWith(QLatin1String("Write error in the file"))) {
                 writeToProcess(QString("A" + QLatin1Char('\n')).toLocal8Bit()); // 默认选择A，终止解压

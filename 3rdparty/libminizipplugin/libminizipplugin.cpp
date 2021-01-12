@@ -343,6 +343,15 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
+            QList<QString> entryNameList = strDestFileName.split('/');
+            foreach (auto &tmp, entryNameList) {
+                // 判断文件名是否过长
+                if (NAME_MAX < tmp.toLocal8Bit().length()) {
+                    return ET_LongNameError;
+                }
+            }
+
+            emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
             return ET_FileOpenError;
         }
 
@@ -379,8 +388,13 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
 
             if (out.writeRawData(buf, readBytes) != readBytes) {
                 file.close();
-                emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
-                return ET_FileWriteError;
+
+                if (isInsufficientDiskSpace(options.strTargetPath, static_cast<qint64>(readBytes))) {  // 小于readBytes作为磁盘空间不足的判断标准
+                    return ET_InsufficientDiskSpace;
+                } else {
+                    emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
+                    return ET_FileWriteError;
+                }
             }
 
             sum += uLong(readBytes);

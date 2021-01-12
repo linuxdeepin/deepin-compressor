@@ -38,6 +38,7 @@
 #include <QDebug>
 
 #include <archive_entry.h>
+#include <linux/limits.h>
 
 LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -297,44 +298,33 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             QFile::setPermissions(/*destinationDirectory + QDir::separator() + */entryName, per);
         }
         break;
-        case ARCHIVE_FAILED:
+        case ARCHIVE_FAILED: {
+            QList<QString> entryNameList = entryName.split('/');
+            foreach (auto &tmp, entryNameList) {
+                // 判断文件名是否过长
+                if (NAME_MAX < tmp.toLocal8Bit().length()) {
+                    m_eErrorType = ET_LongNameError;
+                    return PFT_Error;
+                }
+            }
+
             emit error(("Filed error, extraction aborted."));
             return PFT_Error;
-        case ARCHIVE_FATAL:
+        }
+        case ARCHIVE_FATAL: {
             if (isInsufficientDiskSpace(m_extractDestDir, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
             }
 
             emit error(("Fatal error, extraction aborted."));
             return PFT_Error;
-
+        }
         default:
             break;
         }
 
-        // If we only partially extract the archive and the number of
-        // archive entries is available we use a simple progress based on
-        // number of items extracted.
-//        if (!extractAll && m_cachedArchiveEntryCount) {
-//            ++progressEntryCount;
-//            emit progress(static_cast<double>(progressEntryCount) / totalEntriesCount);
-//            emit progress_filename(entryName);
-//        }
-
         extractedEntriesCount++;
-//        m_listFileName.removeOne(entryName);
-//    } else {
-//        // Archive entry not among selected files, skip it.
-//        archive_read_data_skip(m_archiveReader.data());
-//    }
     }
-
-//    if (extractDst.isEmpty() == false) {
-//        emit updateDestFileSignal(destinationDirectory + "/" + extractDst);
-//    }
-
-//    slotRestoreWorkingDir();
-//return archive_read_close(m_archiveReader.data()) == ARCHIVE_OK;
 
     if (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) {
         return PFT_Nomral;

@@ -782,6 +782,17 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {
+            zip_fclose(zipFile);
+
+            QList<QString> entryNameList = strDestFileName.split('/');
+            foreach (auto &tmp, entryNameList) {
+                // 判断文件名是否过长
+                if (NAME_MAX < tmp.toLocal8Bit().length()) {
+                    return ET_LongNameError;
+                }
+            }
+
+            emit signalFileWriteErrorName(QFileInfo(file.fileName()).fileName());
             return ET_FileWriteError;
         }
 

@@ -53,6 +53,7 @@ public:
     bool isFileExistsMsg(const QString &line) override;
     bool isFileExistsFileName(const QString &line) override;
     bool isMultiPasswordPrompt(const QString &line) override;
+    bool isOpenFileFailed(const QString &line) override;
 
 private:
     void setupCliProperties();

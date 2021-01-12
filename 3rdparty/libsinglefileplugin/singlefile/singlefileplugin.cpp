@@ -35,6 +35,7 @@
 
 #include <KFilterDev>
 //#include <KLocalizedString>
+#include <linux/limits.h>
 
 #include <unistd.h>
 
@@ -119,6 +120,16 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     // 写文件
     QFile outputFile(outputFileName);
     if (!outputFile.open(QIODevice::WriteOnly)) {
+
+        QList<QString> entryNameList = outputFileName.split('/');
+        foreach (auto &tmp, entryNameList) {
+            // 判断文件名是否过长
+            if (NAME_MAX < tmp.toLocal8Bit().length()) {
+                m_eErrorType = ET_LongNameError;
+                return PFT_Error;
+            }
+        }
+
         emit signalFileWriteErrorName(QFileInfo(outputFile.fileName()).fileName());
         m_eErrorType = ET_FileWriteError;
         return PFT_Error;
