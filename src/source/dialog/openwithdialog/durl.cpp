@@ -625,10 +625,10 @@ DUrl DUrl::fromUserInput(const QString &userInput, QString workingDirectory,
 
         return DUrl::fromLocalFile(dir.absolutePath());
     } else {
-        DUrl url(userInput);
+        DUrl urlInput(userInput);
 
         // NOTE(zccrs): 保证数据传入QUrl还能使用toString返回数据
-        if (!url.isValid() || (url.scheme().isEmpty() && url.toString() != userInput)) {
+        if (!urlInput.isValid() || (urlInput.scheme().isEmpty() && urlInput.toString() != userInput)) {
             DUrl url;
 
             url.m_virtualPath = userInput;
@@ -636,7 +636,7 @@ DUrl DUrl::fromUserInput(const QString &userInput, QString workingDirectory,
             return url;
         }
 
-        return url;
+        return urlInput;
     }
 }
 

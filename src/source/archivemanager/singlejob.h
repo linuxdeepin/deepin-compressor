@@ -320,8 +320,8 @@ private Q_SLOTS:
 
 private:
     ReadOnlyArchiveInterface *m_pIface = nullptr;
-    ExtractJob *m_pExtractJob;  // 先解压
-    CreateJob *m_pCreateJob;    // 再压缩成想要的格式
+    ExtractJob *m_pExtractJob = nullptr;  // 先解压
+    CreateJob *m_pCreateJob = nullptr;    // 再压缩成想要的格式
     QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
     QString m_strTargetFullPath;                // 转换目标全路径
     QString m_strNewArchiveFullPath;   // 格式转换后压缩包全路径

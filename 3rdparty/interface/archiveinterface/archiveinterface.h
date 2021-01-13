@@ -52,6 +52,7 @@ public:
 
     // 插件类型
     enum Plugintype {
+        PT_UnKnown,
         PT_Cliinterface,
         PT_LibArchive,
         PT_Libzip,
@@ -198,7 +199,7 @@ Q_SIGNALS:
     void signalCancel();
 
 public:
-    Plugintype m_ePlugintype;
+    Plugintype m_ePlugintype = PT_UnKnown;
 
     bool getHandleCurEntry() const;
 

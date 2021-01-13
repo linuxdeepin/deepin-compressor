@@ -348,8 +348,8 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         absoluteDestinationPath = extractTempDir->path() + QDir::separator() + destination;
         QDir dir;
         dir.mkpath(absoluteDestinationPath);
-        QString newFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
-        if (QFile::link(sourceFileFullPath, newFilePath)) {
+        QString strFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
+        if (QFile::link(sourceFileFullPath, strFilePath)) {
 //            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
         } else {
             qDebug() << "Can't create symlink" << destination << sourceFileFullPath;

@@ -36,6 +36,7 @@ public:
 
     // 操作类型
     enum JobType {
+        JT_NoJob,          // 创建压缩包
         JT_Create,          // 创建压缩包
         JT_Add,             // 添加压缩文件
         JT_Load,            // 加载压缩包
@@ -117,7 +118,7 @@ Q_SIGNALS:
     void signalQuery(Query *query);
 
 public:
-    JobType m_eJobType;     // 操作类型
+    JobType m_eJobType = JT_NoJob;     // 操作类型
     PluginFinishType m_eFinishedType = PFT_Nomral;
     ErrorType m_eErrorType = ET_NoError;
 

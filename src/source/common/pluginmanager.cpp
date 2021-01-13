@@ -328,7 +328,7 @@ QStringList PluginManager::sortByComment(const QSet<QString> &mimeTypes)
 bool PluginManager::libarchiveHasLzo()
 {
     // Step 1: look for the libarchive plugin, which is built against libarchive.
-    const QString pluginPath = []() {
+    const QString strPluginPath = []() {
         const QStringList paths = QCoreApplication::libraryPaths();
         for (const QString &path : paths) {
             const QString pluginPath = QStringLiteral("%1/kerfuffle/kerfuffle_libarchive.so").arg(path);
@@ -347,7 +347,7 @@ bool PluginManager::libarchiveHasLzo()
     args << QStringLiteral(DEPENDENCY_TOOL_ARGS);
 #endif
     dependencyTool.setProgram(QStringLiteral("ldd"));
-    dependencyTool.setArguments(args + QStringList(pluginPath));
+    dependencyTool.setArguments(args + QStringList(strPluginPath));
     dependencyTool.start();
     dependencyTool.waitForFinished();
     const QString output = QString::fromUtf8(dependencyTool.readAllStandardOutput());

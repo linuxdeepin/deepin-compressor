@@ -145,9 +145,9 @@ bool UiTools::isArchiveFile(const QString &strFileName)
         mime = mimeType.name().remove("application/");
 
     bool ret = false;
-    bool bArchive = false;
 
     if (mime.size() > 0) {
+        bool bArchive = false;
         ret = isExistMimeType(mime, bArchive); // 判断是否是归档管理器支持的压缩文件格式
     } else {
         ret = false;

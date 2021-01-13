@@ -158,9 +158,9 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // 右键解压到当前文件夹
         if (options.bRightExtract && iIndex == 0) {
-            FileEntry entry;
-            entry.strFullPath = entryName;
-            DataManager::get_instance().archiveData().listRootEntry << entry;
+            FileEntry stEntry;
+            stEntry.strFullPath = entryName;
+            DataManager::get_instance().archiveData().listRootEntry << stEntry;
         }
         iIndex++;
 

@@ -532,8 +532,7 @@ bool CompressSettingPage::checkFilePermission(const QString &path)
     // 循环判断文件夹下的子文件是否可读
     foreach (fileInfo, dir.entryInfoList()) {
         if (!fileInfo.isReadable()) { // 文件不可读
-            permissionValid = false;
-            return permissionValid;
+            return false;
         }
     }
 

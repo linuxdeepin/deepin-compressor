@@ -128,8 +128,8 @@ public:
     bool getApplyAll();
 
 private:
-    int m_ret;   // 对话框状态
-    int m_retType;   // 对话框选择结果
+    int m_ret = 0;   // 对话框状态
+    int m_retType = 0;   // 对话框选择结果
     bool m_applyAll = false;  // 应用到全部文件
 };
 

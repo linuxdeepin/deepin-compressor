@@ -1597,8 +1597,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
     }
     break;
-//    default:
-//        break;
+    default:
+        break;
     }
 }
 
@@ -2429,8 +2429,8 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             if (!m_stUnCompressParameter.bModifiable) { // 不支持修改文件的压缩包
-                ConvertDialog dialog(this); // 询问是否进行格式转换
-                QStringList ret = dialog.showDialog();
+                ConvertDialog dialogConvert(this); // 询问是否进行格式转换
+                QStringList ret = dialogConvert.showDialog();
 
                 if (ret.at(0) == "true") { // 进行格式转换
                     convertArchive(ret.at(1));

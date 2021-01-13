@@ -147,7 +147,7 @@ private:
     QString m_strExtractPath;       // 解压选择路径
     bool m_bAutoCreatDir = false;       // 是否自动创建文件夹
     int m_iArchiveCount = 0;        // 压缩文件数目
-    int m_iCurArchiveIndex;         // 当前正在操作的压缩包索引
+    int m_iCurArchiveIndex = 0;         // 当前正在操作的压缩包索引
     double m_dLastPercentage = 0;       // 最后进度
 
 };

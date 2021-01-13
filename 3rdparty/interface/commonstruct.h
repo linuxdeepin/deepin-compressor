@@ -167,7 +167,6 @@ Q_DECLARE_METATYPE(CompressOptions)
 struct ExtractionOptions {
     ExtractionOptions()
     {
-        bAllExtract = true;
         qSize = 0;
         qComressSize = 0;
         bRightExtract = false;
