@@ -25,7 +25,7 @@ SettingDialog::SettingDialog(QWidget *parent):
 
 SettingDialog::~SettingDialog()
 {
-
+    SAFE_DELETE_ELE(m_settings);
 }
 
 QString SettingDialog::getDefaultExtractPath()

@@ -45,7 +45,12 @@ SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
 
 SingleJob::~SingleJob()
 {
+    if (d->isRunning()) {
+        d->terminate();
+        d->wait();
+    }
 
+    delete d;
 }
 
 void SingleJob::start()

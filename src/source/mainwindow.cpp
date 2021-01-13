@@ -158,7 +158,7 @@ void MainWindow::initUI()
 void MainWindow::initTitleBar()
 {
     // 创建菜单
-    QMenu *menu = new QMenu();
+    QMenu *menu = new QMenu(this);
     m_pOpenAction = menu->addAction(tr("Open file"), this, &MainWindow::slotChoosefiles);
     menu->addAction(tr("Settings"), this, [ = ] { m_pSettingDlg->exec(); });
     menu->addSeparator();

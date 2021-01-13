@@ -177,7 +177,7 @@ void DataTreeView::initUI()
     setFocusPolicy(Qt::StrongFocus);
 
     // 设置样式代理
-    StyleTreeViewDelegate *pDelegate = new StyleTreeViewDelegate;
+    StyleTreeViewDelegate *pDelegate = new StyleTreeViewDelegate(this);
     setItemDelegate(pDelegate);
 
     // 设置表头
