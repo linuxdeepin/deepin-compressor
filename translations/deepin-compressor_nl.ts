@@ -113,7 +113,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Voer maximaal %1 tekens in</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="280"/>
@@ -315,12 +315,12 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="424"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation>Het archief is beschadigd</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="426"/>
         <source>Open as read-only</source>
-        <translation type="unfinished"></translation>
+        <translation>Openen als alleen-lezen</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="427"/>
@@ -378,96 +378,101 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="344"/>
         <source>Updating comments</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met bijwerken van opmerkingen</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="504"/>
-        <location filename="../src/source/mainwindow.cpp" line="2077"/>
-        <location filename="../src/source/mainwindow.cpp" line="2099"/>
-        <location filename="../src/source/mainwindow.cpp" line="2124"/>
+        <location filename="../src/source/mainwindow.cpp" line="2080"/>
+        <location filename="../src/source/mainwindow.cpp" line="2102"/>
+        <location filename="../src/source/mainwindow.cpp" line="2127"/>
         <source>Plugin error</source>
-        <translation type="unfinished"></translation>
+        <translation>Plug-infout</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1410"/>
         <source>Adding successful</source>
-        <translation type="unfinished"></translation>
+        <translation>Toegevoegd</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1438"/>
-        <location filename="../src/source/mainwindow.cpp" line="2152"/>
+        <location filename="../src/source/mainwindow.cpp" line="2155"/>
         <source>No data in it</source>
-        <translation type="unfinished"></translation>
+        <translation>Het archief is blanco</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1617"/>
         <source>Adding canceled</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen afgebroken</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1631"/>
         <source>Extraction canceled</source>
-        <translation type="unfinished"></translation>
+        <translation>Uitpakken afgebroken</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1699"/>
         <source>Adding failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen mislukt</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1731"/>
-        <location filename="../src/source/mainwindow.cpp" line="1798"/>
-        <location filename="../src/source/mainwindow.cpp" line="2103"/>
-        <location filename="../src/source/mainwindow.cpp" line="2128"/>
+        <location filename="../src/source/mainwindow.cpp" line="1799"/>
+        <location filename="../src/source/mainwindow.cpp" line="2106"/>
+        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>Failed to open the archive</source>
-        <translation type="unfinished"></translation>
+        <translation>Het archief kan niet worden geopend</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1746"/>
-        <location filename="../src/source/mainwindow.cpp" line="2148"/>
+        <location filename="../src/source/mainwindow.cpp" line="2151"/>
         <source>Failed to create &quot;%1&quot;</source>
+        <translation>&apos;%1&apos; kan niet worden aangemaakt</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1808"/>
+        <source>Delete failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2053"/>
+        <location filename="../src/source/mainwindow.cpp" line="2056"/>
         <source>Compression successful</source>
         <translation>Inpakken voltooid</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2085"/>
-        <location filename="../src/source/mainwindow.cpp" line="2156"/>
+        <location filename="../src/source/mainwindow.cpp" line="2088"/>
+        <location filename="../src/source/mainwindow.cpp" line="2159"/>
         <source>Insufficient disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>Onvoldoende vrije schijfruimte</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
-        <location filename="../src/source/mainwindow.cpp" line="2136"/>
+        <location filename="../src/source/mainwindow.cpp" line="2114"/>
+        <location filename="../src/source/mainwindow.cpp" line="2139"/>
         <source>Some volumes are missing</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkele schijven ontbreken</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2140"/>
+        <location filename="../src/source/mainwindow.cpp" line="2143"/>
         <source>Wrong password, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Onjuist wachtwoord - probeer het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2307"/>
+        <location filename="../src/source/mainwindow.cpp" line="2310"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand kiezen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2429"/>
+        <location filename="../src/source/mainwindow.cpp" line="2432"/>
         <source>Update</source>
         <translation>Bijwerken</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2700"/>
+        <location filename="../src/source/mainwindow.cpp" line="2703"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Voer maximaal %1 tekens in</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="186"/>
-        <location filename="../src/source/mainwindow.cpp" line="2576"/>
+        <location filename="../src/source/mainwindow.cpp" line="2579"/>
         <source>File info</source>
         <translation>Bestandsinformatie</translation>
     </message>
@@ -484,7 +489,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1453"/>
-        <location filename="../src/source/mainwindow.cpp" line="2057"/>
+        <location filename="../src/source/mainwindow.cpp" line="2060"/>
         <source>Extraction successful</source>
         <translation>Uitpakken voltooid</translation>
     </message>
@@ -496,7 +501,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
         <location filename="../src/source/mainwindow.cpp" line="1521"/>
-        <location filename="../src/source/mainwindow.cpp" line="2429"/>
+        <location filename="../src/source/mainwindow.cpp" line="2432"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -511,7 +516,7 @@
         <location filename="../src/source/mainwindow.cpp" line="533"/>
         <location filename="../src/source/mainwindow.cpp" line="608"/>
         <location filename="../src/source/mainwindow.cpp" line="1438"/>
-        <location filename="../src/source/mainwindow.cpp" line="2288"/>
+        <location filename="../src/source/mainwindow.cpp" line="2291"/>
         <source>OK</source>
         <translation>Oké</translation>
     </message>
@@ -547,7 +552,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="494"/>
-        <location filename="../src/source/mainwindow.cpp" line="2407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2410"/>
         <source>Loading, please wait...</source>
         <translation>Bezig met laden...</translation>
     </message>
@@ -560,27 +565,27 @@
         <location filename="../src/source/mainwindow.cpp" line="1416"/>
         <location filename="../src/source/mainwindow.cpp" line="1538"/>
         <source>Updating, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met bijwerken...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1741"/>
-        <location filename="../src/source/mainwindow.cpp" line="2144"/>
+        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>File name too long</source>
-        <translation type="unfinished"></translation>
+        <translation>De bestandsnaam is te lang</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2081"/>
+        <location filename="../src/source/mainwindow.cpp" line="2084"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"></translation>
+        <translation>Het bestand kan niet worden aangemaakt</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2074"/>
+        <location filename="../src/source/mainwindow.cpp" line="2077"/>
         <source>Compression failed</source>
         <translation>Het inpakken is mislukt</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="2121"/>
+        <location filename="../src/source/mainwindow.cpp" line="2124"/>
         <source>Extraction failed</source>
         <translation>Het uitpakken is mislukt</translation>
     </message>
@@ -590,96 +595,96 @@
         <translation>Map zoeken</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2096"/>
+        <location filename="../src/source/mainwindow.cpp" line="2099"/>
         <source>Open failed</source>
         <translation>Openen mislukt</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1695"/>
         <location filename="../src/source/mainwindow.cpp" line="1736"/>
-        <location filename="../src/source/mainwindow.cpp" line="1803"/>
-        <location filename="../src/source/mainwindow.cpp" line="1850"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="1804"/>
+        <location filename="../src/source/mainwindow.cpp" line="1853"/>
+        <location filename="../src/source/mainwindow.cpp" line="2110"/>
         <source>Wrong password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="599"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit bestandsformaat wordt niet ondersteund</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2060"/>
+        <location filename="../src/source/mainwindow.cpp" line="2063"/>
         <source>Conversion successful</source>
         <translation>Omzetten voltooid</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2299"/>
+        <location filename="../src/source/mainwindow.cpp" line="2302"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2303"/>
+        <location filename="../src/source/mainwindow.cpp" line="2306"/>
         <source>Help</source>
         <translation>Hulp</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2311"/>
+        <location filename="../src/source/mainwindow.cpp" line="2314"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2319"/>
+        <location filename="../src/source/mainwindow.cpp" line="2322"/>
         <source>Display shortcuts</source>
         <translation>Sneltoetsen tonen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2331"/>
+        <location filename="../src/source/mainwindow.cpp" line="2334"/>
         <source>Shortcuts</source>
         <translation>Sneltoetsen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2600"/>
+        <location filename="../src/source/mainwindow.cpp" line="2603"/>
         <source>Basic info</source>
         <translation>Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2616"/>
+        <location filename="../src/source/mainwindow.cpp" line="2619"/>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2617"/>
+        <location filename="../src/source/mainwindow.cpp" line="2620"/>
         <source>Type</source>
         <translation>Soort</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2618"/>
+        <location filename="../src/source/mainwindow.cpp" line="2621"/>
         <source>Location</source>
         <translation>Locatie</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2619"/>
+        <location filename="../src/source/mainwindow.cpp" line="2622"/>
         <source>Time created</source>
         <translation>Gemaakt om</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2620"/>
+        <location filename="../src/source/mainwindow.cpp" line="2623"/>
         <source>Time accessed</source>
         <translation>Geopend om</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2621"/>
+        <location filename="../src/source/mainwindow.cpp" line="2624"/>
         <source>Time modified</source>
         <translation>Aangepast om</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2631"/>
+        <location filename="../src/source/mainwindow.cpp" line="2634"/>
         <source>Archive</source>
         <translation>Archief</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2662"/>
+        <location filename="../src/source/mainwindow.cpp" line="2665"/>
         <source>Comment</source>
         <translation>Opmerking</translation>
     </message>
@@ -689,12 +694,12 @@
         <translation>Controleer de bestandstoewijzing in de instellingen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2288"/>
+        <location filename="../src/source/mainwindow.cpp" line="2291"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Het archief is ondertussen aangepast. Open het opnieuw.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2132"/>
+        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Damaged file</source>
         <translation>Beschadigd bestand</translation>
     </message>
@@ -803,7 +808,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Terug naar &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -929,12 +934,12 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="355"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet je zeker dat je het uitpakken wilt afbreken?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="357"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet je zeker dat je de verwijdering wilt afbreken?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="129"/>
@@ -988,7 +993,7 @@
         <translation>Grootte</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2426"/>
+        <location filename="../src/source/mainwindow.cpp" line="2429"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 is aangepast. Wil je de aanpassingen opslaan?</translation>
     </message>
@@ -1060,12 +1065,12 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="155"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is al een map met deze naam. Wil je deze vervangen?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="157"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>Samenvoegen</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="198"/>

@@ -1783,6 +1783,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
             default:
+                showErrorMessage(FI_Uncompress, EI_ArchiveDamaged);
                 break;
             }
         }
@@ -1804,6 +1805,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             break;
         }
         default:
+            sendMessage(new CustomFloatingMessage(icon, tr("Delete failed"), 1000, this));
             break;
         }
     }
@@ -1837,6 +1839,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             break;
         }
         default:
+            showErrorMessage(FI_Uncompress, EI_ArchiveDamaged);
             break;
         }
     }

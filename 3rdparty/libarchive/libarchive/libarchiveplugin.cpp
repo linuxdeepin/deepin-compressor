@@ -100,12 +100,16 @@ PluginFinishType LibarchivePlugin::testArchive()
 
 PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
+    m_eErrorType = ET_NoError;
+
     if (!initializeReader()) {
+        m_eErrorType = ET_FileReadError;
         return PFT_Error;
     }
 
     ArchiveWrite writer(archive_write_disk_new());
     if (!writer.data()) {
+        m_eErrorType = ET_FileReadError;
         return PFT_Error;
     }
 
@@ -126,6 +130,12 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     // 判断解压路径是否存在，不存在则创建文件夹
     if (QDir().exists(options.strTargetPath) == false) {
         if (!QDir().mkpath(options.strTargetPath)) {
+            if (isInsufficientDiskSpace(options.strTargetPath, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+                m_eErrorType = ET_InsufficientDiskSpace;
+            } else {
+                m_eErrorType = ET_FileWriteError;
+            }
+
             qDebug() << "Failed to create extractDestDir";
             return PFT_Error;
         }
@@ -308,12 +318,15 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                 }
             }
 
+            m_eErrorType = ET_FileWriteError;
             emit error(("Filed error, extraction aborted."));
             return PFT_Error;
         }
         case ARCHIVE_FATAL: {
             if (isInsufficientDiskSpace(m_extractDestDir, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
+            } else {
+                m_eErrorType = ET_FileWriteError;
             }
 
             emit error(("Fatal error, extraction aborted."));
@@ -329,6 +342,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     if (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) {
         return PFT_Nomral;
     } else {
+        m_eErrorType = ET_FileReadError;
         return PFT_Error;
     }
 }
