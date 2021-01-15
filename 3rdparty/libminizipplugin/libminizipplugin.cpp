@@ -401,7 +401,7 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
             writeSize += readBytes;
 
             // 计算进度并显示（右键快捷解压使用压缩包大小，计算比例）
-            if (options.bRightExtract) {
+            if (options.bExistList) {
                 qExtractSize += readBytes * (double(file_info.compressed_size) / file_info.uncompressed_size);
                 emit signalprogress((double(qExtractSize)) / options.qComressSize * 100);
             } else {

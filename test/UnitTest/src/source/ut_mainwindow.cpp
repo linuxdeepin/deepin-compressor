@@ -484,5 +484,5 @@ TEST_F(TestMainWindow, testaddFiles2Archive)
 TEST_F(TestMainWindow, testresetMainwindow)
 {
     m_tester->resetMainwindow();
-    ASSERT_EQ(m_tester->m_bRightCompress, false);
+    ASSERT_EQ(m_tester->m_eStartupType, StartupType::ST_Normal);
 }

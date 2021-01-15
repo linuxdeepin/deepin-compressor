@@ -132,7 +132,6 @@ struct UnCompressParameter {
 
     UnCompressParameter()
     {
-        bRightOperation = false;
         eSplitVolume = ST_No;
         bMultiplePassword = false;
         bModifiable = false;
@@ -145,7 +144,6 @@ struct UnCompressParameter {
 
     QString strFullPath;        // 压缩包全路径
     QString strExtractPath;     // 解压路径
-    bool bRightOperation;       // 是否右键快捷操作（解压到当前文件夹）
     SplitType eSplitVolume;          // 分卷包类型
     bool bMultiplePassword;     // 是否支持多密码追加
     bool bModifiable;           // 是否更改压缩包数据
@@ -188,6 +186,18 @@ enum ErrorInfo {
     EI_CreatArchiveFailed,      // 创建压缩文件失败
     EI_InsufficientDiskSpace,      // 磁盘空间不足
     EI_ArchiveNoData,           // 压缩包无数据
+};
+
+// 启动应用的方式
+enum StartupType {
+    ST_Normal,  // 右键打开、双击打开、打开单压缩包
+    ST_Compress,    // 右键压缩
+    ST_Compresstozip7z, // 右键压缩成7z、zip
+    ST_Extract, // 右键解压
+    ST_ExtractHere, // 右键解压到当前文件夹
+    ST_ExtractMulti, // 右键解压多压缩包
+    ST_Extractto,   // 右键解压到指定目录
+    ST_DragDropAdd, // 拖拽追加
 };
 
 #endif // CUSTOMDATAINFO_H

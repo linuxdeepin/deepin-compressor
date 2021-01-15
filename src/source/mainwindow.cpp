@@ -785,11 +785,12 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
     if ((listParam.count() == 1 && UiTools::isArchiveFile(listParam[0]))
             || strType == QStringLiteral("extract")
             || strType == QStringLiteral("extract_split")) { //右键选择解压7z压缩分卷文件
+        m_eStartupType = StartupType::ST_Normal;
         // 加载单个压缩包数据
         loadArchive(listParam[0]);
     } else if (strType == QStringLiteral("compress")) {
         // 压缩
-        m_bRightCompress = true;
+        m_eStartupType = StartupType::ST_Compress;
         // 处理选中文件
         QStringList listFiles = listParam;
         listFiles.removeLast();
@@ -799,9 +800,9 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 设置界面标识为压缩设置界面
         m_ePageID = PI_CompressSetting;
     } else if (strType == QStringLiteral("extract_here")) {
+        m_eStartupType = StartupType::ST_ExtractHere;
         // 解压单个文件到当前文件夹
         QString filepath = listParam.at(0);
-        m_stUnCompressParameter.bRightOperation = true;
         transSplitFileName(filepath, m_stUnCompressParameter);
         QFileInfo fileinfo(filepath);
         if (fileinfo.exists()) {
@@ -810,7 +811,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             // 构建解压参数
             options.strTargetPath = fileinfo.path();
             options.bAllExtract = true;
-            options.bRightExtract = true;
+            options.bExistList = true;
             options.qComressSize = fileinfo.size();
             options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
             QString strAutoPath = getExtractPath(fileinfo.fileName());
@@ -879,8 +880,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         QList< QUrl > listSelectpath = dialog.selectedUrls();
         QString strExtractPath = listSelectpath.at(0).toLocalFile();
 
+        m_eStartupType = StartupType::ST_ExtractMulti;
         // 构建批量解压参数
-        m_stUnCompressParameter.bRightOperation = true;
         m_stUnCompressParameter.bBatch = true;
         m_stUnCompressParameter.listBatchFiles = listFiles;
         m_stUnCompressParameter.strExtractPath = strExtractPath;
@@ -908,8 +909,8 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         QStringList listFiles = listParam;
         listFiles.removeLast();
 
+        m_eStartupType = StartupType::ST_ExtractMulti;
         // 构建批量解压参数
-        m_stUnCompressParameter.bRightOperation = true;
         m_stUnCompressParameter.bBatch = true;
         m_stUnCompressParameter.listBatchFiles = listFiles;
         m_stUnCompressParameter.strExtractPath = QFileInfo(listFiles[0]).path();
@@ -938,7 +939,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
         // 解压到xx文件夹
     } else if (strType == QStringLiteral("extract_here_split")) { // 右键选择7z压缩分卷文件，解压到当前文件夹
         QString filepath = listParam.at(0);
-        m_stUnCompressParameter.bRightOperation = true;
+        m_eStartupType = StartupType::ST_ExtractHere;
         transSplitFileName(filepath, m_stUnCompressParameter);
 
         QFileInfo fileinfo(filepath);
@@ -947,7 +948,7 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             // 构建解压参数
             options.strTargetPath = fileinfo.path();
             options.bAllExtract = true;
-            options.bRightExtract = true;
+            options.bExistList = true;
             options.qComressSize = fileinfo.size();
 
             m_operationtype = Operation_Extract;
@@ -968,8 +969,81 @@ void MainWindow::slotHandleRightMenuSelected(const QStringList &listParam)
             m_ePageID = PI_Failure;
             showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume);
         }
-    }
+    } else if (strType == QStringLiteral("dragdropadd")) { // 桌面拖拽追加
+        if (listParam.size() < 3) {
+            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
+                emit sigquitApp();
+            });
+            return;
+        }
 
+        QString archiveName = listParam.first();
+        //处理分卷包名称
+        QString transFile = archiveName;
+        transSplitFileName(transFile, m_stUnCompressParameter);
+
+        QStringList listFiles;
+        for (int i = 1; i < listParam.size() - 1; ++i) {
+            listFiles.push_back(listParam.at(i));
+        }
+        QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
+        QMimeType mimeType = determineMimeType(transFile);
+        // 构建压缩包加载之后的数据
+        m_stUnCompressParameter.strFullPath = archiveName;
+        QFileInfo fileinfo(transFile);
+        m_stUnCompressParameter.bCommentModifiable = (mimeType.name() == "application/zip") ? true : false;
+        m_stUnCompressParameter.bMultiplePassword = false;
+        m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
+                                               && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
+        if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包直接退出
+            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
+                emit sigquitApp();
+            });
+            return;
+        }
+
+        qInfo() << "向压缩包中添加文件";
+        m_eStartupType = StartupType::ST_DragDropAdd;
+
+        CompressOptions options;
+        QList<FileEntry> listEntry;
+
+        options.qTotalSize = fileinfo.size(); // 拖拽追加由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
+        // 构建压缩文件数据
+        foreach (QString strFile, listFiles) {
+            FileEntry stFileEntry;
+            stFileEntry.strFullPath = strFile;
+            if (!QFileInfo(strFile).isDir()) {
+                stFileEntry.qSize = QFileInfo(strFile).size(); // 原文件大小，供libarchive追加进度使用
+            }
+
+            listEntry.push_back(stFileEntry);
+        }
+
+        // 调用添加文件接口
+        if (ArchiveManager::get_instance()->addFiles(transFile, listEntry, options)) {
+            // 切换进度界面
+            m_pProgressPage->setProgressType(PT_CompressAdd);
+            m_pProgressPage->setArchiveName(QFileInfo(transFile).fileName());
+
+            m_operationtype = Operation_Add;
+            m_ePageID = PI_AddCompressProgress;
+//            refreshPage();
+
+            // 设置更新选项
+            m_stUpdateOptions.reset();
+            m_stUpdateOptions.strParentPath = options.strDestination;
+            m_stUpdateOptions.eType = UpdateOptions::Add;
+            ConstructAddOptions(listFiles);
+
+            m_pProgressPage->setTotalSize(m_stUpdateOptions.qSize);
+            m_pProgressPage->restartTimer();
+        } else {
+            // 无可用插件
+            showErrorMessage(FI_Add, EI_NoPlugin);
+        }
+
+    }
     refreshPage();
     show();
 }
@@ -1183,15 +1257,21 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
     refreshPage();
 
-    // 如果是右键压缩，压缩完毕自动关闭界面
-    if (m_bRightCompress && eFinishType == PFT_Nomral) {
+    // 拖拽追加，完毕自动关闭界面
+    if ((PFT_Nomral == eFinishType || PFT_Cancel == eFinishType)
+            && ArchiveJob::JT_Add == eJobType && StartupType::ST_DragDropAdd == m_eStartupType) {
+        QTimer::singleShot(100, this, [ = ]() {
+            close();
+        });
+    } else if (ArchiveJob::JT_Create == eJobType // 如果是右键压缩，压缩完毕自动关闭界面
+               && StartupType::ST_Compress == m_eStartupType && eFinishType == PFT_Nomral) {
         Dtk::Core::DSysInfo::UosEdition edition =  Dtk::Core::DSysInfo::uosEditionType();
         //等于服务器行业版或欧拉版(centos)
         bool isCentos = Dtk::Core::DSysInfo::UosEuler == edition || Dtk::Core::DSysInfo::UosEnterpriseC == edition;
 
         if (isCentos) {
             QTimer::singleShot(100, this, [ = ]() {
-                close();;
+                close();
             });
         }
     }
@@ -1405,20 +1485,26 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Add: {
         qDebug() << "添加结束";
 
-        // 追加成功tip提示
-        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-        sendMessage(new CustomFloatingMessage(icon, tr("Adding successful"), 1000, this));
+        //拖拽追加成功后不需要刷新
+        if (StartupType::ST_DragDropAdd != m_eStartupType) {
+            // 追加成功tip提示
+            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+            sendMessage(new CustomFloatingMessage(icon, tr("Adding successful"), 1000, this));
 
-        // 追加完成更新压缩包数据
-        m_operationtype = Operation_UpdateData;
-        if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
-            // 开始更新
-            m_pLoadingPage->setDes(tr("Updating, please wait..."));
-            m_pLoadingPage->startLoading();     // 开始加载
-            m_ePageID = PI_Loading;
+            // 追加完成更新压缩包数据
+            m_operationtype = Operation_UpdateData;
+            if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
+                // 开始更新
+                m_pLoadingPage->setDes(tr("Updating, please wait..."));
+                m_pLoadingPage->startLoading();     // 开始加载
+                m_ePageID = PI_Loading;
+            } else {
+                // 无可用插件
+                showErrorMessage(FI_Add, EI_NoPlugin);
+            }
         } else {
-            // 无可用插件
-            showErrorMessage(FI_Add, EI_NoPlugin);
+            m_ePageID = PI_Success;
+            showSuccessInfo(SI_Compress);   // 显示压缩成功
         }
     }
     break;
@@ -1465,7 +1551,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                 m_ePageID = PI_Success;
                 showSuccessInfo(SI_UnCompress);
 
-                if (m_stUnCompressParameter.bRightOperation) {
+                if (StartupType::ST_ExtractHere == m_eStartupType||StartupType::ST_ExtractMulti == m_eStartupType) {
                     // 右键解压到当前文件夹，关闭界面（延时100ms，显示明了）
                     QTimer::singleShot(100, this, [ = ]() {
                         close();;
@@ -1612,9 +1698,12 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     break;
     // 添加文件至压缩包
     case ArchiveJob::JT_Add: {
-        m_ePageID = PI_UnCompress;
-        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-        sendMessage(new CustomFloatingMessage(icon, tr("Adding canceled"), 1000, this));
+        //拖拽追加取消后不需要返回列表界面
+        if (StartupType::ST_DragDropAdd != m_eStartupType) {
+            m_ePageID = PI_UnCompress;
+            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
+            sendMessage(new CustomFloatingMessage(icon, tr("Adding canceled"), 1000, this));
+        }
     }
     break;
     // 打开压缩包
@@ -1630,7 +1719,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
             sendMessage(new CustomFloatingMessage(icon, tr("Extraction canceled"), 1000, this));
         } else {
-            if (m_stUnCompressParameter.bRightOperation) {
+            if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType) {
                 // 避免重复提示停止任务
                 m_operationtype = Operation_NULL;
                 // 直接关闭应用
@@ -1687,18 +1776,33 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     break;
     // 压缩包追加文件错误
     case ArchiveJob::JT_Add: {
-        m_ePageID = PI_UnCompress;
-        QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
-        switch (eErrorType) {
-        // 密码错误
-        case ET_WrongPassword: {
-            sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
-            break;
-        }
-        default: {
-            sendMessage(new CustomFloatingMessage(icon, tr("Adding failed"), 1000, this));
-            break;
-        }
+        //拖拽追加失败后需要跳转到失败界面，
+        if (StartupType::ST_DragDropAdd != m_eStartupType) {
+            m_ePageID = PI_UnCompress;
+            QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+            switch (eErrorType) {
+            // 密码错误
+            case ET_WrongPassword: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
+                break;
+            }
+            default: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Adding failed"), 1000, this));
+                break;
+            }
+            }
+        } else {
+            switch (eErrorType) {
+            // 密码错误
+            case ET_WrongPassword: {
+                showErrorMessage(FI_Uncompress, EI_WrongPassword);
+                break;
+            }
+            default: {
+                showErrorMessage(FI_Uncompress, EI_ArchiveDamaged);
+                break;
+            }
+            }
         }
     }
     break;
@@ -1756,25 +1860,31 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             switch (eErrorType) {
             // 压缩包打开失败
             case ET_ArchiveOpenError:
-                showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             // 密码错误
             case ET_WrongPassword:
-                showErrorMessage(FI_Uncompress, EI_WrongPassword, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_WrongPassword,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             // 文件名过长
             case ET_LongNameError:
-                showErrorMessage(FI_Uncompress, EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_LongFileName,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             // 创建文件失败
             case ET_FileWriteError:
-                showErrorMessage(FI_Uncompress, EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_CreatFileFailed,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             case ET_MissingVolume:
-                showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             case ET_InsufficientDiskSpace: {
-                showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace, !m_stUnCompressParameter.bRightOperation);
+                showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace,
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
                 break;
             }
             case ET_PluginError: {
@@ -1792,6 +1902,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 删除错误
     case ArchiveJob::JT_Delete: {
         m_ePageID = PI_UnCompress;
+#if 0 // 删除错误提示暂时不需要
         QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         switch (eErrorType) {
         // 压缩包打开失败
@@ -1805,9 +1916,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             break;
         }
         default:
-            sendMessage(new CustomFloatingMessage(icon, tr("Delete failed"), 1000, this));
+//            sendMessage(new CustomFloatingMessage(icon, tr("Delete failed"), 1000, this));
             break;
         }
+#endif
     }
     break;
     // 批量解压错误
@@ -1815,22 +1927,27 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         switch (eErrorType) {
         // 压缩包打开失败
         case ET_ArchiveOpenError:
-            showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed,
+                             !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
             break;
         // 密码错误
         case ET_WrongPassword:
-            showErrorMessage(FI_Uncompress, EI_WrongPassword, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_WrongPassword,
+                             !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
             break;
         // 文件名过长
         case ET_LongNameError:
-            showErrorMessage(FI_Uncompress, EI_LongFileName, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_LongFileName,
+                             !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
             break;
         // 创建文件失败
         case ET_FileWriteError:
-            showErrorMessage(FI_Uncompress, EI_CreatFileFailed, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_CreatFileFailed,
+                             !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
             break;
         case ET_InsufficientDiskSpace: {
-            showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace, !m_stUnCompressParameter.bRightOperation);
+            showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace,
+                             !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType));
             break;
         }
         case ET_PluginError: {
@@ -1935,7 +2052,7 @@ void MainWindow::resetMainwindow()
     m_comment.clear();
     m_isFirstViewComment = true;
     m_strFinalConvertFile.clear();
-    m_bRightCompress = false;
+    m_eStartupType = StartupType::ST_Normal;
 
     // 清空压缩包监听数据
     SAFE_DELETE_ELE(m_pFileWatcher);
@@ -2520,7 +2637,7 @@ void MainWindow::slotFailureRetry()
     }
     break;
     case FI_Uncompress: {
-        if (m_stUnCompressParameter.bRightOperation) {
+        if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType) {
             // 右键解压到当前文件夹
         } else {
             // 普通加载解压

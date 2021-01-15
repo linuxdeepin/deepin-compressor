@@ -151,7 +151,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
         if (m_bAutoCreatDir)
             stOptions.strTargetPath += QDir::separator() + fileInfo.completeBaseName();
         stOptions.qComressSize = fileInfo.size();
-        stOptions.bRightExtract = true;
+        stOptions.bExistList = true;
         stOptions.bAllExtract = true;
         stOptions.bBatchExtract = true;
 

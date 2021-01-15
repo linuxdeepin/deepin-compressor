@@ -524,7 +524,7 @@ private:
     QString m_strFinalConvertFile;     // 格式转换最终的文件全路径
     QString m_fileWriteErrorName;     // 创建失败的文件名
 
-    bool m_bRightCompress = false;      // 是否是右键压缩
+    StartupType m_eStartupType = StartupType::ST_Normal;      // 操作方式
 
     // 适配arm平台
 #ifdef __aarch64__

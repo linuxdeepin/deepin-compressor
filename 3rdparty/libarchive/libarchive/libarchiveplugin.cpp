@@ -167,7 +167,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
 
         // 右键解压到当前文件夹
-        if (options.bRightExtract && iIndex == 0) {
+        if (options.bExistList && iIndex == 0) {
             FileEntry stEntry;
             stEntry.strFullPath = entryName;
             DataManager::get_instance().archiveData().listRootEntry << stEntry;

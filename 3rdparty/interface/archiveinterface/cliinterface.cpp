@@ -520,7 +520,7 @@ void CliInterface::handleProgress(const QString &line)
                         if (count > 0) {
                             strfilename = line.midRef(count + 2).toString();  // 文件名
                             // 右键 解压到当前文件夹
-                            if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0) {
+                            if (m_workStatus == WT_Extract && m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
                                 m_indexOfListRootEntry++;
                                 FileEntry entry;
                                 entry.strFullPath = strfilename;
@@ -540,7 +540,7 @@ void CliInterface::handleProgress(const QString &line)
                 }
             } else {
                 // 7z解压小文件无法获取文件名添加一个空的entry
-                if (m_workStatus == WT_Extract && m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0 && m_isEmptyArchive == false) {
+                if (m_workStatus == WT_Extract && m_extractOptions.bExistList && m_indexOfListRootEntry == 0 && m_isEmptyArchive == false) {
                     m_indexOfListRootEntry++;
                     FileEntry entry;
                     entry.strFullPath = QString();
@@ -568,7 +568,7 @@ void CliInterface::handleProgress(const QString &line)
             }
 
             // 右键 解压到当前文件夹
-            if (m_extractOptions.bRightExtract && m_indexOfListRootEntry == 0 && fileName.count('/') <= 1) {
+            if (m_extractOptions.bExistList && m_indexOfListRootEntry == 0 && fileName.count('/') <= 1) {
                 m_indexOfListRootEntry++;
                 FileEntry entry;
                 if (fileName.count('/') == 0) { // 压缩包内第一层的文件
