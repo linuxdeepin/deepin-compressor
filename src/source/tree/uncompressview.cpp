@@ -693,27 +693,29 @@ void UnCompressView::slotExtract2Here()
 
 void UnCompressView::slotDeleteFile()
 {
-    // 询问删除对话框
-    SimpleQueryDialog dialog(this);
-    int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
-    if (iResult == 1) {
-        // 删除压缩包数据
-        QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据
-        qint64 qSize = 0;       // 所有需要删除的文件总大小
+    if (m_bModifiable) { // 压缩包数据是否可更改
+        // 询问删除对话框
+        SimpleQueryDialog dialog(this);
+        int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+        if (iResult == 1) {
+            // 删除压缩包数据
+            QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据
+            qint64 qSize = 0;       // 所有需要删除的文件总大小
 
-        // 获取所有文件数据
-        foreach (FileEntry entry, listSelEntry) {
-            if (entry.isDirectory) {
-                QList<FileEntry> listEntry;
-                calEntrySizeByParentPath(entry.strFullPath, qSize);
-            } else {
-                qSize += entry.qSize;
+            // 获取所有文件数据
+            foreach (FileEntry entry, listSelEntry) {
+                if (entry.isDirectory) {
+                    QList<FileEntry> listEntry;
+                    calEntrySizeByParentPath(entry.strFullPath, qSize);
+                } else {
+                    qSize += entry.qSize;
+                }
             }
-        }
 
-        // 发送删除信号
-        m_eChangeType = CT_Delete;
-        emit signalDelFiles(listSelEntry, qSize);
+            // 发送删除信号
+            m_eChangeType = CT_Delete;
+            emit signalDelFiles(listSelEntry, qSize);
+        }
     }
 }
 
