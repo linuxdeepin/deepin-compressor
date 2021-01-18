@@ -399,3 +399,59 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, cons
     ReadOnlyArchiveInterface *iface = factory->create<ReadOnlyArchiveInterface>(nullptr, args);
     return iface;
 }
+
+void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType)
+{
+    if (fileName.contains(".7z.")) {
+        // 7z分卷处理
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
+
+        if (reg.exactMatch(fileName)) {
+            fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
+            eSplitType = UnCompressParameter::ST_Other;
+        }
+    } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
+        // rar分卷处理
+        int x = fileName.lastIndexOf("part");
+        int y = fileName.lastIndexOf(".");
+
+        if ((y - x) > 5) {
+            fileName.replace(x, y - x, "part01");
+        } else {
+            fileName.replace(x, y - x, "part1");
+        }
+
+        eSplitType = UnCompressParameter::ST_Other;
+    } else if (fileName.contains(".zip.")) { // 1.zip.001格式
+        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        if (reg.exactMatch(fileName)) {
+            QFileInfo fi(reg.cap(1) + "001");
+            if (fi.exists() == true) {
+                fileName = reg.cap(1) + "001";
+                eSplitType = UnCompressParameter::ST_Zip;
+            }
+        }
+    } else if (fileName.endsWith(".zip")) { //1.zip 1.01格式
+        /**
+         * 例如123.zip文件，检测123.z01文件是否存在
+         * 如果存在，则认定123.zip是分卷包
+         */
+        QFileInfo tmp(fileName.left(fileName.length() - 2) + "01");
+        if (tmp.exists()) {
+            eSplitType = UnCompressParameter::ST_Zip;
+        }
+    } else if (fileName.contains(".z")) {  //1.zip 1.01格式
+        /**
+         * 例如123.z01文件，检测123.zip文件是否存在
+         * 如果存在，则认定123.z01是分卷包
+         */
+        QRegExp reg("^([\\s\\S]*.)z[0-9]+$");
+        if (reg.exactMatch(fileName)) {
+            fileName = reg.cap(1) + "zip";
+            QFileInfo fi(fileName);
+            if (fi.exists()) {
+                eSplitType = UnCompressParameter::ST_Zip;
+            }
+        }
+    }
+}

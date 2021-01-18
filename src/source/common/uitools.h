@@ -24,6 +24,7 @@
 
 #include "archiveinterface.h"
 #include "plugin.h"
+#include "uistruct.h"
 
 #include <QObject>
 
@@ -137,6 +138,14 @@ public:
      */
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, AssignPluginType eType = APT_Auto/*bool bUseLibArchive = false*/);
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
+
+    /**
+     * @brief transSplitFileName 处理7z、rar分卷压缩包名称
+     * @param fileName 原始名称
+     * @param eSplitType 分卷类型
+     * * @return    是否是分卷压缩包
+     */
+    static void transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType);
 
 public:
     static QStringList m_associtionlist;

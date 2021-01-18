@@ -58,13 +58,14 @@ class MainWindow : public DMainWindow
 {
     Q_OBJECT
 
-signals:
-    /**
-     * @brief sigquitApp    应用程序退出信号
-     */
-    void sigquitApp();
-
 public:
+    enum ArgumentType {
+        AT_Open,            // 打开
+        AT_RightMenu,       // 右键操作
+        AT_DragDropAdd      // 拖拽追加
+    };
+
+public :
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
@@ -172,14 +173,6 @@ private:
      * @return
      */
     QString getExtractPath(const QString &strArchiveFullPath);
-
-    /**
-     * @brief transSplitFileName 处理7z、rar分卷压缩包名称
-     * @param fileName 原始名称
-     * @param unCompressPar 解压参数
-     * * @return    是否是分卷压缩包
-     */
-    void transSplitFileName(QString &fileName, UnCompressParameter &unCompressPar);
 
     /**
      * @brief handleJobNormalFinished   处理job正常结束
@@ -296,6 +289,31 @@ private:
      */
     QJsonObject creatShorcutJson();
 
+    /**
+     * @brief handleArguments_Open  处理文管参数-打开文件
+     * @param listParam
+     */
+    bool handleArguments_Open(const QStringList &listParam);
+
+    /**
+     * @brief handleArguments_RightMenu     处理文管参数-右键操作
+     * @param listParam
+     */
+    bool handleArguments_RightMenu(const QStringList &listParam);
+
+    /**
+     * @brief handleArguments_Append        处理文管操作-拖拽追加
+     * @param listParam
+     */
+    bool handleArguments_Append(const QStringList &listParam);
+
+    /**
+     * @brief rightExtract2Path     右键解压到指定目录（当前文件夹、指定路径）
+     * @param eType
+     * @param listParams
+     */
+    void rightExtract2Path(StartupType eType, const QStringList &listFiles, const QString &strTargetPath);
+
     // QWidget interface
 protected:
     /**
@@ -308,12 +326,20 @@ protected:
      */
     void closeEvent(QCloseEvent *) override;
 
+
+Q_SIGNALS:
+    /**
+     * @brief sigquitApp    应用程序退出信号
+     */
+    void sigquitApp();
+
 private Q_SLOTS:
     /**
-     * @brief slotHandleRightMenuSelected   处理文管操作
+     * @brief slotHandleArguments   处理文管操作
      * @param listParam     参数
+     * @param eType     参数
      */
-    void slotHandleRightMenuSelected(const QStringList &listParam);
+    void slotHandleArguments(const QStringList &listParam, MainWindow::ArgumentType eType);
 
     /**
      * @brief slotTitleBtnClicked   标题栏按钮点击

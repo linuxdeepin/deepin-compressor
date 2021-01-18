@@ -99,7 +99,7 @@ public:
      * @param strPath           解压选择路径
      * @param bAutoCreatDir     是否自动创建文件夹
      */
-    void setExtractPath(const QString &strPath, bool bAutoCreatDir);
+    void setExtractPath(const QString &strPath/*, bool bAutoCreatDir*/);
 
     /**
      * @brief setArchiveFiles       设置批量解压文件（先调用setExtractPath，再调用此函数）
@@ -145,7 +145,7 @@ private:
     QStringList m_listFiles;        // 批量解压的压缩包列表
     qint64 m_qBatchTotalSize = 0;     //批量解压压缩包总大小
     QString m_strExtractPath;       // 解压选择路径
-    bool m_bAutoCreatDir = false;       // 是否自动创建文件夹
+//    bool m_bAutoCreatDir = false;       // 是否自动创建文件夹
     int m_iArchiveCount = 0;        // 压缩文件数目
     int m_iCurArchiveIndex = 0;         // 当前正在操作的压缩包索引
     double m_dLastPercentage = 0;       // 最后进度

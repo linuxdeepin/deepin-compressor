@@ -440,27 +440,6 @@ TEST_F(TestMainWindow, testgetExtractPath_NoAutoCreatDir)
     ASSERT_EQ(m_tester->getExtractPath(strPath), "");
 }
 
-TEST_F(TestMainWindow, testtransSplitFileName_7z)
-{
-    QString strPath = QFileInfo("../UnitTest/test_sources/split/1.7z.002").absoluteFilePath();
-    m_tester->transSplitFileName(strPath, m_tester->m_stUnCompressParameter);
-    ASSERT_EQ(m_tester->m_stUnCompressParameter.eSplitVolume, UnCompressParameter::ST_Other);
-}
-
-TEST_F(TestMainWindow, testtransSplitFileName_rar)
-{
-    QString strPath = QFileInfo("../UnitTest/test_sources/split/1.part2.rar").absoluteFilePath();
-    m_tester->transSplitFileName(strPath, m_tester->m_stUnCompressParameter);
-    ASSERT_EQ(m_tester->m_stUnCompressParameter.eSplitVolume, UnCompressParameter::ST_Other);
-}
-
-TEST_F(TestMainWindow, testtransSplitFileName_zip)
-{
-    QString strPath = QFileInfo("../UnitTest/test_sources/split/1.zip.002").absoluteFilePath();
-    m_tester->transSplitFileName(strPath, m_tester->m_stUnCompressParameter);
-    ASSERT_EQ(m_tester->m_stUnCompressParameter.eSplitVolume, UnCompressParameter::ST_Zip);
-}
-
 TEST_F(TestMainWindow, testhandleJobNormalFinished)
 {
 

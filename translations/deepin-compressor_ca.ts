@@ -163,27 +163,27 @@
         <translation>No teniu permís per comprimir %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="552"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="551"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="660"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="659"/>
         <source>Total size: %1</source>
         <translation>Mida total: %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="718"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="717"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Ja existeix un altre fitxer amb el mateix nom. Voleu reemplaçar-lo?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="718"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="717"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="718"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="717"/>
         <source>Replace</source>
         <translation>Reemplaça</translation>
     </message>
@@ -339,13 +339,13 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../src/main.cpp" line="61"/>
-        <location filename="../src/main.cpp" line="62"/>
+        <location filename="../src/main.cpp" line="53"/>
+        <location filename="../src/main.cpp" line="54"/>
         <source>Archive Manager</source>
         <translation>Gestor d&apos;arxius</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="63"/>
+        <location filename="../src/main.cpp" line="55"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
         <translation>El Gestor d&apos;arxius és una aplicació lleugera i ràpida per crear i descomprimir arxius.</translation>
     </message>
@@ -353,353 +353,359 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="162"/>
-        <location filename="../src/source/mainwindow.cpp" line="181"/>
-        <location filename="../src/source/mainwindow.cpp" line="427"/>
+        <location filename="../src/source/mainwindow.cpp" line="163"/>
+        <location filename="../src/source/mainwindow.cpp" line="182"/>
+        <location filename="../src/source/mainwindow.cpp" line="428"/>
         <source>Open file</source>
         <translation>Obre el fitxer</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="163"/>
+        <location filename="../src/source/mainwindow.cpp" line="164"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="286"/>
-        <location filename="../src/source/mainwindow.cpp" line="296"/>
+        <location filename="../src/source/mainwindow.cpp" line="287"/>
+        <location filename="../src/source/mainwindow.cpp" line="297"/>
         <source>Create New Archive</source>
         <translation>Crea un nou fitxer</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="337"/>
+        <location filename="../src/source/mainwindow.cpp" line="338"/>
         <source>Converting</source>
         <translation>Es converteix</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="344"/>
+        <location filename="../src/source/mainwindow.cpp" line="345"/>
         <source>Updating comments</source>
         <translation>S&apos;actualitzen els comentaris.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="504"/>
-        <location filename="../src/source/mainwindow.cpp" line="2080"/>
-        <location filename="../src/source/mainwindow.cpp" line="2102"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
+        <location filename="../src/source/mainwindow.cpp" line="505"/>
+        <location filename="../src/source/mainwindow.cpp" line="1954"/>
+        <location filename="../src/source/mainwindow.cpp" line="1976"/>
+        <location filename="../src/source/mainwindow.cpp" line="2001"/>
         <source>Plugin error</source>
         <translation>Error del connector</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1410"/>
+        <location filename="../src/source/mainwindow.cpp" line="1249"/>
         <source>Adding successful</source>
         <translation>Addició correcta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1438"/>
-        <location filename="../src/source/mainwindow.cpp" line="2155"/>
+        <location filename="../src/source/mainwindow.cpp" line="1281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2029"/>
         <source>No data in it</source>
         <translation>No hi ha dades.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1617"/>
+        <location filename="../src/source/mainwindow.cpp" line="1462"/>
         <source>Adding canceled</source>
         <translation>S&apos;ha cancel·lat l&apos;addició.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1631"/>
+        <location filename="../src/source/mainwindow.cpp" line="1477"/>
         <source>Extraction canceled</source>
         <translation>S&apos;ha cancel·lat l&apos;extracció.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1699"/>
+        <location filename="../src/source/mainwindow.cpp" line="1547"/>
         <source>Adding failed</source>
         <translation>Ha fallat l&apos;addició.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1731"/>
-        <location filename="../src/source/mainwindow.cpp" line="1799"/>
-        <location filename="../src/source/mainwindow.cpp" line="2106"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="1592"/>
+        <location filename="../src/source/mainwindow.cpp" line="1667"/>
+        <location filename="../src/source/mainwindow.cpp" line="1980"/>
+        <location filename="../src/source/mainwindow.cpp" line="2005"/>
         <source>Failed to open the archive</source>
         <translation>Ha fallat obrir l&apos;arxiu.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1746"/>
-        <location filename="../src/source/mainwindow.cpp" line="2151"/>
+        <location filename="../src/source/mainwindow.cpp" line="1607"/>
+        <location filename="../src/source/mainwindow.cpp" line="2025"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>Ha fallat crear &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <source>Delete failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
+        <location filename="../src/source/mainwindow.cpp" line="1930"/>
         <source>Compression successful</source>
         <translation>Compressió correcta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2088"/>
-        <location filename="../src/source/mainwindow.cpp" line="2159"/>
+        <location filename="../src/source/mainwindow.cpp" line="1962"/>
+        <location filename="../src/source/mainwindow.cpp" line="2033"/>
         <source>Insufficient disk space</source>
         <translation>Espai de disc insuficient</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2114"/>
-        <location filename="../src/source/mainwindow.cpp" line="2139"/>
+        <location filename="../src/source/mainwindow.cpp" line="1988"/>
+        <location filename="../src/source/mainwindow.cpp" line="2013"/>
         <source>Some volumes are missing</source>
         <translation>Manquen alguns volums</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2143"/>
+        <location filename="../src/source/mainwindow.cpp" line="2017"/>
         <source>Wrong password, please retry</source>
         <translation>Contrasenya incorrecta. Torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2310"/>
+        <location filename="../src/source/mainwindow.cpp" line="2184"/>
         <source>Select file</source>
         <translation>Seleccioneu un fitxer</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2432"/>
+        <location filename="../src/source/mainwindow.cpp" line="2642"/>
         <source>Update</source>
         <translation>Actualitza</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2703"/>
+        <location filename="../src/source/mainwindow.cpp" line="2913"/>
         <source>Enter up to %1 characters</source>
         <translation>Escriviu fins a %1 caràcters.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="186"/>
-        <location filename="../src/source/mainwindow.cpp" line="2579"/>
+        <location filename="../src/source/mainwindow.cpp" line="187"/>
+        <location filename="../src/source/mainwindow.cpp" line="2789"/>
         <source>File info</source>
         <translation>Informació del fitxer</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1521"/>
+        <location filename="../src/source/mainwindow.cpp" line="555"/>
+        <location filename="../src/source/mainwindow.cpp" line="1364"/>
         <source>Confirm</source>
         <translation>Confirmeu-ho</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1521"/>
+        <location filename="../src/source/mainwindow.cpp" line="1364"/>
         <source>Do you want to delete the archive?</source>
         <translation>Voleu eliminar l&apos;arxiu?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1453"/>
-        <location filename="../src/source/mainwindow.cpp" line="2060"/>
+        <location filename="../src/source/mainwindow.cpp" line="1296"/>
+        <location filename="../src/source/mainwindow.cpp" line="1934"/>
         <source>Extraction successful</source>
         <translation>Extracció correcta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="530"/>
+        <location filename="../src/source/mainwindow.cpp" line="531"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1521"/>
-        <location filename="../src/source/mainwindow.cpp" line="2432"/>
+        <location filename="../src/source/mainwindow.cpp" line="555"/>
+        <location filename="../src/source/mainwindow.cpp" line="1364"/>
+        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2642"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="72"/>
+        <location filename="../src/source/mainwindow.cpp" line="73"/>
         <source>Archive Manager</source>
         <translation>Gestor d&apos;arxius</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="119"/>
-        <location filename="../src/source/mainwindow.cpp" line="504"/>
-        <location filename="../src/source/mainwindow.cpp" line="533"/>
-        <location filename="../src/source/mainwindow.cpp" line="608"/>
-        <location filename="../src/source/mainwindow.cpp" line="1438"/>
-        <location filename="../src/source/mainwindow.cpp" line="2291"/>
+        <location filename="../src/source/mainwindow.cpp" line="120"/>
+        <location filename="../src/source/mainwindow.cpp" line="505"/>
+        <location filename="../src/source/mainwindow.cpp" line="534"/>
+        <location filename="../src/source/mainwindow.cpp" line="609"/>
+        <location filename="../src/source/mainwindow.cpp" line="1281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2165"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="119"/>
+        <location filename="../src/source/mainwindow.cpp" line="120"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>No teniu permís per desar fitxers aquí. Si us plau, canvieu-ho i torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="309"/>
+        <location filename="../src/source/mainwindow.cpp" line="310"/>
         <source>Adding files to %1</source>
         <translation>S&apos;afegeixen fitxers a %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="316"/>
+        <location filename="../src/source/mainwindow.cpp" line="317"/>
         <source>Compressing</source>
         <translation>Es comprimeix</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="323"/>
+        <location filename="../src/source/mainwindow.cpp" line="324"/>
         <source>Extracting</source>
         <translation>S&apos;extreu</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="330"/>
+        <location filename="../src/source/mainwindow.cpp" line="331"/>
         <source>Deleting</source>
         <translation>S&apos;elimina</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="430"/>
+        <location filename="../src/source/mainwindow.cpp" line="431"/>
         <source>Back</source>
         <translation>Enrere</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="494"/>
-        <location filename="../src/source/mainwindow.cpp" line="2410"/>
+        <location filename="../src/source/mainwindow.cpp" line="495"/>
+        <location filename="../src/source/mainwindow.cpp" line="2620"/>
         <source>Loading, please wait...</source>
         <translation>Es carrega. Espereu, si us plau...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="554"/>
+        <location filename="../src/source/mainwindow.cpp" line="555"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Segur que voleu interrompre la tasca activa?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1416"/>
-        <location filename="../src/source/mainwindow.cpp" line="1538"/>
+        <location filename="../src/source/mainwindow.cpp" line="1255"/>
+        <location filename="../src/source/mainwindow.cpp" line="1381"/>
         <source>Updating, please wait...</source>
         <translation>S&apos;actualitza. Espereu, si us plau...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1741"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
+        <location filename="../src/source/mainwindow.cpp" line="1602"/>
+        <location filename="../src/source/mainwindow.cpp" line="2021"/>
         <source>File name too long</source>
         <translation>Nom del fitxer massa llarg.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2084"/>
+        <location filename="../src/source/mainwindow.cpp" line="1958"/>
         <source>Failed to create file</source>
         <translation>Ha fallat crear el fitxer.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2077"/>
+        <location filename="../src/source/mainwindow.cpp" line="1951"/>
         <source>Compression failed</source>
         <translation>La compressió ha fallat.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="2124"/>
+        <location filename="../src/source/mainwindow.cpp" line="1614"/>
+        <location filename="../src/source/mainwindow.cpp" line="1998"/>
         <source>Extraction failed</source>
         <translation>L&apos;extracció ha fallat.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="866"/>
+        <location filename="../src/source/mainwindow.cpp" line="2336"/>
         <source>Find directory</source>
         <translation>Troba un directori</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2099"/>
+        <location filename="../src/source/mainwindow.cpp" line="1973"/>
         <source>Open failed</source>
         <translation>Ha fallat l&apos;obertura.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1695"/>
-        <location filename="../src/source/mainwindow.cpp" line="1736"/>
-        <location filename="../src/source/mainwindow.cpp" line="1804"/>
-        <location filename="../src/source/mainwindow.cpp" line="1853"/>
-        <location filename="../src/source/mainwindow.cpp" line="2110"/>
+        <location filename="../src/source/mainwindow.cpp" line="1543"/>
+        <location filename="../src/source/mainwindow.cpp" line="1597"/>
+        <location filename="../src/source/mainwindow.cpp" line="1672"/>
+        <location filename="../src/source/mainwindow.cpp" line="1727"/>
+        <location filename="../src/source/mainwindow.cpp" line="1984"/>
         <source>Wrong password</source>
         <translation>Contrasenya incorrecta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="599"/>
+        <location filename="../src/source/mainwindow.cpp" line="600"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>El format del fitxer no l&apos;admet el Gestor d&apos;arxius.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2063"/>
+        <location filename="../src/source/mainwindow.cpp" line="1937"/>
         <source>Conversion successful</source>
         <translation>Conversió correcta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2302"/>
+        <location filename="../src/source/mainwindow.cpp" line="2176"/>
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2306"/>
+        <location filename="../src/source/mainwindow.cpp" line="2180"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2314"/>
+        <location filename="../src/source/mainwindow.cpp" line="2188"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2322"/>
+        <location filename="../src/source/mainwindow.cpp" line="2196"/>
         <source>Display shortcuts</source>
         <translation>Mostra les dreceres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2334"/>
+        <location filename="../src/source/mainwindow.cpp" line="2208"/>
         <source>Shortcuts</source>
         <translation>Dreceres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2603"/>
+        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation type="unfinished">Ja existeix un altre fitxer amb el mateix nom. Voleu reemplaçar-lo?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <source>Replace</source>
+        <translation type="unfinished">Reemplaça</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2813"/>
         <source>Basic info</source>
         <translation>Informació bàsica</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2619"/>
+        <location filename="../src/source/mainwindow.cpp" line="2829"/>
         <source>Size</source>
         <translation>Mida</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2620"/>
+        <location filename="../src/source/mainwindow.cpp" line="2830"/>
         <source>Type</source>
         <translation>Tipus</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2621"/>
+        <location filename="../src/source/mainwindow.cpp" line="2831"/>
         <source>Location</source>
         <translation>Ubicació</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2622"/>
+        <location filename="../src/source/mainwindow.cpp" line="2832"/>
         <source>Time created</source>
         <translation>Hora de creació</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2623"/>
+        <location filename="../src/source/mainwindow.cpp" line="2833"/>
         <source>Time accessed</source>
         <translation>Hora d&apos;accés</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2624"/>
+        <location filename="../src/source/mainwindow.cpp" line="2834"/>
         <source>Time modified</source>
         <translation>Modificat</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2634"/>
+        <location filename="../src/source/mainwindow.cpp" line="2844"/>
         <source>Archive</source>
         <translation>Arxiva</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2665"/>
+        <location filename="../src/source/mainwindow.cpp" line="2875"/>
         <source>Comment</source>
         <translation>Comentari</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Si us plau, comproveu el tipus d&apos;associació de fitxers a la configuració del Gestor d&apos;arxius.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2291"/>
+        <location filename="../src/source/mainwindow.cpp" line="2165"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>L&apos;arxiu ha canviat al disc. Si us plau, torneu-lo a importar.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
+        <location filename="../src/source/mainwindow.cpp" line="2009"/>
         <source>Damaged file</source>
         <translation>Fitxer malmès</translation>
     </message>
@@ -993,7 +999,7 @@
         <translation>Mida</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2429"/>
+        <location filename="../src/source/mainwindow.cpp" line="2639"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 ha canviat. Voleu desar els canvis a l&apos;arxiu?</translation>
     </message>
@@ -1085,12 +1091,12 @@
         <translation>Aplica-ho a tot</translation>
     </message>
     <message>
-        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="390"/>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="391"/>
         <source>Open file</source>
         <translation>Obre el fitxer</translation>
     </message>
     <message>
-        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="396"/>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="397"/>
         <source>Back</source>
         <translation>Enrere</translation>
     </message>

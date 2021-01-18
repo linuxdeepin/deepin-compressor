@@ -103,7 +103,7 @@ public:
      * @param bAutoCreatDir     是否自动创建文件夹
      * @return                      是否调用成功
      */
-    bool batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir);
+    bool batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath/*, bool bAutoCreatDir*/);
 
     /**
      * @brief openFile          打开压缩包中文件

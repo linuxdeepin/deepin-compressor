@@ -512,9 +512,16 @@ void CliInterface::handleProgress(const QString &line)
                 if (line.contains("\b\b\b\b") == true) {
                     QString strfilename;
                     if (m_workStatus == WT_Extract || m_workStatus == WT_Add) { // 解压、压缩解析文件名
-                        int count = line.indexOf("+");
+                        int count = line.indexOf("+");  // 获取压缩参数解析
+
+                        // 解压参数解析
                         if (-1 == count) {
                             count = line.indexOf("-");
+                        }
+
+                        // 更新参数解析
+                        if (-1 == count) {
+                            count = line.indexOf("U");
                         }
 
                         if (count > 0) {

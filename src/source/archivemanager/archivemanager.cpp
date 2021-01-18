@@ -230,10 +230,10 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
     return false;
 }
 
-bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath, bool bAutoCreatDir)
+bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath/*, bool bAutoCreatDir*/)
 {
     BatchExtractJob *pBatchExtractJob = new BatchExtractJob();
-    pBatchExtractJob->setExtractPath(strTargetPath, bAutoCreatDir);
+    pBatchExtractJob->setExtractPath(strTargetPath/*, bAutoCreatDir*/);
 
     if (pBatchExtractJob->setArchiveFiles(listFiles)) {
         // 连接槽函数

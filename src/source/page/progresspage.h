@@ -62,6 +62,12 @@ public:
     void setArchiveName(const QString &strArchiveName);
 
     /**
+     * @brief archiveName   获取压缩包名称
+     * @return
+     */
+    QString archiveName();
+
+    /**
      * @brief setProgress   设置当前进度
      * @param dPercent  进度值
      */
@@ -150,6 +156,8 @@ private:
     int m_iPerent = 0;      // 进度值
     QElapsedTimer m_timer;  //计时器
     qint64 m_qConsumeTime = 0; //消耗时间
+
+    QString m_strArchiveName;
 };
 
 #endif // COMPRESSPAGE_H

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/deepin-compressor  %U extract_here_split_multi
+Exec=/usr/bin/deepin-compressor  %U extract_here
 GenericName=Extract here
 MimeType=application/octet-stream;
 Name=Extract here

@@ -195,8 +195,8 @@ enum StartupType {
     ST_Compresstozip7z, // 右键压缩成7z、zip
     ST_Extract, // 右键解压
     ST_ExtractHere, // 右键解压到当前文件夹
-    ST_ExtractMulti, // 右键解压多压缩包
-    ST_Extractto,   // 右键解压到指定目录
+//    ST_ExtractMulti, // 右键解压多压缩包
+    ST_Extractto,   // 右键解压到指定目录（指定目录）
     ST_DragDropAdd, // 拖拽追加
 };
 
