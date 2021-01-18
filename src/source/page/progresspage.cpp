@@ -71,12 +71,13 @@ void ProgressPage::setTotalSize(qint64 qTotalSize)
 void ProgressPage::setArchiveName(const QString &strArchiveName)
 {
     m_strArchiveName = strArchiveName;
+    QFileInfo fileinfo(strArchiveName);
+
     QFontMetrics elideFont(m_pArchiveNameLbl->font());
-    m_pArchiveNameLbl->setText(elideFont.elidedText(strArchiveName, Qt::ElideMiddle, 160));     // 设置压缩包名称
-    m_pArchiveNameLbl->setToolTip(strArchiveName);
+    m_pArchiveNameLbl->setText(elideFont.elidedText(fileinfo.fileName(), Qt::ElideMiddle, 160));     // 设置压缩包名称
+    m_pArchiveNameLbl->setToolTip(fileinfo.absoluteFilePath());
 
     // 设置类型图片
-    QFileInfo fileinfo(strArchiveName);
     QFileIconProvider provider;
     QIcon icon = provider.icon(fileinfo);
     m_pPixmapLbl->setPixmap(icon.pixmap(128, 128));

@@ -57,7 +57,7 @@ public:
 
     /**
      * @brief setArchiveName    设置压缩包名称和文件总大小、显示图标
-     * @param strArchiveName    压缩包名称
+     * @param strArchiveName    压缩包名称(包含路径)
      */
     void setArchiveName(const QString &strArchiveName);
 

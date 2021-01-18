@@ -626,7 +626,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         menu.setMinimumWidth(202);
 
         // 右键-提取
-        menu.addAction(tr("Extract"), this, &UnCompressView::slotExtract);
+        menu.addAction(tr("Extract", "提取"), this, &UnCompressView::slotExtract);
         // 右键-提取到当前文件夹
         menu.addAction(tr("Extract to current directory"), this, &UnCompressView::slotExtract2Here);
         // 右键-打开

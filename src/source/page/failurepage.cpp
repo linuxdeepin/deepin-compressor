@@ -73,7 +73,7 @@ void FailurePage::initUI()
 
     //失败文字
     m_pFailureLbl = new DLabel(this);
-    m_pFailureLbl->setText(tr("Extraction failed"));
+    m_pFailureLbl->setText(tr("Extraction failed", "解压失败"));
     DFontSizeManager::instance()->bind(m_pFailureLbl, DFontSizeManager::T5, QFont::DemiBold);
     m_pFailureLbl->setForegroundRole(DPalette::ToolTipText);
 

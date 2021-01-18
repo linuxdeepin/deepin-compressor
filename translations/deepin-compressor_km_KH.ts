@@ -279,6 +279,7 @@
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="76"/>
         <source>Extraction failed</source>
+        <comment>解压失败</comment>
         <translation>ការស្រង់ចេញបានបរាជ័យ</translation>
     </message>
     <message>
@@ -382,111 +383,100 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="505"/>
-        <location filename="../src/source/mainwindow.cpp" line="1954"/>
-        <location filename="../src/source/mainwindow.cpp" line="1976"/>
-        <location filename="../src/source/mainwindow.cpp" line="2001"/>
+        <location filename="../src/source/mainwindow.cpp" line="1935"/>
+        <location filename="../src/source/mainwindow.cpp" line="1957"/>
+        <location filename="../src/source/mainwindow.cpp" line="1982"/>
         <source>Plugin error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1249"/>
+        <location filename="../src/source/mainwindow.cpp" line="1230"/>
         <source>Adding successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1281"/>
-        <location filename="../src/source/mainwindow.cpp" line="2029"/>
+        <location filename="../src/source/mainwindow.cpp" line="1262"/>
+        <location filename="../src/source/mainwindow.cpp" line="2010"/>
         <source>No data in it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1462"/>
+        <location filename="../src/source/mainwindow.cpp" line="1443"/>
         <source>Adding canceled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1477"/>
-        <source>Extraction canceled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1547"/>
+        <location filename="../src/source/mainwindow.cpp" line="1528"/>
         <source>Adding failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1592"/>
-        <location filename="../src/source/mainwindow.cpp" line="1667"/>
-        <location filename="../src/source/mainwindow.cpp" line="1980"/>
-        <location filename="../src/source/mainwindow.cpp" line="2005"/>
+        <location filename="../src/source/mainwindow.cpp" line="1573"/>
+        <location filename="../src/source/mainwindow.cpp" line="1648"/>
+        <location filename="../src/source/mainwindow.cpp" line="1961"/>
+        <location filename="../src/source/mainwindow.cpp" line="1986"/>
         <source>Failed to open the archive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1607"/>
-        <location filename="../src/source/mainwindow.cpp" line="2025"/>
+        <location filename="../src/source/mainwindow.cpp" line="1588"/>
+        <location filename="../src/source/mainwindow.cpp" line="2006"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1930"/>
+        <location filename="../src/source/mainwindow.cpp" line="1911"/>
         <source>Compression successful</source>
         <translation>ការបង្ហាប់បានជោគជ័យ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1962"/>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="1943"/>
+        <location filename="../src/source/mainwindow.cpp" line="2014"/>
         <source>Insufficient disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1988"/>
-        <location filename="../src/source/mainwindow.cpp" line="2013"/>
+        <location filename="../src/source/mainwindow.cpp" line="1969"/>
+        <location filename="../src/source/mainwindow.cpp" line="1994"/>
         <source>Some volumes are missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2017"/>
+        <location filename="../src/source/mainwindow.cpp" line="1998"/>
         <source>Wrong password, please retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2184"/>
+        <location filename="../src/source/mainwindow.cpp" line="2165"/>
         <source>Select file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2642"/>
+        <location filename="../src/source/mainwindow.cpp" line="2623"/>
         <source>Update</source>
         <translation>ធ្វើបច្ចុប្បន្នភាព</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2913"/>
+        <location filename="../src/source/mainwindow.cpp" line="2894"/>
         <source>Enter up to %1 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="187"/>
-        <location filename="../src/source/mainwindow.cpp" line="2789"/>
+        <location filename="../src/source/mainwindow.cpp" line="2770"/>
         <source>File info</source>
         <translation>ព័ត៌មានឯកសារ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="555"/>
-        <location filename="../src/source/mainwindow.cpp" line="1364"/>
+        <location filename="../src/source/mainwindow.cpp" line="1345"/>
         <source>Confirm</source>
         <translation>បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1364"/>
+        <location filename="../src/source/mainwindow.cpp" line="1345"/>
         <source>Do you want to delete the archive?</source>
         <translation>តើអ្នកចង់លុបប័ណ្ណសារទេ?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1296"/>
-        <location filename="../src/source/mainwindow.cpp" line="1934"/>
-        <source>Extraction successful</source>
-        <translation>ការស្រង់ចេញបានជោគជ័យ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="531"/>
@@ -495,9 +485,9 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="555"/>
-        <location filename="../src/source/mainwindow.cpp" line="1364"/>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
-        <location filename="../src/source/mainwindow.cpp" line="2642"/>
+        <location filename="../src/source/mainwindow.cpp" line="1345"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
+        <location filename="../src/source/mainwindow.cpp" line="2623"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
@@ -510,9 +500,11 @@
         <location filename="../src/source/mainwindow.cpp" line="120"/>
         <location filename="../src/source/mainwindow.cpp" line="505"/>
         <location filename="../src/source/mainwindow.cpp" line="534"/>
-        <location filename="../src/source/mainwindow.cpp" line="609"/>
-        <location filename="../src/source/mainwindow.cpp" line="1281"/>
-        <location filename="../src/source/mainwindow.cpp" line="2165"/>
+        <location filename="../src/source/mainwindow.cpp" line="578"/>
+        <location filename="../src/source/mainwindow.cpp" line="587"/>
+        <location filename="../src/source/mainwindow.cpp" line="629"/>
+        <location filename="../src/source/mainwindow.cpp" line="1262"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>OK</source>
         <translation>យល់ព្រម</translation>
     </message>
@@ -548,7 +540,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="495"/>
-        <location filename="../src/source/mainwindow.cpp" line="2620"/>
+        <location filename="../src/source/mainwindow.cpp" line="2601"/>
         <source>Loading, please wait...</source>
         <translation>កំពុងផ្ទុក សូមរង់ចាំ...</translation>
     </message>
@@ -558,154 +550,184 @@
         <translation>តើអ្នកពិតជាចង់បញ្ឈប់កិច្ចការដែលកំពុងដំណើរការមែនទេ?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1255"/>
-        <location filename="../src/source/mainwindow.cpp" line="1381"/>
+        <location filename="../src/source/mainwindow.cpp" line="1236"/>
+        <location filename="../src/source/mainwindow.cpp" line="1362"/>
         <source>Updating, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1602"/>
-        <location filename="../src/source/mainwindow.cpp" line="2021"/>
+        <location filename="../src/source/mainwindow.cpp" line="1583"/>
+        <location filename="../src/source/mainwindow.cpp" line="2002"/>
         <source>File name too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1958"/>
+        <location filename="../src/source/mainwindow.cpp" line="1939"/>
         <source>Failed to create file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1951"/>
+        <location filename="../src/source/mainwindow.cpp" line="1932"/>
         <source>Compression failed</source>
         <translation>ការបង្ហាប់បានបរាជ័យ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1614"/>
-        <location filename="../src/source/mainwindow.cpp" line="1998"/>
-        <source>Extraction failed</source>
-        <translation>ការស្រង់ចេញបានបរាជ័យ</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2336"/>
+        <location filename="../src/source/mainwindow.cpp" line="2317"/>
         <source>Find directory</source>
         <translation>រកថតឯកសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1973"/>
+        <location filename="../src/source/mainwindow.cpp" line="1954"/>
         <source>Open failed</source>
         <translation>ការបើកបានបរាជ័យ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1543"/>
-        <location filename="../src/source/mainwindow.cpp" line="1597"/>
-        <location filename="../src/source/mainwindow.cpp" line="1672"/>
-        <location filename="../src/source/mainwindow.cpp" line="1727"/>
-        <location filename="../src/source/mainwindow.cpp" line="1984"/>
+        <location filename="../src/source/mainwindow.cpp" line="1524"/>
+        <location filename="../src/source/mainwindow.cpp" line="1578"/>
+        <location filename="../src/source/mainwindow.cpp" line="1653"/>
+        <location filename="../src/source/mainwindow.cpp" line="1708"/>
+        <location filename="../src/source/mainwindow.cpp" line="1965"/>
         <source>Wrong password</source>
         <translation>លេខសំងាត់​ខុស</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="600"/>
+        <location filename="../src/source/mainwindow.cpp" line="587"/>
+        <location filename="../src/source/mainwindow.cpp" line="620"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1937"/>
+        <location filename="../src/source/mainwindow.cpp" line="578"/>
+        <source>No such file or directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1277"/>
+        <source>Extraction successful</source>
+        <comment>提取成功</comment>
+        <translation>ការស្រង់ចេញបានជោគជ័យ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1458"/>
+        <source>Extraction canceled</source>
+        <comment>取消提取</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1595"/>
+        <source>Extraction failed</source>
+        <comment>提取失败</comment>
+        <translation>ការស្រង់ចេញបានបរាជ័យ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1915"/>
+        <source>Extraction successful</source>
+        <comment>解压成功</comment>
+        <translation>ការស្រង់ចេញបានជោគជ័យ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1918"/>
         <source>Conversion successful</source>
         <translation>ការបំលែងជោគជ័យ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2176"/>
+        <location filename="../src/source/mainwindow.cpp" line="1979"/>
+        <source>Extraction failed</source>
+        <comment>解压失败</comment>
+        <translation>ការស្រង់ចេញបានបរាជ័យ</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2157"/>
         <source>Close</source>
         <translation>បិទ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2180"/>
+        <location filename="../src/source/mainwindow.cpp" line="2161"/>
         <source>Help</source>
         <translation>ជំនួយ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2188"/>
+        <location filename="../src/source/mainwindow.cpp" line="2169"/>
         <source>Delete</source>
         <translation>លុប</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2196"/>
+        <location filename="../src/source/mainwindow.cpp" line="2177"/>
         <source>Display shortcuts</source>
         <translation>បង្ហាញផ្លូវកាត់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2208"/>
+        <location filename="../src/source/mainwindow.cpp" line="2189"/>
         <source>Shortcuts</source>
         <translation>ផ្លូវកាត់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation type="unfinished">ឯកសារមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយជំនួសវា?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
         <source>Replace</source>
         <translation type="unfinished">ជំនួស</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2813"/>
+        <location filename="../src/source/mainwindow.cpp" line="2794"/>
         <source>Basic info</source>
         <translation>ព័ត៌មានមូលដ្ឋាន</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2829"/>
+        <location filename="../src/source/mainwindow.cpp" line="2810"/>
         <source>Size</source>
         <translation>ទំហំ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2830"/>
+        <location filename="../src/source/mainwindow.cpp" line="2811"/>
         <source>Type</source>
         <translation>ប្រភេទ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2831"/>
+        <location filename="../src/source/mainwindow.cpp" line="2812"/>
         <source>Location</source>
         <translation>ទីតាំង</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2832"/>
+        <location filename="../src/source/mainwindow.cpp" line="2813"/>
         <source>Time created</source>
         <translation>ពេលវេលាបានបង្កើត</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2833"/>
+        <location filename="../src/source/mainwindow.cpp" line="2814"/>
         <source>Time accessed</source>
         <translation>ពេលវេលាបានចូល</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2834"/>
+        <location filename="../src/source/mainwindow.cpp" line="2815"/>
         <source>Time modified</source>
         <translation>ពេលវេលាកែប្រែ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2844"/>
+        <location filename="../src/source/mainwindow.cpp" line="2825"/>
         <source>Archive</source>
         <translation>ប័ណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2875"/>
+        <location filename="../src/source/mainwindow.cpp" line="2856"/>
         <source>Comment</source>
         <translation>យោបល់</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="617"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>សូមពិនិត្យមើលប្រភេទឯកសារនៅក្នុងការកំណត់របស់អ្នកគ្រប់គ្រងប័ណ្ណសារ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2165"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>ប័ណ្ណសារត្រូវបានផ្លាស់ប្តូរនៅលើឌីស សូមនាំចូលម្តងទៀត។</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2009"/>
+        <location filename="../src/source/mainwindow.cpp" line="1990"/>
         <source>Damaged file</source>
         <translation>ឯកសារខូច</translation>
     </message>
@@ -856,9 +878,9 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="52"/>
-        <location filename="../src/source/page/progresspage.cpp" line="293"/>
-        <location filename="../src/source/page/progresspage.cpp" line="296"/>
-        <location filename="../src/source/page/progresspage.cpp" line="299"/>
+        <location filename="../src/source/page/progresspage.cpp" line="300"/>
+        <location filename="../src/source/page/progresspage.cpp" line="303"/>
+        <location filename="../src/source/page/progresspage.cpp" line="306"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>ល្បឿន</translation>
@@ -869,109 +891,109 @@
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
         <location filename="../src/source/page/progresspage.cpp" line="60"/>
         <location filename="../src/source/page/progresspage.cpp" line="63"/>
-        <location filename="../src/source/page/progresspage.cpp" line="137"/>
+        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>កំពុងគណនា...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="54"/>
-        <location filename="../src/source/page/progresspage.cpp" line="303"/>
-        <location filename="../src/source/page/progresspage.cpp" line="305"/>
+        <location filename="../src/source/page/progresspage.cpp" line="310"/>
+        <location filename="../src/source/page/progresspage.cpp" line="312"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>ល្បឿន</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="319"/>
-        <location filename="../src/source/page/progresspage.cpp" line="321"/>
+        <location filename="../src/source/page/progresspage.cpp" line="324"/>
+        <location filename="../src/source/page/progresspage.cpp" line="326"/>
+        <location filename="../src/source/page/progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>ល្បឿន</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="60"/>
-        <location filename="../src/source/page/progresspage.cpp" line="309"/>
-        <location filename="../src/source/page/progresspage.cpp" line="311"/>
-        <location filename="../src/source/page/progresspage.cpp" line="313"/>
+        <location filename="../src/source/page/progresspage.cpp" line="316"/>
+        <location filename="../src/source/page/progresspage.cpp" line="318"/>
+        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>ល្បឿន</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="63"/>
-        <location filename="../src/source/page/progresspage.cpp" line="289"/>
+        <location filename="../src/source/page/progresspage.cpp" line="296"/>
         <source>Time left</source>
         <translation>ពេលវេលានៅសល់</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="110"/>
+        <location filename="../src/source/page/progresspage.cpp" line="117"/>
         <source>Compressing</source>
         <translation>កំពុងបង្ហាប់</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="112"/>
+        <location filename="../src/source/page/progresspage.cpp" line="119"/>
         <source>Deleting</source>
         <translation>កំពុងលុប</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="114"/>
+        <location filename="../src/source/page/progresspage.cpp" line="121"/>
         <source>Converting</source>
         <translation>កំពុងបំលែង</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="116"/>
-        <location filename="../src/source/page/progresspage.cpp" line="135"/>
+        <location filename="../src/source/page/progresspage.cpp" line="123"/>
+        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation>កំពុងធ្វើបច្ចុប្បន្នភាពមតិយោបល់...</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="118"/>
+        <location filename="../src/source/page/progresspage.cpp" line="125"/>
         <source>Extracting</source>
         <translation>កំពុងស្រង់ចេញ</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="159"/>
-        <location filename="../src/source/page/progresspage.cpp" line="366"/>
+        <location filename="../src/source/page/progresspage.cpp" line="166"/>
+        <location filename="../src/source/page/progresspage.cpp" line="373"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="355"/>
+        <location filename="../src/source/page/progresspage.cpp" line="362"/>
         <source>Are you sure you want to stop the decompression?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="357"/>
+        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Are you sure you want to stop the deletion?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="129"/>
-        <location filename="../src/source/page/progresspage.cpp" line="160"/>
-        <location filename="../src/source/page/progresspage.cpp" line="337"/>
+        <location filename="../src/source/page/progresspage.cpp" line="136"/>
+        <location filename="../src/source/page/progresspage.cpp" line="167"/>
+        <location filename="../src/source/page/progresspage.cpp" line="344"/>
         <source>Pause</source>
         <translation>ផ្អាក</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="333"/>
+        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Continue</source>
         <translation>បន្ត</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="353"/>
-        <location filename="../src/source/page/progresspage.cpp" line="359"/>
+        <location filename="../src/source/page/progresspage.cpp" line="360"/>
+        <location filename="../src/source/page/progresspage.cpp" line="366"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>តើអ្នកពិតជាចង់បញ្ឈប់ការបង្ហាប់មែនទេ?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="361"/>
+        <location filename="../src/source/page/progresspage.cpp" line="368"/>
         <source>Are you sure you want to stop the conversion?</source>
         <translation>តើអ្នកពិតជាចង់បញ្ឈប់ការបំលែងមែនទេ?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="366"/>
+        <location filename="../src/source/page/progresspage.cpp" line="373"/>
         <source>Confirm</source>
         <translation>បញ្ជាក់</translation>
     </message>
@@ -999,7 +1021,7 @@
         <translation>ទំហំ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2639"/>
+        <location filename="../src/source/mainwindow.cpp" line="2620"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>បានផ្លាស់ប្ដូរ %1។ តើអ្នកចង់រក្សាទុកការផ្លាស់ប្តូរក្នុងប័ណ្ណសារទេ?</translation>
     </message>
@@ -1091,12 +1113,12 @@
         <translation>អនុវត្តទៅទាំងអស់</translation>
     </message>
     <message>
-        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="391"/>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="390"/>
         <source>Open file</source>
         <translation>បើក​ឯកសារ</translation>
     </message>
     <message>
-        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="397"/>
+        <location filename="../test/UnitTest/src/source/ut_mainwindow.cpp" line="396"/>
         <source>Back</source>
         <translation>ថយក្រោយ</translation>
     </message>
@@ -1243,6 +1265,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Extract</source>
+        <comment>提取</comment>
         <translation>ស្រង់ចេញ</translation>
     </message>
     <message>
@@ -1267,22 +1290,22 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="647"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="747"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="749"/>
         <source>Select default program</source>
         <translation>ជ្រើសរើសកម្មវិធីលំនាំដើម</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="698"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="699"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="698"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="699"/>
         <source>Confirm</source>
         <translation>បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="698"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="699"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>តើអ្នកចង់លុបឯកសារ()ដែលបានជ្រើសរើសទេ?</translation>
     </message>

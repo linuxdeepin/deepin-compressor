@@ -159,6 +159,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             if (isInsufficientDiskSpace(destPath, 10 * 1024 * 1024)) {  // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
             } else {
+                emit signalFileWriteErrorName("destPath");
                 m_eErrorType = ET_FileWriteError;
             }
             emit signalFinished(PFT_Error);

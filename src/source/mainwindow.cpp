@@ -1087,7 +1087,7 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
         // 设置进度界面参数
         m_pProgressPage->setProgressType(PT_UnCompress);
         m_pProgressPage->setTotalSize(options.qSize);
-        m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
+        m_pProgressPage->setArchiveName(strArchiveFullPath);
         m_pProgressPage->restartTimer(); // 重启计时器
         m_ePageID = PI_UnCompressProgress;
 
@@ -1274,7 +1274,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             qDebug() << "提取结束";
             m_ePageID = PI_UnCompress;
-            Extract2PathFinish(tr("Extraction successful")); //提取成功
+            Extract2PathFinish(tr("Extraction successful", "提取成功")); //提取成功
             m_pProgressdialog->setFinished();
         } else {
             qDebug() << "解压结束";
@@ -1455,7 +1455,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
-            sendMessage(new CustomFloatingMessage(icon, tr("Extraction canceled"), 1000, this));
+            sendMessage(new CustomFloatingMessage(icon, tr("Extraction canceled", "取消提取"), 1000, this));
         } else {
             if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
                 // 避免重复提示停止任务
@@ -1592,7 +1592,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
 #endif
-            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed"), 1000, this)); // 提取失败提示
+            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -1751,7 +1751,7 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
     if (ArchiveManager::get_instance()->addFiles(strArchiveFullPath, listEntry, options)) {
         // 切换进度界面
         m_pProgressPage->setProgressType(PT_CompressAdd);
-        m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
+        m_pProgressPage->setArchiveName(strArchiveFullPath);
 
         m_operationtype = Operation_Create;
         m_ePageID = PI_AddCompressProgress;
@@ -1912,7 +1912,7 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
         break;
     // 解压成功
     case SI_UnCompress:
-        m_pSuccessPage->setSuccessDes(tr("Extraction successful"));
+        m_pSuccessPage->setSuccessDes(tr("Extraction successful", "解压成功"));
         break;
     case SI_Convert:
         m_pSuccessPage->setSuccessDes(tr("Conversion successful"));
@@ -1976,7 +1976,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
     break;
     // 解压失败
     case FI_Uncompress: {
-        m_pFailurePage->setFailuerDes(tr("Extraction failed"));
+        m_pFailurePage->setFailuerDes(tr("Extraction failed", "解压失败"));
         switch (eErrorInfo) {
         case EI_NoPlugin: {
             m_pFailurePage->setFailureDetail(tr("Plugin error"));
@@ -2104,7 +2104,7 @@ void MainWindow::convertArchive(QString convertType)
     if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createUUID(), newArchivePath)) {
         m_pProgressPage->setProgressType(PT_Convert);
         m_pProgressPage->setTotalSize(oldArchive.size() + DataManager::get_instance().archiveData().qSize);
-        m_pProgressPage->setArchiveName(QFileInfo(newArchivePath).fileName());
+        m_pProgressPage->setArchiveName(newArchivePath);
         m_pProgressPage->restartTimer();
 
         m_ePageID = PI_ConvertProgress;
@@ -2345,7 +2345,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
                 // 设置进度界面参数
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(qSize);
-                m_pProgressPage->setArchiveName(fileInfo.fileName());
+                m_pProgressPage->setArchiveName(listTransFiles[0]);
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
             } else {
@@ -2426,7 +2426,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     if (ArchiveManager::get_instance()->addFiles(transFile, listEntry, options)) {
         // 切换进度界面
         m_pProgressPage->setProgressType(PT_CompressAdd);
-        m_pProgressPage->setArchiveName(QFileInfo(transFile).fileName());
+        m_pProgressPage->setArchiveName(archiveName);
 
         m_operationtype = Operation_Add;
         m_ePageID = PI_AddCompressProgress;
@@ -2498,7 +2498,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
                 // 设置进度界面参数
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(options.qComressSize);
-                m_pProgressPage->setArchiveName(fileinfo.fileName());
+                m_pProgressPage->setArchiveName(listTransFiles[0]);
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
             }
@@ -2524,7 +2524,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             // 设置进度界面参数
             m_pProgressPage->setProgressType(PT_UnCompress);
             m_pProgressPage->setTotalSize(qSize);
-            m_pProgressPage->setArchiveName(QFileInfo(listTransFiles[0]).fileName());
+            m_pProgressPage->setArchiveName(listTransFiles[0]);
             m_pProgressPage->restartTimer(); // 重启计时器
             m_ePageID = PI_UnCompressProgress;
         } else {
@@ -2573,7 +2573,7 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
         // 设置进度界面参数
         m_pProgressPage->setProgressType(PT_Delete);
         m_pProgressPage->setTotalSize(qTotalSize);
-        m_pProgressPage->setArchiveName(QFileInfo(strArchiveFullPath).fileName());
+        m_pProgressPage->setArchiveName(strArchiveFullPath);
         m_pProgressPage->restartTimer(); // 重启计时器
         m_ePageID = PI_DeleteProgress;
         refreshPage();
