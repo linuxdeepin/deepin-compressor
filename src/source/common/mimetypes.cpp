@@ -85,8 +85,8 @@ QMimeType determineMimeType(const QString &filename)
     QMimeType mimeFromExtension = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchExtension);
     QMimeType mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
 
-    //qDebug() << "mimeFromExtension******************" << mimeFromExtension.name();
-    //qDebug() << "mimeFromContent****************" << mimeFromContent.name();
+//    qDebug() << "mimeFromExtension******************" << mimeFromExtension.name() << mimeFromExtension.parentMimeTypes();
+//    qDebug() << "mimeFromContent****************" << mimeFromContent.name() << mimeFromContent.parentMimeTypes();
 
     // mimeFromContent will be "application/octet-stream" when file is
     // unreadable, so use extension.
@@ -122,6 +122,14 @@ QMimeType determineMimeType(const QString &filename)
         // 判断后缀类型是否为zip，避免谷歌插件后后缀虽然为zip，但是实际上类型得按照application/octet-stream
         if (mimeFromContent.isDefault() && (mimeFromExtension.name() != "application/zip")) {
             return mimeFromExtension;
+        } else if (mimeFromContent.isDefault() && (mimeFromExtension.name() == "application/zip")) {
+            QRegExp reg("^([\\s\\S]*.)zip$"); //z01分卷，实际上类型得按照application/zip，使用cli7zplugin
+            if (reg.exactMatch(filename)) {
+                QFileInfo fi(reg.cap(1) + "z01");
+                if (fi.exists() == true) {
+                    return mimeFromExtension;
+                }
+            }
         }
 
         // #354344: ISO files are currently wrongly detected-by-content.

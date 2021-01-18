@@ -1448,6 +1448,19 @@ void MainWindow::transSplitFileName(QString &fileName, UnCompressParameter &unCo
         if (tmp.exists()) {
             unCompressPar.eSplitVolume = UnCompressParameter::ST_Zip;
         }
+    } else if (fileName.contains(".z")) {  //1.zip 1.01格式
+        /**
+         * 例如123.z01文件，检测123.zip文件是否存在
+         * 如果存在，则认定123.z01是分卷包
+         */
+        QRegExp reg("^([\\s\\S]*.)z[0-9]+$");
+        if (reg.exactMatch(fileName)) {
+            fileName = reg.cap(1) + "zip";
+            QFileInfo fi(fileName);
+            if (fi.exists()) {
+                unCompressPar.eSplitVolume = UnCompressParameter::ST_Zip;
+            }
+        }
     }
 }
 
@@ -1551,7 +1564,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                 m_ePageID = PI_Success;
                 showSuccessInfo(SI_UnCompress);
 
-                if (StartupType::ST_ExtractHere == m_eStartupType||StartupType::ST_ExtractMulti == m_eStartupType) {
+                if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_ExtractMulti == m_eStartupType) {
                     // 右键解压到当前文件夹，关闭界面（延时100ms，显示明了）
                     QTimer::singleShot(100, this, [ = ]() {
                         close();;

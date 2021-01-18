@@ -115,7 +115,7 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
         m_pInterface = nullptr;
     }
 
-    m_pInterface = UiTools::createInterface(strArchiveFullPath, eType);
+    m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
 
     if (m_pInterface) {
         LoadJob *pLoadJob = new LoadJob(m_pInterface);
