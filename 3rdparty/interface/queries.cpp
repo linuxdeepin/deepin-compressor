@@ -170,6 +170,7 @@ void OverwriteQuery::execute()
     pTipLbl->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Medium);
     pTipLbl->setText(QObject::tr("Another file with the same name already exists, replace it?"));
+    pTipLbl->setWordWrap(true);
 
     // 应用到全部勾选
     DCheckBox *pApplyAllCkb = new DCheckBox;
@@ -205,9 +206,9 @@ void OverwriteQuery::execute()
     checkLayout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(pTipLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->setContentsMargins(10, 0, 10, 0);
+    mainlayout->addWidget(pTipLbl, 1);
+    mainlayout->addWidget(pFileNameLbl, 0);
 
     mainlayout->addLayout(checkLayout);
     DWidget *widget = new DWidget(dialog);

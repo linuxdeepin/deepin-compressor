@@ -106,8 +106,8 @@ int SimpleQueryDialog::showDialog(const QString &strDesText, const QString btnMs
     }
 
     QVBoxLayout *pMainLayout = new QVBoxLayout;
-    pMainLayout->setContentsMargins(0, 0, 0, 0);
-    pMainLayout->addWidget(pDesLbl, 0, Qt::AlignVCenter);
+    pMainLayout->setContentsMargins(10, 0, 10, 0);
+    pMainLayout->addWidget(pDesLbl, 1, Qt::AlignVCenter);
     pMainLayout->addSpacing(10);
 
     DWidget *widget = new DWidget(this);
@@ -149,6 +149,7 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
     strlabel2->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(strlabel2, DFontSizeManager::T6, QFont::Medium);
     strlabel2->setForegroundRole(DPalette::ToolTipText);
+    strlabel2->setWordWrap(true);
 
     if (bDir) {
         // 文件夹提示
@@ -177,9 +178,9 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
     checkLayout->addStretch();
 
     QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel2, 0, Qt::AlignHCenter | Qt::AlignVCenter);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->setContentsMargins(10, 0, 10, 0);
+    mainlayout->addWidget(strlabel2, 1);
+    mainlayout->addWidget(strlabel, 0);
     mainlayout->addLayout(checkLayout);
 
     DWidget *widget = new DWidget(this);
