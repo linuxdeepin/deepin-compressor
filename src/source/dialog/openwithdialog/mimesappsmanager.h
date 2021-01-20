@@ -50,7 +50,7 @@ class MimeAppsWorker: public QObject
     Q_OBJECT
 
 public:
-    MimeAppsWorker(QObject *parent = 0);
+    MimeAppsWorker(QObject *parent = nullptr);
     ~MimeAppsWorker();
 
     void initConnect();
@@ -60,12 +60,12 @@ public slots:
     void handleDirectoryChanged(const QString &filePath);
     void handleFileChanged(const QString &filePath);
     void updateCache();
-    void writeData(const QString &path, const QByteArray &content);
+    bool writeData(const QString &path, const QByteArray &content);
     QByteArray readData(const QString &path);
 
 
 private:
-    QFileSystemWatcher *m_fileSystemWatcher = NULL;
+    QFileSystemWatcher *m_fileSystemWatcher = nullptr;
     QTimer *m_updateCacheTimer;
 };
 

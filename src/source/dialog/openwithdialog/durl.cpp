@@ -32,7 +32,7 @@
 #include <QUrlQuery>
 
 #include <utility>
-
+/*
 QRegularExpression DUrl::burn_rxp = QRegularExpression("^(.*?)/(" BURN_SEG_ONDISC "|" BURN_SEG_STAGING ")(.*)$");
 
 static inline QString parseDecodedComponent(const QString &data)
@@ -838,3 +838,4 @@ QDataStream &operator>>(QDataStream &in, DUrl &url)
 }
 
 QT_END_NAMESPACE
+*/

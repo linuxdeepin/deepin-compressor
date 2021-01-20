@@ -209,15 +209,18 @@ void MimeAppsWorker::updateCache()
     MimesAppsManager::initMimeTypeApps();
 }
 
-void MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
+bool MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
 {
+    bool bResult = false;
     qDebug() << path;
     QFile file(path);
     if (file.open(QFile::WriteOnly)) {
         file.write(content);
+        bResult = true;
     }
 
     file.close();
+    return bResult;
 }
 
 QByteArray MimeAppsWorker::readData(const QString &path)

@@ -98,7 +98,7 @@ TEST_F(TestDesktopFile, testgetDeepinId)
 
 TEST_F(TestDesktopFile, testgetDeepinVendor)
 {
-    ASSERT_EQ(m_tester->getDeepinVendor(), "deepin");
+    ASSERT_EQ(m_tester->getDeepinVendor(), "user-custom");
 }
 
 TEST_F(TestDesktopFile, testgetNoShow)

@@ -1,19 +1,6 @@
 [Desktop Entry]
 Categories=Qt;Archiving;Compression;
 Comment=Work with file archives
-Exec=/usr/bin/deepin-compressor  %F
-GenericName=Archive Manager
-Icon=deepin-compressor
-MimeType=application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-tarz;application/x-xz-compressed-tar;application/x-lzma-compressed-tar;application/x-lzip-compressed-tar;application/x-tzo;application/x-lrzip-compressed-tar;application/x-lz4-compressed-tar;application/x-zstd-compressed-tar;application/x-cd-image;application/x-bcpio;application/x-cpio;application/x-cpio-compressed;application/x-sv4cpio;application/x-sv4crc;application/x-rpm;application/x-source-rpm;application/vnd.ms-cab-compressed;application/x-xar;application/x-iso9660-appimage;application/x-archive;application/vnd.rar;application/x-rar;application/x-7z-compressed;application/zip;application/x-java-archive;application/x-compress;application/gzip;application/x-bzip;application/x-lzma;application/x-xz;application/vnd.android.package-archive;
-Name=Deepin Archive Manager
-StartupNotify=true
-Terminal=false
-TryExec=/usr/bin/deepin-compressor
-Type=Application
-X-Deepin-Vendor=deepin
-
-# Translations:
-# Do not manually modify!
 Comment[ar]=العمل مع أرشفة المفات
 Comment[ast]=Trabaya con archivos
 Comment[ca]=Treballeu amb arxius de fitxers.
@@ -47,6 +34,8 @@ Comment[ug]=ھۆججەت ئارخىپى  ئىشلەڭ
 Comment[uk]=Робота із файловими архівами
 Comment[zh_HK]=管理壓縮文件
 Comment[zh_TW]=管理壓縮文件
+Exec=/usr/bin/deepin-compressor  %F
+GenericName=Archive Manager
 GenericName[ar]=مدير اﻷرشيفات
 GenericName[ast]=Xestor de ficheros
 GenericName[ca]=Gestor d'arxius
@@ -82,6 +71,9 @@ GenericName[uk]=Керування архівами
 GenericName[zh_CN]=归档管理器
 GenericName[zh_HK]=歸檔管理器
 GenericName[zh_TW]=歸檔管理器
+Icon=deepin-compressor
+MimeType=application/x-tar;application/x-compressed-tar;application/x-bzip-compressed-tar;application/x-tarz;application/x-xz-compressed-tar;application/x-lzma-compressed-tar;application/x-lzip-compressed-tar;application/x-tzo;application/x-lrzip-compressed-tar;application/x-lz4-compressed-tar;application/x-zstd-compressed-tar;application/x-cd-image;application/x-bcpio;application/x-cpio;application/x-cpio-compressed;application/x-sv4cpio;application/x-sv4crc;application/x-rpm;application/x-source-rpm;application/vnd.ms-cab-compressed;application/x-xar;application/x-iso9660-appimage;application/x-archive;application/vnd.rar;application/x-rar;application/x-7z-compressed;application/zip;application/x-java-archive;application/x-compress;application/gzip;application/x-bzip;application/x-lzma;application/x-xz;application/vnd.android.package-archive;
+Name=Deepin Archive Manager
 Name[ar]=مدير اﻷرشيفات من ديبين
 Name[ast]=Deepin Archive Manager
 Name[ca]=Gestor d'arxius del Deepin
@@ -117,4 +109,8 @@ Name[uk]=Керування архівами Deepin
 Name[zh_CN]=归档管理器
 Name[zh_HK]=Deepin 歸檔管理器
 Name[zh_TW]=Deepin 歸檔管理器
-
+StartupNotify=true
+Terminal=false
+TryExec=/usr/bin/deepin-compressor
+Type=Application
+X-Deepin-Vendor=user-custom

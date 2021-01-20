@@ -30,54 +30,54 @@
 #include <QRegularExpression>
 
 
-#define TRASH_SCHEME "trash"
-#define RECENT_SCHEME "recent"
-#define BOOKMARK_SCHEME "bookmark"
-#define FILE_SCHEME "file"
-#define COMPUTER_SCHEME "computer"
-#define SEARCH_SCHEME "search"
-#define NETWORK_SCHEME "network"
-#define SMB_SCHEME "smb"
-#define AFC_SCHEME "afc"
-#define MTP_SCHEME "mtp"
-#define DAV_SCHEME "dav"
-#define GPHOTO2_SCHEME "gphoto2"
-#define USERSHARE_SCHEME "usershare"
-#define AVFS_SCHEME "avfs"
-#define FTP_SCHEME "ftp"
-#define SFTP_SCHEME "sftp"
-#define TAG_SCHEME "tag"
-#define DEVICE_SCHEME "device"
-#define MOUNT_SCHEME "mount"
-#define BURN_SCHEME "burn"
+//#define TRASH_SCHEME "trash"
+//#define RECENT_SCHEME "recent"
+//#define BOOKMARK_SCHEME "bookmark"
+//#define FILE_SCHEME "file"
+//#define COMPUTER_SCHEME "computer"
+//#define SEARCH_SCHEME "search"
+//#define NETWORK_SCHEME "network"
+//#define SMB_SCHEME "smb"
+//#define AFC_SCHEME "afc"
+//#define MTP_SCHEME "mtp"
+//#define DAV_SCHEME "dav"
+//#define GPHOTO2_SCHEME "gphoto2"
+//#define USERSHARE_SCHEME "usershare"
+//#define AVFS_SCHEME "avfs"
+//#define FTP_SCHEME "ftp"
+//#define SFTP_SCHEME "sftp"
+//#define TAG_SCHEME "tag"
+//#define DEVICE_SCHEME "device"
+//#define MOUNT_SCHEME "mount"
+//#define BURN_SCHEME "burn"
 
-#define TRASH_ROOT "trash:///"
-#define RECENT_ROOT "recent:///"
-#define BOOKMARK_ROOT "bookmark:///"
-#define FILE_ROOT  "file:///"
+//#define TRASH_ROOT "trash:///"
+//#define RECENT_ROOT "recent:///"
+//#define BOOKMARK_ROOT "bookmark:///"
+//#define FILE_ROOT  "file:///"
 #define COMPUTER_ROOT "computer:///"
 #define NETWORK_ROOT "network:///"
-#define SMB_ROOT "smb:///"
+//#define SMB_ROOT "smb:///"
 #define USERSHARE_ROOT "usershare:///"
-#define AVFS_ROOT "avfs:///"
-#define TAG_ROOT "tag:///"
-#define DEVICE_ROOT "device:///"
-#define MOUNT_ROOT "mount:///"
-#define BURN_ROOT "burn:///"
+//#define AVFS_ROOT "avfs:///"
+//#define TAG_ROOT "tag:///"
+//#define DEVICE_ROOT "device:///"
+//#define MOUNT_ROOT "mount:///"
+//#define BURN_ROOT "burn:///"
 
-// internal scheme, don't rely on this scheme outside the file manager app.
-#define DFMMD_SCHEME "dfmmd"
-#define DFMMD_ROOT "dfmmd:///"
-#define DFMROOT_SCHEME "dfmroot"
-#define DFMROOT_ROOT "dfmroot:///"
-#define DFMVAULT_SCHEME "dfmvault"
-#define DFMVAULT_ROOT "dfmvault:///"
-// internal scheme end.
+//// internal scheme, don't rely on this scheme outside the file manager app.
+//#define DFMMD_SCHEME "dfmmd"
+//#define DFMMD_ROOT "dfmmd:///"
+//#define DFMROOT_SCHEME "dfmroot"
+//#define DFMROOT_ROOT "dfmroot:///"
+//#define DFMVAULT_SCHEME "dfmvault"
+//#define DFMVAULT_ROOT "dfmvault:///"
+//// internal scheme end.
 
-// Auxiliary path segment strings for the burn scheme
-#define BURN_SEG_ONDISC "disc_files"
-#define BURN_SEG_STAGING "staging_files"
-
+//// Auxiliary path segment strings for the burn scheme
+//#define BURN_SEG_ONDISC "disc_files"
+//#define BURN_SEG_STAGING "staging_files"
+/*
 class DUrl;
 
 QT_BEGIN_NAMESPACE
@@ -209,5 +209,5 @@ QDebug operator<<(QDebug deg, const DUrl &url);
 QDataStream &operator<<(QDataStream &out, const DUrl &url);
 QDataStream &operator>>(QDataStream &in, DUrl &url);
 QT_END_NAMESPACE
-
+*/
 #endif // ZURL_H
