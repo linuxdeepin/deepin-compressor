@@ -217,7 +217,8 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
 QList<FileEntry> CompressView::getCurrentDirFiles()
 {
     // 获取当前目录下所有文件信息
-    QFileInfoList lisfInfo = QDir(m_strCurrentPath).entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);     // 获取当前目录下所有子文件
+    QFileInfoList lisfInfo = QDir(m_strCurrentPath).entryInfoList(QDir::AllEntries | QDir::System
+                                                                  | QDir::NoDotAndDotDot | QDir::Hidden);     // 获取当前目录下所有子文件
     QList<FileEntry> listEntry;
 
     // 文件数据转换

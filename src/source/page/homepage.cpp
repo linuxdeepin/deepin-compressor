@@ -26,6 +26,7 @@
 #include <DFileDialog>
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
+#include <DApplicationHelper>
 
 #include <QVBoxLayout>
 #include <QSettings>

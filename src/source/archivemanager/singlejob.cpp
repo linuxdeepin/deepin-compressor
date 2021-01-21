@@ -538,7 +538,9 @@ void ConvertJob::slotHandleExtractFinished()
                 QList<FileEntry> listEntry;
                 // 在临时路径里面获取待压缩文件
                 QDir dir(m_strTargetFullPath);
-                QFileInfoList fileList = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
+                QFileInfoList fileList = dir.entryInfoList(QDir::AllEntries | QDir::System
+                                                           | QDir::NoDotAndDotDot | QDir::NoSymLinks
+                                                           | QDir::Hidden);
 
                 foreach (QFileInfo strFile, fileList) {
                     FileEntry stFileEntry;

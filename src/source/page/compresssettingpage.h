@@ -166,11 +166,11 @@ private:
     bool checkCompressOptionValid();
 
     /**
-     * @brief CompressSetting::checkFilePermission 检查文件权限
+     * @brief checkFile 检查待压缩文件
      * @param path
      * @return
      */
-    bool checkFilePermission(const QString &path);
+    bool checkFile(const QString &path);
 
     /**
      * @brief showWarningDialog 通用的警告对话框

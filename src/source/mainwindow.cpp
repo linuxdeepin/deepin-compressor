@@ -87,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
     initData();
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -399,7 +401,8 @@ void MainWindow::calFileSizeByThread(const QString &path)
         return;
 
     // 获得文件夹中的文件列表
-    QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
+    QFileInfoList list = dir.entryInfoList(QDir::AllEntries | QDir::System
+                                           | QDir::NoDotAndDotDot | QDir::Hidden);
 
     for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);
@@ -1873,7 +1876,8 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
     if (!dir.exists())
         return;
     // 获得文件夹中的文件列表
-    QFileInfoList list = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::Hidden);
+    QFileInfoList list = dir.entryInfoList(QDir::AllEntries | QDir::System
+                                           | QDir::NoDotAndDotDot | QDir::Hidden);
 
     for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);

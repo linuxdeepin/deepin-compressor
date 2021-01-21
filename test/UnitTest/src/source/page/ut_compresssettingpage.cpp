@@ -243,11 +243,11 @@ TEST_F(TestCompressSettingPage, checkCompressOptionValid)
 //    EXPECT_EQ(ret, true);
 }
 
-TEST_F(TestCompressSettingPage, checkFilePermission)
-{
-    bool ret = m_tester->checkFilePermission("/home/cehnglu/Desktop/ut/1");
-    EXPECT_EQ(ret, true);
-}
+//TEST_F(TestCompressSettingPage, checkFilePermission)
+//{
+//    bool ret = m_tester->checkFilePermission("/home/cehnglu/Desktop/ut/1");
+//    EXPECT_EQ(ret, true);
+//}
 
 TEST_F(TestCompressSettingPage, showWarningDialog)
 {

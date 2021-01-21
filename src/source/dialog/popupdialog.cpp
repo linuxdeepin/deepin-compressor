@@ -60,9 +60,9 @@ int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, Butto
     addButton(btnMsg, true, btnType);
 
     QVBoxLayout *pMainLayout = new QVBoxLayout;
-    pMainLayout->setContentsMargins(0, 0, 0, 0);
+    pMainLayout->setContentsMargins(10, 0, 10, 0);
     pMainLayout->addWidget(pDesLbl, 0, Qt::AlignVCenter);
-    pMainLayout->addSpacing(10);
+//    pMainLayout->addSpacing(10);
 
     DWidget *widget = new DWidget(this);
 
