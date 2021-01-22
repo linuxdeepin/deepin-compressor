@@ -219,6 +219,7 @@ protected:
     QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
     bool m_isProcessKilled = false;  // 进程已经结束
     bool m_isEmptyArchive = false;  // 压缩包内无数据
+    bool m_isCorruptArchive = false; // 是否非致命错误
 
 private:
     QList<FileEntry> m_files; // 文件

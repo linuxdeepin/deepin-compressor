@@ -309,10 +309,8 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (workStatus == WT_List) {
-        if (isCorruptArchiveMsg(line) && (handleCorrupt() == PFT_Error)) { // 解压分卷不完整的情况下出现，只读方式打开
-            m_eErrorType = ET_MissingVolume;
-            m_finishType = PFT_Cancel; // 取消打开或加载文件，界面停留在初始界面
-            return false;
+        if (isCorruptArchiveMsg(line)) {
+            m_isCorruptArchive = true;
         }
 
         return readListLine(line);   // 加载压缩文件，处理命令行内容

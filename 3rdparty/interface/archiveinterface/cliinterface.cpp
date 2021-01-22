@@ -886,6 +886,14 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
     deleteProcess();
 
+    if (m_isCorruptArchive && m_workStatus == WT_List) {
+        if (handleCorrupt() == PFT_Error) {
+            m_eErrorType = ET_MissingVolume;
+            m_finishType = PFT_Cancel; // 取消打开或加载文件，界面停留在初始界面
+        }
+        m_isCorruptArchive = false;
+    }
+
     if (exitCode == 0) { // job正常结束
         m_finishType = PFT_Nomral;
     }
