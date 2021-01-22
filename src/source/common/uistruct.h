@@ -177,7 +177,6 @@ enum FailureInfo {
 // 错误界面显示的信息
 enum ErrorInfo {
     EI_NoPlugin,                // 无可用插件
-    EI_ArchiveOpenFailed,       // 压缩包打开失败
     EI_ArchiveDamaged,          // 压缩包损坏
     EI_ArchiveMissingVolume,    // 分卷包缺失
     EI_WrongPassword,           // 密码错误

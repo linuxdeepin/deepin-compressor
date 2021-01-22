@@ -413,15 +413,16 @@ void LoadCorruptQuery::execute()
     // 控件
     DDialog *dialog = new DDialog(m_pParent);
     dialog->setAccessibleName("LoadCorruptQuery_dialog");
-    dialog->setMinimumSize(QSize(380, 190));
-    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    dialog->setMinimumSize(QSize(380, 140));
+    QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(300, 20));
+    strlabel->setMinimumSize(QSize(293, 20));
     strlabel->setAlignment(Qt::AlignCenter);
     strlabel->setWordWrap(true);
-    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::DemiBold);
+    strlabel->setForegroundRole(DPalette::ToolTipText);
+    DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("The archive is damaged"));
 
     dialog->addButton(tr("Open as read-only"));
@@ -429,8 +430,8 @@ void LoadCorruptQuery::execute()
 
     //布局
     QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->setContentsMargins(10, 0, 10, 0);
+    mainlayout->addWidget(strlabel, 0, Qt::AlignVCenter);
 
     DWidget *widget = new DWidget(dialog);
     widget->setLayout(mainlayout);

@@ -68,7 +68,7 @@ PluginFinishType LibminizipPlugin::list()
     // 打开压缩包文件
     unzFile zipfile = unzOpen(QFile::encodeName(m_strArchiveName).constData());
     if (zipfile == nullptr) {
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged;
         return PFT_Error;
     }
 
@@ -76,7 +76,7 @@ PluginFinishType LibminizipPlugin::list()
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK) {
         unzClose(zipfile);
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged;
         return PFT_Error;
     }
 
@@ -117,7 +117,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
     // 打开压缩包数据
     unzFile zipfile = unzOpen(QFile::encodeName(m_strArchiveName).constData());
     if (zipfile == nullptr) {
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged ;
         return PFT_Error;
     }
 
@@ -125,7 +125,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK) {
         unzClose(zipfile);
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged ;
         return PFT_Error;
     }
 
@@ -366,7 +366,7 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
 
         if (iError != UNZ_OK) {
             unzClose(zipfile);
-            return ET_ArchiveOpenError;
+            return ET_ArchiveDamaged ;
         }
 
         while (sum != file_info.uncompressed_size) {

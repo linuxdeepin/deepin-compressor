@@ -1564,16 +1564,16 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 加载压缩包错误
     case ArchiveJob::JT_Load: {
         switch (eErrorType) {
-        // 压缩包打开失败
-        case ET_ArchiveOpenError:
-            showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
+        // 压缩包损坏
+        case ET_ArchiveDamaged:
+            showErrorMessage(FI_Load, EI_ArchiveDamaged);
             break;
         // 密码错误
         case ET_WrongPassword:
             showErrorMessage(FI_Load, EI_WrongPassword);
             break;
         default:
-            showErrorMessage(FI_Load, EI_ArchiveOpenFailed);
+            showErrorMessage(FI_Load, EI_ArchiveDamaged);
             break;
         }
     }
@@ -1590,9 +1590,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
 #if 0 // 提取失败详细提示
             // 提取出错
             switch (eErrorType) {
-            // 压缩包打开失败
-            case ET_ArchiveOpenError: {
-                sendMessage(new CustomFloatingMessage(icon, tr("Failed to open the archive"), 1000, this));
+            // 压缩包损坏
+            case ET_ArchiveDamaged : {
+                sendMessage(new CustomFloatingMessage(icon, tr("The archive is damaged"), 1000, this));
                 break;
             }
             // 密码错误
@@ -1618,9 +1618,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         } else {
             // 解压出错
             switch (eErrorType) {
-            // 压缩包打开失败
-            case ET_ArchiveOpenError:
-                showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed,
+            // 压缩包损坏
+            case ET_ArchiveDamaged :
+                showErrorMessage(FI_Uncompress, EI_ArchiveDamaged,
                                  !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             // 密码错误
@@ -1665,9 +1665,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
 #if 0 // 删除错误提示暂时不需要
         QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
         switch (eErrorType) {
-        // 压缩包打开失败
-        case ET_ArchiveOpenError: {
-            sendMessage(new CustomFloatingMessage(icon, tr("Failed to open the archive"), 1000, this));
+        // 压缩包损坏
+        case ET_ArchiveDamaged : {
+            sendMessage(new CustomFloatingMessage(icon, tr("The archive is damaged"), 1000, this));
             break;
         }
         // 密码错误
@@ -1685,9 +1685,9 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     // 批量解压错误
     case ArchiveJob::JT_BatchExtract: {
         switch (eErrorType) {
-        // 压缩包打开失败
-        case ET_ArchiveOpenError:
-            showErrorMessage(FI_Uncompress, EI_ArchiveOpenFailed,
+        // 压缩包损坏
+        case ET_ArchiveDamaged :
+            showErrorMessage(FI_Uncompress, EI_ArchiveDamaged,
                              !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
             break;
         // 密码错误
@@ -1980,8 +1980,8 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Plugin error"));
         }
         break;
-        case EI_ArchiveOpenFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to open the archive"));
+        case EI_ArchiveDamaged: {
+            m_pFailurePage->setFailureDetail(tr("The archive is damaged"));
         }
         break;
         case EI_WrongPassword: {
@@ -2005,12 +2005,8 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Plugin error"));
         }
         break;
-        case EI_ArchiveOpenFailed: {
-            m_pFailurePage->setFailureDetail(tr("Failed to open the archive"));
-        }
-        break;
         case EI_ArchiveDamaged: {
-            m_pFailurePage->setFailureDetail(tr("Damaged file"));
+            m_pFailurePage->setFailureDetail(tr("The archive is damaged"));
         }
         break;
         case EI_ArchiveMissingVolume: {

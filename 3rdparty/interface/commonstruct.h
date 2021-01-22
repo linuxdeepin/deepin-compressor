@@ -42,7 +42,7 @@ enum ErrorType {
     ET_WrongPassword,     // 输入的密码错误
     ET_NeedPassword,     // 需要密码
     ET_LongNameError,     // 文件名过长错误
-    ET_ArchiveOpenError,     // 压缩包打开错误
+    ET_ArchiveDamaged,      // 压缩包损坏
     ET_FileOpenError,     // 文件打开错误
     ET_FileReadError,     // 文件读取错误
     ET_FileWriteError,     // 文件写错误

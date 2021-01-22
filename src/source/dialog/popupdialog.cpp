@@ -107,8 +107,7 @@ int SimpleQueryDialog::showDialog(const QString &strDesText, const QString btnMs
 
     QVBoxLayout *pMainLayout = new QVBoxLayout;
     pMainLayout->setContentsMargins(10, 0, 10, 0);
-    pMainLayout->addWidget(pDesLbl, 1, Qt::AlignVCenter);
-    pMainLayout->addSpacing(10);
+    pMainLayout->addWidget(pDesLbl, 0, Qt::AlignVCenter);
 
     DWidget *widget = new DWidget(this);
 

@@ -158,7 +158,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
 
     // 加载时7z分卷文件不完整的情况
     if (line.startsWith(QLatin1String("Open ERROR: Can not open the file as [7z] archive"))) {
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged;
         m_finishType = PFT_Error;
         return false;
     }

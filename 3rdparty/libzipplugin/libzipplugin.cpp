@@ -87,7 +87,7 @@ PluginFinishType LibzipPlugin::list()
 
     // 若打开失败，返回错误
     if (archive == nullptr) {
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged;
         return PFT_Error;
     }
 
@@ -136,7 +136,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     if (archive == nullptr) {
         // 特殊包操作
         // return minizip_extractFiles(files, options);
-        m_eErrorType = ET_ArchiveOpenError;
+        m_eErrorType = ET_ArchiveDamaged ;
         return PFT_Error;
     }
 
