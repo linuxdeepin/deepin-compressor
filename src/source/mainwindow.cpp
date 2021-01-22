@@ -1746,6 +1746,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
 
 void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &strPassword)
 {
+    // 没有需要追加的文件时，直接返回，防止出现追加根目录的现象
+    if (listFiles.isEmpty())
+        return;
+
     qDebug() << "向压缩包中添加文件";
     m_operationtype = Operation_Add;
 

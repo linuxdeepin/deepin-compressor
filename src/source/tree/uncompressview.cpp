@@ -384,6 +384,10 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
         }
     }
 
+    // 没有需要追加的文件时，直接返回，防止出现追加根目录的现象
+    if (m_listAddFiles.isEmpty()) 
+        return;
+
     // 发送追加信号
     m_eChangeType = CT_Add;
     emit signalAddFiles2Archive(m_listAddFiles, strPassword);
