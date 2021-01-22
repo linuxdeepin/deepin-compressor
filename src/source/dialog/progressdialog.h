@@ -40,7 +40,7 @@ public:
 
     void setCurrentTask(const QString &file);
     void setCurrentFile(const QString &file);
-    void setProcess(int value);
+    void setProcess(double value);
     void setFinished();
     void clearprocess();
 
@@ -72,7 +72,7 @@ public slots:
 private:
     int m_defaultWidth = 380;
     int m_defaultHeight = 120;
-    int m_dPerent = 0; //保存上一次进度
+    double m_dPerent = 0.0; //保存上一次进度
 
     DLabel *m_tasklable;
     DLabel *m_filelable;

@@ -189,10 +189,10 @@ bool ReadOnlyArchiveInterface::isInsufficientDiskSpace(QString diskPath, qint64 
     }
 }
 
-bool ReadOnlyArchiveInterface::getHandleCurEntry() const
-{
-    return m_bHandleCurEntry;
-}
+//bool ReadOnlyArchiveInterface::getHandleCurEntry() const
+//{
+//    return m_bHandleCurEntry;
+//}
 
 //void ReadOnlyArchiveInterface::getFileEntry(QList<FileEntry> &listRootEntry, QMap<QString, FileEntry> &mapEntry)
 //{

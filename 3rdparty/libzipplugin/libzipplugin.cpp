@@ -125,6 +125,9 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     setPassword(QString());
     m_workStatus = WT_Extract;
     int errcode = 0;
+    m_bOverwriteAll = false;        //是否全部覆盖
+    m_bSkipAll = false;             // 是否全部跳过
+//    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
     zip_error_t err;
 
     // 打开压缩包
@@ -138,7 +141,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     }
 
     // 右键解压时按照按照压缩包大小计算
-    if (options.bExistList) {
+    if (!options.bExistList) {
         m_dScaleSize = 100.0 / options.qComressSize;
     } else {
         m_dScaleSize = 100.0 / options.qSize;
@@ -160,7 +163,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             // 解压单个文件
             m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
 
-            if (options.bExistList && i == 0) {
+            if (!options.bExistList && i == 0) {
                 FileEntry entry;
                 entry.strFullPath = strFileName;
                 DataManager::get_instance().archiveData().listRootEntry << entry;
@@ -803,7 +806,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         int writeSize = 0;
         double dScale = 1;
         // 右键解压时按照文件比例计算大小
-        if (options.bExistList) {
+        if (!options.bExistList) {
             dScale = double(statBuffer.comp_size) / statBuffer.size;
         }
         while (sum != zip_int64_t(statBuffer.size)) {

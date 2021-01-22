@@ -447,6 +447,12 @@ void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::Stan
 
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
 {
+    if (!QFileInfo(strArchiveFullPath).isReadable()) {
+        TipDialog dialog(this);
+        dialog.showDialog(tr("You do not have permission to load %1").arg(strArchiveFullPath), tr("OK"), DDialog::ButtonNormal);
+        return;
+    }
+
     PERF_PRINT_BEGIN("POINT-05", "加载时间");
     m_operationtype = Operation_Load;
 
@@ -580,64 +586,72 @@ bool MainWindow::checkSettings(QString file)
         dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
         dialog.showDialog(tr("No such file or directory"), tr("OK"), DDialog::ButtonNormal);
         return false;
-    } else if (info.isDir()) {
-        // 选择打开的是文件夹
-        TipDialog dialog;
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenRect =  screen->availableVirtualGeometry();
-        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
-
-        dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK"), DDialog::ButtonNormal);
-        return false;
     } else {
-        // 文件判断
-        QString fileMime;
 
-        bool existMime = false; // 在设置界面是否被勾选
-        bool bArchive = false; // 是否是应用支持解压的格式
-        bool mimeIsChecked = true; // 默认该格式被勾选
-
-        // 判断内容
-        if (file.isEmpty()) {
-            existMime = true;
-        } else {
-            fileMime = determineMimeType(file).name();
-            if (fileMime.contains("application/"))
-                fileMime = fileMime.remove("application/");
-
-            if (fileMime.size() > 0) {
-                existMime = UiTools::isExistMimeType(fileMime, bArchive);
-            } else {
-                existMime = false;
-            }
+        if (!info.isReadable()) {
+            TipDialog dialog(this);
+            dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK"), DDialog::ButtonNormal);
+            return false;
         }
 
-        // 若在关联类型中没有找到勾选的此格式
-        if (!existMime) {
-            QString str;
-            if (bArchive) {
-                // 如果是压缩包，提示勾选关联类型
-                str = tr("Please check the file association type in the settings of Archive Manager");
-            } else {
-                // 如果不是压缩包，提示非支持的压缩格式
-                str = tr("The file format is not supported by Archive Manager");
-            }
-
-            // 弹出提示对话框
+        if (info.isDir()) {
+            // 选择打开的是文件夹
             TipDialog dialog;
             QScreen *screen = QGuiApplication::primaryScreen();
             QRect screenRect =  screen->availableVirtualGeometry();
             dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
 
-            int re = dialog.showDialog(str, tr("OK"), DDialog::ButtonNormal);
-            if (re != 1) { // ？
-                mimeIsChecked = false;
+            dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK"), DDialog::ButtonNormal);
+            return false;
+        } else {
+            // 文件判断
+            QString fileMime;
+
+            bool existMime = false; // 在设置界面是否被勾选
+            bool bArchive = false; // 是否是应用支持解压的格式
+            bool mimeIsChecked = true; // 默认该格式被勾选
+
+            // 判断内容
+            if (file.isEmpty()) {
+                existMime = true;
+            } else {
+                fileMime = determineMimeType(file).name();
+                if (fileMime.contains("application/"))
+                    fileMime = fileMime.remove("application/");
+
+                if (fileMime.size() > 0) {
+                    existMime = UiTools::isExistMimeType(fileMime, bArchive);
+                } else {
+                    existMime = false;
+                }
             }
+
+            // 若在关联类型中没有找到勾选的此格式
+            if (!existMime) {
+                QString str;
+                if (bArchive) {
+                    // 如果是压缩包，提示勾选关联类型
+                    str = tr("Please check the file association type in the settings of Archive Manager");
+                } else {
+                    // 如果不是压缩包，提示非支持的压缩格式
+                    str = tr("The file format is not supported by Archive Manager");
+                }
+
+                // 弹出提示对话框
+                TipDialog dialog;
+                QScreen *screen = QGuiApplication::primaryScreen();
+                QRect screenRect =  screen->availableVirtualGeometry();
+                dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+
+                int re = dialog.showDialog(str, tr("OK"), DDialog::ButtonNormal);
+                if (re != 1) { // ？
+                    mimeIsChecked = false;
+                }
+            }
+
+            return mimeIsChecked;
         }
-
-        return mimeIsChecked;
     }
-
 }
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
@@ -1109,7 +1123,7 @@ void MainWindow::slotReceiveProgress(double dPercentage)
             m_pProgressdialog->exec();
         }
 
-        m_pProgressdialog->setProcess(qRound(dPercentage));
+        m_pProgressdialog->setProcess(dPercentage);
     } else if (Operation_Update_Comment == m_operationtype) { // 更新压缩包注释的进度
         if (!m_commentProgressDialog->isVisible()) {
             m_commentProgressDialog->exec();
@@ -1568,6 +1582,11 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
+
+            if (m_pProgressdialog->isVisible()) {
+                m_pProgressdialog->setFinished();
+            }
+
 #if 0 // 提取失败详细提示
             // 提取出错
             switch (eErrorType) {
@@ -2474,7 +2493,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             ExtractionOptions options;
             // 构建解压参数
             options.strTargetPath = strTargetPath;
-            options.bExistList = true;
+            options.bExistList = false;
             options.bAllExtract = true;
             options.qComressSize = fileinfo.size();
             options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度

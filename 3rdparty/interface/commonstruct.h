@@ -169,7 +169,7 @@ struct ExtractionOptions {
     {
         qSize = 0;
         qComressSize = 0;
-        bExistList = false;
+        bExistList = true;
         bAllExtract = false;
         bBatchExtract = false;
     }

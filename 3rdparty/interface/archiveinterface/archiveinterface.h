@@ -201,7 +201,7 @@ Q_SIGNALS:
 public:
     Plugintype m_ePlugintype = PT_UnKnown;
 
-    bool getHandleCurEntry() const;
+//    bool getHandleCurEntry() const;
 
 protected:
     bool m_bWaitForFinished = false;    // 等待结束 true:CLI false:调接口
@@ -212,7 +212,7 @@ protected:
     Common *m_common = nullptr; // 通用工具类
     bool m_bOverwriteAll = false;        //是否全部覆盖
     bool m_bSkipAll = false;             // 是否全部跳过
-    bool m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
+//    bool m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
     WorkType m_workStatus = WT_List;  // 记录当前工作状态（add、list、extract...）
 
     ErrorType m_eErrorType = ET_NoError;    // 错误类型

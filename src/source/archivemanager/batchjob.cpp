@@ -172,7 +172,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 
         stOptions.strTargetPath += QDir::separator() + strpath; // 批量解压自动创建文件夹
         stOptions.qComressSize = fileInfo.size();
-        stOptions.bExistList = true;
+        stOptions.bExistList = false;
         stOptions.bAllExtract = true;
         stOptions.bBatchExtract = true;
 

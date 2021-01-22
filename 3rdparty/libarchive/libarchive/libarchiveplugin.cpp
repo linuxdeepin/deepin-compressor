@@ -43,7 +43,7 @@
 LibarchivePlugin::LibarchivePlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
-    m_bHandleCurEntry = true; //提取使用选中文件
+//    m_bHandleCurEntry = true; //提取使用选中文件
 //    connect(this, &ReadOnlyArchiveInterface::error, this, &LibarchivePlugin::slotRestoreWorkingDir);
 //    connect(this, &ReadOnlyArchiveInterface::cancelled, this, &LibarchivePlugin::slotRestoreWorkingDir);
 }
@@ -101,6 +101,9 @@ PluginFinishType LibarchivePlugin::testArchive()
 PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
     m_eErrorType = ET_NoError;
+    m_bOverwriteAll = false;        //是否全部覆盖
+    m_bSkipAll = false;             // 是否全部跳过
+//    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
 
     if (!initializeReader()) {
         m_eErrorType = ET_FileReadError;
@@ -167,7 +170,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
 
         // 右键解压到当前文件夹
-        if (options.bExistList && iIndex == 0) {
+        if (!options.bExistList && iIndex == 0) {
             FileEntry stEntry;
             stEntry.strFullPath = entryName;
             DataManager::get_instance().archiveData().listRootEntry << stEntry;

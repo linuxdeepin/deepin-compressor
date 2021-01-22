@@ -116,16 +116,18 @@ void ProgressDialog::setCurrentFile(const QString &file)
  * @brief ProgressDialog::setProcess 设置进度
  * @param value
  */
-void ProgressDialog::setProcess(int value)
+void ProgressDialog::setProcess(double value)
 {
-    if ((m_dPerent - value) == 0 || (m_dPerent > value)) {
+//    m_dPerent = value;
+
+    if ((m_dPerent - value) == 0.0 || (m_dPerent > value)) {
         return;
     }
 
     m_dPerent = value;
 
     if (100 != m_circleprogress->value()) {
-        m_circleprogress->setValue(value);
+        m_circleprogress->setValue(qRound(value));
     }
 }
 
@@ -138,7 +140,7 @@ void ProgressDialog::setFinished()
 //    if (100 != m_circleprogress->value()) {
 //        setWindowTitle("");
     m_circleprogress->setValue(0);
-    m_dPerent = 0;
+    m_dPerent = 0.0;
 //        m_filelable->setText(tr("Extraction successful") + ":" + tr("Extract to") + path);
 //    m_extractdialog->reject();
     //reject();
@@ -154,13 +156,14 @@ void ProgressDialog::setFinished()
  */
 void ProgressDialog::clearprocess()
 {
-    m_dPerent = 0;
+    m_dPerent = 0.0;
     m_circleprogress->setValue(0);
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-    if (m_circleprogress->value() < 100 && m_circleprogress->value() > 0) {
+    qDebug() << m_circleprogress->value();
+    if (m_dPerent < 100 && m_dPerent > 0) {
         // 先暂停
         emit signalPause();
 
