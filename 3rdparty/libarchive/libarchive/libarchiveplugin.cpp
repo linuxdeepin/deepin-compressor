@@ -629,7 +629,17 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     FileEntry m_archiveEntryStat; //压缩包内文件数据
     // 文件名
     const char *name = archive_entry_pathname(aentry);
-    m_archiveEntryStat.strFullPath = m_common->trans2uft8(name, m_mapCode[QString(name)]);
+    QString entryName  = m_common->trans2uft8(name, m_mapCode[QString(name)]);
+
+    // Some archive types e.g. AppImage prepend all entries with "./" so remove this part.
+    // 移除"./"开头的，例如rpm包
+    if (entryName.startsWith(QLatin1String("./"))) {
+        entryName.remove(0, 2);
+    }
+    if (entryName.isEmpty()) {
+        return;
+    }
+    m_archiveEntryStat.strFullPath = entryName;
 
     // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
