@@ -222,7 +222,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_fileEntry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
         } else if (line.startsWith(QLatin1String("Size = "))) {
             // 单文件实际大小
-            m_fileEntry.qSize = line.mid(7).trimmed().toInt();
+            m_fileEntry.qSize = line.midRef(7).trimmed().toInt();
 
             // 压缩包内所有文件总大小
             stArchiveData.qSize += m_fileEntry.qSize;
@@ -230,8 +230,8 @@ bool Cli7zPlugin::readListLine(const QString &line)
             // 文件最后修改时间
             m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
                                                                   QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
-            if (ArchiveTypeIso == m_archiveType) { // 读取的压缩包是iso文件，读到Modified的时候已经结束了
-                QString name = m_fileEntry.strFullPath;
+            if (ArchiveTypeIso == m_archiveType || ArchiveTypeUdf == m_archiveType) { // 读取的压缩包是iso、udf文件，读到Modified的时候已经结束了
+//                QString name = m_fileEntry.strFullPath;
 
                 handleEntry(m_fileEntry);
                 // 获取第一层数据
@@ -240,13 +240,13 @@ bool Cli7zPlugin::readListLine(const QString &line)
 //                }
 
                 // 存储总数据
-                stArchiveData.mapFileEntry.insert(name, m_fileEntry);
+                stArchiveData.mapFileEntry.insert(m_fileEntry.strFullPath, m_fileEntry);
 
                 // clear m_fileEntry
                 m_fileEntry.reset();
             }
         } else if (line.startsWith(QLatin1String("Attributes = "))) {  // 文件权限
-            const QString attributes = line.mid(13).trimmed();
+            const QStringRef attributes = line.midRef(13).trimmed();
 
             // D开头为文件夹
             if (attributes.startsWith(QLatin1Char('D'))) {
@@ -259,7 +259,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
                 m_fileEntry.isDirectory = false;
             }
         } else if (line.startsWith(QLatin1String("Block = ")) || line.startsWith(QLatin1String("Version = "))) {  // 文件的最后一行信息
-            QString name = m_fileEntry.strFullPath;
+//            QString name = m_fileEntry.strFullPath;
 
             handleEntry(m_fileEntry);
             // 获取第一层数据
@@ -268,10 +268,23 @@ bool Cli7zPlugin::readListLine(const QString &line)
 //            }
 
             // 存储总数据
-            stArchiveData.mapFileEntry.insert(name, m_fileEntry);
+            stArchiveData.mapFileEntry.insert(m_fileEntry.strFullPath, m_fileEntry);
 
             // clear m_fileEntry
             m_fileEntry.reset();
+        } else if (line.startsWith(QLatin1String("Folder = "))) {  // 是否文件夹
+            const QStringRef folder = line.midRef(9, 1);
+
+            // "+" 为文件夹
+            if (0 == folder.compare(QLatin1String("+"))) {
+                m_fileEntry.isDirectory = true;
+                if (!m_fileEntry.strFullPath.endsWith(QLatin1Char('/'))) {  // 如果是文件夹且路径最后没有分隔符，手动添加
+                    m_fileEntry.strFullPath = QString(m_fileEntry.strFullPath + QLatin1Char('/'));
+                }
+            } else {
+                // 不是文件夹
+                m_fileEntry.isDirectory = false;
+            }
         }
         break;
     }
