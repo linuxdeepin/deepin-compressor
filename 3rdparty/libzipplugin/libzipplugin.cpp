@@ -765,8 +765,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
                         return ET_WrongPassword;
                     } else {
-                        iCodecIndex++;
                         zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex));
+                        iCodecIndex++;
                         zip_error_clear(archive);
                         zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
                         iErr = zip_error_code_zip(zip_get_error(archive));
