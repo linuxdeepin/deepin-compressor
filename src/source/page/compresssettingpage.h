@@ -226,6 +226,11 @@ private slots:
      */
     void slotCommentTextChanged();
 
+    /**
+     * @brief slotPasswordChanged 输入密码变化
+     */
+    void slotPasswordChanged();
+
 private:
     // 左侧界面
     DLabel *m_pTypePixmapLbl;        // 类型图标

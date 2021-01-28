@@ -355,6 +355,7 @@ void CompressSettingPage::initConnections()
     connect(m_pSplitCkb, &DCheckBox::stateChanged, this, &CompressSettingPage::slotSplitEdtEnabled);
     connect(m_pCompressBtn, &DPushButton::clicked, this, &CompressSettingPage::slotCompressClicked);
     connect(m_pPasswordEdt, &DPasswordEdit::echoModeChanged, this, &CompressSettingPage::slotEchoModeChanged);
+    connect(m_pPasswordEdt, &DPasswordEdit::textEdited, this, &CompressSettingPage::slotPasswordChanged);
     connect(m_pCommentEdt, &DTextEdit::textChanged, this, &CompressSettingPage::slotCommentTextChanged);
 }
 
@@ -745,6 +746,24 @@ void CompressSettingPage::slotCommentTextChanged()
         QTextCursor cursor = m_pCommentEdt->textCursor();
         cursor.setPosition(MAXCOMMENTLEN);
         m_pCommentEdt->setTextCursor(cursor);
+    }
+}
+
+void CompressSettingPage::slotPasswordChanged()
+{
+    QRegExp reg("^[\\x00-\\x80\\x4e00-\\x9fa5]+$");
+    QString pwdin = m_pPasswordEdt->lineEdit()->text();
+    QString pwdout;
+
+    if (!pwdin.isEmpty() && !reg.exactMatch(pwdin)) {
+        for (int i = 0; i < pwdin.length(); ++i) {
+            if (reg.exactMatch(pwdin.at(i))) {
+                pwdout.push_back(pwdin.at(i));
+            }
+        }
+        m_pPasswordEdt->setText(pwdout);
+        // 仅支持中英文字符及部分符号
+        m_pPasswordEdt->showAlertMessage(tr("Only Chinese and English characters and some symbols are supported"));
     }
 }
 

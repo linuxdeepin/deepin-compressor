@@ -155,7 +155,7 @@ void OverwriteQuery::execute()
     DLabel *pFileNameLbl = new DLabel;
     pFileNameLbl->setMinimumSize(QSize(280, 20));
     pFileNameLbl->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Normal);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
 
     int limitCounts = 16;
     int left = 8, right = 8;
@@ -175,6 +175,7 @@ void OverwriteQuery::execute()
     // 应用到全部勾选
     DCheckBox *pApplyAllCkb = new DCheckBox;
     pApplyAllCkb->setAccessibleName("Applyall_btn");
+    DFontSizeManager::instance()->bind(pApplyAllCkb, DFontSizeManager::T6, QFont::Medium);
     pApplyAllCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     DLabel *pApplyAllLbl = new DLabel(QObject::tr("Apply to all"));
@@ -313,9 +314,9 @@ void PasswordNeededQuery::execute()
     // 加密文件名显示
     DLabel *pFileNameLbl = new DLabel(dialog);
     pFileNameLbl->setFixedSize(300, 20);
-    pFileNameLbl->setForegroundRole(DPalette::WindowText);
+    pFileNameLbl->setForegroundRole(DPalette::ToolTipText);
     pFileNameLbl->setWordWrap(true);
-    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
     QString archiveFullPath = m_data[QStringLiteral("fileName")].toString();
     QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
     pFileNameLbl->setText(fileName);

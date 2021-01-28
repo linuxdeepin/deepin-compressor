@@ -385,7 +385,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     }
 
     // 没有需要追加的文件时，直接返回，防止出现追加根目录的现象
-    if (m_listAddFiles.isEmpty()) 
+    if (m_listAddFiles.isEmpty())
         return;
 
     // 发送追加信号
@@ -545,14 +545,15 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
     // 标题
     DLabel *pTitleLbl = new DLabel(&dialog);
     pTitleLbl->setFixedSize(300, 20);
-    pTitleLbl->setForegroundRole(DPalette::WindowText);
+    pTitleLbl->setForegroundRole(DPalette::ToolTipText);
     pTitleLbl->setWordWrap(true);
-    DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::DemiBold);
+    DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::Medium);
     pTitleLbl->setText(tr("Add files to the current archive"));
     pTitleLbl->setAlignment(Qt::AlignCenter);
 
     // 勾选密码
     DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), &dialog);
+    DFontSizeManager::instance()->bind(pSelCkb, DFontSizeManager::T6, QFont::Medium);
     pSelCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     // 密码输入框
