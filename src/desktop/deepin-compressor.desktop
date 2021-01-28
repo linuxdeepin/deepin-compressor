@@ -1,5 +1,6 @@
 [Desktop Entry]
 Categories=Qt;Archiving;Compression;
+Keywords=compress;extract;deepin;
 Comment=Work with file archives
 Exec=/usr/bin/deepin-compressor  %F
 GenericName=Archive Manager
