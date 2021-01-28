@@ -266,7 +266,7 @@ TEST_F(TestArchiveManager, testcontinueOperation)
     typedef void (*fptr)(SingleJob *);
     fptr A_foo = (fptr)(&SingleJob::doContinue);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, doPause_stub);
+    stub.set(A_foo, doContinue_stub);
 
     bool bResult = m_tester->continueOperation();
     ASSERT_EQ(bResult, true);
@@ -285,7 +285,7 @@ TEST_F(TestArchiveManager, testcancelOperation)
     typedef void (*fptr)(SingleJob *);
     fptr A_foo = (fptr)(&SingleJob::kill);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, doPause_stub);
+    stub.set(A_foo, kill_stub);
 
     bool bResult = m_tester->cancelOperation();
     ASSERT_EQ(bResult, true);

@@ -22,11 +22,16 @@
 #include "mainwindow.h"
 #include "popupdialog.h"
 #include "settingdialog.h"
-
+#include "successpage.h"
+#include "failurepage.h"
 #include "gtest/src/stub.h"
+#include "archivemanager.h"
+#include "progresspage.h"
+#include "compresssettingpage.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QSettings>
 #include <DDialog>
 #include <DLabel>
 #include <QKeyEvent>
@@ -462,6 +467,119 @@ TEST_F(TestMainWindow, testaddFiles2Archive)
 
 TEST_F(TestMainWindow, testresetMainwindow)
 {
+    m_tester->m_eStartupType = StartupType::ST_Compress;
     m_tester->resetMainwindow();
     ASSERT_EQ(m_tester->m_eStartupType, StartupType::ST_Normal);
+}
+
+TEST_F(TestMainWindow, testdeleteWhenJobFinish)
+{
+    m_tester->deleteWhenJobFinish(ArchiveJob::JobType::JT_Add);
+//ASSERT_EQ(m_tester->m_eStartupType, StartupType::ST_Normal);
+
+}
+TEST_F(TestMainWindow, testConstructAddOptionsh)
+{
+    QStringList files{"file1", "file2"};
+    m_tester->ConstructAddOptions(files);
+    ASSERT_EQ(m_tester->m_stUpdateOptions.listEntry.size(), files.size());
+}
+
+TEST_F(TestMainWindow, testshowSuccessInfo_001)
+{
+    m_tester->showSuccessInfo(SuccessInfo::SI_Compress);
+    ASSERT_EQ(m_tester->m_pSuccessPage->m_pSuccessLbl->text(), "Compression successful");
+}
+
+TEST_F(TestMainWindow, testshowSuccessInfo_002)
+{
+    m_tester->showSuccessInfo(SuccessInfo::SI_UnCompress);
+    ASSERT_EQ(m_tester->m_pSuccessPage->m_pSuccessLbl->text(), "Extraction successful");
+}
+
+TEST_F(TestMainWindow, testshowSuccessInfo_003)
+{
+    m_tester->showSuccessInfo(SuccessInfo::SI_Convert);
+    ASSERT_EQ(m_tester->m_pSuccessPage->m_pSuccessLbl->text(), "Conversion successful");
+}
+
+TEST_F(TestMainWindow, testshowErrorMessage_001)
+{
+    m_tester->showErrorMessage(FailureInfo::FI_Compress, ErrorInfo::EI_NoPlugin);
+    ASSERT_EQ(m_tester->m_pFailurePage->m_pDetailLbl->text(), "Plugin error");
+}
+
+TEST_F(TestMainWindow, testshowErrorMessage_002)
+{
+    m_tester->showErrorMessage(FailureInfo::FI_Uncompress, ErrorInfo::EI_InsufficientDiskSpace);
+    ASSERT_EQ(m_tester->m_pFailurePage->m_pDetailLbl->text(), "Insufficient disk space");
+}
+
+QVariant value_stub(const QString &key, const QVariant &defaultValue = QVariant())
+{
+    return 0;
+}
+
+TEST_F(TestMainWindow, testgetConfigWinSize)
+{
+    Stub stub;
+    stub.set(ADDR(QSettings, value), value_stub);
+    QSize s = m_tester->getConfigWinSize();
+    ASSERT_EQ(s.width(), MAINWINDOW_DEFAULTW);
+    ASSERT_EQ(s.height(), MAINWINDOW_DEFAULTH);
+}
+
+TEST_F(TestMainWindow, testsaveConfigWinSize)
+{
+    m_tester->saveConfigWinSize(1024, 768);
+}
+
+TEST_F(TestMainWindow, testgetDefaultApp)
+{
+    m_tester->getDefaultApp("vnd.rar");
+}
+
+bool convertArchive_stub(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath)
+{
+    return true;
+}
+
+TEST_F(TestMainWindow, testconvertArchive)
+{
+    Stub stub;
+    stub.set(ADDR(ArchiveManager, convertArchive), convertArchive_stub);
+    m_tester->m_stUnCompressParameter.strFullPath = "test.rar";
+    m_tester->convertArchive("zip");
+    ASSERT_EQ(m_tester->m_pProgressPage->m_eType, Progress_Type::PT_Convert);
+}
+
+bool updateArchiveComment_stub(const QString &strArchiveFullPath, const QString &strComment)
+{
+    return true;
+}
+
+TEST_F(TestMainWindow, testupdateArchiveComment)
+{
+    Stub stub;
+    stub.set(ADDR(ArchiveManager, updateArchiveComment), updateArchiveComment_stub);
+    m_tester->m_stUnCompressParameter.strFullPath = "test.zip";
+    m_tester->m_comment = "one";
+    m_tester->updateArchiveComment();
+}
+
+QString getComment_stub()
+{
+    return "two";
+}
+
+TEST_F(TestMainWindow, testaddArchiveComment)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, getComment), getComment_stub);
+    stub.set(ADDR(ArchiveManager, updateArchiveComment), updateArchiveComment_stub);
+    m_tester->m_stCompressParameter.strTargetPath = "./";
+    m_tester->m_stCompressParameter.strArchiveName = "test.zip";
+
+    m_tester->addArchiveComment();
+    ASSERT_EQ(m_tester->m_pProgressPage->m_eType, Progress_Type::PT_Comment);
 }
