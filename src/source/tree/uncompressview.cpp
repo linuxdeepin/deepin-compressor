@@ -537,14 +537,14 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
 {
     // 创建对话框
     DDialog dialog(this);
-    dialog.setFixedSize(QSize(380, 184));
+    dialog.setMinimumWidth(380);
     dialog.setAccessibleName("PasswordNeeded_dialog");
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog.setIcon(pixmap);
 
     // 标题
     DLabel *pTitleLbl = new DLabel(&dialog);
-    pTitleLbl->setFixedSize(300, 20);
+    pTitleLbl->setMinimumSize(293, 20);
     pTitleLbl->setForegroundRole(DPalette::ToolTipText);
     pTitleLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::Medium);
@@ -560,8 +560,7 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
     DPasswordEdit *pPasswordEdit = new DPasswordEdit(&dialog);
     pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
-    pPasswordEdit->setFixedWidth(280);
-    pPasswordEdit->setFixedHeight(36);
+    pPasswordEdit->setMinimumSize(340, 36);
     pPasswordEdit->setVisible(false);
 
     // 暂时屏蔽明码时的输入法
@@ -575,32 +574,23 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
         pSelCkb->setEnabled(false);
     }
 
-    // 布局
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(0, 0, 0, 0);
-    mainlayout->addWidget(pTitleLbl, 0, Qt::AlignCenter);
-    mainlayout->addSpacing(10);
-    mainlayout->addWidget(pSelCkb, 0, Qt::AlignCenter);
-    mainlayout->addSpacing(10);
-    mainlayout->addWidget(pPasswordEdit, 0, Qt::AlignCenter);
-    mainlayout->addStretch();
-
     // 密码选择框勾选之后显示密码输入框
     connect(pSelCkb, &DCheckBox::clicked, this, [ & ]() {
         if (pSelCkb->checkState() == Qt::Checked) {
-            dialog.setFixedSize(QSize(380, 230));
             pPasswordEdit->setVisible(true);
         } else {
-            dialog.setFixedSize(QSize(380, 184));
-            pPasswordEdit->setVisible(false);
             pPasswordEdit->clear();     // 不勾选加密时，清空密码
+            pPasswordEdit->setVisible(false);
         }
+        dialog.adjustSize(); // 自动调整大小
     });
 
-    // 中心面板
-    DWidget *widget = new DWidget(&dialog);
-    widget->setLayout(mainlayout);
-    dialog.addContent(widget);
+    // 布局
+    dialog.addContent(pTitleLbl, Qt::AlignCenter);
+    dialog.addSpacing(10);
+    dialog.addContent(pSelCkb, Qt::AlignCenter);
+    dialog.addSpacing(10);
+    dialog.addContent(pPasswordEdit, Qt::AlignCenter);
 
     dialog.addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
     dialog.addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
