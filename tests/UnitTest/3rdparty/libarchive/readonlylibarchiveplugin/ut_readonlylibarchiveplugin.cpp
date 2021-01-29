@@ -205,6 +205,9 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles4)
     m_tester->m_ArchiveEntryCount = 2;
 
     ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
+
+    QFile::remove(options.strTargetPath + "/test.txt");
+    QFile::remove(options.strTargetPath + "/test1.txt");
 }
 
 TEST_F(TestReadOnlyLibarchivePlugin, testaddFiles)

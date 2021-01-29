@@ -75,7 +75,7 @@ add_subdirectory(src)
 #单元测试开关
 option(USE_TEST "UT" ON)
 if (USE_TEST)
-    add_subdirectory(test)
+    add_subdirectory(tests)
     set(BUILD_PATH "${CMAKE_BINARY_DIR}")
 endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)

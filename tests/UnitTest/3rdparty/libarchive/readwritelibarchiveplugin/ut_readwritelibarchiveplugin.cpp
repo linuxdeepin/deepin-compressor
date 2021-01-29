@@ -160,4 +160,6 @@ TEST_F(TestReadWriteLibarchivePlugin, testinitializeWriterFilters)
     stub.set(archive_filter_code, archive_filter_code_stub);
 
     ASSERT_EQ(m_tester->initializeWriterFilters(), false);
+
+    QFile::remove("../UnitTest/test_sources/tar/compress/test.tar");
 }

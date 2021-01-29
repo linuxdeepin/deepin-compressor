@@ -100,6 +100,6 @@ compile_commands.json
 # out dir
 
 so(cmake).sh
-test/test_output
+tests/test_output
 translations/*.qm
 build
