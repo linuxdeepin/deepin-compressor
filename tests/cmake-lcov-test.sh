@@ -19,14 +19,15 @@ cd $pathname/tests
 
 mkdir -p coverage
 
-lcov --directory ../ --capture --output-file ./coverage/coverage.info #收集代码运行后所产生的统计计数信息
+#收集代码运行后所产生的统计计数信息
+lcov -d ../ -c -o ./coverage/coverage.info 
 
-#以下几行是过滤一些我们不感兴趣的文件的覆盖率信息，各模块根据自模块实际情况填写过滤信息
-lcov --remove ./coverage/coverage.info '*/${project_name}_tests_autogen/*' '*/${project_name}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*obj-x86_64-linux-gnu/*' '*/tests/*' -o ./coverage/coverage.info
+#只收集src、3rdparty部分目录
+lcov --extract ./coverage/coverage.info '*/src/*' '*/3rdparty/*' -o ./coverage/coverage.info
+#过滤 tests 3rdparty/ChardetDetector目录
+lcov --remove ./coverage/coverage.info '*/tests/*' '*/ChardetDetector/*' -o ./coverage/coverage.info
 
 mkdir ../report
 genhtml -o ../report ./coverage/coverage.info
-
-lcov -d $build_dir –z
 
 exit 0
