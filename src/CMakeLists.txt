@@ -119,3 +119,4 @@ install(FILES desktop/deepin-decompress-split_multi.desktop DESTINATION share/de
 install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION share/icons/hicolor/scalable/apps/)
 install(FILES assets/mimetype/deepin-compressor.xml DESTINATION share/mime/packages/)
 
+install(DIRECTORY assets/deepin-compressor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
