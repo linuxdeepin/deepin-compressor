@@ -102,6 +102,7 @@ install(FILES ${INSTALL_QM_FILES}
 
 install(FILES desktop/deepin-compress.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
 install(FILES desktop/deepin-compress-multi.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
+install(FILES desktop/deepin-compress-multisplite7z.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
 #install(FILES desktop/deepin-compressor.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
 #install(FILES desktop/deepin-compress-to_7z.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
 #install(FILES desktop/deepin-compress-to_zip.desktop DESTINATION share/deepin/dde-file-manager/oem-menuextensions/)
