@@ -103,10 +103,11 @@ int main(int argc, char *argv[])
 
     /*  说明：文件(可以是多个) + 参数
      *  参数为：compress：压缩，例/home/.../xx.txt /home/.../xx1.txt compress
-     *  参数为：compress_specifyFormat：压缩成指定格式（倒数第二个参数为生成的压缩包全路径），例/home/.../xx.txt /home/.../xx1.txt /home/.../xx.zip compress_specifyFormat
+     *  参数为：compress_to_7z：压缩成7z格式，例/home/.../xx.txt /home/.../xx1.txt compress_to_7z
+     *  参数为：compress_to_zip：压缩成zip格式，例/home/.../xx.txt /home/.../xx1.txt compress_to_zip
      *  参数为：extract：解压缩，例/home/.../xx.zip /home/.../xx1.zip extract
      *  参数为：extract_here：解压到当前文件夹，例/home/.../xx.zip /home/.../xx1.zip extract_here
-     *  参数为：extract_to_path：解压到xx文件夹（倒数第二个参数为解压路径），例/home/.../xx.zip /home/.../xx1.zip /home/.../xx extract_to_path
+     *  参数为：extract_to_specifypath：解压到指定文件夹，例/home/.../xx.zip /home/.../xx1.zip extract_to_specifypath
      *  参数为：dragdropadd：文管拖拽压缩，例/home/.../xx.zip /home/.../xx.txt /home/.../xx1.txt dragdropadd
      *  其余情况为同时打开多个文件（开启多个归档管理器）
     */
@@ -129,13 +130,13 @@ int main(int argc, char *argv[])
             if (strType == "dragdropadd") {
                 // 最后一个参数为“dragdropadd”时，说明是拖拽追加
                 eType = MainWindow::AT_DragDropAdd;
-            } else if (strType == "compress" || strType == "compress_specifyFormat" ||
-                       strType == "extract" || strType == "extract_here" || strType == "extract_to_path") {
+            } else if (strType == "compress" || strType == "compress_to_7z" || strType == "compress_to_zip" ||
+                       strType == "extract" || strType == "extract_here" || strType == "extract_to_specifypath") {
                 // 右键操作
                 eType = MainWindow::AT_RightMenu;
 
                 // 不对压缩逻辑进行格式处理
-                if (strType != "compress" && strType != "compress_specifyFormat") {
+                if (strType != "compress" && strType != "compress_to_7z" && strType != "compress_to_zip") {
                     // 对文件类型进行检查处理
                     if (!w.checkSettings(newfilelist[0])) {
                         app.exit();

@@ -310,9 +310,9 @@ private:
     /**
      * @brief rightExtract2Path     右键解压到指定目录（当前文件夹、指定路径）
      * @param eType
-     * @param listParams
+     * @param listFiles
      */
-    void rightExtract2Path(StartupType eType, const QStringList &listFiles, const QString &strTargetPath);
+    void rightExtract2Path(StartupType eType, const QStringList &listFiles/*, const QString &strTargetPath*/);
 
     // QWidget interface
 protected:

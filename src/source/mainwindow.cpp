@@ -2251,10 +2251,21 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         m_pCompressSettingPage->setFileSize(listFiles, calSelectedTotalFileSize(listFiles));
         // 设置界面标识为压缩设置界面
         m_ePageID = PI_CompressSetting;
-    } else if (strType == "compress_specifyFormat") {
+    } else if (strType == "compress_to_7z" || strType == "compress_to_zip") {
         m_eStartupType = StartupType::ST_Compresstozip7z;
-        // 压缩成指定格式（倒数第二个参数为生成的压缩包全路径）
-        QString strArchivePath = listFiles.last();     // 获取解压全路径
+
+        // 压缩成指定格式
+        QString strSuffix = (strType == "compress_to_7z") ? ".7z" : ".zip";
+        QFileInfo info = QFileInfo(listFiles[0]);
+        QString strArchivePath = info.path();
+
+        if (listFiles.count() == 1) {
+            strArchivePath += QDir::separator() + info.baseName() + strSuffix;
+        } else {
+            QString strpath = info.absolutePath();
+            int iIndex = strpath.lastIndexOf(QDir::separator());
+            strArchivePath += QDir::separator() + strpath.mid(iIndex) + strSuffix;
+        }
 
         // 判断本地是否存在此压缩包
         QFileInfo archiveInfo(strArchivePath);
@@ -2273,7 +2284,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         }
 
         QStringList listCompressFiles = listFiles;
-        listCompressFiles.removeLast();   // 获取所有压缩包全路径
+//        listCompressFiles.removeLast();   // 获取所有压缩包全路径
 
         // 创建压缩所需相关数据，调用压缩参数
         QList<FileEntry> listEntry;
@@ -2379,15 +2390,15 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
     } else if (strType == "extract_here") {
         m_eStartupType = StartupType::ST_ExtractHere;               // 启动类型
         // 解压到当前文件夹
-        rightExtract2Path(m_eStartupType, listFiles, QFileInfo(listFiles[0]).path());
-    } else if (strType == "extract_to_path") {
+        rightExtract2Path(m_eStartupType, listFiles/*, QFileInfo(listFiles[0]).path()*/);
+    } else if (strType == "extract_to_specifypath") {
         m_eStartupType = StartupType::ST_Extractto;
         // 解压到xx文件夹（倒数第二个参数为解压路径）
         QString strPath = listFiles.last();     // 获取解压全路径
         QStringList listArchives = listFiles;
-        listArchives.removeLast();   // 获取所有压缩包全路径
+//        listArchives.removeLast();   // 获取所有压缩包全路径
         // 解压到指定路径
-        rightExtract2Path(m_eStartupType, listArchives, strPath);
+        rightExtract2Path(m_eStartupType, listArchives/*, strPath*/);
     }
 
     return true;
@@ -2470,7 +2481,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     return true;
 }
 
-void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFiles, const QString &strTargetPath)
+void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFiles/*, const QString &strTargetPath*/)
 {
     // 对压缩包文件名进行处理
     QStringList listTransFiles;
@@ -2484,6 +2495,23 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
     }
     listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
 
+    if (listTransFiles.count() == 0) {
+        return;
+    }
+
+    QString strExtractPath;
+    if (m_eStartupType == StartupType::ST_ExtractHere) {
+        // 解压到当前文件夹时获取当前文件夹路径
+        strExtractPath = QFileInfo(listTransFiles[0]).path();
+    } else {
+        // 解压到指定路径时根据压缩包数量判断
+        if (listTransFiles.count() == 1) {
+            strExtractPath = QFileInfo(listTransFiles[0]).path() + QDir::separator() + QFileInfo(listTransFiles[0]).baseName();
+        } else {
+            strExtractPath = QFileInfo(listTransFiles[0]).path();
+        }
+    }
+
     if (listTransFiles.count() == 1) {
         // 单个压缩包解压
         m_stUnCompressParameter.eSplitVolume = mapType[listTransFiles[0]];
@@ -2492,7 +2520,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
         if (fileinfo.exists()) {
             ExtractionOptions options;
             // 构建解压参数
-            options.strTargetPath = strTargetPath;
+            options.strTargetPath = strExtractPath;
             options.bExistList = false;
             options.bAllExtract = true;
             options.qComressSize = fileinfo.size();
@@ -2536,7 +2564,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
         // 构建批量解压参数
         m_stUnCompressParameter.bBatch = true;
         m_stUnCompressParameter.listBatchFiles = listTransFiles;
-        m_stUnCompressParameter.strExtractPath = strTargetPath;
+        m_stUnCompressParameter.strExtractPath = strExtractPath;
 
         m_operationtype = Operation_Extract;
         if (ArchiveManager::get_instance()->batchExtractFiles(listTransFiles, m_stUnCompressParameter.strExtractPath/*, m_pSettingDlg->isAutoCreatDir()*/)) {
