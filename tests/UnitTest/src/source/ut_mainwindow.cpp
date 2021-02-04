@@ -583,3 +583,84 @@ TEST_F(TestMainWindow, testaddArchiveComment)
     m_tester->addArchiveComment();
     ASSERT_EQ(m_tester->m_pProgressPage->m_eType, Progress_Type::PT_Comment);
 }
+
+TEST_F(TestMainWindow, testcreatShorcutJson)
+{
+    ASSERT_EQ(m_tester->creatShorcutJson().value("shortcut").isUndefined(), false);
+}
+
+void loadArchive_stub(const QString &strArchiveFullPath)
+{
+    return;
+}
+
+TEST_F(TestMainWindow, testhandleArguments_Open)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, loadArchive), loadArchive_stub);
+
+    QStringList listParam;
+    listParam << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("b");
+    m_tester->handleArguments_Open(listParam);
+    ASSERT_EQ(m_tester->m_eStartupType, StartupType::ST_Normal);
+}
+
+TEST_F(TestMainWindow, testhandleArguments_RightMenu_001)
+{
+    QStringList listParam;
+    listParam << QStringLiteral("a");
+    ASSERT_EQ(m_tester->handleArguments_RightMenu(listParam), false);
+}
+
+TEST_F(TestMainWindow, testhandleArguments_Open_002)
+{
+    QStringList listParam;
+    listParam << QStringLiteral("a") << QStringLiteral("compress");
+    ASSERT_EQ(m_tester->handleArguments_RightMenu(listParam), true);
+}
+
+TEST_F(TestMainWindow, testhandleArguments_Append_001)
+{
+    QStringList listParam;
+    listParam << QStringLiteral("a") << QStringLiteral("compress");
+    ASSERT_EQ(m_tester->handleArguments_Append(listParam), false);
+}
+
+TEST_F(TestMainWindow, testhandleArguments_Append_002)
+{
+
+}
+
+TEST_F(TestMainWindow, testrightExtract2Path)
+{
+
+}
+
+QString archiveFullPath_stub()
+{
+    return QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath() + "/test.tar";
+}
+
+bool extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
+{
+    return true;
+}
+
+TEST_F(TestMainWindow, testslotExtract2Path)
+{
+    ExtractionOptions stOptions;
+    stOptions.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+
+    QList<FileEntry> listSelEntry;
+    FileEntry fileentry1;
+    fileentry1.strFullPath = "test1.txt";
+    listSelEntry << fileentry1;
+    m_tester->slotExtract2Path(listSelEntry, stOptions);
+    ASSERT_EQ(QFileInfo(stOptions.strTargetPath + "/test1.txt").exists(), true);
+    QFile::remove(stOptions.strTargetPath + "/test1.txt");
+}
+
+//TEST_F(TestMainWindow, testslotDelFiles)
+//{
+
+//}
