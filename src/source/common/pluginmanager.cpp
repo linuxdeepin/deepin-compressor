@@ -107,7 +107,7 @@ QVector<Plugin *> PluginManager::enabledPlugins() const
     return enabledPlugins;
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType)
+QVector<Plugin *> PluginManager::preferredPluginsFor(const CustomMimeType &mimeType)
 {
     const auto mimeName = mimeType.name();
     if (m_preferredPluginsCache.contains(mimeName)) {
@@ -119,18 +119,18 @@ QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType)
     return plugins;
 }
 
-QVector<Plugin *> PluginManager::preferredWritePluginsFor(const QMimeType &mimeType) const
+QVector<Plugin *> PluginManager::preferredWritePluginsFor(const CustomMimeType &mimeType) const
 {
     return preferredPluginsFor(mimeType, true);
 }
 
-Plugin *PluginManager::preferredPluginFor(const QMimeType &mimeType)
+Plugin *PluginManager::preferredPluginFor(const CustomMimeType &mimeType)
 {
     const QVector<Plugin *> preferredPlugins = preferredPluginsFor(mimeType);
     return preferredPlugins.isEmpty() ? new Plugin() : preferredPlugins.first();
 }
 
-Plugin *PluginManager::preferredWritePluginFor(const QMimeType &mimeType) const
+Plugin *PluginManager::preferredWritePluginFor(const CustomMimeType &mimeType) const
 {
     const QVector<Plugin *> preferredWritePlugins = preferredWritePluginsFor(mimeType);
     return preferredWritePlugins.isEmpty() ? new Plugin() : preferredWritePlugins.first();
@@ -205,7 +205,7 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
 
     supported.remove(QStringLiteral("application/vnd.rar"));
     supported.remove(QStringLiteral("application/x-rar"));
-    supported.remove(QStringLiteral("application/octet-stream"));
+//    supported.remove(QStringLiteral("application/octet-stream"));
 
     if (mode == SortByComment) {
         return sortByComment(supported);
@@ -214,7 +214,7 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
     return supported.values();
 }
 
-QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, const QMimeType &mimeType) const
+QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, const CustomMimeType &mimeType) const
 {
     const bool supportedMime = supportedMimeTypes().contains(mimeType.name());
     QVector<Plugin *> filteredPlugins;
@@ -223,7 +223,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             // Check whether the mimetype inherits from a supported mimetype.
             const QStringList mimeTypes = plugin->metaData().mimeTypes();
             for (const QString &mime : mimeTypes) {
-                if (mimeType.inherits(mime) && (mime != "application/octet-stream")) {
+                if (mimeType.inherits(mime)/* && (mime != "application/octet-stream")*/) {
                     filteredPlugins << plugin;
                 }
             }
@@ -269,7 +269,7 @@ void PluginManager::loadPlugins()
     }
 }
 
-QVector<Plugin *> PluginManager::preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const
+QVector<Plugin *> PluginManager::preferredPluginsFor(const CustomMimeType &mimeType, bool readWrite) const
 {
     QVector<Plugin *> preferredPlugins = filterBy((readWrite ? availableWritePlugins() : availablePlugins()), mimeType);
 

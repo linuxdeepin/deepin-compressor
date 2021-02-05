@@ -25,10 +25,12 @@
 #include <QMimeDatabase>
 #include <QRegularExpression>
 #include <QDebug>
-
-QMimeType determineMimeType(const QString &filename)
+#include <QProcess>
+Q_DECLARE_METATYPE(CustomMimeType)
+CustomMimeType determineMimeType(const QString &filename)
 {
     QMimeDatabase db;
+    CustomMimeType stMimeType;
 
     QFileInfo fileinfo(filename);
     QString inputFile = filename;
@@ -82,16 +84,20 @@ QMimeType determineMimeType(const QString &filename)
         inputFile += cleanExtension;
     }
 
+//    QMimeType mimeFromDefault = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchDefault);
     QMimeType mimeFromExtension = db.mimeTypeForFile(inputFile, QMimeDatabase::MatchExtension);
     QMimeType mimeFromContent = db.mimeTypeForFile(filename, QMimeDatabase::MatchContent);
 
-//    qDebug() << "mimeFromExtension******************" << mimeFromExtension.name() << mimeFromExtension.parentMimeTypes();
-//    qDebug() << "mimeFromContent****************" << mimeFromContent.name() << mimeFromContent.parentMimeTypes();
+
+//    qInfo() << "mimeFromDefault******************" << mimeFromDefault.name() << mimeFromDefault.parentMimeTypes();
+//    qInfo() << "mimeFromExtension******************" << mimeFromExtension.name() << mimeFromExtension.parentMimeTypes();
+//    qInfo() << "mimeFromContent****************" << mimeFromContent.name() << mimeFromContent.parentMimeTypes();
 
     // mimeFromContent will be "application/octet-stream" when file is
     // unreadable, so use extension.
     if (!fileinfo.isReadable()) {
-        return mimeFromExtension;
+        stMimeType.m_mimeType = mimeFromExtension;
+        return stMimeType;
     }
 
     // Compressed tar-archives are detected as single compressed files when
@@ -115,33 +121,55 @@ QMimeType determineMimeType(const QString &filename)
                 && mimeFromContent == db.mimeTypeForName(QStringLiteral("application/x-lz4")))
             || (mimeFromExtension == db.mimeTypeForName(QStringLiteral("application/x-zstd-compressed-tar"))
                 && mimeFromContent == db.mimeTypeForName(QStringLiteral("application/zstd")))) {
-        return mimeFromExtension;
+        stMimeType.m_mimeType = mimeFromExtension;
+        return stMimeType;
     }
 
-    if (mimeFromExtension != mimeFromContent) {
-        // 判断后缀类型是否为zip，避免谷歌插件后后缀虽然为zip，但是实际上类型得按照application/octet-stream
-        if (mimeFromContent.isDefault() && (mimeFromExtension.name() != "application/zip")) {
-            return mimeFromExtension;
-        } else if (mimeFromContent.isDefault() && (mimeFromExtension.name() == "application/zip")) {
-            QRegExp reg("^([\\s\\S]*.)zip$"); //z01分卷，实际上类型得按照application/zip，使用cli7zplugin
-            if (reg.exactMatch(filename)) {
-                QFileInfo fi(reg.cap(1) + "z01");
-                if (fi.exists() == true) {
-                    return mimeFromExtension;
-                }
-            }
-        }
+    /* 内容为默认格式，即"application/octet-stream"，使用"file -i"再次进行检测，主要针对zip格式再次进行判断
+    *  zip空压缩包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/zip"
+    *  谷歌插件zip：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/x-chrome-extension"
+    *  谷歌插件crx：内容检测为"application/octet-stream"，后缀检测为"application/octet-stream"，file命令探测为"application/x-chrome-extension"
+    *  zip分卷包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/octet-stream"
+    */
+    if (mimeFromContent.isDefault()) {
 
+        QProcess process;
+        QStringList args;
+        args << "-i" << filename;
+        process.setProgram("file");
+        process.setArguments(args);
+        process.start();
+        process.waitForFinished();
+        const QString output = QString::fromUtf8(process.readAllStandardOutput());
+
+        stMimeType.m_bUnKnown = true;
+        if (output.contains("application/octet-stream")) {
+            stMimeType.m_strTypeName = mimeFromExtension.name();
+            return stMimeType;
+        } else if (output.contains("application/x-chrome-extension")) {
+            stMimeType.m_strTypeName = "application/x-chrome-extension";
+            return stMimeType;
+        } else if (output.contains("application/zip")) {
+            stMimeType.m_strTypeName = "application/zip";
+            return stMimeType;
+        }
+    }
+
+    // 对于内容和后缀不一致的情况进行的处理
+    if (mimeFromExtension != mimeFromContent) {
         // #354344: ISO files are currently wrongly detected-by-content.
         if (mimeFromExtension.inherits(QStringLiteral("application/x-cd-image"))) {
-            return mimeFromExtension;
+            stMimeType.m_mimeType = mimeFromExtension;
+            return stMimeType;
         }
 
         if (mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar"))) {
-            return mimeFromExtension;
+            stMimeType.m_mimeType = mimeFromExtension;
+            return stMimeType;
         }
 
     }
 
-    return mimeFromContent;
+    stMimeType.m_mimeType = mimeFromContent;
+    return stMimeType;
 }

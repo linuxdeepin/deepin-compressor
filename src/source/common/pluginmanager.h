@@ -23,6 +23,7 @@
 #define PLUGINMANAGER_H
 
 #include "plugin.h"
+#include "mimetypes.h"
 
 #include <QMimeType>
 #include <QVector>
@@ -68,22 +69,22 @@ public:
     /**
     * @brief preferredPluginsFor 根据类型获取使用的插件
     */
-    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType);
+    QVector<Plugin *> preferredPluginsFor(const CustomMimeType &mimeType);
 
     /**
     * @brief preferredWritePluginsFor 根据压缩类型获取可写插件
     */
-    QVector<Plugin *> preferredWritePluginsFor(const QMimeType &mimeType) const;
-    Plugin *preferredPluginFor(const QMimeType &mimeType);
-    Plugin *preferredWritePluginFor(const QMimeType &mimeType) const;
+    QVector<Plugin *> preferredWritePluginsFor(const CustomMimeType &mimeType) const;
+    Plugin *preferredPluginFor(const CustomMimeType &mimeType);
+    Plugin *preferredWritePluginFor(const CustomMimeType &mimeType) const;
     QStringList supportedMimeTypes(MimeSortingMode mode = Unsorted) const;
     QStringList supportedWriteMimeTypes(MimeSortingMode mode = Unsorted) const;
-    QVector<Plugin *> filterBy(const QVector<Plugin *> &plugins, const QMimeType &mimeType) const;
+    QVector<Plugin *> filterBy(const QVector<Plugin *> &plugins, const CustomMimeType &mimeType) const;
     void setFileSize(qint64 size);
 
 private:
     void loadPlugins();
-    QVector<Plugin *> preferredPluginsFor(const QMimeType &mimeType, bool readWrite) const;
+    QVector<Plugin *> preferredPluginsFor(const CustomMimeType &mimeType, bool readWrite) const;
     static QStringList sortByComment(const QSet<QString> &mimeTypes);
     static bool libarchiveHasLzo();
 

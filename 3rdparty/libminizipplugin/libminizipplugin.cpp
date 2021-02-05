@@ -273,10 +273,7 @@ bool LibminizipPlugin::handleArchiveData(unzFile zipfile)
     datetime.setTime(QTime(int(file_info.tmu_date.tm_hour), int(file_info.tmu_date.tm_min), int(file_info.tmu_date.tm_sec)));
     entry.uLastModifiedTime = uint(datetime.toTime_t());
 
-    // 获取第一层数据
-    if (!name.contains(QDir::separator()) || (name.count(QDir::separator()) == 1 && name.endsWith(QDir::separator()))) {
-        DataManager::get_instance().archiveData().listRootEntry.push_back(entry);
-    }
+    handleEntry(entry);
 
     // 存储总数据
     DataManager::get_instance().archiveData().mapFileEntry[name] = entry;
@@ -340,6 +337,10 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
             file.setFileName(strDestFileName);
             file.setPermissions(QFileDevice::WriteUser);
         }
+
+        // 对文件路径做判断，防止特殊包未先解压出文件夹，导致解压失败
+        if (QDir().exists(QFileInfo(strDestFileName).path()) == false)
+            QDir().mkpath(QFileInfo(strDestFileName).path());
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {

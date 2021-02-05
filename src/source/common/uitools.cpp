@@ -47,7 +47,7 @@
 
 DCORE_USE_NAMESPACE
 Q_DECLARE_METATYPE(KPluginMetaData)
-
+Q_DECLARE_METATYPE(CustomMimeType)
 QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_association_type.x-7z-compressed"
                                         << "file_association.file_association_type.x-archive"
                                         << "file_association.file_association_type.x-bcpio"
@@ -77,7 +77,7 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.x-cd-image"
                                         << "file_association.file_association_type.x-iso9660-appimage"
                                         << "file_association.file_association_type.x-source-rpm"
-                                        << "file_association.file_association_type.octet-stream";
+                                        << "file_association.file_association_type.x-chrome-extension";
 
 UiTools::UiTools(QObject *parent)
     : QObject(parent)
@@ -138,8 +138,11 @@ QString UiTools::humanReadableSize(const qint64 &size, int precision)
 
 bool UiTools::isArchiveFile(const QString &strFileName)
 {
-    QMimeType mimeType = determineMimeType(strFileName);
-    qDebug() << mimeType;
+    QString strTransFileName = strFileName;
+    UnCompressParameter::SplitType type;
+    UiTools::transSplitFileName(strTransFileName, type);
+
+    CustomMimeType mimeType = determineMimeType(strTransFileName);
     QString mime;
     if (mimeType.name().contains("application/"))
         mime = mimeType.name().remove("application/");
@@ -153,11 +156,11 @@ bool UiTools::isArchiveFile(const QString &strFileName)
         ret = false;
     }
 
-    if (strFileName.endsWith(".deb")) {    // 对deb文件识别为普通文件
+    if (strTransFileName.endsWith(".deb")) {    // 对deb文件识别为普通文件
         ret = false;
     }
 
-    if (strFileName.endsWith(".crx") || strFileName.endsWith(".apk")) {    // 对crx、apk文件识别为压缩包
+    if (strTransFileName.endsWith(".crx") || strTransFileName.endsWith(".apk")) {    // 对crx、apk文件识别为压缩包
         ret = true;
     }
 
@@ -298,7 +301,7 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
 {
 //    QFileInfo fileinfo(fileName); // 未使用该变量
 
-    const QMimeType mimeType = determineMimeType(fileName);
+    const CustomMimeType mimeType = determineMimeType(fileName);
 
     QVector<Plugin *> offers;
     if (bWrite) {
@@ -382,7 +385,7 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
     return pIface;
 }
 
-ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin)
+ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, const CustomMimeType &mimeType, Plugin *plugin)
 {
     Q_ASSERT(plugin);
 

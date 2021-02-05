@@ -459,7 +459,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     //处理分卷包名称
     QString transFile = strArchiveFullPath;
     QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
-    QMimeType mimeType = determineMimeType(transFile);
+    CustomMimeType mimeType = determineMimeType(transFile);
 
     // 构建压缩包加载之后的数据
     m_stUnCompressParameter.strFullPath = strArchiveFullPath;
@@ -577,7 +577,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 bool MainWindow::checkSettings(QString file)
 {
-    QFileInfo info(file);
+    QString strTransFileName = file;
+    UnCompressParameter::SplitType type;
+    UiTools::transSplitFileName(strTransFileName, type);
+
+    QFileInfo info(strTransFileName);
     if (!info.exists()) {
         // 文件不存在
         TipDialog dialog;
@@ -590,7 +594,7 @@ bool MainWindow::checkSettings(QString file)
 
         if (!info.isReadable()) {
             TipDialog dialog(this);
-            dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("You do not have permission to load %1").arg(strTransFileName), tr("OK"), DDialog::ButtonNormal);
             return false;
         }
 
@@ -612,10 +616,10 @@ bool MainWindow::checkSettings(QString file)
             bool mimeIsChecked = true; // 默认该格式被勾选
 
             // 判断内容
-            if (file.isEmpty()) {
+            if (strTransFileName.isEmpty()) {
                 existMime = true;
             } else {
-                fileMime = determineMimeType(file).name();
+                fileMime = determineMimeType(strTransFileName).name();
                 if (fileMime.contains("application/"))
                     fileMime = fileMime.remove("application/");
 
@@ -2226,7 +2230,10 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-    loadArchive(listParam[0]);
+    QString strFileName = listParam[0];
+    UnCompressParameter::SplitType type;
+    UiTools::transSplitFileName(strFileName, type);
+    loadArchive(strFileName);
 
     return true;
 }
@@ -2423,7 +2430,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         listFiles.push_back(listParam.at(i));
     }
     QStringList listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
-    QMimeType mimeType = determineMimeType(transFile);
+    CustomMimeType mimeType = determineMimeType(transFile);
     // 构建压缩包加载之后的数据
     m_stUnCompressParameter.strFullPath = archiveName;
     QFileInfo fileinfo(transFile);

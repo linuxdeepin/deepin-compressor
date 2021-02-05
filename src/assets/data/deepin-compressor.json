@@ -262,10 +262,10 @@
                             "default": true
                         },
                         {
-                            "key": "octet-stream",
+                            "key": "x-chrome-extension",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "octet-stream(crx)",
+                            "text": "x-chrome-extension(crx)",
                             "default": true
                         },
                         {

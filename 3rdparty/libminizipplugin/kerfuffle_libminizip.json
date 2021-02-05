@@ -35,7 +35,7 @@
         "Description[zh_TW]": "對 crx 壓縮檔格式的完整支援",
         "Id": "kerfuffle_libminizip",
         "MimeTypes": [
-            "application/octet-stream"
+            "application/x-chrome-extension"
         ],
         "Name": "Libminizip plugin",
         "Name[ca@valencia]": "Connector del Libminizip",
@@ -78,7 +78,7 @@
     },
     "X-KDE-Kerfuffle-ReadWrite": false,
     "X-KDE-Priority": 170,
-    "application/octet-stream": {
+    "application/x-chrome-extension": {
         "CompressionLevelDefault": 6,
         "CompressionLevelMax": 9,
         "CompressionLevelMin": 1,

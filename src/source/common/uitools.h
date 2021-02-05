@@ -25,6 +25,7 @@
 #include "archiveinterface.h"
 #include "plugin.h"
 #include "uistruct.h"
+#include "mimetypes.h"
 
 #include <QObject>
 
@@ -137,7 +138,7 @@ public:
      * @return
      */
     static ReadOnlyArchiveInterface *createInterface(const QString &fileName, bool bWrite = false, AssignPluginType eType = APT_Auto/*bool bUseLibArchive = false*/);
-    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const QMimeType &mimeType, Plugin *plugin);
+    static ReadOnlyArchiveInterface *createInterface(const QString &fileName, const CustomMimeType &mimeType, Plugin *plugin);
 
     /**
      * @brief transSplitFileName 处理7z、rar分卷压缩包名称

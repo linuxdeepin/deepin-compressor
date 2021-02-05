@@ -84,7 +84,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
             return QDateTime::fromTime_t(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
         }
         case DC_Type: {
-            QMimeType mimetype = determineMimeType(entry.strFullPath);  // 根据全路径获取类型
+            CustomMimeType mimetype = determineMimeType(entry.strFullPath);  // 根据全路径获取类型
             return m_pMimetype->displayName(mimetype.name());
         }
         case DC_Size: {
@@ -220,8 +220,8 @@ void DataModel::sort(int column, Qt::SortOrder order)
         }
         case DC_Type: {
 
-            QMimeType mimeLeftType = determineMimeType(entrya.strFullPath);
-            QMimeType mimeRightType = determineMimeType(entryb.strFullPath);
+            CustomMimeType mimeLeftType = determineMimeType(entrya.strFullPath);
+            CustomMimeType mimeRightType = determineMimeType(entryb.strFullPath);
 
             // 比较显示类型
             QCollator col;
