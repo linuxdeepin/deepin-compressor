@@ -47,9 +47,9 @@ PreviousLabel::~PreviousLabel()
 
 void PreviousLabel::setPrePath(const QString &strPath)
 {
-    setToolTip(strPath); // 悬停提示
-
     QString tmp = '/' + strPath;
+    setToolTip(tr("Current path:") + tmp); // 悬停提示
+
     tmp = tmp.left(tmp.lastIndexOf('/'));
     if (tmp.isEmpty()) {
         tmp.push_front('/');

@@ -457,4 +457,10 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
             }
         }
     }
+
+    // 对软链接文件，需要找到源文件进行处理，否则某些操作会改变软链接属性
+    QFileInfo info(fileName);
+    if (info.isSymLink()) {
+        fileName = info.symLinkTarget();
+    }
 }
