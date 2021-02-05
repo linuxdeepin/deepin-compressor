@@ -100,7 +100,7 @@ void SuccessPage::initUI()
 
     mainlayout->addLayout(buttonHBoxLayout);
     mainlayout->addLayout(commandLinkButtonLayout);
-    mainlayout->setContentsMargins(12, 6, 20, 20);
+    mainlayout->setContentsMargins(20, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);

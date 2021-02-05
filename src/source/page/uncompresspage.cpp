@@ -145,7 +145,7 @@ void UnCompressPage::initUI()
     pMainLayout->setStretchFactor(m_pUnCompressView, 9);
     pMainLayout->setStretchFactor(pPathLayout, 1);
     pMainLayout->setStretchFactor(pBtnLayout, 1);
-    pMainLayout->setContentsMargins(12, 1, 20, 20);
+    pMainLayout->setContentsMargins(20, 1, 20, 20);
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);

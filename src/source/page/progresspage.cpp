@@ -227,7 +227,7 @@ void ProgressPage::initUI()
     pMainLayout->addLayout(pSpeedLayout);
     pMainLayout->addStretch();
     pMainLayout->addLayout(pBtnLayout);
-    pMainLayout->setContentsMargins(12, 6, 20, 20);
+    pMainLayout->setContentsMargins(20, 6, 20, 20);
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);
