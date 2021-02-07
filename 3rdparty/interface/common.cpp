@@ -137,7 +137,7 @@ QByteArray Common::detectEncode(const QByteArray &data, const QString &fileName)
     } else {
         ChartDet_DetectingTextCoding(data, detectedResult, chardetconfidence);
     }
-    //qDebug() << "chardet编码：" << detectedResult;
+    //qInfo() << "chardet编码：" << detectedResult;
     m_codecStr = detectedResult.toLatin1();
     if (detectedResult.contains("UTF-8", Qt::CaseInsensitive) || detectedResult.contains("ASCII", Qt::CaseInsensitive)) {
         m_codecStr = "UTF-8";
@@ -160,7 +160,7 @@ int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, flo
     DetectObj *obj = detect_obj_init();
 
     if (obj == nullptr) {
-        //qDebug() << "Memory Allocation failed\n";
+        //qInfo() << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
 
@@ -173,19 +173,19 @@ int Common::ChartDet_DetectingTextCoding(const char *str, QString &encoding, flo
 #endif
     {
     case CHARDET_OUT_OF_MEMORY :
-        qDebug() << "On handle processing, occured out of memory\n";
+        qInfo() << "On handle processing, occured out of memory\n";
         detect_obj_free(&obj);
         return CHARDET_OUT_OF_MEMORY;
     case CHARDET_NULL_OBJECT :
-        qDebug() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+        qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
         return CHARDET_NULL_OBJECT;
     }
 
 #ifndef CHARDET_BOM_CHECK
-    //qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+    //qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
 #else
     // from 1.0.6 support return whether exists BOM
-    qDebug() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+    qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
 #endif
 
     encoding = obj->encoding;
@@ -356,6 +356,6 @@ QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileNa
         return def_codec->name();
     }
 
-    qDebug() << "QCodecs编码：" << encoding;
+    qInfo() << "QCodecs编码：" << encoding;
     return encoding;
 }

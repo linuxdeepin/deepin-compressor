@@ -49,7 +49,7 @@ UnCompressPage::~UnCompressPage()
 
 void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, UnCompressParameter &unCompressPar)
 {
-    qDebug() << "加载压缩包：" << strArchiveFullPath;
+    qInfo() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
 
     m_pUnCompressView->setArchivePath(m_strArchiveFullPath/*QFileInfo(m_strArchiveFullPath).path()*/);  // 设置压缩包路径

@@ -107,7 +107,7 @@ TEST_F(TestUiTools, testHumanReadableSize)
 TEST_F(TestUiTools, testHumanReadableSize1)
 {
     qint64 size = 9223372036854775807;
-//    qDebug() << UiTools::humanReadableSize(size, 1);
+//    qInfo() << UiTools::humanReadableSize(size, 1);
     ASSERT_EQ(UiTools::humanReadableSize(size, 1), "8.0 EB");
 }
 

@@ -48,7 +48,7 @@ PluginManager &PluginManager::get_instance()
 {
 #ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
     if (!QAtomicPointer<PluginManager>::isTestAndSetNative()) //运行时检测
-        qDebug() << "Error: TestAndSetNative not supported!";
+        qInfo() << "Error: TestAndSetNative not supported!";
 #endif
 
     //使用双重检测。
@@ -228,7 +228,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
                 }
             }
         } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
-            qDebug() << plugin->metaData().pluginId() << m_filesize << mimeType.name();
+            qInfo() << plugin->metaData().pluginId() << m_filesize << mimeType.name();
             // if (mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
             //                continue;//when iso is more than 4G,it is udf,use 7z to extract
             // }
@@ -241,7 +241,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
         }
     }
 
-    qDebug() << filteredPlugins.count();
+    qInfo() << filteredPlugins.count();
     return filteredPlugins;
 }
 

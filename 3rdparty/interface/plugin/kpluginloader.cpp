@@ -186,7 +186,7 @@ bool KPluginLoader::load()
 
     if (!d->loader->load()) {
         QString error = d->loader->errorString();
-        qDebug() << error;
+        qInfo() << error;
         return false;
     }
 
@@ -246,7 +246,7 @@ bool KPluginLoader::unload()
 void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(const QString &)> callback)
 {
     QStringList dirsToCheck;
-    qDebug() << QCoreApplication::libraryPaths();
+    qInfo() << QCoreApplication::libraryPaths();
     if (QDir::isAbsolutePath(directory)) {
         dirsToCheck << directory;
     } else {
@@ -261,7 +261,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
             it.next();
             if (QLibrary::isLibrary(it.fileName())) {
                 callback(it.fileInfo().absoluteFilePath());
-                qDebug() << it.fileInfo().absoluteFilePath();
+                qInfo() << it.fileInfo().absoluteFilePath();
             }
         }
     }
@@ -270,7 +270,7 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
 QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
-    qDebug() << "1111111111111111111111111111111111" << directory;
+    qInfo() << "1111111111111111111111111111111111" << directory;
     forEachPlugin(directory, [&](const QString &pluginPath) {
         KPluginMetaData metadata(pluginPath);
         if (!metadata.isValid()) {

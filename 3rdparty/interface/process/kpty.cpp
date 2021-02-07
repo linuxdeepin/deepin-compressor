@@ -442,13 +442,13 @@ bool KPty::openSlave()
     if (d->slaveFd >= 0)
 	return true;
     if (d->masterFd < 0) {
-	qDebug() << "Attempting to open pty slave while master is closed";
+	qInfo() << "Attempting to open pty slave while master is closed";
 	return false;
     }
     //d->slaveFd = KDE_open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     if (d->slaveFd < 0) {
-	qDebug() << "Can't open slave pseudo teletype";
+	qInfo() << "Can't open slave pseudo teletype";
 	return false;
     }
     fcntl(d->slaveFd, F_SETFD, FD_CLOEXEC);

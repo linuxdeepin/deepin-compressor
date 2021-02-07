@@ -131,7 +131,7 @@ TEST_F(TestUnCompressPage, initConnections)
 TEST_F(TestUnCompressPage, elidedExtractPath)
 {
     QString ret = m_tester->elidedExtractPath("/home/chenglu/Desktop/ut");
-//    qDebug() << "////" << m_tester->width(); // 640
+//    qInfo() << "////" << m_tester->width(); // 640
     EXPECT_EQ(ret, "/home/chenglu/Desktop/ut");
 }
 

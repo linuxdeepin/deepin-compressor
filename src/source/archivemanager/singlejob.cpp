@@ -95,7 +95,7 @@ bool SingleJob::doKill()
     }
 
     if (d->isRunning()) { //Returns true if the thread is running
-        qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
+        qInfo() << "Requesting graceful thread interruption, will abort in one second otherwise.";
         d->requestInterruption(); //请求中断线程(建议性)
         d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
     }
@@ -114,7 +114,7 @@ void SingleJob::initConnections()
 
 void SingleJob::slotFinished(PluginFinishType eType)
 {
-    qDebug() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
+    qInfo() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
     m_eFinishedType = eType;
     m_eErrorType = m_pInterface->errorType();
 
@@ -215,7 +215,7 @@ bool CreateJob::doKill()
     }
 
     if (d->isRunning()) { //Returns true if the thread is running
-        qDebug() << "Requesting graceful thread interruption, will abort in one second otherwise.";
+        qInfo() << "Requesting graceful thread interruption, will abort in one second otherwise.";
         d->requestInterruption(); //请求中断线程(建议性)
         d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
     }
@@ -236,14 +236,14 @@ void CreateJob::cleanCompressFileCancel()
         foreach (QFileInfo fi, files) {
             QFile fiRemove(fi.filePath());
             if (fiRemove.exists()) {
-                qDebug() << "取消时删除:" << fiRemove.fileName();
+                qInfo() << "取消时删除:" << fiRemove.fileName();
                 fiRemove.remove();
             }
         }
     } else {
         QFile fiRemove(dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface)->getArchiveName());  // 没有判断 7z分卷压缩的 文件名
         if (fiRemove.exists()) {
-            qDebug() << "取消时删除:" << fiRemove.fileName();
+            qInfo() << "取消时删除:" << fiRemove.fileName();
             fiRemove.remove();
         }
     }
@@ -461,7 +461,7 @@ void ConvertJob::start()
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath);
 
     if (pIface) {
-        qDebug() << "格式转换开始解压";
+        qInfo() << "格式转换开始解压";
         m_pIface = pIface;
         m_workType = WT_Extract;
 
@@ -528,7 +528,7 @@ void ConvertJob::slotHandleExtractFinished()
         switch (m_eFinishedType) {
         // 正常结束之后，进行压缩操作
         case PFT_Nomral: {
-            qDebug() << "格式转换开始压缩";
+            qInfo() << "格式转换开始压缩";
             m_workType = WT_Add;
 
             ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strNewArchiveFullPath, true);
@@ -565,13 +565,13 @@ void ConvertJob::slotHandleExtractFinished()
         break;
         // 用户取消之后，不进行压缩
         case PFT_Cancel: {
-            qDebug() << "取消格式转换";
+            qInfo() << "取消格式转换";
             emit signalJobFinshed();
         }
         break;
         // 出现错误的情况，提示用户
         case PFT_Error: {
-            qDebug() << "格式转换错误";
+            qInfo() << "格式转换错误";
         }
         break;
         }

@@ -301,13 +301,13 @@ QStringList ConvertDialog::showDialog()
     // 转换zip格式
     connect(zipBtn, &DRadioButton::toggled, this, [ =, &isZipConvert]() {
         isZipConvert = zipBtn->isChecked();
-        qDebug() << "zip" << isZipConvert;
+        qInfo() << "zip" << isZipConvert;
     });
 
     // 转换为7z格式
     connect(_7zBtn, &DRadioButton::toggled, this, [ =, &is7zConvert]() {
         is7zConvert = _7zBtn->isChecked();
-        qDebug() << "7z" << is7zConvert;
+        qInfo() << "7z" << is7zConvert;
     });
 
     const int mode = exec();

@@ -678,14 +678,21 @@ void CompressSettingPage::slotSplitEdtEnabled()
 
 void CompressSettingPage::slotCompressClicked()
 {
-    if (!checkCompressOptionValid()) {
-        return;
-    }
-
     QString strTmpCompresstype = m_pCompressTypeLbl->text();        // 压缩格式
     QString strName = m_pFileNameEdt->text() + "." + strTmpCompresstype;   // 压缩包名称
     PERF_PRINT_BEGIN("POINT-03", "压缩包名：" + strName + " 大小：" + QString::number(m_qFileSize));
-    qDebug() << "点击了压缩按钮";
+    qInfo() << "点击了压缩按钮";
+
+    // 检查源文件中是否包含即将生成的压缩包
+    if (m_listFiles.contains(m_pSavePathEdt->text() + QDir::separator() + strName)) {
+        showWarningDialog(tr("The name is the same as that of the compressed archive, please use another one"));
+        return;
+    }
+
+    // 检查合法性
+    if (!checkCompressOptionValid()) {
+        return;
+    }
 
     CompressParameter compressInfo;
 

@@ -212,7 +212,7 @@ void MimeAppsWorker::updateCache()
 bool MimeAppsWorker::writeData(const QString &path, const QByteArray &content)
 {
     bool bResult = false;
-    qDebug() << path;
+    qInfo() << path;
     QFile file(path);
     if (file.open(QFile::WriteOnly)) {
         file.write(content);
@@ -227,7 +227,7 @@ QByteArray MimeAppsWorker::readData(const QString &path)
 {
     QFile file(path);
     if (!file.open(QFile::ReadOnly)) {
-        qDebug() << path << "isn't exists!";
+        qInfo() << path << "isn't exists!";
     }
 
     QByteArray content = file.readAll();
@@ -373,7 +373,7 @@ bool MimesAppsManager::setDefautlAppForTypeByGio(const QString &mimeType, const 
                                        mimeType.toLocal8Bit().constData(),
                                        &error);
     if (error) {
-        qDebug() << "fail to set default app for type:" << error->message;
+        qInfo() << "fail to set default app for type:" << error->message;
         g_free(error);
         return false;
     }
@@ -537,7 +537,7 @@ QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
 
 void MimesAppsManager::initMimeTypeApps()
 {
-    //qDebug() << "getMimeTypeApps in" << QThread::currentThread() << qApp->thread();
+    //qInfo() << "getMimeTypeApps in" << QThread::currentThread() << qApp->thread();
     DesktopFiles.clear();
     DesktopObjs.clear();
     DDE_MimeTypes.clear();
@@ -600,7 +600,7 @@ void MimesAppsManager::initMimeTypeApps()
     //check mime apps from cache
     QFile f(getMimeInfoCacheFilePath());
     if (!f.open(QIODevice::ReadOnly)) {
-        qDebug() << "failed to read mime info cache file:" << f.errorString();
+        qInfo() << "failed to read mime info cache file:" << f.errorString();
         return;
     }
 
@@ -676,7 +676,7 @@ void MimesAppsManager::initMimeTypeApps()
 void MimesAppsManager::loadDDEMimeTypes()
 {
     QSettings settings(getDDEMimeTypeFile(), QSettings::IniFormat);
-    //qDebug() << settings.childGroups();
+    //qInfo() << settings.childGroups();
 
     QFile file(getDDEMimeTypeFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

@@ -114,7 +114,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
         }
     }
 
-//    qDebug() << "Extracting to" << outputFileName;
+//    qInfo() << "Extracting to" << outputFileName;
 
 
     // 写文件

@@ -229,7 +229,7 @@ void SettingDialog::createPathBox()
                 m_extractPathOption->setValue(m_curpath);
             });
 
-            qDebug() << m_curpath;
+            qInfo() << m_curpath;
             return widget;
         }
 
@@ -322,7 +322,7 @@ void SettingDialog::writeConfbf()
 void SettingDialog::slotSettingsChanged(const QString &key, const QVariant &value)
 {
     // 设置界面点击恢复默认选项  具体功能待确认、完善
-    qDebug() << "slotSettingsChanged:  " << key  << value;
+    qInfo() << "slotSettingsChanged:  " << key  << value;
     writeConfbf();
 }
 

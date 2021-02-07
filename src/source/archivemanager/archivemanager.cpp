@@ -51,7 +51,7 @@ ArchiveManager *ArchiveManager::get_instance()
 {
 #ifndef Q_ATOMIC_POINTER_TEST_AND_SET_IS_SOMETIMES_NATIVE
     if (!QAtomicPointer<ArchiveManager>::isTestAndSetNative()) //运行时检测
-        qDebug() << "Error: TestAndSetNative not supported!";
+        qInfo() << "Error: TestAndSetNative not supported!";
 #endif
 
     //使用双重检测。

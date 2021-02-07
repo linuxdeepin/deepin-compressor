@@ -105,7 +105,7 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
 
         tmp += tmparchive;
         args << tmp;
-        //        qDebug() << tmp;
+        //        qInfo() << tmp;
         return args;
     } else {
         QStringList args;

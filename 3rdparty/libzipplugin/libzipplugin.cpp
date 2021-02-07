@@ -57,7 +57,7 @@ LibzipPluginFactory::~LibzipPluginFactory()
 LibzipPlugin::LibzipPlugin(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
 {
-    qDebug() << "LibzipPlugin";
+    qInfo() << "LibzipPlugin";
     m_ePlugintype = PT_Libzip;
     m_listCodecs.clear();
     m_listCodecs << "UTF-8" << "GB18030" << "GBK" << "Big5" << "us-ascii";  // 初始化中文编码格式
@@ -70,7 +70,7 @@ LibzipPlugin::~LibzipPlugin()
 
 PluginFinishType LibzipPlugin::list()
 {
-    qDebug() << "LibzipPlugin插件加载压缩包数据";
+    qInfo() << "LibzipPlugin插件加载压缩包数据";
     setPassword(QString());
     m_mapFileCode.clear();
     m_setHasHandlesDirs.clear();
@@ -120,7 +120,7 @@ PluginFinishType LibzipPlugin::testArchive()
 
 PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
-    qDebug() << "解压缩数据";
+    qInfo() << "解压缩数据";
 
     setPassword(QString());
     m_workStatus = WT_Extract;
@@ -252,7 +252,7 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
 {
     setPassword(QString());
     m_workStatus = WT_Add;
-    qDebug() << "添加压缩包数据";
+    qInfo() << "添加压缩包数据";
     int errcode = 0;
     zip_error_t err;
 

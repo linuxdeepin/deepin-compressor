@@ -186,7 +186,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
 {
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
 
-    qDebug() << index.data(Qt::DisplayRole);
+    // qInfo() << index.data(Qt::DisplayRole);
 
     if (index.isValid()) {
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
@@ -408,12 +408,12 @@ void CompressView::slotOpenStyleClicked()
 
     if (strText == tr("Select default program")) {
         // 选择默认应用程序（弹出窗口）
-        qDebug() << "选择默认应用程序打开";
+        qInfo() << "选择默认应用程序打开";
         OpenWithDialog dialog(m_stRightEntry.strFullPath);
         dialog.showOpenWithDialog(OpenWithDialog::OpenType);
     } else {
         // 用选择的应用程序打开
-        qDebug() << "选择打开方式：" << strText;
+        qInfo() << "选择打开方式：" << strText;
         OpenWithDialog::openWithProgram(m_stRightEntry.strFullPath, pAction->data().toString());
     }
 }

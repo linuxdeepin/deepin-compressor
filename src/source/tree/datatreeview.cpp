@@ -285,7 +285,7 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 void DataTreeView::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
-    // qDebug() << m_reson << model()->rowCount() << currentIndex();
+    // qInfo() << m_reson << model()->rowCount() << currentIndex();
     if (Qt::BacktabFocusReason == m_reson || Qt::TabFocusReason == m_reson) { // 修复不能多选删除
         if (model()->rowCount() > 0) {
             if (currentIndex().isValid()) {

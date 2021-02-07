@@ -95,7 +95,7 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
 
     viewport()->update();
 
-    qDebug() << indexAt(m_dragPos).data(Qt::UserRole).value<FileEntry>().strFileName;
+//    qInfo() << indexAt(m_dragPos).data(Qt::UserRole).value<FileEntry>().strFileName;
     DataTreeView::mousePressEvent(event);
 }
 
@@ -140,7 +140,7 @@ void UnCompressView::mouseMoveEvent(QMouseEvent *event)
     m_pFileDragServer->setProgress(100);
     m_pFileDragServer->deleteLater();
     m_pFileDragServer = nullptr;
-    qDebug() << "sigdragLeave";
+    qInfo() << "sigdragLeave";
 
     if (result == Qt::DropAction::CopyAction) {
         extract2Path(m_strSelUnCompressPath);
@@ -203,7 +203,7 @@ qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
 
 void UnCompressView::handleDoubleClick(const QModelIndex &index)
 {
-    qDebug() << index.data(Qt::DisplayRole);
+    // qInfo() << index.data(Qt::DisplayRole);
 
     if (index.isValid()) {
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();

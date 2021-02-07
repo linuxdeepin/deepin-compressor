@@ -55,7 +55,7 @@ LibarchivePlugin::~LibarchivePlugin()
 
 PluginFinishType LibarchivePlugin::list()
 {
-    qDebug() << "LibarchivePlugin插件加载压缩包数据";
+    qInfo() << "LibarchivePlugin插件加载压缩包数据";
     PluginFinishType eType;
     DataManager::get_instance().archiveData().reset();
     m_setHasHandlesDirs.clear();
@@ -139,7 +139,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                 m_eErrorType = ET_FileWriteError;
             }
 
-            qDebug() << "Failed to create extractDestDir";
+            qInfo() << "Failed to create extractDestDir";
             return PFT_Error;
         }
     }
@@ -302,7 +302,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                 copyDataFromSource(m_archiveReader.data(), writer.data(), options.qSize);
             }
 
-            // qDebug() <<  destinationDirectory + QDir::separator() + entryName;
+            // qInfo() <<  destinationDirectory + QDir::separator() + entryName;
             // 文件权限设置
             QFileDevice::Permissions per = getPermissions(archive_entry_perm(entry));
             if (entryIsDir) {
@@ -511,7 +511,7 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //解压暂停
             sleep(1);
-//            qDebug() << "pause";
+//            qInfo() << "pause";
             continue;
         }
 
@@ -536,7 +536,7 @@ void LibarchivePlugin::copyDataFromSource_ArchiveEntry(archive *source, archive 
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //提取暂停
             sleep(1);
-//            qDebug() << "pause";
+//            qInfo() << "pause";
             continue;
         }
 

@@ -324,7 +324,7 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
     }
 
     if (offers.isEmpty()) {
-        qDebug() << "Could not find a plugin to handle" << fileName;
+        qInfo() << "Could not find a plugin to handle" << fileName;
         return nullptr;
     }
 
@@ -377,7 +377,7 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
 
         // Use the first valid plugin, according to the priority sorting.
         if (pIface) {
-            qDebug() << "选用插件：" << plugin->metaData().pluginId();
+            qInfo() << "选用插件：" << plugin->metaData().pluginId();
             break;
         }
     }

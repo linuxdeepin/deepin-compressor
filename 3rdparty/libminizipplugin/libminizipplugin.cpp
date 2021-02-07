@@ -53,7 +53,7 @@ LibminizipPluginFactory::~LibminizipPluginFactory()
 LibminizipPlugin::LibminizipPlugin(QObject *parent, const QVariantList &args)
     : ReadOnlyArchiveInterface(parent, args)
 {
-    qDebug() << "LibminizipPlugin";
+    qInfo() << "LibminizipPlugin";
     m_ePlugintype = PT_Libminizip;
 
 }
@@ -91,7 +91,7 @@ PluginFinishType LibminizipPlugin::list()
 
         if ((i + 1) < global_info.number_entry) {
             if (unzGoToNextFile(zipfile) != UNZ_OK) {
-                qDebug() << ("cound not read next file\n");
+                qInfo() << ("cound not read next file\n");
             }
         }
     }
@@ -111,7 +111,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
 {
     Q_UNUSED(files)
 
-    qDebug() << "解压缩数据";
+    qInfo() << "解压缩数据";
     m_workStatus = WT_Extract;
 
     // 打开压缩包数据
@@ -176,7 +176,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
 
         if (listFiles.count() > 0) {
             QByteArray strCode;
-            qDebug() << unzLocateFile(zipfile, m_common->trans2uft8(listFiles[0].toUtf8().constData(), strCode).toLatin1(), 0);
+            qInfo() << unzLocateFile(zipfile, m_common->trans2uft8(listFiles[0].toUtf8().constData(), strCode).toLatin1(), 0);
         }
 
         for (const QString &strFileName : listFiles) {
@@ -243,7 +243,7 @@ bool LibminizipPlugin::handleArchiveData(unzFile zipfile)
 
     // 获取文件信息
     if (unzGetCurrentFileInfo(zipfile, &file_info, filename, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK) {
-        qDebug() << ("could not read file info\n");
+        qInfo() << ("could not read file info\n");
         return false;
     }
 
@@ -376,7 +376,7 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
             }
             if (m_bPause) { //解压暂停
                 sleep(1);
-//                qDebug() << "pause";
+//                qInfo() << "pause";
                 continue;
             }
 

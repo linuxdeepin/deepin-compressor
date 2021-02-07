@@ -173,8 +173,8 @@ TEST_F(TestProgressPage, calSpeedAndRemainingTime1)
     m_tester->m_qTotalSize = 10240;
     m_tester->m_iPerent = 10;
     m_tester->calSpeedAndRemainingTime(speed, time);
-//    qDebug() << speed; // -1000
-//    qDebug() <<  time; // 1
+//    qInfo() << speed; // -1000
+//    qInfo() <<  time; // 1
 //    EXPECT_EQ(speed, -1000);
 //    EXPECT_EQ(time, 1);
     EXPECT_EQ(time, 1);
@@ -190,7 +190,7 @@ TEST_F(TestProgressPage, calSpeedAndRemainingTime2)
     m_tester->m_qTotalSize = 10240;
     m_tester->m_iPerent = 10;
     m_tester->calSpeedAndRemainingTime(speed, time);
-//    qDebug() << "tttt " << time; // 10
+//    qInfo() << "tttt " << time; // 10
     EXPECT_EQ(speed, 0.0);
     EXPECT_EQ(time, 10);
 }

@@ -109,7 +109,7 @@ void CompressPage::initConnections()
 
 void CompressPage::slotCompressNextClicked()
 {
-    qDebug() << "点击了压缩下一步按钮";
+    qInfo() << "点击了压缩下一步按钮";
 
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {

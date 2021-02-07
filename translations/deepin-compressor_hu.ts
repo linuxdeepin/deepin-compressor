@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>CommentProgressDialog</name>
     <message>
@@ -176,22 +178,27 @@
         <translation>Teljes méret: %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="726"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Már létezik egy ugyanilyen nevű fájl, lecseréli?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="726"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="726"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>Replace</source>
         <translation>Csere</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="766"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Csak a kínai, és az angol karakterek, valamint néhány szimbólum támogatott </translation>
     </message>
@@ -391,103 +398,103 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="514"/>
-        <location filename="../src/source/mainwindow.cpp" line="1966"/>
-        <location filename="../src/source/mainwindow.cpp" line="1988"/>
-        <location filename="../src/source/mainwindow.cpp" line="2013"/>
+        <location filename="../src/source/mainwindow.cpp" line="2023"/>
+        <location filename="../src/source/mainwindow.cpp" line="2045"/>
+        <location filename="../src/source/mainwindow.cpp" line="2070"/>
         <source>Plugin error</source>
         <translation>Bővítmény hiba</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1251"/>
+        <location filename="../src/source/mainwindow.cpp" line="1279"/>
         <source>Adding successful</source>
         <translation>A hozzáadás sikeres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1283"/>
-        <location filename="../src/source/mainwindow.cpp" line="2037"/>
+        <location filename="../src/source/mainwindow.cpp" line="1311"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>No data in it</source>
         <translation>Nem tartalmaz adatot</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1464"/>
+        <location filename="../src/source/mainwindow.cpp" line="1500"/>
         <source>Adding canceled</source>
         <translation>A hozzáadás megszakítva</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1549"/>
+        <location filename="../src/source/mainwindow.cpp" line="1590"/>
         <source>Adding failed</source>
         <translation>A hozzáadás sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1614"/>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="1655"/>
+        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>A &quot;%1&quot; létrehozása sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1942"/>
+        <location filename="../src/source/mainwindow.cpp" line="1999"/>
         <source>Compression successful</source>
         <translation>A tömörítés sikeres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1974"/>
-        <location filename="../src/source/mainwindow.cpp" line="2041"/>
+        <location filename="../src/source/mainwindow.cpp" line="2031"/>
+        <location filename="../src/source/mainwindow.cpp" line="2098"/>
         <source>Insufficient disk space</source>
         <translation>Nincs elég lemezterület</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2000"/>
-        <location filename="../src/source/mainwindow.cpp" line="2021"/>
+        <location filename="../src/source/mainwindow.cpp" line="2057"/>
+        <location filename="../src/source/mainwindow.cpp" line="2078"/>
         <source>Some volumes are missing</source>
         <translation>Néhány kötet hiányzik</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2025"/>
+        <location filename="../src/source/mainwindow.cpp" line="2082"/>
         <source>Wrong password, please retry</source>
         <translation>Érvénytelen jelszó, kérjük próbálja újra</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2192"/>
+        <location filename="../src/source/mainwindow.cpp" line="2249"/>
         <source>Select file</source>
         <translation>Fájl kiválasztása</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2681"/>
+        <location filename="../src/source/mainwindow.cpp" line="2746"/>
         <source>Update</source>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2952"/>
+        <location filename="../src/source/mainwindow.cpp" line="3017"/>
         <source>Enter up to %1 characters</source>
         <translation>Adjon meg legfeljebb %1 karaktert</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="189"/>
-        <location filename="../src/source/mainwindow.cpp" line="2828"/>
+        <location filename="../src/source/mainwindow.cpp" line="2893"/>
         <source>File info</source>
         <translation>Fájl információ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="564"/>
-        <location filename="../src/source/mainwindow.cpp" line="1366"/>
+        <location filename="../src/source/mainwindow.cpp" line="577"/>
+        <location filename="../src/source/mainwindow.cpp" line="1387"/>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1366"/>
+        <location filename="../src/source/mainwindow.cpp" line="1387"/>
         <source>Do you want to delete the archive?</source>
         <translation>Biztos, hogy törli az archívumot?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="540"/>
+        <location filename="../src/source/mainwindow.cpp" line="544"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>A %1 megváltozott a lemezen, kérjük importálja újra.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="564"/>
-        <location filename="../src/source/mainwindow.cpp" line="1366"/>
-        <location filename="../src/source/mainwindow.cpp" line="2281"/>
-        <location filename="../src/source/mainwindow.cpp" line="2681"/>
+        <location filename="../src/source/mainwindow.cpp" line="577"/>
+        <location filename="../src/source/mainwindow.cpp" line="1387"/>
+        <location filename="../src/source/mainwindow.cpp" line="2345"/>
+        <location filename="../src/source/mainwindow.cpp" line="2746"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
@@ -500,13 +507,14 @@
         <location filename="../src/source/mainwindow.cpp" line="122"/>
         <location filename="../src/source/mainwindow.cpp" line="452"/>
         <location filename="../src/source/mainwindow.cpp" line="514"/>
-        <location filename="../src/source/mainwindow.cpp" line="543"/>
-        <location filename="../src/source/mainwindow.cpp" line="591"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="608"/>
-        <location filename="../src/source/mainwindow.cpp" line="650"/>
-        <location filename="../src/source/mainwindow.cpp" line="1283"/>
-        <location filename="../src/source/mainwindow.cpp" line="2173"/>
+        <location filename="../src/source/mainwindow.cpp" line="547"/>
+        <location filename="../src/source/mainwindow.cpp" line="604"/>
+        <location filename="../src/source/mainwindow.cpp" line="610"/>
+        <location filename="../src/source/mainwindow.cpp" line="621"/>
+        <location filename="../src/source/mainwindow.cpp" line="663"/>
+        <location filename="../src/source/mainwindow.cpp" line="1311"/>
+        <location filename="../src/source/mainwindow.cpp" line="2230"/>
+        <location filename="../src/source/mainwindow.cpp" line="2337"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -542,203 +550,208 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="504"/>
-        <location filename="../src/source/mainwindow.cpp" line="2659"/>
+        <location filename="../src/source/mainwindow.cpp" line="2724"/>
         <source>Loading, please wait...</source>
         <translation>Betöltés, kérjük várjon...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="564"/>
+        <location filename="../src/source/mainwindow.cpp" line="577"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Biztosan le akarja állítani a folyamatban lévő feladatot?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1257"/>
-        <location filename="../src/source/mainwindow.cpp" line="1383"/>
+        <location filename="../src/source/mainwindow.cpp" line="1285"/>
+        <location filename="../src/source/mainwindow.cpp" line="1412"/>
         <source>Updating, please wait...</source>
         <translation>Frissítés, kérjük várjon...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1609"/>
-        <location filename="../src/source/mainwindow.cpp" line="2029"/>
+        <location filename="../src/source/mainwindow.cpp" line="1650"/>
+        <location filename="../src/source/mainwindow.cpp" line="2086"/>
         <source>File name too long</source>
         <translation>A fájlnév túl hosszú</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1970"/>
+        <location filename="../src/source/mainwindow.cpp" line="2027"/>
         <source>Failed to create file</source>
         <translation>A fájl létrehozása sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1963"/>
+        <location filename="../src/source/mainwindow.cpp" line="2020"/>
         <source>Compression failed</source>
         <translation>A tömörítés sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2358"/>
+        <location filename="../src/source/mainwindow.cpp" line="2423"/>
         <source>Find directory</source>
         <translation>Mappa keresése</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1985"/>
+        <location filename="../src/source/mainwindow.cpp" line="2042"/>
         <source>Open failed</source>
         <translation>A megnyitás sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1545"/>
-        <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1679"/>
-        <location filename="../src/source/mainwindow.cpp" line="1734"/>
-        <location filename="../src/source/mainwindow.cpp" line="1996"/>
+        <location filename="../src/source/mainwindow.cpp" line="1586"/>
+        <location filename="../src/source/mainwindow.cpp" line="1645"/>
+        <location filename="../src/source/mainwindow.cpp" line="1720"/>
+        <location filename="../src/source/mainwindow.cpp" line="1775"/>
+        <location filename="../src/source/mainwindow.cpp" line="2053"/>
         <source>Wrong password</source>
         <translation>Érvénytelen jelszó</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="608"/>
-        <location filename="../src/source/mainwindow.cpp" line="641"/>
+        <location filename="../src/source/mainwindow.cpp" line="621"/>
+        <location filename="../src/source/mainwindow.cpp" line="654"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Ez a fájl formátum nem támogatott az Archívumkezelő által</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="452"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="610"/>
         <source>You do not have permission to load %1</source>
         <translation>Nincs engedélye a %1 betöltésére</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="591"/>
+        <location filename="../src/source/mainwindow.cpp" line="604"/>
         <source>No such file or directory</source>
         <translation>Nem létezik ilyen fájl, vagy könyvtár</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1298"/>
+        <location filename="../src/source/mainwindow.cpp" line="1326"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>A kicsomagolás sikeres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1479"/>
+        <location filename="../src/source/mainwindow.cpp" line="1520"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>A kicsomagolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1599"/>
-        <location filename="../src/source/mainwindow.cpp" line="1674"/>
-        <location filename="../src/source/mainwindow.cpp" line="1992"/>
-        <location filename="../src/source/mainwindow.cpp" line="2017"/>
+        <location filename="../src/source/mainwindow.cpp" line="1640"/>
+        <location filename="../src/source/mainwindow.cpp" line="1715"/>
+        <location filename="../src/source/mainwindow.cpp" line="2049"/>
+        <location filename="../src/source/mainwindow.cpp" line="2074"/>
         <source>The archive is damaged</source>
         <translation>Az archívum sérült</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1621"/>
+        <location filename="../src/source/mainwindow.cpp" line="1662"/>
         <source>Extraction failed</source>
         <comment>提取失败</comment>
         <translation>A kicsomagolás sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1946"/>
+        <location filename="../src/source/mainwindow.cpp" line="2003"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>A kicsomagolás sikeres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1949"/>
+        <location filename="../src/source/mainwindow.cpp" line="2006"/>
         <source>Conversion successful</source>
         <translation>A konvertálás sikeres</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2010"/>
+        <location filename="../src/source/mainwindow.cpp" line="2067"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>A kicsomagolás sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2184"/>
+        <location filename="../src/source/mainwindow.cpp" line="2241"/>
         <source>Close</source>
         <translation>Bezárás</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2188"/>
+        <location filename="../src/source/mainwindow.cpp" line="2245"/>
         <source>Help</source>
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2196"/>
+        <location filename="../src/source/mainwindow.cpp" line="2253"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2204"/>
+        <location filename="../src/source/mainwindow.cpp" line="2261"/>
         <source>Display shortcuts</source>
         <translation>Gyorsbillentyűk megjelenítése</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2216"/>
+        <location filename="../src/source/mainwindow.cpp" line="2273"/>
         <source>Shortcuts</source>
         <translation>Gyorsbillentyűk</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2337"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2345"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Már létezik egy ugyanilyen nevű fájl, lecseréli?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2281"/>
+        <location filename="../src/source/mainwindow.cpp" line="2345"/>
         <source>Replace</source>
         <translation>Csere</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2852"/>
+        <location filename="../src/source/mainwindow.cpp" line="2917"/>
         <source>Basic info</source>
         <translation>Alapvető információ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2868"/>
+        <location filename="../src/source/mainwindow.cpp" line="2933"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2869"/>
+        <location filename="../src/source/mainwindow.cpp" line="2934"/>
         <source>Type</source>
         <translation>Típus</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2870"/>
+        <location filename="../src/source/mainwindow.cpp" line="2935"/>
         <source>Location</source>
         <translation>Hely</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2871"/>
+        <location filename="../src/source/mainwindow.cpp" line="2936"/>
         <source>Time created</source>
         <translation>Létrehozás ideje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2872"/>
+        <location filename="../src/source/mainwindow.cpp" line="2937"/>
         <source>Time accessed</source>
         <translation>Hozzáférés ideje</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2873"/>
+        <location filename="../src/source/mainwindow.cpp" line="2938"/>
         <source>Time modified</source>
         <translation>Módosítás időpontja</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2883"/>
+        <location filename="../src/source/mainwindow.cpp" line="2948"/>
         <source>Archive</source>
         <translation>Archívum</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2914"/>
+        <location filename="../src/source/mainwindow.cpp" line="2979"/>
         <source>Comment</source>
         <translation>Hozzászólás</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="638"/>
+        <location filename="../src/source/mainwindow.cpp" line="651"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Kérjük ellenőrizze a fájl társítási típusát az Archívumkezelő beállításaiban</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2173"/>
+        <location filename="../src/source/mainwindow.cpp" line="2230"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Az archívum megváltozott a lemezen, kérjük importálja újra.</translation>
     </message>
@@ -1037,7 +1050,7 @@
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2678"/>
+        <location filename="../src/source/mainwindow.cpp" line="2743"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>A %1 megváltozott. El akarja menteni az archívum módosításait?</translation>
     </message>

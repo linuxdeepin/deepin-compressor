@@ -41,7 +41,7 @@ ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVaria
     : QObject(parent)
 {
     Q_ASSERT(args.size() >= 3);
-//    qDebug() << "Created read-only interface for" << args.first().toString();
+//    qInfo() << "Created read-only interface for" << args.first().toString();
     m_strArchiveName = args.first().toString();
     m_metaData = args.at(1).value<KPluginMetaData>();
     m_mimetype = args.at(2).value<QMimeType>();
@@ -181,7 +181,7 @@ void ReadOnlyArchiveInterface::handleEntry(const FileEntry &entry)
 bool ReadOnlyArchiveInterface::isInsufficientDiskSpace(QString diskPath, qint64 standard)
 {
     QStorageInfo storage(QFileInfo(diskPath).absolutePath());
-    qDebug() << "Available DiskSpace:" << diskPath << storage << storage.bytesAvailable();
+    qInfo() << "Available DiskSpace:" << diskPath << storage << storage.bytesAvailable();
     if (storage.isValid() && storage.bytesAvailable() < standard) {
         return true;
     } else {

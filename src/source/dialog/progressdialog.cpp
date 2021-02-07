@@ -162,7 +162,7 @@ void ProgressDialog::clearprocess()
 
 void ProgressDialog::closeEvent(QCloseEvent *)
 {
-    qDebug() << m_circleprogress->value();
+    qInfo() << m_circleprogress->value();
     if (m_dPerent < 100 && m_dPerent > 0) {
         // 先暂停
         emit signalPause();
@@ -187,7 +187,7 @@ void ProgressDialog::closeEvent(QCloseEvent *)
  */
 void ProgressDialog::slotextractpress(int index)
 {
-    qDebug() << index;
+    qInfo() << index;
     if (1 == index) { // 取消提取
         emit stopExtract();
         emit sigResetPercentAndTime();

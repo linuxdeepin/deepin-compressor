@@ -95,7 +95,7 @@ TEST_F(TestLibzipPlugin, initTest)
 
 TEST_F(TestLibzipPlugin, testlist)
 {
-    qDebug() << "*gaoxiang*" << m_tester->m_strArchiveName;
+    qInfo() << "*gaoxiang*" << m_tester->m_strArchiveName;
     PluginFinishType eFinishType = m_tester->list();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
     ASSERT_EQ(bResult, true);

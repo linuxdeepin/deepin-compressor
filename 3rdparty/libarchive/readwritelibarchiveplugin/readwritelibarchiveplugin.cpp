@@ -54,7 +54,7 @@ ReadWriteLibarchivePlugin::ReadWriteLibarchivePlugin(QObject *parent, const QVar
     : LibarchivePlugin(parent, args)
 //    , m_archiveReadDisk(archive_read_disk_new())
 {
-    qDebug() << "ReadWriteLibarchivePlugin";
+    qInfo() << "ReadWriteLibarchivePlugin";
     m_archiveReadDisk.reset(archive_read_disk_new());
     archive_read_disk_set_standard_lookup(m_archiveReadDisk.data());
 }
@@ -350,9 +350,9 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
         dir.mkpath(absoluteDestinationPath);
         QString strFilePath = absoluteDestinationPath + sourceFileInfo.fileName();
         if (QFile::link(sourceFileFullPath, strFilePath)) {
-//            qDebug() << "Symlink's created:" << destination << sourceFileFullPath;
+//            qInfo() << "Symlink's created:" << destination << sourceFileFullPath;
         } else {
-            qDebug() << "Can't create symlink" << destination << sourceFileFullPath;
+            qInfo() << "Can't create symlink" << destination << sourceFileFullPath;
             return false;
         }
     }
@@ -429,9 +429,9 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
         dir.mkpath(absoluteDestinationPath);//创建临时文件夹
         QString newFilePath = absoluteDestinationPath + relativeFileInfo.fileName();
         if (QFile::link(relativeName, newFilePath)) {
-//            qDebug() << "Symlink's created:" << destination << relativeName;
+//            qInfo() << "Symlink's created:" << destination << relativeName;
         } else {
-            qDebug() << "Can't create symlink" << destination << relativeName;
+            qInfo() << "Can't create symlink" << destination << relativeName;
             return false;
         }
     }
@@ -513,7 +513,7 @@ bool ReadWriteLibarchivePlugin::copyData(const QString &filename, archive *dest,
     while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
         if (m_bPause) { //压缩暂停
             sleep(1);
-//            qDebug() << "pause";
+//            qInfo() << "pause";
             continue;
         }
 

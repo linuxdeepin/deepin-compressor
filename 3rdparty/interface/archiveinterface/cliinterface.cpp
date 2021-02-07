@@ -103,7 +103,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     destPath = options.strTargetPath;
     if (destPath.endsWith("/")) {
         destPath.chop(1);
-        qDebug() << "解压目标路径 --- " << destPath;
+        qInfo() << "解压目标路径 --- " << destPath;
     }
 
     QDir::setCurrent(destPath);
@@ -146,13 +146,13 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             // 设置临时目录
             m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
             if (!m_extractTempDir->isValid()) {
-                qDebug() << "Creation of temporary directory failed.";
+                qInfo() << "Creation of temporary directory failed.";
                 emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
 
             destPath = m_extractTempDir->path();
-            qDebug() << "提取临时路径 --- " << destPath;
+            qInfo() << "提取临时路径 --- " << destPath;
         }
     } else {
         if (!QDir(destPath).exists() && !QDir(destPath).mkpath(destPath)) {
@@ -231,7 +231,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     // 压缩目标路径
     const QString destinationPath = (options.strDestination == QString()) ? QString() : options.strDestination;
-    qDebug() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
+    qInfo() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
 
     if (!destinationPath.isEmpty()) { // 向压缩包非第一层文件里面追加压缩
         m_extractTempDir.reset(new QTemporaryDir());
@@ -249,15 +249,15 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
             // 在临时路径创建待压缩文件的链接
             if (QFile::link(filePath, newFilePath)) {
-                qDebug() << "Symlink's created:" << filePath << newFilePath;
+                qInfo() << "Symlink's created:" << filePath << newFilePath;
             } else { // 创建链接失败
-                qDebug() << "Can't create symlink" << filePath << newFilePath;
+                qInfo() << "Can't create symlink" << filePath << newFilePath;
                 emit signalFinished(PFT_Error);
                 return PFT_Error;
             }
         }
 
-        qDebug() << "Changing working dir again to " << m_extractTempDir->path();
+        qInfo() << "Changing working dir again to " << m_extractTempDir->path();
         QDir::setCurrent(m_extractTempDir->path());
 
         // 添加临时路径中的第一层文件（夹）
@@ -721,7 +721,7 @@ void CliInterface::writeToProcess(const QByteArray &data)
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
-    qDebug() << "Writing data to the process: " << data;
+    qInfo() << "Writing data to the process: " << data;
 //    m_process->write(data);
     m_process->pty()->write(data);
 }
@@ -746,12 +746,12 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
         if (etractEntryTemp.isDir()) {
             // 提取文件夹，创建目标文件夹路径
             if (!finalDestDir.mkpath(extractEntry.filePath())) {
-                qDebug() << "Failed to create directory" << extractEntry.filePath() << "in final destination.";
+                qInfo() << "Failed to create directory" << extractEntry.filePath() << "in final destination.";
             }
         } else {
             // 目标路径下文件已经存在
             if (extractEntryDest.exists()) {
-                qDebug() << "File" << extractEntryDest.absoluteFilePath() << "exists.";
+                qInfo() << "File" << extractEntryDest.absoluteFilePath() << "exists.";
                 if (!skipAll && !overwriteAll) {
                     OverwriteQuery query(extractEntryDest.absoluteFilePath());
                     emit signalQuery(&query);
@@ -763,7 +763,7 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
                         }
 
                         if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
-                            qDebug() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                            qInfo() << "Failed to remove" << extractEntryDest.absoluteFilePath();
                         }
                     } else if (query.responseSkip() || query.responseSkipAll()) {
                         if (query.responseSkipAll()) { // 全部跳过
@@ -780,19 +780,19 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
                     return true;
                 } else if (overwriteAll) { // 全部替换
                     if (!QFile::remove(extractEntryDest.absoluteFilePath())) {
-                        qDebug() << "Failed to remove" << extractEntryDest.absoluteFilePath();
+                        qInfo() << "Failed to remove" << extractEntryDest.absoluteFilePath();
                     }
                 }
             }
 
             // 创建文件夹路径
             if (!finalDestDir.mkpath(extractEntry.path())) {
-                qDebug() << "Failed to create parent directory for file:" << extractEntryDest.filePath();
+                qInfo() << "Failed to create parent directory for file:" << extractEntryDest.filePath();
             }
 
             // 对临时文件夹内的文件进行rename操作，移到目标路径下
             if (!QFile(etractEntryTemp.absoluteFilePath()).rename(extractEntryDest.absoluteFilePath())) {
-                qDebug() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
+                qInfo() << "Failed to move file" << etractEntryTemp.filePath() << "to final destination.";
 //                emit signalFinished(PFT_Error);
                 moveSuccess = false;
 //                return false;
@@ -824,7 +824,7 @@ void CliInterface::readStdout(bool handleAll)
     QList<QByteArray> lines = m_stdOutData.split('\n');
 //    if (m_workStatus == WT_Add || m_workStatus == WT_Extract) {
 //        foreach (auto line, lines) {
-//            qDebug() << line;
+//            qInfo() << line;
 //        }
 //    }
     bool isWrongPwd = isWrongPasswordMsg(lines.last());
@@ -882,7 +882,7 @@ void CliInterface::readStdout(bool handleAll)
 
 void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
+    qInfo() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();
 
@@ -906,7 +906,7 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
 
 void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
+    qInfo() << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
 
     if (m_process) {
         // Handle all the remaining data in the process.
@@ -965,13 +965,13 @@ void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint
         if (lines[0].contains(processid.toUtf8())) {
             for (const QByteArray &line : qAsConst(lines)) {
                 int a, b;
-//                qDebug() << line;
+//                qInfo() << line;
                 if (0 < (a = line.indexOf("-tar(")) && 0 < (b = line.indexOf(")", a))) {
-//                    qDebug() << a << b << line.mid(a + 5, b - a - 5).toInt();
+//                    qInfo() << a << b << line.mid(a + 5, b - a - 5).toInt();
                     childprocessid.append(line.mid(a + 5, b - a - 5).toInt());
                 }
                 if (0 < (a = line.indexOf("-7z(")) && 0 < (b = line.indexOf(")", a))) {
-//                    qDebug() << a << b << line.mid(a + 4, b - a - 4).toInt();
+//                    qInfo() << a << b << line.mid(a + 4, b - a - 4).toInt();
                     childprocessid.append(line.mid(a + 4, b - a - 4).toInt());
                     break;
                 }
