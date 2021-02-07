@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>CommentProgressDialog</name>
     <message>
@@ -165,7 +163,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="526"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Alkuperäistä tiedostoa %1 ei ole, tarkista ja yritä uudelleen</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="560"/>
@@ -195,7 +193,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="766"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -604,7 +602,7 @@
         <location filename="../src/source/mainwindow.cpp" line="452"/>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinulla ei ole oikeuksia ladata kohdetta %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="591"/>
@@ -629,7 +627,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1992"/>
         <location filename="../src/source/mainwindow.cpp" line="2017"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished">Paketti on vahingoittunut</translation>
+        <translation>Paketti on vahingoittunut</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1621"/>
@@ -849,7 +847,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>

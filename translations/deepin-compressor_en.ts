@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>CommentProgressDialog</name>
     <message>
@@ -195,7 +193,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="766"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Only Chinese and English characters and some symbols are supported</translation>
     </message>
 </context>
 <context>
@@ -604,7 +602,7 @@
         <location filename="../src/source/mainwindow.cpp" line="452"/>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation>You do not have permission to load %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="591"/>
@@ -629,7 +627,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1992"/>
         <location filename="../src/source/mainwindow.cpp" line="2017"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished">The archive is damaged</translation>
+        <translation>The archive is damaged</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1621"/>
@@ -849,7 +847,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Current path:</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>

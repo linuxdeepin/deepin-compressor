@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>CommentProgressDialog</name>
     <message>
@@ -143,7 +141,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="482"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Je bent niet gemachtigd om hier bestanden op te slaan. Kies een andere locatie.</translation>
+        <translation>Je bent niet bevoegd om hier bestanden op te slaan. Kies een andere locatie.</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="490"/>
@@ -154,18 +152,18 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="499"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="528"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is niet aanwezig op de schijf. Controleer het bestand en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="506"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="536"/>
         <source>You do not have permission to compress %1</source>
-        <translation>Je bent niet gemachtigd om %1 in te pakken</translation>
+        <translation>Je bent niet bevoegd om %1 in te pakken</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="526"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Het oorspronkelijke bestand van &apos;%1&apos; bestaat niet. Loop alles na en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="560"/>
@@ -195,7 +193,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="766"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -515,7 +513,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="122"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Je bent niet gemachtigd om hier bestanden op te slaan. Kies een andere locatie.</translation>
+        <translation>Je bent niet bevoegd om hier bestanden op te slaan. Kies een andere locatie.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="312"/>
@@ -604,12 +602,12 @@
         <location filename="../src/source/mainwindow.cpp" line="452"/>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Je bent niet bevoegd om %1 te laden</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="591"/>
         <source>No such file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand of map bestaat niet</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1298"/>
@@ -629,7 +627,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1992"/>
         <location filename="../src/source/mainwindow.cpp" line="2017"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished">Het archief is beschadigd</translation>
+        <translation>Het archief is beschadigd</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1621"/>
@@ -849,7 +847,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
@@ -1245,7 +1243,7 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="190"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Je bent niet gemachtigd om hier bestanden op te slaan. Kies een andere locatie.</translation>
+        <translation>Je bent niet bevoegd om hier bestanden op te slaan. Kies een andere locatie.</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="208"/>

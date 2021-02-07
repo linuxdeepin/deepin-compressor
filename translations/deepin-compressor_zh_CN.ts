@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>CommentProgressDialog</name>
     <message>
@@ -195,7 +193,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="766"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation>仅支持中英字符及部分符号</translation>
+        <translation>仅支持中英文字符及部分符号</translation>
     </message>
 </context>
 <context>
@@ -604,7 +602,7 @@
         <location filename="../src/source/mainwindow.cpp" line="452"/>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>You do not have permission to load %1</source>
-        <translation>您没有加载“%1”的权限</translation>
+        <translation>您没有权限加载“%1”文件</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="591"/>
