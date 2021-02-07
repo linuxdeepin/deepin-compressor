@@ -118,6 +118,7 @@ struct CompressParameter {
     int iVolumeSize;    // 分卷大小
     int iCompressionLevel;      // 压缩等级
     qint64 qSize;       // 文件总大小
+    QStringList listCompressFiles;  // 待压缩文件（快捷操作时使用）
 };
 Q_DECLARE_METATYPE(CompressParameter)
 
