@@ -32,7 +32,7 @@
 #include <DFileDialog>
 
 #include <QHBoxLayout>
-#include <QDebug>
+#include <QShortcut>
 #include <QFileInfo>
 
 UnCompressPage::UnCompressPage(QWidget *parent)
@@ -147,6 +147,12 @@ void UnCompressPage::initUI()
     pMainLayout->setStretchFactor(pBtnLayout, 1);
     pMainLayout->setContentsMargins(20, 1, 20, 20);
 
+
+    // 设置快捷键
+    auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
+    openkey->setContext(Qt::ApplicationShortcut);
+    connect(openkey, &QShortcut::activated, this, &UnCompressPage::slotFileChoose);
+
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);
 }
@@ -219,6 +225,12 @@ void UnCompressPage::slotUnCompressPathClicked()
     if (listUrl.count() > 0) {
         setDefaultUncompressPath(listUrl.at(0).toLocalFile());
     }
+}
+
+void UnCompressPage::slotFileChoose()
+{
+    if (m_pUnCompressView->isModifiable())
+        emit signalFileChoose();
 }
 
 CustomCommandLinkButton *UnCompressPage::getUncompressPathBtn() const

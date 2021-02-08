@@ -39,7 +39,6 @@ OpenFileWatcher::~OpenFileWatcher()
 void OpenFileWatcher::reset()
 {
     m_pOpenFileWatcher->removePaths(m_pOpenFileWatcher->files());       // 清空所有监控的文件
-    m_listOpenFiles.clear();
     m_strOpenFile.clear();
     m_mapFileHasModified.clear();
     m_mapFilePassword.clear();

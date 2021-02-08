@@ -406,10 +406,10 @@ void UnCompressView::setModifiable(bool bModifiable, bool bMultiplePassword)
     setAcceptDrops(m_bModifiable);
 }
 
-//bool UnCompressView::isModifiable()
-//{
-//    return m_bModifiable;
-//}
+bool UnCompressView::isModifiable()
+{
+    return m_bModifiable;
+}
 
 void UnCompressView::clear()
 {

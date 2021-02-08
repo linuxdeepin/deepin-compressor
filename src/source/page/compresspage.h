@@ -110,9 +110,14 @@ private slots:
      */
     void slotCompressLevelChanged(bool bRootIndex);
 
+    /**
+     * @brief signalFileChoose  选择文件信号
+     */
+    void slotFileChoose();
 private:
     CompressView *m_pCompressView;    // 压缩列表
     CustomPushButton *m_pNextBtn;       // 下一步
+    bool m_bRootIndex;                  // 是否为根目录
 };
 
 #endif // COMPRESSPAGE_H

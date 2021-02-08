@@ -80,7 +80,6 @@ Q_SIGNALS:
 
 private:
     QFileSystemWatcher *m_pOpenFileWatcher;       // 对打开的文件监控
-    QList<FileEntry> m_listOpenFiles;      // 所有的打开的文件数据
     QString m_strOpenFile;                 // 最后一次打开的文件（真实全路径 用来添加到文件监控中）
     QMap<QString, bool> m_mapFileHasModified;   // 文件是否更改（包内文件路径 - 状态）
     QMap<QString, QString> m_mapFilePassword;   // 文件加密密码（包内文件路径 - 密码）

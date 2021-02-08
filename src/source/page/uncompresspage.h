@@ -125,6 +125,11 @@ private:
 
 Q_SIGNALS:
     /**
+     * @brief signalFileChoose  选择文件信号
+     */
+    void signalFileChoose();
+
+    /**
      * @brief signalUncompress  点击解压按钮
      * @param strTargetPath     解压目标路径
      */
@@ -168,6 +173,11 @@ private Q_SLOTS:
      * @brief slotUnCompressPathClicked     设置解压路径
      */
     void slotUnCompressPathClicked();
+
+    /**
+     * @brief signalFileChoose  选择文件信号
+     */
+    void slotFileChoose();
 
 private:
     UnCompressView *m_pUnCompressView;    // 压缩列表

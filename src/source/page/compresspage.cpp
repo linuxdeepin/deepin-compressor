@@ -94,7 +94,7 @@ void CompressPage::initUI()
     // 设置快捷键
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
     openkey->setContext(Qt::ApplicationShortcut);
-    connect(openkey, &QShortcut::activated, this, &CompressPage::signalFileChoose);
+    connect(openkey, &QShortcut::activated, this, &CompressPage::slotFileChoose);
 
     setAcceptDrops(true);
     setBackgroundRole(DPalette::Base);
@@ -122,9 +122,16 @@ void CompressPage::slotCompressNextClicked()
 
 void CompressPage::slotCompressLevelChanged(bool bRootIndex)
 {
+    m_bRootIndex = bRootIndex;
     emit signalLevelChanged(bRootIndex);
 
     setAcceptDrops(bRootIndex);
+}
+
+void CompressPage::slotFileChoose()
+{
+    if (m_bRootIndex)
+        emit signalFileChoose();
 }
 
 CustomPushButton *CompressPage::getNextBtn() const

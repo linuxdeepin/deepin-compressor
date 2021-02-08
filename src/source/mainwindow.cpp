@@ -246,6 +246,7 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
+    connect(m_pUnCompressPage, &UnCompressPage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pProgressPage, &ProgressPage::signalPause, this, &MainWindow::slotPause);
     connect(m_pProgressPage, &ProgressPage::signalContinue, this, &MainWindow::slotContinue);
     connect(m_pProgressPage, &ProgressPage::signalCancel, this, &MainWindow::slotCancel);
@@ -936,6 +937,11 @@ void MainWindow::slotChoosefiles()
     } else if (m_ePageID == PI_UnCompress) {
         // 追加压缩
         m_pUnCompressPage->addNewFiles(listSelFiles);
+    } else if (m_ePageID == PI_CompressSetting) {
+        // 追加压缩
+        m_pCompressPage->addCompressFiles(listSelFiles);
+        m_ePageID = PI_Compress;
+        refreshPage();
     }
 }
 
@@ -2737,6 +2743,14 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
     QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
 
     if ((mapStatus.find(strPath) != mapStatus.end()) && (!mapStatus[strPath])) {
+
+        // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
+        if (!QFile::exists(strPath)) {
+            mapStatus.remove(strPath);
+            mapPassword.remove(strPath);
+            return;
+        }
+
         mapStatus[strPath] = true;
 
         QFileInfo file(strPath);
