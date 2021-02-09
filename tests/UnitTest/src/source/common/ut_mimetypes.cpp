@@ -71,7 +71,7 @@ TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT006)
     stub.set(ADDR(QFileInfo, isReadable), isReadable_stub);
     stub.set(ADDR(QMimeType, isDefault), isDefault_stub);
 
-    ASSERT_EQ(determineMimeType("test.iso").name(), "application/x-cd-image");
+    ASSERT_EQ(determineMimeType("test.iso").name(), "application/x-iso9660-image");
 }
 
 TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT007)

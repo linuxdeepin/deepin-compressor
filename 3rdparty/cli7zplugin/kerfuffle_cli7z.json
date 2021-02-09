@@ -36,7 +36,7 @@
         "Id": "kerfuffle_cli7z",
         "MimeTypes": [
             "application/x-7z-compressed",
-            "application/x-cd-image",
+            "application/x-iso9660-image",
             "application/zip",
             "application/x-java-archive",
             "application/x-tzo"
@@ -133,7 +133,7 @@
         "SupportsMultiVolume": true,
         "SupportsTesting": true
     },
-    "application/x-cd-image":{
+    "application/x-iso9660-image":{
         "CompressionLevelDefault": 5,
         "CompressionLevelMax": 9,
         "CompressionLevelMin": 0

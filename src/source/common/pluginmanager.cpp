@@ -201,7 +201,7 @@ QStringList PluginManager::supportedWriteMimeTypes(MimeSortingMode mode) const
         supported.remove(QStringLiteral("application/x-tzo"));
     }
 
-    supported.remove(QStringLiteral("application/x-cd-image"));
+    supported.remove(QStringLiteral("application/x-iso9660-image"));
 
     supported.remove(QStringLiteral("application/vnd.rar"));
     supported.remove(QStringLiteral("application/x-rar"));
@@ -229,7 +229,7 @@ QVector<Plugin *> PluginManager::filterBy(const QVector<Plugin *> &plugins, cons
             }
         } else if (plugin->metaData().mimeTypes().contains(mimeType.name())) {
             qInfo() << plugin->metaData().pluginId() << m_filesize << mimeType.name();
-            // if (mimeType.name() == QString("application/x-cd-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
+            // if (mimeType.name() == QString("application/x-iso9660-image") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z") && m_filesize  < 4294967296) { //4294967296(4GB)
             //                continue;//when iso is more than 4G,it is udf,use 7z to extract
             // }
             if (mimeType.name() == QString("application/x-tzo") && plugin->metaData().pluginId() == QString("kerfuffle_cli7z")) {

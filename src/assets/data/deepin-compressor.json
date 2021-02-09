@@ -241,10 +241,10 @@
                             "default": true
                         },
                         {
-                            "key": "x-cd-image",
+                            "key": "x-iso9660-image",
                             "name": " ",
                             "type": "checkbox",
-                            "text": "x-cd-image(iso)",
+                            "text": "x-iso9660-image(iso)",
                             "default": true
                         },
                         {

@@ -343,7 +343,7 @@ void SettingDialog::slotClickCancelSelectAllButton()
 void SettingDialog::slotClickRecommendedButton()
 {
     foreach (QString key, UiTools::m_associtionlist) {
-        if (key == "file_association.file_association_type.x-cd-image"
+        if (key == "file_association.file_association_type.x-iso9660-image"
                 || key == "file_association.file_association_type.x-iso9660-appimage"
                 || key == "file_association.file_association_type.x-source-rpm") {
             m_settings->setOption(key, false);

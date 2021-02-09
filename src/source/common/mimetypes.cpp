@@ -152,17 +152,15 @@ CustomMimeType determineMimeType(const QString &filename)
         } else if (output.contains("application/zip")) {
             stMimeType.m_strTypeName = "application/zip";
             return stMimeType;
+        } else if (output.contains("application/x-iso9660-image")) {
+            stMimeType.m_strTypeName = "application/x-iso9660-image";
+            return stMimeType;
         }
     }
 
+    stMimeType.m_bUnKnown = false;
     // 对于内容和后缀不一致的情况进行的处理
     if (mimeFromExtension != mimeFromContent) {
-        // #354344: ISO files are currently wrongly detected-by-content.
-        if (mimeFromExtension.inherits(QStringLiteral("application/x-cd-image"))) {
-            stMimeType.m_mimeType = mimeFromExtension;
-            return stMimeType;
-        }
-
         if (mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar"))) {
             stMimeType.m_mimeType = mimeFromExtension;
             return stMimeType;

@@ -500,13 +500,13 @@ bool CompressSettingPage::checkCompressOptionValid()
             return false;
         }
 
-        if (file.isFile()) { // 检查文件是否可读
-            if (!file.isReadable()) {
-                bResult = false;
-                showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.fileName())));
-                return false;
-            }
-        } else if (file.isDir()) { // 检查文件夹和文件夹下子文件是否可读
+        if (!file.isReadable()) {
+            bResult = false;
+            showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.filePath())));
+            return false;
+        }
+
+        if (file.isDir()) { // 检查文件夹和文件夹下子文件是否可读
             bResult = checkFile(file.absoluteFilePath());
             if (!bResult)
                 return bResult;
@@ -531,12 +531,12 @@ bool CompressSettingPage::checkFile(const QString &path)
         return false;
     }
 
-    if (fileInfo.isFile()) {
-        if (!fileInfo.isReadable()) {
-            showWarningDialog(tr("You do not have permission to compress %1").arg(/*UiTools::toShortString(*/fileInfo.filePath())/*)*/);
-            return false;
-        }
-    } else {
+    if (!fileInfo.isReadable()) {
+        showWarningDialog(tr("You do not have permission to compress %1").arg(/*UiTools::toShortString(*/fileInfo.filePath())/*)*/);
+        return false;
+    }
+
+    if (fileInfo.isDir()) {
         QDir dir(path);
         // 遍历文件夹下的子文件夹
         QFileInfoList listInfo = dir.entryInfoList(QDir::AllEntries | QDir::System

@@ -74,7 +74,7 @@ QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_
                                         << "file_association.file_association_type.x-xar"
                                         << "file_association.file_association_type.x-xz"
                                         << "file_association.file_association_type.zip"
-                                        << "file_association.file_association_type.x-cd-image"
+                                        << "file_association.file_association_type.x-iso9660-image"
                                         << "file_association.file_association_type.x-iso9660-appimage"
                                         << "file_association.file_association_type.x-source-rpm"
                                         << "file_association.file_association_type.x-chrome-extension";
@@ -225,7 +225,7 @@ QString UiTools::judgeFileMime(const QString &strFileName)
     } else if (strFileName.endsWith(".zip")) {
         type = "zip";
     } else if (strFileName.endsWith(".iso")) {
-        type = "x-cd-image";
+        type = "x-iso9660-image";
     } else if (strFileName.endsWith(".appimage")) {
         type = "x-iso9660-appimage";
     }
