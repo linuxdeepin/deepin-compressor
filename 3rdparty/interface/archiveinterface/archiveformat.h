@@ -29,14 +29,13 @@
 #include "kpluginmetadata.h"
 #include "commonstruct.h"
 
-#include <QMimeType>
 #include <QVariantMap>
 
 class ArchiveFormat
 {
 public:
     explicit ArchiveFormat();
-    explicit ArchiveFormat(const QMimeType &mimeType,
+    explicit ArchiveFormat(const CustomMimeType &mimeType,
                            EncryptionType encryptionType,
                            int minCompLevel,
                            int maxCompLevel,
@@ -49,8 +48,8 @@ public:
                            const QStringList &encryptionMethods,
                            const QString &defaultEncryptionMethod);
 
-    static ArchiveFormat fromMetadata(const QMimeType &mimeType, const KPluginMetaData &metadata);
-    bool isValid() const;
+    static ArchiveFormat fromMetadata(const CustomMimeType &mimeType, const KPluginMetaData &metadata);
+    //bool isValid() const;
     EncryptionType encryptionType() const;
 
     int minCompressionLevel() const;
@@ -65,7 +64,7 @@ public:
     QString defaultEncryptionMethod() const;
 
 private:
-    QMimeType m_mimeType;
+    CustomMimeType m_mimeType;
     EncryptionType m_encryptionType = Unencrypted;
     int m_minCompressionLevel = -1;
     int m_maxCompressionLevel = 0;

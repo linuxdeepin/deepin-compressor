@@ -64,7 +64,6 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     FileEntry entry = m_listEntry[iRow];
 
     // 文件类型     文件夹子文件数目/文件大小
-    QMimeType mimetype;
     QString strSize;    // 显示大小（项）
 
     if (entry.isDirectory) {

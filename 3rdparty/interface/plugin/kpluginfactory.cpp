@@ -21,6 +21,7 @@
  */
 #include "kpluginfactory.h"
 #include "kpluginfactory_p.h"
+#include "commonstruct.h"
 
 #include <QObjectCleanupHandler>
 #include <QDebug>

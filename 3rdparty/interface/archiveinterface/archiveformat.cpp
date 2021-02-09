@@ -31,7 +31,7 @@ ArchiveFormat::ArchiveFormat()
 {
 }
 
-ArchiveFormat::ArchiveFormat(const QMimeType &mimeType,
+ArchiveFormat::ArchiveFormat(const CustomMimeType &mimeType,
                              EncryptionType encryptionType,
                              int minCompLevel,
                              int maxCompLevel,
@@ -58,10 +58,11 @@ ArchiveFormat::ArchiveFormat(const QMimeType &mimeType,
 {
 }
 
-ArchiveFormat ArchiveFormat::fromMetadata(const QMimeType &mimeType, const KPluginMetaData &metadata)
+ArchiveFormat ArchiveFormat::fromMetadata(const CustomMimeType &mimeType, const KPluginMetaData &metadata)
 {
     const QJsonObject json = metadata.rawData();
     const QStringList mimeTypes = metadata.mimeTypes();
+
     for (const QString &mime : mimeTypes) {
         if (mimeType.name() != mime) {
             continue;
@@ -114,10 +115,10 @@ ArchiveFormat ArchiveFormat::fromMetadata(const QMimeType &mimeType, const KPlug
     return ArchiveFormat();
 }
 
-bool ArchiveFormat::isValid() const
-{
-    return m_mimeType.isValid();
-}
+//bool ArchiveFormat::isValid() const
+//{
+//    return m_mimeType.isValid();
+//}
 
 EncryptionType ArchiveFormat::encryptionType() const
 {

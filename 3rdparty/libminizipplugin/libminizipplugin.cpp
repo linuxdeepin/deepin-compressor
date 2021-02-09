@@ -154,6 +154,13 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
             // 解压单个文件
             m_eErrorType = extractEntry(zipfile, file_info, options, qExtractSize, strFileName);
 
+            // 方便右键解压时提示是否有数据解压出来
+            if (!options.bExistList && i == 0) {
+                FileEntry entry;
+                entry.strFullPath = strFileName;
+                DataManager::get_instance().archiveData().listRootEntry << entry;
+            }
+
             if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
                 if ((i + 1) < nofEntries) {
                     if (unzGoToNextFile(zipfile) != UNZ_OK) {

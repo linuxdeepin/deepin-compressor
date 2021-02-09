@@ -22,60 +22,7 @@
 #ifndef MIMETYPES_H
 #define MIMETYPES_H
 
-#include <QMimeType>
-
-/**
- * @param filename Absolute path of a file.
- * @return The mimetype of the given file.
- */
-
-/* 对一些未识别出来的类型进行区分
-*  zip空压缩包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/zip"
-*  谷歌插件zip：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/x-chrome-extension"
-*  谷歌插件crx：内容检测为"application/octet-stream"，后缀检测为"application/octet-stream"，file命令探测为"application/x-chrome-extension"
-*  zip分卷包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/octet-stream"
-*/
-class CustomMimeType
-{
-public:
-    CustomMimeType() {}
-    ~CustomMimeType() {}
-
-    /**
-     * @brief name  获取类型名
-     * @return
-     */
-    QString name() const
-    {
-        if (m_bUnKnown) {
-            return m_strTypeName;
-        }
-
-        return m_mimeType.name();
-    }
-
-    /**
-     * @brief inherits      是否继承某个类型
-     * @param strMimeType   父类型
-     * @return
-     */
-    bool inherits(const QString &strMimeType) const
-    {
-        if (m_bUnKnown) {
-            if (strMimeType == m_strTypeName)
-                return true;
-
-            return false;
-        }
-
-        return m_mimeType.inherits(strMimeType);
-    }
-
-public:
-    bool m_bUnKnown = false;  // 是否自定义扩展类型（内容检测为"application/octet-stream"时使用strTypeName，其余情况使用mimeType）
-    QMimeType m_mimeType;
-    QString m_strTypeName;
-};
+#include "commonstruct.h"
 
 CustomMimeType determineMimeType(const QString &filename);
 

@@ -70,7 +70,7 @@ class CliProperties : public QObject
     Q_PROPERTY(bool captureProgress MEMBER m_captureProgress)
 
 public:
-    explicit CliProperties(QObject *parent, const KPluginMetaData &metaData, const QMimeType &archiveType);
+    explicit CliProperties(QObject *parent, const KPluginMetaData &metaData, const CustomMimeType &archiveType);
 
     QStringList addArgs(const QString &archive,
                         const QStringList &files,
@@ -131,7 +131,7 @@ private:
 
     bool m_captureProgress = false;
 
-    QMimeType m_mimeType;
+    CustomMimeType m_mimeType;
     KPluginMetaData m_metaData;
 };
 

@@ -47,7 +47,7 @@
 
 DCORE_USE_NAMESPACE
 Q_DECLARE_METATYPE(KPluginMetaData)
-Q_DECLARE_METATYPE(CustomMimeType)
+
 QStringList UiTools::m_associtionlist = QStringList() << "file_association.file_association_type.x-7z-compressed"
                                         << "file_association.file_association_type.x-archive"
                                         << "file_association.file_association_type.x-bcpio"

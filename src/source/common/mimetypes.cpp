@@ -26,7 +26,7 @@
 #include <QRegularExpression>
 #include <QDebug>
 #include <QProcess>
-Q_DECLARE_METATYPE(CustomMimeType)
+
 CustomMimeType determineMimeType(const QString &filename)
 {
     QMimeDatabase db;

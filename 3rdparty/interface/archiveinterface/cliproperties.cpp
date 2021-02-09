@@ -30,7 +30,7 @@
 
 #include <QRegularExpression>
 
-CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, const QMimeType &archiveType)
+CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, const CustomMimeType &archiveType)
     : QObject(parent)
     , m_mimeType(archiveType)
     , m_metaData(metaData)
