@@ -1,7 +1,7 @@
 [Desktop Entry]
 Exec=/usr/bin/deepin-compressor  %U compress
 GenericName=Compress
-MimeType=*
+MimeType=application/octet-stream;
 Name=Compress
 Type=Application
 X-DFM-MenuTypes=MultiFileDirs
