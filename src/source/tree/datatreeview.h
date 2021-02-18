@@ -28,6 +28,7 @@
 
 #include <QStyledItemDelegate>
 #include <QDir>
+#include <QTime>
 
 DWIDGET_USE_NAMESPACE
 
@@ -86,6 +87,10 @@ protected:
 
     void resizeEvent(QResizeEvent *event) override;
 
+    bool event(QEvent *event) override;
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     /**
      * @brief keyPressEvent 键盘事件 delete、enter、Alt+M
      * @param event
@@ -152,10 +157,14 @@ protected:
 
     TreeHeaderView *m_pHeaderView; // 表头
     QVector<QString> m_vPre; // 记录上层文件夹名，用于返回上一级焦点设置
+    QPointF m_lastTouchBeginPos; // 触摸屏点击位置
+    bool m_isPressed = false; // 触摸按下标志  true: 按下; false: 松开
+    QTime m_lastTouchTime;
 
 private:
     Qt::FocusReason m_reson;
     QItemSelectionModel *m_selectionModel =  nullptr;
+
 };
 
 #endif // DATATREEVIEW_H

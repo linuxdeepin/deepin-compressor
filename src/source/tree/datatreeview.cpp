@@ -32,6 +32,7 @@
 #include <QHeaderView>
 #include <QMimeData>
 #include <QDebug>
+#include <QScrollBar>
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -166,6 +167,7 @@ void DataTreeView::resetLevel()
 
 void DataTreeView::initUI()
 {
+    setAttribute(Qt::WA_AcceptTouchEvents); // 设置接收触摸屏事件
     setObjectName("TableViewFile");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setIconSize(QSize(24, 24));
@@ -348,6 +350,72 @@ void DataTreeView::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
     resizeColumnWidth();
+}
+
+bool DataTreeView::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::TouchBegin: {
+
+        QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+
+        if (!m_isPressed && touchEvent && touchEvent->device() && touchEvent->device()->type() == QTouchDevice::TouchScreen && touchEvent->touchPointStates() == Qt::TouchPointPressed) {
+
+            QList<QTouchEvent::TouchPoint> points = touchEvent->touchPoints();
+            //dell触摸屏幕只有一个touchpoint 但却能捕获到pinchevent缩放手势?
+            if (points.count() == 1) {
+                QTouchEvent::TouchPoint p = points.at(0);
+                m_lastTouchBeginPos = p.pos();
+                m_lastTouchBeginPos.setY(m_lastTouchBeginPos.y() - m_pHeaderView->height());
+                m_lastTouchTime = QTime::currentTime();
+                m_isPressed = true;
+
+            }
+        }
+        break;
+
+    }
+    default:
+        break;
+    }
+    return  DTreeView::event(event);
+}
+
+void DataTreeView::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_isPressed = false;
+    DTreeView::mouseReleaseEvent(event);
+}
+
+void DataTreeView::mouseMoveEvent(QMouseEvent *event)
+{
+    if (m_isPressed) {
+        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
+        int touchmindistance = 2;
+        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
+        int touchMaxDistance = 30;
+        event->accept();
+        double horiDelta = event->pos().x() - m_lastTouchBeginPos.x();
+        double vertDelta = event->pos().y() - m_lastTouchBeginPos.y();
+        qInfo() << "event->pos()" << event->pos() << "m_pHeaderView->height()" << m_pHeaderView->height();
+        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
+            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
+        }
+
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < m_pHeaderView->height() + 2 && qAbs(vertDelta) > m_pHeaderView->height() - 2 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
+            double svalue = 1;
+            if (vertDelta > 0) {
+                //svalue = svalue;
+            } else if (vertDelta < 0) {
+                svalue = -svalue;
+            } else {
+                svalue = 0;
+            }
+            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
+        }
+        m_lastTouchBeginPos = event->pos();
+        return;
+    }
 }
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)

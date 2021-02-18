@@ -104,7 +104,6 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
     /**
      * @brief mouseDoubleClickEvent 鼠标双击事件
      * @param event 双击事件

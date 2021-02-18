@@ -42,6 +42,7 @@
 #include <QApplication>
 #include <QMimeData>
 #include <QItemSelectionModel>
+#include <QScrollBar>
 
 UnCompressView::UnCompressView(QWidget *parent)
     : DataTreeView(parent)
@@ -99,8 +100,30 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
     DataTreeView::mousePressEvent(event);
 }
 
-void UnCompressView::mouseMoveEvent(QMouseEvent *event)
+void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 {
+
+    if (m_isPressed) {
+        //最小距离为防误触和双向滑动时,只触发横向或者纵向的
+        int touchmindistance = 2;
+        //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
+        int touchMaxDistance = 30;
+        event->accept();
+        double horiDelta = event->pos().x() - m_lastTouchBeginPos.x();
+        double vertDelta = event->pos().y() - m_lastTouchBeginPos.y();
+
+        if (qAbs(horiDelta) > touchmindistance && qAbs(horiDelta) < touchMaxDistance) {
+            horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
+        }
+
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < m_pHeaderView->height() + 2 && qAbs(vertDelta) > m_pHeaderView->height() - 2 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {           
+            verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
+        }
+        m_lastTouchBeginPos = event->pos();
+        return;
+    }
+
+
     QModelIndexList listSel = selectedIndexes();
 
     if (listSel.size() < 1) {
@@ -148,11 +171,6 @@ void UnCompressView::mouseMoveEvent(QMouseEvent *event)
 
     m_strSelUnCompressPath.clear();
     // DataTreeView::mouseMoveEvent(event);
-}
-
-void UnCompressView::mouseReleaseEvent(QMouseEvent *event)
-{
-    DataTreeView::mouseReleaseEvent(event);
 }
 
 void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
