@@ -49,6 +49,7 @@ class DDesktopServicesThread;
 class ArchiveManager;
 class OpenFileWatcher;
 class QFileSystemWatcher;
+class CalculateSizeThread;
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -501,6 +502,11 @@ private Q_SLOTS:
      */
     void slotShowShortcutTip();
 
+    /**
+     * @brief slotFinishCalculateSize 计算文件大小后开始追加流程
+     */
+    void slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry);
+
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
     bool m_initFlag = false;        // 界面是否初始化标志
@@ -551,7 +557,7 @@ private:
     QString m_fileWriteErrorName;     // 创建失败的文件名
 
     StartupType m_eStartupType = StartupType::ST_Normal;      // 操作方式
-
+    CalculateSizeThread *m_mywork = nullptr; // 计算文件(夹)大小线程
     // 适配arm平台
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;

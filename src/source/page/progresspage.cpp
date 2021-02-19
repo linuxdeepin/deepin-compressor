@@ -105,7 +105,7 @@ void ProgressPage::setProgress(double dPercent)
     calSpeedAndRemainingTime(dSpeed, qRemainingTime);
     m_timer.restart();      // 重启定时器
 
-    // 显示速度个剩余时间
+    // 显示速度和剩余时间
     displaySpeedAndTime(dSpeed, qRemainingTime);
 }
 
@@ -152,6 +152,12 @@ void ProgressPage::resetProgress()
 void ProgressPage::restartTimer()
 {
     m_timer.restart();
+}
+
+void ProgressPage::setPushButtonCheckable(bool a, bool b)
+{
+    m_pCancelBtn->setEnabled(a); // 取消按钮
+    m_pPauseContinueButton->setEnabled(b); // 暂停继续按钮
 }
 
 void ProgressPage::initUI()

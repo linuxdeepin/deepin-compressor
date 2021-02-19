@@ -88,6 +88,10 @@ public:
      */
     void restartTimer();
 
+    /**
+     * @brief setPushButtonCheckable 设置按钮是否可点击
+     */
+    void setPushButtonCheckable(bool a, bool b);
 
 private:
     /**

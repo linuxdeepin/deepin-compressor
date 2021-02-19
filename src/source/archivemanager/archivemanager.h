@@ -62,10 +62,11 @@ public:
     bool loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto);
 
     /**
-     * @brief addFiles              向压缩包中添加文件
-     * @param strArchiveFullPath    压缩包全路径
-     * @param listSelEntry          压缩参数
-     * @return                      是否调用成功
+     * @brief addFiles 向压缩包中添加文件
+     * @param strArchiveFullPath 压缩包全路径
+     * @param listAddEntry 添加的文件(夹)
+     * @param stOptions 压缩参数
+     * @return 是否调用成功
      */
     bool addFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions);
 

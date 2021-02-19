@@ -43,6 +43,7 @@
 #include "compressview.h"
 #include "uncompressview.h"
 #include "uitools.h"
+#include "calculatesizethread.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -63,7 +64,7 @@
 #include <QFormLayout>
 #include <QShortcut>
 
-static QMutex mutex;
+static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
@@ -107,6 +108,10 @@ MainWindow::~MainWindow()
     p.execute(command, args);
     p.waitForFinished();
 
+    if (nullptr != m_mywork && m_mywork->isRunning()) {
+        m_mywork->set_thread_stop(true); // 结束计算大小线程
+        m_mywork->wait(); //必须等待线程结束
+    }
     qInfo() << "应用正常退出";
 }
 
@@ -371,6 +376,9 @@ void MainWindow::refreshPage()
 
 qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 {
+    QElapsedTimer time1;
+    time1.start();
+
     m_stCompressParameter.qSize = 0;
 
     foreach (QString file, files) {
@@ -391,6 +399,7 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 
     // 等待线程池结束
     QThreadPool::globalInstance()->waitForDone();
+    qInfo() << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_stCompressParameter.qSize);
 
     return m_stCompressParameter.qSize;
 }
@@ -1832,28 +1841,18 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
         listEntry.push_back(stFileEntry);
     }
 
-    // 调用添加文件接口
-    if (ArchiveManager::get_instance()->addFiles(strArchiveFullPath, listEntry, options)) {
-        // 切换进度界面
-        m_pProgressPage->setProgressType(PT_CompressAdd);
-        m_pProgressPage->setArchiveName(strArchiveFullPath);
+    // 切换进度界面
+    m_pProgressPage->setProgressType(PT_CompressAdd);
+    m_pProgressPage->setArchiveName(strArchiveFullPath);
+    m_operationtype = Operation_Add;
+    m_ePageID = PI_AddCompressProgress;
+    m_pProgressPage->setPushButtonCheckable(false, false);
+    refreshPage();
 
-        m_operationtype = Operation_Create;
-        m_ePageID = PI_AddCompressProgress;
-        refreshPage();
-
-        // 设置更新选项
-        m_stUpdateOptions.reset();
-        m_stUpdateOptions.strParentPath = options.strDestination;
-        m_stUpdateOptions.eType = UpdateOptions::Add;
-        ConstructAddOptions(listFiles);
-
-        m_pProgressPage->setTotalSize(m_stUpdateOptions.qSize);
-        m_pProgressPage->restartTimer();
-    } else {
-        // 无可用插件
-        showErrorMessage(FI_Add, EI_NoPlugin);
-    }
+    // 计算大小
+    m_mywork = new CalculateSizeThread(listFiles, m_stUnCompressParameter.strFullPath, listEntry, options, this);
+    connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
+    m_mywork->start();
 }
 
 void MainWindow::resetMainwindow()
@@ -2537,33 +2536,25 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         stFileEntry.strFullPath = strFile;
         if (!QFileInfo(strFile).isDir()) {
             stFileEntry.qSize = QFileInfo(strFile).size(); // 原文件大小，供libarchive追加进度使用
+        } else {
+            stFileEntry.isDirectory = true;
         }
 
         listEntry.push_back(stFileEntry);
     }
 
-    // 调用添加文件接口
-    if (ArchiveManager::get_instance()->addFiles(transFile, listEntry, options)) {
-        // 切换进度界面
-        m_pProgressPage->setProgressType(PT_CompressAdd);
-        m_pProgressPage->setArchiveName(archiveName);
+    // 切换进度界面
+    m_pProgressPage->setProgressType(PT_CompressAdd);
+    m_pProgressPage->setArchiveName(archiveName);
+    m_operationtype = Operation_Add;
+    m_ePageID = PI_AddCompressProgress;
+    m_pProgressPage->setPushButtonCheckable(false, false);
 
-        m_operationtype = Operation_Add;
-        m_ePageID = PI_AddCompressProgress;
-//            refreshPage();
+    // 计算大小
+    m_mywork = new CalculateSizeThread(listFiles, transFile, listEntry, options/*, this*/);
+    connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
+    m_mywork->start();
 
-        // 设置更新选项
-        m_stUpdateOptions.reset();
-        m_stUpdateOptions.strParentPath = options.strDestination;
-        m_stUpdateOptions.eType = UpdateOptions::Add;
-        ConstructAddOptions(listFiles);
-
-        m_pProgressPage->setTotalSize(m_stUpdateOptions.qSize);
-        m_pProgressPage->restartTimer();
-    } else {
-        // 无可用插件
-        showErrorMessage(FI_Add, EI_NoPlugin);
-    }
     return true;
 }
 
@@ -3135,4 +3126,32 @@ void MainWindow::slotShowShortcutTip()
     shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+}
+
+void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry)
+{
+    // 调用添加文件接口
+    if (ArchiveManager::get_instance()->addFiles(strArchiveFullPath, listAddEntry, stOptions)) {
+        // 切换进度界面
+        m_pProgressPage->setTotalSize(size);
+        m_pProgressPage->setPushButtonCheckable(true, true);
+        m_pProgressPage->setProgressType(PT_CompressAdd);
+        m_pProgressPage->setArchiveName(m_stUnCompressParameter.strFullPath);
+        m_pProgressPage->restartTimer();
+
+        // 设置更新选项
+        m_stUpdateOptions.reset();
+        m_stUpdateOptions.qSize = size;
+        m_stUpdateOptions.listEntry = listEntry;
+        m_stUpdateOptions.strParentPath = stOptions.strDestination;
+        m_stUpdateOptions.eType = UpdateOptions::Add;
+    } else {
+        // 无可用插件
+        showErrorMessage(FI_Add, EI_NoPlugin);
+    }
+
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
 }
