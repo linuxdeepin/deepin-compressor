@@ -38,7 +38,7 @@
 class TestUiTools : public ::testing::Test
 {
 public:
-    TestUiTools() {}
+    TestUiTools(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

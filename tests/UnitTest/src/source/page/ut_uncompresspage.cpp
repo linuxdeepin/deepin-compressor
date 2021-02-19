@@ -34,7 +34,7 @@
 class TestUnCompressPage : public ::testing::Test
 {
 public:
-    TestUnCompressPage() {}
+    TestUnCompressPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

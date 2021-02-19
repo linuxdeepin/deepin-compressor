@@ -27,7 +27,7 @@
 class TestDesktopFile : public ::testing::Test
 {
 public:
-    TestDesktopFile() {}
+    TestDesktopFile(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

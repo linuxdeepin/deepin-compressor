@@ -38,7 +38,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestLibminizipPluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibminizipPluginFactory() {}
+    TestLibminizipPluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -58,7 +58,7 @@ protected:
 class TestLibminizipPlugin : public QObject, public ::testing::Test
 {
 public:
-    TestLibminizipPlugin() {}
+    TestLibminizipPlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -243,7 +243,7 @@ TEST_F(TestLibminizipPlugin, testextractEntry)
     ErrorType eType = ET_NoError;
     if (unzGetCurrentFileInfo(zipfile, &file_info, filename, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK) {
         unzClose(zipfile);
-        eType = ET_FileWriteError;
+//        eType = ET_FileWriteError;
     }
 
     ExtractionOptions options;

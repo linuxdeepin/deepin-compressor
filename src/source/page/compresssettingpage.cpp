@@ -491,7 +491,7 @@ bool CompressSettingPage::checkCompressOptionValid()
         return false;
     }
 
-    bool bResult;
+    bool bResult = false;
     for (int i = 0; i < m_listFiles.count(); i++) {
         QFileInfo file(m_listFiles.at(i));
         if (!file.exists()) {  // 待压缩文件已经不存在
@@ -518,7 +518,6 @@ bool CompressSettingPage::checkCompressOptionValid()
 
 bool CompressSettingPage::checkFile(const QString &path)
 {
-    bool bResult = false;
     QFileInfo fileInfo(path);
 
     if (!fileInfo.exists()) {  // 待压缩文件已经不存在
@@ -541,8 +540,9 @@ bool CompressSettingPage::checkFile(const QString &path)
         // 遍历文件夹下的子文件夹
         QFileInfoList listInfo = dir.entryInfoList(QDir::AllEntries | QDir::System
                                                    | QDir::NoDotAndDotDot | QDir::Hidden);
+
         foreach (QFileInfo subInfo, listInfo) {
-            bResult = checkFile(subInfo.absoluteFilePath());
+            bool bResult = checkFile(subInfo.absoluteFilePath());
             if (!bResult)
                 return bResult;
         }
@@ -553,7 +553,7 @@ bool CompressSettingPage::checkFile(const QString &path)
     return true;
 }
 
-int CompressSettingPage::showWarningDialog(const QString &msg, const QString &strTitle)
+int CompressSettingPage::showWarningDialog(const QString &msg)
 {
     // 使用封装好的提示对话框
     TipDialog dialog(this);

@@ -32,7 +32,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestReadWriteLibarchivePluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestReadWriteLibarchivePluginFactory() {}
+    TestReadWriteLibarchivePluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,7 +52,7 @@ protected:
 class TestReadWriteLibarchivePlugin : public QObject, public ::testing::Test
 {
 public:
-    TestReadWriteLibarchivePlugin() {}
+    TestReadWriteLibarchivePlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

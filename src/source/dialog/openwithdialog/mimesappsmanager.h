@@ -50,7 +50,7 @@ class MimeAppsWorker: public QObject
     Q_OBJECT
 
 public:
-    MimeAppsWorker(QObject *parent = nullptr);
+    explicit MimeAppsWorker(QObject *parent = nullptr);
     ~MimeAppsWorker();
 
     void initConnect();
@@ -75,7 +75,7 @@ class MimesAppsManager: public QObject
     Q_OBJECT
 
 public:
-    MimesAppsManager(QObject *parent = 0);
+    explicit MimesAppsManager(QObject *parent = nullptr);
     ~MimesAppsManager();
 
     static QStringList DesktopFiles;

@@ -40,8 +40,9 @@ class KPluginLoaderPrivate
 {
     Q_DECLARE_PUBLIC(KPluginLoader)
 protected:
-    KPluginLoaderPrivate(const QString &libname)
-        : name(libname)
+    explicit KPluginLoaderPrivate(const QString &libname)
+        : q_ptr(nullptr)
+        , name(libname)
         , loader(nullptr)
         , pluginVersion(~0U)
         , pluginVersionResolved(false)
@@ -270,8 +271,8 @@ void KPluginLoader::forEachPlugin(const QString &directory, std::function<void(c
 QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
-    qInfo() << "1111111111111111111111111111111111" << directory;
-    forEachPlugin(directory, [&](const QString &pluginPath) {
+
+    forEachPlugin(directory, [&](const QString & pluginPath) {
         KPluginMetaData metadata(pluginPath);
         if (!metadata.isValid()) {
             return;
@@ -289,7 +290,7 @@ QVector<KPluginMetaData> KPluginLoader::findPlugins(const QString &directory, st
 
 QVector<KPluginMetaData> KPluginLoader::findPluginsById(const QString &directory, const QString &pluginId)
 {
-    auto filter = [&pluginId](const KPluginMetaData &md) -> bool {
+    auto filter = [&pluginId](const KPluginMetaData & md) -> bool {
         return md.pluginId() == pluginId;
     };
 

@@ -29,7 +29,7 @@
 class TestHomePage : public ::testing::Test
 {
 public:
-    TestHomePage() {}
+    TestHomePage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

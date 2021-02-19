@@ -140,13 +140,13 @@ Q_DECLARE_METATYPE(ArchiveData)
 // 压缩选项
 struct CompressOptions {
     CompressOptions()
+        : qTotalSize(0)
     {
         bEncryption = false;
         bHeaderEncryption = false;
         bSplit = false;
         iVolumeSize = 0;
         iCompressionLevel = -1;
-        qTotalSize = 0;
         bTar_7z = false;
     }
 
@@ -167,9 +167,9 @@ Q_DECLARE_METATYPE(CompressOptions)
 // 解压选项
 struct ExtractionOptions {
     ExtractionOptions()
+        : qSize(0)
+        , qComressSize(0)
     {
-        qSize = 0;
-        qComressSize = 0;
         bExistList = true;
         bAllExtract = false;
         bBatchExtract = false;

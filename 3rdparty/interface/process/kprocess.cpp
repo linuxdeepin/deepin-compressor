@@ -57,7 +57,7 @@ void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
         WriteFile(h, buf.data(), buf.size(), &wr, 0);
     }
 #else
-    fwrite(buf.data(), 1, buf.size(), (FILE*)fd);
+    fwrite(buf.data(), 1, buf.size(), (FILE *)fd);
 #endif
 #else
     int off = 0;
@@ -223,7 +223,7 @@ void KProcess::setProgram(const QStringList &argv)
 {
     Q_D(KProcess);
 
-    Q_ASSERT( !argv.isEmpty() );
+    Q_ASSERT(!argv.isEmpty());
     d->args = argv;
     d->prog = d->args.takeFirst();
 #ifdef Q_OS_WIN
@@ -271,7 +271,7 @@ void KProcess::setShellCommand(const QString &cmd)
 
     KShell::Errors err;
     d->args = KShell::splitArgs(
-            cmd, KShell::AbortOnMeta | KShell::TildeExpand, &err);
+                  cmd, KShell::AbortOnMeta | KShell::TildeExpand, &err);
     if (err == KShell::NoError && !d->args.isEmpty()) {
         d->prog = KStandardDirs::findExe(d->args[0]);
         if (!d->prog.isEmpty()) {

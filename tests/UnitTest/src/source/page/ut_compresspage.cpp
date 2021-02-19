@@ -31,7 +31,7 @@
 class TestCompressPage : public ::testing::Test
 {
 public:
-    TestCompressPage() {}
+    TestCompressPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

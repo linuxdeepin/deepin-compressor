@@ -34,10 +34,8 @@
  * @param fileName
  */
 DesktopFile::DesktopFile(const QString &fileName)
+    : m_fileName(fileName)
 {
-    // Store file name
-    m_fileName = fileName;
-
     // File validity
     if (m_fileName.isEmpty() || !QFile::exists(fileName)) {
         return;

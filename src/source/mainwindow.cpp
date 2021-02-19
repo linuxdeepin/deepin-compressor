@@ -68,9 +68,8 @@ static QMutex mutex; // 静态全局变量只在定义该变量的源文件内�
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
+    , m_strProcessID(QString::number(QCoreApplication::applicationPid()))   // 获取应用进程号
 {
-    m_strProcessID = QString::number(QCoreApplication::applicationPid());   // 获取应用进程号
-
     setWindowTitle(tr("Archive Manager"));
 
     // 先构建初始界面

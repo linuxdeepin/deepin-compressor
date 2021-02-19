@@ -151,9 +151,9 @@ OpenWithDialogListSparerItem::~OpenWithDialogListSparerItem()
 
 OpenWithDialog::OpenWithDialog(const QString &strFileName, QWidget *parent)
     : DAbstractDialog(parent)
+    , m_strFileName(strFileName)
 {
     m_showType = OpenType;
-    m_strFileName = strFileName;
     setWindowFlags(windowFlags()
                    & ~ Qt::WindowMaximizeButtonHint
                    & ~ Qt::WindowMinimizeButtonHint

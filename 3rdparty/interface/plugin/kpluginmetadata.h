@@ -105,13 +105,13 @@ public:
      * Reads the plugin metadata from a KPluginLoader instance. You must call KPluginLoader::setFileName()
      * or use the appropriate constructor on @p loader before calling this.
      */
-    KPluginMetaData(const KPluginLoader &loader);
+    explicit KPluginMetaData(const KPluginLoader &loader);
 
     /**
      * Reads the plugin metadata from a QPluginLoader instance. You must call QPluginLoader::setFileName()
      * or use the appropriate constructor on @p loader before calling this.
      */
-    KPluginMetaData(const QPluginLoader &loader);
+    explicit KPluginMetaData(const QPluginLoader &loader);
 
     /**
      * Reads the plugin metadata from a plugin or .desktop which can be loaded from @p file.
@@ -128,7 +128,7 @@ public:
      * @see QPluginLoader::setFileName()
      * @see KPluginMetaData::fromDesktopFile()
      */
-    KPluginMetaData(const QString &file);
+    explicit KPluginMetaData(const QString &file);
 
     /**
      * Creates a KPluginMetaData from a QJsonObject holding the metadata and a file name

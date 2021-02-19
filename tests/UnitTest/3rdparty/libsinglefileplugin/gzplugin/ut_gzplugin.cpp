@@ -32,7 +32,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestLibGzipInterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibGzipInterfaceFactory() {}
+    TestLibGzipInterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,7 +52,7 @@ protected:
 class TestLibGzipInterface : public QObject, public ::testing::Test
 {
 public:
-    TestLibGzipInterface() {}
+    TestLibGzipInterface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

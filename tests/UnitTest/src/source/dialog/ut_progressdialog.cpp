@@ -28,7 +28,7 @@
 class TestProgressDialog : public ::testing::Test
 {
 public:
-    TestProgressDialog() {}
+    TestProgressDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -115,7 +115,7 @@ TEST_F(TestProgressDialog, slotextractpress2)
 class TestCommentProgressDialog : public ::testing::Test
 {
 public:
-    TestCommentProgressDialog() {}
+    TestCommentProgressDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

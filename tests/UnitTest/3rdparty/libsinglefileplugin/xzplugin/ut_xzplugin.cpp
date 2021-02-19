@@ -32,7 +32,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestLibXzInterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibXzInterfaceFactory() {}
+    TestLibXzInterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,7 +52,7 @@ protected:
 class TestLibXzInterface : public QObject, public ::testing::Test
 {
 public:
-    TestLibXzInterface() {}
+    TestLibXzInterface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

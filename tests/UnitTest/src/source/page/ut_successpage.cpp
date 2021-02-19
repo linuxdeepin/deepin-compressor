@@ -29,7 +29,7 @@
 class TestSuccessPage : public ::testing::Test
 {
 public:
-    TestSuccessPage() {}
+    TestSuccessPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

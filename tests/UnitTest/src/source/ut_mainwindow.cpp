@@ -46,7 +46,7 @@ DWIDGET_USE_NAMESPACE
 class TestMainWindow : public ::testing::Test
 {
 public:
-    TestMainWindow() {}
+    TestMainWindow(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -636,10 +636,10 @@ TEST_F(TestMainWindow, testrightExtract2Path)
 
 }
 
-QString archiveFullPath_stub()
-{
-    return QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath() + "/test.tar";
-}
+//QString archiveFullPath_stub()
+//{
+//    return QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath() + "/test.tar";
+//}
 
 bool extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {

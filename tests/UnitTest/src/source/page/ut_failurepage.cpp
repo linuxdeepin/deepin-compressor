@@ -29,7 +29,7 @@
 class TestFailurePage : public ::testing::Test
 {
 public:
-    TestFailurePage() {}
+    TestFailurePage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

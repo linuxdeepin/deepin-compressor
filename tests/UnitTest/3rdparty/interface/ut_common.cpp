@@ -29,7 +29,7 @@
 class TestCommon : public ::testing::Test
 {
 public:
-    TestCommon() {}
+    TestCommon(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

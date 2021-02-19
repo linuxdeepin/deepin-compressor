@@ -178,7 +178,7 @@ private:
      * @param strTitle
      * @return
      */
-    int showWarningDialog(const QString &msg, const QString &strTitle = "");
+    int showWarningDialog(const QString &msg);
 
     void setDefaultName(QString name);
 

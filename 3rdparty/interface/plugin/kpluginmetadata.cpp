@@ -90,27 +90,30 @@ KPluginMetaData::KPluginMetaData(const QString &file)
 }
 
 KPluginMetaData::KPluginMetaData(const QPluginLoader &loader)
+    : m_metaData(loader.metaData().value(QStringLiteral("MetaData")).toObject())
+    , m_fileName(QFileInfo(loader.fileName()).absoluteFilePath())
 {
-    m_fileName = QFileInfo(loader.fileName()).absoluteFilePath();
-    m_metaData = loader.metaData().value(QStringLiteral("MetaData")).toObject();
+
 }
 
 KPluginMetaData::KPluginMetaData(const KPluginLoader &loader)
+    : m_metaData(loader.metaData().value(QStringLiteral("MetaData")).toObject())
+    , m_fileName(QFileInfo(loader.fileName()).absoluteFilePath())
 {
-    m_fileName = QFileInfo(loader.fileName()).absoluteFilePath();
-    m_metaData = loader.metaData().value(QStringLiteral("MetaData")).toObject();
+
 }
 
 KPluginMetaData::KPluginMetaData(const QJsonObject &metaData, const QString &file)
+    : m_metaData(metaData)
+    , m_fileName(file)
 {
-    m_fileName = file;
-    m_metaData = metaData;
+
 }
 
 KPluginMetaData::KPluginMetaData(const QJsonObject &metaData, const QString &pluginFile, const QString &metaDataFile)
+    : m_metaData(metaData)
+    , m_fileName(pluginFile)
 {
-    m_fileName = pluginFile;
-    m_metaData = metaData;
     if (!metaDataFile.isEmpty()) {
         d = new KPluginMetaDataPrivate;
         d->metaDataFileName = metaDataFile;

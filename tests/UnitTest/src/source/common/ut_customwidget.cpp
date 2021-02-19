@@ -28,7 +28,7 @@
 class TestCustomSuggestButton : public ::testing::Test
 {
 public:
-    TestCustomSuggestButton() {}
+    TestCustomSuggestButton(): m_tester(nullptr), m_tester1(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,7 +52,7 @@ protected:
 class TestCustomCombobox : public ::testing::Test
 {
 public:
-    TestCustomCombobox() {}
+    TestCustomCombobox(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -73,7 +73,7 @@ protected:
 class TestCustomPushButton : public ::testing::Test
 {
 public:
-    TestCustomPushButton() {}
+    TestCustomPushButton(): m_tester(nullptr), m_tester1(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -97,7 +97,7 @@ protected:
 class TestCustomSwitchButton : public ::testing::Test
 {
 public:
-    TestCustomSwitchButton() {}
+    TestCustomSwitchButton(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -118,7 +118,7 @@ protected:
 class TestCustomCheckBox : public ::testing::Test
 {
 public:
-    TestCustomCheckBox() {}
+    TestCustomCheckBox(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -139,7 +139,7 @@ protected:
 class TestCustomCommandLinkButton : public ::testing::Test
 {
 public:
-    TestCustomCommandLinkButton() {}
+    TestCustomCommandLinkButton(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

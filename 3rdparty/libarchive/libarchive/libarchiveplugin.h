@@ -42,7 +42,7 @@
 class HandleWorkingDir
 {
 public:
-    HandleWorkingDir(QString *oldWorkingDir);
+    explicit HandleWorkingDir(QString *oldWorkingDir);
     void change(const QString &newWorkingDir);
     ~HandleWorkingDir();
 private:

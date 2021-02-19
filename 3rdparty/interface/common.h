@@ -8,7 +8,7 @@ class Common: public QObject
 {
     Q_OBJECT
 public:
-    Common(QObject *parent = nullptr)
+    explicit Common(QObject *parent = nullptr)
         : QObject(parent) {}
 
 public:
@@ -20,9 +20,5 @@ public:
 
     QByteArray m_codecStr;
 };
-//QString  trans2uft8(const char *str);
-//QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-//int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
-//QByteArray textCodecDetect(const QByteArray &data, const QString &fileName);
 
 #endif

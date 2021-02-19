@@ -35,7 +35,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestLibBzip2InterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibBzip2InterfaceFactory() {}
+    TestLibBzip2InterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -55,7 +55,7 @@ protected:
 class TestLibBzip2Interface : public QObject, public ::testing::Test
 {
 public:
-    TestLibBzip2Interface() {}
+    TestLibBzip2Interface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

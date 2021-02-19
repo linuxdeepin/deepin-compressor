@@ -29,7 +29,7 @@
 class TestArchiveManager : public ::testing::Test
 {
 public:
-    TestArchiveManager() {}
+    TestArchiveManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

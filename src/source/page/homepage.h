@@ -38,7 +38,7 @@ class HomePage : public DWidget
     Q_OBJECT
 
 public:
-    HomePage(QWidget *parent = nullptr);
+    explicit HomePage(QWidget *parent = nullptr);
     ~HomePage() override;
 
 

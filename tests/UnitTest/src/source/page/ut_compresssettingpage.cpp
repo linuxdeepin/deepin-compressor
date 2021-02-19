@@ -43,7 +43,7 @@
 class TestTypeLabel : public ::testing::Test
 {
 public:
-    TestTypeLabel() {}
+    TestTypeLabel(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -88,7 +88,7 @@ TEST_F(TestTypeLabel, focusOutEvent)
 class TestCompressSettingPage : public ::testing::Test
 {
 public:
-    TestCompressSettingPage() {}
+    TestCompressSettingPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

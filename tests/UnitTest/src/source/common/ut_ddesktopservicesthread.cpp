@@ -30,7 +30,7 @@
 class TestDDesktopServicesThread : public ::testing::Test
 {
 public:
-    TestDDesktopServicesThread() {}
+    TestDDesktopServicesThread(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

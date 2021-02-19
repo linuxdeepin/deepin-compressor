@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestReadOnlyLibarchivePluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestReadOnlyLibarchivePluginFactory() {}
+    TestReadOnlyLibarchivePluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -56,7 +56,7 @@ protected:
 class TestReadOnlyLibarchivePlugin : public QObject, public ::testing::Test
 {
 public:
-    TestReadOnlyLibarchivePlugin() {}
+    TestReadOnlyLibarchivePlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -327,10 +327,10 @@ TEST_F(TestReadOnlyLibarchivePlugin, testupdateArchiveData)
     m_tester->list();
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     int mapFileEntrysizeold = stArchiveData.mapFileEntry.size();
-    int listRootEntrysizeold = stArchiveData.listRootEntry.size();
+//    int listRootEntrysizeold = stArchiveData.listRootEntry.size();
     ASSERT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
     int mapFileEntrysizenew = stArchiveData.mapFileEntry.size();
-    int listRootEntrysizenew = stArchiveData.listRootEntry.size();
+//    int listRootEntrysizenew = stArchiveData.listRootEntry.size();
     ASSERT_EQ(mapFileEntrysizeold, mapFileEntrysizenew + 1);
 }
 

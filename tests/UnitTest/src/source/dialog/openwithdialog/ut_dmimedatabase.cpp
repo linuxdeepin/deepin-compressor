@@ -28,7 +28,7 @@
 class TestDMimeDatabase : public ::testing::Test
 {
 public:
-    TestDMimeDatabase() {}
+    TestDMimeDatabase(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

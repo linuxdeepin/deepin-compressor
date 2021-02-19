@@ -31,7 +31,7 @@ class ProcessOpenThread : public QThread
 {
     Q_OBJECT
 public:
-    ProcessOpenThread(QObject *parent = nullptr);
+    explicit ProcessOpenThread(QObject *parent = nullptr);
 
     /**
      * @brief setProgramPath    设置应用程序

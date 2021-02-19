@@ -35,6 +35,7 @@ protected:
 
     KPluginFactoryPrivate()
         : catalogInitialized(false)
+        , q_ptr(nullptr)
     {
     }
     ~KPluginFactoryPrivate()

@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 class TestLibzipPluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibzipPluginFactory() {}
+    TestLibzipPluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -56,7 +56,7 @@ protected:
 class TestLibzipPlugin : public QObject, public ::testing::Test
 {
 public:
-    TestLibzipPlugin() {}
+    TestLibzipPlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

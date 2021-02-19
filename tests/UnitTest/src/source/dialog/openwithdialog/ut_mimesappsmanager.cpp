@@ -31,7 +31,7 @@
 class TestMimeAppsWorker : public ::testing::Test
 {
 public:
-    TestMimeAppsWorker() {}
+    TestMimeAppsWorker(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -51,7 +51,7 @@ protected:
 class TestMimesAppsManager : public ::testing::Test
 {
 public:
-    TestMimesAppsManager() {}
+    TestMimesAppsManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

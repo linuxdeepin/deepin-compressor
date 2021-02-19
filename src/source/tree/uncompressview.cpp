@@ -116,7 +116,7 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
             horizontalScrollBar()->setValue(static_cast<int>(horizontalScrollBar()->value() - horiDelta));
         }
 
-        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < m_pHeaderView->height() + 2 && qAbs(vertDelta) > m_pHeaderView->height() - 2 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {           
+        if (qAbs(vertDelta) > touchmindistance && !(qAbs(vertDelta) < m_pHeaderView->height() + 2 && qAbs(vertDelta) > m_pHeaderView->height() - 2 && m_lastTouchTime.msecsTo(QTime::currentTime()) < 100)) {
             verticalScrollBar()->setValue(static_cast<int>(verticalScrollBar()->value() - vertDelta));
         }
         m_lastTouchBeginPos = event->pos();
@@ -330,10 +330,10 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
 
     // 追加选项判断
     QString strPassword;
-    int iMode = showEncryptionDialog(strPassword);
+    int iResult = showEncryptionDialog(strPassword);
 
     // 点击取消按钮时，不进行追加操作
-    if (iMode != DDialog::Accepted) {
+    if (iResult != DDialog::Accepted) {
         return;
     }
 
@@ -663,13 +663,12 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
             openMenu.setEnabled(false);
         } else {
             // 右键-打开方式选项
-            QAction *pAction = nullptr;
             // 获取支持的打开方式列表
             QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
             // 添加菜单选项
             for (int i = 0; i < listOpenType.count(); ++i) {
-                pAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
-                pAction->setData(listOpenType[i].getExec());
+                QAction *pOpenAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+                pOpenAction->setData(listOpenType[i].getExec());
             }
         }
 

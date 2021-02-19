@@ -95,6 +95,7 @@ enum Page_ID {
 // 压缩参数
 struct CompressParameter {
     CompressParameter()
+        : qSize(0)
     {
         bEncryption = false;
         bHeaderEncryption = false;
@@ -102,7 +103,6 @@ struct CompressParameter {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
-        qSize = 0;
     }
 
     QString strMimeType;    // 格式类型（application/x-tar）
@@ -132,12 +132,12 @@ struct UnCompressParameter {
     };
 
     UnCompressParameter()
+        : qSize(0)
     {
         eSplitVolume = ST_No;
         bMultiplePassword = false;
         bModifiable = false;
         bCommentModifiable = false;
-        qSize = 0;
         listExractFiles.clear();
         listBatchFiles.clear();
         bBatch = false;

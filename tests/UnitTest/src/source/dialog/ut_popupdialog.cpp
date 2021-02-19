@@ -28,7 +28,7 @@
 class TestTipDialog : public ::testing::Test
 {
 public:
-    TestTipDialog() {}
+    TestTipDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -58,7 +58,7 @@ TEST_F(TestTipDialog, showDialog)
 class TestSimpleQueryDialog : public ::testing::Test
 {
 public:
-    TestSimpleQueryDialog() {}
+    TestSimpleQueryDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -88,7 +88,7 @@ TEST_F(TestSimpleQueryDialog, showDialog)
 class TestOverwriteQueryDialog : public ::testing::Test
 {
 public:
-    TestOverwriteQueryDialog() {}
+    TestOverwriteQueryDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -136,7 +136,7 @@ TEST_F(TestOverwriteQueryDialog, getApplyAll)
 class TestConvertDialog : public ::testing::Test
 {
 public:
-    TestConvertDialog() {}
+    TestConvertDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

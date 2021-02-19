@@ -246,11 +246,10 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 
     QString strResult = strPath;
     QString strTempPath = strPath;
-    int iIndex = 0;
 
     // 根据层级截取全路径字符串，避免目录从文件系统根目录开始
     for (int i = 0; i < m_iLevel; ++i) {
-        iIndex = strTempPath.lastIndexOf(QDir::separator());
+        int iIndex = strTempPath.lastIndexOf(QDir::separator());
         strTempPath = strTempPath.left(iIndex);
     }
     strTempPath += QDir::separator();

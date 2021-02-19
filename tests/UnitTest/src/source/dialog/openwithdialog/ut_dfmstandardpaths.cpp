@@ -28,7 +28,7 @@
 class TestDFMStandardPaths : public ::testing::Test
 {
 public:
-    TestDFMStandardPaths() {}
+    TestDFMStandardPaths(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()

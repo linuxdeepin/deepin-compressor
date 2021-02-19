@@ -33,7 +33,7 @@ class OpenFileWatcher: public QObject
 {
     Q_OBJECT
 public:
-    OpenFileWatcher(QObject *parent);
+    explicit OpenFileWatcher(QObject *parent);
     ~OpenFileWatcher();
 
     /**

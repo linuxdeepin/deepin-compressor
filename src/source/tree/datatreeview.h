@@ -39,7 +39,7 @@ class TreeHeaderView;
 class StyleTreeViewDelegate : public QStyledItemDelegate
 {
 public:
-    StyleTreeViewDelegate(QObject *parent = nullptr);
+    explicit StyleTreeViewDelegate(QObject *parent = nullptr);
     ~StyleTreeViewDelegate() override;
 
     // QAbstractItemDelegate interface

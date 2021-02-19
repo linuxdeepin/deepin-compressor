@@ -61,7 +61,7 @@ class UiTools : public QObject
     Q_OBJECT
 
 public:
-    UiTools(QObject *parent = nullptr);
+    explicit UiTools(QObject *parent = nullptr);
     ~UiTools();
 
     enum AssignPluginType {
