@@ -22,6 +22,7 @@
 #include "datatreeview.h"
 #include "treeheaderview.h"
 #include "datamodel.h"
+#include "uitools.h"
 
 #include <DApplication>
 #include <DStyle>
@@ -310,6 +311,14 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
     if (!mime->hasUrls()) {
         e->ignore();
     } else {
+        // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
+        for (const auto &url : mime->urls()) {
+            if (!UiTools::isLocalDeviceFile(url.toLocalFile())) {
+                e->ignore();
+                return;
+            }
+        }
+
         e->accept();
     }
 }

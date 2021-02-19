@@ -111,6 +111,15 @@ void HomePage::dragEnterEvent(QDragEnterEvent *e)
         e->ignore();
     }
 
+    // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
+    for (const auto &url : mime->urls()) {
+        if (!UiTools::isLocalDeviceFile(url.toLocalFile())) {
+            e->ignore();
+            return;
+        }
+
+    }
+
     e->accept();
 }
 

@@ -42,6 +42,7 @@
 #include <QTextCodec>
 #include <QRegularExpression>
 #include <QUuid>
+#include <QStorageInfo>
 
 #include <KEncodingProber>
 
@@ -463,4 +464,10 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
     if (info.isSymLink()) {
         fileName = info.symLinkTarget();
     }
+}
+
+bool UiTools::isLocalDeviceFile(const QString &strFileName)
+{
+    QStorageInfo info(strFileName);
+    return info.device().startsWith("/dev/");
 }

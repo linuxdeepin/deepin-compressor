@@ -921,6 +921,14 @@ void MainWindow::slotChoosefiles()
     if (listSelFiles.count() == 0)
         return;
 
+    // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
+    for (const auto &url : listSelFiles) {
+        if (!UiTools::isLocalDeviceFile(url)) {
+            return;
+        }
+
+    }
+
     if (m_ePageID == PI_Home) {
         if (listSelFiles.count() == 1 && UiTools::isArchiveFile(listSelFiles[0])) {
             // 压缩包加载
@@ -2423,7 +2431,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
                 strDefaultPath = fileInfo.path();
             }
             // 弹出文件选择对话框，选择解压路径
-            DFileDialog dialog;
+            DFileDialog dialog(this);
             dialog.setAcceptMode(DFileDialog::AcceptOpen);
             dialog.setFileMode(DFileDialog::Directory);
             dialog.setWindowTitle(tr("Find directory"));

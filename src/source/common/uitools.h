@@ -148,6 +148,8 @@ public:
      */
     static void transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType);
 
+    static bool isLocalDeviceFile(const QString &strFileName);
+
 public:
     static QStringList m_associtionlist;
 };
