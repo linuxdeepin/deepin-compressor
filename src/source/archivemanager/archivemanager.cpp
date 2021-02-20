@@ -68,6 +68,11 @@ ArchiveManager *ArchiveManager::get_instance()
     return m_instance;
 }
 
+void ArchiveManager::destory_instance()
+{
+    SAFE_DELETE_ELE(m_instance)
+}
+
 bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType/*, bool useLibArchive, bool bBatch*/)
 {
     // 重新创建压缩包首先释放之前的interface

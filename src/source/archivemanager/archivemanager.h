@@ -44,6 +44,11 @@ public:
     static ArchiveManager *get_instance(void);
 
     /**
+     * @brief destory_instance 销毁单例实例对象
+     */
+    void destory_instance();
+
+    /**
      * @brief createArchive     创建压缩包
      * @param files             待压缩文件
      * @param strDestination    文件存储在压缩包的路径（为空时，处于根目录）

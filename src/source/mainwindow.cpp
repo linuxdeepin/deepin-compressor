@@ -98,6 +98,8 @@ MainWindow::~MainWindow()
         saveConfigWinSize(width(), height());
     }
 
+    ArchiveManager::get_instance()->destory_instance();
+
     // 清除缓存数据
     QProcess p;
     QString command = "rm";

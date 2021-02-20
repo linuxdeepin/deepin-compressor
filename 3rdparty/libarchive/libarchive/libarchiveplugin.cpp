@@ -36,6 +36,7 @@
 #include <QProcess>
 #include <QThread>
 #include <QDebug>
+#include <QUuid>
 
 #include <archive_entry.h>
 #include <linux/limits.h>
@@ -67,7 +68,11 @@ PluginFinishType LibarchivePlugin::list()
     QString fileName = fInfo.fileName();
     //因为tar.bz2、tar.lzma、tar.Z直接list时间较长，所以先用7z解压再list处理
     if (fileName.endsWith("tar.bz2") || fileName.endsWith("tar.lzma") || fileName.endsWith("tar.Z")) {
-        QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        // 设置解压临时路径
+        QString strProcessID = QString::number(QCoreApplication::applicationPid());   // 获取应用进程号
+        QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                               + QDir::separator() + strProcessID + QDir::separator()
+                               + QUuid::createUuid().toString(QUuid::Id128);
         QString tempFileName = tempFilePath + QDir::separator() + fileName.left(fileName.size() - fInfo.suffix().size() - 1);
 
         //QString commandLine = QString("%1%2%3%4").arg("7z x ").arg(filename()).arg(" -aoa -o").arg(tempFilePath);
