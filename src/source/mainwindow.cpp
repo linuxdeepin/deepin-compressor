@@ -1063,7 +1063,7 @@ void MainWindow::slotCompress(const QVariant &val)
     if (zipPasswordIsChinese == true) {
         // 对zip的中文加密使用libzip插件
         eType = UiTools::APT_Libzip;
-    } else if (bUseLibarchive == true) {
+    } else if (bUseLibarchive == true && m_stCompressParameter.strMimeType == "application/zip") {	// 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台
         // 华为ARM单线程场景下使用libarchive
         eType = UiTools::APT_Libarchive;
     }
