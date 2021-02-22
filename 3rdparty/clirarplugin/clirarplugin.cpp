@@ -117,8 +117,10 @@ bool CliRarPlugin::isPasswordPrompt(const QString &line)
 
 bool CliRarPlugin::isWrongPasswordMsg(const QString &line)
 {
-    return (line.contains(QLatin1String("password incorrect")) || line.contains(QLatin1String("wrong password"))
-            || line.contains(QLatin1String("The specified password is incorrect")));
+    return line.startsWith(QLatin1String("The specified password is incorrect"))
+           || line.startsWith(QLatin1String("Checksum error in the encrypted file"))
+           || line.contains(QLatin1String("password incorrect"))
+           /*|| line.contains(QLatin1String("wrong password"))*/;
 }
 
 bool CliRarPlugin::isCorruptArchiveMsg(const QString &line)
@@ -264,8 +266,15 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
     }
 
     if (isWrongPasswordMsg(line)) {  // 提示密码错误
-        m_eErrorType = ET_WrongPassword;
-        return true;
+        // RAR4密码错误直接结束
+        if (line.startsWith(QLatin1String("Checksum error in the encrypted file"))) {
+            m_eErrorType = ET_WrongPassword;
+            m_finishType = PFT_Error;
+            return false;
+        } else { // RAR5密码错误反复输入新密码
+            m_eErrorType = ET_WrongPassword;
+            return true;
+        }
     }
 
     if (workStatus == WT_List) {

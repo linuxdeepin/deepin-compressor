@@ -721,7 +721,6 @@ void CliInterface::writeToProcess(const QByteArray &data)
     Q_ASSERT(m_process);
     Q_ASSERT(!data.isNull());
 
-    qInfo() << "Writing data to the process: " << data;
 //    m_process->write(data);
     m_process->pty()->write(data);
 }
