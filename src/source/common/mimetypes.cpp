@@ -130,6 +130,7 @@ CustomMimeType determineMimeType(const QString &filename)
     *  谷歌插件zip：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/x-chrome-extension"
     *  谷歌插件crx：内容检测为"application/octet-stream"，后缀检测为"application/octet-stream"，file命令探测为"application/x-chrome-extension"
     *  zip分卷包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/octet-stream"
+    *  iso：内容检测为"application/octet-stream"，后缀检测为"application/x-cd-image"，file命令探测为"application/x-iso9660-image"
     */
     if (mimeFromContent.isDefault()) {
 
@@ -154,6 +155,10 @@ CustomMimeType determineMimeType(const QString &filename)
             return stMimeType;
         } else if (output.contains("application/x-iso9660-image")) {
             stMimeType.m_strTypeName = "application/x-iso9660-image";
+            return stMimeType;
+        } else {        // 对于其余情况，使用已识别出的后缀识别即可
+            stMimeType.m_bUnKnown = false;
+            stMimeType.m_mimeType = mimeFromExtension;
             return stMimeType;
         }
     }
