@@ -5,6 +5,7 @@
 #ifdef _WIN32 
 //windows
 #include <windows.h>
+#include <processthreadsapi.h>
 #else
 //linux
 #include <unistd.h>
@@ -22,7 +23,11 @@
 /**********************************************************
                   replace function
 **********************************************************/
-
+#ifdef _WIN32 
+#define CACHEFLUSH(addr, size) FlushInstructionCache(GetCurrentProcess(), addr, size)
+#else
+#define CACHEFLUSH(addr, size) __builtin___clear_cache(addr, addr + size)
+#endif
 
 #if defined(__aarch64__) || defined(_M_ARM64)
     #define CODESIZE 16U
@@ -34,7 +39,8 @@
     #define REPLACE_FAR(t, fn, fn_stub)\
         ((uint32_t*)fn)[0] = 0x58000040 | 9;\
         ((uint32_t*)fn)[1] = 0xd61f0120 | (9 << 5);\
-        *(long long *)(fn + 8) = (long long )fn_stub;
+        *(long long *)(fn + 8) = (long long )fn_stub;\
+        CACHEFLUSH((char *)fn, CODESIZE);
     #define REPLACE_NEAR(t, fn, fn_stub) REPLACE_FAR(t, fn, fn_stub)
 #elif defined(__arm__) || defined(_M_ARM)
     #define CODESIZE 8U
@@ -43,7 +49,8 @@
     // ldr pc, [pc, #-4]
     #define REPLACE_FAR(t, fn, fn_stub)\
         ((uint32_t*)fn)[0] = 0xe51ff004;\
-        ((uint32_t*)fn)[1] = (uint32_t)fn_stub;
+        ((uint32_t*)fn)[1] = (uint32_t)fn_stub;\
+        CACHEFLUSH((char *)fn, CODESIZE);
     #define REPLACE_NEAR(t, fn, fn_stub) REPLACE_FAR(t, fn, fn_stub)
 #elif defined(__thumb__) || defined(_M_THUMB)
     #error "Thumb is not supported"
@@ -60,12 +67,14 @@
         *(long long *)(fn + 2) = (long long)fn_stub;\
         *(fn + 10) = 0x41;\
         *(fn + 11) = 0xff;\
-        *(fn + 12) = 0xe3;
+        *(fn + 12) = 0xe3;\
+        //CACHEFLUSH((char *)fn, CODESIZE);
 
     //5 byte(jmp rel32)
     #define REPLACE_NEAR(t, fn, fn_stub)\
         *fn = 0xE9;\
-        *(int *)(fn + 1) = (int)(fn_stub - fn - CODESIZE_MIN);
+        *(int *)(fn + 1) = (int)(fn_stub - fn - CODESIZE_MIN);\
+        //CACHEFLUSH((char *)fn, CODESIZE);
 #endif
 
 struct func_stub
