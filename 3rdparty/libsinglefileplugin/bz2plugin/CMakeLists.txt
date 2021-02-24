@@ -32,5 +32,5 @@ target_link_libraries(${LIB_NAME}
     Qt5::Widgets
     KF5::Codecs
 #    KF5::Archive
-#    compressor-singlefile
+    compressor-singlefile
 )
