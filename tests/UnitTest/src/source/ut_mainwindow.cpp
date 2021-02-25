@@ -28,6 +28,11 @@
 #include "archivemanager.h"
 #include "progresspage.h"
 #include "compresssettingpage.h"
+#include "uncompresspage.h"
+#include "compresspage.h"
+#include "compressview.h"
+#include "uncompressview.h"
+#include "ddesktopservicesthread.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -38,7 +43,7 @@
 #include <DPushButton>
 #include <DTitlebar>
 #include <DWindowCloseButton>
-
+#include <DGuiApplicationHelper>
 #include <QStackedWidget>
 
 DWIDGET_USE_NAMESPACE
@@ -98,6 +103,9 @@ TEST_F(TestMainWindow, testcheckHerePath)
 
 TEST_F(TestMainWindow, testcheckSettings)
 {
+    Stub stub;
+    stub.set(ADDR(TipDialog, showDialog), showDialog_stub);
+    ASSERT_EQ(m_tester->checkSettings("test"), false);
 }
 
 
@@ -445,20 +453,144 @@ TEST_F(TestMainWindow, testgetExtractPath_NoAutoCreatDir)
     ASSERT_EQ(m_tester->getExtractPath(strPath), "");
 }
 
-TEST_F(TestMainWindow, testhandleJobNormalFinished)
+bool isAutoDeleteFile_stub()
+{
+    return false;
+}
+
+void addArchiveComment_stub()
+{
+}
+
+TEST_F(TestMainWindow, testhandleJobNormalFinished_001)
+{
+    Stub stub;
+    stub.set(ADDR(SettingDialog, isAutoDeleteFile), isAutoDeleteFile_stub);
+    stub.set(ADDR(MainWindow, addArchiveComment), addArchiveComment_stub);
+
+    m_tester->m_iCompressedWatchTimerID = 0;
+    m_tester->m_stCompressParameter.bSplit = false;
+    m_tester->m_stCompressParameter.strArchiveName = "test.zip";
+    m_tester->m_stCompressParameter.strTargetPath = ".";
+    m_tester->handleJobNormalFinished(ArchiveJob::JT_Create);
+    ASSERT_EQ(m_tester->m_pDDesktopServicesThread->m_listFiles.size(), 1);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Success);
+}
+
+void showSuccessInfo_stub(SuccessInfo eSuccessInfo)
+{
+}
+
+TEST_F(TestMainWindow, testhandleJobNormalFinished_002)
+{
+    Stub stub;
+    stub.set(ADDR(SettingDialog, isAutoDeleteFile), isAutoDeleteFile_stub);
+    stub.set(ADDR(MainWindow, showSuccessInfo), showSuccessInfo_stub);
+
+    m_tester->m_eStartupType = StartupType::ST_DragDropAdd;
+    m_tester->handleJobNormalFinished(ArchiveJob::JT_Add);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Success);
+}
+
+TEST_F(TestMainWindow, testhandleJobNormalFinished_003)
 {
 
 }
 
-TEST_F(TestMainWindow, testhandleJobCancelFinished)
+TEST_F(TestMainWindow, testhandleJobNormalFinished_004)
 {
 
 }
 
-TEST_F(TestMainWindow, testhandleJobErrorFinished)
+TEST_F(TestMainWindow, testhandleJobNormalFinished_005)
 {
 
 }
+
+TEST_F(TestMainWindow, testhandleJobNormalFinished_006)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_001)
+{
+    m_tester->m_eStartupType = StartupType::ST_Compress;
+    m_tester->handleJobCancelFinished(ArchiveJob::JT_Create);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Compress);
+}
+
+bool close_stub()
+{
+    return true;
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_002)
+{
+    Stub stub;
+    stub.set(ADDR(QWidget, close), close_stub);
+
+    m_tester->m_eStartupType = StartupType::ST_Compresstozip7z;
+    m_tester->handleJobCancelFinished(ArchiveJob::JT_Create);
+    ASSERT_EQ(m_tester->m_operationtype, Operation_NULL);
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_003)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_004)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_005)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobCancelFinished_006)
+{
+
+}
+
+void showErrorMessage_stub(FailureInfo fFailureInfo, ErrorInfo eErrorInfo, bool bShowRetry)
+{
+}
+
+TEST_F(TestMainWindow, testhandleJobErrorFinished_001)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, showErrorMessage), showErrorMessage_stub);
+
+    m_tester->m_iCompressedWatchTimerID = 0;
+    m_tester->handleJobErrorFinished(ArchiveJob::JT_Create, ET_InsufficientDiskSpace);
+}
+
+TEST_F(TestMainWindow, testhandleJobErrorFinished_002)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, showErrorMessage), showErrorMessage_stub);
+
+    m_tester->m_eStartupType = StartupType::ST_Normal;
+    m_tester->handleJobErrorFinished(ArchiveJob::JT_Add, ET_WrongPassword);
+}
+
+TEST_F(TestMainWindow, testhandleJobErrorFinished_003)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobErrorFinished_004)
+{
+
+}
+
+TEST_F(TestMainWindow, testhandleJobErrorFinished_005)
+{
+
+}
+
 
 TEST_F(TestMainWindow, testaddFiles2Archive)
 {
@@ -648,19 +780,191 @@ bool extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry>
 
 TEST_F(TestMainWindow, testslotExtract2Path)
 {
-    ExtractionOptions stOptions;
-    stOptions.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+//    ExtractionOptions stOptions;
+//    stOptions.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+//    stOptions.bExistList = false;
 
-    QList<FileEntry> listSelEntry;
-    FileEntry fileentry1;
-    fileentry1.strFullPath = "test1.txt";
-    listSelEntry << fileentry1;
-    m_tester->slotExtract2Path(listSelEntry, stOptions);
-    ASSERT_EQ(QFileInfo(stOptions.strTargetPath + "/test1.txt").exists(), true);
-    QFile::remove(stOptions.strTargetPath + "/test1.txt");
+//    QList<FileEntry> listSelEntry;
+//    FileEntry fileentry1;
+//    fileentry1.strFullPath = "test1.txt";
+//    listSelEntry << fileentry1;
+//    m_tester->m_pUnCompressPage->m_strArchiveFullPath = QFileInfo("../UnitTest/test_sources/tar/extract/test.tar").absoluteFilePath();
+////    m_pUnCompressPage
+
+//    m_tester->slotExtract2Path(listSelEntry, stOptions);
+//    ASSERT_EQ(QFileInfo(stOptions.strTargetPath + "/test1.txt").exists(), true);
+//    QFile::remove(stOptions.strTargetPath + "/test1.txt");
 }
 
-//TEST_F(TestMainWindow, testslotDelFiles)
-//{
+TEST_F(TestMainWindow, testslotDelFiles)
+{
 
-//}
+}
+
+TEST_F(TestMainWindow, testslotReceiveCurArchiveName)
+{
+    m_tester->slotReceiveCurArchiveName("test.zip");
+    ASSERT_EQ(m_tester->m_pProgressPage->m_strArchiveName, "test.zip");
+}
+
+TEST_F(TestMainWindow, testslotOpenFile)
+{
+
+}
+
+TEST_F(TestMainWindow, testslotOpenFileChanged)
+{
+
+}
+
+TEST_F(TestMainWindow, testslotPause)
+{
+    /*    ASSERT_EQ(*/m_tester->slotPause()/*, false)*/;
+}
+
+TEST_F(TestMainWindow, testslotContinue)
+{
+    /*    ASSERT_EQ(*/m_tester->slotContinue()/*, false)*/;
+}
+
+TEST_F(TestMainWindow, testslotCancel)
+{
+    /*    ASSERT_EQ(*/m_tester->slotCancel()/*, false)*/;
+}
+
+void addFiles2Archive_stub(const QStringList &listFiles, const QString &strPassword)
+{
+}
+
+TEST_F(TestMainWindow, testslotAddFiles)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, addFiles2Archive), addFiles2Archive_stub);
+
+    QStringList listFiles;
+    QString strPassword;
+    m_tester->slotAddFiles(listFiles, strPassword);
+//    ASSERT_EQ(m_tester->m_operationtype, Operation_Add);
+}
+
+TEST_F(TestMainWindow, testslotSuccessView_001)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, loadArchive), loadArchive_stub);
+
+    m_tester->m_pSuccessPage->setSuccessType(SI_Convert);
+    m_tester->slotSuccessView();
+}
+
+TEST_F(TestMainWindow, testslotSuccessView_002)
+{
+    Stub stub;
+    stub.set(ADDR(MainWindow, loadArchive), loadArchive_stub);
+
+    m_tester->m_pSuccessPage->setSuccessType(SI_Compress);
+    m_tester->slotSuccessView();
+}
+
+TEST_F(TestMainWindow, testslotSuccessReturn_001)
+{
+    m_tester->m_pSuccessPage->setSuccessType(SI_Compress);
+    m_tester->m_pCompressPage->m_pCompressView->m_listCompressFiles << "test.zip";
+    m_tester->slotSuccessReturn();
+    ASSERT_EQ(m_tester->m_pCompressPage->m_pCompressView->m_listSelFiles.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotSuccessReturn_002)
+{
+    m_tester->m_pSuccessPage->setSuccessType(SI_UnCompress);
+    m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath = "test.zip";
+    m_tester->slotSuccessReturn();
+    ASSERT_EQ(m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotSuccessReturn_003)
+{
+    m_tester->m_pSuccessPage->setSuccessType(SI_Convert);
+    m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath = "test.zip";
+    m_tester->slotSuccessReturn();
+    ASSERT_EQ(m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotFailureRetry_001)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Compress);
+    m_tester->slotFailureRetry();
+    ASSERT_EQ(m_tester->m_ePageID, PI_CompressSetting);
+}
+
+TEST_F(TestMainWindow, testslotFailureRetry_002)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Uncompress);
+    m_tester->m_eStartupType = ST_Extract;
+    m_tester->slotFailureRetry();
+    ASSERT_EQ(m_tester->m_ePageID, PI_UnCompress);
+}
+
+TEST_F(TestMainWindow, testslotFailureRetry_003)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Convert);
+    m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath = "test.zip";
+    m_tester->slotFailureRetry();
+    ASSERT_EQ(m_tester->m_ePageID, PI_UnCompress);
+}
+
+TEST_F(TestMainWindow, testslotFailureReturn_001)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Compress);
+    m_tester->m_pCompressPage->m_pCompressView->m_listCompressFiles << "test.zip";
+    m_tester->slotFailureReturn();
+    ASSERT_EQ(m_tester->m_pCompressPage->m_pCompressView->m_listCompressFiles.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotFailureReturn_002)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Uncompress);
+    m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath = "test.zip";
+    m_tester->slotFailureReturn();
+    ASSERT_EQ(m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotFailureReturn_003)
+{
+    m_tester->m_pFailurePage->setFailureInfo(FI_Convert);
+    m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath = "test.zip";
+    m_tester->slotFailureReturn();
+    ASSERT_EQ(m_tester->m_pUnCompressPage->m_pUnCompressView->m_strUnCompressPath.isEmpty(), true);
+    ASSERT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
+TEST_F(TestMainWindow, testslotTitleCommentButtonPressed)
+{
+
+}
+
+DGuiApplicationHelper::ColorType themeType_stub()
+{
+    return DGuiApplicationHelper::DarkType;
+}
+
+TEST_F(TestMainWindow, testslotThemeChanged)
+{
+    Stub stub;
+    stub.set(ADDR(DGuiApplicationHelper, themeType), themeType_stub);
+    m_tester->slotThemeChanged();
+}
+
+TEST_F(TestMainWindow, testslotShowShortcutTip)
+{
+
+}
+
+TEST_F(TestMainWindow, testslotFinishCalculateSize)
+{
+
+}
