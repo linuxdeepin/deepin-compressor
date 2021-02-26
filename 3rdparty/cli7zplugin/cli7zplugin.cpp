@@ -358,18 +358,22 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             }
         }
 
-        // ------磁盘空间不足------ 当读取到命令行最后一行 "E_FAIL" 的时候，检测磁盘空间是否不足
+        // ------磁盘空间不足------
+        // 解压：当读取到命令行最后一行 "ERROR: E_FAIL" 的时候，检测磁盘空间是否不足
+        // 压缩：System ERROR:28 或 System ERROR:17（跟压缩方式、剩余空间、原文件大小有关。。）
+        if (workStatus == WT_Add && line.startsWith("System ERROR:")
+                && (ENOSPC == line.mid(line.lastIndexOf(':') + 1).toInt() || EEXIST == line.mid(line.lastIndexOf(':') + 1).toInt())) {
+            m_finishType = PFT_Error;
+            m_eErrorType = ET_InsufficientDiskSpace;
+            return false;
+        }
         if ((workStatus == WT_Add && line.startsWith("E_FAIL")) || (workStatus == WT_Extract && line.startsWith("ERROR: E_FAIL"))) {
             m_finishType = PFT_Error;
 
-            QString diskPath; // 压缩或解压目的路径
-            if (workStatus == WT_Add) {
-                diskPath = m_strArchiveName;
-            } else if (workStatus == WT_Extract) {
-                diskPath = getTargetPath();
-            }
-            if (isInsufficientDiskSpace(diskPath, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
-                m_eErrorType = ET_InsufficientDiskSpace;
+            if (workStatus == WT_Extract) {
+                if (isInsufficientDiskSpace(getTargetPath(), 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+                    m_eErrorType = ET_InsufficientDiskSpace;
+                }
             }
 
             return false;
