@@ -33,7 +33,7 @@
 TipDialog::TipDialog(QWidget *parent)
     : DDialog(parent)
 {
-    setMinimumSize(380, 140);
+    setMinimumSize(380, 100);
 
     // 设置对话框图标
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
@@ -45,29 +45,35 @@ TipDialog::~TipDialog()
 
 }
 
-int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, ButtonType btnType)
+int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, ButtonType btnType, const QString &strToolTip)
 {
     // 描述内容
     DLabel *pDesLbl = new DLabel(this);
     pDesLbl->setMinimumSize(293, 20);
     pDesLbl->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(pDesLbl, DFontSizeManager::T6, QFont::Medium);
-    pDesLbl->setText(strDesText);
+    QFontMetrics fontMetrics(this->font());
+    int fontSize = fontMetrics.width(strDesText);//获取之前设置的字符串的像素大小
+
+    // 对字符串进行处理，超过两行显示的中间使用...
+    QString pathStr = strDesText;
+    if (fontSize > pDesLbl->width()) {
+        pathStr = fontMetrics.elidedText(strDesText, Qt::ElideMiddle, pDesLbl->width() * 2); //返回一个带有省略号的字符串
+    }
+
+    setFixedHeight(2 * fontMetrics.height() + 120);     // 设置固定高度
+
+    pDesLbl->setText(pathStr);
     pDesLbl->setWordWrap(true);
     pDesLbl->setAlignment(Qt::AlignCenter);
 
+    // 设置提示信息
+    if (!strToolTip.isEmpty())
+        pDesLbl->setToolTip(strToolTip);
+
     // 确定按钮
     addButton(btnMsg, true, btnType);
-
-    QVBoxLayout *pMainLayout = new QVBoxLayout;
-    pMainLayout->setContentsMargins(10, 0, 10, 0);
-    pMainLayout->addWidget(pDesLbl, 0, Qt::AlignVCenter);
-//    pMainLayout->addSpacing(10);
-
-    DWidget *widget = new DWidget(this);
-
-    widget->setLayout(pMainLayout);
-    addContent(widget);
+    addContent(pDesLbl);
 
     return exec();
 }

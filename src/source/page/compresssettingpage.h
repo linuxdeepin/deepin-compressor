@@ -175,10 +175,10 @@ private:
     /**
      * @brief showWarningDialog 通用的警告对话框
      * @param msg
-     * @param strTitle
+     * @param strToolTip
      * @return
      */
-    int showWarningDialog(const QString &msg);
+    int showWarningDialog(const QString &msg, const QString &strToolTip = "");
 
     void setDefaultName(QString name);
 

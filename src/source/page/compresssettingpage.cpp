@@ -496,13 +496,13 @@ bool CompressSettingPage::checkCompressOptionValid()
         QFileInfo file(m_listFiles.at(i));
         if (!file.exists()) {  // 待压缩文件已经不存在
             bResult = false;
-            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(UiTools::toShortString(file.fileName())));
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(file.filePath()), file.filePath());
             return false;
         }
 
         if (!file.isReadable()) {
             bResult = false;
-            showWarningDialog(tr("You do not have permission to compress %1").arg(UiTools::toShortString(file.filePath())));
+            showWarningDialog(tr("You do not have permission to compress %1").arg(file.filePath()), file.filePath());
             return false;
         }
 
@@ -522,16 +522,16 @@ bool CompressSettingPage::checkFile(const QString &path)
 
     if (!fileInfo.exists()) {  // 待压缩文件已经不存在
         if (fileInfo.isSymLink()) {
-            showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(/*UiTools::toShortString(*/fileInfo.filePath())/*)*/);
+            showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
         } else {
-            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(/*UiTools::toShortString(*/fileInfo.filePath())/*)*/);
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
         }
 
         return false;
     }
 
     if (!fileInfo.isReadable()) {
-        showWarningDialog(tr("You do not have permission to compress %1").arg(/*UiTools::toShortString(*/fileInfo.filePath())/*)*/);
+        showWarningDialog(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
         return false;
     }
 
@@ -553,11 +553,11 @@ bool CompressSettingPage::checkFile(const QString &path)
     return true;
 }
 
-int CompressSettingPage::showWarningDialog(const QString &msg)
+int CompressSettingPage::showWarningDialog(const QString &msg, const QString &strToolTip)
 {
     // 使用封装好的提示对话框
     TipDialog dialog(this);
-    return dialog.showDialog(msg, tr("OK"), DDialog::ButtonNormal);
+    return dialog.showDialog(msg, tr("OK"), DDialog::ButtonNormal, strToolTip);
 }
 
 void CompressSettingPage::setDefaultName(QString name)

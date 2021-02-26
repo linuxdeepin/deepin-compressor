@@ -41,9 +41,10 @@ public:
      * @param strDesText    描述内容
      * @param btnMsg        按钮内容
      * @param btnType       按钮类型
+     * @param strToolTip    提示信息
      * @return              操作返回值
      */
-    int showDialog(const QString &strDesText = "", const QString btnMsg = "", ButtonType btnType = ButtonNormal);
+    int showDialog(const QString &strDesText = "", const QString btnMsg = "", ButtonType btnType = ButtonNormal, const QString &strToolTip = "");
 };
 
 class ConvertDialog : public DDialog
