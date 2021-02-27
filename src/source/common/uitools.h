@@ -148,6 +148,13 @@ public:
      */
     static void transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType);
 
+     /**
+     * @brief handleFileName    处理文件名xx.xx.xx去除后面
+     * @param strFileName
+     * @return
+     */
+    static QString handleFileName(const QString &strFileName);
+
     static bool isLocalDeviceFile(const QString &strFileName);
 
 public:

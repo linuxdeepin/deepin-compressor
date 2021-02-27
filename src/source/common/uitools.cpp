@@ -466,6 +466,26 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
     }
 }
 
+QString UiTools::handleFileName(const QString &strFileName)
+{
+    QFileInfo info(strFileName);
+    QString strName = info.completeBaseName();
+
+    if (info.filePath().contains(".tar.")) {
+        strName = strName.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
+    } else if (info.filePath().contains(".7z.")) {
+        strName = strName.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
+    } else if (info.filePath().contains(".part01.rar")) {
+        strName = strName.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
+    } else if (info.filePath().contains(".part1.rar")) {
+        strName = strName.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
+    } else if (info.filePath().contains(".zip.")) {
+        strName = strName.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
+    }
+
+    return strName;
+}
+
 bool UiTools::isLocalDeviceFile(const QString &strFileName)
 {
     QStorageInfo info(strFileName);

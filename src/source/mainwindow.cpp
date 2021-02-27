@@ -1065,7 +1065,7 @@ void MainWindow::slotCompress(const QVariant &val)
     if (zipPasswordIsChinese == true) {
         // 对zip的中文加密使用libzip插件
         eType = UiTools::APT_Libzip;
-    } else if (bUseLibarchive == true && m_stCompressParameter.strMimeType == "application/zip") {	// 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台
+    } else if (bUseLibarchive == true && m_stCompressParameter.strMimeType == "application/zip") {  // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台
         // 华为ARM单线程场景下使用libarchive
         eType = UiTools::APT_Libarchive;
     }
@@ -1245,18 +1245,18 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     // 根据是否自动创建文件夹获取解压最后一层路径
     if (m_pSettingDlg->isAutoCreatDir()) {
         QFileInfo info(strArchiveFullPath);
-        strpath = info.completeBaseName();
-        if (info.filePath().contains(".tar.")) {
-            strpath = strpath.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
-        } else if (info.filePath().contains(".7z.")) {
-            strpath = strpath.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
-        } else if (info.filePath().contains(".part01.rar")) {
-            strpath = strpath.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
-        } else if (info.filePath().contains(".part1.rar")) {
-            strpath = strpath.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
-        } else if (info.filePath().contains(".zip.")) {
-            strpath = strpath.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
-        }
+        strpath = UiTools::handleFileName(info.filePath());
+//        if (info.filePath().contains(".tar.")) {
+//            strpath = strpath.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
+//        } else if (info.filePath().contains(".7z.")) {
+//            strpath = strpath.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
+//        } else if (info.filePath().contains(".part01.rar")) {
+//            strpath = strpath.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
+//        } else if (info.filePath().contains(".part1.rar")) {
+//            strpath = strpath.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
+//        } else if (info.filePath().contains(".zip.")) {
+//            strpath = strpath.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
+//        }
     }
 
     return strpath;
@@ -1374,7 +1374,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                     if (m_pSettingDlg->isAutoCreatDir()) {
                         // 自动创建文件夹的情况下显示创建的文件夹内容
                         for (int i = 0; i < m_stUnCompressParameter.listBatchFiles.count(); ++i) {
-                            listFiles << m_stUnCompressParameter.strExtractPath + QDir::separator() + QFileInfo(m_stUnCompressParameter.listBatchFiles[i]).completeBaseName();
+                            listFiles << m_stUnCompressParameter.strExtractPath + QDir::separator() + UiTools::handleFileName(m_stUnCompressParameter.listBatchFiles[i]);
                         }
                     } else {
                         // 未自动创建文件夹的情况下，显示每个压缩包解压出的第一个文件
@@ -2191,7 +2191,7 @@ void MainWindow::convertArchive(QString convertType)
     // 压缩后的文件名
     int num = 2;
     while (QFileInfo::exists(newArchivePath)) { // 如果文件名存在自动重命名 文件名+（2）...
-        newArchivePath = oldArchive.absolutePath() + QDir::separator() + QFileInfo(m_pUnCompressPage->archiveFullPath()).completeBaseName()
+        newArchivePath = oldArchive.absolutePath() + QDir::separator() + UiTools::handleFileName(m_pUnCompressPage->archiveFullPath())
                          + "(" + QString::number(num) + ")" + "." + convertType;
         num++;
     }
@@ -2338,18 +2338,11 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         QString strArchivePath = info.path();
 
         if (listFiles.count() == 1) {
-            strArchivePath += QDir::separator() + info.baseName() + strSuffix;
+            strArchivePath += QDir::separator() + UiTools::handleFileName(info.filePath()) + strSuffix;
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());
-            strArchivePath += strpath.mid(iIndex) + strSuffix;
-        }
-
-        // 检查源文件中是否包含即将生成的压缩包
-        if (listFiles.contains(strArchivePath)) {
-            TipDialog dialog(this);
-            dialog.showDialog(tr("The name is the same as that of the compressed archive, please use another one"), tr("OK"), DDialog::ButtonNormal);
-            return false;
+            strArchivePath += QDir::separator() + strpath.mid(iIndex) + strSuffix;
         }
 
         // 判断本地是否存在此压缩包
@@ -2517,7 +2510,9 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     m_stUnCompressParameter.bMultiplePassword = false;
     m_stUnCompressParameter.bModifiable = (listSupportedMimeTypes.contains(mimeType.name()) && fileinfo.isWritable()
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
-    if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包直接退出
+    if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
+        TipDialog dialog(this);
+        dialog.showDialog(tr("Appends to archives in this file type are not supported"), tr("OK"), DDialog::ButtonNormal);
         QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
             emit sigquitApp();
         });
@@ -2531,7 +2526,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     QList<FileEntry> listEntry;
 
     options.qTotalSize = fileinfo.size(); // 拖拽追加由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
-    // 构建压缩文件数据
+// 构建压缩文件数据
     foreach (QString strFile, listFiles) {
         FileEntry stFileEntry;
         stFileEntry.strFullPath = strFile;
@@ -2544,14 +2539,14 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         listEntry.push_back(stFileEntry);
     }
 
-    // 切换进度界面
+// 切换进度界面
     m_pProgressPage->setProgressType(PT_CompressAdd);
     m_pProgressPage->setArchiveName(archiveName);
     m_operationtype = Operation_Add;
     m_ePageID = PI_AddCompressProgress;
     m_pProgressPage->setPushButtonCheckable(false, false);
 
-    // 计算大小
+// 计算大小
     m_mywork = new CalculateSizeThread(listFiles, transFile, listEntry, options/*, this*/);
     connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
     m_mywork->start();
@@ -2561,6 +2556,27 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
 
 void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFiles/*, const QString &strTargetPath*/)
 {
+    if (listFiles.count() == 0) {
+        return;
+    }
+
+    QString strExtractPath;
+    if (m_eStartupType == StartupType::ST_ExtractHere) {
+        // 解压到当前文件夹时获取当前文件夹路径
+        strExtractPath = QFileInfo(listFiles[0]).path();
+    } else {
+        // 解压到指定路径时根据压缩包数量判断
+        if (listFiles.count() == 1) {
+            strExtractPath = QFileInfo(listFiles[0]).path() + QDir::separator() + UiTools::handleFileName(listFiles[0]);
+        } else {
+            QFileInfo info(listFiles[0]);
+            QString strpath = info.absolutePath();
+            strExtractPath = info.path();
+            int iIndex = strpath.lastIndexOf(QDir::separator());
+            strExtractPath += QDir::separator() + strpath.mid(iIndex);
+        }
+    }
+
     // 对压缩包文件名进行处理
     QStringList listTransFiles;
     QMap<QString, UnCompressParameter::SplitType> mapType;
@@ -2572,23 +2588,6 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
         mapType[strFileName] = eSplitVolume;
     }
     listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
-
-    if (listTransFiles.count() == 0) {
-        return;
-    }
-
-    QString strExtractPath;
-    if (m_eStartupType == StartupType::ST_ExtractHere) {
-        // 解压到当前文件夹时获取当前文件夹路径
-        strExtractPath = QFileInfo(listTransFiles[0]).path();
-    } else {
-        // 解压到指定路径时根据压缩包数量判断
-        if (listTransFiles.count() == 1) {
-            strExtractPath = QFileInfo(listTransFiles[0]).path() + QDir::separator() + QFileInfo(listTransFiles[0]).baseName();
-        } else {
-            strExtractPath = QFileInfo(listTransFiles[0]).path();
-        }
-    }
 
     if (listTransFiles.count() == 1) {
         // 单个压缩包解压

@@ -156,18 +156,18 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 
         // 自动创建文件夹的名称（去除中间带.的文件夹名称）
         QString strpath = "";
-        strpath = fileInfo.completeBaseName();
-        if (fileInfo.filePath().contains(".tar.")) {
-            strpath = strpath.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
-        } else if (fileInfo.filePath().contains(".7z.")) {
-            strpath = strpath.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
-        } else if (fileInfo.filePath().contains(".part01.rar")) {
-            strpath = strpath.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
-        } else if (fileInfo.filePath().contains(".part1.rar")) {
-            strpath = strpath.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
-        } else if (fileInfo.filePath().contains(".zip.")) {
-            strpath = strpath.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
-        }
+        strpath = UiTools::handleFileName(fileInfo.filePath());
+//        if (fileInfo.filePath().contains(".tar.")) {
+//            strpath = strpath.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
+//        } else if (fileInfo.filePath().contains(".7z.")) {
+//            strpath = strpath.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
+//        } else if (fileInfo.filePath().contains(".part01.rar")) {
+//            strpath = strpath.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
+//        } else if (fileInfo.filePath().contains(".part1.rar")) {
+//            strpath = strpath.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
+//        } else if (fileInfo.filePath().contains(".zip.")) {
+//            strpath = strpath.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
+//        }
 
 
         stOptions.strTargetPath += QDir::separator() + strpath; // 批量解压自动创建文件夹

@@ -33,8 +33,8 @@
 TipDialog::TipDialog(QWidget *parent)
     : DDialog(parent)
 {
-    setMinimumSize(380, 100);
-
+//    setMinimumSize(380, 100);
+    setFixedWidth(380);
     // 设置对话框图标
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     setIcon(pixmap);
@@ -57,11 +57,13 @@ int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, Butto
 
     // 对字符串进行处理，超过两行显示的中间使用...
     QString pathStr = strDesText;
-    if (fontSize > pDesLbl->width()) {
+    qInfo() << pDesLbl->width();
+    if (fontSize > 360) {
         pathStr = fontMetrics.elidedText(strDesText, Qt::ElideMiddle, pDesLbl->width() * 2); //返回一个带有省略号的字符串
+        setFixedHeight(pDesLbl->height() * 2 + 100);   // 设置固定高度
+    } else {
+        setFixedHeight(pDesLbl->height() + 100);     // 设置固定高度
     }
-
-    setFixedHeight(2 * fontMetrics.height() + 120);     // 设置固定高度
 
     pDesLbl->setText(pathStr);
     pDesLbl->setWordWrap(true);
