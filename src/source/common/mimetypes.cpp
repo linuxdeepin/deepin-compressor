@@ -125,7 +125,7 @@ CustomMimeType determineMimeType(const QString &filename)
         return stMimeType;
     }
 
-    /* 内容为默认格式，即"application/octet-stream"，使用"file -i"再次进行检测，主要针对zip格式再次进行判断
+    /* 内容为默认格式，即"application/octet-stream"，使用"file --mime-type"再次进行检测，主要针对zip格式再次进行判断
     *  zip空压缩包：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/zip"
     *  谷歌插件zip：内容检测为"application/octet-stream"，后缀检测为"application/zip"，file命令探测为"application/x-chrome-extension"
     *  谷歌插件crx：内容检测为"application/octet-stream"，后缀检测为"application/octet-stream"，file命令探测为"application/x-chrome-extension"
@@ -136,7 +136,7 @@ CustomMimeType determineMimeType(const QString &filename)
 
         QProcess process;
         QStringList args;
-        args << "-i" << filename;
+        args << "--mime-type" << filename;
         process.setProgram("file");
         process.setArguments(args);
         process.start();
