@@ -176,7 +176,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
     case ParseStateHeader:
         if ((line == archiveInfoDelimiter1) || (line == archiveInfoDelimiter2)) {  // 开始读压缩包整体信息
             // 压缩包大小
-            stArchiveData.qComressSize = line.mid(14).trimmed().toInt();
+            stArchiveData.qComressSize = line.mid(14).trimmed().toLongLong();
             m_parseState = ParseStateArchiveInformation;
         }
         break;
@@ -222,7 +222,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_fileEntry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
         } else if (line.startsWith(QLatin1String("Size = "))) {
             // 单文件实际大小
-            m_fileEntry.qSize = line.midRef(7).trimmed().toInt();
+            m_fileEntry.qSize = line.midRef(7).trimmed().toLongLong();
 
             // 压缩包内所有文件总大小
             stArchiveData.qSize += m_fileEntry.qSize;

@@ -215,7 +215,7 @@ bool CliRarPlugin::readListLine(const QString &line)
             }
         } else if (parseLineLeft == QLatin1String("Size")) {
             // 单文件实际大小
-            m_fileEntry.qSize = parseLineRight.toInt();
+            m_fileEntry.qSize = parseLineRight.toLongLong();
 
             // 压缩包内所有文件总大小
             stArchiveData.qSize += m_fileEntry.qSize;
