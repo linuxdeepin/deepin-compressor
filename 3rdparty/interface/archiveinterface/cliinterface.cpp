@@ -491,16 +491,15 @@ void CliInterface::killProcess(bool emitFinished)
         }
     }
 
-    m_process->kill();
-    m_isProcessKilled = true;
+    // 结束进程，先continue再kill，保证能删除缓存文件
+    kill(static_cast<__pid_t>(m_process->processId()), SIGCONT);
+    kill(static_cast<__pid_t>(m_process->processId()), SIGTERM);
 
-    //取消删除操作时，删除掉临时文件
-    if (m_workStatus == WT_Delete || m_workStatus == WT_Add) {
-        QFile fi(m_strArchiveName + ".tmp");
-        if (fi.exists()) {
-            fi.remove();
-        }
+    // Give some time for the application to finish gracefully
+    if (!m_process->waitForFinished(5)) {
+        m_process->kill();
     }
+    m_isProcessKilled = true;
 }
 
 void CliInterface::handleProgress(const QString &line)
