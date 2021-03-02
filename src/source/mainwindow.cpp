@@ -1109,9 +1109,9 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
     refreshPage();
 
-    // 拖拽追加，完毕自动关闭界面
-    if ((PFT_Nomral == eFinishType || PFT_Cancel == eFinishType)
-            && ArchiveJob::JT_Add == eJobType && StartupType::ST_DragDropAdd == m_eStartupType) {
+    // 拖拽追加或右键压缩成7z、zip，完毕自动关闭界面
+    if (((PFT_Nomral == eFinishType || PFT_Cancel == eFinishType) && ArchiveJob::JT_Add == eJobType && StartupType::ST_DragDropAdd == m_eStartupType)
+            || StartupType::ST_Compresstozip7z == m_eStartupType) {
         QTimer::singleShot(100, this, [ = ]() {
             close();
         });
@@ -2512,7 +2512,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
     if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
         TipDialog dialog(this);
-        dialog.showDialog(tr("Appends to archives in this file type are not supported"), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("You cannot add files to archives in this file type"), tr("OK"), DDialog::ButtonNormal);
         QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
             emit sigquitApp();
         });

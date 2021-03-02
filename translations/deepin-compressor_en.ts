@@ -180,7 +180,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation>The name is the same as that of the compressed archive, please use another one</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -459,11 +459,6 @@
         <translation>Select file</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>Update</translation>
@@ -699,6 +694,11 @@
         <location filename="../src/source/mainwindow.cpp" line="2352"/>
         <source>Replace</source>
         <translation>Replace</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation>You cannot add files to archives in this file type</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>

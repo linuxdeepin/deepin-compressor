@@ -459,11 +459,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>Actualizar</translation>
@@ -699,6 +694,11 @@
         <location filename="../src/source/mainwindow.cpp" line="2352"/>
         <source>Replace</source>
         <translation>Reemplazar</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>

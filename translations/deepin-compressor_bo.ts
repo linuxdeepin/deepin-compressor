@@ -200,7 +200,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>རྒྱ་ཡིག་དང་དབྱིན་ཡིག་གི་ཡིག་རྟགས་དང་ཡིག་རྟགས་འགའ་ཞིག་ལ་རྒྱབ་སྐྱོར་བྱེད་པ།</translation>
     </message>
 </context>
 <context>
@@ -459,11 +459,6 @@
         <translation>ཡིག་ཆ་འདེམས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>གསར་སྒྱུར།</translation>
@@ -701,6 +696,11 @@
         <translation>བརྗེ་བ།</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>
         <source>Basic info</source>
         <translation>གཞི་རྩའི་ཆ་འཕྲིན།</translation>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>མིག་སྔའི་འགྲོ་ལམ།</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>

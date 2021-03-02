@@ -200,7 +200,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestandsnamen mogen alleen Chinese, Engelse en Nederlandse tekens bevatten</translation>
     </message>
 </context>
 <context>
@@ -459,11 +459,6 @@
         <translation>Bestand kiezen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>Bijwerken</translation>
@@ -701,6 +696,11 @@
         <translation>Vervangen</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>
         <source>Basic info</source>
         <translation>Eigenschappen</translation>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Huidig pad:</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>

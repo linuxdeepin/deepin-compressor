@@ -200,7 +200,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Sono supportati solo caratteri tradizionali e cinesi, oltre che alcuni simboli</translation>
     </message>
 </context>
 <context>
@@ -460,11 +460,6 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Seleziona file</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>Aggiorna</translation>
@@ -702,6 +697,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Sostituisci</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>
         <source>Basic info</source>
         <translation>Info base</translation>
@@ -861,7 +861,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso corrente;</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>

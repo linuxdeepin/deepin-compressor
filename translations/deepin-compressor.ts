@@ -545,6 +545,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="3030"/>
         <source>Enter up to %1 characters</source>
         <translation type="unfinished"></translation>
@@ -682,11 +687,6 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

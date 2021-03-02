@@ -459,11 +459,6 @@
         <translation>选择文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation>不支持对该压缩格式的追加</translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>更新</translation>
@@ -699,6 +694,11 @@
         <location filename="../src/source/mainwindow.cpp" line="2352"/>
         <source>Replace</source>
         <translation>替换</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation>此压缩包格式不支持追加文件</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>

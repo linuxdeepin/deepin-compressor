@@ -12,76 +12,41 @@ type = QT
 [deepin-archive-manager.deepin-archive-manager-desktop-ts]
 file_filter = translations/desktop/desktop_<lang>.ts
 source_file = translations/desktop/desktop.ts
-preTranslate_file = deepin-compressor/deepin-compressor.desktop
+preTranslate_file = src/desktop/deepin-compressor.desktop
 source_lang = en
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-compress-ts]
-file_filter = translations/desktop/compress/desktop_<lang>.ts
-source_file = translations/desktop/compress/desktop.ts
-preTranslate_file = deepin-compressor/deepin-compress.desktop
+[deepin-archive-manager.deepin-archive-manager-conf-singleextract-ts]
+file_filter = translations/conf/singleextract/conf_<lang>.ts
+source_file = translations/conf/singleextract/conf.ts
+preTranslate_file = src/conf/compressor-singleextract.conf
 source_lang = en
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-compress-multi-ts]
-file_filter = translations/desktop/compress-multi/desktop_<lang>.ts
-source_file = translations/desktop/compress-multi/desktop.ts
-preTranslate_file = deepin-compressor/deepin-compress-multi.desktop
+[deepin-archive-manager.deepin-archive-manager-conf-singlecompress-ts]
+file_filter = translations/conf/singlecompress/conf_<lang>.ts
+source_file = translations/conf/singlecompress/conf.ts
+preTranslate_file = src/conf/compressor-singlecompress.conf
 source_lang = en
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-decompress-ts]
-file_filter = translations/desktop/decompress/desktop_<lang>.ts
-source_file = translations/desktop/decompress/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompress.desktop
+[deepin-archive-manager.deepin-archive-manager-conf-multiextract-ts]
+file_filter = translations/conf/multiextract/conf_<lang>.ts
+source_file = translations/conf/multiextract/conf.ts
+preTranslate_file = src/conf/compressor-multiextract.conf
 source_lang = en
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-decompress-multi-ts]
-file_filter = translations/desktop/decompress-multi/desktop_<lang>.ts
-source_file = translations/desktop/decompress-multi/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompress-multi.desktop
+[deepin-archive-manager.deepin-archive-manager-conf-multicompress-ts]
+file_filter = translations/conf/multicompress/conf_<lang>.ts
+source_file = translations/conf/multicompress/conf.ts
+preTranslate_file = src/conf/compressor-multicompress.conf
 source_lang = en
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-decompress-split-ts]
-file_filter = translations/desktop/decompress-split/desktop_<lang>.ts
-source_file = translations/desktop/decompress-split/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompress-split.desktop
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-desktop-decompress-split-multi-ts]
-file_filter = translations/desktop/decompress-split-multi/desktop_<lang>.ts
-source_file = translations/desktop/decompress-split-multi/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompress-split_multi.desktop
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-ts]
-file_filter = translations/desktop/decompresshere/desktop_<lang>.ts
-source_file = translations/desktop/decompresshere/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompresshere.desktop
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-multi-ts]
-file_filter = translations/desktop/decompresshere-multi/desktop_<lang>.ts
-source_file = translations/desktop/decompresshere-multi/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompresshere-multi.desktop
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-split-ts]
-file_filter = translations/desktop/decompresshere-split/desktop_<lang>.ts
-source_file = translations/desktop/decompresshere-split/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompresshere-split.desktop
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-desktop-decompresshere-split-multi-ts]
-file_filter = translations/desktop/decompresshere-split-multi/desktop_<lang>.ts
-source_file = translations/desktop/decompresshere-split-multi/desktop.ts
-preTranslate_file = deepin-compressor/deepin-decompresshere-split_multi.desktop
+[deepin-archive-manager.deepin-archive-manager-conf-7zsplitemulticompress-ts]
+file_filter = translations/conf/7zsplitemulticompress/conf_<lang>.ts
+source_file = translations/conf/7zsplitemulticompress/conf.ts
+preTranslate_file = src/conf/compressor-7zsplitemulticompress.conf
 source_lang = en
 type = QT

@@ -154,7 +154,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="499"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="527"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ne obstaja na disku - preverite in poskusite znova</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
@@ -165,7 +165,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="525"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Izvirna datoteka za %1 ne obstaja - preverite in poskusite znova</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="560"/>
@@ -200,7 +200,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Podprti so le nagleški in kitajski znaki ter nekaj posebnih znakov</translation>
     </message>
 </context>
 <context>
@@ -459,11 +459,6 @@
         <translation>Izberite datoteko</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
-        <source>Appends to archives in this file type are not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/source/mainwindow.cpp" line="2759"/>
         <source>Update</source>
         <translation>Posodobi</translation>
@@ -615,12 +610,12 @@
         <location filename="../src/source/mainwindow.cpp" line="463"/>
         <location filename="../src/source/mainwindow.cpp" line="621"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nimate dovoljenja za nalaganje %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="615"/>
         <source>No such file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Datoteka li mapa ne obstaja</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1350"/>
@@ -699,6 +694,11 @@
         <location filename="../src/source/mainwindow.cpp" line="2352"/>
         <source>Replace</source>
         <translation>Zamenjaj</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2930"/>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutna pot:</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
