@@ -1147,6 +1147,20 @@ void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
     options.qSize = stArchiveData.qSize;
     options.qComressSize = stArchiveData.qComressSize;
 
+    /***tar.7z格式压缩流程特殊处理***
+     * 1、tar.7z本质上就是一个tar包压缩成7z包，类型依然是x-7z-compressed
+     * 2、只针对7z里只有一个tar包的解压才做特殊处理，即直接解压出tar包内的文件
+     * 3、对于7z里有多个文件或唯一文件不是tar包的情况，解压不做特殊处理
+     * 4、后缀不为tar.7z,解压不做特殊处理
+     */
+    if (determineMimeType(strArchiveFullPath).name() == QLatin1String("application/x-7z-compressed")
+            && strArchiveFullPath.endsWith(QLatin1String(".tar.7z"))) { // 是否为tar.7z后缀的7z压缩包
+        if (1 == stArchiveData.mapFileEntry.size()
+                && stArchiveData.mapFileEntry.first().strFileName.endsWith(".tar")) { // 7z里是否只有一个tar包
+            options.bTar_7z = true;
+        }
+    }
+
     // 如果自动创建文件夹,解压时增加一层以压缩包名称命名的目录
     QString strAutoPath = getExtractPath(strArchiveFullPath);
     if (!strAutoPath.isEmpty()) {
@@ -1343,6 +1357,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
     // 批量解压
     case ArchiveJob::JT_BatchExtract:
     // 解压
+    case ArchiveJob::JT_StepExtract:
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             qInfo() << "提取结束";
@@ -1538,6 +1553,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
     // 批量解压
     case ArchiveJob::JT_BatchExtract:
     // 解压
+    case ArchiveJob::JT_StepExtract:
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
@@ -1648,6 +1664,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
     }
     break;
     // 解压错误
+    case ArchiveJob::JT_StepExtract:
     case ArchiveJob::JT_Extract: {
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
@@ -2620,6 +2637,13 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             // zip分卷指定使用cli7zplugin
             UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
                                               (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
+
+            // tar.7z特殊处理，右键解压缩到当前文件夹使用cli7zplugin
+            if (listTransFiles[0].endsWith(QLatin1String(".tar.7z"))
+                    && determineMimeType(listTransFiles[0]).name() == QLatin1String("application/x-7z-compressed")) {
+                options.bTar_7z = true;
+                eType = UiTools::AssignPluginType::APT_Cli7z;
+            }
 
             // 调用解压函数-----------------------------------7z非001卷解压到当前文件夹需要使用处理后的文件名
             if (ArchiveManager::get_instance()->extractFiles(listTransFiles[0], QList<FileEntry>(), options, eType)) {

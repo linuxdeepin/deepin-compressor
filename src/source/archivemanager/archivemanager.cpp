@@ -167,19 +167,34 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
     }
 
     if (m_pInterface) {
-        ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
+        if (!stOptions.bTar_7z) {
+            ExtractJob *pExtractJob = new ExtractJob(files, m_pInterface, stOptions);
 
-        // 连接槽函数
-        connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-        connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
-        connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
-        connect(pExtractJob, &ExtractJob::signalFileWriteErrorName, this, &ArchiveManager::signalFileWriteErrorName);
-        connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+            // 连接槽函数
+            connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+            connect(pExtractJob, &ExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+            connect(pExtractJob, &ExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+            connect(pExtractJob, &ExtractJob::signalFileWriteErrorName, this, &ArchiveManager::signalFileWriteErrorName);
+            connect(pExtractJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
 
-        m_pArchiveJob = pExtractJob;
-        pExtractJob->start();
+            m_pArchiveJob = pExtractJob;
+            pExtractJob->start();
 
-        return pExtractJob->errorcode;
+            return pExtractJob->errorcode;
+        } else {
+            // tar.7z包使用分步解压流程
+            StepExtractJob *pStepExtractJob = new StepExtractJob(strArchiveFullPath, stOptions/*, strTargetFullPath, strNewArchiveFullPath*/);
+            m_pArchiveJob = pStepExtractJob;
+
+            // 连接槽函数
+            connect(pStepExtractJob, &StepExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+            connect(pStepExtractJob, &StepExtractJob::signalprogress, this, &ArchiveManager::signalprogress);
+            connect(pStepExtractJob, &StepExtractJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+            connect(pStepExtractJob, &StepExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+
+            pStepExtractJob->start();
+            return true;
+        }
     }
 
     // 发送结束信号

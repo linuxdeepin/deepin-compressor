@@ -170,7 +170,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     QDir::setCurrent(destPath);
 
     // 对列表加密文件进行追加解压的时候使用压缩包的密码
-    QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
+    QString password = DataManager::get_instance().archiveData().isListEncrypted ?
+                       DataManager::get_instance().archiveData().strPassword : QString();
+
     ret =  runProcess(m_cliProps->property("extractProgram").toString(),
                       m_cliProps->extractArgs(m_strArchiveName, fileList, true, password));
 

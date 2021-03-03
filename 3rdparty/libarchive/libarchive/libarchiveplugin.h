@@ -160,7 +160,7 @@ private:
 
 private:
     int m_ArchiveEntryCount = 0; //压缩包内文件(夹)总数量
-    QString m_strOldArchiveName; //压缩包名(全路径)
+    QString m_strOldArchiveName; //原压缩包名(全路径)
     QStringList m_tars; //list时解压出来的临时tar包
     QString m_oldWorkingDir;
     QString m_extractDestDir; //解压目的路径

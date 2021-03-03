@@ -173,15 +173,17 @@ struct ExtractionOptions {
         bExistList = true;
         bAllExtract = false;
         bBatchExtract = false;
+        bTar_7z = false;
     }
 
     QString strTargetPath;      // 解压目标路径
     QString strDestination;     // 提取时的上级目录（若为空，代表提取的是根目录下的文件）
     qint64 qSize;               // 解压:原始大小; 提取:待提取的总大小
     qint64 qComressSize;        // 压缩包大小
-    bool bExistList;         // 是否有list过程
+    bool bExistList;            // 是否有list过程
     bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
-    bool bBatchExtract;           // 是否批量解压
+    bool bBatchExtract;         // 是否批量解压
+    bool bTar_7z;               // 是否是tar.7z格式（补充）
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

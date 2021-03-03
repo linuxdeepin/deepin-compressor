@@ -47,6 +47,7 @@ public:
         JT_Update,         // 更新
         JT_Comment,         // 注释
         JT_Convert,         // 转换
+        JT_StepExtract,     // 分步解压
     };
 
     /**

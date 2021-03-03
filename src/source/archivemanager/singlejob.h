@@ -79,6 +79,7 @@ public:
      */
     void doContinue() override;
 
+    SingleJobThread *getdptr();
 protected:
     /**
      * @brief initConnections   初始化插件和job的信号槽连接
@@ -255,7 +256,7 @@ private:
     UpdateOptions m_stOptions;      // 更新选项
 };
 
-// 更新操作（压缩包修改完之后更新缓存数据）
+// 注释操作
 class CommentJob: public SingleJob
 {
     Q_OBJECT
@@ -272,18 +273,20 @@ private:
     QString m_strComment;      // 注释
 };
 
-// 转换操作
-class ConvertJob: public ArchiveJob
+
+// 组合操作
+// 例如：格式转换、分步解压
+class ComplexJob: public ArchiveJob
 {
     Q_OBJECT
 public:
-    explicit ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent = nullptr);
-    ~ConvertJob() override;
+    explicit ComplexJob(const QString strOriginalArchiveFullPath, QObject *parent = nullptr);
+    ~ComplexJob() override;
 
     /**
      * @brief start     开始
      */
-    void start() override;
+    virtual void start() override = 0;
 
     /**
      * @brief doPause   暂停
@@ -300,7 +303,7 @@ public:
      */
     bool doKill() override;
 
-private Q_SLOTS:
+protected Q_SLOTS:
     /**
      * @brief slotHandleSingleJobProgress       处理单个压缩包解压进度
      * @param dPercentage
@@ -316,16 +319,70 @@ private Q_SLOTS:
     /**
      * @brief slotHandleExtractFinished       处理解压结束
      */
-    void slotHandleExtractFinished();
+    virtual void slotHandleExtractFinished() = 0;
+
+protected:
+    ReadOnlyArchiveInterface *m_pIface = nullptr;
+    QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
+    int m_iStepNo = 0;
+};
+
+// 转换操作
+class ConvertJob: public ComplexJob
+{
+    Q_OBJECT
+public:
+    explicit ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent = nullptr);
+    ~ConvertJob() override;
+
+    /**
+     * @brief start     开始
+     */
+    void start() override;
+
+private Q_SLOTS:
+    /**
+     * @brief slotHandleExtractFinished       处理解压结束
+     */
+    void slotHandleExtractFinished() override;
 
 private:
-    ReadOnlyArchiveInterface *m_pIface = nullptr;
     ExtractJob *m_pExtractJob = nullptr;  // 先解压
     CreateJob *m_pCreateJob = nullptr;    // 再压缩成想要的格式
-    QString m_strOriginalArchiveFullPath;   // 原始压缩包全路径
     QString m_strTargetFullPath;                // 转换目标全路径
     QString m_strNewArchiveFullPath;   // 格式转换后压缩包全路径
-    WorkType m_workType = WT_Convert;
+};
+
+// 分步解压操作
+// 解压特殊压缩包，如tar.7z
+// 注意：tar.bz2、tar.lzma、tar.Z不需要分步解压，直接使用libarchiveplugin
+class StepExtractJob: public ComplexJob
+{
+    Q_OBJECT
+public:
+    explicit StepExtractJob(const QString strOriginalArchiveFullPath, const ExtractionOptions &stOptions, QObject *parent = nullptr);
+    ~StepExtractJob() override;
+
+    /**
+     * @brief start     开始
+     */
+    void start() override;
+
+protected:
+    bool doKill() override;
+
+private Q_SLOTS:
+
+    /**
+     * @brief slotHandleExtractFinished       处理解压结束
+     */
+    void slotHandleExtractFinished() override;
+
+private:
+    ExtractJob *m_pExtractJob = nullptr;  // 先解压成中间格式
+    ExtractJob *m_pExtractJob2 = nullptr;  // 再完全解压
+    QString m_strTempFilePath; // 临时解压路径
+    ExtractionOptions m_stExtractionOptions;
 };
 
 #endif

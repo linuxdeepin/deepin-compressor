@@ -175,16 +175,29 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
         stOptions.bExistList = false;
         stOptions.bAllExtract = true;
         stOptions.bBatchExtract = true;
+        // tar.7z特殊处理，右键解压缩到当前文件夹使用cli7zplugin
+        if (strName.endsWith(QLatin1String(".tar.7z"))
+                && determineMimeType(strName).name() == QLatin1String("application/x-7z-compressed")) {
+            stOptions.bTar_7z = true;
+            ePluginType = UiTools::AssignPluginType::APT_Cli7z;
+        }
 
         pIface->setParent(this);    // 跟随BatchExtractJob释放
-        ExtractJob *pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
-        connect(pExtractJob, &ExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
-        connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
-        connect(pExtractJob, &ExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
-        connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
-
-        addSubjob(pExtractJob);
-
+        if (!stOptions.bTar_7z) {
+            ExtractJob *pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions);
+            connect(pExtractJob, &ExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
+            connect(pExtractJob, &ExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
+            connect(pExtractJob, &ExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
+            connect(pExtractJob, &ExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
+            addSubjob(pExtractJob);
+        } else {
+            StepExtractJob *pStepExtractJob = new StepExtractJob(fileInfo.absoluteFilePath(), stOptions);
+            connect(pStepExtractJob, &StepExtractJob::signalprogress, this, &BatchExtractJob::slotHandleSingleJobProgress);
+            connect(pStepExtractJob, &StepExtractJob::signalCurFileName, this, &BatchExtractJob::slotHandleSingleJobCurFileName);
+            connect(pStepExtractJob, &StepExtractJob::signalQuery, this, &BatchExtractJob::signalQuery);
+            connect(pStepExtractJob, &StepExtractJob::signalJobFinshed, this, &BatchExtractJob::slotHandleSingleJobFinished);
+            addSubjob(pStepExtractJob);
+        }
         return true;
     }
 

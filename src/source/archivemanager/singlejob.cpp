@@ -24,6 +24,7 @@
 #include "datamanager.h"
 #include "uitools.h"
 
+#include <QUuid>
 #include <QThread>
 #include <QDebug>
 #include <QDir>
@@ -85,6 +86,11 @@ void SingleJob::doContinue()
     if (m_pInterface) {
         m_pInterface->continueOperation();
     }
+}
+
+SingleJobThread *SingleJob::getdptr()
+{
+    return d;
 }
 
 bool SingleJob::doKill()
@@ -439,9 +445,58 @@ void CommentJob::doWork()
     }
 }
 
-ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent)
+ComplexJob::ComplexJob(const QString strOriginalArchiveFullPath, QObject *parent)
     : ArchiveJob(parent)
     , m_strOriginalArchiveFullPath(strOriginalArchiveFullPath)
+{
+
+}
+
+ComplexJob::~ComplexJob()
+{
+    if (m_pIface) {
+        delete  m_pIface;
+        m_pIface = nullptr;
+    }
+}
+
+void ComplexJob::doPause()
+{
+    // 调用插件暂停接口
+    if (m_pIface) {
+        m_pIface->pauseOperation();
+    }
+}
+
+void ComplexJob::doContinue()
+{
+    // 调用插件继续接口
+    if (m_pIface) {
+        m_pIface->continueOperation();
+    }
+}
+
+bool ComplexJob::doKill()
+{
+    return m_pIface->doKill();
+}
+
+void ComplexJob::slotHandleSingleJobProgress(double dPercentage)
+{
+    if (0 == m_iStepNo) { // 解压进度
+        emit signalprogress(dPercentage * 0.3);
+    } else { // 压缩进度
+        emit signalprogress(30 + dPercentage * 0.7);
+    }
+}
+
+void ComplexJob::slotHandleSingleJobCurFileName(const QString &strName)
+{
+    emit signalCurFileName(strName);
+}
+
+ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath, QObject *parent)
+    : ComplexJob(strOriginalArchiveFullPath, parent)
     , m_strTargetFullPath(strTargetFullPath)
     , m_strNewArchiveFullPath(strNewArchiveFullPath)
 {
@@ -450,10 +505,7 @@ ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString s
 
 ConvertJob::~ConvertJob()
 {
-    if (m_pIface) {
-        delete  m_pIface;
-        m_pIface = nullptr;
-    }
+
 }
 
 void ConvertJob::start()
@@ -463,7 +515,7 @@ void ConvertJob::start()
     if (pIface) {
         qInfo() << "格式转换开始解压";
         m_pIface = pIface;
-        m_workType = WT_Extract;
+        m_iStepNo = 0;
 
         // 创建解压参数
         QFileInfo file(m_strOriginalArchiveFullPath);
@@ -483,41 +535,6 @@ void ConvertJob::start()
     }
 }
 
-void ConvertJob::doPause()
-{
-    // 调用插件暂停接口
-    if (m_pIface) {
-        m_pIface->pauseOperation();
-    }
-}
-
-void ConvertJob::doContinue()
-{
-    // 调用插件继续接口
-    if (m_pIface) {
-        m_pIface->continueOperation();
-    }
-}
-
-bool ConvertJob::doKill()
-{
-    return m_pIface->doKill();
-}
-
-void ConvertJob::slotHandleSingleJobProgress(double dPercentage)
-{
-    if (m_workType == WT_Extract) { // 解压进度
-        emit signalprogress(dPercentage * 0.3);
-    } else { // 压缩进度
-        emit signalprogress(30 + dPercentage * 0.7);
-    }
-}
-
-void ConvertJob::slotHandleSingleJobCurFileName(const QString &strName)
-{
-    emit signalCurFileName(strName);
-}
-
 void ConvertJob::slotHandleExtractFinished()
 {
     // 解压结束
@@ -529,11 +546,12 @@ void ConvertJob::slotHandleExtractFinished()
         // 正常结束之后，进行压缩操作
         case PFT_Nomral: {
             qInfo() << "格式转换开始压缩";
-            m_workType = WT_Add;
+            m_iStepNo = 1;
 
             ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strNewArchiveFullPath, true);
 
             if (pIface) {
+                SAFE_DELETE_ELE(m_pIface);
                 m_pIface = pIface;
                 QList<FileEntry> listEntry;
                 // 在临时路径里面获取待压缩文件
@@ -576,4 +594,157 @@ void ConvertJob::slotHandleExtractFinished()
         break;
         }
     }
+}
+
+StepExtractJob::StepExtractJob(const QString strOriginalArchiveFullPath, const ExtractionOptions &stOptions, QObject *parent)
+    : ComplexJob(strOriginalArchiveFullPath, parent)
+    , m_stExtractionOptions(stOptions)
+{
+    m_eJobType = JT_StepExtract;
+}
+
+StepExtractJob::~StepExtractJob()
+{
+
+}
+
+void StepExtractJob::start()
+{
+    // tar.7z 指定使用cli7zplugin先解压出tar包
+    ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
+
+    if (nullptr != pIface) {
+        qInfo() << "StepExtractJob: 开始解压tar.7z成tar";
+        m_pIface = pIface;
+        m_iStepNo = 0;
+
+        // 设置解压临时路径
+        QFileInfo file(m_strOriginalArchiveFullPath);
+        QString strProcessID = QString::number(QCoreApplication::applicationPid());   // 获取应用进程号
+        m_strTempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                            + QDir::separator() + strProcessID + QDir::separator()
+                            + QUuid::createUuid().toString(QUuid::Id128);
+        // 创建解压参数
+        ExtractionOptions stOptions;
+        stOptions.strTargetPath = m_strTempFilePath;
+        stOptions.qComressSize = file.size();
+        stOptions.bAllExtract = true;
+
+        // 创建解压操作
+        m_pExtractJob = new ExtractJob(QList<FileEntry>(), pIface, stOptions, this);
+        connect(m_pExtractJob, &ExtractJob::signalprogress, this, &StepExtractJob::slotHandleSingleJobProgress);
+        connect(m_pExtractJob, &ExtractJob::signalCurFileName, this, &StepExtractJob::slotHandleSingleJobCurFileName);
+        connect(m_pExtractJob, &ExtractJob::signalQuery, this, &StepExtractJob::signalQuery);
+        connect(m_pExtractJob, &ExtractJob::signalJobFinshed, this, &StepExtractJob::slotHandleExtractFinished);
+
+        m_pExtractJob->start();
+    }
+}
+
+void StepExtractJob::slotHandleExtractFinished()
+{
+    // 解压结束
+    if (nullptr != m_pExtractJob) {
+        m_eFinishedType = m_pExtractJob->m_eFinishedType;
+        m_eErrorType = m_pExtractJob->m_eErrorType;
+
+        switch (m_eFinishedType) {
+        // 正常结束之后，进行压缩操作
+        case PFT_Nomral: {
+            // 获取临时解压文件
+            QDir dir(m_strTempFilePath);
+            if (!dir.exists()) {
+                return;
+            }
+            QFileInfoList list = dir.entryInfoList(QDir::AllEntries | QDir::System
+                                                   | QDir::NoDotAndDotDot | QDir::Hidden);
+
+            /***tar.7z格式压缩流程特殊处理***
+             * 1、tar.7z本质上就是一个tar包压缩成7z包，类型依然是x-7z-compressed
+             * 2、只针对7z里只有一个tar包的解压才做特殊处理，即直接解压出tar包内的文件
+             * 3、对于7z里有多个文件或唯一文件不是tar包的情况，解压不做特殊处理
+             * 4、后缀不为tar.7z,解压不做特殊处理
+             */
+            if (1 == list.count()
+                    && list.at(0).filePath().endsWith(".tar")
+                    && determineMimeType(list.at(0).filePath()).name() == QLatin1String("application/x-tar")) {
+                QFileInfo fileInfo = list.at(0);
+
+                ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.absoluteFilePath(), false);
+
+                if (nullptr != pIface) {
+                    qInfo() << "StepExtractJob: 开始解压tar";
+                    SAFE_DELETE_ELE(m_pIface);
+                    m_pIface = pIface;
+                    m_iStepNo = 1;
+
+                    // 创建解压参数
+                    ExtractionOptions stOptions = m_stExtractionOptions;
+                    stOptions.qComressSize = fileInfo.size();
+                    stOptions.qSize = fileInfo.size();
+                    stOptions.bAllExtract = true;
+                    stOptions.bTar_7z = false;
+
+                    // 创建解压操作
+                    m_pExtractJob2 = new ExtractJob(QList<FileEntry>(), pIface, stOptions, this);
+                    connect(m_pExtractJob2, &ExtractJob::signalprogress, this, &StepExtractJob::slotHandleSingleJobProgress);
+                    connect(m_pExtractJob2, &ExtractJob::signalCurFileName, this, &StepExtractJob::slotHandleSingleJobCurFileName);
+                    connect(m_pExtractJob2, &ExtractJob::signalQuery, this, &StepExtractJob::signalQuery);
+                    connect(m_pExtractJob2, &ExtractJob::signalJobFinshed, this, &StepExtractJob::signalJobFinshed);
+
+                    m_pExtractJob2->start();
+                }
+            } else {
+                ReadOnlyArchiveInterface *pIface = UiTools::createInterface(m_strOriginalArchiveFullPath, false);
+
+                if (nullptr != pIface) {
+                    qInfo() << "StepExtractJob: 开始直接解压原文件";
+                    SAFE_DELETE_ELE(m_pIface);
+                    m_pIface = pIface;
+                    m_iStepNo = 1;
+
+                    // 创建解压参数
+                    ExtractionOptions stOptions = m_stExtractionOptions;
+                    stOptions.bAllExtract = true;
+                    stOptions.bTar_7z = false;
+
+                    // 创建解压操作
+                    m_pExtractJob2 = new ExtractJob(QList<FileEntry>(), pIface, stOptions, this);
+                    connect(m_pExtractJob2, &ExtractJob::signalprogress, this, &StepExtractJob::slotHandleSingleJobProgress);
+                    connect(m_pExtractJob2, &ExtractJob::signalCurFileName, this, &StepExtractJob::slotHandleSingleJobCurFileName);
+                    connect(m_pExtractJob2, &ExtractJob::signalQuery, this, &StepExtractJob::signalQuery);
+                    connect(m_pExtractJob2, &ExtractJob::signalJobFinshed, this, &StepExtractJob::signalJobFinshed);
+
+                    m_pExtractJob2->start();
+                }
+            }
+        }
+        break;
+        // 用户取消之后，不进行压缩
+        case PFT_Cancel: {
+            emit signalJobFinshed();
+        }
+        break;
+        // 出现错误的情况，提示用户
+        case PFT_Error: {
+            emit signalJobFinshed();
+        }
+        break;
+        }
+    }
+}
+
+bool StepExtractJob::doKill()
+{
+    const bool killed = m_pIface->doKill();
+    if (killed) {
+        return true;
+    }
+    if (m_pExtractJob2->getdptr()->isRunning()) { //Returns true if the thread is running
+        qInfo() << "Requesting graceful thread interruption, will abort in one second otherwise.";
+        m_pExtractJob2->getdptr()->requestInterruption(); //请求中断线程(建议性)
+        m_pExtractJob2->getdptr()->wait(1000); //阻塞1s或阻塞到线程结束(取小)
+    }
+
+    return true;
 }
