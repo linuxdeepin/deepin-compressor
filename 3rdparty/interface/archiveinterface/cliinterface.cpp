@@ -493,14 +493,13 @@ void CliInterface::killProcess(bool emitFinished)
         }
     }
 
+    qint64 processID = m_process->processId();
     // 结束进程，先continue再kill，保证能删除缓存文件
-    kill(static_cast<__pid_t>(m_process->processId()), SIGCONT);
-    kill(static_cast<__pid_t>(m_process->processId()), SIGTERM);
-
-    // Give some time for the application to finish gracefully
-    if (!m_process->waitForFinished(5)) {
-        m_process->kill();
+    if (processID > 0) {
+        kill(static_cast<__pid_t>(processID), SIGCONT);
+        kill(static_cast<__pid_t>(processID), SIGTERM);
     }
+
     m_isProcessKilled = true;
 }
 

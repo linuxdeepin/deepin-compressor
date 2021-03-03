@@ -343,7 +343,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     bool bOverwrite = false;
     for (int i = 0; i < listFiles.count(); ++i) {
         if (listFiles[i] == m_strArchive) { // 追加的文件含有压缩包本身
-            TipDialog dialog;
+            TipDialog dialog(this);
             dialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
             return;
         }

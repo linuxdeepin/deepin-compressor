@@ -62,6 +62,26 @@ void CalculateSizeThread::run()
         entry.qSize = fileInfo.size();   // 大小
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
 
+        // 待压缩文件已经不存在
+        if (!fileInfo.exists()) {
+            if (fileInfo.isSymLink()) {
+                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            } else {
+                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            }
+
+            set_thread_stop(true);
+            return;
+        }
+
+        // 待压缩文件不可读
+        if (!fileInfo.isReadable()) {
+            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
+
+            set_thread_stop(true);
+            return;
+        }
+
         if (!entry.isDirectory) {  // 如果为文件，直接获取大小
             mutex.lock();
             m_qTotalSize += entry.qSize;
@@ -108,6 +128,26 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
         entry.qSize = fileInfo.size();   // 大小
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+
+        // 待压缩文件已经不存在
+        if (!fileInfo.exists()) {
+            if (fileInfo.isSymLink()) {
+                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            } else {
+                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            }
+
+            set_thread_stop(true);
+            return;
+        }
+
+        // 待压缩文件不可读
+        if (!fileInfo.isReadable()) {
+            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
+
+            set_thread_stop(true);
+            return;
+        }
 
         if (entry.isDirectory) {
             mutex.lock();

@@ -2,6 +2,27 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_TW">
 <context>
+    <name>CalculateSizeThread</name>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
+        <source>The original file of %1 does not exist, please check and try again</source>
+        <translation>“%1”指向的來源文件不存在，請檢查後重試</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
+        <source>%1 does not exist on the disk, please check and try again</source>
+        <translation>“%1”不存在，請檢查後重試</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
+        <source>You do not have permission to compress %1</source>
+        <translation>您沒有權限壓縮“%1”文件</translation>
+    </message>
+</context>
+<context>
     <name>CommentProgressDialog</name>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="213"/>
@@ -454,23 +475,23 @@
         <translation>解壓密碼錯誤，請重試</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2266"/>
         <source>Select file</source>
         <translation>選擇文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2759"/>
+        <location filename="../src/source/mainwindow.cpp" line="2779"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3030"/>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
         <source>Enter up to %1 characters</source>
         <translation>注釋內容不得超過%1字符</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="195"/>
-        <location filename="../src/source/mainwindow.cpp" line="2906"/>
+        <location filename="../src/source/mainwindow.cpp" line="2926"/>
         <source>File info</source>
         <translation>文件訊息</translation>
     </message>
@@ -493,8 +514,8 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="588"/>
         <location filename="../src/source/mainwindow.cpp" line="1411"/>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
-        <location filename="../src/source/mainwindow.cpp" line="2759"/>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
+        <location filename="../src/source/mainwindow.cpp" line="2779"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -513,8 +534,10 @@
         <location filename="../src/source/mainwindow.cpp" line="632"/>
         <location filename="../src/source/mainwindow.cpp" line="674"/>
         <location filename="../src/source/mainwindow.cpp" line="1335"/>
-        <location filename="../src/source/mainwindow.cpp" line="2244"/>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <location filename="../src/source/mainwindow.cpp" line="2247"/>
+        <location filename="../src/source/mainwindow.cpp" line="2512"/>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
+        <location filename="../src/source/mainwindow.cpp" line="2682"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
@@ -550,7 +573,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="515"/>
-        <location filename="../src/source/mainwindow.cpp" line="2729"/>
+        <location filename="../src/source/mainwindow.cpp" line="2749"/>
         <source>Loading, please wait...</source>
         <translation>正在載入，請稍候...</translation>
     </message>
@@ -582,7 +605,7 @@
         <translation>壓縮失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2430"/>
+        <location filename="../src/source/mainwindow.cpp" line="2431"/>
         <source>Find directory</source>
         <translation>解壓到目錄</translation>
     </message>
@@ -661,87 +684,97 @@
         <translation>解壓失敗</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2255"/>
+        <location filename="../src/source/mainwindow.cpp" line="2258"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2262"/>
         <source>Help</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2267"/>
+        <location filename="../src/source/mainwindow.cpp" line="2270"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2275"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>Display shortcuts</source>
         <translation>顯示快捷鍵</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2287"/>
+        <location filename="../src/source/mainwindow.cpp" line="2290"/>
         <source>Shortcuts</source>
         <translation>快捷鍵</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
+        <location filename="../src/source/mainwindow.cpp" line="2353"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation>檔案名與被壓縮文件同名，請修改檔案名稱</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否取代？</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <location filename="../src/source/mainwindow.cpp" line="2512"/>
+        <source>You cannot add the archive to itself</source>
+        <translation>無法將壓縮文件添加到自身</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>此壓縮包格式不支援追加文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2930"/>
+        <location filename="../src/source/mainwindow.cpp" line="2950"/>
         <source>Basic info</source>
         <translation>基本訊息</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2946"/>
+        <location filename="../src/source/mainwindow.cpp" line="2966"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2947"/>
+        <location filename="../src/source/mainwindow.cpp" line="2967"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2948"/>
+        <location filename="../src/source/mainwindow.cpp" line="2968"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2949"/>
+        <location filename="../src/source/mainwindow.cpp" line="2969"/>
         <source>Time created</source>
         <translation>創建時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2950"/>
+        <location filename="../src/source/mainwindow.cpp" line="2970"/>
         <source>Time accessed</source>
         <translation>訪問時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2951"/>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
         <source>Time modified</source>
         <translation>修改時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2961"/>
+        <location filename="../src/source/mainwindow.cpp" line="2981"/>
         <source>Archive</source>
         <translation>壓縮文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2992"/>
+        <location filename="../src/source/mainwindow.cpp" line="3012"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
@@ -751,7 +784,7 @@
         <translation>請在歸檔管理器的設定中勾選此文件類型</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2244"/>
+        <location filename="../src/source/mainwindow.cpp" line="2247"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>目前壓縮文件已經發生變化，請重新匯入文件。</translation>
     </message>
@@ -1050,7 +1083,7 @@
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2756"/>
+        <location filename="../src/source/mainwindow.cpp" line="2776"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>文件“%1”已修改，是否將此修改更新到壓縮包？</translation>
     </message>

@@ -43,6 +43,7 @@ private:
 
 Q_SIGNALS:
     void signalFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry);
+    void signalError(const QString &strError, const QString &strToolTip);
 
 private:
     QStringList m_files;

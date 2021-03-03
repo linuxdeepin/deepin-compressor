@@ -2,6 +2,27 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ms">
 <context>
+    <name>CalculateSizeThread</name>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
+        <source>The original file of %1 does not exist, please check and try again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
+        <source>%1 does not exist on the disk, please check and try again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
+        <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
+        <source>You do not have permission to compress %1</source>
+        <translation type="unfinished">Anda tidak memiliki keizinan untuk memampatkan %1</translation>
+    </message>
+</context>
+<context>
     <name>CommentProgressDialog</name>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="213"/>
@@ -454,23 +475,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2266"/>
         <source>Select file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2759"/>
+        <location filename="../src/source/mainwindow.cpp" line="2779"/>
         <source>Update</source>
         <translation>Kemas kini</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3030"/>
+        <location filename="../src/source/mainwindow.cpp" line="3050"/>
         <source>Enter up to %1 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="195"/>
-        <location filename="../src/source/mainwindow.cpp" line="2906"/>
+        <location filename="../src/source/mainwindow.cpp" line="2926"/>
         <source>File info</source>
         <translation>Maklumat fail</translation>
     </message>
@@ -493,8 +514,8 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="588"/>
         <location filename="../src/source/mainwindow.cpp" line="1411"/>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
-        <location filename="../src/source/mainwindow.cpp" line="2759"/>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
+        <location filename="../src/source/mainwindow.cpp" line="2779"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
@@ -513,8 +534,10 @@
         <location filename="../src/source/mainwindow.cpp" line="632"/>
         <location filename="../src/source/mainwindow.cpp" line="674"/>
         <location filename="../src/source/mainwindow.cpp" line="1335"/>
-        <location filename="../src/source/mainwindow.cpp" line="2244"/>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <location filename="../src/source/mainwindow.cpp" line="2247"/>
+        <location filename="../src/source/mainwindow.cpp" line="2512"/>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
+        <location filename="../src/source/mainwindow.cpp" line="2682"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -550,7 +573,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="515"/>
-        <location filename="../src/source/mainwindow.cpp" line="2729"/>
+        <location filename="../src/source/mainwindow.cpp" line="2749"/>
         <source>Loading, please wait...</source>
         <translation>Memuatkan, tunggu sebentar...</translation>
     </message>
@@ -582,7 +605,7 @@
         <translation>Pemampatan gagal</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2430"/>
+        <location filename="../src/source/mainwindow.cpp" line="2431"/>
         <source>Find directory</source>
         <translation>Cari direktori</translation>
     </message>
@@ -661,87 +684,97 @@
         <translation>Pengekstrakan gagal</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2255"/>
+        <location filename="../src/source/mainwindow.cpp" line="2258"/>
         <source>Close</source>
         <translation>Tutup</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2262"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2267"/>
+        <location filename="../src/source/mainwindow.cpp" line="2270"/>
         <source>Delete</source>
         <translation>Padam</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2275"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>Display shortcuts</source>
         <translation>Papar pintasan</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2287"/>
+        <location filename="../src/source/mainwindow.cpp" line="2290"/>
         <source>Shortcuts</source>
         <translation>Pintasan</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
+        <location filename="../src/source/mainwindow.cpp" line="2353"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Ada fail lain dengan nama yang serupa telah wujud, gantikannya?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2352"/>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>Replace</source>
         <translation>Ganti</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2515"/>
+        <location filename="../src/source/mainwindow.cpp" line="2512"/>
+        <source>You cannot add the archive to itself</source>
+        <translation type="unfinished">Anda tidak boleh menambah arkib kepada dirinya sendiri</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2930"/>
+        <location filename="../src/source/mainwindow.cpp" line="2950"/>
         <source>Basic info</source>
         <translation>Maklumat asas</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2946"/>
+        <location filename="../src/source/mainwindow.cpp" line="2966"/>
         <source>Size</source>
         <translation>Saiz</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2947"/>
+        <location filename="../src/source/mainwindow.cpp" line="2967"/>
         <source>Type</source>
         <translation>Jenis</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2948"/>
+        <location filename="../src/source/mainwindow.cpp" line="2968"/>
         <source>Location</source>
         <translation>Lokasi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2949"/>
+        <location filename="../src/source/mainwindow.cpp" line="2969"/>
         <source>Time created</source>
         <translation>Masa dicipta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2950"/>
+        <location filename="../src/source/mainwindow.cpp" line="2970"/>
         <source>Time accessed</source>
         <translation>Masa dicapai</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2951"/>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
         <source>Time modified</source>
         <translation>Masa ubah suai</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2961"/>
+        <location filename="../src/source/mainwindow.cpp" line="2981"/>
         <source>Archive</source>
         <translation>Arkib</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2992"/>
+        <location filename="../src/source/mainwindow.cpp" line="3012"/>
         <source>Comment</source>
         <translation>Ulasan</translation>
     </message>
@@ -751,7 +784,7 @@
         <translation>Sila periksa jenis perkaitan fail dalam tetapan Pengurus Arkib</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2244"/>
+        <location filename="../src/source/mainwindow.cpp" line="2247"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arkib ini telah berubah dalam cakera, sila import ia sekali lagi.</translation>
     </message>
@@ -1050,7 +1083,7 @@
         <translation>Saiz</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2756"/>
+        <location filename="../src/source/mainwindow.cpp" line="2776"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 telah berubah. Anda pasti mahu menyimpan perubahan yang berlaku kepada arkib?</translation>
     </message>

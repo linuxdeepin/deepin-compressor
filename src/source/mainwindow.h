@@ -315,6 +315,14 @@ private:
      */
     void rightExtract2Path(StartupType eType, const QStringList &listFiles/*, const QString &strTargetPath*/);
 
+    /**
+     * @brief showWarningDialog 通用的警告对话框
+     * @param msg
+     * @param strToolTip
+     * @return
+     */
+    int showWarningDialog(const QString &msg, const QString &strToolTip = "");
+
     // QWidget interface
 protected:
     /**
@@ -506,6 +514,8 @@ private Q_SLOTS:
      * @brief slotFinishCalculateSize 计算文件大小后开始追加流程
      */
     void slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry);
+
+    void slotCheckFinished(const QString &strError, const QString &strToolTip);
 
 private:
     QString m_strProcessID;              // 应用唯一标识（用于退出应用时清除缓存文件）
