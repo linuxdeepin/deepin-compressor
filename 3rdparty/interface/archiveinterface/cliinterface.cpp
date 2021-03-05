@@ -52,7 +52,7 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args)
 
 CliInterface::~CliInterface()
 {
-
+    deleteProcess();
 }
 
 PluginFinishType CliInterface::list()
@@ -472,7 +472,7 @@ void CliInterface::deleteProcess()
 {
     if (m_process) {
         readStdout(true);
-
+        m_process->blockSignals(true); // delete m_process之前需要断开所有m_process信号，防止重复处理
         delete m_process;
         m_process = nullptr;
     }
@@ -907,15 +907,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 {
     qInfo() << "Extraction process finished, exitcode:" << exitCode << "   exitstatus:" << exitStatus;
 
-    if (m_process) {
-        // Handle all the remaining data in the process.
-        readStdout(true);
+    deleteProcess();
 
-        delete m_process;
-        m_process = nullptr;
-    }
-
-    if (exitCode == 0) { // job正常结束
+    if (0 == exitCode) { // job正常结束
         m_finishType = PFT_Nomral;
     }
 
@@ -925,14 +919,16 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
     if (!m_extractOptions.bAllExtract && (!(m_extractOptions.strTargetPath.startsWith("/tmp")
                                             && m_extractOptions.strTargetPath.contains("/deepin-compressor-")
                                             && m_extractOptions.strDestination.isEmpty()))) {
-        // 提取操作和打开解压列表文件非第一层的文件
-        // 将文件从临时文件夹内移出
-        bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
-        if (!droppedFilesMoved) {
-            m_rootNode.clear(); // 清空缓存数据
-            m_extractTempDir.reset();
-            emit signalFinished(m_finishType);
-            return;
+        if (0 == exitCode) { // job正常结束
+            // 提取操作和打开解压列表文件非第一层的文件
+            // 将文件从临时文件夹内移出
+            bool droppedFilesMoved = moveExtractTempFilesToDest(m_files, m_extractOptions);
+            if (!droppedFilesMoved) {
+                m_rootNode.clear(); // 清空缓存数据
+                m_extractTempDir.reset();
+                emit signalFinished(m_finishType);
+                return;
+            }
         }
 
         m_rootNode.clear(); // 清空缓存数据
