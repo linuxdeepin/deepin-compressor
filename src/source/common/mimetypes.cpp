@@ -166,7 +166,8 @@ CustomMimeType determineMimeType(const QString &filename)
     stMimeType.m_bUnKnown = false;
     // 对于内容和后缀不一致的情况进行的处理
     if (mimeFromExtension != mimeFromContent) {
-        if (mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar"))) {
+        if ((mimeFromContent.inherits(QStringLiteral("text/x-qml")) && fileinfo.completeSuffix().toLower().contains(QStringLiteral("rar")))
+                || (mimeFromContent.name() == QStringLiteral("image/svg+xml") && mimeFromExtension.name() == QStringLiteral("application/zip"))) {
             stMimeType.m_mimeType = mimeFromExtension;
             return stMimeType;
         }
