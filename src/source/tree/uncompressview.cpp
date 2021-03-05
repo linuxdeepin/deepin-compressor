@@ -406,6 +406,9 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     if (m_listAddFiles.isEmpty())
         return;
 
+    // 去除同名称文件
+    m_listAddFiles = UiTools::removeSameFileName(m_listAddFiles);
+
     // 发送追加信号
     m_eChangeType = CT_Add;
     emit signalAddFiles2Archive(m_listAddFiles, strPassword);

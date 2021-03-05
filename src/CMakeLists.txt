@@ -101,7 +101,6 @@ install(FILES ${INSTALL_QM_FILES}
 # 自定义右键菜单
 install(FILES conf/compressor-singlecompress.conf DESTINATION /usr/share/applications/context-menus/)
 install(FILES conf/compressor-multicompress.conf DESTINATION /usr/share/applications/context-menus/)
-install(FILES conf/compressor-7zsplitemulticompress.conf DESTINATION /usr/share/applications/context-menus/)
 install(FILES conf/compressor-singleextract.conf DESTINATION /usr/share/applications/context-menus/)
 install(FILES conf/compressor-multiextract.conf DESTINATION /usr/share/applications/context-menus/)
 

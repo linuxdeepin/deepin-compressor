@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished">Het oorspronkelijke bestand van &apos;%1&apos; bestaat niet. Loop alles na en probeer het opnieuw.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished">%1 is niet aanwezig op de schijf. Controleer het bestand en probeer het opnieuw.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">Je bent niet bevoegd om %1 in te pakken</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation>De naam is dezelfde als die van een ander archief. Kies een andere naam.</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2353"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
@@ -726,12 +724,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Je kunt het archief niet toevoegen aan hetzelfde archief</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation>Je kunt geen bestanden toevoegen aan archieven met dit bestandstype.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2950"/>

@@ -476,7 +476,7 @@ QString UiTools::handleFileName(const QString &strFileName)
     } else if (info.filePath().contains(".7z.")) {
         strName = strName.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
     } else if (info.filePath().contains(".part01.rar")) {
-        strName = strName.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
+        strName = strName.remove(".part01"); // rar分卷文件，创建文件夹的时候移除part01
     } else if (info.filePath().contains(".part1.rar")) {
         strName = strName.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
     } else if (info.filePath().contains(".zip.")) {
@@ -490,4 +490,22 @@ bool UiTools::isLocalDeviceFile(const QString &strFileName)
 {
     QStorageInfo info(strFileName);
     return info.device().startsWith("/dev/");
+}
+
+QStringList UiTools::removeSameFileName(const QStringList &listFiles)
+{
+    QStringList listResult;
+    QStringList listName;
+
+    for (int i = 0; i < listFiles.count(); ++i) {
+        QFileInfo info(listFiles[i]);
+        if (listName.contains(info.fileName())) {
+            continue;
+        } else {
+            listResult << listFiles[i];
+            listName << info.fileName();
+        }
+    }
+
+    return listResult;
 }

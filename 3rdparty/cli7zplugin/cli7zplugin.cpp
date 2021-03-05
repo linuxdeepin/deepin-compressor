@@ -385,6 +385,13 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
             return false;
         }
 
+        // 文件名过长
+        if (workStatus == WT_Add && line.contains("MAX_PATHNAME_LEN")) {
+            m_finishType = PFT_Error;
+            m_eErrorType = ET_LongNameError;
+            return false;
+        }
+
         handleProgress(line);
     }
 

@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ka">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ka" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">თქვენ არ გაქვთ უფლება %1 კომპრესირებისათვის</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -175,7 +173,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="499"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="527"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
@@ -186,7 +184,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="525"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="560"/>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -221,7 +219,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -266,7 +264,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="381"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="383"/>
@@ -294,7 +292,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="259"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="272"/>
@@ -633,12 +631,12 @@
         <location filename="../src/source/mainwindow.cpp" line="463"/>
         <location filename="../src/source/mainwindow.cpp" line="621"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="615"/>
         <source>No such file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1350"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2353"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
@@ -726,12 +724,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2950"/>
@@ -781,12 +779,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="662"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2247"/>
         <source>The archive was changed on the disk, please import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -893,7 +891,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
@@ -1085,7 +1083,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2776"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="341"/>
@@ -1106,12 +1104,12 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="7"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="8"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="9"/>
@@ -1126,7 +1124,7 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="11"/>
         <source>Files Associated</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
@@ -1172,7 +1170,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="181"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="177"/>
         <source>Apply to all</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/ut_mainwindow.cpp" line="403"/>
@@ -1196,57 +1194,57 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
         <source>Current directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="104"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="105"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="139"/>
         <source>Extract archives to</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Other directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="251"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="284"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1259,7 +1257,7 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="79"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="82"/>
@@ -1272,19 +1270,19 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="120"/>
         <source>Extract</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="74"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="85"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="119"/>
         <source>Extract to:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="194"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="196"/>
@@ -1307,7 +1305,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
@@ -1317,23 +1315,23 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="569"/>
         <source>Add files to the current archive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="573"/>
         <source>Use password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="642"/>
         <source>Extract</source>
         <comment>提取</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
         <source>Extract to current directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
@@ -1369,7 +1367,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="711"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

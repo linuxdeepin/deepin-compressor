@@ -148,14 +148,26 @@ public:
      */
     static void transSplitFileName(QString &fileName, UnCompressParameter::SplitType &eSplitType);
 
-     /**
-     * @brief handleFileName    处理文件名xx.xx.xx去除后面
+    /**
+    * @brief handleFileName    处理文件名xx.xx.xx去除后面
+    * @param strFileName
+    * @return
+    */
+    static QString handleFileName(const QString &strFileName);
+
+    /**
+     * @brief isLocalDeviceFile 是否是本地设备文件
      * @param strFileName
      * @return
      */
-    static QString handleFileName(const QString &strFileName);
-
     static bool isLocalDeviceFile(const QString &strFileName);
+
+    /**
+     * @brief hasSameFileName   是否存在同名文件（不考虑路径）
+     * @param listFiles
+     * @return
+     */
+    static QStringList removeSameFileName(const QStringList &listFiles);
 
 public:
     static QStringList m_associtionlist;

@@ -1606,6 +1606,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             showErrorMessage(FI_Compress, EI_InsufficientDiskSpace, true);
             break;
         }
+        // 文件名过长
+        case ET_LongNameError:
+            showErrorMessage(FI_Uncompress, EI_LongFileName, true);
+            break;
         default: {
             showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
             break;
@@ -1638,6 +1642,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 showErrorMessage(FI_Uncompress, EI_WrongPassword);
                 break;
             }
+            // 文件名过长
+            case ET_LongNameError:
+                showErrorMessage(FI_Uncompress, EI_LongFileName);
+                break;
             default: {
                 showErrorMessage(FI_Uncompress, EI_ArchiveDamaged);
                 break;
@@ -2357,6 +2365,9 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         QFileInfo info = QFileInfo(listFiles[0]);
         QString strArchivePath = info.path();
 
+        // 去除同名称文件
+        listFiles = UiTools::removeSameFileName(listFiles);
+
         if (listFiles.count() == 1) {
             strArchivePath += QDir::separator() + UiTools::handleFileName(info.filePath()) + strSuffix;
         } else {
@@ -2523,10 +2534,12 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
         listFiles.push_back(listParam.at(i));
     }
 
+    // 去除同名称文件
+    listFiles = UiTools::removeSameFileName(listFiles);
+
     // 如果追加文件包含了压缩包本身，给出提示语
     if (listFiles.contains(transFile)) {
-        TipDialog dialog(this);
-        dialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
+        showWarningDialog(tr("You cannot add the archive to itself"));
         return false;
     }
 

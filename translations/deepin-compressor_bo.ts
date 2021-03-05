@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="bo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished">“%1”དམིགས་འཛུགས་བྱས་པའི་ཁུངས་ཡིག་ཆ་མེད་པས། ཞིབ་བཤེར་བྱས་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱོས། </translation>
+        <translation>“%1”དམིགས་འཛུགས་བྱས་པའི་ཁུངས་ཡིག་ཆ་མེད་པས། ཞིབ་བཤེར་བྱས་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱོས། </translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished">“%1”མེད་པས། ཞིབ་བཤེར་བྱས་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱོས། </translation>
+        <translation>“%1”མེད་པས། ཞིབ་བཤེར་བྱས་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱོས། </translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">ཁྱེད་ལ་ཡིག་ཆ་“%1”གནོན་བཙིར་བྱེད་པའི་དབང་ཚད་མེད།</translation>
+        <translation>ཁྱེད་ལ་ཡིག་ཆ་“%1”གནོན་བཙིར་བྱེད་པའི་དབང་ཚད་མེད།</translation>
     </message>
 </context>
 <context>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -339,7 +337,7 @@
     <message>
         <location filename="../src/source/page/homepage.cpp" line="56"/>
         <source>Drag file or folder here</source>
-        <translation>ཡིག་ཆ་（ཡིག་ཁུག་）འདི་རུ་འཇོག་པ།</translation>
+        <translation>ཡིག་ཆ་འདི་རུ་འཇོག་པ།</translation>
     </message>
     <message>
         <location filename="../src/source/page/homepage.cpp" line="58"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2353"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
@@ -726,12 +724,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">གནོན་བཙིར་ཡིག་ཆ་འདི་རང་ཉིད་ཐོག་ཏུ་སྣོན་ཐབས་མེད།</translation>
+        <translation>གནོན་བཙིར་ཡིག་ཆ་འདི་རང་ཉིད་ཐོག་ཏུ་སྣོན་ཐབས་མེད།</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2950"/>
@@ -906,7 +904,7 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="51"/>
         <source>%1 task(s) in progress</source>
-        <translation>ལས་འགན་%1བཀོལ་སྤྱོད་བྱེད་བཞིན་ཡོད།</translation>
+        <translation>ལས་འགན1%བཀོལ་སྤྱོད་བྱེད་བཞིན་ཡོད།</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="58"/>

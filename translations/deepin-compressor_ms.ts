@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ms">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">Anda tidak memiliki keizinan untuk memampatkan %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -134,7 +132,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="259"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="280"/>
@@ -175,7 +173,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="499"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="527"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
@@ -186,7 +184,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="525"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="560"/>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -221,7 +219,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="773"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -352,12 +350,12 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="427"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="429"/>
         <source>Open as read-only</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="430"/>
@@ -415,7 +413,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="354"/>
         <source>Updating comments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="525"/>
@@ -423,34 +421,34 @@
         <location filename="../src/source/mainwindow.cpp" line="2059"/>
         <location filename="../src/source/mainwindow.cpp" line="2084"/>
         <source>Plugin error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1303"/>
         <source>Adding successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1335"/>
         <location filename="../src/source/mainwindow.cpp" line="2108"/>
         <source>No data in it</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1524"/>
         <source>Adding canceled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1614"/>
         <source>Adding failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1679"/>
         <location filename="../src/source/mainwindow.cpp" line="2104"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2013"/>
@@ -461,23 +459,23 @@
         <location filename="../src/source/mainwindow.cpp" line="2045"/>
         <location filename="../src/source/mainwindow.cpp" line="2112"/>
         <source>Insufficient disk space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2071"/>
         <location filename="../src/source/mainwindow.cpp" line="2092"/>
         <source>Some volumes are missing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2096"/>
         <source>Wrong password, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2266"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2779"/>
@@ -487,7 +485,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3050"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="195"/>
@@ -586,18 +584,18 @@
         <location filename="../src/source/mainwindow.cpp" line="1309"/>
         <location filename="../src/source/mainwindow.cpp" line="1436"/>
         <source>Updating, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1674"/>
         <location filename="../src/source/mainwindow.cpp" line="2100"/>
         <source>File name too long</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2041"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2034"/>
@@ -627,18 +625,18 @@
         <location filename="../src/source/mainwindow.cpp" line="632"/>
         <location filename="../src/source/mainwindow.cpp" line="665"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="463"/>
         <location filename="../src/source/mainwindow.cpp" line="621"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="615"/>
         <source>No such file or directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1350"/>
@@ -650,7 +648,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1544"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1664"/>
@@ -658,7 +656,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2063"/>
         <location filename="../src/source/mainwindow.cpp" line="2088"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1686"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2353"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
@@ -726,12 +724,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Anda tidak boleh menambah arkib kepada dirinya sendiri</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2950"/>
@@ -893,12 +891,12 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1024,12 +1022,12 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="368"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="370"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
@@ -1155,12 +1153,12 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="163"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="165"/>
         <source>Merge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="200"/>

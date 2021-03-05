@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="135"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished">O ficheiro original de %1 não existe, verifique e tente novamente</translation>
+        <translation>O ficheiro original de %1 não existe. Verifique e tente novamente</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="137"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished">%1 não existe no disco, verifique e tente novamente</translation>
+        <translation>%1 não existe no disco. Verifique e tente novamente</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="146"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">Não tem autorização para comprimir %1</translation>
+        <translation>Não tem permissão para comprimir %1</translation>
     </message>
 </context>
 <context>
@@ -181,7 +179,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="534"/>
         <source>You do not have permission to compress %1</source>
-        <translation>Não tem autorização para comprimir %1</translation>
+        <translation>Não tem permissão para comprimir %1</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="525"/>
@@ -201,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="688"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome é o mesmo que o do arquivo comprimido, use outro</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
@@ -633,7 +631,7 @@
         <location filename="../src/source/mainwindow.cpp" line="463"/>
         <location filename="../src/source/mainwindow.cpp" line="621"/>
         <source>You do not have permission to load %1</source>
-        <translation>Não tem autorização para carregar %1</translation>
+        <translation>Não tem permissão para carregar %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="615"/>
@@ -711,7 +709,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2353"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome é o mesmo que o do arquivo comprimido, use outro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
@@ -726,12 +724,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Não se pode acrescentar o arquivo a ele mesmo</translation>
+        <translation>Não pode adicionar o arquivo a ele mesmo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível adicionar ficheiros a arquivos neste tipo de ficheiro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2950"/>

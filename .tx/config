@@ -43,10 +43,3 @@ source_file = translations/conf/multicompress/conf.ts
 preTranslate_file = src/conf/compressor-multicompress.conf
 source_lang = en
 type = QT
-
-[deepin-archive-manager.deepin-archive-manager-conf-7zsplitemulticompress-ts]
-file_filter = translations/conf/7zsplitemulticompress/conf_<lang>.ts
-source_file = translations/conf/7zsplitemulticompress/conf.ts
-preTranslate_file = src/conf/compressor-7zsplitemulticompress.conf
-source_lang = en
-type = QT

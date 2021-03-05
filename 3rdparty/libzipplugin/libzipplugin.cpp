@@ -39,6 +39,8 @@
 #include <QDataStream>
 #include <QTextCodec>
 
+#include <utime.h>
+
 //#include <zlib.h>
 #define READBYTES 10240         // 每次读取文件大小
 
@@ -689,6 +691,23 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
     QFile file(strDestFileName);
 
+    // Store parent mtime.
+    QString parentDir;
+    if (strFileName.endsWith(QDir::separator())) {
+        QDir pDir = QFileInfo(strDestFileName).dir();
+        pDir.cdUp();
+        parentDir = pDir.path();
+    } else {
+        parentDir = QFileInfo(strDestFileName).path();
+    }
+    // For top-level items, don't restore parent dir mtime.
+    const bool restoreParentMtime = (parentDir != options.strTargetPath);
+
+    time_t parent_mtime;
+    if (restoreParentMtime) {
+        parent_mtime = QFileInfo(parentDir).lastModified().toMSecsSinceEpoch() / 1000;
+    }
+
     // 获取外部信息（权限）
     zip_uint8_t opsys;
     zip_uint32_t attributes;
@@ -854,6 +873,18 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
     // 设置文件/文件夹权限
     file.setPermissions(per);
+
+    // Set mtime for entry.
+    utimbuf times;
+    times.modtime = statBuffer.mtime;
+    utime(strDestFileName.toUtf8().constData(), &times);
+
+    if (restoreParentMtime) {
+        // Restore mtime for parent dir.
+        times.modtime = parent_mtime;
+        utime(parentDir.toUtf8().constData(), &times);
+    }
+
 
     return ET_NoError;
 }
