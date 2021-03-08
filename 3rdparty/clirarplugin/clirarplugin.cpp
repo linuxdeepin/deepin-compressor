@@ -157,6 +157,24 @@ bool CliRarPlugin::isOpenFileFailed(const QString &line)
     return line.startsWith("Cannot create ");
 }
 
+void CliRarPlugin::killProcess(bool emitFinished)
+{
+    Q_UNUSED(emitFinished);
+    if (!m_process) {
+        return;
+    }
+
+    qint64 processID = m_process->processId();
+    // 结束进程，先continue再kill，保证能删除缓存文件
+    // 使用SIGTERM不能立马结束，需使用SIGKILL强制结束
+    if (processID > 0) {
+        kill(static_cast<__pid_t>(processID), SIGCONT);
+        kill(static_cast<__pid_t>(processID), SIGKILL);
+    }
+
+    m_isProcessKilled = true;
+}
+
 bool CliRarPlugin::readListLine(const QString &line)
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();

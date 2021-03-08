@@ -478,31 +478,6 @@ void CliInterface::deleteProcess()
     }
 }
 
-void CliInterface::killProcess(bool emitFinished)
-{
-    Q_UNUSED(emitFinished);
-    if (!m_process) {
-        return;
-    }
-
-    if (!m_childProcessId.empty()) {
-        for (int i = m_childProcessId.size() - 1; i >= 0; i--) {
-            if (m_childProcessId[i] > 0) {
-                kill(static_cast<__pid_t>(m_childProcessId[i]), SIGKILL);
-            }
-        }
-    }
-
-    qint64 processID = m_process->processId();
-    // 结束进程，先continue再kill，保证能删除缓存文件
-    if (processID > 0) {
-        kill(static_cast<__pid_t>(processID), SIGCONT);
-        kill(static_cast<__pid_t>(processID), SIGTERM);
-    }
-
-    m_isProcessKilled = true;
-}
-
 void CliInterface::handleProgress(const QString &line)
 {
     if (m_process && m_process->program().at(0).contains("7z")) {  // 解析7z相关进度、文件名

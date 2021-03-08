@@ -81,6 +81,8 @@ private:
 
     bool isNoFilesArchive(const QString &line);  // 压缩包内没有数据
 
+    void killProcess(bool emitFinished) override;
+
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;

@@ -1720,25 +1720,25 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             // 密码错误
             case ET_WrongPassword:
                 showErrorMessage(FI_Uncompress, EI_WrongPassword,
-                                 !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             // 文件名过长
             case ET_LongNameError:
                 showErrorMessage(FI_Uncompress, EI_LongFileName,
-                                 !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             // 创建文件失败
             case ET_FileWriteError:
                 showErrorMessage(FI_Uncompress, EI_CreatFileFailed,
-                                 !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             case ET_MissingVolume:
                 showErrorMessage(FI_Uncompress, EI_ArchiveMissingVolume,
-                                 !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             case ET_InsufficientDiskSpace: {
                 showErrorMessage(FI_Uncompress, EI_InsufficientDiskSpace,
-                                 !(StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/));
+                                 !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             }
             case ET_PluginError: {
@@ -2904,7 +2904,7 @@ void MainWindow::slotFailureRetry()
     }
     break;
     case FI_Uncompress: {
-        if (StartupType::ST_ExtractHere == m_eStartupType/* || StartupType::SST_Extractto == m_eStartupType*/) {
+        if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
             // 右键解压到当前文件夹
         } else {
             // 普通加载解压

@@ -148,6 +148,32 @@ bool Cli7zPlugin::isOpenFileFailed(const QString &line)
     return line.contains("ERROR: Can not open output file :");
 }
 
+void Cli7zPlugin::killProcess(bool emitFinished)
+{
+    Q_UNUSED(emitFinished);
+    if (!m_process) {
+        return;
+    }
+
+    if (!m_childProcessId.empty()) {
+        for (int i = m_childProcessId.size() - 1; i >= 0; i--) {
+            if (m_childProcessId[i] > 0) {
+                kill(static_cast<__pid_t>(m_childProcessId[i]), SIGKILL);
+            }
+        }
+    }
+
+    qint64 processID = m_process->processId();
+    // 结束进程，先continue再kill，保证能删除缓存文件
+    // 使用SIGTERM，7z命令可以自动删除缓文件
+    if (processID > 0) {
+        kill(static_cast<__pid_t>(processID), SIGCONT);
+        kill(static_cast<__pid_t>(processID), SIGTERM);
+    }
+
+    m_isProcessKilled = true;
+}
+
 bool Cli7zPlugin::readListLine(const QString &line)
 {
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();

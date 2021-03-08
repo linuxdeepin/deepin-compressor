@@ -67,6 +67,8 @@ private:
 
     bool handleLine(const QString &line, WorkType workStatus) override;
 
+    void killProcess(bool emitFinished) override;
+
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;

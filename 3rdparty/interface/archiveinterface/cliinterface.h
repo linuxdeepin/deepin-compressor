@@ -137,7 +137,7 @@ protected:
      * @brief killProcess  结束进程
      * @param emitFinished
      */
-    void killProcess(bool emitFinished = true);
+    virtual void killProcess(bool emitFinished = true) = 0;
 
     /**
      * @brief handleProgress  解析进度并发送进度信号
@@ -217,6 +217,7 @@ protected:
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
     PluginFinishType m_finishType = PFT_Nomral; // 插件结束类型
     QString m_strEncryptedFileName = QString(); // 当前被解压的加密文件名
+    QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
     bool m_isProcessKilled = false;  // 进程已经结束
     bool m_isEmptyArchive = false;  // 压缩包内无数据
     bool m_isCorruptArchive = false; // 是否非致命错误
@@ -235,7 +236,6 @@ private:
     qint64  m_processId;  // 进程Id
     bool m_isTar7z = false; // 是否是tar.7z文件
     qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
-    QVector<qint64> m_childProcessId; // 压缩tar.7z文件的子进程Id
     QString m_rootEntry; // 追加压缩文件夹的时候记录上一层节点
     int m_indexOfListRootEntry = 0; // 右键解压到当前文件夹时的数据
 };
