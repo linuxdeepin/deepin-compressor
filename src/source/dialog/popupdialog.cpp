@@ -57,12 +57,12 @@ int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, Butto
 
     // 对字符串进行处理，超过两行显示的中间使用...
     QString pathStr = strDesText;
-    qInfo() << pDesLbl->width();
+
     if (fontSize > 360) {
         pathStr = fontMetrics.elidedText(strDesText, Qt::ElideMiddle, pDesLbl->width() * 2); //返回一个带有省略号的字符串
-        setFixedHeight(pDesLbl->height() * 2 + 100);   // 设置固定高度
+        setFixedHeight(fontMetrics.height() * 2 + 120);   // 设置固定高度（字体高度乘以2）
     } else {
-        setFixedHeight(pDesLbl->height() + 100);     // 设置固定高度
+        setFixedHeight(fontMetrics.height() + 120);    // 设置固定高度
     }
 
     pDesLbl->setText(pathStr);

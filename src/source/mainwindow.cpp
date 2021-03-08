@@ -601,11 +601,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 bool MainWindow::checkSettings(QString file)
 {
-    QString strTransFileName = file;
-    UnCompressParameter::SplitType type;
-    UiTools::transSplitFileName(strTransFileName, type);
+//    QString strTransFileName = file;
+//    UnCompressParameter::SplitType type;
+//    UiTools::transSplitFileName(strTransFileName, type);
 
-    QFileInfo info(strTransFileName);
+    QFileInfo info(file);
     if (!info.exists()) {
         // 文件不存在
         TipDialog dialog(this);
@@ -618,7 +618,7 @@ bool MainWindow::checkSettings(QString file)
 
         if (!info.isReadable()) {
             TipDialog dialog(this);
-            dialog.showDialog(tr("You do not have permission to load %1").arg(strTransFileName), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK"), DDialog::ButtonNormal);
             return false;
         }
 
@@ -640,10 +640,10 @@ bool MainWindow::checkSettings(QString file)
             bool mimeIsChecked = true; // 默认该格式被勾选
 
             // 判断内容
-            if (strTransFileName.isEmpty()) {
+            if (file.isEmpty()) {
                 existMime = true;
             } else {
-                fileMime = determineMimeType(strTransFileName).name();
+                fileMime = determineMimeType(file).name();
                 if (fileMime.contains("application/"))
                     fileMime = fileMime.remove("application/");
 
@@ -2329,10 +2329,10 @@ bool MainWindow::handleArguments_Open(const QStringList &listParam)
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-    QString strFileName = listParam[0];
-    UnCompressParameter::SplitType type;
-    UiTools::transSplitFileName(strFileName, type);
-    loadArchive(strFileName);
+//    QString strFileName = listParam[0];
+//    UnCompressParameter::SplitType type;
+//    UiTools::transSplitFileName(strFileName, type);
+    loadArchive(listParam[0]);
 
     return true;
 }
@@ -2429,22 +2429,22 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
     } else if (strType == "extract") {
         m_eStartupType = StartupType::ST_Extract;
         // 解压缩
-        QStringList listTransFiles;
-        // 对压缩包文件名进行处理
-        for (int i = 0; i < listFiles.count(); ++i) {
-            QString strFileName = listFiles[i];
-            UnCompressParameter::SplitType eSplitVolume;
-            UiTools::transSplitFileName(strFileName, eSplitVolume);
-            listTransFiles << strFileName;
-        }
-        listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
+//        QStringList listTransFiles = listFiles;
+//        // 对压缩包文件名进行处理
+//        for (int i = 0; i < listFiles.count(); ++i) {
+//            QString strFileName = listFiles[i];
+//            UnCompressParameter::SplitType eSplitVolume;
+//            UiTools::transSplitFileName(strFileName, eSplitVolume);
+//            listTransFiles << strFileName;
+//        }
+//        listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
 
-        if (listTransFiles.count() == 1) {
+        if (listFiles.count() == 1) {
             // 单个压缩包，打开
-            loadArchive(listTransFiles[0]);
+            loadArchive(listFiles[0]);
         } else {
             // 多个压缩包，显示文件选择对话框，选择解压路径
-            QFileInfo fileInfo(listTransFiles[0]);
+            QFileInfo fileInfo(listFiles[0]);
             QString strDefaultPath;
             // 根据设置选项设置默认解压路径
             if ("" != m_pSettingDlg->getDefaultExtractPath()) {
@@ -2479,15 +2479,15 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
 
             m_operationtype = Operation_Extract;
             // 调用批量解压
-            if (ArchiveManager::get_instance()->batchExtractFiles(listTransFiles, strExtractPath/*, m_pSettingDlg->isAutoCreatDir()*/)) {
+            if (ArchiveManager::get_instance()->batchExtractFiles(listFiles, strExtractPath/*, m_pSettingDlg->isAutoCreatDir()*/)) {
                 qint64 qSize = 0;
-                foreach (QString strFile, listTransFiles) {
+                foreach (QString strFile, listFiles) {
                     qSize += QFile(strFile).size();
                 }
                 // 设置进度界面参数
                 m_pProgressPage->setProgressType(PT_UnCompress);
                 m_pProgressPage->setTotalSize(qSize);
-                m_pProgressPage->setArchiveName(listTransFiles[0]);
+                m_pProgressPage->setArchiveName(listFiles[0]);
                 m_pProgressPage->restartTimer(); // 重启计时器
                 m_ePageID = PI_UnCompressProgress;
             } else {
@@ -3185,13 +3185,13 @@ void MainWindow::slotShowShortcutTip()
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
-void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry)
+void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry)
 {
     if (m_eStartupType == StartupType::ST_Compresstozip7z) {
         m_stCompressParameter.qSize = size;
         stOptions.qTotalSize = m_stCompressParameter.qSize;
         // 调用快捷压缩接口
-        if (ArchiveManager::get_instance()->createArchive(listEntry, strArchiveFullPath, stOptions, UiTools::APT_Auto)) {
+        if (ArchiveManager::get_instance()->createArchive(listAddEntry, strArchiveFullPath, stOptions, UiTools::APT_Auto)) {
             // 切换进度界面
             m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);
             m_pProgressPage->setPushButtonCheckable(true, true);
@@ -3212,7 +3212,7 @@ void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath
             // 设置更新选项
             m_stUpdateOptions.reset();
             m_stUpdateOptions.qSize = size;
-            m_stUpdateOptions.listEntry = listEntry;
+            m_stUpdateOptions.listEntry = listAllEntry;
             m_stUpdateOptions.strParentPath = stOptions.strDestination;
             m_stUpdateOptions.eType = UpdateOptions::Add;
         } else {

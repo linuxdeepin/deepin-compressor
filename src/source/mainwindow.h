@@ -513,7 +513,7 @@ private Q_SLOTS:
     /**
      * @brief slotFinishCalculateSize 计算文件大小后开始追加流程
      */
-    void slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry);
+    void slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry);
 
     void slotCheckFinished(const QString &strError, const QString &strToolTip);
 

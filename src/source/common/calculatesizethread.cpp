@@ -65,9 +65,9 @@ void CalculateSizeThread::run()
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
             if (fileInfo.isSymLink()) {
-                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             } else {
-                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             }
 
             set_thread_stop(true);
@@ -76,7 +76,7 @@ void CalculateSizeThread::run()
 
         // 待压缩文件不可读
         if (!fileInfo.isReadable()) {
-            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
+            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
 
             set_thread_stop(true);
             return;
@@ -85,11 +85,11 @@ void CalculateSizeThread::run()
         if (!entry.isDirectory) {  // 如果为文件，直接获取大小
             mutex.lock();
             m_qTotalSize += entry.qSize;
-            m_listEntry << entry;
+            m_listAllEntry << entry;
             mutex.unlock();
         } else {    // 如果是文件夹，递归获取所有子文件大小总和
             mutex.lock();
-            m_listEntry << entry;
+            m_listAllEntry << entry;
             mutex.unlock();
             QtConcurrent::run(this, &CalculateSizeThread::ConstructAddOptionsByThread, file);
         }
@@ -102,7 +102,7 @@ void CalculateSizeThread::run()
     }
 
     m_stOptions.qTotalSize = m_qTotalSize;
-    emit signalFinishCalculateSize(m_qTotalSize, m_strArchiveFullPath, m_listAddEntry, m_stOptions, m_listEntry);
+    emit signalFinishCalculateSize(m_qTotalSize, m_strArchiveFullPath, m_listAddEntry, m_stOptions, m_listAllEntry);
     qInfo() << QString("计算大小线程结束，耗时:%1ms，文件总大小:%2B").arg(time1.elapsed()).arg(m_qTotalSize);
 }
 
@@ -132,9 +132,10 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
             if (fileInfo.isSymLink()) {
-                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+                qInfo() << "*********" << fileInfo.filePath();
+                emit signalError(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             } else {
-                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+                emit signalError(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
             }
 
             set_thread_stop(true);
@@ -143,7 +144,7 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
 
         // 待压缩文件不可读
         if (!fileInfo.isReadable()) {
-            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
+            emit signalError(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
 
             set_thread_stop(true);
             return;
@@ -151,7 +152,7 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
 
         if (entry.isDirectory) {
             mutex.lock();
-            m_listEntry << entry;
+            m_listAllEntry << entry;
             mutex.unlock();
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
             QtConcurrent::run(this, &CalculateSizeThread::ConstructAddOptionsByThread, entry.strFullPath);
@@ -159,7 +160,7 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
             mutex.lock();
             // 如果是文件则直接计算大小
             m_qTotalSize += entry.qSize;
-            m_listEntry << entry;
+            m_listAllEntry << entry;
             mutex.unlock();
         }
     }

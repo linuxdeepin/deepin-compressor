@@ -42,7 +42,7 @@ private:
     void ConstructAddOptionsByThread(const QString &path);
 
 Q_SIGNALS:
-    void signalFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listEntry);
+    void signalFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry);
     void signalError(const QString &strError, const QString &strToolTip);
 
 private:
@@ -51,7 +51,7 @@ private:
     QList<FileEntry> m_listAddEntry;
     CompressOptions m_stOptions;
     qint64 m_qTotalSize = 0;
-    QList<FileEntry> m_listEntry;
+    QList<FileEntry> m_listAllEntry;
     bool m_thread_stop = false; // 结束线程
 };
 

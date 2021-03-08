@@ -369,18 +369,21 @@ void CompressSettingPage::setTypeImage(const QString &strType)
 
 bool CompressSettingPage::checkFileNameVaild(const QString strText)
 {
+    QString strArchiveName = strText;
+    strArchiveName = strArchiveName.remove(" ");
+
     // 文件名为空返回错误
-    if (strText.length() == 0) {
+    if (strArchiveName.length() == 0) {
         return false;
     }
 
     // 文件名过长返回错误
-    if (strText.length() > 255) {
+    if (strArchiveName.length() > 255) {
         return false;
     }
 
     // 如果文件名中包含"/"，返回错误
-    if (strText.contains(QDir::separator())) {
+    if (strArchiveName.contains(QDir::separator())) {
         return false;
     }
 
@@ -496,13 +499,13 @@ bool CompressSettingPage::checkCompressOptionValid()
         QFileInfo file(m_listFiles.at(i));
         if (!file.exists()) {  // 待压缩文件已经不存在
             bResult = false;
-            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(file.filePath()), file.filePath());
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(file.absoluteFilePath()), file.absoluteFilePath());
             return false;
         }
 
         if (!file.isReadable()) {
             bResult = false;
-            showWarningDialog(tr("You do not have permission to compress %1").arg(file.filePath()), file.filePath());
+            showWarningDialog(tr("You do not have permission to compress %1").arg(file.absoluteFilePath()), file.absoluteFilePath());
             return false;
         }
 
@@ -522,16 +525,16 @@ bool CompressSettingPage::checkFile(const QString &path)
 
     if (!fileInfo.exists()) {  // 待压缩文件已经不存在
         if (fileInfo.isSymLink()) {
-            showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         } else {
-            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.filePath()), fileInfo.filePath());
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         }
 
         return false;
     }
 
     if (!fileInfo.isReadable()) {
-        showWarningDialog(tr("You do not have permission to compress %1").arg(fileInfo.filePath()), fileInfo.filePath());
+        showWarningDialog(tr("You do not have permission to compress %1").arg(fileInfo.absoluteFilePath()), fileInfo.absoluteFilePath());
         return false;
     }
 
