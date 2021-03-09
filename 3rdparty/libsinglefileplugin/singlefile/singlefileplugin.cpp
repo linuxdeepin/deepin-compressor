@@ -94,6 +94,13 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
 
     outputFileName += strFileName;   // 完整文件路径
 
+    // 方便右键解压时提示是否有数据解压出来
+    if (!options.bExistList) {
+        FileEntry entry;
+        entry.strFullPath = strFileName;
+        DataManager::get_instance().archiveData().listRootEntry << entry;
+    }
+
     // 对重复文件进行询问判断
     if (QFile::exists(outputFileName)) {
         OverwriteQuery query(outputFileName);

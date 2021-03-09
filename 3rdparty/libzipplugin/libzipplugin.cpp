@@ -165,6 +165,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             // 解压单个文件
             m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
 
+            // 方便右键解压时提示是否有数据解压出来
             if (!options.bExistList && i == 0) {
                 FileEntry entry;
                 entry.strFullPath = strFileName;
