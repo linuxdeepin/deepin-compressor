@@ -575,7 +575,6 @@ int UnCompressView::showEncryptionDialog(QString &strPassword)
     // 勾选密码
     DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), &dialog);
     DFontSizeManager::instance()->bind(pSelCkb, DFontSizeManager::T6, QFont::Medium);
-    pSelCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     // 密码输入框
     DPasswordEdit *pPasswordEdit = new DPasswordEdit(&dialog);

@@ -176,7 +176,6 @@ void OverwriteQuery::execute()
     DCheckBox *pApplyAllCkb = new DCheckBox;
     pApplyAllCkb->setAccessibleName("Applyall_btn");
     DFontSizeManager::instance()->bind(pApplyAllCkb, DFontSizeManager::T6, QFont::Medium);
-    pApplyAllCkb->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     DLabel *pApplyAllLbl = new DLabel(QObject::tr("Apply to all"));
     pApplyAllLbl->setMinimumSize(QSize(98, 20));
@@ -370,6 +369,9 @@ void PasswordNeededQuery::execute()
     dialog->addContent(widget);
     QRect mainWindowGeometr = getMainWindow()->geometry();
     dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - 50 + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
+
+    passwordedit->lineEdit()->setFocus(); // 默认焦点落在密码框内
+
     const int mode = dialog->exec();
 
     m_data[QStringLiteral("password")] = passwordedit->text();

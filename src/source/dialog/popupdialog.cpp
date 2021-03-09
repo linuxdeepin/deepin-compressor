@@ -172,7 +172,6 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
 
     DCheckBox *checkbox = new DCheckBox;
     checkbox->setAccessibleName("Applyall_btn");
-    checkbox->setStyleSheet("QCheckBox::indicator {width: 21px; height: 21px;}");
 
     DLabel *checkLabel = new DLabel(QObject::tr("Apply to all"));
     checkLabel->setMinimumSize(QSize(98, 20));
