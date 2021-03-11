@@ -705,6 +705,7 @@ void StepExtractJob::slotHandleExtractFinished()
 
                     // 创建解压参数
                     ExtractionOptions stOptions = m_stExtractionOptions;
+                    stOptions.password = DataManager::get_instance().archiveData().strPassword; // 第二次解压使用第一次保存的密码
                     stOptions.bAllExtract = true;
                     stOptions.bTar_7z = false;
 
