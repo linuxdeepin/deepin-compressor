@@ -30,7 +30,7 @@
 #include <QScroller>
 #include <QCheckBox>
 #include <QFileDialog>
-
+#include <QPainterPath>
 
 OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString &text, QWidget *parent)
     : QWidget(parent)

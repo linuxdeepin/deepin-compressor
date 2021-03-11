@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QPainterPath>
 
 static const int kSpacingMargin = 4;
 

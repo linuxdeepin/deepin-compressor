@@ -34,6 +34,7 @@
 #include <QMimeData>
 #include <QDebug>
 #include <QScrollBar>
+#include <QPainterPath>
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
