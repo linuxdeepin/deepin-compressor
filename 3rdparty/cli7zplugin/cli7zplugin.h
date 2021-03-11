@@ -86,6 +86,7 @@ private:
 private:
     ParseState m_parseState = ParseStateTitle;
     FileEntry m_fileEntry;
+    bool m_bWaitingPassword = false; // 是否阻塞在密码输入处
 };
 
 #endif // CLI7ZPLUGIN_H

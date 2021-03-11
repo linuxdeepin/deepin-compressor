@@ -168,7 +168,11 @@ void Cli7zPlugin::killProcess(bool emitFinished)
     // 使用SIGTERM，7z命令可以自动删除缓文件
     if (processID > 0) {
         kill(static_cast<__pid_t>(processID), SIGCONT);
-        kill(static_cast<__pid_t>(processID), SIGTERM);
+        if (m_bWaitingPassword) {
+            kill(static_cast<__pid_t>(processID), SIGKILL); // 等待输入密码时只有SIGKILL才能结束
+        } else {
+            kill(static_cast<__pid_t>(processID), SIGTERM);
+        }
     }
 
     m_isProcessKilled = true;
@@ -328,9 +332,10 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         m_eErrorType = ET_NeedPassword;
         if (handlePassword() == PFT_Cancel) {
             m_finishType = PFT_Cancel;
+            m_bWaitingPassword = true;
             return false;
         }
-
+        m_bWaitingPassword = false;
         return true;
     }
 
