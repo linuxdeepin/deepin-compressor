@@ -44,6 +44,8 @@ public:
     void setFinished();
     void clearprocess();
 
+    void showDialog();
+
 protected:
     void closeEvent(QCloseEvent *) override;
 

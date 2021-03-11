@@ -334,7 +334,7 @@ void CompressSettingPage::initUI()
     pMainLayout->addLayout(pContentLayout, 10);
     pMainLayout->addStretch();
     pMainLayout->addLayout(pBtnLayout);
-    pMainLayout->setContentsMargins(20, 6, 20, 20);
+    pMainLayout->setContentsMargins(0, 6, 0, 20);
 
     // 初始化菜单
     m_pTypeMenu = new QMenu(this);

@@ -22,6 +22,7 @@
 #include "popupdialog.h"
 
 #include <DFontSizeManager>
+#include <DWindowCloseButton>
 
 #include <QBoxLayout>
 #include <QDebug>
@@ -158,6 +159,26 @@ void ProgressDialog::clearprocess()
 {
     m_dPerent = 0.0;
     m_circleprogress->setValue(0);
+}
+
+void ProgressDialog::showDialog()
+{
+
+    //获取ddialog的标题栏
+    DTitlebar *titlebar = findChild<DTitlebar *>();
+    if (titlebar != nullptr) {
+        //获取ddialog标题栏中的关闭按钮
+        DWindowCloseButton *closeBtn = titlebar->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+        if (closeBtn != nullptr) {
+            //如果存在则将标题栏的焦点代理设置为关闭按钮
+            closeBtn->clearFocus();
+//            titlebar->setFocusProxy(closeBtn);
+        }
+        //设置ddialog的焦点代理为标题栏
+        this->setFocusProxy(titlebar);
+    }
+
+    exec();
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)

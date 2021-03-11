@@ -105,15 +105,25 @@ int main(int argc, char *argv[])
     // 对文件名进行处理
     QStringList listTransFiles;
     QStringList listSameFile;
-
-    for (int i = 0; i < newfilelist.count(); i++) {
-        QString strFileName = newfilelist[i];
-        UnCompressParameter::SplitType eSplitVolume;
-        UiTools::transSplitFileName(strFileName, eSplitVolume);
-        if (!listTransFiles.contains(strFileName)) {
-            listTransFiles << strFileName;
+    if (newfilelist.count() != 0) {
+        // 压缩时不处理文件名，其余情况处理
+        if (newfilelist.last() != "compress" && newfilelist.last() != "compress_to_7z" && newfilelist.last() != "compress_to_zip") {
+            for (int i = 0; i < newfilelist.count(); i++) {
+                QString strFileName = newfilelist[i];
+                UnCompressParameter::SplitType eSplitVolume;
+                UiTools::transSplitFileName(strFileName, eSplitVolume);
+                if (!listTransFiles.contains(strFileName)) {
+                    listTransFiles << strFileName;
+                }
+            }
+        } else {
+            listTransFiles = newfilelist;
         }
+    } else {
+        listTransFiles = newfilelist;
     }
+
+
 
     /*  说明：文件(可以是多个) + 参数
      *  参数为：compress：压缩，例/home/.../xx.txt /home/.../xx1.txt compress

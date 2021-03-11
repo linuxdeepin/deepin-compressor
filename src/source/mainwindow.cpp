@@ -1190,7 +1190,7 @@ void MainWindow::slotReceiveProgress(double dPercentage)
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         //需要添加dPercentage < 100判断，否则会出现小文件提取进度对话框不会自动关闭
         if (m_pProgressdialog->isHidden() && dPercentage < 100 && dPercentage > 0) {
-            m_pProgressdialog->exec();
+            m_pProgressdialog->showDialog();
         }
 
         m_pProgressdialog->setProcess(dPercentage);
@@ -2797,24 +2797,23 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 {
     QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
     QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
-
+    qInfo() << strPath;
     if ((mapStatus.find(strPath) != mapStatus.end()) && (!mapStatus[strPath])) {
 
-        // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
-        if (!QFile::exists(strPath)) {
-            mapStatus.remove(strPath);
-            mapPassword.remove(strPath);
-            return;
-        }
-
         mapStatus[strPath] = true;
-
         QFileInfo file(strPath);
         QString strDesText = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
 
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
         if (iResult == 1) {
+            // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
+            if (!QFile::exists(strPath)) {
+                mapStatus.remove(strPath);
+                mapPassword.remove(strPath);
+                return;
+            }
+
             if (!m_stUnCompressParameter.bModifiable) { // 不支持修改文件的压缩包
                 ConvertDialog dialogConvert(this); // 询问是否进行格式转换
                 QStringList ret = dialogConvert.showDialog();
