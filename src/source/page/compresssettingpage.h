@@ -30,6 +30,7 @@
 #include <DDoubleSpinBox>
 #include <DTextEdit>
 #include <DDialog>
+#include <DFrame>
 
 DWIDGET_USE_NAMESPACE
 
@@ -41,7 +42,7 @@ class CustomCombobox;
 class PluginManager;
 
 // 类型控件
-class TypeLabel: public DLabel
+class TypeLabel: public DFrame
 {
     Q_OBJECT
 public:
@@ -235,8 +236,8 @@ private:
     // 左侧界面
     DLabel *m_pTypePixmapLbl;        // 类型图标
     TypeLabel *m_pClickLbl;     // 点击区域
-    TypeLabel *m_pCompressTypeLbl;   // 压缩类型
-    TypeLabel *pArrowPixmapLbl;    // 菜单箭头z
+    DLabel *m_pCompressTypeLbl;   // 压缩类型
+    DLabel *pArrowPixmapLbl;    // 菜单箭头z
 
     // 右侧界面
     DLineEdit *m_pFileNameEdt;  // 压缩包名称

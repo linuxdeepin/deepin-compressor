@@ -3,12 +3,21 @@
 
 #include <DApplicationHelper>
 #include <DDialog>
+#include <DLabel>
 
 #include <QMutex>
 #include <QVariant>
 #include <QWaitCondition>
 
 DWIDGET_USE_NAMESPACE
+
+struct NewStr {
+    QStringList strList;
+    QString resultStr;
+    int fontHeifht = 0;
+};
+
+NewStr autoCutText(const QString &text, DLabel *pDesLbl);
 
 /**
  * @brief The OverwriteQuery_Result enum   处理文件已存在时的选项
@@ -23,6 +32,21 @@ enum OverwriteQuery_Result {
 };
 
 typedef QHash<QString, QVariant> QueryData;
+
+class CustomDDialog: public DDialog
+{
+    Q_OBJECT
+public:
+    explicit CustomDDialog(QWidget *parent = nullptr);
+    explicit CustomDDialog(const QString &title, const QString &message, QWidget *parent = 0);
+
+    // QWidget interface
+protected:
+    void changeEvent(QEvent *event) override;
+
+Q_SIGNALS:
+    void signalFontChange();
+};
 
 // 询问对话框
 class Query : public QObject
@@ -122,6 +146,14 @@ public:
      */
     bool responseOverwriteAll();
 
+    /**
+     * @brief autoFeed 自动换行
+     * @param label1
+     * @param label2
+     * @param dialog
+     */
+    void autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog);
+
 private:
     /**
      * @brief setWidgetColor    设置面板颜色
@@ -138,6 +170,14 @@ private:
      * @param alphaF
      */
     void setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF);
+
+private:
+    QString m_strDesText;
+    QString m_strFileName;
+    int m_iLabelOldHeight = 0;
+    int m_iLabelOld1Height = 0;
+    int m_iCheckboxOld1Height = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 // 密码输入框
@@ -181,6 +221,18 @@ public:
     void execute() override;
 
     bool responseYes();
+
+    /**
+     * @brief autoFeed 自动换行
+     * @param label
+     * @param dialog
+     */
+    void autoFeed(DLabel *label, CustomDDialog *dialog);
+
+private:
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 #endif // QUERIES_H

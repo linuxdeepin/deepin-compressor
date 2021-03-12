@@ -67,7 +67,61 @@ static QPixmap renderSVG(const QString &filePath, const QSize &size)
     return pixmap;
 }
 
+NewStr autoCutText(const QString &text, DLabel *pDesLbl)
+{
+    if (text.isEmpty() || nullptr == pDesLbl) {
+        return NewStr();
+    }
 
+    QFont font; // 应用使用字体对象
+    QFontMetrics font_label(font);
+    QString strText = text;
+    int titlewidth = font_label.width(strText);
+    QString str;
+    NewStr newstr;
+    int width = pDesLbl->width();
+    if (titlewidth < width) {
+        newstr.strList.append(strText);
+        newstr.resultStr += strText;
+    } else {
+        for (int i = 0; i < strText.count(); i++) {
+            str += strText.at(i);
+
+            if (font_label.width(str) > width) { //根据label宽度调整每行字符数
+                str.remove(str.count() - 1, 1);
+                newstr.strList.append(str);
+                newstr.resultStr += str + "\n";
+                str.clear();
+                --i;
+            }
+        }
+        newstr.strList.append(str);
+        newstr.resultStr += str;
+    }
+    newstr.fontHeifht = font_label.height();
+    return newstr;
+}
+
+CustomDDialog::CustomDDialog(QWidget *parent)
+    : DDialog(parent)
+{
+
+}
+
+CustomDDialog::CustomDDialog(const QString &title, const QString &message, QWidget *parent)
+    : DDialog(title, message, parent)
+{
+
+}
+
+void CustomDDialog::changeEvent(QEvent *event)
+{
+    if (QEvent::FontChange == event->type()) {
+        emit signalFontChange();
+    }
+
+    DDialog::changeEvent(event);
+}
 
 Query::Query(QObject *parent)
     : QObject(parent)
@@ -143,10 +197,9 @@ void OverwriteQuery::execute()
         m_pParent = getMainWindow();
     }
 
-    DDialog *dialog = new DDialog(m_pParent);
+    CustomDDialog *dialog = new CustomDDialog(m_pParent);
     dialog->setAccessibleName("Overwrite_dialog");
-    dialog->setMinimumSize(QSize(380, 190));
-
+    dialog->setFixedWidth(380);
     // 设置对话框图标
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
@@ -156,30 +209,27 @@ void OverwriteQuery::execute()
     pFileNameLbl->setMinimumSize(QSize(280, 20));
     pFileNameLbl->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
+    pFileNameLbl->setFixedWidth(340);
 
-    int limitCounts = 16;
-    int left = 8, right = 8;
-    QString fileName = file.fileName();
-    QString displayName = "";
-    displayName = fileName.length() > limitCounts ? fileName.left(left) + "..." + fileName.right(right) : fileName;
-    pFileNameLbl->setText(displayName);
+    m_strFileName = file.fileName();
 
     // 显示提示语
     DLabel *pTipLbl = new DLabel;
-    pTipLbl->setMinimumSize(QSize(154, 20));
+    pTipLbl->setFixedWidth(340);
     pTipLbl->setAlignment(Qt::AlignCenter);
     DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Medium);
     pTipLbl->setText(QObject::tr("Another file with the same name already exists, replace it?"));
-    pTipLbl->setWordWrap(true);
+//    pTipLbl->setWordWrap(true);
+    m_strDesText = pTipLbl->text();
 
     // 应用到全部勾选
     DCheckBox *pApplyAllCkb = new DCheckBox;
     pApplyAllCkb->setAccessibleName("Applyall_btn");
     DFontSizeManager::instance()->bind(pApplyAllCkb, DFontSizeManager::T6, QFont::Medium);
 
-    DLabel *pApplyAllLbl = new DLabel(QObject::tr("Apply to all"));
-    pApplyAllLbl->setMinimumSize(QSize(98, 20));
-    DFontSizeManager::instance()->bind(pApplyAllLbl, DFontSizeManager::T6, QFont::Medium);
+    DCheckBox *checkbox = new DCheckBox(tr("Apply to allApply"));
+
+    DFontSizeManager::instance()->bind(checkbox, DFontSizeManager::T6, QFont::Medium);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
@@ -198,27 +248,18 @@ void OverwriteQuery::execute()
     dialog->addButton(QObject::tr("Skip"));
     dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
 
-    // 布局
-    QHBoxLayout *checkLayout = new QHBoxLayout;
-    checkLayout->addStretch();
-    checkLayout->addWidget(pApplyAllCkb);
-    checkLayout->addWidget(pApplyAllLbl);
-    checkLayout->addStretch();
-
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(10, 0, 10, 0);
-    mainlayout->addWidget(pTipLbl, 1);
-    mainlayout->addWidget(pFileNameLbl, 0);
-
-    mainlayout->addLayout(checkLayout);
-    DWidget *widget = new DWidget(dialog);
-
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
+    dialog->addContent(pTipLbl, Qt::AlignHCenter);
+    dialog->addContent(pFileNameLbl, Qt::AlignHCenter);
+    dialog->addContent(checkbox, Qt::AlignHCenter);
 
     //setTabOrder需放在布局最后，否则不生效
     dialog->setTabOrder(pApplyAllCkb, dialog->getButton(0));
     dialog->setTabOrder(dialog->getButton(0), dialog->getButton(1));
+
+    autoFeed(pFileNameLbl, pTipLbl, dialog);
+    connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
+        autoFeed(pFileNameLbl, pTipLbl, dialog);
+    });
 
     // 操作结果
     const int mode = dialog->exec();
@@ -265,6 +306,29 @@ bool OverwriteQuery::responseOverwrite()
 bool OverwriteQuery::responseOverwriteAll()
 {
     return m_data.value(QStringLiteral("response")).toInt() == Result_OverwriteAll;
+}
+
+void OverwriteQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog)
+{
+    NewStr newstr = autoCutText(m_strDesText, label2);
+    label2->setText(newstr.resultStr);
+    int height_lable = newstr.strList.size() * newstr.fontHeifht;
+    label2->setFixedHeight(height_lable);
+
+    // 字符串太长的情况下用中间使用...
+    QFont font;
+    QFontMetrics elideFont(font);
+    label1->setText(elideFont.elidedText(m_strFileName, Qt::ElideMiddle, 340));
+
+    if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        dialog->adjustSize();
+    } else {
+        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height - m_iCheckboxOld1Height + height_lable + 2 * newstr.fontHeifht); //字号变化后自适应调整
+    }
+    m_iLabelOldHeight = height_lable;
+    m_iLabelOld1Height = newstr.fontHeifht;
+    m_iCheckboxOld1Height = newstr.fontHeifht;
+    m_iDialogOldHeight = dialog->height();
 }
 
 void OverwriteQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF)
@@ -414,31 +478,31 @@ void LoadCorruptQuery::execute()
     }
 
     // 控件
-    DDialog *dialog = new DDialog(m_pParent);
+    CustomDDialog *dialog = new CustomDDialog(m_pParent);
     dialog->setAccessibleName("LoadCorruptQuery_dialog");
-    dialog->setMinimumSize(QSize(380, 140));
+    dialog->setFixedWidth(380);
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
     dialog->setIcon(pixmap);
 
     DLabel *strlabel = new DLabel;
-    strlabel->setMinimumSize(QSize(293, 20));
+    strlabel->setFixedWidth(340);
     strlabel->setAlignment(Qt::AlignCenter);
-    strlabel->setWordWrap(true);
+//    strlabel->setWordWrap(true);
     strlabel->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
     strlabel->setText(tr("The archive is damaged"));
+    m_strDesText = strlabel->text();
 
     dialog->addButton(tr("Open as read-only"));
     dialog->addButton(tr("Cancel"), true, DDialog::ButtonRecommend);
 
-    //布局
-    QVBoxLayout *mainlayout = new QVBoxLayout;
-    mainlayout->setContentsMargins(10, 0, 10, 0);
-    mainlayout->addWidget(strlabel, 0, Qt::AlignVCenter);
 
-    DWidget *widget = new DWidget(dialog);
-    widget->setLayout(mainlayout);
-    dialog->addContent(widget);
+    dialog->addContent(strlabel, Qt::AlignHCenter);
+
+    autoFeed(strlabel, dialog);
+    connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
+        autoFeed(strlabel, dialog);
+    });
 
     // 选择
     const int mode = dialog->exec();
@@ -455,4 +519,19 @@ void LoadCorruptQuery::execute()
 bool LoadCorruptQuery::responseYes()
 {
     return (m_data.value(QStringLiteral("response")).toInt() == Result_Readonly);
+}
+
+void LoadCorruptQuery::autoFeed(DLabel *label, CustomDDialog *dialog)
+{
+    NewStr newstr = autoCutText(m_strDesText, label);
+    label->setText(newstr.resultStr);
+    int height_lable = newstr.strList.size() * newstr.fontHeifht;
+    label->setFixedHeight(height_lable);
+    if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        dialog->adjustSize();
+    } else {
+        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight + height_lable); //字号变化后自适应调整
+    }
+    m_iLabelOldHeight = height_lable;
+    m_iDialogOldHeight = dialog->height();
 }

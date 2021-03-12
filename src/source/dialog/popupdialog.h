@@ -45,6 +45,19 @@ public:
      * @return              操作返回值
      */
     int showDialog(const QString &strDesText = "", const QString btnMsg = "", ButtonType btnType = ButtonNormal, const QString &strToolTip = "");
+    /**
+     * @brief autoFeed 自动换行
+     * @param label
+     */
+    void autoFeed(DLabel *label);
+
+protected:
+    void changeEvent(QEvent *event) override;
+
+private:
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 class ConvertDialog : public DDialog
@@ -55,6 +68,20 @@ public:
     ~ConvertDialog() override;
 
     QStringList showDialog();
+    /**
+     * @brief autoFeed 自动换行
+     * @param label
+     */
+    void autoFeed(DLabel *label);
+
+protected:
+    void changeEvent(QEvent *event) override;
+
+private:
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iLabelOld1Height = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 
@@ -81,6 +108,20 @@ public:
     int showDialog(const QString &strDesText = "", const QString btnMsg1 = "", ButtonType btnType1 = ButtonNormal,
                    const QString btnMsg2 = "", ButtonType btnType2 = ButtonNormal,
                    const QString btnMsg3 = "", ButtonType btnType3 = ButtonNormal);
+
+    /**
+     * @brief autoFeed 自动换行
+     * @param label
+     */
+    void autoFeed(DLabel *label);
+
+protected:
+    void changeEvent(QEvent *event) override;
+
+private:
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 /**
@@ -128,10 +169,27 @@ public:
      */
     bool getApplyAll();
 
+    /**
+     * @brief autoFeed 自动换行
+     * @param label1
+     * @param label2
+     */
+    void autoFeed(DLabel *label1, DLabel *label2);
+
+protected:
+    void changeEvent(QEvent *event) override;
+
 private:
     int m_ret = 0;   // 对话框状态
     int m_retType = 0;   // 对话框选择结果
     bool m_applyAll = false;  // 应用到全部文件
+
+    QString m_strFilesname; // 重复文件名
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iLabelOld1Height = 0;
+    int m_iCheckboxOld1Height = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 #endif // POPUPDIALOG_H

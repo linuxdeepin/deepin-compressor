@@ -45,9 +45,9 @@
 #include <cmath>
 
 TypeLabel::TypeLabel(QWidget *parent)
-    : DLabel(parent)
+    : DFrame(parent)
 {
-
+    setFrameShape(QFrame::NoFrame);
 }
 
 TypeLabel::~TypeLabel()
@@ -58,7 +58,7 @@ TypeLabel::~TypeLabel()
 void TypeLabel::mousePressEvent(QMouseEvent *event)
 {
     emit labelClickEvent(event);
-    DLabel::mousePressEvent(event);
+    DFrame::mousePressEvent(event);
 }
 
 void TypeLabel::paintEvent(QPaintEvent *event)
@@ -77,19 +77,19 @@ void TypeLabel::paintEvent(QPaintEvent *event)
         painter.setRenderHint(QPainter::Antialiasing);
         style->drawPrimitive(DStyle::PE_FrameFocusRect, opt1, &painter, this);
     }
-    QLabel::paintEvent(event);
+    DFrame::paintEvent(event);
 }
 
 void TypeLabel::focusInEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
-    QLabel::focusInEvent(event);
+    DFrame::focusInEvent(event);
 }
 
 void TypeLabel::focusOutEvent(QFocusEvent *event)
 {
     m_reson = event->reason();
-    QLabel::focusOutEvent(event);
+    DFrame::focusOutEvent(event);
 }
 
 
@@ -183,8 +183,8 @@ void CompressSettingPage::initUI()
     // 左侧界面
     m_pTypePixmapLbl = new DLabel(this);
     m_pClickLbl = new TypeLabel(this);
-    m_pCompressTypeLbl = new TypeLabel(this);
-    pArrowPixmapLbl = new TypeLabel(this);
+    m_pCompressTypeLbl = new DLabel(this);
+    pArrowPixmapLbl = new DLabel(this);
 
     m_pClickLbl->setMinimumSize(125, 40);
     m_pClickLbl->setObjectName("ClickTypeLabel");
