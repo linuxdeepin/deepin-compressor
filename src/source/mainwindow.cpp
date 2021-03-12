@@ -2369,7 +2369,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         listFiles = UiTools::removeSameFileName(listFiles);
 
         if (listFiles.count() == 1) {
-            strArchivePath += QDir::separator() + UiTools::handleFileName(info.filePath()) + strSuffix;
+            strArchivePath += QDir::separator() + info.fileName() + strSuffix;
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());

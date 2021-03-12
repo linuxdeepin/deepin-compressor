@@ -5,19 +5,19 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Le fichier d&apos;origine de %1 n&apos;existe pas, veuillez vérifier et réessayer</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 n&apos;existe pas sur le disque, veuillez vérifier et réessayer</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation>Vous n&apos;êtes pas autorisé à compresser %1</translation>
     </message>
 </context>
 <context>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Le nom est le même que celui de l&apos;archive compressée, veuillez en utiliser un autre</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Le nom est le même que celui de l&apos;archive compressée, veuillez en utiliser un autre</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -723,12 +723,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>Vous ne pouvez pas ajouter l&apos;archive à elle-même</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"/>
+        <translation>Vous ne pouvez pas ajouter de fichiers aux archives dans ce type de fichier</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2987"/>

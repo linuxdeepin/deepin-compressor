@@ -199,7 +199,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Име је исто као од запаковане архиве, употребите друго име</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Име је исто као од запаковане архиве, употребите друго име</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -728,7 +728,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"/>
+        <translation>Не можете додавати архиве ове врсте датотека</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2987"/>

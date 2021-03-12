@@ -5,19 +5,19 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>El fitxer original de %1 no existeix. Si us plau, comproveu-ho i torneu-ho a provar.</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 no existeix al disc. Si us plau, comproveu-ho i torneu-ho a provar.</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation>No teniu permís per comprimir %1</translation>
     </message>
 </context>
 <context>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>El nom és igual al de l&apos;arxiu comprimit. Si us plau, useu-ne un altre.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>No podeu afegir un arxiu a si mateix.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>

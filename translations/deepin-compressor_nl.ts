@@ -5,19 +5,19 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Het oorspronkelijke bestand van &apos;%1&apos; bestaat niet. Loop alles na en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 is niet aanwezig op de schijf. Controleer het bestand en probeer het opnieuw.</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation>Je bent niet bevoegd om %1 in te pakken</translation>
     </message>
 </context>
 <context>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>De naam is dezelfde als die van een ander archief. Kies een andere naam.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -723,7 +723,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>Je kunt het archief niet toevoegen aan hetzelfde archief</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
