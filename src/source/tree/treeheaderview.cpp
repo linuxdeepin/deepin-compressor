@@ -87,22 +87,6 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
     QLabel::paintEvent(e);
 }
 
-void PreviousLabel::hideEvent(QHideEvent *event)
-{
-    move(SCROLLMARGIN, 0);
-    headerView_->setFixedHeight(38);
-    QLabel::hideEvent(event);
-    headerView_->update();
-}
-
-void PreviousLabel::showEvent(QShowEvent *event)
-{
-    move(SCROLLMARGIN, 38);
-    headerView_->setFixedHeight(74);
-    QLabel::showEvent(event);
-    headerView_->update();
-}
-
 void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {
     // qInfo() << text();
@@ -160,8 +144,9 @@ TreeHeaderView::TreeHeaderView(Qt::Orientation orientation, QWidget *parent)
 
     m_pPreLbl = new PreviousLabel(this);
     m_pPreLbl->setFixedHeight(36);
-    m_pPreLbl->hide();
     m_pPreLbl->setObjectName("gotoPreviousLabel");
+    m_pPreLbl->move(SCROLLMARGIN, 38);
+    m_pPreLbl->hide();
     DFontSizeManager::instance()->bind(m_pPreLbl, DFontSizeManager::T6, QFont::Weight::Medium);
 }
 
@@ -200,6 +185,11 @@ PreviousLabel *TreeHeaderView::getpreLbl()
 void TreeHeaderView::setPreLblVisible(bool bVisible)
 {
     m_pPreLbl->setVisible(bVisible);
+    if (bVisible) {
+        setFixedHeight(76); // 36+38+2 与item间隔2px
+    } else {
+        setFixedHeight(38);
+    }
 }
 /*
 void TreeHeaderView::paintEvent(QPaintEvent *e)

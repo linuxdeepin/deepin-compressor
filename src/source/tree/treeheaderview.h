@@ -45,8 +45,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    void hideEvent(QHideEvent *event) override;
-    void showEvent(QShowEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;

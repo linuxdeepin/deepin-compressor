@@ -264,7 +264,7 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     // 绘制整行背景，高度-2以让高分屏非整数缩放比例下无被选中的蓝色细线，防止原来通过delegate绘制单元格交替颜色背景出现的高分屏非整数缩放比例下qrect精度问题导致的横向单元格间出现白色边框
     QPainterPath path;
     QRect rowRect { options.rect.x() - header()->offset(),
-                    options.rect.y() + 1,
+                    options.rect.y(),
                     header()->length() - header()->sectionPosition(0),
                     options.rect.height() - 2 };
     rowRect.setX(rowRect.x() + margin);
