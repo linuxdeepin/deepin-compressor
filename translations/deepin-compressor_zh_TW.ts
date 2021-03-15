@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>CalculateSizeThread</name>
     <message>
@@ -23,7 +25,7 @@
 <context>
     <name>CommentProgressDialog</name>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="234"/>
         <source>Updating the comment...</source>
         <translation>注釋更新中，請稍候...</translation>
     </message>
@@ -280,22 +282,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="254"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="255"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
         <source>Convert</source>
         <translation>轉換</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="259"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>不支援對該壓縮格式的修改。為了保持對該文件的修改，建議您進行壓縮格式轉換。</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="272"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
         <source>Convert the format to:</source>
         <translation>轉換壓縮格式為：</translation>
     </message>
@@ -348,17 +350,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="427"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
         <source>The archive is damaged</source>
         <translation>當前壓縮包文件已損壞</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="429"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
         <source>Open as read-only</source>
         <translation>以只讀模式打開</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="430"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -478,18 +480,18 @@
         <translation>選擇文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2816"/>
+        <location filename="../src/source/mainwindow.cpp" line="2808"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3087"/>
+        <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Enter up to %1 characters</source>
         <translation>注釋內容不得超過%1字符</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="195"/>
-        <location filename="../src/source/mainwindow.cpp" line="2963"/>
+        <location filename="../src/source/mainwindow.cpp" line="2962"/>
         <source>File info</source>
         <translation>文件訊息</translation>
     </message>
@@ -513,7 +515,7 @@
         <location filename="../src/source/mainwindow.cpp" line="588"/>
         <location filename="../src/source/mainwindow.cpp" line="1426"/>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
-        <location filename="../src/source/mainwindow.cpp" line="2816"/>
+        <location filename="../src/source/mainwindow.cpp" line="2808"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -731,47 +733,47 @@
         <translation>此壓縮包格式不支援追加文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2987"/>
+        <location filename="../src/source/mainwindow.cpp" line="2986"/>
         <source>Basic info</source>
         <translation>基本訊息</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3003"/>
+        <location filename="../src/source/mainwindow.cpp" line="3002"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3004"/>
+        <location filename="../src/source/mainwindow.cpp" line="3003"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3005"/>
+        <location filename="../src/source/mainwindow.cpp" line="3004"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3006"/>
+        <location filename="../src/source/mainwindow.cpp" line="3005"/>
         <source>Time created</source>
         <translation>創建時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3007"/>
+        <location filename="../src/source/mainwindow.cpp" line="3006"/>
         <source>Time accessed</source>
         <translation>訪問時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3008"/>
+        <location filename="../src/source/mainwindow.cpp" line="3007"/>
         <source>Time modified</source>
         <translation>修改時間</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3018"/>
+        <location filename="../src/source/mainwindow.cpp" line="3017"/>
         <source>Archive</source>
         <translation>壓縮文件</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3049"/>
+        <location filename="../src/source/mainwindow.cpp" line="3048"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
@@ -880,7 +882,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="332"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
         <source>Encrypted file, please enter the password</source>
         <translation>此文件已加密，請輸入解壓密碼</translation>
     </message>
@@ -888,12 +890,12 @@
 <context>
     <name>PreviousLabel</name>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
         <source>Current path:</source>
         <translation>目前路徑：</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="60"/>
         <source>Back to: %1</source>
         <translation>返回到：%1</translation>
     </message>
@@ -901,34 +903,34 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="51"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="52"/>
         <source>%1 task(s) in progress</source>
         <translation>有%1個任務正在進行</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="58"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="101"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="59"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="102"/>
         <source>Task</source>
         <translation>當前任務</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="64"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="112"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="65"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="113"/>
         <source>Extracting</source>
         <translation>正在壓縮</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="171"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="192"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>您確定要停止提取文件嗎？</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="173"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="173"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Confirm</source>
         <translation>確定</translation>
     </message>
@@ -1080,94 +1082,94 @@
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2813"/>
+        <location filename="../src/source/mainwindow.cpp" line="2805"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>文件“%1”已修改，是否將此修改更新到壓縮包？</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="341"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="5"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="26"/>
         <source>General</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="6"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="27"/>
         <source>Extraction</source>
         <translation>解壓</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="7"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>自動建立資料夾</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="8"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
         <translation>當解壓完成後自動開啟對應的資料夾</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="9"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
         <source>File Management</source>
         <translation>文件管理</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="10"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="31"/>
         <source>Delete files after compression</source>
         <translation>壓縮後刪除原來的文件</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="11"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="32"/>
         <source>Files Associated</source>
         <translation>關聯文件</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="33"/>
         <source>File Type</source>
         <translation>文件類型</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="342"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="172"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="168"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否取代？</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="199"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="164"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="169"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Skip</source>
         <translation>跳過</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="163"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="165"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
         <source>Merge</source>
         <translation>合併</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="170"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="181"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="177"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
         <source>Apply to all</source>
         <translation>應用程式到全部文件</translation>
     </message>
@@ -1185,63 +1187,63 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="103"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <translation>全選</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="195"/>
         <source>Current directory</source>
         <translation>目前目錄</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="104"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="125"/>
         <source>Clear All</source>
         <translation>取消全選</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="105"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
         <source>Recommended</source>
         <translation>推薦選擇</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="139"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="160"/>
         <source>Extract archives to</source>
         <translation>預設解壓位置</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="205"/>
         <source>Other directory</source>
         <translation>其他目錄</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="200"/>
         <source>Desktop</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="251"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
         <source>Delete archives after extraction</source>
         <translation>解壓後刪除壓縮文件</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="299"/>
         <source>Never</source>
         <translation>從不</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="302"/>
         <source>Ask for confirmation</source>
         <translation>詢問確認</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="284"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="305"/>
         <source>Always</source>
         <translation>總是</translation>
     </message>
@@ -1322,49 +1324,49 @@
         <translation>使用密碼</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>提取</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="647"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
         <source>Extract to current directory</source>
         <translation>提取到目前資料夾</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="652"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="659"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
         <source>Open with</source>
         <translation>開啟方式</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="663"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="764"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
         <source>Select default program</source>
         <translation>選擇預設程式</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Confirm</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>是否刪除已選定文件？</translation>
     </message>

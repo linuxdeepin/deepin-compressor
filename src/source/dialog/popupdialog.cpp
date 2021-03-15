@@ -207,7 +207,7 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
         addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
     }
 
-    DCheckBox *checkbox = new DCheckBox(tr("Apply to all"));
+    DCheckBox *checkbox = new DCheckBox(QObject::tr("Apply to all"));
     DFontSizeManager::instance()->bind(checkbox, DFontSizeManager::T6, QFont::Medium);
     checkbox->setAccessibleName("Applyall_btn");
 

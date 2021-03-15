@@ -1,29 +1,31 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="az">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">%1 faylının əsli mövcud deyil,lütfən, yoxlayın və təkrar edin</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Diskdə %1 mövcud deyil, lütfən, yoxlayın və təkrar edin</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">%1 sıxmaöa icazəniz yoxdur</translation>
     </message>
 </context>
 <context>
     <name>CommentProgressDialog</name>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="213"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="234"/>
         <source>Updating the comment...</source>
         <translation>Şərh yenilənir...</translation>
     </message>
@@ -199,7 +201,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Ad, sıxışdırılmış arxiv adı ilə eynidir, lütən başqasını seçin</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
@@ -280,22 +282,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="254"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="255"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
         <source>Convert</source>
         <translation>Çevirmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="259"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>Bu fayl növündəki arxivlərdə dəyişiklik etmək dəstəklənmir. Dəyişiklikləri saxlamaq üçün arxivin formatını dəyişin.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="272"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
         <source>Convert the format to:</source>
         <translation>Bu formata çevirmək:</translation>
     </message>
@@ -348,17 +350,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="427"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
         <source>The archive is damaged</source>
         <translation>Arxiv zədələnib</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="429"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
         <source>Open as read-only</source>
         <translation>Yalnız oxumaq üçün açmaq</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="430"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
@@ -478,18 +480,18 @@
         <translation>Faylı seçin</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2816"/>
+        <location filename="../src/source/mainwindow.cpp" line="2808"/>
         <source>Update</source>
         <translation>Yeniləmək</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3087"/>
+        <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Enter up to %1 characters</source>
         <translation>%1 və daha çox işarə daxil edin</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="195"/>
-        <location filename="../src/source/mainwindow.cpp" line="2963"/>
+        <location filename="../src/source/mainwindow.cpp" line="2962"/>
         <source>File info</source>
         <translation>Fayl məlumatı</translation>
     </message>
@@ -513,7 +515,7 @@
         <location filename="../src/source/mainwindow.cpp" line="588"/>
         <location filename="../src/source/mainwindow.cpp" line="1426"/>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
-        <location filename="../src/source/mainwindow.cpp" line="2816"/>
+        <location filename="../src/source/mainwindow.cpp" line="2808"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
@@ -708,7 +710,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Ad, sıxışdırılmış arxiv adı ilə eynidir, lütən başqasını seçin</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -723,55 +725,55 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished">Arxivi öz daxilinə əlavə edə bilməzsiniz</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"/>
+        <translation>Bu fayl növündəki arxivlərə fayllar əlavə edə bilməzsiniz</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2987"/>
+        <location filename="../src/source/mainwindow.cpp" line="2986"/>
         <source>Basic info</source>
         <translation>Əsas məlumat</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3003"/>
+        <location filename="../src/source/mainwindow.cpp" line="3002"/>
         <source>Size</source>
         <translation>Ölçüsü</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3004"/>
+        <location filename="../src/source/mainwindow.cpp" line="3003"/>
         <source>Type</source>
         <translation>Növ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3005"/>
+        <location filename="../src/source/mainwindow.cpp" line="3004"/>
         <source>Location</source>
         <translation>Yer</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3006"/>
+        <location filename="../src/source/mainwindow.cpp" line="3005"/>
         <source>Time created</source>
         <translation>Yaradılma vaxtı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3007"/>
+        <location filename="../src/source/mainwindow.cpp" line="3006"/>
         <source>Time accessed</source>
         <translation>Müdaxilə vaxtı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3008"/>
+        <location filename="../src/source/mainwindow.cpp" line="3007"/>
         <source>Time modified</source>
         <translation>Dəyişdirilmə vaxtı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3018"/>
+        <location filename="../src/source/mainwindow.cpp" line="3017"/>
         <source>Archive</source>
         <translation>Arxiv</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3049"/>
+        <location filename="../src/source/mainwindow.cpp" line="3048"/>
         <source>Comment</source>
         <translation>Şərh</translation>
     </message>
@@ -880,7 +882,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="332"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
         <source>Encrypted file, please enter the password</source>
         <translation>Şifrələnmiş fayl, lütfən, şifrəni daxil edin</translation>
     </message>
@@ -888,12 +890,12 @@
 <context>
     <name>PreviousLabel</name>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="51"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
         <source>Current path:</source>
         <translation>Cari yol:</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/treeheaderview.cpp" line="59"/>
+        <location filename="../src/source/tree/treeheaderview.cpp" line="60"/>
         <source>Back to: %1</source>
         <translation>Geriyə: %1</translation>
     </message>
@@ -901,34 +903,34 @@
 <context>
     <name>ProgressDialog</name>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="51"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="52"/>
         <source>%1 task(s) in progress</source>
         <translation>%1 tapşırıq(lar) yerinə yetirilir</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="58"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="101"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="59"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="102"/>
         <source>Task</source>
         <translation>Tapşırıq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="64"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="112"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="65"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="113"/>
         <source>Extracting</source>
         <translation>Çıxarılır</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="171"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="192"/>
         <source>Are you sure you want to stop the extraction?</source>
         <translation>Çıxarılmanı dayandırmaq istədiyinizə əminsiniz?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="173"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="173"/>
+        <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Confirm</source>
         <translation>Təsdiq etmək</translation>
     </message>
@@ -1080,94 +1082,94 @@
         <translation>Ölçüsü</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2813"/>
+        <location filename="../src/source/mainwindow.cpp" line="2805"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 dəyişdirildi. Dəyişiklikləri arxivdə saxlamaq istəyirsiniz?</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="341"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="5"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="26"/>
         <source>General</source>
         <translation>Əsas</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="6"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="27"/>
         <source>Extraction</source>
         <translation>Çıxarılmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="7"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
         <source>Auto create a folder for multiple extracted files</source>
         <translation>Çıxarılan çoxsaylı fayllar üçün avtomatik qovluq yaratmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="8"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
         <translation>Başa çatdıqda çıxarılan faylları göstərmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="9"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
         <source>File Management</source>
         <translation>Fayl İdarəedilməsi</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="10"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="31"/>
         <source>Delete files after compression</source>
         <translation>Sıxıldıqdan sonra faylları silmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="11"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="32"/>
         <source>Files Associated</source>
         <translation>Fayl əlaqələri</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settings_translation.cpp" line="12"/>
+        <location filename="../src/source/dialog/settings_translation.cpp" line="33"/>
         <source>File Type</source>
         <translation>Fayl növü</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="342"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="172"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="168"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Bu adla başqa bir fayl mövcuddur, o əvəz edilsin?</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="199"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="164"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="169"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Skip</source>
         <translation>Ötürmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="163"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>Bu adla başqa bir qovluq mövcuddur, o əvəz edilsin?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="165"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
         <source>Merge</source>
         <translation>Birləşdirmək</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="170"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
         <source>Replace</source>
         <translation>Əvəz etmək</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="181"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="177"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
         <source>Apply to all</source>
         <translation>Hamısına tətbiq etmək</translation>
     </message>
@@ -1185,63 +1187,63 @@
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="103"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <translation>Hamısını seçmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="174"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="195"/>
         <source>Current directory</source>
         <translation>Cari qoluq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="104"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="125"/>
         <source>Clear All</source>
         <translation>Hamısını silmək</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="105"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
         <source>Recommended</source>
         <translation>Tovsiyyə olunan</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="139"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="160"/>
         <source>Extract archives to</source>
         <translation>Arxivləri buraya çıxartmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="205"/>
         <source>Other directory</source>
         <translation>Başqa qovluq</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="145"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="200"/>
         <source>Desktop</source>
         <translation>İş Masası</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="251"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
         <source>Delete archives after extraction</source>
         <translation>Çıxarıldıqdan sonra arxiv silinsin</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="299"/>
         <source>Never</source>
         <translation>Heç vaxt</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="281"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="302"/>
         <source>Ask for confirmation</source>
         <translation>Tədiq edilməsi soruşulsun</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="257"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="284"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="305"/>
         <source>Always</source>
         <translation>Həmişə</translation>
     </message>
@@ -1322,49 +1324,49 @@
         <translation>Şifrə istifadə etmək</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Çıxartmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="647"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
         <source>Extract to current directory</source>
         <translation>Cari qovluğa çıxartmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
         <source>Open</source>
         <translation>Açmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="652"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
         <source>Delete</source>
         <translation>Silmək</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="659"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
         <source>Open with</source>
         <translation>Bununla açmaq</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="663"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="764"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
         <source>Select default program</source>
         <translation>Standart proqramı seçin</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Confirm</source>
         <translation>Təsdiq etmək</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="714"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Seçilmiş fayl(lar)ı silmək istəyirsiniz?</translation>
     </message>

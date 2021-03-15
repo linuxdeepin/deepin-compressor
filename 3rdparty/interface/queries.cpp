@@ -223,13 +223,9 @@ void OverwriteQuery::execute()
     m_strDesText = pTipLbl->text();
 
     // 应用到全部勾选
-    DCheckBox *pApplyAllCkb = new DCheckBox;
+    DCheckBox *pApplyAllCkb = new DCheckBox(QObject::tr("Apply to all"));
     pApplyAllCkb->setAccessibleName("Applyall_btn");
     DFontSizeManager::instance()->bind(pApplyAllCkb, DFontSizeManager::T6, QFont::Medium);
-
-    DCheckBox *checkbox = new DCheckBox(tr("Apply to allApply"));
-
-    DFontSizeManager::instance()->bind(checkbox, DFontSizeManager::T6, QFont::Medium);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
@@ -250,7 +246,7 @@ void OverwriteQuery::execute()
 
     dialog->addContent(pTipLbl, Qt::AlignHCenter);
     dialog->addContent(pFileNameLbl, Qt::AlignHCenter);
-    dialog->addContent(checkbox, Qt::AlignHCenter);
+    dialog->addContent(pApplyAllCkb, Qt::AlignHCenter);
 
     //setTabOrder需放在布局最后，否则不生效
     dialog->setTabOrder(pApplyAllCkb, dialog->getButton(0));
