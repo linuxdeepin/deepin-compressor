@@ -255,7 +255,7 @@ void OverwriteQuery::execute()
     autoFeed(pFileNameLbl, pTipLbl, dialog);
     connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
         autoFeed(pFileNameLbl, pTipLbl, dialog);
-    });
+    }, Qt::DirectConnection);
 
     // 操作结果
     const int mode = dialog->exec();
@@ -498,7 +498,7 @@ void LoadCorruptQuery::execute()
     autoFeed(strlabel, dialog);
     connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
         autoFeed(strlabel, dialog);
-    });
+    }, Qt::DirectConnection);
 
     // 选择
     const int mode = dialog->exec();
