@@ -199,7 +199,7 @@ TEST_F(TestArchiveManager, testupdateArchiveCacheData)
     UpdateOptions options;
 
     typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
+    fptr A_foo = (fptr)(&UpdateJob::start);   //获取虚函数地址
     Stub stub;
     stub.set(A_foo, start_stub);
 

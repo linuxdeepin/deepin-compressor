@@ -440,8 +440,9 @@ TEST_F(TestLibzipPlugin, testcancelResult002)
 
 TEST_F(TestLibzipPlugin, testpasswordUnicode001)
 {
-    QString str = m_tester->passwordUnicode("哈哈", 0);
-    ASSERT_EQ(str, "哈哈");
+//    QString str =
+    const char *s =  m_tester->passwordUnicode("哈哈", 0);
+    ASSERT_EQ(s, "哈哈");
 }
 
 TEST_F(TestLibzipPlugin, testpasswordUnicode002)

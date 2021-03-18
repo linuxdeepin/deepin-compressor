@@ -19,63 +19,49 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "common.h"
+#include "datamanager.h"
 #include "gtest/src/stub.h"
 
 #include <gtest/gtest.h>
 #include <QString>
 #include <QTextCodec>
 
-class TestCommon : public ::testing::Test
+class TestDataManager : public ::testing::Test
 {
 public:
-    TestCommon(): m_tester(nullptr) {}
+    TestDataManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_tester = new Common;
+        m_tester = new DataManager;
+        m_tester->resetArchiveData();
     }
 
     virtual void TearDown()
     {
+        DataManager::get_instance().resetArchiveData();
         delete m_tester;
     }
 
 protected:
-    Common *m_tester;
+    DataManager *m_tester;
 };
 
-TEST_F(TestCommon, initTest)
+TEST_F(TestDataManager, initTest)
 {
 
 }
 
-TEST_F(TestCommon, testcodecConfidenceForData)
+TEST_F(TestDataManager, testresetArchiveData)
 {
-
+    m_tester->resetArchiveData();
+    ASSERT_EQ(m_tester->m_stArchiveData.qSize, 0);
 }
 
-TEST_F(TestCommon, testtrans2uft8_utf8)
+TEST_F(TestDataManager, testarchiveData)
 {
-    QString strText = "哈哈";
-    QByteArray strCode;
-    m_tester->trans2uft8(strText.toUtf8().data(), strCode);
-    ASSERT_EQ(strCode, "UTF-8");
-}
-
-
-TEST_F(TestCommon, testdetectEncode)
-{
-
-}
-
-TEST_F(TestCommon, testChartDet_DetectingTextCoding)
-{
-
-}
-
-TEST_F(TestCommon, testtextCodecDetect)
-{
-
+    m_tester->m_stArchiveData.qSize = 1;
+    ArchiveData stData = m_tester->archiveData();
+    ASSERT_EQ(stData.qSize, 1);
 }

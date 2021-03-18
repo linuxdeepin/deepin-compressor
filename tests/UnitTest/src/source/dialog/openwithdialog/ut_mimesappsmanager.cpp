@@ -99,6 +99,8 @@ TEST_F(TestMimeAppsWorker, teststartWatch)
 
     m_tester->m_fileSystemWatcher->removePaths(m_tester->m_fileSystemWatcher->files());
     m_tester->startWatch();
+    QStringList list = m_tester->m_fileSystemWatcher->files();
+    qInfo() << "******************************************" << list;
     ASSERT_EQ(m_tester->m_fileSystemWatcher->files(), QStringList() << QFileInfo("../UnitTest/test_sources/deepin-compressor.desktop").absoluteFilePath());
 }
 

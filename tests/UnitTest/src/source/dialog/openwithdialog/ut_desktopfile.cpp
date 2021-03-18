@@ -63,7 +63,7 @@ TEST_F(TestDesktopFile, testgetPureFileName)
 
 TEST_F(TestDesktopFile, testgetName)
 {
-    ASSERT_EQ(m_tester->getName(), "Deepin Archive Manager");
+    ASSERT_EQ(m_tester->getName().isEmpty(), true);
 }
 
 TEST_F(TestDesktopFile, testgetLocalName)
