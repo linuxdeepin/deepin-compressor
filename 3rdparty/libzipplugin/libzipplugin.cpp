@@ -785,7 +785,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
                         return ET_WrongPassword;
                     } else {
-                        zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex));
+                        zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex).toUtf8().constData());
                         iCodecIndex++;
                         zip_error_clear(archive);
                         zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
@@ -949,7 +949,7 @@ int LibzipPlugin::cancelResult()
     }
 }
 
-const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
+QString LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
 {
     if (m_strArchiveName.endsWith(".zip")) {
         // QStringList listCodecName = QStringList() << "UTF-8" << "GB18030" << "GBK" <<"Big5"<< "us-ascii";
@@ -979,10 +979,10 @@ const char *LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex
             QByteArray gb_bytes = gbk->fromUnicode(strUnicode);
             return gb_bytes.data(); //获取其char *
         } else {
-            return strPassword.toUtf8().constData();
+            return strPassword;
         }
     } else {
-        return strPassword.toUtf8().constData();
+        return strPassword;
     }
 
 }

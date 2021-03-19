@@ -180,25 +180,27 @@ TEST_F(TestLibminizipPlugin, testextractFiles_PartExtract)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
-    QList<FileEntry> files;
-    ExtractionOptions options;
-    files << stData.listRootEntry[0];
-    options.bAllExtract = false;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
+    if (stData.listRootEntry.count() > 0) {
+        QList<FileEntry> files;
+        ExtractionOptions options;
+        files << stData.listRootEntry[0];
+        options.bAllExtract = false;
+        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
 
-    Stub stub;
-    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
-    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
+        Stub stub;
+        stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+        stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+        stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+        stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+        stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
 
-    PluginFinishType eFinishType = m_tester->extractFiles(files, options);
-    bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+        PluginFinishType eFinishType = m_tester->extractFiles(files, options);
+        bool bResult = (eFinishType == PFT_Nomral) ? true : false;
+        ASSERT_EQ(bResult, true);
 
-    QDir dir(options.strTargetPath);
-    dir.removeRecursively();
+        QDir dir(options.strTargetPath);
+        dir.removeRecursively();
+    }
 }
 
 TEST_F(TestLibminizipPlugin, testpauseOperation)
@@ -232,32 +234,6 @@ TEST_F(TestLibminizipPlugin, testhandleArchiveData)
     bool bResult = m_tester->handleArchiveData(zipfile);
     ASSERT_EQ(bResult, true);
     unzClose(zipfile);
-}
-
-TEST_F(TestLibminizipPlugin, testextractEntry)
-{
-    unzFile zipfile = unzOpen(QFile::encodeName(m_tester->m_strArchiveName).constData());
-
-    unz_file_info file_info;
-    char filename[ MAX_FILENAME ];
-    ErrorType eType = ET_NoError;
-    if (unzGetCurrentFileInfo(zipfile, &file_info, filename, MAX_FILENAME, nullptr, 0, nullptr, 0) != UNZ_OK) {
-        unzClose(zipfile);
-//        eType = ET_FileWriteError;
-    }
-
-    ExtractionOptions options;
-    options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/crx/temp").absoluteFilePath();
-    qlonglong qExtractSize = 0;
-    QString strFileName = filename;
-    eType = m_tester->extractEntry(zipfile, file_info, options, qExtractSize, strFileName);
-
-    ASSERT_EQ(eType, ET_NoError);
-    unzClose(zipfile);
-
-    QDir dir(options.strTargetPath);
-    dir.removeRecursively();
 }
 
 TEST_F(TestLibminizipPlugin, testgetSelFiles)
