@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
@@ -204,22 +202,27 @@
         <translation>El nombre es el mismo que el del archivo comprimido, por favor utilice otro</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
+        <source>The password for ZIP volumes cannot be in Chinese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Ya existe otro archivo con el mismo nombre, ¿desea remplazarlo?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Replace</source>
         <translation>Reemplazar</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="776"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Solo símbolos y caracteres en inglés y chino están admitidos</translation>
     </message>

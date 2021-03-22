@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
@@ -204,22 +202,27 @@
         <translation>Назва збігається із назвою стисненого архіву. Будь ласка, скористайтеся іншою назвою.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
+        <source>The password for ZIP volumes cannot be in Chinese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Файл вже існує. Що робити?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="776"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Передбачено підтримку лише китайських ієрогліфів, символів англійської абетки та деяких інших символів</translation>
     </message>

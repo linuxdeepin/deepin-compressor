@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished">Izvirna datoteka za %1 ne obstaja - preverite in poskusite znova</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished">%1 ne obstaja na disku - preverite in poskusite znova</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">Nimate pravic za stiskanje %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -201,25 +199,30 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
+        <source>The password for ZIP volumes cannot be in Chinese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Cancel</source>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Replace</source>
         <translation>Zamenjaj</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="776"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Podprti so le nagleški in kitajski znaki ter nekaj posebnih znakov</translation>
     </message>
@@ -710,7 +713,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -725,12 +728,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Arhiva ne morete dodajati samega vase</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2986"/>

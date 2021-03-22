@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="az">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
 <context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished">%1 faylının əsli mövcud deyil,lütfən, yoxlayın və təkrar edin</translation>
+        <translation>%1 orijinal faylı mövcud deyil, lütfən, yoxlayın və yenidən cəhd edin</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished">Diskdə %1 mövcud deyil, lütfən, yoxlayın və təkrar edin</translation>
+        <translation>%1 diskdə mövcud deyil, lütfən, yoxlayın və yenidən cəhd edin</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished">%1 sıxmaöa icazəniz yoxdur</translation>
+        <translation>Sizin %1 sıxmağa icazəniz yoxdur</translation>
     </message>
 </context>
 <context>
@@ -204,22 +202,27 @@
         <translation>Ad, sıxışdırılmış arxiv adı ilə eynidir, lütən başqasını seçin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
+        <source>The password for ZIP volumes cannot be in Chinese</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Bu adla başqa bir fayl mövcuddur, o əvəz edilsin?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="736"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
         <source>Replace</source>
         <translation>Əvəz etmək</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="776"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Yalnız Çin və İngilis işarələri və bəzi simvollar dəstəklənir</translation>
     </message>
@@ -710,7 +713,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished">Ad, sıxışdırılmış arxiv adı ilə eynidir, lütən başqasını seçin</translation>
+        <translation>Ad, sıxışdırılmış arxiv adı ilə eynidir, lütən başqasını seçin</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -725,7 +728,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Arxivi öz daxilinə əlavə edə bilməzsiniz</translation>
+        <translation>Arxiv öz saxilinə əlavə edilə bilməz</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>

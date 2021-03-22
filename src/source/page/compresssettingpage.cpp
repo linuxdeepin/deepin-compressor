@@ -692,6 +692,14 @@ void CompressSettingPage::slotCompressClicked()
         return;
     }
 
+    //压缩zip分卷不支持中文密码
+    if (m_pSplitCkb->isChecked()
+            && "zip" == m_pCompressTypeLbl->text()
+            && (!m_pPasswordEdt->text().isEmpty() && m_pPasswordEdt->text().contains(QRegExp("[\\x4e00-\\x9fa5]+")))) {
+        m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
+        return;
+    }
+
     // 检查合法性
     if (!checkCompressOptionValid()) {
         return;
