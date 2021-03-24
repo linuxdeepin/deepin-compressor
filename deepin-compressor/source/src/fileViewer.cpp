@@ -36,7 +36,6 @@
 #include "archiveinterface.h"
 #include "archivemodel.h"
 
-#include <DFileDrag>
 #include <DFontSizeManager>
 #include <DStandardPaths>
 #include <DPalette>
@@ -63,7 +62,6 @@
 const QString rootPathUnique = "_&_&_&_";
 const QString zipPathUnique = "_&_&_";
 
-static QString m_path;    // 选择的解压路径
 
 FirstRowDelegate::FirstRowDelegate(MyTableView *pTableView, QObject *parent)
     : QItemDelegate(parent)
@@ -299,6 +297,13 @@ MyTableView::MyTableView(QWidget *parent)
     setDragEnabled(true);
     setDropIndicatorShown(true);
     //setSelectionMode(QAbstractItemView::MultiSelection);
+
+
+}
+
+MyTableView::~MyTableView()
+{
+    clearDragData();
 }
 
 void MyTableView::setPreviousButtonVisible(bool visible)
@@ -398,7 +403,7 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     // 创建文件拖拽服务，处理拖拽到文管操作
     s = new DFileDragServer(this);
-    DFileDrag *drag = new DFileDrag(this, s);
+    m_drag = new DFileDrag(this, s);
     QMimeData *m = new QMimeData();
     //m->setText("your stuff here");
 
@@ -406,43 +411,68 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
 
     if (value.isValid()) {
         if (value.type() == QVariant::Pixmap) {
-            drag->setPixmap(qvariant_cast<QPixmap>(value));
+            m_drag->setPixmap(qvariant_cast<QPixmap>(value));
         } else if (value.type() == QVariant::Icon) {
-            drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
+            m_drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
         }
     }
     m->setData("NOT_NEED_SET_TARGET_IN_DRAG", "dragextract");
-    drag->setMimeData(m);
+    m_drag->setMimeData(m);
 
     // 拖拽操作连接槽函数，返回目标路径
-    QUrl url;
-    connect(drag, &DFileDrag::targetUrlChanged, [drag, &url] {
-        url = drag->targetUrl();
+    connect(m_drag, &DFileDrag::targetUrlChanged, [ & ] {
+
+        QUrl url;
+        m_bReceive = true;
+        url = m_drag->targetUrl();
         if (url.isValid())
         {
             m_path = url.toLocalFile(); // 获取拖拽提取目标路径
+            if (m_bDrop && m_bReceive) {
+                emit sigdragLeave(m_path);
+                qInfo() << "recevie";
+                clearDragData();
+            }
         } else
         {
-            m_path.clear();
+            clearDragData();
         }
-
     });
 
-    Qt::DropAction result = drag->exec(Qt::CopyAction);
-
-
-    s->setProgress(100);
-    s->deleteLater();
-    s = nullptr;
-    qDebug() << "sigdragLeave";
+    Qt::DropAction result = m_drag->exec(Qt::CopyAction);
+    m_bDrop = true;
 
     if (result == Qt::DropAction::CopyAction) {
-        emit sigdragLeave(m_path);
+//        m_timer.start();
+        if (m_bDrop && m_bReceive) {
+            emit sigdragLeave(m_path);
+            qInfo() << "finish";
+            clearDragData();
+        }
+    } else {
+        clearDragData();
     }
 
-    m_path.clear();
+//    m_path.clear();
     DTableView::mouseMoveEvent(e);
 }
+
+void MyTableView::clearDragData()
+{
+    if (s) {
+        s->setProgress(100);
+        s->deleteLater();
+        s = nullptr;
+    }
+    if (m_drag) {
+        m_drag->deleteLater();
+        m_drag = nullptr;
+    }
+    m_path.clear();
+    m_bDrop = false;
+    m_bReceive = false;
+}
+
 
 void MyTableView::mouseReleaseEvent(QMouseEvent *event)
 {

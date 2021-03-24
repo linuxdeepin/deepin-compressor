@@ -30,11 +30,13 @@
 #include <DLabel>
 #include <DFileDragServer>
 #include <DMenu>
+#include <DFileDrag>
 
 #include <QItemDelegate>
 #include <QUrl>
 #include <QReadWriteLock>
 #include <QFileInfoList>
+#include <QTimer>
 //#include <QPainter>
 //#include "myfilesystemmodel.h"
 //#include <DScrollBar>
@@ -137,6 +139,7 @@ class MyTableView: public DTableView
     Q_OBJECT
 public:
     MyTableView(QWidget *parent = nullptr);
+    ~MyTableView() override;
     void setPreviousButtonVisible(bool visible);
 
     Qt::FocusReason m_reson;
@@ -165,10 +168,12 @@ public slots:
 private:
     // get parent archive::entry pointer
     Archive::Entry *getParentArchiveEntry();
+    void clearDragData();
 private:
     QPointF touchpos; // 触摸屏点击位置
     QPoint dragpos; // 鼠标拖拽点击位置
     DFileDragServer *s = nullptr; // 文件拖拽服务
+    DFileDrag *m_drag = nullptr;
     //QString m_path; // 拖拽路径
     bool m_isPressed = false; // 触摸按下标志  true: 按下; false: 松开
     // 记录触摸按下事件，在mouse move事件中使用，用于判断手指移动的距离，当大于
@@ -176,6 +181,12 @@ private:
     //QPoint lastTouchBeginPos;
     // QPointF m_lastTouchBeginPos;
     QTime m_lastTouchTime; // 触摸屏最后触摸时间
+
+    // 拖拽提取事件反馈标志
+    bool m_bDrop = false;
+    bool m_bReceive = false;
+    QString m_path;    // 选择的解压路径
+//    QTimer m_timer;
 
 public:
     //bool m_bTouch = false;
@@ -591,6 +602,7 @@ private:
     int openFileTempLink = 0; // 打开的临时文件计数
     QString m_loadPath = ""; // 加载的压缩包路径
     bool m_bDropAdd; // 是否是拖拽添加
+
 };
 
 #endif // FILEVIWER_H
