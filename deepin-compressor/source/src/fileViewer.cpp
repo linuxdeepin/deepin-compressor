@@ -63,6 +63,8 @@
 const QString rootPathUnique = "_&_&_&_";
 const QString zipPathUnique = "_&_&_";
 
+static QString m_path;    // 选择的解压路径
+
 FirstRowDelegate::FirstRowDelegate(MyTableView *pTableView, QObject *parent)
     : QItemDelegate(parent)
     , m_pTableView(pTableView)
@@ -409,11 +411,23 @@ void MyTableView::mouseMoveEvent(QMouseEvent *e)
             drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
         }
     }
-
+    m->setData("NOT_NEED_SET_TARGET_IN_DRAG", "dragextract");
     drag->setMimeData(m);
 
     // 拖拽操作连接槽函数，返回目标路径
-    connect(drag, &DFileDrag::targetUrlChanged, this, &MyTableView::slotDragpath);
+    QUrl url;
+    connect(drag, &DFileDrag::targetUrlChanged, [drag, &url] {
+        url = drag->targetUrl();
+        if (url.isValid())
+        {
+            m_path = url.toLocalFile(); // 获取拖拽提取目标路径
+        } else
+        {
+            m_path.clear();
+        }
+
+    });
+
     Qt::DropAction result = drag->exec(Qt::CopyAction);
 
 
@@ -447,11 +461,11 @@ void MyTableView::mouseDoubleClickEvent(QMouseEvent *event)
     DTableView::mouseDoubleClickEvent(event);
 }
 
-void MyTableView::slotDragpath(QUrl url)
-{
-    m_path = url.toLocalFile(); // 获取拖拽提取目标路径
-    qDebug() << "拖拽提取目标路径：" << m_path;
-}
+//void MyTableView::slotDragpath(QUrl url)
+//{
+//    m_path = url.toLocalFile(); // 获取拖拽提取目标路径
+//    qDebug() << "拖拽提取目标路径：" << m_path;
+//}
 
 void fileViewer::onDropSlot(QStringList files)
 {

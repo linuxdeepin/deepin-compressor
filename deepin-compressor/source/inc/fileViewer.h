@@ -160,7 +160,7 @@ signals:
     void signalDoubleClicked(const QModelIndex &);
 
 public slots:
-    void slotDragpath(QUrl url);
+//    void slotDragpath(QUrl url);
 
 private:
     // get parent archive::entry pointer
@@ -169,7 +169,7 @@ private:
     QPointF touchpos; // 触摸屏点击位置
     QPoint dragpos; // 鼠标拖拽点击位置
     DFileDragServer *s = nullptr; // 文件拖拽服务
-    QString m_path; // 拖拽路径
+    //QString m_path; // 拖拽路径
     bool m_isPressed = false; // 触摸按下标志  true: 按下; false: 松开
     // 记录触摸按下事件，在mouse move事件中使用，用于判断手指移动的距离，当大于
     // QPlatformTheme::TouchDoubleTapDistance 的值时认为触发触屏滚动
