@@ -27,6 +27,7 @@
 
 #include <DWidget>
 #include <DFileDragServer>
+#include <DFileDrag>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -182,6 +183,11 @@ private:
      */
     int showEncryptionDialog(QString &strPassword);
 
+    /**
+     * @brief clearDragData 情况拖拽提取数据
+     */
+    void clearDragData();
+
 Q_SIGNALS:
     /**
      * @brief signalExtract2Path    提取压缩包中文件
@@ -261,19 +267,11 @@ private slots:
      */
     void slotOpenStyleClicked();
 
-    /**
-     * @brief slotDragPath  拖拽接收路径反馈
-     * @param url
-     */
-    void slotDragPath(QUrl url);
-
 private:
     QMap<QString, QList<FileEntry>> m_mapShowEntry; // 显示数据（缓存，目录层级切换时从此处取数据，避免再次对总数据进行操作）
     FileEntry m_stRightEntry;       // 右键点击的文件
     QString m_strUnCompressPath;    // 默认解压路径
     QPoint m_dragPos; // 鼠标拖拽点击位置
-    DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
-    QString m_strSelUnCompressPath;    // 选择的解压路径
     QString m_strArchive;   // 压缩包全路径
     QString m_strArchivePath;       // 压缩包所在路径
     bool m_bModifiable = false;     // 压缩包数据是否可更改（增、删、改）
@@ -281,6 +279,13 @@ private:
 
     ChangeType m_eChangeType = CT_None;
     QStringList m_listAddFiles;     // 追加的文件
+
+    // 拖拽提取
+    DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
+    DFileDrag *m_pDrag;
+    bool m_bDrop = false;
+    bool m_bReceive = false;
+    QString m_strSelUnCompressPath;    // 选择的解压路径
 };
 
 #endif // UNCOMPRESSVIEW_H

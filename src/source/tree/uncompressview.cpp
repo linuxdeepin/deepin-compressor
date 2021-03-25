@@ -31,7 +31,6 @@
 
 #include <DMenu>
 #include <DFileDialog>
-#include <DFileDrag>
 #include <DCheckBox>
 #include <DPasswordEdit>
 
@@ -44,6 +43,7 @@
 #include <QItemSelectionModel>
 #include <QScrollBar>
 
+
 UnCompressView::UnCompressView(QWidget *parent)
     : DataTreeView(parent)
 {
@@ -53,7 +53,7 @@ UnCompressView::UnCompressView(QWidget *parent)
 
 UnCompressView::~UnCompressView()
 {
-
+    clearDragData();
 }
 
 void UnCompressView::refreshArchiveData()
@@ -141,24 +141,42 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 
     // 创建文件拖拽服务，处理拖拽到文管操作
     m_pFileDragServer = new DFileDragServer(this);
-    DFileDrag *drag = new DFileDrag(this, m_pFileDragServer);
+    m_pDrag = new DFileDrag(this, m_pFileDragServer);
     QMimeData *m = new QMimeData();
-
+    m->setData("NOT_NEED_SET_TARGET_IN_DRAG", "dragextract");
     QVariant value = listSel[0].data(Qt::DecorationRole);
 
     if (value.isValid()) {
         if (value.type() == QVariant::Pixmap) {
-            drag->setPixmap(qvariant_cast<QPixmap>(value));
+            m_pDrag->setPixmap(qvariant_cast<QPixmap>(value));
         } else if (value.type() == QVariant::Icon) {
-            drag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
+            m_pDrag->setPixmap((qvariant_cast<QIcon>(value)).pixmap(24, 24));
         }
     }
 
-    drag->setMimeData(m);
+    m_pDrag->setMimeData(m);
 
-    // 拖拽操作连接槽函数，返回目标路径
-    connect(drag, &DFileDrag::targetUrlChanged, this, &UnCompressView::slotDragPath);
-    Qt::DropAction result = drag->exec(Qt::CopyAction);
+    QUrl url;
+    connect(m_pDrag, &DFileDrag::targetUrlChanged, [&] {
+        QUrl url;
+        m_bReceive = true;
+        url = m_pDrag->targetUrl();
+        if (url.isValid())
+        {
+            m_strSelUnCompressPath = url.toLocalFile(); // 获取拖拽提取目标路径
+            if (m_bDrop && m_bReceive) {
+                extract2Path(m_strSelUnCompressPath);
+                clearDragData();
+            }
+        } else
+        {
+            clearDragData();
+        }
+
+    });
+
+    Qt::DropAction result = m_pDrag->exec(Qt::CopyAction);
+    m_bDrop = true;
 
     m_pFileDragServer->setProgress(100);
     m_pFileDragServer->deleteLater();
@@ -166,11 +184,31 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
     qInfo() << "sigdragLeave";
 
     if (result == Qt::DropAction::CopyAction) {
-        extract2Path(m_strSelUnCompressPath);
+        if (m_bDrop && m_bReceive) {
+            extract2Path(m_strSelUnCompressPath);
+            clearDragData();
+        }
+    } else {
+        clearDragData();
     }
 
     m_strSelUnCompressPath.clear();
-    // DataTreeView::mouseMoveEvent(event);
+}
+
+void UnCompressView::clearDragData()
+{
+    if (m_pFileDragServer) {
+        m_pFileDragServer->setProgress(100);
+        m_pFileDragServer->deleteLater();
+        m_pFileDragServer = nullptr;
+    }
+    if (m_pDrag) {
+        m_pDrag->deleteLater();
+        m_pDrag = nullptr;
+    }
+    m_strSelUnCompressPath.clear();
+    m_bDrop = false;
+    m_bReceive = false;
 }
 
 void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
@@ -440,9 +478,9 @@ void UnCompressView::clear()
     DataManager::get_instance().resetArchiveData();
     resetLevel();
     m_strUnCompressPath = "";
-    m_strSelUnCompressPath = "";
     m_bModifiable = false;
     m_bMultiplePassword = false;
+    clearDragData();
 }
 
 QList<FileEntry> UnCompressView::getCurPathFiles()
@@ -771,11 +809,6 @@ void UnCompressView::slotOpenStyleClicked()
         // 发送打开信号（以xx应用打开）
         emit signalOpenFile(m_stRightEntry, pAction->data().toString());
     }
-}
-
-void UnCompressView::slotDragPath(QUrl url)
-{
-    m_strSelUnCompressPath = url.toLocalFile(); // 获取拖拽提取目标路径
 }
 
 void UnCompressView::slotPreClicked()
