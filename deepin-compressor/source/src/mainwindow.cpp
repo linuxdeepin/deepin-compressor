@@ -118,9 +118,9 @@ MainWindow::MainWindow(QWidget *parent) : DMainWindow(parent)
     setAcceptDrops(true);
 
     initTitleBar();
+    initData();
     m_startTimer = startTimer(500);
-
-    loadWindowState();
+//    loadWindowState();
 }
 
 MainWindow::~MainWindow()
@@ -145,12 +145,45 @@ MainWindow::~MainWindow()
         }
     }
 
-    saveWindowState();
+    saveConfigWinSize(width(), height());
 }
 
 void MainWindow::bindAdapter()
 {
     m_pAdaptor = new MonitorAdaptor(this);
+}
+
+QSize MainWindow::getConfigWinSize()
+{
+    // 获取界面宽、高
+    QVariant tempWidth = m_pSettings->value(MAINWINDOW_WIDTH_NAME);
+    QVariant tempHeight = m_pSettings->value(MAINWINDOW_HEIGHT_NAME);
+    int winWidth = MAINWINDOW_DEFAULTW;
+    int winHeight = MAINWINDOW_DEFAULTH;
+
+    // 设置界面宽度
+    if (tempWidth.isValid()) {
+
+        winWidth = tempWidth.toInt();
+        winWidth = winWidth > MAINWINDOW_DEFAULTW ? winWidth : MAINWINDOW_DEFAULTW;
+    }
+
+    // 设置界面高度
+    if (tempHeight.isValid()) {
+        winHeight = tempHeight.toInt();
+        winHeight = winHeight > MAINWINDOW_DEFAULTH ? winHeight : MAINWINDOW_DEFAULTH;
+    }
+
+    return QSize(winWidth, winHeight);
+}
+
+void MainWindow::saveConfigWinSize(int w, int h)
+{
+    int winWidth = w > MAINWINDOW_DEFAULTW ? w : MAINWINDOW_DEFAULTW;
+    int winHeight = h > MAINWINDOW_DEFAULTH ? h : MAINWINDOW_DEFAULTH;
+    m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, winHeight);
+    m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, winWidth);
+    m_pSettings->sync();
 }
 
 qint64 MainWindow::getMediaFreeSpace()
@@ -210,24 +243,24 @@ bool MainWindow::applicationQuit(CompressorApplication *p)
 //    return  m_strAppendFileName;
 //}
 
-void MainWindow::saveWindowState()
-{
-    QSettings settings(objectName());
-    settings.setValue("geometry", saveGeometry());
-}
+//void MainWindow::saveWindowState()
+//{
+//    QSettings settings(objectName());
+//    settings.setValue("geometry", saveGeometry());
+//}
 
-void MainWindow::loadWindowState()
-{
-    QSettings settings(objectName());
-    const QByteArray geometry = settings.value("geometry").toByteArray();
-    if (!geometry.isEmpty()) {
-        restoreGeometry(geometry);
-    } else {
-        resize(620, 465);
-    }
+//void MainWindow::loadWindowState()
+//{
+//    QSettings settings(objectName());
+//    const QByteArray geometry = settings.value("geometry").toByteArray();
+//    if (!geometry.isEmpty()) {
+//        restoreGeometry(geometry);
+//    } else {
+//        resize(620, 465);
+//    }
 
-    setMinimumSize(620, 465);
-}
+//    setMinimumSize(620, 465);
+//}
 
 //QString MainWindow::getLoadFile()
 //{
@@ -534,6 +567,19 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 }
 
+void MainWindow::initData()
+{
+    // 初始化数据配置
+    m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
+
+    if (m_pSettings->value("dir").toString().isEmpty()) {
+        m_pSettings->setValue("dir", "");
+    }
+
+    resize(getConfigWinSize()); // 设置窗口尺寸
+    setMinimumSize(620, 465);   // 设置最小大小
+}
+
 void MainWindow::InitUI()
 {
     m_pUnCompressPage = new UnCompressPage(this);
@@ -546,12 +592,8 @@ void MainWindow::InitUI()
     m_pProgressdialog = new ProgressDialog(this);
     m_pSettingsDialog = new SettingDialog(this);
     //m_encodingpage = new EncodingPage(this);
-    m_pSettings = new QSettings(QDir(Utils::getConfigPath()).filePath("config.conf"), QSettings::IniFormat, this);
     m_pOpenLoadingPage = new OpenLoadingPage(this);
 
-    if (m_pSettings->value("dir").toString().isEmpty()) {
-        m_pSettings->setValue("dir", "");
-    }
 
     // add widget to main layout.
     m_pMainLayout->addWidget(m_pUnCompressPage);
@@ -5375,7 +5417,7 @@ void MainWindow::safeDelete()
     SAFE_DELETE_ELE(m_pOpenLoadingPage);
     qDebug() << "开始safeDelete：m_pSettings";
     //SAFE_DELETE_ELE(m_encodingpage);
-    SAFE_DELETE_ELE(m_pSettings);
+//    SAFE_DELETE_ELE(m_pSettings);
     qDebug() << "开始safeDelete：m_pMmainWidget";
     SAFE_DELETE_ELE(m_pMmainWidget);
     qDebug() << "开始safeDelete：m_pCurAuxInfo";

@@ -35,6 +35,11 @@
 
 #include <QEvent>
 
+#define MAINWINDOW_WIDTH_NAME "MainWindowWidthName"      // 主界宽
+#define MAINWINDOW_HEIGHT_NAME "MainWindowHeightName"    // 主界面高
+#define MAINWINDOW_DEFAULTW 620     // 默认宽度
+#define MAINWINDOW_DEFAULTH 465     // 默认高度
+
 static QVector<qint64> m_gTempProcessId;                 // 临时进程ID
 
 class MainWindow;
@@ -237,12 +242,26 @@ private:
     /**
      * @brief saveWindowState   退出时保存位置
      */
-    void saveWindowState();
+//    void saveWindowState();
 
     /**
      * @brief loadWindowState   初始化时获取上次打开的位置
      */
-    void loadWindowState();
+//    void loadWindowState();
+
+    /**
+     * @brief getConfigWinSize  通过配置文件获取之前保存的窗口大小
+     * @return  之前保存的窗口大小
+     */
+    QSize getConfigWinSize();
+
+    /**
+     * @brief saveConfigWinSize     保存窗口尺寸
+     * @param w     宽度
+     * @param h     高度
+     */
+    void saveConfigWinSize(int w, int h);
+
 
     /**
      * @brief modelIndexToStr
@@ -403,6 +422,7 @@ private:
      * @brief extractMkdir 解压到新建目录
      */
     void extractMkdir(const QStringList &files);
+    void initData();
 
 
 protected:
