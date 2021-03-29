@@ -31,6 +31,7 @@
 #include <QFontMetrics>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <DPasswordEdit>
 
 TipDialog::TipDialog(QWidget *parent)
     : DDialog(parent)
@@ -95,6 +96,7 @@ void TipDialog::changeEvent(QEvent *event)
     }
     DDialog::changeEvent(event);
 }
+
 SimpleQueryDialog::SimpleQueryDialog(QWidget *parent)
     : DDialog(parent)
 {
@@ -416,5 +418,130 @@ void ConvertDialog::changeEvent(QEvent *event)
         }
     }
 
+    DDialog::changeEvent(event);
+}
+
+
+AppendDialog::AppendDialog(QWidget *parent)
+    : DDialog(parent)
+{
+    setFixedWidth(380); // 提示框宽度固定
+
+    QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
+    setIcon(pixmap);
+}
+
+AppendDialog::~AppendDialog()
+{
+
+}
+
+int AppendDialog::showDialog(bool bMultiplePassword)
+{
+    // 标题
+    DLabel *pTitleLbl = new DLabel(this);
+    pTitleLbl->setObjectName("ContentLabel");
+    pTitleLbl->setFixedWidth(340);
+    pTitleLbl->setForegroundRole(DPalette::ToolTipText);
+//    pTitleLbl->setWordWrap(true);
+    DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::Medium);
+    pTitleLbl->setText(tr("Add files to the current archive"));
+    pTitleLbl->setAlignment(Qt::AlignCenter);
+    m_strDesText = pTitleLbl->text();
+
+    // 勾选密码
+    DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), this);
+    DFontSizeManager::instance()->bind(pSelCkb, DFontSizeManager::T6, QFont::Medium);
+
+    // 密码输入框
+    DPasswordEdit *pPasswordEdit = new DPasswordEdit(this);
+    pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
+    pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
+    pPasswordEdit->setMinimumHeight(36);
+    pPasswordEdit->setFixedWidth(280);
+    pPasswordEdit->setVisible(false);
+
+    // 不支持多密码的格式不可以勾选密码框
+    if (!bMultiplePassword) {
+        pSelCkb->setEnabled(false);
+    }
+
+    // 密码选择框勾选之后显示密码输入框
+    connect(pSelCkb, &DCheckBox::clicked, this, [ & ]() {
+        if (pSelCkb->checkState() == Qt::Checked) {
+            pPasswordEdit->setVisible(true);
+            m_bPasswordVisible = true;
+//            qInfo() << pPasswordEdit->height();
+            qInfo() << height();
+            setFixedHeight(m_iDialogOldHeight + 42);
+//            qInfo() << pPasswordEdit->height();
+        } else {
+            pPasswordEdit->clear();     // 不勾选加密时，清空密码
+            pPasswordEdit->setVisible(false);
+            m_bPasswordVisible = false;
+//            qInfo() << pPasswordEdit->height();
+            qInfo() << height();
+            setFixedHeight(m_iDialogOldHeight - 42);
+//            qInfo() << pPasswordEdit->height();
+        }
+        qInfo() << height();
+        m_iDialogOldHeight = height();
+//        adjustSize();
+    });
+
+    // 布局
+    addContent(pTitleLbl, Qt::AlignHCenter);
+//    addSpacing(5);
+    addContent(pSelCkb, Qt::AlignHCenter);
+    addSpacing(5);
+    addContent(pPasswordEdit, Qt::AlignHCenter);
+//    addSpacing(10);
+
+    addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
+    addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
+
+    autoFeed(pTitleLbl);
+
+    int iMode = exec();
+
+    // 接收加密
+    m_strPassword.clear();
+    if (iMode == DDialog::Accepted) {
+        m_strPassword = pPasswordEdit->text();
+    }
+
+    return iMode;
+}
+
+QString AppendDialog::password()
+{
+    return m_strPassword;
+}
+
+void AppendDialog::autoFeed(DLabel *label)
+{
+    NewStr newstr = autoCutText(m_strDesText, label);
+    label->setText(newstr.resultStr);
+    int height_lable = newstr.strList.size() * newstr.fontHeifht;
+    label->setFixedHeight(height_lable);
+    if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        adjustSize();
+    } else {
+        setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iCheckboxOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
+    }
+    m_iLabelOldHeight = height_lable;
+    m_iCheckboxOld1Height = newstr.fontHeifht;
+    m_iDialogOldHeight = height();
+    qInfo() << height();
+}
+
+void AppendDialog::changeEvent(QEvent *event)
+{
+    if (QEvent::FontChange == event->type()) {
+        Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
+        if (nullptr != p) {
+            autoFeed(p);
+        }
+    }
     DDialog::changeEvent(event);
 }

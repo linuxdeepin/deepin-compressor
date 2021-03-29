@@ -1,5 +1,18 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="km_KH" version="2.1">
 <context>
+    <name>AppendDialog</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
+        <source>Add files to the current archive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
+        <source>Use password</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
@@ -207,22 +220,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ឯកសារមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយជំនួសវា?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Replace</source>
         <translation>ជំនួស</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="784"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation type="unfinished"/>
     </message>
@@ -285,22 +298,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="352"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="353"/>
         <source>Convert</source>
         <translation>បំលែង</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>ការផ្លាស់ប្តូរប័ណ្ណសារក្នុងប្រភេទឯកសារនេះមិនត្រូវបានគាំទ្រទេ។ សូមបំលែងទ្រង់ទ្រាយប័ណ្ណសារដើម្បីរក្សាទុកការផ្លាស់ប្តូរ។</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Convert the format to:</source>
         <translation>បំលែងទ្រង់ទ្រាយទៅជាៈ</translation>
     </message>
@@ -353,17 +366,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="522"/>
         <source>The archive is damaged</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>Open as read-only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="526"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
@@ -885,7 +898,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
         <translation>ឯកសារដែលបានអ៊ិនគ្រីប សូមបញ្ចូលពាក្យសម្ងាត់</translation>
     </message>
@@ -1090,8 +1103,8 @@
         <translation>បានផ្លាស់ប្ដូរ %1។ តើអ្នកចង់រក្សាទុកការផ្លាស់ប្តូរក្នុងប័ណ្ណសារទេ?</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="500"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
@@ -1136,43 +1149,43 @@
         <translation>ប្រភេទឯកសារ</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="501"/>
         <source>OK</source>
         <translation>យល់ព្រម</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ឯកសារមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយជំនួសវា?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <source>Skip</source>
         <translation>រំលង</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
         <source>Merge</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Replace</source>
         <translation>ជំនួស</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="226"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <source>Apply to all</source>
         <translation>អនុវត្តទៅទាំងអស់</translation>
     </message>
@@ -1307,69 +1320,59 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>You cannot add the archive to itself</source>
         <translation>អ្នកមិនអាចបន្ថែមប័ណ្ណសារទៅខ្លួនវាបានទេ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>OK</source>
         <translation>យល់ព្រម</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="572"/>
-        <source>Add files to the current archive</source>
-        <translation>បន្ថែមឯកសារទៅប័ណ្ណសារបច្ចុប្បន្ន</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="576"/>
-        <source>Use password</source>
-        <translation>ប្រើពាក្យសម្ងាត់</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>ស្រង់ចេញ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
         <source>Extract to current directory</source>
         <translation>ស្រង់ទៅថតបច្ចុប្បន្ន</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="619"/>
         <source>Open</source>
         <translation>បើក</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Delete</source>
         <translation>លុប</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Open with</source>
         <translation>បើក​ជាមួយ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="734"/>
         <source>Select default program</source>
         <translation>ជ្រើសរើសកម្មវិធីលំនាំដើម</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Cancel</source>
         <translation>បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Confirm</source>
         <translation>បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>តើអ្នកចង់លុបឯកសារ()ដែលបានជ្រើសរើសទេ?</translation>
     </message>

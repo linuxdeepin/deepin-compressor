@@ -365,36 +365,41 @@ void PasswordNeededQuery::execute()
         m_pParent = getMainWindow();
     }
 
-    DDialog *dialog = new DDialog(m_pParent);
+    CustomDDialog *dialog = new CustomDDialog(m_pParent);
     dialog->setAccessibleName("PasswordNeeded_dialog");
     QPixmap pixmap = renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     dialog->setIcon(pixmap);
+    dialog->setFixedWidth(380);
 
     // 加密文件名显示
     DLabel *pFileNameLbl = new DLabel(dialog);
-    pFileNameLbl->setFixedSize(300, 20);
+//    pFileNameLbl->setFixedSize(300, 20);
+    pFileNameLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
     pFileNameLbl->setForegroundRole(DPalette::ToolTipText);
-    pFileNameLbl->setWordWrap(true);
+//    pFileNameLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
     QString archiveFullPath = m_data[QStringLiteral("fileName")].toString();
     QString fileName = toShortString(archiveFullPath.mid(archiveFullPath.lastIndexOf('/') + 1), 22, 11);
     pFileNameLbl->setText(fileName);
     pFileNameLbl->setAlignment(Qt::AlignCenter);
     pFileNameLbl->setToolTip(archiveFullPath);
+    m_strFileName = fileName;
 
     // 提示语显示
     DLabel *pTipLbl = new DLabel(dialog);
     pTipLbl->setFixedWidth(340); //修复英文环境下提示语显示不全
     pTipLbl->setForegroundRole(DPalette::WindowText);
-    pTipLbl->setWordWrap(true);
+//    pTipLbl->setWordWrap(true);
     DFontSizeManager::instance()->bind(pTipLbl, DFontSizeManager::T6, QFont::Normal);
     pTipLbl->setText(tr("Encrypted file, please enter the password"));
     pTipLbl->setAlignment(Qt::AlignCenter);
+    m_strDesText = pTipLbl->text();
 
     // 密码框
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     passwordedit->setFocusPolicy(Qt::StrongFocus);
+    passwordedit->setFixedHeight(36);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
@@ -416,6 +421,7 @@ void PasswordNeededQuery::execute()
 
     // 布局
     QVBoxLayout *mainlayout = new QVBoxLayout;
+    mainlayout->setSpacing(0);
     mainlayout->setContentsMargins(0, 0, 0, 0);
     mainlayout->addWidget(pFileNameLbl, 0, Qt::AlignCenter);
     mainlayout->addWidget(pTipLbl, 0, Qt::AlignCenter);
@@ -432,6 +438,11 @@ void PasswordNeededQuery::execute()
 
     passwordedit->lineEdit()->setFocus(); // 默认焦点落在密码框内
 
+    autoFeed(pFileNameLbl, pTipLbl, dialog);
+    connect(dialog, &CustomDDialog::signalFontChange, this, [&]() {
+        autoFeed(pFileNameLbl, pTipLbl, dialog);
+    }, Qt::DirectConnection);
+
     const int mode = dialog->exec();
 
     m_data[QStringLiteral("password")] = passwordedit->text();
@@ -443,6 +454,28 @@ void PasswordNeededQuery::execute()
     }
 
     delete dialog;
+}
+
+void PasswordNeededQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog)
+{
+    NewStr newstr = autoCutText(m_strDesText, label2);
+    label2->setText(newstr.resultStr);
+    int height_lable = newstr.strList.size() * newstr.fontHeifht;
+    label2->setFixedHeight(height_lable);
+
+    // 字符串太长的情况下用中间使用...
+    QFont font;
+    QFontMetrics elideFont(font);
+    label1->setText(elideFont.elidedText(m_strFileName, Qt::ElideMiddle, 340));
+
+    if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        dialog->adjustSize();
+    } else {
+        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
+    }
+    m_iLabelOldHeight = height_lable;
+    m_iLabelOld1Height = newstr.fontHeifht;
+    m_iDialogOldHeight = dialog->height();
 }
 
 bool PasswordNeededQuery::responseCancelled()

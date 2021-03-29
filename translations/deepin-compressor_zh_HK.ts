@@ -1,5 +1,18 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
 <context>
+    <name>AppendDialog</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
+        <source>Add files to the current archive</source>
+        <translation>將文件添加到當前壓縮包</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
+        <source>Use password</source>
+        <translation>使用密碼</translation>
+    </message>
+</context>
+<context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
@@ -207,22 +220,22 @@
         <translation>zip分卷不支持中文密碼</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Replace</source>
         <translation>替換</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="784"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>僅支持中英文字符及部分符號</translation>
     </message>
@@ -285,22 +298,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="352"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="353"/>
         <source>Convert</source>
         <translation>轉換</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>不支持對該壓縮格式的修改。為了保持對該文件的修改，建議您進行壓縮格式轉換。</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Convert the format to:</source>
         <translation>轉換壓縮格式為：</translation>
     </message>
@@ -353,17 +366,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="522"/>
         <source>The archive is damaged</source>
         <translation>當前壓縮包文件已損壞</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>Open as read-only</source>
         <translation>以只讀模式打開</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="526"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -885,7 +898,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
         <translation>此文件已加密，請輸入解壓密碼</translation>
     </message>
@@ -1090,8 +1103,8 @@
         <translation>文件“%1”已修改，是否將此修改更新到壓縮包？</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="500"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -1136,43 +1149,43 @@
         <translation>文件類型</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="501"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <source>Skip</source>
         <translation>跳過</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
         <source>Merge</source>
         <translation>合併</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Replace</source>
         <translation>替換</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="226"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <source>Apply to all</source>
         <translation>應用到全部文件</translation>
     </message>
@@ -1307,69 +1320,59 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>You cannot add the archive to itself</source>
         <translation>無法將壓縮文件添加到自身</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="572"/>
-        <source>Add files to the current archive</source>
-        <translation>將文件添加到當前壓縮包</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="576"/>
-        <source>Use password</source>
-        <translation>使用密碼</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>提取</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
         <source>Extract to current directory</source>
         <translation>提取到當前文件夾</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="619"/>
         <source>Open</source>
         <translation>打開</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Open with</source>
         <translation>打開方式</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="734"/>
         <source>Select default program</source>
         <translation>選擇默認程序</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Confirm</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>是否刪除已選定文件？</translation>
     </message>

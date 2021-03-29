@@ -32,6 +32,7 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+
 // 解压列表
 class UnCompressView : public DataTreeView
 {
@@ -177,13 +178,6 @@ private:
     void calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize);
 
     /**
-     * @brief showEncryptionDialog  显示加密选项对话框
-     * @param strPassword   密码
-     * @return  是否接受操作
-     */
-    int showEncryptionDialog(QString &strPassword);
-
-    /**
      * @brief clearDragData 情况拖拽提取数据
      */
     void clearDragData();
@@ -282,7 +276,7 @@ private:
 
     // 拖拽提取
     DFileDragServer *m_pFileDragServer = nullptr; // 文件拖拽服务
-    DFileDrag *m_pDrag;
+    DFileDrag *m_pDrag = nullptr;
     bool m_bDrop = false;
     bool m_bReceive = false;
     QString m_strSelUnCompressPath;    // 选择的解压路径

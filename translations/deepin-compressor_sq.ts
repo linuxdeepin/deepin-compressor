@@ -1,23 +1,36 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
 <context>
+    <name>AppendDialog</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
+        <source>Add files to the current archive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
+        <source>Use password</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>Kartela origjinale e %1 s’ekziston, ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 s’ekziston në disk, ju lutemi, kontrolloni dhe riprovoni</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation>S’keni leje për të ngjeshur %1</translation>
     </message>
 </context>
 <context>
@@ -204,25 +217,25 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation type="unfinished"/>
+        <translation>Fjalëkalimi për vëllimet ZIP s’mund të jetë në kinezçe</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Replace</source>
         <translation>Zëvendëso</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="784"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Mbulohen vetëm shenja të gjuhës kineze dhe të anglishtes, si dhe disa simbole</translation>
     </message>
@@ -285,22 +298,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="352"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="353"/>
         <source>Convert</source>
         <translation>Shndërroje</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>Nuk mbulohet ndryshime te arkiva me këtë lloj kartelash. Që të ruhen ndryshimet, ju lutemi, shndërroni formatin e arkivit.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Convert the format to:</source>
         <translation>Shndërroje formatin në:</translation>
     </message>
@@ -353,17 +366,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="522"/>
         <source>The archive is damaged</source>
         <translation>Arkivi është i dëmtuar</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>Open as read-only</source>
         <translation>Hape si vetëm-për-lexim</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="526"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
@@ -713,7 +726,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>Emri është i njëjti me atë të arkivit të ngjeshur, ju lutemi, përdorni një tjetër</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -728,7 +741,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2542"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>S’mund t’i shtoni arkivit vetveten</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
@@ -885,7 +898,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
         <translation>Kartelë e fshehtëzuar, ju lutemi, jepni fjalëkalimin</translation>
     </message>
@@ -1090,8 +1103,8 @@
         <translation>%1 ndryshoi. Doni të ruhen ndryshimet te arkivi?</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="500"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
@@ -1136,43 +1149,43 @@
         <translation>Lloj Kartele</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="501"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <source>Skip</source>
         <translation>Anashkaloje</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>Ka tashmë një dosje me të njëjtin emër, të zëvendësohet?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
         <source>Merge</source>
         <translation>Përzieji</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Replace</source>
         <translation>Zëvendëso</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="226"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <source>Apply to all</source>
         <translation>Zbatoje për të tëra</translation>
     </message>
@@ -1307,69 +1320,59 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>You cannot add the archive to itself</source>
         <translation>S’mund ta shtoni arkivin te vetvetja</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="572"/>
-        <source>Add files to the current archive</source>
-        <translation>Shtoni kartela te arkivi i tanishëm</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="576"/>
-        <source>Use password</source>
-        <translation>Përdor fjalëkalim</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Përftoji</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
         <source>Extract to current directory</source>
         <translation>Përftoji te drejtoria e tanishme</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="619"/>
         <source>Open</source>
         <translation>Përzgjidhni kartelën</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Delete</source>
         <translation>Fshije</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Open with</source>
         <translation>Hape me</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="734"/>
         <source>Select default program</source>
         <translation>Përzgjidhni program parazgjedhje</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Confirm</source>
         <translation>Ripohojeni</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Doni të fshihet kartelat(t) e përzgjedhur?</translation>
     </message>

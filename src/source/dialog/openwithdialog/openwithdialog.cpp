@@ -285,6 +285,7 @@ void OpenWithDialog::init()
     m_pScrollArea->setWidgetResizable(true);
     QScroller::grabGesture(m_pScrollArea);
     m_pScrollArea->installEventFilter(this);
+    m_pScrollArea->viewport()->setStyleSheet("background-color:transparent;"); //设置滚动区域与主窗体颜色一致
 
     QWidget *content_widget = new QWidget;
 

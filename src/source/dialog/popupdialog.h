@@ -192,4 +192,44 @@ private:
     int m_iDialogOldHeight = 0;
 };
 
+// 追加压缩参数对话框
+class AppendDialog : public DDialog
+{
+    Q_OBJECT
+
+public:
+    explicit AppendDialog(QWidget *parent = nullptr);
+    ~AppendDialog() override;
+
+    /**
+     * @brief showDialog    显示对话框
+     * @param bMultiplePassword 是否支持输入密码
+     * @return
+     */
+    int  showDialog(bool bMultiplePassword);
+
+    /**
+     * @brief password  获取输入的密码
+     * @return
+     */
+    QString password();
+
+    /**
+     * @brief autoFeed 自动换行
+     * @param label1
+     * @param label2
+     */
+    void autoFeed(DLabel *label1);
+
+protected:
+    void changeEvent(QEvent *event) override;
+
+private:
+    QString m_strPassword;
+    QString m_strDesText;
+    int m_iLabelOldHeight = 0;
+    int m_iDialogOldHeight = 0;
+    int m_iCheckboxOld1Height = 0;
+    bool m_bPasswordVisible = false;
+};
 #endif // POPUPDIALOG_H

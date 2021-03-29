@@ -1,5 +1,18 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
 <context>
+    <name>AppendDialog</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
+        <source>Add files to the current archive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
+        <source>Use password</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
@@ -207,22 +220,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Eine andere Datei mit dem gleichen Namen existiert bereits, möchten Sie sie ersetzen?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="745"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>
         <source>Replace</source>
         <translation>Ersetzen</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="785"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="784"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Es werden nur chinesische und englische Zeichen und einige Symbole unterstützt</translation>
     </message>
@@ -285,22 +298,22 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="350"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="352"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="351"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="353"/>
         <source>Convert</source>
         <translation>Konvertieren</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="318"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>Änderungen an Archiven dieses Dateityps werden nicht unterstützt. Bitte konvertieren Sie das Archivformat, um die Änderungen zu speichern.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="326"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Convert the format to:</source>
         <translation>Format konvertieren nach:</translation>
     </message>
@@ -353,17 +366,17 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="489"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="522"/>
         <source>The archive is damaged</source>
         <translation>Das Archiv ist beschädigt</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="492"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>Open as read-only</source>
         <translation>Schreibgeschützt öffnen</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="493"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="526"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -885,7 +898,7 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
         <translation>Verschlüsselte Datei, bitte geben Sie das Passwort ein</translation>
     </message>
@@ -1090,8 +1103,8 @@
         <translation>%1 geändert. Möchten Sie die Änderungen im Archiv speichern?</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="400"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="500"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -1136,43 +1149,43 @@
         <translation>Dateityp</translation>
     </message>
     <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="401"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="501"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="204"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Eine andere Datei mit dem gleichen Namen existiert bereits, möchten Sie sie ersetzen?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="201"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
         <source>Merge</source>
         <translation>Zusammenführen</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="207"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Replace</source>
         <translation>Ersetzen</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="226"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="210"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <source>Apply to all</source>
         <translation>Auf alle anwenden</translation>
     </message>
@@ -1307,69 +1320,59 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>You cannot add the archive to itself</source>
         <translation>Sie können das Archiv nicht zu sich selbst hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="347"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="389"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="572"/>
-        <source>Add files to the current archive</source>
-        <translation>Dateien zum aktuellen Archiv hinzufügen</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="576"/>
-        <source>Use password</source>
-        <translation>Passwort verwenden</translation>
-    </message>
-    <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="644"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="615"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Entpacken</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="646"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
         <source>Extract to current directory</source>
         <translation>In aktuelles Verzeichnis entpacken</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="648"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="619"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="651"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="658"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Open with</source>
         <translation>Öffnen mit</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="662"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="763"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="734"/>
         <source>Select default program</source>
         <translation>Standardprogramm auswählen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Confirm</source>
         <translation>Bestätigen</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="713"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="684"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Möchten Sie die ausgewählte(n) Datei(en) löschen?</translation>
     </message>

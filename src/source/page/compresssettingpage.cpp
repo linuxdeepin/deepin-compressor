@@ -347,8 +347,8 @@ void CompressSettingPage::initUI()
 void CompressSettingPage::initConnections()
 {
     connect(m_pClickLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-    connect(m_pCompressTypeLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-    connect(pArrowPixmapLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
+//    connect(m_pCompressTypeLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
+//    connect(pArrowPixmapLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
     connect(m_pTypeMenu, &DMenu::triggered, this, &CompressSettingPage::slotTypeChanged);
     connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotFileNameChanged);
     connect(m_pAdvancedBtn, &DSwitchButton::toggled, this, &CompressSettingPage::slotAdvancedEnabled);

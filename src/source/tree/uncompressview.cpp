@@ -156,7 +156,6 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 
     m_pDrag->setMimeData(m);
 
-    QUrl url;
     connect(m_pDrag, &DFileDrag::targetUrlChanged, [&] {
         QUrl url;
         m_bReceive = true;
@@ -197,15 +196,17 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 
 void UnCompressView::clearDragData()
 {
+    if (m_pDrag) {
+        m_pDrag->deleteLater();
+        m_pDrag = nullptr;
+    }
+
     if (m_pFileDragServer) {
         m_pFileDragServer->setProgress(100);
         m_pFileDragServer->deleteLater();
         m_pFileDragServer = nullptr;
     }
-    if (m_pDrag) {
-        m_pDrag->deleteLater();
-        m_pDrag = nullptr;
-    }
+
     m_strSelUnCompressPath.clear();
     m_bDrop = false;
     m_bReceive = false;
@@ -368,12 +369,14 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
 
     // 追加选项判断
     QString strPassword;
-    int iResult = showEncryptionDialog(strPassword);
+    AppendDialog dialog(this);
+    int iResult = dialog.showDialog(m_bMultiplePassword);
 
     // 点击取消按钮时，不进行追加操作
     if (iResult != DDialog::Accepted) {
         return;
     }
+    strPassword = dialog.password();
 
     // 重复提示
     ArchiveData stArchiveData = DataManager::get_instance().archiveData();
@@ -590,77 +593,6 @@ void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64
             ++iter;
         }
     }
-}
-
-int UnCompressView::showEncryptionDialog(QString &strPassword)
-{
-    // 创建对话框
-    DDialog dialog(this);
-    dialog.setMinimumWidth(380);
-    dialog.setAccessibleName("PasswordNeeded_dialog");
-    QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
-    dialog.setIcon(pixmap);
-
-    // 标题
-    DLabel *pTitleLbl = new DLabel(&dialog);
-    pTitleLbl->setMinimumSize(293, 20);
-    pTitleLbl->setForegroundRole(DPalette::ToolTipText);
-    pTitleLbl->setWordWrap(true);
-    DFontSizeManager::instance()->bind(pTitleLbl, DFontSizeManager::T6, QFont::Medium);
-    pTitleLbl->setText(tr("Add files to the current archive"));
-    pTitleLbl->setAlignment(Qt::AlignCenter);
-
-    // 勾选密码
-    DCheckBox *pSelCkb = new DCheckBox(tr("Use password"), &dialog);
-    DFontSizeManager::instance()->bind(pSelCkb, DFontSizeManager::T6, QFont::Medium);
-
-    // 密码输入框
-    DPasswordEdit *pPasswordEdit = new DPasswordEdit(&dialog);
-    pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
-    pPasswordEdit->setFocusPolicy(Qt::StrongFocus);
-    pPasswordEdit->setMinimumSize(340, 36);
-    pPasswordEdit->setVisible(false);
-
-    // 暂时屏蔽明码时的输入法
-//    //隐藏密码时不能输入中文,显示密码时可以输入中文
-//    connect(pPasswordEdit, &DPasswordEdit::echoModeChanged, pPasswordEdit, [&](bool echoOn) {
-//        pPasswordEdit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, echoOn);
-//    });
-
-    // 不支持多密码的格式不可以勾选密码框
-    if (!m_bMultiplePassword) {
-        pSelCkb->setEnabled(false);
-    }
-
-    // 密码选择框勾选之后显示密码输入框
-    connect(pSelCkb, &DCheckBox::clicked, this, [ & ]() {
-        if (pSelCkb->checkState() == Qt::Checked) {
-            pPasswordEdit->setVisible(true);
-        } else {
-            pPasswordEdit->clear();     // 不勾选加密时，清空密码
-            pPasswordEdit->setVisible(false);
-        }
-        dialog.adjustSize(); // 自动调整大小
-    });
-
-    // 布局
-    dialog.addContent(pTitleLbl, Qt::AlignCenter);
-    dialog.addSpacing(10);
-    dialog.addContent(pSelCkb, Qt::AlignCenter);
-    dialog.addSpacing(10);
-    dialog.addContent(pPasswordEdit, Qt::AlignCenter);
-
-    dialog.addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
-    dialog.addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
-
-    int iMode = dialog.exec();
-
-    // 接收加密
-    if (iMode == DDialog::Accepted) {
-        strPassword = pPasswordEdit->text();
-    }
-
-    return iMode;
 }
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)

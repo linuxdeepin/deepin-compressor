@@ -94,9 +94,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     //如果窗体状态不是最大最小状态，则记录此时窗口尺寸到配置文件里，方便下次打开时恢复大小
-    if (windowState() == Qt::WindowNoState) {
-        saveConfigWinSize(width(), height());
-    }
+//    if (windowState() == Qt::WindowNoState) {
+    saveConfigWinSize(width(), height());
+//    }
 
     ArchiveManager::get_instance()->destory_instance();
 

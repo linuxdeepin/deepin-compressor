@@ -199,6 +199,14 @@ public:
     void execute() override;
 
     /**
+     * @brief autoFeed 自动换行
+     * @param label1
+     * @param label2
+     * @param dialog
+     */
+    void autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dialog);
+
+    /**
      * @brief responseCancelled     是否取消
      * @return
      */
@@ -209,6 +217,14 @@ public:
      * @return 输入的密码
      */
     QString password();
+
+private:
+    QString m_strDesText;
+    QString m_strFileName;
+    int m_iLabelOldHeight = 0;
+    int m_iLabelOld1Height = 0;
+    int m_iCheckboxOld1Height = 0;
+    int m_iDialogOldHeight = 0;
 };
 
 // 加载非致命损坏对话框
