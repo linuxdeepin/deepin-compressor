@@ -31,8 +31,6 @@
 #include <QWidget>
 int main(int argc, char *argv[])
 {
-
-    QApplication a(argc, argv);
     std::cout << "Starting UnitTest" << std::endl;
     qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);

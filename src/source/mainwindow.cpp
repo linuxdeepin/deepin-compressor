@@ -1558,6 +1558,9 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
         if (Archive_OperationType::Operation_SingleExtract == m_operationtype) {
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
             sendMessage(new CustomFloatingMessage(icon, tr("Extraction canceled", "取消提取"), 1000, this));
+            if (m_pProgressdialog->isVisible()) {
+                m_pProgressdialog->setFinished();
+            }
         } else {
             if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
                 // 避免重复提示停止任务
@@ -1608,7 +1611,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         }
         // 文件名过长
         case ET_LongNameError:
-            showErrorMessage(FI_Uncompress, EI_LongFileName, true);
+            showErrorMessage(FI_Compress, EI_LongFileName, true);
             break;
         default: {
             showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
