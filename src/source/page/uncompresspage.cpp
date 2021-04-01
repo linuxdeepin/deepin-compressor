@@ -34,6 +34,7 @@
 #include <QHBoxLayout>
 #include <QShortcut>
 #include <QFileInfo>
+#include <QDebug>
 
 UnCompressPage::UnCompressPage(QWidget *parent)
     : DWidget(parent)

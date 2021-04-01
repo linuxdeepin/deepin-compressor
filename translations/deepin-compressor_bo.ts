@@ -212,7 +212,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>ཡིག་ཆའི་མིང་དང་གནོན་བཙིར་བྱས་པའི་ཡིག་ཆའི་མིང་གཅིག་པ་རེད་འདུག་པས། ཡིག་ཆའི་མིང་བརྗེ་རོགས།</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
@@ -726,7 +726,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2381"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>ཡིག་ཆའི་མིང་དང་གནོན་བཙིར་བྱས་པའི་ཡིག་ཆའི་མིང་གཅིག་པ་རེད་འདུག་པས། ཡིག་ཆའི་མིང་བརྗེ་རོགས།</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2389"/>
@@ -746,7 +746,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2557"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"/>
+        <translation>གནོན་བཙིར་ཡིག་ཆ་འདིའི་རྣམ་གཞག་གིས་ཡིག་ཆར་སྣོན་པར་རྒྱབ་སྐྱོར་མེད།</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2986"/>
