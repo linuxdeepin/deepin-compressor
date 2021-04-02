@@ -178,7 +178,7 @@ void ProgressDialog::showDialog()
         this->setFocusProxy(titlebar);
     }
 
-    exec();
+    open();     // 使用open来进行模态对话框显示，不阻塞事件循环，可以一直接收进度
 }
 
 void ProgressDialog::closeEvent(QCloseEvent *)
