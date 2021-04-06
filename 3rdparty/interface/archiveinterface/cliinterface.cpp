@@ -543,9 +543,17 @@ void CliInterface::handleProgress(const QString &line)
             emit signalprogress(percentage);
         }
 
-        if (line.startsWith("Extracting")) {
-            QStringRef strfilename = line.midRef(12, pos - 24);
-            QString fileName = strfilename.toString();
+        QStringRef strfilename;
+        QString fileName;
+        if (line.startsWith("Extracting")) {            // 普通文件
+            strfilename = line.midRef(12, pos - 24);
+            fileName = strfilename.toString();
+        } else if (line.startsWith("Creating")) {       // 文件夹
+            strfilename = line.midRef(10, pos - 22);
+            fileName = strfilename.toString();
+        }
+
+        if (!fileName.isEmpty()) {
             for (int i = fileName.length() - 1; i > 0; i--) {
                 if (fileName.at(i) == " ") {
                     continue;
@@ -555,7 +563,7 @@ void CliInterface::handleProgress(const QString &line)
                 }
             }
 
-            // 右键 解压到当前文件夹
+            // 右键 解压到当前文件夹（因为快捷解压少了list步骤，因此需要在解压过程中存储首层文件数据，防止误报压缩包无数据）
             if (!m_extractOptions.bExistList && m_indexOfListRootEntry == 0 && fileName.count('/') <= 1) {
                 m_indexOfListRootEntry++;
                 FileEntry entry;
