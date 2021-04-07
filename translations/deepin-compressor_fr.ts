@@ -9,7 +9,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
         <source>Use password</source>
-        <translation>Utiliser le mot de passe</translation>
+        <translation>Utiliser un mot de passe</translation>
     </message>
 </context>
 <context>

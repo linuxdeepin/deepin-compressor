@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
         <source>Add files to the current archive</source>
-        <translation type="unfinished"/>
+        <translation>Afegeix fitxers a l&apos;arxiu actual</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
         <source>Use password</source>
-        <translation type="unfinished"/>
+        <translation>Usa la contrasenya</translation>
     </message>
 </context>
 <context>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="699"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation type="unfinished"/>
+        <translation>La contrasenya per als volums ZIP no pot ser en xinès.</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="744"/>

@@ -471,20 +471,13 @@ int AppendDialog::showDialog(bool bMultiplePassword)
         if (pSelCkb->checkState() == Qt::Checked) {
             pPasswordEdit->setVisible(true);
             m_bPasswordVisible = true;
-//            qInfo() << pPasswordEdit->height();
-            qInfo() << height();
             setFixedHeight(m_iDialogOldHeight + 42);
-//            qInfo() << pPasswordEdit->height();
         } else {
             pPasswordEdit->clear();     // 不勾选加密时，清空密码
             pPasswordEdit->setVisible(false);
             m_bPasswordVisible = false;
-//            qInfo() << pPasswordEdit->height();
-            qInfo() << height();
             setFixedHeight(m_iDialogOldHeight - 42);
-//            qInfo() << pPasswordEdit->height();
         }
-        qInfo() << height();
         m_iDialogOldHeight = height();
 //        adjustSize();
     });
@@ -532,7 +525,6 @@ void AppendDialog::autoFeed(DLabel *label)
     m_iLabelOldHeight = height_lable;
     m_iCheckboxOld1Height = newstr.fontHeifht;
     m_iDialogOldHeight = height();
-    qInfo() << height();
 }
 
 void AppendDialog::changeEvent(QEvent *event)

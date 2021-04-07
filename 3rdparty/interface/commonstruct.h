@@ -97,6 +97,17 @@ struct FileEntry {
         iIndex = -1;
     }
 
+
+    bool operator==(FileEntry &t)       //==的重载
+    {
+        if (this->strFullPath == t.strFullPath && this->strFileName == t.strFileName
+                && this->isDirectory == t.isDirectory && this->qSize == t.qSize
+                && this->uLastModifiedTime == t.uLastModifiedTime && this->iIndex == t.iIndex) {
+            return true;
+        }
+        return false;
+    }
+
     QString strFullPath;    // 文件全路径
     QString strFileName;        // 文件名
     bool isDirectory;        // 是否为文件夹

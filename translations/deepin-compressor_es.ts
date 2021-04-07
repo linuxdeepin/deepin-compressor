@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="448"/>
         <source>Add files to the current archive</source>
-        <translation type="unfinished"/>
+        <translation>Agregar archivos al archivo actual</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="453"/>
         <source>Use password</source>
-        <translation type="unfinished"/>
+        <translation>Usar contraseña</translation>
     </message>
 </context>
 <context>

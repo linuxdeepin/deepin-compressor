@@ -21,9 +21,18 @@
 
 #include "popupdialog.h"
 #include "uitools.h"
+#include "gtest/src/stub.h"
+
 
 #include <gtest/gtest.h>
 #include <QTest>
+
+
+int exec_stub()
+{
+    return -1;
+}
+
 
 class TestTipDialog : public ::testing::Test
 {
@@ -50,9 +59,21 @@ TEST_F(TestTipDialog, initTest)
 
 }
 
-TEST_F(TestTipDialog, showDialog)
+TEST_F(TestTipDialog, testshowDialog)
 {
+    typedef void (*fptr)();
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    Stub stub;
+    stub.set(A_foo, exec_stub);
 
+    ASSERT_EQ(m_tester->showDialog(), -1);
+}
+
+TEST_F(TestTipDialog, testautoFeed)
+{
+    DLabel *label = new DLabel(m_tester);
+    m_tester->autoFeed(label);
+    ASSERT_EQ(m_tester->m_iDialogOldHeight, m_tester->height());
 }
 
 class TestSimpleQueryDialog : public ::testing::Test
@@ -80,10 +101,23 @@ TEST_F(TestSimpleQueryDialog, initTest)
 
 }
 
-TEST_F(TestSimpleQueryDialog, showDialog)
+TEST_F(TestSimpleQueryDialog, testshowDialog)
 {
+    typedef void (*fptr)();
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    Stub stub;
+    stub.set(A_foo, exec_stub);
 
+    ASSERT_EQ(m_tester->showDialog(), -1);
 }
+
+TEST_F(TestSimpleQueryDialog, testautoFeed)
+{
+    DLabel *label = new DLabel(m_tester);
+    m_tester->autoFeed(label);
+    ASSERT_EQ(m_tester->m_iDialogOldHeight, m_tester->height());
+}
+
 
 class TestOverwriteQueryDialog : public ::testing::Test
 {
@@ -110,9 +144,22 @@ TEST_F(TestOverwriteQueryDialog, initTest)
 
 }
 
-TEST_F(TestOverwriteQueryDialog, showDialog)
+TEST_F(TestOverwriteQueryDialog, testshowDialog)
 {
+    typedef void (*fptr)();
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    Stub stub;
+    stub.set(A_foo, exec_stub);
+    m_tester->showDialog("sss");
+    ASSERT_EQ(m_tester->m_retType, OR_Cancel);
+}
 
+TEST_F(TestOverwriteQueryDialog, testautoFeed)
+{
+    DLabel *label = new DLabel(m_tester);
+    DLabel *label2 = new DLabel(m_tester);
+    m_tester->autoFeed(label, label2);
+    ASSERT_EQ(m_tester->m_iDialogOldHeight, m_tester->height());
 }
 
 TEST_F(TestOverwriteQueryDialog, getDialogResult)
@@ -158,7 +205,71 @@ TEST_F(TestConvertDialog, initTest)
 
 }
 
-TEST_F(TestConvertDialog, showDialog)
+TEST_F(TestConvertDialog, testshowDialog)
+{
+    typedef void (*fptr)();
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    Stub stub;
+    stub.set(A_foo, exec_stub);
+    QStringList list;
+    list  << "false" << "" << "false" << "none";
+    bool b = (list == m_tester->showDialog());
+    ASSERT_EQ(b, true);
+}
+
+TEST_F(TestConvertDialog, testautoFeed)
+{
+    DLabel *label = new DLabel(m_tester);
+    m_tester->autoFeed(label);
+    ASSERT_EQ(m_tester->m_iDialogOldHeight, m_tester->height());
+}
+
+
+class TestAppendDialog : public ::testing::Test
+{
+public:
+    TestAppendDialog(): m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new AppendDialog;
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    AppendDialog *m_tester;
+};
+
+TEST_F(TestAppendDialog, initTest)
 {
 
 }
+
+TEST_F(TestAppendDialog, testshowDialog)
+{
+    typedef void (*fptr)();
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    Stub stub;
+    stub.set(A_foo, exec_stub);
+    m_tester->showDialog(false);
+    ASSERT_EQ(m_tester->m_strPassword.isEmpty(), true);
+}
+
+TEST_F(TestAppendDialog, testautoFeed)
+{
+    DLabel *label = new DLabel(m_tester);
+    m_tester->autoFeed(label);
+    ASSERT_EQ(m_tester->m_iDialogOldHeight, m_tester->height());
+}
+
+TEST_F(TestAppendDialog, testpassword)
+{
+    m_tester->m_strPassword = "123";
+    ASSERT_EQ(m_tester->password(), "123");
+}
+
