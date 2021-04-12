@@ -355,9 +355,12 @@ void CompressView::slotDeleteFile()
             foreach (QModelIndex index, selectedIndex) {
                 if (index.isValid()) {
                     FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
-                    QFile fi(entry.strFullPath);
-                    if (fi.exists()) {
-                        fi.remove();
+                    QFileInfo fi(entry.strFullPath);
+                    if (fi.isDir()) {   // 删除文件夹
+                        QDir dir(entry.strFullPath);
+                        dir.removeRecursively();
+                    } else {            // 删除文件
+                        QFile::remove(entry.strFullPath);
                     }
                 }
             }
