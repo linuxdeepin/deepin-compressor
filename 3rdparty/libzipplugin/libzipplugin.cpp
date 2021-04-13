@@ -717,7 +717,14 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     // 从压缩包中获取文件权限
-    mode_t value = attributes >> 16;
+    mode_t value = mode_t();
+    switch (opsys) {
+    case ZIP_OPSYS_UNIX:
+        value = attributes >> 16;
+        break;
+    default:    // TODO: non-UNIX.
+        break;
+    }
     QFileDevice::Permissions per = getPermissions(value);
 
     if (bIsDirectory) {     // 文件夹
