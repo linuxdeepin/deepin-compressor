@@ -85,11 +85,11 @@ TEST_F(TestTreeHeaderView, initTest)
 
 }
 
-TEST_F(TestTreeHeaderView, testsizeHint)
-{
-    QSize size = m_tester->sizeHint();
-    ASSERT_EQ(size.height(), 31);
-}
+//TEST_F(TestTreeHeaderView, testsizeHint)
+//{
+//    QSize size = m_tester->sizeHint();
+//    ASSERT_EQ(size.height(), 31);
+//}
 
 TEST_F(TestTreeHeaderView, testgetpreLbl)
 {
@@ -107,4 +107,11 @@ TEST_F(TestTreeHeaderView, testsetPreLblVisible_false)
 {
     m_tester->setPreLblVisible(false);
     ASSERT_EQ(m_tester->height(), 38);
+}
+
+TEST_F(TestTreeHeaderView, testresizeEvent)
+{
+    QResizeEvent event(QSize(60, 30), QSize(40, 20));
+    m_tester->resizeEvent(&event);
+    ASSERT_EQ(m_tester->m_pPreLbl->width(), 60 - 2 * SCROLLMARGIN);
 }

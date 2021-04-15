@@ -50,11 +50,11 @@ TEST_F(TestDFMStandardPaths, initTest)
 
 }
 
-TEST_F(TestDFMStandardPaths, testgetCachePath)
-{
-    QString defaultPath = m_tester->getCachePath();
-    ASSERT_EQ(QFile::exists(defaultPath), true);
-}
+//TEST_F(TestDFMStandardPaths, testgetCachePath)
+//{
+//    QString defaultPath = m_tester->getCachePath();
+//    ASSERT_EQ(QFile::exists(defaultPath), true);
+//}
 
 TEST_F(TestDFMStandardPaths, testlocation_TrashPath)
 {

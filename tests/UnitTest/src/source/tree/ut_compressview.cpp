@@ -26,6 +26,8 @@
 #include "popupdialog.h"
 #include "treeheaderview.h"
 #include "gtest/src/stub.h"
+#include "ut_commonstub.h"
+#include "config.h"
 
 #include <DMenu>
 
@@ -61,14 +63,14 @@ TEST_F(TestCompressView, initTest)
 
 TEST_F(TestCompressView, testaddCompressFiles)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress/test.txt").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress/test.txt");
     m_tester->addCompressFiles(listFiles);
     ASSERT_EQ(m_tester->m_listSelFiles.isEmpty(), true);
 }
 
 TEST_F(TestCompressView, testgetCompressFiles)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress/test.txt").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress/test.txt");
     m_tester->addCompressFiles(listFiles);
     bool bResult = (m_tester->getCompressFiles() == listFiles);
     ASSERT_EQ(bResult, true);
@@ -100,14 +102,14 @@ TEST_F(TestCompressView, testinitConnections)
 
 TEST_F(TestCompressView, testfileInfo2Entry)
 {
-    QFileInfo info("../UnitTest/test_sources/zip/compress/test.txt");
+    QFileInfo info(TEST_SOURCES_PATH + QString("/zip/compress/test.txt"));
     FileEntry entry = m_tester->fileInfo2Entry(info);
     ASSERT_EQ(entry.strFileName, "test.txt");
 }
 
 TEST_F(TestCompressView, testhandleDoubleClick)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     m_tester->handleDoubleClick(m_tester->model()->index(0, 0));
     ASSERT_EQ(m_tester->m_iLevel, 1);
@@ -115,7 +117,7 @@ TEST_F(TestCompressView, testhandleDoubleClick)
 
 TEST_F(TestCompressView, testgetCurrentDirFiles)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     QList<FileEntry> listEntry = m_tester->getCurrentDirFiles();
     ASSERT_EQ(listEntry.isEmpty(), false);
@@ -130,7 +132,7 @@ TEST_F(TestCompressView, testhandleLevelChanged)
 
 TEST_F(TestCompressView, testgetPrePathByLevel)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     m_tester->handleDoubleClick(m_tester->model()->index(0, 0));
     QString str = m_tester->getPrePathByLevel(m_tester->m_strCurrentPath);
@@ -139,32 +141,19 @@ TEST_F(TestCompressView, testgetPrePathByLevel)
 
 TEST_F(TestCompressView, testrefreshDataByCurrentPath)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     ASSERT_EQ(m_tester->m_pHeaderView->getpreLbl()->isVisible(), false);
 }
 
-QModelIndex indexAt_stub(CompressView *pView, const QPoint &p)
-{
-    return pView->model()->index(0, 0);
-}
-
-QAction *exec_stub(const QPoint &pos, QAction *at = nullptr)
-{
-    return nullptr;
-}
-
 TEST_F(TestCompressView, testslotShowRightMenu)
 {
-    typedef QModelIndex(*fptr)(QTreeView *, int);
-    fptr A_foo = (fptr)(&QTreeView::indexAt);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, indexAt_stub);
+    CommonStub::stub_QTreeView_indexAt(stub);
 
-    Stub stub1;
-    stub1.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), exec_stub);
+    CommonStub::stub_QMenu_exec(stub);
 
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     QPoint p;
     m_tester->slotShowRightMenu(p);
@@ -174,7 +163,7 @@ TEST_F(TestCompressView, testslotShowRightMenu)
 
 TEST_F(TestCompressView, testslotDeleteFile)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     m_tester->slotDeleteFile();
     ASSERT_NE(m_tester, nullptr);
@@ -182,32 +171,27 @@ TEST_F(TestCompressView, testslotDeleteFile)
 
 TEST_F(TestCompressView, testslotDirChanged)
 {
-    m_tester->m_strCurrentPath = QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    m_tester->m_strCurrentPath = TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->slotDirChanged();
     ASSERT_NE(m_tester, nullptr);
 }
 
-int showDialog_stub(const QString &strDesText, const QString btnMsg1, DDialog::ButtonType btnType1, const QString btnMsg2, DDialog::ButtonType btnType2, const QString btnMsg3, DDialog::ButtonType btnType3)
-{
-    return 1;
-}
-
 TEST_F(TestCompressView, testslotDragFiles_isArchiveFile)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
 
     Stub stub;
-    stub.set(ADDR(SimpleQueryDialog, showDialog), showDialog_stub);
+    CommonStub::stub_SimpleQueryDialog_showDialog(stub, 1);
 
-    m_tester->slotDragFiles(QStringList() << QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath());
+    m_tester->slotDragFiles(QStringList() << TEST_SOURCES_PATH + QString("/zip/extract/test.zip"));
 
     ASSERT_NE(m_tester, nullptr);
 }
 
 TEST_F(TestCompressView, testslotDragFiles_NormalFiles)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->slotDragFiles(listFiles);
     bool bResult = (m_tester->m_listCompressFiles == listFiles);
     ASSERT_EQ(bResult, true);
@@ -231,7 +215,7 @@ TEST_F(TestCompressView, testslotDragFiles_NormalFiles)
 
 TEST_F(TestCompressView, testslotPreClicked)
 {
-    QStringList listFiles = QStringList() << QFileInfo("../UnitTest/test_sources/zip/compress").absoluteFilePath();
+    QStringList listFiles = QStringList() << TEST_SOURCES_PATH + QString("/zip/compress");
     m_tester->addCompressFiles(listFiles);
     m_tester->handleDoubleClick(m_tester->model()->index(0, 0));
     m_tester->slotPreClicked();

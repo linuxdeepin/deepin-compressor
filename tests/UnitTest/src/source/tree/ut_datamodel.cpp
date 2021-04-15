@@ -22,6 +22,7 @@
 #include "datamodel.h"
 #include "compressview.h"
 #include "gtest/src/stub.h"
+#include "config.h"
 
 #include <DMenu>
 
@@ -39,8 +40,8 @@ public:
         m_tester = new DataModel;
         m_view = new CompressView;
 
-        m_tester->m_listEntry << m_view->fileInfo2Entry(QFileInfo("../UnitTest/test_sources/zip/compress/test.txt"));
-        m_tester->m_listEntry << m_view->fileInfo2Entry(QFileInfo("../UnitTest/test_sources/zip/compress/test"));
+        m_tester->m_listEntry << m_view->fileInfo2Entry(QFileInfo(TEST_SOURCES_PATH + QString("/zip/compress/test.txt")));
+        m_tester->m_listEntry << m_view->fileInfo2Entry(QFileInfo(TEST_SOURCES_PATH + QString("/zip/compress/test")));
 
     }
 
@@ -113,7 +114,7 @@ TEST_F(TestDataModel, testcolumnCount)
 
 TEST_F(TestDataModel, testrefreshFileEntry)
 {
-    FileEntry entry =  m_view->fileInfo2Entry(QFileInfo("../UnitTest/test_sources/zip/compress/test1.txt"));
+    FileEntry entry =  m_view->fileInfo2Entry(QFileInfo(TEST_SOURCES_PATH + QString("/zip/compress/test1.txt")));
     QList<FileEntry> listEntry = QList<FileEntry>() << entry;
     m_tester->refreshFileEntry(listEntry);
     bool bResult = (m_tester->m_listEntry == listEntry);

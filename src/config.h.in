@@ -24,5 +24,6 @@
 
 #cmakedefine PERF_ON
 #cmakedefine BUILD_PATH "@BUILD_PATH@"
+#cmakedefine TEST_SOURCES_PATH "@TEST_SOURCES_PATH@"
 
 #endif // __CONFIG_H_

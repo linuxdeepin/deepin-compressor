@@ -22,16 +22,11 @@
 #include "popupdialog.h"
 #include "uitools.h"
 #include "gtest/src/stub.h"
+#include "ut_commonstub.h"
 
 
 #include <gtest/gtest.h>
 #include <QTest>
-
-
-int exec_stub()
-{
-    return -1;
-}
 
 
 class TestTipDialog : public ::testing::Test
@@ -61,10 +56,8 @@ TEST_F(TestTipDialog, initTest)
 
 TEST_F(TestTipDialog, testshowDialog)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, exec_stub);
+    CommonStub::stub_QDialog_exec(stub, -1);
 
     ASSERT_EQ(m_tester->showDialog(), -1);
 }
@@ -103,10 +96,8 @@ TEST_F(TestSimpleQueryDialog, initTest)
 
 TEST_F(TestSimpleQueryDialog, testshowDialog)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, exec_stub);
+    CommonStub::stub_QDialog_exec(stub, -1);
 
     ASSERT_EQ(m_tester->showDialog(), -1);
 }
@@ -146,10 +137,8 @@ TEST_F(TestOverwriteQueryDialog, initTest)
 
 TEST_F(TestOverwriteQueryDialog, testshowDialog)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, exec_stub);
+    CommonStub::stub_QDialog_exec(stub, -1);
     m_tester->showDialog("sss");
     ASSERT_EQ(m_tester->m_retType, OR_Cancel);
 }
@@ -207,10 +196,8 @@ TEST_F(TestConvertDialog, initTest)
 
 TEST_F(TestConvertDialog, testshowDialog)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, exec_stub);
+    CommonStub::stub_QDialog_exec(stub, -1);
     QStringList list;
     list  << "false" << "" << "false" << "none";
     bool b = (list == m_tester->showDialog());
@@ -252,10 +239,8 @@ TEST_F(TestAppendDialog, initTest)
 
 TEST_F(TestAppendDialog, testshowDialog)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, exec_stub);
+    CommonStub::stub_QDialog_exec(stub, -1);
     m_tester->showDialog(false);
     ASSERT_EQ(m_tester->m_strPassword.isEmpty(), true);
 }

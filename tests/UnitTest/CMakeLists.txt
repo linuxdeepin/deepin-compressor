@@ -1,11 +1,12 @@
 #1.定义cmake版本
 cmake_minimum_required(VERSION 3.9.5)
 #2.设置项目名称
-
 #访问私有方法 -fno-access-control
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-access-control")
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/test_output/)
+#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/test_output/)
+#3.2 设置可执行程序输出目录
+#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=\"${LIBRARY_OUTPUT_PATH}\":/usr/lib/deepin-compressor/plugins")
@@ -24,3 +25,4 @@ include_directories(${HFILES_OUTPUT_PATH})
 add_subdirectory(src)
 
 add_subdirectory(3rdparty)
+

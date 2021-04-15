@@ -22,6 +22,8 @@
 #include "archivemanager.h"
 #include "singlejob.h"
 #include "gtest/src/stub.h"
+#include "ut_commonstub.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -56,25 +58,18 @@ TEST_F(TestArchiveManager, testget_instance)
     ASSERT_NE(m_tester, nullptr);
 }
 
-void start_stub()
-{
-    return;
-}
-
 TEST_F(TestArchiveManager, testcreateArchive)
 {
     QList<FileEntry> files;
     FileEntry entry;
-    entry.strFullPath = QFileInfo("../UnitTest/test_sources/zip/compress/test.txt").absoluteFilePath();
+    entry.strFullPath = TEST_SOURCES_PATH + QString("/zip/compress/test.txt");
     files << entry;
-    QString strDestination = QFileInfo("../UnitTest/test_sources/zip/compress/test.zip").absoluteFilePath();
+    QString strDestination = TEST_SOURCES_PATH + QString("/zip/compress/test.zip");
     CompressOptions options;
     UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->createArchive(files, strDestination, options, eType);
     ASSERT_EQ(bResult, true);
@@ -82,13 +77,11 @@ TEST_F(TestArchiveManager, testcreateArchive)
 
 TEST_F(TestArchiveManager, testloadArchive)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->loadArchive(strArchiveFullPath, eType);
     ASSERT_EQ(bResult, true);
@@ -98,15 +91,13 @@ TEST_F(TestArchiveManager, testaddFiles)
 {
     QList<FileEntry> listAddEntry;
     FileEntry entry;
-    entry.strFullPath = QFileInfo("../UnitTest/test_sources/zip/compress/test.txt").absoluteFilePath();
+    entry.strFullPath = TEST_SOURCES_PATH + QString("/zip/compress/test.txt");
     listAddEntry << entry;
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/compress/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/compress/test.zip");
     CompressOptions options;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->addFiles(strArchiveFullPath, listAddEntry, options);
     ASSERT_EQ(bResult, true);
@@ -114,15 +105,13 @@ TEST_F(TestArchiveManager, testaddFiles)
 
 TEST_F(TestArchiveManager, testextractFiles)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     ExtractionOptions stOptions;
     stOptions.bAllExtract = true;
     UiTools::AssignPluginType eType = UiTools::AssignPluginType::APT_Auto;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->extractFiles(strArchiveFullPath, QList<FileEntry>(), stOptions, eType);
     ASSERT_EQ(bResult, true);
@@ -130,17 +119,15 @@ TEST_F(TestArchiveManager, testextractFiles)
 
 TEST_F(TestArchiveManager, testextractFiles2Path)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     ExtractionOptions stOptions;
     QList<FileEntry> listEntry;
     FileEntry entry;
     entry.strFullPath = "test.txt";
     listEntry << entry;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->extractFiles2Path(strArchiveFullPath, listEntry, stOptions);
     ASSERT_EQ(bResult, true);
@@ -148,16 +135,14 @@ TEST_F(TestArchiveManager, testextractFiles2Path)
 
 TEST_F(TestArchiveManager, testdeleteFiles)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     QList<FileEntry> listEntry;
     FileEntry entry;
     entry.strFullPath = "test.txt";
     listEntry << entry;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->deleteFiles(strArchiveFullPath, listEntry);
     ASSERT_EQ(bResult, true);
@@ -165,43 +150,37 @@ TEST_F(TestArchiveManager, testdeleteFiles)
 
 TEST_F(TestArchiveManager, testbatchExtractFiles)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
-    bool bResult = m_tester->batchExtractFiles(QStringList() << strArchiveFullPath, QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath());
+    bool bResult = m_tester->batchExtractFiles(QStringList() << strArchiveFullPath, TEST_SOURCES_PATH + QString("/zip/extract"));
     ASSERT_EQ(bResult, true);
 }
 
 TEST_F(TestArchiveManager, testopenFile)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
 
     FileEntry entry;
     entry.strFullPath = "test.txt";
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
-    bool bResult = m_tester->openFile(strArchiveFullPath, entry, QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath(), "deepin-editor");
+    bool bResult = m_tester->openFile(strArchiveFullPath, entry, TEST_SOURCES_PATH + QString("/zip/extract"), "deepin-editor");
     ASSERT_EQ(bResult, true);
 }
 
 TEST_F(TestArchiveManager, testupdateArchiveCacheData)
 {
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
+    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
 
     UpdateOptions options;
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&UpdateJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_UpdateJob_start(stub);
 
     bool bResult = m_tester->updateArchiveCacheData(options);
     ASSERT_EQ(bResult, true);
@@ -209,103 +188,78 @@ TEST_F(TestArchiveManager, testupdateArchiveCacheData)
 
 TEST_F(TestArchiveManager, testupdateArchiveComment)
 {
-    QString strArchiveFullPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strArchiveFullPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, start_stub);
+    CommonStub::stub_SingleJob_start(stub);
 
     bool bResult = m_tester->updateArchiveComment(strArchiveFullPath, "ddddd");
     ASSERT_EQ(bResult, true);
 }
 
-TEST_F(TestArchiveManager, testconvertArchive)
-{
-    QString strArchiveFullPath1 = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
-    QString strArchiveFullPath2 = QFileInfo("../UnitTest/test_sources/zip/extract/test2.zip").absoluteFilePath();
+//TEST_F(TestArchiveManager, testconvertArchive)
+//{
+//    QString strArchiveFullPath1 = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
+//    QString strArchiveFullPath2 = TEST_SOURCES_PATH + QString("/zip/extract/test2.zip");
 
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&ConvertJob::start);   //获取虚函数地址
-    Stub stub;
-    stub.set(A_foo, start_stub);
+//    Stub stub;
+//    CommonStub::stub_ConvertJob_start(stub);
 
-    bool bResult = m_tester->convertArchive(strArchiveFullPath1, QFileInfo("../UnitTest/test_sources/zip/extract").absoluteFilePath(), strArchiveFullPath2);
-    ASSERT_EQ(bResult, true);
-}
+//    bool bResult = m_tester->convertArchive(strArchiveFullPath1, TEST_SOURCES_PATH + QString("/zip/extract"), strArchiveFullPath2);
+//    ASSERT_EQ(bResult, true);
+//}
 
-void doPause_stub()
-{
-    return;
-}
+//TEST_F(TestArchiveManager, testpauseOperation)
+//{
+//    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
+//    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
 
-TEST_F(TestArchiveManager, testpauseOperation)
-{
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
-    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
+//    Stub stub;
+//    CommonStub::stub_SingleJob_doPause(stub);
 
-    typedef void (*fptr)(SingleJob *);
-    fptr A_foo = (fptr)(&SingleJob::doPause);   //获取虚函数地址
-    Stub stub;
-    stub.set(A_foo, doPause_stub);
+//    bool bResult = m_tester->pauseOperation();
+//    ASSERT_EQ(bResult, true);
+//}
 
-    bool bResult = m_tester->pauseOperation();
-    ASSERT_EQ(bResult, true);
-}
+//TEST_F(TestArchiveManager, testcontinueOperation)
+//{
+//    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
+//    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
 
-void doContinue_stub()
-{
-    return;
-}
+//    Stub stub;
+//    CommonStub::stub_SingleJob_doContinue(stub);
 
-TEST_F(TestArchiveManager, testcontinueOperation)
-{
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
-    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
+//    bool bResult = m_tester->continueOperation();
+//    ASSERT_EQ(bResult, true);
+//}
 
-    typedef void (*fptr)(SingleJob *);
-    fptr A_foo = (fptr)(&SingleJob::doContinue);   //获取虚函数地址
-    Stub stub;
-    stub.set(A_foo, doContinue_stub);
+//TEST_F(TestArchiveManager, testcancelOperation)
+//{
+//    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
+//    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
 
-    bool bResult = m_tester->continueOperation();
-    ASSERT_EQ(bResult, true);
-}
+//    Stub stub;
+//    CommonStub::stub_SingleJob_kill(stub);
 
-void kill_stub()
-{
-    return;
-}
+//    bool bResult = m_tester->cancelOperation();
+//    ASSERT_EQ(bResult, true);
+//}
 
-TEST_F(TestArchiveManager, testcancelOperation)
-{
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
-    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
+//TEST_F(TestArchiveManager, testgetCurFilePassword)
+//{
+//    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
+//    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
+//    QString strPassword = "123";
+//    m_tester->m_pInterface->setPassword(strPassword);
 
-    typedef void (*fptr)(SingleJob *);
-    fptr A_foo = (fptr)(&SingleJob::kill);   //获取虚函数地址
-    Stub stub;
-    stub.set(A_foo, kill_stub);
+//    ASSERT_EQ(m_tester->getCurFilePassword(), strPassword);
+//}
 
-    bool bResult = m_tester->cancelOperation();
-    ASSERT_EQ(bResult, true);
-}
+//TEST_F(TestArchiveManager, testslotJobFinished)
+//{
+//    m_tester->m_pInterface = UiTools::createInterface(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"), false);
+//    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
+//    m_tester->slotJobFinished();
 
-TEST_F(TestArchiveManager, testgetCurFilePassword)
-{
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
-    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
-    QString strPassword = "123";
-    m_tester->m_pInterface->setPassword(strPassword);
-
-    ASSERT_EQ(m_tester->getCurFilePassword(), strPassword);
-}
-
-TEST_F(TestArchiveManager, testslotJobFinished)
-{
-    m_tester->m_pInterface = UiTools::createInterface(QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath(), false);
-    m_tester->m_pArchiveJob = new LoadJob(m_tester->m_pInterface);
-    m_tester->slotJobFinished();
-
-    ASSERT_EQ(m_tester->m_pArchiveJob, nullptr);
-}
+//    ASSERT_EQ(m_tester->m_pArchiveJob, nullptr);
+//}

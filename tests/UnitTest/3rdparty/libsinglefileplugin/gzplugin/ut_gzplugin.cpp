@@ -20,6 +20,7 @@
 */
 
 #include "gzplugin.h"
+#include "config.h"
 #include <gtest/gtest.h>
 
 #include <QFileInfo>
@@ -57,7 +58,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/gz/test.gz").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/gz/test.gz");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);

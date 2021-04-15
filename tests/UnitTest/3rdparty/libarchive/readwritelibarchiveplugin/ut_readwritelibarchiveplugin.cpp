@@ -22,6 +22,7 @@
 #include <gtest/gtest.h>
 #include <gtest/src/stub.h>
 #include "readwritelibarchiveplugin.h"
+#include "config.h"
 
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -57,7 +58,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/tar/compress/test.tar").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/tar/compress/test.tar");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -92,26 +93,26 @@ TEST_F(TestReadWriteLibarchivePlugin, testaddFiles)
 {
     QList<FileEntry> files;
     FileEntry file1;
-    file1.strFullPath = "../UnitTest/test_sources/tar/compress/test.txt";
+    file1.strFullPath = TEST_SOURCES_PATH + QString("/tar/compress/test.txt");
     file1.qSize = 4;
     files.push_back(file1);
     CompressOptions options;
-    QFile::remove("../UnitTest/test_sources/tar/compress/test.tar");
+    QFile::remove(TEST_SOURCES_PATH + QString("/tar/compress/test.tar"));
     ASSERT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
-    ASSERT_EQ(QFileInfo::exists("../UnitTest/test_sources/tar/compress/test.tar"), true);
+    ASSERT_EQ(QFileInfo::exists(TEST_SOURCES_PATH + QString("/tar/compress/test.tar")), true);
 }
 
 TEST_F(TestReadWriteLibarchivePlugin, testaddFiles1)
 {
     QList<FileEntry> files;
     FileEntry file1;
-    file1.strFullPath = "../UnitTest/test_sources/tar/compress/dir";
+    file1.strFullPath = TEST_SOURCES_PATH + QString("/tar/compress/dir");
     file1.isDirectory = true;
     file1.qSize = 4;
     files.push_back(file1);
     CompressOptions options;
     ASSERT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
-    ASSERT_EQ(QFileInfo::exists("../UnitTest/test_sources/tar/compress/test.tar"), true);
+    ASSERT_EQ(QFileInfo::exists(TEST_SOURCES_PATH + QString("/tar/compress/test.tar")), true);
 }
 
 TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles)
@@ -121,7 +122,7 @@ TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles)
     file1.strFullPath = "test.txt";
     files.push_back(file1);
     ASSERT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
-    ASSERT_EQ(QFileInfo::exists("../UnitTest/test_sources/tar/compress/test.tar"), true);
+    ASSERT_EQ(QFileInfo::exists(TEST_SOURCES_PATH + QString("/tar/compress/test.tar")), true);
 }
 
 TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles2)
@@ -132,7 +133,7 @@ TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles2)
     file1.isDirectory = true;
     files.push_back(file1);
     ASSERT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
-    ASSERT_EQ(QFileInfo::exists("../UnitTest/test_sources/tar/compress/test.tar"), true);
+    ASSERT_EQ(QFileInfo::exists(TEST_SOURCES_PATH + QString("/tar/compress/test.tar")), true);
 }
 
 bool open_stub(QIODevice::OpenMode flags)
@@ -161,5 +162,5 @@ TEST_F(TestReadWriteLibarchivePlugin, testinitializeWriterFilters)
 
     ASSERT_EQ(m_tester->initializeWriterFilters(), false);
 
-    QFile::remove("../UnitTest/test_sources/tar/compress/test.tar");
+    QFile::remove(TEST_SOURCES_PATH + QString("/tar/compress/test.tar"));
 }

@@ -22,6 +22,7 @@
 #include "singleton.h"
 #include "mimesappsmanager.h"
 #include "durl.h"
+#include "config.h"
 
 #include <gtest/src/stub.h>
 #include <gtest/gtest.h>
@@ -82,7 +83,7 @@ TEST_F(TestMimeAppsWorker, testinitConnect)
 
 QStringList getDesktopFiles_stub()
 {
-    return QStringList() << QFileInfo("../UnitTest/test_sources/deepin-compressor.desktop").absoluteFilePath();
+    return QStringList() << TEST_SOURCES_PATH + QString("/deepin-compressor.desktop");
 //    return QStringList();
 }
 
@@ -100,8 +101,7 @@ TEST_F(TestMimeAppsWorker, teststartWatch)
     m_tester->m_fileSystemWatcher->removePaths(m_tester->m_fileSystemWatcher->files());
     m_tester->startWatch();
     QStringList list = m_tester->m_fileSystemWatcher->files();
-    qInfo() << "******************************************" << list;
-    ASSERT_EQ(m_tester->m_fileSystemWatcher->files(), QStringList() << QFileInfo("../UnitTest/test_sources/deepin-compressor.desktop").absoluteFilePath());
+    ASSERT_EQ(m_tester->m_fileSystemWatcher->files(), QStringList() << TEST_SOURCES_PATH + QString("/deepin-compressor.desktop"));
 }
 
 TEST_F(TestMimeAppsWorker, testhandleFileChanged)
@@ -128,7 +128,7 @@ TEST_F(TestMimeAppsWorker, testupdateCache)
 
 TEST_F(TestMimeAppsWorker, testwriteData)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QByteArray strContent = "write data";
     bool bResult = m_tester->writeData(strFile, strContent);
     ASSERT_EQ(bResult, true);
@@ -136,7 +136,7 @@ TEST_F(TestMimeAppsWorker, testwriteData)
 
 TEST_F(TestMimeAppsWorker, testreadData)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QByteArray strContent = m_tester->readData(strFile);
     ASSERT_EQ(strContent.isEmpty(), false);
 }
@@ -150,28 +150,28 @@ TEST_F(TestMimesAppsManager, initTest)
 
 TEST_F(TestMimesAppsManager, testgetMimeType)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     ASSERT_EQ(type.name().toStdString(), "text/plain");
 }
 
 TEST_F(TestMimesAppsManager, testgetMimeTypeByFileName)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QString strName = m_tester->getMimeTypeByFileName(strFile);
     ASSERT_EQ(strName.toStdString(), "text/plain");
 }
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppByFileName)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QString strName = m_tester->getDefaultAppByFileName(strFile);
     ASSERT_EQ(strName.isEmpty(), false);
 }
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType_001)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     QString strName = m_tester->getDefaultAppByMimeType(type);
     ASSERT_EQ(strName.isEmpty(), false);
@@ -179,7 +179,7 @@ TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType_001)
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType_002)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     QString strName = m_tester->getDefaultAppByMimeType(type.name());
     ASSERT_EQ(strName.isEmpty(), false);
@@ -187,7 +187,7 @@ TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType_002)
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByMimeType)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     QString strName = m_tester->getDefaultAppDisplayNameByMimeType(type);
     ASSERT_EQ(strName.isEmpty(), false);
@@ -195,7 +195,7 @@ TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByMimeType)
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByGio)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     QString strName = m_tester->getDefaultAppDisplayNameByGio(type.name());
     ASSERT_EQ(strName.isEmpty(), false);
@@ -203,7 +203,7 @@ TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByGio)
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppDesktopFileByMimeType)
 {
-    QString strFile = QFileInfo("../UnitTest/test_sources/test.txt").absoluteFilePath();
+    QString strFile = TEST_SOURCES_PATH + QString("/test.txt");
     QMimeType type = m_tester->getMimeType(strFile);
     QString strName = m_tester->getDefaultAppDisplayNameByGio(type.name());
     ASSERT_EQ(strName.isEmpty(), false);

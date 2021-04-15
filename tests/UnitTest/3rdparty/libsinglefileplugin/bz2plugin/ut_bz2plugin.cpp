@@ -22,6 +22,7 @@
 #include "bz2plugin.h"
 #include "gtest/src/stub.h"
 #include "queries.h"
+#include "config.h"
 #include <gtest/gtest.h>
 
 #include <QFileInfo>
@@ -60,7 +61,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/bz2/test.txt.bz2").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/bz2/test.txt.bz2");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -155,7 +156,7 @@ TEST_F(TestLibBzip2Interface, testextractFiles)
 {
     ExtractionOptions options;
     options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/bz2/temp").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/bz2/temp");
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);

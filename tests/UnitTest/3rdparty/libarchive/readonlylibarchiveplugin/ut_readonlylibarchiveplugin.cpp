@@ -25,6 +25,7 @@
 #include "readonlylibarchiveplugin.h"
 #include "queries.h"
 #include "datamanager.h"
+#include "config.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -61,7 +62,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/tar/extract/test.tar").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/tar/extract/test.tar");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -153,7 +154,7 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles1)
     stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
     QList<FileEntry> files;
     ExtractionOptions options;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/tar/extract");
 
     ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
 }
@@ -167,7 +168,7 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles2)
     stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
     QList<FileEntry> files;
     ExtractionOptions options;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/tar/extract");
 
     ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Cancel);
 }
@@ -182,7 +183,7 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles3)
     stub.set(ADDR(QDir, mkpath), mkpath_stub);
     QList<FileEntry> files;
     ExtractionOptions options;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extracterror").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/tar/extracterror");
 
     ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Error);
 }
@@ -201,7 +202,7 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles4)
     file1.strFullPath = QLatin1String("test.txt");
     files.push_back(file1);
     ExtractionOptions options;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/tar/extract").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/tar/extract");
     m_tester->m_ArchiveEntryCount = 2;
 
     ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);

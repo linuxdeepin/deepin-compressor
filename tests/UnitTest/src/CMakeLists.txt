@@ -58,6 +58,7 @@ include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/tree)
 
 #源文件、头文件和资源文件
+include_directories(${PROJECT_SOURCE_DIR}/source/common)
 file(GLOB_RECURSE c_files
     ${SRCRELATIVEPATH}/source/*.cpp
     ${SRCRELATIVEPATH}/source/archivemanager/*.cpp

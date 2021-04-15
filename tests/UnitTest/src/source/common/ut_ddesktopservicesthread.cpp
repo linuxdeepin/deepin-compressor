@@ -21,6 +21,7 @@
 
 #include "ddesktopservicesthread.h"
 #include "gtest/src/stub.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -46,7 +47,7 @@ public:
 
 protected:
     DDesktopServicesThread *m_tester;
-    QStringList m_listTempFile = QStringList() << QFileInfo("../UnitTest/test_sources/test.zip/testDir").absoluteFilePath() << QFileInfo("../UnitTest/test_sources/test.zip/test.txt").absoluteFilePath();
+    QStringList m_listTempFile = QStringList() << TEST_SOURCES_PATH + QString("/test.zip/testDir") << TEST_SOURCES_PATH + QString("/test.zip/test.txt");
 };
 
 

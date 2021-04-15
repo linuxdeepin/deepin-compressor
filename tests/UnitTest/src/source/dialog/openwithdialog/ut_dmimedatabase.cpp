@@ -21,6 +21,7 @@
 
 #include "dmimedatabase.h"
 #include "durl.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -52,14 +53,14 @@ TEST_F(TestDMimeDatabase, initTest)
 
 TEST_F(TestDMimeDatabase, testmimeTypeForFile001)
 {
-    QString strPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     QMimeType mimeType = m_tester->mimeTypeForFile(strPath);
     ASSERT_EQ(mimeType.name(), "application/zip");
 }
 
 TEST_F(TestDMimeDatabase, testmimeTypeForFile002)
 {
-    QFileInfo fileInfo = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip");
+    QFileInfo fileInfo = QFileInfo(TEST_SOURCES_PATH + QString("/zip/extract/test.zip"));
     QMimeType mimeType = m_tester->mimeTypeForFile(fileInfo);
     ASSERT_EQ(mimeType.name(), "application/zip");
 }

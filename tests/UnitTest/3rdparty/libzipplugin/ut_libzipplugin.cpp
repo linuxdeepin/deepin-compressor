@@ -23,6 +23,7 @@
 #include "gtest/src/stub.h"
 #include "queries.h"
 #include "datamanager.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 
@@ -61,7 +62,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -158,7 +159,7 @@ TEST_F(TestLibzipPlugin, testextractFiles_AllExtract)
     QList<FileEntry> files;
     ExtractionOptions options;
     options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/zip/extract/temp");
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -185,7 +186,7 @@ TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
         ExtractionOptions options;
         files << stData.listRootEntry[0];
         options.bAllExtract = false;
-        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
+        options.strTargetPath = TEST_SOURCES_PATH + QString("/zip/extract/temp");
 
         Stub stub;
         stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -221,8 +222,8 @@ TEST_F(TestLibzipPlugin, testcopyFiles)
 
 TEST_F(TestLibzipPlugin, testdeleteFiles)
 {
-    QString strFile1 = QFileInfo("../UnitTest/test_sources/zip/delete/test.zip").absoluteFilePath();
-    QString strFile2 = QFileInfo("../UnitTest/test_sources/zip/delete/testDelete.zip").absoluteFilePath();
+    QString strFile1 = TEST_SOURCES_PATH + QString("/zip/delete/test.zip");
+    QString strFile2 = TEST_SOURCES_PATH + QString("/zip/delete/testDelete.zip");
     QFile::copy(strFile1, strFile2);
     bool bResult = true;
     if (QFileInfo(strFile2).exists()) {
@@ -353,7 +354,7 @@ TEST_F(TestLibzipPlugin, testextractEntry)
     if (archive) {
         ExtractionOptions options;
         options.bAllExtract = true;
-        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
+        options.strTargetPath = TEST_SOURCES_PATH + QString("/zip/extract/temp");
         qlonglong qExtractSize = 0;
         QString strFileName;
 
@@ -403,8 +404,8 @@ TEST_F(TestLibzipPlugin, testpasswordUnicode001)
 
 TEST_F(TestLibzipPlugin, testdeleteEntry)
 {
-    QString strFile1 = QFileInfo("../UnitTest/test_sources/zip/delete/test.zip").absoluteFilePath();
-    QString strFile2 = QFileInfo("../UnitTest/test_sources/zip/delete/testDelete.zip").absoluteFilePath();
+    QString strFile1 = TEST_SOURCES_PATH + QString("/zip/delete/test.zip");
+    QString strFile2 = TEST_SOURCES_PATH + QString("/zip/delete/testDelete.zip");
     QFile::copy(strFile1, strFile2);
     m_tester->m_strArchiveName = strFile2;
 

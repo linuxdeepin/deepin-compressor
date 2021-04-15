@@ -33,6 +33,8 @@
 #include "compressview.h"
 #include "uncompressview.h"
 #include "ddesktopservicesthread.h"
+#include "ut_commonstub.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -79,11 +81,6 @@ bool isExecutable_stub()
     return false;
 }
 
-int showDialog_stub(const QString &strDesText, const QString btnMsg, DDialog::ButtonType btnType)
-{
-    return false;
-}
-
 TEST_F(TestMainWindow, initTest)
 {
 
@@ -92,11 +89,11 @@ TEST_F(TestMainWindow, initTest)
 TEST_F(TestMainWindow, testcheckHerePath)
 {
     Stub stub;
-    stub.set(ADDR(TipDialog, showDialog), showDialog_stub);
+    CommonStub::stub_TipDialog_showDialog(stub, 0);
     stub.set(ADDR(QFileInfo, isWritable), isWritable_stub);
     stub.set(ADDR(QFileInfo, isExecutable), isExecutable_stub);
 
-    QString strPath = QFileInfo("../UnitTest/test_sources/noPermissionDir").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/noPermissionDir");
 
     ASSERT_EQ(m_tester->checkHerePath(strPath), false);
 }
@@ -104,7 +101,7 @@ TEST_F(TestMainWindow, testcheckHerePath)
 TEST_F(TestMainWindow, testcheckSettings)
 {
     Stub stub;
-    stub.set(ADDR(TipDialog, showDialog), showDialog_stub);
+    CommonStub::stub_TipDialog_showDialog(stub, 0);
     ASSERT_EQ(m_tester->checkSettings("test"), false);
 }
 
@@ -385,14 +382,14 @@ TEST_F(TestMainWindow, testrefreshPage_Loading)
 
 TEST_F(TestMainWindow, testcalSelectedTotalFileSize)
 {
-    QString strPath = QFileInfo("../UnitTest/test_sources/calSize").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/calSize");
     ASSERT_EQ(m_tester->calSelectedTotalFileSize(QStringList() << strPath), 30);
 }
 
 TEST_F(TestMainWindow, testcalFileSizeByThread)
 {
     m_tester->m_stCompressParameter.qSize = 0;
-    QString strPath = QFileInfo("../UnitTest/test_sources/calSize").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/calSize");
     m_tester->calFileSizeByThread(strPath);
     ASSERT_EQ(m_tester->m_stCompressParameter.qSize, 30);
 }
@@ -411,7 +408,7 @@ TEST_F(TestMainWindow, testsetTitleButtonStyle_ArrowLeave)
 
 TEST_F(TestMainWindow, testloadArchive)
 {
-    QString strPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     m_tester->loadArchive(strPath);
     ASSERT_EQ(m_tester->m_ePageID, PI_Loading);
 }
@@ -441,7 +438,7 @@ TEST_F(TestMainWindow, testgetExtractPath_AutoCreatDir)
 {
     Stub stub;
     stub.set(ADDR(SettingDialog, isAutoCreatDir), isAutoCreatDir_stub_true);
-    QString strPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     ASSERT_EQ(m_tester->getExtractPath(strPath), "test");
 }
 
@@ -449,7 +446,7 @@ TEST_F(TestMainWindow, testgetExtractPath_NoAutoCreatDir)
 {
     Stub stub;
     stub.set(ADDR(SettingDialog, isAutoCreatDir), isAutoCreatDir_stub_false);
-    QString strPath = QFileInfo("../UnitTest/test_sources/zip/extract/test.zip").absoluteFilePath();
+    QString strPath = TEST_SOURCES_PATH + QString("/zip/extract/test.zip");
     ASSERT_EQ(m_tester->getExtractPath(strPath), "");
 }
 

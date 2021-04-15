@@ -22,6 +22,7 @@
 #include "singlejob.h"
 #include "gtest/src/stub.h"
 #include "uitools.h"
+#include "ut_commonstub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
@@ -54,17 +55,10 @@ TEST_F(TestSingleJobThread, initTest)
 
 }
 
-void doWork_stub()
-{
-    return;
-}
-
 TEST_F(TestSingleJobThread, testrun)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&LoadJob::doWork);   //获取虚函数地址
     Stub stub;
-    stub.set(A_foo, doWork_stub);
+    CommonStub::stub_LoadJob_doWork(stub);
     m_tester->run();
     ASSERT_NE(m_tester, nullptr);
 }

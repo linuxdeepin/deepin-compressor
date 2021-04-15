@@ -23,6 +23,7 @@
 #include "gtest/src/stub.h"
 #include "queries.h"
 #include "datamanager.h"
+#include "config.h"
 
 #include <gtest/gtest.h>
 
@@ -63,7 +64,7 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("../UnitTest/test_sources/crx/test.crx").absoluteFilePath();
+        QString strFile = TEST_SOURCES_PATH + QString("/crx/test.crx");
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -159,7 +160,7 @@ TEST_F(TestLibminizipPlugin, testextractFiles_AllExtract)
     QList<FileEntry> files;
     ExtractionOptions options;
     options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("../UnitTest/test_sources/crx/temp").absoluteFilePath();
+    options.strTargetPath = TEST_SOURCES_PATH + QString("/crx/temp");
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -185,7 +186,7 @@ TEST_F(TestLibminizipPlugin, testextractFiles_PartExtract)
         ExtractionOptions options;
         files << stData.listRootEntry[0];
         options.bAllExtract = false;
-        options.strTargetPath = QFileInfo("../UnitTest/test_sources/zip/extract/temp").absoluteFilePath();
+        options.strTargetPath = TEST_SOURCES_PATH + QString("/zip/extract/temp");
 
         Stub stub;
         stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);

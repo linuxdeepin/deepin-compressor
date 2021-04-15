@@ -23,6 +23,7 @@
 #include <gtest/src/stub.h>
 
 #include "mimetypes.h"
+#include "config.h"
 
 #include <QFileInfo>
 
@@ -61,7 +62,7 @@ bool isReadable_stub()
 
 TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT005)
 {
-    ASSERT_EQ(determineMimeType("../UnitTest/test_sources/bz2/test.tar.bz2").name(), "application/x-bzip-compressed-tar");
+    ASSERT_EQ(determineMimeType(TEST_SOURCES_PATH + QString("/bz2/test.tar.bz2")).name(), "application/x-bzip-compressed-tar");
 }
 
 bool isDefault_stub()
@@ -71,7 +72,7 @@ bool isDefault_stub()
 
 TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT006)
 {
-    ASSERT_EQ(determineMimeType("../UnitTest/test_sources/iso/test.iso").name(), "application/x-iso9660-image");
+    ASSERT_EQ(determineMimeType(TEST_SOURCES_PATH + QString("/iso/test.iso")).name(), "application/x-iso9660-image");
 }
 
 TEST(QMimeType_determineMimeType_UT, QMimeType_determineMimeType_UT007)
