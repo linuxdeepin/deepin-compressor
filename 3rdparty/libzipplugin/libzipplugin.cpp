@@ -1241,17 +1241,26 @@ enum_extractEntryStatus LibzipPlugin::extractEntry(zip_t *archive, int index,  c
         }
 
         // Inspired by fuse-zip source code: fuse-zip/lib/fileNode.cpp
+//        switch (opsys) {
+//        case ZIP_OPSYS_UNIX:
+//            // Unix permissions are stored in the leftmost 16 bits of the external file attribute.
+////            file.setPermissions(KIO::convertPermissions(attributes >> 16)); //TODO_DS
+//            break;
+//        default:    // TODO: non-UNIX.
+//            break;
+//        }
+        // 从压缩包中获取文件权限
+        mode_t value = mode_t();
         switch (opsys) {
         case ZIP_OPSYS_UNIX:
-            // Unix permissions are stored in the leftmost 16 bits of the external file attribute.
-//            file.setPermissions(KIO::convertPermissions(attributes >> 16)); //TODO_DS
+            value = attributes >> 16;
             break;
         default:    // TODO: non-UNIX.
             break;
         }
 
         file.close();
-        file.setPermissions(getPermissions(attributes >> 16));
+        file.setPermissions(getPermissions(value));
         //extract = true;
         bAnyFileExtracted = true;
 
