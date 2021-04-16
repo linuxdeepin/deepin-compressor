@@ -110,5 +110,3 @@ install(FILES assets/mimetype/deepin-compressor.xml DESTINATION share/mime/packa
 # 集成帮助手册
 install(DIRECTORY assets/deepin-compressor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
 
-# 支持压缩的格式
-install(FILES conf/compressor-singlecompress.conf DESTINATION share/deepin-compressor/compressedformat/)
