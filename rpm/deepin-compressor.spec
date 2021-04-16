@@ -56,12 +56,13 @@ popd
 %license LICENSE
 %{_bindir}/%{name}
 /usr/lib/%{name}/plugins/*.so
-%{_datadir}/deepin/dde-file-manager/oem-menuextensions/*.desktop
+# %{_datadir}/deepin/dde-file-manager/oem-menuextensions/*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/%{name}/translations/*.qm
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/deepin-manual/manual-assets/application/deepin-compressor/archive-manager/*
+%{_datadir}/applications/context-menus/*.conf
 
 %changelog
 * Thu Apr 16 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.10.0.22-1
