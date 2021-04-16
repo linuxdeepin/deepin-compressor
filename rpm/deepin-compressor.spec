@@ -28,6 +28,7 @@ BuildRequires: libzip-devel
 BuildRequires: libarchive-devel
 BuildRequires: minizip-devel
 BuildRequires: poppler-cpp-devel
+BuildRequires: gtest-devel
 
 Requires: p7zip p7zip-plugins
 Requires: lz4-libs
