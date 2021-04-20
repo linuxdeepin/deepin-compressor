@@ -85,6 +85,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
+install(TARGETS compressor-ChardetDetector DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
 install(TARGETS minizipplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
