@@ -19,9 +19,9 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:/usr/lib/deepin-compressor/plugins")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins")
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins")
 endif()
 
 add_definitions("-DQT_MESSAGELOGCONTEXT")
@@ -85,14 +85,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
-install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS clirarplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS libzipplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS minizipplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS readwritelibarchiveplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS readonlylibarchiveplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS compressor-interface DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS bz2plugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS gzplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
+install(TARGETS xzplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins/)
 
