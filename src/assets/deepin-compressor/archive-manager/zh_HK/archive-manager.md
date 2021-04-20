@@ -15,8 +15,8 @@
 
 ### 運行歸檔管理器
 
-1. 單擊桌面底部的 ![launcher](../common/deepin_launcher.svg)，進入啟動器界面。
-2. 上下滾動鼠標滾輪瀏覽或通過搜索，找到歸檔管理器 ![deepin_compressor](../common/deepin_compressor.svg)單擊運行。
+1. 單擊任務欄上的啟動器圖標 ![launcher](../common/deepin_launcher.svg)，進入啟動器界面。
+2. 上下滾動鼠標滾輪瀏覽或通過搜索，找到歸檔管理器圖標 ![deepin_compressor](../common/deepin_compressor.svg)，單擊運行。
 3. 右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，您可以：
  - 單擊 **傳送到桌面**，在桌面創建快捷方式。
  - 單擊 **傳送到任務欄**，將應用程序固定到任務欄。
@@ -26,16 +26,18 @@
 ### 關閉歸檔管理器
 
 - 在歸檔管理器界面單擊  ![close_icon](../common/close_icon.svg)，關閉歸檔管理器。
-- 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **關閉所有** 來關閉歸檔管理器。
-- 在歸檔管理器界面單擊 ![icon_menu](../common/icon_menu.svg)，選擇 **退出** 來關閉歸檔管理器。
+- 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **關閉所有**，關閉歸檔管理器。
+- 在歸檔管理器界面單擊 ![icon_menu](../common/icon_menu.svg)，選擇 **退出**，關閉歸檔管理器。
 
 ### 查看快捷鍵
 
-在歸檔管理器界面上，按下鍵盤上的 **Ctrl + Shift + ?** 組合鍵來查看快捷鍵，熟練地使用快捷鍵，將大大提升您的操作效率。
+在歸檔管理器界面，使用快捷鍵 **Ctrl + Shift + ?** 打開快捷鍵預覽界面。熟練地使用快捷鍵，將大大提升您的操作效率。
 
 ![1|hotkey](fig/hotkey.png)
 
 ## 操作介紹
+
+在歸檔管理器界面，可對單個或多個文件（夾）進行壓縮或解壓縮，並且支持多個窗口同時操作。
 
 ### 壓縮
 1. 選擇壓縮文件。

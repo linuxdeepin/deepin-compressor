@@ -13,8 +13,8 @@
 
 ### 运行归档管理器
 
-1. 单击桌面底部的 ![launcher](../common/deepin_launcher.svg)，进入启动器界面。
-2. 上下滚动鼠标滚轮浏览或通过搜索，找到归档管理器 ![deepin_compressor](../common/deepin_compressor.svg)单击运行。
+1. 单击任务栏上的启动器图标 ![launcher](../common/deepin_launcher.svg)，进入启动器界面。
+2. 上下滚动鼠标滚轮浏览或通过搜索，找到归档管理器图标 ![deepin_compressor](../common/deepin_compressor.svg)，单击运行。
 3. 右键单击 ![deepin_compressor](../common/deepin_compressor.svg)，您可以：
  - 单击 **发送到桌面**，在桌面创建快捷方式。
  - 单击 **发送到任务栏**，将应用程序固定到任务栏。
@@ -23,12 +23,12 @@
 ### 关闭归档管理器
 
 - 在归档管理器界面单击  ![close_icon](../common/close_icon.svg)，退出归档管理器。
-- 在任务栏右键单击 ![deepin_compressor](../common/deepin_compressor.svg)，选择 **关闭所有** 来退出归档管理器。
-- 在归档管理器界面单击 ![icon_menu](../common/icon_menu.svg)，选择 **退出** 来退出归档管理器。
+- 在任务栏右键单击 ![deepin_compressor](../common/deepin_compressor.svg)，选择 **关闭所有** ，退出归档管理器。
+- 在归档管理器界面单击 ![icon_menu](../common/icon_menu.svg)，选择 **退出** ，退出归档管理器。
 
 ### 查看快捷键
 
-在归档管理器界面上，按下键盘上的 **Ctrl + Shift + ?** 组合键来查看快捷键，熟练地使用快捷键，将大大提升您的操作效率。
+在归档管理器界面，使用快捷键 **Ctrl + Shift + ?** 打开快捷键预览界面。熟练地使用快捷键，将大大提升您的操作效率。
 
 ![1|hotkey](fig/hotkey.png)
 
@@ -148,7 +148,7 @@
 
 ### 主题
 
-窗口主题包含浅色主题、深色主题和跟随系统主题。
+窗口主题包含浅色主题、深色主题和系统主题。
 
 1. 在归档管理器界面，单击 ![icon_menu](../common/icon_menu.svg)。
 2. 选择 **主题**，选择一个主题颜色。

@@ -22,12 +22,10 @@
  - 點擊 **釘選到Dock**，將應用程式固定到Dock。
  - 點擊 **開機啟動**，將應用程式添加到開機啟動項，在電腦開機時自動執行該應用。
 
-
-
 ### 關閉歸檔管理器
 
 - 在歸檔管理器介面點擊  ![close_icon](../common/close_icon.svg)，關閉歸檔管理器。
-- 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **全部關閉** 來關閉歸檔管理器。
+- 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **全部關閉**  來關閉歸檔管理器。
 - 在歸檔管理器介面點擊 ![icon_menu](../common/icon_menu.svg)，選擇 **離開** 來關閉歸檔管理器。
 
 ### 查看快捷鍵
@@ -100,7 +98,7 @@
 
    + 右鍵單擊壓縮包選擇 **解壓**。
    + 直接將壓縮包拖曳到在歸檔管理器介面上。
-      - 添加並加密文件：單擊選單欄上的按鈕 ![plus](../common/icon_plus.svg) 或 ![icon_menu](../common/icon_menu.svg) > **開啟文件**，可以添加文件到壓縮包。在彈出的對話框中，選擇勾選 **使用密碼** 並設定密碼，對文件進行加密。不同的文件可以設定不同的密碼，僅zip格式的壓縮包支援對追加的文件進行加密。
+      - 添加並加密文件：單擊選單欄上的按鈕 ![plus](../common/icon_plus.svg) 或 ![icon_menu](../common/icon_menu.svg) > **開啟文件**，可以添加文件到壓縮包。在彈出的對話框中，選擇勾選**使用密碼**並設定密碼，對文件進行加密。不同的文件可以設定不同的密碼，僅zip格式的壓縮包支援對追加的文件進行加密。
 
       ![password](fig/password.png)
       
