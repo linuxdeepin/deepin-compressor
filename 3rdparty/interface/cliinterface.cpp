@@ -504,18 +504,18 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     //    if (m_operationMode == Add && !isMultiVolume()) {
     //        list();
     //    } else
-    if (m_operationMode == List && isCorrupt()) {
-        LoadCorruptQuery query(filename());
-        //query.execute();
-        emit userQuery(&query);
-        query.waitForResponse();
-        if (!query.responseYes()) {
-            emit cancelled();
-            emit finished(false);
-        } else {
-            emit progress(1.0);
-            emit finished(true);
-        }
+    if (m_operationMode == List && isCorrupt()) {   // 加载出错的情况，直接结束
+//        LoadCorruptQuery query(filename());
+//        //query.execute();
+//        emit userQuery(&query);
+//        query.waitForResponse();
+//        if (!query.responseYes()) {
+//            emit cancelled();
+//            emit finished(false);
+//        } else {
+        emit progress(1.0);
+        emit finished(false);
+//    }
     } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
         if (m_isbatchlist && 2 == exitCode) {
             PasswordNeededQuery query(filename());
