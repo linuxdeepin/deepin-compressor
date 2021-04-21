@@ -44,6 +44,8 @@ Requires: deepin-shortcut-viewer
 %build
 export PATH=%{_qt5_bindir}:$PATH
 sed -i "s|^cmake_minimum_required.*|cmake_minimum_required(VERSION 3.0)|" $(find . -name "CMakeLists.txt")
+sed -i "s|lib/|%_lib/|" CMakeLists.txt
+sed -i "s|/usr/lib|%_libdir|" src/source/common/pluginmanager.cpp
 mkdir build && pushd build 
 %cmake -DCMAKE_BUILD_TYPE=Release ../  -DAPP_VERSION=%{version} -DVERSION=%{version} 
 %make_build  
@@ -66,5 +68,5 @@ popd
 %{_datadir}/applications/context-menus/*.conf
 
 %changelog
-* Thu Apr 16 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.10.0.22-1
+* Thu Apr 16 2021 zhangdingwen <zhangdingwen@uniontech.com> - 5.10.0.22-1
 - Initial release for OpenEuler
