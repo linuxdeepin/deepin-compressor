@@ -58,7 +58,7 @@ popd
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
-/usr/lib/%{name}/plugins/*.so
+%_libdir/%{name}/plugins/*.so
 # %{_datadir}/deepin/dde-file-manager/oem-menuextensions/*.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/%{name}/translations/*.qm
