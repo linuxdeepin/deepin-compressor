@@ -29,11 +29,21 @@
 #include <QApplication>
 #include <iostream>
 #include <QWidget>
+
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+#include <sanitizer/asan_interface.h>
+#endif
+
 int main(int argc, char *argv[])
 {
     std::cout << "Starting UnitTest" << std::endl;
     qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
+
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+    __sanitizer_set_report_path("asan-interface.log");
+#endif
+
 
     return RUN_ALL_TESTS();
 }

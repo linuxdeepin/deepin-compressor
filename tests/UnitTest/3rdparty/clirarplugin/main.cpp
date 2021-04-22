@@ -28,11 +28,20 @@
 //#include <gmock/gmock-matchers.h>
 #include <QApplication>
 #include <iostream>
+
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+#include <sanitizer/asan_interface.h>
+#endif
+
 int main(int argc, char *argv[])
 {
     std::cout << "Starting UnitTest" << std::endl;
     qputenv("QT_QPA_PLATFORM", "offscreen"); //设置环境变量
     testing::InitGoogleTest(&argc, argv);
+
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+    __sanitizer_set_report_path("asan-clirarplugin.log");
+#endif
 
     return RUN_ALL_TESTS();
 }

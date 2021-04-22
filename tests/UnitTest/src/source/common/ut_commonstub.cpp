@@ -21,20 +21,26 @@
 #include "ut_commonstub.h"
 #include "popupdialog.h"
 #include "singlejob.h"
+#include "pluginmanager.h"
 
-#include <DDialog>
-#include <DMenu>
+#include <QFileInfo>
 
 DWIDGET_USE_NAMESPACE
 
-int g_diaolog_exec_result = 0;
-int g_TipDialog_showDialog_result = 0;
-QStringList g_ConvertDialog_showDialog_result;
-int g_SimpleQueryDialog_showDialog_result = 0;
-int g_OverwriteQueryDialog_showDialog_result = 0;   // 对话框状态
-bool g_OverwriteQueryDialog_applyAll = false;  // 应用到全部文件
-int g_AppendDialog_showDialog_result = 0;
+int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
+int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
 
+QString g_QFileInfo_path_result = "";                   // QFileInfo path返回值
+QString g_QFileInfo_fileName_result = "";               // QFileInfo fileName返回值
+QString g_QFileInfo_completeBaseName_result = "";       // QFileInfo completeBaseName返回值
+bool g_QFileInfo_isDir_result = false;                  // QFileInfo isDir返回值
+bool g_QFileInfo_exists_result = false;                 // QFileInfo exists返回值
+bool g_QFileInfo_isWritable_result = false;             // QFileInfo isWritable返回值
+bool g_QFileInfo_isExecutable_result = false;           // QFileInfo isExecutable返回值
+bool g_QFileInfo_isReadable_result = false;             // QFileInfo isReadable返回值
+bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink返回值
+
+/*************************************CommonStub*************************************/
 CommonStub::CommonStub()
 {
 
@@ -45,49 +51,17 @@ CommonStub::~CommonStub()
 
 }
 
-int diaolog_exec_stub()
+
+/*************************************CustomDialogStub*************************************/
+CustomDialogStub::CustomDialogStub()
 {
-    return g_diaolog_exec_result;
+
 }
 
-void CommonStub::stub_QDialog_exec(Stub &stub, int iResult)
+CustomDialogStub::~CustomDialogStub()
 {
-    g_diaolog_exec_result = iResult;
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub.set(A_foo, diaolog_exec_stub);
+
 }
-
-
-
-QAction *menu_exec_stub(const QPoint &pos, QAction *at = nullptr)
-{
-    return nullptr;
-}
-
-void CommonStub::stub_QMenu_exec(Stub &stub)
-{
-    stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), menu_exec_stub);
-}
-
-
-
-QModelIndex treeView_indexAt_stub(void *obj, const QPoint &p)
-{
-    QTreeView *o = (QTreeView *)obj;
-    if (o) {
-        return o->model()->index(0, 0);
-    }
-    return QModelIndex();
-}
-
-void CommonStub::stub_QTreeView_indexAt(Stub &stub)
-{
-    typedef QModelIndex(*fptr)(QTreeView *, int);
-    fptr A_foo = (fptr)(&QTreeView::indexAt);   //获取虚函数地址
-    stub.set(A_foo, treeView_indexAt_stub);
-}
-
 
 int tipDialog_showDialog_stub(const QString &strDesText, const QString btnMsg, DDialog::ButtonType btnType)
 {
@@ -97,137 +71,165 @@ int tipDialog_showDialog_stub(const QString &strDesText, const QString btnMsg, D
     return g_TipDialog_showDialog_result;
 }
 
-void CommonStub::stub_TipDialog_showDialog(Stub &stub, int iResult)
+int simpleQueryDialog_showDialog_stub(const QString &strDesText, const QString btnMsg1, DDialog::ButtonType btnType1, const QString btnMsg2, DDialog::ButtonType btnType2, const QString btnMsg3, DDialog::ButtonType btnType3)
+{
+    Q_UNUSED(strDesText)
+    Q_UNUSED(btnMsg1)
+    Q_UNUSED(btnType1)
+    Q_UNUSED(btnMsg2)
+    Q_UNUSED(btnType2)
+    Q_UNUSED(btnMsg3)
+    Q_UNUSED(btnType3)
+    return g_SimpleQueryDialog_showDialog_result;
+}
+
+void CustomDialogStub::stub_TipDialog_showDialog(Stub &stub, int iResult)
 {
     g_TipDialog_showDialog_result = iResult;
     stub.set(ADDR(TipDialog, showDialog), tipDialog_showDialog_stub);
 }
 
-
-QStringList convertDialog_showDialog_stub()
-{
-    return g_ConvertDialog_showDialog_result;
-}
-
-void CommonStub::stub_ConvertDialog_showDialog(Stub &stub, QStringList listResult)
-{
-    g_ConvertDialog_showDialog_result = listResult;
-    stub.set(ADDR(ConvertDialog, showDialog), convertDialog_showDialog_stub);
-}
-
-
-int simpleQueryDialog__showDialog_stub(const QString &strDesText, const QString btnMsg1, DDialog::ButtonType btnType1, const QString btnMsg2, DDialog::ButtonType btnType2, const QString btnMsg3, DDialog::ButtonType btnType3)
-{
-    return g_SimpleQueryDialog_showDialog_result;
-}
-
-void CommonStub::stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult)
+void CustomDialogStub::stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult)
 {
     g_SimpleQueryDialog_showDialog_result = iResult;
-    stub.set(ADDR(SimpleQueryDialog, showDialog), simpleQueryDialog__showDialog_stub);
+    stub.set(ADDR(TipDialog, showDialog), simpleQueryDialog_showDialog_stub);
 }
 
 
-void overwriteshowDialog_showDialog_stub(QString file, bool bDir)
+/*************************************QFileInfoStub*************************************/
+QFileInfoStub::QFileInfoStub()
 {
-    return;
-}
-
-void CommonStub::stub_OverwriteQueryDialog_showDialog(Stub &stub, int iReult, bool bApplyAll)
-{
-    g_OverwriteQueryDialog_showDialog_result = iReult;
-    g_OverwriteQueryDialog_applyAll = bApplyAll;
-    stub.set(ADDR(OverwriteQueryDialog, showDialog), overwriteshowDialog_showDialog_stub);
-}
-
-
-int appenshowDialog_showDialog_stub(bool bMultiplePassword)
-{
-    return g_AppendDialog_showDialog_result;
-}
-
-void CommonStub::stub_AppendDialog_showDialog(Stub &stub, int iResult)
-{
-    g_AppendDialog_showDialog_result = iResult;
-    stub.set(ADDR(AppendDialog, showDialog), appenshowDialog_showDialog_stub);
 
 }
 
-
-void job_start_stub()
+QFileInfoStub::~QFileInfoStub()
 {
-    return;
+
 }
 
-void CommonStub::stub_SingleJob_start(Stub &stub)
+QString qfileinfo_path_stub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
-    stub.set(A_foo, job_start_stub);
+    return g_QFileInfo_path_result;
 }
 
-void CommonStub::stub_ConvertJob_start(Stub &stub)
+QString qfileinfo_fileName_stub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&ConvertJob::start);   //获取虚函数地址
-    stub.set(A_foo, job_start_stub);
+    return g_QFileInfo_fileName_result;
 }
 
-void CommonStub::stub_UpdateJob_start(Stub &stub)
+QString qfileinfo_completeBaseName_stub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&UpdateJob::start);   //获取虚函数地址
-    stub.set(A_foo, job_start_stub);
+    return g_QFileInfo_completeBaseName_result;
 }
 
-
-void job_doPause_stub()
+bool qfileinfo_isDir_stub()
 {
-    return;
+    return g_QFileInfo_isDir_result;
 }
 
-void CommonStub::stub_SingleJob_doPause(Stub &stub)
+bool qfileinfo_exists_stub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::doPause);   //获取虚函数地址
-    stub.set(A_foo, job_doPause_stub);
+    return g_QFileInfo_exists_result;
 }
 
-
-void job_doContinue_stub()
+bool qfileinfo_isWritable_stub()
 {
-    return;
+    return g_QFileInfo_isWritable_result;
 }
 
-void CommonStub::stub_SingleJob_doContinue(Stub &stub)
+bool qfileinfo_isExecutable_stub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::doContinue);   //获取虚函数地址
-    stub.set(A_foo, job_doContinue_stub);
+    return g_QFileInfo_isExecutable_result;
+}
+
+bool qfileinfo_isReadable_stub()
+{
+    return g_QFileInfo_isReadable_result;
+}
+
+bool qfileinfo_isSymLink_stub()
+{
+    return g_QFileInfo_isSymLink_result;
 }
 
 
-void job_kill_stub()
+void QFileInfoStub::stub_QFileInfo_path(Stub &stub, const QString &strPath)
 {
-    return;
+    g_QFileInfo_path_result = strPath;
+    stub.set(ADDR(QFileInfo, path), qfileinfo_path_stub);
 }
 
-void CommonStub::stub_SingleJob_kill(Stub &stub)
+void QFileInfoStub::stub_QFileInfo_fileName(Stub &stub, const QString &strPath)
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&SingleJob::kill);   //获取虚函数地址
-    stub.set(A_foo, job_kill_stub);
+    g_QFileInfo_fileName_result = strPath;
+    stub.set(ADDR(QFileInfo, fileName), qfileinfo_fileName_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_completeBaseName(Stub &stub, const QString &strPath)
+{
+    g_QFileInfo_completeBaseName_result = strPath;
+    stub.set(ADDR(QFileInfo, completeBaseName), qfileinfo_completeBaseName_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_isDir(Stub &stub, bool isDir)
+{
+    g_QFileInfo_isDir_result = isDir;
+    stub.set(ADDR(QFileInfo, isDir), qfileinfo_isDir_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_exists(Stub &stub, bool isExists)
+{
+    g_QFileInfo_exists_result = isExists;
+
+    typedef bool (QFileInfo::*fptr)()const ;
+    fptr A_foo = (fptr)(&QFileInfo::exists);   //获取虚函数地址
+    stub.set(A_foo, qfileinfo_exists_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_isWritable(Stub &stub, bool isWritable)
+{
+    g_QFileInfo_isWritable_result = isWritable;
+    stub.set(ADDR(QFileInfo, isWritable), qfileinfo_isWritable_stub);
+
+}
+
+void QFileInfoStub::stub_QFileInfo_isExecutable(Stub &stub, bool isExecutable)
+{
+    g_QFileInfo_isExecutable_result = isExecutable;
+    stub.set(ADDR(QFileInfo, isExecutable), qfileinfo_isExecutable_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_isReadable(Stub &stub, bool isReadable)
+{
+    g_QFileInfo_isReadable_result = isReadable;
+    stub.set(ADDR(QFileInfo, isReadable), qfileinfo_isReadable_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink)
+{
+    g_QFileInfo_isSymLink_result = isSymLink;
+    stub.set(ADDR(QFileInfo, isSymLink), qfileinfo_isSymLink_stub);
 }
 
 
-void job_doWork_stub()
+/*************************************PluginManagerStub*************************************/
+PluginManagerStub::PluginManagerStub()
 {
-    return;
+
 }
 
-void CommonStub::stub_LoadJob_doWork(Stub &stub)
+PluginManagerStub::~PluginManagerStub()
 {
-    typedef void (*fptr)();
-    fptr A_foo = (fptr)(&LoadJob::doWork);   //获取虚函数地址
-    stub.set(A_foo, job_doWork_stub);
+
+}
+
+QStringList pluginManager_supportedWriteMimeTypes_stub(PluginManager::MimeSortingMode mode)
+{
+    QStringList listMimeTypes = QStringList() << "application/zip" << "application/x-7z-compressed";
+    return listMimeTypes;
+}
+
+void PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(Stub &stub)
+{
+    stub.set(ADDR(PluginManager, supportedWriteMimeTypes), pluginManager_supportedWriteMimeTypes_stub);
 }

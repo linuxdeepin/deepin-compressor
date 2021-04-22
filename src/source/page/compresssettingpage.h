@@ -131,12 +131,6 @@ private:
     void setEncryptedEnabled(bool bEnabled);
 
     /**
-     * @brief slotEchoModeChanged   密码框明暗码切换
-     * @param bEchoOn   是否明码
-     */
-    void slotEchoModeChanged(bool bEchoOn);
-
-    /**
      * @brief setListEncryptionEnabled  设置列表加密是否可用
      * @param bEnabled  是否可用
      */
@@ -231,6 +225,12 @@ private slots:
      * @brief slotPasswordChanged 输入密码变化
      */
     void slotPasswordChanged();
+
+    /**
+     * @brief slotEchoModeChanged   密码框明暗码切换
+     * @param bEchoOn   是否明码
+     */
+    void slotEchoModeChanged(bool bEchoOn);
 
 private:
     // 左侧界面

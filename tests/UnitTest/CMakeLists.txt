@@ -4,15 +4,29 @@ cmake_minimum_required(VERSION 3.9.5)
 #访问私有方法 -fno-access-control
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-access-control")
 
-#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/test_output/)
-#3.2 设置可执行程序输出目录
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
+#3 设置可执行程序输出目录
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=\"${LIBRARY_OUTPUT_PATH}\":/usr/lib/deepin-compressor/plugins")
 else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=\"${LIBRARY_OUTPUT_PATH}\":/usr/lib/deepin-compressor/plugins")
 endif()
+
+set(CMAKE_SAFETYTEST "${CMAKE_SAFETYTEST_ARG}")
+
+if(CMAKE_SAFETYTEST STREQUAL "")
+    set(CMAKE_SAFETYTEST "CMAKE_SAFETYTEST_ARG_OFF")
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${CMAKE_SAFETYTEST}")
+
+if(CMAKE_SAFETYTEST STREQUAL "CMAKE_SAFETYTEST_ARG_ON")
+  #安全测试选项
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+endif()
+
 
 #查找依赖关系的包信息
 find_package(GTest REQUIRED)

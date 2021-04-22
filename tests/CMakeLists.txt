@@ -8,20 +8,19 @@ add_subdirectory(UnitTest)
 
 add_custom_target(test
     COMMAND echo " =================== TEST BEGIN ==================== "
-#    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/test-prj-running.sh
-    COMMAND ${CMAKE_BINARY_DIR}/bin/bz2plugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/cli7zplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/clirarplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/deepin-compressor_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/gzplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/interface_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/libarchive_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/libminizipplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/libzipplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/readonlylibarchiveplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/readwritelibarchiveplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/singlefile_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/xzplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/bz2plugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/cli7zplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/clirarplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/deepin-compressor_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/gzplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/interface_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libarchive_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libminizipplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libzipplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readonlylibarchiveplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readwritelibarchiveplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/singlefile_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/xzplugin_test
     COMMAND echo " =================== TEST END ==================== "
 )
 

@@ -76,8 +76,6 @@ add_subdirectory(src)
 option(USE_TEST "UT" ON)
 if (USE_TEST)
     add_subdirectory(tests)
-    set(BUILD_PATH "${CMAKE_BINARY_DIR}")
-    set(TEST_SOURCES_PATH "${CMAKE_SOURCE_DIR}/tests/UnitTest/test_sources")
 endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
 

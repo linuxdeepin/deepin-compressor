@@ -7,19 +7,19 @@ cd ../$utdir
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 make -j16
 
-./bin/bz2plugin_test
-./bin/cli7zplugin_test
-./bin/clirarplugin_test
-./bin/deepin-compressor_test
-./bin/gzplugin_test
-./bin/interface_test
-./bin/libarchive_test
-./bin/libminizipplugin_test
-./bin/libzipplugin_test
-./bin/readonlylibarchiveplugin_test
-./bin/readwritelibarchiveplugin_test
-./bin/singlefile_test
-./bin/xzplugin_test
+./bin/tests/bz2plugin_test
+./bin/tests/cli7zplugin_test
+./bin/tests/clirarplugin_test
+./bin/tests/deepin-compressor_test
+./bin/tests/gzplugin_test
+./bin/tests/interface_test
+./bin/tests/libarchive_test
+./bin/tests/libminizipplugin_test
+./bin/tests/libzipplugin_test
+./bin/tests/readonlylibarchiveplugin_test
+./bin/tests/readwritelibarchiveplugin_test
+./bin/tests/singlefile_test
+./bin/tests/xzplugin_test
 
 workdir=$(cd ../$(dirname $0)/$utdir; pwd)
 

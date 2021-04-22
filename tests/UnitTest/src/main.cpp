@@ -21,36 +21,15 @@
 
 #include <gtest/gtest.h>
 #include <gtest/src/stub.h>
-//#include <gmock/gmock-matchers.h>
-
-#include "pluginmanager.h"
-#include "kpluginloader.h"
-#include "config.h"
 
 #include <QSet>
 #include <QApplication>
 #include <iostream>
 
-void loadPlugins_stub(void *obj)
-{
-    PluginManager *mythis = static_cast<PluginManager *>(obj);
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+#include <sanitizer/asan_interface.h>
+#endif
 
-    QCoreApplication::addLibraryPath(BUILD_PATH);
-    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("./lib"));
-    QSet<QString> addedPlugins;
-    for (const KPluginMetaData &metaData : plugins) {
-        const auto pluginId = metaData.pluginId();
-        // Filter out duplicate plugins.
-        if (addedPlugins.contains(pluginId)) {
-            continue;
-        }
-
-        Plugin *plugin = new Plugin(mythis, metaData);
-        plugin->setEnabled(true);
-        addedPlugins << pluginId;
-        mythis->m_plugins << plugin;
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -59,8 +38,9 @@ int main(int argc, char *argv[])
     testing::InitGoogleTest(&argc, argv);
     QApplication a(argc, argv);
 
-    Stub stub;
-    stub.set(ADDR(PluginManager, loadPlugins), loadPlugins_stub);
+#if defined(CMAKE_SAFETYTEST_ARG_ON)
+    __sanitizer_set_report_path("asan-compressor.log");
+#endif
 
     return RUN_ALL_TESTS();
 }

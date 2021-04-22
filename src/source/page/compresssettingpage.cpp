@@ -109,6 +109,10 @@ CompressSettingPage::~CompressSettingPage()
 
 void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize)
 {
+    if (listFiles.count() == 0) {
+        return;
+    }
+
     m_listFiles = listFiles;
     m_qFileSize = qSize;
 

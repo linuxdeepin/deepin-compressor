@@ -26,132 +26,147 @@
 #include <QObject>
 #include <QTreeView>
 
+extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
+extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
+
+extern QString g_QFileInfo_path_result;                 // QFileInfo path返回值
+extern QString g_QFileInfo_fileName_result;             // QFileInfo fileName返回值
+extern QString g_QFileInfo_completeBaseName_result;     // QFileInfo completeBaseName返回值
+extern bool g_QFileInfo_isDir_result;                   // QFileInfo isDir返回值
+extern bool g_QFileInfo_exists_result;                  // QFileInfo exists返回值
+extern bool g_QFileInfo_isWritable_result;              // QFileInfo isWritable返回值
+extern bool g_QFileInfo_isExecutable_result;            // QFileInfo isExecutable返回值
+extern bool g_QFileInfo_isReadable_result;              // QFileInfo isExecutable返回值
+extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink返回值
+
+// 通用打桩
 class CommonStub : public QObject
 {
 public:
     CommonStub();
     ~CommonStub();
-
-    /**
-     * @brief stub_QDialog_exec     针对QDialog的exec打桩
-     * @param stub
-     * @param iResult               期望返回值
-     * @return
-     */
-    static void stub_QDialog_exec(Stub &stub, int iResult);
+};
 
 
-    /**
-     * @brief stub_QMenu_exec     针对QMenu的exec打桩
-     * @param stub
-     * @return
-     */
-    static void stub_QMenu_exec(Stub &stub);
-
-
-    /**
-     * @brief stub_QTreeView_indexAt     针对QTreeView的indexAt打桩
-     * @param stub
-     * @return
-     */
-    static void stub_QTreeView_indexAt(Stub &stub);
-
+// 针对自定义Dialog的打桩
+class CustomDialogStub : public QObject
+{
+public:
+    CustomDialogStub();
+    ~CustomDialogStub();
 
     /**
      * @brief stub_TipDialog_showDialog     针对TipDialog的showDialog打桩
      * @param stub
+     * @param iResult
      * @return
      */
     static void stub_TipDialog_showDialog(Stub &stub, int iResult);
 
-
-    /**
-     * @brief stub_ConvertDialog_showDialog     针对ConvertDialog的showDialog打桩
-     * @param stub
-     * @return
-     */
-    static void stub_ConvertDialog_showDialog(Stub &stub, QStringList listResult);
-
-
     /**
      * @brief stub_SimpleQueryDialog_showDialog     针对SimpleQueryDialog的showDialog打桩
      * @param stub
+     * @param iResult
      * @return
      */
     static void stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult);
-
-
-    /**
-     * @brief stub_OverwriteQueryDialog_showDialog     针对OverwriteQueryDialog的showDialog打桩
-     * @param stub
-     * @return
-     */
-    static void stub_OverwriteQueryDialog_showDialog(Stub &stub, int iReult, bool bApplyAll);
-
-
-    /**
-     * @brief stub_AppendDialog_showDialog     针对AppendDialog的showDialog打桩
-     * @param stub
-     * @return
-     */
-    static void stub_AppendDialog_showDialog(Stub &stub, int iResult);
-
-
-    /**
-     * @brief stub_SingleJob_start     针对SingleJob的start打桩
-     * @param stub
-     * @return
-     */
-    static void stub_SingleJob_start(Stub &stub);
-
-
-    /**
-     * @brief stub_ConvertJob_start     针对ConvertJob的start打桩
-     * @param stub
-     * @return
-     */
-    static void stub_ConvertJob_start(Stub &stub);
-
-
-    /**
-     * @brief stub_UpdateJob_start     针对UpdateJob的start打桩
-     * @param stub
-     * @return
-     */
-    static void stub_UpdateJob_start(Stub &stub);
-
-
-    /**
-     * @brief stub_SingleJob_doPause     针对SingleJob的doPause打桩
-     * @param stub
-     * @return
-     */
-    static void stub_SingleJob_doPause(Stub &stub);
-
-
-    /**
-     * @brief stub_SingleJob_doContinue     针对SingleJob的doContinue打桩
-     * @param stub
-     * @return
-     */
-    static void stub_SingleJob_doContinue(Stub &stub);
-
-
-    /**
-     * @brief stub_SingleJob_kill     针对SingleJob的kill打桩
-     * @param stub
-     * @return
-     */
-    static void stub_SingleJob_kill(Stub &stub);
-
-
-    /**
-     * @brief stub_LoadJob_doWork     针对LoadJob的doWork打桩
-     * @param stub
-     * @return
-     */
-    static void stub_LoadJob_doWork(Stub &stub);
 };
 
+
+// 针对QFileInfo的打桩
+class QFileInfoStub : public QObject
+{
+public:
+    QFileInfoStub();
+    ~QFileInfoStub();
+
+
+    /**
+     * @brief stub_QFileInfo_path     针对QFileInfo的path打桩
+     * @param stub
+     * @param strPath
+     * @return
+     */
+    static void stub_QFileInfo_path(Stub &stub, const QString &strPath);
+
+    /**
+     * @brief stub_QFileInfo_fileName     针对QFileInfo的fileName打桩
+     * @param stub
+     * @param strPath
+     * @return
+     */
+    static void stub_QFileInfo_fileName(Stub &stub, const QString &strPath);
+
+    /**
+     * @brief stub_QFileInfo_completeBaseName     针对QFileInfo的completeBaseName打桩
+     * @param stub
+     * @param strPath
+     * @return
+     */
+    static void stub_QFileInfo_completeBaseName(Stub &stub, const QString &strPath);
+
+    /**
+     * @brief stub_QFileInfo_isDir     针对QFileInfo的isDir打桩
+     * @param stub
+     * @param isDir
+     * @return
+     */
+    static void stub_QFileInfo_isDir(Stub &stub, bool isDir);
+
+    /**
+     * @brief stub_QFileInfo_exists     针对QFileInfo的exists打桩
+     * @param stub
+     * @param isExists
+     * @return
+     */
+    static void stub_QFileInfo_exists(Stub &stub, bool isExists);
+
+    /**
+     * @brief stub_QFileInfo_isWritable     针对QFileInfo的isWritable打桩
+     * @param stub
+     * @param isWritable
+     * @return
+     */
+    static void stub_QFileInfo_isWritable(Stub &stub, bool isWritable);
+
+    /**
+     * @brief stub_QFileInfo_isExecutable     针对QFileInfo的isExecutable打桩
+     * @param stub
+     * @param isExecutable
+     * @return
+     */
+    static void stub_QFileInfo_isExecutable(Stub &stub, bool isExecutable);
+
+    /**
+     * @brief stub_QFileInfo_isReadable     针对QFileInfo的isReadable打桩
+     * @param stub
+     * @param isReadable
+     * @return
+     */
+    static void stub_QFileInfo_isReadable(Stub &stub, bool isReadable);
+
+    /**
+     * @brief stub_QFileInfo_isSymLink     针对QFileInfo的isSymLink打桩
+     * @param stub
+     * @param isReadable
+     * @return
+     */
+    static void stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink);
+};
+
+
+class PluginManagerStub : public QObject
+{
+public:
+    PluginManagerStub();
+    ~PluginManagerStub();
+
+    /**
+     * @brief stub_PluginManager_supportedWriteMimeTypes     针对PluginManager的supportedWriteMimeTypes打桩
+     * @param stub
+     * @return
+     */
+    static void stub_PluginManager_supportedWriteMimeTypes(Stub &stub);
+};
 
 #endif // UT_COMMONSTUB_H
