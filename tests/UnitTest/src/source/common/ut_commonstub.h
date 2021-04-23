@@ -39,6 +39,9 @@ extern bool g_QFileInfo_isExecutable_result;            // QFileInfo isExecutabl
 extern bool g_QFileInfo_isReadable_result;              // QFileInfo isExecutable返回值
 extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink返回值
 
+extern bool g_QFile_remove_result;                      // QFile remove返回值
+
+
 // 通用打桩
 class CommonStub : public QObject
 {
@@ -148,10 +151,12 @@ public:
     /**
      * @brief stub_QFileInfo_isSymLink     针对QFileInfo的isSymLink打桩
      * @param stub
-     * @param isReadable
+     * @param isSymLink
      * @return
      */
     static void stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink);
+
+
 };
 
 
@@ -167,6 +172,23 @@ public:
      * @return
      */
     static void stub_PluginManager_supportedWriteMimeTypes(Stub &stub);
+};
+
+
+// 针对QFile的打桩
+class QFileStub : public QObject
+{
+public:
+    QFileStub();
+    ~QFileStub();
+
+    /**
+     * @brief stub_QFile_remove     针对QFile的remove打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_QFile_remove(Stub &stub, bool bResult);
 };
 
 #endif // UT_COMMONSTUB_H

@@ -40,6 +40,8 @@ bool g_QFileInfo_isExecutable_result = false;           // QFileInfo isExecutabl
 bool g_QFileInfo_isReadable_result = false;             // QFileInfo isReadable返回值
 bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink返回值
 
+bool g_QFile_remove_result = false;                     // QFile remove返回值
+
 /*************************************CommonStub*************************************/
 CommonStub::CommonStub()
 {
@@ -232,4 +234,29 @@ QStringList pluginManager_supportedWriteMimeTypes_stub(PluginManager::MimeSortin
 void PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(Stub &stub)
 {
     stub.set(ADDR(PluginManager, supportedWriteMimeTypes), pluginManager_supportedWriteMimeTypes_stub);
+}
+
+
+/*************************************PluginManagerStub*************************************/
+QFileStub::QFileStub()
+{
+
+}
+
+QFileStub::~QFileStub()
+{
+
+}
+
+bool qfile_remove_stub()
+{
+    return g_QFile_remove_result;
+}
+
+void QFileStub::stub_QFile_remove(Stub &stub, bool bResult)
+{
+    g_QFile_remove_result = bResult;
+    typedef bool (QFile::*fptr)();
+    fptr A_foo = (fptr)(&QFile::remove);   //获取虚函数地址
+    stub.set(A_foo, qfile_remove_stub);
 }

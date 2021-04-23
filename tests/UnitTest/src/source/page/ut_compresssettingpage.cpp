@@ -540,16 +540,6 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_tar)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_tarbz2)
-{
-    Stub stub;
-    stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
-    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_stub);
-    g_checkCompressOptionValid_result = true;
-    m_tester->m_pCompressTypeLbl->setText("tar.bz2");
-    m_tester->slotCompressClicked();
-}
-
 TEST_F(TestCompressSettingPage, testslotCompressClicked_zip)
 {
     Stub stub;
@@ -560,9 +550,50 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_zip)
     m_tester->slotCompressClicked();
 }
 
+TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_stub);
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
+    QFileStub::stub_QFile_remove(stub, true);
+    g_checkCompressOptionValid_result = true;
+    m_tester->m_pCompressTypeLbl->setText("zip");
+    m_tester->slotCompressClicked();
+}
 
+TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists001)
+{
+    Stub stub;
+    stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
+    stub.set(ADDR(CompressSettingPage, checkCompressOptionValid), checkCompressOptionValid_stub);
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
+    QFileStub::stub_QFile_remove(stub, false);
+    g_checkCompressOptionValid_result = true;
+    m_tester->m_pCompressTypeLbl->setText("zip");
+    m_tester->slotCompressClicked();
+}
 
+TEST_F(TestCompressSettingPage, testslotCommentTextChanged)
+{
+    QString str;
+    QString strTemp;
+    for (int i = 0; i < 10001; ++i) {
+        str += "1";
+        if (i < 10000)
+            strTemp += "1";
+    }
+    m_tester->m_pCommentEdt->setPlainText(str);
+    m_tester->slotCommentTextChanged();
+    ASSERT_EQ(m_tester->m_pCommentEdt->toPlainText(), strTemp);
+}
 
+TEST_F(TestCompressSettingPage, testslotPasswordChanged)
+{
+    m_tester->m_pPasswordEdt->setText("123《》");
+    m_tester->slotPasswordChanged();
+    ASSERT_EQ(m_tester->m_pPasswordEdt->lineEdit()->text(), "123");
+}
 
 TEST_F(TestCompressSettingPage, testslotEchoModeChanged)
 {
