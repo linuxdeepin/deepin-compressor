@@ -360,43 +360,65 @@ void CompressSetting::onNextButoonClicked()
         return;
     }
 
+//    for (int i = 0; i < m_pathlist.count(); i++) {
+//        QFileInfo m_fileName(m_pathlist.at(i));
+//        if (!m_fileName.exists()) {  // 待压缩文件已经不存在
+//            filePermission = false;
+//            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(Utils::toShortString(m_fileName.fileName())));
+//            return;
+//        } /*else if (m_fileName.isDir() && m_fileName.exists()) {
+//            QString dirFilePath = checkDirFileExit(m_fileName.path());
+//            qDebug() << "dirfilepath is : " << dirFilePath;
+//            if (!fileReadable) {
+//                QFileInfo file(dirFilePath);
+//                showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(file.fileName()));
+//                return;
+//            }
+//            QDir dir(m_fileName.path());
+//            foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
+//                qDebug() << "file is :" << fileInfo.fileName();
+//            }
+//        }*/
+//        if (m_fileName.isFile()) { // 检查文件是否可读
+//            if (!m_fileName.isReadable()) {
+//                filePermission = false;
+//                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
+//                return;
+//            }
+//        } else if (m_fileName.isDir()) {
+//            if (!m_fileName.isReadable()) {
+//                filePermission = false;
+//                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
+//                return;
+//            } else {
+//                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
+//                if (!filePermission) {
+//                    showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
+//                    return;
+//                }
+//            }
+//        }
+//    }
+
+    bool bResult = false;
     for (int i = 0; i < m_pathlist.count(); i++) {
-        QFileInfo m_fileName(m_pathlist.at(i));
-        if (!m_fileName.exists()) {  // 待压缩文件已经不存在
-            filePermission = false;
-            showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(Utils::toShortString(m_fileName.fileName())));
-            return;
-        } /*else if (m_fileName.isDir() && m_fileName.exists()) {
-            QString dirFilePath = checkDirFileExit(m_fileName.path());
-            qDebug() << "dirfilepath is : " << dirFilePath;
-            if (!fileReadable) {
-                QFileInfo file(dirFilePath);
-                showWarningDialog(tr("%1 was changed on the disk, please import it again.").arg(file.fileName()));
-                return;
-            }
-            QDir dir(m_fileName.path());
-            foreach (QFileInfo fileInfo, dir.entryInfoList(QDir::Files)) {
-                qDebug() << "file is :" << fileInfo.fileName();
-            }
-        }*/
-        if (m_fileName.isFile()) { // 检查文件是否可读
-            if (!m_fileName.isReadable()) {
-                filePermission = false;
-                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
-                return;
-            }
-        } else if (m_fileName.isDir()) {
-            if (!m_fileName.isReadable()) {
-                filePermission = false;
-                showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
-                return;
-            } else {
-                filePermission = checkFilePermission(m_fileName.absoluteFilePath());
-                if (!filePermission) {
-                    showWarningDialog(tr("You do not have permission to compress %1").arg(Utils::toShortString(m_fileName.fileName())), i);
-                    return;
-                }
-            }
+        QFileInfo file(m_pathlist.at(i));
+        if (!file.exists()) {  // 待压缩文件已经不存在
+            bResult = false;
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(file.fileName()));
+            return ;
+        }
+
+        if (!file.isReadable()) {
+            bResult = false;
+            showWarningDialog(tr("You do not have permission to compress %1").arg(file.fileName()));
+            return ;
+        }
+
+        if (file.isDir()) { // 检查文件夹和文件夹下子文件是否可读
+            bResult = checkFilePermission(file.absoluteFilePath());
+            if (!bResult)
+                return ;
         }
     }
 
@@ -673,22 +695,55 @@ bool CompressSetting::checkfilename(QString str)
  */
 bool CompressSetting::checkFilePermission(const QString &path)
 {
-    bool filePermissionFlag = true;
-    QDir dir(path);
-    QFileInfo fileInfo;
+//    bool filePermissionFlag = true;
+//    QDir dir(path);
+//    QFileInfo fileInfo;
 
-    foreach (fileInfo, dir.entryInfoList()) {
-        if (!fileInfo.isReadable()) {
-            filePermissionFlag = false;
-            return filePermissionFlag;
+//    foreach (fileInfo, dir.entryInfoList()) {
+//        if (!fileInfo.isReadable()) {
+//            filePermissionFlag = false;
+//            return filePermissionFlag;
+//        }
+//    }
+
+//    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+//        filePermissionFlag = checkFilePermission(path + QDir::separator() + subDir);
+//    }
+
+//    return filePermissionFlag;
+    QFileInfo fileInfo(path);
+
+    if (!fileInfo.exists()) {  // 待压缩文件已经不存在
+        if (fileInfo.isSymLink()) {
+            showWarningDialog(tr("The original file of %1 does not exist, please check and try again").arg(fileInfo.fileName()));
+        } else {
+            showWarningDialog(tr("%1 does not exist on the disk, please check and try again").arg(fileInfo.fileName()));
         }
+
+        return false;
     }
 
-    foreach (QString subDir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        filePermissionFlag = checkFilePermission(path + QDir::separator() + subDir);
+    if (!fileInfo.isReadable()) {
+        showWarningDialog(tr("You do not have permission to compress %1").arg(fileInfo.fileName()));
+        return false;
     }
 
-    return filePermissionFlag;
+    if (fileInfo.isDir()) {
+        QDir dir(path);
+        // 遍历文件夹下的子文件夹
+        QFileInfoList listInfo = dir.entryInfoList(QDir::AllEntries | QDir::System
+                                                   | QDir::NoDotAndDotDot | QDir::Hidden);
+
+        foreach (QFileInfo subInfo, listInfo) {
+            bool bResult = checkFilePermission(subInfo.absoluteFilePath());
+            if (!bResult)
+                return bResult;
+        }
+
+
+    }
+
+    return true;
 }
 
 /**
