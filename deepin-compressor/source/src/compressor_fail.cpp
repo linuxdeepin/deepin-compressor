@@ -135,6 +135,11 @@ void Compressor_Fail::setFailStrDetail(const QString &str)
     m_stringdetail = str;
     m_stringdetaillabel->setText(m_stringdetail);
 }
+
+void Compressor_Fail::setErrorTitle(const QString &strTitle)
+{
+    m_stringinfolabel->setText(strTitle);
+}
 /**
  * @brief Compressor_Fail::getRetrybutton 获取重试的失败按钮
  * @return

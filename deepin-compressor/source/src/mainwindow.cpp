@@ -2290,6 +2290,17 @@ void MainWindow::slotLoadingFinished(KJob *job)
                 m_ePageID = PAGE_UNZIP_FAIL;
                 refreshPage();
             }
+        } else if (errorCode == KJob::MissingVolumes) {
+            if (job->mType == KJob::ENUM_JOBTYPE::LOADJOB) {
+                LoadJob *pLoadJob = dynamic_cast<LoadJob *>(job);
+                ReadOnlyArchiveInterface *pFace = pLoadJob->archiveInterface();
+                QString fileName = pFace->filename();
+                QString tipError = tr("Some volumes are missing");
+                m_pCompressFail->setFailStrDetail(tipError);
+                m_ePageID = PAGE_UNZIP_FAIL;
+                refreshPage();
+                m_pCompressFail->setErrorTitle(tr("Open failed"));
+            }
         } else {
             // 设置失败详细信息
             m_pCompressFail->setFailStrDetail(tr("Damaged file, unable to extract"));
@@ -2702,6 +2713,15 @@ void MainWindow::slotExtractionDone(KJob *job)
     QString strFileWatcher;
     if (m_vecExtractSimpleFiles.count() > 0) {
         strFileWatcher = m_vecExtractSimpleFiles.at(0)->property("name").toString();
+    }
+
+
+    if (errorCode == KJob::MissingVolumes) {
+        QString tipError = tr("Some volumes are missing");
+        m_pCompressFail->setFailStrDetail(tipError);
+        m_ePageID = PAGE_UNZIP_FAIL;
+        refreshPage();
+        return;
     }
 
     if (m_ePageID == PAGE_UNZIP  && m_operationtype != Operation_TempExtract_Open_Choose) { // 如果是解压界面，则返回

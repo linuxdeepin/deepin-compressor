@@ -159,6 +159,8 @@ protected:
     QString m_strRootNode;
     QStringList m_listFileName;
 
+    bool m_bMissingVolumes = false;     // 分卷缺失
+
 private:
     void init();
     bool handleFileExistsMessage(const QString &filename);

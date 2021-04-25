@@ -60,6 +60,12 @@ public:
     void setFailStrDetail(const QString &str);
     //  CustomPushButton *getRetrybutton();
 
+    /**
+     * @brief setErrorTitle 设置错误标题
+     * @param strTitle      标题
+     */
+    void setErrorTitle(const QString &strTitle);
+
 private:
     CustomPushButton *m_retrybutton; // 重试按钮
     QPixmap m_compressicon; // 图标

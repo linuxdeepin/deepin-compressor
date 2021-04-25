@@ -148,6 +148,7 @@ bool CliRarPlugin::handleUnrar5Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
         emit error(("Failed to find all archive volumes."));
+        m_bMissingVolumes = true;
         return false;
     }
 
@@ -344,6 +345,7 @@ bool CliRarPlugin::handleUnrar4Line(const QString &line)
 {
     if (line.startsWith(QLatin1String("Cannot find volume "))) {
         emit error(("Failed to find all archive volumes."));
+        m_bMissingVolumes = true;
         return false;
     }
 

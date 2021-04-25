@@ -505,17 +505,23 @@ void CliInterface::processFinished(int exitCode, QProcess::ExitStatus exitStatus
     //        list();
     //    } else
     if (m_operationMode == List && isCorrupt()) {
-        LoadCorruptQuery query(filename());
-        //query.execute();
-        emit userQuery(&query);
-        query.waitForResponse();
-        if (!query.responseYes()) {
-            emit cancelled();
-            emit finished(false);
-        } else {
-            emit progress(1.0);
-            emit finished(true);
-        }
+//        LoadCorruptQuery query(filename());
+//        //query.execute();
+//        emit userQuery(&query);
+//        query.waitForResponse();
+//        if (!query.responseYes()) {
+//            emit cancelled();
+//            emit finished(false);
+//        } else {
+//            emit progress(1.0);
+//            emit finished(true);
+//        }
+        emit progress(1.0);
+        emit finished(false);
+    }   else if (m_operationMode == List && m_bMissingVolumes == true) {
+        emit error(("Failed to find all archive volumes."));
+        emit finished(false);
+        m_bMissingVolumes = false;
     } else if (m_operationMode == List && (isWrongPassword() || 9 == exitCode || 2 == exitCode)) {
         if (m_isbatchlist && 2 == exitCode) {
             PasswordNeededQuery query(filename());
@@ -693,10 +699,26 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
             setPassword(QString());
         }
 
+        if (m_operationMode == List && m_bMissingVolumes == true) {
+            emit error(("Failed to find all archive volumes."));
+            emit finished(false);
+            m_bMissingVolumes = false;
+            return;
+        }
+
         cleanUpExtracting();
         emit finished(false);
         return;
     } else if (m_exitCode == 9 || m_exitCode == 11) {
+
+
+        if (m_operationMode == List && m_bMissingVolumes == true) {
+            emit error(("Failed to find all archive volumes."));
+            emit finished(false);
+            m_bMissingVolumes = false;
+            return;
+        }
+
         if (m_extractionOptions.isBatchExtract()) {
             qDebug() << "wrong password";
             emit sigBatchExtractJobWrongPsd(); //批量解压时，密码错误重新走解压流程

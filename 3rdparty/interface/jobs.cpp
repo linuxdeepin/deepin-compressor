@@ -198,6 +198,11 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
+    } else if (message == "Failed to find all archive volumes.") {
+        setError(KJob::MissingVolumes);
+        setErrorText(message);
+        emitResult();
+        return;
     }
 
     setError(KJob::UserDefinedError);
@@ -241,6 +246,7 @@ void Job::onFinished(bool result)
         if (KJob::UserFilenameLong == error()) {
         } else if (KJob::WrongPsdError == error()) {
         } else if (KJob::CancelError == error()) {
+        } else if (KJob::MissingVolumes == error()) {
         } else {
             setError(KJob::UserDefinedError);
         }
