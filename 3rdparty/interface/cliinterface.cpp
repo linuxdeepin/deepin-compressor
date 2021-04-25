@@ -1188,6 +1188,11 @@ void CliInterface::readStdout(bool handleAll)
         }
     }
 
+    // 针对出现读取失败的错误，直接返回出错，给出默认提示语
+    if (lines.last().contains("Read error in the file") && lines.last().contains("[R]etry, [A]bort")) {
+        emit finished(false);
+    }
+
     // this is complex, here's an explanation:
     // if there is no newline, then there is no guaranteed full line to
     // handle in the output. The exception is that it is supposed to handle
