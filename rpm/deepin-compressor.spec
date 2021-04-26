@@ -34,6 +34,7 @@ Requires: p7zip p7zip-plugins
 Requires: lz4-libs
 Requires: unrar
 Requires: deepin-shortcut-viewer
+Requires: lzop
 
 %description
 %{summary}.
