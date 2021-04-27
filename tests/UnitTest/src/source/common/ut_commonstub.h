@@ -23,8 +23,13 @@
 
 #include "gtest/src/stub.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QObject>
 #include <QTreeView>
+
+
+DGUI_USE_NAMESPACE
 
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
@@ -41,6 +46,9 @@ extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink�
 
 extern bool g_QFile_remove_result;                      // QFile remove返回值
 
+extern qint64 g_QElapsedTimer_elapsed_result;           // QElapsedTimer elapsed返回值
+
+extern DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result;   // DGuiApplicationHelper themeType返回值
 
 // 通用打桩
 class CommonStub : public QObject
@@ -159,7 +167,7 @@ public:
 
 };
 
-
+// 针对PluginManager的打桩
 class PluginManagerStub : public QObject
 {
 public:
@@ -190,5 +198,53 @@ public:
      */
     static void stub_QFile_remove(Stub &stub, bool bResult);
 };
+
+
+// 针对DGuiApplicationHelper的打桩
+class DGuiApplicationHelperStub : public QObject
+{
+public:
+    DGuiApplicationHelperStub();
+    ~DGuiApplicationHelperStub();
+
+    /**
+     * @brief stub_DGuiApplicationHelper_themeType     针对DGuiApplicationHelper的themeType打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_DGuiApplicationHelper_themeType(Stub &stub, DGuiApplicationHelper::ColorType themeType);
+};
+
+
+// 针对QElapsedTimer的打桩
+class QElapsedTimerStub : public QObject
+{
+public:
+    QElapsedTimerStub();
+    ~QElapsedTimerStub();
+
+    /**
+     * @brief stub_QElapsedTimer_start     针对QElapsedTimer的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_QElapsedTimer_start(Stub &stub);
+
+    /**
+     * @brief stub_QElapsedTimer_restart     针对QElapsedTimer的restart打桩
+     * @param stub
+     * @return
+     */
+    static void stub_QElapsedTimer_restart(Stub &stub);
+
+    /**
+     * @brief stub_QElapsedTimer_elapsed     针对QElapsedTimer的elapsed打桩
+     * @param stub
+     * @return
+     */
+    static void stub_QElapsedTimer_elapsed(Stub &stub, qint64 qTime);
+};
+
 
 #endif // UT_COMMONSTUB_H

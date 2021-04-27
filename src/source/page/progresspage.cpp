@@ -253,8 +253,11 @@ void ProgressPage::calSpeedAndRemainingTime(double &dSpeed, qint64 &qRemainingTi
 
     m_qConsumeTime += m_timer.elapsed();
 
-    if (m_qConsumeTime < 0)
-        qInfo() << "定时器异常：" << m_qConsumeTime;
+    if (m_qConsumeTime < 0) {
+        dSpeed = 0.0;
+        qRemainingTime = 0;
+        return;
+    }
 
     // 计算速度
     if (m_qConsumeTime == 0) {

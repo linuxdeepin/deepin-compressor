@@ -89,7 +89,6 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
 
 void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    // qInfo() << text();
     emit doubleClickedSignal();
     QLabel::mouseDoubleClickEvent(event);
 }
@@ -124,7 +123,6 @@ void PreviousLabel::keyPressEvent(QKeyEvent *event)
 {
     if (Qt::Key::Key_Enter == event->key() || Qt::Key::Key_Return == event->key()) {
         clearFocus(); //返回上一级时需主动移除焦点
-        // qInfo() << text();
         emit doubleClickedSignal();
     } else {
         DLabel::keyPressEvent(event);

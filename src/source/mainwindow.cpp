@@ -93,10 +93,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    //如果窗体状态不是最大最小状态，则记录此时窗口尺寸到配置文件里，方便下次打开时恢复大小
-//    if (windowState() == Qt::WindowNoState) {
+    // 保存窗口大小状态
     saveConfigWinSize(width(), height());
-//    }
 
     ArchiveManager::get_instance()->destory_instance();
 
@@ -194,9 +192,6 @@ void MainWindow::initTitleBar()
     m_pTitleCommentButton->setFixedSize(36, 36);
     m_pTitleCommentButton->setToolTip(tr("File info"));
     slotThemeChanged();
-
-//    m_pTitleCommentButton->setIcon(commentIcon);
-//    m_pTitleCommentButton->setIconSize(QSize(15, 15));
 
     m_pTitleCommentButton->setVisible(false);
     m_pTitleCommentButton->setObjectName("CommentButton");
@@ -1260,17 +1255,6 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     if (m_pSettingDlg->isAutoCreatDir()) {
         QFileInfo info(strArchiveFullPath);
         strpath = UiTools::handleFileName(info.filePath());
-//        if (info.filePath().contains(".tar.")) {
-//            strpath = strpath.remove(".tar"); // 类似tar.gz压缩文件，创建文件夹的时候移除.tar
-//        } else if (info.filePath().contains(".7z.")) {
-//            strpath = strpath.remove(".7z"); // 7z分卷文件，创建文件夹的时候移除.7z
-//        } else if (info.filePath().contains(".part01.rar")) {
-//            strpath = strpath.remove(".part01"); // tar分卷文件，创建文件夹的时候移除part01
-//        } else if (info.filePath().contains(".part1.rar")) {
-//            strpath = strpath.remove(".part1"); // rar分卷文件，创建文件夹的时候移除.part1
-//        } else if (info.filePath().contains(".zip.")) {
-//            strpath = strpath.remove(".zip"); // zip分卷文件，创建文件夹的时候移除.zip
-//        }
     }
 
     return strpath;

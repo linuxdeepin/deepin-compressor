@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
-    __sanitizer_set_report_path("asan-compressor.log");
+    __sanitizer_set_report_path("asan.log");
 #endif
 
     return RUN_ALL_TESTS();

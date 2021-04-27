@@ -83,18 +83,6 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
 
     m_pTempInterface = UiTools::createInterface(strDestination, true, eType);
 
-//    if (bBatch) {       // 批量压缩（多路径）
-//        CreateJob *pCreateJob = new CreateJob(files, pInterface, options, this);
-
-//        // 连接槽函数
-//        connect(pCreateJob, &CreateJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-//        connect(pCreateJob, &CreateJob::signalprogress, this, &ArchiveManager::signalprogress);
-//        connect(pCreateJob, &CreateJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
-
-
-//        m_pArchiveJob = pCreateJob;
-//        pCreateJob->start();
-//    } else {            // 单路径压缩
     if (m_pTempInterface) {
         CreateJob *pCreateJob = new CreateJob(files, m_pTempInterface, stOptions, this);
 

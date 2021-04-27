@@ -96,7 +96,6 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
 
     viewport()->update();
 
-//    qInfo() << indexAt(m_dragPos).data(Qt::UserRole).value<FileEntry>().strFileName;
     DataTreeView::mousePressEvent(event);
 }
 
@@ -384,8 +383,8 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     bool bOverwrite = false;
     for (int i = 0; i < listFiles.count(); ++i) {
         if (listFiles[i] == m_strArchive) { // 追加的文件含有压缩包本身
-            TipDialog dialog(this);
-            dialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
+            TipDialog tipDialog(this);
+            tipDialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
             return;
         }
 
@@ -414,12 +413,12 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
                 }
             } else {
                 // 若非全部应用，弹出重复提示对话框
-                OverwriteQueryDialog dialog(this);
-                dialog.showDialog(strTempName, fileInfo.isDir());
+                OverwriteQueryDialog tempDialog(this);
+                tempDialog.showDialog(strTempName, fileInfo.isDir());
 
                 // 获取重复对话框操作的选项
-                int iMode = dialog.getDialogResult();
-                bApplyAll = dialog.getApplyAll();
+                int iMode = tempDialog.getDialogResult();
+                bApplyAll = tempDialog.getApplyAll();
 
                 switch (iMode) {
                 // 点击关闭按钮直接跳过追加操作

@@ -32,7 +32,7 @@ class CalculateSizeThread: public QThread
 {
     Q_OBJECT
 public:
-    explicit CalculateSizeThread(QStringList sfiles, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QObject *parent = nullptr);
+    explicit CalculateSizeThread(const QStringList &listfiles, const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions, QObject *parent = nullptr);
     void set_thread_stop(bool thread_stop);
 
 protected:
@@ -46,13 +46,13 @@ Q_SIGNALS:
     void signalError(const QString &strError, const QString &strToolTip);
 
 private:
-    QStringList m_files;
-    QString m_strArchiveFullPath;
-    QList<FileEntry> m_listAddEntry;
-    CompressOptions m_stOptions;
-    qint64 m_qTotalSize = 0;
-    QList<FileEntry> m_listAllEntry;
-    bool m_thread_stop = false; // 结束线程
+    QStringList m_files;                // 添加的源文件数据（首层）
+    QString m_strArchiveFullPath;       // 压缩包全路径（首层）
+    QList<FileEntry> m_listAddEntry;    // 添加的entry数据
+    CompressOptions m_stOptions;        // 压缩参数
+    qint64 m_qTotalSize = 0;            // 文件总大小
+    QList<FileEntry> m_listAllEntry;    // 所有文件数据
+    bool m_thread_stop = false;         // 结束线程
 };
 
 #endif // CALCULATESIZETHREAD_H

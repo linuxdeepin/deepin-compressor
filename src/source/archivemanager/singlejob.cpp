@@ -95,6 +95,10 @@ SingleJobThread *SingleJob::getdptr()
 
 bool SingleJob::doKill()
 {
+    if (m_pInterface == nullptr) {
+        return false;
+    }
+
     const bool killed = m_pInterface->doKill();
     if (killed) {
         return true;
@@ -122,7 +126,9 @@ void SingleJob::slotFinished(PluginFinishType eType)
 {
     qInfo() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
     m_eFinishedType = eType;
-    m_eErrorType = m_pInterface->errorType();
+
+    if (m_pInterface)
+        m_eErrorType = m_pInterface->errorType();
 
     emit signalJobFinshed();
 }
@@ -142,10 +148,12 @@ LoadJob::~LoadJob()
 
 void LoadJob::doWork()
 {
-    PluginFinishType eType = m_pInterface->list();
+    if (m_pInterface) {
+        PluginFinishType eType = m_pInterface->list();
 
-    if (!(m_pInterface->waitForFinished())) {
-        slotFinished(eType);
+        if (!(m_pInterface->waitForFinished())) {
+            slotFinished(eType);
+        }
     }
 }
 
@@ -214,6 +222,10 @@ void CreateJob::doWork()
 
 bool CreateJob::doKill()
 {
+    if (m_pInterface == nullptr) {
+        return false;
+    }
+
     const bool killed = m_pInterface->doKill();
     if (killed) {
         cleanCompressFileCancel();
@@ -272,13 +284,15 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
-    PluginFinishType eType = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
+    if (m_pInterface) {
+        PluginFinishType eType = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
 
-    if (!(m_pInterface->waitForFinished())) {
-        slotFinished(eType);
-    } else {
-        if (eType == PFT_Error) {
-            errorcode = false;
+        if (!(m_pInterface->waitForFinished())) {
+            slotFinished(eType);
+        } else {
+            if (eType == PFT_Error) {
+                errorcode = false;
+            }
         }
     }
 }
@@ -331,21 +345,23 @@ OpenJob::~OpenJob()
 
 void OpenJob::doWork()
 {
-    // 构建解压参数
-    ExtractionOptions options;
-    options.strTargetPath = m_strTempExtractPath;
-    // 当作提取，去除父目录
-    if (m_stEntry.strFullPath.contains(QDir::separator())) {
-        int iIndex = m_stEntry.strFullPath.lastIndexOf(QDir::separator());
-        if (iIndex > 0)
-            options.strDestination = m_stEntry.strFullPath.left(iIndex + 1); // 当前路径截掉最后一级目录(保留'/')
-    }
-    options.qSize = m_stEntry.qSize;
+    if (m_pInterface) {
+        // 构建解压参数
+        ExtractionOptions options;
+        options.strTargetPath = m_strTempExtractPath;
+        // 当作提取，去除父目录
+        if (m_stEntry.strFullPath.contains(QDir::separator())) {
+            int iIndex = m_stEntry.strFullPath.lastIndexOf(QDir::separator());
+            if (iIndex > 0)
+                options.strDestination = m_stEntry.strFullPath.left(iIndex + 1); // 当前路径截掉最后一级目录(保留'/')
+        }
+        options.qSize = m_stEntry.qSize;
 
-    PluginFinishType eType = m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options);
+        PluginFinishType eType = m_pInterface->extractFiles(QList<FileEntry>() << m_stEntry, options);
 
-    if (!(m_pInterface->waitForFinished())) {
-        slotFinished(eType);
+        if (!(m_pInterface->waitForFinished())) {
+            slotFinished(eType);
+        }
     }
 }
 

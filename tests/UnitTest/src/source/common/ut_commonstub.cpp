@@ -42,6 +42,10 @@ bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink�
 
 bool g_QFile_remove_result = false;                     // QFile remove返回值
 
+qint64 g_QElapsedTimer_elapsed_result = 0;              // QElapsedTimer elapsed返回值
+
+DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result;   // DGuiApplicationHelper themeType返回值
+
 /*************************************CommonStub*************************************/
 CommonStub::CommonStub()
 {
@@ -260,3 +264,71 @@ void QFileStub::stub_QFile_remove(Stub &stub, bool bResult)
     fptr A_foo = (fptr)(&QFile::remove);   //获取虚函数地址
     stub.set(A_foo, qfile_remove_stub);
 }
+
+
+/*************************************DGuiApplicationHelperStub*************************************/
+DGuiApplicationHelperStub::DGuiApplicationHelperStub()
+{
+
+}
+
+DGuiApplicationHelperStub::~DGuiApplicationHelperStub()
+{
+
+}
+
+DGuiApplicationHelper::ColorType dGuiApplicationHelper_themeType_stub()
+{
+    return g_DGuiApplicationHelper_themeType_result;
+}
+
+void DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(Stub &stub, DGuiApplicationHelper::ColorType themeType)
+{
+    g_DGuiApplicationHelper_themeType_result = themeType;
+    stub.set(ADDR(DGuiApplicationHelper, themeType), dGuiApplicationHelper_themeType_stub);
+}
+
+
+/*************************************DGuiApplicationHelperStub*************************************/
+QElapsedTimerStub::QElapsedTimerStub()
+{
+
+}
+
+QElapsedTimerStub::~QElapsedTimerStub()
+{
+
+}
+
+void qElapsedTimer_start_stub()
+{
+    return;
+}
+
+void qElapsedTimer_restart_stub()
+{
+    return;
+}
+
+qint64 qElapsedTimer_elapsed_stub()
+{
+    return g_QElapsedTimer_elapsed_result;
+}
+
+void QElapsedTimerStub::stub_QElapsedTimer_start(Stub &stub)
+{
+    stub.set(ADDR(QElapsedTimer, start), qElapsedTimer_start_stub);
+}
+
+void QElapsedTimerStub::stub_QElapsedTimer_restart(Stub &stub)
+{
+    stub.set(ADDR(QElapsedTimer, restart), qElapsedTimer_restart_stub);
+}
+
+void QElapsedTimerStub::stub_QElapsedTimer_elapsed(Stub &stub, qint64 qTime)
+{
+    g_QElapsedTimer_elapsed_result = qTime;
+    stub.set(ADDR(QElapsedTimer, elapsed), qElapsedTimer_elapsed_stub);
+}
+/*************************************DGuiApplicationHelperStub*************************************/
+

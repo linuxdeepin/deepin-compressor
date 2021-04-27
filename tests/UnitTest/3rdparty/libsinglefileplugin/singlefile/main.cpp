@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     testing::InitGoogleTest(&argc, argv);
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
-    __sanitizer_set_report_path("asan-singleplugin.log");
+    __sanitizer_set_report_path("asan.log");
 #endif
 
     return RUN_ALL_TESTS();

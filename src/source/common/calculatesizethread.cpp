@@ -28,9 +28,9 @@
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 
-CalculateSizeThread::CalculateSizeThread(QStringList sfiles, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QObject *parent)
+CalculateSizeThread::CalculateSizeThread(const QStringList &listfiles, const QString &strArchiveFullPath, const QList<FileEntry> &listAddEntry, const CompressOptions &stOptions, QObject *parent)
     : QThread(parent)
-    , m_files(sfiles)
+    , m_files(listfiles)
     , m_strArchiveFullPath(strArchiveFullPath)
     , m_listAddEntry(listAddEntry)
     , m_stOptions(stOptions)

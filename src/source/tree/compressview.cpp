@@ -186,8 +186,6 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
 {
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
 
-    // qInfo() << index.data(Qt::DisplayRole);
-
     if (index.isValid()) {
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
 
@@ -302,8 +300,6 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
         // 右键-打开方式
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
-
-
 
         // 右键-选择默认应用程序
         openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));

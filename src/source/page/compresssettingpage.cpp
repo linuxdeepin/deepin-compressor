@@ -92,8 +92,6 @@ void TypeLabel::focusOutEvent(QFocusEvent *event)
     DFrame::focusOutEvent(event);
 }
 
-
-
 CompressSettingPage::CompressSettingPage(QWidget *parent)
     : DWidget(parent)
 {
@@ -371,7 +369,7 @@ void CompressSettingPage::setTypeImage(const QString &strType)
     m_pTypePixmapLbl->setPixmap(icon.pixmap(128, 128));
 }
 
-bool CompressSettingPage::checkFileNameVaild(const QString strText)
+bool CompressSettingPage::checkFileNameVaild(const QString &strText)
 {
     QString strArchiveName = strText;
     strArchiveName = strArchiveName.remove(" ");

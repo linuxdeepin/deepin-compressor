@@ -122,7 +122,7 @@ private:
      * @param strText   内容
      * @return  是否合法
      */
-    bool checkFileNameVaild(const QString strText);
+    bool checkFileNameVaild(const QString &strText);
 
     /**
      * @brief setEncryptedEnabled   设置加密文件是否可用

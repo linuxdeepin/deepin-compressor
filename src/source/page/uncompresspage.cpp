@@ -83,6 +83,7 @@ void UnCompressPage::refreshArchiveData()
 
 void UnCompressPage::resizeEvent(QResizeEvent *e)
 {
+    Q_UNUSED(e)
     m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
 }
 
