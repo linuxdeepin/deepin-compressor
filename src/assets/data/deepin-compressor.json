@@ -36,7 +36,7 @@
                         {
                             "key": "delete_compressed_file",
                             "type": "deletebox",
-                            "default": ""
+                            "default": "Never"
                         },
                         {
                             "key": "delete_file",

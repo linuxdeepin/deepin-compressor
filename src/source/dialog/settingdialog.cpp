@@ -166,6 +166,24 @@ void SettingDialog::createPathBox()
             list << tr("Current directory") << tr("Desktop") << tr("Other directory");
             combobox->addItems(list);
 
+            connect(m_extractPathOption, &DSettingsOption::valueChanged, combobox, [ = ](QVariant var) {
+                if (QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_extractPathOption->value()) {
+                    combobox->setCurrentIndex(1);
+                    m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+                    m_index_last = 1;
+                } else if ("" == m_extractPathOption->value()) {
+                    combobox->setCurrentIndex(0);
+                    m_curpath = "";
+                    m_index_last = 0;
+                } else {
+                    combobox->setEditable(true);
+                    combobox->setCurrentIndex(2);
+                    m_curpath = m_extractPathOption->value().toString();
+                    combobox->setEditText(m_curpath);
+                    m_index_last = 2;
+                }
+            });
+
             if (QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) == m_extractPathOption->value()) {
                 combobox->setCurrentIndex(1);
                 m_curpath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
@@ -277,6 +295,16 @@ void SettingDialog::createDeleteBox()
             QStringList list;
             list << tr("Never") << tr("Ask for confirmation") << tr("Always");
             combobox->addItems(list);
+
+            connect(m_deleteArchiveOption, &DSettingsOption::valueChanged, combobox, [ = ](QVariant var) {
+                if ("Always" == m_deleteArchiveOption->value()) {
+                    combobox->setCurrentIndex(2);
+                } else if ("Ask for confirmation" == m_deleteArchiveOption->value()) {
+                    combobox->setCurrentIndex(1);
+                } else {
+                    combobox->setCurrentIndex(0);
+                }
+            });
 
             if ("Always" == m_deleteArchiveOption->value()) {
                 combobox->setCurrentIndex(2);
