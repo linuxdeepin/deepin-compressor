@@ -24,4 +24,4 @@ set(output_h_files
 file(COPY ${output_h_files} DESTINATION ${HFILES_OUTPUT_PATH})
 
 #生成动静态库
-add_library(${LIB_NAME} ${c_files} ${h_files} ${tab_files})
+add_library(${LIB_NAME} STATIC ${c_files} ${h_files} ${tab_files})
