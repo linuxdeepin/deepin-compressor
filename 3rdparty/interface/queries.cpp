@@ -206,9 +206,9 @@ void OverwriteQuery::execute()
 
     // 显示文件名
     DLabel *pFileNameLbl = new DLabel;
-    pFileNameLbl->setMinimumSize(QSize(280, 20));
+//    pFileNameLbl->setMinimumSize(QSize(280, 20));
     pFileNameLbl->setAlignment(Qt::AlignCenter);
-    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Medium);
+    DFontSizeManager::instance()->bind(pFileNameLbl, DFontSizeManager::T6, QFont::Normal);
     pFileNameLbl->setFixedWidth(340);
 
     m_strFileName = file.fileName();
