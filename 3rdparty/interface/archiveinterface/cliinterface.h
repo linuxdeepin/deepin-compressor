@@ -206,11 +206,12 @@ private slots:
     void extractProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
     /**
-     * @brief getChildProcessIdTar7z  对于压缩成tar.7z，bash管道命令会创建多个子进程
+     * @brief getChildProcessIdNormal7z  对于调用7z出现多个子进程的处理
      * @param processid   运行bash命令的进程号(QString类型)
+     * @param listKey     进程关键字（例如7z、tar等）
      * @param childprocessid  存储子进程号的容器
      */
-    void getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid);
+    void getChildProcessId(qint64 processId, const QStringList &listKey, QVector<qint64> &childprocessid);
 
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
