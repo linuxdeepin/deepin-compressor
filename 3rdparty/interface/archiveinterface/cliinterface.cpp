@@ -463,8 +463,10 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         m_childProcessId.clear();
         m_processId = m_process->processId();
 
-        if (m_isTar7z) {
+        if (m_isTar7z) {    // tar.7z获取子进程
             getChildProcessIdTar7z(QString::number(m_processId), m_childProcessId);
+        } else if (m_process->program().at(0).contains("7z")) {     // 普通7z获取子进程（RPM环境会出现多个7z进程）
+            getChildProcessIdNormal7z(QString::number(m_processId), m_childProcessId);
         }
 
         return true;
@@ -930,13 +932,9 @@ void CliInterface::extractProcessFinished(int exitCode, QProcess::ExitStatus exi
 void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid)
 {
     //使用pstree命令获取子进程号，如pstree -np 17251，子进程号为17252、17253
-    /*bash(17251)-+-tar(17252)
-     *            `-7z(17253)-+-{7z}(17254)
-     *                        |-{7z}(17255)
-     *                        |-{7z}(17257)
-     *                        |-{7z}(17258)
-     *                        |-{7z}(17259)
-     *                        |-{7z}(17260)
+    /* bash(3967)-+-tar(3968)
+     *           `-7z(3969)---7z(3971)-+-{7z}(3972)
+     *                                 |-{7z}(3973)
      */
     QProcess p;
     p.setProgram("pstree");
@@ -948,13 +946,51 @@ void CliInterface::getChildProcessIdTar7z(const QString &processid, QVector<qint
         if (lines[0].contains(processid.toUtf8())) {
             for (const QByteArray &line : qAsConst(lines)) {
                 int a, b;
-//                qInfo() << line;
                 if (0 < (a = line.indexOf("-tar(")) && 0 < (b = line.indexOf(")", a))) {
-//                    qInfo() << a << b << line.mid(a + 5, b - a - 5).toInt();
                     childprocessid.append(line.mid(a + 5, b - a - 5).toInt());
                 }
+
+                int iCount = line.count("-7z(");
+                int iIndex = 0;
+                for (int i = 0; i < iCount; ++i) {
+                    a = line.indexOf("-7z(", iIndex);
+                    if (0 < a && 0 < (b = line.indexOf(")", a))) {
+                        childprocessid.append(line.mid(a + 4, b - a - 4).toInt());
+                    }
+                    iIndex = a + 1;
+                }
+
+            }
+        }
+    }
+
+    p.close();
+}
+
+void CliInterface::getChildProcessIdNormal7z(const QString &processid, QVector<qint64> &childprocessid)
+{
+    //使用pstree命令获取子进程号，如pstree -np 17251，子进程号为17252、17253
+    /* 7z(23347)---7z(23348)-+-{7z}(23353)
+     *                       |-{7z}(23354)
+     *                       |-{7z}(23355)
+     *                       |-{7z}(23356)
+     *                       |-{7z}(23357)
+     *                       |-{7z}(23358)
+     *                       |-{7z}(23359)
+    */
+    QProcess p;
+    p.setProgram("pstree");
+    p.setArguments(QStringList() << "-np" << processid);
+    p.start();
+
+    if (p.waitForReadyRead()) {
+        QByteArray dd = p.readAllStandardOutput();
+        QList<QByteArray> lines = dd.split('\n');
+        if (lines[0].contains(processid.toUtf8())) {
+            for (const QByteArray &line : qAsConst(lines)) {
+                qInfo() << line;
+                int a, b;
                 if (0 < (a = line.indexOf("-7z(")) && 0 < (b = line.indexOf(")", a))) {
-//                    qInfo() << a << b << line.mid(a + 4, b - a - 4).toInt();
                     childprocessid.append(line.mid(a + 4, b - a - 4).toInt());
                     break;
                 }

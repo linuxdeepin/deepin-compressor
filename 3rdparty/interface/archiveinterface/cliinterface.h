@@ -212,6 +212,13 @@ private slots:
      */
     void getChildProcessIdTar7z(const QString &processid, QVector<qint64> &childprocessid);
 
+    /**
+     * @brief getChildProcessIdNormal7z  对于调用7z出现多个子进程的处理
+     * @param processid   运行bash命令的进程号(QString类型)
+     * @param childprocessid  存储子进程号的容器
+     */
+    void getChildProcessIdNormal7z(const QString &processid, QVector<qint64> &childprocessid);
+
 protected:
     CliProperties *m_cliProps = nullptr;  // 命令属性
     /*KProcess*/KPtyProcess *m_process = nullptr;  // 工作进程
