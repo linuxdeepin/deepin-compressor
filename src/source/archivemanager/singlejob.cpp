@@ -47,7 +47,7 @@ SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
 SingleJob::~SingleJob()
 {
     if (d->isRunning()) {
-        d->terminate();
+        d->quit();      // 线程安全退出，不能使用terminate强行退出
         d->wait();
     }
 
@@ -367,8 +367,6 @@ void OpenJob::doWork()
 
 void OpenJob::slotFinished(PluginFinishType eType)
 {
-    SingleJob::slotFinished(eType);
-
     if (eType == PFT_Nomral) {
         QString name = m_stEntry.strFileName;
         if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
@@ -386,6 +384,8 @@ void OpenJob::slotFinished(PluginFinishType eType)
         p->setArguments(QStringList() << name);
         p->start();
     }
+
+    SingleJob::slotFinished(eType); // 在结束上述操作之后发送job结束信号
 }
 
 UpdateJob::UpdateJob(const UpdateOptions &options, ReadOnlyArchiveInterface *pInterface, QObject *parent)
