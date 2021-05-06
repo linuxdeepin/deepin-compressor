@@ -1825,6 +1825,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
             if (eErrorType == ET_WrongPassword) { // 打开压缩包中文件密码错误
                 sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
+            }else if(ET_InsufficientDiskSpace == eErrorType){
+                sendMessage(new CustomFloatingMessage(icon, tr("Insufficient disk space"), 1000, this)); // 提取失败提示
+            }else {
+                sendMessage(new CustomFloatingMessage(icon, tr("Open failed"), 1000, this)); // 提取失败提示
             }
         }
         break;

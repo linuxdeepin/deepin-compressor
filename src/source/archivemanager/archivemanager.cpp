@@ -283,8 +283,8 @@ bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry
         OpenJob *pOpenJob = new OpenJob(stEntry, strTempExtractPath, strProgram, m_pInterface);
 
         // 连接槽函数
-        connect(pOpenJob, &ExtractJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
-        connect(pOpenJob, &ExtractJob::signalQuery, this, &ArchiveManager::signalQuery);
+        connect(pOpenJob, &OpenJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+        connect(pOpenJob, &OpenJob::signalQuery, this, &ArchiveManager::signalQuery);
 
 
         m_pArchiveJob = pOpenJob;
