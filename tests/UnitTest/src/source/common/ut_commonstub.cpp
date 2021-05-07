@@ -24,6 +24,7 @@
 #include "pluginmanager.h"
 
 #include <QFileInfo>
+#include <DFileDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -43,6 +44,9 @@ bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink�
 bool g_QFile_remove_result = false;                     // QFile remove返回值
 
 qint64 g_QElapsedTimer_elapsed_result = 0;              // QElapsedTimer elapsed返回值
+
+int g_DFileDialog_exec_result = 0;                      // DFileDialog exec
+QList<QUrl> g_DFileDialog_selectedUrls_result = QList<QUrl>();   // DFileDialog selectedUrls返回值
 
 DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result;   // DGuiApplicationHelper themeType返回值
 
@@ -98,7 +102,7 @@ void CustomDialogStub::stub_TipDialog_showDialog(Stub &stub, int iResult)
 void CustomDialogStub::stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult)
 {
     g_SimpleQueryDialog_showDialog_result = iResult;
-    stub.set(ADDR(TipDialog, showDialog), simpleQueryDialog_showDialog_stub);
+    stub.set(ADDR(SimpleQueryDialog, showDialog), simpleQueryDialog_showDialog_stub);
 }
 
 
@@ -332,3 +336,39 @@ void QElapsedTimerStub::stub_QElapsedTimer_elapsed(Stub &stub, qint64 qTime)
 }
 /*************************************DGuiApplicationHelperStub*************************************/
 
+
+/*************************************DFileDialogStub*************************************/
+DFileDialogStub::DFileDialogStub()
+{
+
+}
+
+DFileDialogStub::~DFileDialogStub()
+{
+
+}
+
+int dFileDialog_exec_stub()
+{
+    return g_DFileDialog_exec_result;
+}
+
+QList<QUrl> dFileDialog_selectedUrls_stub()
+{
+    return g_DFileDialog_selectedUrls_result;
+}
+
+void DFileDialogStub::stub_DFileDialog_exec(Stub &stub, int iResult)
+{
+    g_DFileDialog_exec_result = iResult;
+
+    typedef int (*fptr)(DFileDialog *);
+    fptr A_foo = (fptr)(&DFileDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dFileDialog_exec_stub);
+}
+
+void DFileDialogStub::stub_DFileDialog_selectedUrls(Stub &stub, const QList<QUrl> &listUrls)
+{
+    g_DFileDialog_selectedUrls_result = listUrls;
+    stub.set(ADDR(DFileDialog, selectedUrls), dFileDialog_selectedUrls_stub);
+}

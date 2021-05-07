@@ -50,6 +50,9 @@ extern qint64 g_QElapsedTimer_elapsed_result;           // QElapsedTimer elapsed
 
 extern DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result;   // DGuiApplicationHelper themeType返回值
 
+extern int g_DFileDialog_exec_result;                   // DFileDialog exec
+extern QList<QUrl> g_DFileDialog_selectedUrls_result;   // DFileDialog selectedUrls返回值
+
 // 通用打桩
 class CommonStub : public QObject
 {
@@ -164,7 +167,6 @@ public:
      */
     static void stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink);
 
-
 };
 
 // 针对PluginManager的打桩
@@ -244,6 +246,31 @@ public:
      * @return
      */
     static void stub_QElapsedTimer_elapsed(Stub &stub, qint64 qTime);
+};
+
+
+// 针对QElapsedTimer的打桩
+class DFileDialogStub : public QObject
+{
+public:
+    DFileDialogStub();
+    ~DFileDialogStub();
+
+    /**
+     * @brief stub_DFileDialog_exec     针对DFileDialog的selectedUrls打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_DFileDialog_exec(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_DFileDialog_selectedUrls     针对DFileDialog的selectedUrls打桩
+     * @param stub
+     * @param listUrls
+     * @return
+     */
+    static void stub_DFileDialog_selectedUrls(Stub &stub, const QList<QUrl> &listUrls);
 };
 
 

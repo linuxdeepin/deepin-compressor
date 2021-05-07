@@ -1065,7 +1065,7 @@ void MainWindow::slotCompress(const QVariant &val)
         eType = UiTools::APT_Libarchive;
     }
 
-    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType/*, bBatch*/)) {
+    if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType)) {
         // 切换进度界面
         m_pProgressPage->setProgressType(PT_Compress);
         m_pProgressPage->setTotalSize(m_stCompressParameter.qSize);

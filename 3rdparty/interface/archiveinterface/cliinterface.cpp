@@ -966,16 +966,16 @@ void CliInterface::getChildProcessId(qint64 processId, const QStringList &listKe
             for (const QByteArray &line : qAsConst(lines)) {
 
                 for (const QString &strKey : qAsConst(listKey)) {
-                    int a, b;
                     QString str = QString("-%1(").arg(strKey);
                     int iCount = line.count(str.toStdString().c_str());        // 多个子进程都需要获取到
                     int iIndex = 0;
                     for (int i = 0; i < iCount; ++i) {
-                        a = line.indexOf(str, iIndex);
-                        if (0 < a && 0 < (b = line.indexOf(")", a))) {
-                            childprocessid.append(line.mid(a + str.length(), b - a - str.length()).toInt());    // 取-7z(3971)中间的进程号
+                        int iStartIndex = line.indexOf(str, iIndex);
+                        int iEndIndex = line.indexOf(")", iStartIndex);
+                        if (0 < iStartIndex && 0 < iEndIndex) {
+                            childprocessid.append(line.mid(iStartIndex + str.length(), iEndIndex - iStartIndex - str.length()).toInt());    // 取-7z(3971)中间的进程号
                         }
-                        iIndex = a + 1;
+                        iIndex = iStartIndex + 1;
                     }
                 }
             }

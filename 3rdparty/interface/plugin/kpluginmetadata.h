@@ -349,7 +349,7 @@ public:
      * just that string will be returned, if it is an array the list will contain one entry for each array member.
      * If the key cannot be found an empty list will be returned.
      */
-    static QStringList readStringList(const QJsonObject &jo, const QString &key);
+    static QStringList readStringList(const QJsonObject &obj, const QString &key);
 
     /**
      * Reads a value from @p jo but unlike QJsonObject::value() it allows different entries for each locale

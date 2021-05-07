@@ -216,10 +216,9 @@ public:
 
     /**
      * @brief autoFeed 自动换行
-     * @param label1
-     * @param label2
+     * @param pLabel
      */
-    void autoFeed(DLabel *label1);
+    void autoFeed(DLabel *pLabel);
 
 protected:
     void changeEvent(QEvent *event) override;

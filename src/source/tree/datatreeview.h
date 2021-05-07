@@ -100,9 +100,9 @@ protected:
     /**
      * @brief setPreLblVisible  设置返回上一级是否可见
      * @param bVisible          是否可见标志
-     * @param strPat            上一级路径
+     * @param strPath            上一级路径
      */
-    void setPreLblVisible(bool bVisible, const QString &strPat = "");
+    void setPreLblVisible(bool bVisible, const QString &strPath = "");
 
 private:
     /**

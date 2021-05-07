@@ -162,10 +162,10 @@ private:
     bool writeEntryAdd(struct archive_entry *entry, const qlonglong &totalSize);
     /**
      * @brief processOldEntries_Add 处理需要保留的entry
-     * @param totalCount 压缩包原文件总大小
+     * @param totalSize 压缩包原文件总大小
      * @return
      */
-    bool processOldEntries_Add(qlonglong &totalCount);
+    bool processOldEntries_Add(qlonglong &totalSize);
 };
 
 

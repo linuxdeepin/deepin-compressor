@@ -182,7 +182,7 @@ protected:
         }
     };
 
-    explicit KPluginFactory(KPluginFactoryPrivate &dd);
+    explicit KPluginFactory(KPluginFactoryPrivate &d);
 
     /**
      * Registers a plugin with the factory. Call this function from the constructor of the

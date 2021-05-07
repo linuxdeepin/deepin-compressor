@@ -34,9 +34,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     QString encoding;
     float confidence;
-    long int len = sizeof((char *)data);
-    // long int  len = strtoll((char *)data, NULL, 10);
-    strlen((char *)data);
 
     ChartDet_DetectingTextCoding((char *)data, encoding, confidence);
     return 0;

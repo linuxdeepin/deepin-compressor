@@ -42,7 +42,7 @@ public:
                            int defaultCompLevel,
                            bool supportsWriteComment,
                            bool supportsTesting,
-                           bool suppportsMultiVolume,
+                           bool supportsMultiVolume,
                            const QVariantMap &compressionMethods,
                            const QString &defaultCompressionMethod,
                            const QStringList &encryptionMethods,

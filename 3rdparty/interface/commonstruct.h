@@ -98,7 +98,7 @@ struct FileEntry {
     }
 
 
-    bool operator==(FileEntry &t)       //==的重载
+    bool operator==(FileEntry &t) const       //==的重载
     {
         if (this->strFullPath == t.strFullPath && this->strFileName == t.strFileName
                 && this->isDirectory == t.isDirectory && this->qSize == t.qSize

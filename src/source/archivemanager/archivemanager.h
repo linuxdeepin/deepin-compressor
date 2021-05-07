@@ -56,7 +56,7 @@ public:
      * @param eType            插件选择
      * @return                  是否调用成功
      */
-    bool createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType/*, bool useLibArchive = false, bool bBatch = false*/);
+    bool createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType);
 
     /**
      * @brief loadArchive           加载压缩包数据

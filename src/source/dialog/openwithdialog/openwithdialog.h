@@ -94,9 +94,9 @@ public:
     /**
      * @brief openWithProgram    用默认程序打开文件
      * @param strFileName               文件名
-     * @param strProgram               应用程序
+     * @param strExec               应用程序
      */
-    static void openWithProgram(const QString &strFileName, const QString &strProgram = "");
+    static void openWithProgram(const QString &strFileName, const QString &strExec = "");
 
     /**
      * @brief showOpenWithDialog    显示选择应用程序对话框

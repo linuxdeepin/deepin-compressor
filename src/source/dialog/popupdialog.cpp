@@ -511,12 +511,12 @@ QString AppendDialog::password()
     return m_strPassword;
 }
 
-void AppendDialog::autoFeed(DLabel *label)
+void AppendDialog::autoFeed(DLabel *pLabel)
 {
-    NewStr newstr = autoCutText(m_strDesText, label);
-    label->setText(newstr.resultStr);
+    NewStr newstr = autoCutText(m_strDesText, pLabel);
+    pLabel->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
-    label->setFixedHeight(height_lable);
+    pLabel->setFixedHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
         adjustSize();
     } else {
