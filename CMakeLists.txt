@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME compressor)
 project(${EXE_NAME})
 
+if (NOT DEFINED VERSION)
+    set(VERSION 5.9.0.13)
+endif ()
+
 #SET(CMAKE_BUILD_TYPE "Debug")
 message("CXXFLAGS: $ENV{CXXFLAGS}\nCMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 

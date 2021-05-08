@@ -1,3 +1,11 @@
+deepin-compressor (5.9.0.13) stable; urgency=medium
+
+  * 修复打开异常rar卡死的问题.
+  * 修复非UNIX压缩包解压文件权限异常的问题.
+  * 修复无效软链接压缩异常的错误.
+
+ -- gaoxiang <gaoxiang@uniontech.com>  Sat, 08 May 2021 15:41:33 +0800
+
 deepin-compressor (1.0) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
