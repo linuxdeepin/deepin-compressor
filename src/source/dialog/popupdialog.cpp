@@ -224,32 +224,18 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
     autoFeed(strlabel, strlabel2);
 
     const int mode = exec();
-    m_ret = mode;
     m_applyAll = checkbox->isChecked();  // 是否应用到全部文件
 
-    if (-1 == mode) {
-        m_retType = OR_Cancel;   // 取消
-    } else if (0 == mode) {
-        if (m_applyAll) {
-            m_retType = OR_SkipAll;   // 全部跳过
-        } else {
-            m_retType = OR_Skip;  // 跳过
-        }
+    if (0 == mode) {
+        m_retType = OR_Skip;  // 跳过
     } else if (1 == mode) {
-        if (m_applyAll) {
-            m_retType = OR_OverwriteAll;  // 全部替换
-        } else {
-            m_retType = OR_Overwrite;  // 替换
-        }
+        m_retType = OR_Overwrite;  // 替换
+    } else {
+        m_retType = OR_Cancel;   // 取消
     }
 }
 
-int OverwriteQueryDialog::getDialogResult()
-{
-    return m_ret;
-}
-
-int OverwriteQueryDialog::getQueryResult()
+Overwrite_Result OverwriteQueryDialog::getDialogResult()
 {
     return m_retType;
 }

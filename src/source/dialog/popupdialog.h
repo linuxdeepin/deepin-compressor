@@ -128,11 +128,9 @@ private:
  * @brief The Overwrite_Result enum  替换对话框选择结果
  */
 enum Overwrite_Result {
-    OR_Cancel = 0,
-    OR_Skip = 1,
-    OR_SkipAll = 2,
-    OR_Overwrite = 3,
-    OR_OverwriteAll = 4,
+    OR_Cancel = 0,      // 取消
+    OR_Skip = 1,        // 跳过
+    OR_Overwrite = 2,   // 替换
 };
 
 // 同名文件提示是否替换
@@ -155,13 +153,7 @@ public:
      * @brief getDialogResult  返回对话框状态
      * @return
      */
-    int getDialogResult();
-
-    /**
-     * @brief getQueryResult  返回对话框选择结果
-     * @return
-     */
-    int getQueryResult();
+    Overwrite_Result getDialogResult();
 
     /**
      * @brief getApplyAll  返回是否应用到全部文件
@@ -180,8 +172,7 @@ protected:
     void changeEvent(QEvent *event) override;
 
 private:
-    int m_ret = 0;   // 对话框状态
-    int m_retType = 0;   // 对话框选择结果
+    Overwrite_Result m_retType = OR_Cancel;   // 对话框选择结果
     bool m_applyAll = false;  // 应用到全部文件
 
     QString m_strFilesname; // 重复文件名

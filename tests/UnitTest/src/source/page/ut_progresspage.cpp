@@ -37,6 +37,7 @@ public:
     virtual void SetUp()
     {
         m_tester = new ProgressPage;
+        m_tester->disconnect();
     }
 
     virtual void TearDown()

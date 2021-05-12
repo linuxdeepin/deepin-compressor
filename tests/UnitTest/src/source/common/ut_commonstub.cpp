@@ -22,18 +22,32 @@
 #include "popupdialog.h"
 #include "singlejob.h"
 #include "pluginmanager.h"
+#include "uitools.h"
+#include "processopenthread.h"
+#include "openwithdialog.h"
 
 #include <QFileInfo>
 #include <DFileDialog>
+#include <DMenu>
 
 DWIDGET_USE_NAMESPACE
 
+bool g_QWidget_isVisible_result = false;;               // QWidget isVisible返回值
+bool g_UiTools_isArchiveFile_result = false;            // UiTools isArchiveFile返回值
+QObject *g_QObject_sender_result = nullptr;             // QObject sender返回值
+
 int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
 int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
+Overwrite_Result g_OverwriteQueryDialog_getDialogResult_result = OR_Cancel;  // OverwriteQueryDialog getDialogResult返回值
+bool g_OverwriteQueryDialog_getApplyAll_result = false; // OverwriteQueryDialog getApplyAll返回值
+int g_AppendDialog_showDialog_result = 0;               // AppendDialog showDialog返回值
+QString g_OpenWithDialog_showOpenWithDialog_result = "";  // OpenWithDialog showOpenWithDialog返回值
 
 QString g_QFileInfo_path_result = "";                   // QFileInfo path返回值
+QString g_QFileInfo_filePath_result = "";               // QFileInfo filePath返回值
 QString g_QFileInfo_fileName_result = "";               // QFileInfo fileName返回值
 QString g_QFileInfo_completeBaseName_result = "";       // QFileInfo completeBaseName返回值
+qint64 g_QFileInfo_size_result = 0;                     // QFileInfo size返回值
 bool g_QFileInfo_isDir_result = false;                  // QFileInfo isDir返回值
 bool g_QFileInfo_exists_result = false;                 // QFileInfo exists返回值
 bool g_QFileInfo_isWritable_result = false;             // QFileInfo isWritable返回值
@@ -42,6 +56,13 @@ bool g_QFileInfo_isReadable_result = false;             // QFileInfo isReadable�
 bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink返回值
 
 bool g_QFile_remove_result = false;                     // QFile remove返回值
+bool g_QFile_open_result = false;                     // QFile open返回值
+bool g_QFile_close_result = false;                     // QFile close返回值
+QByteArray g_QFile_readAll_result;                     // QFile readAll返回值
+
+bool g_QDir_exists_result = false;                      // QDir exists返回值
+QFileInfoList g_QDir_entryInfoList_result = QFileInfoList();    // QDir entryInfoList返回值
+QString g_QDir_filePath_result = "";                    // QDir filePath返回值
 
 qint64 g_QElapsedTimer_elapsed_result = 0;              // QElapsedTimer elapsed返回值
 
@@ -59,6 +80,75 @@ CommonStub::CommonStub()
 CommonStub::~CommonStub()
 {
 
+}
+
+int qWidget_isVisible_stub()
+{
+    return g_QWidget_isVisible_result;
+}
+
+QAction *menu_exec_stub(const QPoint &, QAction *)
+{
+    return nullptr;
+}
+
+void CommonStub::stub_QWidget_isVisible(Stub &stub, bool isVisible)
+{
+    g_QWidget_isVisible_result = isVisible;
+    stub.set(ADDR(QWidget, isVisible), qWidget_isVisible_stub);
+}
+
+QModelIndex treeView_indexAt_stub(void *obj, const QPoint &p)
+{
+    QTreeView *o = (QTreeView *)obj;
+    if (o) {
+        return o->model()->index(0, 0);
+    }
+    return QModelIndex();
+}
+
+bool uiTools_isArchiveFile_stub(const QString &)
+{
+    return g_UiTools_isArchiveFile_result;
+}
+
+void processOpenThread_start_stub()
+{
+    return;
+}
+
+QObject *qObject_sender_stub()
+{
+    return g_QObject_sender_result;
+}
+
+void CommonStub::stub_QMenu_exec(Stub &stub)
+{
+    stub.set((QAction * (DMenu::*)(const QPoint &, QAction * at))ADDR(DMenu, exec), menu_exec_stub);
+}
+
+void CommonStub::stub_QTreeView_indexAt(Stub &stub)
+{
+    typedef QModelIndex(*fptr)(QTreeView *, int);
+    fptr A_foo = (fptr)(&QTreeView::indexAt);   //获取虚函数地址
+    stub.set(A_foo, treeView_indexAt_stub);
+}
+
+void CommonStub::stub_UiTools_isArchiveFile(Stub &stub, bool isArchiveFile)
+{
+    g_UiTools_isArchiveFile_result = isArchiveFile;
+    stub.set(ADDR(UiTools, isArchiveFile), uiTools_isArchiveFile_stub);
+}
+
+void CommonStub::stub_ProcessOpenThread_start(Stub &stub)
+{
+    stub.set(ADDR(ProcessOpenThread, start), processOpenThread_start_stub);
+}
+
+void CommonStub::stub_QObject_sender(Stub &stub, QObject *pObject)
+{
+    g_QObject_sender_result = pObject;
+    stub.set(ADDR(QObject, sender), qObject_sender_stub);
 }
 
 
@@ -93,6 +183,38 @@ int simpleQueryDialog_showDialog_stub(const QString &strDesText, const QString b
     return g_SimpleQueryDialog_showDialog_result;
 }
 
+void overwriteQueryDialog_showDialog_stub(QString file, bool bDir)
+{
+    Q_UNUSED(file)
+    Q_UNUSED(bDir)
+    return;
+}
+
+Overwrite_Result overwriteQueryDialog_getDialogResult_stub()
+{
+    return g_OverwriteQueryDialog_getDialogResult_result;
+}
+
+bool overwriteQueryDialog_getApplyAll_stub()
+{
+    return g_OverwriteQueryDialog_getApplyAll_result;
+}
+
+int appendDialog_showDialog_stub()
+{
+    return g_AppendDialog_showDialog_result;
+}
+
+QString openWithDialog_showOpenWithDialog_stub()
+{
+    return g_OpenWithDialog_showOpenWithDialog_result;
+}
+
+void openWithDialog_openWithProgram_stub(const QString &, const QString &)
+{
+    return;
+}
+
 void CustomDialogStub::stub_TipDialog_showDialog(Stub &stub, int iResult)
 {
     g_TipDialog_showDialog_result = iResult;
@@ -103,6 +225,40 @@ void CustomDialogStub::stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult
 {
     g_SimpleQueryDialog_showDialog_result = iResult;
     stub.set(ADDR(SimpleQueryDialog, showDialog), simpleQueryDialog_showDialog_stub);
+}
+
+void CustomDialogStub::stub_OverwriteQueryDialog_showDialog(Stub &stub)
+{
+    stub.set(ADDR(OverwriteQueryDialog, showDialog), overwriteQueryDialog_showDialog_stub);
+}
+
+void CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(Stub &stub, Overwrite_Result iResult)
+{
+    g_OverwriteQueryDialog_getDialogResult_result = iResult;
+    stub.set(ADDR(OverwriteQueryDialog, getDialogResult), overwriteQueryDialog_getDialogResult_stub);
+}
+
+void CustomDialogStub::stub_OverwriteQueryDialog_getApplyAll(Stub &stub, bool bApplyAll)
+{
+    g_OverwriteQueryDialog_getApplyAll_result = bApplyAll;
+    stub.set(ADDR(OverwriteQueryDialog, getApplyAll), overwriteQueryDialog_getApplyAll_stub);
+}
+
+void CustomDialogStub::stub_AppendDialog_showDialog(Stub &stub, int iResult)
+{
+    g_AppendDialog_showDialog_result = iResult;
+    stub.set(ADDR(AppendDialog, showDialog), appendDialog_showDialog_stub);
+}
+
+void CustomDialogStub::stub_OpenWithDialog_showOpenWithDialog(Stub &stub, const QString &strResult)
+{
+    g_OpenWithDialog_showOpenWithDialog_result = strResult;
+    stub.set(ADDR(OpenWithDialog, showOpenWithDialog), openWithDialog_showOpenWithDialog_stub);
+}
+
+void CustomDialogStub::stub_OpenWithDialog_openWithProgram(Stub &stub)
+{
+    stub.set(ADDR(OpenWithDialog, openWithProgram), openWithDialog_openWithProgram_stub);
 }
 
 
@@ -122,6 +278,11 @@ QString qfileinfo_path_stub()
     return g_QFileInfo_path_result;
 }
 
+QString qfileinfo_filePath_stub()
+{
+    return g_QFileInfo_filePath_result;
+}
+
 QString qfileinfo_fileName_stub()
 {
     return g_QFileInfo_fileName_result;
@@ -130,6 +291,11 @@ QString qfileinfo_fileName_stub()
 QString qfileinfo_completeBaseName_stub()
 {
     return g_QFileInfo_completeBaseName_result;
+}
+
+qint64 qfileinfo_size_stub()
+{
+    return g_QFileInfo_size_result;
 }
 
 bool qfileinfo_isDir_stub()
@@ -169,6 +335,12 @@ void QFileInfoStub::stub_QFileInfo_path(Stub &stub, const QString &strPath)
     stub.set(ADDR(QFileInfo, path), qfileinfo_path_stub);
 }
 
+void QFileInfoStub::stub_QFileInfo_filePath(Stub &stub, const QString &strfilePath)
+{
+    g_QFileInfo_filePath_result = strfilePath;
+    stub.set(ADDR(QFileInfo, filePath), qfileinfo_filePath_stub);
+}
+
 void QFileInfoStub::stub_QFileInfo_fileName(Stub &stub, const QString &strPath)
 {
     g_QFileInfo_fileName_result = strPath;
@@ -179,6 +351,12 @@ void QFileInfoStub::stub_QFileInfo_completeBaseName(Stub &stub, const QString &s
 {
     g_QFileInfo_completeBaseName_result = strPath;
     stub.set(ADDR(QFileInfo, completeBaseName), qfileinfo_completeBaseName_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_size(Stub &stub, const qint64 &size)
+{
+    g_QFileInfo_size_result = size;
+    stub.set(ADDR(QFileInfo, size), qfileinfo_size_stub);
 }
 
 void QFileInfoStub::stub_QFileInfo_isDir(Stub &stub, bool isDir)
@@ -261,6 +439,23 @@ bool qfile_remove_stub()
     return g_QFile_remove_result;
 }
 
+bool qfile_open_stub(QIODevice::OpenMode flags)
+{
+    Q_UNUSED(flags)
+
+    return g_QFile_open_result;
+}
+
+bool qfile_close_stub()
+{
+    return g_QFile_close_result;
+}
+
+QByteArray qfile_readAll_stub()
+{
+    return g_QFile_readAll_result;
+}
+
 void QFileStub::stub_QFile_remove(Stub &stub, bool bResult)
 {
     g_QFile_remove_result = bResult;
@@ -269,6 +464,29 @@ void QFileStub::stub_QFile_remove(Stub &stub, bool bResult)
     stub.set(A_foo, qfile_remove_stub);
 }
 
+void QFileStub::stub_QFile_open(Stub &stub, bool bResult)
+{
+    g_QFile_open_result = bResult;
+    typedef bool (*fptr)(QFile *, QIODevice::OpenMode);
+    fptr A_foo = (fptr)((bool(QFile::*)(QIODevice::OpenMode))&QFile::open);   //获取虚函数地址
+    stub.set(A_foo, qfile_open_stub);
+}
+
+void QFileStub::stub_QFile_close(Stub &stub, bool bResult)
+{
+
+    g_QFile_close_result = bResult;
+    typedef bool (*fptr)(QFile *);
+    fptr A_foo = (fptr)(&QFile::close);   //获取虚函数地址
+    stub.set(A_foo, qfile_close_stub);
+}
+
+void QFileStub::stub_QFile_readAll(Stub &stub, const QByteArray &allByteArray)
+{
+    g_QFile_readAll_result = allByteArray;
+
+    stub.set(ADDR(QFile, readAll), qfile_readAll_stub);
+}
 
 /*************************************DGuiApplicationHelperStub*************************************/
 DGuiApplicationHelperStub::DGuiApplicationHelperStub()
@@ -371,4 +589,59 @@ void DFileDialogStub::stub_DFileDialog_selectedUrls(Stub &stub, const QList<QUrl
 {
     g_DFileDialog_selectedUrls_result = listUrls;
     stub.set(ADDR(DFileDialog, selectedUrls), dFileDialog_selectedUrls_stub);
+}
+
+QDirStub::QDirStub()
+{
+
+}
+
+QDirStub::~QDirStub()
+{
+
+}
+
+bool qdir_exists_stub()
+{
+    return g_QDir_exists_result;
+}
+
+QFileInfoList qdir_entryInfoList_stub(QDir::Filters filters, QDir::SortFlags sort)
+{
+    Q_UNUSED(filters)
+    Q_UNUSED(sort)
+
+    return g_QDir_entryInfoList_result;
+}
+
+QString qdir_filePath_stub(const QString &fileName)
+{
+    Q_UNUSED(fileName)
+
+    return g_QDir_filePath_result;
+}
+
+void QDirStub::stub_QDir_exists(Stub &stub, bool isExists)
+{
+    g_QDir_exists_result = isExists;
+
+    typedef bool (QDir::*fptr)()const ;
+    fptr A_foo = (fptr)(&QDir::exists);   //获取虚函数地址
+    stub.set(A_foo, qdir_exists_stub);
+}
+
+void QDirStub::stub_QDir_entryInfoList(Stub &stub, const QFileInfoList &entryInfoList)
+{
+    g_QDir_entryInfoList_result = entryInfoList;
+
+    typedef QFileInfoList(QDir::*fptr)(QDir::Filters, QDir::SortFlags) const;
+    fptr A_foo = (fptr)(&QDir::entryInfoList);   //获取虚函数地址
+    stub.set(A_foo, qdir_entryInfoList_stub);
+}
+
+void QDirStub::stub_QDir_filePath(Stub &stub, const QString &strfilePath)
+{
+    g_QDir_filePath_result = strfilePath;
+
+    stub.set(ADDR(QDir, filePath), qdir_filePath_stub);
 }

@@ -49,6 +49,7 @@ public:
     virtual void SetUp()
     {
         m_tester = new LoadingPage;
+        m_tester->disconnect();
     }
 
     virtual void TearDown()

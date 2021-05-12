@@ -364,6 +364,9 @@ void UnCompressView::refreshDataByCurrentPathChanged()
 
 void UnCompressView::addNewFiles(const QStringList &listFiles)
 {
+    if (listFiles.empty())
+        return;
+
     m_listAddFiles.clear();
 
     // 追加选项判断
@@ -417,16 +420,16 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
                 tempDialog.showDialog(strTempName, fileInfo.isDir());
 
                 // 获取重复对话框操作的选项
-                int iMode = tempDialog.getDialogResult();
+                Overwrite_Result iResult = tempDialog.getDialogResult();
                 bApplyAll = tempDialog.getApplyAll();
 
-                switch (iMode) {
+                switch (iResult) {
                 // 点击关闭按钮直接跳过追加操作
-                case -1:
+                case OR_Cancel:
                     bOverwrite = false;
                     return;
                 // 点击跳过，不追加此文件/文件夹
-                case 0:
+                case OR_Skip:
                     bOverwrite = false;
                     break;
                 // 追加此文件/文件夹

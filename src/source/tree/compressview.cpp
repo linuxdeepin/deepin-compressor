@@ -53,7 +53,7 @@ CompressView::~CompressView()
 
 void CompressView::addCompressFiles(const QStringList &listFiles)
 {
-    int mode = 0;
+    Overwrite_Result mode = OR_Cancel;
     bool applyAll = false;
 
     // 对新添加的文件进行判重
@@ -72,7 +72,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
                     applyAll = dialog.getApplyAll();
                 }
 
-                if (mode == 0 || mode == -1) {  // -1：取消  0：跳过
+                if (mode == OR_Cancel || mode == OR_Skip) {  // OR_Cancel：取消  OR_Skip：跳过
                     m_listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
                 } else { // 替换
                     m_listCompressFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
@@ -185,10 +185,10 @@ FileEntry CompressView::fileInfo2Entry(const QFileInfo &fileInfo)
 void CompressView::handleDoubleClick(const QModelIndex &index)
 {
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
-
+    qInfo() << "gaoxiang:index.isValid()" << index.isValid();
     if (index.isValid()) {
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
-
+        qInfo() << "gaoxiang:entry.isDirectory" << entry.isDirectory;
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
             m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
             m_iLevel++;

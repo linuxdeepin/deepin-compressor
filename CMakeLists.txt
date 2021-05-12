@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 3.9.5)
 set(EXE_NAME compressor)
 project(${EXE_NAME})
 
+if (NOT DEFINED VERSION)
+    set(VERSION 1.0)
+endif ()
+
 #SET(CMAKE_BUILD_TYPE "Debug")  
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 

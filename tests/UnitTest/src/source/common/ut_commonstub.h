@@ -21,22 +21,33 @@
 #ifndef UT_COMMONSTUB_H
 #define UT_COMMONSTUB_H
 
+#include "popupdialog.h"
 #include "gtest/src/stub.h"
 
 #include <DGuiApplicationHelper>
 
 #include <QObject>
 #include <QTreeView>
-
+#include <QFileInfoList>
 
 DGUI_USE_NAMESPACE
 
+extern bool g_QWidget_isVisible_result;                 // QWidget isVisible返回值
+extern bool g_UiTools_isArchiveFile_result;             // UiTools isArchiveFile返回值
+extern QObject *g_QObject_sender_result;                // QObject sender返回值
+
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
+extern Overwrite_Result g_OverwriteQueryDialog_getDialogResult_result;  // OverwriteQueryDialog getDialogResult返回值
+extern bool g_OverwriteQueryDialog_getApplyAll_result;  // OverwriteQueryDialog getApplyAll返回值
+extern int g_AppendDialog_showDialog_result;            // AppendDialog showDialog返回值
+extern QString g_OpenWithDialog_showOpenWithDialog_result;  // OpenWithDialog showOpenWithDialog返回值
 
 extern QString g_QFileInfo_path_result;                 // QFileInfo path返回值
+extern QString g_QFileInfo_filePath_result;             // QFileInfo filePath返回值
 extern QString g_QFileInfo_fileName_result;             // QFileInfo fileName返回值
 extern QString g_QFileInfo_completeBaseName_result;     // QFileInfo completeBaseName返回值
+extern qint64 g_QFileInfo_size_result;                  // QFileInfo size返回值
 extern bool g_QFileInfo_isDir_result;                   // QFileInfo isDir返回值
 extern bool g_QFileInfo_exists_result;                  // QFileInfo exists返回值
 extern bool g_QFileInfo_isWritable_result;              // QFileInfo isWritable返回值
@@ -45,6 +56,13 @@ extern bool g_QFileInfo_isReadable_result;              // QFileInfo isExecutabl
 extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink返回值
 
 extern bool g_QFile_remove_result;                      // QFile remove返回值
+extern bool g_QFile_open_result;                       // QFile open返回值
+extern bool g_QFile_close_result;                      // QFile close返回值
+extern QByteArray g_QFile_readAll_result;              // QFile readAll返回值
+
+extern bool g_QDir_exists_result;                       // QDir exists返回值
+extern QFileInfoList g_QDir_entryInfoList_result;              // QDir entryInfoList返回值
+extern QString g_QDir_filePath_result;              // QDir entryInfoList返回值
 
 extern qint64 g_QElapsedTimer_elapsed_result;           // QElapsedTimer elapsed返回值
 
@@ -59,6 +77,50 @@ class CommonStub : public QObject
 public:
     CommonStub();
     ~CommonStub();
+
+    /**
+     * @brief stub_QWidget_isVisible     针对QWidget的isVisible打桩
+     * @param stub
+     * @param isVisible
+     */
+    static void stub_QWidget_isVisible(Stub &stub, bool isVisible);
+
+    /**
+     * @brief stub_QMenu_exec     针对QMenu的exec打桩
+     * @param stub
+     * @return
+     */
+    static void stub_QMenu_exec(Stub &stub);
+
+    /**
+     * @brief stub_QTreeView_indexAt     针对QTreeView的indexAt打桩
+     * @param stub
+     * @return
+     */
+    static void stub_QTreeView_indexAt(Stub &stub);
+
+    /**
+     * @brief stub_UiTools_isArchiveFile     针对UiTools的isArchiveFile打桩
+     * @param stub
+     * @param isArchiveFile
+     * @return
+     */
+    static void stub_UiTools_isArchiveFile(Stub &stub, bool isArchiveFile);
+
+    /**
+     * @brief stub_ProcessOpenThread_start     针对ProcessOpenThread的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ProcessOpenThread_start(Stub &stub);
+
+    /**
+     * @brief stub_QObject_sender     针对QObject的sender打桩
+     * @param stub
+     * @param pObject
+     * @return
+     */
+    static void stub_QObject_sender(Stub &stub, QObject *pObject);
 };
 
 
@@ -84,6 +146,52 @@ public:
      * @return
      */
     static void stub_SimpleQueryDialog_showDialog(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_OverwriteQueryDialog_showDialog     针对OverwriteQueryDialog的showDialog打桩
+     * @param stub
+     * @return
+     */
+    static void stub_OverwriteQueryDialog_showDialog(Stub &stub);
+
+    /**
+     * @brief stub_OverwriteQueryDialog_getDialogResult     针对OverwriteQueryDialog的getDialogResult打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_OverwriteQueryDialog_getDialogResult(Stub &stub, Overwrite_Result iResult);
+
+    /**
+     * @brief stub_OverwriteQueryDialog_getApplyAll     针对OverwriteQueryDialog的getApplyAll打桩
+     * @param stub
+     * @param bApplyAll
+     * @return
+     */
+    static void stub_OverwriteQueryDialog_getApplyAll(Stub &stub, bool bApplyAll);
+
+    /**
+     * @brief stub_AppendDialog_showDialog     针对AppendDialog的showDialog打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_AppendDialog_showDialog(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_OpenWithDialog_showOpenWithDialog     针对OpenWithDialog的showOpenWithDialog打桩
+     * @param stub
+     * @param strResult
+     * @return
+     */
+    static void stub_OpenWithDialog_showOpenWithDialog(Stub &stub, const QString &strResult);
+
+    /**
+     * @brief stub_OpenWithDialog_openWithProgram     针对OpenWithDialog的openWithProgram打桩
+     * @param stub
+     * @return
+     */
+    static void stub_OpenWithDialog_openWithProgram(Stub &stub);
 };
 
 
@@ -104,6 +212,14 @@ public:
     static void stub_QFileInfo_path(Stub &stub, const QString &strPath);
 
     /**
+     * @brief stub_QFileInfo_filePath     针对QFileInfo的filePath打桩
+     * @param stub
+     * @param strfilePath
+     * @return
+     */
+    static void stub_QFileInfo_filePath(Stub &stub, const QString &strfilePath);
+
+    /**
      * @brief stub_QFileInfo_fileName     针对QFileInfo的fileName打桩
      * @param stub
      * @param strPath
@@ -118,6 +234,14 @@ public:
      * @return
      */
     static void stub_QFileInfo_completeBaseName(Stub &stub, const QString &strPath);
+
+    /**
+     * @brief stub_QFileInfo_size     针对QFileInfo的size打桩
+     * @param stub
+     * @param size
+     * @return
+     */
+    static void stub_QFileInfo_size(Stub &stub, const qint64 &size);
 
     /**
      * @brief stub_QFileInfo_isDir     针对QFileInfo的isDir打桩
@@ -199,8 +323,60 @@ public:
      * @return
      */
     static void stub_QFile_remove(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QFile_open 针对QFile的open打桩
+     * @param stub
+     * @param bResult
+     */
+    static void stub_QFile_open(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QFile_close 针对QFile的close打桩
+     * @param stub
+     * @param bResult
+     */
+    static void stub_QFile_close(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QFile_readAll 针对QFile的readAll打桩
+     * @param stub
+     * @param allByteArray
+     */
+    static void stub_QFile_readAll(Stub &stub, const QByteArray &allByteArray);
 };
 
+// 针对QDir的打桩
+class QDirStub : public QObject
+{
+public:
+    QDirStub();
+    ~QDirStub();
+
+    /**
+     * @brief stub_QDir_exists     针对QFileInfo的exists打桩
+     * @param stub
+     * @param isExists
+     * @return
+     */
+    static void stub_QDir_exists(Stub &stub, bool isExists);
+
+    /**
+     * @brief stub_QDir_entryInfoList 针对QDir的entryInfoList打桩
+     * @param stub
+     * @param filters
+     * @return
+     */
+    static void stub_QDir_entryInfoList(Stub &stub, const QFileInfoList &entryInfoList);
+
+    /**
+     * @brief stub_QDir_filePath 针对QDir的filePath打桩
+     * @param stub
+     * @param strfilePath
+     * @return
+     */
+    static void stub_QDir_filePath(Stub &stub, const QString &strfilePath);
+};
 
 // 针对DGuiApplicationHelper的打桩
 class DGuiApplicationHelperStub : public QObject

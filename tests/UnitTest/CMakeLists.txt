@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.9.5)
 #2.设置项目名称
 #访问私有方法 -fno-access-control
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-access-control")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-access-control -fno-inline")
 
 #3 设置可执行程序输出目录
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
