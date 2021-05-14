@@ -55,12 +55,15 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
     }
     outputFileName += uncompressedFileName();
 
+    emit sigExtractPwdCheckDown();
+
     outputFileName = overwriteFileName(outputFileName);
     if (outputFileName.isEmpty()) {
         return true;
     }
 
     qDebug() << "Extracting to" << outputFileName;
+    emit updateDestFileSignal(outputFileName);
 
     QFile outputFile(outputFileName);
     if (!outputFile.open(QIODevice::WriteOnly)) {
@@ -88,6 +91,10 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
 
     while (true) {
         bytesRead = device->read(dataChunk.data(), dataChunk.size());
+
+        // 解压百分比进度
+        m_currentExtractedFilesSize += bytesRead;
+        emit progress((double(m_currentExtractedFilesSize)) / QFileInfo(filename()).size() * 100); // 因为获取不到原文件大小，所以用压缩包大小代替
 
         if (bytesRead == -1) {
             //emit error(xi18nc("@info", "There was an error while reading <filename>%1</filename> during extraction.", filename()));

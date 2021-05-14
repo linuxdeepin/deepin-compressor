@@ -89,7 +89,5 @@ install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-ChardetDetector DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS compressor-common DESTINATION lib/deepin-compressor/plugins/)
-#install(TARGETS compressor-archive DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-singlefile DESTINATION lib/deepin-compressor/plugins/)
 
 

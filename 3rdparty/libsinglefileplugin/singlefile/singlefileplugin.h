@@ -23,6 +23,7 @@ protected:
 
     QString m_mimeType;
     QStringList m_possibleExtensions;
+    qlonglong m_currentExtractedFilesSize = 0; //当前已经解压出来的文件大小（能展示出来的都已经解压）
 };
 
 #endif // SINGLEFILEPLUGIN_H

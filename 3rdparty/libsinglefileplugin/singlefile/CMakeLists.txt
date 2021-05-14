@@ -81,7 +81,7 @@ include_directories(../../common/)
 include_directories(../../ChardetDetector)
 include_directories(../../interface)
 
-add_library(${LIB_NAME} SHARED  ${h_files} ${c_files})
+add_library(${LIB_NAME} STATIC  ${h_files} ${c_files})
 target_link_libraries(${LIB_NAME} Qt5::Widgets Qt5::Core )
 target_link_libraries(${LIB_NAME} KF5::Archive)
 target_link_libraries(${LIB_NAME} ${LINK_LIBS})
