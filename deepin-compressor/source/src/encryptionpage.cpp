@@ -54,7 +54,7 @@ void EncryptionPage::InitUI()
     m_password->setMinimumSize(340, 36);
     QLineEdit *edit = m_password->lineEdit();
     edit->setPlaceholderText(tr("Password"));
-    m_password->setFocusPolicy(Qt::StrongFocus);
+    m_password->lineEdit()->setFocusPolicy(Qt::StrongFocus);
 
     QVBoxLayout *mainlayout = new QVBoxLayout(this);
     mainlayout->addStretch();
@@ -94,7 +94,10 @@ void EncryptionPage::InitConnection()
 
 void EncryptionPage::setPassowrdFocus()
 {
-    m_password->setFocus(Qt::OtherFocusReason);
+    // 为了避免在某些情况下输入法首次无法切换的情况，需要在设置焦点前先激活输入法，再通过判断明暗码决定是否屏蔽输入法
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, true);
+    m_password->lineEdit()->setFocus(Qt::OtherFocusReason);
+    m_password->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, m_password->isEchoMode());
 }
 
 void EncryptionPage::resetPage()
