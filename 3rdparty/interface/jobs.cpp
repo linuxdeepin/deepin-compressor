@@ -74,7 +74,8 @@ Job::Job(ReadOnlyArchiveInterface *interface)
 Job::~Job()
 {
     if (d->isRunning()) {
-        d->terminate();
+        // 安全退出并等待
+        d->quit();
         d->wait();
     }
 

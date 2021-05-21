@@ -111,6 +111,7 @@ bool LibSingleFileInterface::extractFiles(const QVector<Archive::Entry *> &files
 
     bAnyFileExtracted = true;
 
+    emit progress(1.0);     // 结束时发送100%进度
     return true;
 }
 
