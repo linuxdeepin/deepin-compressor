@@ -1576,8 +1576,9 @@ void MainWindow::calFileSizeByThread(const QString &path)
         return;
     // 获得文件夹中的文件列表
     QFileInfoList list = dir.entryInfoList();
-    int i = 0;
-    do {
+
+    // 循环对每个文件进行计算大小
+    for (int i = 0; i < list.count(); ++i) {
         QFileInfo fileInfo = list.at(i);
         if (fileInfo.fileName() == "." || fileInfo.fileName() == "..") {
             i++;
@@ -1600,9 +1601,7 @@ void MainWindow::calFileSizeByThread(const QString &path)
             m_pProgess->pInfo()->getTotalSize() += curFileSize;
             mutex.unlock();
         }
-
-        i++;
-    } while (i < list.size());
+    }
 }
 
 qint64 MainWindow::calFileSize(const QString &path)
