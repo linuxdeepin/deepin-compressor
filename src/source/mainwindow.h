@@ -82,7 +82,7 @@ public :
      * @param file  文件名
      * @return
      */
-    bool checkSettings(QString file);
+    bool checkSettings(const QString &file);
 
     /**
     * @brief LogCollectorMain::handleApplicationTabEventNotify
@@ -121,11 +121,6 @@ private:
     void initConnections();
 
     /**
-     * @brief loadWindowState   加载状态
-     */
-    //void loadWindowState();
-
-    /**
      * @brief refreshPage   刷新界面页
      */
     void refreshPage();
@@ -160,13 +155,13 @@ private:
      * @brief Extract2PathFinish 提取成功提示
      * @param msg
      */
-    void Extract2PathFinish(QString msg);
+    void Extract2PathFinish(const QString &msg);
 
     /**
-     * @brief createUUID    创建唯一标识
+     * @brief createTempPath    创建唯一标识临时路径
      * @return
      */
-    QString createUUID();
+    QString createTempPath();
 
     /**
      * @brief getExtractPath   根据设置选项是否自动创建文件夹获取解压路径
@@ -255,20 +250,20 @@ private:
      * @param mimetype  文件类型
      * @return 应用程序
      */
-    QString getDefaultApp(QString mimetype);
+    QString getDefaultApp(const QString &mimetype);
 
     /**
      * @brief setDefaultApp 设置默认应用程序
      * @param mimetype  文件类型
      * @param desktop   应用程序
      */
-    void setDefaultApp(QString mimetype, QString desktop);
+    void setDefaultApp(const QString &mimetype, const QString &desktop);
 
     /**
      * @brief convertArchive 格式转换
      * @param convertType 转换后的文件类型
      */
-    void convertArchive(QString convertType);
+    void convertArchive(const QString &convertType);
 
     /**
      * @brief updateArchiveComment 更新压缩包的注释
@@ -322,6 +317,17 @@ private:
      * @return
      */
     int showWarningDialog(const QString &msg, const QString &strToolTip = "");
+
+    /**
+     * @brief moveDialogToCenter    移动对话框至mainwindow中间
+     * @param dialog
+     */
+    void moveDialogToCenter(DDialog *dialog);
+
+    /**
+     * @brief delayQuitApp  延时退出应用
+     */
+    void delayQuitApp();
 
     // QWidget interface
 protected:

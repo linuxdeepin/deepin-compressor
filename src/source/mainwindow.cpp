@@ -120,9 +120,7 @@ bool MainWindow::checkHerePath(const QString &strPath)
     if (!(info.isWritable() && info.isExecutable())) { // 检查一选择保存路径是否有权限
         TipDialog dialog(this);
         // 屏幕居中显示
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenRect =  screen->availableVirtualGeometry();
-        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+        moveDialogToCenter(&dialog);
         dialog.showDialog(tr("You do not have permission to save files here, please change and retry"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     }
@@ -207,7 +205,7 @@ void MainWindow::initTitleBar()
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(6 + 36 + 5 + 36 + 6);
+    left_frame->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
@@ -594,7 +592,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-bool MainWindow::checkSettings(QString file)
+bool MainWindow::checkSettings(const QString &file)
 {
 //    QString strTransFileName = file;
 //    UnCompressParameter::SplitType type;
@@ -604,9 +602,7 @@ bool MainWindow::checkSettings(QString file)
     if (!info.exists()) {
         // 文件不存在
         TipDialog dialog(this);
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenRect =  screen->availableVirtualGeometry();
-        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+        moveDialogToCenter(&dialog);
         dialog.showDialog(tr("No such file or directory"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     } else {
@@ -620,9 +616,7 @@ bool MainWindow::checkSettings(QString file)
         if (info.isDir()) {
             // 选择打开的是文件夹
             TipDialog dialog(this);
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect screenRect =  screen->availableVirtualGeometry();
-            dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+            moveDialogToCenter(&dialog);
 
             dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
@@ -662,9 +656,7 @@ bool MainWindow::checkSettings(QString file)
 
                 // 弹出提示对话框
                 TipDialog dialog;
-                QScreen *screen = QGuiApplication::primaryScreen();
-                QRect screenRect =  screen->availableVirtualGeometry();
-                dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+                moveDialogToCenter(&dialog);
 
                 int re = dialog.showDialog(str, tr("OK", "button"), DDialog::ButtonNormal);
                 if (re != 1) { // ？
@@ -839,9 +831,7 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
     }
 
     if (listParam.count() == 0) {
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return;
     }
 
@@ -850,27 +840,21 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
     switch (eType) {
     case AT_Open: {         // 打开操作
         if (!handleArguments_Open(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
     break;
     case AT_RightMenu: {    // 右键操作
         if (!handleArguments_RightMenu(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
     break;
     case AT_DragDropAdd: {       // 拖拽追加操作
         if (!handleArguments_Append(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
@@ -1107,9 +1091,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
     // 拖拽追加或右键压缩成7z、zip，完毕自动关闭界面
     if (((PFT_Nomral == eFinishType || PFT_Cancel == eFinishType) && ArchiveJob::JT_Add == eJobType && StartupType::ST_DragDropAdd == m_eStartupType)
             || StartupType::ST_Compresstozip7z == m_eStartupType) {
-        QTimer::singleShot(100, this, [ = ]() {
-            close();
-        });
+        delayQuitApp();
     } else if (ArchiveJob::JT_Create == eJobType // 如果是右键压缩，压缩完毕自动关闭界面
                && StartupType::ST_Compress == m_eStartupType && eFinishType == PFT_Nomral) {
         Dtk::Core::DSysInfo::UosEdition edition =  Dtk::Core::DSysInfo::uosEditionType();
@@ -1117,9 +1099,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
         bool isCentos = Dtk::Core::DSysInfo::UosEuler == edition || Dtk::Core::DSysInfo::UosEnterpriseC == edition;
 
         if (isCentos) {
-            QTimer::singleShot(100, this, [ = ]() {
-                close();
-            });
+            delayQuitApp();
         }
     }
 
@@ -1221,7 +1201,7 @@ void MainWindow::slotQuery(Query *query)
     query->execute();
 }
 
-void MainWindow::Extract2PathFinish(QString msg)
+void MainWindow::Extract2PathFinish(const QString &msg)
 {
     QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
     sendMessage(new CustomFloatingMessage(icon, msg, 1000, this));
@@ -1239,7 +1219,7 @@ void MainWindow::Extract2PathFinish(QString msg)
     }
 }
 
-QString MainWindow::createUUID()
+QString MainWindow::createTempPath()
 {
     // 创建临时路径
     QTemporaryDir dir;
@@ -1417,9 +1397,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                 if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
                     m_operationtype = Operation_NULL;   // 首先将操作置空，防止关闭时提示有任务进行
                     // 右键解压到当前文件夹，关闭界面（延时100ms，显示明了）
-                    QTimer::singleShot(100, this, [ = ]() {
-                        close();;
-                    });
+                    delayQuitApp();
                 }
             }
         }
@@ -2171,7 +2149,7 @@ void MainWindow::saveConfigWinSize(int w, int h)
     m_pSettings->sync();
 }
 
-QString MainWindow::getDefaultApp(QString mimetype)
+QString MainWindow::getDefaultApp(const QString &mimetype)
 {
     QString outInfo;
     QProcess p;
@@ -2183,7 +2161,7 @@ QString MainWindow::getDefaultApp(QString mimetype)
     return  outInfo;
 }
 
-void MainWindow::setDefaultApp(QString mimetype, QString desktop)
+void MainWindow::setDefaultApp(const QString &mimetype, const QString &desktop)
 {
     QProcess p;
     QString command3 = "xdg-mime default %1 %2"; // eg: xdg-mime default deepin-compressor.desktop application/vnd.rar
@@ -2191,7 +2169,7 @@ void MainWindow::setDefaultApp(QString mimetype, QString desktop)
     p.waitForFinished();
 }
 
-void MainWindow::convertArchive(QString convertType)
+void MainWindow::convertArchive(const QString &convertType)
 {
     qInfo() << "对压缩包进行格式转换" << convertType;
     m_operationtype = Operation_CONVERT;
@@ -2211,7 +2189,7 @@ void MainWindow::convertArchive(QString convertType)
     m_strFinalConvertFile = newArchivePath;  // 记录格式转换后的文件名，在转换成功之后打开文件使用
 
     // 创建格式转换的job
-    if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createUUID(), newArchivePath)) {
+    if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createTempPath(), newArchivePath)) {
         m_pProgressPage->setProgressType(PT_Convert);
         m_pProgressPage->setTotalSize(oldArchive.size() + DataManager::get_instance().archiveData().qSize);
         m_pProgressPage->setArchiveName(newArchivePath);
@@ -2313,12 +2291,12 @@ QJsonObject MainWindow::creatShorcutJson()
 
 bool MainWindow::handleArguments_Open(const QStringList &listParam)
 {
+    if (listParam.count() == 0)
+        return false;
+
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-//    QString strFileName = listParam[0];
-//    UnCompressParameter::SplitType type;
-//    UiTools::transSplitFileName(strFileName, type);
     loadArchive(listParam[0]);
 
     return true;
@@ -2415,16 +2393,6 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
 
     } else if (strType == "extract") {
         m_eStartupType = StartupType::ST_Extract;
-        // 解压缩
-//        QStringList listTransFiles = listFiles;
-//        // 对压缩包文件名进行处理
-//        for (int i = 0; i < listFiles.count(); ++i) {
-//            QString strFileName = listFiles[i];
-//            UnCompressParameter::SplitType eSplitVolume;
-//            UiTools::transSplitFileName(strFileName, eSplitVolume);
-//            listTransFiles << strFileName;
-//        }
-//        listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
 
         if (listFiles.count() == 1) {
             // 单个压缩包，打开
@@ -2449,9 +2417,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             int mode = dialog.exec();
 
             if (mode != QDialog::Accepted) { // 没有选择解压路径
-                QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                    emit sigquitApp();
-                });
+                delayQuitApp();
                 return false;
             }
 
@@ -2502,9 +2468,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
 bool MainWindow::handleArguments_Append(const QStringList &listParam)
 {
     if (listParam.size() < 3) {
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return false;
     }
 
@@ -2542,9 +2506,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
         TipDialog dialog(this);
         dialog.showDialog(tr("You cannot add files to archives in this file type"), tr("OK", "button"), DDialog::ButtonNormal);
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return false;
     }
 
@@ -2706,6 +2668,19 @@ int MainWindow::showWarningDialog(const QString &msg, const QString &strToolTip)
     return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
 }
 
+void MainWindow::moveDialogToCenter(DDialog *dialog)
+{
+    QRect screenRect =  QGuiApplication::primaryScreen()->availableVirtualGeometry();
+    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
+}
+
+void MainWindow::delayQuitApp()
+{
+    QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
+        emit sigquitApp();
+    });
+}
+
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
     qInfo() << "提取文件至:" << stOptions.strTargetPath;
@@ -2765,7 +2740,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     m_operationtype = Operation_TempExtract_Open;
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
-    QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createUUID();  // 拼接临时路径
+    QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createTempPath();  // 拼接临时路径
     QString strOpenFile =  strTempExtractPath + QDir::separator() + entry.strFileName;     // 临时解压文件全路径
     m_pOpenFileWatcher->setCurOpenFile(strOpenFile);
     if (ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram)) {
@@ -3220,9 +3195,7 @@ void MainWindow::slotCheckFinished(const QString &strError, const QString &strTo
 
     m_operationtype = Operation_NULL;
     if (m_eStartupType == ST_Compresstozip7z || m_eStartupType == ST_DragDropAdd) {
-        QTimer::singleShot(100, this, [ = ]() {
-            close();
-        });
+        delayQuitApp();
     } else {
         m_ePageID = PI_UnCompress;
         refreshPage();

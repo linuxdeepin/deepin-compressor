@@ -373,7 +373,6 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
         int iError = unzOpenCurrentFile(zipfile);
 
         if (iError != UNZ_OK) {
-            unzClose(zipfile);
             return ET_ArchiveDamaged ;
         }
 

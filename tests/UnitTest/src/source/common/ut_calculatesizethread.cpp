@@ -45,9 +45,7 @@ public:
         FileEntry a;
         QList<FileEntry> m_listAddEntry{a};  // 添加的entry数据
         CompressOptions m_stOptions;        // 压缩参数
-        qint64 m_qTotalSize = 0;            // 文件总大小
         QList<FileEntry> m_listAllEntry;    // 所有文件数据
-        bool m_thread_stop = false;         // 结束线程
 
         m_tester = new CalculateSizeThread(m_files, m_strArchiveFullPath, m_listAddEntry, m_stOptions);
         m_tester->disconnect();
@@ -85,11 +83,6 @@ TEST_F(TestCalculateSizeThread, testrun)
 
     m_tester->run();
     ASSERT_EQ(m_tester->m_qTotalSize, 3);
-}
-
-bool foo_stub_int11()
-{
-
 }
 
 TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
