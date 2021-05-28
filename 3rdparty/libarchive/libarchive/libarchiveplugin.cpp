@@ -154,7 +154,6 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     handleWorkingDir.change(options.strTargetPath);
     m_extractDestDir = options.strTargetPath;
 
-    m_currentExtractedFilesSize = 0;
     int extractedEntriesCount = 0; //记录已经解压的文件数量
 
     struct archive_entry *entry = nullptr;
@@ -299,13 +298,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         const int returnCode = archive_write_header(writer.data(), entry); //创建文件
         switch (returnCode) {
         case ARCHIVE_OK: {
-            // If the whole archive is extracted and the total filesize is
-            // available, we use partial progress.
-            if (extractAll == false) {
-                copyDataFromSource_ArchiveEntry(m_archiveReader.data(), writer.data(), options.qSize);
-            } else {
-                copyDataFromSource(m_archiveReader.data(), writer.data(), options.qSize);
-            }
+
+            copyDataFromSource(m_archiveReader.data(), writer.data(), QFileInfo(m_strArchiveName).size());
 
             // qInfo() <<  destinationDirectory + QDir::separator() + entryName;
             // 文件权限设置
@@ -348,6 +342,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     }
 
     if (archive_read_close(m_archiveReader.data()) == ARCHIVE_OK) {
+        emit signalprogress(1);
         return PFT_Nomral;
     } else {
         m_eErrorType = ET_FileReadError;
@@ -525,34 +520,8 @@ void LibarchivePlugin::copyDataFromSource(struct archive *source, struct archive
             return;
         }
 
-        // 解压百分比进度
-        m_currentExtractedFilesSize += readBytes;
-        emit signalprogress((double(m_currentExtractedFilesSize)) / totalSize * 100);
-
-        readBytes = archive_read_data(source, buff, sizeof(buff));
-    }
-}
-
-void LibarchivePlugin::copyDataFromSource_ArchiveEntry(archive *source, archive *dest, qint64 extractFileSize)
-{
-    char buff[10240];
-    auto readBytes = archive_read_data(source, buff, sizeof(buff)); //读压缩包数据到buff
-
-    while (readBytes > 0 && !QThread::currentThread()->isInterruptionRequested()) {
-        if (m_bPause) { //提取暂停
-            sleep(1);
-//            qInfo() << "pause";
-            continue;
-        }
-
-        archive_write_data(dest, buff, static_cast<size_t>(readBytes));
-        if (archive_errno(dest) != ARCHIVE_OK) {
-            return;
-        }
-
-        // 解压百分比进度
-        m_currentExtractedFilesSize += readBytes;
-        emit signalprogress((double(m_currentExtractedFilesSize)) / extractFileSize * 100);
+        // 获取解压过程中的压缩和解压缩文件总大小、计算并发送进度（archive_filter_bytes 0：uncomp   -1：comp）
+        emit signalprogress(double(archive_filter_bytes(source, -1)) / totalSize * 100);
 
         readBytes = archive_read_data(source, buff, sizeof(buff));
     }

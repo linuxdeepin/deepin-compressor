@@ -131,13 +131,6 @@ protected:
      * @param dest 写句柄
      */
     void copyDataFromSource(struct archive *source, struct archive *dest, const qlonglong &totalSize);
-    /**
-     * @brief copyDataFromSource_ArchiveEntry 压缩包数据写到本地文件(提取用)
-     * @param source
-     * @param dest
-     * @param extractFileSize 待提取文件总大小
-     */
-    void copyDataFromSource_ArchiveEntry(struct archive *source, struct archive *dest, qint64 extractFileSize);
 
 private:
     PluginFinishType list_New();
@@ -167,7 +160,6 @@ private:
 //    QString destDirName; //取消解压，需要该变量
 
 protected:
-    qlonglong m_currentExtractedFilesSize = 0;//当前已经解压出来的文件大小（能展示出来的都已经解压）
     QMap<QString, QByteArray> m_mapCode;   // 存储文件名-编码（解压无需再次探测，提高解压速率）
 };
 
