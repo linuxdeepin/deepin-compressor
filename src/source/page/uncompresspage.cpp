@@ -119,7 +119,7 @@ void UnCompressPage::initUI()
     // 初始化相关变量
     m_pUnCompressView = new UnCompressView(this);
     m_pUncompressPathBtn = new CustomCommandLinkButton(tr("Extract to:") + " ~/Desktop", this);
-    m_pUnCompressBtn = new CustomPushButton(tr("Extract"), this);
+    m_pUnCompressBtn = new CustomPushButton(tr("Extract", "button"), this);
 
     m_pUncompressPathBtn->setToolTip(m_strUnCompressPath);
 
@@ -199,7 +199,7 @@ void UnCompressPage::slotUncompressClicked()
         }
 
         TipDialog dialog(this);
-        dialog.showDialog(strDes, tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(strDes, tr("OK", "button"), DDialog::ButtonNormal);
 
         return;
     } else { // 发送解压信号

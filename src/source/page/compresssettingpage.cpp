@@ -216,7 +216,7 @@ void CompressSettingPage::initUI()
     m_pSplitValueEdt = new DDoubleSpinBox(this);
     m_pCommentLbl = new DLabel(tr("Comment") + ":", this);
     m_pCommentEdt = new DTextEdit(this);
-    m_pCompressBtn = new CustomPushButton(tr("Compress"), this);
+    m_pCompressBtn = new CustomPushButton(tr("Compress", "button"), this);
 
     m_pFileNameEdt->setMinimumSize(260, 36);    // 配置文件名属性
     QLineEdit *pNameEdt = m_pFileNameEdt->lineEdit();
@@ -562,7 +562,7 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
 {
     // 使用封装好的提示对话框
     TipDialog dialog(this);
-    return dialog.showDialog(msg, tr("OK"), DDialog::ButtonNormal, strToolTip);
+    return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
 }
 
 void CompressSettingPage::setDefaultName(QString name)
@@ -743,7 +743,7 @@ void CompressSettingPage::slotCompressClicked()
     QFileInfo fileInfo(compressInfo.strTargetPath + QDir::separator() + compressInfo.strArchiveName);
     if (fileInfo.exists()) {
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel"), DDialog::ButtonNormal, tr("Replace"), DDialog::ButtonWarning);
+        int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
         if (iResult == 1) {     // 如果点击替换，先移除本地压缩包
             QFile file(fileInfo.filePath());
             file.remove();

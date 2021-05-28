@@ -90,6 +90,11 @@ QString ProgressPage::archiveName()
 
 void ProgressPage::setProgress(double dPercent)
 {
+    // 添加对异常进度的判断处理
+    if (dPercent > 100) {
+        return;
+    }
+
     int iPercent = qRound(dPercent);
     if (m_iPerent >= iPercent) {
         return ;
@@ -133,7 +138,7 @@ void ProgressPage::resetProgress()
     m_pPauseContinueButton->clearFocus();
 
     // 修复暂停状态返回列表后再切换到进度界面状态混乱
-    m_pPauseContinueButton->setText(tr("Pause"));
+    m_pPauseContinueButton->setText(tr("Pause", "button"));
     m_pPauseContinueButton->setChecked(false);
 
     // 重置相关参数
@@ -169,8 +174,8 @@ void ProgressPage::initUI()
     m_pFileNameLbl = new DLabel(this);
     m_pSpeedLbl = new DLabel(this);
     m_pRemainingTimeLbl = new DLabel(this);
-    m_pCancelBtn = new CustomPushButton(tr("Cancel"), this);
-    m_pPauseContinueButton = new CustomSuggestButton(tr("Pause"), this);
+    m_pCancelBtn = new CustomPushButton(tr("Cancel", "button"), this);
+    m_pPauseContinueButton = new CustomSuggestButton(tr("Pause", "button"), this);
 
     // 初始化压缩包名称样式
     DFontSizeManager::instance()->bind(m_pArchiveNameLbl, DFontSizeManager::T5, QFont::DemiBold);
@@ -346,11 +351,11 @@ void ProgressPage::slotPauseClicked(bool bChecked)
 {
     if (bChecked) {
         // 暂停操作
-        m_pPauseContinueButton->setText(tr("Continue"));
+        m_pPauseContinueButton->setText(tr("Continue", "button"));
         emit signalPause();
     } else {
         // 继续操作
-        m_pPauseContinueButton->setText(tr("Pause"));
+        m_pPauseContinueButton->setText(tr("Pause", "button"));
         emit signalContinue();
     }
 }
@@ -379,7 +384,7 @@ void ProgressPage::slotCancelClicked()
 
     // 弹出取消询问对话框
     SimpleQueryDialog dialog(this);
-    int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+    int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
     if (iResult == 1) {
         // 取消操作
         emit signalCancel();

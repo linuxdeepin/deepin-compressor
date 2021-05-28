@@ -121,7 +121,7 @@ void SettingDialog::createSettingButton()
         {
             QWidget *buttonwidget = new QWidget();
             QHBoxLayout *layout = new QHBoxLayout();
-            CustomPushButton *selectAllButton = new CustomPushButton(tr("Select All"));
+            CustomPushButton *selectAllButton = new CustomPushButton(tr("Select All", "button"));
             CustomPushButton *cancelSelectButton = new CustomPushButton(tr("Clear All"));
             CustomSuggestButton *recommendedButton = new CustomSuggestButton(tr("Recommended"));
             selectAllButton->setMinimumSize(153, 36);

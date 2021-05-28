@@ -123,7 +123,7 @@ bool MainWindow::checkHerePath(const QString &strPath)
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenRect =  screen->availableVirtualGeometry();
         dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
-        dialog.showDialog(tr("You do not have permission to save files here, please change and retry"), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("You do not have permission to save files here, please change and retry"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     }
 
@@ -455,7 +455,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 {
     if (!QFileInfo(strArchiveFullPath).isReadable()) {
         TipDialog dialog(this);
-        dialog.showDialog(tr("You do not have permission to load %1").arg(strArchiveFullPath), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("You do not have permission to load %1").arg(strArchiveFullPath), tr("OK", "button"), DDialog::ButtonNormal);
         return;
     }
 
@@ -517,7 +517,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
         show();
         // 提示无插件
         TipDialog dialog(this);
-        dialog.showDialog(tr("Plugin error"), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("Plugin error"), tr("OK", "button"), DDialog::ButtonNormal);
     }
 }
 
@@ -550,7 +550,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
 
                 TipDialog dialog(this);
-                dialog.showDialog(strTips, tr("OK"), DDialog::ButtonNormal);
+                dialog.showDialog(strTips, tr("OK", "button"), DDialog::ButtonNormal);
 
                 m_pCompressPage->refreshCompressedFiles(true, listFiles[i]);
 
@@ -580,7 +580,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         slotPause();    // 先暂停当前操作
         // 创建询问关闭对话框
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(tr("Are you sure you want to stop the ongoing task?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+        int iResult = dialog.showDialog(tr("Are you sure you want to stop the ongoing task?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
         // 点击确认时，停止当前操作，关闭应用
         if (iResult == QDialog::Accepted) {
             slotCancel();       // 执行取消操作
@@ -607,13 +607,13 @@ bool MainWindow::checkSettings(QString file)
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenRect =  screen->availableVirtualGeometry();
         dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
-        dialog.showDialog(tr("No such file or directory"), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("No such file or directory"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     } else {
 
         if (!info.isReadable()) {
             TipDialog dialog(this);
-            dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("You do not have permission to load %1").arg(file), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
         }
 
@@ -624,7 +624,7 @@ bool MainWindow::checkSettings(QString file)
             QRect screenRect =  screen->availableVirtualGeometry();
             dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
 
-            dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
         } else {
             // 文件判断
@@ -666,7 +666,7 @@ bool MainWindow::checkSettings(QString file)
                 QRect screenRect =  screen->availableVirtualGeometry();
                 dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
 
-                int re = dialog.showDialog(str, tr("OK"), DDialog::ButtonNormal);
+                int re = dialog.showDialog(str, tr("OK", "button"), DDialog::ButtonNormal);
                 if (re != 1) { // ？
                     mimeIsChecked = false;
                 }
@@ -1330,7 +1330,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             resetMainwindow();
             // 提示用户无数据
             TipDialog dialog(this);
-            dialog.showDialog(tr("No data in it"), tr("OK"), DDialog::ButtonNormal);
+            dialog.showDialog(tr("No data in it"), tr("OK", "button"), DDialog::ButtonNormal);
         } else {
             // 有数据的情况下切换到解压列表界面，刷新数据
             m_ePageID = PI_UnCompress;
@@ -1407,7 +1407,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                 } else if (m_pSettingDlg->isAutoDeleteArchive() == AUTO_DELETE_ASK) {
                     // 创建询问删除对话框
                     SimpleQueryDialog dialog(this);
-                    int iResult = dialog.showDialog(tr("Do you want to delete the archive?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+                    int iResult = dialog.showDialog(tr("Do you want to delete the archive?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
                     // 点击确认时，删除原压缩包
                     if (iResult == QDialog::Accepted) {
                         deleteWhenJobFinish(ArchiveJob::JT_Extract);
@@ -2256,7 +2256,7 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
 
         // 显示提示对话框
         TipDialog dialog(this);
-        dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK"));
+        dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK", "button"));
 
         resetMainwindow();
         m_ePageID = PI_Home;
@@ -2373,7 +2373,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         QFileInfo archiveInfo(strArchivePath);
         if (archiveInfo.exists()) {
             SimpleQueryDialog dialog(this);
-            int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel"), DDialog::ButtonNormal, tr("Replace"), DDialog::ButtonWarning);
+            int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
             if (iResult == 1) {     // 如果点击替换，先移除本地压缩包
                 QFile file(archiveInfo.filePath());
                 file.remove();
@@ -2541,7 +2541,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
                                            && m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No); // 支持压缩且文件可写的非分卷格式才能修改数据
     if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
         TipDialog dialog(this);
-        dialog.showDialog(tr("You cannot add files to archives in this file type"), tr("OK"), DDialog::ButtonNormal);
+        dialog.showDialog(tr("You cannot add files to archives in this file type"), tr("OK", "button"), DDialog::ButtonNormal);
         QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
             emit sigquitApp();
         });
@@ -2703,7 +2703,7 @@ int MainWindow::showWarningDialog(const QString &msg, const QString &strToolTip)
 {
     // 使用封装好的提示对话框
     TipDialog dialog(this);
-    return dialog.showDialog(msg, tr("OK"), DDialog::ButtonNormal, strToolTip);
+    return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
@@ -2792,7 +2792,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
         QString strDesText = QObject::tr("%1 changed. Do you want to save changes to the archive?").arg(UiTools::toShortString(file.fileName()));
 
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(strDesText, tr("Cancel"), DDialog::ButtonNormal, tr("Update"), DDialog::ButtonRecommend);
+        int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Update", "button"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
             if (!QFile::exists(strPath)) {

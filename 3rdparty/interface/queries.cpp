@@ -241,8 +241,8 @@ void OverwriteQuery::execute()
     }
 
     // 按钮
-    dialog->addButton(QObject::tr("Skip"));
-    dialog->addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
+    dialog->addButton(QObject::tr("Skip", "button"));
+    dialog->addButton(QObject::tr("Replace", "button"), true, DDialog::ButtonWarning);
 
     dialog->addContent(pTipLbl, Qt::AlignHCenter);
     dialog->addContent(pFileNameLbl, Qt::AlignHCenter);
@@ -402,8 +402,8 @@ void PasswordNeededQuery::execute()
     passwordedit->setFixedHeight(36);
     passwordedit->setFixedWidth(280);
 
-    dialog->addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
-    dialog->addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
+    dialog->addButton(QObject::tr("Cancel", "button"), true, DDialog::ButtonNormal);
+    dialog->addButton(QObject::tr("OK", "button"), true, DDialog::ButtonRecommend);
     dialog->getButton(1)->setEnabled(false);
     //确保输入的密码不为空
     connect(passwordedit, &DPasswordEdit::textChanged, passwordedit, [&]() {
@@ -523,7 +523,7 @@ void LoadCorruptQuery::execute()
     m_strDesText = strlabel->text();
 
     dialog->addButton(tr("Open as read-only"));
-    dialog->addButton(tr("Cancel"), true, DDialog::ButtonRecommend);
+    dialog->addButton(tr("Cancel", "button"), true, DDialog::ButtonRecommend);
 
 
     dialog->addContent(strlabel, Qt::AlignHCenter);

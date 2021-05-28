@@ -6,7 +6,7 @@ if [ "$1" = "ts" ]
 then
     #1. update ts
     echo "update ts"
-    lupdate ./ -ts translations/*.ts -no-obsolete 
+    lupdate ./src ./3rdparty -ts translations/*.ts -no-obsolete 
 else
     #2. update qm
     echo "update qm"

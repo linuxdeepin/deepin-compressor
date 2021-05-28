@@ -199,14 +199,14 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
         // 文件夹提示
         strlabel2->setText(QObject::tr("Another folder with the same name already exists, replace it?"));
         m_strDesText = strlabel2->text();
-        addButton(QObject::tr("Skip"));
-        addButton(QObject::tr("Merge"), true, DDialog::ButtonWarning);
+        addButton(QObject::tr("Skip", "button"));
+        addButton(QObject::tr("Merge", "button"), true, DDialog::ButtonWarning);
     } else {
         // 文件提示
         strlabel2->setText(QObject::tr("Another file with the same name already exists, replace it?"));
         m_strDesText = strlabel2->text();
-        addButton(QObject::tr("Skip"));
-        addButton(QObject::tr("Replace"), true, DDialog::ButtonWarning);
+        addButton(QObject::tr("Skip", "button"));
+        addButton(QObject::tr("Replace", "button"), true, DDialog::ButtonWarning);
     }
 
     DCheckBox *checkbox = new DCheckBox(QObject::tr("Apply to all"));
@@ -335,8 +335,8 @@ QStringList ConvertDialog::showDialog()
     addContent(strlabel, Qt::AlignHCenter); // 使用Qt::AlignHCenter效果最好
     addContent(widget, Qt::AlignHCenter);
     // 添加取消和转换按钮
-    addButton(tr("Cancel"));
-    addButton(tr("Convert"), true, DDialog::ButtonRecommend);
+    addButton(tr("Cancel", "button"));
+    addButton(tr("Convert", "button"), true, DDialog::ButtonRecommend);
 
     // 设置焦点顺序
     setTabOrder(zipBtn, _7zBtn);
@@ -476,8 +476,8 @@ int AppendDialog::showDialog(bool bMultiplePassword)
     addContent(pPasswordEdit, Qt::AlignHCenter);
 //    addSpacing(10);
 
-    addButton(QObject::tr("Cancel"), true, DDialog::ButtonNormal);
-    addButton(QObject::tr("OK"), true, DDialog::ButtonRecommend);
+    addButton(QObject::tr("Cancel", "button"), true, DDialog::ButtonNormal);
+    addButton(QObject::tr("OK", "button"), true, DDialog::ButtonRecommend);
 
     autoFeed(pTitleLbl);
 

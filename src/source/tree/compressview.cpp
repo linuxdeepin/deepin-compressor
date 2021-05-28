@@ -345,7 +345,7 @@ void CompressView::slotDeleteFile()
     } else { // 提示是否删除本地文件
 
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(tr("It will permanently delete the file(s). Are you sure you want to continue?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonWarning);
+        int iResult = dialog.showDialog(tr("It will permanently delete the file(s). Are you sure you want to continue?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonWarning);
         if (iResult == 1) {     // 如果点击确定，移动本地文件至回收站中
             // 从本地文件中将需要删除的文件移动到回收站中
             foreach (QModelIndex index, selectedIndex) {
@@ -378,8 +378,8 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
     if (listFiles.count() == 1 && UiTools::isArchiveFile(listFiles.at(0)) && m_listCompressFiles.count() > 0) {
         SimpleQueryDialog dialog;  // 询问添加压缩文件到压缩目录或者在新窗口打开压缩文件
         int ret = dialog.showDialog(tr("Do you want to add the archive to the list or open it in new window?"),
-                                    tr("Cancel"),  DDialog::ButtonNormal,
-                                    tr("Add"), DDialog::ButtonNormal,
+                                    tr("Cancel", "button"),  DDialog::ButtonNormal,
+                                    tr("Add", "button"), DDialog::ButtonNormal,
                                     tr("Open in new window"), DDialog::ButtonRecommend);
 
         if (ret == 1) { // 添加压缩文件到目录

@@ -387,7 +387,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     for (int i = 0; i < listFiles.count(); ++i) {
         if (listFiles[i] == m_strArchive) { // 追加的文件含有压缩包本身
             TipDialog tipDialog(this);
-            tipDialog.showDialog(tr("You cannot add the archive to itself"), tr("OK"));
+            tipDialog.showDialog(tr("You cannot add the archive to itself"), tr("OK", "button"));
             return;
         }
 
@@ -682,7 +682,7 @@ void UnCompressView::slotDeleteFile()
     if (m_bModifiable) { // 压缩包数据是否可更改
         // 询问删除对话框
         SimpleQueryDialog dialog(this);
-        int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel"), DDialog::ButtonNormal, tr("Confirm"), DDialog::ButtonRecommend);
+        int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
         if (iResult == 1) {
             // 删除压缩包数据
             QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据

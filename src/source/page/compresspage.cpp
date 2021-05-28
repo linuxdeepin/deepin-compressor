@@ -114,7 +114,7 @@ void CompressPage::slotCompressNextClicked()
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {
         TipDialog dialog(this);
-        dialog.showDialog(tr("Please add files"), tr("OK"));
+        dialog.showDialog(tr("Please add files"), tr("OK", "button"));
     } else {
         emit signalCompressNextClicked();  // 发送下一步信号
     }
