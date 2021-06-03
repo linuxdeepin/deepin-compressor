@@ -111,6 +111,11 @@ MainWindow::~MainWindow()
         m_mywork->set_thread_stop(true); // 结束计算大小线程
         m_mywork->wait(); //必须等待线程结束
     }
+
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     qInfo() << "应用正常退出";
 }
 
@@ -1840,6 +1845,10 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
     refreshPage();
 
     // 计算大小
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     m_mywork = new CalculateSizeThread(listFiles, m_stUnCompressParameter.strFullPath, listEntry, options, this);
     connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
     connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);
@@ -2366,6 +2375,10 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         m_pProgressPage->setPushButtonCheckable(false, false);
 
         // 计算大小
+        if (nullptr != m_mywork) {
+            m_mywork->deleteLater();
+            m_mywork = nullptr;
+        }
         m_mywork = new CalculateSizeThread(listFiles, strArchivePath, listEntry, options/*, this*/);
         connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
         connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);
@@ -2518,6 +2531,10 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     m_pProgressPage->setPushButtonCheckable(false, false);
 
     // 计算大小
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     m_mywork = new CalculateSizeThread(listFiles, transFile, listEntry, options/*, this*/);
     connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
     connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);

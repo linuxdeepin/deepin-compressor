@@ -35,6 +35,7 @@
 
 #include <QFileInfo>
 #include <QThreadPool>
+#include <QProcess>
 
 DWIDGET_USE_NAMESPACE
 
@@ -176,6 +177,11 @@ bool qThreadPool_waitForDone_stub()
     return true;
 }
 
+bool qProcess_startDetached_stub(const QString &, const QStringList &)
+{
+    return true;
+}
+
 void CommonStub::stub_QWidget_isVisible(Stub &stub, bool isVisible)
 {
     g_QWidget_isVisible_result = isVisible;
@@ -260,6 +266,13 @@ void CommonStub::stub_QThread_start(Stub &stub)
 void CommonStub::stub_QThreadPool_waitForDone(Stub &stub)
 {
     stub.set(ADDR(QThreadPool, waitForDone), qThreadPool_waitForDone_stub);
+}
+
+void CommonStub::stub_QProcess_startDetached(Stub &stub)
+{
+#if !defined(Q_QDOC)
+    stub.set((bool(*)(const QString &, const QStringList &))ADDR(QProcess, startDetached), qProcess_startDetached_stub);
+#endif
 }
 
 

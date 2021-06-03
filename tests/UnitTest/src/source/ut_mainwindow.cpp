@@ -35,6 +35,7 @@
 #include "compresssettingpage.h"
 #include "ddesktopservicesthread.h"
 #include "openFileWatcher.h"
+#include "calculatesizethread.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
@@ -139,6 +140,10 @@ public:
 
     virtual void TearDown()
     {
+        if (nullptr != m_tester->m_mywork) {
+            m_tester->m_mywork->deleteLater();
+            m_tester->m_mywork = nullptr;
+        }
         delete m_tester;
     }
 
@@ -1040,6 +1045,8 @@ TEST_F(TestMainWindow, testslotThemeChanged)
 
 TEST_F(TestMainWindow, testslotShowShortcutTip)
 {
+    Stub stub;
+    CommonStub::stub_QProcess_startDetached(stub);
     m_tester->slotShowShortcutTip();
 }
 

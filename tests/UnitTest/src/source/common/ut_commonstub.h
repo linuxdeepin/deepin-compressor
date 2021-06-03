@@ -198,6 +198,12 @@ public:
      * @param stub
      */
     static void stub_QThreadPool_waitForDone(Stub &stub);
+
+    /**
+     * @brief stub_QProcess_startDetached     针对QProcess的startDetached打桩
+     * @param stub
+     */
+    static void stub_QProcess_startDetached(Stub &stub);
 };
 
 
