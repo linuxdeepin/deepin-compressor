@@ -343,8 +343,6 @@ QStringList ConvertDialog::showDialog()
     setTabOrder(_7zBtn, getButton(0));
     setTabOrder(getButton(0), getButton(1));
 
-    QStringList typeList;
-    typeList << "false" << "";
     bool isZipConvert = true;
     bool is7zConvert = false;
     QString convertType;
@@ -365,8 +363,8 @@ QStringList ConvertDialog::showDialog()
 
     const int mode = exec();
 
+    QStringList typeList;
     if (mode == QDialog::Accepted) {
-        typeList.clear();
         if (isZipConvert) {
             typeList << "true" << "zip";
         } else if (is7zConvert) {

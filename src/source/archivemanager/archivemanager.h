@@ -143,7 +143,7 @@ public:
      * @param strNewArchiveFullPath         转换之后的压缩包全路径
      * @return
      */
-    bool convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath);
+    bool convertArchive(const QString &strOriginalArchiveFullPath, const QString &strTargetFullPath, const QString &strNewArchiveFullPath);
 
     /**
      * @brief pauseOperation    暂停操作

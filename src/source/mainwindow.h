@@ -246,20 +246,6 @@ private:
     void saveConfigWinSize(int w, int h);
 
     /**
-     * @brief getDefaultApp 根据文件类型获取默认打开的应用的程序
-     * @param mimetype  文件类型
-     * @return 应用程序
-     */
-    QString getDefaultApp(const QString &mimetype);
-
-    /**
-     * @brief setDefaultApp 设置默认应用程序
-     * @param mimetype  文件类型
-     * @param desktop   应用程序
-     */
-    void setDefaultApp(const QString &mimetype, const QString &desktop);
-
-    /**
      * @brief convertArchive 格式转换
      * @param convertType 转换后的文件类型
      */

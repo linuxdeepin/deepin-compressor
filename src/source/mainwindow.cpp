@@ -2149,26 +2149,6 @@ void MainWindow::saveConfigWinSize(int w, int h)
     m_pSettings->sync();
 }
 
-QString MainWindow::getDefaultApp(const QString &mimetype)
-{
-    QString outInfo;
-    QProcess p;
-    QString command3 = "xdg-mime query default %1"; // eg: xdg-mime query default application/vnd.rar
-    p.start(command3.arg("application/" + mimetype)); // 获取默认打开方式
-    p.waitForFinished();
-    outInfo = QString::fromLocal8Bit(p.readAllStandardOutput());
-
-    return  outInfo;
-}
-
-void MainWindow::setDefaultApp(const QString &mimetype, const QString &desktop)
-{
-    QProcess p;
-    QString command3 = "xdg-mime default %1 %2"; // eg: xdg-mime default deepin-compressor.desktop application/vnd.rar
-    p.start(command3.arg(desktop).arg("application/" + mimetype)); // 设置默认打开方式
-    p.waitForFinished();
-}
-
 void MainWindow::convertArchive(const QString &convertType)
 {
     qInfo() << "对压缩包进行格式转换" << convertType;

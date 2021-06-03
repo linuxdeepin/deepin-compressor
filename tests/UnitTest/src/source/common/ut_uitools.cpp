@@ -122,3 +122,54 @@ TEST_F(TestUiTools, testreadConf)
 
     ASSERT_EQ(m_tester->readConf() == QLatin1String("hello world"), true);
 }
+
+TEST_F(TestUiTools, testtoShortString)
+{
+    QString str = "123456789123465789";
+    ASSERT_EQ(m_tester->toShortString(str, 4, 4), "12...89");
+}
+
+TEST_F(TestUiTools, testhandleFileName)
+{
+    Stub stub;
+    QFileInfoStub::stub_QFileInfo_completeBaseName(stub, "1.tar");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "1.tar.lz");
+    ASSERT_EQ(m_tester->handleFileName("1.tar.lz"), "1");
+
+
+    Stub stub1;
+    QFileInfoStub::stub_QFileInfo_completeBaseName(stub1, "1.7z");
+    QFileInfoStub::stub_QFileInfo_filePath(stub1, "1.7z.001");
+    ASSERT_EQ(m_tester->handleFileName("1.7z.001"), "1");
+
+
+    Stub stub2;
+    QFileInfoStub::stub_QFileInfo_completeBaseName(stub2, "1.part01");
+    QFileInfoStub::stub_QFileInfo_filePath(stub2, "1.part01.rar");
+    ASSERT_EQ(m_tester->handleFileName("1.part01.rar"), "1");
+
+
+    Stub stub3;
+    QFileInfoStub::stub_QFileInfo_completeBaseName(stub3, "1.part1");
+    QFileInfoStub::stub_QFileInfo_filePath(stub3, "1.part1.rar");
+    ASSERT_EQ(m_tester->handleFileName("1.part1.rar"), "1");
+
+
+    Stub stub4;
+    QFileInfoStub::stub_QFileInfo_completeBaseName(stub4, "1.zip");
+    QFileInfoStub::stub_QFileInfo_filePath(stub4, "1.zip.001");
+    ASSERT_EQ(m_tester->handleFileName("1.zip.001"), "1");
+}
+
+TEST_F(TestUiTools, testisLocalDeviceFile)
+{
+    m_tester->isLocalDeviceFile("1.txt");
+}
+
+TEST_F(TestUiTools, testremoveSameFileName)
+{
+    QStringList listFiles = QStringList() << "1.txt" << "1.txt";
+    QStringList listResult = m_tester->removeSameFileName(listFiles);
+    bool bResult = (listResult.count() == 1 && listResult[0] == "1.txt");
+    ASSERT_EQ(bResult, true);
+}

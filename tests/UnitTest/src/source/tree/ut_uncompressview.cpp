@@ -22,6 +22,7 @@
 #include "uncompressview.h"
 #include "datamanager.h"
 #include "popupdialog.h"
+#include "datamodel.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
@@ -38,6 +39,12 @@ DWIDGET_USE_NAMESPACE
 /*******************************函数打桩************************************/
 // 对UnCompressView的slotOpen进行打桩
 void unCompressView_slotOpen_stub()
+{
+    return;
+}
+
+// 对UnCompressView的slotOpen进行打桩
+void unCompressView_handleDoubleClick_stub(const QModelIndex &)
 {
     return;
 }
@@ -449,18 +456,34 @@ TEST_F(TestUnCompressView, testslotDeleteFile)
 TEST_F(TestUnCompressView, testslotOpen)
 {
     Stub stub;
-    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
+    typedef void (*fptr)(UnCompressView *, const QModelIndex &);
+    fptr A_foo = (fptr)(&UnCompressView::handleDoubleClick);   // 获取虚函数地址
+    stub.set(A_foo, unCompressView_handleDoubleClick_stub);
 
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
     entry.strFileName = "1/";
     entry.strFullPath = "1/";
+    entry.isDirectory = true;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1.txt";
+    entry.isDirectory = false;
+    entry.qSize = 10;
     DataManager::get_instance().archiveData().listRootEntry << entry;
     DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
     m_tester->refreshArchiveData();
 
-    m_tester->selectAll();
-    m_tester->m_bModifiable = true;
-    m_tester->slotDeleteFile();
-    ASSERT_EQ(m_tester->m_eChangeType, UnCompressView::CT_Delete);
+    m_tester->setCurrentIndex(m_tester->m_pModel->index(0, 0));
+    m_tester->slotOpen();
+
+    m_tester->setCurrentIndex(m_tester->m_pModel->index(1, 0));
+    m_tester->slotOpen();
+
+}
+
+TEST_F(TestUnCompressView, testslotPreClicked)
+{
+
 }

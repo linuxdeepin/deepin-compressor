@@ -37,6 +37,34 @@ void compressView_handleDoubleClick_stub(const QModelIndex &)
 }
 /*******************************函数打桩************************************/
 
+class TestStyleTreeViewDelegate : public ::testing::Test
+{
+public:
+    TestStyleTreeViewDelegate(): m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_tester = new StyleTreeViewDelegate;
+        m_tester->disconnect();
+    }
+
+    virtual void TearDown()
+    {
+        delete m_tester;
+    }
+
+protected:
+    StyleTreeViewDelegate *m_tester;
+};
+
+TEST_F(TestStyleTreeViewDelegate, initTest)
+{
+    QStyleOptionViewItem option;
+    QModelIndex index;
+    ASSERT_EQ(m_tester->sizeHint(option, index).height(), 36);
+}
+
 
 class TestCompressView : public ::testing::Test
 {
@@ -62,6 +90,11 @@ protected:
 TEST_F(TestCompressView, initTest)
 {
 
+}
+
+TEST_F(TestCompressView, testgetHeaderView)
+{
+    ASSERT_EQ(m_tester->getHeaderView(), m_tester->m_pHeaderView);
 }
 
 TEST_F(TestCompressView, testaddCompressFiles_Cancel)

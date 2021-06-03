@@ -321,7 +321,7 @@ bool ArchiveManager::updateArchiveComment(const QString &strArchiveFullPath, con
     return false;
 }
 
-bool ArchiveManager::convertArchive(const QString strOriginalArchiveFullPath, const QString strTargetFullPath, const QString strNewArchiveFullPath)
+bool ArchiveManager::convertArchive(const QString &strOriginalArchiveFullPath, const QString &strTargetFullPath, const QString &strNewArchiveFullPath)
 {
     ConvertJob *pConvertJob = new ConvertJob(strOriginalArchiveFullPath, strTargetFullPath, strNewArchiveFullPath);
     m_pArchiveJob = pConvertJob;

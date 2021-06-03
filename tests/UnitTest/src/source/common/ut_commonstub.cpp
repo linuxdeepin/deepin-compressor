@@ -25,16 +25,24 @@
 #include "uitools.h"
 #include "processopenthread.h"
 #include "openwithdialog.h"
+#include "ddesktopservices.h"
+#include "kprocess.h"
+#include "archivemanager.h"
+#include "queries.h"
 
-#include <QFileInfo>
 #include <DFileDialog>
 #include <DMenu>
+
+#include <QFileInfo>
+#include <QThreadPool>
 
 DWIDGET_USE_NAMESPACE
 
 bool g_QWidget_isVisible_result = false;;               // QWidget isVisible返回值
 bool g_UiTools_isArchiveFile_result = false;            // UiTools isArchiveFile返回值
 QObject *g_QObject_sender_result = nullptr;             // QObject sender返回值
+int g_Dialog_exec_result = 0;                         // DDialog exec返回值
+bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
 
 int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
 int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
@@ -56,9 +64,10 @@ bool g_QFileInfo_isReadable_result = false;             // QFileInfo isReadable�
 bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink返回值
 
 bool g_QFile_remove_result = false;                     // QFile remove返回值
-bool g_QFile_open_result = false;                     // QFile open返回值
-bool g_QFile_close_result = false;                     // QFile close返回值
-QByteArray g_QFile_readAll_result;                     // QFile readAll返回值
+bool g_QFile_open_result = false;                       // QFile open返回值
+bool g_QFile_close_result = false;                      // QFile close返回值
+QByteArray g_QFile_readAll_result;                      // QFile readAll返回值
+bool g_QFile_exists_result = false;                     // QFile exists返回值
 
 bool g_QDir_exists_result = false;                      // QDir exists返回值
 QFileInfoList g_QDir_entryInfoList_result = QFileInfoList();    // QDir entryInfoList返回值
@@ -68,8 +77,24 @@ qint64 g_QElapsedTimer_elapsed_result = 0;              // QElapsedTimer elapsed
 
 int g_DFileDialog_exec_result = 0;                      // DFileDialog exec
 QList<QUrl> g_DFileDialog_selectedUrls_result = QList<QUrl>();   // DFileDialog selectedUrls返回值
+QStringList g_DFileDialog_selectedFiles_result = QStringList();   // DFileDialog selectedUrls返回值
 
 DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result;   // DGuiApplicationHelper themeType返回值
+
+bool g_ArchiveManager_createArchive_result = false;      // ArchiveManager createArchive返回值
+bool g_ArchiveManager_loadArchive_result = false;        // ArchiveManager loadArchive返回值
+bool g_ArchiveManager_addFiles_result = false;           // ArchiveManager addFiles返回值
+bool g_ArchiveManager_extractFiles_result = false;       // ArchiveManager extractFiles返回值
+bool g_ArchiveManager_extractFiles2Path_result = false;  // ArchiveManager extractFiles2Path返回值
+bool g_ArchiveManager_deleteFiles_result = false;        // ArchiveManager deleteFiles返回值
+bool g_ArchiveManager_batchExtractFiles_result = false;  // ArchiveManager batchExtractFiles返回值
+bool g_ArchiveManager_openFile_result = false;           // ArchiveManager openFile返回值
+bool g_ArchiveManager_updateArchiveCacheData_result = false;      // ArchiveManager updateArchiveCacheData返回值
+bool g_ArchiveManager_updateArchiveComment_result = false;      // ArchiveManager updateArchiveComment返回值
+bool g_ArchiveManager_convertArchive_result = false;     // ArchiveManager convertArchive返回值
+bool g_ArchiveManager_pauseOperation_result = false;     // ArchiveManager pauseOperation返回值
+bool g_ArchiveManager_continueOperation_result = false;  // ArchiveManager continueOperation返回值
+bool g_ArchiveManager_cancelOperation_result = false;    // ArchiveManager cancelOperation返回值
 
 /*************************************CommonStub*************************************/
 CommonStub::CommonStub()
@@ -92,12 +117,6 @@ QAction *menu_exec_stub(const QPoint &, QAction *)
     return nullptr;
 }
 
-void CommonStub::stub_QWidget_isVisible(Stub &stub, bool isVisible)
-{
-    g_QWidget_isVisible_result = isVisible;
-    stub.set(ADDR(QWidget, isVisible), qWidget_isVisible_stub);
-}
-
 QModelIndex treeView_indexAt_stub(void *obj, const QPoint &p)
 {
     QTreeView *o = (QTreeView *)obj;
@@ -112,7 +131,17 @@ bool uiTools_isArchiveFile_stub(const QString &)
     return g_UiTools_isArchiveFile_result;
 }
 
+bool uiTools_isLocalDeviceFile_stub(const QString &)
+{
+    return g_UiTools_isLocalDeviceFile_result;
+}
+
 void processOpenThread_start_stub()
+{
+    return;
+}
+
+void kProcess_start_stub()
 {
     return;
 }
@@ -120,6 +149,37 @@ void processOpenThread_start_stub()
 QObject *qObject_sender_stub()
 {
     return g_QObject_sender_result;
+}
+
+int dialog_exec_stub()
+{
+    return g_Dialog_exec_result;
+}
+
+void dialog_open_stub()
+{
+    return;
+}
+
+void query_execute_stub()
+{
+    return;
+}
+
+void qThread_start_stub()
+{
+    return;
+}
+
+bool qThreadPool_waitForDone_stub()
+{
+    return true;
+}
+
+void CommonStub::stub_QWidget_isVisible(Stub &stub, bool isVisible)
+{
+    g_QWidget_isVisible_result = isVisible;
+    stub.set(ADDR(QWidget, isVisible), qWidget_isVisible_stub);
 }
 
 void CommonStub::stub_QMenu_exec(Stub &stub)
@@ -149,6 +209,57 @@ void CommonStub::stub_QObject_sender(Stub &stub, QObject *pObject)
 {
     g_QObject_sender_result = pObject;
     stub.set(ADDR(QObject, sender), qObject_sender_stub);
+}
+
+void CommonStub::stub_KProcess_start(Stub &stub)
+{
+    stub.set(ADDR(KProcess, start), kProcess_start_stub);
+}
+
+void CommonStub::stub_DDialog_exec(Stub &stub, int iResult)
+{
+    g_Dialog_exec_result = iResult;
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
+}
+
+void CommonStub::stub_QDialog_exec(Stub &stub, int iResult)
+{
+    g_Dialog_exec_result = iResult;
+    typedef int (*fptr)(QDialog *);
+    fptr A_foo = (fptr)(&QDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
+}
+
+void CommonStub::stub_QDialog_open(Stub &stub)
+{
+    typedef void (*fptr)(QDialog *);
+    fptr A_foo = (fptr)(&QDialog::open);   //获取虚函数地址
+    stub.set(A_foo, dialog_open_stub);
+}
+
+void CommonStub::stub_UiTools_isLocalDeviceFile(Stub &stub, bool isLocalDeviceFile)
+{
+    g_UiTools_isLocalDeviceFile_result = isLocalDeviceFile;
+    stub.set(ADDR(UiTools, isLocalDeviceFile), uiTools_isLocalDeviceFile_stub);
+}
+
+void CommonStub::stub_OverwriteQuery_execute(Stub &stub)
+{
+    typedef void (*fptr)(OverwriteQuery *);
+    fptr A_foo = (fptr)(&OverwriteQuery::execute);   //获取虚函数地址
+    stub.set(A_foo, query_execute_stub);
+}
+
+void CommonStub::stub_QThread_start(Stub &stub)
+{
+    stub.set(ADDR(QThread, start), qThread_start_stub);
+}
+
+void CommonStub::stub_QThreadPool_waitForDone(Stub &stub)
+{
+    stub.set(ADDR(QThreadPool, waitForDone), qThreadPool_waitForDone_stub);
 }
 
 
@@ -451,6 +562,11 @@ bool qfile_close_stub()
     return g_QFile_close_result;
 }
 
+bool qfile_exists_stub()
+{
+    return g_QFile_exists_result;
+}
+
 QByteArray qfile_readAll_stub()
 {
     return g_QFile_readAll_result;
@@ -486,6 +602,15 @@ void QFileStub::stub_QFile_readAll(Stub &stub, const QByteArray &allByteArray)
     g_QFile_readAll_result = allByteArray;
 
     stub.set(ADDR(QFile, readAll), qfile_readAll_stub);
+}
+
+void QFileStub::stub_QFile_exists(Stub &stub, bool isExists)
+{
+    g_QFile_exists_result = isExists;
+
+    typedef bool (QFile::*fptr)()const ;
+    fptr A_foo = (fptr)(&QFile::exists);   //获取虚函数地址
+    stub.set(A_foo, qfile_exists_stub);
 }
 
 /*************************************DGuiApplicationHelperStub*************************************/
@@ -576,6 +701,11 @@ QList<QUrl> dFileDialog_selectedUrls_stub()
     return g_DFileDialog_selectedUrls_result;
 }
 
+QStringList dFileDialog_selectedFiles_stub()
+{
+    return g_DFileDialog_selectedFiles_result;
+}
+
 void DFileDialogStub::stub_DFileDialog_exec(Stub &stub, int iResult)
 {
     g_DFileDialog_exec_result = iResult;
@@ -590,6 +720,16 @@ void DFileDialogStub::stub_DFileDialog_selectedUrls(Stub &stub, const QList<QUrl
     g_DFileDialog_selectedUrls_result = listUrls;
     stub.set(ADDR(DFileDialog, selectedUrls), dFileDialog_selectedUrls_stub);
 }
+
+void DFileDialogStub::stub_DFileDialog_selectedFiles(Stub &stub, const QStringList &listFiles)
+{
+    g_DFileDialog_selectedFiles_result = listFiles;
+    stub.set(ADDR(DFileDialog, selectedFiles), dFileDialog_selectedFiles_stub);
+}
+/*************************************DFileDialogStub*************************************/
+
+
+/*************************************QDirStub*************************************/
 
 QDirStub::QDirStub()
 {
@@ -645,3 +785,218 @@ void QDirStub::stub_QDir_filePath(Stub &stub, const QString &strfilePath)
 
     stub.set(ADDR(QDir, filePath), qdir_filePath_stub);
 }
+/*************************************QDirStub*************************************/
+
+
+/*************************************DDesktopServicestub*************************************/
+
+DDesktopServicestub::DDesktopServicestub()
+{
+
+}
+
+DDesktopServicestub::~DDesktopServicestub()
+{
+
+}
+
+bool dDesktopServices_showFolder_stub(QString, const QString &)
+{
+    return true;
+}
+
+bool dDesktopServices_showFileItem_stub(QString, const QString &)
+{
+    return true;
+}
+
+void DDesktopServicestub::stub_DDesktopServicestub_showFolder(Stub &stub)
+{
+    bool (*db)(QString, const QString &) = &DDesktopServices::showFolder;
+    stub.set(db, dDesktopServices_showFolder_stub);
+}
+
+void DDesktopServicestub::stub_DDesktopServicestub_showFileItem(Stub &stub)
+{
+
+    bool (*db)(QString, const QString &) = &DDesktopServices::showFileItem;
+    stub.set(db, dDesktopServices_showFileItem_stub);
+}
+/*************************************DDesktopServicestub*************************************/
+
+
+/*************************************ArchiveManagerstub*************************************/
+ArchiveManagerstub::ArchiveManagerstub()
+{
+
+}
+
+ArchiveManagerstub::~ArchiveManagerstub()
+{
+
+}
+
+bool archiveManager_createArchive_stub(const QList<FileEntry> &, const QString &, const CompressOptions &, UiTools::AssignPluginType)
+{
+    return g_ArchiveManager_createArchive_result;
+}
+
+bool archiveManager_loadArchive_stub(const QString &, UiTools::AssignPluginType)
+{
+    return g_ArchiveManager_loadArchive_result;
+}
+
+bool archiveManager_addFiles_stub(const QString &, const QList<FileEntry> &, const CompressOptions &)
+{
+    return g_ArchiveManager_addFiles_result;
+}
+
+bool archiveManager_extractFiles_stub(const QString &, const QList<FileEntry> &, const ExtractionOptions &, UiTools::AssignPluginType)
+{
+    return g_ArchiveManager_extractFiles_result;
+}
+
+bool archiveManager_extractFiles2Path_stub(const QString &, const QList<FileEntry> &, const ExtractionOptions &)
+{
+    return g_ArchiveManager_extractFiles2Path_result;
+}
+
+bool archiveManager_deleteFiles_stub(const QString &, const QList<FileEntry> &)
+{
+    return g_ArchiveManager_deleteFiles_result;
+}
+
+bool archiveManager_batchExtractFiles_stub(const QStringList &, const QString &)
+{
+    return g_ArchiveManager_batchExtractFiles_result;
+}
+
+bool archiveManager_openFile_stub(const QString &, const FileEntry &, const QString &, const QString &)
+{
+    return g_ArchiveManager_openFile_result;
+}
+
+bool archiveManager_updateArchiveCacheData_stub()
+{
+    return g_ArchiveManager_updateArchiveCacheData_result;
+}
+
+bool archiveManager_updateArchiveComment_stub(const QString &, const QString &)
+{
+    return g_ArchiveManager_updateArchiveComment_result;
+}
+
+bool archiveManager_convertArchive_stub(const QString &, const QString &, const QString &)
+{
+    return g_ArchiveManager_convertArchive_result;
+}
+
+bool archiveManager_pauseOperation_stub()
+{
+    return g_ArchiveManager_pauseOperation_result;
+}
+
+bool archiveManager_continueOperation_stub()
+{
+    return g_ArchiveManager_continueOperation_result;
+}
+
+bool archiveManager_cancelOperation_stub()
+{
+    return g_ArchiveManager_cancelOperation_result;
+}
+
+QString archiveManager_getCurFilePassword_stub()
+{
+    return "123";
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_createArchive(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_createArchive_result = bResult;
+    stub.set(ADDR(ArchiveManager, createArchive), archiveManager_createArchive_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_loadArchive(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_loadArchive_result = bResult;
+    stub.set(ADDR(ArchiveManager, loadArchive), archiveManager_loadArchive_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_addFiles(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_addFiles_result = bResult;
+    stub.set(ADDR(ArchiveManager, addFiles), archiveManager_addFiles_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_extractFiles(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_extractFiles_result = bResult;
+    stub.set(ADDR(ArchiveManager, extractFiles), archiveManager_extractFiles_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_extractFiles2Path(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_extractFiles2Path_result = bResult;
+    stub.set(ADDR(ArchiveManager, extractFiles2Path), archiveManager_extractFiles2Path_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_deleteFiles(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_deleteFiles_result = bResult;
+    stub.set(ADDR(ArchiveManager, deleteFiles), archiveManager_deleteFiles_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_batchExtractFiles(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_batchExtractFiles_result = bResult;
+    stub.set(ADDR(ArchiveManager, batchExtractFiles), archiveManager_batchExtractFiles_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_openFile(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_openFile_result = bResult;
+    stub.set(ADDR(ArchiveManager, openFile), archiveManager_openFile_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_updateArchiveCacheData(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_updateArchiveCacheData_result = bResult;
+    stub.set(ADDR(ArchiveManager, updateArchiveCacheData), archiveManager_updateArchiveCacheData_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_updateArchiveComment_result = bResult;
+    stub.set(ADDR(ArchiveManager, updateArchiveComment), archiveManager_updateArchiveComment_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_convertArchive(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_convertArchive_result = bResult;
+    stub.set(ADDR(ArchiveManager, convertArchive), archiveManager_convertArchive_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_pauseOperation(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_pauseOperation_result = bResult;
+    stub.set(ADDR(ArchiveManager, pauseOperation), archiveManager_pauseOperation_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_continueOperation(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_continueOperation_result = bResult;
+    stub.set(ADDR(ArchiveManager, continueOperation), archiveManager_continueOperation_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_cancelOperation(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_cancelOperation_result = bResult;
+    stub.set(ADDR(ArchiveManager, cancelOperation), archiveManager_cancelOperation_stub);
+}
+
+void ArchiveManagerstub::stub_ArchiveManager_getCurFilePassword(Stub &stub)
+{
+    stub.set(ADDR(ArchiveManager, getCurFilePassword), archiveManager_getCurFilePassword_stub);
+}
+/*************************************ArchiveManagerstub*************************************/
