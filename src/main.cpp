@@ -38,9 +38,14 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    //for qt5platform-plugins load DPlatformIntegration or DPlatformIntegrationParent
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+    }
+  
     PERF_PRINT_BEGIN("POINT-01", "打开时间");
-
-    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);    // 使用高分屏
+  
+    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);    // 使用高分屏    
 
     // 初始化DTK应用程序属性
     CompressorApplication app(argc, argv);
