@@ -22,6 +22,7 @@
 #define UT_COMMONSTUB_H
 
 #include "popupdialog.h"
+#include "libzipplugin.h"
 #include "gtest/src/stub.h"
 
 #include <DGuiApplicationHelper>
@@ -37,6 +38,7 @@ extern bool g_UiTools_isArchiveFile_result;             // UiTools isArchiveFile
 extern QObject *g_QObject_sender_result;                // QObject sender返回值
 extern int g_Dialog_exec_result;                        // DDialog exec返回值
 extern bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
+extern ReadOnlyArchiveInterface *g_UiTools_createInterface_result;         // UiTools createInterface返回值
 
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
@@ -90,6 +92,9 @@ extern bool g_ArchiveManager_pauseOperation_result;     // ArchiveManager pauseO
 extern bool g_ArchiveManager_continueOperation_result;  // ArchiveManager continueOperation返回值
 extern bool g_ArchiveManager_cancelOperation_result;    // ArchiveManager cancelOperation返回值
 
+extern bool g_SingleJob_doPause_result;                 // SingleJob doPause返回值
+extern bool g_SingleJob_doContinue_result;              // SingleJob doContinue返回值
+extern bool g_SingleJob_doKill_result;                  // SingleJob doKill返回值
 
 // 通用打桩
 class CommonStub : public QObject
@@ -204,6 +209,13 @@ public:
      * @param stub
      */
     static void stub_QProcess_startDetached(Stub &stub);
+
+    /**
+     * @brief stub_UiTools_createInterface     针对UiTools的createInterface打桩
+     * @param stub
+     * @param pInterface
+     */
+    static void stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface);
 };
 
 
@@ -573,11 +585,11 @@ public:
 
 
 // 针对ArchiveManager的打桩
-class ArchiveManagerstub : public QObject
+class ArchiveManagerStub : public QObject
 {
 public:
-    ArchiveManagerstub();
-    ~ArchiveManagerstub();
+    ArchiveManagerStub();
+    ~ArchiveManagerStub();
 
     /**
      * @brief stub_ArchiveManager_createArchive     针对ArchiveManager的createArchive打桩
@@ -697,6 +709,96 @@ public:
      * @return
      */
     static void stub_ArchiveManager_getCurFilePassword(Stub &stub);
+
+};
+
+
+// 针对SingleJob的打桩
+class JobStub : public QObject
+{
+public:
+    JobStub();
+    ~JobStub();
+
+    /**
+     * @brief stub_SingleJob_start     针对SingleJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_SingleJob_start(Stub &stub);
+
+    /**
+     * @brief stub_ConvertJob_start     针对ConvertJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ConvertJob_start(Stub &stub);
+
+    /**
+     * @brief stub_StepExtractJob_start     针对ComplexJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_StepExtractJob_start(Stub &stub);
+
+    /**
+     * @brief stub_BatchExtractJob_start     针对BatchExtractJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_BatchExtractJob_start(Stub &stub);
+
+    /**
+     * @brief stub_UpdateJob_start     针对UpdateJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_UpdateJob_start(Stub &stub);
+
+    /**
+     * @brief stub_ArchiveJob_kill     针对ArchiveJob的kill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ArchiveJob_kill(Stub &stub);
+
+    /**
+     * @brief stub_SingleJob_doPause     针对SingleJob的doPause打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doPause(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_SingleJob_doContinue     针对SingleJob的doContinue打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doContinue(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_SingleJob_doKill     针对SingleJob的doKill打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doKill(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_CreateJob_doWork     针对CreateJob的doKill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_CreateJob_doWork(Stub &stub);
+
+    /**
+     * @brief stub_ExtractJob_doWork     针对ExtractJob的doKill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ExtractJob_doWork(Stub &stub);
 
 };
 

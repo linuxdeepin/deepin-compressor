@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     std::cout << "Starting UnitTest" << std::endl;
     qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
+    QApplication a(argc, argv);
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
     __sanitizer_set_report_path("asan.log");

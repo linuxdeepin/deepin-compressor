@@ -365,6 +365,7 @@ bool ArchiveManager::cancelOperation()
     // 调用job取消接口
     if (m_pArchiveJob) {
         m_pArchiveJob->kill();
+        m_pArchiveJob->deleteLater();
         m_pArchiveJob = nullptr;
 
         return true;

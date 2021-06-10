@@ -40,11 +40,11 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
     : QObject(parent)
 {
-    Q_ASSERT(args.size() >= 3);
-//    qInfo() << "Created read-only interface for" << args.first().toString();
-    m_strArchiveName = args.first().toString();
-    m_metaData = args.at(1).value<KPluginMetaData>();
-    m_mimetype = args.at(2).value<CustomMimeType>();
+    if (args.count() == 3) {
+        m_strArchiveName = args.first().toString();
+        m_metaData = args.at(1).value<KPluginMetaData>();
+        m_mimetype = args.at(2).value<CustomMimeType>();
+    }
 
     m_common = new Common(this);
 }

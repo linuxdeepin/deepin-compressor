@@ -15,6 +15,7 @@ project(${PROJECT_NAME_TEST})
 #endif ()
 
 set(SRCRELATIVEPATH ../../../src) #相对于源码路径
+set(LIBZIPPLUGINPATH ../../../3rdparty/libzipplugin) #相对于源码路径
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
@@ -23,6 +24,7 @@ find_package(Qt5Concurrent)
 find_package(Qt5Test)
 find_package(KF5Codecs REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
+find_package(ZLIB REQUIRED)
 include(FindPkgConfig)
 
 
@@ -56,6 +58,7 @@ include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/dialog)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/dialog/openwithdialog)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/page)
 include_directories(${PROJECT_SOURCE_DIR}/${SRCRELATIVEPATH}/source/tree)
+include_directories(${PROJECT_SOURCE_DIR}/${LIBZIPPLUGINPATH})
 
 #源文件、头文件和资源文件
 include_directories(${PROJECT_SOURCE_DIR}/source/common)
@@ -67,6 +70,7 @@ file(GLOB_RECURSE c_files
     ${SRCRELATIVEPATH}/source/dialog/openwithdialog/*.cpp
     ${SRCRELATIVEPATH}/source/page/*.cpp
     ${SRCRELATIVEPATH}/source/tree/*.cpp
+    ${LIBZIPPLUGINPATH}/*.cpp
 
     ./source/*.cpp
     ./source/archivemanager/*.cpp
@@ -86,6 +90,7 @@ file(GLOB_RECURSE h_files
     ${SRCRELATIVEPATH}/source/dialog/openwithdialog/*.h
     ${SRCRELATIVEPATH}/source/page/*.h
     ${SRCRELATIVEPATH}/source/tree/*.h
+    ${LIBZIPPLUGINPATH}/*.h
 
     ./source/*.h
     ./source/archivemanager/*.h
@@ -130,5 +135,6 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread
+    zip
 )
 

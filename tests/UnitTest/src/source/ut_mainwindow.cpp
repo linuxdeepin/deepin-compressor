@@ -240,14 +240,14 @@ TEST_F(TestMainWindow, testloadArchive)
     Stub stub2;
     QFileInfoStub::stub_QFileInfo_isReadable(stub2, true);
     QFileInfoStub::stub_QFileInfo_exists(stub2, true);
-    ArchiveManagerstub::stub_ArchiveManager_loadArchive(stub2, true);
+    ArchiveManagerStub::stub_ArchiveManager_loadArchive(stub2, true);
     m_tester->loadArchive("1.zip");
     ASSERT_EQ(m_tester->m_ePageID == PI_Loading, true);
 
     Stub stub3;
     QFileInfoStub::stub_QFileInfo_isReadable(stub3, true);
     QFileInfoStub::stub_QFileInfo_exists(stub3, true);
-    ArchiveManagerstub::stub_ArchiveManager_loadArchive(stub3, false);
+    ArchiveManagerStub::stub_ArchiveManager_loadArchive(stub3, false);
     m_tester->loadArchive("1.zip");
     ASSERT_EQ(m_tester->m_ePageID == PI_Home, true);
 }
@@ -393,13 +393,13 @@ TEST_F(TestMainWindow, testslotCompressNext)
 TEST_F(TestMainWindow, testslotCompress)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_createArchive(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_createArchive(stub, true);
     stub.set(ADDR(CompressPage, compressFiles), compressPage_compressFiles_stub);
     m_tester->slotCompress(QVariant());
     ASSERT_EQ(m_tester->m_ePageID, PI_CompressProgress);
 
     Stub stub1;
-    ArchiveManagerstub::stub_ArchiveManager_createArchive(stub1, false);
+    ArchiveManagerStub::stub_ArchiveManager_createArchive(stub1, false);
     m_tester->slotCompress(QVariant());
     ASSERT_EQ(m_tester->m_operationtype, Operation_NULL);
 }
@@ -419,7 +419,7 @@ TEST_F(TestMainWindow, testslotJobFinished)
 TEST_F(TestMainWindow, testslotUncompressClicked)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_extractFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_extractFiles(stub, true);
     m_tester->slotUncompressClicked("/home/Desktop");
 }
 
@@ -491,8 +491,8 @@ TEST_F(TestMainWindow, testhandleJobNormalFinished)
     Stub stub;
     CommonStub::stub_QThread_start(stub);
     stub.set(ADDR(SettingDialog, isAutoDeleteFile), settingDialog_isAutoDeleteFile_stub);
-    ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(stub, true);
-    ArchiveManagerstub::stub_ArchiveManager_updateArchiveCacheData(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveCacheData(stub, true);
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
 
@@ -762,14 +762,14 @@ TEST_F(TestMainWindow, testsaveConfigWinSize)
 TEST_F(TestMainWindow, testconvertArchive)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_convertArchive(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_convertArchive(stub, true);
     m_tester->convertArchive("zip");
 }
 
 TEST_F(TestMainWindow, testupdateArchiveComment)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, true);
     m_tester->updateArchiveComment();
     ASSERT_EQ(m_tester->m_operationtype, Operation_Update_Comment);
 }
@@ -777,7 +777,7 @@ TEST_F(TestMainWindow, testupdateArchiveComment)
 TEST_F(TestMainWindow, testaddArchiveComment)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, true);
     m_tester->m_pCompressSettingPage->m_pCommentEdt->setPlainText("123456");
     m_tester->addArchiveComment();
     ASSERT_EQ(m_tester->m_ePageID, PI_CommentProgress);
@@ -807,8 +807,8 @@ TEST_F(TestMainWindow, testhandleArguments_RightMenu)
     Stub stub;
     CommonStub::stub_QThread_start(stub);
     DFileDialogStub::stub_DFileDialog_exec(stub, 0);
-    ArchiveManagerstub::stub_ArchiveManager_batchExtractFiles(stub, true);
-    ArchiveManagerstub::stub_ArchiveManager_extractFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_batchExtractFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_extractFiles(stub, true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip"), false);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.txt" << "compress"), true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.txt" << "compress_to_7z"), true);
@@ -838,8 +838,8 @@ TEST_F(TestMainWindow, testhandleArguments_Append)
 TEST_F(TestMainWindow, testrightExtract2Path)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_extractFiles(stub, true);
-    ArchiveManagerstub::stub_ArchiveManager_batchExtractFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_extractFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_batchExtractFiles(stub, true);
 
     m_tester->rightExtract2Path(ST_Extract, QStringList());
 
@@ -872,7 +872,7 @@ TEST_F(TestMainWindow, testdelayQuitApp)
 TEST_F(TestMainWindow, testslotExtract2Path)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_extractFiles2Path(stub, false);
+    ArchiveManagerStub::stub_ArchiveManager_extractFiles2Path(stub, false);
     QList<FileEntry> listEntry;
     FileEntry entry;
     entry.strFileName = "1.txt";
@@ -884,7 +884,7 @@ TEST_F(TestMainWindow, testslotExtract2Path)
 TEST_F(TestMainWindow, testslotDelFiles)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_deleteFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_deleteFiles(stub, true);
     QList<FileEntry> listEntry;
     FileEntry entry;
     entry.strFileName = "1.txt";
@@ -893,7 +893,7 @@ TEST_F(TestMainWindow, testslotDelFiles)
     ASSERT_EQ(m_tester->m_ePageID, PI_DeleteProgress);
 
     Stub stub1;
-    ArchiveManagerstub::stub_ArchiveManager_deleteFiles(stub1, false);
+    ArchiveManagerStub::stub_ArchiveManager_deleteFiles(stub1, false);
     m_tester->slotDelFiles(listEntry, 10);
     ASSERT_EQ(m_tester->m_operationtype, Operation_NULL);
 }
@@ -907,14 +907,14 @@ TEST_F(TestMainWindow, testslotReceiveCurArchiveName)
 TEST_F(TestMainWindow, testslotOpenFile)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_openFile(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_openFile(stub, true);
     FileEntry entry;
     entry.strFileName = "1.txt";
     m_tester->slotOpenFile(entry, "");
     ASSERT_EQ(m_tester->m_ePageID, PI_Loading);
 
     Stub stub1;
-    ArchiveManagerstub::stub_ArchiveManager_openFile(stub1, false);
+    ArchiveManagerStub::stub_ArchiveManager_openFile(stub1, false);
     m_tester->slotOpenFile(entry, "");
     ASSERT_EQ(m_tester->m_operationtype, Operation_NULL);
 }
@@ -931,21 +931,21 @@ TEST_F(TestMainWindow, testslotOpenFileChanged)
 TEST_F(TestMainWindow, testslotPause)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_pauseOperation(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_pauseOperation(stub, true);
     m_tester->slotPause();
 }
 
 TEST_F(TestMainWindow, testslotContinue)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_continueOperation(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_continueOperation(stub, true);
     m_tester->slotContinue();
 }
 
 TEST_F(TestMainWindow, testslotCancel)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_cancelOperation(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_cancelOperation(stub, true);
     m_tester->slotCancel();
 }
 
@@ -1021,7 +1021,7 @@ TEST_F(TestMainWindow, testslotFailureReturn)
 TEST_F(TestMainWindow, testslotTitleCommentButtonPressed)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(stub, false);
+    ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, false);
     m_tester->m_isFirstViewComment = true;
     m_tester->m_ePageID = PI_UnCompress;
     CommonStub::stub_DDialog_exec(stub, 0);
@@ -1053,8 +1053,8 @@ TEST_F(TestMainWindow, testslotShowShortcutTip)
 TEST_F(TestMainWindow, testslotFinishCalculateSize)
 {
     Stub stub;
-    ArchiveManagerstub::stub_ArchiveManager_createArchive(stub, true);
-    ArchiveManagerstub::stub_ArchiveManager_addFiles(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_createArchive(stub, true);
+    ArchiveManagerStub::stub_ArchiveManager_addFiles(stub, true);
 
     m_tester->m_eStartupType = StartupType::ST_Compresstozip7z;
     m_tester->slotFinishCalculateSize(10, "1.txt", QList<FileEntry>(), CompressOptions(), QList<FileEntry>());

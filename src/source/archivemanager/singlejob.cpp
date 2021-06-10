@@ -521,7 +521,8 @@ ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString s
 
 ConvertJob::~ConvertJob()
 {
-
+    SAFE_DELETE_ELE(m_pCreateJob)
+    SAFE_DELETE_ELE(m_pExtractJob);
 }
 
 void ConvertJob::start()

@@ -433,8 +433,11 @@ void PasswordNeededQuery::execute()
 
     widget->setLayout(mainlayout);
     dialog->addContent(widget);
-    QRect mainWindowGeometr = getMainWindow()->geometry();
-    dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - 50 + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
+
+    if (m_pParent) {
+        QRect mainWindowGeometr = m_pParent->geometry();
+        dialog->move(mainWindowGeometr.topLeft().x() + (mainWindowGeometr.width() - dialog->width()) / 2, mainWindowGeometr.topLeft().y() - 50 + (mainWindowGeometr.height() - dialog->height()) / 2); //居中显示
+    }
 
     passwordedit->lineEdit()->setFocus(); // 默认焦点落在密码框内
 

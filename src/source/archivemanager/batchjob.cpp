@@ -51,6 +51,7 @@ bool BatchJob::removeSubjob(ArchiveJob *job)
 {
     if (m_listSubjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
+        delete job;
         return true;
     }
 
@@ -71,6 +72,7 @@ void BatchJob::clearSubjobs()
 {
     Q_FOREACH (ArchiveJob *job, m_listSubjobs) {
         job->setParent(nullptr);
+        delete job;
     }
 
     m_listSubjobs.clear();

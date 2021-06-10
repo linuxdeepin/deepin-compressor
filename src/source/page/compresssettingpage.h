@@ -194,10 +194,9 @@ private slots:
     void slotTypeChanged(QAction *action);
 
     /**
-     * @brief slotFileNameChanged   文件名变化切换风格
-     * @param strText   内容
+     * @brief slotRefreshFileNameEdit   内容变化或者主题变化刷新输入框
      */
-    void slotFileNameChanged(const QString &strText);
+    void slotRefreshFileNameEdit();
 
     /**
      * @brief slotAdvancedEnabled   设置是否启用高级选项

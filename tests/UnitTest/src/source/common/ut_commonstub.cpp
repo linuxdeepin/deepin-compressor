@@ -29,6 +29,7 @@
 #include "kprocess.h"
 #include "archivemanager.h"
 #include "queries.h"
+#include "batchjob.h"
 
 #include <DFileDialog>
 #include <DMenu>
@@ -44,6 +45,7 @@ bool g_UiTools_isArchiveFile_result = false;            // UiTools isArchiveFile
 QObject *g_QObject_sender_result = nullptr;             // QObject sender返回值
 int g_Dialog_exec_result = 0;                         // DDialog exec返回值
 bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
+ReadOnlyArchiveInterface *g_UiTools_createInterface_result = nullptr;         // UiTools createInterface返回值
 
 int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
 int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
@@ -97,6 +99,10 @@ bool g_ArchiveManager_pauseOperation_result = false;     // ArchiveManager pause
 bool g_ArchiveManager_continueOperation_result = false;  // ArchiveManager continueOperation返回值
 bool g_ArchiveManager_cancelOperation_result = false;    // ArchiveManager cancelOperation返回值
 
+bool g_SingleJob_doPause_result = false;                // SingleJob doPause返回值
+bool g_SingleJob_doContinue_result = false;             // SingleJob doContinue返回值
+bool g_SingleJob_doKill_result = false;                 // SingleJob doKill返回值
+
 /*************************************CommonStub*************************************/
 CommonStub::CommonStub()
 {
@@ -137,8 +143,10 @@ bool uiTools_isLocalDeviceFile_stub(const QString &)
     return g_UiTools_isLocalDeviceFile_result;
 }
 
-void processOpenThread_start_stub()
+void processOpenThread_start_stub(void *obj)
 {
+    QThread *pThread = (QThread *)obj;
+    delete pThread;
     return;
 }
 
@@ -180,6 +188,11 @@ bool qThreadPool_waitForDone_stub()
 bool qProcess_startDetached_stub(const QString &, const QStringList &)
 {
     return true;
+}
+
+ReadOnlyArchiveInterface *uiTools_createInterface_stub(const QString &, bool, UiTools::AssignPluginType)
+{
+    return g_UiTools_createInterface_result;
 }
 
 void CommonStub::stub_QWidget_isVisible(Stub &stub, bool isVisible)
@@ -273,6 +286,12 @@ void CommonStub::stub_QProcess_startDetached(Stub &stub)
 #if !defined(Q_QDOC)
     stub.set((bool(*)(const QString &, const QStringList &))ADDR(QProcess, startDetached), qProcess_startDetached_stub);
 #endif
+}
+
+void CommonStub::stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface)
+{
+    g_UiTools_createInterface_result = pInterface;
+    stub.set((ReadOnlyArchiveInterface * (*)(const QString &, bool bWrite, UiTools::AssignPluginType))ADDR(UiTools, createInterface), uiTools_createInterface_stub);
 }
 
 
@@ -838,13 +857,13 @@ void DDesktopServicestub::stub_DDesktopServicestub_showFileItem(Stub &stub)
 /*************************************DDesktopServicestub*************************************/
 
 
-/*************************************ArchiveManagerstub*************************************/
-ArchiveManagerstub::ArchiveManagerstub()
+/*************************************ArchiveManagerStub*************************************/
+ArchiveManagerStub::ArchiveManagerStub()
 {
 
 }
 
-ArchiveManagerstub::~ArchiveManagerstub()
+ArchiveManagerStub::~ArchiveManagerStub()
 {
 
 }
@@ -924,92 +943,215 @@ QString archiveManager_getCurFilePassword_stub()
     return "123";
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_createArchive(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_createArchive(Stub &stub, bool bResult)
 {
     g_ArchiveManager_createArchive_result = bResult;
     stub.set(ADDR(ArchiveManager, createArchive), archiveManager_createArchive_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_loadArchive(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_loadArchive(Stub &stub, bool bResult)
 {
     g_ArchiveManager_loadArchive_result = bResult;
     stub.set(ADDR(ArchiveManager, loadArchive), archiveManager_loadArchive_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_addFiles(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_addFiles(Stub &stub, bool bResult)
 {
     g_ArchiveManager_addFiles_result = bResult;
     stub.set(ADDR(ArchiveManager, addFiles), archiveManager_addFiles_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_extractFiles(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_extractFiles(Stub &stub, bool bResult)
 {
     g_ArchiveManager_extractFiles_result = bResult;
     stub.set(ADDR(ArchiveManager, extractFiles), archiveManager_extractFiles_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_extractFiles2Path(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_extractFiles2Path(Stub &stub, bool bResult)
 {
     g_ArchiveManager_extractFiles2Path_result = bResult;
     stub.set(ADDR(ArchiveManager, extractFiles2Path), archiveManager_extractFiles2Path_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_deleteFiles(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_deleteFiles(Stub &stub, bool bResult)
 {
     g_ArchiveManager_deleteFiles_result = bResult;
     stub.set(ADDR(ArchiveManager, deleteFiles), archiveManager_deleteFiles_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_batchExtractFiles(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_batchExtractFiles(Stub &stub, bool bResult)
 {
     g_ArchiveManager_batchExtractFiles_result = bResult;
     stub.set(ADDR(ArchiveManager, batchExtractFiles), archiveManager_batchExtractFiles_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_openFile(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_openFile(Stub &stub, bool bResult)
 {
     g_ArchiveManager_openFile_result = bResult;
     stub.set(ADDR(ArchiveManager, openFile), archiveManager_openFile_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_updateArchiveCacheData(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_updateArchiveCacheData(Stub &stub, bool bResult)
 {
     g_ArchiveManager_updateArchiveCacheData_result = bResult;
     stub.set(ADDR(ArchiveManager, updateArchiveCacheData), archiveManager_updateArchiveCacheData_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_updateArchiveComment(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(Stub &stub, bool bResult)
 {
     g_ArchiveManager_updateArchiveComment_result = bResult;
     stub.set(ADDR(ArchiveManager, updateArchiveComment), archiveManager_updateArchiveComment_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_convertArchive(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_convertArchive(Stub &stub, bool bResult)
 {
     g_ArchiveManager_convertArchive_result = bResult;
     stub.set(ADDR(ArchiveManager, convertArchive), archiveManager_convertArchive_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_pauseOperation(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_pauseOperation(Stub &stub, bool bResult)
 {
     g_ArchiveManager_pauseOperation_result = bResult;
     stub.set(ADDR(ArchiveManager, pauseOperation), archiveManager_pauseOperation_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_continueOperation(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_continueOperation(Stub &stub, bool bResult)
 {
     g_ArchiveManager_continueOperation_result = bResult;
     stub.set(ADDR(ArchiveManager, continueOperation), archiveManager_continueOperation_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_cancelOperation(Stub &stub, bool bResult)
+void ArchiveManagerStub::stub_ArchiveManager_cancelOperation(Stub &stub, bool bResult)
 {
     g_ArchiveManager_cancelOperation_result = bResult;
     stub.set(ADDR(ArchiveManager, cancelOperation), archiveManager_cancelOperation_stub);
 }
 
-void ArchiveManagerstub::stub_ArchiveManager_getCurFilePassword(Stub &stub)
+void ArchiveManagerStub::stub_ArchiveManager_getCurFilePassword(Stub &stub)
 {
     stub.set(ADDR(ArchiveManager, getCurFilePassword), archiveManager_getCurFilePassword_stub);
 }
-/*************************************ArchiveManagerstub*************************************/
+/*************************************ArchiveManagerStub*************************************/
+
+
+/*************************************SingleJobStub*************************************/
+JobStub::JobStub()
+{
+
+}
+
+JobStub::~JobStub()
+{
+
+}
+
+void job_start_stub()
+{
+    return;
+}
+
+void job_kill_stub()
+{
+    return;
+}
+
+bool singleJob_doPause_stub()
+{
+    return g_SingleJob_doPause_result;
+}
+
+bool singleJob_doContinue_stub()
+{
+    return g_SingleJob_doContinue_result;
+}
+
+bool singleJob_doKill_stub()
+{
+    return g_SingleJob_doKill_result;
+}
+
+void job_doWork_stub()
+{
+    return;
+}
+
+void JobStub::stub_SingleJob_start(Stub &stub)
+{
+    typedef void (*fptr)(SingleJob *);
+    fptr A_foo = (fptr)(&SingleJob::start);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_StepExtractJob_start(Stub &stub)
+{
+    typedef void (*fptr)(StepExtractJob *);
+    fptr A_foo = (fptr)(&StepExtractJob::start);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_ConvertJob_start(Stub &stub)
+{
+    typedef void (*fptr)(ConvertJob *);
+    fptr A_foo = (fptr)(&ConvertJob::start);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_BatchExtractJob_start(Stub &stub)
+{
+    typedef void (*fptr)(BatchExtractJob *);
+    fptr A_foo = (fptr)(&BatchExtractJob::start);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_UpdateJob_start(Stub &stub)
+{
+    typedef void (*fptr)(UpdateJob *);
+    fptr A_foo = (fptr)(&UpdateJob::start);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_ArchiveJob_kill(Stub &stub)
+{
+    typedef void (*fptr)(ArchiveJob *);
+    fptr A_foo = (fptr)(&ArchiveJob::kill);   //获取虚函数地址
+    stub.set(A_foo, job_kill_stub);
+}
+
+void JobStub::stub_SingleJob_doPause(Stub &stub, bool bResult)
+{
+    g_SingleJob_doPause_result = bResult;
+    typedef bool (*fptr)(SingleJob *);
+    fptr A_foo = (fptr)(&SingleJob::doPause);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_SingleJob_doContinue(Stub &stub, bool bResult)
+{
+    g_SingleJob_doContinue_result = bResult;
+    typedef bool (*fptr)(SingleJob *);
+    fptr A_foo = (fptr)(&SingleJob::doContinue);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_SingleJob_doKill(Stub &stub, bool bResult)
+{
+    g_SingleJob_doKill_result = bResult;
+    typedef bool (*fptr)(SingleJob *);
+    fptr A_foo = (fptr)(&SingleJob::doKill);   //获取虚函数地址
+    stub.set(A_foo, job_start_stub);
+}
+
+void JobStub::stub_CreateJob_doWork(Stub &stub)
+{
+    typedef void (*fptr)(CreateJob *);
+    fptr A_foo = (fptr)(&CreateJob::doWork);   //获取虚函数地址
+    stub.set(A_foo, job_doWork_stub);
+}
+
+void JobStub::stub_ExtractJob_doWork(Stub &stub)
+{
+    typedef void (*fptr)(ExtractJob *);
+    fptr A_foo = (fptr)(&ExtractJob::doWork);   //获取虚函数地址
+    stub.set(A_foo, job_doWork_stub);
+}
+/*************************************SingleJobStub*************************************/

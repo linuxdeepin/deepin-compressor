@@ -460,7 +460,8 @@ TEST_F(TestCompressSettingPage, testslotTypeChanged_nullptr)
 
 TEST_F(TestCompressSettingPage, testslotFileNameChanged)
 {
-    m_tester->slotFileNameChanged("");
+    m_tester->m_pFileNameEdt->setText("");
+    m_tester->slotRefreshFileNameEdit();
 }
 
 TEST_F(TestCompressSettingPage, testslotFileNameChanged_inValid)
@@ -468,7 +469,8 @@ TEST_F(TestCompressSettingPage, testslotFileNameChanged_inValid)
     g_checkFileNameVaild_result = false;
     Stub stub;
     stub.set(ADDR(CompressSettingPage, checkFileNameVaild), checkFileNameVaild_stub);
-    m_tester->slotFileNameChanged("hh");
+    m_tester->m_pFileNameEdt->setText("hh");
+    m_tester->slotRefreshFileNameEdit();
 }
 
 TEST_F(TestCompressSettingPage, testslotFileNameChanged_valid)
@@ -476,7 +478,8 @@ TEST_F(TestCompressSettingPage, testslotFileNameChanged_valid)
     g_checkFileNameVaild_result = true;
     Stub stub;
     stub.set(ADDR(CompressSettingPage, checkFileNameVaild), checkFileNameVaild_stub);
-    m_tester->slotFileNameChanged("hh");
+    m_tester->m_pFileNameEdt->setText("hh");
+    m_tester->slotRefreshFileNameEdit();
 }
 
 TEST_F(TestCompressSettingPage, testslotAdvancedEnabled_enabled)

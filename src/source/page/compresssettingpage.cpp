@@ -349,16 +349,15 @@ void CompressSettingPage::initUI()
 void CompressSettingPage::initConnections()
 {
     connect(m_pClickLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-//    connect(m_pCompressTypeLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-//    connect(pArrowPixmapLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
     connect(m_pTypeMenu, &DMenu::triggered, this, &CompressSettingPage::slotTypeChanged);
-    connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotFileNameChanged);
+    connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
     connect(m_pAdvancedBtn, &DSwitchButton::toggled, this, &CompressSettingPage::slotAdvancedEnabled);
     connect(m_pSplitCkb, &DCheckBox::stateChanged, this, &CompressSettingPage::slotSplitEdtEnabled);
     connect(m_pCompressBtn, &DPushButton::clicked, this, &CompressSettingPage::slotCompressClicked);
     connect(m_pPasswordEdt, &DPasswordEdit::echoModeChanged, this, &CompressSettingPage::slotEchoModeChanged);
     connect(m_pPasswordEdt, &DPasswordEdit::textEdited, this, &CompressSettingPage::slotPasswordChanged);
     connect(m_pCommentEdt, &DTextEdit::textChanged, this, &CompressSettingPage::slotCommentTextChanged);
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
 }
 
 void CompressSettingPage::setTypeImage(const QString &strType)
@@ -623,13 +622,13 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
     refreshCompressLevel(selectType);
 }
 
-void CompressSettingPage::slotFileNameChanged(const QString &strText)
+void CompressSettingPage::slotRefreshFileNameEdit()
 {
     DPalette plt = DApplicationHelper::instance()->palette(m_pFileNameEdt);
 
-    if (!strText.isEmpty()) {
+    if (!m_pFileNameEdt->text().isEmpty()) {
         // 检测文件名合法性
-        if (false == checkFileNameVaild(strText)) {
+        if (false == checkFileNameVaild(m_pFileNameEdt->text())) {
             plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));     // 警告色
         } else {
             plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));      // 正常颜色
