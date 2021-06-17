@@ -19,6 +19,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "compressorapplication.h"
+
 #include <gtest/gtest.h>
 #include <gtest/src/stub.h>
 
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
     std::cout << "Starting UnitTest" << std::endl;
     qputenv("QT_QPA_PLATFORM", "offscreen");
     testing::InitGoogleTest(&argc, argv);
-    QApplication a(argc, argv);
+    CompressorApplication a(argc, argv);
 
 #if defined(CMAKE_SAFETYTEST_ARG_ON)
     __sanitizer_set_report_path("asan.log");

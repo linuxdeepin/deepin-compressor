@@ -83,6 +83,26 @@ TEST_F(TestCalculateSizeThread, testrun)
 
     m_tester->run();
     ASSERT_EQ(m_tester->m_qTotalSize, 3);
+
+    Stub stub11;
+    QFileInfoStub::stub_QFileInfo_isDir(stub11, true);
+    m_tester->run();
+
+    Stub stub1;
+    QFileInfoStub::stub_QFileInfo_exists(stub1, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub1, true);
+    m_tester->run();
+
+    Stub stub2;
+    QFileInfoStub::stub_QFileInfo_exists(stub2, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
+    m_tester->run();
+
+    Stub stub3;
+    QFileInfoStub::stub_QFileInfo_exists(stub3, true);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
+    m_tester->run();
+
 }
 
 TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
@@ -101,4 +121,23 @@ TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
 
     m_tester->ConstructAddOptionsByThread("/a/b/");
     ASSERT_EQ(m_tester->m_qTotalSize, 1);
+
+    Stub stub11;
+    QFileInfoStub::stub_QFileInfo_isDir(stub11, true);
+    m_tester->ConstructAddOptionsByThread("/a/b/");
+
+    Stub stub1;
+    QFileInfoStub::stub_QFileInfo_exists(stub1, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub1, true);
+    m_tester->ConstructAddOptionsByThread("/a/b/");
+
+    Stub stub2;
+    QFileInfoStub::stub_QFileInfo_exists(stub2, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
+    m_tester->ConstructAddOptionsByThread("/a/b/");
+
+    Stub stub3;
+    QFileInfoStub::stub_QFileInfo_exists(stub3, true);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
+    m_tester->ConstructAddOptionsByThread("/a/b/");
 }

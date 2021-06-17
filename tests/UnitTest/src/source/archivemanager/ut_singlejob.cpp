@@ -87,6 +87,11 @@ TEST_F(TestLoadJob, testdoKill)
     m_tester->doKill();
 }
 
+TEST_F(TestLoadJob, testfinishJob)
+{
+    m_tester->finishJob();
+}
+
 
 // 测试AddJob
 class TestAddJob : public ::testing::Test

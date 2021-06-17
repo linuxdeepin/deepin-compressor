@@ -93,12 +93,6 @@ TEST_F(TestUiTools, testisArchiveFile)
     ASSERT_EQ(m_tester->isArchiveFile("/a/b/1.deb"), false);
 }
 
-TEST_F(TestUiTools, testjudgeFileMime)
-{
-    ASSERT_EQ(m_tester->judgeFileMime("/a/b/1.7z.001") == QLatin1String("x-7z-compressed"), true);
-    ASSERT_EQ(m_tester->judgeFileMime("/a/b/1..deb") == QLatin1String("vnd.debian.binary-package"), true);
-}
-
 TEST_F(TestUiTools, testisExistMimeType)
 {
     Stub stub;
@@ -172,4 +166,27 @@ TEST_F(TestUiTools, testremoveSameFileName)
     QStringList listResult = m_tester->removeSameFileName(listFiles);
     bool bResult = (listResult.count() == 1 && listResult[0] == "1.txt");
     ASSERT_EQ(bResult, true);
+}
+
+TEST_F(TestUiTools, testtransSplitFileName)
+{
+    Stub stub;
+    QFileInfoStub::stub_QFileInfo_exists(stub, true);
+
+    QString str = "1.7z.001";
+    UnCompressParameter::SplitType type;
+    m_tester->transSplitFileName(str, type);
+    ASSERT_EQ(type, UnCompressParameter::ST_Other);
+
+    str = "1.rar.001";
+    m_tester->transSplitFileName(str, type);
+    ASSERT_EQ(type, UnCompressParameter::ST_Other);
+
+    str = "1.zip.001";
+    m_tester->transSplitFileName(str, type);
+    ASSERT_EQ(type, UnCompressParameter::ST_Zip);
+
+    str = "1.z01";
+    m_tester->transSplitFileName(str, type);
+    ASSERT_EQ(type, UnCompressParameter::ST_Zip);
 }

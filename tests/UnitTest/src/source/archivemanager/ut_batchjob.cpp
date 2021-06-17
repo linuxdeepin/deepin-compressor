@@ -178,3 +178,8 @@ TEST_F(TestBatchExtractJob, testslotHandleSingleJobFinished)
     m_tester->m_listFiles << "1.txt" << "2.txt";
     m_tester->slotHandleSingleJobFinished();
 }
+
+TEST_F(TestBatchExtractJob, testdoKill)
+{
+    m_tester->doKill();
+}

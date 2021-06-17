@@ -65,6 +65,7 @@ bool g_QFileInfo_isWritable_result = false;             // QFileInfo isWritable�
 bool g_QFileInfo_isExecutable_result = false;           // QFileInfo isExecutable返回值
 bool g_QFileInfo_isReadable_result = false;             // QFileInfo isReadable返回值
 bool g_QFileInfo_isSymLink_result = false;              // QFileInfo isSymLink返回值
+QString g_QFileInfo_completeSuffix_result = "";         // QFileInfo completeSuffix返回值
 
 bool g_QFile_remove_result = false;                     // QFile remove返回值
 bool g_QFile_open_result = false;                       // QFile open返回值
@@ -471,6 +472,11 @@ bool qfileinfo_isSymLink_stub()
     return g_QFileInfo_isSymLink_result;
 }
 
+QString qfileinfo_completeSuffix_stub()
+{
+    return g_QFileInfo_completeSuffix_result;
+}
+
 
 void QFileInfoStub::stub_QFileInfo_path(Stub &stub, const QString &strPath)
 {
@@ -521,7 +527,6 @@ void QFileInfoStub::stub_QFileInfo_isWritable(Stub &stub, bool isWritable)
 {
     g_QFileInfo_isWritable_result = isWritable;
     stub.set(ADDR(QFileInfo, isWritable), qfileinfo_isWritable_stub);
-
 }
 
 void QFileInfoStub::stub_QFileInfo_isExecutable(Stub &stub, bool isExecutable)
@@ -540,6 +545,12 @@ void QFileInfoStub::stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink)
 {
     g_QFileInfo_isSymLink_result = isSymLink;
     stub.set(ADDR(QFileInfo, isSymLink), qfileinfo_isSymLink_stub);
+}
+
+void QFileInfoStub::stub_QFileInfo_completeSuffix(Stub &stub, const QString &strCompleteSuffix)
+{
+    g_QFileInfo_completeSuffix_result = strCompleteSuffix;
+    stub.set(ADDR(QFileInfo, completeSuffix), qfileinfo_completeSuffix_stub);
 }
 
 

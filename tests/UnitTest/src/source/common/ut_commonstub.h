@@ -58,6 +58,7 @@ extern bool g_QFileInfo_isWritable_result;              // QFileInfo isWritable�
 extern bool g_QFileInfo_isExecutable_result;            // QFileInfo isExecutable返回值
 extern bool g_QFileInfo_isReadable_result;              // QFileInfo isExecutable返回值
 extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink返回值
+extern QString g_QFileInfo_completeSuffix_result;       // QFileInfo completeSuffix返回值
 
 extern bool g_QFile_remove_result;                      // QFile remove返回值
 extern bool g_QFile_open_result;                        // QFile open返回值
@@ -386,6 +387,14 @@ public:
      */
     static void stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink);
 
+    /**
+     * @brief stub_QFileInfo_completeSuffix     针对QFileInfo的completeSuffix打桩
+     * @param stub
+     * @param strCompleteSuffix
+     * @return
+     */
+    static void stub_QFileInfo_completeSuffix(Stub &stub, const QString &strCompleteSuffix);
+
 };
 
 // 针对PluginManager的打桩
@@ -457,7 +466,7 @@ public:
     ~QDirStub();
 
     /**
-     * @brief stub_QDir_exists     针对QFileInfo的exists打桩
+     * @brief stub_QDir_exists     针对QDir的exists打桩
      * @param stub
      * @param isExists
      * @return

@@ -100,14 +100,6 @@ public:
      */
     static bool isArchiveFile(const QString &strFileName);
 
-
-    /**
-     * @brief judgeFileMime     判断文件类型
-     * @param strFileName  文件名
-     * @return
-     */
-    static QString judgeFileMime(const QString &strFileName);
-
     /**
      * @brief isExistMimeType 判断此文件关联类型是否存在
      * @param strMimeType      文件类型
