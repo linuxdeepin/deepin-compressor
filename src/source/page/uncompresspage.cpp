@@ -102,11 +102,6 @@ QString UnCompressPage::getCurPath()
     return m_pUnCompressView->getCurPath();
 }
 
-//bool UnCompressPage::isModifiable()
-//{
-//    return m_pUnCompressView->isModifiable();
-//}
-
 void UnCompressPage::clear()
 {
     m_pUnCompressView->clear();

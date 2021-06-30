@@ -50,7 +50,7 @@ void SuccessPage::setSuccessDes(const QString &strDes)
     m_pSuccessLbl->setText(strDes);
 }
 
-void SuccessPage::setSuccessType(SuccessInfo successInfo)
+void SuccessPage::setSuccessType(const SuccessInfo &successInfo)
 {
     m_successInfoType = successInfo;
 }

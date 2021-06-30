@@ -54,7 +54,7 @@ void FailurePage::setRetryEnable(bool bEnable)
     m_pRetrybutton->setEnabled(bEnable);
 }
 
-void FailurePage::setFailureInfo(FailureInfo failureInfo)
+void FailurePage::setFailureInfo(const FailureInfo &failureInfo)
 {
     m_failureInfo = failureInfo;
 }

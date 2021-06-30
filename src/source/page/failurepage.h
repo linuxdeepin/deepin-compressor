@@ -61,7 +61,7 @@ public:
      * @brief setFailureInfo  // 设置失败信息
      * @param failureInfo
      */
-    void setFailureInfo(FailureInfo failureInfo);
+    void setFailureInfo(const FailureInfo &failureInfo);
 
     /**
      * @brief getFailureInfo  获取失败信息

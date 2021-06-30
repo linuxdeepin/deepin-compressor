@@ -233,9 +233,7 @@ void CompressSettingPage::initUI()
     // 设置压缩方式选项
     QStringList listCompressLevel = QStringList() << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
     // 添加压缩方式
-    for (int i = 0; i < listCompressLevel.count(); ++i) {
-        m_pCompressLevelCmb->addItem(listCompressLevel[i]);
-    }
+    m_pCompressLevelCmb->addItems(listCompressLevel);
 
     m_pCompressLevelCmb->setCurrentIndex(2);
 
@@ -564,15 +562,9 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
     return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
 }
 
-void CompressSettingPage::setDefaultName(QString name)
+void CompressSettingPage::setDefaultName(const QString &strName)
 {
-//    initWidget();
-
-    // 注释掉这一行，防止每次界面重置
-    //onAdvanceButtonClicked(m_moresetbutton->isChecked());
-//    name = name + "." + m_compresstype->text();
-
-    m_pFileNameEdt->setText(name);
+    m_pFileNameEdt->setText(strName);
     QLineEdit *qfilename = m_pFileNameEdt->lineEdit();
     qfilename->selectAll();
     qfilename->setFocus();

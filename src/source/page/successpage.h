@@ -56,7 +56,7 @@ public:
      * @brief setSuccessType 设置成功界面类型
      * @param successInfo
      */
-    void setSuccessType(SuccessInfo successInfo);
+    void setSuccessType(const SuccessInfo &successInfo);
 
     /**
      * @brief getSuccessType 获取成功界面类型

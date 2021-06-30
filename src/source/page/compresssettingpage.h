@@ -175,7 +175,7 @@ private:
      */
     int showWarningDialog(const QString &msg, const QString &strToolTip = "");
 
-    void setDefaultName(QString name);
+    void setDefaultName(const QString &strName);
 
 signals:
     void signalCompressClicked(const QVariant &val);
@@ -239,29 +239,29 @@ private:
     DLabel *pArrowPixmapLbl;    // 菜单箭头z
 
     // 右侧界面
-    DLineEdit *m_pFileNameEdt;  // 压缩包名称
-    DFileChooserEdit *m_pSavePathEdt;   // 保存路径
-    CustomSwitchButton *m_pAdvancedBtn;    // 高级选项
-    DLabel *m_pEncryptedLbl;        // 加密文件标签
-    DPasswordEdit *m_pPasswordEdt;  // 密码框
-    DLabel *m_pListEncryptionLbl;    // 列表加密标签
-    CustomSwitchButton *m_pListEncryptionBtn;  // 列表加密切换
-    CustomCheckBox *m_pSplitCkb;    // 分卷压缩选择
-    DDoubleSpinBox *m_pSplitValueEdt; // 分卷大小输入框
+    DLineEdit *m_pFileNameEdt = nullptr;  // 压缩包名称
+    DFileChooserEdit *m_pSavePathEdt = nullptr;   // 保存路径
+    CustomSwitchButton *m_pAdvancedBtn = nullptr;    // 高级选项
+    DLabel *m_pEncryptedLbl = nullptr;        // 加密文件标签
+    DPasswordEdit *m_pPasswordEdt = nullptr;  // 密码框
+    DLabel *m_pListEncryptionLbl = nullptr;    // 列表加密标签
+    CustomSwitchButton *m_pListEncryptionBtn = nullptr;  // 列表加密切换
+    CustomCheckBox *m_pSplitCkb = nullptr;    // 分卷压缩选择
+    DDoubleSpinBox *m_pSplitValueEdt = nullptr; // 分卷大小输入框
 
-    DLabel *m_pCompressLevelLbl;      // 压缩方式选择项标签
-    CustomCombobox *m_pCompressLevelCmb;       // 压缩方式选择项
-    DLabel *m_pCommentLbl;                  // 注释文字标签
-    DTextEdit *m_pCommentEdt;       // 注释信息
+    DLabel *m_pCompressLevelLbl = nullptr;      // 压缩方式选择项标签
+    CustomCombobox *m_pCompressLevelCmb = nullptr;       // 压缩方式选择项
+    DLabel *m_pCommentLbl = nullptr;                  // 注释文字标签
+    DTextEdit *m_pCommentEdt = nullptr;       // 注释信息
 
     // 压缩按钮
-    CustomPushButton *m_pCompressBtn;
+    CustomPushButton *m_pCompressBtn = nullptr;
 
     QStringList m_listSupportedMimeTypes;   // 支持压缩的格式
-    QMenu *m_pTypeMenu;     // 类型菜单
+    QMenu *m_pTypeMenu = nullptr;     // 类型菜单
 
     QStringList m_listFiles;    // 待压缩文件
-    qint64 m_qFileSize;     // 待压缩文件大小
+    qint64 m_qFileSize = 0;     // 待压缩文件大小
 
     QString m_strMimeType;  // 压缩类型（application/x-tar）
 };
