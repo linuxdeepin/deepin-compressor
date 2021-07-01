@@ -55,3 +55,110 @@ TEST_F(TestPluginManager, initTest)
 
 }
 
+TEST_F(TestPluginManager, testget_instance)
+{
+    ASSERT_EQ(&m_tester->get_instance(), m_tester->m_instance);
+}
+
+TEST_F(TestPluginManager, testinstalledPlugins)
+{
+    m_tester->installedPlugins();
+}
+
+TEST_F(TestPluginManager, testavailablePlugins)
+{
+    m_tester->availablePlugins();
+}
+
+TEST_F(TestPluginManager, testavailableWritePlugins)
+{
+    m_tester->availableWritePlugins();
+}
+
+TEST_F(TestPluginManager, testenabledPlugins)
+{
+    m_tester->enabledPlugins();
+}
+
+TEST_F(TestPluginManager, testpreferredPluginsFor)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->preferredPluginsFor(mimeType);
+}
+
+TEST_F(TestPluginManager, testpreferredWritePluginsFor)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->preferredWritePluginsFor(mimeType);
+}
+
+TEST_F(TestPluginManager, testpreferredPluginFor)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->preferredPluginFor(mimeType);
+}
+
+TEST_F(TestPluginManager, testpreferredWritePluginFor)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->preferredWritePluginFor(mimeType);
+}
+
+TEST_F(TestPluginManager, testsupportedMimeTypes)
+{
+    m_tester->supportedMimeTypes(PluginManager::SortByComment);
+}
+
+TEST_F(TestPluginManager, testsupportedWriteMimeTypes)
+{
+    m_tester->supportedWriteMimeTypes(PluginManager::SortByComment);
+}
+
+TEST_F(TestPluginManager, testfilterBy)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->filterBy(m_tester->availablePlugins(), mimeType);
+}
+
+TEST_F(TestPluginManager, testsetFileSize)
+{
+    m_tester->setFileSize(10);
+}
+
+TEST_F(TestPluginManager, testloadPlugins)
+{
+    m_tester->loadPlugins();
+}
+
+TEST_F(TestPluginManager, testpreferredPluginsFors)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    m_tester->preferredPluginsFor(mimeType, true);
+    m_tester->preferredPluginsFor(mimeType, false);
+}
+
+TEST_F(TestPluginManager, testsortByComment)
+{
+    QSet<QString> setValue;
+    setValue.insert("application/zip");
+    setValue.insert("application/x-7z-compressed");
+    m_tester->sortByComment(setValue);
+}
+
+TEST_F(TestPluginManager, testlibarchiveHasLzo)
+{
+    m_tester->libarchiveHasLzo();
+}
+

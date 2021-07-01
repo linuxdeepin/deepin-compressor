@@ -72,6 +72,10 @@ set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
+#定义宏定义给UT代码使用（工程路径、应用程序输出路径）
+ADD_DEFINITIONS(-D_SOURCEDIR=\"${CMAKE_SOURCE_DIR}\")
+ADD_DEFINITIONS(-D_BINARYDIR=\"${CMAKE_BINARY_DIR}\")
+ADD_DEFINITIONS(-D_LIBRARYDIR=\"${LIBRARY_OUTPUT_PATH}\")
 
 add_subdirectory(3rdparty)
 add_subdirectory(src)

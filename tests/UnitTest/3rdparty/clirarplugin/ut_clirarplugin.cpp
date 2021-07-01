@@ -30,6 +30,7 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
+PluginFinishType g_cliInterface_handlePassword_result = PFT_Nomral;
 /*******************************函数打桩************************************/
 int kill_stub(__pid_t, int)
 {
@@ -39,6 +40,21 @@ int kill_stub(__pid_t, int)
 qint64 kPtyProcess_processId_stub()
 {
     return 123456;
+}
+
+PluginFinishType cliInterface_handlePassword_stub()
+{
+    return g_cliInterface_handlePassword_result;
+}
+
+void cliInterface_writeToProcess_stub()
+{
+    return ;
+}
+
+bool readOnlyArchiveInterface_isInsufficientDiskSpace_stub()
+{
+    return true;
 }
 /*******************************函数打桩************************************/
 
@@ -184,5 +200,32 @@ TEST_F(TestCliRarPlugin, testreadListLine)
 
 TEST_F(TestCliRarPlugin, testhandleLine)
 {
+    Stub stub1;
+    stub1.set(ADDR(CliInterface, handlePassword), cliInterface_handlePassword_stub);
+    g_cliInterface_handlePassword_result = PFT_Cancel;
+    ASSERT_EQ(m_tester->handleLine("Enter password (will not be echoed) for : ", WT_List), false);
+    g_cliInterface_handlePassword_result = PFT_Nomral;
+    ASSERT_EQ(m_tester->handleLine("Enter password (will not be echoed) for : ", WT_Extract), true);
 
+    ASSERT_EQ(m_tester->handleLine("The specified password is incorrect", WT_Extract), true);
+    ASSERT_EQ(m_tester->handleLine("Checksum error in the encrypted file", WT_Extract), false);
+
+    ASSERT_EQ(m_tester->handleLine("Name: 电影歌曲.zip", WT_List), true);
+
+    Stub stub2;
+    stub2.set(ADDR(CliInterface, writeToProcess), cliInterface_writeToProcess_stub);
+    ASSERT_EQ(m_tester->handleLine("use current password ? [Y]es, [N]o, [A]ll", WT_Extract), true);
+
+
+    ASSERT_EQ(m_tester->handleLine("Cannot create 1/2/3/sssssssssssssssssssssssssssssssssssssssssssssssss"
+                                   "sssssssssssssssssssssssssssssssssssssssssssssssss"
+                                   "sssssssssssssssssssssssssssssssssssssssssssssssss"
+                                   "sssssssssssssssssssssssssssssssssssssssssssssssss"
+                                   "sssssssssssssssssssssssssssssssssssssssssssssssss"
+                                   "sssssssssssssssssssssssssssssssssssssssssssssssss.txt", WT_Extract), false);
+
+
+    Stub stub3;
+    stub3.set(ADDR(ReadOnlyArchiveInterface, isInsufficientDiskSpace), readOnlyArchiveInterface_isInsufficientDiskSpace_stub);
+    ASSERT_EQ(m_tester->handleLine("Write error in the file 1.txt [R]etry, [A]bort ", WT_Extract), false);
 }
