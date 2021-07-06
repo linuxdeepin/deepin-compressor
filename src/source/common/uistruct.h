@@ -145,7 +145,7 @@ struct UnCompressParameter {
 
     QString strFullPath;        // 压缩包全路径
     QString strExtractPath;     // 解压路径
-    SplitType eSplitVolume;          // 分卷包类型
+    SplitType eSplitVolume = UnCompressParameter::SplitType::ST_No;          // 分卷包类型
     bool bMultiplePassword;     // 是否支持多密码追加
     bool bModifiable;           // 是否更改压缩包数据
     bool bCommentModifiable;    // 是否支持注释更改

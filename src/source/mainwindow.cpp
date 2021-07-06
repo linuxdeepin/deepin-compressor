@@ -2571,7 +2571,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
     QMap<QString, UnCompressParameter::SplitType> mapType;
     for (int i = 0; i < listFiles.count(); ++i) {
         QString strFileName = listFiles[i];
-        UnCompressParameter::SplitType eSplitVolume;
+        UnCompressParameter::SplitType eSplitVolume = UnCompressParameter::SplitType::ST_No;
         UiTools::transSplitFileName(strFileName, eSplitVolume);
         listTransFiles << strFileName;
         mapType[strFileName] = eSplitVolume;

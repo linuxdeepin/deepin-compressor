@@ -145,7 +145,7 @@ bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
 bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 {
     QString strName = fileInfo.filePath();
-    UnCompressParameter::SplitType eType;
+    UnCompressParameter::SplitType eType = UnCompressParameter::ST_No;
     UiTools::transSplitFileName(strName, eType);
     UiTools::AssignPluginType ePluginType = (eType == UnCompressParameter::ST_Zip) ?
                                             (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
