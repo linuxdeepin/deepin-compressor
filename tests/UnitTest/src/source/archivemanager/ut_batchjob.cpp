@@ -142,6 +142,7 @@ TEST_F(TestBatchExtractJob, testaddExtractItem)
     CommonStub::stub_UiTools_createInterface(stub, pIface);
 
     ASSERT_EQ(m_tester->addExtractItem(QFileInfo("1.zip")), true);
+    ASSERT_EQ(m_tester->addExtractItem(QFileInfo("1.tar.7z")), true);
 }
 
 TEST_F(TestBatchExtractJob, testslotHandleSingleJobProgress)

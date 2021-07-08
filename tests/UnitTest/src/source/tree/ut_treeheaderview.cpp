@@ -72,6 +72,34 @@ TEST_F(TestPreviousLabel, testmouseDoubleClickEvent)
     QTest::mouseDClick(m_tester, Qt::LeftButton, Qt::KeyboardModifiers(), QPoint());
 }
 
+TEST_F(TestPreviousLabel, testenterEvent)
+{
+    QEvent *event = new QEvent(QEvent::Enter);
+    m_tester->enterEvent(event);
+    delete event;
+}
+
+TEST_F(TestPreviousLabel, testleaveEvent)
+{
+    QEvent *event = new QEvent(QEvent::Leave);
+    m_tester->leaveEvent(event);
+    delete event;
+}
+
+TEST_F(TestPreviousLabel, testfocusInEvent)
+{
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusIn);
+    m_tester->focusInEvent(event);
+    delete event;
+}
+
+TEST_F(TestPreviousLabel, testfocusOutEvent)
+{
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusOut);
+    m_tester->focusOutEvent(event);
+    delete event;
+}
+
 TEST_F(TestPreviousLabel, testkeyPressEvent)
 {
     QTest::keyPress(m_tester, Qt::Key_Enter);
@@ -127,4 +155,11 @@ TEST_F(TestTreeHeaderView, testsetPreLblVisible)
     ASSERT_EQ(m_tester->height(), 76);
     m_tester->setPreLblVisible(false);
     ASSERT_EQ(m_tester->height(), 38);
+}
+
+TEST_F(TestTreeHeaderView, testresizeEvent)
+{
+    QResizeEvent *event = new QResizeEvent(QSize(100, 30), QSize(50, 30));
+    m_tester->resizeEvent(event);
+    delete event;
 }

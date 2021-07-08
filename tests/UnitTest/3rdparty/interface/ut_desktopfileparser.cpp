@@ -19,64 +19,27 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "datamanager.h"
+#include "desktopfileparser_p.h"
 
 #include "gtest/src/stub.h"
 
 #include <gtest/gtest.h>
 
-
+#include <QTextCodec>
+#include <QJsonObject>
 /*******************************函数打桩************************************/
 
 /*******************************函数打桩************************************/
-
-
-// 测试DataManager
-class TestDataManager : public ::testing::Test
+TEST(TestDesktopFileParser, testdeserializeList)
 {
-public:
-    TestDataManager(): m_tester(nullptr) {}
-
-public:
-    virtual void SetUp()
-    {
-        m_tester = new DataManager;
-    }
-
-    virtual void TearDown()
-    {
-        delete m_tester;
-    }
-
-protected:
-    DataManager *m_tester;
-};
-
-TEST_F(TestDataManager, initTest)
-{
-
+    DesktopFileParser::deserializeList("");
+    DesktopFileParser::deserializeList("\\0");
+    DesktopFileParser::deserializeList("1\\2,");
 }
 
-TEST_F(TestDataManager, testDataManager)
+TEST(TestDesktopFileParser, testescapeValue)
 {
-    DataManager tester1(*m_tester);
-}
+    DesktopFileParser::escapeValue("1");
 
-TEST_F(TestDataManager, testresetArchiveData)
-{
-    m_tester->m_stArchiveData.qSize = 100;
-    m_tester->resetArchiveData();
-    ASSERT_EQ(m_tester->m_stArchiveData.qSize, 0);
+    DesktopFileParser::escapeValue("\\s\\n\\t\\r\\");
 }
-
-TEST_F(TestDataManager, testarchiveData)
-{
-    m_tester->m_stArchiveData.qSize = 100;
-    ASSERT_EQ(m_tester->archiveData().qSize, 100);
-}
-
-TEST_F(TestDataManager, testget_instance)
-{
-    ASSERT_EQ((&m_tester->get_instance()) == m_tester->m_instance, true);
-}
-

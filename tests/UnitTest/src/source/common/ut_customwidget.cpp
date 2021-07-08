@@ -108,6 +108,13 @@ TEST_F(TestCustomCombobox, testkeyReleaseEvent)
     QTest::keyRelease(m_tester, Qt::Key_Space);
 }
 
+TEST_F(TestCustomCombobox, testfocusInEvent)
+{
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusIn);
+    m_tester->focusInEvent(event);
+    delete event;
+}
+
 // 测试CustomPushButton
 class TestCustomPushButton : public ::testing::Test
 {
@@ -182,6 +189,13 @@ TEST_F(TestCustomSwitchButton, testkeyPressEvent)
 {
     QTest::keyPress(m_tester, Qt::Key_Enter);
     QTest::keyPress(m_tester, Qt::Key_Space);
+}
+
+TEST_F(TestCustomSwitchButton, testfocusInEvent)
+{
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusIn);
+    m_tester->focusInEvent(event);
+    delete event;
 }
 
 // 测试CustomCheckBox

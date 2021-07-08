@@ -33,6 +33,43 @@
 /*******************************函数打桩************************************/
 
 /*******************************函数打桩************************************/
+// 测试SingleJobThread
+class TestSingleJobThread : public ::testing::Test
+{
+public:
+    TestSingleJobThread(): m_tester(nullptr) {}
+
+public:
+    virtual void SetUp()
+    {
+        m_pInterface = new LibzipPlugin(m_tester, QVariantList());
+        m_pJob = new LoadJob(m_pInterface, nullptr);
+        m_tester = new SingleJobThread(m_pJob);
+    }
+
+    virtual void TearDown()
+    {
+        SAFE_DELETE_ELE(m_pInterface);
+        delete m_pJob;
+        delete m_tester;
+    }
+
+protected:
+    LibzipPlugin *m_pInterface = nullptr;
+    LoadJob *m_pJob;
+    SingleJobThread *m_tester;
+};
+
+TEST_F(TestSingleJobThread, initTest)
+{
+
+}
+
+TEST_F(TestSingleJobThread, testrun)
+{
+    m_tester->run();
+}
+
 // 测试LoadJob
 class TestLoadJob : public ::testing::Test
 {
@@ -60,6 +97,16 @@ protected:
 TEST_F(TestLoadJob, initTest)
 {
 
+}
+
+TEST_F(TestLoadJob, teststart)
+{
+    Stub stub;
+    CommonStub::stub_QThread_start(stub);
+    m_tester->m_pInterface->m_bWaitForFinished = true;
+    m_tester->start();
+    m_tester->m_pInterface->m_bWaitForFinished = false;
+    m_tester->start();
 }
 
 TEST_F(TestLoadJob, testdoWork)
@@ -363,6 +410,21 @@ TEST_F(TestCommentJob, testdoWork)
     m_tester->doWork();
 }
 
+TEST_F(TestCommentJob, testdoPause)
+{
+    m_tester->doPause();
+}
+
+TEST_F(TestCommentJob, testdoContinue)
+{
+    m_tester->doContinue();
+}
+
+TEST_F(TestCommentJob, testdoCancel)
+{
+    m_tester->doCancel();
+}
+
 
 // 测试ConvertJob
 class TestConvertJob : public ::testing::Test
@@ -401,22 +463,25 @@ TEST_F(TestConvertJob, teststart)
 
 TEST_F(TestConvertJob, testslotHandleExtractFinished)
 {
-    //ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
-    // Stub stub;
-    //CommonStub::stub_UiTools_createInterface(stub, pIface);
-    //JobStub::stub_CreateJob_doWork(stub);
-    //JobStub::stub_ExtractJob_doWork(stub);
-    // JobStub::stub_SingleJob_start(stub);
-    // m_tester->start();
-    // m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
-    // ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(nullptr, QVariantList());
-    //  Stub stub1;
-//   CommonStub::stub_UiTools_createInterface(stub1, pIface1);
+////    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
+//    Stub stub;
+////    CommonStub::stub_UiTools_createInterface(stub, pIface);
+//    JobStub::stub_CreateJob_doWork(stub);
+//    JobStub::stub_ExtractJob_doWork(stub);
+//    JobStub::stub_SingleJob_start(stub);
+//    m_tester->start();
+//    m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
+////    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(nullptr, QVariantList());
+//    Stub stub1;
+////    CommonStub::stub_UiTools_createInterface(stub1, pIface1);
 //    m_tester->slotHandleExtractFinished();
+//    SAFE_DELETE_ELE(m_tester->m_pIface);
 //    m_tester->m_pExtractJob->m_eFinishedType = PFT_Cancel;
 //    m_tester->slotHandleExtractFinished();
+//    SAFE_DELETE_ELE(m_tester->m_pIface);
 //    m_tester->m_pExtractJob->m_eFinishedType = PFT_Error;
 //    m_tester->slotHandleExtractFinished();
+//    SAFE_DELETE_ELE(m_tester->m_pIface);
 }
 
 TEST_F(TestConvertJob, testdoPause)

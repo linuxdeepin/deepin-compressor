@@ -2,6 +2,7 @@ utdir=build-ut
 rm -r $utdir
 rm -r ../$utdir
 mkdir ../$utdir
+
 cd ../$utdir
 
 cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -29,7 +30,7 @@ lcov -d $workdir -c -o ./report/coverage.info
 #只收集src、3rdparty部分目录
 lcov --extract ./report/coverage.info '*/src/*' '*/3rdparty/*' -o ./report/coverage.info
 #过滤 tests 3rdparty/ChardetDetector目录
-lcov --remove ./report/coverage.info '*/tests/*' '*/ChardetDetector/*' -o ./report/coverage.info
+lcov --remove ./report/coverage.info '*/tests/*' '*/ChardetDetector/*' '*/interface/plugin/*' '*/interface/process/*' -o ./report/coverage.info
 
 genhtml -o ./report ./report/coverage.info
 

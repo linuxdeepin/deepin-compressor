@@ -46,6 +46,7 @@ QObject *g_QObject_sender_result = nullptr;             // QObject sender返回�
 int g_Dialog_exec_result = 0;                         // DDialog exec返回值
 bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
 ReadOnlyArchiveInterface *g_UiTools_createInterface_result = nullptr;         // UiTools createInterface返回值
+QString g_QFileDialog_getOpenFileName_result = "";      // QFileDialog getOpenFileName返回值
 
 int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
 int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
@@ -191,6 +192,11 @@ bool qProcess_startDetached_stub(const QString &, const QStringList &)
     return true;
 }
 
+QString qFileDialog_getOpenFileName_stub(QWidget *, const QString &, const QString &, const QString &, QString *, QFileDialog::Options)
+{
+    return g_QFileDialog_getOpenFileName_result;
+}
+
 ReadOnlyArchiveInterface *uiTools_createInterface_stub(const QString &, bool, UiTools::AssignPluginType)
 {
     return g_UiTools_createInterface_result;
@@ -252,6 +258,14 @@ void CommonStub::stub_QDialog_exec(Stub &stub, int iResult)
     stub.set(A_foo, dialog_exec_stub);
 }
 
+void CommonStub::stub_DAbstractDialog_exec(Stub &stub, int iResult)
+{
+    g_Dialog_exec_result = iResult;
+    typedef int (*fptr)(QDialog *);
+    fptr A_foo = (fptr)(&DAbstractDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
+}
+
 void CommonStub::stub_QDialog_open(Stub &stub)
 {
     typedef void (*fptr)(QDialog *);
@@ -293,6 +307,12 @@ void CommonStub::stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterfa
 {
     g_UiTools_createInterface_result = pInterface;
     stub.set((ReadOnlyArchiveInterface * (*)(const QString &, bool bWrite, UiTools::AssignPluginType))ADDR(UiTools, createInterface), uiTools_createInterface_stub);
+}
+
+void CommonStub::stub_QFileDialog_getOpenFileName(Stub &stub, const QString &strFileName)
+{
+    g_QFileDialog_getOpenFileName_result = strFileName;
+    stub.set(ADDR(QFileDialog, getOpenFileName), qFileDialog_getOpenFileName_stub);
 }
 
 

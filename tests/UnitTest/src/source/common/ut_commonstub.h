@@ -39,6 +39,7 @@ extern QObject *g_QObject_sender_result;                // QObject sender返回�
 extern int g_Dialog_exec_result;                        // DDialog exec返回值
 extern bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
 extern ReadOnlyArchiveInterface *g_UiTools_createInterface_result;         // UiTools createInterface返回值
+extern QString g_QFileDialog_getOpenFileName_result;    // QFileDialog getOpenFileName返回值
 
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
@@ -172,6 +173,14 @@ public:
     static void stub_QDialog_exec(Stub &stub, int iResult);
 
     /**
+     * @brief stub_DAbstractDialog_exec     针对DAbstractDialog的exec打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_DAbstractDialog_exec(Stub &stub, int iResult);
+
+    /**
      * @brief stub_QDialog_open     针对QDialog的open打桩
      * @param stub
      * @param iResult
@@ -217,6 +226,13 @@ public:
      * @param pInterface
      */
     static void stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface);
+
+    /**
+     * @brief stub_QFileDialog_getOpenFileName     针对QFileDialog的getOpenFileName打桩
+     * @param stub
+     * @param strFileName
+     */
+    static void stub_QFileDialog_getOpenFileName(Stub &stub, const QString &strFileName);
 };
 
 

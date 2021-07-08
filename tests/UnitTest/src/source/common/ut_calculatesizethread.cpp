@@ -96,11 +96,13 @@ TEST_F(TestCalculateSizeThread, testrun)
     Stub stub2;
     QFileInfoStub::stub_QFileInfo_exists(stub2, false);
     QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
+    m_tester->m_thread_stop = false;
     m_tester->run();
 
     Stub stub3;
     QFileInfoStub::stub_QFileInfo_exists(stub3, true);
     QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
+    m_tester->m_thread_stop = false;
     m_tester->run();
 
 }
@@ -134,10 +136,12 @@ TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
     Stub stub2;
     QFileInfoStub::stub_QFileInfo_exists(stub2, false);
     QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
+    m_tester->m_thread_stop = false;
     m_tester->ConstructAddOptionsByThread("/a/b/");
 
     Stub stub3;
     QFileInfoStub::stub_QFileInfo_exists(stub3, true);
     QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
+    m_tester->m_thread_stop = false;
     m_tester->ConstructAddOptionsByThread("/a/b/");
 }

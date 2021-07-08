@@ -189,4 +189,20 @@ TEST_F(TestUiTools, testtransSplitFileName)
     str = "1.z01";
     m_tester->transSplitFileName(str, type);
     ASSERT_EQ(type, UnCompressParameter::ST_Zip);
+
+    str = "1.part1.rar";
+    m_tester->transSplitFileName(str, type);
+    ASSERT_EQ(type, UnCompressParameter::ST_Other);
+}
+
+TEST_F(TestUiTools, testcreateInterface)
+{
+    ReadOnlyArchiveInterface *pInterface = m_tester->createInterface("1.zip", true, UiTools::APT_Auto);
+    SAFE_DELETE_ELE(pInterface);
+    pInterface = m_tester->createInterface("1.zip", true, UiTools::APT_Cli7z);
+    SAFE_DELETE_ELE(pInterface);
+    pInterface = m_tester->createInterface("1.zip", true, UiTools::APT_Libarchive);
+    SAFE_DELETE_ELE(pInterface);
+    pInterface = m_tester->createInterface("1.zip", true, UiTools::APT_Libzip);
+    SAFE_DELETE_ELE(pInterface);
 }

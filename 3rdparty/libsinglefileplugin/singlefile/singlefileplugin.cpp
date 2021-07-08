@@ -102,7 +102,8 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     }
 
     // 对重复文件进行询问判断
-    if (QFile::exists(outputFileName)) {
+    QFile file(outputFileName);
+    if (file.exists()) {
         OverwriteQuery query(outputFileName);
 
         emit signalQuery(&query);

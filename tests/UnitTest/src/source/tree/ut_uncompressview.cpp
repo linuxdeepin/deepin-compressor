@@ -31,6 +31,7 @@
 #include <DFileDrag>
 
 #include <QTest>
+#include <QMimeData>
 
 #include <gtest/gtest.h>
 
@@ -48,6 +49,32 @@ void unCompressView_handleDoubleClick_stub(const QModelIndex &)
 {
     return;
 }
+
+// 对QItemSelectionModel的selectedRows进行打桩
+QModelIndexList qItemSelectionModel_selectedRows_stub(int &)
+{
+    return QModelIndexList() << QModelIndex();
+}
+
+// 对slotDeleteFile进行打桩
+void slotDeleteFile_stub(const QModelIndex &)
+{
+    return;
+}
+
+// 对slotShowRightMenu进行打桩
+void slotShowRightMenu_stub(const QPoint &)
+{
+    return;
+}
+
+// handleDoubleClick进行打桩
+void handleDoubleClick_stub(const QModelIndex &)
+{
+    return;
+}
+
+
 /*******************************函数打桩************************************/
 
 
@@ -110,13 +137,17 @@ TEST_F(TestUnCompressView, testsetDefaultUncompressPath)
 
 TEST_F(TestUnCompressView, testmousePressEvent)
 {
-    QTest::mousePress(m_tester, Qt::LeftButton);
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mousePressEvent(event);
+    delete event;
 }
 
 TEST_F(TestUnCompressView, testmouseMoveEvent)
 {
     m_tester->m_isPressed = true;
-    QTest::mouseMove(m_tester, QPoint(60, 60));
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mouseMoveEvent(event);
+    delete event;
 }
 
 TEST_F(TestUnCompressView, testclearDragData)
@@ -483,7 +514,107 @@ TEST_F(TestUnCompressView, testslotOpen)
 
 }
 
+TEST_F(TestUnCompressView, testfocusInEvent)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusIn, Qt::TabFocusReason);
+    m_tester->focusInEvent(event);
+
+    m_tester->selectionModel()->setCurrentIndex(m_tester->model()->index(0, 0), QItemSelectionModel::Select);
+    m_tester->focusInEvent(event);
+    delete event;
+}
+
+TEST_F(TestUnCompressView, testdragEnterEvent)
+{
+    QMimeData *data = new QMimeData;
+    QDragEnterEvent *e = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    m_tester->dragEnterEvent(e);
+
+    QList<QUrl> listUrls;
+    listUrls << QUrl("123456");
+    data->setUrls(listUrls);
+    m_tester->dragEnterEvent(e);
+
+    delete data;
+    delete e;
+}
+
+TEST_F(TestUnCompressView, testdragMoveEvent)
+{
+    QMimeData *data = new QMimeData;
+    QDragMoveEvent *e = new QDragMoveEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    m_tester->dragMoveEvent(e);
+
+    delete data;
+    delete e;
+}
+
+TEST_F(TestUnCompressView, testdropEvent)
+{
+    QMimeData *data = new QMimeData;
+    QDropEvent *e = new QDropEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    m_tester->dropEvent(e);
+
+    QList<QUrl> listUrls;
+    listUrls << QUrl("123456");
+    data->setUrls(listUrls);
+    m_tester->dropEvent(e);
+
+    delete data;
+    delete e;
+}
+
+TEST_F(TestUnCompressView, testresizeEvent)
+{
+    QResizeEvent *event = new QResizeEvent(QSize(100, 100), QSize(80, 80));
+    m_tester->resizeEvent(event);
+    delete event;
+}
+
+TEST_F(TestUnCompressView, testevent)
+{
+    QTouchDevice *pDevice = new QTouchDevice;
+    pDevice->setType(QTouchDevice::TouchScreen);
+    QTouchEvent *e = new QTouchEvent(QEvent::TouchBegin, pDevice, Qt::NoModifier, Qt::TouchPointPressed);
+    e->setTouchPoints(QList<QTouchEvent::TouchPoint>() << QTouchEvent::TouchPoint());
+    m_tester->m_isPressed = false;
+    m_tester->event(e);
+
+    delete pDevice;
+    delete e;
+}
+
+TEST_F(TestUnCompressView, testkeyPressEvent)
+{
+    Stub stub;
+    stub.set(ADDR(QItemSelectionModel, selectedRows), qItemSelectionModel_selectedRows_stub);
+    typedef void (*fptr)(UnCompressView *);
+    fptr A_foo = (fptr)(&UnCompressView::slotDeleteFile);   // 获取虚函数地址
+    stub.set(A_foo, slotDeleteFile_stub);
+
+    typedef void (*fptr1)(UnCompressView *, const QPoint &);
+    fptr1 A_foo1 = (fptr1)(&UnCompressView::slotShowRightMenu);   // 获取虚函数地址
+    stub.set(A_foo1, slotShowRightMenu_stub);
+
+    typedef void (*fptr2)(UnCompressView *, const QModelIndex &);
+    fptr2 A_foo2 = (fptr2)(&UnCompressView::handleDoubleClick);   // 获取虚函数地址
+    stub.set(A_foo2, handleDoubleClick_stub);
+    QTest::keyPress(m_tester, Qt::Key_Delete);
+    QTest::keyPress(m_tester, Qt::Key_M, Qt::AltModifier);
+    QTest::keyPress(m_tester, Qt::Key_Enter);
+    QTest::keyPress(m_tester, Qt::Key_Tab);
+}
+
 TEST_F(TestUnCompressView, testslotPreClicked)
 {
-
+    m_tester->setPreLblVisible(true, "");
 }

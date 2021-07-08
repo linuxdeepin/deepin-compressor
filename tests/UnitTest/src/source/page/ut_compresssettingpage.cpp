@@ -91,6 +91,9 @@ TEST_F(TestTypeLabel, initTest)
 TEST_F(TestTypeLabel, testmousePressEvent)
 {
     QTest::mousePress(m_tester, Qt::LeftButton);
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mousePressEvent(event);
+    delete event;
 }
 
 

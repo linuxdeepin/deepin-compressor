@@ -151,6 +151,12 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
+
+static bool qfile_exists_stub()
+{
+    return true;
+}
+
 TEST_F(TestLibBzip2Interface, testextractFiles)
 {
     ExtractionOptions options;
@@ -159,12 +165,38 @@ TEST_F(TestLibBzip2Interface, testextractFiles)
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
-    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
 
-    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    typedef bool (QFile::*fptr)()const;
+    fptr A_foo = (fptr)(&QFile::exists);   //获取虚函数地址
+    stub.set(A_foo, qfile_exists_stub);
+
+    Stub stub1;
+    stub1.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
+    stub1.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub1.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub1.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
+    m_tester->extractFiles(QList<FileEntry>(), options);
+
+    Stub stub2;
+    stub2.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub2.set(ADDR(OverwriteQuery, responseSkip), responseSkip_true_stub);
+    stub2.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub2.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
+    m_tester->extractFiles(QList<FileEntry>(), options);
+
+    Stub stub3;
+    stub3.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub3.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub3.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_true_stub);
+    stub3.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
+    m_tester->extractFiles(QList<FileEntry>(), options);
+
+    Stub stub4;
+    stub4.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
+    m_tester->extractFiles(QList<FileEntry>(), options);
 
     QDir dir(options.strTargetPath);
     dir.removeRecursively();

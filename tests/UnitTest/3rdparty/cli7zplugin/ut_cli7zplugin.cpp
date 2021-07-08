@@ -69,6 +69,11 @@ void kProcess_start_stub()
     return ;
 }
 
+qint64 kProcess_processId_stub()
+{
+    return 123456;
+}
+
 bool qProcess_waitForStarted_stub(int)
 {
     return g_QProcess_waitForStarted_result;
@@ -238,6 +243,19 @@ TEST_F(TestCli7zPlugin, testsetupCliProperties)
     m_tester->setupCliProperties();
 }
 
+TEST_F(TestCli7zPlugin, testkillProcess)
+{
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_bWaitingPassword = true;
+    Stub stub;
+    stub.set(kill, kill_stub);
+    stub.set(ADDR(KProcess, processId), kProcess_processId_stub);
+    m_tester->m_bWaitingPassword = true;
+    m_tester->killProcess(true);
+    m_tester->m_bWaitingPassword = false;
+    m_tester->killProcess(true);
+}
+
 TEST_F(TestCli7zPlugin, testreadListLine)
 {
     ASSERT_EQ(m_tester->readListLine("Open ERROR: Can not open the file as [7z] archive"), false);
@@ -330,7 +348,21 @@ TEST_F(TestCli7zPlugin, testtestArchive)
 
 TEST_F(TestCli7zPlugin, testextractFiles)
 {
+    Stub stub;
+    stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
 
+    ExtractionOptions options;
+    options.strTargetPath = "/home/Desktop/";
+    options.bAllExtract = true;
+    m_tester->extractFiles(QList<FileEntry>(), options);
+
+
+    FileEntry entry;
+    entry.strFullPath = "1.txt";
+    entry.strFileName = "1.txt";
+    options.strTargetPath = "/home/Desktop/";
+    options.bAllExtract = false;
+    m_tester->extractFiles(QList<FileEntry>() << entry, options);
 }
 
 TEST_F(TestCli7zPlugin, testpauseOperation)
@@ -359,6 +391,23 @@ TEST_F(TestCli7zPlugin, testdoKill)
 
 TEST_F(TestCli7zPlugin, testaddFiles)
 {
+    Stub stub;
+    stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
+
+    QList<FileEntry> files;
+    CompressOptions options;
+    options.bTar_7z = true;
+
+    m_tester->m_filesSize = 10;
+
+    options.strDestination = "/a/b";
+    m_tester->addFiles(files, options);
+
+    options.strDestination.clear();
+    m_tester->addFiles(files, options);
+
+    options.bTar_7z = false;
+    m_tester->addFiles(files, options);
 
 }
 
@@ -470,6 +519,7 @@ TEST_F(TestCli7zPlugin, testdeleteProcess)
 
 TEST_F(TestCli7zPlugin, testhandleProgress)
 {
+    m_tester->m_filesSize = 10;
     m_tester->m_process = new KPtyProcess;
     m_tester->m_process->setProgram("7z");
     m_tester->m_workStatus = WT_Extract;
@@ -630,4 +680,42 @@ TEST_F(TestCli7zPlugin, testgetTargetPath)
 {
     m_tester->m_extractOptions.strTargetPath = "a/b";
     ASSERT_EQ(m_tester->getTargetPath(), "a/b");
+}
+
+TEST_F(TestCli7zPlugin, testwaitForFinished)
+{
+    m_tester->m_bWaitForFinished = true;
+    ASSERT_EQ(m_tester->waitForFinished(), true);
+}
+
+TEST_F(TestCli7zPlugin, testsetPassword)
+{
+    m_tester->setPassword("123456");
+    ASSERT_EQ(m_tester->m_strPassword, "123456");
+}
+
+TEST_F(TestCli7zPlugin, testgetPassword)
+{
+    m_tester->m_strPassword = "123456";
+    ASSERT_EQ(m_tester->getPassword(), "123456");
+}
+
+TEST_F(TestCli7zPlugin, testerrorType)
+{
+    m_tester->m_eErrorType = ErrorType::ET_NoError;
+    ASSERT_EQ(m_tester->errorType(), ErrorType::ET_NoError);
+}
+
+TEST_F(TestCli7zPlugin, testsetWaitForFinishedSignal)
+{
+    m_tester->setWaitForFinishedSignal(true);
+    ASSERT_EQ(m_tester->m_bWaitForFinished, true);
+}
+
+TEST_F(TestCli7zPlugin, testgetPermissions)
+{
+    mode_t perm = 0;
+    m_tester->getPermissions(perm);
+    perm = S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+    m_tester->getPermissions(perm);
 }

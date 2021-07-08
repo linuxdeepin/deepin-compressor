@@ -36,9 +36,14 @@
 #include "ddesktopservicesthread.h"
 #include "openFileWatcher.h"
 #include "calculatesizethread.h"
+#include "uncompressview.h"
+#include "compressview.h"
+#include "treeheaderview.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
+
+#include <DWindowCloseButton>
 
 #include <QTest>
 #include <QAction>
@@ -50,17 +55,17 @@ DWIDGET_USE_NAMESPACE
 /*******************************函数打桩************************************/
 bool handleArguments_Open_stub(const QStringList &)
 {
-    return true;
+    return false;
 }
 
 bool handleArguments_RightMenu_stub(const QStringList &)
 {
-    return true;
+    return false;
 }
 
 bool handleArguments_Append_stub(const QStringList &)
 {
-    return true;
+    return false;
 }
 
 void slotChoosefiles_stub()
@@ -252,6 +257,26 @@ TEST_F(TestMainWindow, testloadArchive)
     ASSERT_EQ(m_tester->m_ePageID == PI_Home, true);
 }
 
+TEST_F(TestMainWindow, testcloseEvent)
+{
+    Stub stub;
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
+    QCloseEvent *event = new QCloseEvent;
+    m_tester->m_operationtype = Operation_Load;
+    m_tester->closeEvent(event);
+
+    Stub stub1;
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub1, 0);
+    m_tester->m_operationtype = Operation_Load;
+    m_tester->closeEvent(event);
+
+    Stub stub2;
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub2, 0);
+    m_tester->m_operationtype = Operation_NULL;
+    m_tester->closeEvent(event);
+    delete event;
+}
+
 TEST_F(TestMainWindow, testcheckSettings)
 {
     Stub stub;
@@ -283,6 +308,45 @@ TEST_F(TestMainWindow, testcheckSettings)
     QFileInfoStub::stub_QFileInfo_isReadable(stub5, true);
     QFileInfoStub::stub_QFileInfo_isDir(stub5, false);
     m_tester->checkSettings("1.zip");
+}
+
+TEST_F(TestMainWindow, testhandleApplicationTabEventNotify)
+{
+    QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar(), evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleCommentButton, evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleButton, evt);
+    m_tester->m_ePageID = PI_UnCompress;
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView()->m_pHeaderView->m_pPreLbl, evt);
+    m_tester->m_ePageID = PI_Compress;
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView()->m_pHeaderView->m_pPreLbl, evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView(), evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView(), evt);
+    m_tester->m_ePageID = PI_UnCompress;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    m_tester->m_ePageID = PI_Compress;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    m_tester->m_ePageID = PI_CompressSetting;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    delete evt;
+
+    evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier);
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar(), evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleCommentButton, evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleButton, evt);
+    m_tester->m_ePageID = PI_UnCompress;
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView()->m_pHeaderView->m_pPreLbl, evt);
+    m_tester->m_ePageID = PI_Compress;
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView()->m_pHeaderView->m_pPreLbl, evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView(), evt);
+    m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView(), evt);
+    m_tester->m_ePageID = PI_UnCompress;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    m_tester->m_ePageID = PI_Compress;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    m_tester->m_ePageID = PI_CompressSetting;
+    m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
+    delete evt;
 }
 
 TEST_F(TestMainWindow, testhandleQuit)
@@ -806,11 +870,14 @@ TEST_F(TestMainWindow, testhandleArguments_RightMenu)
 {
     Stub stub;
     CommonStub::stub_QThread_start(stub);
-    DFileDialogStub::stub_DFileDialog_exec(stub, 0);
+    DFileDialogStub::stub_DFileDialog_exec(stub, 1);
     ArchiveManagerStub::stub_ArchiveManager_batchExtractFiles(stub, true);
     ArchiveManagerStub::stub_ArchiveManager_extractFiles(stub, true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip"), false);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.txt" << "compress"), true);
+    stub.set(ADDR(MainWindow, loadArchive), loadArchive_stub);
+    ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip" << "extract"), true);
+    ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip" << "2.zip" << "extract"), true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.txt" << "compress_to_7z"), true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip" << "compress_to_7z"), true);
     ASSERT_EQ(m_tester->handleArguments_RightMenu(QStringList() << "1.zip" << "2.zip" << "compress_to_7z"), true);

@@ -397,3 +397,19 @@ TEST_F(TestCompressView, testslotPreClicked)
     m_tester->slotPreClicked();
     ASSERT_EQ(m_tester->m_iLevel, 1);
 }
+
+TEST_F(TestCompressView, testmouseReleaseEventd)
+{
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mouseReleaseEvent(event);
+    delete event;
+}
+
+TEST_F(TestCompressView, testmouseMoveEvent)
+{
+    m_tester->m_isPressed = true;
+    m_tester->m_lastTouchBeginPos = QPoint(0, 0);
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mouseMoveEvent(event);
+    delete event;
+}

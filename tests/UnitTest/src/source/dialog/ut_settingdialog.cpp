@@ -23,8 +23,9 @@
 
 #include "gtest/src/stub.h"
 #include <gtest/gtest.h>
-#include <QDir>
 
+#include <QDir>
+#include <QStandardPaths>
 
 /*******************************函数打桩************************************/
 QVariant dSettings_value_stub(const QString &key)
@@ -93,5 +94,15 @@ TEST_F(TestSettingDialog, testisAutoDeleteArchive)
 {
     m_tester->m_deleteArchiveOption->setValue("Never");
     ASSERT_EQ(m_tester->isAutoDeleteArchive(), "Never");
+}
+
+TEST_F(TestSettingDialog, testslotClickCancelSelectAllButton)
+{
+    m_tester->slotClickCancelSelectAllButton();
+}
+
+TEST_F(TestSettingDialog, testslotClickRecommendedButton)
+{
+    m_tester->slotClickRecommendedButton();
 }
 
