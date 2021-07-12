@@ -8,19 +8,19 @@ cd ../$utdir
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 make -j16
 
-./bin/tests/bz2plugin_test
-./bin/tests/cli7zplugin_test
-./bin/tests/clirarplugin_test
-./bin/tests/deepin-compressor_test
-./bin/tests/gzplugin_test
-./bin/tests/interface_test
-./bin/tests/libarchive_test
-./bin/tests/libminizipplugin_test
-./bin/tests/libzipplugin_test
-./bin/tests/readonlylibarchiveplugin_test
-./bin/tests/readwritelibarchiveplugin_test
-./bin/tests/singlefile_test
-./bin/tests/xzplugin_test
+./bin/tests/bz2plugin_test --gtest_output=xml:./report/report1.xml
+./bin/tests/cli7zplugin_test --gtest_output=xml:./report/report2.xml
+./bin/tests/clirarplugin_test --gtest_output=xml:./report/report3.xml
+./bin/tests/deepin-compressor_test --gtest_output=xml:./report/report4.xml
+./bin/tests/gzplugin_test --gtest_output=xml:./report/report5.xml
+./bin/tests/interface_test --gtest_output=xml:./report/report6.xml
+./bin/tests/libarchive_test --gtest_output=xml:./report/report7.xml
+./bin/tests/libminizipplugin_test --gtest_output=xml:./report/report8.xml
+./bin/tests/libzipplugin_test --gtest_output=xml:./report/report9.xml
+./bin/tests/readonlylibarchiveplugin_test --gtest_output=xml:./report/report10.xml
+./bin/tests/readwritelibarchiveplugin_test --gtest_output=xml:./report/report11.xml
+./bin/tests/singlefile_test --gtest_output=xml:./report/report12.xml
+./bin/tests/xzplugin_test --gtest_output=xml:./report/report13.xml
 
 workdir=$(cd ../$(dirname $0)/$utdir; pwd)
 
