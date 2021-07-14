@@ -79,19 +79,9 @@ target_link_libraries(${EXE_NAME}
 
 
 set(CMAKE_INSTALL_PREFIX /usr)
+install(TARGETS deepin-compressor DESTINATION bin)
+install(FILES desktop/deepin-compressor.desktop DESTINATION share/applications)
 
-
-install(TARGETS deepin-compressor
-        DESTINATION bin/
-        PERMISSIONS OWNER_READ OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE)
-
-install(FILES  desktop/deepin-compressor.desktop
-        DESTINATION share/applications/
-        PERMISSIONS OWNER_READ OWNER_EXECUTE
-        GROUP_READ GROUP_EXECUTE
-        WORLD_READ WORLD_EXECUTE)
 
 file(GLOB INSTALL_QM_FILES ../translations/*.qm)
 install(FILES ${INSTALL_QM_FILES} 
