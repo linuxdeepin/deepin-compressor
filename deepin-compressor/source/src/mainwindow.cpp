@@ -53,6 +53,7 @@
 #include "mimetypes.h"
 #include "logviewheaderview.h"
 #include "DebugTimeManager.h"
+#include "popupdialog.h"
 
 #include <DApplication>
 #include <DFileWatcher>
@@ -480,35 +481,17 @@ void MainWindow::timerEvent(QTimerEvent *event)
             // 若本地文件不存在了，则提示用户
             if (!filein.exists()) {
                 m_isFileModified = true;
-                QString displayName = Utils::toShortString(filein.fileName());
-                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
-                DDialog *dialog = new DDialog(this);
-                QPixmap pixmap = Utils::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(32, 32));
-                dialog->setIcon(pixmap);
-                dialog->addSpacing(32);
-                dialog->setMinimumSize(380, 140);
-                dialog->addButton(tr("OK"), true, DDialog::ButtonNormal);
-//                QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-//                effect->setOffset(0, 4);
-//                effect->setColor(QColor(0, 145, 255, 76));
-//                effect->setBlurRadius(4);
-//                dialog->getButton(0)->setFixedWidth(340);
-//                dialog->getButton(0)->setGraphicsEffect(effect);
-
-                DLabel *pLblContent = new DLabel(strTips, dialog);
-                pLblContent->setAlignment(Qt::AlignmentFlag::AlignHCenter);
-                DPalette pa;
-                pa = DApplicationHelper::instance()->palette(pLblContent);
-                pa.setBrush(DPalette::Text, pa.color(DPalette::ButtonText));
-                DFontSizeManager::instance()->bind(pLblContent, DFontSizeManager::T6, QFont::Medium);
-                pLblContent->setMinimumWidth(this->width());
-                pLblContent->move(dialog->width() / 2 - pLblContent->width() / 2, 48);
 
                 if (isMinimized()) {
                     setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
                 }
 
-                dialog->exec();
+                QString displayName = Utils::toShortString(filein.fileName());
+                QString strTips = tr("%1 was changed on the disk, please import it again.").arg(displayName);
+
+                TipDialog dialog(this);
+                dialog.showDialog(strTips, tr("OK", "button"), DDialog::ButtonNormal);
+//                dialog->exec();
 
                 // 从文件列表中删除已经不存在的文件
                 filelist.removeAt(i);
@@ -528,7 +511,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
                     refreshPage();
                 }
 
-                SAFE_DELETE_ELE(dialog);
             }
         }
     }
