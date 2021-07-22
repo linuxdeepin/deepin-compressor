@@ -14,12 +14,10 @@ add_custom_target(test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/deepin-compressor_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/gzplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/interface_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libarchive_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libminizipplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libzipplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readonlylibarchiveplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readwritelibarchiveplugin_test
-    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/singlefile_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/xzplugin_test
     COMMAND echo " =================== TEST END ==================== "
 )

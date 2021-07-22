@@ -19,27 +19,35 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "desktopfileparser_p.h"
+//#include "desktopfileparser_p.h"
 
-#include "gtest/src/stub.h"
+//#include "gtest/src/stub.h"
 
-#include <gtest/gtest.h>
+//#include <gtest/gtest.h>
 
-#include <QTextCodec>
-#include <QJsonObject>
-/*******************************函数打桩************************************/
+//#include <QTextCodec>
+//#include <QJsonObject>
+///*******************************函数打桩************************************/
 
-/*******************************函数打桩************************************/
-TEST(TestDesktopFileParser, testdeserializeList)
-{
-    DesktopFileParser::deserializeList("");
-    DesktopFileParser::deserializeList("\\0");
-    DesktopFileParser::deserializeList("1\\2,");
-}
 
-TEST(TestDesktopFileParser, testescapeValue)
-{
-    DesktopFileParser::escapeValue("1");
+//void ddd();
+///*******************************函数打桩************************************/
+//TEST(TestDesktopFileParser, testdeserializeList)
+//{
+////    DesktopFileParser::deserializeList("");
+////    DesktopFileParser::deserializeList("\\0");
+////    DesktopFileParser::deserializeList("1\\2,");
+//}
 
-    DesktopFileParser::escapeValue("\\s\\n\\t\\r\\");
-}
+//TEST(TestDesktopFileParser, testescapeValue)
+//{
+////    DesktopFileParser::escapeValue("1");
+
+////    DesktopFileParser::escapeValue("\\s\\n\\t\\r\\");
+//}
+
+//TEST(TestCustomPropertyDefinition, testfromString)
+//{
+
+
+//}

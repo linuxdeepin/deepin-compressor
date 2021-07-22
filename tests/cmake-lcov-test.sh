@@ -14,12 +14,10 @@ make -j16
 ./bin/tests/deepin-compressor_test --gtest_output=xml:./report/report_deepin-compressor.xml
 ./bin/tests/gzplugin_test --gtest_output=xml:./report/report_gzplugin.xml
 ./bin/tests/interface_test --gtest_output=xml:./report/report_interface.xml
-./bin/tests/libarchive_test --gtest_output=xml:./report/report_libarchive.xml
 ./bin/tests/libminizipplugin_test --gtest_output=xml:./report/report_libminizipplugin.xml
 ./bin/tests/libzipplugin_test --gtest_output=xml:./report/report_libzipplugin.xml
 ./bin/tests/readonlylibarchiveplugin_test --gtest_output=xml:./report/report_readonlylibarchiveplugin.xml
 ./bin/tests/readwritelibarchiveplugin_test --gtest_output=xml:./report/report_readwritelibarchiveplugin.xml
-./bin/tests/singlefile_test --gtest_output=xml:./report/report_singlefile.xml
 ./bin/tests/xzplugin_test --gtest_output=xml:./report/report_xzplugin.xml
 
 workdir=$(cd ../$(dirname $0)/$utdir; pwd)

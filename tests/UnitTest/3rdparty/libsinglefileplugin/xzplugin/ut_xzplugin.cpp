@@ -57,7 +57,8 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("test.xz").absoluteFilePath();
+        QString strFile  = _UTSOURCEDIR;
+        strFile += "/test_sources/xz/test.xz";
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);

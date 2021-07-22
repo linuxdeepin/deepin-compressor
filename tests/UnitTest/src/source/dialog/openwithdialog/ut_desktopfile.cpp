@@ -81,8 +81,10 @@ TEST_F(TestDesktopFile, testgetFileName)
 
 TEST_F(TestDesktopFile, testgetPureFileName)
 {
-    m_tester->m_fileName = "1/2.desktop";
-    ASSERT_EQ(m_tester->getPureFileName(), "2");
+    QString strPath = _SOURCEDIR;
+    strPath += "/src/desktop/deepin-compressor.desktop";
+    m_tester->m_fileName = strPath;
+    ASSERT_EQ(m_tester->getPureFileName(), "deepin-compressor");
 }
 
 TEST_F(TestDesktopFile, testgetName)

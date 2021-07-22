@@ -60,7 +60,8 @@ public:
 public:
     virtual void SetUp()
     {
-        QString strFile = QFileInfo("test.txt.bz2").absoluteFilePath();
+        QString strFile  = _UTSOURCEDIR;
+        strFile += "/test_sources/bz2/test.txt.bz2";
         KPluginMetaData data;
         QMimeDatabase db;
         QMimeType mimeFromContent = db.mimeTypeForFile(strFile, QMimeDatabase::MatchContent);
@@ -151,52 +152,23 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
-
-static bool qfile_exists_stub()
-{
-    return true;
-}
-
 TEST_F(TestLibBzip2Interface, testextractFiles)
 {
     ExtractionOptions options;
     options.bAllExtract = true;
-    options.strTargetPath = QFileInfo("/home/Desktop").absoluteFilePath();
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/bz2/temp";
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
 
-    typedef bool (QFile::*fptr)()const;
-    fptr A_foo = (fptr)(&QFile::exists);   //获取虚函数地址
-    stub.set(A_foo, qfile_exists_stub);
+    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
 
-    Stub stub1;
-    stub1.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
-    stub1.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub1.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub1.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
-    m_tester->extractFiles(QList<FileEntry>(), options);
-
-    Stub stub2;
-    stub2.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub2.set(ADDR(OverwriteQuery, responseSkip), responseSkip_true_stub);
-    stub2.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub2.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
-    m_tester->extractFiles(QList<FileEntry>(), options);
-
-    Stub stub3;
-    stub3.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub3.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub3.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_true_stub);
-    stub3.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_false_stub);
-    m_tester->extractFiles(QList<FileEntry>(), options);
-
-    Stub stub4;
-    stub4.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
-    m_tester->extractFiles(QList<FileEntry>(), options);
+    ASSERT_EQ(eType, PFT_Nomral);
 
     QDir dir(options.strTargetPath);
     dir.removeRecursively();
