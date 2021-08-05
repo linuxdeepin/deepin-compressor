@@ -222,6 +222,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
         }
     }
 
+    unzClose(zipfile);
     return PFT_Nomral;
 }
 
