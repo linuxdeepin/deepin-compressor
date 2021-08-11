@@ -44,7 +44,6 @@
             "application/x-lzip-compressed-tar",
             "application/x-tzo",
             "application/x-lrzip-compressed-tar",
-            "application/x-lz4-compressed-tar",
             "application/x-zstd-compressed-tar",
             "application/zip"
         ],
