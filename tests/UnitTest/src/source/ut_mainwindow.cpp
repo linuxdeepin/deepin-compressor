@@ -225,6 +225,7 @@ TEST_F(TestMainWindow, testsetTitleButtonStyle)
     ASSERT_EQ(m_tester->m_pTitleButton->toolTip(), "Open file");
     m_tester->setTitleButtonStyle(true, true, DStyle::SP_ArrowLeave);
     ASSERT_EQ(m_tester->m_pTitleButton->toolTip(), "Back");
+    m_tester->setTitleButtonStyle(true, true, DStyle::SP_EditElement);
 }
 
 TEST_F(TestMainWindow, testloadArchive)

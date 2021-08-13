@@ -72,7 +72,9 @@ TEST_F(TestMimeAppsWorker, testwriteData)
 
 TEST_F(TestMimeAppsWorker, testreadData)
 {
-    m_tester->writeData("", "");
+    QString strPath = _SOURCEDIR;
+    strPath += "/src/desktopdeepin-compressor.desktop";
+    m_tester->readData(strPath);
 }
 
 
@@ -139,7 +141,8 @@ TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByGio)
 
 TEST_F(TestMimesAppsManager, testgetDefaultAppDesktopFileByMimeType)
 {
-    m_tester->getDefaultAppDesktopFileByMimeType("1.zip");
+    m_tester->getDefaultAppDesktopFileByMimeType("application/sss");
+    m_tester->getDefaultAppDesktopFileByMimeType("application/zip");
 }
 
 TEST_F(TestMimesAppsManager, testgetRecommendedAppsByQio)
@@ -149,7 +152,7 @@ TEST_F(TestMimesAppsManager, testgetRecommendedAppsByQio)
 
 TEST_F(TestMimesAppsManager, testgetRecommendedAppsByGio)
 {
-    m_tester->getRecommendedAppsByGio("1.zip");
+    m_tester->getRecommendedAppsByGio("application/zip");
 }
 
 TEST_F(TestMimesAppsManager, testgetApplicationsFolders)

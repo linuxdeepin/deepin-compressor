@@ -68,6 +68,15 @@ TEST_F(TestTipDialog, testautoFeed)
     m_tester->autoFeed(pDesLbl);
 }
 
+TEST_F(TestTipDialog, testchangeEvent)
+{
+    DLabel *pDesLbl = new DLabel(m_tester);
+    pDesLbl->setObjectName("ContentLabel");
+    QEvent *event = new QEvent(QEvent::FontChange);
+    m_tester->changeEvent(event);
+    delete event;
+}
+
 
 
 // 测试ConvertDialog
@@ -155,6 +164,15 @@ TEST_F(TestSimpleQueryDialog, testautoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
+}
+
+TEST_F(TestSimpleQueryDialog, testchangeEvent)
+{
+    DLabel *pDesLbl = new DLabel(m_tester);
+    pDesLbl->setObjectName("ContentLabel");
+    QEvent *event = new QEvent(QEvent::FontChange);
+    m_tester->changeEvent(event);
+    delete event;
 }
 
 
@@ -270,5 +288,14 @@ TEST_F(TestAppendDialog, testautoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
+}
+
+TEST_F(TestAppendDialog, testchangeEvent)
+{
+    DLabel *pDesLbl = new DLabel(m_tester);
+    pDesLbl->setObjectName("ContentLabel");
+    QEvent *event = new QEvent(QEvent::FontChange);
+    m_tester->changeEvent(event);
+    delete event;
 }
 

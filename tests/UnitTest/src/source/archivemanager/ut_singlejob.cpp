@@ -139,6 +139,11 @@ TEST_F(TestLoadJob, testfinishJob)
     m_tester->finishJob();
 }
 
+TEST_F(TestLoadJob, testkill)
+{
+    m_tester->kill();
+}
+
 
 // 测试AddJob
 class TestAddJob : public ::testing::Test

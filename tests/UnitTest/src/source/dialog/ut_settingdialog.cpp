@@ -96,6 +96,11 @@ TEST_F(TestSettingDialog, testisAutoDeleteArchive)
     ASSERT_EQ(m_tester->isAutoDeleteArchive(), "Never");
 }
 
+TEST_F(TestSettingDialog, testisAssociatedType)
+{
+    m_tester->isAssociatedType("application/zip");
+}
+
 TEST_F(TestSettingDialog, testslotClickCancelSelectAllButton)
 {
     m_tester->slotClickCancelSelectAllButton();

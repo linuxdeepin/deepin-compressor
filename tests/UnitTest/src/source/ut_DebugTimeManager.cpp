@@ -62,7 +62,8 @@ TEST_F(TestDebugTimeManager, initTest)
 TEST_F(TestDebugTimeManager, testclear)
 {
     m_tester->m_MapPoint["1"] = PointInfo();
-    ASSERT_EQ(m_tester->m_MapPoint.isEmpty(), false);
+    m_tester->clear();
+    ASSERT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }
 
 TEST_F(TestDebugTimeManager, testbeginPointQt)

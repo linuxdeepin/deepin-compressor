@@ -131,8 +131,9 @@ TEST_F(TestBatchExtractJob, testsetExtractPath)
 TEST_F(TestBatchExtractJob, testsetArchiveFiles)
 {
     Stub stub;
-    stub.set(ADDR(BatchExtractJob, setArchiveFiles), batchExtractJob_addExtractItem_stub);
-    ASSERT_EQ(m_tester->setArchiveFiles(QStringList() << "1.zip" << "2.zip"), true);
+    stub.set(ADDR(BatchExtractJob, addExtractItem), batchExtractJob_addExtractItem_stub);
+    bool b = m_tester->setArchiveFiles(QStringList() << "1.zip" << "2.zip");
+    ASSERT_EQ(b, true);
 }
 
 TEST_F(TestBatchExtractJob, testaddExtractItem)

@@ -18,30 +18,31 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "dmimedatabase.h"
+#include "properties.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
 #include <gtest/gtest.h>
-#include <QDir>
 
+#include <QCheckBox>
+#include <QDir>
+#include <QResizeEvent>
+#include <QStandardPaths>
 
 /*******************************函数打桩************************************/
-QString qQMimeType_name_stub()
-{
-    return "application/zip";
-}
 /*******************************单元测试************************************/
-// 测试DMimeDatabase
-class TestDMimeDatabase : public ::testing::Test
+// 测试Properties
+class TestProperties : public ::testing::Test
 {
 public:
-    TestDMimeDatabase(): m_tester(nullptr) {}
+    TestProperties(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
     {
-        m_tester = new DMimeDatabase;
+        QString strPath = _SOURCEDIR;
+        strPath += "/src/desktopdeepin-compressor.desktop";
+        m_tester = new Properties(strPath, "Desktop Entry");
     }
 
     virtual void TearDown()
@@ -50,19 +51,21 @@ public:
     }
 
 protected:
-    DMimeDatabase *m_tester;
+    Properties *m_tester;
 };
 
-TEST_F(TestDMimeDatabase, initTest)
+TEST_F(TestProperties, initTest)
 {
 
 }
 
-TEST_F(TestDMimeDatabase, testmimeTypeForFile)
+TEST_F(TestProperties, testProperties)
 {
-    m_tester->mimeTypeForFile("1.docx");
+    Properties temp(*m_tester);
 
-    Stub stub;
-    stub.set(ADDR(QMimeType, name), qQMimeType_name_stub);
-    m_tester->mimeTypeForFile("1.docx", QMimeDatabase::MatchExtension);
+}
+
+TEST_F(TestProperties, testgetKeys)
+{
+    m_tester->getKeys();
 }

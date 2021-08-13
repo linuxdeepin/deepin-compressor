@@ -32,6 +32,7 @@
 
 #include <QTest>
 #include <QMimeData>
+#include <QAction>
 
 #include <gtest/gtest.h>
 
@@ -73,8 +74,6 @@ void handleDoubleClick_stub(const QModelIndex &)
 {
     return;
 }
-
-
 /*******************************函数打桩************************************/
 
 
@@ -146,6 +145,23 @@ TEST_F(TestUnCompressView, testmouseMoveEvent)
 {
     m_tester->m_isPressed = true;
     QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->m_lastTouchBeginPos = QPointF(200, 100);
+    m_tester->mouseMoveEvent(event);
+    delete event;
+
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+
+    m_tester->selectAll();
+
+    m_tester->m_isPressed = false;
+    event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->m_lastTouchBeginPos = QPointF(200, 100);
     m_tester->mouseMoveEvent(event);
     delete event;
 }
@@ -270,6 +286,7 @@ TEST_F(TestUnCompressView, testrefreshDataByCurrentPathChanged)
     m_tester->refreshDataByCurrentPathChanged();
 
     m_tester->m_iLevel = 1;
+    m_tester->m_strCurrentPath = "1/";
     m_tester->m_eChangeType = UnCompressView::CT_Add;
     m_tester->refreshDataByCurrentPathChanged();
 }
@@ -438,12 +455,13 @@ TEST_F(TestUnCompressView, testslotShowRightMenu)
     entry.qSize = 10;
     DataManager::get_instance().archiveData().listRootEntry << entry;
     DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
 
     m_tester->m_stRightEntry.isDirectory = true;
-    m_tester->slotShowRightMenu(QPoint());
+    m_tester->slotShowRightMenu(QPoint(10, 50));
 
     m_tester->m_stRightEntry.isDirectory = false;
-    m_tester->slotShowRightMenu(QPoint());
+    m_tester->slotShowRightMenu(QPoint(10, 50));
 }
 
 TEST_F(TestUnCompressView, testslotExtract)
@@ -614,7 +632,35 @@ TEST_F(TestUnCompressView, testkeyPressEvent)
     QTest::keyPress(m_tester, Qt::Key_Tab);
 }
 
+TEST_F(TestUnCompressView, testslotOpenStyleClicked)
+{
+    Stub stub;
+    CustomDialogStub::stub_OpenWithDialog_showOpenWithDialog(stub, "");
+
+    QAction *pAction = new QAction("Select default program", m_tester);
+    CommonStub::stub_QObject_sender(stub, pAction);
+    m_tester->setPreLblVisible(true, "");
+
+    pAction = new QAction("sss", m_tester);
+    Stub stub1;
+    CommonStub::stub_QObject_sender(stub1, pAction);
+}
+
 TEST_F(TestUnCompressView, testslotPreClicked)
 {
-    m_tester->setPreLblVisible(true, "");
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+    m_tester->m_vPre << "/";
+    m_tester->m_iLevel = 0;
+    m_tester->slotPreClicked();
+
+    m_tester->m_iLevel = 1;
+    m_tester->m_vPre << "1/";
+    m_tester->slotPreClicked();
 }

@@ -334,15 +334,17 @@ TEST_F(TestCompressView, testslotDragFiles_isArchiveFile_1)
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
     CommonStub::stub_UiTools_isArchiveFile(stub, true);
-    CommonStub::stub_ProcessOpenThread_start(stub);
+    m_tester->m_listCompressFiles << "1.txt";
     m_tester->slotDragFiles(QStringList() << "1.zip");
 }
 
 TEST_F(TestCompressView, testslotDragFiles_isArchiveFile_2)
 {
     Stub stub;
-    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
+    CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 2);
     CommonStub::stub_UiTools_isArchiveFile(stub, true);
+    CommonStub::stub_ProcessOpenThread_start(stub);
+    m_tester->m_listCompressFiles << "1.txt";
     m_tester->slotDragFiles(QStringList() << "1.zip");
 }
 

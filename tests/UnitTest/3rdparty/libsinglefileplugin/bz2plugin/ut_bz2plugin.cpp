@@ -152,25 +152,52 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
+QStringList qString_split_stub(QChar, QString::SplitBehavior, Qt::CaseSensitivity)
+{
+    return QStringList() << "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+           "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+           "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+}
+
 TEST_F(TestLibBzip2Interface, testextractFiles)
 {
     ExtractionOptions options;
-    options.bAllExtract = true;
+    options.bAllExtract = false;
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/bz2/temp";
+    QDir dir(options.strTargetPath);
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
-    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
 
+    Stub stub1;
+    stub1.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
     PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
 
-    ASSERT_EQ(eType, PFT_Nomral);
+    Stub stub2;
+    stub2.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub2.set(ADDR(OverwriteQuery, responseSkip), responseSkip_true_stub);
+    eType = m_tester->extractFiles(QList<FileEntry>(), options);
 
-    QDir dir(options.strTargetPath);
+    Stub stub3;
+    stub3.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub3.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub3.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_true_stub);
+    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+
+    Stub stub4;
+    stub4.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub4.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
+    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+
+    Stub stub5;
+    typedef QStringList(QString::*fptr)(QChar, QString::SplitBehavior, Qt::CaseSensitivity) const;
+    fptr A_foo = (fptr)(&QString::split);   //获取虚函数地址
+    stub5.set(A_foo, qString_split_stub);
+
+    eType = m_tester->extractFiles(QList<FileEntry>(), options);
     dir.removeRecursively();
 }
 
