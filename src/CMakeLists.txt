@@ -28,6 +28,7 @@ endif ()
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent)
+find_package(Qt5DBus REQUIRED)
 find_package(KF5Codecs REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 include(FindPkgConfig)
@@ -70,6 +71,7 @@ add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_FILES})
 #链接动静态库
 target_link_libraries(${EXE_NAME}
     Qt5::Widgets
+    Qt5::DBus
     KF5::Codecs
     ${DtkWidget_LIBRARIES}
     ${GOBJECT_LIBRARIES}
