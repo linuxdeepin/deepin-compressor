@@ -54,6 +54,7 @@
    ![1|compressor](fig/compressfile1.png)
    
    ![compressor](fig/compressfile2.png)
+
 <table border="1">
    <tr>
     <th>名称</th>
@@ -127,12 +128,12 @@
 在主菜单中，您可以打开文件、修改设置项、切换窗口主题、查看帮助手册，了解归档管理器的更多信息。
 
 ### 打开
-1. 在归档管理器界面，单击  ![icon_menu](../common/icon_menu.svg) 。
+1. 在归档管理器界面，单击 ![icon_menu](../common/icon_menu.svg) 。
 2. 选择 **打开文件**，选择待压缩文件或压缩包文件。
 
 ### 设置
 
-1. 在归档管理器界面，单击  ![icon_menu](../common/icon_menu.svg) 。
+1. 在归档管理器界面，单击 ![icon_menu](../common/icon_menu.svg) 。
 2. 选择 **设置**，可以进行如下操作：
    - 解压设置
      + 设置默认解压位置，可选择当前目录、桌面或设置其他目录。

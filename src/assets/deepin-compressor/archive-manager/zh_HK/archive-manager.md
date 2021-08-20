@@ -25,7 +25,7 @@
 
 ### 關閉歸檔管理器
 
-- 在歸檔管理器界面單擊  ![close_icon](../common/close_icon.svg)，關閉歸檔管理器。
+- 在歸檔管理器界面單擊 ![close_icon](../common/close_icon.svg)，關閉歸檔管理器。
 - 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **關閉所有**，關閉歸檔管理器。
 - 在歸檔管理器界面單擊 ![icon_menu](../common/icon_menu.svg)，選擇 **退出**，關閉歸檔管理器。
 
@@ -40,6 +40,7 @@
 在歸檔管理器界面，可對單個或多個文件（夾）進行壓縮或解壓縮，並且支持多個窗口同時操作。
 
 ### 壓縮
+
 1. 選擇壓縮文件。
 
    + 右鍵單擊待壓縮的文件（夾）選擇 **壓縮**。
@@ -128,12 +129,12 @@
 在主菜單中，您可以打開文件、修改設置項、切換窗口主題、查看幫助手冊，了解歸檔管理器的更多訊息。
 
 ### 打開
-1. 在歸檔管理器界面，單擊  ![icon_menu](../common/icon_menu.svg) 。
+1. 在歸檔管理器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 選擇 **打開文件**，選擇待壓縮文件或壓縮包文件。
 
 ### 設置
 
-1. 在歸檔管理器界面，單擊  ![icon_menu](../common/icon_menu.svg) 。
+1. 在歸檔管理器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 選擇 **設置**，可進行如下操作：
    - 解壓設置
      + 設置默認解壓位置，可選擇當前目錄、桌面或設置其他目錄。
@@ -151,21 +152,21 @@
 
 窗口主題包含淺色主題、深色主題和系統主題。
 
-1. 在歸檔管理器界面，單擊![icon_menu](../common/icon_menu.svg)。
+1. 在歸檔管理器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 單擊 **主題**，選擇一個主題顏色。
 
 ### 幫助
 
 查看幫助手冊，進一步了解和使用歸檔管理器。
 
-1. 在歸檔管理器界面，單擊  ![icon_menu](../common/icon_menu.svg) 。
+1. 在歸檔管理器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 單擊 **幫助**。
 3. 查看歸檔管理器的幫助手冊。
 
 
 ### 關於
 
-1. 在歸檔管理器界面，單擊  ![icon_menu](../common/icon_menu.svg) 。
+1. 在歸檔管理器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 單擊 **關於**。
 3. 查看歸檔管理器的版本和介紹。
 
