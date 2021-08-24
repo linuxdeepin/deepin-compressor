@@ -2656,6 +2656,12 @@ void MainWindow::slotExtractionDone(KJob *job)
             }
         }
 
+        if (KJob::ExistsError == errorCode) {
+            m_pCompressFail->setFailStrDetail(tr("The file name already exists")); // 文件被占用
+            m_ePageID = PAGE_UNZIP_FAIL;
+            refreshPage();
+        }
+
         return;
     } else if ((PAGE_ENCRYPTION == m_ePageID) && (errorCode && (errorCode != KJob::KilledJobError && errorCode != KJob::UserSkiped)))   {
         // do noting:wrong password
@@ -2680,6 +2686,8 @@ void MainWindow::slotExtractionDone(KJob *job)
             m_pCompressFail->setFailStrDetail(tr("Failed to open the archive: %1")); // 无法打开压缩文件
         } else if (KJob::WrongPsdError == errorCode) {
             m_pCompressFail->setFailStrDetail(tr("Wrong password") + "," + tr("Unable to extract")); // 密码错误
+        } else if (KJob::ExistsError == errorCode) {
+            m_pCompressFail->setFailStrDetail(tr("The file name already exists")); // 文件被占用
         }
 
         m_ePageID = PAGE_UNZIP_FAIL;

@@ -199,6 +199,11 @@ void Job::onError(const QString &message, const QString &details)
         setErrorText(message);
         emitResult();
         return;
+    } else if (message == "The file name already exists") {
+        setError(KJob::ExistsError);
+        setErrorText(message);
+        emitResult();
+        return;
     }
 
     setError(KJob::UserDefinedError);
@@ -239,10 +244,9 @@ void Job::onFinished(bool result)
     } else if (m_archiveInterface && !m_archiveInterface->isCheckPsw()) {
         setError(KJob::NopasswordError); //阻止解压zip加密包出现解压失败界面再出现输入密码界面
     } else if ((archive() && !archive()->isValid()) || false == result) {
-        if (KJob::UserFilenameLong == error()) {
-        } else if (KJob::WrongPsdError == error()) {
-        } else if (KJob::CancelError == error()) {
-        } else {
+        if (KJob::ExistsError == error()) {
+            setError(KJob::ExistsError);
+        }  else {
             setError(KJob::UserDefinedError);
         }
     } else if (m_archiveInterface && m_archiveInterface->isAnyFileExtracted() == false) {
@@ -641,6 +645,10 @@ void ExtractJob::doWork()
     QFileInfo destDirInfo(m_destinationDir);
     if (destDirInfo.isDir() && (!destDirInfo.isWritable() || !destDirInfo.isExecutable())) {
         //        onError(tr("Could not write to destination <filename>%1</filename>.<nl/>Check whether you have sufficient permissions.", m_destinationDir), QString());
+        onFinished(false);
+        return;
+    } else if (destDirInfo.exists() && destDirInfo.isFile()) {
+        onError(("The file name already exists"), "");
         onFinished(false);
         return;
     }

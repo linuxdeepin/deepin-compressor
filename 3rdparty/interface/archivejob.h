@@ -60,13 +60,14 @@ public:
 
     enum Unit { Bytes,
                 Files,
-                Directories };
+                Directories
+              };
     Q_ENUM(Unit)
 
     enum Capability { NoCapabilities = 0x0000,
                       Killable = 0x0001,
                       Suspendable = 0x0002
-    };
+                    };
     Q_ENUM(Capability)
 
     Q_DECLARE_FLAGS(Capabilities, Capability)
@@ -81,7 +82,8 @@ public:
     virtual void doPause() {}
     virtual void doContinue() {}
     enum KillVerbosity { Quietly,
-                         EmitResult };
+                         EmitResult
+                       };
     Q_ENUM(KillVerbosity)
 
     ENUM_JOBTYPE mType;
@@ -118,6 +120,8 @@ public:
         WrongPsdError,
         /*same cancel*/
         CancelError,
+        /*The file name already exists*/
+        ExistsError,
         UserDefinedError = 100
     };
 
@@ -136,27 +140,27 @@ Q_SIGNALS:
                   ,
                   QPrivateSignal
 #endif
-    );
+                 );
     void suspended(KJob *job
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                    ,
                    QPrivateSignal
 #endif
-    );
+                  );
 
     void resumed(KJob *job
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                  ,
                  QPrivateSignal
 #endif
-    );
+                );
 
     void result(KJob *job
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 ,
                 QPrivateSignal
 #endif
-    );
+               );
 
     void description(KJob *job, const QString &title,
                      const QPair<QString, QString> &field1 = QPair<QString, QString>(),
