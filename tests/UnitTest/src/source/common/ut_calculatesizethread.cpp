@@ -84,10 +84,6 @@ TEST_F(TestCalculateSizeThread, testrun)
     m_tester->run();
     ASSERT_EQ(m_tester->m_qTotalSize, 3);
 
-    Stub stub11;
-    QFileInfoStub::stub_QFileInfo_isDir(stub11, true);
-    m_tester->run();
-
     Stub stub1;
     QFileInfoStub::stub_QFileInfo_exists(stub1, false);
     QFileInfoStub::stub_QFileInfo_isSymLink(stub1, true);
@@ -123,10 +119,6 @@ TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
 
     m_tester->ConstructAddOptionsByThread("/a/b/");
     ASSERT_EQ(m_tester->m_qTotalSize, 1);
-
-    Stub stub11;
-    QFileInfoStub::stub_QFileInfo_isDir(stub11, true);
-    m_tester->ConstructAddOptionsByThread("/a/b/");
 
     Stub stub1;
     QFileInfoStub::stub_QFileInfo_exists(stub1, false);
