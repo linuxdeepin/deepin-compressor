@@ -136,12 +136,17 @@ bool moveExtractTempFilesToDest_stub()
 {
     return false;
 }
+
+bool isInsufficientDiskSpace_stub()
+{
+    return true;
+}
 /*******************************函数打桩************************************/
 
-class TestCli7zPluginFactory : public QObject, public ::testing::Test
+class UT_Cli7zPluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestCli7zPluginFactory(): m_tester(nullptr) {}
+    UT_Cli7zPluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -158,10 +163,10 @@ protected:
     Cli7zPluginFactory *m_tester;
 };
 
-class TestCli7zPlugin : public QObject, public ::testing::Test
+class UT_Cli7zPlugin : public QObject, public ::testing::Test
 {
 public:
-    TestCli7zPlugin(): m_tester(nullptr) {}
+    UT_Cli7zPlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -188,62 +193,101 @@ protected:
 };
 
 
-TEST_F(TestCli7zPluginFactory, initTest)
+TEST_F(UT_Cli7zPluginFactory, initTest)
 {
 
 }
 
-TEST_F(TestCli7zPlugin, initTest)
+TEST_F(UT_Cli7zPlugin, initTest)
 {
 
 }
 
-TEST_F(TestCli7zPlugin, testisPasswordPrompt)
+TEST_F(UT_Cli7zPlugin, test_isPasswordPrompt)
 {
-    ASSERT_EQ(m_tester->isPasswordPrompt("Enter password (will not be echoed):"), true);
+    EXPECT_EQ(m_tester->isPasswordPrompt("Enter password (will not be echoed):"), true);
 }
 
-TEST_F(TestCli7zPlugin, testisWrongPasswordMsg)
+TEST_F(UT_Cli7zPlugin, test_isWrongPasswordMsg)
 {
-    ASSERT_EQ(m_tester->isWrongPasswordMsg("Wrong password"), true);
+    EXPECT_EQ(m_tester->isWrongPasswordMsg("Wrong password"), true);
 }
 
-TEST_F(TestCli7zPlugin, testisCorruptArchiveMsg)
+TEST_F(UT_Cli7zPlugin, test_isCorruptArchiveMsg)
 {
-    ASSERT_EQ(m_tester->isCorruptArchiveMsg("Unexpected end of archive"), true);
+    EXPECT_EQ(m_tester->isCorruptArchiveMsg("Unexpected end of archive"), true);
 }
 
-TEST_F(TestCli7zPlugin, testisisDiskFullMsg)
+TEST_F(UT_Cli7zPlugin, test_isisDiskFullMsg)
 {
-    ASSERT_EQ(m_tester->isDiskFullMsg("No space left on device"), true);
+    EXPECT_EQ(m_tester->isDiskFullMsg("No space left on device"), true);
 }
 
-TEST_F(TestCli7zPlugin, testisFileExistsMsg)
+TEST_F(UT_Cli7zPlugin, testisFileExistsMsg)
 {
-    ASSERT_EQ(m_tester->isFileExistsMsg("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+    EXPECT_EQ(m_tester->isFileExistsMsg("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
 }
 
-TEST_F(TestCli7zPlugin, testisFileExistsFileName)
+TEST_F(UT_Cli7zPlugin, test_isFileExistsFileName)
 {
-    ASSERT_EQ(m_tester->isFileExistsFileName("file ./"), true);
+    EXPECT_EQ(m_tester->isFileExistsFileName("file ./"), true);
 }
 
-TEST_F(TestCli7zPlugin, testisMultiPasswordPrompt)
+TEST_F(UT_Cli7zPlugin, test_isMultiPasswordPrompt)
 {
-    ASSERT_EQ(m_tester->isMultiPasswordPrompt("ssssss"), false);
+    EXPECT_EQ(m_tester->isMultiPasswordPrompt("ssssss"), false);
 }
 
-TEST_F(TestCli7zPlugin, testisOpenFileFailed)
+TEST_F(UT_Cli7zPlugin, test_isOpenFileFailed)
 {
-    ASSERT_EQ(m_tester->isOpenFileFailed("ERROR: Can not open output file :"), true);
+    EXPECT_EQ(m_tester->isOpenFileFailed("ERROR: Can not open output file :"), true);
 }
 
-TEST_F(TestCli7zPlugin, testsetupCliProperties)
+TEST_F(UT_Cli7zPlugin, test_setupCliProperties)
 {
     m_tester->setupCliProperties();
+
+    EXPECT_EQ(m_tester->m_cliProps->property("captureProgress"), false);
+    EXPECT_EQ(m_tester->m_cliProps->property("addProgram"), QStringLiteral("7z"));
+
+    EXPECT_EQ(m_tester->m_cliProps->property("addSwitch"), QStringList({QStringLiteral("a"), QStringLiteral("-l")}));
+    EXPECT_EQ(m_tester->m_cliProps->property("deleteProgram"), QStringLiteral("7z"));
+    EXPECT_EQ(m_tester->m_cliProps->property("deleteSwitch"), QStringLiteral("d"));
+
+    EXPECT_EQ(m_tester->m_cliProps->property("extractProgram"), QStringLiteral("7z"));
+    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitch"), QStringLiteral("x"));
+    EXPECT_EQ(m_tester->m_cliProps->property("progressarg"), QStringLiteral("-bsp1"));
+    EXPECT_EQ(m_tester->m_cliProps->property("extractSwitchNoPreserve"), QStringList{QStringLiteral("e")});
+
+    EXPECT_EQ(m_tester->m_cliProps->property("listProgram"), QStringLiteral("7z"));
+    EXPECT_EQ(m_tester->m_cliProps->property("listSwitch"), QStringList({QStringLiteral("l"), QStringLiteral("-slt")}));
+
+    EXPECT_EQ(m_tester->m_cliProps->property("moveProgram"), QStringLiteral("7z"));
+    EXPECT_EQ(m_tester->m_cliProps->property("moveSwitch"), QStringLiteral("rn"));
+
+    EXPECT_EQ(m_tester->m_cliProps->property("testProgram"), QStringLiteral("7z")) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("testSwitch"), QStringLiteral("t")) ;
+
+    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitch"), QStringLiteral("-p$Password")) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("passwordSwitchHeaderEnc"), QStringList({QStringLiteral("-p$Password"), QStringLiteral("-mhe=on")})) ;
+
+    EXPECT_EQ(m_tester->m_cliProps->property("compressionLevelSwitch"), QStringLiteral("-mx=$CompressionLevel")) ;
+
+    EXPECT_EQ(m_tester->m_cliProps->property("multiVolumeSwitch"), QStringLiteral("-v$VolumeSizek"));
+    EXPECT_EQ(m_tester->m_cliProps->property("testPassedPatterns"), QStringList({QStringLiteral("^Everything is Ok$")})) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("fileExistsFileNameRegExp"), QStringList({QStringLiteral("^file \\./(.*)$"), QStringLiteral("^  Path:     \\./(.*)$")})) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("fileExistsInput"), QStringList({QStringLiteral("Y"), QStringLiteral("N"), QStringLiteral("A"), QStringLiteral("S"), QStringLiteral("Q")})) ;
+    EXPECT_EQ(m_tester->m_cliProps->property("multiVolumeSuffix"), QStringList{QStringLiteral("$Suffix.001")});
 }
 
-TEST_F(TestCli7zPlugin, testkillProcess)
+TEST_F(UT_Cli7zPlugin, test_killProcess_001)
+{
+    m_tester->m_process = nullptr;
+    m_tester->killProcess(true);
+    EXPECT_EQ(m_tester->m_process, nullptr);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_killProcess_002)
 {
     m_tester->m_process = new KPtyProcess;
     m_tester->m_bWaitingPassword = true;
@@ -252,120 +296,337 @@ TEST_F(TestCli7zPlugin, testkillProcess)
     stub.set(ADDR(KProcess, processId), kProcess_processId_stub);
     m_tester->m_bWaitingPassword = true;
     m_tester->killProcess(true);
+    EXPECT_EQ(m_tester->m_isProcessKilled, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_killProcess_003)
+{
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_bWaitingPassword = true;
+    Stub stub;
+    stub.set(kill, kill_stub);
+    stub.set(ADDR(KProcess, processId), kProcess_processId_stub);
     m_tester->m_bWaitingPassword = false;
     m_tester->killProcess(true);
+    EXPECT_EQ(m_tester->m_isProcessKilled, true);
 }
 
-TEST_F(TestCli7zPlugin, testreadListLine)
+TEST_F(UT_Cli7zPlugin, tset_readListLine_001)
 {
-    ASSERT_EQ(m_tester->readListLine("Open ERROR: Can not open the file as [7z] archive"), false);
+    EXPECT_EQ(m_tester->readListLine("Open ERROR: Can not open the file as [7z] archive"), false);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_ArchiveDamaged);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
 
+TEST_F(UT_Cli7zPlugin, tset_readListLine_002)
+{
     m_tester->m_parseState = ParseStateTitle;
-    ASSERT_EQ(m_tester->readListLine("7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21"), true);
-
-    m_tester->m_parseState = ParseStateHeader;
-    ASSERT_EQ(m_tester->readListLine("--"), true);
-
-    m_tester->m_parseState = ParseStateArchiveInformation;
-    ASSERT_EQ(m_tester->readListLine("----------"), true);
-    m_tester->m_parseState = ParseStateArchiveInformation;
-    ASSERT_EQ(m_tester->readListLine("Type = 7z"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = bzip2"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = gzip"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = xz"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = tar"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = zip"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = Rar"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = Split"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = Udf"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = Iso"), true);
-    ASSERT_EQ(m_tester->readListLine("Type = crx"), false);
-
-    m_tester->m_parseState = ParseStateEntryInformation;
-    ASSERT_EQ(m_tester->readListLine("Path = /home"), true);
-    ASSERT_EQ(m_tester->readListLine("Size = 8172"), true);
-    m_tester->m_archiveType = Cli7zPlugin::ArchiveType::ArchiveTypeIso;
-    ASSERT_EQ(m_tester->readListLine("Modified = 2021-06-18 15:27:01"), true);
-    ASSERT_EQ(m_tester->readListLine("Attributes = D...."), true);
-    ASSERT_EQ(m_tester->readListLine("Attributes = ....."), true);
-    ASSERT_EQ(m_tester->readListLine("Block = "), true);
-    ASSERT_EQ(m_tester->readListLine("Folder = -"), true);
+    EXPECT_EQ(m_tester->readListLine("p7zip Version 16.02 (locale=zh_CN.UTF-8,Utf16=on,HugeFiles=on,64 bits,16 CPUs Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz (A0655),ASM,AES-NI)"), true);
+    EXPECT_EQ(m_tester->m_parseState, ParseStateHeader);
 }
 
-TEST_F(TestCli7zPlugin, testhandleLine)
+TEST_F(UT_Cli7zPlugin, tset_readListLine_003)
 {
-    Stub stub1;
-    stub1.set(ADDR(CliInterface, handlePassword), cliInterface_handlePassword_stub);
+    m_tester->m_parseState = ParseStateHeader;
+    EXPECT_EQ(m_tester->readListLine("--"), true);
+    EXPECT_EQ(m_tester->m_parseState, ParseStateArchiveInformation);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_004)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("----------"), true);
+    EXPECT_EQ(m_tester->m_parseState, ParseStateEntryInformation);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_005)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = 7z"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveType7z);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_006)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = bzip2"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeBZip2);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_007)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = gzip"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeGZip);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_008)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = xz"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeXz);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_009)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = tar"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeTar);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_010)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = zip"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeZip);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_011)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = Rar"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeRar);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_012)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = Split"), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_013)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = Udf"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeUdf);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_014)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = Iso"), true);
+    EXPECT_EQ(m_tester->m_archiveType, Cli7zPlugin::ArchiveType::ArchiveTypeIso);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_015)
+{
+    m_tester->m_parseState = ParseStateArchiveInformation;
+    EXPECT_EQ(m_tester->readListLine("Type = crx"), false);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_016)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Path = /home"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.strFullPath, "/home");
+    EXPECT_EQ(m_tester->m_fileEntry.strFileName, "home");
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_017)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Size = 8172"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.qSize, 8172);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_018)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    m_tester->m_archiveType = Cli7zPlugin::ArchiveType::ArchiveType7z;
+    EXPECT_EQ(m_tester->readListLine("Modified = 2021-06-18 15:27:01"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, QDateTime::fromString("2021-06-18 15:27:01", "yyyy-MM-dd hh:mm:ss").toTime_t());
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_019)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    m_tester->m_archiveType = Cli7zPlugin::ArchiveType::ArchiveTypeIso;
+    EXPECT_EQ(m_tester->readListLine("Modified = 2021-06-18 15:27:01"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, 0);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_020)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Attributes = D...."), true);
+    EXPECT_EQ(m_tester->m_fileEntry.isDirectory, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_021)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Attributes = ....."), true);
+    EXPECT_EQ(m_tester->m_fileEntry.isDirectory, false);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_022)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Block = "), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_023)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Folder = +"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.isDirectory, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_readListLine_024)
+{
+    m_tester->m_parseState = ParseStateEntryInformation;
+    EXPECT_EQ(m_tester->readListLine("Folder = -"), true);
+    EXPECT_EQ(m_tester->m_fileEntry.isDirectory, false);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_001)
+{
+    Stub stub;
+    stub.set(ADDR(CliInterface, handlePassword), cliInterface_handlePassword_stub);
     g_cliInterface_handlePassword_result = PFT_Cancel;
-    ASSERT_EQ(m_tester->handleLine("Enter password (will not be echoed):", WT_List), false);
+    EXPECT_EQ(m_tester->handleLine("Enter password (will not be echoed):", WT_List), false);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NeedPassword);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Cancel);
+    EXPECT_EQ(m_tester->m_bWaitingPassword, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_002)
+{
+    Stub stub;
+    stub.set(ADDR(CliInterface, handlePassword), cliInterface_handlePassword_stub);
     g_cliInterface_handlePassword_result = PFT_Nomral;
-    ASSERT_EQ(m_tester->handleLine("Enter password (will not be echoed):", WT_List), true);
-    ASSERT_EQ(m_tester->handleLine("Wrong password", WT_List), false);
-    ASSERT_EQ(m_tester->handleLine("No space left on device", WT_List), false);
+    EXPECT_EQ(m_tester->handleLine("Enter password (will not be echoed):", WT_List), true);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NeedPassword);
+    EXPECT_EQ(m_tester->m_bWaitingPassword, false);
+}
 
-    ASSERT_EQ(m_tester->handleLine("Unexpected end of archive", WT_List), true);
-    m_tester->m_isEmptyArchive = false;
-    ASSERT_EQ(m_tester->handleLine("Unexpected end of archive", WT_Extract), true);
+TEST_F(UT_Cli7zPlugin, tset_handleLine_003)
+{
+    EXPECT_EQ(m_tester->handleLine("Wrong password", WT_List), false);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_WrongPassword);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
 
-    Stub stub2;
-    g_cliInterface_handleFileExists_result = true;
-    stub2.set(ADDR(CliInterface, handleFileExists), cliInterface_handleFileExists_stub);
-    ASSERT_EQ(m_tester->handleLine("No files to process", WT_Extract), true);
+TEST_F(UT_Cli7zPlugin, tset_handleLine_004)
+{
+    EXPECT_EQ(m_tester->handleLine("No space left on device", WT_List), false);
+}
 
-    Stub stub3;
-    g_cliInterface_handleFileExists_result = false;
-    stub3.set(ADDR(CliInterface, handleFileExists), cliInterface_handleFileExists_stub);
-    ASSERT_EQ(m_tester->handleLine("ERROR: Can not open output file : sssssssssssssssssssssssssssssssssssssssssssssssss"
+TEST_F(UT_Cli7zPlugin, tset_handleLine_005)
+{
+    EXPECT_EQ(m_tester->handleLine("Unexpected end of archive", WT_List), true);
+    EXPECT_EQ(m_tester->m_isCorruptArchive, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_006)
+{
+    EXPECT_EQ(m_tester->handleLine("Unexpected end of archive", WT_Extract), true);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_MissingVolume);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_007)
+{
+    EXPECT_EQ(m_tester->handleLine("No files to process", WT_Extract), true);
+    EXPECT_EQ(m_tester->m_isEmptyArchive, true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_008)
+{
+    EXPECT_EQ(m_tester->handleLine("ERROR: Can not open output file : sssssssssssssssssssssssssssssssssssssssssssssssss"
                                    "sssssssssssssssssssssssssssssssssssssssssssssssss"
                                    "sssssssssssssssssssssssssssssssssssssssssssssssss"
                                    "sssssssssssssssssssssssssssssssssssssssssssssssss"
                                    "sssssssssssssssssssssssssssssssssssssssssssssssss"
                                    "sssssssssssssssssssssssssssssssssssssssssssssssss", WT_Extract), false);
-
-    ASSERT_EQ(m_tester->handleLine("System ERROR:28", WT_Add), false);
-    ASSERT_EQ(m_tester->handleLine("ERROR: E_FAIL", WT_Extract), false);
-    m_tester->m_eErrorType = ET_WrongPassword;
-    ASSERT_EQ(m_tester->handleLine("E_FAIL", WT_Delete), false);
-    ASSERT_EQ(m_tester->handleLine("MAX_PATHNAME_LEN", WT_Add), false);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_LongNameError);
 }
 
-TEST_F(TestCli7zPlugin, testisNoFilesArchive)
+TEST_F(UT_Cli7zPlugin, tset_handleLine_009)
 {
-    ASSERT_EQ(m_tester->isNoFilesArchive("No files to process"), true);
+    EXPECT_EQ(m_tester->handleLine("System ERROR:28", WT_Add), false);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_InsufficientDiskSpace);
 }
 
-TEST_F(TestCli7zPlugin, testlist)
+TEST_F(UT_Cli7zPlugin, tset_handleLine_010)
+{
+    Stub stub;
+    stub.set(ADDR(ReadOnlyArchiveInterface, isInsufficientDiskSpace), isInsufficientDiskSpace_stub);
+    EXPECT_EQ(m_tester->handleLine("ERROR: E_FAIL", WT_Extract), false);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_InsufficientDiskSpace);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_011)
+{
+    m_tester->m_eErrorType = ET_WrongPassword;
+    EXPECT_EQ(m_tester->handleLine("E_FAIL", WT_Delete), false);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleLine_012)
+{
+    EXPECT_EQ(m_tester->handleLine("MAX_PATHNAME_LEN", WT_Add), false);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Error);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_LongNameError);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_isNoFilesArchive)
+{
+    EXPECT_EQ(m_tester->isNoFilesArchive("No files to process"), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_list)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
-    ASSERT_EQ(m_tester->list(), PFT_Nomral);
+    EXPECT_EQ(m_tester->list(), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_setHasRootDirs.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_setHasHandlesDirs.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_workStatus, WT_List);
 }
 
-TEST_F(TestCli7zPlugin, testtestArchive)
+TEST_F(UT_Cli7zPlugin, tset_testArchive)
 {
-    ASSERT_EQ(m_tester->testArchive(), PFT_Nomral);
+    EXPECT_EQ(m_tester->testArchive(), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Add);
 }
 
-TEST_F(TestCli7zPlugin, testextractFiles)
+TEST_F(UT_Cli7zPlugin, tset_extractFiles_001)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
 
     ExtractionOptions options;
-    options.strTargetPath = "/home/Desktop/";
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/tset_sources/7z/extract";
     options.bAllExtract = true;
-    m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(m_tester->extractFiles(QList<FileEntry>(), options), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Extract);
+}
 
+TEST_F(UT_Cli7zPlugin, tset_extractFiles_002)
+{
+    Stub stub;
+    stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
 
     FileEntry entry;
     entry.strFullPath = "1.txt";
     entry.strFileName = "1.txt";
-    options.strTargetPath = "/home/Desktop/";
+    ExtractionOptions options;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/tset_sources/7z/extract";
     options.bAllExtract = false;
-    m_tester->extractFiles(QList<FileEntry>() << entry, options);
+    EXPECT_EQ(m_tester->extractFiles(QList<FileEntry>() << entry, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Extract);
 }
 
-TEST_F(TestCli7zPlugin, testpauseOperation)
+TEST_F(UT_Cli7zPlugin, tset_pauseOperation)
 {
     Stub stub;
     stub.set(kill, kill_stub);
@@ -374,7 +635,7 @@ TEST_F(TestCli7zPlugin, testpauseOperation)
     m_tester->pauseOperation();
 }
 
-TEST_F(TestCli7zPlugin, testcontinueOperation)
+TEST_F(UT_Cli7zPlugin, tset_continueOperation)
 {
     Stub stub;
     stub.set(kill, kill_stub);
@@ -383,13 +644,19 @@ TEST_F(TestCli7zPlugin, testcontinueOperation)
     m_tester->continueOperation();
 }
 
-TEST_F(TestCli7zPlugin, testdoKill)
+TEST_F(UT_Cli7zPlugin, tset_doKill_001)
 {
     m_tester->m_process = new KPtyProcess;
-    m_tester->doKill();
+    EXPECT_EQ(m_tester->doKill(), true);
 }
 
-TEST_F(TestCli7zPlugin, testaddFiles)
+TEST_F(UT_Cli7zPlugin, tset_doKill_002)
+{
+    m_tester->m_process = nullptr;
+    EXPECT_EQ(m_tester->doKill(), false);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_addFiles_001)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
@@ -400,41 +667,69 @@ TEST_F(TestCli7zPlugin, testaddFiles)
 
     m_tester->m_filesSize = 10;
 
-    options.strDestination = "/a/b";
-    m_tester->addFiles(files, options);
-
-    options.strDestination.clear();
-    m_tester->addFiles(files, options);
-
-    options.bTar_7z = false;
-    m_tester->addFiles(files, options);
-
+    options.strDestination = _UTSOURCEDIR;
+    options.strDestination += "/tset_sources/7z/compress";
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Add);
 }
 
-TEST_F(TestCli7zPlugin, testmoveFiles)
-{
-    ASSERT_EQ(m_tester->moveFiles(QList<FileEntry>(), CompressOptions()), PFT_Nomral);
-}
-
-TEST_F(TestCli7zPlugin, testcopyFiles)
-{
-    ASSERT_EQ(m_tester->copyFiles(QList<FileEntry>(), CompressOptions()), PFT_Nomral);
-}
-
-TEST_F(TestCli7zPlugin, testdeleteFiles)
+TEST_F(UT_Cli7zPlugin, tset_addFiles_002)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
 
-    ASSERT_EQ(m_tester->deleteFiles(QList<FileEntry>()), PFT_Nomral);
+    QList<FileEntry> files;
+    CompressOptions options;
+    options.strDestination = _UTSOURCEDIR;
+    options.strDestination += "/tset_sources/7z/compress";
+    options.bTar_7z = true;
+    options.strDestination.clear();
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Add);
+    EXPECT_EQ(m_tester->m_isTar7z, true);
 }
 
-TEST_F(TestCli7zPlugin, testaddComment)
+TEST_F(UT_Cli7zPlugin, tset_addFiles_003)
 {
-    ASSERT_EQ(m_tester->addComment(""), PFT_Nomral);
+    Stub stub;
+    stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
+
+    QList<FileEntry> files;
+    CompressOptions options;
+    options.strDestination = _UTSOURCEDIR;
+    options.strDestination += "/tset_sources/7z/compress";
+    options.bTar_7z = false;
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Add);
+    EXPECT_EQ(m_tester->m_isTar7z, false);
+
 }
 
-TEST_F(TestCli7zPlugin, testupdateArchiveData)
+TEST_F(UT_Cli7zPlugin, tset_moveFiles)
+{
+    EXPECT_EQ(m_tester->moveFiles(QList<FileEntry>(), CompressOptions()), PFT_Nomral);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_copyFiles)
+{
+    EXPECT_EQ(m_tester->copyFiles(QList<FileEntry>(), CompressOptions()), PFT_Nomral);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_deleteFiles)
+{
+    Stub stub;
+    stub.set(ADDR(CliInterface, runProcess), cliInterface_runProcess_stub);
+
+    EXPECT_EQ(m_tester->deleteFiles(QList<FileEntry>()), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_workStatus, WT_Delete);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_addComment)
+{
+    EXPECT_EQ(m_tester->addComment(""), PFT_Nomral);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_updateArchiveData_001)
 {
     UpdateOptions options;
 
@@ -466,8 +761,14 @@ TEST_F(TestCli7zPlugin, testupdateArchiveData)
     stArchiveData.mapFileEntry[entry.strFullPath] = entry;
 
     options.eType = UpdateOptions::Delete;
-    ASSERT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
+    EXPECT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
+}
 
+TEST_F(UT_Cli7zPlugin, tset_updateArchiveData_002)
+{
+    UpdateOptions options;
+    FileEntry entry;
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     entry.strFullPath = "1/2.txt";
     entry.strFileName = "2.txt";
     entry.isDirectory = false;
@@ -475,178 +776,304 @@ TEST_F(TestCli7zPlugin, testupdateArchiveData)
     stArchiveData.listRootEntry << entry;
     stArchiveData.mapFileEntry[entry.strFullPath] = entry;
     options.eType = UpdateOptions::Add;
-    ASSERT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
+    EXPECT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
 }
 
-TEST_F(TestCli7zPlugin, testsetListEmptyLines)
+TEST_F(UT_Cli7zPlugin, tset_setListEmptyLines)
 {
     m_tester->setListEmptyLines(true);
-    ASSERT_EQ(m_tester->m_listEmptyLines, true);
+    EXPECT_EQ(m_tester->m_listEmptyLines, true);
 }
 
-TEST_F(TestCli7zPlugin, testrunProcess)
+TEST_F(UT_Cli7zPlugin, tset_runProcess_001)
 {
     Stub stub;
     stub.set(ADDR(KProcess, start), kProcess_start_stub);
+    stub.set(ADDR(QStandardPaths, findExecutable), qStandardPaths_findExecutable_stub);
+    EXPECT_EQ(m_tester->runProcess("asdasd", QStringList()), false);
+}
 
-    Stub stub1;
-    stub1.set(ADDR(QStandardPaths, findExecutable), qStandardPaths_findExecutable_stub);
-    ASSERT_EQ(m_tester->runProcess("asdasd", QStringList()), false);
-    m_tester->deleteProcess();
-
-    Stub stub2;
-    stub2.set(ADDR(QStandardPaths, findExecutable), qStandardPaths_findExecutable_stub);
-    stub2.set(ADDR(QProcess, waitForStarted), qProcess_waitForStarted_stub);
+TEST_F(UT_Cli7zPlugin, tset_runProcess_002)
+{
+    Stub stub;
+    stub.set(ADDR(QStandardPaths, findExecutable), qStandardPaths_findExecutable_stub);
+    stub.set(ADDR(QProcess, waitForStarted), qProcess_waitForStarted_stub);
     g_QProcess_waitForStarted_result = true;
     m_tester->m_workStatus = WT_Extract;
     m_tester->m_isTar7z = true;
-    ASSERT_EQ(m_tester->runProcess("7z", QStringList()), true);
-    m_tester->deleteProcess();
+    EXPECT_EQ(m_tester->runProcess("7z", QStringList()), true);
+    EXPECT_EQ(m_tester->m_stdOutData.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_isProcessKilled, false);
+}
 
-    Stub stub3;
-    stub3.set(ADDR(QProcess, waitForStarted), qProcess_waitForStarted_stub);
+TEST_F(UT_Cli7zPlugin, tset_runProcess_003)
+{
+    Stub stub;
+    stub.set(ADDR(QStandardPaths, findExecutable), qStandardPaths_findExecutable_stub);
+    stub.set(ADDR(QProcess, waitForStarted), qProcess_waitForStarted_stub);
     g_QProcess_waitForStarted_result = false;
     m_tester->m_workStatus = WT_Add;
     m_tester->m_isTar7z = false;
-    ASSERT_EQ(m_tester->runProcess("7z", QStringList()), true);
+    EXPECT_EQ(m_tester->runProcess("7z", QStringList()), true);
+    EXPECT_EQ(m_tester->m_stdOutData.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_isProcessKilled, false);
 }
 
-TEST_F(TestCli7zPlugin, testdeleteProcess)
+TEST_F(UT_Cli7zPlugin, tset_deleteProcess)
 {
     m_tester->m_process = new KPtyProcess;
     m_tester->deleteProcess();
+    EXPECT_EQ(m_tester->m_process, nullptr);
 }
 
-TEST_F(TestCli7zPlugin, testhandleProgress)
+TEST_F(UT_Cli7zPlugin, tset_handleProgress_001)
 {
     m_tester->m_filesSize = 10;
     m_tester->m_process = new KPtyProcess;
     m_tester->m_process->setProgram("7z");
     m_tester->m_workStatus = WT_Extract;
     m_tester->handleProgress("22% \b\b\b\b 73593 - 1/2/3.js");
+    EXPECT_EQ(m_tester->m_indexOfListRootEntry, 0);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleProgress_002)
+{
+    m_tester->m_filesSize = 10;
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_process->setProgram("7z");
     m_tester->m_workStatus = WT_Delete;
     m_tester->handleProgress("% = 1/2/3.js");
+    EXPECT_NE(m_tester->m_process, nullptr);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleProgress_003)
+{
+    m_tester->m_filesSize = 10;
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_process->setProgram("7z");
     m_tester->m_workStatus = WT_Extract;
-    m_tester->handleProgress("0% \b\b\b\b 73593 - 1/2/3.js");
+    m_tester->m_extractOptions.bExistList = false;
+    m_tester->m_indexOfListRootEntry = 0;
+    DataManager::get_instance().resetArchiveData();
+    m_tester->handleProgress("12% \b\b\b\b 73593 - 1/2/3.js");
+    EXPECT_EQ(m_tester->m_indexOfListRootEntry, 1);
+    EXPECT_EQ(DataManager::get_instance().archiveData().listRootEntry.count(), 1);
+}
 
+TEST_F(UT_Cli7zPlugin, tset_handleProgress_004)
+{
+    m_tester->m_filesSize = 10;
+    m_tester->m_process = new KPtyProcess;
     m_tester->m_process->setProgram("unrar");
+    m_tester->m_extractOptions.bExistList = false;
+    m_tester->m_indexOfListRootEntry = 0;
+    DataManager::get_instance().resetArchiveData();
     m_tester->handleProgress("Extracting  安装包/新建文件夹 - 副本 (2)/TabTip.exe.mui                         OK");
+    EXPECT_EQ(m_tester->m_indexOfListRootEntry, 1);
+    EXPECT_EQ(DataManager::get_instance().archiveData().listRootEntry.count(), 1);
+}
 
+TEST_F(UT_Cli7zPlugin, tset_handleProgress_005)
+{
+    m_tester->m_filesSize = 10;
+    m_tester->m_process = new KPtyProcess;
     m_tester->m_process->setProgram("bash");
     m_tester->handleProgress("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b  7M + [Content]");
+    EXPECT_NE(m_tester->m_process, nullptr);
 }
 
-TEST_F(TestCli7zPlugin, testhandlePassword)
+TEST_F(UT_Cli7zPlugin, tset_handlePassword_001)
 {
-    m_tester->m_process = new KPtyProcess;
-
     Stub stub;
     stub.set(ADDR(PasswordNeededQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
+
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_process->setProgram("7z");
 
     g_PasswordNeededQuery_responseCancelled_result = true;
-    Stub stub1;
-    stub1.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
-    m_tester->m_process->setProgram("7z");
-    ASSERT_EQ(m_tester->handlePassword(), PFT_Cancel);
-
-
-    g_PasswordNeededQuery_responseCancelled_result = false;
-    Stub stub2;
-    stub2.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
-    m_tester->m_process->setProgram("7z");
-    ASSERT_EQ(m_tester->handlePassword(), PFT_Nomral);
-
-
-    Stub stub3;
-    stub3.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
-
-    m_tester->m_process->setProgram("unrar");
-    ASSERT_EQ(m_tester->handlePassword(), PFT_Nomral);
+    EXPECT_EQ(m_tester->handlePassword(), PFT_Cancel);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NoError);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
 }
 
-TEST_F(TestCli7zPlugin, testhandleFileExists)
+TEST_F(UT_Cli7zPlugin, tset_handlePassword_002)
+{
+    Stub stub;
+    stub.set(ADDR(PasswordNeededQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
+
+    g_PasswordNeededQuery_responseCancelled_result = false;
+
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_process->setProgram("7z");
+
+    EXPECT_EQ(m_tester->handlePassword(), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NoError);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handlePassword_003)
+{
+    Stub stub;
+    stub.set(ADDR(PasswordNeededQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(PasswordNeededQuery, responseCancelled), passwordNeededQuery_responseCancelled_stub);
+
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_process->setProgram("unrar");
+
+    EXPECT_EQ(m_tester->handlePassword(), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_NoError);
+    EXPECT_EQ(m_tester->m_strPassword.isEmpty(), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_001)
 {
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
     stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
 
-    ASSERT_EQ(m_tester->handleFileExists("file ./"), false);
+    EXPECT_EQ(m_tester->handleFileExists("file ./"), false);
+}
 
-    Stub stub1;
-    stub1.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
-    stub1.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
-    stub1.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
-    stub1.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
-    stub1.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_002)
+{
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
 
     g_OverwriteQuery_responseCancelled_result = true;
     g_OverwriteQuery_responseSkip_result = false;
     g_OverwriteQuery_responseSkipAll_result = false;
     g_OverwriteQuery_responseOverwrite_result = false;
     g_OverwriteQuery_responseOverwriteAll_result = false;
-    ASSERT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+    EXPECT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_003)
+{
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
 
     g_OverwriteQuery_responseCancelled_result = false;
     g_OverwriteQuery_responseSkip_result = true;
     g_OverwriteQuery_responseSkipAll_result = false;
     g_OverwriteQuery_responseOverwrite_result = false;
     g_OverwriteQuery_responseOverwriteAll_result = false;
-    ASSERT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+    EXPECT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_004)
+{
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
 
     g_OverwriteQuery_responseCancelled_result = false;
     g_OverwriteQuery_responseSkip_result = false;
     g_OverwriteQuery_responseSkipAll_result = true;
     g_OverwriteQuery_responseOverwrite_result = false;
     g_OverwriteQuery_responseOverwriteAll_result = false;
-    ASSERT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+    EXPECT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_005)
+{
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
 
     g_OverwriteQuery_responseCancelled_result = false;
     g_OverwriteQuery_responseSkip_result = false;
     g_OverwriteQuery_responseSkipAll_result = false;
     g_OverwriteQuery_responseOverwrite_result = true;
     g_OverwriteQuery_responseOverwriteAll_result = false;
-    ASSERT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+    EXPECT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_006)
+{
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(CliInterface, writeToProcess), writeToProcess_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), overwriteQuery_responseCancelled_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), overwriteQuery_responseSkip_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), overwriteQuery_responseSkipAll_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwrite), overwriteQuery_responseOverwrite_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), overwriteQuery_responseOverwriteAll_stub);
 
     g_OverwriteQuery_responseCancelled_result = false;
     g_OverwriteQuery_responseSkip_result = false;
     g_OverwriteQuery_responseSkipAll_result = false;
     g_OverwriteQuery_responseOverwrite_result = false;
     g_OverwriteQuery_responseOverwriteAll_result = true;
-    ASSERT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
-
-    ASSERT_EQ(m_tester->handleFileExists("sssssssss"), false);
+    EXPECT_EQ(m_tester->handleFileExists("(Y)es / (N)o / (A)lways / (S)kip all / A(u)to rename all / (Q)uit? "), true);
 }
 
-TEST_F(TestCli7zPlugin, testhandleCorrupt)
+TEST_F(UT_Cli7zPlugin, tset_handleFileExists_007)
+{
+    EXPECT_EQ(m_tester->handleFileExists("sssssssss"), false);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_handleCorrupt_001)
 {
     Stub stub;
     stub.set(ADDR(LoadCorruptQuery, waitForResponse), query_waitForResponse_stub);
     stub.set(ADDR(LoadCorruptQuery, responseYes), loadCorruptQuery_responseYes_stub);
 
     g_LoadCorruptQuery_responseYes_result = false;
-    ASSERT_EQ(m_tester->handleCorrupt(), PFT_Error);
-
-    g_LoadCorruptQuery_responseYes_result = true;
-    ASSERT_EQ(m_tester->handleCorrupt(), PFT_Nomral);
+    EXPECT_EQ(m_tester->handleCorrupt(), PFT_Error);
 }
 
-TEST_F(TestCli7zPlugin, testwriteToProcess)
+TEST_F(UT_Cli7zPlugin, tset_handleCorrupt_002)
+{
+    Stub stub;
+    stub.set(ADDR(LoadCorruptQuery, waitForResponse), query_waitForResponse_stub);
+    stub.set(ADDR(LoadCorruptQuery, responseYes), loadCorruptQuery_responseYes_stub);
+
+    g_LoadCorruptQuery_responseYes_result = true;
+    EXPECT_EQ(m_tester->handleCorrupt(), PFT_Nomral);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_writeToProcess)
 {
     m_tester->m_process = new KPtyProcess;
     m_tester->writeToProcess("");
+    EXPECT_NE(m_tester->m_process->pty(), nullptr);
 }
 
-TEST_F(TestCli7zPlugin, testmoveExtractTempFilesToDest)
+TEST_F(UT_Cli7zPlugin, tset_moveExtractTempFilesToDest)
 {
 
 }
 
-TEST_F(TestCli7zPlugin, testreadStdout)
+TEST_F(UT_Cli7zPlugin, tset_readStdout)
 {
 
 }
 
-TEST_F(TestCli7zPlugin, testprocessFinished)
+TEST_F(UT_Cli7zPlugin, tset_processFinished)
 {
     Stub stub;
     stub.set(ADDR(LoadCorruptQuery, waitForResponse), query_waitForResponse_stub);
@@ -656,11 +1083,14 @@ TEST_F(TestCli7zPlugin, testprocessFinished)
 
     m_tester->m_process = new KPtyProcess;
     m_tester->m_isCorruptArchive = true;
+    m_tester->m_workStatus = WT_List;
     m_tester->processFinished(0, QProcess::NormalExit);
-    ASSERT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_MissingVolume);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_isCorruptArchive, false);
 }
 
-TEST_F(TestCli7zPlugin, testextractProcessFinished)
+TEST_F(UT_Cli7zPlugin, tset_extractProcessFinished_001)
 {
     Stub stub;
     stub.set(ADDR(CliInterface, moveExtractTempFilesToDest), moveExtractTempFilesToDest_stub);
@@ -669,53 +1099,82 @@ TEST_F(TestCli7zPlugin, testextractProcessFinished)
     m_tester->m_extractOptions.bAllExtract = false;
     m_tester->m_extractOptions.strTargetPath = "/home";
     m_tester->extractProcessFinished(0, QProcess::NormalExit);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_indexOfListRootEntry, 0);
+    EXPECT_EQ(m_tester->m_isEmptyArchive, false);
+    EXPECT_EQ(m_tester->m_rootNode.isEmpty(), true);
 }
 
-TEST_F(TestCli7zPlugin, testgetChildProcessId)
+TEST_F(UT_Cli7zPlugin, tset_extractProcessFinished_002)
+{
+    Stub stub;
+    stub.set(ADDR(CliInterface, moveExtractTempFilesToDest), moveExtractTempFilesToDest_stub);
+
+    m_tester->m_process = new KPtyProcess;
+    m_tester->m_extractOptions.bAllExtract = false;
+    m_tester->m_extractOptions.strTargetPath = "/home";
+    m_tester->extractProcessFinished(0, QProcess::CrashExit);
+    EXPECT_EQ(m_tester->m_finishType, PFT_Nomral);
+    EXPECT_EQ(m_tester->m_indexOfListRootEntry, 0);
+    EXPECT_EQ(m_tester->m_isEmptyArchive, false);
+    EXPECT_EQ(m_tester->m_rootNode.isEmpty(), true);
+}
+
+TEST_F(UT_Cli7zPlugin, tset_getChildProcessId)
 {
 
 }
 
-TEST_F(TestCli7zPlugin, testgetTargetPath)
+TEST_F(UT_Cli7zPlugin, tset_getTargetPath)
 {
     m_tester->m_extractOptions.strTargetPath = "a/b";
-    ASSERT_EQ(m_tester->getTargetPath(), "a/b");
+    EXPECT_EQ(m_tester->getTargetPath(), "a/b");
 }
 
-TEST_F(TestCli7zPlugin, testwaitForFinished)
+TEST_F(UT_Cli7zPlugin, tset_waitForFinished)
 {
     m_tester->m_bWaitForFinished = true;
-    ASSERT_EQ(m_tester->waitForFinished(), true);
+    EXPECT_EQ(m_tester->waitForFinished(), true);
 }
 
-TEST_F(TestCli7zPlugin, testsetPassword)
+TEST_F(UT_Cli7zPlugin, tset_setPassword)
 {
     m_tester->setPassword("123456");
-    ASSERT_EQ(m_tester->m_strPassword, "123456");
+    EXPECT_EQ(m_tester->m_strPassword, "123456");
 }
 
-TEST_F(TestCli7zPlugin, testgetPassword)
+TEST_F(UT_Cli7zPlugin, tset_getPassword)
 {
     m_tester->m_strPassword = "123456";
-    ASSERT_EQ(m_tester->getPassword(), "123456");
+    EXPECT_EQ(m_tester->getPassword(), "123456");
 }
 
-TEST_F(TestCli7zPlugin, testerrorType)
+TEST_F(UT_Cli7zPlugin, tset_errorType)
 {
     m_tester->m_eErrorType = ErrorType::ET_NoError;
-    ASSERT_EQ(m_tester->errorType(), ErrorType::ET_NoError);
+    EXPECT_EQ(m_tester->errorType(), ErrorType::ET_NoError);
 }
 
-TEST_F(TestCli7zPlugin, testsetWaitForFinishedSignal)
+TEST_F(UT_Cli7zPlugin, tset_setWaitForFinishedSignal)
 {
     m_tester->setWaitForFinishedSignal(true);
-    ASSERT_EQ(m_tester->m_bWaitForFinished, true);
+    EXPECT_EQ(m_tester->m_bWaitForFinished, true);
 }
 
-TEST_F(TestCli7zPlugin, testgetPermissions)
+TEST_F(UT_Cli7zPlugin, tset_getPermissions_001)
+{
+    mode_t perm = 0;
+    QFileDevice::Permissions pers = QFileDevice::Permissions();
+    pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
+    EXPECT_EQ(m_tester->getPermissions(perm), pers);
+
+}
+
+TEST_F(UT_Cli7zPlugin, tset_getPermissions_002)
 {
     mode_t perm = 0;
     m_tester->getPermissions(perm);
     perm = S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
-    m_tester->getPermissions(perm);
+    QFileDevice::Permissions pers = QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser | QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ExeGroup | QFileDevice::ReadOther | QFileDevice::WriteOther | QFileDevice::ExeOther;
+    EXPECT_EQ(m_tester->getPermissions(perm), pers);
 }

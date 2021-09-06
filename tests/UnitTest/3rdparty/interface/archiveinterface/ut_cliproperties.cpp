@@ -33,10 +33,10 @@
 
 
 // 测试CliProperties
-class TestCliProperties : public ::testing::Test
+class UT_CliProperties : public ::testing::Test
 {
 public:
-    TestCliProperties(): m_tester(nullptr) {}
+    UT_CliProperties(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -59,65 +59,86 @@ protected:
     CliProperties *m_tester;
 };
 
-TEST_F(TestCliProperties, initTest)
+TEST_F(UT_CliProperties, initTest)
 {
 
 }
 
-TEST_F(TestCliProperties, testaddArgs)
+TEST_F(UT_CliProperties, test_addArgs_001)
 {
     m_tester->m_compressionLevelSwitch = "ON";
     m_tester->m_passwordSwitch = QStringList() << "123";
     m_tester->m_compressionMethodSwitch["application/zip"] = "ON";
-    m_tester->addArgs("1.zip", QStringList() << "1.txt", "123", false, 3, "BZip2", "AES256", 0, true, "");
-    m_tester->addArgs("1.zip", QStringList() << "1.txt", "123", false, 3, "BZip2", "AES256", 0, false, "");
+    QStringList list = QStringList() << "-c" << "tar cf - | 7z a -si 123 ON ON  1.zip";
+    EXPECT_EQ(m_tester->addArgs("1.zip", QStringList() << "1.txt", "123", false, 3, "BZip2", "AES256", 0, true, ""), list);
 }
 
-TEST_F(TestCliProperties, testcommentArgs)
+TEST_F(UT_CliProperties, test_addArgs_002)
+{
+    m_tester->m_compressionLevelSwitch = "ON";
+    m_tester->m_passwordSwitch = QStringList() << "123";
+    m_tester->m_compressionMethodSwitch["application/zip"] = "ON";
+    QStringList list = QStringList() << "123" << "ON" << "ON" << "1.zip" << "1.txt";
+    EXPECT_EQ(m_tester->addArgs("1.zip", QStringList() << "1.txt", "123", false, 3, "BZip2", "AES256", 0, false, ""), list);
+}
+
+TEST_F(UT_CliProperties, test_commentArgs)
 {
     m_tester->m_commentSwitch = QStringList() << "ON";
-    m_tester->commentArgs("1.zip", "123456789");
+    QStringList list = QStringList() << "ON" << "1.zip";
+    EXPECT_EQ(m_tester->commentArgs("1.zip", "123456789"), list);
 }
 
-TEST_F(TestCliProperties, testdeleteArgs)
+TEST_F(UT_CliProperties, test_deleteArgs)
 {
     QList<FileEntry> files;
     FileEntry entry;
     entry.strFullPath = "1/";
     files << entry;
     m_tester->m_passwordSwitch = QStringList() << "123";
-    m_tester->deleteArgs("1.zip", files, "123456");
+    QStringList list = QStringList() << "123" << "1.zip" << "1";
+    EXPECT_EQ(m_tester->deleteArgs("1.zip", files, "123456"), list);
 }
 
-TEST_F(TestCliProperties, testextractArgs)
+TEST_F(UT_CliProperties, test_extractArgs_001)
 {
     m_tester->m_extractSwitch = QStringList() << "1/";
     m_tester->m_passwordSwitch = QStringList() << "123";
-    m_tester->extractArgs("1.zip", QStringList() << "1.txt", true, "123456");
-    m_tester->extractArgs("1.zip", QStringList() << "1.txt", false, "123456");
+    QStringList list = QStringList() << "1/" << "123" << "1.zip" << "1.txt";
+    EXPECT_EQ(m_tester->extractArgs("1.zip", QStringList() << "1.txt", true, "123456"), list);
 }
 
-TEST_F(TestCliProperties, testlistArgs)
+TEST_F(UT_CliProperties, test_extractArgs_002)
 {
-    m_tester->listArgs("1.zip", "123456");
+    m_tester->m_extractSwitch = QStringList() << "1/";
+    m_tester->m_passwordSwitch = QStringList() << "123";
+    QStringList list = QStringList() << "123" << "1.zip" << "1.txt";
+    EXPECT_EQ(m_tester->extractArgs("1.zip", QStringList() << "1.txt", false, "123456"), list);
 }
 
-TEST_F(TestCliProperties, testmoveArgs)
+TEST_F(UT_CliProperties, test_listArgs)
+{
+    QStringList list = QStringList() << "1.zip";
+    EXPECT_EQ(m_tester->listArgs("1.zip", "123456"), list);
+}
+
+TEST_F(UT_CliProperties, test_moveArgs)
 {
     QString destination;
     m_tester->m_passwordSwitch = QStringList() << "123";
-    m_tester->moveArgs("1.zip", QList<FileEntry>(), destination, "");
+    EXPECT_EQ(m_tester->moveArgs("1.zip", QList<FileEntry>(), destination, ""), QStringList());
 }
 
-TEST_F(TestCliProperties, testtestArgs)
+TEST_F(UT_CliProperties, test_testArgs)
 {
     m_tester->m_testSwitch = QStringList() << "t";
     m_tester->m_passwordSwitch = QStringList() << "123";
-    m_tester->testArgs("1.zip", "123");
+    QStringList list = QStringList() << "t" << "123" << "1.zip";
+    EXPECT_EQ(m_tester->testArgs("1.zip", "123"), list);
 }
 
-TEST_F(TestCliProperties, testsubstituteCommentSwitch)
+TEST_F(UT_CliProperties, test_substituteCommentSwitch)
 {
     m_tester->m_commentSwitch = QStringList() << "ON";
-    m_tester->substituteCommentSwitch("123");
+    EXPECT_EQ(m_tester->substituteCommentSwitch("123"), QStringList() << "ON");
 }

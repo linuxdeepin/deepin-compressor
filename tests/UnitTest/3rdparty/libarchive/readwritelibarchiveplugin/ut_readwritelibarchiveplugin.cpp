@@ -29,10 +29,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestReadWriteLibarchivePluginFactory : public QObject, public ::testing::Test
+class UT_ReadWriteLibarchivePluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestReadWriteLibarchivePluginFactory(): m_tester(nullptr) {}
+    UT_ReadWriteLibarchivePluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -49,10 +49,10 @@ protected:
     ReadWriteLibarchivePluginFactory *m_tester;
 };
 
-class TestReadWriteLibarchivePlugin : public QObject, public ::testing::Test
+class UT_ReadWriteLibarchivePlugin : public QObject, public ::testing::Test
 {
 public:
-    TestReadWriteLibarchivePlugin(): m_tester(nullptr) {}
+    UT_ReadWriteLibarchivePlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -79,17 +79,17 @@ protected:
     ReadWriteLibarchivePlugin *m_tester;
 };
 
-TEST_F(TestReadWriteLibarchivePluginFactory, initTest)
+TEST_F(UT_ReadWriteLibarchivePluginFactory, initTest)
 {
 
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, initTest)
+TEST_F(UT_ReadWriteLibarchivePlugin, initTest)
 {
 
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, testaddFiles)
+TEST_F(UT_ReadWriteLibarchivePlugin, test_addFiles_001)
 {
     QList<FileEntry> files;
     FileEntry file1;
@@ -101,10 +101,10 @@ TEST_F(TestReadWriteLibarchivePlugin, testaddFiles)
     QString strArchive = _UTSOURCEDIR;
     strArchive += "/test_sources/tar/compress/test.tar";
     QFile::remove(strArchive);
-    ASSERT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, testaddFiles1)
+TEST_F(UT_ReadWriteLibarchivePlugin, test_addFiles_002)
 {
     QList<FileEntry> files;
     FileEntry file1;
@@ -114,26 +114,26 @@ TEST_F(TestReadWriteLibarchivePlugin, testaddFiles1)
     file1.qSize = 4;
     files.push_back(file1);
     CompressOptions options;
-    ASSERT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Nomral);
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles)
+TEST_F(UT_ReadWriteLibarchivePlugin, test_deleteFiles_001)
 {
     QList<FileEntry> files;
     FileEntry file1;
     file1.strFullPath = "test.txt";
     files.push_back(file1);
-    ASSERT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
+    EXPECT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, testdeleteFiles2)
+TEST_F(UT_ReadWriteLibarchivePlugin, test_deleteFiles_002)
 {
     QList<FileEntry> files;
     FileEntry file1;
     file1.strFullPath = "dir";
     file1.isDirectory = true;
     files.push_back(file1);
-    ASSERT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
+    EXPECT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
 }
 
 bool open_stub(QIODevice::OpenMode flags)
@@ -141,26 +141,27 @@ bool open_stub(QIODevice::OpenMode flags)
     return false;
 }
 
-TEST_F(TestReadWriteLibarchivePlugin, testinitializeWriter)
+TEST_F(UT_ReadWriteLibarchivePlugin, test_initializeWriter)
 {
     typedef bool (*fptr)(QIODevice::OpenMode);
     fptr QSaveFile_open = (fptr)(&QSaveFile::open);   //获取虚函数地址
     Stub stub;
     stub.set(QSaveFile_open, open_stub);
 
-    ASSERT_EQ(m_tester->initializeWriter(), false);
+    EXPECT_EQ(m_tester->initializeWriter(), false);
 }
 
 int archive_filter_code_stub(struct archive *, int)
 {
     return ARCHIVE_FILTER_NONE - 1;
 }
-TEST_F(TestReadWriteLibarchivePlugin, testinitializeWriterFilters)
+
+TEST_F(UT_ReadWriteLibarchivePlugin, test_initializeWriterFilters)
 {
     Stub stub;
     stub.set(archive_filter_code, archive_filter_code_stub);
 
-    ASSERT_EQ(m_tester->initializeWriterFilters(), false);
+    EXPECT_EQ(m_tester->initializeWriterFilters(), false);
 
     QString strPath = _UTSOURCEDIR;
     QFile::remove(strPath + "/test_sources/tar/compress/test.tar");

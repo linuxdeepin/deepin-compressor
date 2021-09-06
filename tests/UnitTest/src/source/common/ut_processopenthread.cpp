@@ -30,10 +30,10 @@
 
 /*******************************单元测试************************************/
 // 测试ProcessOpenThread
-class TestProcessOpenThread : public ::testing::Test
+class UT_ProcessOpenThread : public ::testing::Test
 {
 public:
-    TestProcessOpenThread(): m_tester(nullptr) {}
+    UT_ProcessOpenThread(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -50,25 +50,25 @@ protected:
     ProcessOpenThread *m_tester;
 };
 
-TEST_F(TestProcessOpenThread, initTest)
+TEST_F(UT_ProcessOpenThread, initTest)
 {
 
 }
 
-TEST_F(TestProcessOpenThread, testsetProgramPath)
+TEST_F(UT_ProcessOpenThread, test_setProgramPath)
 {
     m_tester->setProgramPath("xdg-open");
-    ASSERT_EQ(m_tester->m_strProgramPath, "xdg-open");
+    EXPECT_EQ(m_tester->m_strProgramPath, "xdg-open");
 }
 
-TEST_F(TestProcessOpenThread, testsetArguments)
+TEST_F(UT_ProcessOpenThread, test_setArguments)
 {
     QStringList listArguments = QStringList() << "1.txt";
     m_tester->setArguments(listArguments);
-    ASSERT_EQ(m_tester->m_listArguments == listArguments, true);
+    EXPECT_EQ(m_tester->m_listArguments == listArguments, true);
 }
 
-TEST_F(TestProcessOpenThread, testrun)
+TEST_F(UT_ProcessOpenThread, testrun)
 {
     Stub stub;
     CommonStub::stub_KProcess_start(stub);

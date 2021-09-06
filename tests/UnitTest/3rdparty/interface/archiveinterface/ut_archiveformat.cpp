@@ -33,10 +33,10 @@
 
 
 // 测试ArchiveFormat
-class TestArchiveFormat : public ::testing::Test
+class UT_ArchiveFormat : public ::testing::Test
 {
 public:
-    TestArchiveFormat() {}
+    UT_ArchiveFormat() {}
 
 public:
     virtual void SetUp()
@@ -59,64 +59,75 @@ protected:
     ArchiveFormat m_tester;
 };
 
-TEST_F(TestArchiveFormat, initTest)
+TEST_F(UT_ArchiveFormat, initTest)
 {
 
 }
 
-TEST_F(TestArchiveFormat, testencryptionType)
+TEST_F(UT_ArchiveFormat, test_encryptionType)
 {
-    m_tester.encryptionType();
+    m_tester.m_encryptionType = Unencrypted;
+    EXPECT_EQ(m_tester.encryptionType(), Unencrypted);
 }
 
-TEST_F(TestArchiveFormat, testminCompressionLevel)
+TEST_F(UT_ArchiveFormat, test_minCompressionLevel)
 {
-    m_tester.minCompressionLevel();
+    m_tester.m_minCompressionLevel = 1;
+    EXPECT_EQ(m_tester.minCompressionLevel(), 1);
 }
 
-TEST_F(TestArchiveFormat, testmaxCompressionLevel)
+TEST_F(UT_ArchiveFormat, test_maxCompressionLevel)
 {
-    m_tester.maxCompressionLevel();
+    m_tester.m_maxCompressionLevel = 9;
+    EXPECT_EQ(m_tester.maxCompressionLevel(), 9);
 }
 
-TEST_F(TestArchiveFormat, testdefaultCompressionLevel)
+TEST_F(UT_ArchiveFormat, test_defaultCompressionLevel)
 {
-    m_tester.maxCompressionLevel();
+    m_tester.m_defaultCompressionLevel = 6;
+    EXPECT_EQ(m_tester.defaultCompressionLevel(), 6);
 }
 
-TEST_F(TestArchiveFormat, testsupportsWriteComment)
+TEST_F(UT_ArchiveFormat, test_supportsWriteComment)
 {
-    m_tester.maxCompressionLevel();
+    m_tester.m_supportsWriteComment = true;
+    EXPECT_EQ(m_tester.supportsWriteComment(), true);
 }
 
-TEST_F(TestArchiveFormat, testsupportsTesting)
+TEST_F(UT_ArchiveFormat, test_supportsTesting)
 {
-    m_tester.supportsTesting();
+    m_tester.m_supportsTesting = true;
+    EXPECT_EQ(m_tester.supportsTesting(), true);
 }
 
-TEST_F(TestArchiveFormat, testsupportsMultiVolume)
+TEST_F(UT_ArchiveFormat, test_supportsMultiVolume)
 {
-    m_tester.supportsMultiVolume();
+    m_tester.m_supportsMultiVolume = true;
+    EXPECT_EQ(m_tester.supportsMultiVolume(), true);
 }
 
-TEST_F(TestArchiveFormat, testcompressionMethods)
+TEST_F(UT_ArchiveFormat, test_compressionMethods)
 {
-    m_tester.compressionMethods();
+    m_tester.m_compressionMethods = QVariantMap();
+    EXPECT_EQ(m_tester.compressionMethods(), QVariantMap());
 }
 
-TEST_F(TestArchiveFormat, testdefaultCompressionMethod)
+TEST_F(UT_ArchiveFormat, test_defaultCompressionMethod)
 {
-    m_tester.defaultCompressionMethod();
+    m_tester.m_defaultCompressionMethod = "Default";
+    EXPECT_EQ(m_tester.defaultCompressionMethod(), "Default");
 }
 
-TEST_F(TestArchiveFormat, testencryptionMethods)
+TEST_F(UT_ArchiveFormat, test_encryptionMethods)
 {
-    m_tester.encryptionMethods();
+    m_tester.m_encryptionMethods = QStringList() << "AES256";
+    EXPECT_EQ(m_tester.encryptionMethods(), QStringList() << "AES256");
 }
 
-TEST_F(TestArchiveFormat, testdefaultEncryptionMethod)
+TEST_F(UT_ArchiveFormat, test_defaultEncryptionMethod)
 {
-    m_tester.defaultEncryptionMethod();
+    m_tester.m_defaultEncryptionMethod = "AES256";
+    EXPECT_EQ(m_tester.defaultEncryptionMethod(), "AES256");
 }
 
 

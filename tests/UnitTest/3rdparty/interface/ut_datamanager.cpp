@@ -32,10 +32,10 @@
 
 
 // 测试DataManager
-class TestDataManager : public ::testing::Test
+class UT_DataManager : public ::testing::Test
 {
 public:
-    TestDataManager(): m_tester(nullptr) {}
+    UT_DataManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,31 +52,32 @@ protected:
     DataManager *m_tester;
 };
 
-TEST_F(TestDataManager, initTest)
+TEST_F(UT_DataManager, initTest)
 {
 
 }
 
-TEST_F(TestDataManager, testDataManager)
+TEST_F(UT_DataManager, test_DataManager)
 {
     DataManager tester1(*m_tester);
+    EXPECT_EQ(tester1.m_stArchiveData.listRootEntry.isEmpty(), true);
 }
 
-TEST_F(TestDataManager, testresetArchiveData)
+TEST_F(UT_DataManager, UT_DataManagerre_setArchiveData)
 {
     m_tester->m_stArchiveData.qSize = 100;
     m_tester->resetArchiveData();
-    ASSERT_EQ(m_tester->m_stArchiveData.qSize, 0);
+    EXPECT_EQ(m_tester->m_stArchiveData.qSize, 0);
 }
 
-TEST_F(TestDataManager, testarchiveData)
+TEST_F(UT_DataManager, test_archiveData)
 {
     m_tester->m_stArchiveData.qSize = 100;
-    ASSERT_EQ(m_tester->archiveData().qSize, 100);
+    EXPECT_EQ(m_tester->archiveData().qSize, 100);
 }
 
-TEST_F(TestDataManager, testget_instance)
+TEST_F(UT_DataManager, test_get_instance)
 {
-    ASSERT_EQ((&m_tester->get_instance()) == m_tester->m_instance, true);
+    EXPECT_EQ((&m_tester->get_instance()) == m_tester->m_instance, true);
 }
 

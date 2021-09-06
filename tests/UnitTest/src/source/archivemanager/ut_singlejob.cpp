@@ -34,10 +34,10 @@
 
 /*******************************函数打桩************************************/
 // 测试SingleJobThread
-class TestSingleJobThread : public ::testing::Test
+class UT_SingleJobThread : public ::testing::Test
 {
 public:
-    TestSingleJobThread(): m_tester(nullptr) {}
+    UT_SingleJobThread(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -60,21 +60,21 @@ protected:
     SingleJobThread *m_tester;
 };
 
-TEST_F(TestSingleJobThread, initTest)
+TEST_F(UT_SingleJobThread, initTest)
 {
 
 }
 
-TEST_F(TestSingleJobThread, testrun)
+TEST_F(UT_SingleJobThread, testrun)
 {
     m_tester->run();
 }
 
 // 测试LoadJob
-class TestLoadJob : public ::testing::Test
+class UT_LoadJob : public ::testing::Test
 {
 public:
-    TestLoadJob(): m_tester(nullptr) {}
+    UT_LoadJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -94,62 +94,86 @@ protected:
     LoadJob *m_tester;
 };
 
-TEST_F(TestLoadJob, initTest)
+TEST_F(UT_LoadJob, initTest)
 {
 
 }
 
-TEST_F(TestLoadJob, teststart)
+TEST_F(UT_LoadJob, test_start_001)
 {
     Stub stub;
     CommonStub::stub_QThread_start(stub);
     m_tester->m_pInterface->m_bWaitForFinished = true;
     m_tester->start();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
+}
+
+TEST_F(UT_LoadJob, test_start_002)
+{
+    Stub stub;
+    CommonStub::stub_QThread_start(stub);
     m_tester->m_pInterface->m_bWaitForFinished = false;
     m_tester->start();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestLoadJob, testdoWork)
+TEST_F(UT_LoadJob, test_start_003)
+{
+    Stub stub;
+    CommonStub::stub_QThread_start(stub);
+    SAFE_DELETE_ELE(m_tester->m_pInterface);
+    m_pInterface = nullptr;
+    m_tester->start();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Error);
+}
+
+TEST_F(UT_LoadJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestLoadJob, testdoPause)
+TEST_F(UT_LoadJob, test_doPause)
 {
     m_tester->doPause();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestLoadJob, testdoContinue)
+TEST_F(UT_LoadJob, test_doContinue)
 {
     m_tester->doContinue();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestLoadJob, testgetdptr)
+TEST_F(UT_LoadJob, test_getdptr)
 {
-    m_tester->getdptr();
+    EXPECT_EQ(m_tester->getdptr(), m_tester->d);
 }
 
-TEST_F(TestLoadJob, testdoKill)
+TEST_F(UT_LoadJob, test_doKill)
 {
-    m_tester->doKill();
+    EXPECT_EQ(m_tester->doKill(), true);
 }
 
-TEST_F(TestLoadJob, testfinishJob)
+TEST_F(UT_LoadJob, test_finishJob)
 {
     m_tester->finishJob();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestLoadJob, testkill)
+TEST_F(UT_LoadJob, testkill)
 {
     m_tester->kill();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Cancel);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_UserCancelOpertion);
 }
 
 
 // 测试AddJob
-class TestAddJob : public ::testing::Test
+class UT_AddJob : public ::testing::Test
 {
 public:
-    TestAddJob(): m_tester(nullptr) {}
+    UT_AddJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -169,22 +193,23 @@ protected:
     AddJob *m_tester;
 };
 
-TEST_F(TestAddJob, initTest)
+TEST_F(UT_AddJob, initTest)
 {
 
 }
 
-TEST_F(TestAddJob, testdoWork)
+TEST_F(UT_AddJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
 
 // 测试AddJob
-class TestCreateJob : public ::testing::Test
+class UT_CreateJob : public ::testing::Test
 {
 public:
-    TestCreateJob(): m_tester(nullptr) {}
+    UT_CreateJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -204,35 +229,42 @@ protected:
     CreateJob *m_tester;
 };
 
-TEST_F(TestCreateJob, initTest)
+TEST_F(UT_CreateJob, initTest)
 {
 
 }
 
-TEST_F(TestCreateJob, testdoWork)
+TEST_F(UT_CreateJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestCreateJob, testdoKill)
+TEST_F(UT_CreateJob, test_doKill)
 {
-    m_tester->doKill();
+    EXPECT_EQ(m_tester->doKill(), true);
 }
 
-TEST_F(TestCreateJob, testcleanCompressFileCancel)
+TEST_F(UT_CreateJob, test_cleanCompressFileCancel_001)
 {
     m_tester->m_stCompressOptions.bSplit = true;
     m_tester->cleanCompressFileCancel();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
+}
+
+TEST_F(UT_CreateJob, test_cleanCompressFileCancel_002)
+{
     m_tester->m_stCompressOptions.bSplit = false;
     m_tester->cleanCompressFileCancel();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
 
 // 测试ExtractJob
-class TestExtractJob : public ::testing::Test
+class UT_ExtractJob : public ::testing::Test
 {
 public:
-    TestExtractJob(): m_tester(nullptr) {}
+    UT_ExtractJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -252,22 +284,23 @@ protected:
     ExtractJob *m_tester;
 };
 
-TEST_F(TestExtractJob, initTest)
+TEST_F(UT_ExtractJob, initTest)
 {
 
 }
 
-TEST_F(TestExtractJob, testdoWork)
+TEST_F(UT_ExtractJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Error);
 }
 
 
 // 测试DeleteJob
-class TestDeleteJob : public ::testing::Test
+class UT_DeleteJob : public ::testing::Test
 {
 public:
-    TestDeleteJob(): m_tester(nullptr) {}
+    UT_DeleteJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -287,22 +320,23 @@ protected:
     DeleteJob *m_tester;
 };
 
-TEST_F(TestDeleteJob, initTest)
+TEST_F(UT_DeleteJob, initTest)
 {
 
 }
 
-TEST_F(TestDeleteJob, testdoWork)
+TEST_F(UT_DeleteJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Error);
 }
 
 
 // 测试OpenJob
-class TestOpenJob : public ::testing::Test
+class UT_OpenJob : public ::testing::Test
 {
 public:
-    TestOpenJob(): m_tester(nullptr) {}
+    UT_OpenJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -322,29 +356,31 @@ protected:
     OpenJob *m_tester;
 };
 
-TEST_F(TestOpenJob, initTest)
+TEST_F(UT_OpenJob, initTest)
 {
 
 }
 
-TEST_F(TestOpenJob, testdoWork)
+TEST_F(UT_OpenJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Error);
 }
 
-TEST_F(TestOpenJob, testslotFinished)
+TEST_F(UT_OpenJob, test_slotFinished)
 {
     Stub stub;
     CommonStub::stub_ProcessOpenThread_start(stub);
     m_tester->slotFinished(PFT_Nomral);
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Nomral);
 }
 
 
 // 测试UpdateJob
-class TestUpdateJob : public ::testing::Test
+class UT_UpdateJob : public ::testing::Test
 {
 public:
-    TestUpdateJob(): m_tester(nullptr) {}
+    UT_UpdateJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -364,30 +400,32 @@ protected:
     UpdateJob *m_tester;
 };
 
-TEST_F(TestUpdateJob, initTest)
+TEST_F(UT_UpdateJob, initTest)
 {
 
 }
 
-TEST_F(TestUpdateJob, teststart)
+TEST_F(UT_UpdateJob, test_start)
 {
     Stub stub;
     CommonStub::stub_QThread_start(stub);
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
     m_tester->start();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestUpdateJob, testdoWork)
+TEST_F(UT_UpdateJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
 
 // 测试CommentJob
-class TestCommentJob : public ::testing::Test
+class UT_CommentJob : public ::testing::Test
 {
 public:
-    TestCommentJob(): m_tester(nullptr) {}
+    UT_CommentJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -405,37 +443,41 @@ protected:
     CommentJob *m_tester;
 };
 
-TEST_F(TestCommentJob, initTest)
+TEST_F(UT_CommentJob, initTest)
 {
 
 }
 
-TEST_F(TestCommentJob, testdoWork)
+TEST_F(UT_CommentJob, test_doWork)
 {
     m_tester->doWork();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestCommentJob, testdoPause)
+TEST_F(UT_CommentJob, test_doPause)
 {
     m_tester->doPause();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestCommentJob, testdoContinue)
+TEST_F(UT_CommentJob, test_doContinue)
 {
     m_tester->doContinue();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
-TEST_F(TestCommentJob, testdoCancel)
+TEST_F(UT_CommentJob, test_doCancel)
 {
     m_tester->doCancel();
+    EXPECT_NE(m_tester->m_pInterface, nullptr);
 }
 
 
 // 测试ConvertJob
-class TestConvertJob : public ::testing::Test
+class UT_ConvertJob : public ::testing::Test
 {
 public:
-    TestConvertJob(): m_tester(nullptr) {}
+    UT_ConvertJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -452,21 +494,23 @@ protected:
     ConvertJob *m_tester;
 };
 
-TEST_F(TestConvertJob, initTest)
+TEST_F(UT_ConvertJob, initTest)
 {
 
 }
 
-TEST_F(TestConvertJob, teststart)
+TEST_F(UT_ConvertJob, test_start)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_ExtractJob_doWork(stub);
     m_tester->start();
+    EXPECT_EQ(m_tester->m_pIface, pIface);
+    EXPECT_EQ(m_tester->m_iStepNo, 0);
 }
 
-TEST_F(TestConvertJob, testslotHandleExtractFinished)
+TEST_F(UT_ConvertJob, testslotHandleExtractFinished)
 {
 ////    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
 //    Stub stub;
@@ -489,7 +533,7 @@ TEST_F(TestConvertJob, testslotHandleExtractFinished)
 //    SAFE_DELETE_ELE(m_tester->m_pIface);
 }
 
-TEST_F(TestConvertJob, testdoPause)
+TEST_F(UT_ConvertJob, test_doPause)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
     Stub stub;
@@ -497,9 +541,10 @@ TEST_F(TestConvertJob, testdoPause)
     JobStub::stub_ExtractJob_doWork(stub);
     m_tester->start();
     m_tester->doPause();
+    EXPECT_NE(m_tester->m_pIface, nullptr);
 }
 
-TEST_F(TestConvertJob, testdoContinue)
+TEST_F(UT_ConvertJob, test_doContinue)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
     Stub stub;
@@ -507,9 +552,10 @@ TEST_F(TestConvertJob, testdoContinue)
     JobStub::stub_ExtractJob_doWork(stub);
     m_tester->start();
     m_tester->doContinue();
+    EXPECT_NE(m_tester->m_pIface, nullptr);
 }
 
-TEST_F(TestConvertJob, testdoKill)
+TEST_F(UT_ConvertJob, test_doKill)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(nullptr, QVariantList());
     Stub stub;
@@ -517,14 +563,15 @@ TEST_F(TestConvertJob, testdoKill)
     JobStub::stub_ExtractJob_doWork(stub);
     m_tester->start();
     m_tester->doKill();
+    EXPECT_NE(m_tester->m_pIface, nullptr);
 }
 
 
 // 测试StepExtractJob
-class TestStepExtractJob : public ::testing::Test
+class UT_StepExtractJob : public ::testing::Test
 {
 public:
-    TestStepExtractJob(): m_tester(nullptr) {}
+    UT_StepExtractJob(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -541,21 +588,23 @@ protected:
     StepExtractJob *m_tester;
 };
 
-TEST_F(TestStepExtractJob, initTest)
+TEST_F(UT_StepExtractJob, initTest)
 {
 
 }
 
-TEST_F(TestStepExtractJob, teststart)
+TEST_F(UT_StepExtractJob, test_start)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
     Stub stub;
     CommonStub::stub_UiTools_createInterface(stub, pIface);
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
+    EXPECT_EQ(m_tester->m_pIface, pIface);
+    EXPECT_EQ(m_tester->m_iStepNo, 0);
 }
 
-TEST_F(TestStepExtractJob, testslotHandleExtractFinished)
+TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_001)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
     Stub stub;
@@ -567,13 +616,42 @@ TEST_F(TestStepExtractJob, testslotHandleExtractFinished)
     Stub stub1;
     CommonStub::stub_UiTools_createInterface(stub1, pIface1);
     m_tester->slotHandleExtractFinished();
-    m_tester->m_pExtractJob->m_eFinishedType = PFT_Cancel;
-    m_tester->slotHandleExtractFinished();
-    m_tester->m_pExtractJob->m_eFinishedType = PFT_Error;
-    m_tester->slotHandleExtractFinished();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Nomral);
 }
 
-TEST_F(TestStepExtractJob, testdoKill)
+TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_002)
+{
+    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    Stub stub;
+    CommonStub::stub_UiTools_createInterface(stub, pIface);
+    JobStub::stub_SingleJob_start(stub);
+    m_tester->start();
+    m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
+    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(m_tester, QVariantList());
+    Stub stub1;
+    CommonStub::stub_UiTools_createInterface(stub1, pIface1);
+    m_tester->m_pExtractJob->m_eFinishedType = PFT_Cancel;
+    m_tester->slotHandleExtractFinished();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Cancel);
+}
+
+TEST_F(UT_StepExtractJob, test_slotHandleExtractFinished_003)
+{
+    ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
+    Stub stub;
+    CommonStub::stub_UiTools_createInterface(stub, pIface);
+    JobStub::stub_SingleJob_start(stub);
+    m_tester->start();
+    m_tester->m_pExtractJob->m_eFinishedType = PluginFinishType::PFT_Nomral;
+    ReadOnlyArchiveInterface *pIface1 = new LibzipPlugin(m_tester, QVariantList());
+    Stub stub1;
+    CommonStub::stub_UiTools_createInterface(stub1, pIface1);
+    m_tester->m_pExtractJob->m_eFinishedType = PFT_Error;
+    m_tester->slotHandleExtractFinished();
+    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Error);
+}
+
+TEST_F(UT_StepExtractJob, test_doKill)
 {
     ReadOnlyArchiveInterface *pIface = new LibzipPlugin(m_tester, QVariantList());
     Stub stub;
@@ -581,7 +659,7 @@ TEST_F(TestStepExtractJob, testdoKill)
     JobStub::stub_SingleJob_start(stub);
     m_tester->start();
     m_tester->m_pExtractJob2 = new ExtractJob(QList<FileEntry>(), pIface, ExtractionOptions(), m_tester);
-    m_tester->doKill();
+    EXPECT_EQ(m_tester->doKill(), true);
 }
 
 

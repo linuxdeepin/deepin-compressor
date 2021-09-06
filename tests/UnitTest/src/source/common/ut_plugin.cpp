@@ -30,10 +30,10 @@
 
 /*******************************单元测试************************************/
 // 测试Plugin
-class TestPlugin : public ::testing::Test
+class UT_Plugin : public ::testing::Test
 {
 public:
-    TestPlugin(): m_tester(nullptr) {}
+    UT_Plugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -50,34 +50,34 @@ protected:
     Plugin *m_tester;
 };
 
-TEST_F(TestPlugin, initTest)
+TEST_F(UT_Plugin, initTest)
 {
 
 }
 
-TEST_F(TestPlugin, testpriority)
+TEST_F(UT_Plugin, test_priority)
 {
-    ASSERT_EQ(m_tester->priority(), 0);
+    EXPECT_EQ(m_tester->priority(), 0);
 }
 
-TEST_F(TestPlugin, testisEnabled)
+TEST_F(UT_Plugin, test_isEnabled)
 {
-    ASSERT_EQ(m_tester->isEnabled(), m_tester->m_enabled);
+    EXPECT_EQ(m_tester->isEnabled(), m_tester->m_enabled);
 }
 
-TEST_F(TestPlugin, testsetEnabled)
+TEST_F(UT_Plugin, test_setEnabled)
 {
     m_tester->m_enabled = false;
     m_tester->setEnabled(true);
-    ASSERT_EQ(m_tester->m_enabled, true);
+    EXPECT_EQ(m_tester->m_enabled, true);
 }
 
-TEST_F(TestPlugin, testisReadWrite)
+TEST_F(UT_Plugin, test_isReadWrite)
 {
-    ASSERT_EQ(m_tester->isReadWrite(), false);
+    EXPECT_EQ(m_tester->isReadWrite(), false);
 }
 
-TEST_F(TestPlugin, testreadOnlyExecutables)
+TEST_F(UT_Plugin, test_readOnlyExecutables)
 {
-    ASSERT_EQ(m_tester->isReadWrite(), false);
+    EXPECT_EQ(m_tester->isReadWrite(), false);
 }

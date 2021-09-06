@@ -32,10 +32,10 @@
 /*******************************函数打桩************************************/
 /*******************************单元测试************************************/
 // 测试Properties
-class TestProperties : public ::testing::Test
+class UT_Properties : public ::testing::Test
 {
 public:
-    TestProperties(): m_tester(nullptr) {}
+    UT_Properties(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -54,18 +54,17 @@ protected:
     Properties *m_tester;
 };
 
-TEST_F(TestProperties, initTest)
+TEST_F(UT_Properties, initTest)
 {
 
 }
 
-TEST_F(TestProperties, testProperties)
+TEST_F(UT_Properties, test_Properties)
 {
     Properties temp(*m_tester);
-
 }
 
-TEST_F(TestProperties, testgetKeys)
+TEST_F(UT_Properties, test_getKeys)
 {
-    m_tester->getKeys();
+    EXPECT_EQ(m_tester->getKeys().isEmpty(), true);
 }

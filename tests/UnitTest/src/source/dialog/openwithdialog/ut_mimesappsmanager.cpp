@@ -30,10 +30,10 @@
 
 /*******************************单元测试************************************/
 // 测试MimeAppsWorker
-class TestMimeAppsWorker : public ::testing::Test
+class UT_MimeAppsWorker : public ::testing::Test
 {
 public:
-    TestMimeAppsWorker(): m_tester(nullptr) {}
+    UT_MimeAppsWorker(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -50,27 +50,27 @@ protected:
     MimeAppsWorker *m_tester;
 };
 
-TEST_F(TestMimeAppsWorker, initTest)
+TEST_F(UT_MimeAppsWorker, initTest)
 {
 
 }
 
-TEST_F(TestMimeAppsWorker, testhandleDirectoryChanged)
+TEST_F(UT_MimeAppsWorker, test_handleDirectoryChanged)
 {
     m_tester->handleDirectoryChanged("");
 }
 
-TEST_F(TestMimeAppsWorker, testupdateCache)
+TEST_F(UT_MimeAppsWorker, test_updateCache)
 {
     m_tester->updateCache();
 }
 
-TEST_F(TestMimeAppsWorker, testwriteData)
+TEST_F(UT_MimeAppsWorker, test_writeData)
 {
     m_tester->writeData("", "");
 }
 
-TEST_F(TestMimeAppsWorker, testreadData)
+TEST_F(UT_MimeAppsWorker, test_readData)
 {
     QString strPath = _SOURCEDIR;
     strPath += "/src/desktopdeepin-compressor.desktop";
@@ -79,10 +79,10 @@ TEST_F(TestMimeAppsWorker, testreadData)
 
 
 // 测试MimesAppsManager
-class TestMimesAppsManager : public ::testing::Test
+class UT_MimesAppsManager : public ::testing::Test
 {
 public:
-    TestMimesAppsManager(): m_tester(nullptr) {}
+    UT_MimesAppsManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -99,113 +99,122 @@ protected:
     MimesAppsManager *m_tester;
 };
 
-TEST_F(TestMimesAppsManager, initTest)
+TEST_F(UT_MimesAppsManager, initTest)
 {
 
 }
 
-TEST_F(TestMimesAppsManager, testgetMimeType)
+TEST_F(UT_MimesAppsManager, test_getMimeType)
 {
-    ASSERT_EQ(m_tester->getMimeType("1.zip").name(), "application/zip");
+    EXPECT_EQ(m_tester->getMimeType("1.zip").name(), "application/zip");
 }
 
-TEST_F(TestMimesAppsManager, testgetMimeTypeByFileName)
+TEST_F(UT_MimesAppsManager, test_getMimeTypeByFileName)
 {
-    ASSERT_EQ(m_tester->getMimeTypeByFileName("1.zip"), "application/zip");
+    EXPECT_EQ(m_tester->getMimeTypeByFileName("1.zip"), "application/zip");
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppByFileName)
+QString getDefaultAppByMimeType_stub(const QMimeType &)
+{
+    return "";
+}
+
+TEST_F(UT_MimesAppsManager, test_getDefaultAppByFileName)
 {
     m_tester->getDefaultAppByFileName("1.zip");
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType)
+TEST_F(UT_MimesAppsManager, test_getDefaultAppByMimeType)
 {
-    m_tester->getDefaultAppByMimeType("1.zip");
+    EXPECT_EQ(m_tester->getDefaultAppByMimeType("1.zip"), "");
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppByMimeType1)
+TEST_F(UT_MimesAppsManager, test_getDefaultAppByMimeType1)
 {
-    m_tester->getDefaultAppByMimeType(m_tester->getMimeType("1.zip"));
+    EXPECT_EQ(m_tester->getDefaultAppByMimeType("1.zip").isEmpty(), true);
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByMimeType)
+TEST_F(UT_MimesAppsManager, test_getDefaultAppDisplayNameByMimeType)
 {
-    m_tester->getDefaultAppByMimeType("1.zip");
+    EXPECT_EQ(m_tester->getDefaultAppByMimeType("1.zip"), "");
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppDisplayNameByGio)
+TEST_F(UT_MimesAppsManager, test_getDefaultAppDisplayNameByGio)
 {
-    m_tester->getDefaultAppDisplayNameByGio("1.zip");
+    EXPECT_EQ(m_tester->getDefaultAppDisplayNameByGio("1.zip"), "");
 }
 
-TEST_F(TestMimesAppsManager, testgetDefaultAppDesktopFileByMimeType)
+TEST_F(UT_MimesAppsManager, test_getDefaultAppDesktopFileByMimeType_001)
 {
-    m_tester->getDefaultAppDesktopFileByMimeType("application/sss");
+    EXPECT_EQ(m_tester->getDefaultAppDesktopFileByMimeType("application/sss"), "");
+}
+
+TEST_F(UT_MimesAppsManager, test_getDefaultAppDesktopFileByMimeType_002)
+{
     m_tester->getDefaultAppDesktopFileByMimeType("application/zip");
 }
 
-TEST_F(TestMimesAppsManager, testgetRecommendedAppsByQio)
+TEST_F(UT_MimesAppsManager, test_getRecommendedAppsByQio)
 {
     m_tester->getRecommendedAppsByQio(m_tester->getMimeType("1.zip"));
 }
 
-TEST_F(TestMimesAppsManager, testgetRecommendedAppsByGio)
+TEST_F(UT_MimesAppsManager, test_getRecommendedAppsByGio)
 {
     m_tester->getRecommendedAppsByGio("application/zip");
 }
 
-TEST_F(TestMimesAppsManager, testgetApplicationsFolders)
+TEST_F(UT_MimesAppsManager, test_getApplicationsFolders)
 {
-    m_tester->getApplicationsFolders();
+    EXPECT_EQ(m_tester->getApplicationsFolders().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetMimeAppsCacheFile)
+TEST_F(UT_MimesAppsManager, test_getMimeAppsCacheFile)
 {
-    m_tester->getMimeAppsCacheFile();
+    EXPECT_EQ(m_tester->getMimeAppsCacheFile().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetMimeInfoCacheFilePath)
+TEST_F(UT_MimesAppsManager, test_getMimeInfoCacheFilePath)
 {
-    m_tester->getMimeInfoCacheFilePath();
+    EXPECT_EQ(m_tester->getMimeInfoCacheFilePath().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetMimeInfoCacheFileRootPath)
+TEST_F(UT_MimesAppsManager, test_getMimeInfoCacheFileRootPath)
 {
-    m_tester->getMimeInfoCacheFileRootPath();
+    EXPECT_EQ(m_tester->getMimeInfoCacheFileRootPath().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetDesktopFilesCacheFile)
+TEST_F(UT_MimesAppsManager, test_getDesktopFilesCacheFile)
 {
-    m_tester->getDesktopFilesCacheFile();
+    EXPECT_EQ(m_tester->getDesktopFilesCacheFile().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetDesktopIconsCacheFile)
+TEST_F(UT_MimesAppsManager, test_getDesktopIconsCacheFile)
 {
-    m_tester->getDesktopIconsCacheFile();
+    EXPECT_EQ(m_tester->getDesktopIconsCacheFile().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetDesktopFiles)
+TEST_F(UT_MimesAppsManager, test_getDesktopFiles)
 {
-    m_tester->getDesktopIconsCacheFile();
+    EXPECT_EQ(m_tester->getDesktopFiles().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetDDEMimeTypeFile)
+TEST_F(UT_MimesAppsManager, test_getDDEMimeTypeFile)
 {
-    m_tester->getDDEMimeTypeFile();
+    EXPECT_EQ(m_tester->getDDEMimeTypeFile().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testgetDesktopObjs)
+TEST_F(UT_MimesAppsManager, test_getDesktopObjs)
 {
-    m_tester->getDesktopObjs();
+    EXPECT_EQ(m_tester->getDesktopObjs().isEmpty(), false);
 }
 
-TEST_F(TestMimesAppsManager, testinitMimeTypeApps)
+TEST_F(UT_MimesAppsManager, test_initMimeTypeApps)
 {
     m_tester->initMimeTypeApps();
 }
 
-TEST_F(TestMimesAppsManager, testloadDDEMimeTypes)
+TEST_F(UT_MimesAppsManager, test_loadDDEMimeTypes)
 {
     m_tester->loadDDEMimeTypes();
 }

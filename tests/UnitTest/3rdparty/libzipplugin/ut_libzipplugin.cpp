@@ -33,10 +33,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestLibzipPluginFactory : public QObject, public ::testing::Test
+class UT_LibzipPluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibzipPluginFactory(): m_tester(nullptr) {}
+    UT_LibzipPluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -53,10 +53,10 @@ protected:
     LibzipPluginFactory *m_tester;
 };
 
-class TestLibzipPlugin : public QObject, public ::testing::Test
+class UT_LibzipPlugin : public QObject, public ::testing::Test
 {
 public:
-    TestLibzipPlugin(): m_tester(nullptr) {}
+    UT_LibzipPlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -84,28 +84,28 @@ protected:
 };
 
 
-TEST_F(TestLibzipPluginFactory, initTest)
+TEST_F(UT_LibzipPluginFactory, initTest)
 {
 
 }
 
-TEST_F(TestLibzipPlugin, initTest)
+TEST_F(UT_LibzipPlugin, initTest)
 {
 
 }
 
-TEST_F(TestLibzipPlugin, testlist)
+TEST_F(UT_LibzipPlugin, test_list)
 {
     PluginFinishType eFinishType = m_tester->list();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testtestArchive)
+TEST_F(UT_LibzipPlugin, test_testArchive)
 {
     PluginFinishType eFinishType = m_tester->testArchive();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
 void waitForResponse_stub()
@@ -153,7 +153,7 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
-TEST_F(TestLibzipPlugin, testextractFiles_AllExtract)
+TEST_F(UT_LibzipPlugin, test_extractFiles_001)
 {
     QList<FileEntry> files;
     ExtractionOptions options;
@@ -170,13 +170,13 @@ TEST_F(TestLibzipPlugin, testextractFiles_AllExtract)
 
     PluginFinishType eFinishType = m_tester->extractFiles(files, options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 
     QDir dir(options.strTargetPath);
     dir.removeRecursively();
 }
 
-TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
+TEST_F(UT_LibzipPlugin, test_extractFiles_002)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
@@ -198,30 +198,30 @@ TEST_F(TestLibzipPlugin, testextractFiles_PartExtract)
 
         PluginFinishType eFinishType = m_tester->extractFiles(files, options);
         bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-        ASSERT_EQ(bResult, true);
+        EXPECT_EQ(bResult, true);
 
         QDir dir(options.strTargetPath);
         dir.removeRecursively();
     }
 }
 
-TEST_F(TestLibzipPlugin, testmoveFiles)
+TEST_F(UT_LibzipPlugin, test_moveFiles)
 {
     CompressOptions options;
     PluginFinishType eFinishType = m_tester->moveFiles(QList<FileEntry>(), options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testcopyFiles)
+TEST_F(UT_LibzipPlugin, test_copyFiles)
 {
     CompressOptions options;
     PluginFinishType eFinishType = m_tester->copyFiles(QList<FileEntry>(), options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testdeleteFiles)
+TEST_F(UT_LibzipPlugin, test_deleteFiles)
 {
     QString str = _UTSOURCEDIR;
     QString strFile1 = str + "/test_sources/zip/delete/test.zip";
@@ -237,50 +237,50 @@ TEST_F(TestLibzipPlugin, testdeleteFiles)
         bResult = (eFinishType == PFT_Nomral) ? true : false;
     }
 
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testaddComment)
+TEST_F(UT_LibzipPlugin, test_addComment)
 {
     PluginFinishType eFinishType = m_tester->addComment("sssss");
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testupdateArchiveData)
+TEST_F(UT_LibzipPlugin, test_updateArchiveData)
 {
     UpdateOptions options;
     PluginFinishType eFinishType = m_tester->updateArchiveData(options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testpauseOperation)
+TEST_F(UT_LibzipPlugin, test_pauseOperation)
 {
     m_tester->m_bPause = false;
     m_tester->pauseOperation();
     bool bResult = (m_tester->m_bPause == true) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testcontinueOperation)
+TEST_F(UT_LibzipPlugin, test_continueOperation)
 {
     m_tester->m_bPause = true;
     m_tester->continueOperation();
     bool bResult = (m_tester->m_bPause == false) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testdoKill)
+TEST_F(UT_LibzipPlugin, test_doKill)
 {
     m_tester->m_bPause = true;
     m_tester->m_bCancel = false;
     m_tester->doKill();
     bool bResult = (m_tester->m_bPause == false && m_tester->m_bCancel == true) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibzipPlugin, testprogressCallback)
+TEST_F(UT_LibzipPlugin, test_progressCallback)
 {
     int errcode = 0;
     zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
@@ -289,12 +289,12 @@ TEST_F(TestLibzipPlugin, testprogressCallback)
         m_tester->progressCallback(archive, 0.6, m_tester);
     }
 
-    ASSERT_NE(archive, nullptr);
+    EXPECT_NE(archive, nullptr);
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, testcancelCallback)
+TEST_F(UT_LibzipPlugin, test_cancelCallback)
 {
     int errcode = 0;
     zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
@@ -303,12 +303,12 @@ TEST_F(TestLibzipPlugin, testcancelCallback)
         m_tester->cancelCallback(archive, m_tester);
     }
 
-    ASSERT_NE(archive, nullptr);
+    EXPECT_NE(archive, nullptr);
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, testhandleArchiveData)
+TEST_F(UT_LibzipPlugin, test_handleArchiveData)
 {
     int errcode = 0;
     zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
@@ -318,12 +318,12 @@ TEST_F(TestLibzipPlugin, testhandleArchiveData)
         bResult = m_tester->handleArchiveData(archive, 0);
     }
 
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, teststatBuffer2FileEntry)
+TEST_F(UT_LibzipPlugin, test_statBuffer2FileEntry)
 {
     int errcode = 0;
     zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
@@ -338,16 +338,16 @@ TEST_F(TestLibzipPlugin, teststatBuffer2FileEntry)
         entry.strFullPath = statBuffer.name;
         m_tester->statBuffer2FileEntry(statBuffer, entry);
         bResult = !entry.strFileName.isEmpty();
-        ASSERT_EQ(bResult, true);
+        EXPECT_EQ(bResult, true);
     } else {
-        ASSERT_EQ(bResult, false);
+        EXPECT_EQ(bResult, false);
     }
 
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, testextractEntry)
+TEST_F(UT_LibzipPlugin, test_extractEntry)
 {
     int errcode = 0;
     zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), ZIP_CREATE, &errcode); //filename()压缩包名
@@ -375,37 +375,37 @@ TEST_F(TestLibzipPlugin, testextractEntry)
         dir.removeRecursively();
     }
 
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, testemitProgress)
+TEST_F(UT_LibzipPlugin, test_emitProgress)
 {
     m_tester->emitProgress(0.6);
-    ASSERT_NE(m_tester, nullptr);
+    EXPECT_NE(m_tester, nullptr);
 }
 
-TEST_F(TestLibzipPlugin, testcancelResult001)
+TEST_F(UT_LibzipPlugin, test_cancelResult001)
 {
     m_tester->m_bCancel = true;
     int iResult = m_tester->cancelResult();
-    ASSERT_EQ(iResult, 1);
+    EXPECT_EQ(iResult, 1);
 }
 
-TEST_F(TestLibzipPlugin, testcancelResult002)
+TEST_F(UT_LibzipPlugin, test_cancelResult002)
 {
     m_tester->m_bCancel = false;
     int iResult = m_tester->cancelResult();
-    ASSERT_EQ(iResult, 0);
+    EXPECT_EQ(iResult, 0);
 }
 
-TEST_F(TestLibzipPlugin, testpasswordUnicode001)
+TEST_F(UT_LibzipPlugin, test_passwordUnicode001)
 {
-    ASSERT_EQ(m_tester->passwordUnicode("hh", 0), QString("hh"));
+    EXPECT_EQ(m_tester->passwordUnicode("hh", 0), QString("hh"));
 }
 
-TEST_F(TestLibzipPlugin, testdeleteEntry)
+TEST_F(UT_LibzipPlugin, test_deleteEntry)
 {
     QString str = _UTSOURCEDIR;
     QString strFile1 = str + "/test_sources/zip/delete/test.zip";
@@ -420,12 +420,12 @@ TEST_F(TestLibzipPlugin, testdeleteEntry)
     if (archive) {
         bResult = m_tester->deleteEntry(0, archive);
     }
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 
     zip_close(archive);
 }
 
-TEST_F(TestLibzipPlugin, testgetIndexBySelEntry)
+TEST_F(UT_LibzipPlugin, test_getIndexBySelEntry)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
@@ -438,7 +438,7 @@ TEST_F(TestLibzipPlugin, testgetIndexBySelEntry)
         if (m_tester->m_listCurIndex.count() > 0 && m_tester->m_listCurIndex[0] == 0) {
             bResult = true;
         }
-        ASSERT_EQ(bResult, true);
+        EXPECT_EQ(bResult, true);
     }
 
 }

@@ -77,10 +77,10 @@ void handleDoubleClick_stub(const QModelIndex &)
 /*******************************函数打桩************************************/
 
 
-class TestUnCompressView : public ::testing::Test
+class UT_UnCompressView : public ::testing::Test
 {
 public:
-    TestUnCompressView(): m_tester(nullptr) {}
+    UT_UnCompressView(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -98,12 +98,12 @@ protected:
     UnCompressView *m_tester;
 };
 
-TEST_F(TestUnCompressView, initTest)
+TEST_F(UT_UnCompressView, initTest)
 {
 
 }
 
-TEST_F(TestUnCompressView, testrefreshArchiveData)
+TEST_F(UT_UnCompressView, test_refreshArchiveData)
 {
     m_tester->m_iLevel = 1;
 
@@ -119,29 +119,31 @@ TEST_F(TestUnCompressView, testrefreshArchiveData)
     DataManager::get_instance().archiveData().listRootEntry << entry;
     DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
     m_tester->refreshArchiveData();
-    ASSERT_EQ(m_tester->m_iLevel, 0);
+    EXPECT_EQ(m_tester->m_iLevel, 0);
 }
 
-TEST_F(TestUnCompressView, testsetArchivePath)
+TEST_F(UT_UnCompressView, test_setArchivePath)
 {
     m_tester->setArchivePath("1/2/3");
-    ASSERT_EQ(m_tester->m_strArchive, "1/2/3");
+    EXPECT_EQ(m_tester->m_strArchive, "1/2/3");
+    EXPECT_EQ(m_tester->m_strArchivePath, "1/2");
 }
 
-TEST_F(TestUnCompressView, testsetDefaultUncompressPath)
+TEST_F(UT_UnCompressView, test_setDefaultUncompressPath)
 {
     m_tester->setDefaultUncompressPath("/home/Desktop");
-    ASSERT_EQ(m_tester->m_strUnCompressPath, "/home/Desktop");
+    EXPECT_EQ(m_tester->m_strUnCompressPath, "/home/Desktop");
 }
 
-TEST_F(TestUnCompressView, testmousePressEvent)
+TEST_F(UT_UnCompressView, test_mousePressEvent)
 {
     QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_tester->mousePressEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->m_dragPos, QPointF(50, 50));
 }
 
-TEST_F(TestUnCompressView, testmouseMoveEvent)
+TEST_F(UT_UnCompressView, test_mouseMoveEvent)
 {
     m_tester->m_isPressed = true;
     QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
@@ -166,20 +168,22 @@ TEST_F(TestUnCompressView, testmouseMoveEvent)
     delete event;
 }
 
-TEST_F(TestUnCompressView, testclearDragData)
+TEST_F(UT_UnCompressView, test_clearDragData)
 {
     m_tester->m_pFileDragServer = new DFileDragServer(m_tester);
     m_tester->m_pDrag = new DFileDrag(m_tester, m_tester->m_pFileDragServer);
     m_tester->clearDragData();
-    ASSERT_EQ(m_tester->m_bReceive, false);
+    EXPECT_EQ(m_tester->m_bReceive, false);
+    EXPECT_EQ(m_tester->m_strSelUnCompressPath.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_bDrop, false);
 }
 
-TEST_F(TestUnCompressView, testmouseDoubleClickEvent)
+TEST_F(UT_UnCompressView, test_mouseDoubleClickEvent)
 {
     QTest::mouseDClick(m_tester, Qt::LeftButton);
 }
 
-TEST_F(TestUnCompressView, testcalDirItemCount)
+TEST_F(UT_UnCompressView, test_calDirItemCount)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -193,10 +197,10 @@ TEST_F(TestUnCompressView, testcalDirItemCount)
     DataManager::get_instance().archiveData().listRootEntry << entry;
     DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
 
-    ASSERT_EQ(m_tester->calDirItemCount("1/"), 1);
+    EXPECT_EQ(m_tester->calDirItemCount("1/"), 1);
 }
 
-TEST_F(TestUnCompressView, testhandleDoubleClick)
+TEST_F(UT_UnCompressView, test_handleDoubleClick_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -214,10 +218,10 @@ TEST_F(TestUnCompressView, testhandleDoubleClick)
 
     m_tester->m_iLevel = 0;
     m_tester->handleDoubleClick(index);
-    ASSERT_EQ(m_tester->m_iLevel, 1);
+    EXPECT_EQ(m_tester->m_iLevel, 1);
 }
 
-TEST_F(TestUnCompressView, testhandleDoubleClick1)
+TEST_F(UT_UnCompressView, test_handleDoubleClick_002)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -236,10 +240,10 @@ TEST_F(TestUnCompressView, testhandleDoubleClick1)
 
     m_tester->m_iLevel = 0;
     m_tester->handleDoubleClick(index);
-    ASSERT_EQ(m_tester->m_iLevel, 0);
+    EXPECT_EQ(m_tester->m_iLevel, 0);
 }
 
-TEST_F(TestUnCompressView, testrefreshDataByCurrentPath)
+TEST_F(UT_UnCompressView, test_refreshDataByCurrentPath_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -259,12 +263,31 @@ TEST_F(TestUnCompressView, testrefreshDataByCurrentPath)
     m_tester->m_mapShowEntry.clear();
     m_tester->m_mapShowEntry[m_tester->m_strCurrentPath] = DataManager::get_instance().archiveData().listRootEntry;
     m_tester->refreshDataByCurrentPath();
+}
+
+TEST_F(UT_UnCompressView, test_refreshDataByCurrentPath_002)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
 
     m_tester->m_iLevel = 1;
+    m_tester->m_strCurrentPath = "/";
+    m_tester->m_mapShowEntry.clear();
+    m_tester->m_mapShowEntry[m_tester->m_strCurrentPath] = DataManager::get_instance().archiveData().listRootEntry;
     m_tester->refreshDataByCurrentPath();
 }
 
-TEST_F(TestUnCompressView, testrefreshDataByCurrentPathChanged)
+TEST_F(UT_UnCompressView, test_refreshDataByCurrentPathChanged_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -284,14 +307,32 @@ TEST_F(TestUnCompressView, testrefreshDataByCurrentPathChanged)
     m_tester->m_mapShowEntry.clear();
     m_tester->m_mapShowEntry[m_tester->m_strCurrentPath] = DataManager::get_instance().archiveData().listRootEntry;
     m_tester->refreshDataByCurrentPathChanged();
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::ChangeType::CT_None);
+}
+
+TEST_F(UT_UnCompressView, test_refreshDataByCurrentPathChanged_002)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
 
     m_tester->m_iLevel = 1;
     m_tester->m_strCurrentPath = "1/";
     m_tester->m_eChangeType = UnCompressView::CT_Add;
     m_tester->refreshDataByCurrentPathChanged();
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::ChangeType::CT_None);
 }
 
-TEST_F(TestUnCompressView, testaddNewFiles)
+TEST_F(UT_UnCompressView, test_addNewFiles_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -316,53 +357,130 @@ TEST_F(TestUnCompressView, testaddNewFiles)
     m_tester->m_strArchive = "/1.zip";
 
     m_tester->addNewFiles(QStringList() << "/1.zip");
-    ASSERT_EQ(m_tester->m_eChangeType, UnCompressView::CT_None);
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::CT_None);
+}
 
+TEST_F(UT_UnCompressView, test_addNewFiles_002)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+
+    Stub stub;
+    CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
+    CustomDialogStub::stub_OverwriteQueryDialog_showDialog(stub);
+    CustomDialogStub::stub_AppendDialog_showDialog(stub, 1);
+    QFileInfoStub::stub_QFileInfo_path(stub, "");
     QFileInfoStub::stub_QFileInfo_filePath(stub, "/1.txt");
+
+
+    m_tester->m_strArchive = "/1.zip";
+
     CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(stub, Overwrite_Result::OR_Cancel);
     m_tester->addNewFiles(QStringList() << "/1.txt");
-    ASSERT_EQ(m_tester->m_eChangeType, UnCompressView::CT_None);
-
-    Stub stub1;
-    QFileInfoStub::stub_QFileInfo_filePath(stub1, "/1.txt");
-    CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(stub1, Overwrite_Result::OR_Skip);
-    m_tester->addNewFiles(QStringList() << "/1.txt");
-
-    Stub stub2;
-    QFileInfoStub::stub_QFileInfo_filePath(stub2, "/1.txt");
-    CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(stub2, Overwrite_Result::OR_Overwrite);
-    m_tester->addNewFiles(QStringList() << "/1.txt");
-
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::CT_None);
 }
 
-TEST_F(TestUnCompressView, testgetCurPath)
+TEST_F(UT_UnCompressView, test_addNewFiles_003)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+
+    Stub stub;
+    CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
+    CustomDialogStub::stub_OverwriteQueryDialog_showDialog(stub);
+    CustomDialogStub::stub_AppendDialog_showDialog(stub, 1);
+    QFileInfoStub::stub_QFileInfo_path(stub, "");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "/1.txt");
+    CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(stub, Overwrite_Result::OR_Skip);
+
+    m_tester->m_strArchive = "/1.zip";
+
+    m_tester->addNewFiles(QStringList() << "/1.txt");
+    EXPECT_EQ(m_tester->m_listAddFiles.count(), 0);
+}
+
+TEST_F(UT_UnCompressView, test_addNewFiles_004)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
+
+    Stub stub;
+    CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
+    CustomDialogStub::stub_OverwriteQueryDialog_showDialog(stub);
+    CustomDialogStub::stub_AppendDialog_showDialog(stub, 1);
+    QFileInfoStub::stub_QFileInfo_path(stub, "");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "/1.txt");
+    CustomDialogStub::stub_OverwriteQueryDialog_getDialogResult(stub, Overwrite_Result::OR_Overwrite);
+
+    m_tester->m_strArchive = "/1.zip";
+
+    m_tester->addNewFiles(QStringList() << "/1.txt");
+    EXPECT_EQ(m_tester->m_listAddFiles.count(), 1);
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::ChangeType::CT_Add);
+}
+
+TEST_F(UT_UnCompressView, test_getCurPath_001)
 {
     m_tester->m_iLevel = 0;
-    ASSERT_EQ(m_tester->getCurPath(), "");
+    EXPECT_EQ(m_tester->getCurPath(), "");
+}
+
+TEST_F(UT_UnCompressView, test_getCurPath_002)
+{
     m_tester->m_strCurrentPath = "/";
     m_tester->m_iLevel = 1;
-    ASSERT_EQ(m_tester->getCurPath(), "/");
+    EXPECT_EQ(m_tester->getCurPath(), "/");
 }
 
-TEST_F(TestUnCompressView, testsetModifiable)
+TEST_F(UT_UnCompressView, test_setModifiable)
 {
     m_tester->setModifiable(false, false);
-    ASSERT_EQ(m_tester->m_bMultiplePassword, false);
+    EXPECT_EQ(m_tester->m_bMultiplePassword, false);
 }
 
-TEST_F(TestUnCompressView, testisModifiable)
+TEST_F(UT_UnCompressView, test_isModifiable)
 {
     m_tester->m_bModifiable = false;
-    ASSERT_EQ(m_tester->isModifiable(), false);
+    EXPECT_EQ(m_tester->isModifiable(), false);
 }
 
-TEST_F(TestUnCompressView, testclear)
+TEST_F(UT_UnCompressView, test_clear)
 {
     m_tester->clear();
-    ASSERT_EQ(m_tester->m_bReceive, false);
+    EXPECT_EQ(m_tester->m_bReceive, false);
 }
 
-TEST_F(TestUnCompressView, testgetCurPathFiles)
+TEST_F(UT_UnCompressView, test_getCurPathFiles)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -378,10 +496,10 @@ TEST_F(TestUnCompressView, testgetCurPathFiles)
     m_tester->refreshArchiveData();
 
     m_tester->m_strCurrentPath = "1/";
-    ASSERT_EQ(m_tester->getCurPathFiles().count(), 1);
+    EXPECT_EQ(m_tester->getCurPathFiles().count(), 1);
 }
 
-TEST_F(TestUnCompressView, testgetSelEntry)
+TEST_F(UT_UnCompressView, test_getSelEntry)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -392,10 +510,10 @@ TEST_F(TestUnCompressView, testgetSelEntry)
     m_tester->refreshArchiveData();
 
     m_tester->selectAll();
-    ASSERT_EQ(m_tester->getSelEntry().count(), 1);
+    EXPECT_EQ(m_tester->getSelEntry().count(), 1);
 }
 
-TEST_F(TestUnCompressView, testextract2Path)
+TEST_F(UT_UnCompressView, test_extract2Path)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -414,7 +532,7 @@ TEST_F(TestUnCompressView, testextract2Path)
     m_tester->extract2Path("/home/Desktop");
 }
 
-TEST_F(TestUnCompressView, testcalEntrySizeByParentPath)
+TEST_F(UT_UnCompressView, test_calEntrySizeByParentPath)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -430,15 +548,16 @@ TEST_F(TestUnCompressView, testcalEntrySizeByParentPath)
 
     qint64 qSize;
     m_tester->calEntrySizeByParentPath("1/", qSize);
-    ASSERT_EQ(qSize, 10);
+    EXPECT_EQ(qSize, 10);
 }
 
-TEST_F(TestUnCompressView, testslotDragFiles)
+TEST_F(UT_UnCompressView, test_slotDragFiles)
 {
     m_tester->slotDragFiles(QStringList());
+    EXPECT_EQ(m_tester->m_listAddFiles.isEmpty(), true);
 }
 
-TEST_F(TestUnCompressView, testslotShowRightMenu)
+TEST_F(UT_UnCompressView, test_slotShowRightMenu_001)
 {
     Stub stub;
     CommonStub::stub_QTreeView_indexAt(stub);
@@ -459,31 +578,55 @@ TEST_F(TestUnCompressView, testslotShowRightMenu)
 
     m_tester->m_stRightEntry.isDirectory = true;
     m_tester->slotShowRightMenu(QPoint(10, 50));
+}
+
+TEST_F(UT_UnCompressView, test_slotShowRightMenu_002)
+{
+    Stub stub;
+    CommonStub::stub_QTreeView_indexAt(stub);
+    CommonStub::stub_QMenu_exec(stub);
+
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1/1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
 
     m_tester->m_stRightEntry.isDirectory = false;
     m_tester->slotShowRightMenu(QPoint(10, 50));
 }
 
-TEST_F(TestUnCompressView, testslotExtract)
+TEST_F(UT_UnCompressView, test_slotExtract_001)
 {
     Stub stub;
     DFileDialogStub::stub_DFileDialog_exec(stub, 0);
     m_tester->slotExtract();
-
-    Stub stub1;
-    QList<QUrl> listUrl;
-    listUrl << QUrl("/home/Desktop");
-    DFileDialogStub::stub_DFileDialog_selectedUrls(stub1, listUrl);
-    DFileDialogStub::stub_DFileDialog_exec(stub1, 1);
-    m_tester->slotExtract();
 }
 
-TEST_F(TestUnCompressView, testslotExtract2Here)
+TEST_F(UT_UnCompressView, test_slotExtract_002)
+{
+    Stub stub;
+    QList<QUrl> listUrl;
+    listUrl << QUrl("/home/Desktop");
+    DFileDialogStub::stub_DFileDialog_selectedUrls(stub, listUrl);
+    DFileDialogStub::stub_DFileDialog_exec(stub, 1);
+    m_tester->slotExtract();
+    EXPECT_EQ(m_tester->m_strSelUnCompressPath, "");
+}
+
+TEST_F(UT_UnCompressView, test_slotExtract2Here)
 {
     m_tester->extract2Path("/home/Desktop");
 }
 
-TEST_F(TestUnCompressView, testslotDeleteFile)
+TEST_F(UT_UnCompressView, test_slotDeleteFile)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
@@ -499,10 +642,10 @@ TEST_F(TestUnCompressView, testslotDeleteFile)
     m_tester->selectAll();
     m_tester->m_bModifiable = true;
     m_tester->slotDeleteFile();
-    ASSERT_EQ(m_tester->m_eChangeType, UnCompressView::CT_Delete);
+    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::CT_Delete);
 }
 
-TEST_F(TestUnCompressView, testslotOpen)
+TEST_F(UT_UnCompressView, test_slotOpen_001)
 {
     Stub stub;
     typedef void (*fptr)(UnCompressView *, const QModelIndex &);
@@ -526,13 +669,35 @@ TEST_F(TestUnCompressView, testslotOpen)
 
     m_tester->setCurrentIndex(m_tester->m_pModel->index(0, 0));
     m_tester->slotOpen();
+}
+
+TEST_F(UT_UnCompressView, test_slotOpen_002)
+{
+    Stub stub;
+    typedef void (*fptr)(UnCompressView *, const QModelIndex &);
+    fptr A_foo = (fptr)(&UnCompressView::handleDoubleClick);   // 获取虚函数地址
+    stub.set(A_foo, unCompressView_handleDoubleClick_stub);
+
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1/";
+    entry.strFullPath = "1/";
+    entry.isDirectory = true;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1.txt";
+    entry.isDirectory = false;
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
 
     m_tester->setCurrentIndex(m_tester->m_pModel->index(1, 0));
     m_tester->slotOpen();
-
 }
 
-TEST_F(TestUnCompressView, testfocusInEvent)
+TEST_F(UT_UnCompressView, test_focusInEvent_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -545,17 +710,33 @@ TEST_F(TestUnCompressView, testfocusInEvent)
 
     QFocusEvent *event = new QFocusEvent(QEvent::FocusIn, Qt::TabFocusReason);
     m_tester->focusInEvent(event);
+    delete event;
+    EXPECT_EQ(m_tester->m_reson, Qt::TabFocusReason);
+}
 
+TEST_F(UT_UnCompressView, test_focusInEvent_002)
+{
+    QFocusEvent *event = new QFocusEvent(QEvent::FocusIn, Qt::TabFocusReason);
     m_tester->selectionModel()->setCurrentIndex(m_tester->model()->index(0, 0), QItemSelectionModel::Select);
     m_tester->focusInEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->m_reson, Qt::TabFocusReason);
 }
 
-TEST_F(TestUnCompressView, testdragEnterEvent)
+TEST_F(UT_UnCompressView, test_dragEnterEvent_001)
 {
     QMimeData *data = new QMimeData;
     QDragEnterEvent *e = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     m_tester->dragEnterEvent(e);
+
+    delete data;
+    delete e;
+}
+
+TEST_F(UT_UnCompressView, test_dragEnterEvent_002)
+{
+    QMimeData *data = new QMimeData;
+    QDragEnterEvent *e = new QDragEnterEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
 
     QList<QUrl> listUrls;
     listUrls << QUrl("123456");
@@ -566,7 +747,7 @@ TEST_F(TestUnCompressView, testdragEnterEvent)
     delete e;
 }
 
-TEST_F(TestUnCompressView, testdragMoveEvent)
+TEST_F(UT_UnCompressView, test_dragMoveEvent_001)
 {
     QMimeData *data = new QMimeData;
     QDragMoveEvent *e = new QDragMoveEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
@@ -576,11 +757,20 @@ TEST_F(TestUnCompressView, testdragMoveEvent)
     delete e;
 }
 
-TEST_F(TestUnCompressView, testdropEvent)
+TEST_F(UT_UnCompressView, test_dropEvent_001)
 {
     QMimeData *data = new QMimeData;
     QDropEvent *e = new QDropEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
     m_tester->dropEvent(e);
+
+    delete data;
+    delete e;
+}
+
+TEST_F(UT_UnCompressView, test_dropEvent_002)
+{
+    QMimeData *data = new QMimeData;
+    QDropEvent *e = new QDropEvent(QPoint(0, 0), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
 
     QList<QUrl> listUrls;
     listUrls << QUrl("123456");
@@ -591,14 +781,18 @@ TEST_F(TestUnCompressView, testdropEvent)
     delete e;
 }
 
-TEST_F(TestUnCompressView, testresizeEvent)
+TEST_F(UT_UnCompressView, test_resizeEvent)
 {
     QResizeEvent *event = new QResizeEvent(QSize(100, 100), QSize(80, 80));
     m_tester->resizeEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->columnWidth(0), m_tester->width() * 25 / 58);
+    EXPECT_EQ(m_tester->columnWidth(1), m_tester->width() * 17 / 58);
+    EXPECT_EQ(m_tester->columnWidth(2), m_tester->width() * 8 / 58);
+    EXPECT_EQ(m_tester->columnWidth(3), m_tester->width() * 8 / 58);
 }
 
-TEST_F(TestUnCompressView, testevent)
+TEST_F(UT_UnCompressView, test_event)
 {
     QTouchDevice *pDevice = new QTouchDevice;
     pDevice->setType(QTouchDevice::TouchScreen);
@@ -609,9 +803,11 @@ TEST_F(TestUnCompressView, testevent)
 
     delete pDevice;
     delete e;
+
+    EXPECT_EQ(m_tester->m_isPressed, true);
 }
 
-TEST_F(TestUnCompressView, testkeyPressEvent)
+TEST_F(UT_UnCompressView, test_keyPressEvent)
 {
     Stub stub;
     stub.set(ADDR(QItemSelectionModel, selectedRows), qItemSelectionModel_selectedRows_stub);
@@ -632,7 +828,7 @@ TEST_F(TestUnCompressView, testkeyPressEvent)
     QTest::keyPress(m_tester, Qt::Key_Tab);
 }
 
-TEST_F(TestUnCompressView, testslotOpenStyleClicked)
+TEST_F(UT_UnCompressView, test_setPreLblVisible)
 {
     Stub stub;
     CustomDialogStub::stub_OpenWithDialog_showOpenWithDialog(stub, "");
@@ -646,7 +842,7 @@ TEST_F(TestUnCompressView, testslotOpenStyleClicked)
     CommonStub::stub_QObject_sender(stub1, pAction);
 }
 
-TEST_F(TestUnCompressView, testslotPreClicked)
+TEST_F(UT_UnCompressView, test_slotPreClicked_001)
 {
     DataManager::get_instance().resetArchiveData();
     FileEntry entry;
@@ -659,7 +855,18 @@ TEST_F(TestUnCompressView, testslotPreClicked)
     m_tester->m_vPre << "/";
     m_tester->m_iLevel = 0;
     m_tester->slotPreClicked();
+}
 
+TEST_F(UT_UnCompressView, test_slotPreClicked_002)
+{
+    DataManager::get_instance().resetArchiveData();
+    FileEntry entry;
+    entry.strFileName = "1.txt";
+    entry.strFullPath = "1/1.txt";
+    entry.qSize = 10;
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+    m_tester->refreshArchiveData();
     m_tester->m_iLevel = 1;
     m_tester->m_vPre << "1/";
     m_tester->slotPreClicked();

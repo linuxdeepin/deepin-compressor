@@ -32,10 +32,10 @@
 
 
 // 测试Common
-class TestCommon : public ::testing::Test
+class UT_Common : public ::testing::Test
 {
 public:
-    TestCommon(): m_tester(nullptr) {}
+    UT_Common(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,34 +52,39 @@ protected:
     Common *m_tester;
 };
 
-TEST_F(TestCommon, initTest)
+TEST_F(UT_Common, initTest)
 {
 
 }
 
-TEST_F(TestCommon, testcodecConfidenceForData)
+TEST_F(UT_Common, test_codecConfidenceForData)
 {
-    m_tester->codecConfidenceForData(QTextCodec::codecForName("GBK"), "哈哈", QLocale::China);
+    EXPECT_EQ(m_tester->codecConfidenceForData(QTextCodec::codecForName("GBK"), "哈哈", QLocale::China), 1);
 }
 
-TEST_F(TestCommon, testtrans2uft8)
+TEST_F(UT_Common, test_trans2uft8_001)
 {
     QByteArray strCode;
-    m_tester->trans2uft8("哈哈", strCode);
-    m_tester->trans2uft8("abc", strCode);
+    EXPECT_EQ(m_tester->trans2uft8("哈哈", strCode), "哈哈");
 }
 
-TEST_F(TestCommon, testdetectEncode)
+TEST_F(UT_Common, test_trans2uft8_002)
+{
+    QByteArray strCode;
+    EXPECT_EQ(m_tester->trans2uft8("abc", strCode), "abc");
+}
+
+TEST_F(UT_Common, test_detectEncode)
 {
 
 }
 
-TEST_F(TestCommon, testChartDet_DetectingTextCoding)
+TEST_F(UT_Common, test_ChartDet_DetectingTextCoding)
 {
 
 }
 
-TEST_F(TestCommon, testtextCodecDetect)
+TEST_F(UT_Common, test_textCodecDetect)
 {
 
 }

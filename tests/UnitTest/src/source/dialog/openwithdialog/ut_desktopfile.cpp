@@ -40,10 +40,10 @@ bool properties_contains_stub(const QString &key)
 
 /*******************************单元测试************************************/
 // 测试CompressParameter
-class TestDesktopFile : public ::testing::Test
+class UT_DesktopFile : public ::testing::Test
 {
 public:
-    TestDesktopFile(): m_tester(nullptr) {}
+    UT_DesktopFile(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -60,93 +60,108 @@ protected:
     DesktopFile *m_tester;
 };
 
-TEST_F(TestDesktopFile, initTest)
+TEST_F(UT_DesktopFile, initTest)
 {
 
 }
 
-TEST_F(TestDesktopFile, testDesktopFile)
+TEST_F(UT_DesktopFile, test_DesktopFile)
 {
     Stub stub;
     QFileStub::stub_QFile_exists(stub, true);
     stub.set(ADDR(Properties, contains), properties_contains_stub);
 
     DesktopFile desktop1("1.desktop");
+
+    EXPECT_EQ(desktop1.m_fileName, "1.desktop");
+    EXPECT_EQ(desktop1.m_deepinId, "");
+    EXPECT_EQ(desktop1.m_deepinVendor, "");
+    EXPECT_EQ(desktop1.m_noDisplay, false);
+    EXPECT_EQ(desktop1.m_hidden, false);
+    EXPECT_EQ(desktop1.m_localName, "");
+    EXPECT_EQ(desktop1.m_genericName, "");
+    EXPECT_EQ(desktop1.m_exec, "");
+    EXPECT_EQ(desktop1.m_icon, "");
+    EXPECT_EQ(desktop1.m_type, "");
+    EXPECT_EQ(desktop1.m_categories.isEmpty(), true);
 }
 
-TEST_F(TestDesktopFile, testgetFileName)
+TEST_F(UT_DesktopFile, test_getFileName)
 {
-    ASSERT_EQ(m_tester->getFileName(), m_tester->m_fileName);
+    EXPECT_EQ(m_tester->getFileName(), m_tester->m_fileName);
 }
 
-TEST_F(TestDesktopFile, testgetPureFileName)
+TEST_F(UT_DesktopFile, test_getPureFileName)
 {
     QString strPath = _SOURCEDIR;
     strPath += "/src/desktop/deepin-compressor.desktop";
     m_tester->m_fileName = strPath;
-    ASSERT_EQ(m_tester->getPureFileName(), "deepin-compressor");
+    EXPECT_EQ(m_tester->getPureFileName(), "deepin-compressor");
 }
 
-TEST_F(TestDesktopFile, testgetName)
+TEST_F(UT_DesktopFile, test_getName)
 {
     m_tester->m_name = "deepin";
-    ASSERT_EQ(m_tester->getName(), "deepin");
+    EXPECT_EQ(m_tester->getName(), "deepin");
 }
 
-TEST_F(TestDesktopFile, testgetLocalName)
+TEST_F(UT_DesktopFile, test_getLocalName)
 {
     m_tester->m_localName = "deepin";
-    ASSERT_EQ(m_tester->getLocalName(), "deepin");
+    EXPECT_EQ(m_tester->getLocalName(), "deepin");
 }
 
-TEST_F(TestDesktopFile, testgetDisplayName)
+TEST_F(UT_DesktopFile, test_getDisplayName_001)
 {
     m_tester->m_deepinVendor = "deepin";
     m_tester->m_genericName = "compressor";
-    ASSERT_EQ(m_tester->getDisplayName(), "compressor");
+    EXPECT_EQ(m_tester->getDisplayName(), "compressor");
+}
 
+TEST_F(UT_DesktopFile, test_getDisplayName_002)
+{
     m_tester->m_deepinVendor = "360";
     m_tester->m_localName = "test";
-    ASSERT_EQ(m_tester->getDisplayName(), "test");
+    EXPECT_EQ(m_tester->getDisplayName(), "test");
 }
 
-TEST_F(TestDesktopFile, testgetExec)
+TEST_F(UT_DesktopFile, test_getExec)
 {
-    ASSERT_EQ(m_tester->getExec(), m_tester->m_exec);
+    EXPECT_EQ(m_tester->getExec(), m_tester->m_exec);
 }
 
-TEST_F(TestDesktopFile, testgetIcon)
+TEST_F(UT_DesktopFile, test_getIcon)
 {
-    ASSERT_EQ(m_tester->getIcon(), m_tester->m_icon);
+    EXPECT_EQ(m_tester->getIcon(), m_tester->m_icon);
 }
 
-TEST_F(TestDesktopFile, testgetType)
+TEST_F(UT_DesktopFile, test_getType)
 {
-    ASSERT_EQ(m_tester->getType(), m_tester->m_type);
+    EXPECT_EQ(m_tester->getType(), m_tester->m_type);
 }
 
-TEST_F(TestDesktopFile, testgetDeepinId)
+TEST_F(UT_DesktopFile, test_getDeepinId)
 {
-    ASSERT_EQ(m_tester->getDeepinId(), m_tester->m_deepinId);
+    EXPECT_EQ(m_tester->getDeepinId(), m_tester->m_deepinId);
 }
 
-TEST_F(TestDesktopFile, testgetDeepinVendor)
+TEST_F(UT_DesktopFile, test_getDeepinVendor)
 {
-    ASSERT_EQ(m_tester->getDeepinVendor(), m_tester->m_deepinVendor);
+    EXPECT_EQ(m_tester->getDeepinVendor(), m_tester->m_deepinVendor);
 }
 
-TEST_F(TestDesktopFile, testgetNoShow)
+TEST_F(UT_DesktopFile, test_getNoShow)
 {
     m_tester->m_noDisplay = true;
-    ASSERT_EQ(m_tester->getNoShow(), true);
+    EXPECT_EQ(m_tester->getNoShow(), true);
 }
 
-TEST_F(TestDesktopFile, testgetCategories)
+TEST_F(UT_DesktopFile, test_getCategories)
 {
-    ASSERT_EQ(m_tester->getCategories() == m_tester->m_categories, true);
+    EXPECT_EQ(m_tester->getCategories() == m_tester->m_categories, true);
 }
 
-TEST_F(TestDesktopFile, testgetMimeType)
+TEST_F(UT_DesktopFile, test_getMimeType)
 {
-    ASSERT_EQ(m_tester->getMimeType() == m_tester->m_mimeType, true);
+    EXPECT_EQ(m_tester->getMimeType() == m_tester->m_mimeType, true);
 }

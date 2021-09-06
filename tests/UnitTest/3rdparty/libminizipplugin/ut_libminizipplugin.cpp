@@ -35,10 +35,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestLibminizipPluginFactory : public QObject, public ::testing::Test
+class UT_LibminizipPluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibminizipPluginFactory(): m_tester(nullptr) {}
+    UT_LibminizipPluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -55,10 +55,10 @@ protected:
     LibminizipPluginFactory *m_tester;
 };
 
-class TestLibminizipPlugin : public QObject, public ::testing::Test
+class UT_LibminizipPlugin : public QObject, public ::testing::Test
 {
 public:
-    TestLibminizipPlugin(): m_tester(nullptr) {}
+    UT_LibminizipPlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -86,28 +86,28 @@ protected:
 };
 
 
-TEST_F(TestLibminizipPluginFactory, initTest)
+TEST_F(UT_LibminizipPluginFactory, initTest)
 {
 
 }
 
-TEST_F(TestLibminizipPlugin, initTest)
+TEST_F(UT_LibminizipPlugin, initTest)
 {
 
 }
 
-TEST_F(TestLibminizipPlugin, testlist)
+TEST_F(UT_LibminizipPlugin, test_list)
 {
     PluginFinishType eFinishType = m_tester->list();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibminizipPlugin, testtestArchive)
+TEST_F(UT_LibminizipPlugin, test_testArchive)
 {
     PluginFinishType eFinishType = m_tester->testArchive();
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
 void waitForResponse_stub()
@@ -155,7 +155,7 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
-TEST_F(TestLibminizipPlugin, testextractFiles_AllExtract)
+TEST_F(UT_LibminizipPlugin, test_extractFiles_001)
 {
     QList<FileEntry> files;
     ExtractionOptions options;
@@ -172,13 +172,13 @@ TEST_F(TestLibminizipPlugin, testextractFiles_AllExtract)
 
     PluginFinishType eFinishType = m_tester->extractFiles(files, options);
     bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 
     QDir dir(options.strTargetPath);
     dir.removeRecursively();
 }
 
-TEST_F(TestLibminizipPlugin, testextractFiles_PartExtract)
+TEST_F(UT_LibminizipPlugin, test_extractFiles_002)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
@@ -199,47 +199,47 @@ TEST_F(TestLibminizipPlugin, testextractFiles_PartExtract)
 
         PluginFinishType eFinishType = m_tester->extractFiles(files, options);
         bool bResult = (eFinishType == PFT_Nomral) ? true : false;
-        ASSERT_EQ(bResult, true);
+        EXPECT_EQ(bResult, true);
 
         QDir dir(options.strTargetPath);
         dir.removeRecursively();
     }
 }
 
-TEST_F(TestLibminizipPlugin, testpauseOperation)
+TEST_F(UT_LibminizipPlugin, test_pauseOperation)
 {
     m_tester->m_bPause = false;
     m_tester->pauseOperation();
     bool bResult = (m_tester->m_bPause == true) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibminizipPlugin, testcontinueOperation)
+TEST_F(UT_LibminizipPlugin, test_continueOperation)
 {
     m_tester->m_bPause = true;
     m_tester->continueOperation();
     bool bResult = (m_tester->m_bPause == false) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibminizipPlugin, testdoKill)
+TEST_F(UT_LibminizipPlugin, test_doKill)
 {
     m_tester->m_bPause = true;
     m_tester->m_bCancel = false;
     m_tester->doKill();
     bool bResult = (m_tester->m_bPause == false && m_tester->m_bCancel == true) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibminizipPlugin, testhandleArchiveData)
+TEST_F(UT_LibminizipPlugin, test_handleArchiveData)
 {
     unzFile zipfile = unzOpen(QFile::encodeName(m_tester->m_strArchiveName).constData());
     bool bResult = m_tester->handleArchiveData(zipfile);
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
     unzClose(zipfile);
 }
 
-TEST_F(TestLibminizipPlugin, testgetSelFiles)
+TEST_F(UT_LibminizipPlugin, test_getSelFiles)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
@@ -254,5 +254,5 @@ TEST_F(TestLibminizipPlugin, testgetSelFiles)
         bResult = true;
     }
 
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }

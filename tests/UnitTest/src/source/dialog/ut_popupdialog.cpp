@@ -29,10 +29,10 @@
 /*******************************函数打桩************************************/
 /*******************************单元测试************************************/
 // 测试TipDialog
-class TestTipDialog : public ::testing::Test
+class UT_TipDialog : public ::testing::Test
 {
 public:
-    TestTipDialog(): m_tester(nullptr) {}
+    UT_TipDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -49,26 +49,29 @@ protected:
     TipDialog *m_tester;
 };
 
-TEST_F(TestTipDialog, initTest)
+TEST_F(UT_TipDialog, initTest)
 {
 
 }
 
-TEST_F(TestTipDialog, testshowDialog)
+TEST_F(UT_TipDialog, test_showDialog)
 {
     Stub stub;
     CommonStub::stub_DDialog_exec(stub, 1);
 
-    ASSERT_EQ(m_tester->showDialog(), 1);
+    EXPECT_EQ(m_tester->showDialog(), 1);
+    EXPECT_EQ(m_tester->m_strDesText, "");
 }
 
-TEST_F(TestTipDialog, testautoFeed)
+TEST_F(UT_TipDialog, test_autoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }
 
-TEST_F(TestTipDialog, testchangeEvent)
+TEST_F(UT_TipDialog, test_changeEvent)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     pDesLbl->setObjectName("ContentLabel");
@@ -80,10 +83,10 @@ TEST_F(TestTipDialog, testchangeEvent)
 
 
 // 测试ConvertDialog
-class TestConvertDialog : public ::testing::Test
+class UT_ConvertDialog : public ::testing::Test
 {
 public:
-    TestConvertDialog(): m_tester(nullptr) {}
+    UT_ConvertDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -100,37 +103,43 @@ protected:
     ConvertDialog *m_tester;
 };
 
-TEST_F(TestConvertDialog, initTest)
+TEST_F(UT_ConvertDialog, initTest)
 {
 
 }
 
-TEST_F(TestConvertDialog, testshowDialog)
+TEST_F(UT_ConvertDialog, test_showDialog_001)
 {
     Stub stub;
     CommonStub::stub_DDialog_exec(stub, 1);
     QStringList listValue = m_tester->showDialog();
-    ASSERT_EQ(listValue.contains("true"), true);
-
-    Stub stub1;
-    CommonStub::stub_DDialog_exec(stub1, 0);
-    listValue = m_tester->showDialog();
-    ASSERT_EQ(listValue.contains("false"), true);
+    EXPECT_EQ(listValue.contains("true"), true);
 }
 
-TEST_F(TestConvertDialog, testautoFeed)
+TEST_F(UT_ConvertDialog, test_showDialog_002)
+{
+    Stub stub;
+    CommonStub::stub_DDialog_exec(stub, 0);
+    QStringList listValue = m_tester->showDialog();
+    EXPECT_EQ(listValue.contains("false"), true);
+}
+
+TEST_F(UT_ConvertDialog, test_autoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iLabelOld1Height, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }
 
 
 
 // 测试SimpleQueryDialog
-class TestSimpleQueryDialog : public ::testing::Test
+class UT_SimpleQueryDialog : public ::testing::Test
 {
 public:
-    TestSimpleQueryDialog(): m_tester(nullptr) {}
+    UT_SimpleQueryDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -147,26 +156,29 @@ protected:
     SimpleQueryDialog *m_tester;
 };
 
-TEST_F(TestSimpleQueryDialog, initTest)
+TEST_F(UT_SimpleQueryDialog, initTest)
 {
 
 }
 
-TEST_F(TestSimpleQueryDialog, testshowDialog)
+TEST_F(UT_SimpleQueryDialog, test_showDialog)
 {
     Stub stub;
     CommonStub::stub_DDialog_exec(stub, 1);
 
-    ASSERT_EQ(m_tester->showDialog(), 1);
+    EXPECT_EQ(m_tester->showDialog(), 1);
+    EXPECT_EQ(m_tester->m_strDesText, "");
 }
 
-TEST_F(TestSimpleQueryDialog, testautoFeed)
+TEST_F(UT_SimpleQueryDialog, test_autoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }
 
-TEST_F(TestSimpleQueryDialog, testchangeEvent)
+TEST_F(UT_SimpleQueryDialog, test_changeEvent)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     pDesLbl->setObjectName("ContentLabel");
@@ -178,10 +190,10 @@ TEST_F(TestSimpleQueryDialog, testchangeEvent)
 
 
 // 测试OverwriteQueryDialog
-class TestOverwriteQueryDialog : public ::testing::Test
+class UT_OverwriteQueryDialog : public ::testing::Test
 {
 public:
-    TestOverwriteQueryDialog(): m_tester(nullptr) {}
+    UT_OverwriteQueryDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -198,44 +210,49 @@ protected:
     OverwriteQueryDialog *m_tester;
 };
 
-TEST_F(TestOverwriteQueryDialog, initTest)
+TEST_F(UT_OverwriteQueryDialog, initTest)
 {
 
 }
 
-TEST_F(TestOverwriteQueryDialog, testshowDialog)
+TEST_F(UT_OverwriteQueryDialog, test_showDialog_001)
 {
     Stub stub;
     CommonStub::stub_DDialog_exec(stub, 0);
 
     m_tester->showDialog("1/", true);
-    ASSERT_EQ(m_tester->m_retType, OR_Skip);
-
-    Stub stub1;
-    CommonStub::stub_DDialog_exec(stub1, 1);
-    m_tester->showDialog("1.txt", false);
-    ASSERT_EQ(m_tester->m_retType, OR_Overwrite);
-
-    Stub stub2;
-    CommonStub::stub_DDialog_exec(stub2, -1);
-    m_tester->showDialog("1.txt", false);
-    qInfo() << m_tester->m_retType;
-    ASSERT_EQ(m_tester->m_retType, OR_Cancel);
+    EXPECT_EQ(m_tester->m_retType, OR_Skip);
 }
 
-TEST_F(TestOverwriteQueryDialog, testgetDialogResult)
+TEST_F(UT_OverwriteQueryDialog, test_showDialog_002)
+{
+    Stub stub;
+    CommonStub::stub_DDialog_exec(stub, 1);
+    m_tester->showDialog("1.txt", false);
+    EXPECT_EQ(m_tester->m_retType, OR_Overwrite);
+}
+
+TEST_F(UT_OverwriteQueryDialog, test_showDialog_003)
+{
+    Stub stub;
+    CommonStub::stub_DDialog_exec(stub, -1);
+    m_tester->showDialog("1.txt", false);
+    EXPECT_EQ(m_tester->m_retType, OR_Cancel);
+}
+
+TEST_F(UT_OverwriteQueryDialog, test_getDialogResult)
 {
     m_tester->m_retType = OR_Skip;
-    ASSERT_EQ(m_tester->getDialogResult(), OR_Skip);
+    EXPECT_EQ(m_tester->getDialogResult(), OR_Skip);
 }
 
-TEST_F(TestOverwriteQueryDialog, testgetApplyAll)
+TEST_F(UT_OverwriteQueryDialog, test_getApplyAll)
 {
     m_tester->m_applyAll = true;
-    ASSERT_EQ(m_tester->getApplyAll(), true);
+    EXPECT_EQ(m_tester->getApplyAll(), true);
 }
 
-TEST_F(TestOverwriteQueryDialog, testautoFeed)
+TEST_F(UT_OverwriteQueryDialog, test_autoFeed)
 {
     DLabel *pDesLbl1 = new DLabel(m_tester);
     DLabel *pDesLbl2 = new DLabel(m_tester);
@@ -245,10 +262,10 @@ TEST_F(TestOverwriteQueryDialog, testautoFeed)
 
 
 // 测试AppendDialog
-class TestAppendDialog : public ::testing::Test
+class UT_AppendDialog : public ::testing::Test
 {
 public:
-    TestAppendDialog(): m_tester(nullptr) {}
+    UT_AppendDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -265,32 +282,32 @@ protected:
     AppendDialog *m_tester;
 };
 
-TEST_F(TestAppendDialog, initTest)
+TEST_F(UT_AppendDialog, initTest)
 {
 
 }
 
-TEST_F(TestAppendDialog, testshowDialog)
+TEST_F(UT_AppendDialog, test_showDialog)
 {
     Stub stub;
     CommonStub::stub_DDialog_exec(stub, 1);
 
-    ASSERT_EQ(m_tester->showDialog(true), 1);
+    EXPECT_EQ(m_tester->showDialog(true), 1);
 }
 
-TEST_F(TestAppendDialog, testpassword)
+TEST_F(UT_AppendDialog, test_password)
 {
     m_tester->m_strPassword = "123";
-    ASSERT_EQ(m_tester->m_strPassword, "123");
+    EXPECT_EQ(m_tester->m_strPassword, "123");
 }
 
-TEST_F(TestAppendDialog, testautoFeed)
+TEST_F(UT_AppendDialog, test_autoFeed)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     m_tester->autoFeed(pDesLbl);
 }
 
-TEST_F(TestAppendDialog, testchangeEvent)
+TEST_F(UT_AppendDialog, test_changeEvent)
 {
     DLabel *pDesLbl = new DLabel(m_tester);
     pDesLbl->setObjectName("ContentLabel");

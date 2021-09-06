@@ -34,10 +34,10 @@ QVariant dSettings_value_stub(const QString &key)
 }
 /*******************************单元测试************************************/
 // 测试SettingDialog
-class TestSettingDialog : public ::testing::Test
+class UT_SettingDialog : public ::testing::Test
 {
 public:
-    TestSettingDialog(): m_tester(nullptr) {}
+    UT_SettingDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -55,59 +55,63 @@ protected:
     SettingDialog *m_tester;
 };
 
-TEST_F(TestSettingDialog, initTest)
+TEST_F(UT_SettingDialog, initTest)
 {
 
 }
 
-TEST_F(TestSettingDialog, testgetDefaultExtractPath)
+TEST_F(UT_SettingDialog, test_getDefaultExtractPath)
 {
     m_tester->m_curpath = "1/2";
-    ASSERT_EQ(m_tester->getDefaultExtractPath(), "1/2");
+    EXPECT_EQ(m_tester->getDefaultExtractPath(), "1/2");
 }
 
-TEST_F(TestSettingDialog, testisAutoCreatDir)
+TEST_F(UT_SettingDialog, test_isAutoCreatDir)
 {
     Stub stub;
     stub.set(ADDR(DSettings, value), dSettings_value_stub);
 
-    ASSERT_EQ(m_tester->isAutoCreatDir(), true);
+    EXPECT_EQ(m_tester->isAutoCreatDir(), true);
 }
 
-TEST_F(TestSettingDialog, testisAutoOpen)
+TEST_F(UT_SettingDialog, test_isAutoOpen)
 {
     Stub stub;
     stub.set(ADDR(DSettings, value), dSettings_value_stub);
 
-    ASSERT_EQ(m_tester->isAutoOpen(), true);
+    EXPECT_EQ(m_tester->isAutoOpen(), true);
 }
 
-TEST_F(TestSettingDialog, testisAutoDeleteFile)
+TEST_F(UT_SettingDialog, test_isAutoDeleteFile)
 {
     Stub stub;
     stub.set(ADDR(DSettings, value), dSettings_value_stub);
 
-    ASSERT_EQ(m_tester->isAutoDeleteFile(), true);
+    EXPECT_EQ(m_tester->isAutoDeleteFile(), true);
 }
 
-TEST_F(TestSettingDialog, testisAutoDeleteArchive)
+TEST_F(UT_SettingDialog, test_isAutoDeleteArchive)
 {
     m_tester->m_deleteArchiveOption->setValue("Never");
-    ASSERT_EQ(m_tester->isAutoDeleteArchive(), "Never");
+    EXPECT_EQ(m_tester->isAutoDeleteArchive(), "Never");
 }
 
-TEST_F(TestSettingDialog, testisAssociatedType)
+TEST_F(UT_SettingDialog, test_isAssociatedType)
 {
     m_tester->isAssociatedType("application/zip");
 }
 
-TEST_F(TestSettingDialog, testslotClickCancelSelectAllButton)
+TEST_F(UT_SettingDialog, test_slotClickCancelSelectAllButton)
 {
     m_tester->slotClickCancelSelectAllButton();
+    EXPECT_EQ(m_tester->m_settings->option("file_association.file_association_type.x-sv4crc")->value(), false);
 }
 
-TEST_F(TestSettingDialog, testslotClickRecommendedButton)
+TEST_F(UT_SettingDialog, testslotClickRecommendedButton)
 {
     m_tester->slotClickRecommendedButton();
+    EXPECT_EQ(m_tester->m_settings->option("file_association.file_association_type.x-iso9660-image")->value(), false);
+    EXPECT_EQ(m_tester->m_settings->option("file_association.file_association_type.x-iso9660-appimage")->value(), false);
+    EXPECT_EQ(m_tester->m_settings->option("file_association.file_association_type.x-source-rpm")->value(), false);
 }
 

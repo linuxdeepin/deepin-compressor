@@ -31,10 +31,10 @@
 
 /*******************************单元测试************************************/
 // 测试MimeTypeDisplayManager
-class TestMimeTypeDisplayManager : public ::testing::Test
+class UT_MimeTypeDisplayManager : public ::testing::Test
 {
 public:
-    TestMimeTypeDisplayManager(): m_tester(nullptr) {}
+    UT_MimeTypeDisplayManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,52 +52,52 @@ protected:
     MimeTypeDisplayManager *m_tester;
 };
 
-TEST_F(TestMimeTypeDisplayManager, initTest)
+TEST_F(UT_MimeTypeDisplayManager, initTest)
 {
 
 }
 
-TEST_F(TestMimeTypeDisplayManager, testdisplayName)
+TEST_F(UT_MimeTypeDisplayManager, test_displayName)
 {
-    ASSERT_EQ(m_tester->displayName("inode/directory"), "Directory");
+    EXPECT_EQ(m_tester->displayName("inode/directory"), "Directory");
 }
 
-TEST_F(TestMimeTypeDisplayManager, testdisplayNameToEnum)
+TEST_F(UT_MimeTypeDisplayManager, test_displayNameToEnum)
 {
-    ASSERT_EQ(m_tester->displayNameToEnum("application/x-desktop"), FileType::DesktopApplication);
-    ASSERT_EQ(m_tester->displayNameToEnum("inode/directory"), FileType::Directory);
-    ASSERT_EQ(m_tester->displayNameToEnum("application/x-executable"), FileType::Executable);
-    ASSERT_EQ(m_tester->displayNameToEnum("video/"), FileType::Videos);
-    ASSERT_EQ(m_tester->displayNameToEnum("audio/"), FileType::Audios);
-    ASSERT_EQ(m_tester->displayNameToEnum("image/"), FileType::Images);
-    ASSERT_EQ(m_tester->displayNameToEnum("text/"), FileType::Documents);
+    EXPECT_EQ(m_tester->displayNameToEnum("application/x-desktop"), FileType::DesktopApplication);
+    EXPECT_EQ(m_tester->displayNameToEnum("inode/directory"), FileType::Directory);
+    EXPECT_EQ(m_tester->displayNameToEnum("application/x-executable"), FileType::Executable);
+    EXPECT_EQ(m_tester->displayNameToEnum("video/"), FileType::Videos);
+    EXPECT_EQ(m_tester->displayNameToEnum("audio/"), FileType::Audios);
+    EXPECT_EQ(m_tester->displayNameToEnum("image/"), FileType::Images);
+    EXPECT_EQ(m_tester->displayNameToEnum("text/"), FileType::Documents);
     if (MimeTypeDisplayManager::ArchiveMimeTypes.count() > 0) {
-        ASSERT_EQ(m_tester->displayNameToEnum(MimeTypeDisplayManager::ArchiveMimeTypes[0]), FileType::Archives);
+        EXPECT_EQ(m_tester->displayNameToEnum(MimeTypeDisplayManager::ArchiveMimeTypes[0]), FileType::Archives);
     }
     if (MimeTypeDisplayManager::BackupMimeTypes.count() > 0) {
-        ASSERT_EQ(m_tester->displayNameToEnum(MimeTypeDisplayManager::BackupMimeTypes[0]), FileType::Backups);
+        EXPECT_EQ(m_tester->displayNameToEnum(MimeTypeDisplayManager::BackupMimeTypes[0]), FileType::Backups);
     }
-    ASSERT_EQ(m_tester->displayNameToEnum("sadsadasd"), FileType::Unknown);
+    EXPECT_EQ(m_tester->displayNameToEnum("sadsadasd"), FileType::Unknown);
 }
 
-TEST_F(TestMimeTypeDisplayManager, testdefaultIcon)
+TEST_F(UT_MimeTypeDisplayManager, test_defaultIcon)
 {
-    ASSERT_EQ(m_tester->defaultIcon("inode/directory"), "folder");
+    EXPECT_EQ(m_tester->defaultIcon("inode/directory"), "folder");
 }
 
-TEST_F(TestMimeTypeDisplayManager, testdisplayNames)
+TEST_F(UT_MimeTypeDisplayManager, test_displayNames)
 {
-    ASSERT_EQ(m_tester->displayNames(), m_tester->m_displayNames);
+    EXPECT_EQ(m_tester->displayNames(), m_tester->m_displayNames);
 }
 
-TEST_F(TestMimeTypeDisplayManager, testsupportArchiveMimetypes)
+TEST_F(UT_MimeTypeDisplayManager, test_supportArchiveMimetypes)
 {
-    ASSERT_EQ(m_tester->supportArchiveMimetypes() == MimeTypeDisplayManager::ArchiveMimeTypes, true);
+    EXPECT_EQ(m_tester->supportArchiveMimetypes() == MimeTypeDisplayManager::ArchiveMimeTypes, true);
 }
 
-TEST_F(TestMimeTypeDisplayManager, testsupportVideoMimeTypes)
+TEST_F(UT_MimeTypeDisplayManager, test_supportVideoMimeTypes)
 {
-    ASSERT_EQ(m_tester->supportVideoMimeTypes() == MimeTypeDisplayManager::VideoMimeTypes, true);
+    EXPECT_EQ(m_tester->supportVideoMimeTypes() == MimeTypeDisplayManager::VideoMimeTypes, true);
 }
 
 

@@ -32,10 +32,10 @@
 
 DGUI_USE_NAMESPACE
 
-class TestHomePage : public ::testing::Test
+class UT_HomePage : public ::testing::Test
 {
 public:
-    TestHomePage(): m_tester(nullptr) {}
+    UT_HomePage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -53,43 +53,46 @@ protected:
     HomePage *m_tester;
 };
 
-TEST_F(TestHomePage, initTest)
+TEST_F(UT_HomePage, initTest)
 {
 
 }
 
-TEST_F(TestHomePage, dragEnterEvent)
+TEST_F(UT_HomePage, dragEnterEvent)
 {
 
 }
 
-TEST_F(TestHomePage, dragMoveEvent)
+TEST_F(UT_HomePage, dragMoveEvent)
 {
 
 }
 
-TEST_F(TestHomePage, dropEvent)
+TEST_F(UT_HomePage, dropEvent)
 {
 
 }
 
-TEST_F(TestHomePage, slotThemeChanged_LightType)
+TEST_F(UT_HomePage, test_slotThemeChanged_001)
 {
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::LightType);
     m_tester->slotThemeChanged();
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
 }
 
-TEST_F(TestHomePage, slotThemeChanged_DarkType)
+TEST_F(UT_HomePage, test_slotThemeChanged_002)
 {
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::DarkType);
     m_tester->slotThemeChanged();
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/dark/icons/split_line_dark.svg").toImage(), true);
 }
 
-TEST_F(TestHomePage, slotThemeChanged_UnknownType)
+TEST_F(UT_HomePage, test_slotThemeChanged_003)
 {
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::UnknownType);
     m_tester->slotThemeChanged();
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
 }

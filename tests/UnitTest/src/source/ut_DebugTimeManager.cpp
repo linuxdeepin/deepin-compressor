@@ -34,10 +34,10 @@
 /*******************************函数打桩************************************/
 
 
-class TestDebugTimeManager : public ::testing::Test
+class UT_DebugTimeManager : public ::testing::Test
 {
 public:
-    TestDebugTimeManager(): m_tester(nullptr) {}
+    UT_DebugTimeManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -54,40 +54,40 @@ protected:
     DebugTimeManager *m_tester;
 };
 
-TEST_F(TestDebugTimeManager, initTest)
+TEST_F(UT_DebugTimeManager, initTest)
 {
 
 }
 
-TEST_F(TestDebugTimeManager, testclear)
+TEST_F(UT_DebugTimeManager, test_clear)
 {
     m_tester->m_MapPoint["1"] = PointInfo();
     m_tester->clear();
-    ASSERT_EQ(m_tester->m_MapPoint.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }
 
-TEST_F(TestDebugTimeManager, testbeginPointQt)
+TEST_F(UT_DebugTimeManager, test_beginPointQt)
 {
     m_tester->beginPointQt("1", "status");
-    ASSERT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
+    EXPECT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
 }
 
-TEST_F(TestDebugTimeManager, testendPointQt)
-{
-    m_tester->beginPointQt("1", "status");
-    m_tester->endPointQt("1");
-    ASSERT_EQ(m_tester->m_MapPoint.isEmpty(), true);
-}
-
-TEST_F(TestDebugTimeManager, testbeginPointLinux)
-{
-    m_tester->beginPointQt("1", "status");
-    ASSERT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
-}
-
-TEST_F(TestDebugTimeManager, testendPointLinux)
+TEST_F(UT_DebugTimeManager, test_endPointQt)
 {
     m_tester->beginPointQt("1", "status");
     m_tester->endPointQt("1");
-    ASSERT_EQ(m_tester->m_MapPoint.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
+}
+
+TEST_F(UT_DebugTimeManager, test_beginPointLinux)
+{
+    m_tester->beginPointQt("1", "status");
+    EXPECT_EQ(m_tester->m_MapPoint["1"].desc == "status", true);
+}
+
+TEST_F(UT_DebugTimeManager, test_endPointLinux)
+{
+    m_tester->beginPointQt("1", "status");
+    m_tester->endPointQt("1");
+    EXPECT_EQ(m_tester->m_MapPoint.isEmpty(), true);
 }

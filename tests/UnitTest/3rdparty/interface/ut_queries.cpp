@@ -42,10 +42,10 @@ int dialog_exec_stub()
 }
 /*******************************函数打桩************************************/
 // 测试CustomDDialog
-class TestCustomDDialog : public ::testing::Test
+class UT_CustomDDialog : public ::testing::Test
 {
 public:
-    TestCustomDDialog(): m_tester(nullptr) {}
+    UT_CustomDDialog(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -62,17 +62,17 @@ protected:
     CustomDDialog *m_tester;
 };
 
-TEST_F(TestCustomDDialog, initTest)
+TEST_F(UT_CustomDDialog, initTest)
 {
 
 }
 
 
 // 测试OverwriteQuery
-class TestOverwriteQuery : public ::testing::Test
+class UT_OverwriteQuery : public ::testing::Test
 {
 public:
-    TestOverwriteQuery(): m_tester(nullptr) {}
+    UT_OverwriteQuery(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -89,69 +89,81 @@ protected:
     OverwriteQuery *m_tester;
 };
 
-TEST_F(TestOverwriteQuery, initTest)
+TEST_F(UT_OverwriteQuery, initTest)
 {
 
 }
 
-TEST_F(TestOverwriteQuery, testexecute)
+TEST_F(UT_OverwriteQuery, test_execute_001)
 {
     Stub stub;
     stub.set(ADDR(QUrl, fromLocalFile), qUrl_fromLocalFile_stub);
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
 
     g_Dialog_exec_result1 = -1;
-    Stub stub1;
-    typedef int (*fptr)(DDialog *);
-    fptr A_foo1 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub1.set(A_foo1, dialog_exec_stub);
     m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Cancel);
+}
+
+TEST_F(UT_OverwriteQuery, test_execute_002)
+{
+    Stub stub;
+    stub.set(ADDR(QUrl, fromLocalFile), qUrl_fromLocalFile_stub);
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
 
     g_Dialog_exec_result1 = 0;
-    Stub stub2;
-    typedef int (*fptr)(DDialog *);
-    fptr A_foo2 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub2.set(A_foo2, dialog_exec_stub);
     m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Skip);
+}
+
+TEST_F(UT_OverwriteQuery, test_execute_003)
+{
+    Stub stub;
+    stub.set(ADDR(QUrl, fromLocalFile), qUrl_fromLocalFile_stub);
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
 
     g_Dialog_exec_result1 = 1;
-    Stub stub3;
-    typedef int (*fptr)(DDialog *);
-    fptr A_foo3 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub3.set(A_foo3, dialog_exec_stub);
     m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Overwrite);
 }
 
-TEST_F(TestOverwriteQuery, testresponseCancelled)
+TEST_F(UT_OverwriteQuery, test_responseCancelled)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_Cancel;
-    ASSERT_EQ(m_tester->responseCancelled(), true);
+    EXPECT_EQ(m_tester->responseCancelled(), true);
 }
 
-TEST_F(TestOverwriteQuery, testresponseSkip)
+TEST_F(UT_OverwriteQuery, test_responseSkip)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_Skip;
-    ASSERT_EQ(m_tester->responseSkip(), true);
+    EXPECT_EQ(m_tester->responseSkip(), true);
 }
 
-TEST_F(TestOverwriteQuery, testresponseSkipAll)
+TEST_F(UT_OverwriteQuery, test_responseSkipAll)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_SkipAll;
-    ASSERT_EQ(m_tester->responseSkipAll(), true);
+    EXPECT_EQ(m_tester->responseSkipAll(), true);
 }
 
-TEST_F(TestOverwriteQuery, testresponseOverwrite)
+TEST_F(UT_OverwriteQuery, test_responseOverwrite)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_Overwrite;
-    ASSERT_EQ(m_tester->responseOverwrite(), true);
+    EXPECT_EQ(m_tester->responseOverwrite(), true);
 }
 
-TEST_F(TestOverwriteQuery, testresponseOverwriteAll)
+TEST_F(UT_OverwriteQuery, test_responseOverwriteAll)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_OverwriteAll;
-    ASSERT_EQ(m_tester->responseOverwriteAll(), true);
+    EXPECT_EQ(m_tester->responseOverwriteAll(), true);
 }
 
-TEST_F(TestOverwriteQuery, testautoFeed)
+TEST_F(UT_OverwriteQuery, test_autoFeed)
 {
     DLabel *label1 = new DLabel();
     DLabel *label2 = new DLabel();
@@ -162,34 +174,45 @@ TEST_F(TestOverwriteQuery, testautoFeed)
     delete label1;
     delete label2;
     delete dialog;
+
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iLabelOld1Height, 0);
+    EXPECT_EQ(m_tester->m_iCheckboxOld1Height, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }
 
-TEST_F(TestOverwriteQuery, testsetWidgetColor)
+TEST_F(UT_OverwriteQuery, test_setWidgetColor)
 {
     QWidget *pWgt = new QWidget;
     DPalette::ColorRole ct = DPalette::ToolTipText;
     double alphaF = 0.5;
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
 
     m_tester->setWidgetColor(pWgt, ct, alphaF);
+    EXPECT_EQ(pWgt->palette().color(ct) == color, true);
     delete pWgt;
 }
 
-TEST_F(TestOverwriteQuery, testsetWidgetType)
+TEST_F(UT_OverwriteQuery, test_setWidgetType)
 {
     QWidget *pWgt = new QWidget;
     DPalette::ColorType ct;
     double alphaF = 0.5;
+    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    QColor color = palette.color(ct);
 
     m_tester->setWidgetType(pWgt, ct, alphaF);
+    EXPECT_EQ(DApplicationHelper::instance()->palette(pWgt).color(ct) == color, true);
     delete pWgt;
 }
 
 
 // 测试PasswordNeededQuery
-class TestPasswordNeededQuery : public ::testing::Test
+class UT_PasswordNeededQuery : public ::testing::Test
 {
 public:
-    TestPasswordNeededQuery(): m_tester(nullptr) {}
+    UT_PasswordNeededQuery(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -206,29 +229,34 @@ protected:
     PasswordNeededQuery *m_tester;
 };
 
-TEST_F(TestPasswordNeededQuery, initTest)
+TEST_F(UT_PasswordNeededQuery, initTest)
 {
 
 }
 
-TEST_F(TestPasswordNeededQuery, testexecute)
+TEST_F(UT_PasswordNeededQuery, UT_PasswordNeededQuery_execute_001)
 {
     g_Dialog_exec_result1 = -1;
-    Stub stub1;
+    Stub stub;
     typedef int (*fptr)(DDialog *);
-    fptr A_foo1 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub1.set(A_foo1, dialog_exec_stub);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
     m_tester->execute();
-
-    g_Dialog_exec_result1 = 1;
-    Stub stub2;
-    typedef int (*fptr)(DDialog *);
-    fptr A_foo2 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub2.set(A_foo2, dialog_exec_stub);
-    m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Cancel);
 }
 
-TEST_F(TestPasswordNeededQuery, testautoFeed)
+TEST_F(UT_PasswordNeededQuery, UT_PasswordNeededQuery_execute_002)
+{
+    g_Dialog_exec_result1 = 1;
+    Stub stub;
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
+    m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Skip);
+}
+
+TEST_F(UT_PasswordNeededQuery, UT_PasswordNeededQuery_autoFeed)
 {
     DLabel *label1 = new DLabel();
     DLabel *label2 = new DLabel();
@@ -239,26 +267,30 @@ TEST_F(TestPasswordNeededQuery, testautoFeed)
     delete label1;
     delete label2;
     delete dialog;
+
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iLabelOld1Height, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }
 
-TEST_F(TestPasswordNeededQuery, testresponseCancelled)
+TEST_F(UT_PasswordNeededQuery, UT_PasswordNeededQuery_responseCancelled)
 {
     m_tester->m_data[QStringLiteral("response")] = false;
-    ASSERT_EQ(m_tester->responseCancelled(), true);
+    EXPECT_EQ(m_tester->responseCancelled(), true);
 }
 
-TEST_F(TestPasswordNeededQuery, testpassword)
+TEST_F(UT_PasswordNeededQuery, UT_PasswordNeededQuery_password)
 {
     m_tester->m_data[QStringLiteral("password")] = "123";
-    ASSERT_EQ(m_tester->password(), "123");
+    EXPECT_EQ(m_tester->password(), "123");
 }
 
 
 // 测试PasswordNeededQuery
-class TestLoadCorruptQuery : public ::testing::Test
+class UT_LoadCorruptQuery : public ::testing::Test
 {
 public:
-    TestLoadCorruptQuery(): m_tester(nullptr) {}
+    UT_LoadCorruptQuery(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -275,35 +307,40 @@ protected:
     LoadCorruptQuery *m_tester;
 };
 
-TEST_F(TestLoadCorruptQuery, initTest)
+TEST_F(UT_LoadCorruptQuery, initTest)
 {
 
 }
 
-TEST_F(TestLoadCorruptQuery, testexecute)
+TEST_F(UT_LoadCorruptQuery, UT_LoadCorruptQuery_execute_001)
 {
     g_Dialog_exec_result1 = -1;
-    Stub stub1;
+    Stub stub;
     typedef int (*fptr)(DDialog *);
-    fptr A_foo1 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub1.set(A_foo1, dialog_exec_stub);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
     m_tester->execute();
-
-    g_Dialog_exec_result1 = 0;
-    Stub stub2;
-    typedef int (*fptr)(DDialog *);
-    fptr A_foo2 = (fptr)(&DDialog::exec);   //获取虚函数地址
-    stub2.set(A_foo2, dialog_exec_stub);
-    m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Cancel);
 }
 
-TEST_F(TestLoadCorruptQuery, testresponseYes)
+TEST_F(UT_LoadCorruptQuery, UT_LoadCorruptQuery_execute_002)
+{
+    g_Dialog_exec_result1 = 0;
+    Stub stub;
+    typedef int (*fptr)(DDialog *);
+    fptr A_foo = (fptr)(&DDialog::exec);   //获取虚函数地址
+    stub.set(A_foo, dialog_exec_stub);
+    m_tester->execute();
+    EXPECT_EQ(m_tester->m_data.value("response").toInt(), Result_Readonly);
+}
+
+TEST_F(UT_LoadCorruptQuery, UT_LoadCorruptQuery_responseYes)
 {
     m_tester->m_data[QStringLiteral("response")] = Result_Readonly;
-    ASSERT_EQ(m_tester->responseYes(), true);
+    EXPECT_EQ(m_tester->responseYes(), true);
 }
 
-TEST_F(TestLoadCorruptQuery, testautoFeed)
+TEST_F(UT_LoadCorruptQuery, UT_LoadCorruptQuery_autoFeed)
 {
     DLabel *label = new DLabel();
     CustomDDialog *dialog = new CustomDDialog();
@@ -312,4 +349,7 @@ TEST_F(TestLoadCorruptQuery, testautoFeed)
 
     delete label;
     delete dialog;
+
+    EXPECT_EQ(m_tester->m_iLabelOldHeight, 0);
+    EXPECT_EQ(m_tester->m_iDialogOldHeight, 100);
 }

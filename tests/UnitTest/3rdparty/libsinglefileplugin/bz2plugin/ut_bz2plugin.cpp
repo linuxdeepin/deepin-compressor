@@ -32,10 +32,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestLibBzip2InterfaceFactory : public QObject, public ::testing::Test
+class UT_LibBzip2InterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibBzip2InterfaceFactory(): m_tester(nullptr) {}
+    UT_LibBzip2InterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,10 +52,10 @@ protected:
     LibBzip2InterfaceFactory *m_tester;
 };
 
-class TestLibBzip2Interface : public QObject, public ::testing::Test
+class UT_LibBzip2Interface : public QObject, public ::testing::Test
 {
 public:
-    TestLibBzip2Interface(): m_tester(nullptr) {}
+    UT_LibBzip2Interface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -83,26 +83,26 @@ protected:
 };
 
 
-TEST_F(TestLibBzip2InterfaceFactory, initTest)
+TEST_F(UT_LibBzip2InterfaceFactory, initTest)
 {
 
 }
 
-TEST_F(TestLibBzip2Interface, initTest)
+TEST_F(UT_LibBzip2Interface, initTest)
 {
 
 }
 
-TEST_F(TestLibBzip2Interface, testlist)
+TEST_F(UT_LibBzip2Interface, test_list)
 {
     PluginFinishType eType = m_tester->list();
-    ASSERT_EQ(eType, PFT_Nomral);
+    EXPECT_EQ(eType, PFT_Nomral);
 }
 
-TEST_F(TestLibBzip2Interface, testinittestArchive)
+TEST_F(UT_LibBzip2Interface, test_inittestArchive)
 {
     PluginFinishType eType = m_tester->testArchive();
-    ASSERT_EQ(eType, PFT_Nomral);
+    EXPECT_EQ(eType, PFT_Nomral);
 }
 
 
@@ -159,7 +159,7 @@ QStringList qString_split_stub(QChar, QString::SplitBehavior, Qt::CaseSensitivit
            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
 }
 
-TEST_F(TestLibBzip2Interface, testextractFiles)
+TEST_F(UT_LibBzip2Interface, test_extractFiles_001)
 {
     ExtractionOptions options;
     options.bAllExtract = false;
@@ -169,64 +169,110 @@ TEST_F(TestLibBzip2Interface, testextractFiles)
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
 
-    Stub stub1;
-    stub1.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
+    m_tester->extractFiles(QList<FileEntry>(), options);
+}
+
+TEST_F(UT_LibBzip2Interface, test_extractFiles_002)
+{
+    ExtractionOptions options;
+    options.bAllExtract = false;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/bz2/temp";
+    QDir dir(options.strTargetPath);
+
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_true_stub);
+
     PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(eType, PFT_Cancel);
+}
 
-    Stub stub2;
-    stub2.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub2.set(ADDR(OverwriteQuery, responseSkip), responseSkip_true_stub);
-    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+TEST_F(UT_LibBzip2Interface, test_extractFiles_003)
+{
+    ExtractionOptions options;
+    options.bAllExtract = false;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/bz2/temp";
+    QDir dir(options.strTargetPath);
 
-    Stub stub3;
-    stub3.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub3.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub3.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_true_stub);
-    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_true_stub);
 
-    Stub stub4;
-    stub4.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
-    stub4.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
-    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(eType, PFT_Cancel);
+}
 
-    Stub stub5;
+TEST_F(UT_LibBzip2Interface, test_extractFiles_004)
+{
+    ExtractionOptions options;
+    options.bAllExtract = false;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/bz2/temp";
+    QDir dir(options.strTargetPath);
+
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
+
+    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(eType, PFT_Nomral);
+}
+
+TEST_F(UT_LibBzip2Interface, test_extractFiles_005)
+{
+    ExtractionOptions options;
+    options.bAllExtract = false;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/bz2/temp";
+    QDir dir(options.strTargetPath);
+
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
     typedef QStringList(QString::*fptr)(QChar, QString::SplitBehavior, Qt::CaseSensitivity) const;
     fptr A_foo = (fptr)(&QString::split);   //获取虚函数地址
-    stub5.set(A_foo, qString_split_stub);
+    stub.set(A_foo, qString_split_stub);
 
-    eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(eType, PFT_Cancel);
     dir.removeRecursively();
 }
 
-TEST_F(TestLibBzip2Interface, testpauseOperation)
+TEST_F(UT_LibBzip2Interface, testpauseOperation)
 {
     m_tester->m_bPause = false;
     m_tester->pauseOperation();
     bool bResult = (m_tester->m_bPause == true) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibBzip2Interface, testcontinueOperation)
+TEST_F(UT_LibBzip2Interface, test_continueOperation)
 {
     m_tester->m_bPause = true;
     m_tester->continueOperation();
     bool bResult = (m_tester->m_bPause == false) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibBzip2Interface, testdoKill)
+TEST_F(UT_LibBzip2Interface, test_doKill)
 {
     m_tester->m_bPause = true;
     m_tester->doKill();
     bool bResult = (m_tester->m_bPause == false) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
-TEST_F(TestLibBzip2Interface, testuncompressedFileName)
+TEST_F(UT_LibBzip2Interface, test_uncompressedFileName)
 {
     QString str = m_tester->uncompressedFileName();
-    ASSERT_EQ(str, "test.txt");
+    EXPECT_EQ(str, "test.txt");
 }

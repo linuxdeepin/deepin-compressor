@@ -33,10 +33,10 @@ QString qQMimeType_name_stub()
 }
 /*******************************单元测试************************************/
 // 测试DMimeDatabase
-class TestDMimeDatabase : public ::testing::Test
+class UT_DMimeDatabase : public ::testing::Test
 {
 public:
-    TestDMimeDatabase(): m_tester(nullptr) {}
+    UT_DMimeDatabase(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -53,16 +53,22 @@ protected:
     DMimeDatabase *m_tester;
 };
 
-TEST_F(TestDMimeDatabase, initTest)
+TEST_F(UT_DMimeDatabase, initTest)
 {
 
 }
 
-TEST_F(TestDMimeDatabase, testmimeTypeForFile)
+TEST_F(UT_DMimeDatabase, test_mimeTypeForFile_001)
 {
-    m_tester->mimeTypeForFile("1.docx");
+    QMimeType mime = m_tester->mimeTypeForFile("1.docx");
+    EXPECT_EQ(mime.name().isEmpty(), false);
+}
 
+TEST_F(UT_DMimeDatabase, test_mimeTypeForFile_002)
+{
     Stub stub;
     stub.set(ADDR(QMimeType, name), qQMimeType_name_stub);
-    m_tester->mimeTypeForFile("1.docx", QMimeDatabase::MatchExtension);
+    QMimeType mime = m_tester->mimeTypeForFile("1.docx", QMimeDatabase::MatchExtension);
+    qInfo() << mime.name();
+    EXPECT_EQ(mime.name(), "application/zip");
 }

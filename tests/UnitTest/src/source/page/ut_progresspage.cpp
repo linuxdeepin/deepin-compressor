@@ -28,10 +28,10 @@
 #include <gtest/gtest.h>
 #include <QTest>
 
-class TestProgressPage : public ::testing::Test
+class UT_ProgressPage : public ::testing::Test
 {
 public:
-    TestProgressPage(): m_tester(nullptr) {}
+    UT_ProgressPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -49,72 +49,72 @@ protected:
     ProgressPage *m_tester;
 };
 
-TEST_F(TestProgressPage, initTest)
+TEST_F(UT_ProgressPage, initTest)
 {
 
 }
 
-TEST_F(TestProgressPage, testsetProgressType_Compress)
+TEST_F(UT_ProgressPage, test_setProgressType_001)
 {
     m_tester->setProgressType(PT_Compress);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "compress") + ": " + QObject::tr("Calculating...")));
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "compress") + ": " + QObject::tr("Calculating...")));
 }
 
-TEST_F(TestProgressPage, testsetProgressType_Delete)
+TEST_F(UT_ProgressPage, test_setProgressType_002)
 {
     m_tester->setProgressType(PT_Delete);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "delete") + ": " + QObject::tr("Calculating...")));
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "delete") + ": " + QObject::tr("Calculating...")));
 }
 
-TEST_F(TestProgressPage, testsetProgressType_Convert)
+TEST_F(UT_ProgressPage, test_setProgressType_003)
 {
     m_tester->setProgressType(PT_Convert);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "convert") + ": " + QObject::tr("Calculating...")));
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "convert") + ": " + QObject::tr("Calculating...")));
 }
 
-TEST_F(TestProgressPage, testsetProgressType_Comment)
+TEST_F(UT_ProgressPage, test_setProgressType_004)
 {
     m_tester->setProgressType(PT_Comment);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), "");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), "");
 }
 
-TEST_F(TestProgressPage, testsetProgressType_Other)
+TEST_F(UT_ProgressPage, test_setProgressType_005)
 {
     m_tester->setProgressType(PT_UnCompress);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "uncompress") + ": " + QObject::tr("Calculating...")));
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), (QObject::tr("Speed", "uncompress") + ": " + QObject::tr("Calculating...")));
 }
 
-TEST_F(TestProgressPage, testsetTotalSize)
+TEST_F(UT_ProgressPage, test_setTotalSize)
 {
     m_tester->m_qTotalSize = 0;
     m_tester->setTotalSize(1);
-    ASSERT_EQ(m_tester->m_qTotalSize, 1);
+    EXPECT_EQ(m_tester->m_qTotalSize, 1);
 }
 
-TEST_F(TestProgressPage, testsetArchiveName)
+TEST_F(UT_ProgressPage, test_setArchiveName)
 {
     m_tester->m_strArchiveName.clear();
     m_tester->setArchiveName("123");
-    ASSERT_EQ(m_tester->m_strArchiveName, "123");
+    EXPECT_EQ(m_tester->m_strArchiveName, "123");
 }
 
-TEST_F(TestProgressPage, testarchiveName)
+TEST_F(UT_ProgressPage, test_archiveName)
 {
     m_tester->m_strArchiveName = "123";
-    ASSERT_EQ(m_tester->archiveName(), "123");
+    EXPECT_EQ(m_tester->archiveName(), "123");
 }
 
-TEST_F(TestProgressPage, testsetProgress)
+TEST_F(UT_ProgressPage, test_setProgress_001)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
     QElapsedTimerStub::stub_QElapsedTimer_restart(stub);
     m_tester->m_iPerent = 50;
     m_tester->setProgress(40);
-    ASSERT_EQ(m_tester->m_iPerent, 50);
+    EXPECT_EQ(m_tester->m_iPerent, 50);
 }
 
-TEST_F(TestProgressPage, testsetProgress_normal)
+TEST_F(UT_ProgressPage, test_setProgress_002)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -122,76 +122,77 @@ TEST_F(TestProgressPage, testsetProgress_normal)
     QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
     m_tester->m_iPerent = 50;
     m_tester->setProgress(60);
-    ASSERT_EQ(m_tester->m_iPerent, 60);
+    EXPECT_EQ(m_tester->m_iPerent, 60);
 }
 
-TEST_F(TestProgressPage, testsetCurrentFileName_Compress)
+TEST_F(UT_ProgressPage, test_setCurrentFileName_001)
 {
     m_tester->m_eType = PT_Compress;
     m_tester->setCurrentFileName("11");
-    ASSERT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Compressing"), true);
+    EXPECT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Compressing"), true);
 }
 
-TEST_F(TestProgressPage, testsetCurrentFileName_Delete)
+TEST_F(UT_ProgressPage, test_setCurrentFileName_002)
 {
     m_tester->m_eType = PT_Delete;
     m_tester->setCurrentFileName("11");
-    ASSERT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Deleting"), true);
+    EXPECT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Deleting"), true);
 }
 
-TEST_F(TestProgressPage, testsetCurrentFileName_Convert)
+TEST_F(UT_ProgressPage, ttest_setCurrentFileName_003)
 {
     m_tester->m_eType = PT_Convert;
     m_tester->setCurrentFileName("11");
-    ASSERT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Converting"), true);
+    EXPECT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Converting"), true);
 }
 
-TEST_F(TestProgressPage, testsetCurrentFileName_Comment)
+TEST_F(UT_ProgressPage, test_setCurrentFileName_004)
 {
     m_tester->m_eType = PT_Comment;
     m_tester->setCurrentFileName("11");
-    ASSERT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Updating the comment"), true);
+    EXPECT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Updating the comment"), true);
 }
 
-TEST_F(TestProgressPage, testsetCurrentFileName_Other)
+TEST_F(UT_ProgressPage, test_setCurrentFileName_005)
 {
     m_tester->m_eType = PT_None;
     m_tester->setCurrentFileName("11");
-    ASSERT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Extracting"), true);
+    EXPECT_EQ(m_tester->m_pFileNameLbl->text().startsWith("Extracting"), true);
 }
 
-TEST_F(TestProgressPage, testresetProgress_Comment)
+TEST_F(UT_ProgressPage, test_resetProgress_001)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
     m_tester->m_eType = PT_Comment;
     m_tester->resetProgress();
-    ASSERT_EQ(m_tester->m_qConsumeTime, 0);
+    EXPECT_EQ(m_tester->m_qConsumeTime, 0);
 }
 
-TEST_F(TestProgressPage, testresetProgress_Other)
+TEST_F(UT_ProgressPage, test_resetProgress_002)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
     m_tester->m_eType = PT_None;
     m_tester->resetProgress();
-    ASSERT_EQ(m_tester->m_qConsumeTime, 0);
+    EXPECT_EQ(m_tester->m_qConsumeTime, 0);
 }
 
-TEST_F(TestProgressPage, testresetProgress)
+TEST_F(UT_ProgressPage, test_restartTimer)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_restart(stub);
     m_tester->restartTimer();
 }
 
-TEST_F(TestProgressPage, testsetPushButtonCheckable)
+TEST_F(UT_ProgressPage, test_setPushButtonCheckable)
 {
     m_tester->setPushButtonCheckable(true, true);
-    ASSERT_EQ(m_tester->m_pPauseContinueButton->isEnabled(), true);
+    EXPECT_EQ(m_tester->m_pCancelBtn->isEnabled(), true);
+    EXPECT_EQ(m_tester->m_pPauseContinueButton->isEnabled(), true);
 }
 
-TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_return)
+TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_001)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -203,10 +204,10 @@ TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_return)
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(dSpeed, 0);
+    EXPECT_EQ(dSpeed, 0);
 }
 
-TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_0ms)
+TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_002)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -216,10 +217,10 @@ TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_0ms)
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(dSpeed, 0);
+    EXPECT_EQ(dSpeed, 0);
 }
 
-TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_Convert)
+TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_003)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -233,10 +234,10 @@ TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_Convert)
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(dSpeed, 200);
+    EXPECT_EQ(dSpeed, 200);
 }
 
-TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_Other)
+TEST_F(UT_ProgressPage, test_calSpeedAndRemainingTime_004)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -250,130 +251,130 @@ TEST_F(TestProgressPage, testcalSpeedAndRemainingTime_Other)
     double dSpeed;
     qint64 qRemainingTime;
     m_tester->calSpeedAndRemainingTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(dSpeed, 100);
+    EXPECT_EQ(dSpeed, 100);
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_CompressSmall)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_001)
 {
     m_tester->m_eType = PT_Compress;
     double dSpeed = 1000;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_CompressNormal)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_002)
 {
     m_tester->m_eType = PT_Compress;
     double dSpeed = 1024 * 10;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_CompressOther)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_003)
 {
     m_tester->m_eType = PT_Compress;
     double dSpeed = 1024 * 400;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + ">300MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "compress") + ": " + ">300MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_DeleteSmall)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_004)
 {
     m_tester->m_eType = PT_Delete;
     double dSpeed = 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_DeleteOther)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_005)
 {
     m_tester->m_eType = PT_Delete;
     double dSpeed = 2048;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_UnCompressSmall)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_006)
 {
     m_tester->m_eType = PT_UnCompress;
     double dSpeed = 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_UnCompressNormal)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_007)
 {
     m_tester->m_eType = PT_UnCompress;
     double dSpeed = 1024 * 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_UnCompressOther)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_008)
 {
     m_tester->m_eType = PT_UnCompress;
     double dSpeed = 1024 * 400;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + ">300MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + ">300MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_ConvertSmall)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_009)
 {
     m_tester->m_eType = PT_Convert;
     double dSpeed = 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "convert") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_ConvertNormal)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_010)
 {
     m_tester->m_eType = PT_Convert;
     double dSpeed = 1024 * 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "convert") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_ConvertOther)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_011)
 {
     m_tester->m_eType = PT_Convert;
     double dSpeed = 1024 * 400;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + ">300MB/s");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), QObject::tr("Speed", "uncompress") + ": " + ">300MB/s");
 }
 
-TEST_F(TestProgressPage, testdisplaySpeedAndTime_Comment)
+TEST_F(UT_ProgressPage, test_displaySpeedAndTime_012)
 {
     m_tester->m_eType = PT_Comment;
     double dSpeed = 20;
     qint64 qRemainingTime = 10;
     m_tester->displaySpeedAndTime(dSpeed, qRemainingTime);
-    ASSERT_EQ(m_tester->m_pSpeedLbl->text(), "");
+    EXPECT_EQ(m_tester->m_pSpeedLbl->text(), "");
 }
 
-TEST_F(TestProgressPage, testslotPauseClicked_Checked)
+TEST_F(UT_ProgressPage, test_slotPauseClicked_001)
 {
     m_tester->slotPauseClicked(true);
-    ASSERT_EQ(m_tester->m_pPauseContinueButton->text(), "Continue");
+    EXPECT_EQ(m_tester->m_pPauseContinueButton->text(), "Continue");
 }
 
-TEST_F(TestProgressPage, testslotPauseClicked_UnChecked)
+TEST_F(UT_ProgressPage, test_slotPauseClicked_002)
 {
     m_tester->slotPauseClicked(false);
-    ASSERT_EQ(m_tester->m_pPauseContinueButton->text(), "Pause");
+    EXPECT_EQ(m_tester->m_pPauseContinueButton->text(), "Pause");
 }
 
-TEST_F(TestProgressPage, testslotCancelClicked_Compress)
+TEST_F(UT_ProgressPage, test_slotCancelClicked_001)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 1);
@@ -382,7 +383,7 @@ TEST_F(TestProgressPage, testslotCancelClicked_Compress)
     m_tester->slotCancelClicked();
 }
 
-TEST_F(TestProgressPage, testslotCancelClicked_UnCompress)
+TEST_F(UT_ProgressPage, test_slotCancelClicked_002)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
@@ -391,7 +392,7 @@ TEST_F(TestProgressPage, testslotCancelClicked_UnCompress)
     m_tester->slotCancelClicked();
 }
 
-TEST_F(TestProgressPage, testslotCancelClicked_Delete)
+TEST_F(UT_ProgressPage, test_slotCancelClicked_003)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
@@ -400,7 +401,7 @@ TEST_F(TestProgressPage, testslotCancelClicked_Delete)
     m_tester->slotCancelClicked();
 }
 
-TEST_F(TestProgressPage, testslotCancelClicked_CompressAdd)
+TEST_F(UT_ProgressPage, test_slotCancelClicked_004)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);
@@ -409,7 +410,7 @@ TEST_F(TestProgressPage, testslotCancelClicked_CompressAdd)
     m_tester->slotCancelClicked();
 }
 
-TEST_F(TestProgressPage, testslotCancelClicked_Convert)
+TEST_F(UT_ProgressPage, test_slotCancelClicked_005)
 {
     Stub stub;
     CustomDialogStub::stub_SimpleQueryDialog_showDialog(stub, 0);

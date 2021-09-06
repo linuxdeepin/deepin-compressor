@@ -32,10 +32,10 @@
 
 
 // 测试FileEntry
-class TestFileEntry : public ::testing::Test
+class UT_FileEntry : public ::testing::Test
 {
 public:
-    TestFileEntry(): m_tester(nullptr) {}
+    UT_FileEntry(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -52,22 +52,22 @@ protected:
     FileEntry *m_tester;
 };
 
-TEST_F(TestFileEntry, initTest)
+TEST_F(UT_FileEntry, initTest)
 {
 
 }
 
-TEST_F(TestFileEntry, testreset)
+TEST_F(UT_FileEntry, UT_FileEntry_reset)
 {
-    ASSERT_EQ(m_tester->iIndex, -1);
+    EXPECT_EQ(m_tester->iIndex, -1);
 }
 
 
 // 测试ArchiveData
-class TestArchiveData : public ::testing::Test
+class UT_ArchiveData : public ::testing::Test
 {
 public:
-    TestArchiveData(): m_tester(nullptr) {}
+    UT_ArchiveData(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -84,22 +84,22 @@ protected:
     ArchiveData *m_tester;
 };
 
-TEST_F(TestArchiveData, initTest)
+TEST_F(UT_ArchiveData, initTest)
 {
 
 }
 
-TEST_F(TestArchiveData, testreset)
+TEST_F(UT_ArchiveData, test_reset)
 {
-    ASSERT_EQ(m_tester->strPassword.isEmpty(), true);
+    EXPECT_EQ(m_tester->strPassword.isEmpty(), true);
 }
 
 
 // 测试UpdateOptions
-class TestUpdateOptions : public ::testing::Test
+class UT_UpdateOptions : public ::testing::Test
 {
 public:
-    TestUpdateOptions(): m_tester(nullptr) {}
+    UT_UpdateOptions(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -116,12 +116,12 @@ protected:
     UpdateOptions *m_tester;
 };
 
-TEST_F(TestUpdateOptions, initTest)
+TEST_F(UT_UpdateOptions, initTest)
 {
 
 }
 
-TEST_F(TestUpdateOptions, testreset)
+TEST_F(UT_UpdateOptions, test_reset)
 {
-    ASSERT_EQ(m_tester->qSize, 0);
+    EXPECT_EQ(m_tester->qSize, 0);
 }

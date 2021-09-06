@@ -29,10 +29,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestLibXzInterfaceFactory : public QObject, public ::testing::Test
+class UT_LibXzInterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibXzInterfaceFactory(): m_tester(nullptr) {}
+    UT_LibXzInterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -49,10 +49,10 @@ protected:
     LibXzInterfaceFactory *m_tester;
 };
 
-class TestLibXzInterface : public QObject, public ::testing::Test
+class UT_LibXzInterface : public QObject, public ::testing::Test
 {
 public:
-    TestLibXzInterface(): m_tester(nullptr) {}
+    UT_LibXzInterface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -80,12 +80,12 @@ protected:
 };
 
 
-TEST_F(TestLibXzInterfaceFactory, initTest)
+TEST_F(UT_LibXzInterfaceFactory, initTest)
 {
 
 }
 
-TEST_F(TestLibXzInterface, initTest)
+TEST_F(UT_LibXzInterface, initTest)
 {
 
 }

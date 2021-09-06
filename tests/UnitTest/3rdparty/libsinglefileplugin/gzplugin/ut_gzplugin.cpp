@@ -29,10 +29,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestLibGzipInterfaceFactory : public QObject, public ::testing::Test
+class UT_LibGzipInterfaceFactory : public QObject, public ::testing::Test
 {
 public:
-    TestLibGzipInterfaceFactory(): m_tester(nullptr) {}
+    UT_LibGzipInterfaceFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -49,10 +49,10 @@ protected:
     LibGzipInterfaceFactory *m_tester;
 };
 
-class TestLibGzipInterface : public QObject, public ::testing::Test
+class UT_LibGzipInterface : public QObject, public ::testing::Test
 {
 public:
-    TestLibGzipInterface(): m_tester(nullptr) {}
+    UT_LibGzipInterface(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -80,12 +80,12 @@ protected:
 };
 
 
-TEST_F(TestLibGzipInterfaceFactory, initTest)
+TEST_F(UT_LibGzipInterfaceFactory, initTest)
 {
 
 }
 
-TEST_F(TestLibGzipInterface, initTest)
+TEST_F(UT_LibGzipInterface, initTest)
 {
 
 }

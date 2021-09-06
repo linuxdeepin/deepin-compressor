@@ -33,10 +33,10 @@
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
-class TestReadOnlyLibarchivePluginFactory : public QObject, public ::testing::Test
+class UT_ReadOnlyLibarchivePluginFactory : public QObject, public ::testing::Test
 {
 public:
-    TestReadOnlyLibarchivePluginFactory(): m_tester(nullptr) {}
+    UT_ReadOnlyLibarchivePluginFactory(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -53,10 +53,10 @@ protected:
     ReadOnlyLibarchivePluginFactory *m_tester;
 };
 
-class TestReadOnlyLibarchivePlugin : public QObject, public ::testing::Test
+class UT_ReadOnlyLibarchivePlugin : public QObject, public ::testing::Test
 {
 public:
-    TestReadOnlyLibarchivePlugin(): m_tester(nullptr) {}
+    UT_ReadOnlyLibarchivePlugin(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -83,24 +83,27 @@ protected:
     ReadOnlyLibarchivePlugin *m_tester;
 };
 
-TEST_F(TestReadOnlyLibarchivePluginFactory, initTest)
+TEST_F(UT_ReadOnlyLibarchivePluginFactory, initTest)
 {
 
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, initTest)
+TEST_F(UT_ReadOnlyLibarchivePlugin, initTest)
 {
 
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testlist)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_list)
 {
-    ASSERT_EQ(m_tester->list(), PFT_Nomral);
+    EXPECT_EQ(m_tester->list(), PFT_Nomral);
+    EXPECT_EQ(m_tester->m_setHasHandlesDirs.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_setHasRootDirs.isEmpty(), false);
+    EXPECT_EQ(m_tester->m_mapCode.isEmpty(), false);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testtestArchive)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_testArchive)
 {
-    ASSERT_EQ(m_tester->testArchive(), PFT_Nomral);
+    EXPECT_EQ(m_tester->testArchive(), PFT_Nomral);
 }
 
 bool initializeReader_stub()
@@ -133,7 +136,7 @@ bool responseCancelled_false_stub()
     return false;
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractFiles_001)
 {
     Stub stub;
     stub.set(ADDR(LibarchivePlugin, initializeReader), initializeReader_stub);
@@ -141,10 +144,12 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles)
     QList<FileEntry> files;
     ExtractionOptions options;
 
-    ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Error);
+    EXPECT_EQ(m_tester->extractFiles(files, options), PFT_Error);
+    EXPECT_EQ(m_tester->m_bOverwriteAll, false);
+    EXPECT_EQ(m_tester->m_bSkipAll, false);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles1)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractFiles_002)
 {
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -157,10 +162,10 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles1)
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/tar/extract";
 
-    ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles2)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractFiles_003)
 {
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -172,14 +177,15 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles2)
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/tar/extract";
 
-    ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Cancel);
+    EXPECT_EQ(m_tester->extractFiles(files, options), PFT_Cancel);
 }
 
 bool mkpath_stub(const QString &)
 {
     return false;
 }
-TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles3)
+
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractFiles_004)
 {
     Stub stub;
     stub.set(ADDR(QDir, mkpath), mkpath_stub);
@@ -188,10 +194,10 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles3)
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/tar/extracterror";
 
-    ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Error);
+    EXPECT_EQ(m_tester->extractFiles(files, options), PFT_Error);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles4)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractFiles_005)
 {
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -209,74 +215,75 @@ TEST_F(TestReadOnlyLibarchivePlugin, testextractFiles4)
     options.strTargetPath += "/test_sources/tar/extract";
     m_tester->m_ArchiveEntryCount = 2;
 
-    ASSERT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
+    EXPECT_EQ(m_tester->extractFiles(files, options), PFT_Nomral);
 
     QFile::remove(options.strTargetPath + "/test.txt");
     QFile::remove(options.strTargetPath + "/test1.txt");
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testaddFiles)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_addFiles)
 {
     QList<FileEntry> files;
     CompressOptions options;
 
-    ASSERT_EQ(m_tester->addFiles(files, options), PFT_Error);
+    EXPECT_EQ(m_tester->addFiles(files, options), PFT_Error);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testcopyFiles)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_copyFiles)
 {
     QList<FileEntry> files;
     CompressOptions options;
 
-    ASSERT_EQ(m_tester->copyFiles(files, options), PFT_Error);
+    EXPECT_EQ(m_tester->copyFiles(files, options), PFT_Error);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testdeleteFiles)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_deleteFiles)
 {
     QList<FileEntry> files;
     CompressOptions options;
 
-    ASSERT_EQ(m_tester->deleteFiles(files), PFT_Error);
+    EXPECT_EQ(m_tester->deleteFiles(files), PFT_Error);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testaddComment)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_addComment)
 {
-    ASSERT_EQ(m_tester->addComment("comment"), PFT_Error);
+    EXPECT_EQ(m_tester->addComment("comment"), PFT_Error);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testpauseOperation)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_pauseOperation)
 {
     m_tester->pauseOperation();
-    ASSERT_EQ(m_tester->m_bPause, true);
+    EXPECT_EQ(m_tester->m_bPause, true);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testcontinueOperation)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_continueOperation)
 {
     m_tester->continueOperation();
-    ASSERT_EQ(m_tester->m_bPause, false);
+    EXPECT_EQ(m_tester->m_bPause, false);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testdoKill)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_doKill)
 {
     bool ret = m_tester->doKill();
-    ASSERT_EQ(m_tester->m_bPause, false);
-    ASSERT_EQ(ret, false);
+    EXPECT_EQ(m_tester->m_bPause, false);
+    EXPECT_EQ(ret, false);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testinitializeReader)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_initializeReader)
 {
-    ASSERT_EQ(m_tester->initializeReader(), true);
+    EXPECT_EQ(m_tester->initializeReader(), true);
 }
 
 int archive_read_support_filter_all_stub(struct archive *)
 {
     return ARCHIVE_FAILED;
 }
-TEST_F(TestReadOnlyLibarchivePlugin, testinitializeReader1)
+
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_initializeReader_001)
 {
     Stub stub;
     stub.set(archive_read_support_filter_all, archive_read_support_filter_all_stub);
-    ASSERT_EQ(m_tester->initializeReader(), false);
+    EXPECT_EQ(m_tester->initializeReader(), false);
 }
 
 int archive_read_support_format_all_stub(struct archive *)
@@ -284,11 +291,11 @@ int archive_read_support_format_all_stub(struct archive *)
     return ARCHIVE_FAILED;
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testinitializeReader2)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_initializeReader_002)
 {
     Stub stub;
     stub.set(archive_read_support_format_all, archive_read_support_format_all_stub);
-    ASSERT_EQ(m_tester->initializeReader(), false);
+    EXPECT_EQ(m_tester->initializeReader(), false);
 }
 
 int archive_read_open_filename_stub(struct archive *)
@@ -296,29 +303,29 @@ int archive_read_open_filename_stub(struct archive *)
     return ARCHIVE_FAILED;
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testinitializeReader3)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_initializeReader_003)
 {
     Stub stub;
     stub.set(archive_read_open_filename, archive_read_open_filename_stub);
-    ASSERT_EQ(m_tester->initializeReader(), false);
+    EXPECT_EQ(m_tester->initializeReader(), false);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testconvertCompressionName)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_convertCompressionName)
 {
-    ASSERT_EQ(m_tester->convertCompressionName("gzip_error").isEmpty(), true);
-    ASSERT_EQ(m_tester->convertCompressionName("gzip").toStdString(), "GZip");
-    ASSERT_EQ(m_tester->convertCompressionName("bzip2").toStdString(), "BZip2");
-    ASSERT_EQ(m_tester->convertCompressionName("xz").toStdString(), "XZ");
-    ASSERT_EQ(m_tester->convertCompressionName("compress (.Z)").toStdString(), "Compress");
-    ASSERT_EQ(m_tester->convertCompressionName("lrzip").toStdString(), "LRZip");
-    ASSERT_EQ(m_tester->convertCompressionName("lzip").toStdString(), "LZip");
-    ASSERT_EQ(m_tester->convertCompressionName("lz4").toStdString(), "LZ4");
-    ASSERT_EQ(m_tester->convertCompressionName("lzop").toStdString(), "lzop");
-    ASSERT_EQ(m_tester->convertCompressionName("lzma").toStdString(), "LZMA");
-    ASSERT_EQ(m_tester->convertCompressionName("zstd").toStdString(), "Zstandard");
+    EXPECT_EQ(m_tester->convertCompressionName("gzip_error").isEmpty(), true);
+    EXPECT_EQ(m_tester->convertCompressionName("gzip").toStdString(), "GZip");
+    EXPECT_EQ(m_tester->convertCompressionName("bzip2").toStdString(), "BZip2");
+    EXPECT_EQ(m_tester->convertCompressionName("xz").toStdString(), "XZ");
+    EXPECT_EQ(m_tester->convertCompressionName("compress (.Z)").toStdString(), "Compress");
+    EXPECT_EQ(m_tester->convertCompressionName("lrzip").toStdString(), "LRZip");
+    EXPECT_EQ(m_tester->convertCompressionName("lzip").toStdString(), "LZip");
+    EXPECT_EQ(m_tester->convertCompressionName("lz4").toStdString(), "LZ4");
+    EXPECT_EQ(m_tester->convertCompressionName("lzop").toStdString(), "lzop");
+    EXPECT_EQ(m_tester->convertCompressionName("lzma").toStdString(), "LZMA");
+    EXPECT_EQ(m_tester->convertCompressionName("zstd").toStdString(), "Zstandard");
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testupdateArchiveData)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_updateArchiveData)
 {
     UpdateOptions options;
     options.eType = UpdateOptions::Delete;
@@ -329,14 +336,12 @@ TEST_F(TestReadOnlyLibarchivePlugin, testupdateArchiveData)
     m_tester->list();
     ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
     int mapFileEntrysizeold = stArchiveData.mapFileEntry.size();
-//    int listRootEntrysizeold = stArchiveData.listRootEntry.size();
-    ASSERT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
+    EXPECT_EQ(m_tester->updateArchiveData(options), PFT_Nomral);
     int mapFileEntrysizenew = stArchiveData.mapFileEntry.size();
-//    int listRootEntrysizenew = stArchiveData.listRootEntry.size();
-    ASSERT_EQ(mapFileEntrysizeold, mapFileEntrysizenew + 1);
+    EXPECT_EQ(mapFileEntrysizeold, mapFileEntrysizenew + 1);
 }
 
-TEST_F(TestReadOnlyLibarchivePlugin, testextractionFlags)
+TEST_F(UT_ReadOnlyLibarchivePlugin, test_extractionFlags)
 {
-    ASSERT_EQ(m_tester->extractionFlags(), 0x0204);
+    EXPECT_EQ(m_tester->extractionFlags(), 0x0204);
 }

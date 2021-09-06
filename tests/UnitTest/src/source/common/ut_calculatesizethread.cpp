@@ -31,10 +31,10 @@
 
 /*******************************单元测试************************************/
 // 测试CompressPage
-class TestCalculateSizeThread : public ::testing::Test
+class UT_CalculateSizeThread : public ::testing::Test
 {
 public:
-    TestCalculateSizeThread(): m_tester(nullptr) {}
+    UT_CalculateSizeThread(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -60,18 +60,18 @@ protected:
     CalculateSizeThread *m_tester;
 };
 
-TEST_F(TestCalculateSizeThread, initTest)
+TEST_F(UT_CalculateSizeThread, initTest)
 {
 
 }
 
-TEST_F(TestCalculateSizeThread, testset_thread_stop)
+TEST_F(UT_CalculateSizeThread, test_set_thread_stop)
 {
     m_tester->set_thread_stop(true);
-    ASSERT_EQ(m_tester->m_thread_stop, true);
+    EXPECT_EQ(m_tester->m_thread_stop, true);
 }
 
-TEST_F(TestCalculateSizeThread, testrun)
+TEST_F(UT_CalculateSizeThread, test_run_001)
 {
     Stub stub;
     QElapsedTimerStub::stub_QElapsedTimer_start(stub);
@@ -80,30 +80,55 @@ TEST_F(TestCalculateSizeThread, testrun)
     QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
     QFileInfoStub::stub_QFileInfo_isDir(stub, false);
     QFileInfoStub::stub_QFileInfo_size(stub, 1);
-
     m_tester->run();
-    ASSERT_EQ(m_tester->m_qTotalSize, 3);
-
-    Stub stub1;
-    QFileInfoStub::stub_QFileInfo_exists(stub1, false);
-    QFileInfoStub::stub_QFileInfo_isSymLink(stub1, true);
-    m_tester->run();
-
-    Stub stub2;
-    QFileInfoStub::stub_QFileInfo_exists(stub2, false);
-    QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
-    m_tester->m_thread_stop = false;
-    m_tester->run();
-
-    Stub stub3;
-    QFileInfoStub::stub_QFileInfo_exists(stub3, true);
-    QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
-    m_tester->m_thread_stop = false;
-    m_tester->run();
-
+    EXPECT_EQ(m_tester->m_qTotalSize, 3);
+    EXPECT_EQ(m_tester->m_thread_stop, false);
 }
 
-TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
+TEST_F(UT_CalculateSizeThread, test_run_002)
+{
+    Stub stub;
+    QElapsedTimerStub::stub_QElapsedTimer_start(stub);
+    QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub, true);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    m_tester->run();
+    EXPECT_EQ(m_tester->m_thread_stop, true);
+}
+
+TEST_F(UT_CalculateSizeThread, test_run_003)
+{
+    Stub stub;
+    QElapsedTimerStub::stub_QElapsedTimer_start(stub);
+    QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub, false);
+    m_tester->m_thread_stop = false;
+    m_tester->run();
+    EXPECT_EQ(m_tester->m_thread_stop, true);
+}
+
+TEST_F(UT_CalculateSizeThread, test_run_004)
+{
+    Stub stub;
+    QElapsedTimerStub::stub_QElapsedTimer_start(stub);
+    QElapsedTimerStub::stub_QElapsedTimer_elapsed(stub, 1);
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    QFileInfoStub::stub_QFileInfo_exists(stub, true);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, false);
+    m_tester->m_thread_stop = false;
+    m_tester->run();
+    EXPECT_EQ(m_tester->m_thread_stop, true);
+}
+
+TEST_F(UT_CalculateSizeThread, test_ConstructAddOptionsByThread_001)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_exists(stub, true);
@@ -118,22 +143,49 @@ TEST_F(TestCalculateSizeThread, testConstructAddOptionsByThread)
     QDirStub::stub_QDir_entryInfoList(stub, filist);
 
     m_tester->ConstructAddOptionsByThread("/a/b/");
-    ASSERT_EQ(m_tester->m_qTotalSize, 1);
+    EXPECT_EQ(m_tester->m_qTotalSize, 1);
+    EXPECT_EQ(m_tester->m_thread_stop, false);
+}
 
-    Stub stub1;
-    QFileInfoStub::stub_QFileInfo_exists(stub1, false);
-    QFileInfoStub::stub_QFileInfo_isSymLink(stub1, true);
+TEST_F(UT_CalculateSizeThread, test_ConstructAddOptionsByThread_002)
+{
+    Stub stub;
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    QFileInfoStub::stub_QFileInfo_fileName(stub, "1.txt");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "/a/b/1.txt");
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub, true);
     m_tester->ConstructAddOptionsByThread("/a/b/");
+    EXPECT_EQ(m_tester->m_thread_stop, false);
+}
 
-    Stub stub2;
-    QFileInfoStub::stub_QFileInfo_exists(stub2, false);
-    QFileInfoStub::stub_QFileInfo_isSymLink(stub2, false);
+TEST_F(UT_CalculateSizeThread, test_ConstructAddOptionsByThread_003)
+{
+    Stub stub;
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    QFileInfoStub::stub_QFileInfo_fileName(stub, "1.txt");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "/a/b/1.txt");
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+    QFileInfoStub::stub_QFileInfo_isSymLink(stub, false);
     m_tester->m_thread_stop = false;
     m_tester->ConstructAddOptionsByThread("/a/b/");
+    EXPECT_EQ(m_tester->m_thread_stop, false);
+}
 
-    Stub stub3;
-    QFileInfoStub::stub_QFileInfo_exists(stub3, true);
-    QFileInfoStub::stub_QFileInfo_isReadable(stub3, false);
+TEST_F(UT_CalculateSizeThread, test_ConstructAddOptionsByThread_004)
+{
+    Stub stub;
+    QFileInfoStub::stub_QFileInfo_isDir(stub, false);
+    QFileInfoStub::stub_QFileInfo_size(stub, 1);
+    QFileInfoStub::stub_QFileInfo_fileName(stub, "1.txt");
+    QFileInfoStub::stub_QFileInfo_filePath(stub, "/a/b/1.txt");
+    QFileInfoStub::stub_QFileInfo_exists(stub, true);
+    QFileInfoStub::stub_QFileInfo_isReadable(stub, false);
     m_tester->m_thread_stop = false;
     m_tester->ConstructAddOptionsByThread("/a/b/");
+    EXPECT_EQ(m_tester->m_thread_stop, false);
 }

@@ -30,10 +30,10 @@
 
 /*******************************单元测试************************************/
 // 测试CompressParameter
-class TestCompressParameter : public ::testing::Test
+class UT_CompressParameter : public ::testing::Test
 {
 public:
-    TestCompressParameter(): m_tester(nullptr) {}
+    UT_CompressParameter(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -50,7 +50,7 @@ protected:
     CompressParameter *m_tester;
 };
 
-TEST_F(TestCompressParameter, initTest)
+TEST_F(UT_CompressParameter, initTest)
 {
 
 }
@@ -58,10 +58,10 @@ TEST_F(TestCompressParameter, initTest)
 
 
 // 测试UnCompressParameter
-class TestUnCompressParameter : public ::testing::Test
+class UT_UnCompressParameter : public ::testing::Test
 {
 public:
-    TestUnCompressParameter(): m_tester(nullptr) {}
+    UT_UnCompressParameter(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -78,7 +78,7 @@ protected:
     UnCompressParameter *m_tester;
 };
 
-TEST_F(TestUnCompressParameter, initTest)
+TEST_F(UT_UnCompressParameter, initTest)
 {
 
 }

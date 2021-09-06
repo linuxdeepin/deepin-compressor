@@ -30,10 +30,10 @@
 
 /*******************************单元测试************************************/
 // 测试PluginManager
-class TestPluginManager : public ::testing::Test
+class UT_PluginManager : public ::testing::Test
 {
 public:
-    TestPluginManager(): m_tester(nullptr) {}
+    UT_PluginManager(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -50,115 +50,124 @@ protected:
     PluginManager *m_tester;
 };
 
-TEST_F(TestPluginManager, initTest)
+TEST_F(UT_PluginManager, initTest)
 {
 
 }
 
-TEST_F(TestPluginManager, testget_instance)
+TEST_F(UT_PluginManager, test_get_instance)
 {
-    ASSERT_EQ(&m_tester->get_instance(), m_tester->m_instance);
+    EXPECT_EQ(&m_tester->get_instance(), m_tester->m_instance);
 }
 
-TEST_F(TestPluginManager, testinstalledPlugins)
+TEST_F(UT_PluginManager, test_installedPlugins)
 {
     m_tester->installedPlugins();
+    EXPECT_EQ(m_tester->m_plugins.isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testavailablePlugins)
+TEST_F(UT_PluginManager, test_availablePlugins)
 {
-    m_tester->availablePlugins();
+    EXPECT_EQ(m_tester->availablePlugins().isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testavailableWritePlugins)
+TEST_F(UT_PluginManager, test_availableWritePlugins)
 {
-    m_tester->availableWritePlugins();
+    EXPECT_EQ(m_tester->availableWritePlugins().isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testenabledPlugins)
+TEST_F(UT_PluginManager, test_enabledPlugins)
 {
-    m_tester->enabledPlugins();
+    EXPECT_EQ(m_tester->enabledPlugins().isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testpreferredPluginsFor)
-{
-    CustomMimeType mimeType;
-    mimeType.m_bUnKnown = true;
-    mimeType.m_strTypeName = "application/zip";
-    m_tester->preferredPluginsFor(mimeType);
-}
-
-TEST_F(TestPluginManager, testpreferredWritePluginsFor)
+TEST_F(UT_PluginManager, testpreferredPluginsFor)
 {
     CustomMimeType mimeType;
     mimeType.m_bUnKnown = true;
     mimeType.m_strTypeName = "application/zip";
-    m_tester->preferredWritePluginsFor(mimeType);
+    EXPECT_EQ(m_tester->preferredPluginsFor(mimeType).isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testpreferredPluginFor)
+TEST_F(UT_PluginManager, test_preferredWritePluginsFor)
 {
     CustomMimeType mimeType;
     mimeType.m_bUnKnown = true;
     mimeType.m_strTypeName = "application/zip";
-    m_tester->preferredPluginFor(mimeType);
+    EXPECT_EQ(m_tester->preferredWritePluginsFor(mimeType).isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testpreferredWritePluginFor)
+TEST_F(UT_PluginManager, test_preferredPluginFor)
 {
     CustomMimeType mimeType;
     mimeType.m_bUnKnown = true;
     mimeType.m_strTypeName = "application/zip";
-    m_tester->preferredWritePluginFor(mimeType);
+    EXPECT_NE(m_tester->preferredPluginFor(mimeType), nullptr);
 }
 
-TEST_F(TestPluginManager, testsupportedMimeTypes)
-{
-    m_tester->supportedMimeTypes(PluginManager::SortByComment);
-}
-
-TEST_F(TestPluginManager, testsupportedWriteMimeTypes)
-{
-    m_tester->supportedWriteMimeTypes(PluginManager::SortByComment);
-}
-
-TEST_F(TestPluginManager, testfilterBy)
+TEST_F(UT_PluginManager, test_preferredWritePluginFor)
 {
     CustomMimeType mimeType;
     mimeType.m_bUnKnown = true;
     mimeType.m_strTypeName = "application/zip";
-    m_tester->filterBy(m_tester->availablePlugins(), mimeType);
+    EXPECT_NE(m_tester->preferredWritePluginFor(mimeType), nullptr);
 }
 
-TEST_F(TestPluginManager, testsetFileSize)
+TEST_F(UT_PluginManager, test_supportedMimeTypes)
+{
+    EXPECT_EQ(m_tester->supportedMimeTypes(PluginManager::SortByComment).isEmpty(), false);
+}
+
+TEST_F(UT_PluginManager, test_supportedWriteMimeTypes)
+{
+    EXPECT_EQ(m_tester->supportedWriteMimeTypes(PluginManager::SortByComment).isEmpty(), false);
+}
+
+TEST_F(UT_PluginManager, test_filterBy)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    EXPECT_EQ(m_tester->filterBy(m_tester->availablePlugins(), mimeType).isEmpty(), false);
+}
+
+TEST_F(UT_PluginManager, test_setFileSize)
 {
     m_tester->setFileSize(10);
+    EXPECT_EQ(m_tester->m_filesize, 10);
 }
 
-TEST_F(TestPluginManager, testloadPlugins)
+TEST_F(UT_PluginManager, test_loadPlugins)
 {
     m_tester->loadPlugins();
 }
 
-TEST_F(TestPluginManager, testpreferredPluginsFors)
+TEST_F(UT_PluginManager, test_preferredPluginsFors_001)
 {
     CustomMimeType mimeType;
     mimeType.m_bUnKnown = true;
     mimeType.m_strTypeName = "application/zip";
-    m_tester->preferredPluginsFor(mimeType, true);
-    m_tester->preferredPluginsFor(mimeType, false);
+    EXPECT_EQ(m_tester->preferredPluginsFor(mimeType, true).isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testsortByComment)
+TEST_F(UT_PluginManager, test_preferredPluginsFors_002)
+{
+    CustomMimeType mimeType;
+    mimeType.m_bUnKnown = true;
+    mimeType.m_strTypeName = "application/zip";
+    EXPECT_EQ(m_tester->preferredPluginsFor(mimeType, false).isEmpty(), false);
+}
+
+TEST_F(UT_PluginManager, test_sortByComment)
 {
     QSet<QString> setValue;
     setValue.insert("application/zip");
     setValue.insert("application/x-7z-compressed");
-    m_tester->sortByComment(setValue);
+    EXPECT_EQ(m_tester->sortByComment(setValue).isEmpty(), false);
 }
 
-TEST_F(TestPluginManager, testlibarchiveHasLzo)
+TEST_F(UT_PluginManager, test_libarchiveHasLzo)
 {
-    m_tester->libarchiveHasLzo();
+    EXPECT_EQ(m_tester->libarchiveHasLzo(), false);
 }
 

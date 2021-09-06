@@ -31,10 +31,10 @@
 
 /*******************************单元测试************************************/
 // 测试CompressParameter
-class TestDFMStandardPaths : public ::testing::Test
+class UT_DFMStandardPaths : public ::testing::Test
 {
 public:
-    TestDFMStandardPaths(): m_tester(nullptr) {}
+    UT_DFMStandardPaths(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -51,53 +51,53 @@ protected:
     DFMStandardPaths *m_tester;
 };
 
-TEST_F(TestDFMStandardPaths, initTest)
+TEST_F(UT_DFMStandardPaths, initTest)
 {
 
 }
 
-TEST_F(TestDFMStandardPaths, testlocation)
+TEST_F(UT_DFMStandardPaths, test_location)
 {
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashPath), QDir::homePath() + "/.local/share/Trash");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashFilesPath), QDir::homePath() + "/.local/share/Trash/files");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashInfosPath), QDir::homePath() + "/.local/share/Trash/info");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashPath), QDir::homePath() + "/.local/share/Trash");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashFilesPath), QDir::homePath() + "/.local/share/Trash/files");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::TrashInfosPath), QDir::homePath() + "/.local/share/Trash/info");
 #ifdef APPSHAREDIR
 #endif
 #ifdef PLUGINDIR
 #endif
 #ifdef QMAKE_TARGET
 #endif
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath), QDir::homePath() + "/.cache/thumbnails");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailFailPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/fail");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailLargePath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/large");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailNormalPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/normal");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailSmallPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/small");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath), QDir::homePath() + "/.cache/thumbnails");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailFailPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/fail");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailLargePath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/large");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailNormalPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/normal");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailSmallPath), m_tester->location(DFMStandardPaths::StandardLocation::ThumbnailPath) + "/small");
 #ifdef APPSHAREDIR
 #endif
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::RecentPath), "recent:///");
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::HomePath), QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DesktopPath), QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::VideosPath), QStandardPaths::standardLocations(QStandardPaths::MoviesLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::MusicPath), QStandardPaths::standardLocations(QStandardPaths::MusicLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::PicturesPath), QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DocumentsPath), QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DownloadsPath), QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::CachePath), m_tester->getCachePath());
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DiskPath), QDir::rootPath());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::RecentPath), "recent:///");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::HomePath), QStandardPaths::standardLocations(QStandardPaths::HomeLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DesktopPath), QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::VideosPath), QStandardPaths::standardLocations(QStandardPaths::MoviesLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::MusicPath), QStandardPaths::standardLocations(QStandardPaths::MusicLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::PicturesPath), QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DocumentsPath), QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DownloadsPath), QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::CachePath), m_tester->getCachePath());
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::DiskPath), QDir::rootPath());
 #ifdef NETWORK_ROOT
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::NetworkRootPath), NETWORK_ROOT);
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::NetworkRootPath), NETWORK_ROOT);
 #endif
 #ifdef USERSHARE_ROOT
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::UserShareRootPath), USERSHARE_ROOT);
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::UserShareRootPath), USERSHARE_ROOT);
 #endif
 #ifdef COMPUTER_ROOT
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ComputerRootPath), COMPUTER_ROOT);
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::ComputerRootPath), COMPUTER_ROOT);
 #endif
-    ASSERT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::Root), "/");
+    EXPECT_EQ(m_tester->location(DFMStandardPaths::StandardLocation::Root), "/");
 }
 
-TEST_F(TestDFMStandardPaths, testgetCachePath)
+TEST_F(UT_DFMStandardPaths, test_getCachePath)
 {
-    m_tester->getCachePath();
+    EXPECT_EQ(m_tester->getCachePath().isEmpty(), false);
 }
 

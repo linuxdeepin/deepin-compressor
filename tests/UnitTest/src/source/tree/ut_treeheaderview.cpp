@@ -36,10 +36,10 @@ QSize qHeaderView_sectionSizeFromContents_stub(int logicalIndex)
 /*******************************函数打桩************************************/
 
 
-class TestPreviousLabel : public ::testing::Test
+class UT_PreviousLabel : public ::testing::Test
 {
 public:
-    TestPreviousLabel(): m_tester(nullptr) {}
+    UT_PreviousLabel(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -57,50 +57,56 @@ protected:
     PreviousLabel *m_tester;
 };
 
-TEST_F(TestPreviousLabel, initTest)
+TEST_F(UT_PreviousLabel, initTest)
 {
 
 }
 
-TEST_F(TestPreviousLabel, testsetPrePath)
+TEST_F(UT_PreviousLabel, test_setPrePath)
 {
     m_tester->setPrePath("123");
+    qInfo() << m_tester->text();
+    EXPECT_EQ(m_tester->text(), "     .. Back to: /");
 }
 
-TEST_F(TestPreviousLabel, testmouseDoubleClickEvent)
+TEST_F(UT_PreviousLabel, test_mouseDoubleClickEvent)
 {
     QTest::mouseDClick(m_tester, Qt::LeftButton, Qt::KeyboardModifiers(), QPoint());
 }
 
-TEST_F(TestPreviousLabel, testenterEvent)
+TEST_F(UT_PreviousLabel, test_enterEvent)
 {
     QEvent *event = new QEvent(QEvent::Enter);
     m_tester->enterEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->focusIn_, true);
 }
 
-TEST_F(TestPreviousLabel, testleaveEvent)
+TEST_F(UT_PreviousLabel, test_leaveEvent)
 {
     QEvent *event = new QEvent(QEvent::Leave);
     m_tester->leaveEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->focusIn_, false);
 }
 
-TEST_F(TestPreviousLabel, testfocusInEvent)
+TEST_F(UT_PreviousLabel, test_focusInEvent)
 {
     QFocusEvent *event = new QFocusEvent(QEvent::FocusIn);
     m_tester->focusInEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->focusIn_, true);
 }
 
-TEST_F(TestPreviousLabel, testfocusOutEvent)
+TEST_F(UT_PreviousLabel, test_focusOutEvent)
 {
     QFocusEvent *event = new QFocusEvent(QEvent::FocusOut);
     m_tester->focusOutEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->focusIn_, false);
 }
 
-TEST_F(TestPreviousLabel, testkeyPressEvent)
+TEST_F(UT_PreviousLabel, test_keyPressEvent)
 {
     QTest::keyPress(m_tester, Qt::Key_Enter);
     QTest::keyPress(m_tester, Qt::Key_Tab);
@@ -108,10 +114,10 @@ TEST_F(TestPreviousLabel, testkeyPressEvent)
 
 
 
-class TestTreeHeaderView : public ::testing::Test
+class UT_TreeHeaderView : public ::testing::Test
 {
 public:
-    TestTreeHeaderView(): m_tester(nullptr) {}
+    UT_TreeHeaderView(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -129,37 +135,42 @@ protected:
     TreeHeaderView *m_tester;
 };
 
-TEST_F(TestTreeHeaderView, initTest)
+TEST_F(UT_TreeHeaderView, initTest)
 {
 
 }
 
-TEST_F(TestTreeHeaderView, testsizeHint)
+TEST_F(UT_TreeHeaderView, test_sizeHint)
 {
     typedef QSize(*fptr)(QHeaderView *, int);
     fptr A_foo = (fptr)(&QHeaderView::sectionSizeFromContents);   // 获取虚函数地址
     Stub stub;
     stub.set(A_foo, qHeaderView_sectionSizeFromContents_stub);
 
-    ASSERT_EQ(m_tester->sizeHint().width(), 30);
+    EXPECT_EQ(m_tester->sizeHint().width(), 30);
 }
 
-TEST_F(TestTreeHeaderView, testgetpreLbl)
+TEST_F(UT_TreeHeaderView, test_getpreLbl)
 {
-    ASSERT_EQ(m_tester->getpreLbl(), m_tester->m_pPreLbl);
+    EXPECT_EQ(m_tester->getpreLbl(), m_tester->m_pPreLbl);
 }
 
-TEST_F(TestTreeHeaderView, testsetPreLblVisible)
+TEST_F(UT_TreeHeaderView, test_setPreLblVisible_001)
 {
     m_tester->setPreLblVisible(true);
-    ASSERT_EQ(m_tester->height(), 76);
-    m_tester->setPreLblVisible(false);
-    ASSERT_EQ(m_tester->height(), 38);
+    EXPECT_EQ(m_tester->height(), 76);
 }
 
-TEST_F(TestTreeHeaderView, testresizeEvent)
+TEST_F(UT_TreeHeaderView, test_setPreLblVisible_002)
+{
+    m_tester->setPreLblVisible(false);
+    EXPECT_EQ(m_tester->height(), 38);
+}
+
+TEST_F(UT_TreeHeaderView, test_resizeEvent)
 {
     QResizeEvent *event = new QResizeEvent(QSize(100, 30), QSize(50, 30));
     m_tester->resizeEvent(event);
     delete event;
+    EXPECT_EQ(m_tester->m_pPreLbl->width(), 80);
 }
