@@ -383,7 +383,7 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
          * 例如123.z01文件，检测123.zip文件是否存在
          * 如果存在，则认定123.z01是分卷包
          */
-        QRegExp reg("^([\\s\\S]*.)z[0-9]+$");
+        QRegExp reg("^([\\s\\S]*\\.)z[0-9]+$"); //
         if (reg.exactMatch(fileName)) {
             fileName = reg.cap(1) + "zip";
             QFileInfo fi(fileName);
