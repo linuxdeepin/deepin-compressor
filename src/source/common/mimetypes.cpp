@@ -45,17 +45,17 @@ CustomMimeType determineMimeType(const QString &filename)
         bool isBZ2 = false;
         bool isLZ4 = false;
         bool is7Z = false;
-        if (fileinfo.completeSuffix().toLower().contains(QStringLiteral("bz2"))) {
+        if (fileinfo.completeSuffix().toLower().endsWith(QStringLiteral("tar.bz2"))) {
             cleanExtension.remove(QStringLiteral("bz2"));
             isBZ2 = true;
         }
 
-        if (fileinfo.completeSuffix().toLower().contains(QStringLiteral("lz4"))) {
+        if (fileinfo.completeSuffix().toLower().endsWith(QStringLiteral("tar.lz4"))) {
             cleanExtension.remove(QStringLiteral("lz4"));
             isLZ4 = true;
         }
 
-        if (fileinfo.completeSuffix().toLower().contains(QStringLiteral("7z"))) {
+        if (fileinfo.completeSuffix().toLower().endsWith(QStringLiteral("tar.7z"))) {
             cleanExtension.remove(QStringLiteral("7z"));
             is7Z = true;
         }
