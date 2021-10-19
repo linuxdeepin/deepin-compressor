@@ -16,6 +16,7 @@ make -j16
 ./bin/tests/interface_test --gtest_output=xml:./report/report_interface.xml
 ./bin/tests/libminizipplugin_test --gtest_output=xml:./report/report_libminizipplugin.xml
 ./bin/tests/libzipplugin_test --gtest_output=xml:./report/report_libzipplugin.xml
+./bin/tests/libpigzplugin_test --gtest_output=xml:./report/report_libpigzplugin.xml
 ./bin/tests/readonlylibarchiveplugin_test --gtest_output=xml:./report/report_readonlylibarchiveplugin.xml
 ./bin/tests/readwritelibarchiveplugin_test --gtest_output=xml:./report/report_readwritelibarchiveplugin.xml
 ./bin/tests/xzplugin_test --gtest_output=xml:./report/report_xzplugin.xml

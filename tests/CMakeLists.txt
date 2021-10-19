@@ -15,6 +15,7 @@ add_custom_target(test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/gzplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/interface_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libminizipplugin_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libpigzplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/libzipplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readonlylibarchiveplugin_test
     COMMAND ${CMAKE_BINARY_DIR}/bin/tests/readwritelibarchiveplugin_test
