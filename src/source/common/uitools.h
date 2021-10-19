@@ -68,7 +68,8 @@ public:
         APT_Auto,           // 自动识别
         APT_Cli7z,          // cli7zplugin
         APT_Libarchive,     // libarchive
-        APT_Libzip          // libzipplugin
+        APT_Libzip,         // libzipplugin
+        APT_Libpigz         // libpigzPlugin
     };
 
     /**

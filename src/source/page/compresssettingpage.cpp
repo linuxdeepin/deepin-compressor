@@ -210,6 +210,8 @@ void CompressSettingPage::initUI()
     m_pAdvancedBtn = new CustomSwitchButton(this);
     m_pEncryptedLbl = new DLabel(tr("Encrypt the archive") + ":", this);
     m_pPasswordEdt = new DPasswordEdit(this);
+    m_pCpuLbl = new DLabel(tr("CPU threads") + ":", this);
+    m_pCpuCmb = new CustomCombobox(this);
     m_pListEncryptionLbl = new DLabel(tr("Encrypt the file list too"), this);
     m_pListEncryptionBtn = new CustomSwitchButton(this);
     m_pSplitCkb = new CustomCheckBox(tr("Split to volumes") + ":", this);
@@ -230,12 +232,23 @@ void CompressSettingPage::initUI()
     m_pCompressLevelCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
     m_pCompressLevelCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
 
+
+    m_pCpuCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
+    m_pCpuCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
+
     // 设置压缩方式选项
     QStringList listCompressLevel = QStringList() << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
     // 添加压缩方式
     m_pCompressLevelCmb->addItems(listCompressLevel);
 
     m_pCompressLevelCmb->setCurrentIndex(2);
+
+    // 设置CPU线程数
+    QStringList listCpuThread = QStringList() << tr("Single thread") << tr("Multiple threads");
+    // 添加压缩方式
+    m_pCpuCmb->addItems(listCpuThread);
+
+    m_pCpuCmb->setCurrentIndex(0);
 
     pAdvancedLbl->setForegroundRole(DPalette::WindowText);
 
@@ -296,6 +309,8 @@ void CompressSettingPage::initUI()
     QVBoxLayout *pRightLayout = new QVBoxLayout;
     pRightLayout->addLayout(pFileFormLayout);
     pRightLayout->addLayout(pAdvancedLayout);
+    pRightLayout->addWidget(m_pCpuLbl);
+    pRightLayout->addWidget(m_pCpuCmb);
     pRightLayout->addWidget(m_pEncryptedLbl);
     pRightLayout->addWidget(m_pPasswordEdt);
     pRightLayout->addLayout(pListEncryptionLayout);
@@ -589,6 +604,9 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
     setTypeImage(selectType);
     m_pCompressTypeLbl->setText(selectType);
 
+    m_pCpuLbl->setEnabled(false);
+    m_pCpuCmb->setEnabled(false);
+
     if (0 == selectType.compare("tar.7z")) {       // tar.7z支持普通/列表加密，不支持分卷
         setEncryptedEnabled(true);
         setListEncryptionEnabled(true);
@@ -609,6 +627,11 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         setListEncryptionEnabled(false);
         setSplitEnabled(false);
         setCommentEnabled(false);
+
+        if (0 == selectType.compare("tar.gz")) {
+            m_pCpuLbl->setEnabled(true);
+            m_pCpuCmb->setEnabled(true);
+        }
     }
 
     refreshCompressLevel(selectType);
@@ -643,6 +666,8 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
     m_pSplitValueEdt->setVisible(bEnabled);
     m_pCommentLbl->setVisible(bEnabled);
     m_pCommentEdt->setVisible(bEnabled);
+    m_pCpuLbl->setVisible(bEnabled);
+    m_pCpuCmb->setVisible(bEnabled);
 
     // 不启用高级选项时清空界面数据
     if (!bEnabled) {
@@ -711,6 +736,7 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
     compressInfo.bTar_7z = (strTmpCompresstype == "tar.7z") ? true : false;     // 是否为tar.7z格式
     compressInfo.qSize = m_qFileSize;
+    compressInfo.iCPUTheadNum = (0 == m_pCpuCmb->currentIndex()) ? 1 : 2;        // 线程数
 
     // 压缩等级
     // tar、tar.Z:使用默认压缩方式

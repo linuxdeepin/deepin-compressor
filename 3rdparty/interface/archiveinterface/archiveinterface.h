@@ -56,7 +56,8 @@ public:
         PT_Cliinterface,
         PT_LibArchive,
         PT_Libzip,
-        PT_Libminizip
+        PT_Libminizip,
+        PT_Libpigz
     };
 
 //    // 工作类型

@@ -254,6 +254,9 @@ private:
     DLabel *m_pCommentLbl = nullptr;                  // 注释文字标签
     DTextEdit *m_pCommentEdt = nullptr;       // 注释信息
 
+    DLabel *m_pCpuLbl = nullptr;      // cpu线程数选择项标签
+    CustomCombobox *m_pCpuCmb = nullptr;       // cpu线程数选择项
+
     // 压缩按钮
     CustomPushButton *m_pCompressBtn = nullptr;
 

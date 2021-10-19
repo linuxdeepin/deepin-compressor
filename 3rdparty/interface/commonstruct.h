@@ -159,6 +159,7 @@ struct CompressOptions {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
+        iCPUTheadNum = 1;
     }
 
     QString strPassword;        // 密码
@@ -172,6 +173,7 @@ struct CompressOptions {
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+    int iCPUTheadNum;        // CPU线程数
 };
 Q_DECLARE_METATYPE(CompressOptions)
 

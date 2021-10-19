@@ -103,6 +103,7 @@ struct CompressParameter {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
+        iCPUTheadNum = 1;
     }
 
     QString strMimeType;    // 格式类型（application/x-tar）
@@ -115,6 +116,7 @@ struct CompressParameter {
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+    int iCPUTheadNum;        // 线程数
     int iVolumeSize;    // 分卷大小
     int iCompressionLevel;      // 压缩等级
     qint64 qSize;       // 文件总大小

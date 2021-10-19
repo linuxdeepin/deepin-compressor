@@ -308,6 +308,12 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
                 pIface = createInterface(fileName, mimeType, plugin);
             }
             break;
+        // libpigzplugin
+        case APT_Libpigz:
+            if (plugin->metaData().name().contains("pigz", Qt::CaseInsensitive)) {
+                pIface = createInterface(fileName, mimeType, plugin);
+            }
+            break;
         }
 
         // Use the first valid plugin, according to the priority sorting.

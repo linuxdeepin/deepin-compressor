@@ -1028,6 +1028,7 @@ void MainWindow::slotCompress(const QVariant &val)
     options.iCompressionLevel = m_stCompressParameter.iCompressionLevel;
     options.qTotalSize = m_stCompressParameter.qSize;
     options.bTar_7z = m_stCompressParameter.bTar_7z;
+    options.iCPUTheadNum = m_stCompressParameter.iCPUTheadNum;
 
     bool bUseLibarchive = false;
 #ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
@@ -1049,9 +1050,12 @@ void MainWindow::slotCompress(const QVariant &val)
     if (zipPasswordIsChinese == true) {
         // 对zip的中文加密使用libzip插件
         eType = UiTools::APT_Libzip;
-    } else if ((options.bSplit == false) && bUseLibarchive == true && m_stCompressParameter.strMimeType == "application/zip") {
+    } else if ((false == options.bSplit) && true == bUseLibarchive && "application/zip" == m_stCompressParameter.strMimeType) {
         // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台，分卷情况不做此处理
         eType = UiTools::APT_Libarchive;
+    } else if ("application/x-compressed-tar" == m_stCompressParameter.strMimeType && m_stCompressParameter.strArchiveName.endsWith("tar.gz") && 2 == m_stCompressParameter.iCPUTheadNum) {
+        // 针对多线程的tar.gz，使用pigz进行压缩，提高性能
+        eType = UiTools::APT_Libpigz;
     }
 
     if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType)) {
