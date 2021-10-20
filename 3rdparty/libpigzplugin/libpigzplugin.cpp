@@ -102,7 +102,14 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
         }
     }
 
-    QString strTemp = QString("tar -cvf - %1 | pigz -p %2 > %3").arg(strFileName).arg(options.iCPUTheadNum).arg(m_strArchiveName);
+    // 对压缩包名称特殊字符进行处理
+    QString strTmparchive = m_strArchiveName;
+    for (int n = 0; n < strold.length(); ++n) {
+        strTmparchive.replace(strold[n], strnew[n]);
+    }
+
+    QString strTemp = QString("tar -cvf - %1 | pigz -p %2 > %3").arg(strFileName).arg(options.iCPUTheadNum).arg(strTmparchive);
+
     QStringList slist = QStringList() << "-c" << strTemp;
     m_process->setProgram(QStandardPaths::findExecutable("bash"), slist);
 
