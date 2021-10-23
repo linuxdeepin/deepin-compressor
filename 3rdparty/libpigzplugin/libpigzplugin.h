@@ -92,6 +92,7 @@ private:
     QByteArray m_stdOutData;  // 存储命令行输出数据
     qint64  m_processId;  // 进程Id
     QVector<qint64> m_childProcessId; // 压缩tar.gz文件的子进程Id
+    qlonglong m_qTotalSize; // 源文件总大小
 };
 
 #endif // libPigzPlugin_H

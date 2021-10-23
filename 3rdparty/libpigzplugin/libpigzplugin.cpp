@@ -65,13 +65,14 @@ PluginFinishType LibPigzPlugin::testArchive()
     return PFT_Nomral;
 }
 
-PluginFinishType LibPigzPlugin::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
+PluginFinishType LibPigzPlugin::extractFiles(const QList<FileEntry> &, const ExtractionOptions &)
 {
     return PFT_Nomral;
 }
 
 PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    m_qTotalSize = options.qTotalSize;
     m_stdOutData.clear();
     m_isProcessKilled = false;
 
@@ -202,6 +203,9 @@ bool LibPigzPlugin::handleLine(const QString &line)
         m_eErrorType = ET_InsufficientDiskSpace;
         return false;
     } else {
+        // 临时进度解决方案，使用压缩包的大小/原始文件总大小来计算进度
+        QFileInfo info(m_strArchiveName);
+        emit signalprogress(static_cast<double>(info.size()) / m_qTotalSize * 100);
         emit signalCurFileName(line);
     }
 
