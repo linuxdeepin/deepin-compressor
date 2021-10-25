@@ -676,6 +676,8 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pSplitCkb->setChecked(false);
         m_pSplitValueEdt->clear();
         m_pSplitValueEdt->setValue(0.0);
+        m_pCpuCmb->setCurrentIndex(0);
+        m_pCommentEdt->clear();
     }
 }
 
