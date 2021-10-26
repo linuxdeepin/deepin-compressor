@@ -176,17 +176,19 @@ int main(int argc, char *argv[])
     app.setProductIcon(appIcon);
     app.setWindowIcon(appIcon);
 
-    MainWindow w;
-    app.setMainWindow(&w);
+    if (busRegistered == true) {    // 注册成功的情况下，即第一次启动，初始化界面并处理逻辑
 
-    //判断目标文件是否合法
-    if (argc >= 2 && !w.checkSettings(argv[1])) {
-        app.exit();
-        return 0;
-    } else {
-        w.bindAdapter();
+        // 构建界面
+        MainWindow w;
+        app.setMainWindow(&w);
 
-        if (busRegistered == true) {
+        //判断目标文件是否合法
+        if (argc >= 2 && !w.checkSettings(argv[1])) {
+            app.exit();
+            return 0;
+        } else {
+            w.bindAdapter();
+
             // init modules.
             if (app.setSingleInstance("deepin-compressor")) {
                 Dtk::Widget::moveToCenter(&w);
@@ -206,7 +208,9 @@ int main(int argc, char *argv[])
                 PERF_PRINT_END("POINT-01");
             }
         }
+        return app.exec();
+    } else {    // 若已有应用存在，退出当前应用，使用上面的dbus依托于已存在的应用createSubWindow进行构建界面，处理逻辑
+        app.exit();
+        return 0;
     }
-
-    return app.exec();
 }
