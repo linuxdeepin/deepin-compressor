@@ -176,11 +176,11 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
         m_currentExtractedFilesSize += bytesRead;
         emit signalprogress((double(m_currentExtractedFilesSize)) / options.qSize * 100); // 因为获取不到原文件大小，所以用压缩包大小代替
 
-        if (bytesRead == -1) {
+        if (-1 == bytesRead) {
             emit signalFileWriteErrorName(QFileInfo(outputFile.fileName()).fileName());
             m_eErrorType = ET_FileWriteError;
             break;
-        } else if (bytesRead == 0) {
+        } else if (0 == bytesRead) {
             break;
         }
 
@@ -196,7 +196,7 @@ PluginFinishType LibSingleFileInterface::extractFiles(const QList<FileEntry> &fi
     device->close();
     delete device;
 
-    return m_eErrorType == ET_NoError ? PFT_Nomral : PFT_Error;
+    return ET_NoError == m_eErrorType ? PFT_Nomral : PFT_Error;
 }
 
 void LibSingleFileInterface::pauseOperation()

@@ -47,9 +47,9 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 {
     Q_UNUSED(orientation)
 
-    if (role == Qt::DisplayRole) {
+    if (Qt::DisplayRole == role) {
         return m_listColumn[section];           // 返回表头对应列的内容
-    } else if (role == Qt::TextAlignmentRole) {
+    } else if (Qt::TextAlignmentRole == role) {
         return QVariant(Qt::AlignLeft | Qt::AlignVCenter);  // 表头左对齐
     }
 
@@ -98,7 +98,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     }
     // 图标数据
     case Qt::DecorationRole: {
-        if (iColumn == DC_Name) {
+        if (DC_Name == iColumn) {
             QMimeDatabase db;
             QIcon icon;
             // 根据类型获取文件类型图标
@@ -162,7 +162,7 @@ QModelIndex DataModel::getListEntryIndex(const QString &listName)
     for (int i = 0; i < m_listEntry.size(); ++i) {
         QModelIndex index = this->index(i, DC_Name);
         // 处理是否需要选中的文件
-        if (listName == (index.data(Qt::DisplayRole).toString())) {
+        if ((index.data(Qt::DisplayRole).toString()) == listName) {
             return index;
         }
     }
@@ -200,7 +200,7 @@ void DataModel::sort(int column, Qt::SortOrder order)
             // 对首字母是汉字进行额外处理
             if (entrya.strFileName.at(0).script() == QChar::Script_Han) {
                 if (entryb.strFileName.at(0).script() != QChar::Script_Han) {
-                    return order == Qt::DescendingOrder;
+                    return Qt::DescendingOrder == order;
                 }
             } else if (entryb.strFileName.at(0).script() == QChar::Script_Han) {
                 return order != Qt::DescendingOrder;
@@ -211,7 +211,7 @@ void DataModel::sort(int column, Qt::SortOrder order)
         }
         case DC_Time: {
             // 比较文件最后一次修改时间
-            if (order == Qt::AscendingOrder) {
+            if (Qt::AscendingOrder == order) {
                 return (entrya.uLastModifiedTime < entryb.uLastModifiedTime);
             } else {
                 return (entrya.uLastModifiedTime > entryb.uLastModifiedTime);
@@ -224,14 +224,14 @@ void DataModel::sort(int column, Qt::SortOrder order)
 
             // 比较显示类型
             QCollator col;
-            if (order == Qt::AscendingOrder) {
+            if (Qt::AscendingOrder == order) {
                 return (col.compare(m_pMimetype->displayName(mimeLeftType.name()), m_pMimetype->displayName(mimeRightType.name())) < 0);
             } else {
                 return (col.compare(m_pMimetype->displayName(mimeLeftType.name()), m_pMimetype->displayName(mimeRightType.name())) > 0);
             }
         }
         case DC_Size: {
-            if (order == Qt::AscendingOrder) {
+            if (Qt::AscendingOrder == order) {
                 return (entrya.qSize < entryb.qSize);
             } else {
                 return (entrya.qSize > entryb.qSize);

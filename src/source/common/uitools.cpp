@@ -118,7 +118,7 @@ QPixmap UiTools::renderSVG(const QString &filePath, const QSize &size)
 
 QString UiTools::humanReadableSize(const qint64 &size, int precision)
 {
-    if (size == 0) {
+    if (0 == size) {
         return "-";
     }
 

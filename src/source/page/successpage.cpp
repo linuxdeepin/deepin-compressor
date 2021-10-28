@@ -112,7 +112,3 @@ void SuccessPage::initConnections()
     connect(m_pReturnBtn, &DCommandLinkButton::clicked, this, &SuccessPage::sigBackButtonClicked);
 }
 
-//void SuccessPage::slotShowfiledirSlot()
-//{
-
-//}

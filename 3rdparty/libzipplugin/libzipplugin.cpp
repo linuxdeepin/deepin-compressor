@@ -88,7 +88,7 @@ PluginFinishType LibzipPlugin::list()
     zip_error_init_with_code(&err, errcode);
 
     // 若打开失败，返回错误
-    if (archive == nullptr) {
+    if (nullptr == archive) {
         m_eErrorType = ET_ArchiveDamaged;
         return PFT_Error;
     }
@@ -135,7 +135,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     // 打开压缩包
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);
     zip_error_init_with_code(&err, errcode);
-    if (archive == nullptr) {
+    if (nullptr == archive) {
         // 特殊包操作
         // return minizip_extractFiles(files, options);
         m_eErrorType = ET_ArchiveDamaged ;
@@ -166,20 +166,20 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
 
             // 方便右键解压时提示是否有数据解压出来
-            if (!options.bExistList && i == 0) {
+            if (!options.bExistList && 0 == i) {
                 FileEntry entry;
                 entry.strFullPath = strFileName;
                 DataManager::get_instance().archiveData().listRootEntry << entry;
             }
 
-            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
                 continue;
-            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+            } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
-                if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
+                if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
                     PasswordNeededQuery query(strFileName);
                     emit signalQuery(&query);
                     query.waitForResponse();
@@ -216,14 +216,14 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             // 解压单个文件
             m_eErrorType = extractEntry(archive, m_listCurIndex[i], options, qExtractSize, strFileName);
 
-            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
                 continue;
-            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+            } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
-                if (m_eErrorType == ET_WrongPassword || m_eErrorType == ET_NeedPassword) {
+                if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
 
                     PasswordNeededQuery query(strFileName);
                     emit signalQuery(&query);
@@ -378,7 +378,7 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
     // Open archive.
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), 0, &errcode);
     zip_error_init_with_code(&err, errcode);
-    if (archive == nullptr) {
+    if (nullptr == archive) {
         // 打开压缩包失败
         emit error(("Failed to open the archive: %1"));
         m_eErrorType = ET_FileOpenError;
@@ -522,7 +522,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
     zip_int64_t index;
     if (isDir) {
         index = zip_dir_add(archive, str.toUtf8().constData(), ZIP_FL_ENC_GUESS);
-        if (index == -1) {
+        if (-1 == index) {
             // If directory already exists in archive, we get an error.
             return true;
         }
@@ -536,7 +536,7 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
 
         // 向压缩包中添加文件
         index = zip_file_add(archive, str.toUtf8().constData(), src, ZIP_FL_ENC_GUESS | ZIP_FL_OVERWRITE);
-        if (index == -1) {
+        if (-1 == index) {
             zip_source_free(src);
             emit error(("Failed to add entry: %1"));
             return false;
@@ -558,11 +558,11 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
     // 设置压缩的加密算法
     if (options.bEncryption && !options.strEncryptionMethod.isEmpty()) { //ReadOnlyArchiveInterface::password()
         int ret = 0;
-        if (options.strEncryptionMethod == QLatin1String("AES128")) {
+        if (QLatin1String("AES128") == options.strEncryptionMethod) {
             ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_128, options.strPassword.toUtf8().constData());
-        } else if (options.strEncryptionMethod == QLatin1String("AES192")) {
+        } else if (QLatin1String("AES192") == options.strEncryptionMethod) {
             ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_192, options.strPassword.toUtf8().constData());
-        } else if (options.strEncryptionMethod == QLatin1String("AES256")) {
+        } else if (QLatin1String("AES256") == options.strEncryptionMethod) {
             ret = zip_file_set_encryption(archive, uindex, ZIP_EM_AES_256, options.strPassword.toUtf8().constData());
         }
         if (ret != 0) {
@@ -574,11 +574,11 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
     // 设置压缩算法
     zip_int32_t compMethod = ZIP_CM_DEFAULT;
     if (!options.strCompressionMethod.isEmpty()) {
-        if (options.strCompressionMethod == QLatin1String("Deflate")) {
+        if (QLatin1String("Deflate") == options.strCompressionMethod) {
             compMethod = ZIP_CM_DEFLATE;
-        } else if (options.strCompressionMethod == QLatin1String("BZip2")) {
+        } else if (QLatin1String("BZip2") == options.strCompressionMethod) {
             compMethod = ZIP_CM_BZIP2;
-        } else if (options.strCompressionMethod == QLatin1String("Store")) {
+        } else if (QLatin1String("Store") == options.strCompressionMethod) {
             compMethod = ZIP_CM_STORE;
         }
     }
@@ -607,7 +607,7 @@ int LibzipPlugin::cancelCallback(zip_t *, void *that)
 
 bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
 {
-    if (archive == nullptr) {
+    if (nullptr == archive) {
         return false;
     }
 
@@ -776,15 +776,15 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
         // 错误处理
-        if (zipFile == nullptr) {
+        if (nullptr == zipFile) {
             int iErr = zip_error_code_zip(zip_get_error(archive));
-            if (iErr == ZIP_ER_WRONGPASSWD) {//密码错误
+            if (ZIP_ER_WRONGPASSWD == iErr) {//密码错误
 
                 // 对密码编码的探测
                 bool bCheckFinished = false;
                 int iCodecIndex = 0;
-                while (zipFile == nullptr && bCheckFinished == false) {
-                    if (iCodecIndex == m_listCodecs.length()) {
+                while (nullptr == zipFile && false == bCheckFinished) {
+                    if (m_listCodecs.length() == iCodecIndex) {
                         bCheckFinished = true;
                         if (file.exists()) {
                             file.remove();
@@ -802,7 +802,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
                         }
                     }
                 }
-            } else if (iErr == ZIP_ER_NOPASSWD) {   // 无密码输入
+            } else if (ZIP_ER_NOPASSWD == iErr) {   // 无密码输入
                 return ET_NeedPassword;
             } else {
                 return ET_FileOpenError;
@@ -913,12 +913,12 @@ void LibzipPlugin::emitProgress(double dPercentage)
 
         // 处理当前文件名
         if (m_pCurArchive) {
-            if (m_workStatus == WT_Add) {
+            if (WT_Add == m_workStatus) {
                 // 压缩操作显示当前正在压缩的文件名
                 zip_uint64_t index = zip_uint64_t(m_curFileCount * dPercentage);
                 // 发送当前文件名信号
                 emit signalCurFileName(m_common->trans2uft8(zip_get_name(m_pCurArchive, index, ZIP_FL_ENC_RAW), m_mapFileCode[zip_int64_t(index)]));
-            } else if (m_workStatus == WT_Delete) {
+            } else if (WT_Delete == m_workStatus) {
                 // 删除操作显示当前正在删除的文件名
                 int iSpan = qRound(m_listCurName.count() * dPercentage);    // 获取占比
                 QString strCurFileName;
@@ -1008,7 +1008,7 @@ bool LibzipPlugin::deleteEntry(int index, zip_t *archive)
     }
 
     int statusDel = zip_delete(archive, zip_uint64_t(index));   // 获取删除状态
-    if (statusDel == -1) {
+    if (-1 == statusDel) {
         // 删除失败
         emit error(("Failed to delete entry: %1"));
         m_eErrorType = ET_DeleteError;

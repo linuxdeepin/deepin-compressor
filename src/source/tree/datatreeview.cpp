@@ -123,7 +123,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 
     //绘制图标
-    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning &&
+    if (QStyleOptionViewItem::Beginning == opt.viewItemPosition &&
             index.data(Qt::DecorationRole).isValid()) {
         // icon size
         auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
@@ -137,7 +137,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     //绘制文字
     textRect = rect;
-    if (index.column() == 0) {
+    if (0 == index.column()) {
         textRect.setX(textRect.x() + margin + 32 - 2);
     } else {
         textRect.setX(textRect.x() + margin - 2);
@@ -275,7 +275,7 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 
     QTreeView::drawRow(painter, options, index);
     // draw focus
-    if (hasFocus() && currentIndex().row() == index.row() && (m_reson == Qt::TabFocusReason || m_reson == Qt::BacktabFocusReason)) {
+    if (hasFocus() && currentIndex().row() == index.row() && (Qt::TabFocusReason == m_reson || Qt::BacktabFocusReason == m_reson)) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(options);
         o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;

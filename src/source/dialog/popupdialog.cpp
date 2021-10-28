@@ -364,7 +364,7 @@ QStringList ConvertDialog::showDialog()
     const int mode = exec();
 
     QStringList typeList;
-    if (mode == QDialog::Accepted) {
+    if (QDialog::Accepted == mode) {
         if (isZipConvert) {
             typeList << "true" << "zip";
         } else if (is7zConvert) {
@@ -483,7 +483,7 @@ int AppendDialog::showDialog(bool bMultiplePassword)
 
     // 接收加密
     m_strPassword.clear();
-    if (iMode == DDialog::Accepted) {
+    if (DDialog::Accepted == iMode) {
         m_strPassword = pPasswordEdit->text();
     }
 

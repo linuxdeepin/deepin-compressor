@@ -63,11 +63,15 @@ public:
     void clear();
 
     /**
-     * @brief getCompressView
+     * @brief getCompressView   // 获取压缩列表
      * @return
      */
     CompressView *getCompressView();
 
+    /**
+     * @brief getNextBtn    获取“下一步”按钮
+     * @return
+     */
     CustomPushButton *getNextBtn() const;
 
 private:

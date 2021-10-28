@@ -38,7 +38,7 @@ BatchJob::~BatchJob()
 
 bool BatchJob::addSubjob(ArchiveJob *job)
 {
-    if (job == nullptr || m_listSubjobs.contains(job)) {
+    if (nullptr == job || m_listSubjobs.contains(job)) {
         return false;
     }
 
@@ -147,7 +147,7 @@ bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
     QString strName = fileInfo.filePath();
     UnCompressParameter::SplitType eType = UnCompressParameter::ST_No;
     UiTools::transSplitFileName(strName, eType);
-    UiTools::AssignPluginType ePluginType = (eType == UnCompressParameter::ST_Zip) ?
+    UiTools::AssignPluginType ePluginType = (UnCompressParameter::ST_Zip == eType) ?
                                             (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.filePath(), false, ePluginType);
 
@@ -222,7 +222,7 @@ void BatchExtractJob::slotHandleSingleJobCurFileName(const QString &strName)
 void BatchExtractJob::slotHandleSingleJobFinished()
 {
     if (m_pCurJob != nullptr) {
-        if (m_pCurJob->m_eFinishedType == PFT_Error || m_pCurJob->m_eFinishedType == PFT_Cancel) {
+        if (PFT_Error == m_pCurJob->m_eFinishedType || PFT_Cancel == m_pCurJob->m_eFinishedType) {
             // 获取结束结果
             m_eJobType = m_pCurJob->m_eJobType;
             m_eFinishedType = m_pCurJob->m_eFinishedType;

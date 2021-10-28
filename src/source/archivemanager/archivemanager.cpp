@@ -150,7 +150,7 @@ bool ArchiveManager::addFiles(const QString &strArchiveFullPath, const QList<Fil
 
 bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList<FileEntry> &files, const ExtractionOptions &stOptions, UiTools::AssignPluginType eType)
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         m_pInterface = UiTools::createInterface(strArchiveFullPath, false, eType);
     }
 
@@ -192,7 +192,7 @@ bool ArchiveManager::extractFiles(const QString &strArchiveFullPath, const QList
 
 bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
@@ -216,7 +216,7 @@ bool ArchiveManager::extractFiles2Path(const QString &strArchiveFullPath, const 
 
 bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 
@@ -263,7 +263,7 @@ bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QStri
 
 bool ArchiveManager::openFile(const QString &strArchiveFullPath, const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram)
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         m_pInterface = UiTools::createInterface(strArchiveFullPath);
     }
 

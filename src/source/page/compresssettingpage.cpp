@@ -595,7 +595,7 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 
 void CompressSettingPage::slotTypeChanged(QAction *action)
 {
-    if (action == nullptr)
+    if (nullptr == action)
         return;
 
     m_strMimeType = action->data().toString();
@@ -736,7 +736,7 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.bHeaderEncryption = m_pListEncryptionBtn->isChecked();     // 是否列表加密
     compressInfo.bSplit = m_pSplitCkb->isChecked();     // 是否分卷
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
-    compressInfo.bTar_7z = (strTmpCompresstype == "tar.7z") ? true : false;     // 是否为tar.7z格式
+    compressInfo.bTar_7z = ("tar.7z" == strTmpCompresstype) ? true : false;     // 是否为tar.7z格式
     compressInfo.qSize = m_qFileSize;
     compressInfo.iCPUTheadNum = (0 == m_pCpuCmb->currentIndex()) ? 1 : 2;        // 线程数
 
@@ -763,7 +763,7 @@ void CompressSettingPage::slotCompressClicked()
     if (fileInfo.exists()) {
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-        if (iResult == 1) {     // 如果点击替换，先移除本地压缩包
+        if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
             QFile file(fileInfo.filePath());
             file.remove();
         } else {    // 点击关闭或者取消，不操作
