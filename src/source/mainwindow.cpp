@@ -2332,7 +2332,14 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         listFiles = UiTools::removeSameFileName(listFiles);
 
         if (listFiles.count() == 1) {
-            strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+            // 区分待压缩文件是否是文件夹，比如"1.7z"文件夹压缩，结果应该是"1.7z.7z"，不应该去掉后缀
+            // 如果是普通文件，比如"1.txt"，应该使用完整的文件名再压缩，结果应该是"1.7z"
+            if (info.isDir()) {
+                strArchivePath = info.filePath() + strSuffix;
+            } else {
+                strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+            }
+
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());

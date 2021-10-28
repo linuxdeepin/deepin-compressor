@@ -348,10 +348,10 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
 {
     if (fileName.contains(".7z.")) {
         // 7z分卷处理
-        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
+        QRegExp reg("^([\\s\\S]*\\.)7z\\.[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
         if (reg.exactMatch(fileName)) {
-            fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
+            fileName = reg.cap(1) + "7z.001"; //例如: *.7z.003 -> *.7z.001
             eSplitType = UnCompressParameter::ST_Other;
         }
     } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
@@ -367,11 +367,11 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
 
         eSplitType = UnCompressParameter::ST_Other;
     } else if (fileName.contains(".zip.")) { // 1.zip.001格式
-        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        QRegExp reg("^([\\s\\S]*\\.)zip\\.[0-9]{3}$");
         if (reg.exactMatch(fileName)) {
-            QFileInfo fi(reg.cap(1) + "001");
+            QFileInfo fi(reg.cap(1) + "zip.001");
             if (fi.exists() == true) {
-                fileName = reg.cap(1) + "001";
+                fileName = reg.cap(1) + "zip.001";
                 eSplitType = UnCompressParameter::ST_Zip;
             }
         }
