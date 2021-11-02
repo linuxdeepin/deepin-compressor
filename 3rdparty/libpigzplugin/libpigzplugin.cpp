@@ -76,7 +76,7 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
     m_stdOutData.clear();
     m_isProcessKilled = false;
 
-    // 压缩命令tar -cvf - filename | pigz -p 2 > filename.tar.gz
+    // 压缩命令tar -cvf - filename | pigz -p 2 -5> filename.tar.gz
     m_process = new KPtyProcess;
     m_process->setPtyChannels(KPtyProcess::StdinChannel);
     m_process->setOutputChannelMode(KProcess::MergedChannels);
@@ -109,7 +109,7 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
         strTmparchive.replace(strold[n], strnew[n]);
     }
 
-    QString strTemp = QString("tar -cvf - %1 | pigz -p %2 > %3").arg(strFileName).arg(options.iCPUTheadNum).arg(strTmparchive);
+    QString strTemp = QString("tar -cvf - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
 
     QStringList slist = QStringList() << "-c" << strTemp;
     m_process->setProgram(QStandardPaths::findExecutable("bash"), slist);
