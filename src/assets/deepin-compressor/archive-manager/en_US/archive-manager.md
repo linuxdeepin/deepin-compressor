@@ -43,7 +43,7 @@ In the interface of archive manager, single or multiple files (folders) can be c
 1. To select files to be compressed:
    + right-click the files (folder) to be compressed and select **Compress**.
    + drag the files(folder) directly to the Archive Manager interface and click **Next**.
-      - Click ![plus](../common/icon_plus.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files (folder) to be compressed.
+      - Click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files (folder) to be compressed.
       - In the list of files, right-click a file(folder) to view or delete it. 
 
    ![1|compressor](fig/compress_add.png)
@@ -74,6 +74,7 @@ In the interface of archive manager, single or multiple files (folders) can be c
     <td>Advanced Options</td>
     <td>Switch on "Advanced Options", then you can encrypt files/ file lists, split to volumes, and add comments.
     <ul>
+          <li>CPU threads: You can choose between single-threaded or multi-threaded compression (tar.gz only).</li>
           <li>Encrypt the archive: you can encrypt archives. After that, you will have to enter password to view the file contents. Formats such as 7z, tar.7z and zip are supported. You can use numbers, letters, symbols or common Chinese characters to encrypt archives.</li>
           <li>Encrypt the file list too: you can encrypt file list. After that, you will have to enter password to view the file list contents. Formats such as 7z and tar.7z are supported. The password used here is the same as the one you use for archive encryption. </li>
           <li>Split to volumes: this option is applicable for large files, which splits the large file into several volumes and is convenient for transferring. At most 200 volumes are supported. Formats such as 7z and zip are supported.</li>
@@ -101,7 +102,7 @@ In the interface of archive manager, single or multiple files (folders) can be c
 1.  Select a package, and then:
    + right-click and select **Extract**.
    + drag the package directly to the Archive Manager interface.
-      - Add and encrypt files: click ![plus](../common/icon_plus.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files to the package. In the pop-up dialog box, you can select **Use password** and set a password. Different passwords can be added to different files. This option is only applicable for packages in zip format.
+      - Add and encrypt files: click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files to the package. In the pop-up dialog box, you can select **Use password** and set a password. Different passwords can be added to different files. This option is only applicable for packages in zip format.
       
       ![password](fig/password.png)
       
