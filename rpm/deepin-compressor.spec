@@ -21,7 +21,6 @@ BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(disomaster)
 BuildRequires: pkgconfig(dtkwidget)
 BuildRequires: pkgconfig(dtkgui)
-BuildRequires: pkgconfig(udisks2-qt5)
 BuildRequires: kf5-kcodecs-devel
 BuildRequires: kf5-karchive-devel
 BuildRequires: libzip-devel
