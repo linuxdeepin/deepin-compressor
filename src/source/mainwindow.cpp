@@ -2337,7 +2337,12 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             if (info.isDir()) {
                 strArchivePath = info.filePath() + strSuffix;
             } else {
-                strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+                // 如果文件completeBaseName为空，使用完整的fileName作为压缩包名称,防止出现空名称的现象
+                if (info.completeBaseName().isEmpty()) {
+                    strArchivePath += QDir::separator() + info.fileName() + strSuffix;
+                } else {
+                    strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+                }
             }
 
         } else {
