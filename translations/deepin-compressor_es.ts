@@ -86,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"/>
+        <translation>Hilos de CPU</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -142,7 +142,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"/>
+        <translation>Un hilo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -237,7 +237,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Multiple threads</source>
-        <translation type="unfinished"/>
+        <translation>Hilos múltiples</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="707"/>

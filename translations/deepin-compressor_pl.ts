@@ -30,7 +30,7 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation>Nie masz uprawnień do kompresji %1</translation>
+        <translation>Nie masz uprawnień, żeby móc kompresować %1</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="234"/>
         <source>Updating the comment...</source>
-        <translation>Aktualizuję komentarz...</translation>
+        <translation>Aktualizowanie komentarza...</translation>
     </message>
 </context>
 <context>
@@ -46,7 +46,7 @@
     <message>
         <location filename="../src/source/page/compresspage.cpp" line="77"/>
         <source>Next</source>
-        <translation>Następny</translation>
+        <translation>Dalej</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresspage.cpp" line="118"/>
@@ -86,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"/>
+        <translation>Rdzeni CPU</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -107,12 +107,12 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="221"/>
         <source>Compress</source>
         <comment>button</comment>
-        <translation>Kompresja</translation>
+        <translation>Kompresuj</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
         <source>Store</source>
-        <translation>Sklep</translation>
+        <translation>Przechowanie</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
@@ -132,17 +132,17 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
         <source>Good</source>
-        <translation>Dobra</translation>
+        <translation>Dokładna</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
         <source>Best</source>
-        <translation>Najlepsza</translation>
+        <translation>Najdokładniejsza</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"/>
+        <translation>Pojedynczy rdzeń</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -237,22 +237,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Multiple threads</source>
-        <translation type="unfinished"/>
+        <translation>Wiele rdzeni</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="707"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Nazwa jest taka sama, jak nazwa skompresowanego archiwum, użyj innego</translation>
+        <translation>Użyta nazwa jest taka sama jak skompresowanego archiwum, użyj innej</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="715"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation>Hasło dla woluminów ZIP nie może być w języku Chińskim</translation>
+        <translation>Hasło dla wolumenów ZIP nie może być w języku Chińskim</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="761"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Istnieje już inny plik o tej samej nazwie, zastąp go?</translation>
+        <translation>Istnieje już inny plik o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="801"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="301"/>
         <source>Open with</source>
-        <translation>Otwierać z</translation>
+        <translation>Otwórz za pomocą</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
@@ -357,7 +357,7 @@
         <location filename="../src/source/page/failurepage.cpp" line="76"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>Wypakowanie nie powiodła się</translation>
+        <translation>Wypakowanie nie powiodło się</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="84"/>
@@ -422,12 +422,12 @@
         <location filename="../src/main.cpp" line="60"/>
         <location filename="../src/main.cpp" line="61"/>
         <source>Archive Manager</source>
-        <translation>Menedżer archiwum</translation>
+        <translation>Zarządzanie archiwami</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>Menedżer archiwum to szybka i lekka aplikacja do tworzenia i rozpakowywania archiwów.</translation>
+        <translation>Zarządzanie archiwami to szybka i lekka aplikacja do tworzenia i rozpakowywania archiwów.</translation>
     </message>
 </context>
 <context>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="345"/>
         <source>Converting</source>
-        <translation>Konwersja</translation>
+        <translation>Konwertuję</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="352"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1290"/>
         <source>Adding successful</source>
-        <translation>Dodawanie powiodło się</translation>
+        <translation>Dodawanie zakończone sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1322"/>
@@ -498,7 +498,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2016"/>
         <source>Compression successful</source>
-        <translation>Kompresja powiodła się</translation>
+        <translation>Kompresja zakończona sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2048"/>
@@ -546,12 +546,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="73"/>
         <source>Archive Manager</source>
-        <translation>Menedżer archiwum</translation>
+        <translation>Zarządzanie archiwami</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="129"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Nie masz uprawnień do zapisywania plików tutaj, zmień i spróbuj ponownie</translation>
+        <translation>Nie masz uprawnień do zapisywania plików tutaj, zmień ścieżkę i spróbuj ponownie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="317"/>
@@ -593,7 +593,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1296"/>
         <location filename="../src/source/mainwindow.cpp" line="1422"/>
         <source>Updating, please wait...</source>
-        <translation>Aktualizuję, czekaj...</translation>
+        <translation>Aktualizuję, proszę czekać...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
@@ -640,7 +640,7 @@
         <location filename="../src/source/mainwindow.cpp" line="626"/>
         <location filename="../src/source/mainwindow.cpp" line="659"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation>Format pliku nie jest obsługiwany przez Archive Manager</translation>
+        <translation>Format pliku nie jest obsługiwany przez Zarządzanie Archiwami</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="129"/>
@@ -690,7 +690,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1338"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
-        <translation>Wypakowanie udane</translation>
+        <translation>Wypakowanie zakończone sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1531"/>
@@ -710,24 +710,24 @@
         <location filename="../src/source/mainwindow.cpp" line="1685"/>
         <source>Extraction failed</source>
         <comment>提取失败</comment>
-        <translation>Wypakowanie nie powiodła się</translation>
+        <translation>Wypakowanie nie powiodło się</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2020"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
-        <translation>Wypakowanie udane</translation>
+        <translation>Wypakowanie zakończone sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2023"/>
         <source>Conversion successful</source>
-        <translation>Konwersja powiodła się</translation>
+        <translation>Konwersja zakończona sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2084"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>Wypakowanie nie powiodła się</translation>
+        <translation>Wypakowanie nie powiodło się</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2241"/>
@@ -757,12 +757,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2339"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Nazwa jest taka sama, jak nazwa skompresowanego archiwum, użyj innego</translation>
+        <translation>Użyta nazwa jest taka sama jak skompresowanego archiwum, użyj innej</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2347"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Istnieje już inny plik o tej samej nazwie, zastąp go?</translation>
+        <translation>Istnieje już inny plik o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2490"/>
@@ -778,12 +778,12 @@
         <location filename="../src/source/mainwindow.cpp" line="2771"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation>Aktualizacja</translation>
+        <translation>Aktualizowanie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2949"/>
         <source>Basic info</source>
-        <translation>Podstawowa informacja</translation>
+        <translation>Podstawowe informacje</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2965"/>
@@ -808,12 +808,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2969"/>
         <source>Time accessed</source>
-        <translation>Czas dostępny</translation>
+        <translation>Ostatni dostęp</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2970"/>
         <source>Time modified</source>
-        <translation>Czas modyfikowania</translation>
+        <translation>Data modyfikacji</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2980"/>
@@ -828,7 +828,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="656"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation>Sprawdź typ skojarzenia plików w ustawieniach Menedżera archiwum</translation>
+        <translation>Sprawdź typ skojarzenia plików w ustawieniach Zarządzania Archiwami</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2230"/>
@@ -894,7 +894,7 @@
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="280"/>
         <source>Open with</source>
-        <translation>Otwierać z</translation>
+        <translation>Otwórz za pomocą</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="300"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="126"/>
         <source>Converting</source>
-        <translation>Konwersja</translation>
+        <translation>Konwertuję</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="128"/>
@@ -1125,7 +1125,7 @@
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Time modified</source>
-        <translation>Czas modyfikowania</translation>
+        <translation>Data modyfikacji</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
@@ -1175,12 +1175,12 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="32"/>
         <source>Files Associated</source>
-        <translation>Powiązane pliki</translation>
+        <translation>Skojarzenia plików</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="33"/>
         <source>File Type</source>
-        <translation>Typ pliku</translation>
+        <translation>Typy plików</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
@@ -1200,7 +1200,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Istnieje już inny plik o tej samej nazwie, zastąp go?</translation>
+        <translation>Istnieje już inny plik o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
@@ -1226,7 +1226,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Istnieje już inny folder o tej samej nazwie, czy go zastąpić?</translation>
+        <translation>Istnieje już inny folder o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
@@ -1257,7 +1257,7 @@
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
         <source>Recommended</source>
-        <translation>Zalecana</translation>
+        <translation>Zalecane</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="160"/>
@@ -1305,12 +1305,12 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="74"/>
         <source>Compression successful</source>
-        <translation>Kompresja powiodła się</translation>
+        <translation>Kompresja zakończona sukcesem</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="79"/>
         <source>View</source>
-        <translation>Widok</translation>
+        <translation>Zobacz</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="82"/>
@@ -1392,7 +1392,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="630"/>
         <source>Open with</source>
-        <translation>Otwórz przez</translation>
+        <translation>Otwórz za pomocą</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="634"/>
