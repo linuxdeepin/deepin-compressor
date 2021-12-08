@@ -227,7 +227,7 @@ void UnCompressView::initUI()
 
 void UnCompressView::initConnections()
 {
-    connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles);
+    connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles, Qt::QueuedConnection);    // wayland下使用Qt::QueuedConnection连接方式，防止对话框exec导致事件阻塞，图标停留在界面上
     connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
 }
 
