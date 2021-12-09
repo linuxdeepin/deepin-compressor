@@ -113,6 +113,8 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
 
     qInfo() << "解压缩数据";
     m_workStatus = WT_Extract;
+    m_bOverwriteAll = false;        //是否全部覆盖
+    m_bSkipAll = false;             // 是否全部跳过
 
     // 打开压缩包数据
     unzFile zipfile = unzOpen(QFile::encodeName(m_strArchiveName).constData());
