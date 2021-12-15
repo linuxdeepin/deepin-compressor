@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ka" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ka">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -86,7 +88,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -142,7 +144,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -218,45 +220,45 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="761"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>გაუქმება</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="761"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>ჩანაცვლება</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="687"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>საერთო ზომა: %1</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Multiple threads</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="707"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>სახელი იგივეა რაც არქივის, გთხოვთ მიუთითოთ სხვა სახელი</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="715"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="719"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
         <translation>ZIP ტომის პაროლი არ შეიძლება იყოს ჩინურ ენაზე</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="761"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ფაილი ასეთ სახელით უკვე დამატებულია, 
 ჩავანაცვლოთ?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="801"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>მხოლოდ ჩინური და ლათინური სიმბოლოების მხარდაჭერა</translation>
     </message>
@@ -463,79 +465,79 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="523"/>
-        <location filename="../src/source/mainwindow.cpp" line="2040"/>
-        <location filename="../src/source/mainwindow.cpp" line="2062"/>
-        <location filename="../src/source/mainwindow.cpp" line="2087"/>
+        <location filename="../src/source/mainwindow.cpp" line="2050"/>
+        <location filename="../src/source/mainwindow.cpp" line="2072"/>
+        <location filename="../src/source/mainwindow.cpp" line="2097"/>
         <source>Plugin error</source>
         <translation>პლაგინის შეცდომა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1290"/>
+        <location filename="../src/source/mainwindow.cpp" line="1300"/>
         <source>Adding successful</source>
         <translation>დამატება წარმატებით დასრულდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1322"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
+        <location filename="../src/source/mainwindow.cpp" line="1332"/>
+        <location filename="../src/source/mainwindow.cpp" line="2121"/>
         <source>No data in it</source>
         <translation>მასში მონაცემები არ მოიძებნა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1510"/>
+        <location filename="../src/source/mainwindow.cpp" line="1520"/>
         <source>Adding canceled</source>
         <translation>დამატება გაუქმებულია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1608"/>
+        <location filename="../src/source/mainwindow.cpp" line="1618"/>
         <source>Adding failed</source>
         <translation>შეცდომა ამოარქივებისას</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="1688"/>
+        <location filename="../src/source/mainwindow.cpp" line="2117"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>შეცდომა &quot;%1&quot; შექმნისას</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2016"/>
+        <location filename="../src/source/mainwindow.cpp" line="2026"/>
         <source>Compression successful</source>
         <translation>არქივი წარმატებით შეიქმნა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2048"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
+        <location filename="../src/source/mainwindow.cpp" line="2058"/>
+        <location filename="../src/source/mainwindow.cpp" line="2125"/>
         <source>Insufficient disk space</source>
         <translation>მყარ დისკზე არასაკმარისი მოცულება</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2074"/>
-        <location filename="../src/source/mainwindow.cpp" line="2095"/>
+        <location filename="../src/source/mainwindow.cpp" line="2084"/>
+        <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Some volumes are missing</source>
         <translation>ზოგიერთი ტომი არ მოიძებნა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2099"/>
+        <location filename="../src/source/mainwindow.cpp" line="2109"/>
         <source>Wrong password, please retry</source>
         <translation>არასწორი პაროლი, გთხოვთ სცადოთ განმეორებით</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2249"/>
+        <location filename="../src/source/mainwindow.cpp" line="2259"/>
         <source>Select file</source>
         <translation>აირჩიეთ ფაილი</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3049"/>
+        <location filename="../src/source/mainwindow.cpp" line="3071"/>
         <source>Enter up to %1 characters</source>
         <translation>შეიყვანეთ %1 სიმბოლო</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="196"/>
-        <location filename="../src/source/mainwindow.cpp" line="2925"/>
+        <location filename="../src/source/mainwindow.cpp" line="2947"/>
         <source>File info</source>
         <translation>ფაილის ინფორმაცია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1399"/>
+        <location filename="../src/source/mainwindow.cpp" line="1409"/>
         <source>Do you want to delete the archive?</source>
         <translation>ნამდვილად გსურთ არქივის წაშლა?</translation>
     </message>
@@ -581,7 +583,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="513"/>
-        <location filename="../src/source/mainwindow.cpp" line="2749"/>
+        <location filename="../src/source/mainwindow.cpp" line="2771"/>
         <source>Loading, please wait...</source>
         <translation>იტვირთება, გთხოვთ დაელოდოთ...</translation>
     </message>
@@ -591,49 +593,49 @@
         <translation>დარწმუნებული ხართ, რომ ნამდვილად გსურთ მიმდინარე დავალების გაჩერება?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1296"/>
-        <location filename="../src/source/mainwindow.cpp" line="1422"/>
+        <location filename="../src/source/mainwindow.cpp" line="1306"/>
+        <location filename="../src/source/mainwindow.cpp" line="1432"/>
         <source>Updating, please wait...</source>
         <translation>განახლება, გთხოვთ დაელოდოთ...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="2103"/>
+        <location filename="../src/source/mainwindow.cpp" line="1683"/>
+        <location filename="../src/source/mainwindow.cpp" line="2113"/>
         <source>File name too long</source>
         <translation>ფაილის სახელი ძალიან გრძელია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2044"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Failed to create file</source>
         <translation>შეცდომა ფაილის შექმნისას</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2037"/>
+        <location filename="../src/source/mainwindow.cpp" line="2047"/>
         <source>Compression failed</source>
         <translation>კომპრესირება შეწყდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2347"/>
+        <location filename="../src/source/mainwindow.cpp" line="2369"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>ჩანაცვლება</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2411"/>
+        <location filename="../src/source/mainwindow.cpp" line="2433"/>
         <source>Find directory</source>
         <translation>საქაღალდის ძებნა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2059"/>
+        <location filename="../src/source/mainwindow.cpp" line="2069"/>
         <source>Open failed</source>
         <translation>შეცდომა გახსნისას</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1668"/>
-        <location filename="../src/source/mainwindow.cpp" line="1743"/>
-        <location filename="../src/source/mainwindow.cpp" line="1798"/>
-        <location filename="../src/source/mainwindow.cpp" line="2070"/>
+        <location filename="../src/source/mainwindow.cpp" line="1614"/>
+        <location filename="../src/source/mainwindow.cpp" line="1678"/>
+        <location filename="../src/source/mainwindow.cpp" line="1753"/>
+        <location filename="../src/source/mainwindow.cpp" line="1808"/>
+        <location filename="../src/source/mainwindow.cpp" line="2080"/>
         <source>Wrong password</source>
         <translation>არასწორი პაროლი</translation>
     </message>
@@ -652,10 +654,10 @@
         <location filename="../src/source/mainwindow.cpp" line="617"/>
         <location filename="../src/source/mainwindow.cpp" line="626"/>
         <location filename="../src/source/mainwindow.cpp" line="666"/>
-        <location filename="../src/source/mainwindow.cpp" line="1322"/>
-        <location filename="../src/source/mainwindow.cpp" line="2230"/>
-        <location filename="../src/source/mainwindow.cpp" line="2505"/>
-        <location filename="../src/source/mainwindow.cpp" line="2669"/>
+        <location filename="../src/source/mainwindow.cpp" line="1332"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
+        <location filename="../src/source/mainwindow.cpp" line="2691"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -668,16 +670,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1399"/>
-        <location filename="../src/source/mainwindow.cpp" line="2347"/>
-        <location filename="../src/source/mainwindow.cpp" line="2771"/>
+        <location filename="../src/source/mainwindow.cpp" line="1409"/>
+        <location filename="../src/source/mainwindow.cpp" line="2369"/>
+        <location filename="../src/source/mainwindow.cpp" line="2793"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>გაუქმება</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1399"/>
+        <location filename="../src/source/mainwindow.cpp" line="1409"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>დადასტურება</translation>
@@ -688,142 +690,142 @@
         <translation>არ არის ასეთი ფაილი ან საქაღალდე</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1338"/>
+        <location filename="../src/source/mainwindow.cpp" line="1348"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>ამოარქივება დასრულდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1531"/>
+        <location filename="../src/source/mainwindow.cpp" line="1541"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>ამოარქივება გაუქმებულია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1663"/>
-        <location filename="../src/source/mainwindow.cpp" line="1738"/>
-        <location filename="../src/source/mainwindow.cpp" line="2066"/>
-        <location filename="../src/source/mainwindow.cpp" line="2091"/>
+        <location filename="../src/source/mainwindow.cpp" line="1673"/>
+        <location filename="../src/source/mainwindow.cpp" line="1748"/>
+        <location filename="../src/source/mainwindow.cpp" line="2076"/>
+        <location filename="../src/source/mainwindow.cpp" line="2101"/>
         <source>The archive is damaged</source>
         <translation>არქივი დაზიანებულია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1685"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
         <source>Extraction failed</source>
         <comment>提取失败</comment>
         <translation>ამოარქივება შეწყდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2020"/>
+        <location filename="../src/source/mainwindow.cpp" line="2030"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>ამოარქივება დასრულდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2023"/>
+        <location filename="../src/source/mainwindow.cpp" line="2033"/>
         <source>Conversion successful</source>
         <translation>კონვერსა წარმატებით დასრულდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2084"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>ამოარქივება შეწყდა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2241"/>
+        <location filename="../src/source/mainwindow.cpp" line="2251"/>
         <source>Close</source>
         <translation>დახურვა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2245"/>
+        <location filename="../src/source/mainwindow.cpp" line="2255"/>
         <source>Help</source>
         <translation>დახმარება</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2253"/>
+        <location filename="../src/source/mainwindow.cpp" line="2263"/>
         <source>Delete</source>
         <translation>წაშლა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2261"/>
+        <location filename="../src/source/mainwindow.cpp" line="2271"/>
         <source>Display shortcuts</source>
         <translation>იარლიყის ჩვენება</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2273"/>
+        <location filename="../src/source/mainwindow.cpp" line="2283"/>
         <source>Shortcuts</source>
         <translation>იარლიყი</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2339"/>
+        <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>აღნიშნული ფაილის სახელი იგივეა რაც არქივის სახელი, გთხოვთ გამოიყენოთ სხვა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2347"/>
+        <location filename="../src/source/mainwindow.cpp" line="2369"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ფაილი ასეთ სახელით უკვე დამატებულია, 
 ჩავანაცვლოთ?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2490"/>
+        <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
         <translation>თქვენ ვერ დაამატებთ არქივს თავის თავში</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2505"/>
+        <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>აღნიშნულ არქივში ამ ტიპის ფაილის დამატება შეუძლებელია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2771"/>
+        <location filename="../src/source/mainwindow.cpp" line="2793"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>განახლება</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2949"/>
+        <location filename="../src/source/mainwindow.cpp" line="2971"/>
         <source>Basic info</source>
         <translation>საბაზო ინფორმაცია</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2965"/>
+        <location filename="../src/source/mainwindow.cpp" line="2987"/>
         <source>Size</source>
         <translation>ზომა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2966"/>
+        <location filename="../src/source/mainwindow.cpp" line="2988"/>
         <source>Type</source>
         <translation>ტიპი</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2967"/>
+        <location filename="../src/source/mainwindow.cpp" line="2989"/>
         <source>Location</source>
         <translation>ადგილმდებარეობა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2968"/>
+        <location filename="../src/source/mainwindow.cpp" line="2990"/>
         <source>Time created</source>
         <translation>შექმნის დრო</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2969"/>
+        <location filename="../src/source/mainwindow.cpp" line="2991"/>
         <source>Time accessed</source>
         <translation>შემოწმების დრო</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2970"/>
+        <location filename="../src/source/mainwindow.cpp" line="2992"/>
         <source>Time modified</source>
         <translation>შეცვლის დრო</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2980"/>
+        <location filename="../src/source/mainwindow.cpp" line="3002"/>
         <source>Archive</source>
         <translation>არქივი</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3011"/>
+        <location filename="../src/source/mainwindow.cpp" line="3033"/>
         <source>Comment</source>
         <translation>კომენტარის დამატება</translation>
     </message>
@@ -833,7 +835,7 @@
         <translation>გთხოვთ გადაამოწმოთ ასოცირებული ფაილების არქივების მენეჯერის პარამეტრებში</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2230"/>
+        <location filename="../src/source/mainwindow.cpp" line="2240"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>არქივი შეიცვლა დისკზე. გთხოვთ დააიმპორტოთ განმეორებით</translation>
     </message>
@@ -1140,7 +1142,7 @@
         <translation>ზომა</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2768"/>
+        <location filename="../src/source/mainwindow.cpp" line="2790"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 შეიცვლა, გსურთ ცვლილების შენახვა?</translation>
     </message>
