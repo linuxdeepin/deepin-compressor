@@ -680,9 +680,15 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
         return false;
     }
 
+    QObject *pLastObj = nullptr;
+    if (UiTools::isWayland()) {
+        pLastObj = titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
+    } else {
+        pLastObj = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+    }
+
     int keyOfEvent = evt->key();
     if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
-        DWindowCloseButton *closebtn = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
         if (obj == titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
             if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
                 m_pTitleButton->setFocus(Qt::TabFocusReason);
@@ -725,7 +731,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 return false;
             }
             return true;
-        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
+        } else if (obj == pLastObj) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
             switch (m_ePageID) {
             case PI_UnCompress:
                 if (m_pUnCompressPage->getUnCompressView()->getHeaderView()->getpreLbl()->isVisible()) {
@@ -750,8 +756,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             return true;
         }
     } else if (Qt::Key_Backtab == keyOfEvent) { //shift+tab 焦点顺序，与tab焦点顺序相反
-        DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
-        if (obj == optionbtn) {
+        if (obj == pLastObj) {
             if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
                 m_pTitleCommentButton->setFocus(Qt::BacktabFocusReason);
                 return true;

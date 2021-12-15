@@ -162,6 +162,12 @@ public:
      */
     static QStringList removeSameFileName(const QStringList &listFiles);
 
+    /**
+     * @brief isWayland     判断是否是wayland环境
+     * @return
+     */
+    static bool isWayland();
+
 public:
     static QStringList m_associtionlist;
 };
