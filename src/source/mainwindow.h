@@ -507,6 +507,11 @@ private Q_SLOTS:
      */
     void slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry);
 
+    /**
+     * @brief slotCheckFinished     文件检测结束处理
+     * @param strError              错误信息
+     * @param strToolTip            文件信息
+     */
     void slotCheckFinished(const QString &strError, const QString &strToolTip);
 
 private:
