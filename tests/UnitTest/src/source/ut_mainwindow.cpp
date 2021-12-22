@@ -132,6 +132,16 @@ bool settingDialog_isAutoDeleteFile_stub()
 {
     return true;
 }
+
+bool calculateSizeThread_isRunning_stub()
+{
+    return true;
+}
+
+bool calculateSizeThread_wait_stub()
+{
+    return true;
+}
 /*******************************函数打桩************************************/
 
 
@@ -150,10 +160,10 @@ public:
 
     virtual void TearDown()
     {
-        if (nullptr != m_tester->m_mywork) {
-            m_tester->m_mywork->deleteLater();
-            m_tester->m_mywork = nullptr;
-        }
+//        if (nullptr != m_tester->m_mywork) {
+//            m_tester->m_mywork->deleteLater();
+//            m_tester->m_mywork = nullptr;
+//        }
         delete m_tester;
     }
 
@@ -164,6 +174,20 @@ protected:
 TEST_F(UT_MainWindow, initTest)
 {
 
+}
+
+TEST_F(UT_MainWindow, test_MainWindow_destruct)
+{
+    Stub stub;
+    CommonStub::stub_QThread_isRunning(stub, true);
+    CommonStub::stub_QThread_wait(stub, true);
+
+    QStringList listfiles;
+    QString strArchiveFullPath;
+    QList<FileEntry> listAddEntry;
+    CompressOptions stOptions;
+    m_tester->m_mywork = new CalculateSizeThread(listfiles, strArchiveFullPath, listAddEntry, stOptions);
+    EXPECT_NE(m_tester->m_mywork, nullptr);
 }
 
 TEST_F(UT_MainWindow, test_checkHerePath_001)
@@ -333,6 +357,41 @@ TEST_F(UT_MainWindow, test_loadArchive_004)
     EXPECT_EQ(m_tester->m_ePageID == PI_Home, true);
 }
 
+TEST_F(UT_MainWindow, test_timerEvent_001)
+{
+    QTimerEvent *event = new QTimerEvent(m_tester->m_iInitUITimer);
+    m_tester->timerEvent(event);
+    delete event;
+    EXPECT_EQ(m_tester->m_initFlag, true);
+}
+
+TEST_F(UT_MainWindow, test_timerEvent_002)
+{
+    Stub stub;
+    CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
+    stub.set(ADDR(CompressPage, compressFiles), compressPage_compressFiles_stub);
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+
+    QTimerEvent *event = new QTimerEvent(m_tester->m_iCompressedWatchTimerID);
+    m_tester->timerEvent(event);
+    delete event;
+    EXPECT_EQ(m_tester->m_initFlag, false);
+    EXPECT_EQ(m_tester->m_ePageID, PI_Compress);
+}
+
+TEST_F(UT_MainWindow, test_timerEvent_003)
+{
+    Stub stub;
+    CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
+    QFileInfoStub::stub_QFileInfo_exists(stub, false);
+
+    QTimerEvent *event = new QTimerEvent(m_tester->m_iCompressedWatchTimerID);
+    m_tester->timerEvent(event);
+    delete event;
+    EXPECT_EQ(m_tester->m_initFlag, false);
+    EXPECT_EQ(m_tester->m_ePageID, PI_Home);
+}
+
 TEST_F(UT_MainWindow, test_closeEvent_001)
 {
     Stub stub;
@@ -410,7 +469,7 @@ CustomMimeType determineMimeType_stub(const QString &)
 
 bool isExistMimeType_stub()
 {
-    return true;
+    return false;
 }
 
 TEST_F(UT_MainWindow, test_checkSettings_005)
@@ -422,7 +481,7 @@ TEST_F(UT_MainWindow, test_checkSettings_005)
     QFileInfoStub::stub_QFileInfo_isDir(stub, false);
     stub.set(determineMimeType, determineMimeType_stub);
     stub.set(ADDR(UiTools, isExistMimeType), isExistMimeType_stub);
-    EXPECT_EQ(m_tester->checkSettings("1.zip"), true);
+    EXPECT_EQ(m_tester->checkSettings("1.zip"), false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_001)
@@ -810,6 +869,7 @@ TEST_F(UT_MainWindow, test_slotJobFinished_001)
     stub.set(ADDR(MainWindow, handleJobCancelFinished), handleJobCancelFinished_stub);
     stub.set(ADDR(MainWindow, handleJobErrorFinished), handleJobErrorFinished_stub);
 
+    m_tester->m_eStartupType = StartupType::ST_Compress;
     m_tester->slotJobFinished(ArchiveJob::JT_Create, PFT_Nomral, ET_NoError);
     EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
     EXPECT_EQ(m_tester->m_fileWriteErrorName.isEmpty(), true);
@@ -822,7 +882,8 @@ TEST_F(UT_MainWindow, test_slotJobFinished_002)
     stub.set(ADDR(MainWindow, handleJobCancelFinished), handleJobCancelFinished_stub);
     stub.set(ADDR(MainWindow, handleJobErrorFinished), handleJobErrorFinished_stub);
 
-    m_tester->slotJobFinished(ArchiveJob::JT_Create, PFT_Cancel, ET_UserCancelOpertion);
+    m_tester->m_eStartupType = StartupType::ST_DragDropAdd;
+    m_tester->slotJobFinished(ArchiveJob::JT_Add, PFT_Cancel, ET_UserCancelOpertion);
     EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
     EXPECT_EQ(m_tester->m_fileWriteErrorName.isEmpty(), true);
 }
@@ -839,10 +900,32 @@ TEST_F(UT_MainWindow, test_slotJobFinished_003)
     EXPECT_EQ(m_tester->m_fileWriteErrorName.isEmpty(), true);
 }
 
+CustomMimeType determineMimeType_stub_7z(const QString &)
+{
+    CustomMimeType type;
+    type.m_bUnKnown = true;
+    type.m_strTypeName = "application/x-7z-compressed";
+    return type;
+}
+
+QString archiveFullPath_stub_7z()
+{
+    return "1.tar.7z";
+}
+
 TEST_F(UT_MainWindow, test_slotUncompressClicked)
 {
     Stub stub;
+    stub.set(ADDR(UnCompressPage, archiveFullPath), archiveFullPath_stub_7z);
+    stub.set(determineMimeType, determineMimeType_stub_7z);
     ArchiveManagerStub::stub_ArchiveManager_extractFiles(stub, true);
+
+    FileEntry entry;
+    entry.strFileName = "1.tar";
+    entry.strFullPath = "1.tar";
+    DataManager::get_instance().archiveData().listRootEntry << entry;
+    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
+
     m_tester->slotUncompressClicked("/home/Desktop");
     EXPECT_EQ(m_tester->m_operationtype, Operation_Extract);
     EXPECT_EQ(m_tester->m_stUnCompressParameter.strExtractPath.isEmpty(), false);
@@ -1956,7 +2039,7 @@ TEST_F(UT_MainWindow, test_slotFailureReturn_003)
     EXPECT_EQ(m_tester->m_ePageID, PI_Home);
 }
 
-TEST_F(UT_MainWindow, test_slotTitleCommentButtonPressed)
+TEST_F(UT_MainWindow, test_slotTitleCommentButtonPressed_001)
 {
     Stub stub;
     ArchiveManagerStub::stub_ArchiveManager_updateArchiveComment(stub, false);

@@ -30,6 +30,7 @@
 #include <QMimeDatabase>
 #include <QDir>
 #include <QDebug>
+#include <QThread>
 
 Q_DECLARE_METATYPE(KPluginMetaData)
 
@@ -83,6 +84,11 @@ protected:
     LibzipPlugin *m_tester;
 };
 
+static bool g_isInterruptionRequested_result;
+bool isInterruptionRequested_stub()
+{
+    return g_isInterruptionRequested_result;
+}
 
 TEST_F(UT_LibzipPluginFactory, initTest)
 {
@@ -155,6 +161,14 @@ bool responseOverwriteAll_false_stub()
 
 TEST_F(UT_LibzipPlugin, test_extractFiles_001)
 {
+    m_tester->m_strArchiveName = "1.zip";
+    PluginFinishType eFinishType = m_tester->extractFiles(QList<FileEntry>(), ExtractionOptions());
+    EXPECT_EQ(m_tester->m_eErrorType, ET_ArchiveDamaged);
+    EXPECT_EQ(eFinishType, PFT_Error);
+}
+
+TEST_F(UT_LibzipPlugin, test_extractFiles_002)
+{
     QList<FileEntry> files;
     ExtractionOptions options;
     options.bAllExtract = true;
@@ -176,7 +190,31 @@ TEST_F(UT_LibzipPlugin, test_extractFiles_001)
     dir.removeRecursively();
 }
 
-TEST_F(UT_LibzipPlugin, test_extractFiles_002)
+TEST_F(UT_LibzipPlugin, test_extractFiles_003)
+{
+    QList<FileEntry> files;
+    ExtractionOptions options;
+    options.bAllExtract = true;
+    options.bExistList = false;
+    options.strTargetPath = _UTSOURCEDIR;
+    options.strTargetPath += "/test_sources/zip/extract/temp";
+
+    Stub stub;
+    stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+    stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkip), responseSkip_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
+    stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
+
+    PluginFinishType eFinishType = m_tester->extractFiles(files, options);
+    bool bResult = (eFinishType == PFT_Nomral) ? true : false;
+    EXPECT_EQ(bResult, true);
+
+    QDir dir(options.strTargetPath);
+    dir.removeRecursively();
+}
+
+TEST_F(UT_LibzipPlugin, test_extractFiles_004)
 {
     m_tester->list();
     ArchiveData stData = DataManager::get_instance().archiveData();
@@ -237,6 +275,7 @@ TEST_F(UT_LibzipPlugin, test_deleteFiles)
         bResult = (eFinishType == PFT_Nomral) ? true : false;
     }
 
+    QFile::remove(strFile2);
     EXPECT_EQ(bResult, true);
 }
 
@@ -380,10 +419,58 @@ TEST_F(UT_LibzipPlugin, test_extractEntry)
     zip_close(archive);
 }
 
-TEST_F(UT_LibzipPlugin, test_emitProgress)
+TEST_F(UT_LibzipPlugin, test_emitProgress_001)
 {
+    Stub stub;
+    stub.set(ADDR(QThread, isInterruptionRequested), isInterruptionRequested_stub);
+
+    g_isInterruptionRequested_result = true;
     m_tester->emitProgress(0.6);
-    EXPECT_NE(m_tester, nullptr);
+    EXPECT_EQ(m_tester->m_bPause, false);
+}
+
+TEST_F(UT_LibzipPlugin, test_emitProgress_002)
+{
+    Stub stub;
+    stub.set(ADDR(QThread, isInterruptionRequested), isInterruptionRequested_stub);
+
+    QString str = _UTSOURCEDIR;
+    QString strFile1 = str + "/test_sources/zip/delete/test.zip";
+    QString strFile2 = str + "/test_sources/zip/delete/testDelete.zip";
+    QFile::copy(strFile1, strFile2);
+    m_tester->m_strArchiveName = strFile2;
+
+    int errcode = 0;
+    m_tester->m_pCurArchive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), 0, &errcode);
+    m_tester->m_workStatus = WT_Add;
+
+    g_isInterruptionRequested_result = false;
+    m_tester->emitProgress(0.6);
+    QFile::remove(strFile2);
+    EXPECT_EQ(m_tester->m_bPause, false);
+}
+
+TEST_F(UT_LibzipPlugin, test_emitProgress_003)
+{
+    Stub stub;
+    stub.set(ADDR(QThread, isInterruptionRequested), isInterruptionRequested_stub);
+
+    QString str = _UTSOURCEDIR;
+    QString strFile1 = str + "/test_sources/zip/delete/test.zip";
+    QString strFile2 = str + "/test_sources/zip/delete/testDelete.zip";
+    QFile::copy(strFile1, strFile2);
+    m_tester->m_strArchiveName = strFile2;
+
+    int errcode = 0;
+    m_tester->m_pCurArchive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), 0, &errcode);
+    m_tester->m_workStatus = WT_Delete;
+    m_tester->m_listCurName << "1.txt";
+
+    g_isInterruptionRequested_result = false;
+    m_tester->emitProgress(0.6);
+    QFile::remove(strFile2);
+    EXPECT_EQ(m_tester->m_bPause, false);
+    zip_close(m_tester->m_pCurArchive);
 }
 
 TEST_F(UT_LibzipPlugin, test_cancelResult001)
@@ -405,7 +492,7 @@ TEST_F(UT_LibzipPlugin, test_passwordUnicode001)
     EXPECT_EQ(m_tester->passwordUnicode("hh", 0), QString("hh"));
 }
 
-TEST_F(UT_LibzipPlugin, test_deleteEntry)
+TEST_F(UT_LibzipPlugin, test_deleteEntry_001)
 {
     QString str = _UTSOURCEDIR;
     QString strFile1 = str + "/test_sources/zip/delete/test.zip";
@@ -420,9 +507,68 @@ TEST_F(UT_LibzipPlugin, test_deleteEntry)
     if (archive) {
         bResult = m_tester->deleteEntry(0, archive);
     }
+
+    QFile::remove(strFile2);
     EXPECT_EQ(bResult, true);
 
     zip_close(archive);
+}
+
+TEST_F(UT_LibzipPlugin, test_deleteEntry_002)
+{
+    Stub stub;
+    stub.set(ADDR(QThread, isInterruptionRequested), isInterruptionRequested_stub);
+
+    g_isInterruptionRequested_result = true;
+
+    QString str = _UTSOURCEDIR;
+    QString strFile1 = str + "/test_sources/zip/delete/test.zip";
+    QString strFile2 = str + "/test_sources/zip/delete/testDelete.zip";
+    QFile::copy(strFile1, strFile2);
+    m_tester->m_strArchiveName = strFile2;
+
+    int errcode = 0;
+    zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), 0, &errcode);
+
+    bool bResult = true;
+    if (archive) {
+        bResult = m_tester->deleteEntry(0, archive);
+    }
+
+    QFile::remove(strFile2);
+    EXPECT_EQ(bResult, false);
+}
+
+int zip_delete_stub(zip_t *, zip_uint64_t)
+{
+    return -1;
+}
+
+TEST_F(UT_LibzipPlugin, test_deleteEntry_003)
+{
+    Stub stub;
+    stub.set(ADDR(QThread, isInterruptionRequested), isInterruptionRequested_stub);
+    stub.set(zip_delete, zip_delete_stub);
+
+    g_isInterruptionRequested_result = false;
+
+    QString str = _UTSOURCEDIR;
+    QString strFile1 = str + "/test_sources/zip/delete/test.zip";
+    QString strFile2 = str + "/test_sources/zip/delete/testDelete.zip";
+    QFile::copy(strFile1, strFile2);
+    m_tester->m_strArchiveName = strFile2;
+
+    int errcode = 0;
+    zip_t *archive = zip_open(QFile::encodeName(m_tester->m_strArchiveName).constData(), 0, &errcode);
+
+    bool bResult = true;
+    if (archive) {
+        bResult = m_tester->deleteEntry(0, archive);
+    }
+
+    QFile::remove(strFile2);
+    EXPECT_EQ(m_tester->m_eErrorType, ET_DeleteError);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_LibzipPlugin, test_getIndexBySelEntry)

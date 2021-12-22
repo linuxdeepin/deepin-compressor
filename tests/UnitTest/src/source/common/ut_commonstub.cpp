@@ -47,6 +47,8 @@ int g_Dialog_exec_result = 0;                         // DDialog exec返回值
 bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
 ReadOnlyArchiveInterface *g_UiTools_createInterface_result = nullptr;         // UiTools createInterface返回值
 QString g_QFileDialog_getOpenFileName_result = "";      // QFileDialog getOpenFileName返回值
+bool g_QThread_isRunning_result = false;                 // QThread isRunning返回值
+bool g_QThread_wait_result = false;                      // QThread wait返回值
 
 int g_TipDialog_showDialog_result = 0;                  // TipDialog showDialog返回值
 int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog showDialog返回值
@@ -182,6 +184,16 @@ void qThread_start_stub()
     return;
 }
 
+bool qThread_isRunning_stub()
+{
+    return g_QThread_isRunning_result;
+}
+
+bool qThread_wait_stub()
+{
+    return g_QThread_wait_result;
+}
+
 bool qThreadPool_waitForDone_stub()
 {
     return true;
@@ -289,6 +301,18 @@ void CommonStub::stub_OverwriteQuery_execute(Stub &stub)
 void CommonStub::stub_QThread_start(Stub &stub)
 {
     stub.set(ADDR(QThread, start), qThread_start_stub);
+}
+
+void CommonStub::stub_QThread_isRunning(Stub &stub, bool bResult)
+{
+    g_QThread_isRunning_result = bResult;
+    stub.set(ADDR(QThread, isRunning), qThread_isRunning_stub);
+}
+
+void CommonStub::stub_QThread_wait(Stub &stub, bool bResult)
+{
+    g_QThread_wait_result = bResult;
+    stub.set(ADDR(QThread, wait), qThread_wait_stub);
 }
 
 void CommonStub::stub_QThreadPool_waitForDone(Stub &stub)

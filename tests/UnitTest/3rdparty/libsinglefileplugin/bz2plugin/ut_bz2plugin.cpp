@@ -162,6 +162,7 @@ QStringList qString_split_stub(QChar, QString::SplitBehavior, Qt::CaseSensitivit
 TEST_F(UT_LibBzip2Interface, test_extractFiles_001)
 {
     ExtractionOptions options;
+    options.bExistList = false;
     options.bAllExtract = false;
     options.strTargetPath = _UTSOURCEDIR;
     options.strTargetPath += "/test_sources/bz2/temp";
@@ -171,7 +172,8 @@ TEST_F(UT_LibBzip2Interface, test_extractFiles_001)
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
     stub.set(ADDR(OverwriteQuery, responseCancelled), responseCancelled_true_stub);
 
-    m_tester->extractFiles(QList<FileEntry>(), options);
+    PluginFinishType eType = m_tester->extractFiles(QList<FileEntry>(), options);
+    EXPECT_EQ(eType, PFT_Nomral);
 }
 
 TEST_F(UT_LibBzip2Interface, test_extractFiles_002)
@@ -271,8 +273,15 @@ TEST_F(UT_LibBzip2Interface, test_doKill)
     EXPECT_EQ(bResult, true);
 }
 
-TEST_F(UT_LibBzip2Interface, test_uncompressedFileName)
+TEST_F(UT_LibBzip2Interface, test_uncompressedFileName_001)
 {
     QString str = m_tester->uncompressedFileName();
     EXPECT_EQ(str, "test.txt");
+}
+
+TEST_F(UT_LibBzip2Interface, test_uncompressedFileName_002)
+{
+    m_tester->m_strArchiveName = "test.svgz";
+    QString str = m_tester->uncompressedFileName();
+    EXPECT_EQ(str, "test.svg");
 }

@@ -40,6 +40,8 @@ extern int g_Dialog_exec_result;                        // DDialog exec返回值
 extern bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
 extern ReadOnlyArchiveInterface *g_UiTools_createInterface_result;         // UiTools createInterface返回值
 extern QString g_QFileDialog_getOpenFileName_result;    // QFileDialog getOpenFileName返回值
+extern bool g_QThread_isRunning_result;                 // QThread isRunning返回值
+extern bool g_QThread_wait_result;                      // QThread wait返回值
 
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
@@ -207,6 +209,18 @@ public:
      * @param stub
      */
     static void stub_QThread_start(Stub &stub);
+
+    /**
+     * @brief stub_QThread_isRunning     针对QThread的isRunning打桩
+     * @param stub
+     */
+    static void stub_QThread_isRunning(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QThread_wait     针对QThread的wait打桩
+     * @param stub
+     */
+    static void stub_QThread_wait(Stub &stub, bool bResult);
 
     /**
      * @brief stub_QThreadPool_waitForDone     针对QThreadPool的waitForDone打桩

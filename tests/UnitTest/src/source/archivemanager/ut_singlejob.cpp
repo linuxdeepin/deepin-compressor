@@ -31,7 +31,25 @@
 #include <QTest>
 
 /*******************************函数打桩************************************/
+bool libzipPlugin_doKill_stub()
+{
+    return true;
+}
 
+//bool qThread_isRunning_stub()
+//{
+//    return true;
+//}
+
+void qThread_requestInterruption_stub()
+{
+    return;
+}
+
+bool qThread_wait_stub(unsigned long)
+{
+    return true;
+}
 /*******************************函数打桩************************************/
 // 测试SingleJobThread
 class UT_SingleJobThread : public ::testing::Test
@@ -150,10 +168,31 @@ TEST_F(UT_LoadJob, test_getdptr)
     EXPECT_EQ(m_tester->getdptr(), m_tester->d);
 }
 
-TEST_F(UT_LoadJob, test_doKill)
+TEST_F(UT_LoadJob, test_doKill_001)
 {
+    SAFE_DELETE_ELE(m_tester->m_pInterface);
+    m_pInterface = nullptr;
+    EXPECT_EQ(m_tester->doKill(), false);
+}
+
+TEST_F(UT_LoadJob, test_doKill_002)
+{
+    Stub stub;
+    typedef bool (*fptr)(LibzipPlugin *);
+    fptr A_foo = (fptr)(&LibzipPlugin::doKill);   //获取虚函数地址
+    stub.set(A_foo, libzipPlugin_doKill_stub);
     EXPECT_EQ(m_tester->doKill(), true);
 }
+
+//TEST_F(UT_LoadJob, test_doKill_003)
+//{
+//    Stub stub;
+//    CommonStub::stub_QThread_isRunning(stub, true);
+////    stub.set(ADDR(QThread, isRunning), qThread_isRunning_stub);
+//    stub.set(ADDR(QThread, requestInterruption), qThread_requestInterruption_stub);
+//    stub.set(ADDR(QThread, wait), qThread_wait_stub);
+//    EXPECT_EQ(m_tester->doKill(), true);
+//}
 
 TEST_F(UT_LoadJob, test_finishJob)
 {

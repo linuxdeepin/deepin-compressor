@@ -24,6 +24,8 @@
 #include "gtest/src/stub.h"
 
 #include <QTest>
+#include <QSignalSpy>
+#include <DApplication>
 
 #include <gtest/gtest.h>
 
@@ -45,7 +47,7 @@ public:
     virtual void SetUp()
     {
         m_tester = new PreviousLabel;
-        m_tester->disconnect();
+//        m_tester->disconnect();
     }
 
     virtual void TearDown()
@@ -69,9 +71,19 @@ TEST_F(UT_PreviousLabel, test_setPrePath)
     EXPECT_EQ(m_tester->text(), "     .. Back to: /");
 }
 
+TEST_F(UT_PreviousLabel, test_paintEvent)
+{
+    QRect f;
+    QPaintEvent *paint = new QPaintEvent(f);
+    m_tester->paintEvent(paint);
+    delete paint;
+}
+
 TEST_F(UT_PreviousLabel, test_mouseDoubleClickEvent)
 {
+    QSignalSpy spy(m_tester, SIGNAL(doubleClickedSignal()));
     QTest::mouseDClick(m_tester, Qt::LeftButton, Qt::KeyboardModifiers(), QPoint());
+    EXPECT_EQ(spy.count(), 1);
 }
 
 TEST_F(UT_PreviousLabel, test_enterEvent)
@@ -108,7 +120,9 @@ TEST_F(UT_PreviousLabel, test_focusOutEvent)
 
 TEST_F(UT_PreviousLabel, test_keyPressEvent)
 {
+    QSignalSpy spy(m_tester, SIGNAL(doubleClickedSignal()));
     QTest::keyPress(m_tester, Qt::Key_Enter);
+    EXPECT_EQ(spy.count(), 1);
     QTest::keyPress(m_tester, Qt::Key_Tab);
 }
 
