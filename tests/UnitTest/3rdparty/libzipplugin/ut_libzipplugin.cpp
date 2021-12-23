@@ -448,6 +448,7 @@ TEST_F(UT_LibzipPlugin, test_emitProgress_002)
     m_tester->emitProgress(0.6);
     QFile::remove(strFile2);
     EXPECT_EQ(m_tester->m_bPause, false);
+    zip_close(m_tester->m_pCurArchive);
 }
 
 TEST_F(UT_LibzipPlugin, test_emitProgress_003)
@@ -567,6 +568,7 @@ TEST_F(UT_LibzipPlugin, test_deleteEntry_003)
     }
 
     QFile::remove(strFile2);
+    zip_close(archive);
     EXPECT_EQ(m_tester->m_eErrorType, ET_DeleteError);
     EXPECT_EQ(bResult, false);
 }
