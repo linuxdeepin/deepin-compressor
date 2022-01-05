@@ -190,12 +190,14 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
         clearDragData();
     }
 
+    m_bDrop = false;    // 无论exec的返回值是否是CopyAction，当此拖拽功能结束时应该将此变量置为false，防止后续再次接收到targetUrlChanged信号会触发clearDragData
     m_strSelUnCompressPath.clear();
 }
 
 void UnCompressView::clearDragData()
 {
     if (m_pDrag) {
+        m_pDrag->disconnect();      // 先断开信号，防止deleteLater过程中还有有一些处理
         m_pDrag->deleteLater();
         m_pDrag = nullptr;
     }
