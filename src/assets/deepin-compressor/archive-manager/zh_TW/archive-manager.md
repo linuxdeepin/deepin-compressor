@@ -26,7 +26,7 @@
 
 - 在歸檔管理器介面單擊  ![close_icon](../common/close_icon.svg)，關閉歸檔管理器。
 - 在任務欄右鍵單擊 ![deepin_compressor](../common/deepin_compressor.svg)，選擇 **全部關閉**  來關閉歸檔管理器。
-- 在歸檔管理器介面單擊 ![icon_menu](../common/icon_menu.svg)，選擇 **離開** 來關閉歸檔管理器。
+- 在歸檔管理器介面單擊 ![icon_menu](../common/icon_menu.svg)，選擇 **退出** 來關閉歸檔管理器。
 
 ### 查看快捷鍵
 
@@ -168,7 +168,7 @@
 2. 單擊 **關於**。
 3. 查看歸檔管理器的版本和介紹。
 
-### 離開
+### 退出
 
 1. 在歸檔管理器介面，單擊 ![icon_menu](../common/icon_menu.svg)。
-2. 單擊 **離開**。
+2. 單擊 **退出**。

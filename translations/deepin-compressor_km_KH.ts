@@ -1360,62 +1360,62 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>You cannot add the archive to itself</source>
         <translation>អ្នកមិនអាចបន្ថែមប័ណ្ណសារទៅខ្លួនវាបានទេ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">យល់ព្រម</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>ស្រង់ចេញ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
         <source>Extract to current directory</source>
         <translation>ស្រង់ទៅថតបច្ចុប្បន្ន</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Open</source>
         <translation>បើក</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="623"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="625"/>
         <source>Delete</source>
         <translation>លុប</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="630"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="632"/>
         <source>Open with</source>
         <translation>បើក​ជាមួយ</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="634"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="735"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="636"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="737"/>
         <source>Select default program</source>
         <translation>ជ្រើសរើសកម្មវិធីលំនាំដើម</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">បោះបង់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation type="unfinished">បញ្ជាក់</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>តើអ្នកចង់លុបឯកសារ()ដែលបានជ្រើសរើសទេ?</translation>
     </message>

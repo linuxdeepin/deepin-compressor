@@ -88,7 +88,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU konularıCPU iş parçacıkları</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek iş parçacığı</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Multiple threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Çoklu iş parçacığı</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -1360,62 +1360,62 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arşivi kendisine ekleyemezsiniz</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Çıkart</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
         <source>Extract to current directory</source>
         <translation>Mevcut dizine çıkart</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="623"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="625"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="630"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="632"/>
         <source>Open with</source>
         <translation>Bununla aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="634"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="735"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="636"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="737"/>
         <source>Select default program</source>
         <translation>Varsayılan programı seç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Onayla</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Seçili dosya(ları) silmek istiyor musunuz?</translation>
     </message>

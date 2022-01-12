@@ -1360,62 +1360,62 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>You cannot add the archive to itself</source>
         <translation>Não é possível adicionar o arquivo a si mesmo</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="390"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="616"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Extrair</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
         <source>Extract to current directory</source>
         <translation>Extrair no diretório atual</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="623"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="625"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="630"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="632"/>
         <source>Open with</source>
         <translation>Abrir com</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="634"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="735"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="636"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="737"/>
         <source>Select default program</source>
         <translation>Selecionar o aplicativo padrão</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Confirmar</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="685"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Excluir o(s) arquivo(s) selecionado(s)?</translation>
     </message>
