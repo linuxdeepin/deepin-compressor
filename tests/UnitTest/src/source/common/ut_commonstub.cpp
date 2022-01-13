@@ -312,7 +312,8 @@ void CommonStub::stub_QThread_isRunning(Stub &stub, bool bResult)
 void CommonStub::stub_QThread_wait(Stub &stub, bool bResult)
 {
     g_QThread_wait_result = bResult;
-    stub.set(ADDR(QThread, wait), qThread_wait_stub);
+//    stub.set(ADDR(QThread, wait), qThread_wait_stub);
+    stub.set((bool(QThread::*)(unsigned long))ADDR(QThread, wait), qThread_wait_stub);
 }
 
 void CommonStub::stub_QThreadPool_waitForDone(Stub &stub)
