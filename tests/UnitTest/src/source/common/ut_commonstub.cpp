@@ -189,7 +189,7 @@ bool qThread_isRunning_stub()
     return g_QThread_isRunning_result;
 }
 
-bool qThread_wait_stub()
+bool qThread_wait_stub(unsigned long)
 {
     return g_QThread_wait_result;
 }

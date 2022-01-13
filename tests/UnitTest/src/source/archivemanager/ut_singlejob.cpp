@@ -46,10 +46,6 @@ void qThread_requestInterruption_stub()
     return;
 }
 
-bool qThread_wait_stub(unsigned long)
-{
-    return true;
-}
 /*******************************函数打桩************************************/
 // 测试SingleJobThread
 class UT_SingleJobThread : public ::testing::Test
