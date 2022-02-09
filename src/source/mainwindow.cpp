@@ -2180,7 +2180,7 @@ void MainWindow::convertArchive(const QString &convertType)
     QString oldArchivePath = m_stUnCompressParameter.strFullPath; // 需要进行格式转换的压缩包的全路径
     QFileInfo oldArchive(oldArchivePath);
 
-    QString newArchivePath = oldArchive.filePath().remove(oldArchive.suffix()) + convertType; // 转换后压缩包的全路径，还未判断该文件名是否存在
+    QString newArchivePath = oldArchive.absolutePath() + QDir::separator() + oldArchive.completeBaseName() + "." + convertType; // 转换后压缩包的全路径，还未判断该文件名是否存在
     // 压缩后的文件名
     int num = 2;
     while (QFileInfo::exists(newArchivePath)) { // 如果文件名存在自动重命名 文件名+（2）...
