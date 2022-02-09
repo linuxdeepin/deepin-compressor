@@ -39,7 +39,6 @@ DGUI_USE_NAMESPACE
 
 CompressPage::CompressPage(QWidget *parent)
     : DWidget(parent)
-    , m_bRootIndex(false)
 {
     initUI();
     initConnections();

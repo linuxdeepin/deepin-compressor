@@ -121,7 +121,7 @@ private slots:
 private:
     CompressView *m_pCompressView = nullptr;    // 压缩列表
     CustomPushButton *m_pNextBtn = nullptr;       // 下一步
-    bool m_bRootIndex;                  // 是否为根目录
+    bool m_bRootIndex = true;                  // 是否为根目录
 };
 
 #endif // COMPRESSPAGE_H
