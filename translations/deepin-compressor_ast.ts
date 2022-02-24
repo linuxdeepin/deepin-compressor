@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ast">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ast">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>Amiesta ficheros</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>D&apos;acuerdu</translation>
@@ -88,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -144,7 +142,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -220,13 +233,13 @@
         <translation>D&apos;acuerdu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Encaboxar</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Trocar</translation>
@@ -235,11 +248,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>Tamañu total: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +260,12 @@
         <translation>Les contraseñes de los ficheros ZIP nun puen tar en chinu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Yá esiste un ficheru col mesmu nome, ¿trocalu?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Namás se sofiten los caráuteres chinos, llatinos y dalgunos símbolos</translation>
     </message>
@@ -883,7 +891,7 @@
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="54"/>
         <source>Backup file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="55"/>
@@ -949,7 +957,7 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="60"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

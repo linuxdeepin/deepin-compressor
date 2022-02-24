@@ -46,17 +46,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>Următorul</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>Adăugați, vă rog, fișiere</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">OK</translation>
@@ -147,6 +147,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
         <source>Support zip, 7z type only</source>
         <translation>Se acceptă doar tipul zip, 7z</translation>
@@ -220,13 +235,13 @@
         <translation type="unfinished">OK</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Anulare</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation type="unfinished">Înlocuire</translation>
@@ -235,11 +250,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>Mărimea totală: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +262,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Fișier cu așa nume deja există, să-l înlocuiesc?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation type="unfinished"></translation>
     </message>

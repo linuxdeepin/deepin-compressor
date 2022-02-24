@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>Пожалуйста, добавьте файлы</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Хорошо</translation>
@@ -88,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -144,7 +142,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -220,13 +233,13 @@
         <translation>Хорошо</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Заменить</translation>
@@ -235,11 +248,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>Общий размер: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +260,12 @@
         <translation>Пароль для ZIP-архивов не может быть на китайском языке.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation> Файл с таким именем уже существует, заменить его?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Поддерживаются только китайские и английские символы и некоторые другие символы.</translation>
     </message>
@@ -759,7 +767,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2361"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished">Такое-же имя уже есть, используйте другое</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2369"/>
@@ -769,12 +777,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2512"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished">Вы не можете добавить архив идентичного значения</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2527"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2793"/>
@@ -912,13 +920,13 @@
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="303"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="304"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">Подтвердить</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="308"/>
@@ -944,12 +952,12 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="60"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -980,13 +988,13 @@
         <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">Подтвердить</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1074,31 +1082,31 @@
         <location filename="../src/source/page/progresspage.cpp" line="358"/>
         <source>Pause</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
         <location filename="../src/source/page/progresspage.cpp" line="387"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="354"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="387"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">Подтвердить</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="376"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="378"/>
@@ -1196,7 +1204,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
@@ -1209,26 +1217,26 @@
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished">Заменить</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="477"/>
         <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="478"/>
         <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
@@ -1254,7 +1262,7 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
@@ -1333,7 +1341,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
-        <translation type="unfinished">Извлечь</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="191"/>
@@ -1349,7 +1357,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="211"/>
@@ -1368,7 +1376,7 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
@@ -1406,13 +1414,13 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished">Подтвердить</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="687"/>

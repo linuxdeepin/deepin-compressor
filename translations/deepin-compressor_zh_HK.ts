@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_HK">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_HK">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>下一步</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>請添加文件</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
@@ -147,6 +145,21 @@
         <translation>單線程</translation>
     </message>
     <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation>雙線程</translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation>四線程</translation>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation>八線程</translation>
+    </message>
+    <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
         <source>Support zip, 7z type only</source>
         <translation>僅支持zip, 7z格式</translation>
@@ -220,13 +233,13 @@
         <translation>確 定</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>替 換</translation>
@@ -235,11 +248,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>文件總大小：%1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation>多線程</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +260,12 @@
         <translation>zip分卷不支持中文密碼</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替換？</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>僅支持中英文字符及部分符號</translation>
     </message>

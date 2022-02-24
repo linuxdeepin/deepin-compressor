@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>Dalej</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>Proszę dodać pliki</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -147,6 +145,21 @@
         <translation>Pojedynczy rdzeń</translation>
     </message>
     <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
         <source>Support zip, 7z type only</source>
         <translation>Obsługuje tylko zip, 7z</translation>
@@ -220,13 +233,13 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zastąp</translation>
@@ -235,11 +248,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>Całkowity rozmiar: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation>Wiele rdzeni</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +260,12 @@
         <translation>Hasło dla wolumenów ZIP nie może być w języku Chińskim</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Istnieje już inny plik o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Obsługiwane są tylko znaki chińskie i angielskie oraz niektóre symbole</translation>
     </message>
@@ -288,7 +296,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="348"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation>Spowoduje to trwałe usunięcie plik(ów). Jesteś pewien, że chcesz kontynuować? </translation>
+        <translation>Spowoduje to permanentne usunięcie plik(ów). Czy jesteś pewien, że chcesz kontynuować? </translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="348"/>
@@ -795,7 +803,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2988"/>
         <source>Type</source>
-        <translation>Rodzaj</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2989"/>
@@ -1132,7 +1140,7 @@
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Type</source>
-        <translation>Rodzaj</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
@@ -1157,7 +1165,7 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>Automatycznie utwórz folder dla wielu wyodrębnionych plików</translation>
+        <translation>Automatycznie utwórz katalog dla wielu wyodrębnionych plików</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
@@ -1228,7 +1236,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Istnieje już inny folder o tej samej nazwie, czy chcesz go zastąpić?</translation>
+        <translation>Istnieje już inny katalog o tej samej nazwie, czy chcesz go zastąpić?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
@@ -1254,7 +1262,7 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation>Wybierz wszystko</translation>
+        <translation>Zaznacz wszystko</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>

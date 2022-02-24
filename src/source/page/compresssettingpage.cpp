@@ -244,7 +244,7 @@ void CompressSettingPage::initUI()
     m_pCompressLevelCmb->setCurrentIndex(2);
 
     // 设置CPU线程数
-    QStringList listCpuThread = QStringList() << tr("Single thread") << tr("Multiple threads");
+    QStringList listCpuThread = QStringList() << tr("Single thread") << tr("2 threads") << tr("4 threads") << tr("8 threads");
     // 添加压缩方式
     m_pCpuCmb->addItems(listCpuThread);
 
@@ -738,7 +738,25 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
     compressInfo.bTar_7z = ("tar.7z" == strTmpCompresstype) ? true : false;     // 是否为tar.7z格式
     compressInfo.qSize = m_qFileSize;
-    compressInfo.iCPUTheadNum = (0 == m_pCpuCmb->currentIndex()) ? 1 : 2;        // 线程数
+
+    // 线程数
+    switch (m_pCpuCmb->currentIndex()) {
+    case 0:
+        compressInfo.iCPUTheadNum = 1;
+        break;
+    case 1:
+        compressInfo.iCPUTheadNum = 2;
+        break;
+    case 2:
+        compressInfo.iCPUTheadNum = 4;
+        break;
+    case 3:
+        compressInfo.iCPUTheadNum = 8;
+        break;
+    default:
+        compressInfo.iCPUTheadNum = 1;
+        break;
+    }
 
     // 压缩等级
     // tar、tar.Z:使用默认压缩方式

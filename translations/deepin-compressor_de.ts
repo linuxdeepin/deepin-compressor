@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -26,7 +24,7 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="77"/>
+        <location filename="../src/source/page/compresspage.cpp" line="76"/>
         <source>Next</source>
         <translation>Weiter</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>Please add files</source>
         <translation>Bitte fügen Sie Dateien hinzu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="118"/>
+        <location filename="../src/source/page/compresspage.cpp" line="117"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -88,7 +86,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
@@ -144,7 +142,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>2 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>4 threads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <source>8 threads</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
@@ -200,7 +213,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="516"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="544"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
@@ -220,13 +233,13 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Ersetzen</translation>
@@ -235,11 +248,6 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
         <source>Total size: %1</source>
         <translation>Gesamtgröße: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
-        <source>Multiple threads</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
@@ -252,12 +260,12 @@
         <translation>Das Passwort für ZIP-Volumen darf nicht auf Chinesisch sein</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="765"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Eine andere Datei mit dem gleichen Namen existiert bereits, möchten Sie sie ersetzen?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="805"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Es werden nur chinesische und englische Zeichen und einige Symbole unterstützt</translation>
     </message>
@@ -468,12 +476,12 @@
         <location filename="../src/source/mainwindow.cpp" line="2072"/>
         <location filename="../src/source/mainwindow.cpp" line="2097"/>
         <source>Plugin error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1300"/>
         <source>Adding successful</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1332"/>
@@ -495,7 +503,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
         <location filename="../src/source/mainwindow.cpp" line="2117"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2026"/>
@@ -506,13 +514,13 @@
         <location filename="../src/source/mainwindow.cpp" line="2058"/>
         <location filename="../src/source/mainwindow.cpp" line="2125"/>
         <source>Insufficient disk space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2084"/>
         <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Some volumes are missing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2109"/>
@@ -606,7 +614,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2047"/>
@@ -1098,12 +1106,12 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="376"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="378"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="374"/>
@@ -1228,7 +1236,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
