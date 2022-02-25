@@ -129,6 +129,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     int errcode = 0;
     m_bOverwriteAll = false;        //是否全部覆盖
     m_bSkipAll = false;             // 是否全部跳过
+    m_mapLongName.clear();
+    m_setLongName.clear();
 //    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
     zip_error_t err;
 
@@ -150,10 +152,10 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     }
 
     // 执行解压操作
+    bool bHandleLongName = false;
     if (options.bAllExtract) {  // 全部解压
         qlonglong qExtractSize = 0;
         zip_int64_t nofEntries = zip_get_num_entries(archive, 0);
-
         for (zip_int64_t i = 0; i < nofEntries; ++i) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 m_bCancel = false;      // 重置标志位
@@ -163,7 +165,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             QString strFileName;
 
             // 解压单个文件
-            m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName);
+            m_eErrorType = extractEntry(archive, i, options, qExtractSize, strFileName, bHandleLongName);
 
             // 方便右键解压时提示是否有数据解压出来
             if (!options.bExistList && 0 == i) {
@@ -172,7 +174,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 DataManager::get_instance().archiveData().listRootEntry << entry;
             }
 
-            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType || (bHandleLongName == true && ET_NoError == m_eErrorType)) {  // 无错误，继续解压下一个文件
                 continue;
             } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
@@ -193,7 +195,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                         zip_set_default_password(archive, m_strPassword.toUtf8().constData());
                         i--;
                     }
-                } else {
+                }  else {
                     zip_close(archive);
                     return PFT_Error;
                 }
@@ -214,9 +216,9 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
             QString strFileName;
 
             // 解压单个文件
-            m_eErrorType = extractEntry(archive, m_listCurIndex[i], options, qExtractSize, strFileName);
+            m_eErrorType = extractEntry(archive, m_listCurIndex[i], options, qExtractSize, strFileName, bHandleLongName);
 
-            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType || (bHandleLongName == true && ET_NoError == m_eErrorType)) {  // 无错误，继续解压下一个文件
                 continue;
             } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 zip_close(archive);
@@ -245,6 +247,10 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
 
             }
         }
+    }
+
+    if (bHandleLongName == true) {
+        m_eErrorType = ET_LongNameError;
     }
 
     zip_close(archive);
@@ -668,7 +674,7 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
     DataManager::get_instance().archiveData().strComment = m_strComment;
 }
 
-ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName)
+ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName, bool &bHandleLongName)
 {
     zip_stat_t statBuffer;
     if (zip_stat_index(archive, zip_uint64_t(index), ZIP_FL_ENC_RAW, &statBuffer) != 0) {
@@ -676,11 +682,54 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     strFileName = m_common->trans2uft8(statBuffer.name, m_mapFileCode[index]);    // 解压文件名（压缩包中）
+    QString strOriginName = strFileName;
+
+    // 针对文件夹名称过长的情况，直接提示解压失败，文件夹名称过长
+    QStringList listPath = strFileName.split(QDir::separator());
+    listPath.removeLast();
+    for (int i = 0; i < listPath.count(); ++i) {
+        if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
+            return ET_LongNameError;
+        }
+    }
+
+    QString strFilePath;
+    QString strTempFileName = strFileName;
+    int iIndex = strFileName.lastIndexOf(QDir::separator());
+
+    if (iIndex >= 0) {
+        strFilePath = strFileName.left(iIndex - 1);
+        strTempFileName = strFileName.right(strFileName.length() - iIndex - 1);
+    }
+
+    if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
+        QString strTemp = strTempFileName.left(60);
+        if (m_mapLongName[strTemp] >= 999 || options.bOpen == true) {
+            return ET_LongNameError;
+        }
+        bHandleLongName = true;
+        m_mapLongName[strTemp]++;
+        strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[strTemp], 3, 10, QChar('0')) + "." + QFileInfo(strTempFileName).completeSuffix();
+
+        strFileName = strTempFileName;
+        if (iIndex >= 0) {
+            strFileName = strFilePath + QDir::separator() + strTempFileName;
+        }
+
+    }
+
     // 提取
     if (!options.strDestination.isEmpty()) {
         strFileName = strFileName.remove(0, options.strDestination.size());
     }
-    emit signalCurFileName(strFileName);        // 发送当前正在解压的文件名
+
+
+    if (bHandleLongName) {
+        emit signalCurFileName(strOriginName); // 发送当前正在解压的文件名
+    } else {
+        emit signalCurFileName(strFileName); // 发送当前正在解压的文件名
+    }
+
     bool bIsDirectory = strFileName.endsWith(QDir::separator());    // 是否为文件夹
 
     // 判断解压路径是否存在，不存在则创建文件夹
@@ -728,6 +777,9 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     QFileDevice::Permissions per = getPermissions(value);
 
     if (bIsDirectory) {     // 文件夹
+        if (NAME_MAX < QString(strFileName).toLocal8Bit().length())
+            return ET_LongNameError;
+
         QDir dir;
         dir.mkpath(strDestFileName);
 
@@ -762,6 +814,9 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
             }
         }
 
+        if (bHandleLongName) {
+            m_setLongName << strFileName;
+        }
 
         // 若文件存在且不是可写权限，重新创建一个文件
         if (file.exists() && !file.isWritable()) {
@@ -808,7 +863,6 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
                 return ET_FileOpenError;
             }
         }
-
 
         // 以只写的方式打开待解压的文件
         if (file.open(QIODevice::WriteOnly) == false) {

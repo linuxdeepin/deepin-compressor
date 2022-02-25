@@ -399,6 +399,7 @@ TEST_F(UT_LibzipPlugin, test_extractEntry)
         options.strTargetPath += "/test_sources/zip/extract/temp";
         qlonglong qExtractSize = 0;
         QString strFileName;
+        bool bHandleLongName = false;
 
         Stub stub;
         stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
@@ -407,7 +408,7 @@ TEST_F(UT_LibzipPlugin, test_extractEntry)
         stub.set(ADDR(OverwriteQuery, responseSkipAll), responseSkipAll_false_stub);
         stub.set(ADDR(OverwriteQuery, responseOverwriteAll), responseOverwriteAll_true_stub);
 
-        ErrorType eType = m_tester->extractEntry(archive, 0, options, qExtractSize, strFileName);
+        ErrorType eType = m_tester->extractEntry(archive, 0, options, qExtractSize, strFileName, bHandleLongName);
         bResult = (eType == ET_NoError) ? true : false;
 
         QDir dir(options.strTargetPath);

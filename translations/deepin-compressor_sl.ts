@@ -233,13 +233,13 @@
         <translation>V redu</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zamenjaj</translation>
@@ -260,12 +260,12 @@
         <translation>Gesla za ZIP nosilce ne morejo biti v kitajščini</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="795"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="835"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="823"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Podprti so le nagleški in kitajski znaki ter nekaj posebnih znakov</translation>
     </message>
@@ -364,24 +364,24 @@
 <context>
     <name>FailurePage</name>
     <message>
-        <location filename="../src/source/page/failurepage.cpp" line="76"/>
+        <location filename="../src/source/page/failurepage.cpp" line="87"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Razširanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/page/failurepage.cpp" line="84"/>
+        <location filename="../src/source/page/failurepage.cpp" line="100"/>
         <source>Damaged file, unable to extract</source>
         <translation>Poškodovana datoteka, razširjanje ni možno</translation>
     </message>
     <message>
-        <location filename="../src/source/page/failurepage.cpp" line="89"/>
+        <location filename="../src/source/page/failurepage.cpp" line="105"/>
         <source>Retry</source>
         <comment>button</comment>
         <translation>Ponovi</translation>
     </message>
     <message>
-        <location filename="../src/source/page/failurepage.cpp" line="92"/>
+        <location filename="../src/source/page/failurepage.cpp" line="108"/>
         <source>Back</source>
         <translation>Nazaj</translation>
     </message>
@@ -472,79 +472,105 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="523"/>
-        <location filename="../src/source/mainwindow.cpp" line="2050"/>
-        <location filename="../src/source/mainwindow.cpp" line="2072"/>
-        <location filename="../src/source/mainwindow.cpp" line="2097"/>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
+        <location filename="../src/source/mainwindow.cpp" line="2090"/>
+        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Plugin error</source>
         <translation>Napaka vtičnika</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1300"/>
+        <location filename="../src/source/mainwindow.cpp" line="1302"/>
         <source>Adding successful</source>
         <translation>Dodajanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1332"/>
-        <location filename="../src/source/mainwindow.cpp" line="2121"/>
+        <location filename="../src/source/mainwindow.cpp" line="1334"/>
+        <location filename="../src/source/mainwindow.cpp" line="2139"/>
         <source>No data in it</source>
         <translation>Ne vsebuje podatkov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1520"/>
+        <location filename="../src/source/mainwindow.cpp" line="1522"/>
         <source>Adding canceled</source>
         <translation>Dodajanje je bilo prekinjeno</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1618"/>
+        <location filename="../src/source/mainwindow.cpp" line="1620"/>
         <source>Adding failed</source>
         <translation>Dodajanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2117"/>
+        <location filename="../src/source/mainwindow.cpp" line="1673"/>
+        <source>Extraction failed: the file name is too long</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1700"/>
+        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>Neuspelo ustvarjanje &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2026"/>
+        <location filename="../src/source/mainwindow.cpp" line="1822"/>
+        <source>Open failed: the file name is too long</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2041"/>
         <source>Compression successful</source>
         <translation>Stiskanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2058"/>
-        <location filename="../src/source/mainwindow.cpp" line="2125"/>
+        <location filename="../src/source/mainwindow.cpp" line="2047"/>
+        <location filename="../src/source/mainwindow.cpp" line="2155"/>
+        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2076"/>
+        <location filename="../src/source/mainwindow.cpp" line="2143"/>
         <source>Insufficient disk space</source>
         <translation>Na disku ni dovolj prostora</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2084"/>
-        <location filename="../src/source/mainwindow.cpp" line="2105"/>
+        <location filename="../src/source/mainwindow.cpp" line="2102"/>
+        <location filename="../src/source/mainwindow.cpp" line="2123"/>
         <source>Some volumes are missing</source>
         <translation>Nekateri pogoni manjkajo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2109"/>
+        <location filename="../src/source/mainwindow.cpp" line="2127"/>
         <source>Wrong password, please retry</source>
         <translation>Napačno geslo, poskusite znova</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2259"/>
+        <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <source>The file name is too long. Keep the name within 60 characters please.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2152"/>
+        <source>Conversion failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2290"/>
         <source>Select file</source>
         <translation>Izberite datoteko</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3071"/>
+        <location filename="../src/source/mainwindow.cpp" line="3102"/>
         <source>Enter up to %1 characters</source>
         <translation>Vnesite do %1 znakov</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="196"/>
-        <location filename="../src/source/mainwindow.cpp" line="2947"/>
+        <location filename="../src/source/mainwindow.cpp" line="2978"/>
         <source>File info</source>
         <translation>Podatki o datoteki</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1409"/>
+        <location filename="../src/source/mainwindow.cpp" line="1411"/>
         <source>Do you want to delete the archive?</source>
         <translation>Ali želite izbrisati arhiv?</translation>
     </message>
@@ -590,7 +616,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="513"/>
-        <location filename="../src/source/mainwindow.cpp" line="2771"/>
+        <location filename="../src/source/mainwindow.cpp" line="2802"/>
         <source>Loading, please wait...</source>
         <translation>Nalaganje, počakajte...</translation>
     </message>
@@ -600,49 +626,48 @@
         <translation>Želite zaustaviti trenutno opravilo?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1306"/>
-        <location filename="../src/source/mainwindow.cpp" line="1432"/>
+        <location filename="../src/source/mainwindow.cpp" line="1308"/>
+        <location filename="../src/source/mainwindow.cpp" line="1434"/>
         <source>Updating, please wait...</source>
         <translation>Posodabljanje. Počakajte...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1683"/>
-        <location filename="../src/source/mainwindow.cpp" line="2113"/>
+        <location filename="../src/source/mainwindow.cpp" line="1695"/>
         <source>File name too long</source>
         <translation>Predolgo ime datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2054"/>
+        <location filename="../src/source/mainwindow.cpp" line="2072"/>
         <source>Failed to create file</source>
         <translation>Neuspešno ustvarjanje datoteke</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2047"/>
+        <location filename="../src/source/mainwindow.cpp" line="2065"/>
         <source>Compression failed</source>
         <translation>Stiskanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2369"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Zamenjaj</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2433"/>
+        <location filename="../src/source/mainwindow.cpp" line="2464"/>
         <source>Find directory</source>
         <translation>Poišči mapo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2069"/>
+        <location filename="../src/source/mainwindow.cpp" line="2087"/>
         <source>Open failed</source>
         <translation>Odpiranje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1614"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2080"/>
+        <location filename="../src/source/mainwindow.cpp" line="1616"/>
+        <location filename="../src/source/mainwindow.cpp" line="1690"/>
+        <location filename="../src/source/mainwindow.cpp" line="1765"/>
+        <location filename="../src/source/mainwindow.cpp" line="1820"/>
+        <location filename="../src/source/mainwindow.cpp" line="2098"/>
         <source>Wrong password</source>
         <translation>Napačno geslo</translation>
     </message>
@@ -661,10 +686,10 @@
         <location filename="../src/source/mainwindow.cpp" line="617"/>
         <location filename="../src/source/mainwindow.cpp" line="626"/>
         <location filename="../src/source/mainwindow.cpp" line="666"/>
-        <location filename="../src/source/mainwindow.cpp" line="1332"/>
-        <location filename="../src/source/mainwindow.cpp" line="2240"/>
-        <location filename="../src/source/mainwindow.cpp" line="2527"/>
-        <location filename="../src/source/mainwindow.cpp" line="2691"/>
+        <location filename="../src/source/mainwindow.cpp" line="1334"/>
+        <location filename="../src/source/mainwindow.cpp" line="2271"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <location filename="../src/source/mainwindow.cpp" line="2722"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>V redu</translation>
@@ -677,16 +702,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1409"/>
-        <location filename="../src/source/mainwindow.cpp" line="2369"/>
-        <location filename="../src/source/mainwindow.cpp" line="2793"/>
+        <location filename="../src/source/mainwindow.cpp" line="1411"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
+        <location filename="../src/source/mainwindow.cpp" line="2824"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Prekini</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1409"/>
+        <location filename="../src/source/mainwindow.cpp" line="1411"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Potrdi</translation>
@@ -697,141 +722,135 @@
         <translation>Datoteka li mapa ne obstaja</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1348"/>
+        <location filename="../src/source/mainwindow.cpp" line="1350"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>Razširjanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1541"/>
+        <location filename="../src/source/mainwindow.cpp" line="1543"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>Razširjanje je bilo prekinjeno</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2076"/>
-        <location filename="../src/source/mainwindow.cpp" line="2101"/>
+        <location filename="../src/source/mainwindow.cpp" line="1685"/>
+        <location filename="../src/source/mainwindow.cpp" line="1760"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
+        <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>The archive is damaged</source>
         <translation>Arhiv je poškodovan</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1695"/>
-        <source>Extraction failed</source>
-        <comment>提取失败</comment>
-        <translation>Razširanje ni uspelo</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2030"/>
+        <location filename="../src/source/mainwindow.cpp" line="2045"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Razširjanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="2051"/>
         <source>Conversion successful</source>
         <translation>Pretvorba je uspela</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
+        <location filename="../src/source/mainwindow.cpp" line="2112"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Razširanje ni uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2251"/>
+        <location filename="../src/source/mainwindow.cpp" line="2282"/>
         <source>Close</source>
         <translation>Zapri</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2255"/>
+        <location filename="../src/source/mainwindow.cpp" line="2286"/>
         <source>Help</source>
         <translation>Pomoč</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2294"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2271"/>
+        <location filename="../src/source/mainwindow.cpp" line="2302"/>
         <source>Display shortcuts</source>
         <translation>Prikaži bljižnice</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2283"/>
+        <location filename="../src/source/mainwindow.cpp" line="2314"/>
         <source>Shortcuts</source>
         <translation>Bljižnice</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2361"/>
+        <location filename="../src/source/mainwindow.cpp" line="2392"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Ime je enako imenu stisnjene datoteke. Uporabite drugo ime</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2369"/>
+        <location filename="../src/source/mainwindow.cpp" line="2400"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Obstaja druga datoteka s tem imenom. Ali naj jo zamenjam?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2512"/>
+        <location filename="../src/source/mainwindow.cpp" line="2543"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arhiva ne morete dodajati samega vase</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2527"/>
+        <location filename="../src/source/mainwindow.cpp" line="2558"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>Arhivom ne morete dodajati datotek te vrste</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2793"/>
+        <location filename="../src/source/mainwindow.cpp" line="2824"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Posodobi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2971"/>
+        <location filename="../src/source/mainwindow.cpp" line="3002"/>
         <source>Basic info</source>
         <translation>Osnovni podatki</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2987"/>
+        <location filename="../src/source/mainwindow.cpp" line="3018"/>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2988"/>
+        <location filename="../src/source/mainwindow.cpp" line="3019"/>
         <source>Type</source>
         <translation>Vrsta</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2989"/>
+        <location filename="../src/source/mainwindow.cpp" line="3020"/>
         <source>Location</source>
         <translation>Lokacija</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2990"/>
+        <location filename="../src/source/mainwindow.cpp" line="3021"/>
         <source>Time created</source>
         <translation>Čas stvarjenja</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2991"/>
+        <location filename="../src/source/mainwindow.cpp" line="3022"/>
         <source>Time accessed</source>
         <translation>Čas dostopa</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2992"/>
+        <location filename="../src/source/mainwindow.cpp" line="3023"/>
         <source>Time modified</source>
         <translation>Čas spremembe</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3002"/>
+        <location filename="../src/source/mainwindow.cpp" line="3033"/>
         <source>Archive</source>
         <translation>Arhiv</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3033"/>
+        <location filename="../src/source/mainwindow.cpp" line="3064"/>
         <source>Comment</source>
         <translation>Komentar</translation>
     </message>
@@ -841,7 +860,7 @@
         <translation>Preverite povezano vrsto datotek v nastavitvah Upravitelja arhivov</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2240"/>
+        <location filename="../src/source/mainwindow.cpp" line="2271"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arhiv na disku je bil spremenjen. Uvozite ga znova.</translation>
     </message>
@@ -1148,7 +1167,7 @@
         <translation>Velikost</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2790"/>
+        <location filename="../src/source/mainwindow.cpp" line="2821"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>Sprememba v %1. Želite shraniti spremembe v arhiv?</translation>
     </message>
@@ -1313,17 +1332,17 @@
 <context>
     <name>SuccessPage</name>
     <message>
-        <location filename="../src/source/page/successpage.cpp" line="74"/>
+        <location filename="../src/source/page/successpage.cpp" line="79"/>
         <source>Compression successful</source>
         <translation>Stiskanje je uspelo</translation>
     </message>
     <message>
-        <location filename="../src/source/page/successpage.cpp" line="79"/>
+        <location filename="../src/source/page/successpage.cpp" line="89"/>
         <source>View</source>
         <translation>Prikaz</translation>
     </message>
     <message>
-        <location filename="../src/source/page/successpage.cpp" line="82"/>
+        <location filename="../src/source/page/successpage.cpp" line="92"/>
         <source>Back</source>
         <translation>Nazaj</translation>
     </message>

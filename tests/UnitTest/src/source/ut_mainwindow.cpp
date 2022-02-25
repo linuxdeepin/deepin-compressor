@@ -1545,7 +1545,7 @@ TEST_F(UT_MainWindow, test_showErrorMessage_011)
 TEST_F(UT_MainWindow, test_showErrorMessage_012)
 {
     m_tester->showErrorMessage(FI_Uncompress, EI_LongFileName);
-    EXPECT_EQ(m_tester->m_pFailurePage->m_pDetailLbl->text(), "File name too long");
+    EXPECT_EQ(m_tester->m_pFailurePage->m_pDetailLbl->text(), "The file name is too long. Keep the name within 60 characters please.");
 }
 
 TEST_F(UT_MainWindow, test_showErrorMessage_013)

@@ -316,6 +316,7 @@ bool CliRarPlugin::handleLine(const QString &line, WorkType workStatus)
                 if (NAME_MAX < tmp.length()) {
                     m_finishType = PFT_Error;
                     m_eErrorType = ET_LongNameError;
+                    emit signalCurFileName(diskPath);
                     return false;
                 }
             }

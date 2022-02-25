@@ -133,7 +133,7 @@ private:
      * @param strFileName   当前解压的文件名
      * @return              错误类型
      */
-    ErrorType extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName);
+    ErrorType extractEntry(zip_t *archive, zip_int64_t index, const ExtractionOptions &options, qlonglong &qExtractSize, QString &strFileName, bool &bHandleLongName);
 
     /**
      * @brief emitProgress  发送进度信号
@@ -184,6 +184,8 @@ private:
     double m_dScaleSize = 0.0;   // 100/总大小
     QString m_strComment = QString();
 
+    QMap<QString, int> m_mapLongName;       // 存储截取的文件名称和截取的次数（不包含001之类的）
+    QSet<QString> m_setLongName;            // 存储被截取之后的文件名称（包含001之类的）
 };
 
 #endif // LIBZIPPLUGIN_H

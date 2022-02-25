@@ -108,6 +108,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     m_eErrorType = ET_NoError;
     m_bOverwriteAll = false;        //是否全部覆盖
     m_bSkipAll = false;             // 是否全部跳过
+    m_mapLongName.clear();
+    m_setLongName.clear();
 //    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
 
     if (!initializeReader()) {
@@ -231,6 +233,42 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
         // entryFI is the fileinfo pointing to where the file will be
         // written from the archive.
+
+        // 针对文件夹名称过长的情况，直接提示解压失败，文件夹名称过长
+        QStringList listPath = entryName.split(QDir::separator());
+        listPath.removeLast();
+        for (int i = 0; i < listPath.count(); ++i) {
+            if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
+                emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+                m_eErrorType = ET_LongNameError;
+                return PFT_Error;
+            }
+        }
+
+
+        QString strFilePath;
+        QString strTempFileName = entryName;
+        int iSepIndex = entryName.lastIndexOf(QDir::separator());
+
+        if (iSepIndex >= 0) {
+            strFilePath = entryName.left(iSepIndex - 1);
+            strTempFileName = entryName.right(entryName.length() - iSepIndex - 1);
+        }
+
+        bool bLongName = false;
+        QString strOriginName = entryName;
+        if (NAME_MAX < QString(entryName).toLocal8Bit().length() && !entryName.endsWith(QDir::separator())) {
+            QString strTemp = entryName.left(60);
+            if (m_mapLongName[strTemp] >= 999 || options.bOpen == true) {
+                emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+                m_eErrorType = ET_LongNameError;
+                return PFT_Error;
+            }
+            m_eErrorType = ET_LongNameError;
+            bLongName = true;
+            m_mapLongName[strTemp]++;
+            entryName = strTemp + QString("(%1)").arg(m_mapLongName[strTemp], 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
+        }
         QFileInfo entryFI(entryName);
 
         // If the file has a rootNode attached, remove it from file path.
@@ -248,10 +286,14 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
         }
 
-        emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+        if (bLongName) {
+            emit signalCurFileName(strOriginName); // 发送当前正在解压的文件名
+        } else {
+            emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+        }
 
         // Check if the file about to be written already exists.
-        if (!entryIsDir && entryFI.exists()) {
+        if (!entryIsDir && entryFI.exists() && !m_setLongName.contains(entryName)) {
             if (m_bSkipAll) {
                 archive_read_data_skip(m_archiveReader.data());
                 archive_entry_clear(entry);
@@ -292,6 +334,10 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
                 archive_read_data_skip(m_archiveReader.data());
                 continue;
             }
+        }
+
+        if (bLongName) {
+            m_setLongName << entryName;
         }
 
         // Write the entry header and check return value.

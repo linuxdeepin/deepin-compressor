@@ -1090,7 +1090,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
     switch (eFinishType) {
     case PFT_Nomral:
-        handleJobNormalFinished(eJobType);  // 处理job正常结束
+        handleJobNormalFinished(eJobType, eErrorType); // 处理job正常结束
         break;
     // 用户取消操作
     case PFT_Cancel:
@@ -1201,6 +1201,8 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
+    qInfo() << strName;
+    m_strCurrentName = strName;
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         m_pProgressdialog->setCurrentFile(strName);
     } else {
@@ -1259,7 +1261,7 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     return strpath;
 }
 
-void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
+void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eErrorType)
 {
     switch (eType) {
     // 创建压缩包
@@ -1358,7 +1360,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             } else {
                 // 正常解压完成的情况，解压成功
                 m_ePageID = PI_Success;
-                showSuccessInfo(SI_UnCompress);
+                showSuccessInfo(SI_UnCompress, eErrorType);
 
                 // 初始化服务
                 if (nullptr == m_pDDesktopServicesThread) {
@@ -1665,6 +1667,16 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 m_pProgressdialog->setFinished();
             }
 
+            // 提取出错
+            switch (eErrorType) {
+            case ET_LongNameError: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed: the file name is too long"), 1000, this));
+                break;
+            }
+            default:
+                break;
+            }
+
 #if 0 // 提取失败详细提示
             // 提取出错
             switch (eErrorType) {
@@ -1692,7 +1704,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
 #endif
-            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
+//            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -1806,12 +1818,14 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
             if (ET_WrongPassword == eErrorType) { // 打开压缩包中文件密码错误
                 sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
+            } else if (ET_LongNameError == eErrorType) {
+                sendMessage(new CustomFloatingMessage(icon, tr("Open failed: the file name is too long"), 1000, this));
             }
         }
         break;
     // 转换错误
     case ArchiveJob::JT_Convert:
-
+        showErrorMessage(FI_Convert, EI_LongFileName);
         break;
     // 更新压缩包数据错误
     case ArchiveJob::JT_Update:
@@ -2016,9 +2030,10 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
     }
 }
 
-void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
+void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo, ErrorType eErrorType)
 {
     m_pSuccessPage->setSuccessType(eSuccessInfo);
+    m_pSuccessPage->setDetail("");
 
     switch (eSuccessInfo) {
     // 压缩成功
@@ -2028,6 +2043,9 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
     // 解压成功
     case SI_UnCompress:
         m_pSuccessPage->setSuccessDes(tr("Extraction successful", "解压成功"));
+        if (eErrorType == ET_LongNameError) {
+            m_pSuccessPage->setDetail(tr("The file name is too long, so the first 60 characters have been intercepted as the file name."));
+        }
         break;
     case SI_Convert:
         m_pSuccessPage->setSuccessDes(tr("Conversion successful"));
@@ -2110,7 +2128,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_LongFileName: {
-            m_pFailurePage->setFailureDetail(tr("File name too long")); // 文件名过长
+            m_pFailurePage->setFailureDetail(tr("The file name is too long. Keep the name within 60 characters please."), m_strCurrentName); // 文件名过长
         }
         break;
         case EI_CreatFileFailed: {
@@ -2130,11 +2148,24 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
     }
     break;
+    case FI_Convert: {
+        m_pFailurePage->setFailuerDes(tr("Conversion failed"));
+        switch (eErrorInfo) {
+        case EI_LongFileName: {
+            m_pFailurePage->setFailureDetail(tr("The file name is too long, so the first 60 characters have been intercepted as the file name."));
+        }
+        break;
+
+        default:
+            break;
+        }
+    }
+    break;
     default:
         break;
     }
 
-    // 刷新错误界面显示
+// 刷新错误界面显示
     m_ePageID = PI_Failure;
     refreshPage();
 }

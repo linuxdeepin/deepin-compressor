@@ -174,7 +174,7 @@ private:
      * @brief handleJobNormalFinished   处理job正常结束
      * @param eType     job类型
      */
-    void handleJobNormalFinished(ArchiveJob::JobType eType);
+    void handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eErrorType = ET_NoError);
 
     /**
      * @brief handleJobCancelFinished   处理job取消结束
@@ -223,7 +223,7 @@ private:
      * @brief showSuccessInfo   显示成功信息
      * @param eSuccessInfo      成功信息
      */
-    void showSuccessInfo(SuccessInfo eSuccessInfo);
+    void showSuccessInfo(SuccessInfo eSuccessInfo, ErrorType eErrorType = ET_NoError);
 
     /**
      * @brief showErrorMessage  显示错误信息
@@ -569,6 +569,8 @@ private:
 #ifdef __aarch64__
     qint64 maxFileSize_ = 0;
 #endif
+
+    QString m_strCurrentName;
 };
 
 #endif // MAINWINDOW_H

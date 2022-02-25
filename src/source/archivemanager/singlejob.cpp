@@ -348,6 +348,7 @@ void OpenJob::doWork()
     if (m_pInterface) {
         // 构建解压参数
         ExtractionOptions options;
+        options.bOpen = true;
         options.strTargetPath = m_strTempExtractPath;
         // 当作提取，去除父目录
         if (m_stEntry.strFullPath.contains(QDir::separator())) {
@@ -607,6 +608,7 @@ void ConvertJob::slotHandleExtractFinished()
         // 出现错误的情况，提示用户
         case PFT_Error: {
             qInfo() << "格式转换错误";
+            emit signalJobFinshed();
         }
         break;
         }

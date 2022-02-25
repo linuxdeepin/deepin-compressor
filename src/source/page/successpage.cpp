@@ -60,6 +60,11 @@ SuccessInfo SuccessPage::getSuccessType()
     return m_successInfoType;
 }
 
+void SuccessPage::setDetail(const QString &strDetail)
+{
+    m_pDetailLbl->setText(strDetail);
+}
+
 void SuccessPage::initUI()
 {
     //成功图标
@@ -72,6 +77,11 @@ void SuccessPage::initUI()
     DFontSizeManager::instance()->bind(m_pSuccessLbl, DFontSizeManager::T5, QFont::DemiBold);
     m_pSuccessLbl->setForegroundRole(DPalette::ToolTipText);
     m_pSuccessLbl->setText(tr("Compression successful"));
+
+    //失败具体原因
+    m_pDetailLbl = new DLabel(this);
+    m_pDetailLbl->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(m_pDetailLbl, DFontSizeManager::T8);
 
     //查看文件按钮
     m_pShowFileBtn = new CustomPushButton(this);
@@ -86,6 +96,7 @@ void SuccessPage::initUI()
     mainlayout->addStretch();
     mainlayout->addWidget(m_pSuccessPixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_pSuccessLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pDetailLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
 
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
