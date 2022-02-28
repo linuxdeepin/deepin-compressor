@@ -689,6 +689,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     listPath.removeLast();
     for (int i = 0; i < listPath.count(); ++i) {
         if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
+            emit signalCurFileName(strFileName); // 发送当前正在解压的文件名
             return ET_LongNameError;
         }
     }
@@ -698,7 +699,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     int iIndex = strFileName.lastIndexOf(QDir::separator());
 
     if (iIndex >= 0) {
-        strFilePath = strFileName.left(iIndex - 1);
+        strFilePath = strFileName.left(iIndex);   // bug114527 left函数参数为截取的字符串长度
         strTempFileName = strFileName.right(strFileName.length() - iIndex - 1);
     }
 
