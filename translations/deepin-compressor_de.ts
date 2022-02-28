@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -24,7 +26,7 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
@@ -213,7 +215,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="516"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="544"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
@@ -476,7 +478,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Plugin error</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1302"/>
@@ -502,18 +504,18 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1700"/>
         <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1822"/>
         <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2041"/>
@@ -522,9 +524,8 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2047"/>
-        <location filename="../src/source/mainwindow.cpp" line="2155"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2076"/>
@@ -536,7 +537,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2102"/>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
         <source>Some volumes are missing</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2127"/>
@@ -545,13 +546,14 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="2155"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2152"/>
         <source>Conversion failed</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2290"/>
@@ -639,7 +641,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2072"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2065"/>

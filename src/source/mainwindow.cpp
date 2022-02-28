@@ -2152,7 +2152,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         m_pFailurePage->setFailuerDes(tr("Conversion failed"));
         switch (eErrorInfo) {
         case EI_LongFileName: {
-            m_pFailurePage->setFailureDetail(tr("The file name is too long, so the first 60 characters have been intercepted as the file name."));
+            m_pFailurePage->setFailureDetail(tr("The file name is too long. Keep the name within 60 characters please."));
         }
         break;
 

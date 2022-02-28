@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_TW">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>AppendDialog</name>
     <message>
@@ -522,7 +524,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2047"/>
-        <location filename="../src/source/mainwindow.cpp" line="2155"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation>檔案名超長，已為您自動截取前60個字元</translation>
     </message>
@@ -545,6 +546,7 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="2155"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>檔案名超長，請修改為60個字元以內</translation>
     </message>
