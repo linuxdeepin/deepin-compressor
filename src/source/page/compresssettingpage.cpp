@@ -283,7 +283,7 @@ void CompressSettingPage::initUI()
     m_pClickLbl->setLayout(pTypeLayout);
 
     QVBoxLayout *pLeftLayout = new QVBoxLayout; // 左侧整体布局
-    pLeftLayout->addSpacing(65);
+    pLeftLayout->addStretch();      // task 16309调整最小大小
     pLeftLayout->addWidget(m_pTypePixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pLeftLayout->addWidget(m_pClickLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pLeftLayout->addStretch();
@@ -327,7 +327,7 @@ void CompressSettingPage::initUI()
     pRightWgt->setLayout(pRightLayout);
     m_pRightScroll->setFrameShape(QFrame::NoFrame);
     m_pRightScroll->setWidgetResizable(true);
-    m_pRightScroll->setMinimumHeight(345);
+    m_pRightScroll->setMinimumHeight(100);           // task 16309调整最小大小
     m_pRightScroll->setWidget(pRightWgt);
 
     // 按钮布局

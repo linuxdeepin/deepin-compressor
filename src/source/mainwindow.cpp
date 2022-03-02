@@ -230,7 +230,7 @@ void MainWindow::initData()
     }
 
     resize(getConfigWinSize()); // 设置窗口尺寸
-    setMinimumSize(620, 465);   // 设置最小大小
+    setMinimumSize(620, 300);   // task 16309调整最小大小
 }
 
 void MainWindow::initConnections()
