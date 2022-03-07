@@ -197,6 +197,7 @@ void CliInterface::pauseOperation()
     if (m_processId > 0) {
         kill(static_cast<__pid_t>(m_processId), SIGSTOP);
     }
+    m_bPause = true;
 }
 
 void CliInterface::continueOperation()
@@ -212,6 +213,8 @@ void CliInterface::continueOperation()
     if (m_processId > 0) {
         kill(static_cast<__pid_t>(m_processId), SIGCONT);
     }
+
+    m_bPause = false;
 }
 
 bool CliInterface::doKill()

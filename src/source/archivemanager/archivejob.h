@@ -75,6 +75,12 @@ public:
      */
     virtual void kill();
 
+    /**
+     * @brief status 状态
+     * @return  状态
+     */
+    virtual bool status();
+
 private:
     /**
      * @brief finishJob 结束job

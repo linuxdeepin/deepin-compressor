@@ -80,6 +80,11 @@ bool ReadOnlyArchiveInterface::doKill()
     return false;   // 修改默认为未取消
 }
 
+bool ReadOnlyArchiveInterface::status()
+{
+    return m_bPause;   // true 暂停状态，false 非暂停状态
+}
+
 void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
 {
     m_bWaitForFinished = value;

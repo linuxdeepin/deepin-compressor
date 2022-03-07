@@ -579,6 +579,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_operationtype != Operation_NULL) {
+        // 保存当前操作的状态以便还原操作
+        bool isPause = getCurrentStatus();
+        qInfo() << "点击x按钮之前的操作" << isPause;
         // 当前还有操作正在进行
         slotPause();    // 先暂停当前操作
         // 创建询问关闭对话框
@@ -589,7 +592,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
             slotCancel();       // 执行取消操作
             event->accept();
         } else {
-            slotContinue();    // 继续之前的操作
+            if (!isPause) {  // 之前未暂停
+                slotContinue(); // 继续之前的操作
+            }
+
             event->ignore();    // 忽略退出
         }
     } else {
@@ -2733,6 +2739,11 @@ void MainWindow::delayQuitApp()
     QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
         emit sigquitApp();
     });
+}
+
+bool MainWindow::getCurrentStatus()
+{
+    return ArchiveManager::get_instance()->currentStatus();
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)

@@ -132,6 +132,12 @@ public:
      */
     virtual bool doKill();
 
+    /**
+     * @brief status 状态
+     * @return 状态
+     */
+    virtual bool status();
+
     bool isUserCancel() {return m_bCancel;}
 
 protected:

@@ -94,6 +94,16 @@ void BatchJob::doContinue()
     }
 }
 
+bool BatchJob::status()
+{
+    // 调用子job继续接口
+    if (m_pCurJob) {
+        return m_pCurJob->status();
+    }
+
+    return false;
+}
+
 BatchExtractJob::BatchExtractJob(QObject *parent)
     : BatchJob(parent)
 {

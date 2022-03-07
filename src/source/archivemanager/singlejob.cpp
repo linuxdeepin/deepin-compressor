@@ -88,6 +88,16 @@ void SingleJob::doContinue()
     }
 }
 
+bool SingleJob::status()
+{
+    // 调用插件继续接口
+    if (m_pInterface) {
+        return m_pInterface->status();
+    }
+
+    return false;
+}
+
 SingleJobThread *SingleJob::getdptr()
 {
     return d;

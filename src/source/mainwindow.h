@@ -315,6 +315,12 @@ private:
      */
     void delayQuitApp();
 
+    /**
+     * @brief getCurrentStatus  获取当前解压、压缩任务是否暂停
+     * @return 任务状态
+     */
+    bool getCurrentStatus();
+
     // QWidget interface
 protected:
     /**

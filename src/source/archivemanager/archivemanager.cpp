@@ -383,6 +383,16 @@ QString ArchiveManager::getCurFilePassword()
     return "";
 }
 
+bool ArchiveManager::currentStatus()
+{
+    // 调用job状态接口
+    if (m_pArchiveJob) {
+        return m_pArchiveJob->status();
+    }
+
+    return false;
+}
+
 void ArchiveManager::slotJobFinished()
 {
     if (m_pArchiveJob) {

@@ -169,6 +169,12 @@ public:
      */
     QString getCurFilePassword();
 
+    /**
+     * @brief currentStatus  当前任务状态
+     * @return 当前任务状态
+     */
+    bool currentStatus();
+
 Q_SIGNALS:
     /**
      * @brief signalError       错误信号
