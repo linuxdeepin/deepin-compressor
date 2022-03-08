@@ -703,14 +703,17 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         strTempFileName = strFileName.right(strFileName.length() - iIndex - 1);
     }
 
+    QString tempFilePathName;
     if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
         QString strTemp = strTempFileName.left(60);
-        if (m_mapLongName[strTemp] >= 999 || options.bOpen == true) {
+
+        // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
+        tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+        if (m_mapLongName[tempFilePathName] >= 999 || options.bOpen == true) {
             return ET_LongNameError;
         }
         bHandleLongName = true;
-        m_mapLongName[strTemp]++;
-        strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[strTemp], 3, 10, QChar('0')) + "." + QFileInfo(strTempFileName).completeSuffix();
+        strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, 3, 10, QChar('0')) + "." + QFileInfo(strTempFileName).completeSuffix();
 
         strFileName = strTempFileName;
         if (iIndex >= 0) {
@@ -791,6 +794,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         // 判断是否有同名文件
         if (file.exists()) {
             if (m_bSkipAll) {       // 全部跳过
+                m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
                 return ET_NoError;
             } else {
                 if (!m_bOverwriteAll) {     // 若不是全部覆盖，单条处理
@@ -804,9 +808,11 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
                         emit signalCancel();
                         return ET_UserCancelOpertion;
                     } else if (query.responseSkip()) {
+                        m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
                         return ET_NoError;
                     } else if (query.responseSkipAll()) {
                         m_bSkipAll = true;
+                        m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
                         return ET_NoError;
                     }  else if (query.responseOverwriteAll()) {
                         m_bOverwriteAll = true;
@@ -948,7 +954,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         utime(parentDir.toUtf8().constData(), &times);
     }
 
-
+    m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
     return ET_NoError;
 }
 

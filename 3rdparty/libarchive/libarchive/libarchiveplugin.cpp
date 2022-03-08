@@ -256,18 +256,22 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         }
 
         bool bLongName = false;
+        QString tempFilePathName;
         QString strOriginName = entryName;
         if (NAME_MAX < QString(entryName).toLocal8Bit().length() && !entryName.endsWith(QDir::separator())) {
             QString strTemp = entryName.left(60);
-            if (m_mapLongName[strTemp] >= 999 || options.bOpen == true) {
+
+            // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
+            tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+            if (m_mapLongName[tempFilePathName] >= 999 || options.bOpen == true) {
                 emit signalCurFileName(entryName); // 发送当前正在解压的文件名
                 m_eErrorType = ET_LongNameError;
                 return PFT_Error;
             }
             m_eErrorType = ET_LongNameError;
             bLongName = true;
-            m_mapLongName[strTemp]++;
-            entryName = strTemp + QString("(%1)").arg(m_mapLongName[strTemp], 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
+
+            entryName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName], 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
         }
         QFileInfo entryFI(entryName);
 
@@ -344,6 +348,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         const int returnCode = archive_write_header(writer.data(), entry); //创建文件
         switch (returnCode) {
         case ARCHIVE_OK: {
+            m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
 
             copyDataFromSource(m_archiveReader.data(), writer.data(), QFileInfo(m_strArchiveName).size());
 
