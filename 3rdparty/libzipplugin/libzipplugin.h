@@ -153,7 +153,7 @@ private:
      * @param iIndex    编码索引
      * @return
      */
-    QString passwordUnicode(const QString &strPassword, int iIndex);
+    QByteArray passwordUnicode(const QString &strPassword, int iIndex);
 
     /**
      * @brief deleteEntry   从压缩包中删除指定文件

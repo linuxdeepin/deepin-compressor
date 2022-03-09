@@ -854,7 +854,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
                         return ET_WrongPassword;
                     } else {
-                        zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex).toUtf8().constData());
+                        // 115645 【专业版】【1060】【归档管理器】【5.12.0.2】无法解压中文密码的zip压缩包（含有长名称）
+                        zip_set_default_password(archive, passwordUnicode(m_strPassword, iCodecIndex).data());
                         iCodecIndex++;
                         zip_error_clear(archive);
                         zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
@@ -1017,7 +1018,7 @@ int LibzipPlugin::cancelResult()
     }
 }
 
-QString LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
+QByteArray LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
 {
     if (m_strArchiveName.endsWith(".zip")) {
         // QStringList listCodecName = QStringList() << "UTF-8" << "GB18030" << "GBK" <<"Big5"<< "us-ascii";
@@ -1045,12 +1046,12 @@ QString LibzipPlugin::passwordUnicode(const QString &strPassword, int iIndex)
             QString strUnicode = utf8->toUnicode(strPassword.toUtf8().data());
             //2. unicode -> 所需编码, 得到QByteArray
             QByteArray gb_bytes = gbk->fromUnicode(strUnicode);
-            return gb_bytes.data(); //获取其char *
+            return gb_bytes; //获取其char *115645 【专业版】【1060】【归档管理器】【5.12.0.2】无法解压中文密码的zip压缩包（含有长名称）
         } else {
-            return strPassword;
+            return strPassword.toUtf8();
         }
     } else {
-        return strPassword;
+        return strPassword.toUtf8();
     }
 
 }
