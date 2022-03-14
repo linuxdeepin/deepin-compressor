@@ -271,7 +271,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             m_eErrorType = ET_LongNameError;
             bLongName = true;
 
-            entryName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName], 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
+            // bug 117553 tar格式含有多个长名称文件的压缩包，解压第一个同名文件编号是（000）
+            entryName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
         }
         QFileInfo entryFI(entryName);
 
