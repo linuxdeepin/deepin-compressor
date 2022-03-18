@@ -89,7 +89,9 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
 {
     QFileDevice::Permissions pers = QFileDevice::Permissions();
 
-    if (perm == 0) {
+    // bug 118731  zip_file_get_external_attributes获取文件属性异常
+    // 644 和0 一样作无效值考虑
+    if (0 == perm || 644 == perm) {
         pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
         return pers;
     }

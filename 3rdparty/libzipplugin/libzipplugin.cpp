@@ -879,14 +879,6 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         zip_fclose(zipFile);
     }
 
-    // bug 118731  zip_file_get_external_attributes获取文件属性异常
-    // 增加lstat接口获取文件权限
-    struct stat st;
-    int ret = lstat(strDestFileName.toStdString().c_str(), &st);
-    if (ret > -1 && getPermissions(st.st_mode) > per) {
-        per = getPermissions(st.st_mode);
-    }
-
     // 设置文件/文件夹权限
     file.setPermissions(per);
 
