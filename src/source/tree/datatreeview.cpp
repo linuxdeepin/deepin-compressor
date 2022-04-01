@@ -432,7 +432,8 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
     // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
     if (Qt::Key_Up == event->key()) {
-        if (this->currentIndex().row() == 0) {
+        // 当前行为0或为空文件夹时，焦点放在返回上一层目录上
+        if (this->currentIndex().row() == 0 || model()->rowCount() == 0) {
             if (m_pHeaderView->isVisiable()) {
                 m_pHeaderView->setLabelFocus(true);
                 m_selectionModel->clearSelection();
@@ -442,7 +443,7 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 
     // 当前选中返回上一层目录，再点击Key_Down,选中表格第一行
     if (Qt::Key_Down == event->key()) {
-        if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus()) {
+        if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus() && model()->rowCount() > 0) {
             m_pHeaderView->setLabelFocus(false);
             m_selectionModel->setCurrentIndex(m_pModel->index(-1, -1), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }

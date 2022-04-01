@@ -276,11 +276,18 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             sortByColumn(DC_Name);
 
             m_vPre.push_back(entry.strFileName); // 保存进入的文件夹名
-            // 自动选中第一行
-            QModelIndex tmpindex = model()->index(0, 0, index);
-            if (tmpindex.isValid()) {
-                setCurrentIndex(tmpindex);
+
+            // 空目录自动选中返回上一级目录Label bug122305
+            if (model()->rowCount() == 0 && m_pHeaderView->isVisiable()) {
+                m_pHeaderView->setLabelFocus(true);
+            } else {
+                // 自动选中第一行
+                QModelIndex tmpindex = model()->index(0, 0, index);
+                if (tmpindex.isValid()) {
+                    setCurrentIndex(tmpindex);
+                }
             }
+
         } else {    // 如果是文件，选择默认方式打开
             slotOpen();
         }
