@@ -430,6 +430,24 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
+    // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
+    if (Qt::Key_Up == event->key()) {
+        if (this->currentIndex().row() == 0) {
+            if (m_pHeaderView->isVisiable()) {
+                m_pHeaderView->setLabelFocus(true);
+                m_selectionModel->clearSelection();
+            }
+        }
+    }
+
+    // 当前选中返回上一层目录，再点击Key_Down,选中表格第一行
+    if (Qt::Key_Down == event->key()) {
+        if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus()) {
+            m_pHeaderView->setLabelFocus(false);
+            m_selectionModel->setCurrentIndex(m_pModel->index(-1, -1), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+        }
+    }
+
     if (Qt::Key_Delete == event->key() && m_selectionModel->selectedRows().count() > 0) { //删除键
         slotDeleteFile();
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()

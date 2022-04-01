@@ -39,6 +39,7 @@
 #include <QDateTime>
 #include <QFileSystemWatcher>
 
+
 CompressView::CompressView(QWidget *parent)
     : DataTreeView(parent)
 {

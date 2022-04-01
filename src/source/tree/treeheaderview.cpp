@@ -189,6 +189,16 @@ void TreeHeaderView::setPreLblVisible(bool bVisible)
         setFixedHeight(38);
     }
 }
+
+void TreeHeaderView::setLabelFocus(bool focus)
+{
+    if (focus) {
+        m_pPreLbl->setFocus();
+
+    } else {
+        m_pPreLbl->clearFocus();
+    }
+}
 /*
 void TreeHeaderView::paintEvent(QPaintEvent *e)
 {
