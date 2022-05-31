@@ -1133,7 +1133,7 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 {
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         //需要添加dPercentage < 100判断，否则会出现小文件提取进度对话框不会自动关闭
-        if (m_pProgressdialog->isHidden() && dPercentage < 100 && dPercentage > 0) {
+        if (!m_pProgressdialog->isVisible() && dPercentage < 100 && dPercentage > 0) {
             m_pProgressdialog->showDialog();
         }
 
