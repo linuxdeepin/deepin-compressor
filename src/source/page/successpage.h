@@ -56,13 +56,19 @@ public:
      * @brief setSuccessType 设置成功界面类型
      * @param successInfo
      */
-    void setSuccessType(SuccessInfo successInfo);
+    void setSuccessType(const SuccessInfo &successInfo);
 
     /**
      * @brief getSuccessType 获取成功界面类型
      * @return
      */
     SuccessInfo getSuccessType();
+
+    /**
+     * @brief setDetail  设置失败先详细信息
+     * @param strDetail         失败详细信息
+     */
+    void setDetail(const QString &strDetail);
 
 private:
     /**
@@ -86,15 +92,12 @@ signals:
      */
     void sigBackButtonClicked();
 
-
-public slots:
-    //void slotShowfiledirSlot();
-
 private:
-    DLabel *m_pSuccessPixmapLbl; //成功图片显示
-    DLabel *m_pSuccessLbl;      // 成功文字显示
-    CustomPushButton *m_pShowFileBtn; // 查看文件按钮
-    CustomCommandLinkButton *m_pReturnBtn; // 返回按钮
+    DLabel *m_pSuccessPixmapLbl = nullptr; //成功图片显示
+    DLabel *m_pSuccessLbl = nullptr;      // 成功文字显示
+    DLabel *m_pDetailLbl = nullptr; // 描述信息
+    CustomPushButton *m_pShowFileBtn = nullptr; // 查看文件按钮
+    CustomCommandLinkButton *m_pReturnBtn = nullptr; // 返回按钮
     QString m_strFullPath;  // 压缩地址
     SuccessInfo m_successInfoType = SI_Compress; // 成功界面类型
 };

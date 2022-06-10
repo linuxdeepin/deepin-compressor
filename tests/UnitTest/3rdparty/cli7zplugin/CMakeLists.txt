@@ -11,28 +11,47 @@ find_package(Qt5Widgets REQUIRED)
 find_package(KF5Codecs REQUIRED)
 include(FindPkgConfig)
 
-#指定头文件路径
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${HFILES_OUTPUT_PATH})
-include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/cli7zplugin)
+pkg_search_module(DtkWidget REQUIRED dtkwidget)
+pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 
-#链接库路径
-link_directories(${LIBRARY_OUTPUT_PATH})
+#指定头文件路径
+include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${DtkWidget_INCLUDE_DIRS})
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${KF5Codecs_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/cli7zplugin)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/archiveinterface)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/plugin)
+include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/interface/process)
+
 
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files
     ${3RDPARTYRELATIVEPATH}/cli7zplugin/*.cpp
     ./*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/archiveinterface/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/plugin/*.cpp
+    ${3RDPARTYRELATIVEPATH}/interface/process/*.cpp
 )
 
 file(GLOB_RECURSE h_files
-    ${3RDPARTYRELATIVEPATH}//cli7zplugin/*.h
+    ${3RDPARTYRELATIVEPATH}/cli7zplugin/*.h
     ./*.h
+    ${3RDPARTYRELATIVEPATH}/interface/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/archiveinterface/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/plugin/*.h
+    ${3RDPARTYRELATIVEPATH}/interface/process/*.h
 )
 
 file(GLOB_RECURSE json_files
-    ${3RDPARTYRELATIVEPATH}//cli7zplugin/*.json
+    ${3RDPARTYRELATIVEPATH}/cli7zplugin/*.json
 )
+
+#链接库路径
+link_directories(${LIBRARY_OUTPUT_PATH})
 
 #生成可执行文件
 add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
@@ -41,8 +60,9 @@ add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 target_link_libraries(${EXE_NAME}_test
     Qt5::Widgets
     KF5::Codecs
-    compressor-interface
+    ${DtkWidget_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread
+    compressor-ChardetDetector
 )

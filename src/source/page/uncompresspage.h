@@ -81,12 +81,6 @@ public:
      */
     QString getCurPath();
 
-//    /**
-//     * @brief isModifiable     获取压缩包数据是否可以更改
-//     * @return    是否可更改
-//     */
-//    bool isModifiable();
-
     /**
      * @brief clear 清空数据
      */

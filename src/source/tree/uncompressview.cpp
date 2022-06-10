@@ -190,12 +190,14 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
         clearDragData();
     }
 
+    m_bDrop = false;    // 无论exec的返回值是否是CopyAction，当此拖拽功能结束时应该将此变量置为false，防止后续再次接收到targetUrlChanged信号会触发clearDragData
     m_strSelUnCompressPath.clear();
 }
 
 void UnCompressView::clearDragData()
 {
     if (m_pDrag) {
+        m_pDrag->disconnect();      // 先断开信号，防止deleteLater过程中还有有一些处理
         m_pDrag->deleteLater();
         m_pDrag = nullptr;
     }
@@ -227,7 +229,7 @@ void UnCompressView::initUI()
 
 void UnCompressView::initConnections()
 {
-    connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles);
+    connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles, Qt::QueuedConnection);    // wayland下使用Qt::QueuedConnection连接方式，防止对话框exec导致事件阻塞，图标停留在界面上
     connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
 }
 
@@ -274,11 +276,18 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             sortByColumn(DC_Name);
 
             m_vPre.push_back(entry.strFileName); // 保存进入的文件夹名
-            // 自动选中第一行
-            QModelIndex tmpindex = model()->index(0, 0, index);
-            if (tmpindex.isValid()) {
-                setCurrentIndex(tmpindex);
+
+            // 空目录自动选中返回上一级目录Label bug122305
+            if (model()->rowCount() == 0 && m_pHeaderView->isVisiable()) {
+                m_pHeaderView->setLabelFocus(true);
+            } else {
+                // 自动选中第一行
+                QModelIndex tmpindex = model()->index(0, 0, index);
+                if (tmpindex.isValid()) {
+                    setCurrentIndex(tmpindex);
+                }
             }
+
         } else {    // 如果是文件，选择默认方式打开
             slotOpen();
         }
@@ -287,7 +296,7 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
 
 void UnCompressView::refreshDataByCurrentPath()
 {
-    if (m_iLevel == 0) {
+    if (0 == m_iLevel) {
         setPreLblVisible(false);
     } else {
         QString strTempPath = m_strCurrentPath;
@@ -345,7 +354,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
     sortByColumn(DC_Name);
 
     // 追加时需要选中追加的文件
-    if (m_eChangeType == CT_Add) {
+    if (CT_Add == m_eChangeType) {
         // 获取所有的追加文件的文件名
         QStringList listSelName;
         foreach (QString strFile, m_listAddFiles) {
@@ -459,7 +468,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
 
 QString UnCompressView::getCurPath()
 {
-    return (m_iLevel == 0) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
+    return (0 == m_iLevel) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
 }
 
 void UnCompressView::setModifiable(bool bModifiable, bool bMultiplePassword)
@@ -563,7 +572,7 @@ void UnCompressView::extract2Path(const QString &strPath)
     QList<FileEntry> listSelEntry = getSelEntry();    // 待提取的文件数据
     ExtractionOptions stOptions;    // 提取参数
     stOptions.strTargetPath = strPath;
-    stOptions.strDestination = (m_iLevel == 0) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
+    stOptions.strDestination = (0 == m_iLevel) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
 
     // 获取所有文件数据
     foreach (FileEntry entry, listSelEntry) {
@@ -683,7 +692,7 @@ void UnCompressView::slotDeleteFile()
         // 询问删除对话框
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Do you want to delete the selected file(s)?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
-        if (iResult == 1) {
+        if (1 == iResult) {
             // 删除压缩包数据
             QList<FileEntry> listSelEntry = getSelEntry();    // 待删除的文件数据
             qint64 qSize = 0;       // 所有需要删除的文件总大小
@@ -726,13 +735,13 @@ void UnCompressView::slotOpen()
 void UnCompressView::slotOpenStyleClicked()
 {
     QAction *pAction = qobject_cast<QAction *>(sender());
-    if (pAction == nullptr) {
+    if (nullptr == pAction) {
         return;
     }
 
     QString strText = pAction->text();
 
-    if (strText == tr("Select default program")) {
+    if (tr("Select default program") == strText) {
         // 用选择的应用程序打开
         OpenWithDialog dialog(m_stRightEntry.strFullPath);
         QString str = dialog.showOpenWithDialog(OpenWithDialog::SelectType);
@@ -749,7 +758,7 @@ void UnCompressView::slotPreClicked()
 {
     m_iLevel--;     // 目录层级减1
 
-    if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
+    if (0 == m_iLevel) {    // 如果返回到根目录，显示待压缩文件
         resetLevel();
     } else {        // 否则传递上级目录
         // 如果以'/'结尾,先移除最后一个'/',方便接下来截取倒数第二个'/'

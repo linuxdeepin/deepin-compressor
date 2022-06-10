@@ -31,7 +31,8 @@ class CompressorApplication: public DApplication
 {
     Q_OBJECT
 public:
-    CompressorApplication(int &argc, char **argv);
+    explicit CompressorApplication(int &argc, char **argv);
+    ~CompressorApplication() override;
     bool notify(QObject *watched, QEvent *event) override;
 
 protected:

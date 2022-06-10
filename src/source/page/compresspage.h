@@ -63,11 +63,15 @@ public:
     void clear();
 
     /**
-     * @brief getCompressView
+     * @brief getCompressView   // 获取压缩列表
      * @return
      */
     CompressView *getCompressView();
 
+    /**
+     * @brief getNextBtn    获取“下一步”按钮
+     * @return
+     */
     CustomPushButton *getNextBtn() const;
 
 private:
@@ -115,9 +119,9 @@ private slots:
      */
     void slotFileChoose();
 private:
-    CompressView *m_pCompressView;    // 压缩列表
-    CustomPushButton *m_pNextBtn;       // 下一步
-    bool m_bRootIndex;                  // 是否为根目录
+    CompressView *m_pCompressView = nullptr;    // 压缩列表
+    CustomPushButton *m_pNextBtn = nullptr;       // 下一步
+    bool m_bRootIndex = true;                  // 是否为根目录
 };
 
 #endif // COMPRESSPAGE_H

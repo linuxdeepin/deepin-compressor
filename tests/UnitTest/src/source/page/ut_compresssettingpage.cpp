@@ -25,6 +25,8 @@
 
 #include "gtest/src/stub.h"
 
+#include <DApplicationHelper>
+
 #include <gtest/gtest.h>
 #include <QTest>
 #include <QAction>
@@ -63,10 +65,10 @@ bool checkCompressOptionValid_stub()
 
 
 // 测试TypeLabel
-class TestTypeLabel : public ::testing::Test
+class UT_TypeLabel : public ::testing::Test
 {
 public:
-    TestTypeLabel(): m_tester(nullptr) {}
+    UT_TypeLabel(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -83,22 +85,25 @@ protected:
     TypeLabel *m_tester;
 };
 
-TEST_F(TestTypeLabel, initTest)
+TEST_F(UT_TypeLabel, initTest)
 {
 
 }
 
-TEST_F(TestTypeLabel, testmousePressEvent)
+TEST_F(UT_TypeLabel, test_mousePressEvent)
 {
     QTest::mousePress(m_tester, Qt::LeftButton);
+    QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPointF(50, 50), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    m_tester->mousePressEvent(event);
+    delete event;
 }
 
 
 // 测试TypeLabel
-class TestCompressSettingPage : public ::testing::Test
+class UT_CompressSettingPage : public ::testing::Test
 {
 public:
-    TestCompressSettingPage(): m_tester(nullptr) {}
+    UT_CompressSettingPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -116,12 +121,12 @@ protected:
     CompressSettingPage *m_tester;
 };
 
-TEST_F(TestCompressSettingPage, initTest)
+TEST_F(UT_CompressSettingPage, initTest)
 {
 
 }
 
-TEST_F(TestCompressSettingPage, testsetFileSize_noFiles)
+TEST_F(UT_CompressSettingPage, test_setFileSize_001)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_path(stub, "");
@@ -134,7 +139,7 @@ TEST_F(TestCompressSettingPage, testsetFileSize_noFiles)
     m_tester->setFileSize(listFiles, 0);
 }
 
-TEST_F(TestCompressSettingPage, testsetFileSize_oneFilesAndisDir)
+TEST_F(UT_CompressSettingPage, test_setFileSize_002)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_path(stub, "path");
@@ -145,10 +150,10 @@ TEST_F(TestCompressSettingPage, testsetFileSize_oneFilesAndisDir)
 
     QStringList listFiles = QStringList() << "path/";
     m_tester->setFileSize(listFiles, 0);
-    ASSERT_EQ(m_tester->m_pSavePathEdt->text(), "path");
+    EXPECT_EQ(m_tester->m_pSavePathEdt->text(), "path");
 }
 
-TEST_F(TestCompressSettingPage, testsetFileSize_oneFilesAndisFile)
+TEST_F(UT_CompressSettingPage, test_setFileSize_003)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_path(stub, "1");
@@ -159,10 +164,10 @@ TEST_F(TestCompressSettingPage, testsetFileSize_oneFilesAndisFile)
 
     QStringList listFiles = QStringList() << "1/1.txt";
     m_tester->setFileSize(listFiles, 0);
-    ASSERT_EQ(m_tester->m_pSavePathEdt->text(), "1");
+    EXPECT_EQ(m_tester->m_pSavePathEdt->text(), "1");
 }
 
-TEST_F(TestCompressSettingPage, testsetFileSize_twoFiles)
+TEST_F(UT_CompressSettingPage, test_setFileSize_004)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_path(stub, "1");
@@ -173,116 +178,119 @@ TEST_F(TestCompressSettingPage, testsetFileSize_twoFiles)
 
     QStringList listFiles = QStringList() << "1/1.txt" << "2/2.txt";
     m_tester->setFileSize(listFiles, 0);
-    ASSERT_EQ(m_tester->m_pSavePathEdt->text(), "1");
+    EXPECT_EQ(m_tester->m_pSavePathEdt->text(), "1");
 }
 
-TEST_F(TestCompressSettingPage, testrefreshMenu)
+TEST_F(UT_CompressSettingPage, test_refreshMenu)
 {
     Stub stub;
     PluginManagerStub::stub_PluginManager_supportedWriteMimeTypes(stub);
 
     m_tester->refreshMenu();
+    EXPECT_EQ(m_tester->m_listSupportedMimeTypes.isEmpty(), false);
 }
 
-TEST_F(TestCompressSettingPage, testgetClickLbl)
+TEST_F(UT_CompressSettingPage, test_getClickLbl)
 {
-    ASSERT_EQ(m_tester->getClickLbl(), m_tester->m_pClickLbl);
+    EXPECT_EQ(m_tester->getClickLbl(), m_tester->m_pClickLbl);
 }
 
-TEST_F(TestCompressSettingPage, testgetCompressBtn)
+TEST_F(UT_CompressSettingPage, test_getCompressBtn)
 {
-    ASSERT_EQ(m_tester->getCompressBtn(), m_tester->m_pCompressBtn);
+    EXPECT_EQ(m_tester->getCompressBtn(), m_tester->m_pCompressBtn);
 }
 
-TEST_F(TestCompressSettingPage, testgetComment_enabled)
+TEST_F(UT_CompressSettingPage, test_getComment_001)
 {
     m_tester->m_pCommentEdt->setPlainText("hhh");
     m_tester->m_pCommentEdt->setEnabled(true);
-    ASSERT_EQ(m_tester->getComment(), "hhh");
+    EXPECT_EQ(m_tester->getComment(), "hhh");
 }
 
-TEST_F(TestCompressSettingPage, testgetComment_disabled)
+TEST_F(UT_CompressSettingPage, test_getComment_002)
 {
     m_tester->m_pCommentEdt->setPlainText("hhh");
     m_tester->m_pCommentEdt->setEnabled(false);
-    ASSERT_EQ(m_tester->getComment().isEmpty(), true);
+    EXPECT_EQ(m_tester->getComment().isEmpty(), true);
 }
 
-TEST_F(TestCompressSettingPage, testgetComment_nullptr)
+TEST_F(UT_CompressSettingPage, test_getComment_003)
 {
-    ASSERT_EQ(m_tester->getComment().isEmpty(), true);
+    EXPECT_EQ(m_tester->getComment().isEmpty(), true);
 }
 
-TEST_F(TestCompressSettingPage, testsetTypeImage)
+TEST_F(UT_CompressSettingPage, test_setTypeImage)
 {
-    ASSERT_EQ(m_tester->checkFileNameVaild("1.zip"), true);
+    EXPECT_EQ(m_tester->checkFileNameVaild("1.zip"), true);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFileNameVaild_length0)
+TEST_F(UT_CompressSettingPage, test_checkFileNameVaild_001)
 {
-    ASSERT_EQ(m_tester->checkFileNameVaild(""), false);
+    EXPECT_EQ(m_tester->checkFileNameVaild(""), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFileNameVaild_toolong)
+TEST_F(UT_CompressSettingPage, test_checkFileNameVaild_002)
 {
-    ASSERT_EQ(m_tester->checkFileNameVaild("hdfjshfjksdhfkjshaflkashdfkjshfdksjdhfjhsadfrsahfsjahfdhsakjdfhsadifhasdhfasjkdhfjksadfhkjsadfhjksadhfkjsadhfjksadhfosdhfkjsadhfkjsadhfjklashdfkjsadhfkjasdhfkjasdhfkjlsahdfjksadhofusadkjfhhdfjshfjksdhfkjshaflkashdfkjshfdksjdhfjhsadfrsahfsjahfdhsakjdfhsadifhasdhfa.zip"), false);
+    EXPECT_EQ(m_tester->checkFileNameVaild("hdfjshfjksdhfkjshaflkashdfkjshfdksjdhfjhsadfrsahfsjahfdhsakjdfhsadifhasdhfasjkdhfjksadfhkjsadfhjksadhfkjsadhfjksadhfosdhfkjsadhfkjsadhfjklashdfkjsadhfkjasdhfkjasdhfkjlsahdfjksadhofusadkjfhhdfjshfjksdhfkjshaflkashdfkjshfdksjdhfjhsadfrsahfsjahfdhsakjdfhsadifhasdhfa.zip"), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFileNameVaild_hasSeparator)
+TEST_F(UT_CompressSettingPage, test_checkFileNameVaild_h003)
 {
-    ASSERT_EQ(m_tester->checkFileNameVaild("1/1.zip"), false);
+    EXPECT_EQ(m_tester->checkFileNameVaild("1/1.zip"), false);
 }
 
-TEST_F(TestCompressSettingPage, testsetEncryptedEnabled)
+TEST_F(UT_CompressSettingPage, test_setEncryptedEnabled)
 {
     m_tester->setEncryptedEnabled(false);
-    ASSERT_EQ(m_tester->m_pPasswordEdt->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pPasswordEdt->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testsetListEncryptionEnabled)
+TEST_F(UT_CompressSettingPage, test_setListEncryptionEnabled)
 {
     m_tester->setListEncryptionEnabled(false);
+    EXPECT_EQ(m_tester->m_pListEncryptionLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pListEncryptionBtn->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testsetSplitEnabled_false)
+TEST_F(UT_CompressSettingPage, test_setSplitEnabled_001)
 {
     m_tester->setSplitEnabled(false);
-    ASSERT_EQ(m_tester->m_pSplitValueEdt->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pSplitValueEdt->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testsetSplitEnabled_true)
+TEST_F(UT_CompressSettingPage, test_setSplitEnabled_002)
 {
     m_tester->m_pSplitCkb->setCheckState(Qt::Checked);
     m_tester->setSplitEnabled(true);
-    ASSERT_EQ(m_tester->m_pSplitValueEdt->isEnabled(), true);
+    EXPECT_EQ(m_tester->m_pSplitValueEdt->isEnabled(), true);
 }
 
-TEST_F(TestCompressSettingPage, testrefreshCompressLevel_tar)
+TEST_F(UT_CompressSettingPage, test_refreshCompressLevel_001)
 {
     m_tester->refreshCompressLevel("tar");
-    ASSERT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testrefreshCompressLevel_tarZ)
+TEST_F(UT_CompressSettingPage, test_refreshCompressLevel_002)
 {
     m_tester->refreshCompressLevel("tar.Z");
-    ASSERT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testrefreshCompressLevel_other)
+TEST_F(UT_CompressSettingPage, test_refreshCompressLevel_003)
 {
     m_tester->refreshCompressLevel("zip");
-    ASSERT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), true);
+    EXPECT_EQ(m_tester->m_pCompressLevelLbl->isEnabled(), true);
 }
 
-TEST_F(TestCompressSettingPage, testsetCommentEnabled)
+TEST_F(UT_CompressSettingPage, test_setCommentEnabled)
 {
     m_tester->m_pCommentEdt->setPlainText("aaa");
     m_tester->setCommentEnabled(false);
-    ASSERT_EQ(m_tester->m_pCommentEdt->toPlainText().isEmpty(), true);
+    EXPECT_EQ(m_tester->m_pCommentEdt->toPlainText().isEmpty(), true);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_001)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -293,29 +301,29 @@ TEST_F(TestCompressSettingPage, testcheckCompressOptionValid)
     m_tester->m_pFileNameEdt->setText("1");
     m_tester->m_pSavePathEdt->setText("1/");
     m_tester->m_pSplitCkb->setChecked(false);
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), true);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), true);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_nameUnVaild)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_002)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
 
     m_tester->m_pFileNameEdt->setText("");
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), false);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_savePathEmpty)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_003)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
 
     m_tester->m_pFileNameEdt->setText("1");
     m_tester->m_pSavePathEdt->setText(" ");
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), false);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_savePathNoExists)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_004)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -323,10 +331,10 @@ TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_savePathNoExists)
 
     m_tester->m_pFileNameEdt->setText("1");
     m_tester->m_pSavePathEdt->setText("1/");
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), false);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_savePathNoWritable)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_005)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -336,10 +344,10 @@ TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_savePathNoWritable)
 
     m_tester->m_pFileNameEdt->setText("1");
     m_tester->m_pSavePathEdt->setText("1/");
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), false);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_splitCkbUnChecked)
+TEST_F(UT_CompressSettingPage, test_checkCompressOptionValid_006)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -352,10 +360,10 @@ TEST_F(TestCompressSettingPage, testcheckCompressOptionValid_splitCkbUnChecked)
     m_tester->m_pSplitCkb->setChecked(true);
     m_tester->m_pSplitValueEdt->setValue(0.000000000000001);
     m_tester->m_strMimeType = "7z";
-    ASSERT_EQ(m_tester->checkCompressOptionValid(), false);
+    EXPECT_EQ(m_tester->checkCompressOptionValid(), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFile)
+TEST_F(UT_CompressSettingPage, test_checkFile_001)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -363,40 +371,40 @@ TEST_F(TestCompressSettingPage, testcheckFile)
     QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
     QFileInfoStub::stub_QFileInfo_isDir(stub, false);
 
-    ASSERT_EQ(m_tester->checkFile(""), true);
+    EXPECT_EQ(m_tester->checkFile(""), true);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFile_isSymLink)
+TEST_F(UT_CompressSettingPage, test_checkFile_002)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
     QFileInfoStub::stub_QFileInfo_exists(stub, false);
     QFileInfoStub::stub_QFileInfo_isSymLink(stub, true);
 
-    ASSERT_EQ(m_tester->checkFile(""), false);
+    EXPECT_EQ(m_tester->checkFile(""), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFile_isNotSymLink)
+TEST_F(UT_CompressSettingPage, test_checkFile_003)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
     QFileInfoStub::stub_QFileInfo_exists(stub, false);
     QFileInfoStub::stub_QFileInfo_isSymLink(stub, false);
 
-    ASSERT_EQ(m_tester->checkFile(""), false);
+    EXPECT_EQ(m_tester->checkFile(""), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFile_isNotReadable)
+TEST_F(UT_CompressSettingPage, test_checkFile_004)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
     QFileInfoStub::stub_QFileInfo_exists(stub, true);
     QFileInfoStub::stub_QFileInfo_isReadable(stub, false);
 
-    ASSERT_EQ(m_tester->checkFile(""), false);
+    EXPECT_EQ(m_tester->checkFile(""), false);
 }
 
-TEST_F(TestCompressSettingPage, testcheckFile_isDir)
+TEST_F(UT_CompressSettingPage, test_checkFile_005)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -404,112 +412,123 @@ TEST_F(TestCompressSettingPage, testcheckFile_isDir)
     QFileInfoStub::stub_QFileInfo_isReadable(stub, true);
     QFileInfoStub::stub_QFileInfo_isDir(stub, true);
 
-    ASSERT_EQ(m_tester->checkFile(""), true);
+    EXPECT_EQ(m_tester->checkFile(""), true);
 }
 
-TEST_F(TestCompressSettingPage, testshowWarningDialog)
+TEST_F(UT_CompressSettingPage, test_showWarningDialog)
 {
     Stub stub;
     CustomDialogStub::stub_TipDialog_showDialog(stub, 0);
-    ASSERT_EQ(m_tester->showWarningDialog("", ""), 0);
+    EXPECT_EQ(m_tester->showWarningDialog("", ""), 0);
 }
 
-TEST_F(TestCompressSettingPage, testsetDefaultName)
+TEST_F(UT_CompressSettingPage, test_setDefaultName)
 {
     m_tester->setDefaultName("/home");
-    ASSERT_EQ(m_tester->m_pFileNameEdt->lineEdit()->text(), "/home");
+    EXPECT_EQ(m_tester->m_pFileNameEdt->lineEdit()->text(), "/home");
 }
 
-TEST_F(TestCompressSettingPage, testslotTypeChanged_tar7z)
+TEST_F(UT_CompressSettingPage, test_slotTypeChanged_001)
 {
     QAction *pAction = new QAction(m_tester);
     pAction->setText("tar.7z");
     m_tester->slotTypeChanged(pAction);
-    ASSERT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testslotTypeChanged_7z)
+TEST_F(UT_CompressSettingPage, test_slotTypeChanged_002)
 {
     QAction *pAction = new QAction(m_tester);
     pAction->setText("7z");
     m_tester->slotTypeChanged(pAction);
-    ASSERT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testslotTypeChanged_zip)
+TEST_F(UT_CompressSettingPage, test_slotTypeChanged_003)
 {
     QAction *pAction = new QAction(m_tester);
     pAction->setText("zip");
     m_tester->slotTypeChanged(pAction);
-    ASSERT_EQ(m_tester->m_pSplitCkb->isEnabled(), true);
+    EXPECT_EQ(m_tester->m_pSplitCkb->isEnabled(), true);
 }
 
-TEST_F(TestCompressSettingPage, testslotTypeChanged_other)
+TEST_F(UT_CompressSettingPage, test_slotTypeChanged_004)
 {
     QAction *pAction = new QAction(m_tester);
     pAction->setText("tar");
     m_tester->slotTypeChanged(pAction);
-    ASSERT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCommentLbl->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testslotTypeChanged_nullptr)
+TEST_F(UT_CompressSettingPage, test_slotTypeChanged_005)
 {
-    QAction *pAction = nullptr;
-    m_tester->slotTypeChanged(pAction);
+    m_tester->m_strMimeType = "123";
+    m_tester->slotTypeChanged(nullptr);
+    EXPECT_EQ(m_tester->m_strMimeType, "123");
 }
 
-TEST_F(TestCompressSettingPage, testslotFileNameChanged)
+TEST_F(UT_CompressSettingPage, test_slotFileNameChanged_001)
 {
-    m_tester->slotFileNameChanged("");
+    m_tester->m_pFileNameEdt->setText("");
+    m_tester->slotRefreshFileNameEdit();
+    EXPECT_EQ(m_tester->m_pFileNameEdt->text(), "");
+    DPalette plt = DApplicationHelper::instance()->palette(m_tester->m_pFileNameEdt);
+    EXPECT_EQ(plt.brush(DPalette::Text).color(), plt.color(DPalette::WindowText));
 }
 
-TEST_F(TestCompressSettingPage, testslotFileNameChanged_inValid)
+TEST_F(UT_CompressSettingPage, test_slotFileNameChanged_002)
 {
     g_checkFileNameVaild_result = false;
     Stub stub;
     stub.set(ADDR(CompressSettingPage, checkFileNameVaild), checkFileNameVaild_stub);
-    m_tester->slotFileNameChanged("hh");
+    m_tester->m_pFileNameEdt->setText("hh");
+    m_tester->slotRefreshFileNameEdit();
+    DPalette plt = DApplicationHelper::instance()->palette(m_tester->m_pFileNameEdt);
+    EXPECT_EQ(plt.brush(DPalette::Text).color(), plt.color(DPalette::TextWarning));
 }
 
-TEST_F(TestCompressSettingPage, testslotFileNameChanged_valid)
+TEST_F(UT_CompressSettingPage, test_slotFileNameChanged_003)
 {
     g_checkFileNameVaild_result = true;
     Stub stub;
     stub.set(ADDR(CompressSettingPage, checkFileNameVaild), checkFileNameVaild_stub);
-    m_tester->slotFileNameChanged("hh");
+    m_tester->m_pFileNameEdt->setText("hh");
+    m_tester->slotRefreshFileNameEdit();
+    DPalette plt = DApplicationHelper::instance()->palette(m_tester->m_pFileNameEdt);
+    EXPECT_EQ(plt.brush(DPalette::Text).color(), plt.color(DPalette::WindowText));
 }
 
-TEST_F(TestCompressSettingPage, testslotAdvancedEnabled_enabled)
+TEST_F(UT_CompressSettingPage, test_slotAdvancedEnabled_001)
 {
     m_tester->m_pSplitValueEdt->setValue(1.0);
     m_tester->slotAdvancedEnabled(true);
-    ASSERT_EQ(m_tester->m_pSplitValueEdt->value(), 1.0);
+    EXPECT_EQ(m_tester->m_pSplitValueEdt->value(), 1.0);
 }
 
-TEST_F(TestCompressSettingPage, testslotAdvancedEnabled_unEnabled)
+TEST_F(UT_CompressSettingPage, test_slotAdvancedEnabled_002)
 {
     m_tester->m_pSplitValueEdt->setValue(1.0);
     m_tester->slotAdvancedEnabled(false);
-    ASSERT_EQ(m_tester->m_pSplitValueEdt->value(), 0.0);
+    EXPECT_EQ(m_tester->m_pSplitValueEdt->value(), 0.0);
 }
 
-TEST_F(TestCompressSettingPage, testslotSplitEdtEnabled_SplitCkbUnChecked)
+TEST_F(UT_CompressSettingPage, test_slotSplitEdtEnabled_003)
 {
     m_tester->m_pSplitCkb->setChecked(false);
     m_tester->m_pSplitValueEdt->setValue(1.0);
     m_tester->slotSplitEdtEnabled();
-    ASSERT_EQ(m_tester->m_pSplitValueEdt->value(), 0.0);
+    EXPECT_EQ(m_tester->m_pSplitValueEdt->value(), 0.0);
 }
 
-TEST_F(TestCompressSettingPage, testslotSplitEdtEnabled_SplitCkbChecked)
+TEST_F(UT_CompressSettingPage, test_slotSplitEdtEnabled_004)
 {
     m_tester->m_pSplitCkb->setChecked(true);
     m_tester->m_strMimeType = "zip";
     m_tester->slotSplitEdtEnabled();
-    ASSERT_EQ(m_tester->m_pCommentEdt->isEnabled(), false);
+    EXPECT_EQ(m_tester->m_pCommentEdt->isEnabled(), false);
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_containsSelf)
+TEST_F(UT_CompressSettingPage, test_slotCompressClicked_001)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -521,7 +540,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_containsSelf)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_zipVolumePassword)
+TEST_F(UT_CompressSettingPage, test_slotCompressClicked_002)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -530,7 +549,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_zipVolumePassword)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_tar)
+TEST_F(UT_CompressSettingPage, testslotCompressClicked_003)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -540,7 +559,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_tar)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_zip)
+TEST_F(UT_CompressSettingPage, testslotCompressClicked_004)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -550,7 +569,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_zip)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists)
+TEST_F(UT_CompressSettingPage, testslotCompressClicked_005)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -562,7 +581,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists001)
+TEST_F(UT_CompressSettingPage, testslotCompressClicked_006)
 {
     Stub stub;
     stub.set(ADDR(CompressSettingPage, showWarningDialog), showWarningDialog_stub);
@@ -574,7 +593,7 @@ TEST_F(TestCompressSettingPage, testslotCompressClicked_archiveExists001)
     m_tester->slotCompressClicked();
 }
 
-TEST_F(TestCompressSettingPage, testslotCommentTextChanged)
+TEST_F(UT_CompressSettingPage, test_slotCommentTextChanged)
 {
     QString str;
     QString strTemp;
@@ -585,17 +604,18 @@ TEST_F(TestCompressSettingPage, testslotCommentTextChanged)
     }
     m_tester->m_pCommentEdt->setPlainText(str);
     m_tester->slotCommentTextChanged();
-    ASSERT_EQ(m_tester->m_pCommentEdt->toPlainText(), strTemp);
+    EXPECT_EQ(m_tester->m_pCommentEdt->toPlainText(), strTemp);
 }
 
-TEST_F(TestCompressSettingPage, testslotPasswordChanged)
+TEST_F(UT_CompressSettingPage, test_slotPasswordChanged)
 {
     m_tester->m_pPasswordEdt->setText("123《》");
     m_tester->slotPasswordChanged();
-    ASSERT_EQ(m_tester->m_pPasswordEdt->lineEdit()->text(), "123");
+    EXPECT_EQ(m_tester->m_pPasswordEdt->lineEdit()->text(), "123");
 }
 
-TEST_F(TestCompressSettingPage, testslotEchoModeChanged)
+TEST_F(UT_CompressSettingPage, test_slotEchoModeChanged)
 {
     m_tester->slotEchoModeChanged(false);
+    EXPECT_EQ(m_tester->m_pPasswordEdt->lineEdit()->testAttribute(Qt::WA_InputMethodEnabled), false);
 }

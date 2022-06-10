@@ -59,7 +59,7 @@ void SingleJob::start()
     jobTimer.start();
 
     // 若插件指针为空，立即异常退出
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         slotFinished(PFT_Error);
         return;
     }
@@ -88,6 +88,16 @@ void SingleJob::doContinue()
     }
 }
 
+bool SingleJob::status()
+{
+    // 调用插件继续接口
+    if (m_pInterface) {
+        return m_pInterface->status();
+    }
+
+    return false;
+}
+
 SingleJobThread *SingleJob::getdptr()
 {
     return d;
@@ -95,7 +105,7 @@ SingleJobThread *SingleJob::getdptr()
 
 bool SingleJob::doKill()
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         return false;
     }
 
@@ -176,7 +186,7 @@ void AddJob::doWork()
 {
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
-    if (pWriteInterface == nullptr) {
+    if (nullptr == pWriteInterface) {
         return;
     }
 
@@ -222,7 +232,7 @@ void CreateJob::doWork()
 
 bool CreateJob::doKill()
 {
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         return false;
     }
 
@@ -290,7 +300,7 @@ void ExtractJob::doWork()
         if (!(m_pInterface->waitForFinished())) {
             slotFinished(eType);
         } else {
-            if (eType == PFT_Error) {
+            if (PFT_Error == eType) {
                 errorcode = false;
             }
         }
@@ -316,7 +326,7 @@ void DeleteJob::doWork()
 {
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
-    if (pWriteInterface == nullptr) {
+    if (nullptr == pWriteInterface) {
         return;
     }
 
@@ -348,6 +358,7 @@ void OpenJob::doWork()
     if (m_pInterface) {
         // 构建解压参数
         ExtractionOptions options;
+        options.bOpen = true;
         options.strTargetPath = m_strTempExtractPath;
         // 当作提取，去除父目录
         if (m_stEntry.strFullPath.contains(QDir::separator())) {
@@ -367,7 +378,7 @@ void OpenJob::doWork()
 
 void OpenJob::slotFinished(PluginFinishType eType)
 {
-    if (eType == PFT_Nomral) {
+    if (PFT_Nomral == eType) {
         QString name = m_stEntry.strFileName;
         if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
             name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;
@@ -406,7 +417,7 @@ void UpdateJob::start()
     jobTimer.start();
 
     // 若插件指针为空，立即异常退出
-    if (m_pInterface == nullptr) {
+    if (nullptr == m_pInterface) {
         slotFinished(PFT_Error);
         return;
     }
@@ -521,7 +532,8 @@ ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString s
 
 ConvertJob::~ConvertJob()
 {
-
+    SAFE_DELETE_ELE(m_pCreateJob)
+    SAFE_DELETE_ELE(m_pExtractJob);
 }
 
 void ConvertJob::start()
@@ -606,6 +618,7 @@ void ConvertJob::slotHandleExtractFinished()
         // 出现错误的情况，提示用户
         case PFT_Error: {
             qInfo() << "格式转换错误";
+            emit signalJobFinshed();
         }
         break;
         }

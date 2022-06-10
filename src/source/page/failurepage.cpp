@@ -44,8 +44,19 @@ void FailurePage::setFailuerDes(const QString &strDes)
     m_pFailureLbl->setText(strDes);
 }
 
-void FailurePage::setFailureDetail(const QString &strDetail)
+void FailurePage::setFailureDetail(const QString &strDetail, const QString &strFileName)
 {
+    if (strFileName.isEmpty()) {
+        m_pFileNameLbl->setVisible(false);
+    } else {
+        m_pFileNameLbl->setVisible(true);
+        m_pFileNameLbl->setToolTip(strFileName);
+        QFont font = m_pFileNameLbl->font();
+        font.setUnderline(true);//下划线
+        m_pFileNameLbl->setFont(font);
+        QFontMetrics elideFont(font);
+        m_pFileNameLbl->setText(elideFont.elidedText(strFileName, Qt::ElideMiddle, 520));
+    }
     m_pDetailLbl->setText(strDetail);
 }
 
@@ -54,7 +65,7 @@ void FailurePage::setRetryEnable(bool bEnable)
     m_pRetrybutton->setEnabled(bEnable);
 }
 
-void FailurePage::setFailureInfo(FailureInfo failureInfo)
+void FailurePage::setFailureInfo(const FailureInfo &failureInfo)
 {
     m_failureInfo = failureInfo;
 }
@@ -77,6 +88,11 @@ void FailurePage::initUI()
     DFontSizeManager::instance()->bind(m_pFailureLbl, DFontSizeManager::T5, QFont::DemiBold);
     m_pFailureLbl->setForegroundRole(DPalette::ToolTipText);
 
+    m_pFileNameLbl = new DLabel(this);
+    m_pFileNameLbl->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(m_pFileNameLbl, DFontSizeManager::T8);
+    m_pFileNameLbl->setVisible(false);
+
     //失败具体原因
     m_pDetailLbl = new DLabel(this);
     m_pDetailLbl->setForegroundRole(DPalette::TextTips);
@@ -96,6 +112,7 @@ void FailurePage::initUI()
     mainlayout->addStretch();
     mainlayout->addWidget(m_pFailurePixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_pFailureLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pFileNameLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_pDetailLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
     QHBoxLayout *buttonHBoxLayout = new QHBoxLayout;

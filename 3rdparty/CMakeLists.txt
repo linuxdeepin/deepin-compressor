@@ -8,6 +8,8 @@ add_subdirectory(clirarplugin)
 
 add_subdirectory(libarchive)
 
+add_subdirectory(libpigzplugin)
+
 add_subdirectory(libsinglefileplugin)
 
 add_subdirectory(libzipplugin)

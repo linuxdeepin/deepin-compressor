@@ -210,6 +210,8 @@ void CompressSettingPage::initUI()
     m_pAdvancedBtn = new CustomSwitchButton(this);
     m_pEncryptedLbl = new DLabel(tr("Encrypt the archive") + ":", this);
     m_pPasswordEdt = new DPasswordEdit(this);
+    m_pCpuLbl = new DLabel(tr("CPU threads") + ":", this);
+    m_pCpuCmb = new CustomCombobox(this);
     m_pListEncryptionLbl = new DLabel(tr("Encrypt the file list too"), this);
     m_pListEncryptionBtn = new CustomSwitchButton(this);
     m_pSplitCkb = new CustomCheckBox(tr("Split to volumes") + ":", this);
@@ -230,14 +232,23 @@ void CompressSettingPage::initUI()
     m_pCompressLevelCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
     m_pCompressLevelCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
 
+
+    m_pCpuCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
+    m_pCpuCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
+
     // 设置压缩方式选项
     QStringList listCompressLevel = QStringList() << tr("Store") << tr("Fastest") << tr("Fast") << tr("Normal") << tr("Good") << tr("Best");
     // 添加压缩方式
-    for (int i = 0; i < listCompressLevel.count(); ++i) {
-        m_pCompressLevelCmb->addItem(listCompressLevel[i]);
-    }
+    m_pCompressLevelCmb->addItems(listCompressLevel);
 
     m_pCompressLevelCmb->setCurrentIndex(2);
+
+    // 设置CPU线程数
+    QStringList listCpuThread = QStringList() << tr("Single thread") << tr("2 threads") << tr("4 threads") << tr("8 threads");
+    // 添加压缩方式
+    m_pCpuCmb->addItems(listCpuThread);
+
+    m_pCpuCmb->setCurrentIndex(0);
 
     pAdvancedLbl->setForegroundRole(DPalette::WindowText);
 
@@ -272,7 +283,7 @@ void CompressSettingPage::initUI()
     m_pClickLbl->setLayout(pTypeLayout);
 
     QVBoxLayout *pLeftLayout = new QVBoxLayout; // 左侧整体布局
-    pLeftLayout->addSpacing(65);
+    pLeftLayout->addStretch();      // task 16309调整最小大小
     pLeftLayout->addWidget(m_pTypePixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pLeftLayout->addWidget(m_pClickLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     pLeftLayout->addStretch();
@@ -298,6 +309,8 @@ void CompressSettingPage::initUI()
     QVBoxLayout *pRightLayout = new QVBoxLayout;
     pRightLayout->addLayout(pFileFormLayout);
     pRightLayout->addLayout(pAdvancedLayout);
+    pRightLayout->addWidget(m_pCpuLbl);
+    pRightLayout->addWidget(m_pCpuCmb);
     pRightLayout->addWidget(m_pEncryptedLbl);
     pRightLayout->addWidget(m_pPasswordEdt);
     pRightLayout->addLayout(pListEncryptionLayout);
@@ -314,7 +327,7 @@ void CompressSettingPage::initUI()
     pRightWgt->setLayout(pRightLayout);
     m_pRightScroll->setFrameShape(QFrame::NoFrame);
     m_pRightScroll->setWidgetResizable(true);
-    m_pRightScroll->setMinimumHeight(345);
+    m_pRightScroll->setMinimumHeight(100);           // task 16309调整最小大小
     m_pRightScroll->setWidget(pRightWgt);
 
     // 按钮布局
@@ -349,16 +362,15 @@ void CompressSettingPage::initUI()
 void CompressSettingPage::initConnections()
 {
     connect(m_pClickLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-//    connect(m_pCompressTypeLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
-//    connect(pArrowPixmapLbl, SIGNAL(labelClickEvent(QMouseEvent *)), this, SLOT(slotShowRightMenu(QMouseEvent *)));
     connect(m_pTypeMenu, &DMenu::triggered, this, &CompressSettingPage::slotTypeChanged);
-    connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotFileNameChanged);
+    connect(m_pFileNameEdt, &DLineEdit::textChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
     connect(m_pAdvancedBtn, &DSwitchButton::toggled, this, &CompressSettingPage::slotAdvancedEnabled);
     connect(m_pSplitCkb, &DCheckBox::stateChanged, this, &CompressSettingPage::slotSplitEdtEnabled);
     connect(m_pCompressBtn, &DPushButton::clicked, this, &CompressSettingPage::slotCompressClicked);
     connect(m_pPasswordEdt, &DPasswordEdit::echoModeChanged, this, &CompressSettingPage::slotEchoModeChanged);
     connect(m_pPasswordEdt, &DPasswordEdit::textEdited, this, &CompressSettingPage::slotPasswordChanged);
     connect(m_pCommentEdt, &DTextEdit::textChanged, this, &CompressSettingPage::slotCommentTextChanged);
+    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
 }
 
 void CompressSettingPage::setTypeImage(const QString &strType)
@@ -565,15 +577,9 @@ int CompressSettingPage::showWarningDialog(const QString &msg, const QString &st
     return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
 }
 
-void CompressSettingPage::setDefaultName(QString name)
+void CompressSettingPage::setDefaultName(const QString &strName)
 {
-//    initWidget();
-
-    // 注释掉这一行，防止每次界面重置
-    //onAdvanceButtonClicked(m_moresetbutton->isChecked());
-//    name = name + "." + m_compresstype->text();
-
-    m_pFileNameEdt->setText(name);
+    m_pFileNameEdt->setText(strName);
     QLineEdit *qfilename = m_pFileNameEdt->lineEdit();
     qfilename->selectAll();
     qfilename->setFocus();
@@ -589,7 +595,7 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 
 void CompressSettingPage::slotTypeChanged(QAction *action)
 {
-    if (action == nullptr)
+    if (nullptr == action)
         return;
 
     m_strMimeType = action->data().toString();
@@ -597,6 +603,9 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
     QString selectType = action->text();
     setTypeImage(selectType);
     m_pCompressTypeLbl->setText(selectType);
+
+    m_pCpuLbl->setEnabled(false);
+    m_pCpuCmb->setEnabled(false);
 
     if (0 == selectType.compare("tar.7z")) {       // tar.7z支持普通/列表加密，不支持分卷
         setEncryptedEnabled(true);
@@ -618,18 +627,23 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         setListEncryptionEnabled(false);
         setSplitEnabled(false);
         setCommentEnabled(false);
+
+        if (0 == selectType.compare("tar.gz")) {
+            m_pCpuLbl->setEnabled(true);
+            m_pCpuCmb->setEnabled(true);
+        }
     }
 
     refreshCompressLevel(selectType);
 }
 
-void CompressSettingPage::slotFileNameChanged(const QString &strText)
+void CompressSettingPage::slotRefreshFileNameEdit()
 {
     DPalette plt = DApplicationHelper::instance()->palette(m_pFileNameEdt);
 
-    if (!strText.isEmpty()) {
+    if (!m_pFileNameEdt->text().isEmpty()) {
         // 检测文件名合法性
-        if (false == checkFileNameVaild(strText)) {
+        if (false == checkFileNameVaild(m_pFileNameEdt->text())) {
             plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));     // 警告色
         } else {
             plt.setBrush(DPalette::Text, plt.color(DPalette::WindowText));      // 正常颜色
@@ -652,6 +666,8 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
     m_pSplitValueEdt->setVisible(bEnabled);
     m_pCommentLbl->setVisible(bEnabled);
     m_pCommentEdt->setVisible(bEnabled);
+    m_pCpuLbl->setVisible(bEnabled);
+    m_pCpuCmb->setVisible(bEnabled);
 
     // 不启用高级选项时清空界面数据
     if (!bEnabled) {
@@ -660,6 +676,8 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pSplitCkb->setChecked(false);
         m_pSplitValueEdt->clear();
         m_pSplitValueEdt->setValue(0.0);
+        m_pCpuCmb->setCurrentIndex(0);
+        m_pCommentEdt->clear();
     }
 }
 
@@ -718,8 +736,27 @@ void CompressSettingPage::slotCompressClicked()
     compressInfo.bHeaderEncryption = m_pListEncryptionBtn->isChecked();     // 是否列表加密
     compressInfo.bSplit = m_pSplitCkb->isChecked();     // 是否分卷
     compressInfo.iVolumeSize = static_cast< int >(m_pSplitValueEdt->value() * 1024);    // 分卷大小
-    compressInfo.bTar_7z = (strTmpCompresstype == "tar.7z") ? true : false;     // 是否为tar.7z格式
+    compressInfo.bTar_7z = ("tar.7z" == strTmpCompresstype) ? true : false;     // 是否为tar.7z格式
     compressInfo.qSize = m_qFileSize;
+
+    // 线程数
+    switch (m_pCpuCmb->currentIndex()) {
+    case 0:
+        compressInfo.iCPUTheadNum = 1;
+        break;
+    case 1:
+        compressInfo.iCPUTheadNum = 2;
+        break;
+    case 2:
+        compressInfo.iCPUTheadNum = 4;
+        break;
+    case 3:
+        compressInfo.iCPUTheadNum = 8;
+        break;
+    default:
+        compressInfo.iCPUTheadNum = 1;
+        break;
+    }
 
     // 压缩等级
     // tar、tar.Z:使用默认压缩方式
@@ -744,7 +781,7 @@ void CompressSettingPage::slotCompressClicked()
     if (fileInfo.exists()) {
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-        if (iResult == 1) {     // 如果点击替换，先移除本地压缩包
+        if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
             QFile file(fileInfo.filePath());
             file.remove();
         } else {    // 点击关闭或者取消，不操作

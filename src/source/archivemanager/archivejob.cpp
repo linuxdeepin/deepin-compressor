@@ -41,6 +41,11 @@ void ArchiveJob::kill()
     }
 }
 
+bool ArchiveJob::status()
+{
+    return true;
+}
+
 void ArchiveJob::finishJob()
 {
     emit signalJobFinshed();

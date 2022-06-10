@@ -20,6 +20,8 @@ add_subdirectory(libarchive)
 
 add_subdirectory(libsinglefileplugin)
 
+add_subdirectory(libpigzplugin)
+
 add_subdirectory(libzipplugin)
 
 add_subdirectory(libminizipplugin)

@@ -74,6 +74,12 @@ protected:
      */
     void doContinue() override;
 
+    /**
+     * @brief status 状态
+     * @return 状态
+     */
+    bool status() override;
+
 protected:
     ArchiveJob *m_pCurJob = nullptr;              // 当前操作
 

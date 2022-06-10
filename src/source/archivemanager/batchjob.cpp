@@ -38,7 +38,7 @@ BatchJob::~BatchJob()
 
 bool BatchJob::addSubjob(ArchiveJob *job)
 {
-    if (job == nullptr || m_listSubjobs.contains(job)) {
+    if (nullptr == job || m_listSubjobs.contains(job)) {
         return false;
     }
 
@@ -51,6 +51,7 @@ bool BatchJob::removeSubjob(ArchiveJob *job)
 {
     if (m_listSubjobs.removeAll(job) > 0) {
         job->setParent(nullptr);
+        delete job;
         return true;
     }
 
@@ -71,6 +72,7 @@ void BatchJob::clearSubjobs()
 {
     Q_FOREACH (ArchiveJob *job, m_listSubjobs) {
         job->setParent(nullptr);
+        delete job;
     }
 
     m_listSubjobs.clear();
@@ -90,6 +92,16 @@ void BatchJob::doContinue()
     if (m_pCurJob) {
         m_pCurJob->doContinue();
     }
+}
+
+bool BatchJob::status()
+{
+    // 调用子job继续接口
+    if (m_pCurJob) {
+        return m_pCurJob->status();
+    }
+
+    return false;
 }
 
 BatchExtractJob::BatchExtractJob(QObject *parent)
@@ -143,9 +155,9 @@ bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
 bool BatchExtractJob::addExtractItem(const QFileInfo &fileInfo)
 {
     QString strName = fileInfo.filePath();
-    UnCompressParameter::SplitType eType;
+    UnCompressParameter::SplitType eType = UnCompressParameter::ST_No;
     UiTools::transSplitFileName(strName, eType);
-    UiTools::AssignPluginType ePluginType = (eType == UnCompressParameter::ST_Zip) ?
+    UiTools::AssignPluginType ePluginType = (UnCompressParameter::ST_Zip == eType) ?
                                             (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
     ReadOnlyArchiveInterface *pIface = UiTools::createInterface(fileInfo.filePath(), false, ePluginType);
 
@@ -220,7 +232,7 @@ void BatchExtractJob::slotHandleSingleJobCurFileName(const QString &strName)
 void BatchExtractJob::slotHandleSingleJobFinished()
 {
     if (m_pCurJob != nullptr) {
-        if (m_pCurJob->m_eFinishedType == PFT_Error || m_pCurJob->m_eFinishedType == PFT_Cancel) {
+        if (PFT_Error == m_pCurJob->m_eFinishedType || PFT_Cancel == m_pCurJob->m_eFinishedType) {
             // 获取结束结果
             m_eJobType = m_pCurJob->m_eJobType;
             m_eFinishedType = m_pCurJob->m_eFinishedType;

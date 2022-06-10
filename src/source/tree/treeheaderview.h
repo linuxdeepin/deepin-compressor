@@ -43,6 +43,12 @@ public:
      */
     void setPrePath(const QString &strPath);
 
+    /**
+     * @brief isFocus Label是否focus
+     * @return
+     */
+    bool isFocus() {return focusIn_;}
+
 protected:
     void paintEvent(QPaintEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -93,6 +99,24 @@ public:
      * @param bVisible  是否可见标志位
      */
     void setPreLblVisible(bool bVisible);
+
+    /**
+     * @brief isVisiable 获取表头是否可见
+     * @return bool
+     */
+    bool isVisiable() {return m_pPreLbl->isVisible();}
+
+    /**
+     * @brief setLabelFocus 设置Label是否选中
+     * @param focus bool
+     */
+    void setLabelFocus(bool focus);
+
+    /**
+     * @brief isLabelFocus Label是否选中
+     * @return bool
+     */
+    bool isLabelFocus() {return m_pPreLbl->isFocus();}
 
 protected:
     //void paintEvent(QPaintEvent *e) override;

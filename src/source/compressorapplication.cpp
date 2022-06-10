@@ -34,6 +34,11 @@ CompressorApplication::CompressorApplication(int &argc, char **argv)
 
 }
 
+CompressorApplication::~CompressorApplication()
+{
+
+}
+
 bool CompressorApplication::notify(QObject *watched, QEvent *event)
 {
     if (QEvent::KeyPress == event->type()) {
@@ -41,8 +46,9 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
         int keyOfEvent = keyEvent->key();
         if (Qt::Key_Enter == keyOfEvent || Qt::Key_Return == keyOfEvent) {
             //checkbox响应"回车键"
-//            qInfo() << watched->metaObject()->className();
-            if (watched->metaObject()->className() == QStringLiteral("QCheckBox")) {
+
+            const QMetaObject *pObj = watched->metaObject();
+            if (pObj && pObj->className() == QStringLiteral("QCheckBox")) {
                 DCheckBox *checkBox = qobject_cast<DCheckBox *>(watched);
                 // 模拟空格键按下事件
                 QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");

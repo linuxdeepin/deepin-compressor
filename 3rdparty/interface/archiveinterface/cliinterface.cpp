@@ -197,6 +197,7 @@ void CliInterface::pauseOperation()
     if (m_processId > 0) {
         kill(static_cast<__pid_t>(m_processId), SIGSTOP);
     }
+    m_bPause = true;
 }
 
 void CliInterface::continueOperation()
@@ -212,6 +213,8 @@ void CliInterface::continueOperation()
     if (m_processId > 0) {
         kill(static_cast<__pid_t>(m_processId), SIGCONT);
     }
+
+    m_bPause = false;
 }
 
 bool CliInterface::doKill()
@@ -566,7 +569,7 @@ void CliInterface::handleProgress(const QString &line)
             }
 
             // 右键 解压到当前文件夹（因为快捷解压少了list步骤，因此需要在解压过程中存储首层文件数据，防止误报压缩包无数据）
-            if (!m_extractOptions.bExistList && m_indexOfListRootEntry == 0 && fileName.count('/') <= 1) {
+            if (!m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
                 m_indexOfListRootEntry++;
                 FileEntry entry;
                 if (fileName.count('/') == 0) { // 压缩包内第一层的文件

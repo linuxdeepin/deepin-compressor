@@ -23,10 +23,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${CMAKE_SAFETYTEST}")
 
 if(CMAKE_SAFETYTEST STREQUAL "CMAKE_SAFETYTEST_ARG_ON")
   #安全测试选项
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=undefined,address -O2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=undefined,address -O2")
 endif()
 
+#定义宏定义给UT代码使用（工程路径、应用程序输出路径、库输出路径、UT工程路径）
+ADD_DEFINITIONS(-D_SOURCEDIR=\"${CMAKE_SOURCE_DIR}\")
+ADD_DEFINITIONS(-D_BINARYDIR=\"${CMAKE_BINARY_DIR}\")
+ADD_DEFINITIONS(-D_LIBRARYDIR=\"${LIBRARY_OUTPUT_PATH}\")
+ADD_DEFINITIONS(-D_UTSOURCEDIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 
 #查找依赖关系的包信息
 find_package(GTest REQUIRED)

@@ -68,7 +68,8 @@ public:
         APT_Auto,           // 自动识别
         APT_Cli7z,          // cli7zplugin
         APT_Libarchive,     // libarchive
-        APT_Libzip          // libzipplugin
+        APT_Libzip,         // libzipplugin
+        APT_Libpigz         // libpigzPlugin
     };
 
     /**
@@ -99,14 +100,6 @@ public:
      * @return                  true：压缩包    false：普通文件
      */
     static bool isArchiveFile(const QString &strFileName);
-
-
-    /**
-     * @brief judgeFileMime     判断文件类型
-     * @param strFileName  文件名
-     * @return
-     */
-    static QString judgeFileMime(const QString &strFileName);
 
     /**
      * @brief isExistMimeType 判断此文件关联类型是否存在
@@ -168,6 +161,12 @@ public:
      * @return
      */
     static QStringList removeSameFileName(const QStringList &listFiles);
+
+    /**
+     * @brief isWayland     判断是否是wayland环境
+     * @return
+     */
+    static bool isWayland();
 
 public:
     static QStringList m_associtionlist;

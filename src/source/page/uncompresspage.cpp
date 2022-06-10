@@ -72,7 +72,7 @@ void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
     m_strUnCompressPath = strPath;
     m_pUncompressPathBtn->setToolTip(m_strUnCompressPath);      // 设置解压路径提示信息
-    m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));  // 截取解压路径显示
+    m_pUncompressPathBtn->setText(elidedExtractPath(tr("Extract to:") + m_strUnCompressPath));  // 截取解压路径显示
     m_pUnCompressView->setDefaultUncompressPath(m_strUnCompressPath);
 }
 
@@ -84,7 +84,7 @@ void UnCompressPage::refreshArchiveData()
 void UnCompressPage::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e)
-    m_pUncompressPathBtn->setText(tr("Extract to:") + elidedExtractPath(m_strUnCompressPath));
+    m_pUncompressPathBtn->setText(elidedExtractPath(tr("Extract to:") + m_strUnCompressPath));
 }
 
 void UnCompressPage::refreshDataByCurrentPathChanged()
@@ -101,11 +101,6 @@ QString UnCompressPage::getCurPath()
 {
     return m_pUnCompressView->getCurPath();
 }
-
-//bool UnCompressPage::isModifiable()
-//{
-//    return m_pUnCompressView->isModifiable();
-//}
 
 void UnCompressPage::clear()
 {

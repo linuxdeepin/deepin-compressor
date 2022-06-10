@@ -24,6 +24,15 @@ else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins")
 endif()
 
+#安全编译参数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
+
+#代码覆盖率开关
+if(CMAKE_COVERAGE_ARG STREQUAL "CMAKE_COVERAGE_ARG_ON")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -fprofile-arcs -ftest-coverage")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -fprofile-arcs -ftest-coverage")
+endif()
+
 add_definitions("-DQT_MESSAGELOGCONTEXT")
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
@@ -77,7 +86,6 @@ set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
-
 add_subdirectory(3rdparty)
 add_subdirectory(src)
 
@@ -95,6 +103,7 @@ endif()
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS libpigzplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)

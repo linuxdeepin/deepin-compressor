@@ -42,7 +42,7 @@ enum ErrorType {
     ET_PluginError,        // 插件错误
     ET_WrongPassword,     // 输入的密码错误
     ET_NeedPassword,     // 需要密码
-    ET_LongNameError,     // 文件名过长错误
+    ET_LongNameError,     // 文件名过长错误（对于zip和tar文件名过长解压成功也会使用这个枚举值）
     ET_ArchiveDamaged,      // 压缩包损坏
     ET_FileOpenError,     // 文件打开错误
     ET_FileReadError,     // 文件读取错误
@@ -159,6 +159,7 @@ struct CompressOptions {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
+        iCPUTheadNum = 1;
     }
 
     QString strPassword;        // 密码
@@ -172,6 +173,7 @@ struct CompressOptions {
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+    int iCPUTheadNum;        // CPU线程数
 };
 Q_DECLARE_METATYPE(CompressOptions)
 
@@ -185,6 +187,7 @@ struct ExtractionOptions {
         bAllExtract = false;
         bBatchExtract = false;
         bTar_7z = false;
+        bOpen = false;
     }
 
     QString strTargetPath;      // 解压目标路径
@@ -196,6 +199,7 @@ struct ExtractionOptions {
     bool bAllExtract;           // 是否全部解压（true：全部解压 false：提取）
     bool bBatchExtract;         // 是否批量解压
     bool bTar_7z;               // 是否是tar.7z格式（补充）
+    bool bOpen;                 // 是否是用来打开
 };
 Q_DECLARE_METATYPE(ExtractionOptions)
 

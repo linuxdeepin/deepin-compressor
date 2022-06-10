@@ -111,6 +111,11 @@ MainWindow::~MainWindow()
         m_mywork->set_thread_stop(true); // 结束计算大小线程
         m_mywork->wait(); //必须等待线程结束
     }
+
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     qInfo() << "应用正常退出";
 }
 
@@ -120,9 +125,7 @@ bool MainWindow::checkHerePath(const QString &strPath)
     if (!(info.isWritable() && info.isExecutable())) { // 检查一选择保存路径是否有权限
         TipDialog dialog(this);
         // 屏幕居中显示
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenRect =  screen->availableVirtualGeometry();
-        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+        moveDialogToCenter(&dialog);
         dialog.showDialog(tr("You do not have permission to save files here, please change and retry"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     }
@@ -207,7 +210,7 @@ void MainWindow::initTitleBar()
     leftLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(6 + 36 + 5 + 36 + 6);
+    left_frame->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
     left_frame->setContentsMargins(0, 0, 0, 0);
     left_frame->setLayout(leftLayout);
 
@@ -227,7 +230,7 @@ void MainWindow::initData()
     }
 
     resize(getConfigWinSize()); // 设置窗口尺寸
-    setMinimumSize(620, 465);   // 设置最小大小
+    setMinimumSize(620, 300);   // task 16309调整最小大小
 }
 
 void MainWindow::initConnections()
@@ -284,7 +287,7 @@ void MainWindow::refreshPage()
     case PI_Compress: {
         m_pMainWidget->setCurrentIndex(1);
         setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_IncreaseElement);
-        if (m_iCompressedWatchTimerID == 0) {
+        if (0 == m_iCompressedWatchTimerID) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
 
@@ -294,7 +297,7 @@ void MainWindow::refreshPage()
     case PI_CompressSetting: {
         m_pMainWidget->setCurrentIndex(2);
         setTitleButtonStyle(true, false, DStyle::StandardPixmap::SP_ArrowLeave);
-        if (m_iCompressedWatchTimerID == 0) {
+        if (0 == m_iCompressedWatchTimerID) {
             m_iCompressedWatchTimerID = startTimer(1);
         }
 
@@ -503,7 +506,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     }
 
     // zip分卷指定使用cli7zplugin
-    UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
+    UiTools::AssignPluginType eType = (UnCompressParameter::ST_Zip == m_stUnCompressParameter.eSplitVolume) ?
                                       (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
     // 加载操作
     if (ArchiveManager::get_instance()->loadArchive(transFile, eType)) {
@@ -576,17 +579,23 @@ void MainWindow::timerEvent(QTimerEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_operationtype != Operation_NULL) {
+        // 保存当前操作的状态以便还原操作
+        bool isPause = getCurrentStatus();
+        qInfo() << "点击x按钮之前的操作" << isPause;
         // 当前还有操作正在进行
         slotPause();    // 先暂停当前操作
         // 创建询问关闭对话框
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Are you sure you want to stop the ongoing task?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
         // 点击确认时，停止当前操作，关闭应用
-        if (iResult == QDialog::Accepted) {
+        if (QDialog::Accepted == iResult) {
             slotCancel();       // 执行取消操作
             event->accept();
         } else {
-            slotContinue();    // 继续之前的操作
+            if (!isPause) {  // 之前未暂停
+                slotContinue(); // 继续之前的操作
+            }
+
             event->ignore();    // 忽略退出
         }
     } else {
@@ -594,7 +603,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-bool MainWindow::checkSettings(QString file)
+bool MainWindow::checkSettings(const QString &file)
 {
 //    QString strTransFileName = file;
 //    UnCompressParameter::SplitType type;
@@ -604,9 +613,7 @@ bool MainWindow::checkSettings(QString file)
     if (!info.exists()) {
         // 文件不存在
         TipDialog dialog(this);
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenRect =  screen->availableVirtualGeometry();
-        dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+        moveDialogToCenter(&dialog);
         dialog.showDialog(tr("No such file or directory"), tr("OK", "button"), DDialog::ButtonNormal);
         return false;
     } else {
@@ -620,9 +627,7 @@ bool MainWindow::checkSettings(QString file)
         if (info.isDir()) {
             // 选择打开的是文件夹
             TipDialog dialog(this);
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect screenRect =  screen->availableVirtualGeometry();
-            dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+            moveDialogToCenter(&dialog);
 
             dialog.showDialog(tr("The file format is not supported by Archive Manager"), tr("OK", "button"), DDialog::ButtonNormal);
             return false;
@@ -662,9 +667,7 @@ bool MainWindow::checkSettings(QString file)
 
                 // 弹出提示对话框
                 TipDialog dialog;
-                QScreen *screen = QGuiApplication::primaryScreen();
-                QRect screenRect =  screen->availableVirtualGeometry();
-                dialog.move(((screenRect.width() / 2) - (dialog.width() / 2)), ((screenRect.height() / 2) - (dialog.height() / 2)));
+                moveDialogToCenter(&dialog);
 
                 int re = dialog.showDialog(str, tr("OK", "button"), DDialog::ButtonNormal);
                 if (re != 1) { // ？
@@ -683,9 +686,15 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
         return false;
     }
 
+    QObject *pLastObj = nullptr;
+    if (UiTools::isWayland()) {
+        pLastObj = titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
+    } else {
+        pLastObj = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
+    }
+
     int keyOfEvent = evt->key();
     if (Qt::Key_Tab == keyOfEvent) { //tab焦点顺序：从上到下，从左到右
-        DWindowCloseButton *closebtn = titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton");
         if (obj == titlebar()) { //焦点顺序：标题栏设置按钮->标题栏按钮
             if (m_pTitleButton->isVisible() && m_pTitleButton->isEnabled()) {
                 m_pTitleButton->setFocus(Qt::TabFocusReason);
@@ -728,7 +737,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
                 return false;
             }
             return true;
-        } else if (obj == closebtn) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
+        } else if (obj == pLastObj) { //焦点顺序：关闭应用按钮->返回上一页/文件列表/压缩类型选择
             switch (m_ePageID) {
             case PI_UnCompress:
                 if (m_pUnCompressPage->getUnCompressView()->getHeaderView()->getpreLbl()->isVisible()) {
@@ -753,8 +762,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             return true;
         }
     } else if (Qt::Key_Backtab == keyOfEvent) { //shift+tab 焦点顺序，与tab焦点顺序相反
-        DWindowOptionButton *optionbtn = this->titlebar()->findChild<DWindowOptionButton *>("DTitlebarDWindowOptionButton");
-        if (obj == optionbtn) {
+        if (obj == pLastObj) {
             if (m_pTitleCommentButton->isVisible() && m_pTitleCommentButton->isEnabled()) {
                 m_pTitleCommentButton->setFocus(Qt::BacktabFocusReason);
                 return true;
@@ -839,9 +847,7 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
     }
 
     if (listParam.count() == 0) {
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return;
     }
 
@@ -850,27 +856,21 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
     switch (eType) {
     case AT_Open: {         // 打开操作
         if (!handleArguments_Open(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
     break;
     case AT_RightMenu: {    // 右键操作
         if (!handleArguments_RightMenu(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
     break;
     case AT_DragDropAdd: {       // 拖拽追加操作
         if (!handleArguments_Append(listParam)) {
-            QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                emit sigquitApp();
-            });
+            delayQuitApp();
             return;
         }
     }
@@ -884,10 +884,10 @@ void MainWindow::slotHandleArguments(const QStringList &listParam, MainWindow::A
 
 void MainWindow::slotTitleBtnClicked()
 {
-    if (m_ePageID == PI_Home || m_ePageID == PI_Compress || m_ePageID == PI_UnCompress) {
+    if (PI_Home == m_ePageID || PI_Compress == m_ePageID || PI_UnCompress == m_ePageID) {
         // 通过文件选择对话框选择文件进行操作
         slotChoosefiles();
-    } else if (m_ePageID == PI_CompressSetting) {
+    } else if (PI_CompressSetting == m_ePageID) {
         // 压缩设置界面点击 返回
         m_ePageID = PI_Compress;
         refreshPage();
@@ -934,7 +934,7 @@ void MainWindow::slotChoosefiles()
 
     }
 
-    if (m_ePageID == PI_Home) {
+    if (PI_Home == m_ePageID) {
         if (listSelFiles.count() == 1 && UiTools::isArchiveFile(listSelFiles[0])) {
             // 压缩包加载
             loadArchive(listSelFiles[0]);
@@ -944,13 +944,13 @@ void MainWindow::slotChoosefiles()
             m_ePageID = PI_Compress;
         }
         refreshPage();
-    } else if (m_ePageID == PI_Compress) {
+    } else if (PI_Compress == m_ePageID) {
         // 添加压缩文件
         m_pCompressPage->addCompressFiles(listSelFiles);
-    } else if (m_ePageID == PI_UnCompress) {
+    } else if (PI_UnCompress == m_ePageID) {
         // 追加压缩
         m_pUnCompressPage->addNewFiles(listSelFiles);
-    } else if (m_ePageID == PI_CompressSetting) {
+    } else if (PI_CompressSetting == m_ePageID) {
         // 追加压缩
         m_pCompressPage->addCompressFiles(listSelFiles);
         m_ePageID = PI_Compress;
@@ -1039,6 +1039,7 @@ void MainWindow::slotCompress(const QVariant &val)
     options.iCompressionLevel = m_stCompressParameter.iCompressionLevel;
     options.qTotalSize = m_stCompressParameter.qSize;
     options.bTar_7z = m_stCompressParameter.bTar_7z;
+    options.iCPUTheadNum = m_stCompressParameter.iCPUTheadNum;
 
     bool bUseLibarchive = false;
 #ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
@@ -1050,19 +1051,27 @@ void MainWindow::slotCompress(const QVariant &val)
 
     // 判断zip格式是否使用了中文加密
     bool zipPasswordIsChinese = false;
-    if (m_stCompressParameter.strMimeType == "application/zip") {
+    if ("application/zip" == m_stCompressParameter.strMimeType) {
         if (m_stCompressParameter.strPassword.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
             zipPasswordIsChinese = true;
         }
     }
 
     UiTools::AssignPluginType eType = UiTools::APT_Auto;        // 默认自动选择插件
-    if (zipPasswordIsChinese == true) {
+    if (true == zipPasswordIsChinese) {
         // 对zip的中文加密使用libzip插件
         eType = UiTools::APT_Libzip;
-    } else if ((options.bSplit == false) && bUseLibarchive == true && m_stCompressParameter.strMimeType == "application/zip") {
+    } else if ((false == options.bSplit) && true == bUseLibarchive && "application/zip" == m_stCompressParameter.strMimeType) {
         // 考虑到华为arm平台 zip压缩 性能提升，只针对zip类型的压缩才会考虑到是否特殊处理arm平台，分卷情况不做此处理
         eType = UiTools::APT_Libarchive;
+    } else if ("application/x-compressed-tar" == m_stCompressParameter.strMimeType && m_stCompressParameter.strArchiveName.endsWith("tar.gz")) {
+        if (1 == m_stCompressParameter.iCPUTheadNum) {
+            // 针对单线程的tar.gz，使用gzip默认方式进行压缩
+            eType = UiTools::APT_Libarchive;
+        } else {
+            // 针对多线程的tar.gz，使用pigz进行压缩，提高性能
+            eType = UiTools::APT_Libpigz;
+        }
     }
 
     if (ArchiveManager::get_instance()->createArchive(listEntry, strDestination, options, eType)) {
@@ -1087,7 +1096,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
     switch (eFinishType) {
     case PFT_Nomral:
-        handleJobNormalFinished(eJobType);  // 处理job正常结束
+        handleJobNormalFinished(eJobType, eErrorType); // 处理job正常结束
         break;
     // 用户取消操作
     case PFT_Cancel:
@@ -1107,9 +1116,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
     // 拖拽追加或右键压缩成7z、zip，完毕自动关闭界面
     if (((PFT_Nomral == eFinishType || PFT_Cancel == eFinishType) && ArchiveJob::JT_Add == eJobType && StartupType::ST_DragDropAdd == m_eStartupType)
             || StartupType::ST_Compresstozip7z == m_eStartupType) {
-        QTimer::singleShot(100, this, [ = ]() {
-            close();
-        });
+        delayQuitApp();
     } else if (ArchiveJob::JT_Create == eJobType // 如果是右键压缩，压缩完毕自动关闭界面
                && StartupType::ST_Compress == m_eStartupType && eFinishType == PFT_Nomral) {
         Dtk::Core::DSysInfo::UosEdition edition =  Dtk::Core::DSysInfo::uosEditionType();
@@ -1117,9 +1124,7 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
         bool isCentos = Dtk::Core::DSysInfo::UosEuler == edition || Dtk::Core::DSysInfo::UosEnterpriseC == edition;
 
         if (isCentos) {
-            QTimer::singleShot(100, this, [ = ]() {
-                close();
-            });
+            delayQuitApp();
         }
     }
 
@@ -1202,6 +1207,8 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 
 void MainWindow::slotReceiveCurFileName(const QString &strName)
 {
+    qInfo() << strName;
+    m_strCurrentName = strName;
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         m_pProgressdialog->setCurrentFile(strName);
     } else {
@@ -1221,14 +1228,14 @@ void MainWindow::slotQuery(Query *query)
     query->execute();
 }
 
-void MainWindow::Extract2PathFinish(QString msg)
+void MainWindow::Extract2PathFinish(const QString &msg)
 {
     QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_success_30px.svg", QSize(30, 30));
     sendMessage(new CustomFloatingMessage(icon, msg, 1000, this));
 
     // 设置了自动打开文件夹处理流程
     if (m_pSettingDlg->isAutoOpen()) {
-        if (m_pDDesktopServicesThread == nullptr) {
+        if (nullptr == m_pDDesktopServicesThread) {
             m_pDDesktopServicesThread = new DDesktopServicesThread(this);
         }
 
@@ -1239,7 +1246,7 @@ void MainWindow::Extract2PathFinish(QString msg)
     }
 }
 
-QString MainWindow::createUUID()
+QString MainWindow::createTempPath()
 {
     // 创建临时路径
     QTemporaryDir dir;
@@ -1260,7 +1267,7 @@ QString MainWindow::getExtractPath(const QString &strArchiveFullPath)
     return strpath;
 }
 
-void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
+void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eErrorType)
 {
     switch (eType) {
     // 创建压缩包
@@ -1278,7 +1285,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         }
 
         // 初始化文件服务
-        if (m_pDDesktopServicesThread == nullptr) {
+        if (nullptr == m_pDDesktopServicesThread) {
             m_pDDesktopServicesThread = new DDesktopServicesThread(this);
         }
 
@@ -1359,10 +1366,10 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
             } else {
                 // 正常解压完成的情况，解压成功
                 m_ePageID = PI_Success;
-                showSuccessInfo(SI_UnCompress);
+                showSuccessInfo(SI_UnCompress, eErrorType);
 
                 // 初始化服务
-                if (m_pDDesktopServicesThread == nullptr) {
+                if (nullptr == m_pDDesktopServicesThread) {
                     m_pDDesktopServicesThread = new DDesktopServicesThread(this);
                 }
 
@@ -1409,7 +1416,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                     SimpleQueryDialog dialog(this);
                     int iResult = dialog.showDialog(tr("Do you want to delete the archive?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonRecommend);
                     // 点击确认时，删除原压缩包
-                    if (iResult == QDialog::Accepted) {
+                    if (QDialog::Accepted == iResult) {
                         deleteWhenJobFinish(ArchiveJob::JT_Extract);
                     }
                 }
@@ -1417,9 +1424,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
                 if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) {
                     m_operationtype = Operation_NULL;   // 首先将操作置空，防止关闭时提示有任务进行
                     // 右键解压到当前文件夹，关闭界面（延时100ms，显示明了）
-                    QTimer::singleShot(100, this, [ = ]() {
-                        close();;
-                    });
+                    delayQuitApp();
                 }
             }
         }
@@ -1447,7 +1452,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType)
         // 若压缩包文件可更改，打开文件之后对文件进行监控
         // 非分卷的rar可以进行格式转换
         if ((m_stUnCompressParameter.bModifiable) ||
-                ((m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_No)
+                ((UnCompressParameter::ST_No == m_stUnCompressParameter.eSplitVolume)
                  && (determineMimeType(m_stUnCompressParameter.strFullPath).name() == "application/vnd.rar"))) {
             // 打开成功之后添加当前打开文件至文件监控中
             m_pOpenFileWatcher->addCurOpenWatchFile();
@@ -1668,6 +1673,16 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 m_pProgressdialog->setFinished();
             }
 
+            // 提取出错
+            switch (eErrorType) {
+            case ET_LongNameError: {
+                sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed: the file name is too long"), 1000, this));
+                break;
+            }
+            default:
+                break;
+            }
+
 #if 0 // 提取失败详细提示
             // 提取出错
             switch (eErrorType) {
@@ -1695,7 +1710,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                 break;
             }
 #endif
-            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
+//            sendMessage(new CustomFloatingMessage(icon, tr("Extraction failed", "提取失败"), 1000, this)); // 提取失败提示
         } else {
             // 解压出错
             switch (eErrorType) {
@@ -1807,14 +1822,16 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         if (Archive_OperationType::Operation_TempExtract_Open == m_operationtype) {
             m_ePageID = PI_UnCompress;
             QIcon icon = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_fail_128px.svg", QSize(30, 30));
-            if (eErrorType == ET_WrongPassword) { // 打开压缩包中文件密码错误
+            if (ET_WrongPassword == eErrorType) { // 打开压缩包中文件密码错误
                 sendMessage(new CustomFloatingMessage(icon, tr("Wrong password"), 1000, this));
+            } else if (ET_LongNameError == eErrorType) {
+                sendMessage(new CustomFloatingMessage(icon, tr("Open failed: the file name is too long"), 1000, this));
             }
         }
         break;
     // 转换错误
     case ArchiveJob::JT_Convert:
-
+        showErrorMessage(FI_Convert, EI_LongFileName);
         break;
     // 更新压缩包数据错误
     case ArchiveJob::JT_Update:
@@ -1862,6 +1879,10 @@ void MainWindow::addFiles2Archive(const QStringList &listFiles, const QString &s
     refreshPage();
 
     // 计算大小
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     m_mywork = new CalculateSizeThread(listFiles, m_stUnCompressParameter.strFullPath, listEntry, options, this);
     connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
     connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);
@@ -1923,7 +1944,7 @@ void MainWindow::deleteWhenJobFinish(ArchiveJob::JobType eType)
     case ArchiveJob::JT_Extract: {
         QStringList listArchivePath;
 
-        if (m_eStartupType == StartupType::ST_ExtractHere || m_eStartupType == StartupType::ST_Extractto) { // 右键快捷解压
+        if (StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType) { // 右键快捷解压
             if (m_stUnCompressParameter.bBatch) {   // 批量删除
                 listArchivePath = m_stUnCompressParameter.listBatchFiles;
             } else {    // 单个压缩包
@@ -2015,9 +2036,10 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
     }
 }
 
-void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
+void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo, ErrorType eErrorType)
 {
     m_pSuccessPage->setSuccessType(eSuccessInfo);
+    m_pSuccessPage->setDetail("");
 
     switch (eSuccessInfo) {
     // 压缩成功
@@ -2027,6 +2049,9 @@ void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo)
     // 解压成功
     case SI_UnCompress:
         m_pSuccessPage->setSuccessDes(tr("Extraction successful", "解压成功"));
+        if (eErrorType == ET_LongNameError) {
+            m_pSuccessPage->setDetail(tr("The file name is too long, so the first 60 characters have been intercepted as the file name."));
+        }
         break;
     case SI_Convert:
         m_pSuccessPage->setSuccessDes(tr("Conversion successful"));
@@ -2109,7 +2134,7 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
         break;
         case EI_LongFileName: {
-            m_pFailurePage->setFailureDetail(tr("File name too long")); // 文件名过长
+            m_pFailurePage->setFailureDetail(tr("The file name is too long. Keep the name within 60 characters please."), m_strCurrentName); // 文件名过长
         }
         break;
         case EI_CreatFileFailed: {
@@ -2129,11 +2154,24 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         }
     }
     break;
+    case FI_Convert: {
+        m_pFailurePage->setFailuerDes(tr("Conversion failed"));
+        switch (eErrorInfo) {
+        case EI_LongFileName: {
+            m_pFailurePage->setFailureDetail(tr("The file name is too long. Keep the name within 60 characters please."));
+        }
+        break;
+
+        default:
+            break;
+        }
+    }
+    break;
     default:
         break;
     }
 
-    // 刷新错误界面显示
+// 刷新错误界面显示
     m_ePageID = PI_Failure;
     refreshPage();
 }
@@ -2171,27 +2209,7 @@ void MainWindow::saveConfigWinSize(int w, int h)
     m_pSettings->sync();
 }
 
-QString MainWindow::getDefaultApp(QString mimetype)
-{
-    QString outInfo;
-    QProcess p;
-    QString command3 = "xdg-mime query default %1"; // eg: xdg-mime query default application/vnd.rar
-    p.start(command3.arg("application/" + mimetype)); // 获取默认打开方式
-    p.waitForFinished();
-    outInfo = QString::fromLocal8Bit(p.readAllStandardOutput());
-
-    return  outInfo;
-}
-
-void MainWindow::setDefaultApp(QString mimetype, QString desktop)
-{
-    QProcess p;
-    QString command3 = "xdg-mime default %1 %2"; // eg: xdg-mime default deepin-compressor.desktop application/vnd.rar
-    p.start(command3.arg(desktop).arg("application/" + mimetype)); // 设置默认打开方式
-    p.waitForFinished();
-}
-
-void MainWindow::convertArchive(QString convertType)
+void MainWindow::convertArchive(const QString &convertType)
 {
     qInfo() << "对压缩包进行格式转换" << convertType;
     m_operationtype = Operation_CONVERT;
@@ -2199,7 +2217,7 @@ void MainWindow::convertArchive(QString convertType)
     QString oldArchivePath = m_stUnCompressParameter.strFullPath; // 需要进行格式转换的压缩包的全路径
     QFileInfo oldArchive(oldArchivePath);
 
-    QString newArchivePath = oldArchive.filePath().remove(oldArchive.suffix()) + convertType; // 转换后压缩包的全路径，还未判断该文件名是否存在
+    QString newArchivePath = oldArchive.absolutePath() + QDir::separator() + oldArchive.completeBaseName() + "." + convertType; // 转换后压缩包的全路径，还未判断该文件名是否存在
     // 压缩后的文件名
     int num = 2;
     while (QFileInfo::exists(newArchivePath)) { // 如果文件名存在自动重命名 文件名+（2）...
@@ -2211,7 +2229,7 @@ void MainWindow::convertArchive(QString convertType)
     m_strFinalConvertFile = newArchivePath;  // 记录格式转换后的文件名，在转换成功之后打开文件使用
 
     // 创建格式转换的job
-    if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createUUID(), newArchivePath)) {
+    if (ArchiveManager::get_instance()->convertArchive(oldArchivePath, TEMPPATH + QDir::separator() + m_strProcessID + createTempPath(), newArchivePath)) {
         m_pProgressPage->setProgressType(PT_Convert);
         m_pProgressPage->setTotalSize(oldArchive.size() + DataManager::get_instance().archiveData().qSize);
         m_pProgressPage->setArchiveName(newArchivePath);
@@ -2313,12 +2331,12 @@ QJsonObject MainWindow::creatShorcutJson()
 
 bool MainWindow::handleArguments_Open(const QStringList &listParam)
 {
+    if (listParam.count() == 0)
+        return false;
+
     qInfo() << "打开文件";
     m_eStartupType = StartupType::ST_Normal;
     // 加载单个压缩包数据
-//    QString strFileName = listParam[0];
-//    UnCompressParameter::SplitType type;
-//    UiTools::transSplitFileName(strFileName, type);
     loadArchive(listParam[0]);
 
     return true;
@@ -2337,18 +2355,18 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         return false;
     }
 
-    if (strType == "compress") {
+    if ("compress" == strType) {
         m_eStartupType = StartupType::ST_Compress;
         // 压缩
         m_pCompressPage->addCompressFiles(listFiles);
         m_pCompressSettingPage->setFileSize(listFiles, calSelectedTotalFileSize(listFiles));
         // 设置界面标识为压缩设置界面
         m_ePageID = PI_CompressSetting;
-    } else if (strType == "compress_to_7z" || strType == "compress_to_zip") {
+    } else if ("compress_to_7z" == strType || "compress_to_zip" == strType) {
         m_eStartupType = StartupType::ST_Compresstozip7z;
 
         // 压缩成指定格式
-        QString strSuffix = (strType == "compress_to_7z") ? ".7z" : ".zip";
+        QString strSuffix = ("compress_to_7z" == strType) ? ".7z" : ".zip";
         QFileInfo info = QFileInfo(listFiles[0]);
         QString strArchivePath = info.path();
 
@@ -2356,7 +2374,19 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         listFiles = UiTools::removeSameFileName(listFiles);
 
         if (listFiles.count() == 1) {
-            strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+            // 区分待压缩文件是否是文件夹，比如"1.7z"文件夹压缩，结果应该是"1.7z.7z"，不应该去掉后缀
+            // 如果是普通文件，比如"1.txt"，应该使用完整的文件名再压缩，结果应该是"1.7z"
+            if (info.isDir()) {
+                strArchivePath = info.filePath() + strSuffix;
+            } else {
+                // 如果文件completeBaseName为空，使用完整的fileName作为压缩包名称,防止出现空名称的现象
+                if (info.completeBaseName().isEmpty()) {
+                    strArchivePath += QDir::separator() + info.fileName() + strSuffix;
+                } else {
+                    strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+                }
+            }
+
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());
@@ -2374,7 +2404,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         if (archiveInfo.exists()) {
             SimpleQueryDialog dialog(this);
             int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
-            if (iResult == 1) {     // 如果点击替换，先移除本地压缩包
+            if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
                 QFile file(archiveInfo.filePath());
                 file.remove();
             } else {    // 点击关闭或者取消，不操作
@@ -2408,23 +2438,17 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         m_pProgressPage->setPushButtonCheckable(false, false);
 
         // 计算大小
+        if (nullptr != m_mywork) {
+            m_mywork->deleteLater();
+            m_mywork = nullptr;
+        }
         m_mywork = new CalculateSizeThread(listFiles, strArchivePath, listEntry, options/*, this*/);
         connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
         connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);
         m_mywork->start();
 
-    } else if (strType == "extract") {
+    } else if ("extract" == strType) {
         m_eStartupType = StartupType::ST_Extract;
-        // 解压缩
-//        QStringList listTransFiles = listFiles;
-//        // 对压缩包文件名进行处理
-//        for (int i = 0; i < listFiles.count(); ++i) {
-//            QString strFileName = listFiles[i];
-//            UnCompressParameter::SplitType eSplitVolume;
-//            UiTools::transSplitFileName(strFileName, eSplitVolume);
-//            listTransFiles << strFileName;
-//        }
-//        listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
 
         if (listFiles.count() == 1) {
             // 单个压缩包，打开
@@ -2449,9 +2473,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             int mode = dialog.exec();
 
             if (mode != QDialog::Accepted) { // 没有选择解压路径
-                QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-                    emit sigquitApp();
-                });
+                delayQuitApp();
                 return false;
             }
 
@@ -2482,11 +2504,11 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
                 showErrorMessage(FI_Uncompress, EI_NoPlugin);
             }
         }
-    } else if (strType == "extract_here") {
+    } else if ("extract_here" == strType) {
         m_eStartupType = StartupType::ST_ExtractHere;               // 启动类型
         // 解压到当前文件夹
         rightExtract2Path(m_eStartupType, listFiles/*, QFileInfo(listFiles[0]).path()*/);
-    } else if (strType == "extract_to_specifypath") {
+    } else if ("extract_to_specifypath" == strType) {
         m_eStartupType = StartupType::ST_Extractto;
         // 解压到xx文件夹（倒数第二个参数为解压路径）
         QString strPath = listFiles.last();     // 获取解压全路径
@@ -2502,9 +2524,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
 bool MainWindow::handleArguments_Append(const QStringList &listParam)
 {
     if (listParam.size() < 3) {
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return false;
     }
 
@@ -2542,9 +2562,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     if (!m_stUnCompressParameter.bModifiable) { // 不支持修改数据的压缩包进行提示
         TipDialog dialog(this);
         dialog.showDialog(tr("You cannot add files to archives in this file type"), tr("OK", "button"), DDialog::ButtonNormal);
-        QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
-            emit sigquitApp();
-        });
+        delayQuitApp();
         return false;
     }
 
@@ -2576,6 +2594,10 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
     m_pProgressPage->setPushButtonCheckable(false, false);
 
     // 计算大小
+    if (nullptr != m_mywork) {
+        m_mywork->deleteLater();
+        m_mywork = nullptr;
+    }
     m_mywork = new CalculateSizeThread(listFiles, transFile, listEntry, options/*, this*/);
     connect(m_mywork, &CalculateSizeThread::signalFinishCalculateSize, this, &MainWindow::slotFinishCalculateSize);
     connect(m_mywork, &CalculateSizeThread::signalError, this, &MainWindow::slotCheckFinished);
@@ -2591,7 +2613,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
     }
 
     QString strExtractPath;
-    if (m_eStartupType == StartupType::ST_ExtractHere) {
+    if (StartupType::ST_ExtractHere == m_eStartupType) {
         // 解压到当前文件夹时获取当前文件夹路径
         strExtractPath = QFileInfo(listFiles[0]).path();
     } else {
@@ -2612,7 +2634,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
     QMap<QString, UnCompressParameter::SplitType> mapType;
     for (int i = 0; i < listFiles.count(); ++i) {
         QString strFileName = listFiles[i];
-        UnCompressParameter::SplitType eSplitVolume;
+        UnCompressParameter::SplitType eSplitVolume = UnCompressParameter::SplitType::ST_No;
         UiTools::transSplitFileName(strFileName, eSplitVolume);
         listTransFiles << strFileName;
         mapType[strFileName] = eSplitVolume;
@@ -2634,7 +2656,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
 
             // 如果是右键解压到当前文件夹或者右键解压缩，根据设置选项判断是否自动创建文件夹，给出解压路径
-            if (eType == ST_ExtractHere || eType == ST_Extract) {
+            if (ST_ExtractHere == eType || ST_Extract == eType) {
                 QString strAutoPath = getExtractPath(fileinfo.fileName());
                 // 根据是否自动创建文件夹处理解压路径
                 if (!strAutoPath.isEmpty()) {
@@ -2648,7 +2670,7 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             m_operationtype = Operation_Extract;
 
             // zip分卷指定使用cli7zplugin
-            UiTools::AssignPluginType eType = (m_stUnCompressParameter.eSplitVolume == UnCompressParameter::ST_Zip) ?
+            UiTools::AssignPluginType eType = (UnCompressParameter::ST_Zip == m_stUnCompressParameter.eSplitVolume) ?
                                               (UiTools::AssignPluginType::APT_Cli7z) : (UiTools::AssignPluginType::APT_Auto);
 
             // tar.7z特殊处理，右键解压缩到当前文件夹使用cli7zplugin
@@ -2704,6 +2726,24 @@ int MainWindow::showWarningDialog(const QString &msg, const QString &strToolTip)
     // 使用封装好的提示对话框
     TipDialog dialog(this);
     return dialog.showDialog(msg, tr("OK", "button"), DDialog::ButtonNormal, strToolTip);
+}
+
+void MainWindow::moveDialogToCenter(DDialog *dialog)
+{
+    QRect screenRect =  QGuiApplication::primaryScreen()->availableVirtualGeometry();
+    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
+}
+
+void MainWindow::delayQuitApp()
+{
+    QTimer::singleShot(100, this, [ = ] { // 发信号退出应用
+        emit sigquitApp();
+    });
+}
+
+bool MainWindow::getCurrentStatus()
+{
+    return ArchiveManager::get_instance()->currentStatus();
 }
 
 void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const ExtractionOptions &stOptions)
@@ -2765,7 +2805,7 @@ void MainWindow::slotOpenFile(const FileEntry &entry, const QString &strProgram)
     m_operationtype = Operation_TempExtract_Open;
     // 设置解压临时路径
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
-    QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createUUID();  // 拼接临时路径
+    QString strTempExtractPath = TEMPPATH + QDir::separator() + m_strProcessID + createTempPath();  // 拼接临时路径
     QString strOpenFile =  strTempExtractPath + QDir::separator() + entry.strFileName;     // 临时解压文件全路径
     m_pOpenFileWatcher->setCurOpenFile(strOpenFile);
     if (ArchiveManager::get_instance()->openFile(strArchiveFullPath, entry, strTempExtractPath, strProgram)) {
@@ -2793,7 +2833,7 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
 
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(strDesText, tr("Cancel", "button"), DDialog::ButtonNormal, tr("Update", "button"), DDialog::ButtonRecommend);
-        if (iResult == 1) {
+        if (1 == iResult) {
             // 对重命名或删除导致的文件不存在的情况，不给出任何提示，且从文件监控中去掉此文件
             if (!QFile::exists(strPath)) {
                 mapStatus.remove(strPath);
@@ -2944,7 +2984,7 @@ void MainWindow::slotTitleCommentButtonPressed()
         m_comment = DataManager::get_instance().archiveData().strComment;
     }
 
-    if (m_ePageID == PI_UnCompress) {
+    if (PI_UnCompress == m_ePageID) {
         DDialog *dialog = new DDialog(this);
         dialog->setWindowTitle(tr("File info"));
         dialog->setFixedWidth(300);
@@ -3128,7 +3168,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         int mode = dialog->exec();
         delete dialog;
-        if (mode == -1 && m_comment != newComment) {
+        if (-1 == mode && m_comment != newComment) {
             m_isFirstViewComment = false;
             m_comment = newComment;
             updateArchiveComment();
@@ -3140,9 +3180,9 @@ void MainWindow::slotThemeChanged()
 {
     QIcon icon;
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if (themeType == DGuiApplicationHelper::LightType) {    // 浅色
+    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
         icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    } else if (themeType == DGuiApplicationHelper::DarkType) {  // 深色
+    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
         icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
     } else {        // 其它默认
         icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
@@ -3173,7 +3213,7 @@ void MainWindow::slotShowShortcutTip()
 
 void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry)
 {
-    if (m_eStartupType == StartupType::ST_Compresstozip7z) {
+    if (StartupType::ST_Compresstozip7z == m_eStartupType) {
         m_stCompressParameter.qSize = size;
         stOptions.qTotalSize = m_stCompressParameter.qSize;
         // 调用快捷压缩接口
@@ -3219,10 +3259,8 @@ void MainWindow::slotCheckFinished(const QString &strError, const QString &strTo
         showWarningDialog(strError, strToolTip);
 
     m_operationtype = Operation_NULL;
-    if (m_eStartupType == ST_Compresstozip7z || m_eStartupType == ST_DragDropAdd) {
-        QTimer::singleShot(100, this, [ = ]() {
-            close();
-        });
+    if (ST_Compresstozip7z == m_eStartupType || ST_DragDropAdd == m_eStartupType) {
+        delayQuitApp();
     } else {
         m_ePageID = PI_UnCompress;
         refreshPage();
