@@ -33,11 +33,17 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QGuiApplication>
+#include <QDBusConnection>
 
 DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    //for qt5platform-plugins load DPlatformIntegration or DPlatformIntegrationParent
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+    }
+
     PERF_PRINT_BEGIN("POINT-01", "打开时间");
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);    // 使用高分屏
@@ -97,10 +103,12 @@ int main(int argc, char *argv[])
     // 创建主界面
     MainWindow w;
 
-    // 默认居中显示
-    if (app.setSingleInstance("deepin-compressor")) {
+    // 默认居中显示（使用dbus判断是否为第一个进程，第一个进程居中显示）
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    if (dbus.registerService("com.deepin.compressor")) {
         Dtk::Widget::moveToCenter(&w);
     }
+
 
     // 对文件名进行处理
     QStringList listTransFiles;

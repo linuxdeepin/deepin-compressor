@@ -159,25 +159,7 @@ public:
      */
     ~KPluginMetaData();
 
-    /**
-     * Load a KPluginMetaData instace from a .desktop file. Unlike the constructor which takes
-     * a single file parameter this method allows you to specify which service type files should
-     * be parsed to determine the correct type for a given .desktop property.
-     * This ensures that a e.g. comma-separated string list field in the .desktop file will correctly
-     * be converted to a JSON string array.
-     *
-     * @note This function mostly exists for backwards-compatibility. It is recommended
-     * that new applications load JSON files directly instead of using .desktop files for plugin metadata.
-     *
-     * @param file the .desktop file to load
-     * @param serviceTypes a list of files to parse If one of these paths is a relative path it
-     * will be resolved relative to the "kservicetypes5" subdirectory in QStandardPaths::GenericDataLocation.
-     * If the list is empty only the default set of properties will be treated specially and all other entries
-     * will be read as the JSON string type.
-     *
-     * @since 5.16
-     */
-    static KPluginMetaData fromDesktopFile(const QString &file, const QStringList &serviceTypes = QStringList());
+
 
     /**
      * @return whether this object holds valid information about a plugin.
@@ -382,7 +364,6 @@ public:
 
 private:
     QJsonObject rootObject() const;
-    void loadFromDesktopFile(const QString &file, const QStringList &serviceTypes);
 
 private:
     QJsonObject m_metaData;

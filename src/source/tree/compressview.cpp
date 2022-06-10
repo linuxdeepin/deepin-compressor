@@ -39,6 +39,7 @@
 #include <QDateTime>
 #include <QFileSystemWatcher>
 
+
 CompressView::CompressView(QWidget *parent)
     : DataTreeView(parent)
 {
@@ -72,7 +73,7 @@ void CompressView::addCompressFiles(const QStringList &listFiles)
                     applyAll = dialog.getApplyAll();
                 }
 
-                if (mode == OR_Cancel || mode == OR_Skip) {  // OR_Cancel：取消  OR_Skip：跳过
+                if (OR_Cancel == mode || OR_Skip == mode) {  // OR_Cancel：取消  OR_Skip：跳过
                     m_listSelFiles.removeOne(newPath); // 在新添加的文件中删除该同名文件
                 } else { // 替换
                     m_listCompressFiles.removeOne(oldPath); // 在已存在的文件中删除该同名文件
@@ -156,7 +157,7 @@ void CompressView::initUI()
 
 void CompressView::initConnections()
 {
-    connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles);
+    connect(this, &CompressView::signalDragFiles, this, &CompressView::slotDragFiles, Qt::QueuedConnection);
     connect(this, &CompressView::customContextMenuRequested, this, &CompressView::slotShowRightMenu);
     connect(m_pFileWatcher, &QFileSystemWatcher::directoryChanged, this, &CompressView::slotDirChanged); // 文件目录变化
 }
@@ -201,11 +202,17 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             sortByColumn(DC_Name);
 
             m_vPre.push_back(entry.strFileName);
-            // 自动选中第一行
-            QModelIndex tmpindex = model()->index(0, 0, index);
-            if (tmpindex.isValid()) {
-                setCurrentIndex(tmpindex);
+            // 空目录自动选中返回上一级目录Label bug122305
+            if (model()->rowCount() == 0 && m_pHeaderView->isVisiable()) {
+                m_pHeaderView->setLabelFocus(true);
+            } else {
+                // 自动选中第一行
+                QModelIndex tmpindex = model()->index(0, 0, index);
+                if (tmpindex.isValid()) {
+                    setCurrentIndex(tmpindex);
+                }
             }
+
         } else {    // 如果是文件，选择默认方式打开
             OpenWithDialog::openWithProgram(entry.strFullPath);
         }
@@ -230,7 +237,7 @@ QList<FileEntry> CompressView::getCurrentDirFiles()
 void CompressView::handleLevelChanged()
 {
     // 发送层级变化信号，通知mainwindow是否是根目录
-    bool bRoot = (m_iLevel == 0 ? true : false);
+    bool bRoot = (0 == m_iLevel ? true : false);
     setAcceptDrops(bRoot);
     emit signalLevelChanged(bRoot);
 }
@@ -238,7 +245,7 @@ void CompressView::handleLevelChanged()
 QString CompressView::getPrePathByLevel(const QString &strPath)
 {
     // 若层级为0,即根目录，返回空
-    if (m_iLevel == 0) {
+    if (0 == m_iLevel) {
         return "";
     }
 
@@ -257,7 +264,7 @@ QString CompressView::getPrePathByLevel(const QString &strPath)
 
 void CompressView::refreshDataByCurrentPath()
 {
-    if (m_iLevel == 0) {
+    if (0 == m_iLevel) {
         setPreLblVisible(false);
         m_pModel->refreshFileEntry(m_listEntry);    // 数据模型刷新
     } else {
@@ -326,7 +333,7 @@ void CompressView::slotDeleteFile()
 {
     QModelIndexList selectedIndex = selectionModel()->selectedRows(0);    // 获取所有待删除的第一行index
 
-    if (m_iLevel == 0) { // 如果是根目录，删除缓存文件名
+    if (0 == m_iLevel) { // 如果是根目录，删除缓存文件名
 
         // 从内存中删除选中的文件
         foreach (QModelIndex index, selectedIndex) {
@@ -346,7 +353,7 @@ void CompressView::slotDeleteFile()
 
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("It will permanently delete the file(s). Are you sure you want to continue?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Confirm", "button"), DDialog::ButtonWarning);
-        if (iResult == 1) {     // 如果点击确定，移动本地文件至回收站中
+        if (1 == iResult) {     // 如果点击确定，移动本地文件至回收站中
             // 从本地文件中将需要删除的文件移动到回收站中
             foreach (QModelIndex index, selectedIndex) {
                 if (index.isValid()) {
@@ -382,7 +389,7 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
                                     tr("Add", "button"), DDialog::ButtonNormal,
                                     tr("Open in new window"), DDialog::ButtonRecommend);
 
-        if (ret == 1) { // 添加压缩文件到目录
+        if (1 == ret) { // 添加压缩文件到目录
             addCompressFiles(listFiles);
         } else if (ret == 2) { // 在新窗口打开压缩文件
             ProcessOpenThread *p = new ProcessOpenThread;
@@ -398,13 +405,13 @@ void CompressView::slotDragFiles(const QStringList &listFiles)
 void CompressView::slotOpenStyleClicked()
 {
     QAction *pAction = qobject_cast<QAction *>(sender());
-    if (pAction == nullptr) {
+    if (nullptr == pAction) {
         return;
     }
 
     QString strText = pAction->text();
 
-    if (strText == tr("Select default program")) {
+    if (tr("Select default program") == strText) {
         // 选择默认应用程序（弹出窗口）
         qInfo() << "选择默认应用程序打开";
         OpenWithDialog dialog(m_stRightEntry.strFullPath);
@@ -421,7 +428,7 @@ void CompressView::slotPreClicked()
     m_pFileWatcher->removePath(m_strCurrentPath);       // 删除目录监听
     m_iLevel--;     // 目录层级减1
 
-    if (m_iLevel == 0) {    // 如果返回到根目录，显示待压缩文件
+    if (0 == m_iLevel) {    // 如果返回到根目录，显示待压缩文件
         resetLevel();
     } else {        // 否则传递上级目录
         int iIndex = m_strCurrentPath.lastIndexOf(QDir::separator());

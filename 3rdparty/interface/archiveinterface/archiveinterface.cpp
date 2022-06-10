@@ -40,11 +40,11 @@ Q_DECLARE_METATYPE(KPluginMetaData)
 ReadOnlyArchiveInterface::ReadOnlyArchiveInterface(QObject *parent, const QVariantList &args)
     : QObject(parent)
 {
-    Q_ASSERT(args.size() >= 3);
-//    qInfo() << "Created read-only interface for" << args.first().toString();
-    m_strArchiveName = args.first().toString();
-    m_metaData = args.at(1).value<KPluginMetaData>();
-    m_mimetype = args.at(2).value<CustomMimeType>();
+    if (args.count() == 3) {
+        m_strArchiveName = args.first().toString();
+        m_metaData = args.at(1).value<KPluginMetaData>();
+        m_mimetype = args.at(2).value<CustomMimeType>();
+    }
 
     m_common = new Common(this);
 }
@@ -80,6 +80,11 @@ bool ReadOnlyArchiveInterface::doKill()
     return false;   // 修改默认为未取消
 }
 
+bool ReadOnlyArchiveInterface::status()
+{
+    return m_bPause;   // true 暂停状态，false 非暂停状态
+}
+
 void ReadOnlyArchiveInterface::setWaitForFinishedSignal(bool value)
 {
     m_bWaitForFinished = value;
@@ -89,7 +94,9 @@ QFileDevice::Permissions ReadOnlyArchiveInterface::getPermissions(const mode_t &
 {
     QFileDevice::Permissions pers = QFileDevice::Permissions();
 
-    if (perm == 0) {
+    // bug 118731  zip_file_get_external_attributes获取文件属性异常
+    // 644 和0 一样作无效值考虑
+    if (0 == perm || 644 == perm) {
         pers |= (QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ReadGroup | QFileDevice::ReadOther);
         return pers;
     }

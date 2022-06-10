@@ -155,7 +155,7 @@ private:
     CustomPushButton *m_pCancelBtn;      // 取消按钮
     CustomSuggestButton *m_pPauseContinueButton; // 暂停继续按钮
 
-    Progress_Type m_eType;      // 进度类型
+    Progress_Type m_eType = PT_None;      // 进度类型
     qint64 m_qTotalSize = 0;         // 文件大小kB
     int m_iPerent = 0;      // 进度值
     QElapsedTimer m_timer;  //计时器

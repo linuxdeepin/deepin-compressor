@@ -103,6 +103,7 @@ struct CompressParameter {
         iVolumeSize = 0;
         iCompressionLevel = -1;
         bTar_7z = false;
+        iCPUTheadNum = 1;
     }
 
     QString strMimeType;    // 格式类型（application/x-tar）
@@ -115,6 +116,7 @@ struct CompressParameter {
     bool bHeaderEncryption;     // 是否列表加密
     bool bSplit;        // 是否分卷
     bool bTar_7z;       // 是否是tar.7z格式（补充）
+    int iCPUTheadNum;        // 线程数
     int iVolumeSize;    // 分卷大小
     int iCompressionLevel;      // 压缩等级
     qint64 qSize;       // 文件总大小
@@ -145,7 +147,7 @@ struct UnCompressParameter {
 
     QString strFullPath;        // 压缩包全路径
     QString strExtractPath;     // 解压路径
-    SplitType eSplitVolume;          // 分卷包类型
+    SplitType eSplitVolume = UnCompressParameter::SplitType::ST_No;          // 分卷包类型
     bool bMultiplePassword;     // 是否支持多密码追加
     bool bModifiable;           // 是否更改压缩包数据
     bool bCommentModifiable;    // 是否支持注释更改

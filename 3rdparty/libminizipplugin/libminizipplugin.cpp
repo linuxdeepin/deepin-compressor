@@ -67,7 +67,7 @@ PluginFinishType LibminizipPlugin::list()
 {
     // 打开压缩包文件
     unzFile zipfile = unzOpen(QFile::encodeName(m_strArchiveName).constData());
-    if (zipfile == nullptr) {
+    if (nullptr == zipfile) {
         m_eErrorType = ET_ArchiveDamaged;
         return PFT_Error;
     }
@@ -113,10 +113,12 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
 
     qInfo() << "解压缩数据";
     m_workStatus = WT_Extract;
+    m_bOverwriteAll = false;        //是否全部覆盖
+    m_bSkipAll = false;             // 是否全部跳过
 
     // 打开压缩包数据
     unzFile zipfile = unzOpen(QFile::encodeName(m_strArchiveName).constData());
-    if (zipfile == nullptr) {
+    if (nullptr == zipfile) {
         m_eErrorType = ET_ArchiveDamaged ;
         return PFT_Error;
     }
@@ -155,19 +157,19 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
             m_eErrorType = extractEntry(zipfile, file_info, options, qExtractSize, strFileName);
 
             // 方便右键解压时提示是否有数据解压出来
-            if (!options.bExistList && i == 0) {
+            if (!options.bExistList && 0 == i) {
                 FileEntry entry;
                 entry.strFullPath = strFileName;
                 DataManager::get_instance().archiveData().listRootEntry << entry;
             }
 
-            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
                 if ((i + 1) < nofEntries) {
                     if (unzGoToNextFile(zipfile) != UNZ_OK) {
                         continue;
                     }
                 }
-            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+            } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 unzClose(zipfile);
                 return PFT_Cancel;
             } else {    // 处理错误
@@ -204,7 +206,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
             // 解压单个文件
             m_eErrorType = extractEntry(zipfile, file_info, options, qExtractSize, strFileNameTemp);
 
-            if (m_eErrorType == ET_NoError) {  // 无错误，继续解压下一个文件
+            if (ET_NoError == m_eErrorType) {  // 无错误，继续解压下一个文件
                 if ((++i) < nofEntries) {
                     QByteArray strCode;
                     int error = unzLocateFile(zipfile, m_common->trans2uft8(listFiles[int(i)].toUtf8().data(), strCode).toLatin1(), 0);
@@ -212,7 +214,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
                         continue;
                     }
                 }
-            } else if (m_eErrorType == ET_UserCancelOpertion) {    // 用户取消，结束解压，返回结束标志
+            } else if (ET_UserCancelOpertion == m_eErrorType) {    // 用户取消，结束解压，返回结束标志
                 unzClose(zipfile);
                 return PFT_Cancel;
             } else {    // 处理错误
@@ -222,6 +224,7 @@ PluginFinishType LibminizipPlugin::extractFiles(const QList<FileEntry> &files, c
         }
     }
 
+    unzClose(zipfile);
     return PFT_Nomral;
 }
 
@@ -373,7 +376,6 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
         int iError = unzOpenCurrentFile(zipfile);
 
         if (iError != UNZ_OK) {
-            unzClose(zipfile);
             return ET_ArchiveDamaged ;
         }
 

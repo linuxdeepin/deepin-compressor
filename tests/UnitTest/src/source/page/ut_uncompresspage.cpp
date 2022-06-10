@@ -22,12 +22,14 @@
 #include "uncompresspage.h"
 #include "uistruct.h"
 #include "uncompressview.h"
+#include "customwidget.h"
 #include "ut_commonstub.h"
 
 #include "gtest/src/stub.h"
 
 #include <gtest/gtest.h>
 #include <QTest>
+
 
 /*******************************函数打桩************************************/
 // 对UnCompressView的addNewFiles进行打桩
@@ -62,10 +64,10 @@ int qFontMetrics_width_stub(const QString &, int)
 }
 /*******************************函数打桩************************************/
 
-class TestUnCompressPage : public ::testing::Test
+class UT_UnCompressPage : public ::testing::Test
 {
 public:
-    TestUnCompressPage(): m_tester(nullptr) {}
+    UT_UnCompressPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -83,98 +85,115 @@ protected:
     UnCompressPage *m_tester;
 };
 
-TEST_F(TestUnCompressPage, initTest)
+TEST_F(UT_UnCompressPage, initTest)
 {
 
 }
 
-TEST_F(TestUnCompressPage, testsetArchiveFullPath)
+TEST_F(UT_UnCompressPage, test_setArchiveFullPath_001)
 {
     UnCompressParameter stUnCompressParameter;
     stUnCompressParameter.eSplitVolume = UnCompressParameter::ST_No;
     stUnCompressParameter.bModifiable = true;
     m_tester->setArchiveFullPath("1.zip", stUnCompressParameter);
-    ASSERT_EQ(m_tester->getUnCompressView()->isModifiable(), true);
+    EXPECT_EQ(m_tester->m_strArchiveFullPath, "1.zip");
+    EXPECT_EQ(m_tester->getUnCompressView()->isModifiable(), true);
 }
 
-TEST_F(TestUnCompressPage, testsetArchiveFullPath_No)
+TEST_F(UT_UnCompressPage, test_setArchiveFullPath_002)
 {
     UnCompressParameter stUnCompressParameter;
     stUnCompressParameter.eSplitVolume = UnCompressParameter::ST_Zip;
     stUnCompressParameter.bModifiable = false;
     m_tester->setArchiveFullPath("1.zip.001", stUnCompressParameter);
-    ASSERT_EQ(m_tester->getUnCompressView()->isModifiable(), false);
+    EXPECT_EQ(m_tester->m_strArchiveFullPath, "1.zip.001");
+    EXPECT_EQ(m_tester->getUnCompressView()->isModifiable(), false);
 }
 
-TEST_F(TestUnCompressPage, testarchiveFullPath)
+TEST_F(UT_UnCompressPage, test_archiveFullPath)
 {
     UnCompressParameter stUnCompressParameter;
     m_tester->setArchiveFullPath("1.zip.001", stUnCompressParameter);
-    ASSERT_EQ(m_tester->archiveFullPath(), "1.zip.001");
+    EXPECT_EQ(m_tester->archiveFullPath(), "1.zip.001");
 }
 
-TEST_F(TestUnCompressPage, testsetDefaultUncompressPath)
+TEST_F(UT_UnCompressPage, test_setDefaultUncompressPath)
 {
     m_tester->setDefaultUncompressPath("/home/Desktop");
-    ASSERT_EQ(m_tester->m_strUnCompressPath, "/home/Desktop");
+    EXPECT_EQ(m_tester->m_strUnCompressPath, "/home/Desktop");
+    EXPECT_EQ(m_tester->m_pUncompressPathBtn->toolTip(), "/home/Desktop");
+    EXPECT_EQ(m_tester->m_pUncompressPathBtn->text().contains("Extract to:"), true);
 }
 
-TEST_F(TestUnCompressPage, testsetrefreshArchiveData)
+TEST_F(UT_UnCompressPage, test_setrefreshArchiveData)
 {
     m_tester->refreshArchiveData();
+    EXPECT_EQ(m_tester->m_pUnCompressView->m_iLevel, 0);
 }
 
-TEST_F(TestUnCompressPage, testrefreshDataByCurrentPathChanged)
+TEST_F(UT_UnCompressPage, test_refreshDataByCurrentPathChanged)
 {
     Stub stub;
     stub.set(ADDR(UnCompressView, refreshDataByCurrentPathChanged), unCompressView_refreshDataByCurrentPathChanged_stub);
     m_tester->refreshDataByCurrentPathChanged();
+    EXPECT_NE(m_tester->m_pUnCompressView, nullptr);
 }
 
-TEST_F(TestUnCompressPage, testaddNewFiles)
+TEST_F(UT_UnCompressPage, test_addNewFiles)
 {
     Stub stub;
     stub.set(ADDR(UnCompressView, addNewFiles), unCompressView_addNewFiles_stub);
     m_tester->addNewFiles(QStringList());
+    EXPECT_NE(m_tester->m_pUnCompressView, nullptr);
 }
 
-TEST_F(TestUnCompressPage, testgetCurPath)
+TEST_F(UT_UnCompressPage, test_getCurPath)
 {
     Stub stub;
     stub.set(ADDR(UnCompressView, getCurPath), unCompressView_getCurPath_stub);
-    ASSERT_EQ(m_tester->getCurPath(), "123");
+    EXPECT_EQ(m_tester->getCurPath(), "123");
 }
 
-TEST_F(TestUnCompressPage, testclear)
+TEST_F(UT_UnCompressPage, test_clear)
 {
     m_tester->clear();
+    EXPECT_EQ(m_tester->m_pUnCompressView->m_mapShowEntry.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_pUnCompressView->m_strUnCompressPath, "");
+    EXPECT_EQ(m_tester->m_pUnCompressView->m_bModifiable, false);
+    EXPECT_EQ(m_tester->m_pUnCompressView->m_bMultiplePassword, false);
 }
 
-TEST_F(TestUnCompressPage, testgetUnCompressView)
+TEST_F(UT_UnCompressPage, test_getUnCompressView)
 {
-    ASSERT_EQ(m_tester->getUnCompressView(), m_tester->m_pUnCompressView);
+    EXPECT_EQ(m_tester->getUnCompressView(), m_tester->m_pUnCompressView);
 }
 
-TEST_F(TestUnCompressPage, testgetUnCompressBtn)
+TEST_F(UT_UnCompressPage, test_getUnCompressBtn)
 {
-    ASSERT_EQ(m_tester->getUnCompressBtn(), m_tester->m_pUnCompressBtn);
+    EXPECT_EQ(m_tester->getUnCompressBtn(), m_tester->m_pUnCompressBtn);
 }
 
-TEST_F(TestUnCompressPage, testgetUncompressPathBtn)
+TEST_F(UT_UnCompressPage, test_getUncompressPathBtn)
 {
-    ASSERT_EQ(m_tester->getUncompressPathBtn(), m_tester->m_pUncompressPathBtn);
+    EXPECT_EQ(m_tester->getUncompressPathBtn(), m_tester->m_pUncompressPathBtn);
 }
 
-TEST_F(TestUnCompressPage, testelidedExtractPath)
+QString elidedText_stub(const QString &, Qt::TextElideMode, int, int)
+{
+    return "123…456";
+}
+
+TEST_F(UT_UnCompressPage, test_elidedExtractPath)
 {
     Stub stub;
     stub.set(ADDR(UnCompressPage, width), unCompressPage_width_stub);
     stub.set((int(QFontMetrics::*)(const QString &, int)const)ADDR(QFontMetrics, width), qFontMetrics_width_stub);
-    QString str = "123456789123456789123456789";
-    m_tester->elidedExtractPath(str);
+    stub.set(ADDR(QFontMetrics, elidedText), elidedText_stub);
+    QString str = "12345678912";
+    EXPECT_EQ(m_tester->elidedExtractPath(str).isEmpty(), false);
 }
 
-TEST_F(TestUnCompressPage, testslotUncompressClicked001)
+TEST_F(UT_UnCompressPage, test_slotUncompressClicked_001)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_isWritable(stub, false);
@@ -184,7 +203,7 @@ TEST_F(TestUnCompressPage, testslotUncompressClicked001)
     m_tester->slotUncompressClicked();
 }
 
-TEST_F(TestUnCompressPage, testslotUncompressClicked002)
+TEST_F(UT_UnCompressPage, test_slotUncompressClicked_002)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_isWritable(stub, false);
@@ -194,7 +213,7 @@ TEST_F(TestUnCompressPage, testslotUncompressClicked002)
     m_tester->slotUncompressClicked();
 }
 
-TEST_F(TestUnCompressPage, testslotUncompressClicked003)
+TEST_F(UT_UnCompressPage, test_slotUncompressClicked_003)
 {
     Stub stub;
     QFileInfoStub::stub_QFileInfo_isWritable(stub, true);
@@ -203,7 +222,7 @@ TEST_F(TestUnCompressPage, testslotUncompressClicked003)
     m_tester->slotUncompressClicked();
 }
 
-TEST_F(TestUnCompressPage, testslotUnCompressPathClicked_Rejected)
+TEST_F(UT_UnCompressPage, test_slotUnCompressPathClicked_001)
 {
     QList<QUrl> listUrl;
     listUrl << QUrl("/home/Desktop");
@@ -213,7 +232,7 @@ TEST_F(TestUnCompressPage, testslotUnCompressPathClicked_Rejected)
     m_tester->slotUnCompressPathClicked();
 }
 
-TEST_F(TestUnCompressPage, testslotUnCompressPathClicked_Accepted)
+TEST_F(UT_UnCompressPage, test_slotUnCompressPathClicked_002)
 {
     QList<QUrl> listUrl;
     listUrl << QUrl("/home/Desktop");
@@ -223,8 +242,9 @@ TEST_F(TestUnCompressPage, testslotUnCompressPathClicked_Accepted)
     m_tester->slotUnCompressPathClicked();
 }
 
-TEST_F(TestUnCompressPage, testslotFileChoose)
+TEST_F(UT_UnCompressPage, test_slotFileChoose)
 {
     m_tester->getUnCompressView()->m_bModifiable = true;
     m_tester->slotFileChoose();
+    EXPECT_EQ(m_tester->m_pUnCompressView->isModifiable(), true);
 }

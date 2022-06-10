@@ -159,9 +159,9 @@ void HomePage::slotThemeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
-    if (themeType == DGuiApplicationHelper::LightType) {    // 浅色
+    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
         m_pSplitLbl->setPixmap(QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg"));
-    } else if (themeType == DGuiApplicationHelper::DarkType) {  // 深色
+    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
         m_pSplitLbl->setPixmap(QPixmap(":assets/icons/deepin/builtin/dark/icons/split_line_dark.svg"));
     } else {        // 其它默认
         m_pSplitLbl->setPixmap(QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg"));

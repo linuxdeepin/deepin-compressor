@@ -50,7 +50,7 @@ void SuccessPage::setSuccessDes(const QString &strDes)
     m_pSuccessLbl->setText(strDes);
 }
 
-void SuccessPage::setSuccessType(SuccessInfo successInfo)
+void SuccessPage::setSuccessType(const SuccessInfo &successInfo)
 {
     m_successInfoType = successInfo;
 }
@@ -58,6 +58,11 @@ void SuccessPage::setSuccessType(SuccessInfo successInfo)
 SuccessInfo SuccessPage::getSuccessType()
 {
     return m_successInfoType;
+}
+
+void SuccessPage::setDetail(const QString &strDetail)
+{
+    m_pDetailLbl->setText(strDetail);
 }
 
 void SuccessPage::initUI()
@@ -73,6 +78,11 @@ void SuccessPage::initUI()
     m_pSuccessLbl->setForegroundRole(DPalette::ToolTipText);
     m_pSuccessLbl->setText(tr("Compression successful"));
 
+    //失败具体原因
+    m_pDetailLbl = new DLabel(this);
+    m_pDetailLbl->setForegroundRole(DPalette::TextTips);
+    DFontSizeManager::instance()->bind(m_pDetailLbl, DFontSizeManager::T8);
+
     //查看文件按钮
     m_pShowFileBtn = new CustomPushButton(this);
     m_pShowFileBtn->setMinimumSize(340, 36);
@@ -86,6 +96,7 @@ void SuccessPage::initUI()
     mainlayout->addStretch();
     mainlayout->addWidget(m_pSuccessPixmapLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addWidget(m_pSuccessLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
+    mainlayout->addWidget(m_pDetailLbl, 0, Qt::AlignHCenter | Qt::AlignVCenter);
     mainlayout->addStretch();
 
     QHBoxLayout *commandLinkButtonLayout = new QHBoxLayout;
@@ -112,7 +123,3 @@ void SuccessPage::initConnections()
     connect(m_pReturnBtn, &DCommandLinkButton::clicked, this, &SuccessPage::sigBackButtonClicked);
 }
 
-//void SuccessPage::slotShowfiledirSlot()
-//{
-
-//}

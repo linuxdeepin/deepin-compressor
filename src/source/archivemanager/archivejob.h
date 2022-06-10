@@ -58,12 +58,12 @@ public:
     /**
      * @brief doPause   暂停
      */
-    virtual void doPause() {}
+    virtual void doPause() = 0;
 
     /**
      * @brief doContinue    继续
      */
-    virtual void doContinue() {}
+    virtual void doContinue() = 0;
 
     /**
      * @brief doCancel  取消
@@ -74,6 +74,12 @@ public:
      * @brief kill  强行结束job
      */
     virtual void kill();
+
+    /**
+     * @brief status 状态
+     * @return  状态
+     */
+    virtual bool status();
 
 private:
     /**

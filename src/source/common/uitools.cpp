@@ -43,6 +43,7 @@
 #include <QRegularExpression>
 #include <QUuid>
 #include <QStorageInfo>
+#include <QProcessEnvironment>
 
 #include <KEncodingProber>
 
@@ -118,7 +119,7 @@ QPixmap UiTools::renderSVG(const QString &filePath, const QSize &size)
 
 QString UiTools::humanReadableSize(const qint64 &size, int precision)
 {
-    if (size == 0) {
+    if (0 == size) {
         return "-";
     }
 
@@ -166,72 +167,6 @@ bool UiTools::isArchiveFile(const QString &strFileName)
     }
 
     return ret;
-}
-
-QString UiTools::judgeFileMime(const QString &strFileName)
-{
-    QString type = "";
-    if (strFileName.endsWith(".7z") || strFileName.contains(".7z.0")) {
-        type = "x-7z-compressed";
-    } else if (strFileName.endsWith(".cpio.gz")) {
-        type = "x-cpio-compressed";
-    } else if (strFileName.endsWith(".tar.bz2")) {
-        type = "x-bzip-compressed-tar";
-    } else if (strFileName.endsWith(".tar.gz")) {
-        type = "x-compressed-tar";
-    } else if (strFileName.endsWith(".tar.lz")) {
-        type = "x-lzip-compressed-tar";
-    } else if (strFileName.endsWith(".tar.lzma")) {
-        type = "x-lzma-compressed-tar";
-    } else if (strFileName.endsWith(".tar.lzo")) {
-        type = "x-tzo";
-    } else if (strFileName.endsWith(".tar.xz")) {
-        type = "x-xz-compressed-tar";
-    } else if (strFileName.endsWith(".tar.Z")) {
-        type = "x-tarz";
-    } else if (strFileName.endsWith(".src.rpm")) {
-        type = "x-source-rpm";
-    } else if (strFileName.endsWith(".ar")) {
-        type = "x-archive";
-    } else if (strFileName.endsWith(".bcpio")) {
-        type = "x-bcpio";
-    } else if (strFileName.endsWith(".bz2")) {
-        type = "x-bzip";
-    } else if (strFileName.endsWith(".cpio")) {
-        type = "x-cpio";
-    } else if (strFileName.endsWith(".deb")) {
-        type = "vnd.debian.binary-package";
-    } else if (strFileName.endsWith(".gz")) {
-        type = "gzip";
-    } else if (strFileName.endsWith(".jar")) {
-        type = "x-java-archive";
-    } else if (strFileName.endsWith(".lzma")) {
-        type = "x-lzma";
-    } else if (strFileName.endsWith(".cab")) {
-        type = "vnd.ms-cab-compressed";
-    } else if (strFileName.endsWith(".rar")) {
-        type = "vnd.rar";
-    } else if (strFileName.endsWith(".rpm")) {
-        type = "x-rpm";
-    } else if (strFileName.endsWith(".sv4cpio")) {
-        type = "x-sv4cpio";
-    } else if (strFileName.endsWith(".sc4crc")) {
-        type = "x-sc4crc";
-    } else if (strFileName.endsWith(".tar")) {
-        type = "x-tar";
-    } else if (strFileName.endsWith(".xar")) {
-        type = "x-xar";
-    } else if (strFileName.endsWith(".xz")) {
-        type = "x-xz";
-    } else if (strFileName.endsWith(".zip")) {
-        type = "zip";
-    } else if (strFileName.endsWith(".iso")) {
-        type = "x-iso9660-image";
-    } else if (strFileName.endsWith(".appimage")) {
-        type = "x-iso9660-appimage";
-    }
-
-    return type;
 }
 
 bool UiTools::isExistMimeType(const QString &strMimeType, bool &bArchive)
@@ -374,6 +309,12 @@ ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool
                 pIface = createInterface(fileName, mimeType, plugin);
             }
             break;
+        // libpigzplugin
+        case APT_Libpigz:
+            if (plugin->metaData().name().contains("pigz", Qt::CaseInsensitive)) {
+                pIface = createInterface(fileName, mimeType, plugin);
+            }
+            break;
         }
 
         // Use the first valid plugin, according to the priority sorting.
@@ -408,10 +349,10 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
 {
     if (fileName.contains(".7z.")) {
         // 7z分卷处理
-        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
+        QRegExp reg("^([\\s\\S]*\\.)7z\\.[0-9]{3}$"); // QRegExp reg("[*.]part\\d+.rar$"); //rar分卷不匹配
 
         if (reg.exactMatch(fileName)) {
-            fileName = reg.cap(1) + "001"; //例如: *.7z.003 -> *.7z.001
+            fileName = reg.cap(1) + "7z.001"; //例如: *.7z.003 -> *.7z.001
             eSplitType = UnCompressParameter::ST_Other;
         }
     } else if (fileName.contains(".part") && fileName.endsWith(".rar")) {
@@ -427,11 +368,11 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
 
         eSplitType = UnCompressParameter::ST_Other;
     } else if (fileName.contains(".zip.")) { // 1.zip.001格式
-        QRegExp reg("^([\\s\\S]*.)[0-9]{3}$");
+        QRegExp reg("^([\\s\\S]*\\.)zip\\.[0-9]{3}$");
         if (reg.exactMatch(fileName)) {
-            QFileInfo fi(reg.cap(1) + "001");
+            QFileInfo fi(reg.cap(1) + "zip.001");
             if (fi.exists() == true) {
-                fileName = reg.cap(1) + "001";
+                fileName = reg.cap(1) + "zip.001";
                 eSplitType = UnCompressParameter::ST_Zip;
             }
         }
@@ -449,7 +390,7 @@ void UiTools::transSplitFileName(QString &fileName, UnCompressParameter::SplitTy
          * 例如123.z01文件，检测123.zip文件是否存在
          * 如果存在，则认定123.z01是分卷包
          */
-        QRegExp reg("^([\\s\\S]*.)z[0-9]+$");
+        QRegExp reg("^([\\s\\S]*\\.)z[0-9]+$"); //
         if (reg.exactMatch(fileName)) {
             fileName = reg.cap(1) + "zip";
             QFileInfo fi(fileName);
@@ -508,4 +449,17 @@ QStringList UiTools::removeSameFileName(const QStringList &listFiles)
     }
 
     return listResult;
+}
+
+bool UiTools::isWayland()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+        return true;
+    } else {
+        return false;
+    }
 }

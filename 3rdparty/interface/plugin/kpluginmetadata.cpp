@@ -15,7 +15,7 @@
 
 #include "kpluginloader.h"
 #include "kpluginmetadata.h"
-#include "desktopfileparser_p.h"
+//#include "desktopfileparser_p.h"
 
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -58,9 +58,7 @@ KPluginMetaData::~KPluginMetaData()
 
 KPluginMetaData::KPluginMetaData(const QString &file)
 {
-    if (file.endsWith(QStringLiteral(".desktop"))) {
-        loadFromDesktopFile(file, QStringList());
-    } else if (file.endsWith(QStringLiteral(".json"))) {
+    if (file.endsWith(QStringLiteral(".json"))) {
         d = new KPluginMetaDataPrivate;
         QFile f(file);
         bool b = f.open(QIODevice::ReadOnly);
@@ -110,32 +108,6 @@ KPluginMetaData::KPluginMetaData(const QJsonObject &metaData, const QString &plu
     if (!metaDataFile.isEmpty()) {
         d = new KPluginMetaDataPrivate;
         d->metaDataFileName = metaDataFile;
-    }
-}
-
-KPluginMetaData KPluginMetaData::fromDesktopFile(const QString &file, const QStringList &serviceTypes)
-{
-    KPluginMetaData result;
-    result.loadFromDesktopFile(file, serviceTypes);
-    return result;
-}
-
-void KPluginMetaData::loadFromDesktopFile(const QString &file, const QStringList &serviceTypes)
-{
-    QString libraryPath;
-    if (!DesktopFileParser::convert(file, serviceTypes, m_metaData, &libraryPath)) {
-        Q_ASSERT(!isValid());
-        return; // file could not be parsed for some reason, leave this object invalid
-    }
-
-    d = new KPluginMetaDataPrivate;
-    d->metaDataFileName = QFileInfo(file).absoluteFilePath();
-    if (!libraryPath.isEmpty()) {
-        // this was a plugin with a shared library
-        m_fileName = libraryPath;
-    } else {
-        // no library, make filename point to the .desktop file
-        m_fileName = d->metaDataFileName;
     }
 }
 

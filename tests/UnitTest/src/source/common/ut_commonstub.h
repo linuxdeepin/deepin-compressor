@@ -22,6 +22,7 @@
 #define UT_COMMONSTUB_H
 
 #include "popupdialog.h"
+#include "libzipplugin.h"
 #include "gtest/src/stub.h"
 
 #include <DGuiApplicationHelper>
@@ -35,6 +36,12 @@ DGUI_USE_NAMESPACE
 extern bool g_QWidget_isVisible_result;                 // QWidget isVisible返回值
 extern bool g_UiTools_isArchiveFile_result;             // UiTools isArchiveFile返回值
 extern QObject *g_QObject_sender_result;                // QObject sender返回值
+extern int g_Dialog_exec_result;                        // DDialog exec返回值
+extern bool g_UiTools_isLocalDeviceFile_result;         // UiTools isLocalDeviceFile返回值
+extern ReadOnlyArchiveInterface *g_UiTools_createInterface_result;         // UiTools createInterface返回值
+extern QString g_QFileDialog_getOpenFileName_result;    // QFileDialog getOpenFileName返回值
+extern bool g_QThread_isRunning_result;                 // QThread isRunning返回值
+extern bool g_QThread_wait_result;                      // QThread wait返回值
 
 extern int g_TipDialog_showDialog_result;               // TipDialog showDialog返回值
 extern int g_SimpleQueryDialog_showDialog_result;       // SimpleQueryDialog showDialog返回值
@@ -54,11 +61,13 @@ extern bool g_QFileInfo_isWritable_result;              // QFileInfo isWritable�
 extern bool g_QFileInfo_isExecutable_result;            // QFileInfo isExecutable返回值
 extern bool g_QFileInfo_isReadable_result;              // QFileInfo isExecutable返回值
 extern bool g_QFileInfo_isSymLink_result;               // QFileInfo isSymLink返回值
+extern QString g_QFileInfo_completeSuffix_result;       // QFileInfo completeSuffix返回值
 
 extern bool g_QFile_remove_result;                      // QFile remove返回值
-extern bool g_QFile_open_result;                       // QFile open返回值
-extern bool g_QFile_close_result;                      // QFile close返回值
-extern QByteArray g_QFile_readAll_result;              // QFile readAll返回值
+extern bool g_QFile_open_result;                        // QFile open返回值
+extern bool g_QFile_close_result;                       // QFile close返回值
+extern QByteArray g_QFile_readAll_result;               // QFile readAll返回值
+extern bool g_QFile_exists_result;                      // QFile exists返回值
 
 extern bool g_QDir_exists_result;                       // QDir exists返回值
 extern QFileInfoList g_QDir_entryInfoList_result;              // QDir entryInfoList返回值
@@ -70,6 +79,26 @@ extern DGuiApplicationHelper::ColorType g_DGuiApplicationHelper_themeType_result
 
 extern int g_DFileDialog_exec_result;                   // DFileDialog exec
 extern QList<QUrl> g_DFileDialog_selectedUrls_result;   // DFileDialog selectedUrls返回值
+extern QStringList g_DFileDialog_selectedFiles_result;  // DFileDialog selectedFiles返回值
+
+extern bool g_ArchiveManager_createArchive_result;      // ArchiveManager createArchive返回值
+extern bool g_ArchiveManager_loadArchive_result;        // ArchiveManager loadArchive返回值
+extern bool g_ArchiveManager_addFiles_result;           // ArchiveManager addFiles返回值
+extern bool g_ArchiveManager_extractFiles_result;       // ArchiveManager extractFiles返回值
+extern bool g_ArchiveManager_extractFiles2Path_result;  // ArchiveManager extractFiles2Path返回值
+extern bool g_ArchiveManager_deleteFiles_result;        // ArchiveManager deleteFiles返回值
+extern bool g_ArchiveManager_batchExtractFiles_result;  // ArchiveManager batchExtractFiles返回值
+extern bool g_ArchiveManager_openFile_result;           // ArchiveManager openFile返回值
+extern bool g_ArchiveManager_updateArchiveCacheData_result;      // ArchiveManager updateArchiveCacheData返回值
+extern bool g_ArchiveManager_updateArchiveComment_result;      // ArchiveManager updateArchiveComment返回值
+extern bool g_ArchiveManager_convertArchive_result;     // ArchiveManager convertArchive返回值
+extern bool g_ArchiveManager_pauseOperation_result;     // ArchiveManager pauseOperation返回值
+extern bool g_ArchiveManager_continueOperation_result;  // ArchiveManager continueOperation返回值
+extern bool g_ArchiveManager_cancelOperation_result;    // ArchiveManager cancelOperation返回值
+
+extern bool g_SingleJob_doPause_result;                 // SingleJob doPause返回值
+extern bool g_SingleJob_doContinue_result;              // SingleJob doContinue返回值
+extern bool g_SingleJob_doKill_result;                  // SingleJob doKill返回值
 
 // 通用打桩
 class CommonStub : public QObject
@@ -121,6 +150,103 @@ public:
      * @return
      */
     static void stub_QObject_sender(Stub &stub, QObject *pObject);
+
+    /**
+     * @brief stub_KProcess_start     针对KProcess的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_KProcess_start(Stub &stub);
+
+    /**
+     * @brief stub_DDialog_exec     针对DDialog的exec打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_DDialog_exec(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_QDialog_exec     针对QDialog的exec打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_QDialog_exec(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_DAbstractDialog_exec     针对DAbstractDialog的exec打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_DAbstractDialog_exec(Stub &stub, int iResult);
+
+    /**
+     * @brief stub_QDialog_open     针对QDialog的open打桩
+     * @param stub
+     * @param iResult
+     * @return
+     */
+    static void stub_QDialog_open(Stub &stub);
+
+    /**
+     * @brief stub_UiTools_isLocalDeviceFile     针对UiTools的isLocalDeviceFile打桩
+     * @param stub
+     * @param isLocalDeviceFile
+     * @return
+     */
+    static void stub_UiTools_isLocalDeviceFile(Stub &stub, bool isLocalDeviceFile);
+
+    /**
+     * @brief stub_OverwriteQuery_execute     针对OverwriteQuery的execute打桩
+     * @param stub
+     */
+    static void stub_OverwriteQuery_execute(Stub &stub);
+
+    /**
+     * @brief stub_QThread_start     针对QThread的start打桩
+     * @param stub
+     */
+    static void stub_QThread_start(Stub &stub);
+
+    /**
+     * @brief stub_QThread_isRunning     针对QThread的isRunning打桩
+     * @param stub
+     */
+    static void stub_QThread_isRunning(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QThread_wait     针对QThread的wait打桩
+     * @param stub
+     */
+    static void stub_QThread_wait(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_QThreadPool_waitForDone     针对QThreadPool的waitForDone打桩
+     * @param stub
+     */
+    static void stub_QThreadPool_waitForDone(Stub &stub);
+
+    /**
+     * @brief stub_QProcess_startDetached     针对QProcess的startDetached打桩
+     * @param stub
+     */
+    static void stub_QProcess_startDetached(Stub &stub);
+
+    /**
+     * @brief stub_UiTools_createInterface     针对UiTools的createInterface打桩
+     * @param stub
+     * @param pInterface
+     */
+    static void stub_UiTools_createInterface(Stub &stub, ReadOnlyArchiveInterface *pInterface);
+
+    /**
+     * @brief stub_QFileDialog_getOpenFileName     针对QFileDialog的getOpenFileName打桩
+     * @param stub
+     * @param strFileName
+     */
+    static void stub_QFileDialog_getOpenFileName(Stub &stub, const QString &strFileName);
 };
 
 
@@ -291,6 +417,14 @@ public:
      */
     static void stub_QFileInfo_isSymLink(Stub &stub, bool isSymLink);
 
+    /**
+     * @brief stub_QFileInfo_completeSuffix     针对QFileInfo的completeSuffix打桩
+     * @param stub
+     * @param strCompleteSuffix
+     * @return
+     */
+    static void stub_QFileInfo_completeSuffix(Stub &stub, const QString &strCompleteSuffix);
+
 };
 
 // 针对PluginManager的打桩
@@ -344,6 +478,14 @@ public:
      * @param allByteArray
      */
     static void stub_QFile_readAll(Stub &stub, const QByteArray &allByteArray);
+
+    /**
+     * @brief stub_QFile_exists     针对QFile的exists打桩
+     * @param stub
+     * @param isExists
+     * @return
+     */
+    static void stub_QFile_exists(Stub &stub, bool isExists);
 };
 
 // 针对QDir的打桩
@@ -354,7 +496,7 @@ public:
     ~QDirStub();
 
     /**
-     * @brief stub_QDir_exists     针对QFileInfo的exists打桩
+     * @brief stub_QDir_exists     针对QDir的exists打桩
      * @param stub
      * @param isExists
      * @return
@@ -447,6 +589,256 @@ public:
      * @return
      */
     static void stub_DFileDialog_selectedUrls(Stub &stub, const QList<QUrl> &listUrls);
+
+    /**
+     * @brief stub_DFileDialog_selectedFiles     针对DFileDialog的selectedFiles打桩
+     * @param stub
+     * @param listFiles
+     * @return
+     */
+    static void stub_DFileDialog_selectedFiles(Stub &stub, const QStringList &listFiles);
+};
+
+
+// 针对DDesktopServicesThread的打桩
+class DDesktopServicestub : public QObject
+{
+public:
+    DDesktopServicestub();
+    ~DDesktopServicestub();
+
+    /**
+     * @brief stub_DDesktopServicestub_showFolder     针对DDesktopServices的showFolder打桩
+     * @param stub
+     * @return
+     */
+    static void stub_DDesktopServicestub_showFolder(Stub &stub);
+
+    /**
+     * @brief stub_DDesktopServicestub_showFileItem     针对DDesktopServices的showFileItem打桩
+     * @param stub
+     * @return
+     */
+    static void stub_DDesktopServicestub_showFileItem(Stub &stub);
+};
+
+
+// 针对ArchiveManager的打桩
+class ArchiveManagerStub : public QObject
+{
+public:
+    ArchiveManagerStub();
+    ~ArchiveManagerStub();
+
+    /**
+     * @brief stub_ArchiveManager_createArchive     针对ArchiveManager的createArchive打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_createArchive(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_loadArchive     针对ArchiveManager的loadArchive打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_loadArchive(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_addFiles     针对ArchiveManager的addFiles打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_addFiles(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_extractFiles     针对ArchiveManager的extractFiles打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_extractFiles(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_extractFiles2Path     针对ArchiveManager的extractFiles2Path打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_extractFiles2Path(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_deleteFiles     针对ArchiveManager的deleteFiles打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_deleteFiles(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_batchExtractFiles     针对ArchiveManager的batchExtractFiles打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_batchExtractFiles(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_openFile     针对ArchiveManager的openFile打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_openFile(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_updateArchiveCacheData     针对ArchiveManager的updateArchiveCacheData打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_updateArchiveCacheData(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_updateArchiveComment     针对ArchiveManager的updateArchiveComment打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_updateArchiveComment(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_convertArchive     针对ArchiveManager的convertArchive打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_convertArchive(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_pauseOperation     针对ArchiveManager的pauseOperation打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_pauseOperation(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_continueOperation     针对ArchiveManager的continueOperation打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_continueOperation(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_cancelOperation     针对ArchiveManager的cancelOperation打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_ArchiveManager_cancelOperation(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_ArchiveManager_getCurFilePassword     针对ArchiveManager的getCurFilePassword打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ArchiveManager_getCurFilePassword(Stub &stub);
+
+};
+
+
+// 针对SingleJob的打桩
+class JobStub : public QObject
+{
+public:
+    JobStub();
+    ~JobStub();
+
+    /**
+     * @brief stub_SingleJob_start     针对SingleJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_SingleJob_start(Stub &stub);
+
+    /**
+     * @brief stub_ConvertJob_start     针对ConvertJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ConvertJob_start(Stub &stub);
+
+    /**
+     * @brief stub_StepExtractJob_start     针对ComplexJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_StepExtractJob_start(Stub &stub);
+
+    /**
+     * @brief stub_BatchExtractJob_start     针对BatchExtractJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_BatchExtractJob_start(Stub &stub);
+
+    /**
+     * @brief stub_UpdateJob_start     针对UpdateJob的start打桩
+     * @param stub
+     * @return
+     */
+    static void stub_UpdateJob_start(Stub &stub);
+
+    /**
+     * @brief stub_ArchiveJob_kill     针对ArchiveJob的kill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ArchiveJob_kill(Stub &stub);
+
+    /**
+     * @brief stub_SingleJob_doPause     针对SingleJob的doPause打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doPause(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_SingleJob_doContinue     针对SingleJob的doContinue打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doContinue(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_SingleJob_doKill     针对SingleJob的doKill打桩
+     * @param stub
+     * @param bResult
+     * @return
+     */
+    static void stub_SingleJob_doKill(Stub &stub, bool bResult);
+
+    /**
+     * @brief stub_CreateJob_doWork     针对CreateJob的doKill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_CreateJob_doWork(Stub &stub);
+
+    /**
+     * @brief stub_ExtractJob_doWork     针对ExtractJob的doKill打桩
+     * @param stub
+     * @return
+     */
+    static void stub_ExtractJob_doWork(Stub &stub);
+
 };
 
 

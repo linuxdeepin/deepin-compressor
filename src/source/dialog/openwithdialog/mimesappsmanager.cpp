@@ -63,7 +63,7 @@ QMap<QString, DesktopFile> MimesAppsManager::DesktopObjs = {};
 
 MimeAppsWorker::MimeAppsWorker(QObject *parent): QObject(parent)
 {
-    m_fileSystemWatcher = new QFileSystemWatcher;
+    m_fileSystemWatcher = new QFileSystemWatcher(this);
     m_updateCacheTimer = new QTimer(this);
     m_updateCacheTimer->setInterval(2000);
     m_updateCacheTimer->setSingleShot(true);
@@ -237,7 +237,7 @@ QByteArray MimeAppsWorker::readData(const QString &path)
 
 MimesAppsManager::MimesAppsManager(QObject *parent): QObject(parent)
 {
-    m_mimeAppsWorker = new MimeAppsWorker;
+    m_mimeAppsWorker = new MimeAppsWorker(this);
     connect(this, &MimesAppsManager::requestUpdateCache, m_mimeAppsWorker, &MimeAppsWorker::updateCache);
     QThread *mimeAppsThread = new QThread;
     m_mimeAppsWorker->moveToThread(mimeAppsThread);

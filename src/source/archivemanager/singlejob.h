@@ -79,6 +79,12 @@ public:
      */
     void doContinue() override;
 
+    /**
+     * @brief status 状态
+     * @return  状态
+     */
+    bool status() override;
+
     SingleJobThread *getdptr();
 protected:
     /**

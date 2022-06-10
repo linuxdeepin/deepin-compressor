@@ -189,6 +189,16 @@ void TreeHeaderView::setPreLblVisible(bool bVisible)
         setFixedHeight(38);
     }
 }
+
+void TreeHeaderView::setLabelFocus(bool focus)
+{
+    if (focus) {
+        m_pPreLbl->setFocus();
+
+    } else {
+        m_pPreLbl->clearFocus();
+    }
+}
 /*
 void TreeHeaderView::paintEvent(QPaintEvent *e)
 {
@@ -289,7 +299,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     QFont pFont = DFontSizeManager::instance()->get(DFontSizeManager::T6);
     pFont.setWeight(QFont::Weight::Medium);
     painter->setFont(pFont);
-    if (logicalIndex == 0) {
+    if (0 == logicalIndex) {
         QRect col0Rect = textRect;
         col0Rect.setX(textRect.x() + 4 + SCROLLMARGIN);
         col0Rect.setWidth(col0Rect.width() + SCROLLMARGIN);
@@ -303,9 +313,9 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     }
 
     // sort indicator
-    if (isSortIndicatorShown() && logicalIndex == sortIndicatorSection()) {
+    if (isSortIndicatorShown() && sortIndicatorSection() == logicalIndex) {
         // TODO: arrow size (8x5)
-        QRect sortIndicator(textRect.x() + textRect.width() - ((logicalIndex == 0) ? 0 : 1),
+        QRect sortIndicator(textRect.x() + textRect.width() - ((0 == logicalIndex) ? 0 : 1),
                             textRect.y() + (textRect.height() - 5) / 2, 8, 8);
         option.rect = sortIndicator;
         if (sortIndicatorOrder() == Qt::DescendingOrder) {

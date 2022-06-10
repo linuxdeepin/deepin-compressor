@@ -343,8 +343,6 @@ QStringList ConvertDialog::showDialog()
     setTabOrder(_7zBtn, getButton(0));
     setTabOrder(getButton(0), getButton(1));
 
-    QStringList typeList;
-    typeList << "false" << "";
     bool isZipConvert = true;
     bool is7zConvert = false;
     QString convertType;
@@ -365,8 +363,8 @@ QStringList ConvertDialog::showDialog()
 
     const int mode = exec();
 
-    if (mode == QDialog::Accepted) {
-        typeList.clear();
+    QStringList typeList;
+    if (QDialog::Accepted == mode) {
         if (isZipConvert) {
             typeList << "true" << "zip";
         } else if (is7zConvert) {
@@ -485,7 +483,7 @@ int AppendDialog::showDialog(bool bMultiplePassword)
 
     // 接收加密
     m_strPassword.clear();
-    if (iMode == DDialog::Accepted) {
+    if (DDialog::Accepted == iMode) {
         m_strPassword = pPasswordEdit->text();
     }
 

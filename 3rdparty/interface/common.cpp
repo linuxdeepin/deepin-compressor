@@ -20,7 +20,6 @@
 */
 
 #include "common.h"
-#include "detectencoding.h"
 
 #include <QTextCodec>
 #include <QMimeDatabase>

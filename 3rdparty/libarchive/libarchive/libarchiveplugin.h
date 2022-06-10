@@ -161,6 +161,8 @@ private:
 
 protected:
     QMap<QString, QByteArray> m_mapCode;   // 存储文件名-编码（解压无需再次探测，提高解压速率）
+    QMap<QString, int> m_mapLongName;       // 存储截取的文件名称和截取的次数（不包含001之类的）
+    QSet<QString> m_setLongName;            // 存储被截取之后的文件名称（包含001之类的）
 };
 
 

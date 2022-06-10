@@ -24,8 +24,8 @@ You can run, exit or create a shortcut for Archive Manager by the following ways
 
 ### Exit Archive Manager
 
-- Click  ![close_icon](../common/close_icon.svg) on the Archive Manager interface to exit Archive Manager.
-- Right-click ![deepin_compressor](../common/deepin_compressor.svg)on dock and select **Close All** to exit.
+- Click ![close_icon](../common/close_icon.svg) on the Archive Manager interface to exit Archive Manager.
+- Right-click ![deepin_compressor](../common/deepin_compressor.svg) on dock and select **Close All** to exit.
 - Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface and select  **Exit** to exit.
 
 ### View Shortcuts
@@ -42,15 +42,15 @@ In the interface of archive manager, single or multiple files (folders) can be c
 
 1. To select files to be compressed:
    + right-click the files (folder) to be compressed and select **Compress**.
-   + drag the files(folder) directly to the Archive Manager interface and click **Next**.
-      - Click ![plus](../common/icon_plus.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files (folder) to be compressed.
-      - In the list of files, right-click a file(folder) to view or delete it. 
+   + drag the files (folder) directly to the Archive Manager interface and click **Next**.
+      - Click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files (folder) to be compressed.
+      - In the list of files, right-click a file (folder) to view or delete it. 
 
    ![1|compressor](fig/compress_add.png)
 
 2. Set the name, storage location, compression method, etc.
    
-   > ![notes](../common/notes.svg)Notes: the default format of compressed packages is .zip. 
+   > ![notes](../common/notes.svg) Notes: the default format of compressed packages is .zip. 
 
    ![1|compressor](fig/compressfile.png)
 
@@ -74,14 +74,17 @@ In the interface of archive manager, single or multiple files (folders) can be c
     <td>Advanced Options</td>
     <td>Switch on "Advanced Options", then you can encrypt files/ file lists, split to volumes, and add comments.
     <ul>
-          <li>Encrypt the archive: you can encrypt archives. After that, you will have to enter password to view the file contents. Formats such as 7z, tar.7z and zip are supported. You can use numbers, letters, symbols or common Chinese characters to encrypt archives.</li>
+          <li>CPU threads: You can choose among single thread, 2 threads, 4 threads or 8 threads for compression (for tar.gz format only). The more CPU threads, the higher the compression efficiency.</li>
+          <li>Encrypt the archive: You can encrypt archives. After that, you will have to enter password to view the file contents. Formats such as 7z, tar.7z and zip are supported. You can use numbers, letters, symbols or common Chinese characters to encrypt archives.</li>
           <li>Encrypt the file list too: you can encrypt file list. After that, you will have to enter password to view the file list contents. Formats such as 7z and tar.7z are supported. The password used here is the same as the one you use for archive encryption. </li>
-          <li>Split to volumes: this option is applicable for large files, which splits the large file into several volumes and is convenient for transferring. At most 200 volumes are supported. Formats such as 7z and zip are supported.</li>
-          <li>Comments: you can only add comments to package in zip format.</li>
+          <li>Split to volumes: This option is applicable for large files, which splits the large file into several volumes and is convenient for transferring. At most 200 volumes are supported. Formats such as 7z and zip are supported.</li>
+          <li>Comments: You can only add comments to package in zip format.</li>
       </ul>
  </td>
    </tr>
    </table>
+
+
 
 
 3.  Click **Compress**. You can pause/continue compression during the compressing process.
@@ -101,7 +104,7 @@ In the interface of archive manager, single or multiple files (folders) can be c
 1.  Select a package, and then:
    + right-click and select **Extract**.
    + drag the package directly to the Archive Manager interface.
-      - Add and encrypt files: click ![plus](../common/icon_plus.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files to the package. In the pop-up dialog box, you can select **Use password** and set a password. Different passwords can be added to different files. This option is only applicable for packages in zip format.
+      - Add and encrypt files: click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files to the package. In the pop-up dialog box, you can select **Use password** and set a password. Different passwords can be added to different files. This option is only applicable for packages in zip format.
       
       ![password](fig/password.png)
       
@@ -115,7 +118,7 @@ In the interface of archive manager, single or multiple files (folders) can be c
    
 3.  Click **Extract**. During extraction, you can pause/continue extraction.
 
-   > ![notes](../common/notes.svg)Notes: When there is one encrypted file in the package, you will have to enter the password to extract.  file to be extracted is encrypted, you need to enter the password to complete extraction. When there are multiple encrypted files in the package, you will have to enter the passwords correspondingly. 
+   > ![notes](../common/notes.svg) Notes: When there is one encrypted file in the package, you will have to enter the password to extract.  file to be extracted is encrypted, you need to enter the password to complete extraction. When there are multiple encrypted files in the package, you will have to enter the passwords correspondingly. 
 
 
 
@@ -132,13 +135,13 @@ In the interface of archive manager, single or multiple files (folders) can be c
 In the main menu, you can open the compression interface, switch window themes, view the help manual and get more information about Archive Manager.
 
 ### Open file
-1.  Click  ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
-2.  Select **Open file** and select the file to be compressed or extracted from the file selector.
+1. Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
+2. Select **Open file** and select the file to be compressed or extracted from the file selector.
 
 ### Settings
 
-1.  Click  ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
-2.  Click **Settings**.
+1. Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
+2. Click **Settings**.
    - Extraction:
       + Set the directory where the extracted archives go to;
       + Check or uncheck **Auto create a folder for multiple extracted files**;
@@ -148,7 +151,7 @@ In the main menu, you can open the compression interface, switch window themes, 
       + Check or uncheck **Delete files after compression**.
    - Files Associated:
       + Check or uncheck file types of associated files.
-3.  Click **Restore Defaults** on the interface to restore the initial setting.
+3. Click **Restore Defaults** on the interface to restore the initial setting.
 
 
 
@@ -156,25 +159,25 @@ In the main menu, you can open the compression interface, switch window themes, 
 
 The window theme includes Light Theme, Dark Theme and System Theme.
 
-1.   On the Archive Manager interface, click![icon_menu](../common/icon_menu.svg).
-2.   Click **Theme** to select a theme.
+1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Click **Theme** to select a theme.
 
 ### Help
 
 View Help to get more information about Archive Manager.
 
-1.  On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
-2.  Click **Help**.
-3.  View the manual.
+1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Click **Help**.
+3. View the manual.
 
 
 ### About
 
-1.   On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg) . 
-2.  Click **About**.
-3.   View the version description.
+1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg). 
+2. Click **About**.
+3. View the version description.
 
 ### Exit
 
-1.  On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg) .
-2.  Click **Exit** to exit.
+1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Click **Exit** to exit.

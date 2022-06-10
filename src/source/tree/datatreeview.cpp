@@ -123,7 +123,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 
     //绘制图标
-    if (opt.viewItemPosition == QStyleOptionViewItem::Beginning &&
+    if (QStyleOptionViewItem::Beginning == opt.viewItemPosition &&
             index.data(Qt::DecorationRole).isValid()) {
         // icon size
         auto iconSize = style->pixelMetric(DStyle::PM_ListViewIconSize, &option);
@@ -137,7 +137,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 
     //绘制文字
     textRect = rect;
-    if (index.column() == 0) {
+    if (0 == index.column()) {
         textRect.setX(textRect.x() + margin + 32 - 2);
     } else {
         textRect.setX(textRect.x() + margin - 2);
@@ -275,7 +275,7 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 
     QTreeView::drawRow(painter, options, index);
     // draw focus
-    if (hasFocus() && currentIndex().row() == index.row() && (m_reson == Qt::TabFocusReason || m_reson == Qt::BacktabFocusReason)) {
+    if (hasFocus() && currentIndex().row() == index.row() && (Qt::TabFocusReason == m_reson || Qt::BacktabFocusReason == m_reson)) {
         QStyleOptionFocusRect o;
         o.QStyleOption::operator=(options);
         o.state |= QStyle::State_KeyboardFocusChange | QStyle::State_HasFocus;
@@ -430,6 +430,25 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
+    // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
+    if (Qt::Key_Up == event->key()) {
+        // 当前行为0或为空文件夹时，焦点放在返回上一层目录上
+        if (this->currentIndex().row() == 0 || model()->rowCount() == 0) {
+            if (m_pHeaderView->isVisiable()) {
+                m_pHeaderView->setLabelFocus(true);
+                m_selectionModel->clearSelection();
+            }
+        }
+    }
+
+    // 当前选中返回上一层目录，再点击Key_Down,选中表格第一行
+    if (Qt::Key_Down == event->key()) {
+        if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus() && model()->rowCount() > 0) {
+            m_pHeaderView->setLabelFocus(false);
+            m_selectionModel->setCurrentIndex(m_pModel->index(-1, -1), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+        }
+    }
+
     if (Qt::Key_Delete == event->key() && m_selectionModel->selectedRows().count() > 0) { //删除键
         slotDeleteFile();
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()

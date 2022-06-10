@@ -48,8 +48,9 @@ public:
     /**
      * @brief setFailureDetail  设置失败先详细信息
      * @param strDetail         失败详细信息
+     * @param strFileName       文件名
      */
-    void setFailureDetail(const QString &strDetail);
+    void setFailureDetail(const QString &strDetail, const QString &strFileName = "");
 
     /**
      * @brief setRetryEnable    设置重试按钮是否可用
@@ -61,7 +62,7 @@ public:
      * @brief setFailureInfo  // 设置失败信息
      * @param failureInfo
      */
-    void setFailureInfo(FailureInfo failureInfo);
+    void setFailureInfo(const FailureInfo &failureInfo);
 
     /**
      * @brief getFailureInfo  获取失败信息
@@ -83,6 +84,7 @@ private:
 private:
     DLabel *m_pFailurePixmapLbl; //失败图片显示
     DLabel *m_pFailureLbl; //失败文字显示
+    DLabel *m_pFileNameLbl; // 失败的文件名称
     DLabel *m_pDetailLbl; //错误原因
     CustomPushButton *m_pRetrybutton; // 重试按钮
     CustomCommandLinkButton *commandLinkBackButton; //返回按钮

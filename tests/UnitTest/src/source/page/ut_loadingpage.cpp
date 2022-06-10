@@ -40,10 +40,10 @@ void dSpinner_stop_stub()
 }
 /*******************************函数打桩************************************/
 
-class TestLoadingPage : public ::testing::Test
+class UT_LoadingPage : public ::testing::Test
 {
 public:
-    TestLoadingPage(): m_tester(nullptr) {}
+    UT_LoadingPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -61,27 +61,27 @@ protected:
     LoadingPage *m_tester;
 };
 
-TEST_F(TestLoadingPage, initTest)
+TEST_F(UT_LoadingPage, initTest)
 {
 
 }
 
-TEST_F(TestLoadingPage, teststartLoading)
+TEST_F(UT_LoadingPage, test_startLoading)
 {
     Stub stub;
     stub.set(ADDR(DSpinner, start), dSpinner_start_stub);
     m_tester->startLoading();
 }
 
-TEST_F(TestLoadingPage, teststopLoading)
+TEST_F(UT_LoadingPage, test_stopLoading)
 {
     Stub stub;
     stub.set(ADDR(DSpinner, stop), dSpinner_stop_stub);
     m_tester->stopLoading();
 }
 
-TEST_F(TestLoadingPage, testsetDes)
+TEST_F(UT_LoadingPage, test_setDes)
 {
     m_tester->setDes("123");
-    ASSERT_EQ(m_tester->m_pTextLbl->text(), "123");
+    EXPECT_EQ(m_tester->m_pTextLbl->text(), "123");
 }

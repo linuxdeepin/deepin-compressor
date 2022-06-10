@@ -27,6 +27,7 @@
 
 #include <gtest/gtest.h>
 #include <QTest>
+#include <QFileSystemWatcher>
 
 
 /*******************************函数打桩************************************/
@@ -66,10 +67,10 @@ void compressView_clear_stub()
 
 
 // 测试CompressPage
-class TestCompressPage : public ::testing::Test
+class UT_CompressPage : public ::testing::Test
 {
 public:
-    TestCompressPage(): m_tester(nullptr) {}
+    UT_CompressPage(): m_tester(nullptr) {}
 
 public:
     virtual void SetUp()
@@ -87,21 +88,23 @@ protected:
     CompressPage *m_tester;
 };
 
-TEST_F(TestCompressPage, initTest)
+TEST_F(UT_CompressPage, initTest)
 {
 
 }
 
 // 测试CompressPage的addCompressFiles函数
-TEST_F(TestCompressPage, testaddCompressFiles)
+TEST_F(UT_CompressPage, test_addCompressFiles)
 {
     Stub stub;
     stub.set(ADDR(CompressView, addCompressFiles), compressView_addCompressFiles_stub);
-    m_tester->addCompressFiles(QStringList() << "1.txt" << "2.txt");
+    QStringList listFiles = QStringList() << "1.txt" << "2.txt";
+    m_tester->addCompressFiles(listFiles);
+    EXPECT_EQ(m_tester->m_pCompressView->m_listCompressFiles.isEmpty(), true);
 }
 
 // 测试CompressPage的compressFiles函数
-TEST_F(TestCompressPage, testcompressFiles)
+TEST_F(UT_CompressPage, test_compressFiles)
 {
     Stub stub;
     stub.set(ADDR(CompressView, getCompressFiles), compressView_getCompressFiles_stub);
@@ -109,39 +112,43 @@ TEST_F(TestCompressPage, testcompressFiles)
     QStringList listFiles = QStringList() << "1.txt" << "2.txt";
     QStringList listFileResult = m_tester->compressFiles();
     bool bResult = (listFiles == listFileResult) ? true : false;
-    ASSERT_EQ(bResult, true);
+    EXPECT_EQ(bResult, true);
 }
 
 // 测试CompressPage的refreshCompressedFiles函数
-TEST_F(TestCompressPage, testrefreshCompressedFiles)
+TEST_F(UT_CompressPage, test_refreshCompressedFiles)
 {
     Stub stub;
     stub.set(ADDR(CompressView, refreshCompressedFiles), compressView_refreshCompressedFiles_stub);
     m_tester->refreshCompressedFiles(false, "");
+    EXPECT_EQ(m_tester->m_pCompressView->m_listCompressFiles.isEmpty(), true);
 }
 
 // 测试CompressPage的clear函数
-TEST_F(TestCompressPage, testclear)
+TEST_F(UT_CompressPage, test_clear)
 {
     Stub stub;
     stub.set(ADDR(CompressView, clear), compressView_clear_stub);
     m_tester->clear();
+    EXPECT_EQ(m_tester->m_pCompressView->m_pFileWatcher->files().isEmpty(), true);
+    EXPECT_EQ(m_tester->m_pCompressView->m_listCompressFiles.isEmpty(), true);
+    EXPECT_EQ(m_tester->m_pCompressView->m_listEntry.isEmpty(), true);
 }
 
 // 测试CompressPage的getCompressView函数
-TEST_F(TestCompressPage, testgetCompressView)
+TEST_F(UT_CompressPage, test_getCompressView)
 {
-    ASSERT_EQ(m_tester->getCompressView(), m_tester->m_pCompressView);
+    EXPECT_EQ(m_tester->getCompressView(), m_tester->m_pCompressView);
 }
 
 // 测试CompressPage的getNextBtn函数
-TEST_F(TestCompressPage, testgetNextBtn)
+TEST_F(UT_CompressPage, test_getNextBtn)
 {
-    ASSERT_EQ(m_tester->getNextBtn(), m_tester->m_pNextBtn);
+    EXPECT_EQ(m_tester->getNextBtn(), m_tester->m_pNextBtn);
 }
 
 // 测试CompressPage的slotCompressNextClicked函数
-TEST_F(TestCompressPage, testslotCompressNextClicked)
+TEST_F(UT_CompressPage, test_slotCompressNextClicked)
 {
     Stub stub;
     stub.set(ADDR(CompressView, getCompressFiles), compressView_getCompressFiles_stub);
@@ -149,7 +156,7 @@ TEST_F(TestCompressPage, testslotCompressNextClicked)
 }
 
 // 测试CompressPage的slotCompressNextClicked函数
-TEST_F(TestCompressPage, testslotCompressNextClicked_empty)
+TEST_F(UT_CompressPage, test_slotCompressNextClicked_empty)
 {
     Stub stub;
     stub.set(ADDR(CompressView, getCompressFiles), compressView_getCompressFiles_empty_stub);
@@ -158,15 +165,16 @@ TEST_F(TestCompressPage, testslotCompressNextClicked_empty)
 }
 
 // 测试CompressPage的slotCompressLevelChanged函数
-TEST_F(TestCompressPage, testslotCompressLevelChanged)
+TEST_F(UT_CompressPage, test_slotCompressLevelChanged)
 {
     m_tester->slotCompressLevelChanged(true);
-    ASSERT_EQ(m_tester->m_bRootIndex, true);
+    EXPECT_EQ(m_tester->m_bRootIndex, true);
 }
 
 // 测试CompressPage的slotCompressLevelChanged函数
-TEST_F(TestCompressPage, testslotFileChoose)
+TEST_F(UT_CompressPage, test_slotFileChoose)
 {
     m_tester->m_bRootIndex = true;
     m_tester->slotFileChoose();
+    EXPECT_EQ(m_tester->m_bRootIndex, true);
 }
