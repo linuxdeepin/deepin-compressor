@@ -79,11 +79,11 @@ target_link_libraries(${EXE_NAME}
     compressor-interface
 )
 
-
-set(CMAKE_INSTALL_PREFIX /usr)
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif()
 install(TARGETS deepin-compressor DESTINATION bin)
 install(FILES desktop/deepin-compressor.desktop DESTINATION share/applications)
-
 
 file(GLOB INSTALL_QM_FILES ../translations/*.qm)
 install(FILES ${INSTALL_QM_FILES} 

@@ -68,12 +68,17 @@ endif()
 #模糊测试设置 -end
 
 #3.1 设置lib输出目录
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+if(NOT DEFINED LIBRARY_OUTPUT_PATH)
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+endif()
 #3.2 设置可执行程序输出目录
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+if(NOT DEFINED EXECUTABLE_OUTPUT_PATH)
+    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+endif()
 #导出头文件路径
-set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-
+if(NOT DEFINED HFILES_OUTPUT_PATH)
+    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
+endif()
 
 #Generate the qm file
 set(APP_RES_DIR "src")
@@ -91,7 +96,9 @@ if (USE_TEST)
 endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
 
-set(CMAKE_INSTALL_PREFIX /usr)
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif()
 
 install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
 install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
