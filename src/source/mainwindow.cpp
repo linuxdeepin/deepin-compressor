@@ -3282,7 +3282,7 @@ void TitleWidget::initUI()
     m_pTitleCommentButton = new DIconButton(this);
     m_pTitleCommentButton->setFixedSize(36, 36);
     m_pTitleCommentButton->setToolTip(tr("File info"));
-//    slotThemeChanged();
+    slotThemeChanged();
 
 //    m_pTitleCommentButton->setVisible(false);
     m_pTitleCommentButton->setObjectName("CommentButton");
