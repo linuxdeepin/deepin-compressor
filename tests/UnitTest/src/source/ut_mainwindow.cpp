@@ -286,19 +286,19 @@ TEST_F(UT_MainWindow, test_refreshPage_014)
 TEST_F(UT_MainWindow, test_setTitleButtonStyle_001)
 {
     m_tester->setTitleButtonStyle(true, true, DStyle::SP_IncreaseElement);
-    EXPECT_EQ(m_tester->m_pTitleButton->toolTip(), "Open file");
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleButton->toolTip(), "Open file");
 }
 
 TEST_F(UT_MainWindow, test_setTitleButtonStyle_002)
 {
     m_tester->setTitleButtonStyle(true, true, DStyle::SP_ArrowLeave);
-    EXPECT_EQ(m_tester->m_pTitleButton->toolTip(), "Back");
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleButton->toolTip(), "Back");
 }
 
 TEST_F(UT_MainWindow, test_setTitleButtonStyle_003)
 {
     m_tester->setTitleButtonStyle(true, false, DStyle::SP_EditElement);
-    EXPECT_EQ(m_tester->m_pTitleCommentButton->isVisible(), false);
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->isVisible(), false);
 }
 
 TEST_F(UT_MainWindow, test_loadArchive_001)
@@ -479,7 +479,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_001)
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_002)
 {
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
-    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleCommentButton, evt);
+    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleWidget->m_pTitleCommentButton, evt);
     delete evt;
     EXPECT_EQ(bResult, false);
 }
@@ -487,7 +487,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_002)
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_003)
 {
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
-    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleButton, evt);
+    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleWidget->m_pTitleButton, evt);
     delete evt;
     EXPECT_EQ(bResult, false);
 }
@@ -498,7 +498,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_004)
     m_tester->m_ePageID = PI_UnCompress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView()->m_pHeaderView->m_pPreLbl, evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_005)
@@ -507,7 +507,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_005)
     m_tester->m_ePageID = PI_Compress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView()->m_pHeaderView->m_pPreLbl, evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_006)
@@ -532,7 +532,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_008)
     m_tester->m_ePageID = PI_UnCompress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_009)
@@ -541,7 +541,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_009)
     m_tester->m_ePageID = PI_Compress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_010)
@@ -550,7 +550,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_010)
     m_tester->m_ePageID = PI_CompressSetting;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->titlebar()->findChild<DWindowCloseButton *>("DTitlebarDWindowCloseButton"), evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_011)
@@ -564,7 +564,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_011)
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_012)
 {
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier);
-    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleCommentButton, evt);
+    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleWidget->m_pTitleCommentButton, evt);
     delete evt;
     EXPECT_EQ(bResult, false);
 }
@@ -572,7 +572,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_012)
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_013)
 {
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier);
-    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleButton, evt);
+    bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pTitleWidget->m_pTitleButton, evt);
     delete evt;
     EXPECT_EQ(bResult, false);
 }
@@ -583,7 +583,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_014)
     m_tester->m_ePageID = PI_UnCompress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView()->m_pHeaderView->m_pPreLbl, evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_015)
@@ -592,7 +592,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_015)
     m_tester->m_ePageID = PI_Compress;
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView()->m_pHeaderView->m_pPreLbl, evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_016)
@@ -600,7 +600,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_016)
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier);
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pUnCompressPage->getUnCompressView(), evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_017)
@@ -608,7 +608,7 @@ TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_017)
     QKeyEvent *evt = new QKeyEvent(QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier);
     bool bResult = m_tester->handleApplicationTabEventNotify(m_tester->m_pCompressPage->getCompressView(), evt);
     delete evt;
-    EXPECT_EQ(bResult, true);
+    EXPECT_EQ(bResult, false);
 }
 
 TEST_F(UT_MainWindow, test_handleApplicationTabEventNotify_018)
@@ -2040,7 +2040,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_001)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::LightType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
 }
 
 TEST_F(UT_MainWindow, test_slotThemeChanged_002)
@@ -2048,7 +2048,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_002)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::DarkType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
 }
 
 TEST_F(UT_MainWindow, test_slotThemeChanged_003)
@@ -2056,7 +2056,7 @@ TEST_F(UT_MainWindow, test_slotThemeChanged_003)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::UnknownType);
     m_tester->slotThemeChanged();
-    EXPECT_EQ(m_tester->m_pTitleCommentButton->iconSize(), QSize(15, 15));
+    EXPECT_EQ(m_tester->m_pTitleWidget->m_pTitleCommentButton->iconSize(), QSize(15, 15));
 }
 
 TEST_F(UT_MainWindow, test_slotShowShortcutTip)

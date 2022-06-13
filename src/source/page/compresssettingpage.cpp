@@ -313,7 +313,7 @@ void CompressSettingPage::initUI()
     m_pRightScroll->setWidgetResizable(true);
     m_pRightScroll->setMinimumHeight(100);           // task 16309调整最小大小
     m_pRightScroll->setWidget(pRightWgt);
-
+    m_pRightScroll->setFocusPolicy(Qt::NoFocus);
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
     pBtnLayout->addStretch(1);
