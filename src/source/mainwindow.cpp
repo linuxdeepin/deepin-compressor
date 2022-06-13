@@ -182,42 +182,14 @@ void MainWindow::initTitleBar()
     QIcon icon = QIcon::fromTheme("deepin-compressor");
     titlebar()->setIcon(icon);
 
-    // 添加左上角按钮
-    m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
-    m_pTitleButton->setFixedSize(36, 36);
-    m_pTitleButton->setVisible(false);
-    m_pTitleButton->setObjectName("TitleButton");
-    m_pTitleButton->setAccessibleName("Title_btn");
-    m_pTitleButton->setToolTip(tr("Open file"));
+    // titlebar widget
+    m_pTitleWidget = new TitleWidget(this);
+    m_pTitleWidget->setFocusPolicy(Qt::TabFocus);
+    this->titlebar()->addWidget(m_pTitleWidget, Qt::AlignLeft);
+    setTabOrder(this->titlebar(), m_pTitleWidget);
 
-    // 左上角注释信息
-    m_pTitleCommentButton = new DIconButton(this);
-    m_pTitleCommentButton->setFixedSize(36, 36);
-    m_pTitleCommentButton->setToolTip(tr("File info"));
-    slotThemeChanged();
-
-    m_pTitleCommentButton->setVisible(false);
-    m_pTitleCommentButton->setObjectName("CommentButton");
-    m_pTitleCommentButton->setAccessibleName("Comment_btn");
-
-    // 左上角按钮布局
-    QHBoxLayout *leftLayout = new QHBoxLayout;
-    leftLayout->addSpacing(6);
-    leftLayout->addWidget(m_pTitleButton);
-    leftLayout->addSpacing(5);
-    leftLayout->addWidget(m_pTitleCommentButton);
-    leftLayout->addStretch();
-    leftLayout->setContentsMargins(0, 0, 0, 0);
-
-    QFrame *left_frame = new QFrame(this);
-    left_frame->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
-    left_frame->setContentsMargins(0, 0, 0, 0);
-    left_frame->setLayout(leftLayout);
-
-    titlebar()->addWidget(left_frame, Qt::AlignLeft);
-    titlebar()->setContentsMargins(0, 0, 0, 0);
-
-    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
+    m_pTitleWidget->setVisible(false);
+    this->titlebar()->setFocusProxy(nullptr);
 }
 
 void MainWindow::initData()
@@ -237,8 +209,8 @@ void MainWindow::initConnections()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
 
-    connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotTitleBtnClicked);
-    connect(m_pTitleCommentButton, &DPushButton::clicked, this, &MainWindow::slotTitleCommentButtonPressed);
+    connect(m_pTitleWidget, &TitleWidget::sigTitleClicked, this, &MainWindow::slotTitleBtnClicked);
+    connect(m_pTitleWidget, &TitleWidget::sigCommentClicked, this, &MainWindow::slotTitleCommentButtonPressed);
     connect(m_pHomePage, &HomePage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pHomePage, &HomePage::signalDragFiles, this, &MainWindow::slotDragSelectedFiles);
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
@@ -276,6 +248,7 @@ void MainWindow::initConnections()
 
 void MainWindow::refreshPage()
 {
+    qInfo() << "refreshPage()";
     switch (m_ePageID) {
     case PI_Home: {
         resetMainwindow();
@@ -435,23 +408,14 @@ void MainWindow::calFileSizeByThread(const QString &path)
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
-    switch (pixmap) {
-    case DStyle::SP_IncreaseElement: // 列表界面
-        m_pTitleButton->setToolTip(tr("Open file"));
-        break;
-    case DStyle::SP_ArrowLeave:  // 压缩设置界面
-        m_pTitleButton->setToolTip(tr("Back"));
-        break;
-    default:
-        break;
+    m_pTitleWidget->setVisible(bVisible);
+    if (bVisible) {
+        this->titlebar()->setFocusProxy(m_pTitleWidget);
+    } else {
+        this->titlebar()->setFocusProxy(this->titlebar());
     }
 
-    m_pTitleButton->setVisible(bVisible);
-
-    if (bVisible)
-        m_pTitleButton->setIcon(pixmap);
-
-    m_pTitleCommentButton->setVisible(bVisible2);
+    m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
 }
 
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
@@ -493,7 +457,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter);     // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
-    m_pTitleButton->setEnabled(m_stUnCompressParameter.bModifiable);
+    m_pTitleWidget->setTitleButtonEnable(m_stUnCompressParameter.bModifiable);
     m_pOpenAction->setEnabled(m_stUnCompressParameter.bModifiable);
 
     // 设置默认解压路径
@@ -682,6 +646,7 @@ bool MainWindow::checkSettings(const QString &file)
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 {
+#if 0
     if (!m_pUnCompressPage || !m_pCompressPage /*|| !m_pCompressSetting*/) {
         return false;
     }
@@ -825,7 +790,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             return true;
         }
     }
-
+#endif
     return false;
 }
 
@@ -987,7 +952,7 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 {
     m_pOpenAction->setEnabled(bRootIndex);
-    m_pTitleButton->setVisible(bRootIndex);
+    m_pTitleWidget->setTitleButtonVisible(bRootIndex);
 }
 
 void MainWindow::slotCompressNext()
@@ -3178,18 +3143,7 @@ void MainWindow::slotTitleCommentButtonPressed()
 
 void MainWindow::slotThemeChanged()
 {
-    QIcon icon;
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
-    } else {        // 其它默认
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    }
-
-    m_pTitleCommentButton->setIcon(icon);
-    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+    m_pTitleWidget->slotThemeChanged();
 }
 
 void MainWindow::slotShowShortcutTip()
@@ -3265,4 +3219,107 @@ void MainWindow::slotCheckFinished(const QString &strError, const QString &strTo
         m_ePageID = PI_UnCompress;
         refreshPage();
     }
+}
+
+TitleWidget::TitleWidget(QWidget *parent):
+    QWidget(parent)
+{
+    initUI();
+    initConnection();
+}
+
+void TitleWidget::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
+{
+    switch (pixmap) {
+    case DStyle::SP_IncreaseElement: // 列表界面
+        m_pTitleButton->setToolTip(tr("Open file"));
+        break;
+    case DStyle::SP_ArrowLeave:  // 压缩设置界面
+        m_pTitleButton->setToolTip(tr("Back"));
+        break;
+    default:
+        break;
+    }
+
+    m_pTitleButton->setVisible(bVisible);
+
+    if (bVisible)
+        m_pTitleButton->setIcon(pixmap);
+
+    m_pTitleCommentButton->setVisible(bVisible2);
+
+    if (bVisible) {
+        setFocusProxy(m_pTitleButton);
+    } else {
+        setFocusProxy(nullptr);
+    }
+}
+
+void TitleWidget::setTitleButtonEnable(bool enable)
+{
+    m_pTitleButton->setEnabled(enable);
+}
+
+void TitleWidget::setTitleButtonVisible(bool visible)
+{
+    m_pTitleButton->setVisible(visible);
+}
+
+void TitleWidget::slotThemeChanged()
+{
+    QIcon icon;
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
+    } else {        // 其它默认
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    }
+
+    m_pTitleCommentButton->setIcon(icon);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
+}
+
+void TitleWidget::initUI()
+{
+    // 添加左上角按钮
+    m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
+    m_pTitleButton->setFixedSize(36, 36);
+//    m_pTitleButton->setVisible(false);
+    m_pTitleButton->setObjectName("TitleButton");
+    m_pTitleButton->setAccessibleName("Title_btn");
+    m_pTitleButton->setToolTip(tr("Open file"));
+
+    // 左上角注释信息
+    m_pTitleCommentButton = new DIconButton(this);
+    m_pTitleCommentButton->setFixedSize(36, 36);
+    m_pTitleCommentButton->setToolTip(tr("File info"));
+//    slotThemeChanged();
+
+//    m_pTitleCommentButton->setVisible(false);
+    m_pTitleCommentButton->setObjectName("CommentButton");
+    m_pTitleCommentButton->setAccessibleName("Comment_btn");
+
+    // 左上角按钮布局
+    QHBoxLayout *leftLayout = new QHBoxLayout;
+    leftLayout->addSpacing(6);
+    leftLayout->addWidget(m_pTitleButton);
+    leftLayout->addSpacing(5);
+    leftLayout->addWidget(m_pTitleCommentButton);
+    leftLayout->addStretch();
+    leftLayout->setContentsMargins(0, 0, 0, 0);
+
+    this->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
+    this->setContentsMargins(0, 0, 0, 0);
+    this->setLayout(leftLayout);
+
+    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
+    setFocusProxy(m_pTitleButton);
+}
+
+void TitleWidget::initConnection()
+{
+    connect(m_pTitleButton, &DIconButton::clicked, this, &TitleWidget::sigTitleClicked);
+    connect(m_pTitleCommentButton, &DIconButton::clicked, this, &TitleWidget::sigCommentClicked);
 }
