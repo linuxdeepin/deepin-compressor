@@ -3265,16 +3265,6 @@ void TitleWidget::setTitleButtonVisible(bool visible)
     m_pTitleButton->setVisible(visible);
 }
 
-bool TitleWidget::isTitleButtonVisible()
-{
-    return m_pTitleButton->isVisible();
-}
-
-void TitleWidget::setCommentButtonVisible(bool visible)
-{
-    m_pTitleCommentButton->setVisible(visible);
-}
-
 void TitleWidget::slotThemeChanged()
 {
     QIcon icon;
