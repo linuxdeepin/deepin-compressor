@@ -357,6 +357,9 @@ void CompressSettingPage::initUI()
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);
+
+    // bug103712  滚动区域内widget高度发生变化导致页面闪动
+    pRightWgt ->setMinimumHeight(pRightWgt->height());
 }
 
 void CompressSettingPage::initConnections()
