@@ -9,6 +9,27 @@ if (NOT DEFINED VERSION)
     set(VERSION 1.0)
 endif ()
 
+#3.输出目录的预设值
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif()
+#3.1 设置lib输出目录
+if(NOT DEFINED LIBRARY_OUTPUT_PATH)
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+endif()
+#3.2 设置可执行程序输出目录
+if(NOT DEFINED EXECUTABLE_OUTPUT_PATH)
+    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+endif()
+#3.3 导出头文件路径
+if(NOT DEFINED HFILES_OUTPUT_PATH)
+    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
+endif()
+#3.4 插件安装目录
+if(NOT DEFINED COMPRESSOR_PLUGIN_PATH)
+    set(COMPRESSOR_PLUGIN_PATH ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins)
+endif()
+
 #SET(CMAKE_BUILD_TYPE "Debug")  
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 
@@ -19,9 +40,9 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:/usr/lib/deepin-compressor/plugins")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:${COMPRESSOR_PLUGIN_PATH}")
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=/usr/lib/deepin-compressor/plugins")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${COMPRESSOR_PLUGIN_PATH}")
 endif()
 
 #安全编译参数
@@ -67,18 +88,6 @@ if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif()
 #模糊测试设置 -end
 
-#3.1 设置lib输出目录
-if(NOT DEFINED LIBRARY_OUTPUT_PATH)
-    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-endif()
-#3.2 设置可执行程序输出目录
-if(NOT DEFINED EXECUTABLE_OUTPUT_PATH)
-    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-endif()
-#导出头文件路径
-if(NOT DEFINED HFILES_OUTPUT_PATH)
-    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-endif()
 
 #Generate the qm file
 set(APP_RES_DIR "src")
@@ -96,19 +105,16 @@ if (USE_TEST)
 endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
 
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif()
 
-install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS libpigzplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
-install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS cli7zplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS clirarplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS libzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS libpigzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS minizipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS readwritelibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS readonlylibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS compressor-interface DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS bz2plugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS gzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+install(TARGETS xzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
 
