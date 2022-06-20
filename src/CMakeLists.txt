@@ -91,16 +91,16 @@ install(FILES ${INSTALL_QM_FILES}
 
 
 # 自定义右键菜单
-install(FILES conf/compressor-singlecompress.conf DESTINATION /usr/share/applications/context-menus/)
-install(FILES conf/compressor-multicompress.conf DESTINATION /usr/share/applications/context-menus/)
-install(FILES conf/compressor-singleextract.conf DESTINATION /usr/share/applications/context-menus/)
-install(FILES conf/compressor-multiextract.conf DESTINATION /usr/share/applications/context-menus/)
+install(FILES conf/compressor-singlecompress.conf DESTINATION share/applications/context-menus/)
+install(FILES conf/compressor-multicompress.conf DESTINATION share/applications/context-menus/)
+install(FILES conf/compressor-singleextract.conf DESTINATION share/applications/context-menus/)
+install(FILES conf/compressor-multiextract.conf DESTINATION share/applications/context-menus/)
 
 install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION share/icons/hicolor/scalable/apps/)
 install(FILES assets/mimetype/deepin-compressor.xml DESTINATION share/mime/packages/)
 
 # 集成帮助手册
-install(DIRECTORY assets/deepin-compressor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+install(DIRECTORY assets/deepin-compressor DESTINATION share/deepin-manual/manual-assets/application/)
 
 # 支持压缩的格式
 #install(FILES conf/compressor-singlecompress.conf DESTINATION share/deepin-compressor/compressedformat/)

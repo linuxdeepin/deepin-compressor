@@ -8,9 +8,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fno-acce
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=\"${LIBRARY_OUTPUT_PATH}\":/usr/lib/deepin-compressor/plugins")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=\"${LIBRARY_OUTPUT_PATH}\":${COMPRESSOR_PLUGIN_PATH}")
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=\"${LIBRARY_OUTPUT_PATH}\":/usr/lib/deepin-compressor/plugins")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=\"${LIBRARY_OUTPUT_PATH}\":${COMPRESSOR_PLUGIN_PATH}")
 endif()
 
 set(CMAKE_SAFETYTEST "${CMAKE_SAFETYTEST_ARG}")
