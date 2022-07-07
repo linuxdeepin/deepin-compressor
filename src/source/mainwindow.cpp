@@ -328,6 +328,7 @@ void MainWindow::refreshPage()
     }
     break;
     }
+    this->titlebar()->setFocus();
 }
 
 qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
@@ -393,12 +394,6 @@ void MainWindow::calFileSizeByThread(const QString &path)
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
     m_pTitleWidget->setVisible(bVisible);
-    if (bVisible) {
-        this->titlebar()->setFocusProxy(m_pTitleWidget);
-    } else {
-        this->titlebar()->setFocusProxy(this->titlebar());
-    }
-
     m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
 }
 
