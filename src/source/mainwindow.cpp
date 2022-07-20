@@ -328,6 +328,11 @@ void MainWindow::refreshPage()
     }
     break;
     }
+    //压缩文件焦点需压缩文件名上
+    if(m_ePageID == PI_CompressSetting) {
+        return;
+    }
+    //切换界面后焦点默认在标题栏上
     this->titlebar()->setFocus();
 }
 
