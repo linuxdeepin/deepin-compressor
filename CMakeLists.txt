@@ -49,7 +49,7 @@ set(CMAKE_AUTORCC ON)
 
 
 #对DApplication 进行加速
-set(CMAKE_EXE_LINKER_FLAGS "-pie")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
 
 #龙芯特有编译参数 -start
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
