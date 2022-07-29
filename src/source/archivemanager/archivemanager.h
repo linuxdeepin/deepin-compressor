@@ -103,6 +103,14 @@ public:
     bool deleteFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry);
 
     /**
+     * @brief renameFiles       重命名压缩包中的文件
+     * @param strArchiveFullPath    压缩包全路径
+     * @param listSelEntry      当前选中的文件
+     * @return                      是否调用成功
+     */
+    bool renameFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry);
+
+    /**
      * @brief batchExtractFiles 批量解压
      * @param listFiles          压缩文件
      * @param strTargetPath     解压路径

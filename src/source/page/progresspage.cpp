@@ -52,6 +52,8 @@ void ProgressPage::setProgressType(Progress_Type eType)
         m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
     }  else if (PT_Delete == m_eType) { // 删除
         m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
+    }  else if (PT_Rename == m_eType) { // 重命名
+        m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + tr("Calculating..."));
     }  else if (PT_Convert == m_eType) { // 格式转换
         m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
     } else if (PT_Comment == m_eType) { // 压缩后添加注释进度
@@ -122,6 +124,8 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Compressing") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Delete == m_eType) {   // 删除
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Deleting") + ": " + strFileName, Qt::ElideMiddle, 520));
+    } else if (PT_Rename == m_eType) {   // 重命名
+        m_pFileNameLbl->setText(elideFont.elidedText(tr("Renaming") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Convert == m_eType) {     // 转换
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Converting") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Comment == m_eType) {     // 注释进度
@@ -325,6 +329,12 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
         } else {
             m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         }
+    } else if (PT_Rename == m_eType) {
+        if (dSpeed < 1024) {
+            m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
+        } else {
+            m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
+        }
     } else if (PT_UnCompress == m_eType) {
         if (dSpeed < 1024) {
             m_pSpeedLbl->setText(tr("Speed", "uncompress") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
@@ -376,6 +386,8 @@ void ProgressPage::slotCancelClicked()
         strDesText = tr("Are you sure you want to stop the decompression?");      // 是否停止解压
     } else if (PT_Delete == m_eType) {
         strDesText = tr("Are you sure you want to stop the deletion?");      // 是否停止删除
+    } else if (PT_Rename == m_eType) {
+        strDesText = tr("Are you sure you want to stop the rename?");      // 是否停止重命名
     } else if (PT_CompressAdd == m_eType) {
         strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止追加
     } else if (PT_Convert == m_eType) {

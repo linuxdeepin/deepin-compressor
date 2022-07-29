@@ -42,6 +42,7 @@ public:
         JT_Load,            // 加载压缩包
         JT_Extract,         // 解压
         JT_Delete,         // 删除
+        JT_Rename,         // 重命名
         JT_BatchExtract,   // 批量解压
         JT_Open,            // 打开
         JT_Update,         // 更新
