@@ -46,7 +46,7 @@ else()
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../3rdparty/interface:../../3rdparty/interface:${COMPRESSOR_PLUGIN_PATH}")
     else()
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=../lib:${COMPRESSOR_PLUGIN_PATH}")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${COMPRESSOR_PLUGIN_PATH}")
     endif()
 endif()
 
