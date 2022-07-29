@@ -418,6 +418,13 @@ private Q_SLOTS:
     void slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize);
 
     /**
+     * @brief slotDelFiels    重命名压缩包中文件
+     * @param listSelEntry      当前选中的文件
+     * @param qTotalSize        重命名文件总大小
+     */
+    void slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize);
+
+    /**
      * @brief slotReceiveCurArchiveName  当前正在操作的压缩包名称显示
      * @param strArchiveName        压缩包名称
      */

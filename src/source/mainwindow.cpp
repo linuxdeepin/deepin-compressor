@@ -211,6 +211,7 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
+    connect(m_pUnCompressPage, &UnCompressPage::signalRenameFile, this, &MainWindow::slotRenameFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalFileChoose, this, &MainWindow::slotChoosefiles);
@@ -300,6 +301,13 @@ void MainWindow::refreshPage()
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
         titlebar()->setTitle(tr("Deleting"));
+    }
+    break;
+    case PI_RenameProgress: {
+        m_pMainWidget->setCurrentIndex(4);
+        setTitleButtonStyle(false, false);
+        m_pProgressPage->resetProgress();
+        titlebar()->setTitle(tr("Renaming"));
     }
     break;
     case PI_ConvertProgress: {
@@ -976,12 +984,7 @@ void MainWindow::slotCompress(const QVariant &val)
     CompressOptions options;
 
     // 构建压缩文件数据
-    foreach (QString strFile, listFiles) {
-        FileEntry stFileEntry;
-        stFileEntry.strFullPath = strFile;
-        listEntry.push_back(stFileEntry);
-    }
-
+    listEntry = m_pCompressPage->getEntrys();
     strDestination = m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName;
 
     // 构建压缩参数
@@ -1387,7 +1390,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     }
     break;
 // 删除
-    case ArchiveJob::JT_Delete: {
+    case ArchiveJob::JT_Delete:
+	{
         qInfo() << "删除结束";
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
@@ -1399,6 +1403,22 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
         } else {
             // 无可用插件
             showErrorMessage(FI_Delete, EI_NoPlugin);
+        }
+    }
+    break;
+    case ArchiveJob::JT_Rename:
+    {
+        qInfo() << "重命名结束";
+        // 追加完成更新压缩包数据
+        m_operationtype = Operation_UpdateData;
+        if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
+            // 开始更新
+            m_pLoadingPage->setDes(tr("Updating, please wait..."));
+            m_pLoadingPage->startLoading();
+            m_ePageID = PI_Loading;
+        } else {
+            // 无可用插件
+            showErrorMessage(FI_Rename, EI_NoPlugin);
         }
     }
     break;
@@ -2752,6 +2772,58 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
     } else {
         // 无可用插件
         showErrorMessage(FI_Delete, EI_NoPlugin);
+    }
+}
+
+void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
+{
+    // 调用添加文件接口
+    CompressOptions options;
+    options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
+    options.strPassword = ArchiveManager::get_instance()->getCurFilePassword();
+    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
+    options.qTotalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
+    QList<FileEntry> sListEntry;
+    sListEntry << SelEntry;
+    //判断是否重名，重名不做操作
+    QString strAlias;
+    if (!SelEntry.strFullPath.endsWith(QDir::separator())) { //文件重命名
+        QString strPath = QFileInfo(SelEntry.strFullPath).path();
+        if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
+            strAlias = SelEntry.strAlias;
+        } else {
+            strAlias = strPath + QDir::separator() + SelEntry.strAlias;
+        }
+    } else { //文件夹重命名
+        QString strPath = QFileInfo(SelEntry.strFullPath.left(SelEntry.strFullPath.length() - 1)).path();
+        if(strPath == "."){
+            strAlias = SelEntry.strAlias + QDir::separator();
+        } else {
+            strAlias = strPath + QDir::separator() + SelEntry.strAlias + QDir::separator();
+        }
+    }
+    if(stArchiveData.mapFileEntry.keys().contains(strAlias)) {//判断是否重名，重名不做操作
+        qInfo() << "文件重名，不做处理";
+        return;
+    }
+    QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
+    if (ArchiveManager::get_instance()->renameFiles(strArchiveFullPath, sListEntry)) {
+        // 设置更新选项
+        m_stUpdateOptions.reset();
+        m_stUpdateOptions.eType = UpdateOptions::Rename;
+        m_stUpdateOptions.listEntry << SelEntry;
+        m_stUpdateOptions.qSize = qTotalSize;
+
+        // 设置进度界面参数
+        m_pProgressPage->setProgressType(PT_Rename);
+        m_pProgressPage->setTotalSize(qTotalSize);
+        m_pProgressPage->setArchiveName(strArchiveFullPath);
+        m_pProgressPage->restartTimer(); // 重启计时器
+        m_ePageID = PI_RenameProgress;
+        refreshPage();
+    } else {
+        // 无可用插件
+        showErrorMessage(FI_Rename, EI_NoPlugin);
     }
 }
 

@@ -223,6 +223,30 @@ bool ArchiveManager::deleteFiles(const QString &strArchiveFullPath, const QList<
     return false;
 }
 
+bool ArchiveManager::renameFiles(const QString &strArchiveFullPath, const QList<FileEntry> &listSelEntry)
+{
+    if (nullptr == m_pInterface) {
+        m_pInterface = UiTools::createInterface(strArchiveFullPath);
+    }
+
+    if (m_pInterface) {
+        RenameJob *pRenameJob = new RenameJob(listSelEntry, m_pInterface);
+
+        // 连接槽函数
+        connect(pRenameJob, &RenameJob::signalJobFinshed, this, &ArchiveManager::slotJobFinished);
+        connect(pRenameJob, &RenameJob::signalprogress, this, &ArchiveManager::signalprogress);
+        connect(pRenameJob, &RenameJob::signalCurFileName, this, &ArchiveManager::signalCurFileName);
+        connect(pRenameJob, &RenameJob::signalQuery, this, &ArchiveManager::signalQuery);
+
+        m_pArchiveJob = pRenameJob;
+        pRenameJob->start();
+
+        return true;
+    }
+
+    return false;
+}
+
 bool ArchiveManager::batchExtractFiles(const QStringList &listFiles, const QString &strTargetPath/*, bool bAutoCreatDir*/)
 {
     BatchExtractJob *pBatchExtractJob = new BatchExtractJob();

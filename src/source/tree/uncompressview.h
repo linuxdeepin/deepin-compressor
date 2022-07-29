@@ -28,6 +28,7 @@ public:
     // 对压缩包数据更改的操作类型
     enum ChangeType {
         CT_None,        // 未做任何更改
+        CT_Rename,      // 重命名
         CT_Delete,      // 删除文件
         CT_Add,         // 追加文件
     };
@@ -186,6 +187,12 @@ Q_SIGNALS:
      * @param qTotalSize        删除文件总大小
      */
     void signalDelFiles(const QList<FileEntry> &listCurEntry, qint64 qTotalSize);
+    /**
+     * @brief signalDelFiels    重命名压缩包中文件
+     * @param listSelEntry      当前重命名选中的文件
+     * @param qTotalSize        重命名文件总大小
+     */
+    void signalRenameFile(const FileEntry &SelEntry, qint64 qTotalSize);
 
     /**
      * @brief signalOpenFile    打开压缩包中文件
@@ -234,6 +241,11 @@ private slots:
      * @brief slotDeleteFile    右键删除操作
      */
     void slotDeleteFile() override;
+
+    /**
+     * @brief slotRenameFile    重命名文件
+     */
+    void slotRenameFile() override;
 
     /**
      * @brief slotDeleteFile    右键打开操作
