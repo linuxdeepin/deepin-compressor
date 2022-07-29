@@ -33,6 +33,7 @@ enum ErrorType {
     ET_FileReadError,     // 文件读取错误
     ET_FileWriteError,     // 文件写错误
     ET_DeleteError,         // 文件删除错误
+    ET_RenameError,         // 文件重命名错误
     ET_MissingVolume,    // 分卷缺失
     ET_InsufficientDiskSpace,   // 磁盘空间不足
 
@@ -58,6 +59,7 @@ enum WorkType {
     WT_Extract,
     WT_Add,
     WT_Delete,
+    WT_Rename,
     WT_Move,
     WT_Copy,
     WT_Comment,
@@ -76,6 +78,7 @@ struct FileEntry {
     {
         strFullPath = "";
         strFileName = "";
+        strAlias = "";
         isDirectory = false;
         qSize = 0;
         uLastModifiedTime = 0;
@@ -83,7 +86,7 @@ struct FileEntry {
     }
 
 
-    bool operator==(FileEntry &t) const       //==的重载
+    bool operator==(const FileEntry &t) const       //==的重载
     {
         if (this->strFullPath == t.strFullPath && this->strFileName == t.strFileName
                 && this->isDirectory == t.isDirectory && this->qSize == t.qSize
@@ -95,10 +98,10 @@ struct FileEntry {
 
     QString strFullPath;    // 文件全路径
     QString strFileName;        // 文件名
+    QString strAlias;       //别名，文件重命名
     bool isDirectory;        // 是否为文件夹
     qlonglong qSize;        // 文件真实大小（文件夹显示项）
     uint uLastModifiedTime;      // 文件最后修改时间
-
     int iIndex;         // 文件在压缩包中的索引位置（目前是只有zip格式会用到，通过索引查找）
 };
 Q_DECLARE_METATYPE(FileEntry)
@@ -192,6 +195,7 @@ Q_DECLARE_METATYPE(ExtractionOptions)
 struct UpdateOptions {
     enum Type {
         Delete,     // 删除
+        Rename,     // 重命名
         Add         // 追加
     };
 

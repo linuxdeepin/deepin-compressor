@@ -64,6 +64,7 @@ public:
     PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
+    PluginFinishType renameFiles(const QList<FileEntry> &files) override;
     PluginFinishType addComment(const QString &comment) override;
     PluginFinishType updateArchiveData(const UpdateOptions &options) override;
 
@@ -164,10 +165,18 @@ private:
     bool deleteEntry(int index, zip_t *archive);
 
     /**
+     * @brief deleteEntry   从压缩包中删除指定文件
+     * @param index     文件索引
+     * @param archive   压缩包数据
+     * @return
+     */
+    bool renameEntry(int index, zip_t *archive, const QString &strAlisa);
+
+    /**
      * @brief getIndexBySelEntry    根据选择的文件获取所有需要操作的entry
      * @param listEntry             选择的文件
      */
-    void getIndexBySelEntry(const QList<FileEntry> &listEntry);
+    void getIndexBySelEntry(const QList<FileEntry> &listEntry, bool isRename = false);
 
 
 Q_SIGNALS:

@@ -40,6 +40,7 @@ int g_SimpleQueryDialog_showDialog_result = 0;          // SimpleQueryDialog sho
 Overwrite_Result g_OverwriteQueryDialog_getDialogResult_result = OR_Cancel;  // OverwriteQueryDialog getDialogResult返回值
 bool g_OverwriteQueryDialog_getApplyAll_result = false; // OverwriteQueryDialog getApplyAll返回值
 int g_AppendDialog_showDialog_result = 0;               // AppendDialog showDialog返回值
+int g_RenameDialog_showDialog_result = 0;               // RenameDialog showDialog返回值
 QString g_OpenWithDialog_showOpenWithDialog_result = "";  // OpenWithDialog showOpenWithDialog返回值
 
 QString g_QFileInfo_path_result = "";                   // QFileInfo path返回值
@@ -79,6 +80,7 @@ bool g_ArchiveManager_addFiles_result = false;           // ArchiveManager addFi
 bool g_ArchiveManager_extractFiles_result = false;       // ArchiveManager extractFiles返回值
 bool g_ArchiveManager_extractFiles2Path_result = false;  // ArchiveManager extractFiles2Path返回值
 bool g_ArchiveManager_deleteFiles_result = false;        // ArchiveManager deleteFiles返回值
+bool g_ArchiveManager_renameFiles_result = false;        // ArchiveManager renameFiles返回值
 bool g_ArchiveManager_batchExtractFiles_result = false;  // ArchiveManager batchExtractFiles返回值
 bool g_ArchiveManager_openFile_result = false;           // ArchiveManager openFile返回值
 bool g_ArchiveManager_updateArchiveCacheData_result = false;      // ArchiveManager updateArchiveCacheData返回值
@@ -379,6 +381,11 @@ int appendDialog_showDialog_stub()
     return g_AppendDialog_showDialog_result;
 }
 
+int renameDialog_showDialog_stub()
+{
+    return g_RenameDialog_showDialog_result;
+}
+
 QString openWithDialog_showOpenWithDialog_stub()
 {
     return g_OpenWithDialog_showOpenWithDialog_result;
@@ -422,6 +429,12 @@ void CustomDialogStub::stub_AppendDialog_showDialog(Stub &stub, int iResult)
 {
     g_AppendDialog_showDialog_result = iResult;
     stub.set(ADDR(AppendDialog, showDialog), appendDialog_showDialog_stub);
+}
+
+void CustomDialogStub::stub_RenameDialog_showDialog(Stub &stub, int iResult)
+{
+    g_RenameDialog_showDialog_result = iResult;
+    stub.set(ADDR(RenameDialog, showDialog), renameDialog_showDialog_stub);
 }
 
 void CustomDialogStub::stub_OpenWithDialog_showOpenWithDialog(Stub &stub, const QString &strResult)
@@ -939,6 +952,11 @@ bool archiveManager_deleteFiles_stub(const QString &, const QList<FileEntry> &)
     return g_ArchiveManager_deleteFiles_result;
 }
 
+bool archiveManager_renameFiles_stub(const QString &, const QList<FileEntry> &)
+{
+    return g_ArchiveManager_renameFiles_result;
+}
+
 bool archiveManager_batchExtractFiles_stub(const QStringList &, const QString &)
 {
     return g_ArchiveManager_batchExtractFiles_result;
@@ -1018,6 +1036,12 @@ void ArchiveManagerStub::stub_ArchiveManager_deleteFiles(Stub &stub, bool bResul
 {
     g_ArchiveManager_deleteFiles_result = bResult;
     stub.set(ADDR(ArchiveManager, deleteFiles), archiveManager_deleteFiles_stub);
+}
+
+void ArchiveManagerStub::stub_ArchiveManager_renameFiles(Stub &stub, bool bResult)
+{
+    g_ArchiveManager_renameFiles_result = bResult;
+    stub.set(ADDR(ArchiveManager, renameFiles), archiveManager_renameFiles_stub);
 }
 
 void ArchiveManagerStub::stub_ArchiveManager_batchExtractFiles(Stub &stub, bool bResult)
