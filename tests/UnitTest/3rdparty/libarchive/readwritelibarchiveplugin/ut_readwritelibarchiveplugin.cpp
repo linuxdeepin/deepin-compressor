@@ -124,6 +124,12 @@ bool deleteEntry_stub(const QList<FileEntry> &)
     return true;
 }
 
+bool renameEntry_stub(const QList<FileEntry> &)
+{
+    return true;
+}
+
+
 static bool g_initializeReader_result;
 bool initializeReader_stub()
 {
@@ -192,6 +198,25 @@ TEST_F(UT_ReadWriteLibarchivePlugin, test_deleteFiles_004)
     files.push_back(file);
 
     EXPECT_EQ(m_tester->deleteFiles(files), PFT_Nomral);
+}
+
+TEST_F(UT_ReadWriteLibarchivePlugin, test_renameFiles)
+{
+    Stub stub;
+    stub.set(ADDR(ReadWriteLibarchivePlugin, initializeReader), initializeReader_stub);
+    stub.set(ADDR(ReadWriteLibarchivePlugin, initializeWriter), initializeWriter_stub);
+    stub.set(ADDR(ReadWriteLibarchivePlugin, renameEntry), renameEntry_stub);
+    stub.set(ADDR(ReadWriteLibarchivePlugin, finish), finish_stub);
+
+    g_initializeReader_result = true;
+    g_initializeWriter_result = true;
+    QList<FileEntry> files;
+    FileEntry file;
+    file.strFullPath = "test.txt";
+    file.strAlias = "test1.txt";
+    files.push_back(file);
+
+    EXPECT_EQ(m_tester->renameFiles(files), PFT_Nomral);
 }
 
 bool open_stub(QIODevice::OpenMode flags)

@@ -81,12 +81,13 @@ public:
                         const QString &encryptionMethod,
                         int volumeSize,
                         bool isTar7z,
-                        const QString &globalWorkDir);
+                        const QString &globalWorkDir,
+                        const QStringList &renameList = QStringList());
     QStringList commentArgs(const QString &archive, const QString &commentfile);
     QStringList deleteArgs(const QString &archive, const QList<FileEntry> &files, const QString &password);
     QStringList extractArgs(const QString &archive, const QStringList &files, bool preservePaths, const QString &password);
     QStringList listArgs(const QString &archive, const QString &password);
-    QStringList moveArgs(const QString &archive, const QList<FileEntry> &entries, QString &destination, const QString &password);
+    QStringList moveArgs(const QString &archive, const QList<FileEntry> &entries, const ArchiveData &stArchiveData, const QString &password);
     QStringList testArgs(const QString &archive, const QString &password);
 
     bool isTestPassedMsg(const QString &line);

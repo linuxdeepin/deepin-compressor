@@ -160,6 +160,7 @@ void UnCompressPage::initConnections()
     connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
     connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
     connect(m_pUnCompressView, &UnCompressView::signalDelFiles, this, &UnCompressPage::signalDelFiles);
+    connect(m_pUnCompressView, &UnCompressView::signalRenameFile, this, &UnCompressPage::signalRenameFile);
     connect(m_pUnCompressView, &UnCompressView::signalOpenFile, this, &UnCompressPage::signalOpenFile);
     connect(m_pUnCompressView, &UnCompressView::signalAddFiles2Archive, this, &UnCompressPage::signalAddFiles2Archive);
 }

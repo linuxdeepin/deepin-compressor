@@ -93,6 +93,11 @@ QStringList CompressView::getCompressFiles()
     return m_listCompressFiles;
 }
 
+QList<FileEntry> CompressView::getEntrys()
+{
+    return m_listEntry;
+}
+
 void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileName)
 {
     m_listEntry.clear();
@@ -300,7 +305,11 @@ void CompressView::slotShowRightMenu(const QPoint &pos)
             }
 
         });
-
+        // 右键-重命名
+        QAction *renameAct = menu.addAction(tr("Rename"), this, &CompressView::slotRenameFile);
+        if(selectionModel()->selectedRows().count() != 1) {
+            renameAct->setEnabled(false);
+        }
         // 右键-删除
         menu.addAction(tr("Delete"), this, &CompressView::slotDeleteFile);
 
@@ -365,6 +374,71 @@ void CompressView::slotDeleteFile()
                     } else {            // 删除文件
                         QFile::remove(entry.strFullPath);
                     }
+                }
+            }
+        } else {    // 点击关闭或者取消，不操作
+            return;
+        }
+    }
+}
+
+void CompressView::slotRenameFile()
+{
+    QList<FileEntry> listSelEntry;
+
+    QModelIndexList listModelIndex = selectionModel()->selectedRows();
+
+    foreach (QModelIndex index, listModelIndex) {
+        if (index.isValid()) {
+            FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();  // 获取文件数据
+            listSelEntry << entry;
+        }
+    }
+    // 重命名只操作单个文件
+    if(listSelEntry.size() != 1) {
+        return;
+    }
+    // 提示重命名文件
+    RenameDialog dialog(this);
+    // 获取重命名所需文件
+    FileEntry entry = listSelEntry.first();
+    int iResult = dialog.showDialog(entry.strFullPath, entry.strAlias, entry.isDirectory);
+    if (0 == m_iLevel) { // 如果是根目录，重命名缓存文件名
+        if (1 == iResult) {     // 如果点击确定，重命名文件
+            // 从缓存中同步重命名数据
+            int iRemoveIndex = m_listCompressFiles.indexOf(entry.strFullPath);
+            if(iRemoveIndex == -1) return;
+            FileEntry tmp = m_listEntry.at(iRemoveIndex);
+            QString strAlias = QFileInfo(dialog.getNewNameText()).fileName();
+            if(strAlias == entry.strFileName) return; //名字与原来相同不做处理
+            QString strAliasEndPath = QDir::separator() + strAlias;
+            for(FileEntry tmpentry: m_listEntry) {
+                if(tmpentry.isDirectory == entry.isDirectory && tmpentry.strFullPath.endsWith(strAliasEndPath)) {
+                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
+                    return;
+                }
+            }
+            tmp.strAlias = strAlias;
+            m_listEntry.replace(iRemoveIndex, tmp);
+            m_pModel->refreshFileEntry(m_listEntry);   // 刷新列表数据
+        } else {    // 点击关闭或者取消，不操作
+            return;
+        }
+    } else{
+        if (1 == iResult) {     // 如果点击确定，重命名本地文件
+            // 重命名本地文件
+            QFileInfo fi(entry.strFullPath);
+            if (fi.isDir()) {   // 重命名文件夹
+                QDir dir(entry.strFullPath);
+                bool bRename = dir.rename(entry.strFullPath, dialog.getNewNameText());
+                if(!bRename) {
+                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
+                }
+            } else {            // 重命名文件
+                QFile file(entry.strFullPath);
+                bool bRename = file.rename(dialog.getNewNameText());
+                if(!bRename) {
+                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
                 }
             }
         } else {    // 点击关闭或者取消，不操作
