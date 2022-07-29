@@ -147,6 +147,11 @@ PluginFinishType LibPigzPlugin::deleteFiles(const QList<FileEntry> &)
     return PFT_Nomral;
 }
 
+PluginFinishType LibPigzPlugin::renameFiles(const QList<FileEntry> &files)
+{
+    return PFT_Nomral;
+}
+
 PluginFinishType LibPigzPlugin::addComment(const QString &)
 {
     return PFT_Nomral;

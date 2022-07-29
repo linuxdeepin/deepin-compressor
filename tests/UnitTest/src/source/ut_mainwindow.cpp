@@ -1887,6 +1887,30 @@ TEST_F(UT_MainWindow, test_slotDelFiles_002)
     EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
 }
 
+TEST_F(UT_MainWindow, test_slotRenameFiles_001)
+{
+    Stub stub;
+    ArchiveManagerStub::stub_ArchiveManager_renameFiles(stub, true);
+    FileEntry entry;
+    entry.strFileName = "1.txt";
+    entry.strAlias = "3.txt";
+    m_tester->slotRenameFile(entry, 10);
+    EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
+    EXPECT_EQ(m_tester->m_ePageID, PI_RenameProgress);
+}
+
+TEST_F(UT_MainWindow, test_slotRenameFiles_002)
+{
+    Stub stub;
+    ArchiveManagerStub::stub_ArchiveManager_renameFiles(stub, false);
+
+    FileEntry entry;
+    entry.strFileName = "1.txt";
+    m_tester->slotRenameFile(entry, 10);
+    EXPECT_EQ(m_tester->m_operationtype, Operation_NULL);
+}
+
+
 TEST_F(UT_MainWindow, test_slotReceiveCurArchiveName)
 {
     m_tester->slotReceiveCurArchiveName("1.zip");

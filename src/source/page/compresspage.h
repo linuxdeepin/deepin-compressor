@@ -23,6 +23,7 @@
 #define COMPRESSPAGE_H
 
 #include <DWidget>
+#include "commonstruct.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -50,6 +51,11 @@ public:
      */
     QStringList compressFiles();
 
+    /**
+     * @brief getEntrys  获取待压缩的文件信息
+     * @return      待压缩的文件信息
+     */
+    QList<FileEntry> getEntrys();
     /**
      * @brief refreshCompressedFiles    刷新压缩文件
      * @param bChanged                  是否有文件改变

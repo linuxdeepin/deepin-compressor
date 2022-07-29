@@ -41,6 +41,7 @@ enum Progress_Type {
     PT_Compress,     // 压缩进度
     PT_UnCompress,   // 解压缩进度
     PT_Delete,       // 删除进度
+    PT_Rename,       // 重命名进度
     PT_CompressAdd, // 追加压缩进度
     PT_Convert,         // 转换格式进度
     PT_Comment,  // 压缩后添加注释进度
@@ -85,6 +86,7 @@ enum Page_ID {
     PI_AddCompressProgress, // 追加进度
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度
+    PI_RenameProgress,      // 重命名进度
     PI_ConvertProgress,     // 转换进度
     PI_CommentProgress,     // 添加zip注释进度
     PI_Success,             // 成功
@@ -174,6 +176,7 @@ enum FailureInfo {
     FI_Uncompress,   // 解压失败（包括解压、提取、打开文件）
     FI_Add,          // 追加失败
     FI_Delete,       // 删除失败
+    FI_Rename,       // 重命名失败
     FI_Convert       // 转换失败
 };
 
