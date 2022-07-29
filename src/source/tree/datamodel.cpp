@@ -62,7 +62,11 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole: {
         switch (iColumn) {
         case DC_Name: {
-            return entry.strFileName;
+            if(entry.strAlias.isEmpty() || entry.strAlias.isNull()) {
+                return entry.strFileName;
+            } else {
+                return entry.strAlias;
+            }
         }
         case DC_Time: {
             return QDateTime::fromTime_t(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
@@ -183,14 +187,16 @@ void DataModel::sort(int column, Qt::SortOrder order)
             sortCollator.setCaseSensitivity(Qt::CaseInsensitive);
 
             // 对首字母是汉字进行额外处理
-            if (entrya.strFileName.at(0).script() == QChar::Script_Han) {
-                if (entryb.strFileName.at(0).script() != QChar::Script_Han) {
-                    return Qt::DescendingOrder == order;
+            if(!(entrya.strFileName.isEmpty() || entrya.strFileName.isNull())
+                 &&!(entryb.strFileName.isEmpty() || entryb.strFileName.isNull())) {
+                if (entrya.strFileName.at(0).script() == QChar::Script_Han) {
+                    if (entryb.strFileName.at(0).script() != QChar::Script_Han) {
+                        return Qt::DescendingOrder == order;
+                    }
+                } else if (entryb.strFileName.at(0).script() == QChar::Script_Han) {
+                    return order != Qt::DescendingOrder;
                 }
-            } else if (entryb.strFileName.at(0).script() == QChar::Script_Han) {
-                return order != Qt::DescendingOrder;
             }
-
             // 默认排序
             return ((order == Qt::DescendingOrder) ^ (sortCollator.compare(entrya.strFileName, entryb.strFileName) < 0)) == 0x01;
         }

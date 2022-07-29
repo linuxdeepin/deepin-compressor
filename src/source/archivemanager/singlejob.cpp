@@ -322,6 +322,36 @@ void DeleteJob::doWork()
     }
 }
 
+// 重命名操作
+RenameJob::RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
+    : SingleJob(pInterface, parent)
+    , m_vecFiles(files)
+{
+    m_eJobType = JT_Rename;
+    initConnections();
+    m_eJobType = JT_Rename;
+}
+
+RenameJob::~RenameJob()
+{
+
+}
+
+void RenameJob::doWork()
+{
+    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
+
+    if (nullptr == pWriteInterface) {
+        return;
+    }
+
+    PluginFinishType eType = pWriteInterface->renameFiles(m_vecFiles);
+
+    if (!(pWriteInterface->waitForFinished())) {
+        slotFinished(eType);
+    }
+}
+
 OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_stEntry(stEntry)

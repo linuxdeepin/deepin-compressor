@@ -131,6 +131,10 @@ protected Q_SLOTS:
      * @brief slotDeleteFile    删除待压缩文件
      */
     virtual void slotDeleteFile() = 0;
+    /**
+     * @brief slotRenameFile    重命名待压缩文件
+     */
+    virtual void slotRenameFile() = 0;
 
 protected:
 

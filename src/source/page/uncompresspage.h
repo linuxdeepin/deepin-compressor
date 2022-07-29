@@ -128,6 +128,13 @@ Q_SIGNALS:
     void signalDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize);
 
     /**
+     * @brief signalDelFiels    重命名压缩包中文件
+     * @param listSelEntry      当前选中的文件
+     * @param qTotalSize        重命名文件总大小
+     */
+    void signalRenameFile(const FileEntry &SelEntry, qint64 qTotalSize);
+
+    /**
      * @brief signalOpenFile    打开压缩包中文件
      * @param entry             待打开的文件
      * @param strProgram        应用程序名（为空时，用默认应用程序打开）

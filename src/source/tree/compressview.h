@@ -39,6 +39,11 @@ public:
      * @return      待压缩的文件
      */
     QStringList getCompressFiles();
+    /**
+     * @brief getEntrys  获取待压缩的文件信息
+     * @return      待压缩的文件信息
+     */
+    QList<FileEntry> getEntrys();
 
     /**
      * @brief refreshCompressedFiles    刷新压缩文件
@@ -124,6 +129,11 @@ private slots:
      * @brief slotDeleteFile    删除待压缩文件
      */
     void slotDeleteFile() override;
+
+    /**
+     * @brief slotRenameFile    重命名文件
+     */
+    void slotRenameFile() override;
 
     /**
      * @brief slotDirChanged   监听当前目录变化

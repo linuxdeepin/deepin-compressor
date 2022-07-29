@@ -199,6 +199,24 @@ private:
 
 };
 
+// 重命名操作
+class RenameJob : public SingleJob
+{
+    Q_OBJECT
+public:
+    explicit RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent = nullptr);
+    ~RenameJob() override;
+
+    /**
+     * @brief doWork    执行操作
+     */
+    void doWork() override;
+
+private:
+    QList<FileEntry> m_vecFiles;
+
+};
+
 // 打开操作
 class OpenJob: public SingleJob
 {
