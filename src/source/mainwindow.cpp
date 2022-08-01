@@ -44,6 +44,7 @@
 #include "uncompressview.h"
 #include "uitools.h"
 #include "calculatesizethread.h"
+#include "eventlogutils.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -63,6 +64,7 @@
 #include <QScreen>
 #include <QFormLayout>
 #include <QShortcut>
+#include <QJsonObject>
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 
@@ -88,7 +90,12 @@ MainWindow::MainWindow(QWidget *parent)
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
 
-
+    QJsonObject obj{
+        {"tid", EventLogUtils::Start},
+        {"version", QCoreApplication::applicationVersion()},
+        {"mode", 1}
+    };
+    EventLogUtils::get().writeLogs(obj);
 }
 
 MainWindow::~MainWindow()
