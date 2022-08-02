@@ -24,6 +24,7 @@
 
 #include <DDialog>
 #include <DLabel>
+#include <DPasswordEdit>
 
 DWIDGET_USE_NAMESPACE
 
@@ -237,13 +238,13 @@ public:
      * @param strReName 重命名名字
      * @return
      */
-    int  showDialog(const QString &strReName, const QString &strAlias = "", bool isDirectory = false);
+    int  showDialog(const QString &strReName, const QString &strAlias = "", bool isDirectory = false, bool isRepeat = false);
     QString getNewNameText() const;
 
 private:
     QString m_strName;
     bool m_isDirectory;
-    QLineEdit *m_lineEdit;
+    DLineEdit *m_lineEdit;
     bool m_bPasswordVisible = false;
 };
 #endif // POPUPDIALOG_H

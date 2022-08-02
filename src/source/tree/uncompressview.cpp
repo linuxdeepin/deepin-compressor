@@ -232,6 +232,7 @@ void UnCompressView::initConnections()
 {
     connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles, Qt::QueuedConnection);    // wayland下使用Qt::QueuedConnection连接方式，防止对话框exec导致事件阻塞，图标停留在界面上
     connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
+    connect(this, &UnCompressView::sigRenameFile, this, &UnCompressView::slotRenameFile);
 }
 
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
@@ -739,7 +740,8 @@ void UnCompressView::slotRenameFile()
     } else {
         strShowName = entry.strAlias;
     }
-    int iResult = dialog.showDialog(entry.strFileName, entry.strAlias, entry.isDirectory);
+    bool isRepeat = (sender() == this);
+    int iResult = dialog.showDialog(entry.strFileName, entry.strAlias, entry.isDirectory, isRepeat);
     if (1 == iResult) {
         entry.strAlias = QFileInfo(dialog.getNewNameText()).fileName();
         // 获取所有文件数据

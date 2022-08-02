@@ -340,6 +340,9 @@ Q_SIGNALS:
      * @brief sigquitApp    应用程序退出信号
      */
     void sigquitApp();
+    /**重命名信号
+      */
+    void sigRenameFile();
 
 private Q_SLOTS:
     /**
