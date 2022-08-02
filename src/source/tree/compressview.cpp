@@ -386,7 +386,8 @@ void CompressView::slotRenameFile()
     RenameDialog dialog(this);
     // 获取重命名所需文件
     FileEntry entry = listSelEntry.first();
-    int iResult = dialog.showDialog(entry.strFullPath, entry.strAlias, entry.isDirectory);
+    bool isRepeat = !sender()->property("repeat").isNull();
+    int iResult = dialog.showDialog(entry.strFullPath, entry.strAlias, entry.isDirectory, isRepeat);
     if (0 == m_iLevel) { // 如果是根目录，重命名缓存文件名
         if (1 == iResult) {     // 如果点击确定，重命名文件
             // 从缓存中同步重命名数据
@@ -394,11 +395,18 @@ void CompressView::slotRenameFile()
             if(iRemoveIndex == -1) return;
             FileEntry tmp = m_listEntry.at(iRemoveIndex);
             QString strAlias = QFileInfo(dialog.getNewNameText()).fileName();
-            if(strAlias == entry.strFileName) return; //名字与原来相同不做处理
+            if(strAlias == entry.strFileName || strAlias == entry.strAlias) { //名字与原来相同不做处理
+                qInfo() << entry.strAlias <<" | The name already exists. Level" << m_iLevel;
+                sender()->setProperty("repeat", "true");
+                slotRenameFile();
+                return;
+            }
             QString strAliasEndPath = QDir::separator() + strAlias;
             for(FileEntry tmpentry: m_listEntry) {
                 if(tmpentry.isDirectory == entry.isDirectory && tmpentry.strFullPath.endsWith(strAliasEndPath)) {
-                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
+                    qInfo() << entry.strFullPath << " | The name already exists。 Level" << m_iLevel;
+                    sender()->setProperty("repeat", "true");
+                    slotRenameFile();
                     return;
                 }
             }
@@ -416,13 +424,17 @@ void CompressView::slotRenameFile()
                 QDir dir(entry.strFullPath);
                 bool bRename = dir.rename(entry.strFullPath, dialog.getNewNameText());
                 if(!bRename) {
-                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
+                    qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    sender()->setProperty("repeat", "true");
+                    slotRenameFile();
                 }
             } else {            // 重命名文件
                 QFile file(entry.strFullPath);
                 bool bRename = file.rename(dialog.getNewNameText());
                 if(!bRename) {
-                    qInfo() << "重命名失败,有重名。 Level" << m_iLevel;
+                    qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    sender()->setProperty("repeat", "true");
+                    slotRenameFile();
                 }
             }
         } else {    // 点击关闭或者取消，不操作

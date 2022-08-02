@@ -147,6 +147,7 @@ void UnCompressPage::initConnections()
     connect(m_pUnCompressView, &UnCompressView::signalRenameFile, this, &UnCompressPage::signalRenameFile);
     connect(m_pUnCompressView, &UnCompressView::signalOpenFile, this, &UnCompressPage::signalOpenFile);
     connect(m_pUnCompressView, &UnCompressView::signalAddFiles2Archive, this, &UnCompressPage::signalAddFiles2Archive);
+    connect(this, &UnCompressPage::sigRenameFile, m_pUnCompressView, &UnCompressView::sigRenameFile);
 }
 
 QString UnCompressPage::elidedExtractPath(const QString &strPath)

@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="tr">
 <context>
     <name>AppendDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="432"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="438"/>
         <source>Add files to the current archive</source>
         <translation>Dosyaları mevcut arşive ekleyin.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="437"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="443"/>
         <source>Use password</source>
         <translation>Parola kullan</translation>
     </message>
@@ -46,17 +44,17 @@
 <context>
     <name>CompressPage</name>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="76"/>
+        <location filename="../src/source/page/compresspage.cpp" line="81"/>
         <source>Next</source>
         <translation>İleri</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="117"/>
+        <location filename="../src/source/page/compresspage.cpp" line="122"/>
         <source>Please add files</source>
         <translation>Lütfen dosya ekle</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresspage.cpp" line="117"/>
+        <location filename="../src/source/page/compresspage.cpp" line="122"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
@@ -65,209 +63,209 @@
 <context>
     <name>CompressSettingPage</name>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="143"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="226"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="146"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="229"/>
         <source>New Archive</source>
         <translation>Yeni Arşiv</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="204"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="207"/>
         <source>Advanced Options</source>
         <translation>Gelişmiş Seçenekler</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="208"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="211"/>
         <source>Compression method</source>
         <translation>Sıkıştırma yöntemi</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="211"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="214"/>
         <source>Encrypt the archive</source>
         <translation>Arşivi şifrele</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="216"/>
         <source>CPU threads</source>
-        <translation>CPU konularıCPU iş parçacıkları</translation>
+        <translation>CPU iş parçacıkları</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="215"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>Encrypt the file list too</source>
         <translation>Dosya listesini de şifrele</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="217"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="220"/>
         <source>Split to volumes</source>
         <translation>Birimlere böl</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="219"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="222"/>
         <source>Comment</source>
         <translation>Açıklama</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="221"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="224"/>
         <source>Compress</source>
         <comment>button</comment>
         <translation>Sıkıştır</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Store</source>
         <translation>Depo</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Fastest</source>
         <translation>En hızlı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Fast</source>
         <translation>Hızlı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Good</source>
         <translation>İyi</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="240"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Best</source>
         <translation>En iyi </translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>Single thread</source>
         <translation>Tek iş parçacığı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>2 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>2 iş parçacığı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>4 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>4 iş parçacığı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="247"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>8 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>8 iş parçacığı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="257"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="260"/>
         <source>Support zip, 7z type only</source>
         <translation>Destek zip, sadece 7z türü</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="260"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="263"/>
         <source>Support 7z type only</source>
         <translation>Destek sadece 7z türü</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="272"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="275"/>
         <source>Enter up to %1 characters</source>
         <translation>%1 fazla karakter girin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="293"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="296"/>
         <source>Name</source>
         <translation>İsim</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="294"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="297"/>
         <source>Save to</source>
         <translation>Şuraya kaydet</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="483"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="489"/>
         <source>Invalid file name</source>
         <translation>Bilinmeyen dosya adı</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="489"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="495"/>
         <source>Please enter the path</source>
         <translation>Lütfen yolu gir</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="494"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="500"/>
         <source>The path does not exist, please retry</source>
         <translation>Yol mevcut değil, lütfen tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="499"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Dosyaları buraya kaydetme izniniz yok, lütfen değiştirin ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="507"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
         <source>Too many volumes, please change and retry</source>
         <translation>Çok fazla cilt, lütfen değiştirin ve yeniden deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="516"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="544"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="550"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 diskte yok, lütfen kontrol edip ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="551"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="528"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="557"/>
         <source>You do not have permission to compress %1</source>
         <translation>Sıkıştırma izniniz yok %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="542"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>%1 orijinal dosyası mevcut değil, lütfen kontrol edip ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="577"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="583"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="691"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="705"/>
         <source>Total size: %1</source>
         <translation>Toplam boyut: %1</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="711"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="725"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Ad, sıkıştırılmış arşivin adıyla aynı, lütfen başka bir ad kullanın</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="719"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
         <translation>ZIP birimlerinin parolası Çince olamaz.</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="783"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Aynı ada sahip başka bir dosya zaten var, değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="823"/>
+        <location filename="../src/source/page/compresssettingpage.cpp" line="837"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
         <translation>Yalnızca Çince ve İngilizce karakterler ve bazı sembolleri destekler</translation>
     </message>
@@ -275,57 +273,62 @@
 <context>
     <name>CompressView</name>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="284"/>
+        <location filename="../src/source/tree/compressview.cpp" line="296"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="298"/>
+        <location filename="../src/source/tree/compressview.cpp" line="309"/>
+        <source>Rename</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/tree/compressview.cpp" line="314"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="301"/>
+        <location filename="../src/source/tree/compressview.cpp" line="317"/>
         <source>Open with</source>
         <translation>Bununla aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="407"/>
+        <location filename="../src/source/tree/compressview.cpp" line="321"/>
+        <location filename="../src/source/tree/compressview.cpp" line="500"/>
         <source>Select default program</source>
         <translation>Varsayılan programı seç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="348"/>
+        <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
         <translation>Dosya(lar) kalıcı olarak silinecektir. Devam etmek istediğine emin misin?</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="348"/>
-        <location filename="../src/source/tree/compressview.cpp" line="381"/>
+        <location filename="../src/source/tree/compressview.cpp" line="364"/>
+        <location filename="../src/source/tree/compressview.cpp" line="474"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="348"/>
+        <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Onayla</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="382"/>
+        <location filename="../src/source/tree/compressview.cpp" line="475"/>
         <source>Add</source>
         <comment>button</comment>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="380"/>
+        <location filename="../src/source/tree/compressview.cpp" line="473"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
         <translation>Arşivi listeye eklemek mi yoksa yeni pencerede mi açmak istiyorsunuz?</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/compressview.cpp" line="383"/>
+        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Open in new window</source>
         <translation>Yeni pencerede aç</translation>
     </message>
@@ -333,23 +336,23 @@
 <context>
     <name>ConvertDialog</name>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="306"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="312"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
         <translation>Bu dosya türündeki arşivlerde yapılan değişiklikler desteklenmez. Değişiklikleri kaydetmek için lütfen arşiv biçimini dönüştürün.</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="314"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Convert the format to:</source>
         <translation>Biçimi şuna dönüştür:</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="338"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="344"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="339"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="345"/>
         <source>Convert</source>
         <comment>button</comment>
         <translation>Dönüştür</translation>
@@ -402,25 +405,6 @@
     </message>
 </context>
 <context>
-    <name>LoadCorruptQuery</name>
-    <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
-        <source>The archive is damaged</source>
-        <translation>Arşiv zarar görmüş</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="528"/>
-        <source>Open as read-only</source>
-        <translation>Salt okunur olarak aç</translation>
-    </message>
-    <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="529"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation>İptal</translation>
-    </message>
-</context>
-<context>
     <name>LoadingPage</name>
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="65"/>
@@ -446,8 +430,6 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="172"/>
-        <location filename="../src/source/mainwindow.cpp" line="191"/>
-        <location filename="../src/source/mainwindow.cpp" line="440"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
@@ -457,127 +439,126 @@
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="294"/>
-        <location filename="../src/source/mainwindow.cpp" line="304"/>
+        <location filename="../src/source/mainwindow.cpp" line="269"/>
+        <location filename="../src/source/mainwindow.cpp" line="279"/>
         <source>Create New Archive</source>
         <translation>Yeni Arşiv Oluştur</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="345"/>
+        <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Converting</source>
         <translation>Dönüştürülüyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="352"/>
+        <location filename="../src/source/mainwindow.cpp" line="334"/>
         <source>Updating comments</source>
         <translation>Açıklamalar güncelleniyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="523"/>
-        <location filename="../src/source/mainwindow.cpp" line="2068"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
+        <location filename="../src/source/mainwindow.cpp" line="496"/>
+        <location filename="../src/source/mainwindow.cpp" line="2060"/>
+        <location filename="../src/source/mainwindow.cpp" line="2082"/>
+        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>Eklenti hatası</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1302"/>
+        <location filename="../src/source/mainwindow.cpp" line="1277"/>
         <source>Adding successful</source>
         <translation>Ekleme başarılı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1334"/>
-        <location filename="../src/source/mainwindow.cpp" line="2139"/>
+        <location filename="../src/source/mainwindow.cpp" line="1309"/>
+        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>İçinde veri yok</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1522"/>
+        <location filename="../src/source/mainwindow.cpp" line="1514"/>
         <source>Adding canceled</source>
         <translation>Ekleme iptal edildi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1620"/>
+        <location filename="../src/source/mainwindow.cpp" line="1612"/>
         <source>Adding failed</source>
         <translation>Eklenemedi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1673"/>
+        <location filename="../src/source/mainwindow.cpp" line="1665"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkarma başarısız oldu: dosya adı çok uzun</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1700"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
+        <location filename="../src/source/mainwindow.cpp" line="1692"/>
+        <location filename="../src/source/mainwindow.cpp" line="2127"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>&quot;%1&quot; oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1822"/>
+        <location filename="../src/source/mainwindow.cpp" line="1814"/>
         <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Açılamadı: dosya adı çok uzun</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2041"/>
+        <location filename="../src/source/mainwindow.cpp" line="2033"/>
         <source>Compression successful</source>
         <translation>Sıkıştırma başarılı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2047"/>
+        <location filename="../src/source/mainwindow.cpp" line="2039"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya adı çok uzun, bu nedenle ilk 60 karakter dosya adı olarak belirlendi.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2076"/>
-        <location filename="../src/source/mainwindow.cpp" line="2143"/>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
+        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
         <translation>Yetersiz disk alanı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2102"/>
-        <location filename="../src/source/mainwindow.cpp" line="2123"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
+        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
         <translation>Bazı bölümler eksik</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
+        <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Wrong password, please retry</source>
         <translation>Yanlış şifre, lütfen tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
-        <location filename="../src/source/mainwindow.cpp" line="2155"/>
+        <location filename="../src/source/mainwindow.cpp" line="2123"/>
+        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosya adı çok uzun. Adı 60 karakter içinde tutun lütfen. </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2152"/>
+        <location filename="../src/source/mainwindow.cpp" line="2144"/>
         <source>Conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Dönüştürülemedi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2290"/>
+        <location filename="../src/source/mainwindow.cpp" line="2282"/>
         <source>Select file</source>
         <translation>Dosya seç</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3102"/>
+        <location filename="../src/source/mainwindow.cpp" line="3152"/>
         <source>Enter up to %1 characters</source>
         <translation>%1 fazla karakter girin</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="196"/>
-        <location filename="../src/source/mainwindow.cpp" line="2978"/>
+        <location filename="../src/source/mainwindow.cpp" line="3028"/>
         <source>File info</source>
         <translation>Dosya bilgisi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1411"/>
+        <location filename="../src/source/mainwindow.cpp" line="1386"/>
         <source>Do you want to delete the archive?</source>
         <translation>Arşivi silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="553"/>
+        <location filename="../src/source/mainwindow.cpp" line="526"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 diskte değiştirildi, lütfen tekrar içe aktarın.</translation>
     </message>
@@ -592,277 +573,278 @@
         <translation>Dosyaları buraya kaydetme izniniz yok, lütfen değiştirin ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="317"/>
+        <location filename="../src/source/mainwindow.cpp" line="292"/>
         <source>Adding files to %1</source>
         <translation>%1 klasörüne dosya ekleniyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="324"/>
+        <location filename="../src/source/mainwindow.cpp" line="299"/>
         <source>Compressing</source>
         <translation>Sıkıştırılıyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="331"/>
+        <location filename="../src/source/mainwindow.cpp" line="306"/>
         <source>Extracting</source>
         <translation>Çıkarılıyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="338"/>
+        <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Deleting</source>
         <translation>Siliniyor</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="443"/>
-        <source>Back</source>
-        <translation>Geri</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="513"/>
-        <location filename="../src/source/mainwindow.cpp" line="2802"/>
+        <location filename="../src/source/mainwindow.cpp" line="486"/>
+        <location filename="../src/source/mainwindow.cpp" line="2852"/>
         <source>Loading, please wait...</source>
         <translation>Yükleniyor lütfen bekleyin...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="586"/>
+        <location filename="../src/source/mainwindow.cpp" line="562"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Devam eden görevi durdurmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1308"/>
-        <location filename="../src/source/mainwindow.cpp" line="1434"/>
+        <location filename="../src/source/mainwindow.cpp" line="1283"/>
+        <location filename="../src/source/mainwindow.cpp" line="1410"/>
+        <location filename="../src/source/mainwindow.cpp" line="1426"/>
         <source>Updating, please wait...</source>
         <translation>Güncelleniyor, lütfen bekleyin ...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1695"/>
+        <location filename="../src/source/mainwindow.cpp" line="1687"/>
         <source>File name too long</source>
         <translation>Dosya adı çok uzun</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2072"/>
+        <location filename="../src/source/mainwindow.cpp" line="2064"/>
         <source>Failed to create file</source>
         <translation>Dosya oluşturulamadı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2065"/>
+        <location filename="../src/source/mainwindow.cpp" line="2057"/>
         <source>Compression failed</source>
         <translation>Sıkıştırma başarısız</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2400"/>
+        <location filename="../src/source/mainwindow.cpp" line="2392"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2464"/>
+        <location filename="../src/source/mainwindow.cpp" line="2456"/>
         <source>Find directory</source>
         <translation>Dizin bul</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2087"/>
+        <location filename="../src/source/mainwindow.cpp" line="2079"/>
         <source>Open failed</source>
         <translation>Açma başarısız</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1616"/>
-        <location filename="../src/source/mainwindow.cpp" line="1690"/>
-        <location filename="../src/source/mainwindow.cpp" line="1765"/>
-        <location filename="../src/source/mainwindow.cpp" line="1820"/>
-        <location filename="../src/source/mainwindow.cpp" line="2098"/>
+        <location filename="../src/source/mainwindow.cpp" line="1608"/>
+        <location filename="../src/source/mainwindow.cpp" line="1682"/>
+        <location filename="../src/source/mainwindow.cpp" line="1757"/>
+        <location filename="../src/source/mainwindow.cpp" line="1812"/>
+        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
         <translation>Yanlış parola</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="626"/>
-        <location filename="../src/source/mainwindow.cpp" line="659"/>
+        <location filename="../src/source/mainwindow.cpp" line="605"/>
+        <location filename="../src/source/mainwindow.cpp" line="638"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Dosya biçimi Arşiv Yöneticisi tarafından desteklenmiyor</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="129"/>
-        <location filename="../src/source/mainwindow.cpp" line="461"/>
-        <location filename="../src/source/mainwindow.cpp" line="523"/>
-        <location filename="../src/source/mainwindow.cpp" line="556"/>
-        <location filename="../src/source/mainwindow.cpp" line="611"/>
-        <location filename="../src/source/mainwindow.cpp" line="617"/>
-        <location filename="../src/source/mainwindow.cpp" line="626"/>
-        <location filename="../src/source/mainwindow.cpp" line="666"/>
-        <location filename="../src/source/mainwindow.cpp" line="1334"/>
-        <location filename="../src/source/mainwindow.cpp" line="2271"/>
-        <location filename="../src/source/mainwindow.cpp" line="2558"/>
-        <location filename="../src/source/mainwindow.cpp" line="2722"/>
+        <location filename="../src/source/mainwindow.cpp" line="434"/>
+        <location filename="../src/source/mainwindow.cpp" line="496"/>
+        <location filename="../src/source/mainwindow.cpp" line="529"/>
+        <location filename="../src/source/mainwindow.cpp" line="590"/>
+        <location filename="../src/source/mainwindow.cpp" line="596"/>
+        <location filename="../src/source/mainwindow.cpp" line="605"/>
+        <location filename="../src/source/mainwindow.cpp" line="645"/>
+        <location filename="../src/source/mainwindow.cpp" line="1309"/>
+        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <location filename="../src/source/mainwindow.cpp" line="2714"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="461"/>
-        <location filename="../src/source/mainwindow.cpp" line="617"/>
+        <location filename="../src/source/mainwindow.cpp" line="320"/>
+        <source>Renaming</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="434"/>
+        <location filename="../src/source/mainwindow.cpp" line="596"/>
         <source>You do not have permission to load %1</source>
         <translation>%1 yükleme izniniz yok</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1411"/>
-        <location filename="../src/source/mainwindow.cpp" line="2400"/>
-        <location filename="../src/source/mainwindow.cpp" line="2824"/>
+        <location filename="../src/source/mainwindow.cpp" line="562"/>
+        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2874"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="586"/>
-        <location filename="../src/source/mainwindow.cpp" line="1411"/>
+        <location filename="../src/source/mainwindow.cpp" line="562"/>
+        <location filename="../src/source/mainwindow.cpp" line="1386"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Onayla</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="611"/>
+        <location filename="../src/source/mainwindow.cpp" line="590"/>
         <source>No such file or directory</source>
         <translation>Böyle bir dosya ya da dizin yok</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1350"/>
+        <location filename="../src/source/mainwindow.cpp" line="1325"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>Çıkarma başarılı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1543"/>
+        <location filename="../src/source/mainwindow.cpp" line="1535"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>Çıkarma iptal edildi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1685"/>
-        <location filename="../src/source/mainwindow.cpp" line="1760"/>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2119"/>
+        <location filename="../src/source/mainwindow.cpp" line="1677"/>
+        <location filename="../src/source/mainwindow.cpp" line="1752"/>
+        <location filename="../src/source/mainwindow.cpp" line="2086"/>
+        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>Arşiv zarar görmüş</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2045"/>
+        <location filename="../src/source/mainwindow.cpp" line="2037"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Çıkarma başarılı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2051"/>
+        <location filename="../src/source/mainwindow.cpp" line="2043"/>
         <source>Conversion successful</source>
         <translation>Dönüştürme başarılı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2112"/>
+        <location filename="../src/source/mainwindow.cpp" line="2104"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Çıkarma başarısız</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2282"/>
+        <location filename="../src/source/mainwindow.cpp" line="2274"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2286"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2294"/>
+        <location filename="../src/source/mainwindow.cpp" line="2286"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2302"/>
+        <location filename="../src/source/mainwindow.cpp" line="2294"/>
         <source>Display shortcuts</source>
         <translation>Kısayolları göster</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2314"/>
+        <location filename="../src/source/mainwindow.cpp" line="2306"/>
         <source>Shortcuts</source>
         <translation>Kısayollar</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2384"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Ad, sıkıştırılmış arşivin adıyla aynı, lütfen başka bir ad kullanın</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2400"/>
+        <location filename="../src/source/mainwindow.cpp" line="2392"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Aynı ada sahip başka bir dosya zaten var, değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2543"/>
+        <location filename="../src/source/mainwindow.cpp" line="2535"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arşivi kendisine ekleyemezsiniz</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2558"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>Bu dosya türünde arşivlere dosya ekleyemezsiniz</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2824"/>
+        <location filename="../src/source/mainwindow.cpp" line="2874"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Güncelle</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3002"/>
+        <location filename="../src/source/mainwindow.cpp" line="3052"/>
         <source>Basic info</source>
         <translation>Temel bilgi</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3018"/>
+        <location filename="../src/source/mainwindow.cpp" line="3068"/>
         <source>Size</source>
         <translation>Boyut</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3019"/>
+        <location filename="../src/source/mainwindow.cpp" line="3069"/>
         <source>Type</source>
         <translation>Tür</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3020"/>
+        <location filename="../src/source/mainwindow.cpp" line="3070"/>
         <source>Location</source>
         <translation>Konum</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3021"/>
+        <location filename="../src/source/mainwindow.cpp" line="3071"/>
         <source>Time created</source>
         <translation>Oluşturulma zamanı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3022"/>
+        <location filename="../src/source/mainwindow.cpp" line="3072"/>
         <source>Time accessed</source>
         <translation>Erişim zamanı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3023"/>
+        <location filename="../src/source/mainwindow.cpp" line="3073"/>
         <source>Time modified</source>
         <translation>Değiştirilme zamanı</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3033"/>
+        <location filename="../src/source/mainwindow.cpp" line="3083"/>
         <source>Archive</source>
         <translation>Arşiv</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3064"/>
+        <location filename="../src/source/mainwindow.cpp" line="3114"/>
         <source>Comment</source>
         <translation>Açıklama</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="656"/>
+        <location filename="../src/source/mainwindow.cpp" line="635"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Arşiv Yöneticisi ayarlarında dosya ilişkilendirme türünü kontrol edin</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2271"/>
+        <location filename="../src/source/mainwindow.cpp" line="2263"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arşiv diskte değiştirildi, lütfen tekrar içe aktarın.</translation>
     </message>
@@ -961,14 +943,6 @@
     </message>
 </context>
 <context>
-    <name>PasswordNeededQuery</name>
-    <message>
-        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
-        <source>Encrypted file, please enter the password</source>
-        <translation>Şifrelenmiş dosya, lütfen parolayı gir</translation>
-    </message>
-</context>
-<context>
     <name>PreviousLabel</name>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
@@ -1021,127 +995,141 @@
 <context>
     <name>ProgressPage</name>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="52"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
+        <location filename="../src/source/page/progresspage.cpp" line="59"/>
+        <location filename="../src/source/page/progresspage.cpp" line="325"/>
+        <location filename="../src/source/page/progresspage.cpp" line="328"/>
+        <location filename="../src/source/page/progresspage.cpp" line="331"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="52"/>
-        <location filename="../src/source/page/progresspage.cpp" line="54"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="60"/>
+        <location filename="../src/source/page/progresspage.cpp" line="59"/>
+        <location filename="../src/source/page/progresspage.cpp" line="61"/>
         <location filename="../src/source/page/progresspage.cpp" line="63"/>
-        <location filename="../src/source/page/progresspage.cpp" line="149"/>
+        <location filename="../src/source/page/progresspage.cpp" line="65"/>
+        <location filename="../src/source/page/progresspage.cpp" line="69"/>
+        <location filename="../src/source/page/progresspage.cpp" line="72"/>
+        <location filename="../src/source/page/progresspage.cpp" line="160"/>
         <source>Calculating...</source>
         <translation>Hesaplanıyor...</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="54"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
+        <location filename="../src/source/page/progresspage.cpp" line="61"/>
+        <location filename="../src/source/page/progresspage.cpp" line="335"/>
+        <location filename="../src/source/page/progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
-        <location filename="../src/source/page/progresspage.cpp" line="342"/>
+        <location filename="../src/source/page/progresspage.cpp" line="63"/>
+        <location filename="../src/source/page/progresspage.cpp" line="341"/>
+        <location filename="../src/source/page/progresspage.cpp" line="343"/>
+        <source>Speed</source>
+        <comment>rename</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/progresspage.cpp" line="65"/>
+        <location filename="../src/source/page/progresspage.cpp" line="355"/>
+        <location filename="../src/source/page/progresspage.cpp" line="357"/>
+        <location filename="../src/source/page/progresspage.cpp" line="359"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="60"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
-        <location filename="../src/source/page/progresspage.cpp" line="334"/>
+        <location filename="../src/source/page/progresspage.cpp" line="69"/>
+        <location filename="../src/source/page/progresspage.cpp" line="347"/>
+        <location filename="../src/source/page/progresspage.cpp" line="349"/>
+        <location filename="../src/source/page/progresspage.cpp" line="351"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>Hız</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="63"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
+        <location filename="../src/source/page/progresspage.cpp" line="72"/>
+        <location filename="../src/source/page/progresspage.cpp" line="321"/>
         <source>Time left</source>
         <translation>Kalan zaman</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="122"/>
+        <location filename="../src/source/page/progresspage.cpp" line="131"/>
         <source>Compressing</source>
         <translation>Sıkıştırılıyor</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="124"/>
+        <location filename="../src/source/page/progresspage.cpp" line="133"/>
         <source>Deleting</source>
         <translation>Siliniyor</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="126"/>
+        <location filename="../src/source/page/progresspage.cpp" line="135"/>
+        <source>Renaming</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/page/progresspage.cpp" line="137"/>
         <source>Converting</source>
         <translation>Dönüştürülüyor</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="128"/>
-        <location filename="../src/source/page/progresspage.cpp" line="147"/>
+        <location filename="../src/source/page/progresspage.cpp" line="139"/>
+        <location filename="../src/source/page/progresspage.cpp" line="158"/>
         <source>Updating the comment...</source>
         <translation>Açıklama güncelleniyor....</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="130"/>
+        <location filename="../src/source/page/progresspage.cpp" line="141"/>
         <source>Extracting</source>
         <translation>Çıkarılıyor</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="141"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="358"/>
+        <location filename="../src/source/page/progresspage.cpp" line="152"/>
+        <location filename="../src/source/page/progresspage.cpp" line="189"/>
+        <location filename="../src/source/page/progresspage.cpp" line="375"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>Duraklat</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="387"/>
+        <location filename="../src/source/page/progresspage.cpp" line="188"/>
+        <location filename="../src/source/page/progresspage.cpp" line="404"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="354"/>
+        <location filename="../src/source/page/progresspage.cpp" line="371"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Devam</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="387"/>
+        <location filename="../src/source/page/progresspage.cpp" line="404"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Onayla</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="376"/>
+        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Are you sure you want to stop the decompression?</source>
         <translation>Açmayı durdurmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="378"/>
+        <location filename="../src/source/page/progresspage.cpp" line="395"/>
         <source>Are you sure you want to stop the deletion?</source>
         <translation>Silme işlemini durdurmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="374"/>
-        <location filename="../src/source/page/progresspage.cpp" line="380"/>
+        <location filename="../src/source/page/progresspage.cpp" line="391"/>
+        <location filename="../src/source/page/progresspage.cpp" line="397"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Sıkıştırmayı durdurmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/source/page/progresspage.cpp" line="382"/>
+        <location filename="../src/source/page/progresspage.cpp" line="399"/>
         <source>Are you sure you want to stop the conversion?</source>
         <translation>Dönüştürmeyi durdurmak istediğinizden emin misiniz?</translation>
     </message>
@@ -1169,7 +1157,7 @@
         <translation>Boyut</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2821"/>
+        <location filename="../src/source/mainwindow.cpp" line="2871"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 değişti. Arşivdeki değişiklikleri kaydetmek istiyor musunuz?</translation>
     </message>
@@ -1214,56 +1202,75 @@
         <translation>Dosya Türü</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Atla</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="203"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Merge</source>
         <comment>button</comment>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Aynı ada sahip başka bir dosya zaten var, değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="477"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="478"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="200"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another folder with the same name already exists, replace it?</source>
         <translation>Aynı isimde başka bir klasör zaten var, değiştirilsin mi?</translation>
     </message>
     <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
         <source>Apply to all</source>
         <translation>Tümünü onayla</translation>
+    </message>
+</context>
+<context>
+    <name>RenameDialog</name>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
+        <source>Rename</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
+        <source>The name already exists</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1350,6 +1357,25 @@
     </message>
 </context>
 <context>
+    <name>TitleWidget</name>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3309"/>
+        <location filename="../src/source/mainwindow.cpp" line="3366"/>
+        <source>Open file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3312"/>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3371"/>
+        <source>File info</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="75"/>
@@ -1365,23 +1391,23 @@
         <translation>Çıkart</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="191"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="193"/>
         <source>The default extraction path does not exist, please retry</source>
         <translation>Varsayılan çıkarma yolu mevcut değil, lütfen tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="193"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="195"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Dosyaları buraya kaydetme izniniz yok, lütfen değiştirin ve tekrar deneyin</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="199"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/page/uncompresspage.cpp" line="211"/>
+        <location filename="../src/source/page/uncompresspage.cpp" line="213"/>
         <source>Find directory</source>
         <translation>Dizin bul</translation>
     </message>
@@ -1389,62 +1415,67 @@
 <context>
     <name>UnCompressView</name>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>You cannot add the archive to itself</source>
         <translation>Arşivi kendisine ekleyemezsiniz</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="392"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>TAMAM</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="618"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="627"/>
         <source>Extract</source>
         <comment>提取</comment>
         <translation>Çıkart</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="620"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Extract to current directory</source>
         <translation>Mevcut dizine çıkart</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="631"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="625"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
+        <source>Rename</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="632"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
         <source>Open with</source>
         <translation>Bununla aç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="636"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="737"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="790"/>
         <source>Select default program</source>
         <translation>Varsayılan programı seç</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Onayla</translation>
     </message>
     <message>
-        <location filename="../src/source/tree/uncompressview.cpp" line="687"/>
+        <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Do you want to delete the selected file(s)?</source>
         <translation>Seçili dosya(ları) silmek istiyor musunuz?</translation>
     </message>
