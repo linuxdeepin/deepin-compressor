@@ -205,6 +205,7 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalRenameFile, this, &MainWindow::slotRenameFile);
+    connect(this, &MainWindow::sigRenameFile, m_pUnCompressPage, &UnCompressPage::sigRenameFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalFileChoose, this, &MainWindow::slotChoosefiles);
@@ -1401,7 +1402,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     break;
     case ArchiveJob::JT_Rename:
     {
-        qInfo() << "重命名结束";
+        qInfo() << "Rename end!";
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
         if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
@@ -2795,7 +2796,8 @@ void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
         }
     }
     if(stArchiveData.mapFileEntry.keys().contains(strAlias)) {//判断是否重名，重名不做操作
-        qInfo() << "文件重名，不做处理";
+        qInfo() << "The name already exists! " << strAlias;
+        emit sigRenameFile();
         return;
     }
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();

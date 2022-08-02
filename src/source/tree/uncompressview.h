@@ -207,6 +207,9 @@ Q_SIGNALS:
      * @param strPassword               密码
      */
     void signalAddFiles2Archive(const QStringList &listFiles, const QString &strPassword);
+    /**重命名信号
+      */
+    void sigRenameFile();
 
 protected Q_SLOTS:
     /**
