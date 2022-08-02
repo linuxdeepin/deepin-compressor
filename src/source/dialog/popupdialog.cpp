@@ -33,6 +33,11 @@
 #include <QDebug>
 #include <DPasswordEdit>
 #include <QFileInfo>
+const int g_nTextLength = 255;
+const int g_nDlgWidth = 380;
+const int g_nDlgHeight = 178;
+const int g_nLableHeight = 20;
+const int g_nLineEditHeight = 36;
 
 TipDialog::TipDialog(QWidget *parent)
     : DDialog(parent)
@@ -526,10 +531,10 @@ void AppendDialog::changeEvent(QEvent *event)
 RenameDialog::RenameDialog(QWidget *parent)
     : DDialog(parent)
 {
-    setFixedSize(380, 178); // 提示框宽度固定
-    m_lineEdit = new QLineEdit;
+    setFixedSize(g_nDlgWidth, g_nDlgHeight); // 提示框宽度固定
+    m_lineEdit = new DLineEdit;
     //输入字符格式与文管保持一致
-    connect(m_lineEdit, &QLineEdit::textChanged,[=](){
+    connect(m_lineEdit, &DLineEdit::textChanged,[=](){
         QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
         QString text = m_lineEdit->text();
         m_lineEdit->setText(text.remove(QRegularExpression(name)));
@@ -544,17 +549,17 @@ RenameDialog::~RenameDialog()
 
 }
 
-int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, bool isDirectory)
+int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, bool isDirectory, bool isRepeat)
 {
     DLabel *strlabel = new DLabel;
     strlabel->setObjectName("ContentLabel");
-    strlabel->setFixedSize(380, 20); // 宽度固定
+    strlabel->setFixedSize(g_nDlgWidth, g_nLableHeight); // 宽度固定
     strlabel->setText(tr("Rename"));
     strlabel->setAlignment(Qt::AlignCenter);
     strlabel->setForegroundRole(DPalette::ToolTipText);
     DFontSizeManager::instance()->bind(strlabel, DFontSizeManager::T6, QFont::Medium);
 
-    m_lineEdit->setMaximumHeight(36);
+    m_lineEdit->setMaximumHeight(g_nLineEditHeight);
     if(strAlias.isEmpty() || strAlias.isNull()) {
         if(isDirectory) {
             m_lineEdit->setText(QFileInfo(strReName).fileName());
@@ -570,16 +575,19 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     }
     m_isDirectory = isDirectory;
     m_strName = strReName;
-    m_lineEdit->setClearButtonEnabled(true);
+
+//    m_lineEdit->setClearButtonEnabled(true);
     //限制输入最大字符长度255
     if(m_isDirectory) {
-        m_lineEdit->setMaxLength(255);
+        m_lineEdit->lineEdit()->setMaxLength(g_nTextLength);
     } else {
         QString strSuffix = QFileInfo(m_strName).suffix();
         if(strSuffix.isNull() || strSuffix.isEmpty()) {
-            m_lineEdit->setMaxLength(255);
+            m_lineEdit->lineEdit()->setMaxLength(g_nTextLength);
         } else {
-            m_lineEdit->setMaxLength(255-QFileInfo(m_strName).suffix().length()-1);
+            int nLength = g_nTextLength-QFileInfo(m_strName).suffix().length()-1;
+            if(nLength < 0) nLength = 0;
+            m_lineEdit->lineEdit()->setMaxLength(nLength);
         }
     }
     DFontSizeManager::instance()->bind(m_lineEdit, DFontSizeManager::T6, QFont::Medium);
@@ -603,9 +611,15 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     // 设置焦点顺序
     setTabOrder(m_lineEdit, getButton(0));
     setTabOrder(getButton(0), getButton(1));
-    m_lineEdit->setFocus();
-    m_lineEdit->selectAll();
+    if(!isRepeat) {
+        m_lineEdit->setFocus();
+    } else {
+        strlabel->setFocus();
+        m_lineEdit->setAlert(true);
+        m_lineEdit->showAlertMessage(tr("The name already exists"));
+    }
     return  exec();
+
 }
 
 QString RenameDialog::getNewNameText() const

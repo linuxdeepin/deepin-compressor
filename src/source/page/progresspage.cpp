@@ -47,6 +47,13 @@ ProgressPage::~ProgressPage()
 void ProgressPage::setProgressType(Progress_Type eType)
 {
     m_eType = eType;
+    if(PT_Rename == m_eType) {
+        m_pPauseContinueButton->setVisible(false);
+        m_pCancelBtn->setVisible(false);
+    } else{
+        m_pPauseContinueButton->setVisible(true);
+        m_pCancelBtn->setVisible(true);
+    }
 
     if (PT_Compress == m_eType || PT_CompressAdd == m_eType) { // 压缩
         m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
@@ -386,8 +393,6 @@ void ProgressPage::slotCancelClicked()
         strDesText = tr("Are you sure you want to stop the decompression?");      // 是否停止解压
     } else if (PT_Delete == m_eType) {
         strDesText = tr("Are you sure you want to stop the deletion?");      // 是否停止删除
-    } else if (PT_Rename == m_eType) {
-        strDesText = tr("Are you sure you want to stop the rename?");      // 是否停止重命名
     } else if (PT_CompressAdd == m_eType) {
         strDesText = tr("Are you sure you want to stop the compression?");      // 是否停止追加
     } else if (PT_Convert == m_eType) {

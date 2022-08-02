@@ -260,7 +260,7 @@ QStringList CliProperties::moveArgs(const QString &archive, const QList<FileEntr
     for (const FileEntry &entry : entries) {
         QString path = entry.strFullPath;
         QString strAlias;
-        auto iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
+        QMap<QString, FileEntry>::const_iterator iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
         for (; iter != stArchiveData.mapFileEntry.end() ;) {
             if (!iter.key().startsWith(path)) {
                 break;
