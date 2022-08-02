@@ -327,7 +327,6 @@ RenameJob::RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pI
     : SingleJob(pInterface, parent)
     , m_vecFiles(files)
 {
-    m_eJobType = JT_Rename;
     initConnections();
     m_eJobType = JT_Rename;
 }

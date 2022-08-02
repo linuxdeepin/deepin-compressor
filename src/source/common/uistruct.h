@@ -22,7 +22,7 @@
 
 // 进度类型
 enum Progress_Type {
-    PT_None,            // 无进度
+    PT_None = 0,            // 无进度
     PT_Compress,     // 压缩进度
     PT_UnCompress,   // 解压缩进度
     PT_Delete,       // 删除进度
@@ -63,7 +63,7 @@ enum DataView_Column {
 
 // 界面标识
 enum Page_ID {
-    PI_Home,                // 首页
+    PI_Home = 0,                // 首页
     PI_Compress,            // 压缩列表
     PI_CompressSetting,     // 压缩设置
     PI_UnCompress,          // 解压列表
@@ -156,7 +156,7 @@ enum SuccessInfo {
 
 // 失败界面信息
 enum FailureInfo {
-    FI_Compress,     // 压缩失败
+    FI_Compress = 0,     // 压缩失败
     FI_Load,         // 打开失败
     FI_Uncompress,   // 解压失败（包括解压、提取、打开文件）
     FI_Add,          // 追加失败
