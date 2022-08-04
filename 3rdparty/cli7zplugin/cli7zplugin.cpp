@@ -396,7 +396,11 @@ bool Cli7zPlugin::handleLine(const QString &line, WorkType workStatus)
         if (workStatus == WT_Add && line.startsWith("System ERROR:")
                 && (ENOSPC == line.mid(line.lastIndexOf(':') + 1).toInt() || EEXIST == line.mid(line.lastIndexOf(':') + 1).toInt())) {
             m_finishType = PFT_Error;
-            m_eErrorType = ET_InsufficientDiskSpace;
+            if(EEXIST == line.mid(line.lastIndexOf(':') + 1).toInt()) {
+                m_eErrorType = ET_ExistVolume;
+            } else {
+                m_eErrorType = ET_InsufficientDiskSpace;
+            }
             return false;
         }
         if ((workStatus == WT_Add && line.startsWith("E_FAIL")) || (workStatus == WT_Extract && line.startsWith("ERROR: E_FAIL"))) {

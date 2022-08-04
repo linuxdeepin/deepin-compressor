@@ -1579,6 +1579,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         case ET_LongNameError:
             showErrorMessage(FI_Compress, EI_LongFileName, true);
             break;
+        // 分卷已存在
+        case ET_ExistVolume:
+            showErrorMessage(FI_Compress, EI_ExistVolume, true);
+            break;
         default: {
             showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
             break;
@@ -2057,6 +2061,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
         break;
         case EI_InsufficientDiskSpace: {
             m_pFailurePage->setFailureDetail(tr("Insufficient disk space"));
+        }
+        break;
+        case EI_ExistVolume: {
+            m_pFailurePage->setFailureDetail(tr("The compressed volumes already exist"));
         }
         break;
         default:
