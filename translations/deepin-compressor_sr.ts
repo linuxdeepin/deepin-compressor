@@ -405,6 +405,25 @@
     </message>
 </context>
 <context>
+    <name>LoadCorruptQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
+        <source>The archive is damaged</source>
+        <translation>Архива је оштећена</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="528"/>
+        <source>Open as read-only</source>
+        <translation>Отвори као само-читање</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="529"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Откажи</translation>
+    </message>
+</context>
+<context>
     <name>LoadingPage</name>
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="65"/>
@@ -429,422 +448,427 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="172"/>
+        <location filename="../src/source/mainwindow.cpp" line="179"/>
         <source>Open file</source>
         <translation>Отвори датотеку</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="173"/>
+        <location filename="../src/source/mainwindow.cpp" line="180"/>
         <source>Settings</source>
         <translation>Подешавања</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="269"/>
-        <location filename="../src/source/mainwindow.cpp" line="279"/>
+        <location filename="../src/source/mainwindow.cpp" line="276"/>
+        <location filename="../src/source/mainwindow.cpp" line="286"/>
         <source>Create New Archive</source>
         <translation>Нова архива</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="327"/>
+        <location filename="../src/source/mainwindow.cpp" line="334"/>
         <source>Converting</source>
         <translation>Претварање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="334"/>
+        <location filename="../src/source/mainwindow.cpp" line="341"/>
         <source>Updating comments</source>
         <translation>Ажурирање коментара</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="2060"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="2071"/>
+        <location filename="../src/source/mainwindow.cpp" line="2097"/>
+        <location filename="../src/source/mainwindow.cpp" line="2122"/>
         <source>Plugin error</source>
         <translation>Грешка додатка</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1277"/>
+        <location filename="../src/source/mainwindow.cpp" line="1284"/>
         <source>Adding successful</source>
         <translation>Успешно додато</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>No data in it</source>
         <translation>Не садржи податке</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1514"/>
+        <location filename="../src/source/mainwindow.cpp" line="1521"/>
         <source>Adding canceled</source>
         <translation>Додавање је отказано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1612"/>
+        <location filename="../src/source/mainwindow.cpp" line="1623"/>
         <source>Adding failed</source>
         <translation>Неуспешно додавање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1665"/>
+        <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1692"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
+        <location filename="../src/source/mainwindow.cpp" line="1703"/>
+        <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>Неуспешно прављење &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1814"/>
+        <location filename="../src/source/mainwindow.cpp" line="1825"/>
         <source>Open failed: the file name is too long</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="2044"/>
         <source>Compression successful</source>
         <translation>Успешно запаковано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2039"/>
+        <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2068"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
+        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2150"/>
         <source>Insufficient disk space</source>
         <translation>Недовољно простора на диску</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
+        <location filename="../src/source/mainwindow.cpp" line="2109"/>
+        <location filename="../src/source/mainwindow.cpp" line="2130"/>
         <source>Some volumes are missing</source>
         <translation>Неки делови недостау</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2119"/>
+        <location filename="../src/source/mainwindow.cpp" line="2134"/>
         <source>Wrong password, please retry</source>
         <translation>Погрешна лозинка, поново унесите</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
+        <location filename="../src/source/mainwindow.cpp" line="2138"/>
+        <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2144"/>
+        <location filename="../src/source/mainwindow.cpp" line="2159"/>
         <source>Conversion failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2282"/>
+        <location filename="../src/source/mainwindow.cpp" line="2297"/>
         <source>Select file</source>
         <translation>Изабери датотеку</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3152"/>
+        <location filename="../src/source/mainwindow.cpp" line="3167"/>
         <source>Enter up to %1 characters</source>
         <translation>Унесите до %1 карактера</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3028"/>
+        <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
         <translation>Својства датотеке</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Do you want to delete the archive?</source>
         <translation>Желите ли да обришете архиву?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="526"/>
+        <location filename="../src/source/mainwindow.cpp" line="533"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 је измењено на диску, поново увезите.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="73"/>
+        <location filename="../src/source/mainwindow.cpp" line="75"/>
         <source>Archive Manager</source>
         <translation>Архиватор</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>Немате дозволу да чувате датотеке овде, направите промену и покушајте поново</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="292"/>
+        <location filename="../src/source/mainwindow.cpp" line="299"/>
         <source>Adding files to %1</source>
         <translation>Додавање датотека у %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="299"/>
+        <location filename="../src/source/mainwindow.cpp" line="306"/>
         <source>Compressing</source>
         <translation>Запакивање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="306"/>
+        <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Extracting</source>
         <translation>Распакивање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="313"/>
+        <location filename="../src/source/mainwindow.cpp" line="320"/>
         <source>Deleting</source>
         <translation>Брисање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="486"/>
-        <location filename="../src/source/mainwindow.cpp" line="2852"/>
+        <location filename="../src/source/mainwindow.cpp" line="493"/>
+        <location filename="../src/source/mainwindow.cpp" line="2867"/>
         <source>Loading, please wait...</source>
         <translation>Учитавање, молимо сачекајте...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Заиста желите да зауставите задатак који је у току?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1283"/>
-        <location filename="../src/source/mainwindow.cpp" line="1410"/>
-        <location filename="../src/source/mainwindow.cpp" line="1426"/>
+        <location filename="../src/source/mainwindow.cpp" line="1290"/>
+        <location filename="../src/source/mainwindow.cpp" line="1417"/>
+        <location filename="../src/source/mainwindow.cpp" line="1433"/>
         <source>Updating, please wait...</source>
         <translation>Ажурирање, молимо сачекајте...</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1687"/>
+        <location filename="../src/source/mainwindow.cpp" line="1698"/>
         <source>File name too long</source>
         <translation>Предугачко име датотеке</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2064"/>
+        <location filename="../src/source/mainwindow.cpp" line="2075"/>
         <source>Failed to create file</source>
         <translation>Неуспешно прављење датотеке</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2057"/>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>Compression failed</source>
         <translation>Неуспешно запакивање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Замени</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2456"/>
+        <location filename="../src/source/mainwindow.cpp" line="2471"/>
         <source>Find directory</source>
         <translation>Нађи директоријум</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Open failed</source>
         <translation>Неуспешно отварање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1608"/>
-        <location filename="../src/source/mainwindow.cpp" line="1682"/>
-        <location filename="../src/source/mainwindow.cpp" line="1757"/>
-        <location filename="../src/source/mainwindow.cpp" line="1812"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
+        <location filename="../src/source/mainwindow.cpp" line="1619"/>
+        <location filename="../src/source/mainwindow.cpp" line="1693"/>
+        <location filename="../src/source/mainwindow.cpp" line="1768"/>
+        <location filename="../src/source/mainwindow.cpp" line="1823"/>
+        <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Wrong password</source>
         <translation>Погрешна лозинка</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="638"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="645"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Архиватор не подржава овај формат датотеке</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="529"/>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="645"/>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <location filename="../src/source/mainwindow.cpp" line="2714"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="536"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="652"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
+        <location filename="../src/source/mainwindow.cpp" line="2729"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>У реду</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="320"/>
+        <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
         <translation>Немате дозволу да учитате %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Потврди</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
         <translation>Нема такве датотеке или директоријума</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1325"/>
+        <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>Успешно распаковано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1535"/>
+        <location filename="../src/source/mainwindow.cpp" line="1542"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>Распакивање је отказано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1677"/>
-        <location filename="../src/source/mainwindow.cpp" line="1752"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
+        <location filename="../src/source/mainwindow.cpp" line="1688"/>
+        <location filename="../src/source/mainwindow.cpp" line="1763"/>
+        <location filename="../src/source/mainwindow.cpp" line="2101"/>
+        <location filename="../src/source/mainwindow.cpp" line="2126"/>
         <source>The archive is damaged</source>
         <translation>Архива је оштећена</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2037"/>
+        <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Успешно распаковано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2043"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Conversion successful</source>
         <translation>Успешно претворено</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2104"/>
+        <location filename="../src/source/mainwindow.cpp" line="2083"/>
+        <source>The compressed volumes already exist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Неуспешно распакивање</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2274"/>
+        <location filename="../src/source/mainwindow.cpp" line="2289"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2293"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2286"/>
+        <location filename="../src/source/mainwindow.cpp" line="2301"/>
         <source>Delete</source>
         <translation>Обриши</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2294"/>
+        <location filename="../src/source/mainwindow.cpp" line="2309"/>
         <source>Display shortcuts</source>
         <translation>Прикажи пречице</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2306"/>
+        <location filename="../src/source/mainwindow.cpp" line="2321"/>
         <source>Shortcuts</source>
         <translation>Пречице</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2384"/>
+        <location filename="../src/source/mainwindow.cpp" line="2399"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Име је исто као од запаковане архиве, употребите друго име</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Датотека под истим називом већ постоји. Заменити?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2535"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add the archive to itself</source>
         <translation>Не можете додати архиву самој себи</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>Не можете додавати архиве ове врсте датотека</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Ажурирај</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3052"/>
+        <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
         <translation>Основни подаци</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3068"/>
+        <location filename="../src/source/mainwindow.cpp" line="3083"/>
         <source>Size</source>
         <translation>Величина</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3069"/>
+        <location filename="../src/source/mainwindow.cpp" line="3084"/>
         <source>Type</source>
         <translation>Врста</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3070"/>
+        <location filename="../src/source/mainwindow.cpp" line="3085"/>
         <source>Location</source>
         <translation>Локација</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3071"/>
+        <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Time created</source>
         <translation>Настало</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3072"/>
+        <location filename="../src/source/mainwindow.cpp" line="3087"/>
         <source>Time accessed</source>
         <translation>Приступљено</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3088"/>
         <source>Time modified</source>
         <translation>Време измене</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3083"/>
+        <location filename="../src/source/mainwindow.cpp" line="3098"/>
         <source>Archive</source>
         <translation>Архива</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3114"/>
+        <location filename="../src/source/mainwindow.cpp" line="3129"/>
         <source>Comment</source>
         <translation>Коментар</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="635"/>
+        <location filename="../src/source/mainwindow.cpp" line="642"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Подесите врсте датотека у подешавањима Архиватора</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Архива је измењена на диску, поново увезите.</translation>
     </message>
@@ -940,6 +964,14 @@
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="310"/>
         <source>Other Applications</source>
         <translation>Други програми</translation>
+    </message>
+</context>
+<context>
+    <name>PasswordNeededQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
+        <source>Encrypted file, please enter the password</source>
+        <translation>Шифрована датотека, молимо унесите лознку</translation>
     </message>
 </context>
 <context>
@@ -1157,7 +1189,7 @@
         <translation>Величина</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2871"/>
+        <location filename="../src/source/mainwindow.cpp" line="2886"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 је измењена. Желите ли да сачувате измене архиве?</translation>
     </message>
@@ -1204,6 +1236,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Прескочи</translation>
@@ -1216,23 +1249,27 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Датотека под истим називом већ постоји. Заменити?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Замени</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Откажи</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>У реду</translation>
@@ -1244,6 +1281,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
         <source>Apply to all</source>
         <translation>Примени на све</translation>
     </message>
@@ -1359,18 +1397,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3309"/>
-        <location filename="../src/source/mainwindow.cpp" line="3366"/>
+        <location filename="../src/source/mainwindow.cpp" line="3324"/>
+        <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3312"/>
+        <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3371"/>
+        <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
         <translation type="unfinished"/>
     </message>
