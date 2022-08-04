@@ -405,6 +405,25 @@
     </message>
 </context>
 <context>
+    <name>LoadCorruptQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
+        <source>The archive is damaged</source>
+        <translation>མིག་སྔའི་སྡུད་སྒྲིལ་ཡིག་ཆ་འཕྲོ་བརླག་ཕྱིན་འདུག </translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="528"/>
+        <source>Open as read-only</source>
+        <translation>ཀློག་ཙམ་གྱི་དཔེ་རྣམ་ལས་ཁ་ཕྱེ་བ།</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="529"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>འདོར་བ།</translation>
+    </message>
+</context>
+<context>
     <name>LoadingPage</name>
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="65"/>
@@ -429,422 +448,427 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="172"/>
+        <location filename="../src/source/mainwindow.cpp" line="179"/>
         <source>Open file</source>
         <translation>ཡིག་ཆ་ཁ་ཕྱེ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="173"/>
+        <location filename="../src/source/mainwindow.cpp" line="180"/>
         <source>Settings</source>
         <translation>སྒྲིག་འགོད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="269"/>
-        <location filename="../src/source/mainwindow.cpp" line="279"/>
+        <location filename="../src/source/mainwindow.cpp" line="276"/>
+        <location filename="../src/source/mainwindow.cpp" line="286"/>
         <source>Create New Archive</source>
         <translation>ཡིག་ཚགས་སུ་ཉར་བའི་ཡིག་ཆ་གསར་བཟོ་བྱ་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="327"/>
+        <location filename="../src/source/mainwindow.cpp" line="334"/>
         <source>Converting</source>
         <translation>བརྗེ་སྒྱུར་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="334"/>
+        <location filename="../src/source/mainwindow.cpp" line="341"/>
         <source>Updating comments</source>
         <translation>མཆན་འགྲེལ་གསར་སྒྱུར་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="2060"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="2071"/>
+        <location filename="../src/source/mainwindow.cpp" line="2097"/>
+        <location filename="../src/source/mainwindow.cpp" line="2122"/>
         <source>Plugin error</source>
         <translation>བར་འཇུག་རྒྱུན་འགལ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1277"/>
+        <location filename="../src/source/mainwindow.cpp" line="1284"/>
         <source>Adding successful</source>
         <translation>བསྐྱར་སྣོན་བྱེད་ཐུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>No data in it</source>
         <translation>སྡུད་སྒྲིལ་ནང་གཞི་གྲངས་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1514"/>
+        <location filename="../src/source/mainwindow.cpp" line="1521"/>
         <source>Adding canceled</source>
         <translation>བསྐྱར་སྣོན་བྱེད་མཚམས་བཞག་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1612"/>
+        <location filename="../src/source/mainwindow.cpp" line="1623"/>
         <source>Adding failed</source>
         <translation>བསྐྱར་སྣོན་བྱེད་མ་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1665"/>
+        <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1692"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
+        <location filename="../src/source/mainwindow.cpp" line="1703"/>
+        <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>ཡིག་ཆ་“%1”བཟོ་མ་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1814"/>
+        <location filename="../src/source/mainwindow.cpp" line="1825"/>
         <source>Open failed: the file name is too long</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="2044"/>
         <source>Compression successful</source>
         <translation>གནོན་བཙིར་ཐུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2039"/>
+        <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2068"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
+        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2150"/>
         <source>Insufficient disk space</source>
         <translation>སྡུད་སྡེར་གྱི་བར་སྟོང་མི་འདང་བ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
+        <location filename="../src/source/mainwindow.cpp" line="2109"/>
+        <location filename="../src/source/mainwindow.cpp" line="2130"/>
         <source>Some volumes are missing</source>
         <translation>དེབ་བགོས་མ་ཚང་མེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2119"/>
+        <location filename="../src/source/mainwindow.cpp" line="2134"/>
         <source>Wrong password, please retry</source>
         <translation>བསྡུས་འགྲོལ་གསང་ཨང་ནོར་བས། ཡང་བསྐྱར་ཚོད་ལྟ་བྱོས། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
+        <location filename="../src/source/mainwindow.cpp" line="2138"/>
+        <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2144"/>
+        <location filename="../src/source/mainwindow.cpp" line="2159"/>
         <source>Conversion failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2282"/>
+        <location filename="../src/source/mainwindow.cpp" line="2297"/>
         <source>Select file</source>
         <translation>ཡིག་ཆ་འདེམས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3152"/>
+        <location filename="../src/source/mainwindow.cpp" line="3167"/>
         <source>Enter up to %1 characters</source>
         <translation>མཆན་འགྲེལ་གྱི་ནང་དོན་ཡིག་རྟགས་%1ལས་བརྒལ་མི་རུང་། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3028"/>
+        <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
         <translation>ཡིག་ཆའི་ཆ་འཕྲིན།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Do you want to delete the archive?</source>
         <translation>ཁྱེད་ཀྱིས་གནོན་བཙིར་ཡིག་ཆ་འདི་སུབ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="526"/>
+        <location filename="../src/source/mainwindow.cpp" line="533"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>“%1”ལ་འགྱུར་བ་བྱུང་ཟིན་པས། ཡང་བསྐྱར་ཡིག་ཆ་འདྲེན་འཇུག་གནང་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="73"/>
+        <location filename="../src/source/mainwindow.cpp" line="75"/>
         <source>Archive Manager</source>
         <translation>ཡིག་ཚགས་དོ་དམ་ཆས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>ཁྱེད་ལ་ལམ་བུ་འདི་བརྒྱུད་ནས་ཡིག་ཆ་ཉར་བའི་དབང་ཚད་མེད་པས། ཡང་བསྐྱར་ཚོད་ལྟ་གྱིས་དང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="292"/>
+        <location filename="../src/source/mainwindow.cpp" line="299"/>
         <source>Adding files to %1</source>
         <translation>%1ལ་ཡིག་ཆ་སྣོན་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="299"/>
+        <location filename="../src/source/mainwindow.cpp" line="306"/>
         <source>Compressing</source>
         <translation>གནོན་བཙིར་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="306"/>
+        <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Extracting</source>
         <translation>བསྡུས་འགྲོལ་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="313"/>
+        <location filename="../src/source/mainwindow.cpp" line="320"/>
         <source>Deleting</source>
         <translation>སུབ་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="486"/>
-        <location filename="../src/source/mainwindow.cpp" line="2852"/>
+        <location filename="../src/source/mainwindow.cpp" line="493"/>
+        <location filename="../src/source/mainwindow.cpp" line="2867"/>
         <source>Loading, please wait...</source>
         <translation>སྣོན་འཇུག་བྱེད་བཞིན་པས། ཏོག་ཙམ་སྒུག་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>ཁྱེད་ཀྱིས་བཀོལ་སྤྱོད་བྱེད་བཞིན་པའི་ལས་འགན་མཚམས་འཇོག་བྱ་རྒྱུ་གཏན་འཁེལ་ལམ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1283"/>
-        <location filename="../src/source/mainwindow.cpp" line="1410"/>
-        <location filename="../src/source/mainwindow.cpp" line="1426"/>
+        <location filename="../src/source/mainwindow.cpp" line="1290"/>
+        <location filename="../src/source/mainwindow.cpp" line="1417"/>
+        <location filename="../src/source/mainwindow.cpp" line="1433"/>
         <source>Updating, please wait...</source>
         <translation>གསར་སྒྱུར་བྱེད་བཞིན་ཡོད་པས། སྒུག་རོགས། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1687"/>
+        <location filename="../src/source/mainwindow.cpp" line="1698"/>
         <source>File name too long</source>
         <translation>ཡིག་ཆའི་མིང་རིང་དྲགས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2064"/>
+        <location filename="../src/source/mainwindow.cpp" line="2075"/>
         <source>Failed to create file</source>
         <translation>ཡིག་ཆ་བཟོ་མ་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2057"/>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>Compression failed</source>
         <translation>གནོན་བཙིར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>བརྗེ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2456"/>
+        <location filename="../src/source/mainwindow.cpp" line="2471"/>
         <source>Find directory</source>
         <translation>དཀར་ཆག་ཏུ་བསྡུས་འགྲོལ་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Open failed</source>
         <translation>ཁ་ཕྱེ་མ་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1608"/>
-        <location filename="../src/source/mainwindow.cpp" line="1682"/>
-        <location filename="../src/source/mainwindow.cpp" line="1757"/>
-        <location filename="../src/source/mainwindow.cpp" line="1812"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
+        <location filename="../src/source/mainwindow.cpp" line="1619"/>
+        <location filename="../src/source/mainwindow.cpp" line="1693"/>
+        <location filename="../src/source/mainwindow.cpp" line="1768"/>
+        <location filename="../src/source/mainwindow.cpp" line="1823"/>
+        <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Wrong password</source>
         <translation>གསང་ཨང་ནོར་འདུག</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="638"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="645"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>རྣམ་གཞག་འདིའ་ཡིག་ཆ་ཁ་ཕྱེ་བར་རྒྱབ་སྐྱོར་མེད། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="529"/>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="645"/>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <location filename="../src/source/mainwindow.cpp" line="2714"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="536"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="652"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
+        <location filename="../src/source/mainwindow.cpp" line="2729"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ཆོག</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="320"/>
+        <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
         <translation>ཁྱོད་ལ་ཡིག་ཆ་“%1”སྣོན་འཇུག་བྱེད་དབང་མེད། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>གཏན་འཁེལ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
         <translation>ཡིག་ཆའམ་དཀར་ཆག་དེ་མི་འདུག </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1325"/>
+        <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>བསྡུས་འགྲོལ་ཐུབ་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1535"/>
+        <location filename="../src/source/mainwindow.cpp" line="1542"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>ལེན་མཚམས་བཞག་པ། </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1677"/>
-        <location filename="../src/source/mainwindow.cpp" line="1752"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
+        <location filename="../src/source/mainwindow.cpp" line="1688"/>
+        <location filename="../src/source/mainwindow.cpp" line="1763"/>
+        <location filename="../src/source/mainwindow.cpp" line="2101"/>
+        <location filename="../src/source/mainwindow.cpp" line="2126"/>
         <source>The archive is damaged</source>
         <translation>མིག་སྔའི་སྡུད་སྒྲིལ་ཡིག་ཆ་འཕྲོ་བརླག་ཕྱིན་འདུག </translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2037"/>
+        <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>བསྡུས་འགྲོལ་ཐུབ་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2043"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Conversion successful</source>
         <translation>བརྗེ་སྒྱུར་ཐུབ་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2104"/>
+        <location filename="../src/source/mainwindow.cpp" line="2083"/>
+        <source>The compressed volumes already exist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>བསྡུས་འགྲོལ་བྱེད་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2274"/>
+        <location filename="../src/source/mainwindow.cpp" line="2289"/>
         <source>Close</source>
         <translation>ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2293"/>
         <source>Help</source>
         <translation>རོགས་རམ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2286"/>
+        <location filename="../src/source/mainwindow.cpp" line="2301"/>
         <source>Delete</source>
         <translation>སུབ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2294"/>
+        <location filename="../src/source/mainwindow.cpp" line="2309"/>
         <source>Display shortcuts</source>
         <translation>མྱུར་མཐེབ་འཆར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2306"/>
+        <location filename="../src/source/mainwindow.cpp" line="2321"/>
         <source>Shortcuts</source>
         <translation>མྱུར་མཐེབ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2384"/>
+        <location filename="../src/source/mainwindow.cpp" line="2399"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>ཡིག་ཆའི་མིང་དང་གནོན་བཙིར་བྱས་པའི་ཡིག་ཆའི་མིང་གཅིག་པ་རེད་འདུག་པས། ཡིག་ཆའི་མིང་བརྗེ་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ཡིག་ཆ་ཡོད་ཟིན་པས། བརྗེས་སམ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2535"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add the archive to itself</source>
         <translation>གནོན་བཙིར་ཡིག་ཆ་འདི་རང་ཉིད་ཐོག་ཏུ་སྣོན་ཐབས་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>གནོན་བཙིར་ཡིག་ཆ་འདིའི་རྣམ་གཞག་གིས་ཡིག་ཆར་སྣོན་པར་རྒྱབ་སྐྱོར་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>གསར་སྒྱུར།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3052"/>
+        <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
         <translation>གཞི་རྩའི་ཆ་འཕྲིན།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3068"/>
+        <location filename="../src/source/mainwindow.cpp" line="3083"/>
         <source>Size</source>
         <translation>ཆེ་ཆུང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3069"/>
+        <location filename="../src/source/mainwindow.cpp" line="3084"/>
         <source>Type</source>
         <translation>རིགས་གྲས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3070"/>
+        <location filename="../src/source/mainwindow.cpp" line="3085"/>
         <source>Location</source>
         <translation>གནས་ས།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3071"/>
+        <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Time created</source>
         <translation>དུས་ཚོད་བཟོ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3072"/>
+        <location filename="../src/source/mainwindow.cpp" line="3087"/>
         <source>Time accessed</source>
         <translation>ལྟ་སྤྱོད་དུས་ཚོད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3088"/>
         <source>Time modified</source>
         <translation>བཅོས་པའི་དུས་ཚོད།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3083"/>
+        <location filename="../src/source/mainwindow.cpp" line="3098"/>
         <source>Archive</source>
         <translation>གནོན་བཙིར་ཡིག་ཆ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3114"/>
+        <location filename="../src/source/mainwindow.cpp" line="3129"/>
         <source>Comment</source>
         <translation>མཆན་འགྲེལ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="635"/>
+        <location filename="../src/source/mainwindow.cpp" line="642"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>ཡིག་ཚགས་དོ་དམ་ཆས་ཀྱི་སྒྲིག་འགོད་ཁྲོད་དུ་ཡིག་ཆ་དེའི་རིགས་གྲས་འདེམས་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>མིག་སྔའི་གནོན་བཙིར་ཡིག་ཆ་ལ་འགྱུར་བ་བྱུང་ཟིན་པས། ཡང་བསྐྱར་ཡིག་ཆ་འདྲེན་འཇུག་གནང་རོགས།</translation>
     </message>
@@ -940,6 +964,14 @@
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="310"/>
         <source>Other Applications</source>
         <translation>ཉེར་སྤྱོད་གཞན་དག</translation>
+    </message>
+</context>
+<context>
+    <name>PasswordNeededQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
+        <source>Encrypted file, please enter the password</source>
+        <translation>ཡིག་ཆ་འདི་གསང་སྡོམ་བྱས་ཟིན་པས། བསྡུས་འགྲོལ་གསང་ཨང་འཇུག་རོགས།</translation>
     </message>
 </context>
 <context>
@@ -1157,7 +1189,7 @@
         <translation>ཆེ་ཆུང་།</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2871"/>
+        <location filename="../src/source/mainwindow.cpp" line="2886"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>ཡིག་ཆ་“%1”བཅོས་ཟིན་པས། བཟོ་བཅོས་འདི་གནོན་བཙིར་ཁུག་ཏུ་གསར་སྒྱུར་བྱེད་དམ།</translation>
     </message>
@@ -1204,6 +1236,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>མཆོང་བ།</translation>
@@ -1216,23 +1249,27 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>ཡིག་ཆ་ཡོད་ཟིན་པས། བརྗེས་སམ།</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>བརྗེ་བ།</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ཆོག</translation>
@@ -1244,6 +1281,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
         <source>Apply to all</source>
         <translation>ཡིག་ཆ་ཚང་མར་སྤྱོད་པ།</translation>
     </message>
@@ -1359,18 +1397,18 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3309"/>
-        <location filename="../src/source/mainwindow.cpp" line="3366"/>
+        <location filename="../src/source/mainwindow.cpp" line="3324"/>
+        <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3312"/>
+        <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3371"/>
+        <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
         <translation type="unfinished"/>
     </message>

@@ -280,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="309"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Перейменувати</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="314"/>
@@ -405,6 +405,25 @@
     </message>
 </context>
 <context>
+    <name>LoadCorruptQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="525"/>
+        <source>The archive is damaged</source>
+        <translation>Архів пошкоджено</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="528"/>
+        <source>Open as read-only</source>
+        <translation>Відкрити лише для читання</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="529"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Скасувати</translation>
+    </message>
+</context>
+<context>
     <name>LoadingPage</name>
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="65"/>
@@ -429,422 +448,427 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="172"/>
+        <location filename="../src/source/mainwindow.cpp" line="179"/>
         <source>Open file</source>
         <translation>Відкрити файл</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="173"/>
+        <location filename="../src/source/mainwindow.cpp" line="180"/>
         <source>Settings</source>
         <translation>Параметри</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="269"/>
-        <location filename="../src/source/mainwindow.cpp" line="279"/>
+        <location filename="../src/source/mainwindow.cpp" line="276"/>
+        <location filename="../src/source/mainwindow.cpp" line="286"/>
         <source>Create New Archive</source>
         <translation>Створити архів</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="327"/>
+        <location filename="../src/source/mainwindow.cpp" line="334"/>
         <source>Converting</source>
         <translation>Перетворення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="334"/>
+        <location filename="../src/source/mainwindow.cpp" line="341"/>
         <source>Updating comments</source>
         <translation>Оновлюємо коментарі</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="2060"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="2071"/>
+        <location filename="../src/source/mainwindow.cpp" line="2097"/>
+        <location filename="../src/source/mainwindow.cpp" line="2122"/>
         <source>Plugin error</source>
         <translation>Помилка додатка</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1277"/>
+        <location filename="../src/source/mainwindow.cpp" line="1284"/>
         <source>Adding successful</source>
         <translation>Успішне додавання</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>No data in it</source>
         <translation>У ньому немає даних</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1514"/>
+        <location filename="../src/source/mainwindow.cpp" line="1521"/>
         <source>Adding canceled</source>
         <translation>Додавання скасовано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1612"/>
+        <location filename="../src/source/mainwindow.cpp" line="1623"/>
         <source>Adding failed</source>
         <translation>Додавання зазнало невдачі</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1665"/>
+        <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
         <translation>Не вдалося видобути. Назва файла є надто довгою.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1692"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
+        <location filename="../src/source/mainwindow.cpp" line="1703"/>
+        <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
         <translation>Не вдалося створити «%1»</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1814"/>
+        <location filename="../src/source/mainwindow.cpp" line="1825"/>
         <source>Open failed: the file name is too long</source>
         <translation>Не вдалося відкрити. Назва файла є надто довгою.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2033"/>
+        <location filename="../src/source/mainwindow.cpp" line="2044"/>
         <source>Compression successful</source>
         <translation>Успішне стискання</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2039"/>
+        <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
         <translation>Назва файла є надто довгою. Для назви буде використано лише перші 60 символів.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2068"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
+        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2150"/>
         <source>Insufficient disk space</source>
         <translation>На диску недостатньо місця</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
+        <location filename="../src/source/mainwindow.cpp" line="2109"/>
+        <location filename="../src/source/mainwindow.cpp" line="2130"/>
         <source>Some volumes are missing</source>
         <translation>Не вистачає деяких томів</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2119"/>
+        <location filename="../src/source/mainwindow.cpp" line="2134"/>
         <source>Wrong password, please retry</source>
         <translation>Помилковий пароль, будь ласка, повторіть спробу</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
+        <location filename="../src/source/mainwindow.cpp" line="2138"/>
+        <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>Назва файла є надто довгою. Будь ласка, обмежте назву 60 символами.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2144"/>
+        <location filename="../src/source/mainwindow.cpp" line="2159"/>
         <source>Conversion failed</source>
         <translation>Не вдалося перетворити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2282"/>
+        <location filename="../src/source/mainwindow.cpp" line="2297"/>
         <source>Select file</source>
         <translation>Вибір файла</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3152"/>
+        <location filename="../src/source/mainwindow.cpp" line="3167"/>
         <source>Enter up to %1 characters</source>
         <translation>Введіть до %1 символів</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3028"/>
+        <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
         <translation>Відомості щодо файла</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Do you want to delete the archive?</source>
         <translation>Хочете вилучити архів?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="526"/>
+        <location filename="../src/source/mainwindow.cpp" line="533"/>
         <source>%1 was changed on the disk, please import it again.</source>
         <translation>%1 було змінено на диску. Будь ласка, імпортуйте його знову.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="73"/>
+        <location filename="../src/source/mainwindow.cpp" line="75"/>
         <source>Archive Manager</source>
         <translation>Керування архівами</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
         <source>You do not have permission to save files here, please change and retry</source>
         <translation>У вас немає прав доступу для зберігання файлів тут. Будь ласка, змініть каталог і повторіть спробу.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="292"/>
+        <location filename="../src/source/mainwindow.cpp" line="299"/>
         <source>Adding files to %1</source>
         <translation>Додаємо файли до %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="299"/>
+        <location filename="../src/source/mainwindow.cpp" line="306"/>
         <source>Compressing</source>
         <translation>Стискання</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="306"/>
+        <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Extracting</source>
         <translation>Видобування</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="313"/>
+        <location filename="../src/source/mainwindow.cpp" line="320"/>
         <source>Deleting</source>
         <translation>Вилучення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="486"/>
-        <location filename="../src/source/mainwindow.cpp" line="2852"/>
+        <location filename="../src/source/mainwindow.cpp" line="493"/>
+        <location filename="../src/source/mainwindow.cpp" line="2867"/>
         <source>Loading, please wait...</source>
         <translation>Завантаження, зачекайте…</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
         <source>Are you sure you want to stop the ongoing task?</source>
         <translation>Ви справді хочете зупинити виконання завдання, яке виконується?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1283"/>
-        <location filename="../src/source/mainwindow.cpp" line="1410"/>
-        <location filename="../src/source/mainwindow.cpp" line="1426"/>
+        <location filename="../src/source/mainwindow.cpp" line="1290"/>
+        <location filename="../src/source/mainwindow.cpp" line="1417"/>
+        <location filename="../src/source/mainwindow.cpp" line="1433"/>
         <source>Updating, please wait...</source>
         <translation>Оновлення, будь ласка, зачекайте…</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1687"/>
+        <location filename="../src/source/mainwindow.cpp" line="1698"/>
         <source>File name too long</source>
         <translation>Назва файл є надто довгою</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2064"/>
+        <location filename="../src/source/mainwindow.cpp" line="2075"/>
         <source>Failed to create file</source>
         <translation>Не вдалося створити файл</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2057"/>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>Compression failed</source>
         <translation>Помилка під час стискання</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2456"/>
+        <location filename="../src/source/mainwindow.cpp" line="2471"/>
         <source>Find directory</source>
         <translation>Знайти каталог</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Open failed</source>
         <translation>Не вдалося відкрити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1608"/>
-        <location filename="../src/source/mainwindow.cpp" line="1682"/>
-        <location filename="../src/source/mainwindow.cpp" line="1757"/>
-        <location filename="../src/source/mainwindow.cpp" line="1812"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
+        <location filename="../src/source/mainwindow.cpp" line="1619"/>
+        <location filename="../src/source/mainwindow.cpp" line="1693"/>
+        <location filename="../src/source/mainwindow.cpp" line="1768"/>
+        <location filename="../src/source/mainwindow.cpp" line="1823"/>
+        <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Wrong password</source>
         <translation>Помилковий пароль</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="638"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="645"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>У «Менеджері архівів» не передбачено підтримки файлів у цьому форматі</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="129"/>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="496"/>
-        <location filename="../src/source/mainwindow.cpp" line="529"/>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
-        <location filename="../src/source/mainwindow.cpp" line="605"/>
-        <location filename="../src/source/mainwindow.cpp" line="645"/>
-        <location filename="../src/source/mainwindow.cpp" line="1309"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <location filename="../src/source/mainwindow.cpp" line="2714"/>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="536"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="652"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
+        <location filename="../src/source/mainwindow.cpp" line="2729"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Гаразд</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="320"/>
+        <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Перейменовування</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="434"/>
-        <location filename="../src/source/mainwindow.cpp" line="596"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
         <translation>У вас немає прав доступу для завантаження %1</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="562"/>
-        <location filename="../src/source/mainwindow.cpp" line="1386"/>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Підтвердити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="590"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
         <translation>Немає такого файла або каталогу</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1325"/>
+        <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
         <translation>Успішне видобування</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1535"/>
+        <location filename="../src/source/mainwindow.cpp" line="1542"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
         <translation>Видобування скасовано</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="1677"/>
-        <location filename="../src/source/mainwindow.cpp" line="1752"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
+        <location filename="../src/source/mainwindow.cpp" line="1688"/>
+        <location filename="../src/source/mainwindow.cpp" line="1763"/>
+        <location filename="../src/source/mainwindow.cpp" line="2101"/>
+        <location filename="../src/source/mainwindow.cpp" line="2126"/>
         <source>The archive is damaged</source>
         <translation>Архів пошкоджено</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2037"/>
+        <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Успішне видобування</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2043"/>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Conversion successful</source>
         <translation>Успішне перетворення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2104"/>
+        <location filename="../src/source/mainwindow.cpp" line="2083"/>
+        <source>The compressed volumes already exist</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Помилка під час розпаковування.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2274"/>
+        <location filename="../src/source/mainwindow.cpp" line="2289"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2293"/>
         <source>Help</source>
         <translation>Довідка</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2286"/>
+        <location filename="../src/source/mainwindow.cpp" line="2301"/>
         <source>Delete</source>
         <translation>Вилучити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2294"/>
+        <location filename="../src/source/mainwindow.cpp" line="2309"/>
         <source>Display shortcuts</source>
         <translation>Показати клавіатурні скорочення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2306"/>
+        <location filename="../src/source/mainwindow.cpp" line="2321"/>
         <source>Shortcuts</source>
         <translation>Клавіатурні скорочення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2384"/>
+        <location filename="../src/source/mainwindow.cpp" line="2399"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
         <translation>Назва збігається із назвою стисненого архіву. Будь ласка, скористайтеся іншою назвою.</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2392"/>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Файл вже існує. Що робити?</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2535"/>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add the archive to itself</source>
         <translation>Ви не можете додавати архів до самого себе</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
         <source>You cannot add files to archives in this file type</source>
         <translation>Ви не можете додавати архіви до цього типу файлів</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2874"/>
+        <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3052"/>
+        <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
         <translation>Основні відомості</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3068"/>
+        <location filename="../src/source/mainwindow.cpp" line="3083"/>
         <source>Size</source>
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3069"/>
+        <location filename="../src/source/mainwindow.cpp" line="3084"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3070"/>
+        <location filename="../src/source/mainwindow.cpp" line="3085"/>
         <source>Location</source>
         <translation>Розташування</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3071"/>
+        <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Time created</source>
         <translation>Час створення</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3072"/>
+        <location filename="../src/source/mainwindow.cpp" line="3087"/>
         <source>Time accessed</source>
         <translation>Час доступу</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3073"/>
+        <location filename="../src/source/mainwindow.cpp" line="3088"/>
         <source>Time modified</source>
         <translation>Час зміни</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3083"/>
+        <location filename="../src/source/mainwindow.cpp" line="3098"/>
         <source>Archive</source>
         <translation>Архівувати</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3114"/>
+        <location filename="../src/source/mainwindow.cpp" line="3129"/>
         <source>Comment</source>
         <translation>Коментар</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="635"/>
+        <location filename="../src/source/mainwindow.cpp" line="642"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
         <translation>Будь ласка, перевірте прив&apos;язку до типу файлів у параметрах «Керування архівами»</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Архів було змінено на диску. Будь ласка, імпортуйте його знову.</translation>
     </message>
@@ -943,6 +967,14 @@
     </message>
 </context>
 <context>
+    <name>PasswordNeededQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="394"/>
+        <source>Encrypted file, please enter the password</source>
+        <translation>Зашифрований файл. Будь ласка, введіть пароль</translation>
+    </message>
+</context>
+<context>
     <name>PreviousLabel</name>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
@@ -1028,7 +1060,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="343"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished"/>
+        <translation>Швидкість</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="65"/>
@@ -1067,7 +1099,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="135"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Перейменовування</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="137"/>
@@ -1157,7 +1189,7 @@
         <translation>Розмір</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2871"/>
+        <location filename="../src/source/mainwindow.cpp" line="2886"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
         <translation>%1 змінено. Хочете зберегти зміни до архіву?</translation>
     </message>
@@ -1204,6 +1236,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Пропустити</translation>
@@ -1216,23 +1249,27 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Файл вже існує. Що робити?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Замінити</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Гаразд</translation>
@@ -1244,6 +1281,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
         <source>Apply to all</source>
         <translation>Застосувати до всіх</translation>
     </message>
@@ -1253,24 +1291,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Перейменувати</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Гаразд</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>Таку назву вже використано</translation>
     </message>
 </context>
 <context>
@@ -1359,20 +1397,20 @@
 <context>
     <name>TitleWidget</name>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3309"/>
-        <location filename="../src/source/mainwindow.cpp" line="3366"/>
+        <location filename="../src/source/mainwindow.cpp" line="3324"/>
+        <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Відкрити файл</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3312"/>
+        <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="3371"/>
+        <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Відомості щодо файла</translation>
     </message>
 </context>
 <context>
@@ -1444,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Перейменувати</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
