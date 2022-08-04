@@ -182,7 +182,7 @@ enum FailureInfo {
 
 // 错误界面显示的信息
 enum ErrorInfo {
-    EI_NoPlugin,                // 无可用插件
+    EI_NoPlugin = 0,                // 无可用插件
     EI_ArchiveDamaged,          // 压缩包损坏
     EI_ArchiveMissingVolume,    // 分卷包缺失
     EI_WrongPassword,           // 密码错误
@@ -191,6 +191,7 @@ enum ErrorInfo {
     EI_CreatArchiveFailed,      // 创建压缩文件失败
     EI_InsufficientDiskSpace,      // 磁盘空间不足
     EI_ArchiveNoData,           // 压缩包无数据
+    EI_ExistVolume,      // 分卷已存在
 };
 
 // 启动应用的方式

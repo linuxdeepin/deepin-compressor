@@ -53,6 +53,7 @@ enum ErrorType {
     ET_InsufficientDiskSpace,   // 磁盘空间不足
 
     ET_UserCancelOpertion,     // 用户取消操作
+    ET_ExistVolume,   // 分卷已存在
 };
 
 //加密类型
