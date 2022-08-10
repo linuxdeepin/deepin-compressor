@@ -515,14 +515,9 @@ void AppendDialog::changeEvent(QEvent *event)
 RenameDialog::RenameDialog(QWidget *parent)
     : DDialog(parent)
 {
+    m_nOkBtnIndex = -1;
+    m_lineEdit = NULL;
     setFixedSize(g_nDlgWidth, g_nDlgHeight); // 提示框宽度固定
-    m_lineEdit = new DLineEdit;
-    //输入字符格式与文管保持一致
-    connect(m_lineEdit, &DLineEdit::textChanged,[=](){
-        QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
-        QString text = m_lineEdit->text();
-        m_lineEdit->setText(text.remove(QRegularExpression(name)));
-    });
     m_isDirectory = false;
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     setIcon(pixmap);
@@ -530,11 +525,30 @@ RenameDialog::RenameDialog(QWidget *parent)
 
 RenameDialog::~RenameDialog()
 {
-
+    if(m_lineEdit)  {
+        delete m_lineEdit;
+        m_lineEdit = NULL;
+    }
 }
 
 int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, bool isDirectory, bool isRepeat)
 {
+    if(m_lineEdit == NULL) {//创建DLineEdit,设定显示规则。
+        m_lineEdit = new DLineEdit(this);
+        //输入字符格式与文管保持一致
+        connect(m_lineEdit, &DLineEdit::textChanged,[=](){
+            QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
+            QString text = m_lineEdit->text();
+            m_lineEdit->setText(text.remove(QRegularExpression(name)));
+            if(m_nOkBtnIndex >= 0) { //重命名输入文字为空时确认按钮不可点击，输入文字后恢复
+                if(text.isNull()||text.isEmpty()){
+                    getButton(m_nOkBtnIndex)->setEnabled(false);
+                } else {
+                    getButton(m_nOkBtnIndex)->setEnabled(true);
+                }
+            }
+        });
+    }
     DLabel *strlabel = new DLabel;
     strlabel->setObjectName("ContentLabel");
     strlabel->setFixedSize(g_nDlgWidth, g_nLableHeight); // 宽度固定
@@ -590,7 +604,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     addContent(widget, Qt::AlignHCenter);
     // 添加取消和转换按钮
     addButton(tr("Cancel", "button"));
-    addButton(tr("OK", "button"), true, DDialog::ButtonRecommend);
+    m_nOkBtnIndex = addButton(tr("OK", "button"), true, DDialog::ButtonRecommend);
 
     // 设置焦点顺序
     setTabOrder(m_lineEdit, getButton(0));
@@ -608,6 +622,7 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
 
 QString RenameDialog::getNewNameText() const
 {
+    if(!m_lineEdit) return "";
     if(m_lineEdit->text().isNull() || m_lineEdit->text().isEmpty()) {
         return QFileInfo(m_strName).absoluteFilePath();
     }
