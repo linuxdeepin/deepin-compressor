@@ -246,5 +246,6 @@ private:
     bool m_isDirectory;
     DLineEdit *m_lineEdit;
     bool m_bPasswordVisible = false;
+    int m_nOkBtnIndex; //确认(Ok)按钮在对话框中的索引
 };
 #endif // POPUPDIALOG_H
