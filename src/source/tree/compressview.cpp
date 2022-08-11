@@ -402,7 +402,9 @@ void CompressView::slotRenameFile()
     RenameDialog dialog(this);
     // 获取重命名所需文件
     FileEntry entry = listSelEntry.first();
-    bool isRepeat = !sender()->property("repeat").isNull();
+    bool isRepeat = true;
+    if(sender())
+        isRepeat = !sender()->property("repeat").isNull();
     int iResult = dialog.showDialog(entry.strFullPath, entry.strAlias, entry.isDirectory, isRepeat);
     if (0 == m_iLevel) { // 如果是根目录，重命名缓存文件名
         if (1 == iResult) {     // 如果点击确定，重命名文件
@@ -413,6 +415,7 @@ void CompressView::slotRenameFile()
             QString strAlias = QFileInfo(dialog.getNewNameText()).fileName();
             if(strAlias == entry.strFileName || strAlias == entry.strAlias) { //名字与原来相同不做处理
                 qInfo() << entry.strAlias <<" | The name already exists. Level" << m_iLevel;
+                if(!sender()) return;
                 sender()->setProperty("repeat", "true");
                 slotRenameFile();
                 return;
@@ -421,6 +424,7 @@ void CompressView::slotRenameFile()
             for(FileEntry tmpentry: m_listEntry) {
                 if(tmpentry.isDirectory == entry.isDirectory && tmpentry.strFullPath.endsWith(strAliasEndPath)) {
                     qInfo() << entry.strFullPath << " | The name already exists。 Level" << m_iLevel;
+                    if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
                     return;
@@ -441,6 +445,7 @@ void CompressView::slotRenameFile()
                 bool bRename = dir.rename(entry.strFullPath, dialog.getNewNameText());
                 if(!bRename) {
                     qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
                 }
@@ -449,6 +454,7 @@ void CompressView::slotRenameFile()
                 bool bRename = file.rename(dialog.getNewNameText());
                 if(!bRename) {
                     qInfo() << entry.strFullPath <<" | The name already exists. Level" << m_iLevel;
+                    if(!sender()) return;
                     sender()->setProperty("repeat", "true");
                     slotRenameFile();
                 }
