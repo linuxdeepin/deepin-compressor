@@ -79,28 +79,25 @@ target_link_libraries(${EXE_NAME}
     compressor-interface
 )
 
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif()
-install(TARGETS deepin-compressor DESTINATION bin)
-install(FILES desktop/deepin-compressor.desktop DESTINATION share/applications)
+install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES desktop/deepin-compressor.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 file(GLOB INSTALL_QM_FILES ../translations/*.qm)
 install(FILES ${INSTALL_QM_FILES} 
-        DESTINATION share/deepin-compressor/translations)
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-compressor/translations)
 
 
 # 自定义右键菜单
-install(FILES conf/compressor-singlecompress.conf DESTINATION share/applications/context-menus/)
-install(FILES conf/compressor-multicompress.conf DESTINATION share/applications/context-menus/)
-install(FILES conf/compressor-singleextract.conf DESTINATION share/applications/context-menus/)
-install(FILES conf/compressor-multiextract.conf DESTINATION share/applications/context-menus/)
+install(FILES conf/compressor-singlecompress.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus/)
+install(FILES conf/compressor-multicompress.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus/)
+install(FILES conf/compressor-singleextract.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus/)
+install(FILES conf/compressor-multiextract.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/context-menus/)
 
-install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION share/icons/hicolor/scalable/apps/)
-install(FILES assets/mimetype/deepin-compressor.xml DESTINATION share/mime/packages/)
+install(FILES assets/icons/deepin/builtin/icons/deepin-compressor.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps/)
+install(FILES assets/mimetype/deepin-compressor.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages/)
 
 # 集成帮助手册
-install(DIRECTORY assets/deepin-compressor DESTINATION share/deepin-manual/manual-assets/application/)
+install(DIRECTORY assets/deepin-compressor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
 
 # 支持压缩的格式
-#install(FILES conf/compressor-singlecompress.conf DESTINATION share/deepin-compressor/compressedformat/)
+#install(FILES conf/compressor-singlecompress.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-compressor/compressedformat/)
