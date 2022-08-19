@@ -10,24 +10,19 @@ if (NOT DEFINED VERSION)
 endif ()
 
 #3.输出目录的预设值
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif()
-#3.1 设置lib输出目录
-if(NOT DEFINED LIBRARY_OUTPUT_PATH)
-    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-endif()
-#3.2 设置可执行程序输出目录
-if(NOT DEFINED EXECUTABLE_OUTPUT_PATH)
-    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-endif()
-#3.3 导出头文件路径
-if(NOT DEFINED HFILES_OUTPUT_PATH)
-    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-endif()
-#3.4 插件安装目录
+include(GNUInstallDirs)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+   set(CMAKE_INSTALL_PREFIX /usr)
+endif ()
+
+## 插件安装目录
 if(NOT DEFINED COMPRESSOR_PLUGIN_PATH)
     set(COMPRESSOR_PLUGIN_PATH ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins)
+endif()
+
+## 导出头文件路径,非安装时使用
+if(NOT DEFINED HFILES_OUTPUT_PATH)
+    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
 endif()
 
 #SET(CMAKE_BUILD_TYPE "Debug")  
