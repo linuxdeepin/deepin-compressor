@@ -35,7 +35,7 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:${COMPRESSOR_PLUGIN_PATH}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../../3rdparty/interface:${COMPRESSOR_PLUGIN_PATH}")
 else()
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${COMPRESSOR_PLUGIN_PATH}")
 endif()
