@@ -280,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="309"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Renomear</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="314"/>
@@ -409,12 +409,12 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>The archive is damaged</source>
-        <translation>O arquivo está danificado</translation>
+        <translation>O arquivo está corrompido</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="528"/>
         <source>Open as read-only</source>
-        <translation>Abrir como apenas leitura</translation>
+        <translation>Abrir como apenas-leitura</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="529"/>
@@ -695,7 +695,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>A renomear</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="441"/>
@@ -758,7 +758,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Os volumes comprimidos já existem</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -971,7 +971,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Ficheiro encriptado, introduza a palavra-passe</translation>
+        <translation>Ficheiro encriptado. Introduza a palavra-passe</translation>
     </message>
 </context>
 <context>
@@ -1060,7 +1060,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="343"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished"/>
+        <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="65"/>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="135"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>A renomear</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="137"/>
@@ -1291,24 +1291,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Renomear</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceitar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>O nome já existe</translation>
     </message>
 </context>
 <context>
@@ -1400,17 +1400,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3324"/>
         <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Abrir ficheiro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Voltar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Informação do ficheiro</translation>
     </message>
 </context>
 <context>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Renomear</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>

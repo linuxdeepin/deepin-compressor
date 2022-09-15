@@ -505,7 +505,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation type="unfinished"/>
+        <translation>Entpacken fehlgeschlagen: Der Dateiname ist zu lang</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1703"/>
@@ -516,7 +516,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1825"/>
         <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"/>
+        <translation>Öffnen fehlgeschlagen: Der Dateiname ist zu lang</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2044"/>
@@ -526,7 +526,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"/>
+        <translation>Der Dateiname ist zu lang, daher wurden die ersten 60 Zeichen als Dateiname abgefangen.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2079"/>
@@ -549,7 +549,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2138"/>
         <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"/>
+        <translation>Der Dateiname ist zu lang. Bitte halten Sie den Namen auf 60 Zeichen begrenzt.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2159"/>
@@ -758,7 +758,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Das komprimierte Volumen existiert bereits</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -1303,12 +1303,12 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>Der Name existiert bereits</translation>
     </message>
 </context>
 <context>
@@ -1400,17 +1400,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3324"/>
         <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Datei öffnen</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Zurück</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Dateiinformation</translation>
     </message>
 </context>
 <context>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Umbenennen</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>

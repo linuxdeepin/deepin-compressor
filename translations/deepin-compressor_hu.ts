@@ -758,7 +758,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>A tömörített kötetek már léteznek</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>

@@ -280,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="309"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="314"/>
@@ -695,7 +695,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Переименование</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="441"/>
@@ -758,7 +758,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Сжатые тома уже существуют</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="135"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Переименование</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="137"/>
@@ -1291,7 +1291,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
@@ -1410,7 +1410,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Сведения о файле</translation>
     </message>
 </context>
 <context>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
