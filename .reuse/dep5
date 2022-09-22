@@ -73,65 +73,10 @@ Files: src/desktop/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
-# 3rdparty/ChardetDetector
-Files: 3rdparty/ChardetDetector/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/cli7zplugin
-Files: 3rdparty/cli7zplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/clirarplugin
-Files: 3rdparty/clirarplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/cliunarchiverplugin
-Files: 3rdparty/cliunarchiverplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/clizipplugin
-Files: 3rdparty/clizipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/interface
-Files: 3rdparty/interface/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/libarchive
-Files: 3rdparty/libarchive/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/libminizipplugin
-Files: 3rdparty/libminizipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/clizipplugin
-Files: 3rdparty/clizipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/libsinglefileplugin
-Files: 3rdparty/libsinglefileplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/libzipplugin
-Files: 3rdparty/libzipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
-# 3rdparty/libpigzplugin
-Files: 3rdparty/libpigzplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+# 3rdparty
+Files: 3rdparty/*
+Copyright: None
+License: GPL-2.0-only
 
 # docs
 Files: docs/*

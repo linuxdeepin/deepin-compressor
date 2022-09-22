@@ -4,18 +4,18 @@ Source: https://github.com/linuxdeepin/deepin-compressor
 
 Files: *
 Copyright: 2017 Deepin Technology Co., Ltd.
-License: GPL-3+
+License: MPL 1.1/GPL 2.0/LGPL 2.1
  
 Files: 3rdparty
 Copyright: 1989, 1991 Free Software Foundation Co., Ltd.
-License: GPL-2+
+License: MPL 1.1/GPL 2.0/LGPL 2.1 
 
 Files: 3rdparty/ChardetDetector/*
 Copyright (c) 2019 JoungKyun.Kim http://oops.org All rights reserved.
-License: MPL 1.1 or LGPL 2.1
+License: MPL 1.1/GPL 2.0/LGPL 2.1 
 
 
-License: GPL-3+
+License: GPL-3.0-or-later
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 3 of the License, or
@@ -32,7 +32,7 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
 
-License: GPL-2+
+License: GPL-2.0-or-later
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or

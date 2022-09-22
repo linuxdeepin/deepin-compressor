@@ -29,3 +29,6 @@ Caution:
 
 ## [Wiki](http://gitlab01.archermind.com/amt_SY/compressor/wikis/home)
 
+## License
+
+deepin-compressor is licensed under [GPL-3.0-only](LICENSE) 
