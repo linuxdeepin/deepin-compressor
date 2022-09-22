@@ -484,7 +484,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1284"/>
         <source>Adding successful</source>
-        <translation>Dodawanie zakończone sukcesem</translation>
+        <translation>Dodawanie zakończone pomyślnie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1316"/>
@@ -495,7 +495,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1521"/>
         <source>Adding canceled</source>
-        <translation>Dodawanie anulowane</translation>
+        <translation>Anulowano dodawanie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1623"/>
@@ -543,7 +543,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2134"/>
         <source>Wrong password, please retry</source>
-        <translation>Nieprawidłowe hasło, spróbuj ponownie</translation>
+        <translation>Błędne hasło, spróbuj ponownie</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2138"/>
@@ -569,7 +569,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
-        <translation>Informacja o pliku</translation>
+        <translation>Informacje o pliku</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1393"/>
@@ -667,7 +667,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1823"/>
         <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Wrong password</source>
-        <translation>Nieprawidłowe hasło</translation>
+        <translation>Błędne hasło</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="612"/>
@@ -758,7 +758,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Skompresowane woluminy już istnieją</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -820,7 +820,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
-        <translation>Podstawowe informacje</translation>
+        <translation>Informacje podstawowe</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3083"/>
@@ -971,7 +971,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Zaszyfrowany plik, wprowadź hasło</translation>
+        <translation>Plik zaszyfrowany, wprowadź hasło</translation>
     </message>
 </context>
 <context>

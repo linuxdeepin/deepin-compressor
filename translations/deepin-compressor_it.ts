@@ -759,7 +759,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>I volumi compressi esistono già</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>

@@ -16,6 +16,7 @@ cd ../$builddir
 #编译
 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_ON" ..
 make -j8
+export LD_LIBRARY_PATH=./3rdparty/interface:$LD_LIBRARY_PATH
 #生成asan日志和ut测试xml结果
 ./bin/tests/bz2plugin_test --gtest_output=xml:./report/report_bz2plugin.xml
 ./bin/tests/cli7zplugin_test --gtest_output=xml:./report/report_cli7zplugin.xml
