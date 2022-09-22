@@ -34,3 +34,6 @@ sudo apt-get install deepin-compressor
 
 ## [Wiki](http://gitlab01.archermind.com/amt_SY/compressor/wikis/home)
 
+## License
+
+ deepin-compressor 根据 [GPL-3.0-only]（许可证）获得许可.
