@@ -75,28 +75,36 @@ License: GPL-3.0-or-later
 
 # 3rdparty/ChardetDetector
 Files: 3rdparty/ChardetDetector/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 1998 Shy Shalom <shooshX@gmail.com>
+License: GPL-2.0-or-later
 
 # 3rdparty/cli7zplugin
 Files: 3rdparty/cli7zplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+           2009-2011 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+           2016 Vladyslav Batyrenko <mvlabat@gmail.com>
+License: GPL-2.0-or-later
 
 # 3rdparty/clirarplugin
 Files: 3rdparty/clirarplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+           2010-2011,2014 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+           2015-2016 Ragnar Thomsen <rthomsen6@gmail.com>
+           2016 Vladyslav Batyrenko <mvlabat@gmail.com>
+License: GPL-2.0-or-later
 
 # 3rdparty/cliunarchiverplugin
 Files: 3rdparty/cliunarchiverplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2011 Luke Shumaker <lukeshu@sbcglobal.net>
+           2016 Elvis Angelaccio <elvis.angelaccio@kde.org>
+License: GPL-2.0-or-later
 
 # 3rdparty/clizipplugin
 Files: 3rdparty/clizipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+           2009-2011 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+           2016 Vladyslav Batyrenko <mvlabat@gmail.com>
+License: GPL-2.0-or-later
 
 # 3rdparty/interface
 Files: 3rdparty/interface/*
@@ -105,33 +113,32 @@ License: GPL-3.0-or-later
 
 # 3rdparty/libarchive
 Files: 3rdparty/libarchive/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright:  2007 Henrique Pinto <henrique.pinto@kdemail.net>
+           2008-2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+           2010 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+License: GPL-2.0-or-later
 
 # 3rdparty/libminizipplugin
 Files: 3rdparty/libminizipplugin/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
-# 3rdparty/clizipplugin
-Files: 3rdparty/clizipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
-
 # 3rdparty/libsinglefileplugin
 Files: 3rdparty/libsinglefileplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2009  Raphael Kubo da Costa <rakuco@FreeBSD.org>
+License: GPL-2.0-or-later
 
 # 3rdparty/libzipplugin
 Files: 3rdparty/libzipplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2017 Ragnar Thomsen <rthomsen6@gmail.com>
+License: GPL-2.0-or-later
 
 # 3rdparty/libpigzplugin
 Files: 3rdparty/libpigzplugin/*
-Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+Copyright: 2009 Harald Hvaal <haraldhv@stud.ntnu.no>
+           2009-2010 Raphael Kubo da Costa <rakuco@FreeBSD.org>
+           2016 Vladyslav Batyrenko <mvlabat@gmail.com> 
+License: GPL-2.0-or-later
 
 # docs
 Files: docs/*
