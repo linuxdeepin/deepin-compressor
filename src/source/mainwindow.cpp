@@ -2640,8 +2640,9 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             options.qComressSize = fileinfo.size();
             options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
 
-            // 如果是右键解压到当前文件夹或者右键解压缩，根据设置选项判断是否自动创建文件夹，给出解压路径
-            if (ST_ExtractHere == eType || ST_Extract == eType) {
+            // 如果是者右键解压缩，根据设置选项判断是否自动创建文件夹，给出解压路径
+            // 如果是右键解压到当前文件夹，则不创建文件夹（bug 162597）
+            if (ST_Extract == eType) {
                 QString strAutoPath = getExtractPath(fileinfo.fileName());
                 // 根据是否自动创建文件夹处理解压路径
                 if (!strAutoPath.isEmpty()) {
