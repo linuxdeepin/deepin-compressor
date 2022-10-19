@@ -2375,7 +2375,17 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());
-            strArchivePath += strpath.mid(iIndex) + strSuffix;
+            //fixbug:163153 远程挂在目录下压缩多个文件，压缩文件夹存在路径中特殊字符
+            //这里使用最后一个文件夹名进行压缩，防止特殊字符压缩不成功
+            QRegExp reg("^\s+|[\\:*\"'?<>|\r\n\t]");
+            if (strpath.mid(iIndex).indexOf(reg) != -1) {
+                QString compressor = strpath.split("=").last() + strSuffix;
+                if (compressor.indexOf(reg) != -1)
+                    compressor.remove(reg);
+                strArchivePath += QDir::separator() + compressor;
+            } else {
+                strArchivePath += strpath.mid(iIndex) + strSuffix;
+            }
         }
 
         // 检查源文件中是否包含即将生成的压缩包
