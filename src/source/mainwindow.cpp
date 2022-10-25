@@ -2265,6 +2265,19 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
         m_ePageID = PI_Home;
         refreshPage();
     });
+
+    connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
+        // 取消操作
+        slotCancel();
+
+        // 显示提示对话框
+        TipDialog dialog(this);
+        dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK", "button"));
+
+        resetMainwindow();
+        m_ePageID = PI_Home;
+        refreshPage();
+    });
 }
 
 QJsonObject MainWindow::creatShorcutJson()
