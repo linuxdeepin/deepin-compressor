@@ -263,7 +263,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
 
             // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
             tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
-            if (m_mapLongName[tempFilePathName] >= 999 || options.bOpen == true) {
+            if (m_mapLongName[tempFilePathName] >= 999) {
                 emit signalCurFileName(entryName); // 发送当前正在解压的文件名
                 m_eErrorType = ET_LongNameError;
                 return PFT_Error;
