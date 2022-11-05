@@ -276,13 +276,8 @@ void CompressSettingPage::initUI()
     pLeftLayout->addStretch();
 
     // 右侧布局
-    QFormLayout *pFileFormLayout = new QFormLayout();
-    pFileFormLayout->addRow(tr("Name") + ":", m_pFileNameEdt);
-    pFileFormLayout->addRow(tr("Save to") + ":", m_pSavePathEdt);
-    pFileFormLayout->addRow(m_pCompressLevelLbl, m_pCompressLevelCmb);
-    pFileFormLayout->setLabelAlignment(Qt::AlignLeft);
-    pFileFormLayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
-    pFileFormLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+    DLabel *pLabName = new DLabel(tr("Name") + ":", this);
+    DLabel *pLabSave = new DLabel(tr("Save to") + ":", this);
 
     QHBoxLayout *pAdvancedLayout = new QHBoxLayout();       // 高级选项布局
     pAdvancedLayout->addWidget(pAdvancedLbl, 0, Qt::AlignLeft);
@@ -294,7 +289,12 @@ void CompressSettingPage::initUI()
 
     // 右侧内容布局
     QVBoxLayout *pRightLayout = new QVBoxLayout;
-    pRightLayout->addLayout(pFileFormLayout);
+    pRightLayout->addWidget(pLabName);
+    pRightLayout->addWidget(m_pFileNameEdt);
+    pRightLayout->addWidget(pLabSave);
+    pRightLayout->addWidget(m_pSavePathEdt);
+    pRightLayout->addWidget(m_pCompressLevelLbl);
+    pRightLayout->addWidget(m_pCompressLevelCmb);
     pRightLayout->addLayout(pAdvancedLayout);
     pRightLayout->addWidget(m_pCpuLbl);
     pRightLayout->addWidget(m_pCpuCmb);
