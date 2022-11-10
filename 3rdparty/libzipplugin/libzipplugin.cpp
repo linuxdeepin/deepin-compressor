@@ -840,7 +840,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     QFileDevice::Permissions per = getPermissions(value);
 
     if (bIsDirectory) {     // 文件夹
-        if (NAME_MAX < QString(strFileName).toLocal8Bit().length())
+        if (PATH_MAX < QString(strFileName).toLocal8Bit().length())
             return ET_LongNameError;
 
         QDir dir;
