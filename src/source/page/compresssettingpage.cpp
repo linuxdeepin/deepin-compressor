@@ -596,6 +596,7 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
 
     m_pCpuLbl->setEnabled(false);
     m_pCpuCmb->setEnabled(false);
+    m_pCpuCmb->setCurrentIndex(0);
 
     if (0 == selectType.compare("tar.7z")) {       // tar.7z支持普通/列表加密，不支持分卷
         setEncryptedEnabled(true);
@@ -621,6 +622,7 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         if (0 == selectType.compare("tar.gz")) {
             m_pCpuLbl->setEnabled(true);
             m_pCpuCmb->setEnabled(true);
+            m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
         }
     }
 
@@ -675,8 +677,8 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pCpuCmb->setCurrentIndex(0);
         m_pCommentEdt->clear();
     }
-
-
+    if (m_pCompressTypeLbl->text() == "tar.gz")
+        m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 }
 
 void CompressSettingPage::slotSplitEdtEnabled()
