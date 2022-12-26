@@ -3,6 +3,9 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
+[transifex]
+branch = m20
+
 [deepin-archive-manager.deepin-archive-manager]
 file_filter = translations/deepin-compressor_<lang>.ts
 source_file = translations/deepin-compressor_en.ts
