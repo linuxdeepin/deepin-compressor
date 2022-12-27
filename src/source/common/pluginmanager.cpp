@@ -15,6 +15,7 @@
 #include <QSet>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QDir>
 
 #include <algorithm>
 
@@ -236,7 +237,31 @@ void PluginManager::setFileSize(qint64 size)
 
 void PluginManager::loadPlugins()
 {
-    QCoreApplication::addLibraryPath("/usr/lib/");
+#ifndef LINGLONG_PREFIX
+#define LINGLONG_PREFIX "/usr/"
+#endif
+
+    QStringList environment = QProcess::systemEnvironment();
+    QString str, t_str;
+    foreach (str, environment) {
+        if (str.startsWith("LD_LIBRARY_PATH=")) {
+            t_str = str;
+            break;
+        }
+    }
+    if (t_str.isEmpty()) {
+        qWarning() << "library path is empty!!!!";
+        return;
+    }
+    qInfo() << t_str;
+    QStringList liststr = t_str.split("=").at(1).split(":");
+    QString libPath;
+    libPath = liststr.size() >= 2 ? liststr.at(1) : liststr.at(0);
+    QDir dir(libPath);
+    dir.cdUp();
+
+    QCoreApplication::addLibraryPath(dir.path());
+
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("deepin-compressor/plugins"));
     QSet<QString> addedPlugins;
     for (const KPluginMetaData &metaData : plugins) {

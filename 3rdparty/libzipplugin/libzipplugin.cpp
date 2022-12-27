@@ -413,62 +413,6 @@ PluginFinishType LibzipPlugin::deleteFiles(const QList<FileEntry> &files)
     return PFT_Nomral;
 }
 
-PluginFinishType LibzipPlugin::renameFiles(const QList<FileEntry> &files)
-{
-    // 初始化变量
-    setPassword(QString());
-    m_workStatus = WT_Rename;
-    int errcode = 0;
-    zip_error_t err;
-
-    // 打开压缩包
-    // Open archive.
-    zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), 0, &errcode);
-    zip_error_init_with_code(&err, errcode);
-    if (nullptr == archive) {
-        // 打开压缩包失败
-        emit error(("Failed to open the archive: %1"));
-        m_eErrorType = ET_FileOpenError;
-        return PFT_Error;
-    }
-
-    m_curFileCount = 0;
-    m_pCurArchive = archive; // 置空，防止进度处理
-    zip_register_progress_callback_with_state(archive, 0.001, progressCallback, nullptr, this); // 进度回调
-    zip_register_cancel_callback_with_state(archive, cancelCallback, nullptr, this);        // 取消回调
-
-    m_listCurIndex.clear();
-    getIndexBySelEntry(files, true);    // 获取索引值，只针对单个文件或文件夹
-
-    // 循环调用重命名操作,只针对单个文件或文件夹
-    for (int i = 0; i < m_listCurIndex.count(); i++) {
-        QString strAlias;
-        if (!files[0].strFullPath.endsWith(QDir::separator())) { //文件重命名
-            QString strPath = QFileInfo(files[0].strFullPath).path();
-            if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
-                strAlias = files[0].strAlias;
-            } else {
-                strAlias = strPath + QDir::separator() + files[0].strAlias;
-            }
-        } else { //文件夹重命名
-            QString strPath = QFileInfo(files[0].strFullPath.left(files[0].strFullPath.length() - 1)).path();
-            if(strPath == "."){
-                strAlias = files[0].strAlias + QDir::separator();
-            } else {
-                strAlias = strPath + QDir::separator() + files[0].strAlias + QDir::separator();
-            }
-            strAlias = strAlias + m_listCurName[i].right(m_listCurName[i].length()-files[0].strFullPath.length());
-        }
-        renameEntry(m_listCurIndex[i], archive,  strAlias);        //rename from archive
-    }
-    if (zip_close(archive)) {
-        emit error(("Failed to write archive."));
-        m_eErrorType = ET_FileWriteError;
-        return PFT_Error;
-    }
-    return PFT_Nomral;
-}
-
 PluginFinishType LibzipPlugin::addComment(const QString &comment)
 {
     setPassword(QString());
@@ -682,10 +626,7 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
     // 对文件名进行编码探测并转码
     QString name = m_common->trans2uft8(statBuffer.name, strCode);
     m_mapFileCode[index] = strCode;
-    //对于名称以"/"开头的去除开始的"/"
-    if(name.startsWith(QDir::separator())) {
-        name.remove(0,1);
-    }
+
     FileEntry entry;
     entry.iIndex = int(index);
     entry.strFullPath = name;
@@ -768,7 +709,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
         tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
-        if (m_mapLongName[tempFilePathName] >= 999 ) {
+        if (m_mapLongName[tempFilePathName] >= 999 || options.bOpen == true) {
             return ET_LongNameError;
         }
         bHandleLongName = true;
@@ -840,7 +781,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     QFileDevice::Permissions per = getPermissions(value);
 
     if (bIsDirectory) {     // 文件夹
-        if (PATH_MAX < QString(strFileName).toLocal8Bit().length())
+        if (NAME_MAX < QString(strFileName).toLocal8Bit().length())
             return ET_LongNameError;
 
         QDir dir;
@@ -1139,31 +1080,7 @@ bool LibzipPlugin::deleteEntry(int index, zip_t *archive)
     return true;
 }
 
-bool LibzipPlugin::renameEntry(int index, zip_t *archive, const QString &strAlisa)
-{
-    // 事件循环
-    if (QThread::currentThread()->isInterruptionRequested()) {
-        if (zip_close(archive)) {
-            // 发送保存失败
-            emit error(("Failed to write archive."));
-            m_eErrorType = ET_FileWriteError;
-            return false;
-        }
-        return false;
-    }
-
-    int statusDel = zip_rename(archive, zip_uint64_t(index), strAlisa.toUtf8().data());   // 获取重命名状态
-    if (-1 == statusDel) {
-        // 重命名失败
-        emit error(("Failed to rename entry: %1"));
-        m_eErrorType = ET_RenameError;
-        return false;
-    }
-
-    return true;
-}
-
-void LibzipPlugin::getIndexBySelEntry(const QList<FileEntry> &listEntry, bool isRename)
+void LibzipPlugin::getIndexBySelEntry(const QList<FileEntry> &listEntry)
 {
     m_listCurIndex.clear();
     m_listCurName.clear();
@@ -1191,7 +1108,7 @@ void LibzipPlugin::getIndexBySelEntry(const QList<FileEntry> &listEntry, bool is
             }
         }
     }
-    if(isRename) return;//重命名不做排序处理
+
     // 升序排序
     std::stable_sort(m_listCurIndex.begin(), m_listCurIndex.end());
 }

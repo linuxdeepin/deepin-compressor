@@ -313,26 +313,6 @@ TEST_F(UT_CompressView, test_slotDeleteFile_002)
     m_tester->slotDeleteFile();
 }
 
-TEST_F(UT_CompressView, test_slotRenameFile_001)
-{
-    Stub stub;
-    CustomDialogStub::stub_RenameDialog_showDialog(stub, 1);
-    QStringList listFiles = QStringList() << "/home/Desktop/compress";
-    m_tester->addCompressFiles(listFiles);
-    m_tester->slotRenameFile();
-}
-
-TEST_F(UT_CompressView, test_slotRenameFile_002)
-{
-    Stub stub;
-    CustomDialogStub::stub_RenameDialog_showDialog(stub, 1);
-
-    QStringList listFiles = QStringList() << "/home/Desktop/compress.txt";
-    m_tester->addCompressFiles(listFiles);
-    m_tester->m_iLevel = 1;
-    m_tester->slotRenameFile();
-}
-
 TEST_F(UT_CompressView, test_slotDirChanged)
 {
     m_tester->slotDirChanged();

@@ -28,7 +28,6 @@
 #include "uncompressview.h"
 #include "uitools.h"
 #include "calculatesizethread.h"
-#include "eventlogutils.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -48,7 +47,6 @@
 #include <QScreen>
 #include <QFormLayout>
 #include <QShortcut>
-#include <QJsonObject>
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 
@@ -74,12 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
     // 开启定时器刷新界面
     m_iInitUITimer = startTimer(500);
 
-    QJsonObject obj{
-        {"tid", EventLogUtils::Start},
-        {"version", QCoreApplication::applicationVersion()},
-        {"mode", 1}
-    };
-    EventLogUtils::get().writeLogs(obj);
+
 }
 
 MainWindow::~MainWindow()
@@ -173,14 +166,42 @@ void MainWindow::initTitleBar()
     QIcon icon = QIcon::fromTheme("deepin-compressor");
     titlebar()->setIcon(icon);
 
-    // titlebar widget
-    m_pTitleWidget = new TitleWidget(this);
-    m_pTitleWidget->setFocusPolicy(Qt::TabFocus);
-    this->titlebar()->addWidget(m_pTitleWidget, Qt::AlignLeft);
-    setTabOrder(this->titlebar(), m_pTitleWidget);
+    // 添加左上角按钮
+    m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
+    m_pTitleButton->setFixedSize(36, 36);
+    m_pTitleButton->setVisible(false);
+    m_pTitleButton->setObjectName("TitleButton");
+    m_pTitleButton->setAccessibleName("Title_btn");
+    m_pTitleButton->setToolTip(tr("Open file"));
 
-    m_pTitleWidget->setVisible(false);
-    this->titlebar()->setFocusProxy(nullptr);
+    // 左上角注释信息
+    m_pTitleCommentButton = new DIconButton(this);
+    m_pTitleCommentButton->setFixedSize(36, 36);
+    m_pTitleCommentButton->setToolTip(tr("File info"));
+    slotThemeChanged();
+
+    m_pTitleCommentButton->setVisible(false);
+    m_pTitleCommentButton->setObjectName("CommentButton");
+    m_pTitleCommentButton->setAccessibleName("Comment_btn");
+
+    // 左上角按钮布局
+    QHBoxLayout *leftLayout = new QHBoxLayout;
+    leftLayout->addSpacing(6);
+    leftLayout->addWidget(m_pTitleButton);
+    leftLayout->addSpacing(5);
+    leftLayout->addWidget(m_pTitleCommentButton);
+    leftLayout->addStretch();
+    leftLayout->setContentsMargins(0, 0, 0, 0);
+
+    QFrame *left_frame = new QFrame(this);
+    left_frame->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
+    left_frame->setContentsMargins(0, 0, 0, 0);
+    left_frame->setLayout(leftLayout);
+
+    titlebar()->addWidget(left_frame, Qt::AlignLeft);
+    titlebar()->setContentsMargins(0, 0, 0, 0);
+
+    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
 }
 
 void MainWindow::initData()
@@ -200,8 +221,8 @@ void MainWindow::initConnections()
 {
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MainWindow::slotThemeChanged);
 
-    connect(m_pTitleWidget, &TitleWidget::sigTitleClicked, this, &MainWindow::slotTitleBtnClicked);
-    connect(m_pTitleWidget, &TitleWidget::sigCommentClicked, this, &MainWindow::slotTitleCommentButtonPressed);
+    connect(m_pTitleButton, &DIconButton::clicked, this, &MainWindow::slotTitleBtnClicked);
+    connect(m_pTitleCommentButton, &DPushButton::clicked, this, &MainWindow::slotTitleCommentButtonPressed);
     connect(m_pHomePage, &HomePage::signalFileChoose, this, &MainWindow::slotChoosefiles);
     connect(m_pHomePage, &HomePage::signalDragFiles, this, &MainWindow::slotDragSelectedFiles);
     connect(m_pCompressPage, &CompressPage::signalLevelChanged, this, &MainWindow::slotCompressLevelChanged);
@@ -211,8 +232,6 @@ void MainWindow::initConnections()
     connect(m_pUnCompressPage, &UnCompressPage::signalUncompress, this, &MainWindow::slotUncompressClicked);
     connect(m_pUnCompressPage, &UnCompressPage::signalExtract2Path, this, &MainWindow::slotExtract2Path);
     connect(m_pUnCompressPage, &UnCompressPage::signalDelFiles, this, &MainWindow::slotDelFiles);
-    connect(m_pUnCompressPage, &UnCompressPage::signalRenameFile, this, &MainWindow::slotRenameFile);
-    connect(this, &MainWindow::sigRenameFile, m_pUnCompressPage, &UnCompressPage::sigRenameFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalOpenFile, this, &MainWindow::slotOpenFile);
     connect(m_pUnCompressPage, &UnCompressPage::signalAddFiles2Archive, this, &MainWindow::slotAddFiles);
     connect(m_pUnCompressPage, &UnCompressPage::signalFileChoose, this, &MainWindow::slotChoosefiles);
@@ -241,7 +260,6 @@ void MainWindow::initConnections()
 
 void MainWindow::refreshPage()
 {
-    qInfo() << "refreshPage()";
     switch (m_ePageID) {
     case PI_Home: {
         resetMainwindow();
@@ -304,13 +322,6 @@ void MainWindow::refreshPage()
         titlebar()->setTitle(tr("Deleting"));
     }
     break;
-    case PI_RenameProgress: {
-        m_pMainWidget->setCurrentIndex(4);
-        setTitleButtonStyle(false, false);
-        m_pProgressPage->resetProgress();
-        titlebar()->setTitle(tr("Renaming"));
-    }
-    break;
     case PI_ConvertProgress: {
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
@@ -344,12 +355,6 @@ void MainWindow::refreshPage()
     }
     break;
     }
-    //压缩文件焦点需压缩文件名上
-    if(m_ePageID == PI_CompressSetting) {
-        return;
-    }
-    //切换界面后焦点默认在标题栏上
-    this->titlebar()->setFocus();
 }
 
 qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
@@ -414,8 +419,23 @@ void MainWindow::calFileSizeByThread(const QString &path)
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
-    m_pTitleWidget->setVisible(bVisible);
-    m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
+    switch (pixmap) {
+    case DStyle::SP_IncreaseElement: // 列表界面
+        m_pTitleButton->setToolTip(tr("Open file"));
+        break;
+    case DStyle::SP_ArrowLeave:  // 压缩设置界面
+        m_pTitleButton->setToolTip(tr("Back"));
+        break;
+    default:
+        break;
+    }
+
+    m_pTitleButton->setVisible(bVisible);
+
+    if (bVisible)
+        m_pTitleButton->setIcon(pixmap);
+
+    m_pTitleCommentButton->setVisible(bVisible2);
 }
 
 void MainWindow::loadArchive(const QString &strArchiveFullPath)
@@ -457,7 +477,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter);     // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
-    m_pTitleWidget->setTitleButtonEnable(m_stUnCompressParameter.bModifiable);
+    m_pTitleButton->setEnabled(m_stUnCompressParameter.bModifiable);
     m_pOpenAction->setEnabled(m_stUnCompressParameter.bModifiable);
 
     // 设置默认解压路径
@@ -646,7 +666,6 @@ bool MainWindow::checkSettings(const QString &file)
 
 bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
 {
-#if 0
     if (!m_pUnCompressPage || !m_pCompressPage /*|| !m_pCompressSetting*/) {
         return false;
     }
@@ -790,7 +809,7 @@ bool MainWindow::handleApplicationTabEventNotify(QObject *obj, QKeyEvent *evt)
             return true;
         }
     }
-#endif
+
     return false;
 }
 
@@ -952,7 +971,7 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 {
     m_pOpenAction->setEnabled(bRootIndex);
-    m_pTitleWidget->setTitleButtonVisible(bRootIndex);
+    m_pTitleButton->setVisible(bRootIndex);
 }
 
 void MainWindow::slotCompressNext()
@@ -985,7 +1004,12 @@ void MainWindow::slotCompress(const QVariant &val)
     CompressOptions options;
 
     // 构建压缩文件数据
-    listEntry = m_pCompressPage->getEntrys();
+    foreach (QString strFile, listFiles) {
+        FileEntry stFileEntry;
+        stFileEntry.strFullPath = strFile;
+        listEntry.push_back(stFileEntry);
+    }
+
     strDestination = m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName;
 
     // 构建压缩参数
@@ -1149,7 +1173,7 @@ void MainWindow::slotReceiveProgress(double dPercentage)
 {
     if (Operation_SingleExtract == m_operationtype) { //提取删除操作使用小弹窗进度
         //需要添加dPercentage < 100判断，否则会出现小文件提取进度对话框不会自动关闭
-        if (!m_pProgressdialog->isVisible() && dPercentage < 100 && dPercentage > 0) {
+        if (m_pProgressdialog->isHidden() && dPercentage < 100 && dPercentage > 0) {
             m_pProgressdialog->showDialog();
         }
 
@@ -1391,8 +1415,7 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
     }
     break;
 // 删除
-    case ArchiveJob::JT_Delete:
-	{
+    case ArchiveJob::JT_Delete: {
         qInfo() << "删除结束";
         // 追加完成更新压缩包数据
         m_operationtype = Operation_UpdateData;
@@ -1404,22 +1427,6 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
         } else {
             // 无可用插件
             showErrorMessage(FI_Delete, EI_NoPlugin);
-        }
-    }
-    break;
-    case ArchiveJob::JT_Rename:
-    {
-        qInfo() << "Rename end!";
-        // 追加完成更新压缩包数据
-        m_operationtype = Operation_UpdateData;
-        if (ArchiveManager::get_instance()->updateArchiveCacheData(m_stUpdateOptions)) {
-            // 开始更新
-            m_pLoadingPage->setDes(tr("Updating, please wait..."));
-            m_pLoadingPage->startLoading();
-            m_ePageID = PI_Loading;
-        } else {
-            // 无可用插件
-            showErrorMessage(FI_Rename, EI_NoPlugin);
         }
     }
     break;
@@ -1578,10 +1585,6 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         // 文件名过长
         case ET_LongNameError:
             showErrorMessage(FI_Compress, EI_LongFileName, true);
-            break;
-        // 分卷已存在
-        case ET_ExistVolume:
-            showErrorMessage(FI_Compress, EI_ExistVolume, true);
             break;
         default: {
             showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
@@ -2063,10 +2066,6 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Insufficient disk space"));
         }
         break;
-        case EI_ExistVolume: {
-            m_pFailurePage->setFailureDetail(tr("The compressed volumes already exist"));
-        }
-        break;
         default:
             break;
         }
@@ -2265,19 +2264,6 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
         m_ePageID = PI_Home;
         refreshPage();
     });
-
-    connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
-        // 取消操作
-        slotCancel();
-
-        // 显示提示对话框
-        TipDialog dialog(this);
-        dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK", "button"));
-
-        resetMainwindow();
-        m_ePageID = PI_Home;
-        refreshPage();
-    });
 }
 
 QJsonObject MainWindow::creatShorcutJson()
@@ -2388,17 +2374,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
         } else {
             QString strpath = info.absolutePath();
             int iIndex = strpath.lastIndexOf(QDir::separator());
-            //fixbug:163153 远程挂在目录下压缩多个文件，压缩文件夹存在路径中特殊字符
-            //这里使用最后一个文件夹名进行压缩，防止特殊字符压缩不成功
-            QRegExp reg("^\s+|[\\:*\"'?<>|\r\n\t]");
-            if (strpath.mid(iIndex).indexOf(reg) != -1) {
-                QString compressor = strpath.split("=").last() + strSuffix;
-                if (compressor.indexOf(reg) != -1)
-                    compressor.remove(reg);
-                strArchivePath += QDir::separator() + compressor;
-            } else {
-                strArchivePath += strpath.mid(iIndex) + strSuffix;
-            }
+            strArchivePath += strpath.mid(iIndex) + strSuffix;
         }
 
         // 检查源文件中是否包含即将生成的压缩包
@@ -2663,9 +2639,8 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
             options.qComressSize = fileinfo.size();
             options.qSize = fileinfo.size(); // 解压到当前文件夹由于没有list，不能获取压缩包原文件总大小，libarchive使用压缩包大小代替计算进度
 
-            // 如果是者右键解压缩，根据设置选项判断是否自动创建文件夹，给出解压路径
-            // 如果是右键解压到当前文件夹，则不创建文件夹（bug 162597）
-            if (ST_Extract == eType) {
+            // 如果是右键解压到当前文件夹或者右键解压缩，根据设置选项判断是否自动创建文件夹，给出解压路径
+            if (ST_ExtractHere == eType || ST_Extract == eType) {
                 QString strAutoPath = getExtractPath(fileinfo.fileName());
                 // 根据是否自动创建文件夹处理解压路径
                 if (!strAutoPath.isEmpty()) {
@@ -2801,59 +2776,6 @@ void MainWindow::slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTota
     } else {
         // 无可用插件
         showErrorMessage(FI_Delete, EI_NoPlugin);
-    }
-}
-
-void MainWindow::slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize)
-{
-    // 调用添加文件接口
-    CompressOptions options;
-    options.strDestination = m_pUnCompressPage->getCurPath();   // 获取追加目录
-    options.strPassword = ArchiveManager::get_instance()->getCurFilePassword();
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
-    options.qTotalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
-    QList<FileEntry> sListEntry;
-    sListEntry << SelEntry;
-    //判断是否重名，重名不做操作
-    QString strAlias;
-    if (!SelEntry.strFullPath.endsWith(QDir::separator())) { //文件重命名
-        QString strPath = QFileInfo(SelEntry.strFullPath).path();
-        if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
-            strAlias = SelEntry.strAlias;
-        } else {
-            strAlias = strPath + QDir::separator() + SelEntry.strAlias;
-        }
-    } else { //文件夹重命名
-        QString strPath = QFileInfo(SelEntry.strFullPath.left(SelEntry.strFullPath.length() - 1)).path();
-        if(strPath == "."){
-            strAlias = SelEntry.strAlias + QDir::separator();
-        } else {
-            strAlias = strPath + QDir::separator() + SelEntry.strAlias + QDir::separator();
-        }
-    }
-    if(stArchiveData.mapFileEntry.keys().contains(strAlias)) {//判断是否重名，重名不做操作
-        qInfo() << "The name already exists! " << strAlias;
-        emit sigRenameFile();
-        return;
-    }
-    QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
-    if (ArchiveManager::get_instance()->renameFiles(strArchiveFullPath, sListEntry)) {
-        // 设置更新选项
-        m_stUpdateOptions.reset();
-        m_stUpdateOptions.eType = UpdateOptions::Rename;
-        m_stUpdateOptions.listEntry << SelEntry;
-        m_stUpdateOptions.qSize = qTotalSize;
-
-        // 设置进度界面参数
-        m_pProgressPage->setProgressType(PT_Rename);
-        m_pProgressPage->setTotalSize(qTotalSize);
-        m_pProgressPage->setArchiveName(strArchiveFullPath);
-        m_pProgressPage->restartTimer(); // 重启计时器
-        m_ePageID = PI_RenameProgress;
-        refreshPage();
-    } else {
-        // 无可用插件
-        showErrorMessage(FI_Rename, EI_NoPlugin);
     }
 }
 
@@ -3240,7 +3162,18 @@ void MainWindow::slotTitleCommentButtonPressed()
 
 void MainWindow::slotThemeChanged()
 {
-    m_pTitleWidget->slotThemeChanged();
+    QIcon icon;
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
+    } else {        // 其它默认
+        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
+    }
+
+    m_pTitleCommentButton->setIcon(icon);
+    m_pTitleCommentButton->setIconSize(QSize(15, 15));
 }
 
 void MainWindow::slotShowShortcutTip()
@@ -3316,107 +3249,4 @@ void MainWindow::slotCheckFinished(const QString &strError, const QString &strTo
         m_ePageID = PI_UnCompress;
         refreshPage();
     }
-}
-
-TitleWidget::TitleWidget(QWidget *parent):
-    QWidget(parent)
-{
-    initUI();
-    initConnection();
-}
-
-void TitleWidget::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
-{
-    switch (pixmap) {
-    case DStyle::SP_IncreaseElement: // 列表界面
-        m_pTitleButton->setToolTip(tr("Open file"));
-        break;
-    case DStyle::SP_ArrowLeave:  // 压缩设置界面
-        m_pTitleButton->setToolTip(tr("Back"));
-        break;
-    default:
-        break;
-    }
-
-    m_pTitleButton->setVisible(bVisible);
-
-    if (bVisible)
-        m_pTitleButton->setIcon(pixmap);
-
-    m_pTitleCommentButton->setVisible(bVisible2);
-
-    if (bVisible) {
-        setFocusProxy(m_pTitleButton);
-    } else {
-        setFocusProxy(nullptr);
-    }
-}
-
-void TitleWidget::setTitleButtonEnable(bool enable)
-{
-    m_pTitleButton->setEnabled(enable);
-}
-
-void TitleWidget::setTitleButtonVisible(bool visible)
-{
-    m_pTitleButton->setVisible(visible);
-}
-
-void TitleWidget::slotThemeChanged()
-{
-    QIcon icon;
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if (DGuiApplicationHelper::LightType == themeType) {    // 浅色
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    } else if (DGuiApplicationHelper::DarkType == themeType) {  // 深色
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_dark.svg");
-    } else {        // 其它默认
-        icon.addFile(":assets/icons/deepin/builtin/icons/compress_information_15px.svg");
-    }
-
-    m_pTitleCommentButton->setIcon(icon);
-    m_pTitleCommentButton->setIconSize(QSize(15, 15));
-}
-
-void TitleWidget::initUI()
-{
-    // 添加左上角按钮
-    m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
-    m_pTitleButton->setFixedSize(36, 36);
-//    m_pTitleButton->setVisible(false);
-    m_pTitleButton->setObjectName("TitleButton");
-    m_pTitleButton->setAccessibleName("Title_btn");
-    m_pTitleButton->setToolTip(tr("Open file"));
-
-    // 左上角注释信息
-    m_pTitleCommentButton = new DIconButton(this);
-    m_pTitleCommentButton->setFixedSize(36, 36);
-    m_pTitleCommentButton->setToolTip(tr("File info"));
-    slotThemeChanged();
-
-//    m_pTitleCommentButton->setVisible(false);
-    m_pTitleCommentButton->setObjectName("CommentButton");
-    m_pTitleCommentButton->setAccessibleName("Comment_btn");
-
-    // 左上角按钮布局
-    QHBoxLayout *leftLayout = new QHBoxLayout;
-    leftLayout->addSpacing(6);
-    leftLayout->addWidget(m_pTitleButton);
-    leftLayout->addSpacing(5);
-    leftLayout->addWidget(m_pTitleCommentButton);
-    leftLayout->addStretch();
-    leftLayout->setContentsMargins(0, 0, 0, 0);
-
-    this->setFixedWidth(89); // 宽度为：6 + 36 + 5 + 36 + 6，即两个按钮的宽度加上左右间距
-    this->setContentsMargins(0, 0, 0, 0);
-    this->setLayout(leftLayout);
-
-    setTabOrder(m_pTitleButton, m_pTitleCommentButton);
-    setFocusProxy(m_pTitleButton);
-}
-
-void TitleWidget::initConnection()
-{
-    connect(m_pTitleButton, &DIconButton::clicked, this, &TitleWidget::sigTitleClicked);
-    connect(m_pTitleCommentButton, &DIconButton::clicked, this, &TitleWidget::sigCommentClicked);
 }

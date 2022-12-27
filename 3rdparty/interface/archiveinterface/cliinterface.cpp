@@ -282,42 +282,6 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
 
     // 对列表加密文件进行追加压缩的时候使用压缩包的密码
     QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : options.strPassword;
-    //进程方式重命名，建立软连接
-    QVariantMap mapdata;
-    QList<QTemporaryDir *> lstTmpDir;
-    QStringList sRenameList;
-    for (FileEntry file : files) {
-        bool isAlias = !(file.strAlias.isEmpty() || file.strAlias.isNull());
-        if(isAlias) {
-            QTemporaryDir *tmpdir = new QTemporaryDir();
-            tmpdir->setAutoRemove(true);
-            const QString linkpath = tmpdir->path() + QDir::separator() + file.strAlias;
-
-            if(!options.bTar_7z) {
-                if (QFile::link(file.strFullPath, linkpath)) {
-                    qInfo() << "process Symlink's created:" << file.strFullPath << linkpath;
-                    mapdata.insert(file.strFullPath, linkpath);
-                } else { // 创建链接失败
-                    qInfo() << "process Can't create symlink" << file.strFullPath << linkpath;
-                    emit signalFinished(PFT_Error);
-                    return PFT_Error;
-                }
-            } else {
-                QString sRename = "--transform='flags=r;s|%1|%2|'";
-                sRename = sRename.arg(file.strFileName).arg(file.strAlias);
-                sRenameList.append(sRename);
-            }
-            lstTmpDir.append(tmpdir);
-        }
-    }
-    //替换重命名文件
-    if(!mapdata.isEmpty()) {
-        for(QString sfileName: fileList) {
-            if(mapdata.contains(sfileName)) {
-                fileList.replace(fileList.indexOf(sfileName), mapdata.value(sfileName).toString());
-            }
-        }
-    }
     // 压缩命令的参数
     QStringList arguments = m_cliProps->addArgs(m_strArchiveName,
                                                 fileList,
@@ -328,8 +292,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
                                                 options.strEncryptionMethod,
                                                 options.iVolumeSize,
                                                 options.bTar_7z,
-                                                QFileInfo(m_strArchiveName).path(),
-                                                sRenameList);
+                                                QFileInfo(m_strArchiveName).path());
 
     if (options.bTar_7z) { // 压缩tar.7z文件
         m_isTar7z = true;
@@ -338,10 +301,6 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         ret = runProcess(strProgram, arguments);
     } else {
         ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
-    }
-    //删除临时目录
-    for(QTemporaryDir *tmdDir: lstTmpDir) {
-        delete tmdDir;
     }
 
     return ret ? PFT_Nomral : PFT_Error;
@@ -373,22 +332,6 @@ PluginFinishType CliInterface::deleteFiles(const QList<FileEntry> &files)
     QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
     ret = runProcess(m_cliProps->property("deleteProgram").toString(),
                      m_cliProps->deleteArgs(m_strArchiveName, files, password));
-
-    return ret ? PFT_Nomral : PFT_Error;
-}
-
-PluginFinishType CliInterface::renameFiles(const QList<FileEntry> &files)
-{
-    setPassword(QString());
-    m_workStatus = WT_Delete;
-    m_files = files;
-
-    bool ret = false;
-
-    // 对列表加密文件进行追加删除的时候使用压缩包的密码
-    QString password = DataManager::get_instance().archiveData().isListEncrypted ? DataManager::get_instance().archiveData().strPassword : QString();
-    ret = runProcess(m_cliProps->property("moveProgram").toString(),
-                     m_cliProps->moveArgs(m_strArchiveName, files, DataManager::get_instance().archiveData(), password));
 
     return ret ? PFT_Nomral : PFT_Error;
 }
@@ -443,79 +386,7 @@ PluginFinishType CliInterface::updateArchiveData(const UpdateOptions &options)
                     }
                 }
             }
-        } else if (options.eType == UpdateOptions::Rename) { // 重命名，更新压缩包数据
-        QMap<QString, FileEntry> tmpMapFileEntry;
-        QString strAlias;
-        if (entry.isDirectory) { // 重命名文件夹
-            // 在map中查找该文件夹下的文件并重命名
-            QMap<QString, FileEntry>::iterator itor = stArchiveData.mapFileEntry.begin();
-            while (itor != stArchiveData.mapFileEntry.end()) {
-                if (itor->strFullPath.startsWith(entry.strFullPath)) {
-                    QString strPath = QFileInfo(entry.strFullPath.left(entry.strFullPath.length() - 1)).path();
-                    if(strPath == "."){
-                        strAlias = entry.strAlias + QDir::separator();
-                    } else {
-                        strAlias = strPath + QDir::separator() + entry.strAlias + QDir::separator();
-                    }
-                    strAlias = strAlias + QString(itor->strFullPath).right(QString(itor->strFullPath).length()-entry.strFullPath.length());
-                    FileEntry tmpEntry = itor.value();
-                    tmpEntry.strFullPath = strAlias;
-                    if(tmpEntry.isDirectory) {
-                        tmpEntry.strFileName = QFileInfo(strAlias.left(strAlias.length() - 1)).fileName();
-                    } else {
-                        tmpEntry.strFileName = QFileInfo(strAlias).fileName();
-                    }
-                    tmpEntry.strAlias.clear();
-                    tmpMapFileEntry.insert(strAlias, tmpEntry);
-                    itor = stArchiveData.mapFileEntry.erase(itor);
-                } else {
-                    ++itor;
-                }
-            }
-            if(!tmpMapFileEntry.isEmpty()) {
-                for (QString strFullPath: tmpMapFileEntry.keys()) {
-                    stArchiveData.mapFileEntry.insert(strFullPath, tmpMapFileEntry.value(strFullPath));
-                }
-            }
-            // 更新文件夹第一层的数据
-            if (entry.strFullPath.endsWith(QLatin1Char('/')) && entry.strFullPath.count(QLatin1Char('/')) == 1) {
-                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
-                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry移除
-                        stArchiveData.listRootEntry.removeAt(i);
-                        strAlias = entry.strAlias + QDir::separator();
-                        entry.strFullPath = strAlias;
-                        entry.strFileName = strAlias;
-                        stArchiveData.listRootEntry.append(entry);
-                        break;
-                    }
-                }
-            }
-        } else { // 重命名文件
-            stArchiveData.mapFileEntry.remove(entry.strFullPath); //在map中重命名该文件
-            QString strPath = QFileInfo(entry.strFullPath).path();
-            if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
-                strAlias = entry.strAlias;
-            } else {
-                strAlias = strPath + QDir::separator() + entry.strAlias;
-            }
-            FileEntry tmpEntry = entry;
-            tmpEntry.strFullPath = strAlias;
-            stArchiveData.mapFileEntry.insert(strAlias, tmpEntry);
-            // 更新文件夹第一层的数据
-            if (!entry.strFullPath.contains(QLatin1Char('/'))) {
-                for (int i = 0; i < stArchiveData.listRootEntry.count(); i++) {
-                    if (stArchiveData.listRootEntry.at(i).strFullPath == entry.strFullPath) { // 在第一次层数据中找到entry重命名
-                        stArchiveData.listRootEntry.removeAt(i);
-                        strAlias = entry.strAlias;
-                        entry.strFullPath = strAlias;
-                        entry.strFileName = strAlias;
-                        stArchiveData.listRootEntry.append(entry);
-                        break;
-                    }
-                }
-            }
-        }
-    } else if (options.eType == UpdateOptions::Add) { // 追加压缩
+        } else if (options.eType == UpdateOptions::Add) { // 追加压缩
             QString destinationPath = options.strParentPath; // 追加目标路径
             QFileInfo file(entry.strFullPath);
 

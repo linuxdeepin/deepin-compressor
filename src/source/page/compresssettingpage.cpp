@@ -28,9 +28,6 @@
 
 #include <cmath>
 
-#define SCROLL_MAX 621
-#define SCROLL_MIN 348
-
 TypeLabel::TypeLabel(QWidget *parent)
     : DFrame(parent)
 {
@@ -309,14 +306,14 @@ void CompressSettingPage::initUI()
     pRightLayout->setContentsMargins(0, 0, 50, 0);
 
     // 右侧滚动区域
-    m_pRightScroll = new QScrollArea(this);
+    QScrollArea *m_pRightScroll = new QScrollArea(this);
     DWidget *pRightWgt = new DWidget(this);
     pRightWgt->setLayout(pRightLayout);
     m_pRightScroll->setFrameShape(QFrame::NoFrame);
     m_pRightScroll->setWidgetResizable(true);
     m_pRightScroll->setMinimumHeight(100);           // task 16309调整最小大小
     m_pRightScroll->setWidget(pRightWgt);
-    m_pRightScroll->setFocusPolicy(Qt::NoFocus);
+
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
     pBtnLayout->addStretch(1);
@@ -344,9 +341,6 @@ void CompressSettingPage::initUI()
 
     setBackgroundRole(DPalette::Base);
     setAutoFillBackground(true);
-
-    // bug103712  滚动区域内widget高度发生变化导致页面闪动
-    pRightWgt ->setFixedHeight(pRightWgt->height());
 }
 
 void CompressSettingPage::initConnections()
@@ -596,7 +590,6 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
 
     m_pCpuLbl->setEnabled(false);
     m_pCpuCmb->setEnabled(false);
-    m_pCpuCmb->setCurrentIndex(0);
 
     if (0 == selectType.compare("tar.7z")) {       // tar.7z支持普通/列表加密，不支持分卷
         setEncryptedEnabled(true);
@@ -622,7 +615,6 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
         if (0 == selectType.compare("tar.gz")) {
             m_pCpuLbl->setEnabled(true);
             m_pCpuCmb->setEnabled(true);
-            m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
         }
     }
 
@@ -649,12 +641,6 @@ void CompressSettingPage::slotRefreshFileNameEdit()
 
 void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
 {
-    // bug103712  滚动区域内widget高度发生变化导致页面闪动   页面变化前先设置widget大小
-    if (bEnabled) {
-        m_pRightScroll->widget()->setFixedHeight(SCROLL_MAX);
-    } else {
-        m_pRightScroll->widget()->setFixedHeight(SCROLL_MIN);
-    }
     // 设置控件是否隐藏
     m_pEncryptedLbl->setVisible(bEnabled);
     m_pPasswordEdt->setVisible(bEnabled);
@@ -677,8 +663,6 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pCpuCmb->setCurrentIndex(0);
         m_pCommentEdt->clear();
     }
-    if (m_pCompressTypeLbl->text() == "tar.gz")
-        m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 }
 
 void CompressSettingPage::slotSplitEdtEnabled()

@@ -9,35 +9,23 @@ if (NOT DEFINED VERSION)
     set(VERSION 1.0)
 endif ()
 
-#3.输出目录的预设值
-include(GNUInstallDirs)
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-   set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
-
-## 插件安装目录
-if(NOT DEFINED COMPRESSOR_PLUGIN_PATH)
-    set(COMPRESSOR_PLUGIN_PATH ${CMAKE_INSTALL_LIBDIR}/deepin-compressor/plugins)
-endif()
-
-## 导出头文件路径,非安装时使用
-if(NOT DEFINED HFILES_OUTPUT_PATH)
-    set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-endif()
-
 #SET(CMAKE_BUILD_TYPE "Debug")  
 #SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 
-
+if(DEFINED ENV{PREFIX})
+  set(CMAKE_INSTALL_PREFIX $ENV{PREFIX})
+else()
+  set(CMAKE_INSTALL_PREFIX /usr)
+endif()
 # 添加c++ 11标准支持
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../3rdparty/interface:../../3rdparty/interface:${COMPRESSOR_PLUGIN_PATH}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=../lib:${CMAKE_INSTALL_PREFIX}/lib/deepin-compressor/plugins")
 else()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${COMPRESSOR_PLUGIN_PATH}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wl,-O1,-rpath=${CMAKE_INSTALL_PREFIX}/lib/deepin-compressor/plugins")
 endif()
 
 #安全编译参数
@@ -65,7 +53,7 @@ set(CMAKE_AUTORCC ON)
 
 
 #对DApplication 进行加速
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+set(CMAKE_EXE_LINKER_FLAGS "-pie")
 
 #龙芯特有编译参数 -start
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "mips64")
@@ -83,6 +71,13 @@ if((${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif()
 #模糊测试设置 -end
 
+#3.1 设置lib输出目录
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+#3.2 设置可执行程序输出目录
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+#导出头文件路径
+set(HFILES_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
+
 
 #Generate the qm file
 set(APP_RES_DIR "src")
@@ -94,26 +89,23 @@ add_subdirectory(3rdparty)
 add_subdirectory(src)
 
 #单元测试开关
-if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    option(USE_TEST "UT" ON)
-else()
-    option(USE_TEST "UT" OFF)
-endif()
-if (USE_TEST)
-    add_subdirectory(tests)
-endif(USE_TEST)
+#option(USE_TEST "UT" ON)
+#if (USE_TEST)
+#    add_subdirectory(tests)
+#endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
 
 
-install(TARGETS cli7zplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS clirarplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS libzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS libpigzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS minizipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS readwritelibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS readonlylibarchiveplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS compressor-interface DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS bz2plugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS gzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-install(TARGETS xzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+
+install(TARGETS cli7zplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS clirarplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS libzipplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS libpigzplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS minizipplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS readwritelibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS readonlylibarchiveplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS compressor-interface DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS bz2plugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS gzplugin DESTINATION lib/deepin-compressor/plugins/)
+install(TARGETS xzplugin DESTINATION lib/deepin-compressor/plugins/)
 

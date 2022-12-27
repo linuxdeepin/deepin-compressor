@@ -22,11 +22,10 @@
 
 // 进度类型
 enum Progress_Type {
-    PT_None = 0,            // 无进度
+    PT_None,            // 无进度
     PT_Compress,     // 压缩进度
     PT_UnCompress,   // 解压缩进度
     PT_Delete,       // 删除进度
-    PT_Rename,       // 重命名进度
     PT_CompressAdd, // 追加压缩进度
     PT_Convert,         // 转换格式进度
     PT_Comment,  // 压缩后添加注释进度
@@ -63,7 +62,7 @@ enum DataView_Column {
 
 // 界面标识
 enum Page_ID {
-    PI_Home = 0,                // 首页
+    PI_Home,                // 首页
     PI_Compress,            // 压缩列表
     PI_CompressSetting,     // 压缩设置
     PI_UnCompress,          // 解压列表
@@ -71,7 +70,6 @@ enum Page_ID {
     PI_AddCompressProgress, // 追加进度
     PI_UnCompressProgress,  // 解压进度
     PI_DeleteProgress,      // 删除进度
-    PI_RenameProgress,      // 重命名进度
     PI_ConvertProgress,     // 转换进度
     PI_CommentProgress,     // 添加zip注释进度
     PI_Success,             // 成功
@@ -156,18 +154,17 @@ enum SuccessInfo {
 
 // 失败界面信息
 enum FailureInfo {
-    FI_Compress = 0,     // 压缩失败
+    FI_Compress,     // 压缩失败
     FI_Load,         // 打开失败
     FI_Uncompress,   // 解压失败（包括解压、提取、打开文件）
     FI_Add,          // 追加失败
     FI_Delete,       // 删除失败
-    FI_Rename,       // 重命名失败
     FI_Convert       // 转换失败
 };
 
 // 错误界面显示的信息
 enum ErrorInfo {
-    EI_NoPlugin = 0,                // 无可用插件
+    EI_NoPlugin,                // 无可用插件
     EI_ArchiveDamaged,          // 压缩包损坏
     EI_ArchiveMissingVolume,    // 分卷包缺失
     EI_WrongPassword,           // 密码错误
@@ -176,7 +173,6 @@ enum ErrorInfo {
     EI_CreatArchiveFailed,      // 创建压缩文件失败
     EI_InsufficientDiskSpace,      // 磁盘空间不足
     EI_ArchiveNoData,           // 压缩包无数据
-    EI_ExistVolume,      // 分卷已存在
 };
 
 // 启动应用的方式

@@ -8,7 +8,6 @@
 
 #include <DDialog>
 #include <DLabel>
-#include <DPasswordEdit>
 
 DWIDGET_USE_NAMESPACE
 
@@ -206,30 +205,5 @@ private:
     int m_iDialogOldHeight = 0;
     int m_iCheckboxOld1Height = 0;
     bool m_bPasswordVisible = false;
-};
-
-// 重命名对话框
-class RenameDialog : public DDialog
-{
-    Q_OBJECT
-
-public:
-    explicit RenameDialog(QWidget *parent = nullptr);
-    ~RenameDialog() override;
-
-    /**
-     * @brief showDialog    显示对话框
-     * @param strReName 重命名名字
-     * @return
-     */
-    int  showDialog(const QString &strReName, const QString &strAlias = "", bool isDirectory = false, bool isRepeat = false);
-    QString getNewNameText() const;
-
-private:
-    QString m_strName;
-    bool m_isDirectory;
-    DLineEdit *m_lineEdit;
-    bool m_bPasswordVisible = false;
-    int m_nOkBtnIndex; //确认(Ok)按钮在对话框中的索引
 };
 #endif // POPUPDIALOG_H

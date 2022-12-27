@@ -120,7 +120,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
                     totalSize += it.fileInfo().size();
                 }
 
-                if (!writeFileTodestination(path, options.strDestination, externalPath, totalSize, selectedFile.strAlias)) {
+                if (!writeFileTodestination(path, options.strDestination, externalPath, totalSize)) {
                     finish(false);
                     return PFT_Error;
                 }
@@ -155,25 +155,6 @@ PluginFinishType ReadWriteLibarchivePlugin::deleteFiles(const QList<FileEntry> &
     }
 
     const bool isSuccessful = deleteEntry(files);
-
-    finish(isSuccessful);
-    return isSuccessful ? PFT_Nomral : PFT_Error;
-}
-
-PluginFinishType ReadWriteLibarchivePlugin::renameFiles(const QList<FileEntry> &files)
-{
-    if (files.count() == 0) {
-        return PFT_Error;
-    }
-    if (!initializeReader()) {
-        return PFT_Error;
-    }
-
-    if (!initializeWriter()) {
-        return PFT_Error;
-    }
-
-    const bool isSuccessful = renameEntry(files);
 
     finish(isSuccessful);
     return isSuccessful ? PFT_Nomral : PFT_Error;
@@ -353,7 +334,7 @@ void ReadWriteLibarchivePlugin::finish(const bool isSuccessful)
     }
 }
 
-bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath,  const qlonglong &totalsize, const QString &strAlias)
+bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath,  const qlonglong &totalsize)
 {
     //如果是文件夹，采用软链接的形式
     QString newFilePath = sourceFileFullPath;
@@ -378,7 +359,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
     QFileInfo fileInfo(newFilePath);
     QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
     QString destinationFilename = absoluteFilename;
-    destinationFilename = destination + newFilePath.right(newFilePath.length() - externalPath.length());
+    destinationFilename = destination + newFilePath.remove(externalPath);
 
     // #253059: Even if we use archive_read_disk_entry_from_file,
     //          libarchive may have been compiled without HAVE_LSTAT,
@@ -389,9 +370,6 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
     lstat(QFile::encodeName(absoluteFilename).constData(), &st); // krazy:exclude=syscalls
 
     struct archive_entry *entry = archive_entry_new();
-    if(!(strAlias.isEmpty() || strAlias.isNull())) {
-        destinationFilename = destination + strAlias + QDir::separator() + destinationFilename.right(destinationFilename.length() - destinationFilename.indexOf(QDir::separator()) - 1);
-    }
     archive_entry_set_pathname(entry, QFile::encodeName(destinationFilename).constData());
     archive_entry_copy_sourcepath(entry, QFile::encodeName(absoluteFilename).constData());
     archive_read_disk_entry_from_file(m_archiveReadDisk.data(), entry, -1, &st);
@@ -440,7 +418,6 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     QString newFilePath = relativeName;
     QString absoluteDestinationPath = "";
     QFileInfo relativeFileInfo(relativeName);
-    bool isAlias = !(pEntry.strAlias.isEmpty() || pEntry.strAlias.isNull());
 
     if (relativeFileInfo.isDir()) {
         QScopedPointer<QTemporaryDir> extractTempDir;
@@ -459,7 +436,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
 
     QFileInfo fileInfo(newFilePath);
     const QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
-    QString destinationFilename = destination + fileInfo.fileName();
+    const QString destinationFilename = destination + fileInfo.fileName();
 
     // #253059: Even if we use archive_read_disk_entry_from_file,
     //          libarchive may have been compiled without HAVE_LSTAT,
@@ -470,10 +447,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     lstat(QFile::encodeName(absoluteFilename).constData(), &st); // krazy:exclude=syscalls
 
     struct archive_entry *entry = archive_entry_new();
-    if(isAlias) {
-        destinationFilename = destination + pEntry.strAlias;
-    }
-    archive_entry_copy_pathname(entry, QFile::encodeName(destinationFilename).constData());
+    archive_entry_set_pathname(entry, QFile::encodeName(destinationFilename).constData());
     archive_entry_copy_sourcepath(entry, QFile::encodeName(absoluteFilename).constData());
     archive_read_disk_entry_from_file(m_archiveReadDisk.data(), entry, -1, &st);
 
@@ -618,61 +592,6 @@ bool ReadWriteLibarchivePlugin::deleteEntry(const QList<FileEntry> &files)
         if (flag) {
             continue;
         }
-
-
-        // Write old entries.
-        // 复制保留文件的数据到新的压缩包
-        if (!writeEntryDelete(entry, totalSize)) {
-            return false;
-        }
-    }
-
-    return !QThread::currentThread()->isInterruptionRequested();
-}
-
-bool ReadWriteLibarchivePlugin::renameEntry(const QList<FileEntry> &files)
-{
-    struct archive_entry *entry;
-    archive_filter_count(m_archiveReader.data());
-    ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
-    qlonglong totalSize = stArchiveData.qSize; // 原压缩包内文件总大小，供libarchive追加进度使用
-
-    while (!QThread::currentThread()->isInterruptionRequested() && archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK) {
-//        const QString file = QFile::decodeName(archive_entry_pathname(entry));
-        const char *name = archive_entry_pathname(entry);
-        QString entryName = m_common->trans2uft8(name, m_mapCode[QString(name)]); //该条entry在压缩包内文件名(全路径)
-        bool flag = false;
-        foreach (const FileEntry &tmpFileEntry, files) {
-            QString strAlias;
-            if (tmpFileEntry.isDirectory) { //跳过该文件夹以及子文件
-                if (entryName.startsWith(tmpFileEntry.strFullPath)) {
-                    QString strPath = QFileInfo(tmpFileEntry.strFullPath.left(tmpFileEntry.strFullPath.length() - 1)).path();
-                    if(strPath == "."){
-                        strAlias = tmpFileEntry.strAlias + QDir::separator();
-                    } else {
-                        strAlias = strPath + QDir::separator() + tmpFileEntry.strAlias + QDir::separator();
-                    }
-                    strAlias = strAlias + QString(name).right(QString(name).length()-tmpFileEntry.strFullPath.length());
-                    archive_entry_copy_pathname(entry, QFile::encodeName(strAlias).constData());
-                    emit signalCurFileName(entryName);
-                    break;
-                }
-            } else {
-                if (0 == entryName.compare(tmpFileEntry.strFullPath)) {
-
-                    QString strPath = QFileInfo(tmpFileEntry.strFullPath).path();
-                    if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
-                        strAlias = tmpFileEntry.strAlias;
-                    } else {
-                        strAlias = strPath + QDir::separator() + tmpFileEntry.strAlias;
-                    }
-                    archive_entry_copy_pathname(entry, QFile::encodeName(strAlias).constData());
-                    emit signalCurFileName(entryName);
-                    break;
-                }
-            }
-        }
-
 
 
         // Write old entries.

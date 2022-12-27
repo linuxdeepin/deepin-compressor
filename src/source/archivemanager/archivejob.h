@@ -21,13 +21,12 @@ public:
 
     // 操作类型
     enum JobType {
-        JT_NoJob = 0,          // 创建压缩包
+        JT_NoJob,          // 创建压缩包
         JT_Create,          // 创建压缩包
         JT_Add,             // 添加压缩文件
         JT_Load,            // 加载压缩包
         JT_Extract,         // 解压
         JT_Delete,         // 删除
-        JT_Rename,         // 重命名
         JT_BatchExtract,   // 批量解压
         JT_Open,            // 打开
         JT_Update,         // 更新

@@ -9,14 +9,16 @@ project(${LIB_NAME})
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(KF5Codecs REQUIRED)
-find_package(LibArchive REQUIRED)
+#find_package(LibArchive REQUIRED)
 include(FindPkgConfig)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
+pkg_check_modules(archive REQUIRED IMPORTED_TARGET libarchive)
 #pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 
 #指定头文件路径
 include_directories(${DtkWidget_INCLUDE_DIRS})
+include_directories(${archive_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
 
@@ -41,7 +43,7 @@ add_library(${LIB_NAME} STATIC ${h_files} ${c_files})
 target_link_libraries(${LIB_NAME}
     Qt5::Widgets
     KF5::Codecs
-    archive
+    PkgConfig::archive
 #    ${GOBJECT_LIBRARIES}
     compressor-interface
 )

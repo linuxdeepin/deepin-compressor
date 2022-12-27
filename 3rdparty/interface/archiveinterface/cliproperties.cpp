@@ -27,9 +27,6 @@
 
 #include "cliproperties.h"
 #include "archiveformat.h"
-//#include "datamanager.h"
-#include <QFileInfo>
-#include <QDir>
 
 #include <QRegularExpression>
 
@@ -40,10 +37,7 @@ CliProperties::CliProperties(QObject *parent, const KPluginMetaData &metaData, c
 {
 }
 
-QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod,
-                                   const QString &encryptionMethod,
-                                   int volumeSize, bool isTar7z, const QString &globalWorkDir,
-                                   const QStringList &renameList)
+QStringList CliProperties::addArgs(const QString &archive, const QStringList &files, const QString &password, bool headerEncryption, int compressionLevel, const QString &compressionMethod, const QString &encryptionMethod, int volumeSize, bool isTar7z, const QString &globalWorkDir)
 {
     Q_UNUSED(globalWorkDir);
 
@@ -52,7 +46,6 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
     }
 
     if (isTar7z) {
-        //        tar.7z压缩命令重命名：tar --transform='flags=r;s|oldname1|newname1|' --transform='flags=r;s|oldname2|newname3|' ....
         //        tar.7z压缩命令: tar cf - -C /home/username/Desktop/ 1.txt -C /home/username/Desktop/2/3/ 4K | 7z a - si new.tar.7z
         const QString oneSpace = " "; //一个空格
         QVector<QString> strold = {" ", "!", "$", "&", "*", "(", ")", "<", ">", "+", "-", ";"};
@@ -63,14 +56,6 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         args << "-c";
 
         QString tmp = "tar cf - ";
-        //重命名文件
-        if(!renameList.isEmpty()) {
-            tmp = "tar ";
-            for (QString sRename: renameList) {
-                tmp = tmp + sRename + oneSpace;
-            }
-            tmp = tmp + "-cf - ";
-        }
         for (QString file : files) {
             for (int n = 0; n < strold.length(); ++n) {
                 file.replace(strold[n], strnew[n]);
@@ -243,53 +228,9 @@ QStringList CliProperties::listArgs(const QString &archive, const QString &passw
     return args;
 }
 
-QStringList CliProperties::moveArgs(const QString &archive, const QList<FileEntry> &entries, const ArchiveData &stArchiveData, const QString &password)
+QStringList CliProperties::moveArgs(const QString &archive, const QList<FileEntry> &entries, QString &destination, const QString &password)
 {
     QStringList args;
-    args << m_moveSwitch;
-
-    if (!m_progressarg.isEmpty()) {
-        args << m_progressarg;
-    }
-
-    if (!password.isEmpty()) {
-        args << substitutePasswordSwitch(password);
-    }
-
-    args << archive;
-    for (const FileEntry &entry : entries) {
-        QString path = entry.strFullPath;
-        QString strAlias;
-        QMap<QString, FileEntry>::const_iterator iter = stArchiveData.mapFileEntry.find(entry.strFullPath);
-        for (; iter != stArchiveData.mapFileEntry.end() ;) {
-            if (!iter.key().startsWith(path)) {
-                break;
-            } else {
-                if(entry.isDirectory) {
-                    QString strPath = QFileInfo(entry.strFullPath.left(entry.strFullPath.length() - 1)).path();
-                    if(strPath == "."){
-                        strAlias = entry.strAlias + QDir::separator();
-                    } else {
-                        strAlias = strPath + QDir::separator() + entry.strAlias + QDir::separator();
-                    }
-                    strAlias = strAlias + QString(iter->strFullPath).right(QString(iter->strFullPath).length()-entry.strFullPath.length());
-                } else {
-                    QString strPath = QFileInfo(entry.strFullPath).path();
-                    if(strPath == "." || strPath.isEmpty() || strPath.isNull()) {
-                        strAlias = entry.strAlias;
-                    } else {
-                        strAlias = strPath + QDir::separator() + entry.strAlias;
-                    }
-                }
-                args << path;
-                args << strAlias;
-                ++iter;
-            }
-        }
-    }
-
-
-    args.removeAll(QString());
     return args;
 }
 

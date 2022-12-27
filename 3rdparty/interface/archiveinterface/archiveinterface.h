@@ -136,7 +136,7 @@ public:
      * @brief status 状态
      * @return 状态
      */
-    bool status();
+    virtual bool status();
 
     bool isUserCancel() {return m_bCancel;}
 
@@ -272,12 +272,6 @@ public:
      */
     virtual PluginFinishType deleteFiles(const QList<FileEntry> &files) = 0;
 
-    /**
-     * @brief renameFiles          重命名压缩文件
-     * @param files             待重命名文件
-     * @return
-     */
-    virtual PluginFinishType renameFiles(const QList<FileEntry> &files) = 0;
     /**
      * @brief addComment        添加注释
      * @param comment           注释内容

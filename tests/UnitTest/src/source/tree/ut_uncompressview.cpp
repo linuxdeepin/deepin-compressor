@@ -629,26 +629,6 @@ TEST_F(UT_UnCompressView, test_slotDeleteFile)
     EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::CT_Delete);
 }
 
-TEST_F(UT_UnCompressView, test_slotRenameFile)
-{
-    Stub stub;
-    CustomDialogStub::stub_RenameDialog_showDialog(stub, 1);
-
-    DataManager::get_instance().resetArchiveData();
-    FileEntry entry;
-    entry.strFileName = "1";
-    entry.strAlias = "2";
-    entry.strFullPath = "1/";
-    DataManager::get_instance().archiveData().listRootEntry << entry;
-    DataManager::get_instance().archiveData().mapFileEntry[entry.strFullPath] = entry;
-    m_tester->refreshArchiveData();
-
-    m_tester->selectAll();
-    m_tester->m_bModifiable = true;
-    m_tester->slotRenameFile();
-    EXPECT_EQ(m_tester->m_eChangeType, UnCompressView::CT_Rename);
-}
-
 TEST_F(UT_UnCompressView, test_slotOpen_001)
 {
     Stub stub;

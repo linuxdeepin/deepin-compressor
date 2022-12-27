@@ -26,7 +26,6 @@
 #include <QMimeData>
 #include <QItemSelectionModel>
 #include <QScrollBar>
-#include <QFileInfo>
 
 
 UnCompressView::UnCompressView(QWidget *parent)
@@ -216,7 +215,6 @@ void UnCompressView::initConnections()
 {
     connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles, Qt::QueuedConnection);    // wayland下使用Qt::QueuedConnection连接方式，防止对话框exec导致事件阻塞，图标停留在界面上
     connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
-    connect(this, &UnCompressView::sigRenameFile, this, &UnCompressView::slotRenameFile);
 }
 
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
@@ -613,11 +611,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         menu.addAction(tr("Extract to current directory"), this, &UnCompressView::slotExtract2Here);
         // 右键-打开
         menu.addAction(tr("Open"), this, &UnCompressView::slotOpen);
-        // 右键-重命名
-        QAction *renameAct = menu.addAction(tr("Rename"), this, &UnCompressView::slotRenameFile);
-        if(selectionModel()->selectedRows().count() != 1 || !m_bModifiable) {
-            renameAct->setEnabled(false);
-        }
+
         // 右键-删除
         QAction *pAction = menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
 
@@ -702,46 +696,6 @@ void UnCompressView::slotDeleteFile()
             emit signalDelFiles(listSelEntry, qSize);
         }
     }
-}
-
-void UnCompressView::slotRenameFile()
-{
-    if (!m_bModifiable) return; // 压缩包数据是否可更改
-    // 询问重命名对话框
-    // 重命名数据
-    QList<FileEntry> listSelEntry = getSelEntry();    // 待重命名的文件数据
-
-    // 重命名只操作单个文件
-    if(listSelEntry.size() != 1) {
-        return;
-    }
-    FileEntry &entry = listSelEntry[0];
-
-    RenameDialog dialog(this);
-    QString strShowName;
-    if(entry.strAlias.isEmpty() || entry.strAlias.isNull()) {
-        strShowName = entry.strFullPath;
-    } else {
-        strShowName = entry.strAlias;
-    }
-    bool isRepeat = (sender() == this);
-    int iResult = dialog.showDialog(entry.strFileName, entry.strAlias, entry.isDirectory, isRepeat);
-    if (1 == iResult) {
-        entry.strAlias = QFileInfo(dialog.getNewNameText()).fileName();
-        // 获取所有文件数据
-        qint64 qSize = 0;       // 所有需要删除的文件总大小
-        foreach (FileEntry entry, listSelEntry) {
-            if (entry.isDirectory) {
-                calEntrySizeByParentPath(entry.strFullPath, qSize);
-            } else {
-                qSize += entry.qSize;
-            }
-        }
-        // 发送重命名信号
-        m_eChangeType = CT_Rename;
-        emit signalRenameFile(entry, qSize);
-    }
-
 }
 
 void UnCompressView::slotOpen()
