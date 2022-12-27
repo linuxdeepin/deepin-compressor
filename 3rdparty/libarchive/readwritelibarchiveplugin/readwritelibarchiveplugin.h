@@ -85,18 +85,6 @@ public:
      * @return
      */
     PluginFinishType deleteFiles(const QList<FileEntry> &files) override;
-    /**
-     * @brief renameFiles 重命名压缩包内指定文件
-     * 重命名流程:
-     *  1.初始化
-     *  2.筛选是否是需要重命名的文件
-     *  3.是:跳过; 否: 复制保留文件数据到新的压缩包中
-     *  4.更新存放压缩包信息的map
-     *  5.替换原压缩包
-     * @param files 选中的文件
-     * @return
-     */
-    PluginFinishType renameFiles(const QList<FileEntry> &files) override;
 //    bool addComment(const QString &comment) override;
 
 private:
@@ -124,10 +112,9 @@ private:
      * @param destination
      * @param externalPath 文件夹路径
      * @param totalsize 原文件总大小
-     * @param strAlias 文件别名
      * @return
      */
-    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const qlonglong &totalsize, const QString &strAlias = "");
+    bool writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath, const qlonglong &totalsize);
     /**
      * @brief writeFileFromEntry 将文件写入压缩包
      * @param relativeName 本地文件(夹)(全路径)
@@ -159,13 +146,6 @@ private:
      * @return
      */
     bool deleteEntry(const QList<FileEntry> &files);
-    /**
-     * @brief renameEntry 具体重命名操作
-     * 筛选是否是需要重命名的文件，复制保留文件数据到新的压缩包中
-     * @param files 选中的文件
-     * @return
-     */
-    bool renameEntry(const QList<FileEntry> &files);
     /**
      * @brief writeEntryDelete 删除操作，复制压缩包保留文件数据
      * @param entry

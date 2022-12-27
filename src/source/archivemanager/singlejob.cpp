@@ -9,7 +9,6 @@
 #include "datamanager.h"
 #include "uitools.h"
 
-#include <linux/limits.h>
 #include <QUuid>
 #include <QThread>
 #include <QDebug>
@@ -323,35 +322,6 @@ void DeleteJob::doWork()
     }
 }
 
-// 重命名操作
-RenameJob::RenameJob(const QList<FileEntry> &files, ReadOnlyArchiveInterface *pInterface, QObject *parent)
-    : SingleJob(pInterface, parent)
-    , m_vecFiles(files)
-{
-    initConnections();
-    m_eJobType = JT_Rename;
-}
-
-RenameJob::~RenameJob()
-{
-
-}
-
-void RenameJob::doWork()
-{
-    ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
-
-    if (nullptr == pWriteInterface) {
-        return;
-    }
-
-    PluginFinishType eType = pWriteInterface->renameFiles(m_vecFiles);
-
-    if (!(pWriteInterface->waitForFinished())) {
-        slotFinished(eType);
-    }
-}
-
 OpenJob::OpenJob(const FileEntry &stEntry, const QString &strTempExtractPath, const QString &strProgram, ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
     , m_stEntry(stEntry)
@@ -395,14 +365,6 @@ void OpenJob::slotFinished(PluginFinishType eType)
 {
     if (PFT_Nomral == eType) {
         QString name = m_stEntry.strFileName;
-
-        //对于超长文件打开失败问题处理
-        QString strTempFileName = m_stEntry.strFileName;
-        if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
-            QString strTemp = strTempFileName.left(60);
-            name = strTemp + QString("(%1)").arg(1, 3, 10, QChar('0'))+"." + QFileInfo(strTempFileName).completeSuffix();
-        }
-
         if (name.contains("%")) { // 文件名含有%的时候无法直接双击打开, 创建一个该文件的链接，文件名不含有%，通过打开链接打开源文件
             name = m_strTempExtractPath + QDir::separator() + name.replace("%", "1"); // 将文件名中的%替换为1;
             if (!QFile::link(m_stEntry.strFileName, name)) { // 创建链接
@@ -411,9 +373,6 @@ void OpenJob::slotFinished(PluginFinishType eType)
         } else {
             name = m_strTempExtractPath + QDir::separator() + name;
         }
-
-
-
 
         // 在线程中执行外部应用打开的命令
         ProcessOpenThread *p = new ProcessOpenThread;
@@ -558,8 +517,15 @@ ConvertJob::ConvertJob(const QString strOriginalArchiveFullPath, const QString s
 
 ConvertJob::~ConvertJob()
 {
-    SAFE_DELETE_ELE(m_pCreateJob)
-    SAFE_DELETE_ELE(m_pExtractJob);
+    if (m_pCreateJob != nullptr) {
+        delete m_pCreateJob;
+        m_pCreateJob = nullptr;
+    }
+
+    if (m_pExtractJob != nullptr) {
+        delete m_pExtractJob;
+        m_pExtractJob = nullptr;
+    }
 }
 
 void ConvertJob::start()

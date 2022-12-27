@@ -108,18 +108,9 @@ TEST_F(UT_CliProperties, test_listArgs)
 
 TEST_F(UT_CliProperties, test_moveArgs)
 {
-    QList<FileEntry> files;
-    FileEntry entry;
-    entry.strAlias = "2";
-    entry.strFullPath = "1";
-    files << entry;
-    FileEntry srcentry;
-    srcentry.strFullPath = "1";
+    QString destination;
     m_tester->m_passwordSwitch = QStringList() << "123";
-    ArchiveData stArchiveData;
-    stArchiveData.mapFileEntry.insert("1", srcentry);
-    QStringList list = QStringList() << "123" << "1.zip" << "1" << "2";
-    EXPECT_EQ(m_tester->moveArgs("1.zip", files, stArchiveData, "123456"), list);
+    EXPECT_EQ(m_tester->moveArgs("1.zip", QList<FileEntry>(), destination, ""), QStringList());
 }
 
 TEST_F(UT_CliProperties, test_testArgs)

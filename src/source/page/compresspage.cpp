@@ -43,11 +43,6 @@ QStringList CompressPage::compressFiles()
     return m_pCompressView->getCompressFiles();
 }
 
-QList<FileEntry> CompressPage::getEntrys()
-{
-    return m_pCompressView->getEntrys();
-}
-
 void CompressPage::refreshCompressedFiles(bool bChanged, const QString &strFileName)
 {
     m_pCompressView->refreshCompressedFiles(bChanged, strFileName);
@@ -98,7 +93,7 @@ void CompressPage::initConnections()
 
 void CompressPage::slotCompressNextClicked()
 {
-    qInfo() << "点击了压缩下一步按钮";
+    qDebug() << "点击了压缩下一步按钮";
 
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {

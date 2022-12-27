@@ -290,14 +290,6 @@ public:
     static void stub_AppendDialog_showDialog(Stub &stub, int iResult);
 
     /**
-     * @brief stub_RenameDialog_showDialog     针对RenameDialog的showDialog打桩
-     * @param stub
-     * @param iResult
-     * @return
-     */
-    static void stub_RenameDialog_showDialog(Stub &stub, int iResult);
-
-    /**
      * @brief stub_OpenWithDialog_showOpenWithDialog     针对OpenWithDialog的showOpenWithDialog打桩
      * @param stub
      * @param strResult
@@ -670,14 +662,6 @@ public:
      * @return
      */
     static void stub_ArchiveManager_deleteFiles(Stub &stub, bool bResult);
-
-    /**
-     * @brief stub_ArchiveManager_renameFiles     针对ArchiveManager的renameFiles打桩
-     * @param stub
-     * @param bResult
-     * @return
-     */
-    static void stub_ArchiveManager_renameFiles(Stub &stub, bool bResult);
 
     /**
      * @brief stub_ArchiveManager_batchExtractFiles     针对ArchiveManager的batchExtractFiles打桩

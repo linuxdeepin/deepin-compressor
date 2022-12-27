@@ -34,7 +34,6 @@ class ArchiveManager;
 class OpenFileWatcher;
 class QFileSystemWatcher;
 class CalculateSizeThread;
-class TitleWidget;
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -324,9 +323,6 @@ Q_SIGNALS:
      * @brief sigquitApp    应用程序退出信号
      */
     void sigquitApp();
-    /**重命名信号
-      */
-    void sigRenameFile();
 
 private Q_SLOTS:
     /**
@@ -419,13 +415,6 @@ private Q_SLOTS:
      * @param qTotalSize        删除文件总大小
      */
     void slotDelFiles(const QList<FileEntry> &listSelEntry, qint64 qTotalSize);
-
-    /**
-     * @brief slotDelFiels    重命名压缩包中文件
-     * @param listSelEntry      当前选中的文件
-     * @param qTotalSize        重命名文件总大小
-     */
-    void slotRenameFile(const FileEntry &SelEntry, qint64 qTotalSize);
 
     /**
      * @brief slotReceiveCurArchiveName  当前正在操作的压缩包名称显示
@@ -530,9 +519,9 @@ private:
     SuccessPage *m_pSuccessPage;  // 成功界面
     FailurePage *m_pFailurePage;  // 失败界面
     LoadingPage *m_pLoadingPage;  // 加载界面
-    TitleWidget *m_pTitleWidget;
-//    DIconButton *m_pTitleButton; // 标题栏按钮（添加文件）
-//    DIconButton *m_pTitleCommentButton = nullptr; // 标题栏按钮（注释信息）
+
+    DIconButton *m_pTitleButton; // 标题栏按钮（添加文件）
+    DIconButton *m_pTitleCommentButton = nullptr; // 标题栏按钮（注释信息）
     QAction *m_pOpenAction;                                 // 菜单 - 打开
 
     // 弹窗
@@ -572,58 +561,6 @@ private:
 #endif
 
     QString m_strCurrentName;
-};
-
-class TitleWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit TitleWidget(QWidget *parent = nullptr);
-
-    /**
-     * @brief setTitleButtonStyle   设置标题栏按钮样式以及显隐状态
-     * @param bVisible  显示/隐藏添加按钮
-     * @param bVisible2  显示/隐藏文件信息按钮
-     * @param pixmap    图片样式
-     */
-    void setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap = DStyle::StandardPixmap::SP_IncreaseElement);
-
-    /**
-     * @brief setTitleButtonEnable 设置标题栏按钮是否可用
-     * @param enable bool
-     */
-    void setTitleButtonEnable(bool enable);
-
-    /**
-     * @brief setTitleButtonVisible 设置标题栏按钮是否可见
-     * @param visible bool
-     */
-    void setTitleButtonVisible(bool visible);
-
-    /**
-     * @brief slotThemeChanged 系统主题变化
-     */
-    void slotThemeChanged();
-
-signals:
-    /**
-     * @brief sigTitleClicked : m_pTitleButton  点击后的信号
-     */
-    void sigTitleClicked();
-
-    /**
-     * @brief sigCommentClicked : m_pTitleCommentButton 点击后的信号
-     */
-    void sigCommentClicked();
-
-private:
-    void initUI();
-
-    void initConnection();
-
-private:
-    DIconButton *m_pTitleButton = nullptr; // 标题栏按钮（添加文件）
-    DIconButton *m_pTitleCommentButton = nullptr; // 标题栏按钮（注释信息）
 };
 
 #endif // MAINWINDOW_H

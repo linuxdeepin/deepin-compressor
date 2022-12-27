@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %b</source>
-        <translation>Wypakuj do %b</translation>
+        <translation>Wypakuj do %b </translation>
     </message>
 </context>
 </TS>

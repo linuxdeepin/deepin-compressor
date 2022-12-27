@@ -31,20 +31,11 @@ ProgressPage::~ProgressPage()
 void ProgressPage::setProgressType(Progress_Type eType)
 {
     m_eType = eType;
-    if(PT_Rename == m_eType) {
-        m_pPauseContinueButton->setVisible(false);
-        m_pCancelBtn->setVisible(false);
-    } else{
-        m_pPauseContinueButton->setVisible(true);
-        m_pCancelBtn->setVisible(true);
-    }
 
     if (PT_Compress == m_eType || PT_CompressAdd == m_eType) { // 压缩
         m_pSpeedLbl->setText(tr("Speed", "compress") + ": " + tr("Calculating..."));
     }  else if (PT_Delete == m_eType) { // 删除
         m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + tr("Calculating..."));
-    }  else if (PT_Rename == m_eType) { // 重命名
-        m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + tr("Calculating..."));
     }  else if (PT_Convert == m_eType) { // 格式转换
         m_pSpeedLbl->setText(tr("Speed", "convert") + ": " + tr("Calculating..."));
     } else if (PT_Comment == m_eType) { // 压缩后添加注释进度
@@ -115,8 +106,6 @@ void ProgressPage::setCurrentFileName(const QString &strFileName)
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Compressing") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Delete == m_eType) {   // 删除
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Deleting") + ": " + strFileName, Qt::ElideMiddle, 520));
-    } else if (PT_Rename == m_eType) {   // 重命名
-        m_pFileNameLbl->setText(elideFont.elidedText(tr("Renaming") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Convert == m_eType) {     // 转换
         m_pFileNameLbl->setText(elideFont.elidedText(tr("Converting") + ": " + strFileName, Qt::ElideMiddle, 520));
     } else if (PT_Comment == m_eType) {     // 注释进度
@@ -319,12 +308,6 @@ void ProgressPage::displaySpeedAndTime(double dSpeed, qint64 qRemainingTime)
             m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
         } else {
             m_pSpeedLbl->setText(tr("Speed", "delete") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
-        }
-    } else if (PT_Rename == m_eType) {
-        if (dSpeed < 1024) {
-            m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + QString::number(dSpeed, 'f', 2) + "KB/s");
-        } else {
-            m_pSpeedLbl->setText(tr("Speed", "rename") + ": " + QString::number((dSpeed / 1024), 'f', 2) + "MB/s");
         }
     } else if (PT_UnCompress == m_eType) {
         if (dSpeed < 1024) {

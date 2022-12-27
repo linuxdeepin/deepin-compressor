@@ -296,9 +296,6 @@ ErrorType LibminizipPlugin::extractEntry(unzFile zipfile, unz_file_info file_inf
     QFile file(strDestFileName);
 
     if (bIsDirectory) {     // 文件夹
-        if (PATH_MAX < QString(strFileName).toLocal8Bit().length())
-            return ET_LongNameError;
-
         QDir dir;
         dir.mkpath(strDestFileName);
     } else {        // 普通文件

@@ -182,9 +182,9 @@ TEST_F(UT_LoadJob, test_finishJob)
 
 TEST_F(UT_LoadJob, testkill)
 {
-    m_tester->kill();
-    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Cancel);
-    EXPECT_EQ(m_tester->m_eErrorType, ET_UserCancelOpertion);
+//    m_tester->kill();
+//    EXPECT_EQ(m_tester->m_eFinishedType, PFT_Cancel);
+//    EXPECT_EQ(m_tester->m_eErrorType, ET_UserCancelOpertion);
 }
 
 

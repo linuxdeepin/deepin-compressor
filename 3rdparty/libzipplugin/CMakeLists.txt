@@ -13,11 +13,13 @@ find_package(ZLIB REQUIRED)
 include(FindPkgConfig)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
+pkg_check_modules(libzip REQUIRED IMPORTED_TARGET libzip)
 
 #指定头文件路径
 include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
+include_directories(${zip_INCLUDE_DIRS})
 
 #链接库路径
 link_directories(${LIBRARY_OUTPUT_PATH})
@@ -35,5 +37,5 @@ target_link_libraries(${LIB_NAME}
     Qt5::Widgets
     KF5::Codecs
     compressor-interface
-    zip
+    PkgConfig::libzip
 )

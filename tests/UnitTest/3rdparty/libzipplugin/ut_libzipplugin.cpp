@@ -263,27 +263,6 @@ TEST_F(UT_LibzipPlugin, test_deleteFiles)
     EXPECT_EQ(bResult, true);
 }
 
-TEST_F(UT_LibzipPlugin, test_renameFiles)
-{
-    QString str = _UTSOURCEDIR;
-    QString strFile1 = str + "/test_sources/zip/delete/test.zip";
-    QString strFile2 = str + "/test_sources/zip/delete/testRename.zip";
-    QFile::copy(strFile1, strFile2);
-    bool bResult = true;
-    if (QFileInfo(strFile2).exists()) {
-        m_tester->m_strArchiveName = strFile2;
-        m_tester->list();
-        ArchiveData stData = DataManager::get_instance().archiveData();
-        FileEntry entry = stData.listRootEntry[0];
-        entry.strAlias = "test1.txt";
-        PluginFinishType eFinishType = m_tester->renameFiles(QList<FileEntry>() << entry);
-        bResult = (eFinishType == PFT_Nomral) ? true : false;
-    }
-
-    QFile::remove(strFile2);
-    EXPECT_EQ(bResult, true);
-}
-
 TEST_F(UT_LibzipPlugin, test_addComment)
 {
     PluginFinishType eFinishType = m_tester->addComment("sssss");
