@@ -2776,6 +2776,9 @@ void MainWindow::slotExtract2Path(const QList<FileEntry> &listSelEntry, const Ex
     if (!ArchiveManager::get_instance()->extractFiles2Path(strArchiveFullPath, listSelEntry, stOptions)) {
         // 无可用插件
         showErrorMessage(FI_Uncompress, EI_NoPlugin);
+    } else {
+        m_pProgressdialog->showDialog();
+        m_pProgressdialog->setProcess(1);
     }
 }
 
