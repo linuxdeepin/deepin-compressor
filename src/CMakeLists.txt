@@ -83,6 +83,14 @@ target_link_libraries(${EXE_NAME}
     compressor-interface
 )
 
+if(DEFINED ENV{PREFIX})
+  set(CMAKE_INSTALL_PREFIX $ENV{PREFIX})
+else()
+  set(CMAKE_INSTALL_PREFIX /usr)
+endif()
+
+add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}\")
+
 install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES desktop/deepin-compressor.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
