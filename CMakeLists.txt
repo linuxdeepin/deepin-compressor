@@ -36,6 +36,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-
 
 if(DEFINED ENV{PREFIX})
     set(CMAKE_INSTALL_PREFIX $ENV{PREFIX})
+    set(COMPRESSOR_PLUGIN_PATH lib/deepin-compressor/plugins)
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -Wl,-rpath=${CMAKE_INSTALL_PREFIX}/lib/deepin-compressor/plugins")
     else()
