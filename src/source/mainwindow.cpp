@@ -2715,7 +2715,7 @@ int MainWindow::showWarningDialog(const QString &msg, const QString &strToolTip)
 void MainWindow::moveDialogToCenter(DDialog *dialog)
 {
     QRect screenRect =  QGuiApplication::primaryScreen()->availableGeometry();
-    dialog->move(((screenRect.width() / 2) - (dialog->width() / 2)), ((screenRect.height() / 2) - (dialog->height() / 2)));
+    dialog->move(screenRect.x() + ((screenRect.width() / 2) - (dialog->width() / 2)), screenRect.y() + ((screenRect.height() / 2) - (dialog->height() / 2)));
 }
 
 void MainWindow::delayQuitApp()
