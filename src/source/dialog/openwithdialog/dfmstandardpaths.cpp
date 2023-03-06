@@ -20,25 +20,41 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
         return QDir::homePath() + "/.local/share/Trash/files";
     case TrashInfosPath:
         return QDir::homePath() + "/.local/share/Trash/info";
+    case ApplicationConfigPath:
+        return QDir::homePath() + "/.config";
 #ifdef APPSHAREDIR
     case TranslationPath: {
-        QString path = APPSHAREDIR"/translations";
+        QString path = APPSHAREDIR "/translations";
         if (!QDir(path).exists()) {
             path = qApp->applicationDirPath() + "/translations";
         }
         return path;
     }
     case TemplatesPath: {
-        QString path = APPSHAREDIR"/templates";
+        QString path = APPSHAREDIR "/templates";
         if (!QDir(path).exists()) {
             path = qApp->applicationDirPath() + "/templates";
         }
         return path;
     }
     case MimeTypePath: {
-        QString path = APPSHAREDIR"/mimetypes";
+        QString path = APPSHAREDIR "/mimetypes";
         if (!QDir(path).exists()) {
             path = qApp->applicationDirPath() + "/mimetypes";
+        }
+        return path;
+    }
+    case ExtensionsPath: {
+        QString path = APPSHAREDIR "/extensions";
+        if (!QDir(path).exists()) {
+            path = qApp->applicationDirPath() + "/extensions";
+        }
+        return path;
+    }
+    case ExtensionsAppEntryPath: {
+        QString path = APPSHAREDIR "/extensions/appEntry";
+        if (!QDir(path).exists()) {
+            path = qApp->applicationDirPath() + "/extensions/appEntry";
         }
         return path;
     }
@@ -67,7 +83,7 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
     case ThumbnailSmallPath:
         return location(ThumbnailPath) + "/small";
 #ifdef APPSHAREDIR
-    case ApplicationSharePath:
+    case kApplicationSharePath:
         return APPSHAREDIR;
 #endif
     case RecentPath:
@@ -104,72 +120,13 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
 #endif
     case Root:
         return "/";
+    case Vault:
+        return "dfmvault:///";   // 根据需求确定使用哪种类型
     default:
         return QStringLiteral("bug://dde-file-manager-lib/interface/dfmstandardpaths.cpp#") + QT_STRINGIFY(type);
     }
 }
 
-//QString DFMStandardPaths::fromStandardUrl(const DUrl &standardUrl)
-//{
-//    if (standardUrl.scheme() != "standard")
-//        return QString();
-
-//    static QMap<QString, QString> path_convert {
-//        {"home", location(HomePath)},
-//        {"desktop", location(DesktopPath)},
-//        {"videos", location(VideosPath)},
-//        {"music", location(MusicPath)},
-//        {"pictures", location(PicturesPath)},
-//        {"documents", location(DocumentsPath)},
-//        {"downloads", location(DownloadsPath)}
-//    };
-
-//    const QString &path = path_convert.value(standardUrl.host());
-
-//    if (path.isEmpty())
-//        return path;
-
-//    const QString &url_path = standardUrl.path();
-
-//    if (url_path.isEmpty() || url_path == "/")
-//        return path;
-
-//    return path + standardUrl.path();
-//}
-
-//DUrl DFMStandardPaths::toStandardUrl(const QString &localPath)
-//{
-//    static QList<QPair<QString, QString>> path_convert {
-//        {location(DesktopPath), "desktop"},
-//        {location(VideosPath), "videos"},
-//        {location(MusicPath), "music"},
-//        {location(PicturesPath), "pictures"},
-//        {location(DocumentsPath), "documents"},
-//        {location(DownloadsPath), "downloads"},
-//        {location(HomePath), "home"}
-//    };
-
-//    for (auto begin : path_convert) {
-//        if (localPath.startsWith(begin.first)) {
-//            const QString &path = localPath.mid(begin.first.size());
-
-//            if (!path.isEmpty() && !path.startsWith("/"))
-//                continue;
-
-//            DUrl url;
-
-//            url.setScheme("standard");
-//            url.setHost(begin.second);
-
-//            if (!path.isEmpty() && path != "/")
-//                url.setPath(path);
-
-//            return url;
-//        }
-//    }
-
-//    return DUrl();
-//}
 
 #ifdef QMAKE_TARGET
 QString DFMStandardPaths::getConfigPath()
@@ -185,10 +142,14 @@ QString DFMStandardPaths::getConfigPath()
 QString DFMStandardPaths::getCachePath()
 {
     QString projectName = qApp->applicationName();
-    QDir::home().mkpath(".cache");
-    QDir::home().mkpath(QString("%1/deepin/%2/").arg(".cache", projectName));
-    QString defaultPath = QString("%1/%2/deepin/%3").arg(QDir::homePath(), ".cache", projectName);
-    return defaultPath;
+
+    const QString &cachePath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).first();
+    QDir::home().mkpath(cachePath);
+
+    const QString &projectPath = QString("%1/%2/%3/").arg(cachePath, qApp->organizationName(), projectName);
+    QDir::home().mkpath(projectPath);
+
+    return projectPath;
 }
 
 DFMStandardPaths::DFMStandardPaths()
