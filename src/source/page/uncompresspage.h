@@ -75,6 +75,7 @@ public:
     CustomPushButton *getUnCompressBtn() const;
 
     CustomCommandLinkButton *getUncompressPathBtn() const;
+    QVariantMap mapOrderJson();
 
 protected:
     /**

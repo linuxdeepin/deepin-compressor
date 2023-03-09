@@ -87,7 +87,6 @@ public:
      * @brief clear 清空数据
      */
     void clear();
-
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

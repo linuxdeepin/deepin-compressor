@@ -612,11 +612,21 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         // 右键-提取到当前文件夹
         menu.addAction(tr("Extract to current directory"), this, &UnCompressView::slotExtract2Here);
         // 右键-打开
-        menu.addAction(tr("Open"), this, &UnCompressView::slotOpen);
+        QAction *openAct = menu.addAction(tr("Open"), this, &UnCompressView::slotOpen);
+        if(m_mapOrderJson.contains(ORDER_EDIT)) {
+            if (m_stRightEntry.isDirectory) {
+                openAct->setEnabled(true);
+            } else {
+                openAct->setEnabled(m_mapOrderJson.value(ORDER_EDIT).toBool());
+            }
+        }
         // 右键-重命名
         QAction *renameAct = menu.addAction(tr("Rename"), this, &UnCompressView::slotRenameFile);
         if(selectionModel()->selectedRows().count() != 1 || !m_bModifiable) {
             renameAct->setEnabled(false);
+        }
+        if(m_mapOrderJson.contains(ORDER_RENAME)) {
+            renameAct->setEnabled(m_mapOrderJson.value(ORDER_RENAME).toBool());
         }
         // 右键-删除
         QAction *pAction = menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
@@ -624,7 +634,9 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         if (!m_bModifiable) {
             pAction->setEnabled(false); // 若压缩包数据不能更改，深处按钮设置成不可用
         }
-
+        if(m_mapOrderJson.contains(ORDER_DELETE)) {
+            pAction->setEnabled(m_mapOrderJson.value(ORDER_DELETE).toBool());
+        }
         // 右键-打开方式
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
@@ -642,6 +654,9 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
             for (int i = 0; i < listOpenType.count(); ++i) {
                 QAction *pOpenAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
                 pOpenAction->setData(listOpenType[i].getExec());
+            }
+            if(m_mapOrderJson.contains(ORDER_EDIT)) {
+                openMenu.setEnabled(m_mapOrderJson.value(ORDER_EDIT).toBool());
             }
         }
 
@@ -678,6 +693,11 @@ void UnCompressView::slotExtract2Here()
 
 void UnCompressView::slotDeleteFile()
 {
+    QVariantMap mapdata = mapOrderJson();
+    if(mapdata.contains(ORDER_DELETE)) {
+        if(!mapdata.value(ORDER_DELETE).toBool()) return;
+    }
+
     if (m_bModifiable) { // 压缩包数据是否可更改
         // 询问删除对话框
         SimpleQueryDialog dialog(this);

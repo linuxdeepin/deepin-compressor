@@ -296,7 +296,10 @@ void SettingDialog::createDeleteBox()
 
                 m_deleteArchiveOption->setValue(m_autoDeleteArchive);
             });
-
+            if(parent()->property(ORDER_JSON).isValid()) {
+                combobox->setCurrentIndex(0);
+                combobox->setEnabled(false);
+            }
             return widget;
         }
 

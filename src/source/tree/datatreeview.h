@@ -49,6 +49,9 @@ public:
     void resetLevel();
 
     TreeHeaderView *getHeaderView() const;
+    void setMapOrderJson(const QString &sJson);
+
+    QVariantMap mapOrderJson();
 
 protected:
     void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const override;
@@ -148,11 +151,10 @@ protected:
     QPointF m_lastTouchBeginPos; // 触摸屏点击位置
     bool m_isPressed = false; // 触摸按下标志  true: 按下; false: 松开
     QTime m_lastTouchTime;
-
+    QVariantMap m_mapOrderJson;
 private:
     Qt::FocusReason m_reson;
     QItemSelectionModel *m_selectionModel =  nullptr;
-
 };
 
 #endif // DATATREEVIEW_H
