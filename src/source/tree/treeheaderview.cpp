@@ -45,6 +45,11 @@ void PreviousLabel::setPrePath(const QString &strPath)
     setText("     .. " + tr("Back to: %1").arg(str));
 }
 
+void PreviousLabel::setFocusValue(bool bFocus)
+{
+    focusIn_ = bFocus;
+}
+
 void PreviousLabel::paintEvent(QPaintEvent *e)
 {
     QRectF rectangle(0, 0, width(), height());
@@ -80,14 +85,18 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 
 void PreviousLabel::enterEvent(QEvent *event)
 {
-    focusIn_ = true;
+    if(!hasFocus()) {
+        focusIn_ = true;
+    }
     DLabel::enterEvent(event);
     update();
 }
 
 void PreviousLabel::leaveEvent(QEvent *event)
 {
-    focusIn_ = false;
+    if(!hasFocus()) {
+        focusIn_ = false;
+    }
     DLabel::leaveEvent(event);
     update();
 }
@@ -183,6 +192,7 @@ void TreeHeaderView::setLabelFocus(bool focus)
     } else {
         m_pPreLbl->clearFocus();
     }
+    m_pPreLbl->setFocusValue(focus);
 }
 /*
 void TreeHeaderView::paintEvent(QPaintEvent *e)
