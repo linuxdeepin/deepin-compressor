@@ -33,6 +33,11 @@ public:
      * @return
      */
     bool isFocus() {return focusIn_;}
+    /**
+     * @brief setFocusValue 设置focusIn_
+     * @return
+     */
+    void setFocusValue(bool bFocus);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
