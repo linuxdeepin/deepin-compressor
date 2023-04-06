@@ -160,6 +160,11 @@ void ProgressPage::setPushButtonCheckable(bool a, bool b)
     m_pPauseContinueButton->setEnabled(b); // 暂停继续按钮
 }
 
+bool ProgressPage::isPause()
+{
+    return m_pPauseContinueButton->text() == tr("Continue", "button");
+}
+
 void ProgressPage::initUI()
 {
     // 初始化控件
