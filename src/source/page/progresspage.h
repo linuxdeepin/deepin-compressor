@@ -76,7 +76,10 @@ public:
      * @brief setPushButtonCheckable 设置按钮是否可点击
      */
     void setPushButtonCheckable(bool a, bool b);
-
+    /**
+     * @brief isPause 进度页是否暂停
+     */
+    bool isPause();
 private:
     /**
      * @brief initUI    初始化界面
