@@ -544,7 +544,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (m_operationtype != Operation_NULL) {
         // 保存当前操作的状态以便还原操作
-        bool isPause = getCurrentStatus();
+        bool isPause = m_pProgressPage->isPause();
         qInfo() << "点击x按钮之前的操作" << isPause;
         // 当前还有操作正在进行
         slotPause();    // 先暂停当前操作
