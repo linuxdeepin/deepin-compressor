@@ -251,6 +251,8 @@ private:
     qint64 m_qFileSize = 0;     // 待压缩文件大小
 
     QString m_strMimeType;  // 压缩类型（application/x-tar）
+
+    QScrollArea *m_pRightScroll = nullptr;
 };
 
 #endif // COMPRESSSETTINGPAGE_H
