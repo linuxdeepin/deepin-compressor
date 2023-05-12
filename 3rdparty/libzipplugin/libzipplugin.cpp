@@ -682,6 +682,8 @@ bool LibzipPlugin::handleArchiveData(zip_t *archive, zip_int64_t index)
     // 对文件名进行编码探测并转码
     QString name = m_common->trans2uft8(statBuffer.name, strCode);
     m_mapFileCode[index] = strCode;
+    if(name.contains(QLatin1Char('\\')))
+        name = name.replace(QLatin1Char('\\'), QDir::separator());
     //对于名称以"/"开头的去除开始的"/"
     if(name.startsWith(QDir::separator())) {
         name.remove(0,1);
@@ -741,6 +743,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     strFileName = m_common->trans2uft8(statBuffer.name, m_mapFileCode[index]);    // 解压文件名（压缩包中）
+    if(strFileName.contains(QLatin1Char('\\')))
+        strFileName = strFileName.replace(QLatin1Char('\\'), QDir::separator());
     QString strOriginName = strFileName;
 
     // 针对文件夹名称过长的情况，直接提示解压失败，文件夹名称过长
