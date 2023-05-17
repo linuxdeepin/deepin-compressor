@@ -744,14 +744,18 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     if (entryName.isEmpty()) {
         return;
     }
+    // 是否为文件夹
+    m_archiveEntryStat.isDirectory = S_ISDIR(archive_entry_mode(aentry));
+
+    if(m_archiveEntryStat.isDirectory && !entryName.endsWith(QLatin1String("/"))){
+        entryName += QLatin1String("/");
+    }
     m_archiveEntryStat.strFullPath = entryName;
 
     // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
     m_archiveEntryStat.strFileName = pieces.last();
 
-    // 是否为文件夹
-    m_archiveEntryStat.isDirectory = S_ISDIR(archive_entry_mode(aentry));
 
     // 文件真实大小（文件夹显示项）
     if (m_archiveEntryStat.isDirectory) {
