@@ -131,6 +131,8 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     m_bSkipAll = false;             // 是否全部跳过
     m_mapLongName.clear();
     m_setLongName.clear();
+    m_mapLongDirName.clear();
+    m_mapRealDirValue.clear();
 //    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
     zip_error_t err;
 
@@ -284,7 +286,8 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
         }
 
         // If entry is a directory, traverse and add all its files and subfolders.
-        if (QFileInfo(e.strFullPath).isDir()) {
+        QFileInfo info(e.strFullPath);
+        if (QFileInfo(e.strFullPath).isDir() && !info.isSymLink()) {
             if (!writeEntry(archive, e.strFullPath, options, true, strPath)) {
                 if (zip_close(archive)) {
                     emit error(("Failed to write archive."));
@@ -301,7 +304,7 @@ PluginFinishType LibzipPlugin::addFiles(const QList<FileEntry> &files, const Com
             while (!QThread::currentThread()->isInterruptionRequested() && it.hasNext()) {
                 const QString path = it.next();
 
-                if (QFileInfo(path).isDir()) {
+                if (QFileInfo(path).isDir()&&!QFileInfo(path).isSymLink()) {
                     if (!writeEntry(archive, path, options, true, strPath)) {
                         if (zip_close(archive)) {
                             emit error(("Failed to write archive."));
@@ -572,7 +575,7 @@ bool LibzipPlugin::doKill()
 bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const CompressOptions &options, bool isDir, const QString &strRoot)
 {
     Q_ASSERT(archive);
-
+    QFileInfo info(entry);
     QString str;
     if (!options.strDestination.isEmpty()) {
         str = QString(options.strDestination + entry.mid(strRoot.length()));
@@ -580,15 +583,29 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
         //移除前缀路径
         str = entry.mid(strRoot.length());
     }
-
     zip_int64_t index;
-    if (isDir) {
+    if (isDir && !info.isSymLink()) {
         index = zip_dir_add(archive, str.toUtf8().constData(), ZIP_FL_ENC_GUESS);
         if (-1 == index) {
             // If directory already exists in archive, we get an error.
-            return true;
+            return false;
         }
-    } else {
+    } else if(info.isSymLink()) { // symlink
+        QByteArray strLinkArr = info.symLinkTarget().toUtf8();
+        struct zip_source *source = zip_source_buffer(archive , strLinkArr, strLinkArr.length(), 0);
+        if (source)
+        {
+            index = zip_add(archive, str.toUtf8().constData(), source);
+        }
+        else
+        {
+            zip_source_free(source);
+            emit error(("Failed to add entry: %1"));
+            return false;
+        }
+        zip_source_commit_write(source);
+        zip_source_close(source);
+     } else {
         // 获取源文件
         zip_source_t *src = zip_source_file(archive, QFile::encodeName(entry).constData(), 0, -1);
         if (!src) {
@@ -603,16 +620,17 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
             emit error(("Failed to add entry: %1"));
             return false;
         }
+        zip_source_commit_write(src);
+        zip_source_close(src);
     }
-
     zip_uint64_t uindex = static_cast<zip_uint64_t>(index);
 #ifndef Q_OS_WIN
     // 设置文件权限
     QT_STATBUF result;
-    if (QT_STAT(QFile::encodeName(entry).constData(), &result) != 0) {
+    if (QT_LSTAT(QFile::encodeName(entry).constData(), &result) != 0) {
     } else {
         zip_uint32_t attributes = result.st_mode << 16;
-        if (zip_file_set_external_attributes(archive, uindex, ZIP_FL_UNCHANGED, ZIP_OPSYS_UNIX, attributes) != 0) {
+        if (zip_file_set_external_attributes(archive, uindex, 0, ZIP_OPSYS_UNIX, attributes) != 0) {
         }
     }
 #endif
@@ -651,7 +669,6 @@ bool LibzipPlugin::writeEntry(zip_t *archive, const QString &entry, const Compre
         emit error(("Failed to set compression options for entry: %1"));
         return false;
     }
-
     return true;
 }
 
@@ -748,14 +765,14 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     QString strOriginName = strFileName;
 
     // 针对文件夹名称过长的情况，直接提示解压失败，文件夹名称过长
-    QStringList listPath = strFileName.split(QDir::separator());
-    listPath.removeLast();
-    for (int i = 0; i < listPath.count(); ++i) {
-        if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
-            emit signalCurFileName(strFileName); // 发送当前正在解压的文件名
-            return ET_LongNameError;
-        }
-    }
+//    QStringList listPath = strFileName.split(QDir::separator());
+//    listPath.removeLast();
+//    for (int i = 0; i < listPath.count(); ++i) {
+//        if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
+//            emit signalCurFileName(strFileName); // 发送当前正在解压的文件名
+//            return ET_LongNameError;
+//        }
+//    }
 
     QString strFilePath;
     QString strTempFileName = strFileName;
@@ -767,27 +784,60 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     QString tempFilePathName;
-    if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
-        QString strTemp = strTempFileName.left(60);
-
-        // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
-        tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
-        if (m_mapLongName[tempFilePathName] >= 999 ) {
-            return ET_LongNameError;
+    Common com;
+    bool bDlnfs = com.isSubpathOfDlnfs(options.strTargetPath);
+    if(!bDlnfs) {
+    QString sDir = com.handleLongNameforPath(strFilePath, strFileName, m_mapLongDirName, m_mapRealDirValue);
+        if(sDir.length() > 0) {
+           strFilePath = sDir.endsWith(QDir::separator())?sDir.left(sDir.length() -1):sDir;
+           if(strFileName.endsWith(QDir::separator())) {
+               strFileName = sDir;
+           } else if (NAME_MAX >= QString(strTempFileName).toLocal8Bit().length()) {
+               strFileName = sDir + strTempFileName;
+           }
+           if(!m_mapLongDirName.isEmpty()) {
+               bHandleLongName = true;
+           }
         }
-        bHandleLongName = true;
-        strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, 3, 10, QChar('0')) + "." + QFileInfo(strTempFileName).completeSuffix();
+        if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !strTempFileName.endsWith(QDir::separator())) {
+            QString strTemp = strTempFileName.left(TRUNCATION_FILE_LONG);
 
-        strFileName = strTempFileName;
-        if (iIndex >= 0) {
-            strFileName = strFilePath + QDir::separator() + strTempFileName;
+            // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
+            tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+            if (m_mapLongName[tempFilePathName] >= LONGFILE_SAME_FILES ) {
+                return ET_LongNameError;
+            }
+            bHandleLongName = true;
+            QString sSuffix = QFileInfo(strTempFileName).completeSuffix();
+            if(10 < sSuffix.length()){
+                sSuffix = QFileInfo(strTempFileName).suffix();
+                if(10 < sSuffix.length()) {
+                    sSuffix = sSuffix.right(10);
+                }
+            }
+            strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + "." + sSuffix;
+
+            strFileName = strTempFileName;
+            if (iIndex >= 0) {
+                strFileName = strFilePath + QDir::separator() + strTempFileName;
+            }
+
         }
-
     }
 
     // 提取
     if (!options.strDestination.isEmpty()) {
-        strFileName = strFileName.remove(0, options.strDestination.size());
+        if(bHandleLongName) {
+            int nCnt = options.strDestination.count(QDir::separator());
+            int nIndex = 0;
+            for(int i = 0; i < nCnt; i++){
+                nIndex = strFileName.indexOf(QDir::separator(), nIndex);
+                nIndex++;
+            }
+            strFileName = strFileName.remove(0, nIndex);
+        } else {
+            strFileName = strFileName.remove(0, options.strDestination.size());
+        }
     }
 
 
@@ -841,9 +891,13 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     default:    // TODO: non-UNIX.
         break;
     }
+    bool isLink = false;
+    if(S_ISLNK(value)) {
+        isLink = true;
+    }
     QFileDevice::Permissions per = getPermissions(value);
 
-    if (bIsDirectory) {     // 文件夹
+    if (bIsDirectory && !isLink) {     // 文件夹
         if (PATH_MAX < QString(strFileName).toLocal8Bit().length())
             return ET_LongNameError;
 
@@ -852,6 +906,20 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
         // 文件夹加可执行权限
         per = per | QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser ;
+    } else if(isLink) { //软连接解压
+        zip_file_t *zipFile = zip_fopen_index(archive, zip_uint64_t(index), 0);
+        char buf[READBYTES] = {0};
+        const auto readBytes = zip_fread(zipFile, buf, zip_uint64_t(READBYTES));
+        if (readBytes > 0) {
+            QString strBuf = QString(buf).toLocal8Bit();
+            if (QFile::link(strBuf, strDestFileName)) {
+                qInfo() << "Symlink's created:" << buf << strFileName;
+            } else {
+                qInfo() << "Can't create symlink" << buf << strFileName;
+            }
+        }
+        file.close();
+        zip_fclose(zipFile);
     } else {        // 普通文件
 
         // 判断是否有同名文件
@@ -1003,21 +1071,21 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
         file.close();
         zip_fclose(zipFile);
     }
+    if(!isLink) {
+        // 设置文件/文件夹权限
+        file.setPermissions(per);
 
-    // 设置文件/文件夹权限
-    file.setPermissions(per);
+        // Set mtime for entry.
+        utimbuf times;
+        times.modtime = statBuffer.mtime;
+        utime(strDestFileName.toUtf8().constData(), &times);
 
-    // Set mtime for entry.
-    utimbuf times;
-    times.modtime = statBuffer.mtime;
-    utime(strDestFileName.toUtf8().constData(), &times);
-
-    if (restoreParentMtime) {
-        // Restore mtime for parent dir.
-        times.modtime = parent_mtime;
-        utime(parentDir.toUtf8().constData(), &times);
+        if (restoreParentMtime) {
+            // Restore mtime for parent dir.
+            times.modtime = parent_mtime;
+            utime(parentDir.toUtf8().constData(), &times);
+        }
     }
-
     m_mapLongName[tempFilePathName]++;   // 保存文件路径，不同目录下的同名文件分开计数，解压成功，添加计数
     return ET_NoError;
 }
