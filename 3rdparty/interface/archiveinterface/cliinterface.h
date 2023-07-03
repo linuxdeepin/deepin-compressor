@@ -175,6 +175,10 @@ protected:
      * @return
      */
     QString getTargetPath();
+	    /**
+     * @brief extractFiles 业务解压
+     */
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bDlnfs);
 
 private:
     /**
@@ -184,6 +188,8 @@ private:
      * @return
      */
     bool moveExtractTempFilesToDest(const QList<FileEntry> &files, const ExtractionOptions &options);
+
+    bool handleLongNameExtract(const QList<FileEntry> &files);
 
 private slots:
     /**
@@ -240,6 +246,9 @@ private:
     qint64 m_filesSize; //选择需要压缩的文件大小，压缩tar.7z时使用
     QString m_rootEntry; // 追加压缩文件夹的时候记录上一层节点
     int m_indexOfListRootEntry = 0; // 右键解压到当前文件夹时的数据
+    QMap<QString, int> m_mapLongName;       // 长文件名统计
+    QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
+    QMap<QString, int> m_mapRealDirValue;    // 真实文件统计
 };
 
 #endif // CLIINTERFACE_H

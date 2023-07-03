@@ -13,6 +13,7 @@ include(FindPkgConfig)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
+pkg_search_module(MOUNT REQUIRED mount)
 
 #源文件、头文件和资源文件
 file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} *.cpp)
@@ -20,6 +21,7 @@ file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
 
 #指定头文件路径
 include_directories(${DtkWidget_INCLUDE_DIRS})
+include_directories(${MOUNT_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${KF5Codecs_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
@@ -60,6 +62,7 @@ target_link_libraries(${LIB_NAME}
     Qt5::Widgets
     KF5::Codecs
     ${DtkWidget_LIBRARIES}
+    ${MOUNT_LIBRARIES}
     compressor-ChardetDetector
 )
 

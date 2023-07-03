@@ -14,9 +14,12 @@
 #include <DDesktopServices>
 #include <QDebug>
 #include <QFileInfo>
+#define USE_MIN_QTVERSION QT_VERSION_CHECK(5,15,3)
 
 DWIDGET_USE_NAMESPACE
+#if (QT_VERSION >= USE_MIN_QTVERSION)
 DGUI_USE_NAMESPACE
+#endif
 
 // 文管打开文件目录线程
 class DDesktopServicesThread : public QThread

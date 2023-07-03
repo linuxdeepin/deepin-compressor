@@ -2,7 +2,7 @@ Source: deepin-compressor
 Section: devel
 Priority: optional
 Maintainer: packages <packages@deepin.com>
-Build-Depends: debhelper (>= 11),cmake, libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qtchooser (>= 55-gc9562a1-1~), qt5-qmake, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev, libminizip-dev, qttools5-dev, libgtest-dev
+Build-Depends: debhelper (>= 11),cmake, libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qtchooser (>= 55-gc9562a1-1~), qt5-qmake, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev, libminizip-dev, qttools5-dev, libgtest-dev, libmount-dev
 Standards-Version: 4.1.3
 
 Package: deepin-compressor

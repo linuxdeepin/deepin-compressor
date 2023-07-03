@@ -51,6 +51,7 @@
 #include <QJsonObject>
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
+#define FILE_TRUNCATION_LENGTH 70
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
@@ -2375,13 +2376,13 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             // 区分待压缩文件是否是文件夹，比如"1.7z"文件夹压缩，结果应该是"1.7z.7z"，不应该去掉后缀
             // 如果是普通文件，比如"1.txt"，应该使用完整的文件名再压缩，结果应该是"1.7z"
             if (info.isDir()) {
-                strArchivePath = info.filePath() + strSuffix;
+                strArchivePath += QDir::separator() + info.fileName().left(FILE_TRUNCATION_LENGTH) + strSuffix;
             } else {
                 // 如果文件completeBaseName为空，使用完整的fileName作为压缩包名称,防止出现空名称的现象
                 if (info.completeBaseName().isEmpty()) {
-                    strArchivePath += QDir::separator() + info.fileName() + strSuffix;
+                    strArchivePath += QDir::separator() + info.fileName().left(FILE_TRUNCATION_LENGTH) + strSuffix;
                 } else {
-                    strArchivePath += QDir::separator() + info.completeBaseName() + strSuffix;
+                    strArchivePath += QDir::separator() + info.completeBaseName().left(FILE_TRUNCATION_LENGTH) + strSuffix;
                 }
             }
 
