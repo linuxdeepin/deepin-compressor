@@ -17,6 +17,7 @@ include(FindPkgConfig)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
+pkg_search_module(MOUNT REQUIRED mount)
 
 #指定头文件路径
 include_directories(${HFILES_OUTPUT_PATH})
@@ -65,6 +66,7 @@ target_link_libraries(${EXE_NAME}_test
     Qt5::Widgets
     KF5::Codecs
     ${DtkWidget_LIBRARIES}
+    ${MOUNT_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread

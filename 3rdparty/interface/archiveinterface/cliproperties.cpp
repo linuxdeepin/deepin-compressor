@@ -209,6 +209,7 @@ QStringList CliProperties::extractArgs(const QString &archive, const QStringList
         args << m_extractSwitch;
     } else if (!preservePaths && !m_extractSwitchNoPreserve.isEmpty()) {
         args << m_extractSwitchNoPreserve;
+        args << "-y";
     }
 
     if (!password.isEmpty()) {

@@ -95,7 +95,7 @@ void CliPlugin::setupCliProperties()
     m_cliProps->setProperty("captureProgress", false);
 
     m_cliProps->setProperty("addProgram", QStringLiteral("zip"));
-    m_cliProps->setProperty("addSwitch", QStringList({QStringLiteral("-r")}));
+    m_cliProps->setProperty("addSwitch", QStringList({QStringLiteral("-ry")}));
 
     m_cliProps->setProperty("deleteProgram", QStringLiteral("zip"));
     m_cliProps->setProperty("deleteSwitch", QStringLiteral("-d"));

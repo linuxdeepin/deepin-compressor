@@ -37,6 +37,8 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QUrl>
+#include "common.h"
+#include <linux/limits.h>
 
 CliInterface::CliInterface(QObject *parent, const QVariantList &args)
     : ReadWriteArchiveInterface(parent, args)
@@ -87,7 +89,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     QString destPath;
 
     bool ret = false;
-
+    m_rootNode.clear();
+    m_mapLongName.clear();
+    m_mapLongDirName.clear();
+    m_mapRealDirValue.clear();
     QStringList fileList;
     foreach (FileEntry file, files) {
         QString fileName = file.strFullPath;
@@ -105,7 +110,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         destPath.chop(1);
         qInfo() << "解压目标路径 --- " << destPath;
     }
-
+    bool bHandleLongName = false;
+    Common com;
+    bool bDlnfs = com.isSubpathOfDlnfs(options.strTargetPath);
     QDir::setCurrent(destPath);
     if (!m_extractOptions.bAllExtract) {  // 提取部分文件
         m_files.clear();
@@ -114,7 +121,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
                 if (entry.isDirectory) {
                     m_rootNode = entry.strFullPath.left(entry.strFullPath.length() - entry.strFileName.length() - 1);
                 } else {
-                    m_rootNode = entry.strFullPath.right(entry.strFullPath.length() - entry.strFileName.length());
+                    m_rootNode = entry.strFullPath.left(entry.strFullPath.length() - entry.strFileName.length());
                 }
             }
 
@@ -137,12 +144,22 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
                 m_files << entry;
             }
         }
-
+        //长文件解压
+        if(!bDlnfs) {
+            for (FileEntry entry: m_files) {
+                if(NAME_MAX < entry.strFileName.toLocal8Bit().length() ||
+                        NAME_MAX < entry.strFullPath.toLocal8Bit().length())
+                {
+                    bHandleLongName = true;
+                    break;
+                }
+            }
+        }
         if (destPath.startsWith("/tmp") && destPath.contains("/deepin-compressor-")) { // 打开解压列表文件
             if (!QDir(destPath).exists()) {
                 QDir(destPath).mkpath(destPath);
             }
-        } else {  // 判断不是打开解压列表文件的临时目录，设置提取的临时目录
+        } else if(!bHandleLongName) {  // 判断不是打开解压列表文件的临时目录，设置提取的临时目录
             // 设置临时目录
             m_extractTempDir.reset(new QTemporaryDir(QStringLiteral(".%1-").arg(QCoreApplication::applicationName())));
             if (!m_extractTempDir->isValid()) {
@@ -152,11 +169,18 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             }
 
             destPath = m_extractTempDir->path();
-            qInfo() << "提取临时路径 --- " << destPath;
+            qInfo() << "extract temp path--- " << destPath;
+        }
+        if(bHandleLongName) {
+            if(!handleLongNameExtract(m_files))
+            {
+                m_eErrorType = ET_FileWriteError;
+                return PFT_Error;
+            }
         }
     } else {
         if (!QDir(destPath).exists() && !QDir(destPath).mkpath(destPath)) {
-            if (isInsufficientDiskSpace(destPath, 10 * 1024 * 1024)) {  // 暂取小于10M作为磁盘空间不足的判断标准
+            if (isInsufficientDiskSpace(destPath, FILE_MAX_SIZE)) {  // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
             } else {
                 emit signalFileWriteErrorName("destPath");
@@ -165,6 +189,46 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             emit signalFinished(PFT_Error);
             return PFT_Error;
         }
+        //ADD
+        QString password;
+        if (options.password.isEmpty()) {
+            // 对列表加密文件进行追加解压的时候使用压缩包的密码
+            password = DataManager::get_instance().archiveData().isListEncrypted ?
+                       DataManager::get_instance().archiveData().strPassword : QString();
+        } else {
+            password = options.password;
+        }
+        //长文件解压
+        ArchiveData arcData = DataManager::get_instance().archiveData();
+        if(!bDlnfs) {
+            if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) { //对于长文件解压,压缩包小于10M，右键解压支持，先获取文件列表，再根据列表数据判断是否为长文件，以后应用加开关表明是否为唱文件解压
+                list();
+                if(m_process) {
+                    m_process->waitForFinished();
+                    m_process->deleteLater();
+                    m_process = nullptr;
+                }
+                arcData = DataManager::get_instance().archiveData();
+            }
+            for (QMap<QString, FileEntry>::const_iterator iter = arcData.mapFileEntry.begin(); iter != arcData.mapFileEntry.end(); iter++) {
+                if(NAME_MAX < iter.value().strFileName.toLocal8Bit().length())
+                {
+                    bHandleLongName = true;
+                    break;
+                }
+            }
+        }
+        if(bHandleLongName) {
+            if(!handleLongNameExtract(arcData.mapFileEntry.values()))
+            {
+                m_eErrorType = ET_FileWriteError;
+                return PFT_Error;
+            }
+        }
+    }
+    if(bHandleLongName) {
+        m_eErrorType = ET_LongNameError;
+        return list();
     }
 
     QDir::setCurrent(destPath);
@@ -922,6 +986,112 @@ bool CliInterface::moveExtractTempFilesToDest(const QList<FileEntry> &files, con
     }
 
     return moveSuccess;
+}
+
+bool CliInterface::handleLongNameExtract(const QList<FileEntry> &files)
+{
+    ExtractionOptions &options = m_extractOptions;
+    QString password;
+    QStringList fileList;
+    if (options.password.isEmpty()) {
+        // 对列表加密文件进行追加解压的时候使用压缩包的密码
+        password = DataManager::get_instance().archiveData().isListEncrypted ?
+                   DataManager::get_instance().archiveData().strPassword : QString();
+    } else {
+        password = options.password;
+    }
+    QScopedPointer<QTemporaryDir> extractTempDir;
+    extractTempDir.reset(new QTemporaryDir());
+    QString absoluteDestinationPath = extractTempDir->path() + QDir::separator() + QFileInfo(m_strArchiveName).fileName();
+    QFile tmpFile(absoluteDestinationPath);
+    if(tmpFile.exists()) tmpFile.remove();
+    QFile::copy(m_strArchiveName, absoluteDestinationPath);
+    KPtyProcess* pProcess = new KPtyProcess;
+    for (FileEntry entry: files)
+    {
+        qInfo() << "file path --- " << entry.strFullPath;
+        QFileInfo info(entry.strFullPath);
+        QString strFilePath = info.path();
+        QString strFileName = entry.strFullPath;
+        Common com;
+        QString sDir = com.handleLongNameforPath(strFilePath, strFileName, m_mapLongDirName, m_mapRealDirValue);
+        if(sDir.length() > 0) {
+           strFilePath = sDir.endsWith(QDir::separator())?sDir.left(sDir.length() -1):sDir;
+           if(strFileName.endsWith(QDir::separator())) {
+               strFileName = sDir;
+           } else if (NAME_MAX >= QString(info.fileName()).toLocal8Bit().length()) {
+               strFileName = sDir + info.fileName();
+           }
+        }
+        if (NAME_MAX < QString(info.fileName()).toLocal8Bit().length() && !entry.strFullPath.endsWith(QDir::separator())) {
+            QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
+
+            // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
+            QString tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+            if (m_mapLongName[tempFilePathName]++ >= LONGFILE_SAME_FILES) {
+                emit signalCurFileName(entry.strFullPath); // 发送当前正在解压的文件名
+                m_eErrorType = ET_LongNameError;
+                return false;
+            }
+            m_eErrorType = ET_LongNameError;
+            QString strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName], LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + "." + QFileInfo(entry.strFullPath).completeSuffix();
+            strFileName = strTempFileName;
+            if (strFilePath != ".") {
+                strFileName = strFilePath + QDir::separator() + strTempFileName;
+            }
+        }
+        QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
+        if(!m_extractOptions.bAllExtract) {//部分提取截断目录结构，保证拖动文件进入对应的目标目录中。
+            //去除文件的头目录结构，由于长文件夹命名限制，长文件夹重命名格式不一致，使用头目录文件分隔符的个数为基准去除目录头
+            int nCnt = m_rootNode.count(QDir::separator());
+            QString destFileName = strFileName;
+            for(int i = 0; i < nCnt; i++) {
+                int nIndex = destFileName.indexOf(QDir::separator());
+                if(nIndex > 0) {
+                    destFileName.remove(0, nIndex + 1);
+                }
+            }
+            strDestFileName = options.strTargetPath + QDir::separator() + destFileName;
+        }
+        qInfo() <<"m_rootNode --- "<< m_rootNode;
+        qInfo() <<"dest file name --- "<< strDestFileName;
+        if(entry.strFullPath.endsWith(QDir::separator())) {
+            // 解压完整文件名（含路径）
+            if (!QDir(strDestFileName).exists()) {
+                if(!QDir(strDestFileName).mkpath(strDestFileName))
+                    return false;
+            }
+        } else {
+            QList<FileEntry> lstFile;
+            entry.strAlias = QFileInfo(strFileName).fileName();
+            lstFile.append(entry);
+            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+            pProcess->setOutputChannelMode(KProcess::MergedChannels);
+            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+            pProcess->setProgram(m_cliProps->property("moveProgram").toString(), m_cliProps->moveArgs(absoluteDestinationPath, lstFile, DataManager::get_instance().archiveData(), password));
+            pProcess->start();
+            pProcess->waitForFinished(-1);
+
+            //解压到当前
+            fileList.clear();
+            if(info.path() != ".") {
+                fileList.append(info.path()+ QDir::separator() + entry.strAlias);
+            } else {
+                fileList.append(entry.strAlias);
+            }
+            QDir::setCurrent(QFileInfo(strDestFileName).path());
+            pProcess->setPtyChannels(KPtyProcess::StdinChannel);
+            pProcess->setOutputChannelMode(KProcess::MergedChannels);
+            pProcess->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+            pProcess->setProgram(m_cliProps->property("extractProgram").toString(),
+                                   m_cliProps->extractArgs(absoluteDestinationPath, fileList, false, password));
+            pProcess->start();
+            pProcess->waitForFinished(-1);
+        }
+    }
+    pProcess->deleteLater();
+    pProcess = nullptr;
+    return true;
 }
 
 void CliInterface::readStdout(bool handleAll)
