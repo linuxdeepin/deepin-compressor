@@ -45,6 +45,7 @@ public:
     };
 
     static QString location(StandardLocation type);
+    static bool pathControl(const QString &sPath);
     //static QString fromStandardUrl(const DUrl &standardUrl);
     //static DUrl toStandardUrl(const QString &localPath);
 

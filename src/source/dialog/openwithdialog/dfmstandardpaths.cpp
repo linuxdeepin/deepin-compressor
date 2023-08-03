@@ -10,6 +10,8 @@
 #include <QCoreApplication>
 #include <QStandardPaths>
 #include <QMap>
+#include <QDBusInterface>
+#include <QDBusMessage>
 
 QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
 {
@@ -108,7 +110,28 @@ QString DFMStandardPaths::location(DFMStandardPaths::StandardLocation type)
         return QStringLiteral("bug://dde-file-manager-lib/interface/dfmstandardpaths.cpp#") + QT_STRINGIFY(type);
     }
 }
-
+bool DFMStandardPaths::pathControl(const QString &sPath)
+{
+    QString docPath = DFMStandardPaths::location(DFMStandardPaths::DocumentsPath);
+    QString picPath = DFMStandardPaths::location(DFMStandardPaths::PicturesPath);
+    QDBusMessage reply;
+    QDBusInterface iface("com.deepin.FileArmor1", "/com/deepin/FileArmor1", "com.deepin.FileArmor1",QDBusConnection::systemBus());
+    if (iface.isValid()) {
+        if(sPath.startsWith(docPath)) {
+            reply = iface.call("GetApps", docPath);
+        } else if(sPath.startsWith(picPath)) {
+            reply = iface.call("GetApps", picPath);
+        }
+    }
+    if(reply.type() == QDBusMessage::ReplyMessage) {
+        QList<QString> lValue = reply.arguments().takeFirst().toStringList();
+        QString strApp = QStandardPaths::findExecutable("deepin-compressor");
+        if(lValue.contains(strApp)) {
+            return true;
+        }
+    }
+    return false;
+}
 //QString DFMStandardPaths::fromStandardUrl(const DUrl &standardUrl)
 //{
 //    if (standardUrl.scheme() != "standard")

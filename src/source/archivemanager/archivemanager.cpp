@@ -14,6 +14,7 @@
 #include <QMimeDatabase>
 #include <QFileInfo>
 #include <QDebug>
+#include "dfmstandardpaths.h"
 
 //静态成员变量初始化。
 QMutex ArchiveManager::m_mutex;//一个线程可以多次锁同一个互斥量
@@ -65,7 +66,9 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
         delete m_pInterface;
         m_pInterface = nullptr;
     }
-
+    if(DFMStandardPaths::pathControl(strDestination)) {
+        return false;
+    }
     m_pTempInterface = UiTools::createInterface(strDestination, true, eType);
 
     if (m_pTempInterface) {
