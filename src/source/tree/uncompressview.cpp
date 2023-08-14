@@ -631,7 +631,8 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
 
         // 右键-选择默认应用程序
         openMenu.addAction(tr("Select default program"), this, SLOT(slotOpenStyleClicked()));
-
+        int nMax = 0;
+        QFontMetrics fm(openMenu.font());
         if (m_stRightEntry.isDirectory) {
             openMenu.setEnabled(false);
         } else {
@@ -640,11 +641,22 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
             QList<DesktopFile> listOpenType = OpenWithDialog::getOpenStyle(m_stRightEntry.strFullPath);
             // 添加菜单选项
             for (int i = 0; i < listOpenType.count(); ++i) {
-                QAction *pOpenAction = openMenu.addAction(QIcon::fromTheme(listOpenType[i].getIcon()), listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+                QIcon icon = QIcon::fromTheme(listOpenType[i].getIcon());
+                QAction *pOpenAction = openMenu.addAction(icon, listOpenType[i].getDisplayName(), this, SLOT(slotOpenStyleClicked()));
+                if(!icon.isNull()) {
+                    int nWidth = fm.width(listOpenType[i].getDisplayName()) * qApp->devicePixelRatio();
+                    if(nWidth > nMax) {
+                        nMax = nWidth;
+                    }
+                }
                 pOpenAction->setData(listOpenType[i].getExec());
             }
         }
-
+        if(nMax > menu.minimumWidth()) {
+            openMenu.setMinimumWidth(nMax);
+        } else {
+            openMenu.setMinimumWidth(menu.minimumWidth());
+        }
         menu.exec(viewport()->mapToGlobal(pos));
     }
 }
