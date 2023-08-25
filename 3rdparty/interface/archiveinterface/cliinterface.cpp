@@ -111,8 +111,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         qInfo() << "解压目标路径 --- " << destPath;
     }
     bool bHandleLongName = false;
-    Common com;
-    bool bDlnfs = com.isSubpathOfDlnfs(options.strTargetPath);
+    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
     QDir::setCurrent(destPath);
     if (!m_extractOptions.bAllExtract) {  // 提取部分文件
         m_files.clear();
