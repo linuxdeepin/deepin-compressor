@@ -197,6 +197,7 @@ private:
     QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
     QMap<QString, int> m_mapRealDirValue;   // 长文件真实文件统计
     QSet<QString> m_setLongName;            // 存储被截取之后的文件名称（包含001之类的）
+    bool m_bDlnfs = false;                        //文件系统是否支持长文件
 };
 
 #endif // LIBZIPPLUGIN_H
