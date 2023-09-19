@@ -294,7 +294,7 @@ void OverwriteQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dia
     NewStr newstr = autoCutText(m_strDesText, label2);
     label2->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
-    label2->setFixedHeight(height_lable);
+    label2->setMinimumHeight(height_lable);
 
     // 字符串太长的情况下用中间使用...
     QFont font;
@@ -304,7 +304,7 @@ void OverwriteQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dia
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
         dialog->adjustSize();
     } else {
-        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height - m_iCheckboxOld1Height + height_lable + 2 * newstr.fontHeifht); //字号变化后自适应调整
+        dialog->setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height - m_iCheckboxOld1Height + height_lable + 2 * newstr.fontHeifht); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iLabelOld1Height = newstr.fontHeifht;
@@ -384,7 +384,7 @@ void PasswordNeededQuery::execute()
     DPasswordEdit *passwordedit = new DPasswordEdit(dialog);
     passwordedit->lineEdit()->setAttribute(Qt::WA_InputMethodEnabled, false); //隐藏密码时不能输入中文
     passwordedit->setFocusPolicy(Qt::StrongFocus);
-    passwordedit->setFixedHeight(36);
+    passwordedit->setMinimumHeight(36);
     passwordedit->setFixedWidth(280);
 
     dialog->addButton(QObject::tr("Cancel", "button"), true, DDialog::ButtonNormal);
@@ -449,7 +449,7 @@ void PasswordNeededQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog
     NewStr newstr = autoCutText(m_strDesText, label2);
     label2->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
-    label2->setFixedHeight(height_lable);
+    label2->setMinimumHeight(height_lable);
 
     // 字符串太长的情况下用中间使用...
     QFont font;
@@ -459,7 +459,7 @@ void PasswordNeededQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
         dialog->adjustSize();
     } else {
-        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
+        dialog->setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iLabelOld1Height = newstr.fontHeifht;
@@ -543,11 +543,11 @@ void LoadCorruptQuery::autoFeed(DLabel *label, CustomDDialog *dialog)
     NewStr newstr = autoCutText(m_strDesText, label);
     label->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
-    label->setFixedHeight(height_lable);
+    label->setMinimumHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
         dialog->adjustSize();
     } else {
-        dialog->setFixedHeight(m_iDialogOldHeight - m_iLabelOldHeight + height_lable); //字号变化后自适应调整
+        dialog->setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight + height_lable); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iDialogOldHeight = dialog->height();

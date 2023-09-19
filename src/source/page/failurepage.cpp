@@ -85,7 +85,7 @@ void FailurePage::initUI()
 
     //重试按钮
     m_pRetrybutton = new CustomPushButton(this);
-    m_pRetrybutton->setMinimumSize(340, 36);
+    m_pRetrybutton->setMinimumWidth(340);
     m_pRetrybutton->setText(tr("Retry", "button"));
 
     //返回按钮
