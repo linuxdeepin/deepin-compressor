@@ -35,7 +35,16 @@ QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const 
 {
     Q_UNUSED(index);
 
-    return QSize(option.rect.width(), 36);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
+    } else {
+        return QSize(option.rect.width(), TABLE_HEIGHT_CompactMode);
+    }
+#else
+    return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
+#endif
 }
 
 void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const

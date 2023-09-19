@@ -63,7 +63,7 @@ void CompressPage::initUI()
     // 初始化相关变量
     m_pCompressView = new CompressView(this);
     m_pNextBtn = new CustomPushButton(tr("Next"), this);
-    m_pNextBtn->setMinimumSize(340, 36);
+    m_pNextBtn->setMinimumWidth(340);
 
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;

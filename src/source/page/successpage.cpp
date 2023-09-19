@@ -69,7 +69,7 @@ void SuccessPage::initUI()
 
     //查看文件按钮
     m_pShowFileBtn = new CustomPushButton(this);
-    m_pShowFileBtn->setMinimumSize(340, 36);
+    m_pShowFileBtn->setMinimumWidth(340);
     m_pShowFileBtn->setText(tr("View"));
 
     //返回按钮
