@@ -17,6 +17,9 @@
 #include <QElapsedTimer>
 #include <QItemSelection>
 #include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 DataModel::DataModel(QObject *parent)
     : QAbstractTableModel(parent)
