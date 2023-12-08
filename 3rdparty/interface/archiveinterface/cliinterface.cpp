@@ -201,13 +201,16 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         ArchiveData arcData = DataManager::get_instance().archiveData();
         if(!bDlnfs) {
             if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) { //对于长文件解压,压缩包小于10M，右键解压支持，先获取文件列表，再根据列表数据判断是否为长文件，以后应用加开关表明是否为唱文件解压
+                setProperty("list", "tmpList");
                 list();
                 if(m_process) {
                     m_process->waitForFinished();
                     m_process->deleteLater();
                     m_process = nullptr;
                 }
+                m_workStatus = WT_Extract;
                 arcData = DataManager::get_instance().archiveData();
+                setProperty("list", "");
             }
             for (QMap<QString, FileEntry>::const_iterator iter = arcData.mapFileEntry.begin(); iter != arcData.mapFileEntry.end(); iter++) {
                 if(NAME_MAX < iter.value().strFileName.toLocal8Bit().length())
@@ -646,7 +649,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
     if (m_workStatus == WT_Extract) {
         // Extraction jobs need a dedicated post-processing function.
         connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(extractProcessFinished(int, QProcess::ExitStatus)));
-    } else {
+    } else if(property("list").toString() != "tmpList"){
         connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
     }
 
