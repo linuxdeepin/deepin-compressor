@@ -761,6 +761,11 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     strFileName = m_common->trans2uft8(statBuffer.name, m_mapFileCode[index]);    // 解压文件名（压缩包中）
+    //fix 232873
+    if(strFileName.indexOf("../") != -1) {
+        qInfo() << "skipped ../ path component(s) in " << strFileName;
+        strFileName = strFileName.replace("../", "");
+    }
     if(strFileName.contains(QLatin1Char('\\')))
         strFileName = strFileName.replace(QLatin1Char('\\'), QDir::separator());
     QString strOriginName = strFileName;
