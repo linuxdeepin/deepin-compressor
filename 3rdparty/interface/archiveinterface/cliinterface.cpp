@@ -197,10 +197,9 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         } else {
             password = options.password;
         }
-        //长文件解压
         ArchiveData arcData = DataManager::get_instance().archiveData();
         if(!bDlnfs) {
-            if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) { //对于长文件解压,压缩包小于10M，右键解压支持，先获取文件列表，再根据列表数据判断是否为长文件，以后应用加开关表明是否为唱文件解压
+            if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
                 setProperty("list", "tmpList");
                 list();
                 if(m_process) {
