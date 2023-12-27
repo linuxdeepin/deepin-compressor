@@ -251,16 +251,18 @@ void PluginManager::loadPlugins()
     }
     if (t_str.isEmpty()) {
         qWarning() << "library path is empty!!!!";
-        return;
-    }
-    qInfo() << t_str;
-    QStringList liststr = t_str.split("=").at(1).split(":");
-    QString libPath;
-    libPath = liststr.size() >= 2 ? liststr.at(1) : liststr.at(0);
-    QDir dir(libPath);
-    dir.cdUp();
+    } else {
+        qInfo() << t_str;
+        QStringList liststr = t_str.split("=").at(1).split(":");
+        QString libPath;
+        libPath = liststr.size() >= 2 ? liststr.at(1) : liststr.at(0);
+        QDir dir(libPath);
+        dir.cdUp();
 
-    QCoreApplication::addLibraryPath(dir.path());
+        QCoreApplication::addLibraryPath(dir.path());
+    }
+
+    QCoreApplication::addLibraryPath("/usr/lib");
 
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("deepin-compressor/plugins"));
     QSet<QString> addedPlugins;
