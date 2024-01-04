@@ -35,11 +35,24 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QTemporaryDir>
+#include <QRegExp>
+#include <QStringList>
+#include <QProcess>
 
 #include <archive_entry.h>
 
 // 300M
 #define MB300 314572800 /*(300*1024*1024)*/
+
+/**
+ * 判断文件夹或文件夹是否是由mtp挂载的：
+ * /run/user/$UID/gvfs/mtp:xxxxxxxxx/xxx
+ * /root/.gvfs/mtp:xxxxxxxxx/xxx
+*/
+static bool IsMtpFileOrDirectory(QString path) noexcept {
+    const static QRegExp regexp("((/run/user/[0-9]+/gvfs/mtp:)|(/root/.gvfs/mtp:)).+");
+    return regexp.exactMatch(path);
+}
 
 ReadWriteLibarchivePluginFactory::ReadWriteLibarchivePluginFactory()
 {
@@ -65,6 +78,10 @@ ReadWriteLibarchivePlugin::~ReadWriteLibarchivePlugin()
 
 PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    qInfo()<<"ReadWriteLibarchivePlugin addFiles";
+    if( !m_tempDir.isValid()) {
+        return PFT_Error;
+    }
     const bool creatingNewFile = !QFileInfo::exists(m_strArchiveName); //true:压缩 false:追加
     m_writtenFilesSet.clear();
 
@@ -73,6 +90,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
     }
 
     if (!initializeWriter(creatingNewFile, options)) {
+        qInfo()<<"initializeWriter(creatingNewFile, options)";
         return PFT_Error;
     }
 
@@ -134,7 +152,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
         isSuccessful = processOldEntries_Add(totalSize);
     }
 
-    finish(isSuccessful);
+    isSuccessful = finish(isSuccessful);
 
     emit signalFinished(isSuccessful ? PFT_Nomral : PFT_Error);
 
@@ -181,7 +199,19 @@ PluginFinishType ReadWriteLibarchivePlugin::renameFiles(const QList<FileEntry> &
 
 bool ReadWriteLibarchivePlugin::initializeWriter(const bool creatingNewFile, const CompressOptions &options)
 {
-    m_tempFile.setFileName(m_strArchiveName);
+    //由于mtp中可能无法进行文件的重命名
+    //因此如果是在mtp目录下，那么在 /tmp/deepin-compresor/ 文件夹下进行压缩，然后copy到对应的目录下
+    QString filepath = QFileInfo(m_strArchiveName).absoluteFilePath();
+    qInfo()<<"m_strArchiveName absoluteFilePath: "<<filepath;
+    if (IsMtpFileOrDirectory(filepath)) {
+
+        QString temp_filepath = m_tempDir.path()+"/"+QFileInfo(m_strArchiveName).fileName(); 
+        qInfo()<< "压缩mtp挂载的文件,建立临时文件："<<temp_filepath;
+        m_tempFile.setFileName(temp_filepath);
+    } else { 
+        m_tempFile.setFileName(m_strArchiveName);
+    }
+
     if (!m_tempFile.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
         emit error(("Failed to create a temporary file for writing data."));
         return false;
@@ -338,7 +368,7 @@ bool ReadWriteLibarchivePlugin::initializeNewFileWriterFilters(const CompressOpt
     return true;
 }
 
-void ReadWriteLibarchivePlugin::finish(const bool isSuccessful)
+bool ReadWriteLibarchivePlugin::finish(bool isSuccessful)
 {
     if (!isSuccessful || QThread::currentThread()->isInterruptionRequested()) {
         archive_write_fail(m_archiveWriter.data());
@@ -349,8 +379,17 @@ void ReadWriteLibarchivePlugin::finish(const bool isSuccessful)
         // TODO: We need to abstract this code better so that we only deal with one
         // object that manages both QSaveFile and ArchiveWriter.
         archive_write_close(m_archiveWriter.data());
-        m_tempFile.commit();
+        isSuccessful = m_tempFile.commit();
+        if (isSuccessful && IsMtpFileOrDirectory(m_strArchiveName)) {
+            qInfo()<< "mtp 压缩完成,现在开始移动："<< isSuccessful;
+            QStringList  args_list;  
+            args_list<< m_tempFile.fileName() << m_strArchiveName; 
+            QProcess mover; 
+            isSuccessful = 0 == mover.execute("mv",args_list);   
+            isSuccessful = mover.exitCode() == QProcess::NormalExit;
+        }
     }
+    return isSuccessful;
 }
 
 bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFileFullPath, const QString &destination, const QString &externalPath,  const qlonglong &totalsize, const QString &strAlias)
