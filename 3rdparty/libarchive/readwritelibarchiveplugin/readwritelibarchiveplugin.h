@@ -33,6 +33,7 @@
 
 #include <QSaveFile>
 #include <QSet>
+#include <QTemporaryDir>
 
 #include <archive.h>
 
@@ -101,6 +102,7 @@ public:
 
 private:
     QSaveFile m_tempFile;
+    QTemporaryDir m_tempDir;
     QSet<QString> m_writtenFilesSet; //已经压缩完的文件(使用QSet查找性能更佳)
     ArchiveWrite m_archiveWriter;
     qlonglong m_currentAddFilesSize = 0;//当前已经压缩的文件大小（能展示出来的都已经压缩）
@@ -117,7 +119,12 @@ private:
      * @return
      */
     bool initializeNewFileWriterFilters(const CompressOptions &options);
-    void finish(const bool isSuccessful);
+    /**
+     * @brief finish 压缩任务闭环，close相关的archive、commit打开的QSaveFile。note：该步骤可能会失败，例如QSaveFile commit失败
+     * @param isSuccessful 之前的步骤是否成功
+     * @return
+     */
+    bool finish(bool isSuccessful);
     /**
      * @brief writeFileTodestination 将文件夹内文件(夹)写入压缩包
      * @param sourceFileFullPath
