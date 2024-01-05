@@ -461,3 +461,9 @@ bool Common::findDlnfsPath(const QString &target, Compare func)
     if (iter) mnt_free_iter(iter);
     return false;
 }
+
+
+bool IsMtpFileOrDirectory(QString path) noexcept {
+    const static QRegExp regexp("((/run/user/[0-9]+/gvfs/mtp:)|(/root/.gvfs/mtp:)).+");
+    return regexp.exactMatch(path);
+}

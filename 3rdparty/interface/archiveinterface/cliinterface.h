@@ -98,6 +98,9 @@ public:
 
     // ReadWriteArchiveInterface interface
 public:
+    /**
+     * @brief note:在mtp中压缩的时候，需要先建立一个临时目录，在该临时目录中压缩，压缩完毕后move到正确的位置
+     */
     PluginFinishType addFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType moveFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
     PluginFinishType copyFiles(const QList<FileEntry> &files, const CompressOptions &options) override;
