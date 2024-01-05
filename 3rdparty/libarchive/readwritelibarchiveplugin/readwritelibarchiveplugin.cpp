@@ -40,19 +40,9 @@
 #include <QProcess>
 
 #include <archive_entry.h>
-
+#include "common.h"
 // 300M
 #define MB300 314572800 /*(300*1024*1024)*/
-
-/**
- * 判断文件夹或文件夹是否是由mtp挂载的：
- * /run/user/$UID/gvfs/mtp:xxxxxxxxx/xxx
- * /root/.gvfs/mtp:xxxxxxxxx/xxx
-*/
-static bool IsMtpFileOrDirectory(QString path) noexcept {
-    const static QRegExp regexp("((/run/user/[0-9]+/gvfs/mtp:)|(/root/.gvfs/mtp:)).+");
-    return regexp.exactMatch(path);
-}
 
 ReadWriteLibarchivePluginFactory::ReadWriteLibarchivePluginFactory()
 {

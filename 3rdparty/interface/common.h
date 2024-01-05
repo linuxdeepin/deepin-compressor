@@ -46,4 +46,11 @@ private:
     bool findDlnfsPath(const QString &target, Compare func);
 };
 
+/**
+ * 判断文件夹或文件夹是否是由mtp挂载的：
+ * /run/user/$UID/gvfs/mtp:xxxxxxxxx/xxx
+ * /root/.gvfs/mtp:xxxxxxxxx/xxx
+*/
+bool IsMtpFileOrDirectory(QString path) noexcept;
+
 #endif

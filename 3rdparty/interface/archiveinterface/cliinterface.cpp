@@ -37,6 +37,9 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QUrl>
+#include <QScopedPointer>
+#include <QTemporaryDir>
+
 #include "common.h"
 #include <linux/limits.h>
 
@@ -383,8 +386,30 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
             }
         }
     }
-    // 压缩命令的参数
-    QStringList arguments = m_cliProps->addArgs(m_strArchiveName,
+
+    //判断是否是在以mtp方式挂载的目录中进行压缩.建立临时文件
+    QString temp_archiveName("");
+    QScopedPointer<QTemporaryDir> temp_dir;
+    if (IsMtpFileOrDirectory(m_strArchiveName)) {
+        temp_dir.reset(new QTemporaryDir);
+        temp_dir->setAutoRemove(true);
+        qInfo()<< "mtp 挂载压缩，建立临时文件夹：" << temp_dir->path();
+        temp_archiveName = temp_dir->path() + QDir::separator() + QFileInfo(m_strArchiveName).fileName();
+        //如果文件已经存在了，则为追加操作，move过去
+        if(QFileInfo(m_strArchiveName).exists()){
+            QStringList args_list;  
+            args_list << m_strArchiveName << temp_archiveName;
+            QProcess mover; 
+            ret = 0 == mover.execute("mv",args_list);   
+            ret = mover.exitCode() == QProcess::NormalExit;
+            if (!ret) {
+                qInfo() << "建立临时文件失败!";
+                return PFT_Error;
+            }
+        }
+    }
+    // 压缩命令的参数,在mtp中进行压缩的时候，先放在临时文件 temp_archiveName 中，最后再mv过去
+    QStringList arguments = m_cliProps->addArgs(temp_archiveName.isEmpty() ? m_strArchiveName:temp_archiveName,
                                                 fileList,
                                                 password,
                                                 options.bHeaderEncryption,
@@ -403,6 +428,16 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         ret = runProcess(strProgram, arguments);
     } else {
         ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+    }
+    
+    if (ret && !temp_archiveName.isEmpty()) {
+        qInfo()<< "mtp 压缩完成,现在开始移动";
+        QStringList  args_list;  
+        args_list<< temp_archiveName << m_strArchiveName;
+        QProcess mover; 
+        ret = 0 == mover.execute("mv",args_list);   
+        ret = mover.exitCode() == QProcess::NormalExit;
+        qInfo()<< "mtp 移动成功? " << ret;
     }
     //删除临时目录
     for(QTemporaryDir *tmdDir: lstTmpDir) {
