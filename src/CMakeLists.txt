@@ -31,6 +31,7 @@ find_package(Qt5Concurrent)
 find_package(Qt5DBus REQUIRED)
 find_package(KF5Codecs REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
+find_package(DtkWidget REQUIRED)
 include(FindPkgConfig)
 
 
@@ -78,6 +79,14 @@ target_link_libraries(${EXE_NAME}
     ${GIO_LIBRARIES}
     compressor-interface
 )
+
+#hw机型增加DConfig配置
+set(APPID org.deepin.compressor)
+set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.compressor.method.json)
+if (DEFINED DSG_DATA_DIR)
+    message("-- DConfig is supported by DTK")
+    dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+endif()
 
 install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES desktop/deepin-compressor.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)

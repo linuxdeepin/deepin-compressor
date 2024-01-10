@@ -27,6 +27,11 @@
 #include <QDebug>
 
 #include <cmath>
+#include <QProcess>
+#ifdef DTKCORE_CLASS_DConfigFile
+#include <DConfig>
+DCORE_USE_NAMESPACE
+#endif
 
 #define SCROLL_MAX 621
 #define SCROLL_MIN 348
@@ -160,6 +165,30 @@ void CompressSettingPage::refreshMenu()
             m_pTypeMenu->addAction("tar.7z");
         }
     }
+    QProcess process;
+    process.start("bash", QStringList() << "-c" << "dmidecode | grep -i \"String 4\"");
+    process.waitForStarted();
+    process.waitForFinished();
+    QString result = process.readAll();
+    //qDebug() << __func__ << result;
+    m_isPanguX = result.contains("PGUX", Qt::CaseInsensitive);
+    process.close();
+#ifdef DTKCORE_CLASS_DConfigFile
+    if(m_isPanguX) {
+        m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
+        DConfig *dconfig = (DConfig *)m_dconfig;
+        int nCompType = -1;
+        if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCompressorType")){
+                    nCompType = dconfig->value("specialCompressorType").toInt();
+                }
+        QList<QAction*> lstAct = m_pTypeMenu->actions();
+        if(nCompType >= 0 && nCompType < lstAct.count()) {
+            slotTypeChanged(lstAct.at(nCompType));
+            return;
+        }
+    }
+#endif
+
 
     // 默认选择类型为zip
     if (pAction != nullptr) {
@@ -439,6 +468,90 @@ void CompressSettingPage::setSplitEnabled(bool bEnabled)
 
 void CompressSettingPage::refreshCompressLevel(const QString &strType)
 {
+#ifdef DTKCORE_CLASS_DConfigFile
+    if(m_isPanguX) {
+        // 其余格式支持设置压缩方式
+        // 设置压缩方式可用
+        m_pCompressLevelCmb->setEnabled(true);
+        m_pCompressLevelLbl->setEnabled(true);
+        if(!m_dconfig) return;
+        DConfig *dconfig = (DConfig *)m_dconfig;
+        if(strType == "7z") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("special7zCompressor")){
+                        int nMethod = dconfig->value("special7zCompressor").toInt();
+                        m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                    }
+        } else if(strType == "jar") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialJarCompressor")){
+                        int nMethod = dconfig->value("specialJarCompressor").toInt();
+                        m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                    }
+        } else if(strType == "tar") {
+            // tar只有存储功能
+            m_pCompressLevelCmb->setCurrentIndex(0);
+            // 设置压缩方式不可用
+            m_pCompressLevelCmb->setEnabled(false);
+            m_pCompressLevelLbl->setEnabled(false);
+        } else if(strType == "tar.bz2") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarbz2Compressor")){
+                        int nMethod = dconfig->value("specialTarbz2Compressor").toInt();
+                        m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                    }
+        } else if(strType == "tar.gz") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarGzCompressor")){
+                        int nMethod = dconfig->value("specialTarGzCompressor").toInt();
+                        m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                    }
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
+                        int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
+                        m_pCpuCmb->setCurrentIndex(nCpu);
+                    }
+        } else if(strType == "tar.gz") {
+             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarGzCompressor")){
+                       int nMethod = dconfig->value("specialTarGzCompressor").toInt();
+                       m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                    }
+        } else if(strType == "tar.lz") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarLzCompressor")){
+                      int nMethod = dconfig->value("specialTarLzCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       } else if(strType == "tar.lzma") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarLzmaCompressor")){
+                      int nMethod = dconfig->value("specialTarLzmaCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       } else if(strType == "tar.lzo") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarLzoCompressor")){
+                      int nMethod = dconfig->value("specialTarLzoCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       } else if(strType == "tar.xz") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTarXzCompressor")){
+                      int nMethod = dconfig->value("specialTarXzCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       } else if(strType == "tar.Z") {
+            // tar.Z无压缩方式，使用默认，即标准
+            m_pCompressLevelCmb->setCurrentIndex(3);
+            // 设置压缩方式不可用
+            m_pCompressLevelCmb->setEnabled(false);
+            m_pCompressLevelLbl->setEnabled(false);
+       } else if(strType == "tar.7z") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialTar7zCompressor")){
+                      int nMethod = dconfig->value("specialTar7zCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       } else if(strType == "zip") {
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialZipCompressor")){
+                      int nMethod = dconfig->value("specialZipCompressor").toInt();
+                      m_pCompressLevelCmb->setCurrentIndex(nMethod);
+                   }
+       }
+       return;
+   }
+#endif
+
     if (0 == strType.compare("tar")) {
         // tar只有存储功能
         m_pCompressLevelCmb->setCurrentIndex(0);
