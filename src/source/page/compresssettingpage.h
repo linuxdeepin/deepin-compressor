@@ -253,6 +253,8 @@ private:
     QString m_strMimeType;  // 压缩类型（application/x-tar）
 
     QScrollArea *m_pRightScroll = nullptr;
+    void *m_dconfig = nullptr; //读取dconfig配置
+    bool m_isPanguX = false;    //是否pangux系统
 };
 
 #endif // COMPRESSSETTINGPAGE_H

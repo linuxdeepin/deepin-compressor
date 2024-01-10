@@ -1,0 +1,146 @@
+{
+  "magic": "dsg.config.meta",
+  "version": "1.0",
+  "contents": {
+      "specialCompressorType": {
+          "value": 11,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Compressor Type",
+          "name[zh_CN]": "压缩类型",
+          "description": "Compressor Type",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+      "special7zCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "7z Compressor",
+          "name[zh_CN]": "7z 压缩方式",
+          "description": "7z Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialJarCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Jar Compressor",
+          "name[zh_CN]": "Jar 压缩方式",
+          "description": "Jar Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Tar Compressor",
+          "name[zh_CN]": "Tar 压缩方式",
+          "description": "Tar Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarbz2Compressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Tar.bz2 Compressor",
+          "name[zh_CN]": "Tar.bz2 压缩方式",
+          "description": "Tar.bz2 Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarGzCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.gz Compressor",
+          "name[zh_CN]": "tar.gz 压缩方式",
+          "description": "tar.gz  Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarLzCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.lz Compressor",
+          "name[zh_CN]": "tar.lz 压缩方式",
+          "description": "tar.lz Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarLzmaCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.lzma Compressor",
+          "name[zh_CN]": "tar.lzma 压缩方式",
+          "description": "tar.lzma Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarLzoCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.lzo Compressor",
+          "name[zh_CN]": "tar.lzo 压缩方式",
+          "description": "tar.lzo Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarXzCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.xz Compressor",
+          "name[zh_CN]": "tar.xz 压缩方式",
+          "description": "tar.xz Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTarZCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.Z Compressor",
+          "name[zh_CN]": "tar.Z 压缩方式",
+          "description": "tar.Z Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialTar7zCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.7z Compressor",
+          "name[zh_CN]": "tar.7z 压缩方式",
+          "description": "tar.7z Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialZipCompressor": {
+          "value": 0,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Zip Compressor",
+          "name[zh_CN]": "Zip 压缩方式",
+          "description": "Zip Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
+    "specialCpuTarGzCompressor": {
+          "value": 3,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "tar.gz multithread Compressor",
+          "name[zh_CN]": "tar.gz 多线程压缩",
+          "description": "Zip Compressor",
+          "permissions": "readwrite",
+          "visibility": "private"
+      }
+  }
+}
