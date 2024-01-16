@@ -49,6 +49,10 @@
 #include <QFormLayout>
 #include <QShortcut>
 #include <QJsonObject>
+#ifdef DTKCORE_CLASS_DConfigFile
+#include <DConfig>
+DCORE_USE_NAMESPACE
+#endif
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 #define FILE_TRUNCATION_LENGTH 70
@@ -2269,7 +2273,9 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
 
     connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
         // 取消操作
-        slotCancel();
+        if(m_stUpdateOptions.eType != UpdateOptions::Add) {
+            slotCancel();
+        }
 
         // 显示提示对话框
         TipDialog dialog(this);
@@ -3269,6 +3275,22 @@ void MainWindow::slotShowShortcutTip()
 void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath, QList<FileEntry> listAddEntry, CompressOptions stOptions, QList<FileEntry> listAllEntry)
 {
     if (StartupType::ST_Compresstozip7z == m_eStartupType) {
+#ifdef DTKCORE_CLASS_DConfigFile
+    if(m_pCompressSettingPage->property("devName").toString().contains("PGUX", Qt::CaseInsensitive)) {
+        DConfig *dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
+        if(strArchiveFullPath.endsWith("7z")) {
+           if(dconfig && dconfig->isValid() && dconfig->keyList().contains("special7zCompressor")){
+                int nMethod = dconfig->value("special7zCompressor").toInt();
+                stOptions.iCompressionLevel = nMethod;
+           }
+        } else if (strArchiveFullPath.endsWith("zip")) {
+           if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialZipCompressor")){
+                int nMethod = dconfig->value("specialZipCompressor").toInt();
+                stOptions.iCompressionLevel = nMethod;
+            }
+        }
+    }
+#endif
         m_stCompressParameter.qSize = size;
         stOptions.qTotalSize = m_stCompressParameter.qSize;
         // 调用快捷压缩接口
