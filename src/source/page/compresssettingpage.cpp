@@ -174,6 +174,7 @@ void CompressSettingPage::refreshMenu()
     m_isPanguX = result.contains("PGUX", Qt::CaseInsensitive);
     process.close();
 #ifdef DTKCORE_CLASS_DConfigFile
+    setProperty("devName", result);
     if(m_isPanguX) {
         m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
         DConfig *dconfig = (DConfig *)m_dconfig;
