@@ -8,9 +8,14 @@
 
 #include "commonstruct.h"
 
+#include <DGuiApplicationHelper>
+#include <dtkwidget_global.h>
 #include <QAbstractTableModel>
 #include <QFileInfoList>
 #include <QDir>
+
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class MimeTypeDisplayManager;
 class QItemSelection;
