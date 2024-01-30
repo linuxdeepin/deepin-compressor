@@ -29,6 +29,7 @@
 #include <QDateTime>
 #include <QStandardPaths>
 #include <linux/limits.h>
+#include <QTimer>
 
 LibPigzPluginFactory::LibPigzPluginFactory()
 {
@@ -48,11 +49,20 @@ LibPigzPlugin::LibPigzPlugin(QObject *parent, const QVariantList &args)
         qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
     }
     m_ePlugintype = PT_Libpigz;
+    m_timer = new QTimer();
+    connect(m_timer, &QTimer::timeout, this, [=](){
+        QFileInfo info(m_strArchiveName);
+        emit signalprogress(static_cast<double>(info.size()) / m_qTotalSize * 100);
+    });
 }
 
 LibPigzPlugin::~LibPigzPlugin()
 {
     deleteProcess();
+    if(m_timer) {
+        m_timer->stop();
+        delete m_timer;
+    }
 }
 
 PluginFinishType LibPigzPlugin::list()
@@ -110,6 +120,9 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
     }
 
     QString strTemp = QString("tar cvfz - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
+    if(0 == options.iCompressionLevel) {
+        strTemp = QString("tar cvf - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
+    }
 
     QStringList slist = QStringList() << "-c" << strTemp;
     m_process->setProgram(QStandardPaths::findExecutable("bash"), slist);
@@ -196,6 +209,7 @@ bool LibPigzPlugin::doKill()
 {
     if (m_process) {
         killProcess(false);
+        m_timer->stop();
         return true;
     }
 
@@ -212,6 +226,7 @@ bool LibPigzPlugin::handleLine(const QString &line)
         QFileInfo info(m_strArchiveName);
         emit signalprogress(static_cast<double>(info.size()) / m_qTotalSize * 100);
         emit signalCurFileName(line);
+        m_timer->start(1000);
     }
 
     return true;
@@ -332,6 +347,7 @@ void LibPigzPlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatu
     qInfo() << "Process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
 
     deleteProcess();
+    m_timer->stop();
 
     PluginFinishType eFinishType;
 

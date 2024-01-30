@@ -26,6 +26,7 @@
 
 #include "cliinterface.h"
 #include "kpluginfactory.h"
+class QTimer;
 
 class LibPigzPluginFactory : public KPluginFactory
 {
@@ -94,6 +95,7 @@ private:
     qint64  m_processId;  // 进程Id
     QVector<qint64> m_childProcessId; // 压缩tar.gz文件的子进程Id
     qlonglong m_qTotalSize; // 源文件总大小
+    QTimer *m_timer = nullptr;
 };
 
 #endif // libPigzPlugin_H
