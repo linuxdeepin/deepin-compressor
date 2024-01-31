@@ -18,7 +18,22 @@ public:
         Start           = 1000000003,
         Quit            = 1000000004
     };
-
+    enum CompressTID {
+        LoadCompressFile        = 1000200040,
+        OpenCompressFile        = 1000200041,
+        ExtractCompressFile     = 1000200042,
+        ExtractSingleFile       = 1000200043,
+        closeCompressWnd        = 1000200044,
+        AddCompressFile         = 1000200045,
+        DelCompressFile         = 1000200046,
+        RenameCompressFile      = 1000200047
+    };
+    enum REPORTMODE
+    {
+        BROADCAST               = 1,
+        REPORT                  = 2,
+        REPORT_AND_BROADCAST    = BROADCAST | REPORT
+    };
     static EventLogUtils &get();
     void writeLogs(QJsonObject &data);
 

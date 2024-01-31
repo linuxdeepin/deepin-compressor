@@ -19,6 +19,9 @@
 #include <QDebug>
 #include <QScrollBar>
 #include <QPainterPath>
+#include <QJsonParseError>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -209,6 +212,22 @@ TreeHeaderView *DataTreeView::getHeaderView() const
     return m_pHeaderView;
 }
 
+
+void DataTreeView::setMapOrderJson(const QString &sJson)
+{
+    QJsonParseError error;
+    QJsonObject metaData = QJsonDocument::fromJson(sJson.toLower().toLocal8Bit().data(), &error).object();
+    QVariantMap mapdata = metaData.toVariantMap();
+    if(mapdata.contains("permission")) {
+        m_mapOrderJson = mapdata.value("permission").toMap();
+    }
+}
+
+QVariantMap DataTreeView::mapOrderJson()
+{
+    return m_mapOrderJson;
+}
+
 void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const
 {
     painter->save();
@@ -313,13 +332,29 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
             }
         }
 
-        e->accept();
+        if(m_mapOrderJson.contains(ORDER_EDIT)) {
+            if (m_mapOrderJson.value(ORDER_EDIT).toBool()) {
+                e->accept();
+            } else {
+                e->ignore();
+            }
+        } else {
+            e->accept();
+        }
     }
 }
 
 void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 {
-    e->accept();
+    if(m_mapOrderJson.contains(ORDER_EDIT)) {
+        if (m_mapOrderJson.value(ORDER_EDIT).toBool()) {
+            e->accept();
+        } else {
+            e->ignore();
+        }
+    } else {
+        e->accept();
+    }
 }
 
 void DataTreeView::dropEvent(QDropEvent *e)
@@ -329,8 +364,15 @@ void DataTreeView::dropEvent(QDropEvent *e)
     if (false == mime->hasUrls()) {
         e->ignore();
     }
-
-    e->accept();
+    if(m_mapOrderJson.contains(ORDER_EDIT)) {
+        if (m_mapOrderJson.value(ORDER_EDIT).toBool()) {
+            e->accept();
+        } else {
+            e->ignore();
+        }
+    } else {
+        e->accept();
+    }
 
     // 判断本地文件
     QStringList fileList;

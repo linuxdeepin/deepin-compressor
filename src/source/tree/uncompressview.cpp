@@ -618,13 +618,18 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
         if(selectionModel()->selectedRows().count() != 1 || !m_bModifiable) {
             renameAct->setEnabled(false);
         }
+        if(m_mapOrderJson.contains(ORDER_RENAME)) {
+            renameAct->setEnabled(m_mapOrderJson.value(ORDER_RENAME).toBool());
+        }
         // 右键-删除
         QAction *pAction = menu.addAction(tr("Delete"), this, &UnCompressView::slotDeleteFile);
 
         if (!m_bModifiable) {
             pAction->setEnabled(false); // 若压缩包数据不能更改，深处按钮设置成不可用
         }
-
+        if(m_mapOrderJson.contains(ORDER_DELETE)) {
+            pAction->setEnabled(m_mapOrderJson.value(ORDER_DELETE).toBool());
+        }
         // 右键-打开方式
         DMenu openMenu(tr("Open with"), this);
         menu.addMenu(&openMenu);
@@ -678,6 +683,11 @@ void UnCompressView::slotExtract2Here()
 
 void UnCompressView::slotDeleteFile()
 {
+    QVariantMap mapdata = mapOrderJson();
+    if(mapdata.contains(ORDER_DELETE)) {
+        if(!mapdata.value(ORDER_DELETE).toBool()) return;
+    }
+
     if (m_bModifiable) { // 压缩包数据是否可更改
         // 询问删除对话框
         SimpleQueryDialog dialog(this);
