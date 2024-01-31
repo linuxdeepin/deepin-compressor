@@ -34,6 +34,11 @@ UnCompressPage::~UnCompressPage()
 
 void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, UnCompressParameter &unCompressPar)
 {
+    if(property(ORDER_JSON).isValid()) {
+        if(m_pUnCompressView) {
+            m_pUnCompressView->setMapOrderJson(property(ORDER_JSON).toString());
+        }
+    }
     qInfo() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
 
@@ -219,6 +224,11 @@ void UnCompressPage::slotFileChoose()
 CustomCommandLinkButton *UnCompressPage::getUncompressPathBtn() const
 {
     return m_pUncompressPathBtn;
+}
+
+QVariantMap UnCompressPage::mapOrderJson()
+{
+    return m_pUnCompressView->mapOrderJson();
 }
 
 CustomPushButton *UnCompressPage::getUnCompressBtn() const

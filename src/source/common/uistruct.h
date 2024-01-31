@@ -15,6 +15,10 @@
 #define TEMPPATH DStandardPaths::writableLocation(QStandardPaths::TempLocation)     // 临时路径（打开等操作）
 #define MAINWINDOW_WIDTH_NAME "MainWindowWidthName"      // 主界宽
 #define MAINWINDOW_HEIGHT_NAME "MainWindowHeightName"    // 主界面高
+#define ORDER_JSON "OrderJson"  // 编辑json
+#define ORDER_EDIT "edit"       // 编辑权限
+#define ORDER_RENAME "rename"   // 重命名权限
+#define ORDER_DELETE "delete"   // 删除权限
 #define HISTORY_DIR_NAME "dir"      // 历史打开路径
 #define MAINWINDOW_DEFAULTW 620     // 默认宽度
 #define MAINWINDOW_DEFAULTH 465     // 默认高度

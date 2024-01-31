@@ -18,8 +18,100 @@
 #include <QMessageBox>
 #include <QGuiApplication>
 #include <QDBusConnection>
-
+#include <QDBusInterface>
+#include <QDBusPendingCall>
+#include <QJsonParseError>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QString>
+#include <QByteArray>
+#include "common/dbusadpator.h"
+#include "eventlogutils.h"
+#ifdef DTKWIDGET_CLASS_DWaterMarkHelper
+#include <DWaterMarkHelper>
+DWIDGET_USE_NAMESPACE
+#endif
 DCORE_USE_NAMESPACE
+
+/**
+ * @brief showWatermark     显示窗体水印
+ * @param sJson             json字符串
+ * @param w                 窗体
+ * font 使用的字体名称
+ * fontSize 字体PT字号(0,∞)
+ * color 000000～FFFFFF 16进制颜色字符串
+ * opacity 0~255透明度，0为全透明，255为不透明
+ * layout 0,1布局类型，0为居中，1为平铺
+ * angle 0,359水印倾度，顺时针旋转角度
+ * rowSpacing 平铺时使用，不同行间距像素(0,∞)
+ * columnSpacing 平铺时使用，行内水印间接像素(0,∞)
+ * text 水印文本，utf-8编码
+ */
+void showWatermark(const QString &sJson, MainWindow *w)
+{
+    QJsonParseError error;
+    QJsonObject metaData = QJsonDocument::fromJson(sJson.toLocal8Bit().data(), &error).object();
+    QVariantMap mapwaterMark, mapdata = metaData.toVariantMap();
+    if(mapdata.contains("wndWatermark")) {
+        mapwaterMark = mapdata.value("wndWatermark").toMap();
+    }
+    if(mapwaterMark.isEmpty()) return;
+
+#ifdef DTKWIDGET_CLASS_DWaterMarkHelper
+    auto ins = DWaterMarkHelper::instance();
+    WaterMarkData data = ins->data();
+    // DTKWidget 主线和定制线的水印接口不同，通过版本进行区分
+    // 主线水印接口在 5.6.9 之后引入.
+    // 因此，判断定制线：存在水印接口，版本不低于 5.4.42.7 且低于 5.5
+#if DTK_VERSION_CHECK(5, 4, 42, 7) <= DTK_VERSION && DTK_VERSION < DTK_VERSION_CHECK(5, 5, 0, 0)
+    //接口变动为结构体
+    data.text = mapwaterMark.value("text").toString();
+    data.type = WaterMarkType::Text;
+    data.layout = mapwaterMark.value("layout").toInt() == 1 ? WaterMarkLayout::Tiled : WaterMarkLayout::Center;
+    data.rotation = mapwaterMark.value("angle").toInt();
+    data.color = QColor(mapwaterMark.value("color").toString().toUInt(nullptr, 16));
+    auto font = QFont(mapwaterMark.value("font").toString());
+    font.setPointSize(mapwaterMark.value("fontSize").toInt());
+    data.font = font;
+    data.spacing = mapwaterMark.value("columnSpacing").toInt();
+    data.lineSpacing = mapwaterMark.value("rowSpacing").toInt();
+    data.opacity = mapwaterMark.value("opacity").toInt()/255.0;
+    data.grayScale = true;
+    //显示放大倍数
+    if(mapwaterMark.contains("ignoreDevicePixelRatio") && mapwaterMark.value("ignoreDevicePixelRatio").toBool()){
+        qreal deviceRatio = qApp->devicePixelRatio();
+        data.font.setPointSizeF(data.font.pointSizeF()/deviceRatio);
+        data.spacing /= deviceRatio;
+        data.lineSpacing /= deviceRatio;
+    }
+
+#else
+    data.setText(mapwaterMark.value("text").toString());
+    data.setType(WaterMarkData::Text);
+    data.setLayout(mapwaterMark.value("layout").toInt() == 1 ? WaterMarkData::Tiled : WaterMarkData::Center);
+    data.setRotation(mapwaterMark.value("angle").toInt());
+    data.setColor(QColor(mapwaterMark.value("color").toString().toUInt(nullptr, 16)));
+    auto font = QFont(mapwaterMark.value("font").toString());
+    font.setPointSize(mapwaterMark.value("fontSize").toInt());
+    data.setFont(font);
+    data.setSpacing(mapwaterMark.value("columnSpacing").toInt());
+    data.setLineSpacing(mapwaterMark.value("rowSpacing").toInt());
+    data.setOpacity(mapwaterMark.value("opacity").toInt()/255.0);
+    data.setGrayScale(true);
+    //显示放大倍数
+    if(mapwaterMark.contains("ignoreDevicePixelRatio") && mapwaterMark.value("ignoreDevicePixelRatio").toBool()){
+        qreal deviceRatio = qApp->devicePixelRatio();
+        QFont ft = data.font();
+        ft.setPointSizeF(ft.pointSizeF()/deviceRatio);
+        data.setFont(ft);
+        data.setSpacing(data.spacing() / deviceRatio);
+        data.setLineSpacing(data.lineSpacing() / deviceRatio);
+    }
+#endif
+    ins->setData(data);
+    ins->registerWidget(w);
+#endif
+}
 
 int main(int argc, char *argv[])
 {
@@ -27,7 +119,8 @@ int main(int argc, char *argv[])
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
-
+    bool orderObject = false;
+    QString sJsonStr;
     PERF_PRINT_BEGIN("POINT-01", "打开时间");
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);    // 使用高分屏
@@ -69,28 +162,71 @@ int main(int argc, char *argv[])
        如果调用了addVersionOption，则内置选项为--version，如果调用了addHelpOption，则为--help     --help-all。
        当调用这些选项之一时，或者当发生错误（例如，传递了未知选项）时，当前进程将使用exit（）函数停止。
     */
-    parser.process(app);
-
     // 文件名过滤
     QStringList newfilelist;
-    foreach (QString file, parser.positionalArguments()) {
+    if(argc == 3 && QString(argv[2]).startsWith("--param="))
+    {
+        orderObject = true;
+        QString slast = QString(argv[2]).remove(0,strlen("--param="));
+        //接收时需要转换为可用数据
+        qInfo() << "last:" << slast;
+        sJsonStr = QByteArray::fromBase64(slast.toLatin1().data()).data();
+//            sJsonStr = sList.last();
+        qInfo() << "json:" << sJsonStr;
+        QString file = argv[1];
         if (file.contains("file://")) {
             file.remove("file://");
         }
-
         newfilelist.append(file);
+        newfilelist.append(QString(argv[2]));
+    } else {
+        parser.process(app);
+        foreach (QString file, parser.positionalArguments()) {
+            if (file.contains("file://")) {
+                file.remove("file://");
+            }
+            newfilelist.append(file);
+        }
     }
 
     qInfo() << "传入参数：" << newfilelist;
-
+    if (orderObject) {
+        //启动由wps控制，本地不做控制
+        newfilelist.removeLast();
+    }
 
     // 创建主界面
     MainWindow w;
+    showWatermark(sJsonStr, &w);
 
     // 默认居中显示（使用dbus判断是否为第一个进程，第一个进程居中显示）
+    ApplicationAdaptor adaptor(&app);
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    if (dbus.registerService("com.deepin.compressor")) {
-        Dtk::Widget::moveToCenter(&w);
+    if(!orderObject){
+        if (dbus.registerService("com.deepin.compressor")) {
+            Dtk::Widget::moveToCenter(&w);
+        }
+    } else {
+        if (dbus.registerService("com.deepin.compressor"+QString::number(QGuiApplication::applicationPid()))) {
+             dbus.registerObject("/"+QString::number(QGuiApplication::applicationPid()), &app);
+             adaptor.setCompressFile(newfilelist.first());
+             Dtk::Widget::moveToCenter(&w);
+             w.setProperty(ORDER_JSON, sJsonStr);
+        }
+        QDBusConnection dbusConnection = QDBusConnection::sessionBus();
+
+        if (dbusConnection.connect("com.wps.cryptfs"
+                                   , "/com/wps/cryptfs"
+                                   , "cryptfs.method.Type"
+                                  , "activateProcess"
+                                  , &adaptor
+                                  , SLOT(onActiveWindow(qint64))
+                                 ))
+        {
+            qInfo() << "DBus connect success!";
+        } else {
+            qInfo() << "DBus connect failed!";
+        };
     }
 
 
@@ -192,7 +328,26 @@ int main(int argc, char *argv[])
         // 无参数打开应用
         w.show();
     }
-
+    QObject::connect(&app, &DApplication::aboutToQuit,[=](){
+        QString strOpenFile;
+        if(!listTransFiles.isEmpty())
+            strOpenFile = listTransFiles[0];
+        if(strOpenFile.isEmpty()) {
+            QJsonObject obj{
+                {"tid", EventLogUtils::closeCompressWnd},
+                {"operate", "closeCompressWnd"},
+                {"describe", QString("Close Compress Window.")}
+            };
+            EventLogUtils::get().writeLogs(obj);
+        } else {
+            QJsonObject obj{
+                {"tid", EventLogUtils::closeCompressWnd},
+                {"operate", "closeCompressWnd"},
+                {"describe", QString("Close Compress Window. Close compress file : ") + strOpenFile}
+            };
+            EventLogUtils::get().writeLogs(obj);
+        }
+    });
     PERF_PRINT_END("POINT-01");
 
     return app.exec();

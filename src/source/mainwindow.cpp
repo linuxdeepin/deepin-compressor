@@ -240,8 +240,10 @@ void MainWindow::initConnections()
     connect(ArchiveManager::get_instance(), &ArchiveManager::signalQuery, this, &MainWindow::slotQuery);
 
     connect(m_pOpenFileWatcher, &OpenFileWatcher::fileChanged, this, &MainWindow::slotOpenFileChanged);
-
-    connect(m_openkey, &QShortcut::activated, this, &MainWindow::slotShowShortcutTip);
+    //定制需求不显示ctrl+shift+？快捷键菜单
+    if(!property(ORDER_JSON).isValid()) {
+        connect(m_openkey, &QShortcut::activated, this, &MainWindow::slotShowShortcutTip);
+    }
 }
 
 void MainWindow::refreshPage()
@@ -277,7 +279,17 @@ void MainWindow::refreshPage()
     break;
     case PI_UnCompress: {
         m_pMainWidget->setCurrentIndex(3);
-        setTitleButtonStyle(true, true, DStyle::StandardPixmap::SP_IncreaseElement);
+        bool bShowAddBtn = true;
+        if(property(ORDER_JSON).isValid()) {
+            if(m_pUnCompressPage) {
+                QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
+                if(mapdata.contains(ORDER_EDIT)) {
+                    bShowAddBtn = mapdata.value(ORDER_EDIT).toBool();
+                    m_pOpenAction->setEnabled(bShowAddBtn);
+                }
+            }
+        }
+        setTitleButtonStyle(bShowAddBtn, true, DStyle::StandardPixmap::SP_IncreaseElement);
         titlebar()->setTitle(QFileInfo(m_pUnCompressPage->archiveFullPath()).fileName());
     }
     break;
@@ -419,7 +431,7 @@ void MainWindow::calFileSizeByThread(const QString &path)
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
-    m_pTitleWidget->setVisible(bVisible);
+    m_pTitleWidget->setVisible(bVisible || bVisible2);
     m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
 }
 
@@ -458,7 +470,10 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
     // 监听压缩包
     watcherArchiveFile(transFile);
-
+    if(property(ORDER_JSON).isValid()) {
+        if(m_pUnCompressPage)
+            m_pUnCompressPage->setProperty(ORDER_JSON, property(ORDER_JSON));
+    }
     m_pUnCompressPage->setArchiveFullPath(transFile, m_stUnCompressParameter);     // 设置压缩包全路径和是否分卷
 
     // 根据是否可修改压缩包标志位设置打开文件选项是否可用
@@ -866,6 +881,14 @@ void MainWindow::slotTitleBtnClicked()
 
 void MainWindow::slotChoosefiles()
 {
+    if(property(ORDER_JSON).isValid()) {
+        if(m_pUnCompressPage) {
+            QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
+            if(mapdata.contains(ORDER_EDIT)) {
+                if(!mapdata.value(ORDER_EDIT).toBool()) return;
+            }
+        }
+    }
     // 创建文件选择对话框
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -1100,6 +1123,12 @@ void MainWindow::slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType 
 
 void MainWindow::slotUncompressClicked(const QString &strUncompressPath)
 {
+    QJsonObject obj{
+        {"tid", EventLogUtils::ExtractCompressFile},
+        {"operate", "ExtractCompressFile"},
+        {"describe", QString("Extract Compress File: ") + strUncompressPath}
+    };
+    EventLogUtils::get().writeLogs(obj);
     m_operationtype = Operation_Extract; //解压操作
 
     QString strArchiveFullPath = m_pUnCompressPage->archiveFullPath();
@@ -2272,18 +2301,24 @@ void MainWindow::watcherArchiveFile(const QString &strFullPath)
     });
 
     connect(m_pFileWatcher, &DFileWatcher::fileDeleted, this, [ = ]() { //监控压缩包，重命名时提示
-        // 取消操作
-        if(m_stUpdateOptions.eType != UpdateOptions::Add) {
-            slotCancel();
-        }
+        QTimer::singleShot(1000, this, [=]()
+        {
+            if(QFile::exists(strFullPath)) {
+                return;
+            }
+            // 取消操作
+            if(m_stUpdateOptions.eType != UpdateOptions::Add) {
+                slotCancel();
+            }
 
-        // 显示提示对话框
-        TipDialog dialog(this);
-        dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK", "button"));
+            // 显示提示对话框
+            TipDialog dialog(this);
+            dialog.showDialog(tr("The archive was changed on the disk, please import it again."), tr("OK", "button"));
 
-        resetMainwindow();
-        m_ePageID = PI_Home;
-        refreshPage();
+            resetMainwindow();
+            m_ePageID = PI_Home;
+            refreshPage();
+        });
     });
 }
 
@@ -2897,6 +2932,14 @@ void MainWindow::slotOpenFileChanged(const QString &strPath)
     QMap<QString, bool> &mapStatus = m_pOpenFileWatcher->getFileHasModified();
     QMap<QString, QString> mapPassword = m_pOpenFileWatcher->getFilePassword();
     qInfo() << strPath;
+    if(property(ORDER_JSON).isValid()) {
+        if(m_pUnCompressPage) {
+            QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
+            if(mapdata.contains(ORDER_EDIT)) {
+                if(!mapdata.value(ORDER_EDIT).toBool()) return;
+            }
+        }
+    }
     if ((mapStatus.find(strPath) != mapStatus.end()) && (!mapStatus[strPath])) {
 
         mapStatus[strPath] = true;
@@ -3215,6 +3258,14 @@ void MainWindow::slotTitleCommentButtonPressed()
 
         DWidget *widget = new DWidget;
         widget->setLayout(mainLayout);
+        if(property(ORDER_JSON).isValid()) {
+            if(m_pUnCompressPage) {
+                QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
+                if(mapdata.contains(ORDER_EDIT)) {
+                    commentTextedit->setEnabled(mapdata.value(ORDER_EDIT).toBool());
+                }
+            }
+        }
 
         dialog->addContent(widget);
         dialog->move(this->geometry().topLeft().x() + this->width() / 2  - dialog->width() / 2,
