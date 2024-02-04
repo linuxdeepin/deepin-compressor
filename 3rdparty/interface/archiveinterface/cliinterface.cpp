@@ -401,6 +401,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
             args_list << m_strArchiveName << temp_archiveName;
             QProcess mover; 
             ret = 0 == mover.execute("mv",args_list);   
+            mover.waitForFinished();
             ret = mover.exitCode() == QProcess::NormalExit;
             if (!ret) {
                 qInfo() << "建立临时文件失败!";
@@ -434,6 +435,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         qInfo()<< "mtp 压缩完成,现在开始移动";
         QStringList  args_list;  
         args_list<< temp_archiveName << m_strArchiveName;
+        m_process->waitForFinished();
         QProcess mover; 
         ret = 0 == mover.execute("mv",args_list);   
         ret = mover.exitCode() == QProcess::NormalExit;
