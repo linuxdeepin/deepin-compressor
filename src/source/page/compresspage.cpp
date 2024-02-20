@@ -78,7 +78,7 @@ void CompressPage::initUI()
     pMainLayout->addLayout(pBtnLayout);
     pMainLayout->setStretchFactor(m_pCompressView, 10);
     pMainLayout->setStretchFactor(pBtnLayout, 1);
-    pMainLayout->setContentsMargins(20, 1, 20, 20);
+    pMainLayout->setContentsMargins(10, 1, 10, 20);
 
     // 设置快捷键
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
