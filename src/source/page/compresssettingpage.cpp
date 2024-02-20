@@ -25,6 +25,7 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QDebug>
+#include <DApplicationHelper>
 
 #include <cmath>
 #include <QProcess>
@@ -213,6 +214,11 @@ void CompressSettingPage::initUI()
     DStyle style;   // 设置菜单箭头
     QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
     pArrowPixmapLbl->setPixmap(pixmap);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [=]() {
+        DStyle style;   // 设置菜单箭头
+        QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
+        pArrowPixmapLbl->setPixmap(pixmap);
+    });
 
     DFontSizeManager::instance()->bind(m_pCompressTypeLbl, DFontSizeManager::T5, QFont::DemiBold);
 
@@ -798,6 +804,9 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
 
 void CompressSettingPage::slotSplitEdtEnabled()
 {
+    if(m_pSplitValueEdt->hasFocus() || m_pCommentEdt->hasFocus()) {
+        parentWidget()->setFocus();
+    }
     // 设置分卷输入框是否可用
     m_pSplitValueEdt->setEnabled(m_pSplitCkb->isChecked());
 

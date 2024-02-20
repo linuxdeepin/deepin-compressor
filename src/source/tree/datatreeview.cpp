@@ -262,8 +262,13 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     //根据实际情况设置颜色，奇数行为灰色
     auto palette = options.palette;
     QBrush background;
-    if (!(index.row() & 1)) {
-        background = palette.color(cg, DPalette::AlternateBase);
+    bool bVis = m_pHeaderView->getpreLbl()->isVisible();
+    if (bVis ? (index.row() & 1) : !(index.row() & 1)) {
+        if(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+            background = QColor(255, 255, 255, 12);
+        } else {
+            background = palette.color(cg, DPalette::AlternateBase);
+        }
     } else {
         background = palette.color(cg, DPalette::Base);
     }

@@ -67,7 +67,11 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
         if (focusIn_) {
             bgColor = QColor(44, 44, 44);
         } else {
-            bgColor = QColor(38, 38, 38);
+            if(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+                bgColor = QColor(255, 255, 255, 12);
+            } else {
+                bgColor = QColor(38, 38, 38);
+            }
         }
     }
 
