@@ -179,6 +179,11 @@ protected:
      */
     QString getTargetPath();
 
+    /**
+     * @brief extractFiles 业务解压
+     */
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bDlnfs);
+
 private:
     /**
      * @brief moveDroppedFilesToDest 提取文件后，将文件从临时目录移到目的路径
