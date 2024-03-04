@@ -85,6 +85,39 @@ PluginFinishType CliInterface::testArchive()
 
 PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
+    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
+    setProperty("dlnfs", bDlnfs);
+    ArchiveData arcData = DataManager::get_instance().archiveData();
+
+    if(!bDlnfs) {
+        if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
+            emit signalprogress(1);
+            setProperty("list", "tmpList");
+            list();
+            setProperty("list", "");
+            connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+                  [=](int exitCode, QProcess::ExitStatus){
+                if(m_process) {
+                    if(exitCode != 0) {
+                        emit signalprogress(100);
+                        emit signalFinished(m_finishType);
+                        return PFT_Error;
+                    }
+                    m_process->deleteLater();
+                    m_process = nullptr;
+                    extractFiles(files, options, property("dlnfs").toBool());
+                }
+            });
+            return PFT_Nomral;
+        }
+    }
+    return extractFiles(files, options, bDlnfs);
+}
+
+PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bDlnfs)
+{
+    ArchiveData arcData = DataManager::get_instance().archiveData();
+    setProperty("list", "");
     setPassword(QString());
     m_workStatus = WT_Extract;
     m_files = files;
@@ -114,7 +147,6 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         qInfo() << "解压目标路径 --- " << destPath;
     }
     bool bHandleLongName = false;
-    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
     QDir::setCurrent(destPath);
     if (!m_extractOptions.bAllExtract) {  // 提取部分文件
         m_files.clear();
@@ -200,20 +232,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         } else {
             password = options.password;
         }
-        ArchiveData arcData = DataManager::get_instance().archiveData();
         if(!bDlnfs) {
-            if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
-                setProperty("list", "tmpList");
-                list();
-                if(m_process) {
-                    m_process->waitForFinished();
-                    m_process->deleteLater();
-                    m_process = nullptr;
-                }
-                m_workStatus = WT_Extract;
-                arcData = DataManager::get_instance().archiveData();
-                setProperty("list", "");
-            }
             for (QMap<QString, FileEntry>::const_iterator iter = arcData.mapFileEntry.begin(); iter != arcData.mapFileEntry.end(); iter++) {
                 if(NAME_MAX < iter.value().strFileName.toLocal8Bit().length())
                 {

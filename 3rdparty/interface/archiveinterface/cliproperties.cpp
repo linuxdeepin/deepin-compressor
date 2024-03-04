@@ -331,7 +331,7 @@ QStringList CliProperties::substituteCommentSwitch(const QString &commentfile) c
 
 QStringList CliProperties::substitutePasswordSwitch(const QString &password, bool headerEnc) const
 {
-    if (password.isEmpty()) {
+    if (password.isEmpty() || password.isNull()) {
         return QStringList();
     }
 
