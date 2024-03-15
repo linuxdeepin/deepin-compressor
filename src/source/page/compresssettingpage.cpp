@@ -141,11 +141,17 @@ void CompressSettingPage::refreshMenu()
     QAction *pAction = nullptr;
     bool bHas7z = false;
     for (const QString &type : qAsConst(m_listSupportedMimeTypes)) {
-        if (QMimeDatabase().mimeTypeForName(type).preferredSuffix() == "7z") {
+        QMimeType mType = QMimeDatabase().mimeTypeForName(type);
+        // QStringList suffixLst = mType.globPatterns(); 支持的后缀名
+        QString suffix = mType.preferredSuffix();
+        if(type.contains("x-7z-compressed")) {
+            suffix = "7z";
+        }
+        if (suffix == "7z") {
             bHas7z = true;
         }
 
-        pAction = new QAction(QMimeDatabase().mimeTypeForName(type).preferredSuffix(), m_pTypeMenu);
+        pAction = new QAction(suffix, m_pTypeMenu);
         pAction->setData(type);
         m_pTypeMenu->addAction(pAction);
 
