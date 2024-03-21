@@ -1,3 +1,9 @@
+deepin-compressor (5.12.26) unstable; urgency=medium
+
+  * fix: Optimization of file list encryption method for decompression(Task: 326497)
+
+ -- houchengqiu <houchengqiu@uniontech.com>  Thu, 21 Mar 2024 16:29:26 +0800
+
 deepin-compressor (5.12.25) unstable; urgency=medium
 
   * changelog 5.12.25.
