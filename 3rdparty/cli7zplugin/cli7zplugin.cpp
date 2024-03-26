@@ -58,7 +58,7 @@ void Cli7zPlugin::setupCliProperties()
 
     m_cliProps->setProperty("addProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("addSwitch", QStringList{QStringLiteral("a"),
-                                                     QStringLiteral("-l")});
+                                                     QStringLiteral("-snl")});
 
     m_cliProps->setProperty("deleteProgram", QStringLiteral("7z"));
     m_cliProps->setProperty("deleteSwitch", QStringLiteral("d"));

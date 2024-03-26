@@ -29,6 +29,7 @@
 #include "libarchiveplugin.h"
 #include "queries.h"
 #include "datamanager.h"
+#include "common.h"
 
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -110,7 +111,8 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     m_bSkipAll = false;             // 是否全部跳过
     m_mapLongName.clear();
     m_setLongName.clear();
-//    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
+    m_mapLongDirName.clear();
+    m_mapRealDirValue.clear();
 
     if (!initializeReader()) {
         m_eErrorType = ET_FileReadError;
@@ -161,6 +163,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     struct archive_entry *entry = nullptr;
 
     QString extractDst;
+    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
 
     // Iterate through all entries in archive.
     int iIndex = 0;     // 存储索引值
@@ -235,15 +238,15 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         // written from the archive.
 
         // 针对文件夹名称过长的情况，直接提示解压失败，文件夹名称过长
-        QStringList listPath = entryName.split(QDir::separator());
-        listPath.removeLast();
-        for (int i = 0; i < listPath.count(); ++i) {
-            if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
-                emit signalCurFileName(entryName); // 发送当前正在解压的文件名
-                m_eErrorType = ET_LongNameError;
-                return PFT_Error;
-            }
-        }
+//        QStringList listPath = entryName.split(QDir::separator());
+//        listPath.removeLast();
+//        for (int i = 0; i < listPath.count(); ++i) {
+//            if (NAME_MAX < QString(listPath[i]).toLocal8Bit().length()) {
+//                emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+//                m_eErrorType = ET_LongNameError;
+//                return PFT_Error;
+//            }
+//        }
 
 
         QString strFilePath;
@@ -251,28 +254,48 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         int iSepIndex = entryName.lastIndexOf(QDir::separator());
 
         if (iSepIndex >= 0) {
-            strFilePath = entryName.left(iSepIndex - 1);
+            strFilePath = entryName.left(iSepIndex);
             strTempFileName = entryName.right(entryName.length() - iSepIndex - 1);
         }
 
         bool bLongName = false;
         QString tempFilePathName;
         QString strOriginName = entryName;
-        if (NAME_MAX < QString(entryName).toLocal8Bit().length() && !entryName.endsWith(QDir::separator())) {
-            QString strTemp = entryName.left(60);
 
-            // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
-            tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
-            if (m_mapLongName[tempFilePathName] >= 999 || options.bOpen == true) {
-                emit signalCurFileName(entryName); // 发送当前正在解压的文件名
-                m_eErrorType = ET_LongNameError;
-                return PFT_Error;
+        if(!bDlnfs) {
+            QString sDir = m_common->handleLongNameforPath(strFilePath, entryName, m_mapLongDirName, m_mapRealDirValue);
+            if(sDir.length() > 0) {
+               strFilePath = sDir.endsWith(QDir::separator())?sDir.left(sDir.length() -1):sDir;
+               if(entryName.endsWith(QDir::separator())) {
+                   entryName = sDir;
+               } else if (NAME_MAX >= QString(strTempFileName).toLocal8Bit().length()) {
+                   entryName = sDir + strTempFileName;
+               }
+               if(!m_mapLongDirName.isEmpty()) {
+                   bLongName = true;
+               }
             }
-            m_eErrorType = ET_LongNameError;
-            bLongName = true;
 
-            // bug 117553 tar格式含有多个长名称文件的压缩包，解压第一个同名文件编号是（000）
-            entryName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, 3, 10, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
+            if (NAME_MAX < QString(strTempFileName).toLocal8Bit().length() && !entryName.endsWith(QDir::separator())) {
+                QString strTemp = strTempFileName.left(TRUNCATION_FILE_LONG);
+
+                // 保存文件路径，不同目录下的同名文件分开计数,文件解压结束后才添加计数，
+                tempFilePathName = strFilePath + QDir::separator() + strTemp;   // 路径加截取后的文件名
+                if (m_mapLongName[tempFilePathName] >= LONGFILE_SAME_FILES) {
+                    emit signalCurFileName(entryName); // 发送当前正在解压的文件名
+                    m_eErrorType = ET_LongNameError;
+                    return PFT_Error;
+                }
+                m_eErrorType = ET_LongNameError;
+                bLongName = true;
+
+                // bug 117553 tar格式含有多个长名称文件的压缩包，解压第一个同名文件编号是（000）
+                strTempFileName = strTemp + QString("(%1)").arg(m_mapLongName[tempFilePathName] + 1, LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + "." + QFileInfo(entryName).completeSuffix();
+                entryName = strTempFileName;
+                if (iIndex >= 0) {
+                    entryName = strFilePath + QDir::separator() + strTempFileName;
+                }
+            }
         }
         QFileInfo entryFI(entryName);
 
@@ -283,9 +306,21 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             if (isAtRootPath) { //提取首层目录下文件
                 archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
             } else {
-                const QString truncatedFilename(entryName.remove(entryName.indexOf(rootNode), rootNode.size()));
-                archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
-                entryFI = QFileInfo(truncatedFilename);
+                if(bLongName) {
+                    int nCnt = rootNode.count(QDir::separator());
+                    int nIndex = 0;
+                    for(int i = 0; i < nCnt; i++){
+                        nIndex = entryName.indexOf(QDir::separator(), nIndex);
+                        nIndex++;
+                    }
+                    const QString truncatedFilename(entryName.remove(0, nIndex));
+                    archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
+                    entryFI = QFileInfo(truncatedFilename);
+                } else {
+                    const QString truncatedFilename(entryName.remove(entryName.indexOf(rootNode), rootNode.size()));
+                    archive_entry_copy_pathname(entry, QFile::encodeName(truncatedFilename).constData());
+                    entryFI = QFileInfo(truncatedFilename);
+                }
             }
         } else {
             archive_entry_copy_pathname(entry, entryName.toUtf8().constData());
@@ -377,7 +412,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
             return PFT_Error;
         }
         case ARCHIVE_FATAL: {
-            if (isInsufficientDiskSpace(m_extractDestDir, 10 * 1024 * 1024)) { // 暂取小于10M作为磁盘空间不足的判断标准
+            if (isInsufficientDiskSpace(m_extractDestDir, FILE_MAX_SIZE)) { // 暂取小于10M作为磁盘空间不足的判断标准
                 m_eErrorType = ET_InsufficientDiskSpace;
             } else {
                 m_eErrorType = ET_FileWriteError;
@@ -744,14 +779,17 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     if (entryName.isEmpty()) {
         return;
     }
+    // 是否为文件夹
+    m_archiveEntryStat.isDirectory = S_ISDIR(archive_entry_mode(aentry));
+
+    if(m_archiveEntryStat.isDirectory && !entryName.endsWith(QLatin1String("/"))){
+        entryName += QLatin1String("/");
+    }
     m_archiveEntryStat.strFullPath = entryName;
 
     // 文件名
     const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
     m_archiveEntryStat.strFileName = pieces.last();
-
-    // 是否为文件夹
-    m_archiveEntryStat.isDirectory = S_ISDIR(archive_entry_mode(aentry));
 
     // 文件真实大小（文件夹显示项）
     if (m_archiveEntryStat.isDirectory) {

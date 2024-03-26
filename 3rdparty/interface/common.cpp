@@ -11,6 +11,9 @@
 #include <QLocale>
 #include <QTextStream>
 #include <QDebug>
+#include <QFileInfo>
+#include <QDir>
+#include <linux/limits.h>
 
 #include <KEncodingProber>
 #include "chardet.h"
@@ -362,4 +365,99 @@ QByteArray Common::textCodecDetect(const QByteArray &data, const QString &fileNa
 
     qInfo() << "QCodecs编码：" << encoding;
     return encoding;
+}
+
+QString Common::handleLongNameforPath(const QString &strFilePath, const QString &entryName, QMap<QString, int> &mapLongDirName, QMap<QString, int> &mapRealDirValue)
+{
+    bool bLongName = false;
+    QString tempFilePathName;
+    QFileInfo info(strFilePath);
+     if(entryName.endsWith(QDir::separator())){
+         //目录计数+1
+        if(NAME_MAX < info.fileName().toLocal8Bit().length()) {
+            QString strTemp = info.fileName().left(TRUNCATION_FILE_LONG);
+            if(info.path() == ".") {
+                tempFilePathName = strTemp;
+            } else {
+                tempFilePathName = info.path() + QDir::separator() + strTemp;
+            }
+            mapLongDirName[tempFilePathName]++;
+            mapRealDirValue[info.filePath()] = mapLongDirName[tempFilePathName];
+            bLongName = true;
+        }
+    }
+    //目录拼接
+     QString sDir;
+     if(NAME_MAX < strFilePath.toLocal8Bit().length()) {
+         QString strTempPath = strFilePath + QDir::separator();
+         int nIndex = strTempPath.indexOf(QDir::separator(), 0);
+         while (nIndex >= 0) {
+            QString strPathName = strTempPath.left(nIndex);
+            QFileInfo pathinfo(strPathName);
+            if(NAME_MAX < pathinfo.fileName().toLocal8Bit().length()) {
+                QString strTemp = pathinfo.fileName().left(TRUNCATION_FILE_LONG);
+                if(pathinfo.path() == ".") {
+                    tempFilePathName = strTemp;
+                } else {
+                    tempFilePathName = pathinfo.path() + QDir::separator() + strTemp;
+                }
+                if(mapLongDirName.contains(tempFilePathName)) {
+                    sDir = sDir + strTemp + QString("(%1)").arg(mapRealDirValue[pathinfo.filePath()], LONGFILE_SUFFIX_FieldWidth, BINARY_NUM, QChar('0')) + QDir::separator();
+                }else {
+                    mapLongDirName[tempFilePathName]++;
+                    mapRealDirValue[pathinfo.filePath()] = mapLongDirName[tempFilePathName];
+                    bLongName = true;
+                    sDir = sDir + strTemp + QString("(%1)").arg(mapRealDirValue[pathinfo.filePath()], 3, BINARY_NUM, QChar('0')) + QDir::separator();
+                }
+            } else {
+                sDir = sDir + pathinfo.fileName() + QDir::separator();
+            }
+            nIndex = strTempPath.indexOf(QDir::separator(), nIndex+1);
+         }
+     }
+     return sDir;
+}
+
+bool Common::isSubpathOfDlnfs(const QString &path)
+{
+    return findDlnfsPath(path, [](const QString &target, const QString &compare) {
+        return target.startsWith(compare);
+    });
+}
+
+bool Common::findDlnfsPath(const QString &target, Compare func)
+{
+    Q_ASSERT(func);
+    libmnt_table *tab { mnt_new_table() };
+    libmnt_iter *iter = mnt_new_iter(MNT_ITER_BACKWARD);
+
+    auto unifyPath = [](const QString &path) {
+        return path.endsWith("/") ? path : path + "/";
+    };
+
+    int ret = mnt_table_parse_mtab(tab, nullptr);
+    if (ret != 0) {
+        qWarning() << "device: cannot parse mtab" << ret;
+        if (tab) mnt_free_table(tab);
+        if (iter) mnt_free_iter(iter);
+        return false;
+    }
+
+    libmnt_fs *fs = nullptr;
+    while (mnt_table_next_fs(tab, iter, &fs) == 0) {
+        if (!fs)
+            continue;
+        qInfo() << unifyPath(mnt_fs_get_target(fs));
+        if (strcmp("dlnfs", mnt_fs_get_source(fs)) == 0) {
+            QString mpt = unifyPath(mnt_fs_get_target(fs));
+            if (func(unifyPath(target), mpt))
+                if (tab) mnt_free_table(tab);
+                if (iter) mnt_free_iter(iter);
+                return true;
+        }
+    }
+
+    if (tab) mnt_free_table(tab);
+    if (iter) mnt_free_iter(iter);
+    return false;
 }

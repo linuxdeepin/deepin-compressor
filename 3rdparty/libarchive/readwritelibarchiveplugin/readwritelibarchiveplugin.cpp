@@ -98,7 +98,7 @@ PluginFinishType ReadWriteLibarchivePlugin::addFiles(const QList<FileEntry> &fil
 
         // 2.For directories, write all subfiles/folders.
         const QString &fullPath = selectedFile.strFullPath;
-        if (QFileInfo(fullPath).isDir()) {
+        if (QFileInfo(fullPath).isDir() && !QFileInfo(fullPath).isSymLink()) {
             QDirIterator it(fullPath,
                             QDir::AllEntries | QDir::Readable |
                             QDir::Hidden | QDir::NoDotAndDotDot,
@@ -359,7 +359,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
     QString newFilePath = sourceFileFullPath;
     QFileInfo sourceFileInfo(sourceFileFullPath);
     QString absoluteDestinationPath = "";
-    if (sourceFileInfo.isDir()) {
+    if (sourceFileInfo.isDir() && !sourceFileInfo.isSymLink()) {
         QScopedPointer<QTemporaryDir> extractTempDir;
         extractTempDir.reset(new QTemporaryDir());
         absoluteDestinationPath = extractTempDir->path() + QDir::separator() + destination;
@@ -376,7 +376,7 @@ bool ReadWriteLibarchivePlugin::writeFileTodestination(const QString &sourceFile
 
 //    QFileInfo fileInfo(relativeName);
     QFileInfo fileInfo(newFilePath);
-    QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
+    QString absoluteFilename = fileInfo.absoluteFilePath();
     QString destinationFilename = absoluteFilename;
     destinationFilename = destination + newFilePath.right(newFilePath.length() - externalPath.length());
 
@@ -442,7 +442,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     QFileInfo relativeFileInfo(relativeName);
     bool isAlias = !(pEntry.strAlias.isEmpty() || pEntry.strAlias.isNull());
 
-    if (relativeFileInfo.isDir()) {
+    if (relativeFileInfo.isDir() && !relativeFileInfo.isSymLink()) {
         QScopedPointer<QTemporaryDir> extractTempDir;
         extractTempDir.reset(new QTemporaryDir());
         absoluteDestinationPath = extractTempDir->path() + QDir::separator() + destination;
@@ -458,7 +458,7 @@ bool ReadWriteLibarchivePlugin::writeFileFromEntry(const QString &relativeName, 
     }
 
     QFileInfo fileInfo(newFilePath);
-    const QString absoluteFilename = fileInfo.isSymLink() ? fileInfo.symLinkTarget() : fileInfo.absoluteFilePath();
+    const QString absoluteFilename = fileInfo.absoluteFilePath();
     QString destinationFilename = destination + fileInfo.fileName();
 
     // #253059: Even if we use archive_read_disk_entry_from_file,
