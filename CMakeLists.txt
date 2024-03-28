@@ -109,9 +109,9 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
 else()
     option(USE_TEST "UT" OFF)
 endif()
-#if (USE_TEST)
-#    add_subdirectory(tests)
-#endif(USE_TEST)
+if (USE_TEST)
+    add_subdirectory(tests)
+endif(USE_TEST)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${HFILES_OUTPUT_PATH}/config.h @ONLY)
 
 
