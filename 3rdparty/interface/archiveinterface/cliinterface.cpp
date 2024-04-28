@@ -88,6 +88,8 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
     bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
     setProperty("dlnfs", bDlnfs);
     ArchiveData arcData = DataManager::get_instance().archiveData();
+    m_files = files;
+    m_extractOptions = options;
 
     if(!bDlnfs) {
         if(arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
@@ -95,19 +97,6 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             setProperty("list", "tmpList");
             list();
             setProperty("list", "");
-            connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
-                  [=](int exitCode, QProcess::ExitStatus){
-                if(m_process) {
-                    if(exitCode != 0) {
-                        emit signalprogress(100);
-                        emit signalFinished(m_finishType);
-                        return PFT_Error;
-                    }
-                    m_process->deleteLater();
-                    m_process = nullptr;
-                    extractFiles(files, options, property("dlnfs").toBool());
-                }
-            });
             return PFT_Nomral;
         }
     }
@@ -706,6 +695,18 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
         connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(extractProcessFinished(int, QProcess::ExitStatus)));
     } else if(property("list").toString() != "tmpList"){
         connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
+    } else {
+        connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+              [=](int exitCode, QProcess::ExitStatus){
+            if(m_process) {
+                if(exitCode != 0) {
+                    emit signalprogress(100);
+                    emit signalFinished(PFT_Error);
+                }
+                deleteProcess();
+                extractFiles(m_files, m_extractOptions, property("dlnfs").toBool());
+            }
+        });
     }
 
     m_stdOutData.clear();
