@@ -414,7 +414,8 @@ QString UiTools::handleFileName(const QString &strFileName)
 bool UiTools::isLocalDeviceFile(const QString &strFileName)
 {
     QStorageInfo info(strFileName);
-    return info.device().startsWith("/dev/");
+    QString sDevice = info.device();
+    return sDevice.startsWith("/dev/") || sDevice.startsWith("dlnfs"); //长文件名开启后以dlnfs方式挂载
 }
 
 QStringList UiTools::removeSameFileName(const QStringList &listFiles)
