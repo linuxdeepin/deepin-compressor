@@ -6,7 +6,11 @@
 #include "ddesktopservicesthread.h"
 
 #include <DDesktopServices>
+#include <dtkwidget_global.h>
+#include <DGuiApplicationHelper>
 
+DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 DDesktopServicesThread::DDesktopServicesThread(QObject *parent)
     : QThread(parent)
 {
