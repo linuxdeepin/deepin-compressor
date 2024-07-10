@@ -7,11 +7,8 @@
 #define DDESKTOPSERVICESTHREAD_H
 
 #include <QThread>
-
-#include <DDesktopServices>
 #include <QDebug>
 #include <QFileInfo>
-DWIDGET_USE_NAMESPACE
 
 // 文管打开文件目录线程
 class DDesktopServicesThread : public QThread
