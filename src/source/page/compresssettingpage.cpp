@@ -263,7 +263,7 @@ void CompressSettingPage::initUI()
     // 添加压缩方式
     m_pCompressLevelCmb->addItems(listCompressLevel);
 
-    m_pCompressLevelCmb->setCurrentIndex(2);
+    m_pCompressLevelCmb->setCurrentIndex(0);
 
     // 设置CPU线程数
     QStringList listCpuThread = QStringList() << tr("Single thread") << tr("2 threads") << tr("4 threads") << tr("8 threads");
