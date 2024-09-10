@@ -88,6 +88,7 @@ void TypeLabel::focusOutEvent(QFocusEvent *event)
 CompressSettingPage::CompressSettingPage(QWidget *parent)
     : DWidget(parent)
 {
+    initConfig();
     initUI();
     initConnections();
     slotAdvancedEnabled(m_pAdvancedBtn->isChecked());
@@ -166,18 +167,8 @@ void CompressSettingPage::refreshMenu()
             m_pTypeMenu->addAction("tar.7z");
         }
     }
-    QProcess process;
-    process.start("bash", QStringList() << "-c" << "dmidecode | grep -i \"String 4\"");
-    process.waitForStarted();
-    process.waitForFinished();
-    QString result = process.readAll();
-    //qDebug() << __func__ << result;
-    m_isPanguX = result.contains("PGUX", Qt::CaseInsensitive);
-    process.close();
 #ifdef DTKCORE_CLASS_DConfigFile
-    setProperty("devName", result);
     if(m_isPanguX) {
-        m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
         DConfig *dconfig = (DConfig *)m_dconfig;
         int nCompType = -1;
         if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCompressorType")){
@@ -696,6 +687,26 @@ void CompressSettingPage::setDefaultName(const QString &strName)
     qfilename->setFocus();
 }
 
+void CompressSettingPage::initConfig()
+{
+#ifdef DTKCORE_CLASS_DConfigFile
+    QProcess process;
+    process.start("dmidecode");
+    process.waitForStarted();
+    process.waitForFinished();
+    QString result = process.readAll();
+    QStringList lines = result.split('\n');
+    for (const QString &line : lines) {
+        if (line.contains("String 4", Qt::CaseInsensitive)) {
+            m_isPanguX = line.contains("PGUX", Qt::CaseInsensitive);
+            setProperty("devName", line);
+        }
+    }
+    process.close();
+    m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
+#endif
+}
+
 void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 {
     Q_UNUSED(e)
@@ -798,8 +809,18 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
         m_pCpuCmb->setCurrentIndex(0);
         m_pCommentEdt->clear();
     }
-    if (m_pCompressTypeLbl->text() == "tar.gz")
+    if (m_pCompressTypeLbl->text() == "tar.gz") {
         m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
+#ifdef DTKCORE_CLASS_DConfigFile
+        if(m_isPanguX) {
+            DConfig *dconfig = (DConfig *)m_dconfig;
+            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
+                int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
+                m_pCpuCmb->setCurrentIndex(nCpu);
+            }
+        }
+#endif
+    }
 }
 
 void CompressSettingPage::slotSplitEdtEnabled()
