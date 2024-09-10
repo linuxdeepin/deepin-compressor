@@ -160,6 +160,11 @@ private:
     int showWarningDialog(const QString &msg, const QString &strToolTip = "");
 
     void setDefaultName(const QString &strName);
+    /**
+     * @brief initConfig 初始化配置
+     * @return
+     */
+    void initConfig();
 
 signals:
     void signalCompressClicked(const QVariant &val);
