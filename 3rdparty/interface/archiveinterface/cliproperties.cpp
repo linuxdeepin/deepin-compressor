@@ -60,7 +60,6 @@ QStringList CliProperties::addArgs(const QString &archive, const QStringList &fi
         //        注意字符转意，待优化
 
         QStringList args;
-        args << "-c";
 
         QString tmp = "tar cf - ";
         //重命名文件

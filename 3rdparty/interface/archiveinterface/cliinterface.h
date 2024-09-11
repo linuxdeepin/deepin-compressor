@@ -253,6 +253,7 @@ private:
     QMap<QString, int> m_mapLongName;       // 长文件名统计
     QMap<QString, int> m_mapLongDirName;    // 长文件夹统计
     QMap<QString, int> m_mapRealDirValue;    // 真实文件统计
+    QString m_scriptPath; // 脚本路径
 };
 
 #endif // CLIINTERFACE_H
