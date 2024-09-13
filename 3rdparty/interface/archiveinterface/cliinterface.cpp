@@ -311,6 +311,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
     // 压缩目标路径
     const QString destinationPath = (options.strDestination == QString()) ? QString() : options.strDestination;
     qInfo() << "Adding" << files.count() << "file(s) to destination:" << destinationPath;
+    bool isLink = true;
 
     if (!destinationPath.isEmpty()) {   // 向压缩包非第一层文件里面追加压缩
         m_extractTempDir.reset(new QTemporaryDir());
@@ -326,6 +327,7 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
             // 待压缩文件的文件名(临时路径全路径)
             const QString newFilePath = absoluteDestinationPath + QFileInfo(file.strFullPath).fileName();
 
+            isLink = (isLink && QFileInfo(filePath).isSymLink());
             // 在临时路径创建待压缩文件的链接
             if (QFile::link(filePath, newFilePath)) {
                 qInfo() << "Symlink's created:" << filePath << newFilePath;
@@ -442,7 +444,18 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
             ret = false;
         }
     } else {
-        ret = runProcess(m_cliProps->property("addProgram").toString(), arguments);
+        QString processName = m_cliProps->property("addProgram").toString();
+        if(processName == "7z" && !destinationPath.isEmpty()) {
+            if(!isLink) {
+                for(int i = 0; i < arguments.count(); i++) {
+                    if(arguments.at(i) == QStringLiteral("-snl")) {
+                        arguments.replace(i, QStringLiteral("-l"));
+                        break;
+                    }
+                }
+            }
+        }
+        ret = runProcess(processName, arguments);
     }
 
     if (ret && !temp_archiveName.isEmpty()) {
