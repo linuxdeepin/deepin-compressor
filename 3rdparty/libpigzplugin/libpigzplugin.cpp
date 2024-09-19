@@ -86,7 +86,10 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
     m_isProcessKilled = false;
 
     // 压缩命令tar -cvf - filename | pigz -p 2 -5> filename.tar.gz
-    m_process = new QProcess;
+    m_process = new KPtyProcess;
+    m_process->setPtyChannels(KPtyProcess::StdinChannel);
+    m_process->setOutputChannelMode(KProcess::MergedChannels);
+    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
     //m_process->setProcessChannelMode(QProcess::MergedChannels);
 
     QString strFileName;
@@ -116,19 +119,34 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
         strTmparchive.replace(strold[n], strnew[n]);
     }
 
-    QString command = QString("tar --use-compress-program=\"pigz -k -p%1 -%2\" -cvf %3 %4")
-                              .arg(options.iCPUTheadNum)
-                              .arg(options.iCompressionLevel)
-                              .arg(strTmparchive)
-                              .arg(strFileName);
+    QString strTemp = QString("tar cvfz - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
+    if (0 == options.iCompressionLevel) {
+        strTemp = QString("tar cvf - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
+    }
 
+    m_scriptPath = QDir::tempPath() + "/tempScript_" + QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()) + ".sh";
+    QFile scriptFile(m_scriptPath);
+    if (scriptFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&scriptFile);
+        out << "#!/bin/bash\n";
+
+        out << strTemp << "\n";
+        scriptFile.close();
+        QProcess::execute("chmod", { "+x", m_scriptPath });
+    }
+    m_process->setProgram(m_scriptPath, QStringList());
     connect(m_process, &QProcess::readyReadStandardOutput, this, [=] {
         readStdout();
     });
 
+    connect(m_process, &QProcess::readyReadStandardError, this, [=] {
+        QByteArray errorOutput = m_process->readAllStandardError();
+        qDebug() << "Error Output:" << QString::fromLocal8Bit(errorOutput);
+    });
+
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
 
-    m_process->start(command, QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Text);
+    m_process->start();
 
     if (m_process->waitForStarted()) {
         m_childProcessId.clear();
@@ -259,6 +277,9 @@ void LibPigzPlugin::deleteProcess()
         m_process->blockSignals(true);   // delete m_process之前需要断开所有m_process信号，防止重复处理
         delete m_process;
         m_process = nullptr;
+        if (!m_scriptPath.isEmpty()) {
+            QFile::remove(m_scriptPath);
+        }
     }
 }
 
