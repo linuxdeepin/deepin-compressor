@@ -280,7 +280,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="309"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Nimeä</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="314"/>
@@ -448,6 +448,16 @@
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="75"/>
+        <source>Archive Manager</source>
+        <translation>Pakkaaja</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="533"/>
+        <source>%1 was changed on the disk, please import it again.</source>
+        <translation>%1 on muuttunut levyllä, tuo se uudelleen.</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="179"/>
         <source>Open file</source>
         <translation>Avaa tiedosto</translation>
@@ -462,134 +472,6 @@
         <location filename="../src/source/mainwindow.cpp" line="286"/>
         <source>Create New Archive</source>
         <translation>Luo uusi arkisto</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="334"/>
-        <source>Converting</source>
-        <translation>Muuntaminen</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="341"/>
-        <source>Updating comments</source>
-        <translation>Päivitetään kommentteja</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="503"/>
-        <location filename="../src/source/mainwindow.cpp" line="2071"/>
-        <location filename="../src/source/mainwindow.cpp" line="2097"/>
-        <location filename="../src/source/mainwindow.cpp" line="2122"/>
-        <source>Plugin error</source>
-        <translation>Lisäosan virhe</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1284"/>
-        <source>Adding successful</source>
-        <translation>Lisääminen onnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1316"/>
-        <location filename="../src/source/mainwindow.cpp" line="2146"/>
-        <source>No data in it</source>
-        <translation>Sisältö on tyhjä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1521"/>
-        <source>Adding canceled</source>
-        <translation>Lisääminen peruutettu</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1623"/>
-        <source>Adding failed</source>
-        <translation>Lisääminen epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1676"/>
-        <source>Extraction failed: the file name is too long</source>
-        <translation>Purkaminen epäonnistui: tiedostonimi on liian pitkä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1703"/>
-        <location filename="../src/source/mainwindow.cpp" line="2142"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Virhe luodessa &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1825"/>
-        <source>Open failed: the file name is too long</source>
-        <translation>Avaaminen epäonnistui: tiedostonimi on liian pitkä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2044"/>
-        <source>Compression successful</source>
-        <translation>Pakkaus onnistunut</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2050"/>
-        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation>Tiedostonimi on liian pitkä, joten ensimmäiset 60 merkkiä on käytetty tiedostonimeksi.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2079"/>
-        <location filename="../src/source/mainwindow.cpp" line="2150"/>
-        <source>Insufficient disk space</source>
-        <translation>Liian vähän levytilaa</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2109"/>
-        <location filename="../src/source/mainwindow.cpp" line="2130"/>
-        <source>Some volumes are missing</source>
-        <translation>Jotkut asemat puuttuvat</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2134"/>
-        <source>Wrong password, please retry</source>
-        <translation>Väärä salasana, yritä uudelleen</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2138"/>
-        <location filename="../src/source/mainwindow.cpp" line="2162"/>
-        <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation>Tiedostonimi on liian pitkä. Pidä nimi 60 merkin sisällä.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2159"/>
-        <source>Conversion failed</source>
-        <translation>Muuntaminen epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2297"/>
-        <source>Select file</source>
-        <translation>Valitse tiedosto</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3167"/>
-        <source>Enter up to %1 characters</source>
-        <translation>Kirjoita enintään %1 merkkiä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="3043"/>
-        <source>File info</source>
-        <translation>Tiedoston tiedot</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1393"/>
-        <source>Do you want to delete the archive?</source>
-        <translation>Haluatko poistaa paketin?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="533"/>
-        <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 on muuttunut levyllä, tuo se uudelleen.</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="75"/>
-        <source>Archive Manager</source>
-        <translation>Arkiston hallinta</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="136"/>
-        <source>You do not have permission to save files here, please change and retry</source>
-        <translation>Sinulla ei ole oikeuksia tallentaa tiedostoja täällä, vaihda ja yritä uudelleen</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="299"/>
@@ -612,96 +494,34 @@
         <translation>Poistaminen</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="493"/>
-        <location filename="../src/source/mainwindow.cpp" line="2867"/>
-        <source>Loading, please wait...</source>
-        <translation>Ladataan. odota...</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="569"/>
-        <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Haluatko varmasti lopettaa meneillään olevan tehtävän?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1290"/>
-        <location filename="../src/source/mainwindow.cpp" line="1417"/>
-        <location filename="../src/source/mainwindow.cpp" line="1433"/>
-        <source>Updating, please wait...</source>
-        <translation>Päivitetään, odota...</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1698"/>
-        <source>File name too long</source>
-        <translation>Tiedoston nimi on liian pitkä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2075"/>
-        <source>Failed to create file</source>
-        <translation>Tiedoston luominen epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2068"/>
-        <source>Compression failed</source>
-        <translation>Pakkaus epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2407"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Korvaa</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2471"/>
-        <source>Find directory</source>
-        <translation>Etsi hakemisto</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <source>Open failed</source>
-        <translation>Avaaminen epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="1619"/>
-        <location filename="../src/source/mainwindow.cpp" line="1693"/>
-        <location filename="../src/source/mainwindow.cpp" line="1768"/>
-        <location filename="../src/source/mainwindow.cpp" line="1823"/>
-        <location filename="../src/source/mainwindow.cpp" line="2105"/>
-        <source>Wrong password</source>
-        <translation>Väärä salasana</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="612"/>
-        <location filename="../src/source/mainwindow.cpp" line="645"/>
-        <source>The file format is not supported by Archive Manager</source>
-        <translation>Pakkaaja ei tue tiedostomuotoa</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="136"/>
-        <location filename="../src/source/mainwindow.cpp" line="441"/>
-        <location filename="../src/source/mainwindow.cpp" line="503"/>
-        <location filename="../src/source/mainwindow.cpp" line="536"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="603"/>
-        <location filename="../src/source/mainwindow.cpp" line="612"/>
-        <location filename="../src/source/mainwindow.cpp" line="652"/>
-        <location filename="../src/source/mainwindow.cpp" line="1316"/>
-        <location filename="../src/source/mainwindow.cpp" line="2278"/>
-        <location filename="../src/source/mainwindow.cpp" line="2565"/>
-        <location filename="../src/source/mainwindow.cpp" line="2729"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="327"/>
-        <source>Renaming</source>
-        <translation type="unfinished"/>
+        <location filename="../src/source/mainwindow.cpp" line="334"/>
+        <source>Converting</source>
+        <translation>Muuntaminen</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="441"/>
         <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
         <translation>Sinulla ei ole oikeuksia ladata kohdetta %1</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="493"/>
+        <location filename="../src/source/mainwindow.cpp" line="2867"/>
+        <source>Loading, please wait...</source>
+        <translation>Ladataan. odota...</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="2071"/>
+        <location filename="../src/source/mainwindow.cpp" line="2097"/>
+        <location filename="../src/source/mainwindow.cpp" line="2122"/>
+        <source>Plugin error</source>
+        <translation>Lisäosan virhe</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="569"/>
+        <source>Are you sure you want to stop the ongoing task?</source>
+        <translation>Haluatko varmasti lopettaa meneillään olevan tehtävän?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
@@ -725,6 +545,18 @@
         <translation>Ei tällaista tiedostoa tai hakemistoa</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1284"/>
+        <source>Adding successful</source>
+        <translation>Lisääminen onnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1290"/>
+        <location filename="../src/source/mainwindow.cpp" line="1417"/>
+        <location filename="../src/source/mainwindow.cpp" line="1433"/>
+        <source>Updating, please wait...</source>
+        <translation>Päivitetään, odota...</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
@@ -737,6 +569,11 @@
         <translation>Purku peruutettu</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1676"/>
+        <source>Extraction failed: the file name is too long</source>
+        <translation>Purkaminen epäonnistui: tiedostonimi on liian pitkä</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
         <location filename="../src/source/mainwindow.cpp" line="1763"/>
         <location filename="../src/source/mainwindow.cpp" line="2101"/>
@@ -745,26 +582,145 @@
         <translation>Paketti on vahingoittunut</translation>
     </message>
     <message>
+        <location filename="../src/source/mainwindow.cpp" line="1825"/>
+        <source>Open failed: the file name is too long</source>
+        <translation>Avaaminen epäonnistui: tiedostonimi on liian pitkä</translation>
+    </message>
+    <message>
         <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
         <translation>Purkaminen onnistui</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2054"/>
-        <source>Conversion successful</source>
-        <translation>Muuntaminen onnistui</translation>
+        <location filename="../src/source/mainwindow.cpp" line="2050"/>
+        <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
+        <translation>Tiedostonimi on liian pitkä, joten ensimmäiset 60 merkkiä on käytetty tiedostonimeksi.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2079"/>
+        <location filename="../src/source/mainwindow.cpp" line="2150"/>
+        <source>Insufficient disk space</source>
+        <translation>Liian vähän levytilaa</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Pakatut asemat ovat jo olemassa</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
         <translation>Purku epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2138"/>
+        <location filename="../src/source/mainwindow.cpp" line="2162"/>
+        <source>The file name is too long. Keep the name within 60 characters please.</source>
+        <translation>Tiedostonimi on liian pitkä. Pidä nimi 60 merkin sisällä.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2159"/>
+        <source>Conversion failed</source>
+        <translation>Muuntaminen epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2399"/>
+        <source>The name is the same as that of the compressed archive, please use another one</source>
+        <translation>Nimi on sama kuin valmiiksi pakatun nimi, käytä toista</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2407"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Toinen samanniminen tiedosto on jo olemassa, korvataanko se?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2550"/>
+        <source>You cannot add the archive to itself</source>
+        <translation>Et voi lisätä pakettia itseensä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
+        <source>You cannot add files to archives in this file type</source>
+        <translation>Et voi lisätä tiedostoja tämän pakkaustyypin paketteihin</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="3167"/>
+        <source>Enter up to %1 characters</source>
+        <translation>Kirjoita enintään %1 merkkiä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1698"/>
+        <source>File name too long</source>
+        <translation>Tiedoston nimi on liian pitkä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2075"/>
+        <source>Failed to create file</source>
+        <translation>Tiedoston luominen epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2044"/>
+        <source>Compression successful</source>
+        <translation>Pakkaus onnistunut</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2068"/>
+        <source>Compression failed</source>
+        <translation>Pakkaus epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2471"/>
+        <source>Find directory</source>
+        <translation>Etsi hakemisto</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2094"/>
+        <source>Open failed</source>
+        <translation>Avaaminen epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <source>The archive was changed on the disk, please import it again.</source>
+        <translation>Paketti on muuttunut levyllä, tuo se uudelleen.</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1619"/>
+        <location filename="../src/source/mainwindow.cpp" line="1693"/>
+        <location filename="../src/source/mainwindow.cpp" line="1768"/>
+        <location filename="../src/source/mainwindow.cpp" line="1823"/>
+        <location filename="../src/source/mainwindow.cpp" line="2105"/>
+        <source>Wrong password</source>
+        <translation>Väärä salasana</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
+        <location filename="../src/source/mainwindow.cpp" line="441"/>
+        <location filename="../src/source/mainwindow.cpp" line="503"/>
+        <location filename="../src/source/mainwindow.cpp" line="536"/>
+        <location filename="../src/source/mainwindow.cpp" line="597"/>
+        <location filename="../src/source/mainwindow.cpp" line="603"/>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="652"/>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2278"/>
+        <location filename="../src/source/mainwindow.cpp" line="2565"/>
+        <location filename="../src/source/mainwindow.cpp" line="2729"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="612"/>
+        <location filename="../src/source/mainwindow.cpp" line="645"/>
+        <source>The file format is not supported by Archive Manager</source>
+        <translation>Pakkaaja ei tue tiedostomuotoa</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2054"/>
+        <source>Conversion successful</source>
+        <translation>Muuntaminen onnistui</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2289"/>
@@ -792,24 +748,63 @@
         <translation>Pikakuvakkeet</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2399"/>
-        <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Nimi on sama kuin valmiiksi pakatun nimi, käytä toista</translation>
+        <location filename="../src/source/mainwindow.cpp" line="3043"/>
+        <source>File info</source>
+        <translation>Tiedoston tiedot</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="341"/>
+        <source>Updating comments</source>
+        <translation>Päivitetään kommentteja</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="327"/>
+        <source>Renaming</source>
+        <translation>Nimeä uudelleen</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1316"/>
+        <location filename="../src/source/mainwindow.cpp" line="2146"/>
+        <source>No data in it</source>
+        <translation>Sisältö on tyhjä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1521"/>
+        <source>Adding canceled</source>
+        <translation>Lisääminen peruutettu</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1623"/>
+        <source>Adding failed</source>
+        <translation>Lisääminen epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1703"/>
+        <location filename="../src/source/mainwindow.cpp" line="2142"/>
+        <source>Failed to create &quot;%1&quot;</source>
+        <translation>Virhe luodessa &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2109"/>
+        <location filename="../src/source/mainwindow.cpp" line="2130"/>
+        <source>Some volumes are missing</source>
+        <translation>Jotkut asemat puuttuvat</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2134"/>
+        <source>Wrong password, please retry</source>
+        <translation>Väärä salasana, yritä uudelleen</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="2297"/>
+        <source>Select file</source>
+        <translation>Valitse tiedosto</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Toinen samanniminen tiedosto on jo olemassa, korvataanko se?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2550"/>
-        <source>You cannot add the archive to itself</source>
-        <translation>Et voi lisätä pakettia itseensä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/mainwindow.cpp" line="2565"/>
-        <source>You cannot add files to archives in this file type</source>
-        <translation>Et voi lisätä tiedostoja tämän pakkaustyypin paketteihin</translation>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Korvaa</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2889"/>
@@ -868,9 +863,14 @@
         <translation>Tarkista tiedoston kytkemisen tyyppi asetuksista</translation>
     </message>
     <message>
-        <location filename="../src/source/mainwindow.cpp" line="2278"/>
-        <source>The archive was changed on the disk, please import it again.</source>
-        <translation>Paketti on muuttunut levyllä, tuo se uudelleen.</translation>
+        <location filename="../src/source/mainwindow.cpp" line="136"/>
+        <source>You do not have permission to save files here, please change and retry</source>
+        <translation>Sinulla ei ole oikeuksia tallentaa tiedostoja täällä, vaihda ja yritä uudelleen</translation>
+    </message>
+    <message>
+        <location filename="../src/source/mainwindow.cpp" line="1393"/>
+        <source>Do you want to delete the archive?</source>
+        <translation>Haluatko poistaa paketin?</translation>
     </message>
 </context>
 <context>
@@ -906,14 +906,14 @@
         <translation>Arkisto</translation>
     </message>
     <message>
-        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="53"/>
-        <source>Executable</source>
-        <translation>Suoritettava</translation>
-    </message>
-    <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="52"/>
         <source>Document</source>
         <translation>Asiakirja</translation>
+    </message>
+    <message>
+        <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="53"/>
+        <source>Executable</source>
+        <translation>Suoritettava</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="54"/>
@@ -1060,7 +1060,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="343"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation type="unfinished"/>
+        <translation>Nopeus</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="65"/>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="135"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Nimeä uudelleen</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="137"/>
@@ -1169,6 +1169,58 @@
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
+        <source>Skip</source>
+        <comment>button</comment>
+        <translation>Ohita</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
+        <source>Merge</source>
+        <comment>button</comment>
+        <translation>Yhdistä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
+        <source>Another file with the same name already exists, replace it?</source>
+        <translation>Toinen samanniminen tiedosto on jo olemassa, korvataanko se?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
+        <source>Replace</source>
+        <comment>button</comment>
+        <translation>Korvaa</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation>Peruuta</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
+        <source>Another folder with the same name already exists, replace it?</source>
+        <translation>Toinen samanniminen kansio on jo olemassa, korvataanko se?</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
+        <source>Apply to all</source>
+        <translation>Koskee kaikkia</translation>
+    </message>
+    <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Name</source>
         <translation>Nimi</translation>
@@ -1233,102 +1285,44 @@
         <source>File Type</source>
         <translation>Tiedosto tyyppi</translation>
     </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="208"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="214"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="244"/>
-        <source>Skip</source>
-        <comment>button</comment>
-        <translation>Ohita</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
-        <source>Merge</source>
-        <comment>button</comment>
-        <translation>Yhdistä</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="221"/>
-        <source>Another file with the same name already exists, replace it?</source>
-        <translation>Toinen samanniminen tiedosto on jo olemassa, korvataanko se?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="245"/>
-        <source>Replace</source>
-        <comment>button</comment>
-        <translation>Korvaa</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="405"/>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation>Peruuta</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="406"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
-        <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Toinen samanniminen kansio on jo olemassa, korvataanko se?</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
-        <location filename="../3rdparty/interface/queries.cpp" line="226"/>
-        <source>Apply to all</source>
-        <translation>Koskee kaikkia</translation>
-    </message>
 </context>
 <context>
     <name>RenameDialog</name>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Nimeä</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>Nimi on jo olemassa</translation>
     </message>
 </context>
 <context>
     <name>SettingDialog</name>
     <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="195"/>
-        <source>Current directory</source>
-        <translation>Nykyinen hakemisto</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
+        <source>Select All</source>
+        <comment>button</comment>
+        <translation>Valitse kaikki</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="125"/>
         <source>Clear All</source>
         <translation>Pyyhi kaikki</translation>
-    </message>
-    <message>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
-        <source>Select All</source>
-        <comment>button</comment>
-        <translation>Valitse kaikki</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
@@ -1342,15 +1336,21 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="205"/>
-        <source>Other directory</source>
-        <translation>Muu hakemisto</translation>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="195"/>
+        <source>Current directory</source>
+        <translation>Nykyinen hakemisto</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="200"/>
         <source>Desktop</source>
         <translation>Työpöytä</translation>
+    </message>
+    <message>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
+        <location filename="../src/source/dialog/settingdialog.cpp" line="205"/>
+        <source>Other directory</source>
+        <translation>Muu hakemisto</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
@@ -1400,17 +1400,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3324"/>
         <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Avaa tiedosto</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Takaisin</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Tiedoston tiedot</translation>
     </message>
 </context>
 <context>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Nimeä</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
