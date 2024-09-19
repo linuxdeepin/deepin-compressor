@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Zero]Name" line="0"/>
         <source>Compress</source>
-        <translation>კომპრესირება</translation>
+        <translation>შეკუმშვა</translation>
     </message>
 </context>
 </TS>
