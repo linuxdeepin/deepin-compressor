@@ -89,13 +89,14 @@ private Q_SLOTS:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    QProcess *m_process = nullptr;   // 工作进程
+    KPtyProcess *m_process = nullptr;   // 工作进程
     bool m_isProcessKilled = false;   // 进程已经结束
     QByteArray m_stdOutData;   // 存储命令行输出数据
     qint64 m_processId;   // 进程Id
     QVector<qint64> m_childProcessId;   // 压缩tar.gz文件的子进程Id
     qlonglong m_qTotalSize;   // 源文件总大小
     QTimer *m_timer = nullptr;
+    QString m_scriptPath;   // 脚本路径
 };
 
 #endif   // libPigzPlugin_H
