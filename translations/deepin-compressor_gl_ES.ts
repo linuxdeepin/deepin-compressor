@@ -18,7 +18,7 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>O ficheiro orixinal de %1 non existe, comproba e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
@@ -247,17 +247,17 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="705"/>
         <source>Total size: %1</source>
-        <translation type="unfinished"/>
+        <translation>Tamaño total: %1</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="725"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>O nome é o mesmo que o do arquivo comprimido, use outro</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation type="unfinished"/>
+        <translation>O contrasinal dos volumes ZIP non pode estar en chinés</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
@@ -267,7 +267,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="837"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation type="unfinished"/>
+        <translation>Só se admiten caracteres chineses e ingleses e algúns símbolos</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Eliminará permanentemente o(s) ficheiro(s). Estás seguro de que queres continuar?</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="364"/>
@@ -606,7 +606,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"/>
+        <translation>Os volumes comprimidos xa existen</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -628,7 +628,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2399"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation type="unfinished"/>
+        <translation>O nome é o mesmo que o do arquivo comprimido, use outro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
@@ -638,12 +638,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>Non pode engadir o arquivo a si mesmo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2565"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"/>
+        <translation>Non pode engadir ficheiros a arquivos deste tipo de ficheiro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3167"/>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="642"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation type="unfinished"/>
+        <translation>Comprobe o tipo de asociación de ficheiros na configuración do Xestor de arquivos</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="136"/>
@@ -1147,12 +1147,12 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"/>
+        <translation>Está seguro que quere parar a descompresión?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="395"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"/>
+        <translation>Está seguro de que quere parar a eliminación?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="391"/>
@@ -1163,7 +1163,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="399"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation type="unfinished"/>
+        <translation>Está seguro que quere parar a conversión?</translation>
     </message>
 </context>
 <context>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2886"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"/>
+        <translation>%1 cambiou. Queres gardar os cambios no arquivo?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="26"/>
