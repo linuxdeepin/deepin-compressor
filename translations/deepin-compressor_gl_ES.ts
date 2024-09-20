@@ -1174,13 +1174,13 @@
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Saltar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Combinar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
@@ -1193,14 +1193,14 @@
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Substituír</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
         <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
@@ -1212,7 +1212,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Xa existe outro cartafol co mesmo nome, substituílo?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
@@ -1291,24 +1291,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Cambiar o nome</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation type="unfinished"/>
+        <translation>O nome xa existe</translation>
     </message>
 </context>
 <context>
@@ -1317,7 +1317,7 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Seleccionar todo</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="125"/>
@@ -1355,25 +1355,25 @@
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar arquivos despois da extracción</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="299"/>
         <source>Never</source>
-        <translation type="unfinished"/>
+        <translation>Nunca</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="302"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"/>
+        <translation>Pedir confirmación</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="305"/>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>Sempre</translation>
     </message>
 </context>
 <context>
@@ -1400,17 +1400,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3324"/>
         <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Abrir ficheiro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atrás</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation type="unfinished"/>
+        <translation>Información do ficheiro</translation>
     </message>
 </context>
 <context>
@@ -1426,7 +1426,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Extraer</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="193"/>
@@ -1436,13 +1436,13 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="195"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"/>
+        <translation>Non tes permiso para gardar ficheiros aquí, cambia e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="199"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="213"/>
@@ -1455,13 +1455,13 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"/>
+        <translation>Non pode engadir o arquivo a si mesmo</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="627"/>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Cambiar o nome</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
@@ -1492,30 +1492,30 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
         <source>Open with</source>
-        <translation type="unfinished"/>
+        <translation>Abrir con</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
         <location filename="../src/source/tree/uncompressview.cpp" line="790"/>
         <source>Select default program</source>
-        <translation type="unfinished"/>
+        <translation>Seleccionar o programa predeterminado</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Confirmar</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"/>
+        <translation>Quere eliminar os ficheiros seleccionados?</translation>
     </message>
 </context>
 </TS>
