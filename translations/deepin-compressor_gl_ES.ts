@@ -24,7 +24,7 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 non existe no disco, comprobe e ténteo de novo</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="275"/>
         <source>Enter up to %1 characters</source>
-        <translation type="unfinished"/>
+        <translation>Introduza ata % 1 caracteres</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="296"/>
@@ -202,29 +202,29 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"/>
+        <translation>Non tes permiso para gardar ficheiros aquí, cambia e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
         <source>Too many volumes, please change and retry</source>
-        <translation type="unfinished"/>
+        <translation>Demasiados volumes, cambia e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="550"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>%1 non existe no disco, comprobe e ténteo de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="528"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="557"/>
         <source>You do not have permission to compress %1</source>
-        <translation type="unfinished"/>
+        <translation>Non ten permiso para comprimir %1</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation type="unfinished"/>
+        <translation>O ficheiro orixinal de %1 non existe, comproba e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="583"/>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="312"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"/>
+        <translation>Non se admiten cambios nos arquivos deste tipo de ficheiro. Converte o formato de arquivo para gardar os cambios.</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
@@ -516,7 +516,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2097"/>
         <location filename="../src/source/mainwindow.cpp" line="2122"/>
         <source>Plugin error</source>
-        <translation type="unfinished"/>
+        <translation>Erro no complemento</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"/>
+        <translation>O nome do ficheiro é demasiado longo, polo que os primeiros 60 caracteres foron interceptados como nome do ficheiro.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2079"/>
@@ -618,7 +618,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2138"/>
         <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"/>
+        <translation>O nome do ficheiro é demasiado longo. Mantén o nome dentro de 60 caracteres, por favor.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2159"/>
@@ -782,7 +782,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1703"/>
         <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation type="unfinished"/>
+        <translation>Faiou a creación &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2109"/>
@@ -1207,7 +1207,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
@@ -1263,7 +1263,7 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar os ficheiros extraídos cando se complete</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
