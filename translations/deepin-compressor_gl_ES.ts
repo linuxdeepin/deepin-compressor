@@ -491,7 +491,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="320"/>
         <source>Deleting</source>
-        <translation type="unfinished"/>
+        <translation>Eliminando</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="334"/>
@@ -502,13 +502,13 @@
         <location filename="../src/source/mainwindow.cpp" line="441"/>
         <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
-        <translation type="unfinished"/>
+        <translation>Non ten permiso para cargar %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="493"/>
         <location filename="../src/source/mainwindow.cpp" line="2867"/>
         <source>Loading, please wait...</source>
-        <translation type="unfinished"/>
+        <translation>Cargando, por favor espere...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="503"/>
@@ -530,19 +530,19 @@
         <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
         <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Confirmar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
-        <translation type="unfinished"/>
+        <translation>Non hai ningún ficheiro ou directorio de este tipo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1284"/>
@@ -554,7 +554,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1417"/>
         <location filename="../src/source/mainwindow.cpp" line="1433"/>
         <source>Updating, please wait...</source>
-        <translation type="unfinished"/>
+        <translation>Actualizando, por favor espere...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1332"/>
@@ -566,7 +566,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1542"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelouse a extracción</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1676"/>
@@ -579,7 +579,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2101"/>
         <location filename="../src/source/mainwindow.cpp" line="2126"/>
         <source>The archive is damaged</source>
-        <translation type="unfinished"/>
+        <translation>O arquivo está danado</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1825"/>
@@ -653,12 +653,12 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1698"/>
         <source>File name too long</source>
-        <translation type="unfinished"/>
+        <translation>O nome do ficheiro é demasiado longo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2075"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"/>
+        <translation>Faiou a creación do ficheiro</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2044"/>
@@ -678,7 +678,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Open failed</source>
-        <translation type="unfinished"/>
+        <translation>Faiou a apertura</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2278"/>
@@ -709,7 +709,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2729"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="612"/>
@@ -720,7 +720,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Conversion successful</source>
-        <translation type="unfinished"/>
+        <translation>Conversión exitosa</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2289"/>
@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
-        <translation type="unfinished"/>
+        <translation>Cambiando o nome</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1316"/>
@@ -804,7 +804,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Substituír</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2889"/>
@@ -870,7 +870,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Do you want to delete the archive?</source>
-        <translation type="unfinished"/>
+        <translation>Quere eliminar o arquivo?</translation>
     </message>
 </context>
 <context>
