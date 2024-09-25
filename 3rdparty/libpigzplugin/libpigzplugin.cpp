@@ -119,10 +119,7 @@ PluginFinishType LibPigzPlugin::addFiles(const QList<FileEntry> &files, const Co
         strTmparchive.replace(strold[n], strnew[n]);
     }
 
-    QString strTemp = QString("tar cvfz - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
-    if (0 == options.iCompressionLevel) {
-        strTemp = QString("tar cvf - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
-    }
+    QString strTemp = QString("tar cvf - %1 | pigz -p %2 -%3 > %4").arg(strFileName).arg(options.iCPUTheadNum).arg(options.iCompressionLevel).arg(strTmparchive);
 
     m_scriptPath = QDir::tempPath() + "/tempScript_" + QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch()) + ".sh";
     QFile scriptFile(m_scriptPath);
