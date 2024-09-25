@@ -257,7 +257,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation>Fjalëkalimi për vëllimet ZIP s’mund të jetë në kinezçe</translation>
+        <translation>Fjalëkalimi për vëllimet ZIP s’mund të jetë në gjuhën kineze</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
@@ -521,7 +521,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
         <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Jeni i sigurt se doni të ndalet akti në xhirim e sipër?</translation>
+        <translation>Jeni i sigurt se doni të ndalet akti që është duke u kryer?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
@@ -571,7 +571,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation>Përftim dështoi: emri i kartelës është shumë i gjatë</translation>
+        <translation>Përftimi dështoi: emri i kartelës është shumë i gjatë</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
@@ -715,7 +715,7 @@
         <location filename="../src/source/mainwindow.cpp" line="612"/>
         <location filename="../src/source/mainwindow.cpp" line="645"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation>Formati i kartelës nuk mbulohet nga Përgjegjësi i Arkivave</translation>
+        <translation>Formati i kartelës s’mbulohet nga Përgjegjësi i Arkivave</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
@@ -750,7 +750,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
-        <translation>Të dhëna kartele</translation>
+        <translation>Hollësi kartele</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="341"/>
@@ -782,7 +782,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1703"/>
         <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation>S’u arrit të krijohet &quot;%1&quot;</translation>
+        <translation>S’u arrit të krijohet “%1”</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2109"/>
@@ -815,7 +815,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
-        <translation>Të dhëna bazë</translation>
+        <translation>Hollësi bazë</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3083"/>
