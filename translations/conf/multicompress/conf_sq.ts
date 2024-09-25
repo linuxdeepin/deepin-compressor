@@ -9,7 +9,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Add to &quot;%d.zip&quot;</source>
-        <translation>Shtoje te &quot;%d.zip&quot;</translation>
+        <translation>Shtoje te “%d.zip”</translation>
     </message>
     <message>
         <location filename="Menu Action Zero]Name" line="0"/>
