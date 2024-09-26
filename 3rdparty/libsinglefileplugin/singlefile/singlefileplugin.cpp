@@ -57,6 +57,7 @@ PluginFinishType LibSingleFileInterface::list()
     entry.strFullPath = uncompressedFileName();
     entry.strFileName = entry.strFullPath;
     entry.qSize = QFileInfo(m_strArchiveName).size(); // 只能获取到压缩后大小
+    entry.uLastModifiedTime = QFileInfo(m_strArchiveName).lastModified().toTime_t();
 
     stArchiveData.qSize = entry.qSize;
     stArchiveData.qComressSize = entry.qSize;
