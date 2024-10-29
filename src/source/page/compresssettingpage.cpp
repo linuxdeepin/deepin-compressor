@@ -168,7 +168,7 @@ void CompressSettingPage::refreshMenu()
         }
     }
 #ifdef DTKCORE_CLASS_DConfigFile
-    if(m_isPanguX) {
+    if(m_isOrderMode) {
         DConfig *dconfig = (DConfig *)m_dconfig;
         int nCompType = -1;
         if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCompressorType")){
@@ -467,7 +467,7 @@ void CompressSettingPage::setSplitEnabled(bool bEnabled)
 void CompressSettingPage::refreshCompressLevel(const QString &strType)
 {
 #ifdef DTKCORE_CLASS_DConfigFile
-    if(m_isPanguX) {
+    if(m_isOrderMode) {
         // 其余格式支持设置压缩方式
         // 设置压缩方式可用
         m_pCompressLevelCmb->setEnabled(true);
@@ -698,8 +698,7 @@ void CompressSettingPage::initConfig()
     QStringList lines = result.split('\n');
     for (const QString &line : lines) {
         if (line.contains("String 4", Qt::CaseInsensitive)) {
-            m_isPanguX = line.contains("PGUX", Qt::CaseInsensitive);
-            setProperty("devName", line);
+            m_isOrderMode = line.contains("PGUX", Qt::CaseInsensitive) || line.contains("FXK11", Qt::CaseInsensitive);
         }
     }
     process.close();
@@ -812,7 +811,7 @@ void CompressSettingPage::slotAdvancedEnabled(bool bEnabled)
     if (m_pCompressTypeLbl->text() == "tar.gz") {
         m_pCpuCmb->setCurrentIndex(m_pCpuCmb->count() - 1);
 #ifdef DTKCORE_CLASS_DConfigFile
-        if(m_isPanguX) {
+        if(m_isOrderMode) {
             DConfig *dconfig = (DConfig *)m_dconfig;
             if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCpuTarGzCompressor")){
                 int nCpu = dconfig->value("specialCpuTarGzCompressor").toInt();
@@ -1003,6 +1002,11 @@ bool CompressSettingPage::eventFilter(QObject *watched, QEvent *event)
         // pass the event on to the parent class
         return DWidget::eventFilter(watched, event);
     }
+}
+
+bool CompressSettingPage::isOrderMode()
+{
+    return m_isOrderMode;
 }
 
 TypeLabel *CompressSettingPage::getClickLbl() const
