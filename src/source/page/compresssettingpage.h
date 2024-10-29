@@ -83,6 +83,11 @@ public:
      * @return
      */
     bool eventFilter(QObject *watched, QEvent *event) override;
+    /**
+     * @brief 是否定制模式
+     * @return
+     */
+    bool isOrderMode();
 
 private:
     /**
@@ -259,7 +264,7 @@ private:
 
     QScrollArea *m_pRightScroll = nullptr;
     void *m_dconfig = nullptr; //读取dconfig配置
-    bool m_isPanguX = false;    //是否pangux系统
+    bool m_isOrderMode = false;    //是否定制模式存储压缩方式优先
 };
 
 #endif // COMPRESSSETTINGPAGE_H

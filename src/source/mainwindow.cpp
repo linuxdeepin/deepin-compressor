@@ -3327,7 +3327,7 @@ void MainWindow::slotFinishCalculateSize(qint64 size, QString strArchiveFullPath
 {
     if (StartupType::ST_Compresstozip7z == m_eStartupType) {
 #ifdef DTKCORE_CLASS_DConfigFile
-    if(m_pCompressSettingPage->property("devName").toString().contains("PGUX", Qt::CaseInsensitive)) {
+    if(m_pCompressSettingPage->isOrderMode()) {
         DConfig *dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
         if(strArchiveFullPath.endsWith("7z")) {
            if(dconfig && dconfig->isValid() && dconfig->keyList().contains("special7zCompressor")){
