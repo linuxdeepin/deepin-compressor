@@ -437,7 +437,7 @@
         <location filename="../src/main.cpp" line="60"/>
         <location filename="../src/main.cpp" line="61"/>
         <source>Archive Manager</source>
-        <translation>Gerenciador de Arquivos</translation>
+        <translation>Gerenciador de Compressão</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
@@ -450,7 +450,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="75"/>
         <source>Archive Manager</source>
-        <translation>Gerenciador de Arquivos</translation>
+        <translation>Gerenciador de Compressão</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="533"/>
