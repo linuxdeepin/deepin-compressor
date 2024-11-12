@@ -10,8 +10,10 @@
 #include <DHeaderView>
 
 DWIDGET_USE_NAMESPACE
-
 #define SCROLLMARGIN 10
+#define TABLE_HEIGHT_NormalMode  36
+#define TABLE_HEIGHT_CompactMode 24
+
 
 class TreeHeaderView;
 // 返回上一级

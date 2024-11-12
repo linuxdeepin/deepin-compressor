@@ -140,6 +140,7 @@ void MainWindow::initUI()
     m_pProgressdialog = new ProgressDialog(this); //进度弹窗
     m_commentProgressDialog = new CommentProgressDialog(this); // 更新注释进度弹窗
     m_pSettingDlg = new SettingDialog(this);
+    m_pSettingDlg->setMinimumWidth(750);
 
     // 添加界面至主界面
     m_pMainWidget->addWidget(m_pCompressPage);
@@ -167,7 +168,6 @@ void MainWindow::initTitleBar()
 
     // 初始化标题栏菜单
     titlebar()->setMenu(menu);
-    titlebar()->setFixedHeight(50);
     titlebar()->setTitle("");
 
     // 设置应用程序图标
@@ -3386,7 +3386,6 @@ void TitleWidget::initUI()
 {
     // 添加左上角按钮
     m_pTitleButton = new DIconButton(DStyle::SP_IncreaseElement, this);
-    m_pTitleButton->setFixedSize(36, 36);
 //    m_pTitleButton->setVisible(false);
     m_pTitleButton->setObjectName("TitleButton");
     m_pTitleButton->setAccessibleName("Title_btn");
@@ -3394,7 +3393,6 @@ void TitleWidget::initUI()
 
     // 左上角注释信息
     m_pTitleCommentButton = new DIconButton(this);
-    m_pTitleCommentButton->setFixedSize(36, 36);
     m_pTitleCommentButton->setToolTip(tr("File info"));
     slotThemeChanged();
 
