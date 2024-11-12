@@ -35,7 +35,15 @@ QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const 
 {
     Q_UNUSED(index);
 
-    return QSize(option.rect.width(), 36);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
+    } else {
+        return QSize(option.rect.width(), TABLE_HEIGHT_CompactMode);
+    }
+#else
+    return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
+#endif
 }
 
 void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -234,8 +242,13 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
     //根据实际情况设置颜色，奇数行为灰色
     auto palette = options.palette;
     QBrush background;
-    if (!(index.row() & 1)) {
-        background = palette.color(cg, DPalette::AlternateBase);
+    bool bVis = m_pHeaderView->getpreLbl()->isVisible();
+    if (bVis ? (index.row() & 1) : !(index.row() & 1)) {
+        if(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+            background = QColor(255, 255, 255, 12);
+        } else {
+            background = palette.color(cg, DPalette::AlternateBase);
+        }
     } else {
         background = palette.color(cg, DPalette::Base);
     }

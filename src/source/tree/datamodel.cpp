@@ -16,6 +16,10 @@
 #include <QCollator>
 #include <QElapsedTimer>
 #include <QItemSelection>
+#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 DataModel::DataModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -99,7 +103,15 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
                 icon = QIcon::fromTheme("empty").pixmap(24, 24);
             }
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+            if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+                return icon;
+            } else {
+                return icon.pixmap(16, 16);
+            }
+#else
             return icon;
+#endif
         }
 
         return QVariant();

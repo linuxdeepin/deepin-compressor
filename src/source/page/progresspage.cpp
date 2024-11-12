@@ -201,10 +201,10 @@ void ProgressPage::initUI()
     DFontSizeManager::instance()->bind(m_pRemainingTimeLbl, DFontSizeManager::T8);
 
     // 设置取消按钮样式
-    m_pCancelBtn->setMinimumSize(200, 36);
+    m_pCancelBtn->setMinimumWidth(200);
 
     // 设置暂停继续按钮样式
-    m_pPauseContinueButton->setMinimumSize(200, 36);
+    m_pPauseContinueButton->setMinimumWidth(200);
     m_pPauseContinueButton->setCheckable(true);
 
     // 速度和剩余时间布局

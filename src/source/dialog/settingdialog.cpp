@@ -108,9 +108,9 @@ void SettingDialog::createSettingButton()
             CustomPushButton *selectAllButton = new CustomPushButton(tr("Select All", "button"));
             CustomPushButton *cancelSelectButton = new CustomPushButton(tr("Clear All"));
             CustomSuggestButton *recommendedButton = new CustomSuggestButton(tr("Recommended"));
-            selectAllButton->setMinimumSize(153, 36);
-            cancelSelectButton->setMinimumSize(153, 36);
-            recommendedButton->setMinimumSize(153, 36);
+            selectAllButton->setMinimumWidth(153);
+            cancelSelectButton->setMinimumWidth(153);
+            recommendedButton->setMinimumWidth(153);
             layout->addStretch();
             layout->addWidget(selectAllButton);
             layout->addStretch();

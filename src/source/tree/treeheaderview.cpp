@@ -67,7 +67,11 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
         if (focusIn_) {
             bgColor = QColor(44, 44, 44);
         } else {
-            bgColor = QColor(38, 38, 38);
+            if(DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+                bgColor = QColor(255, 255, 255, 12);
+            } else {
+                bgColor = QColor(38, 38, 38);
+            }
         }
     }
 
@@ -128,17 +132,44 @@ void PreviousLabel::keyPressEvent(QKeyEvent *event)
 TreeHeaderView::TreeHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
 {
-    setFixedHeight(38);
     viewport()->setAutoFillBackground(false);
     setSectionsClickable(true);
     setHighlightSections(true);
     setFrameShape(DHeaderView::NoFrame);
 
     m_pPreLbl = new PreviousLabel(this);
-    m_pPreLbl->setFixedHeight(36);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
+        m_pPreLbl->setFixedHeight(TABLE_HEIGHT_NormalMode);
+        m_pPreLbl->setObjectName("gotoPreviousLabel");
+        m_pPreLbl->move(SCROLLMARGIN, TABLE_HEIGHT_NormalMode + 2);
+        m_pPreLbl->hide();
+    } else {
+        setFixedHeight(TABLE_HEIGHT_CompactMode + 2);
+        m_pPreLbl->setFixedHeight(TABLE_HEIGHT_CompactMode);
+        m_pPreLbl->setObjectName("gotoPreviousLabel");
+        m_pPreLbl->move(SCROLLMARGIN, TABLE_HEIGHT_CompactMode + 2);
+        m_pPreLbl->hide();
+    }
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [=](DGuiApplicationHelper::SizeMode sizeMode) {
+        if (sizeMode == DGuiApplicationHelper::NormalMode) {
+            m_pPreLbl->setFixedHeight(TABLE_HEIGHT_NormalMode);
+            setPreLblVisible(m_pPreLbl->isVisible());
+            m_pPreLbl->move(SCROLLMARGIN, TABLE_HEIGHT_NormalMode + 2);
+        } else {
+            m_pPreLbl->setFixedHeight(TABLE_HEIGHT_CompactMode);
+            setPreLblVisible(m_pPreLbl->isVisible());
+            m_pPreLbl->move(SCROLLMARGIN, TABLE_HEIGHT_CompactMode + 2);
+        }
+    });
+#else
+    setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
+    m_pPreLbl->setFixedHeight(TABLE_HEIGHT_NormalMode);
     m_pPreLbl->setObjectName("gotoPreviousLabel");
     m_pPreLbl->move(SCROLLMARGIN, 38);
     m_pPreLbl->hide();
+#endif
     DFontSizeManager::instance()->bind(m_pPreLbl, DFontSizeManager::T6, QFont::Weight::Medium);
 }
 
@@ -177,11 +208,28 @@ PreviousLabel *TreeHeaderView::getpreLbl()
 void TreeHeaderView::setPreLblVisible(bool bVisible)
 {
     m_pPreLbl->setVisible(bVisible);
-    if (bVisible) {
-        setFixedHeight(76); // 36+38+2 与item间隔2px
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        if (bVisible) {
+            setFixedHeight(TABLE_HEIGHT_NormalMode*2 + 4); // 36+38+2 与item间隔2px
+        } else {
+            setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
+        }
     } else {
-        setFixedHeight(38);
+        if (bVisible) {
+            setFixedHeight(TABLE_HEIGHT_CompactMode*2 + 4); // 36+38+2 与item间隔2px
+        } else {
+            setFixedHeight(TABLE_HEIGHT_CompactMode + 2);
+        }
     }
+#else
+    if (bVisible) {
+        setFixedHeight(TABLE_HEIGHT_NormalMode*2 + 4); // 36+38+2 与item间隔2px
+    } else {
+        setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
+    }
+#endif
+
 }
 
 void TreeHeaderView::setLabelFocus(bool focus)
@@ -262,10 +310,18 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     initStyleOption(&option);
     /*int margin = */style->pixelMetric(DStyle::PM_ContentsMargins, &option);
 
+    int nHeight = TABLE_HEIGHT_NormalMode;
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        nHeight = TABLE_HEIGHT_NormalMode;
+    } else {
+        nHeight = TABLE_HEIGHT_CompactMode;
+    }
+#endif
     // title
-    QRect contentRect(rect.x(), rect.y(), rect.width(), 36 - m_spacing);
+    QRect contentRect(rect.x(), rect.y(), rect.width(), nHeight - m_spacing);
     QRect hSpacingRect(rect.x(), contentRect.height() - 1, rect.width(),
-                       36 - contentRect.height() - 2);
+                       nHeight - contentRect.height() - 2);
 
     QBrush contentBrush(palette.color(cg, DPalette::Base));
     // horizontal spacing
@@ -273,7 +329,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     // vertical spacing
     QBrush vSpacingBrush(palette.color(cg, DPalette::FrameBorder));
     QRectF vSpacingRect(rect.x(), rect.y() + kSpacingMargin + 2, m_spacing,
-                        36 - kSpacingMargin * 2 - 6);
+                        nHeight - kSpacingMargin * 2 - 6);
     QBrush clearBrush(palette.color(cg, DPalette::Window));
 
     painter->fillRect(hSpacingRect, clearBrush);
@@ -286,7 +342,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
 
     // TODO: dropdown icon (8x5)
     QRect textRect(contentRect.x() + 6, contentRect.y(), contentRect.width() - 23,
-                   contentRect.height());
+                   nHeight);
     QString title = model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString();
     //    int align = model()->headerData(logicalIndex, orientation(),
     //    Qt::TextAlignmentRole).toInt();

@@ -181,14 +181,13 @@ void CompressSettingPage::initUI()
     m_pCompressTypeLbl = new DLabel(this);
     pArrowPixmapLbl = new DLabel(this);
 
-    m_pClickLbl->setMinimumSize(125, 40);
+    m_pClickLbl->setMinimumWidth(125);
     m_pClickLbl->setObjectName("ClickTypeLabel");
     m_pClickLbl->setFocusPolicy(Qt::TabFocus);
     m_pClickLbl->installEventFilter(this);
 
     DStyle style;   // 设置菜单箭头
     QPixmap pixmap = style.standardIcon(DStyle::StandardPixmap::SP_ReduceElement).pixmap(QSize(10, 10));
-    pArrowPixmapLbl->setMinimumHeight(25);
     pArrowPixmapLbl->setPixmap(pixmap);
 
     DFontSizeManager::instance()->bind(m_pCompressTypeLbl, DFontSizeManager::T5, QFont::DemiBold);
@@ -213,20 +212,20 @@ void CompressSettingPage::initUI()
     m_pCommentEdt = new DTextEdit(this);
     m_pCompressBtn = new CustomPushButton(tr("Compress", "button"), this);
 
-    m_pFileNameEdt->setMinimumSize(260, 36);    // 配置文件名属性
+    m_pFileNameEdt->setMinimumWidth(260);    // 配置文件名属性
     QLineEdit *pNameEdt = m_pFileNameEdt->lineEdit();
     pNameEdt->setMaxLength(70);
     m_pFileNameEdt->setText(tr("New Archive"));
 
     m_pSavePathEdt->setFileMode(DFileDialog::Directory);        // 配置保存路径
     m_pSavePathEdt->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
-    m_pSavePathEdt->setMinimumSize(260, 36);
+    m_pSavePathEdt->setMinimumWidth(260);
 
-    m_pCompressLevelCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
+    m_pCompressLevelCmb->setMinimumWidth(260);   // 设置压缩方式尺寸
     m_pCompressLevelCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
 
 
-    m_pCpuCmb->setMinimumSize(260, 36);   // 设置压缩方式尺寸
+    m_pCpuCmb->setMinimumWidth(260);   // 设置压缩方式尺寸
     m_pCpuCmb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed); // 跟随界面缩放
 
     // 设置压缩方式选项
@@ -254,7 +253,7 @@ void CompressSettingPage::initUI()
     m_pListEncryptionLbl->setEnabled(false);
 
     // 待确认
-    m_pSplitValueEdt->setMinimumSize(260, 36);
+    m_pSplitValueEdt->setMinimumWidth(260);
     m_pSplitValueEdt->setSuffix("MB");
     m_pSplitValueEdt->setRange(0.0, 1000000);
     m_pSplitValueEdt->setSingleStep(0.1);
@@ -265,7 +264,7 @@ void CompressSettingPage::initUI()
     m_pCommentEdt->setPlaceholderText(tr("Enter up to %1 characters").arg(MAXCOMMENTLEN));
     m_pCommentEdt->setTabChangesFocus(true); // DTextEdit中Tab键切换焦点
 
-    m_pCompressBtn->setMinimumSize(340, 36);    // 设置压缩按钮最小尺寸
+    m_pCompressBtn->setMinimumWidth(340);    // 设置压缩按钮最小尺寸
 
     // 左侧布局
     QHBoxLayout *pTypeLayout = new QHBoxLayout; // 类型布局
@@ -295,8 +294,10 @@ void CompressSettingPage::initUI()
 
     // 右侧内容布局
     QVBoxLayout *pRightLayout = new QVBoxLayout;
+    pRightLayout->setSpacing(5);
     pRightLayout->addWidget(pLabName);
     pRightLayout->addWidget(m_pFileNameEdt);
+    pRightLayout->addSpacing(7);
     pRightLayout->addWidget(pLabSave);
     pRightLayout->addWidget(m_pSavePathEdt);
     pRightLayout->addWidget(m_pCompressLevelLbl);

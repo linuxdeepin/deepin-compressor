@@ -63,7 +63,7 @@ void CompressPage::initUI()
     // 初始化相关变量
     m_pCompressView = new CompressView(this);
     m_pNextBtn = new CustomPushButton(tr("Next"), this);
-    m_pNextBtn->setMinimumSize(340, 36);
+    m_pNextBtn->setMinimumWidth(340);
 
     // 按钮布局
     QHBoxLayout *pBtnLayout = new QHBoxLayout;
@@ -78,7 +78,7 @@ void CompressPage::initUI()
     pMainLayout->addLayout(pBtnLayout);
     pMainLayout->setStretchFactor(m_pCompressView, 10);
     pMainLayout->setStretchFactor(pBtnLayout, 1);
-    pMainLayout->setContentsMargins(20, 1, 20, 20);
+    pMainLayout->setContentsMargins(10, 1, 10, 20);
 
     // 设置快捷键
     auto openkey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this);
@@ -98,7 +98,7 @@ void CompressPage::initConnections()
 
 void CompressPage::slotCompressNextClicked()
 {
-    qDebug() << "点击了压缩下一步按钮";
+    qInfo() << "点击了压缩下一步按钮";
 
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {
