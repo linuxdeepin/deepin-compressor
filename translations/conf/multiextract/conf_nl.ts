@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %d</source>
-        <translation>Uitpakken in %d</translation>
+        <translation>Uitpakken naar ‘%d’</translation>
     </message>
 </context>
 </TS>
