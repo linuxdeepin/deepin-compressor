@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %d</source>
-        <translation>استخراج إلى d%</translation>
+        <translation>استخراج إلى %d</translation>
     </message>
 </context>
 </TS>
