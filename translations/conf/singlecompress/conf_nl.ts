@@ -4,12 +4,12 @@
     <message>
         <location filename="Menu Action One]Name" line="0"/>
         <source>Add to &quot;%b.7z&quot;</source>
-        <translation>Toevoegen aan &apos;%b.7z&apos;</translation>
+        <translation>Archief maken: ‘%b.7z’</translation>
     </message>
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Add to &quot;%b.zip&quot;</source>
-        <translation>Toevoegen aan &apos;%b.zip&apos;</translation>
+        <translation>Archief maken: ‘%b.zip’</translation>
     </message>
     <message>
         <location filename="Menu Action Zero]Name" line="0"/>
