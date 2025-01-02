@@ -150,3 +150,7 @@ Files: FuzzyTest/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
+# unrar
+Files: acknow.txt
+Copyright: 1993-2023 Alexander L. Roshal
+License: LicenseRef-freeware
