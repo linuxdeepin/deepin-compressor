@@ -5,7 +5,8 @@
 #ifndef QUERIES_H
 #define QUERIES_H
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
 #include <DDialog>
 #include <DLabel>
 

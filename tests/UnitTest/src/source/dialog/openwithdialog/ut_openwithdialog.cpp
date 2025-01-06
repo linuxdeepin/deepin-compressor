@@ -71,7 +71,11 @@ TEST_F(UT_OpenWithDialogListItem, test_resizeEvent)
 
 TEST_F(UT_OpenWithDialogListItem, test_enterEvent)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QEvent *e = new QEvent(QEvent::Enter);
+#else
+    QEnterEvent *e = new QEnterEvent(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
+#endif
     m_tester->enterEvent(e);
     delete e;
 }

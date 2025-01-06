@@ -58,7 +58,7 @@ void UnCompressView::refreshArchiveData()
 
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(DC_Name);
+    sortByColumn(DC_Name, Qt::AscendingOrder);
     resetLevel();       // 重置目录层级
 }
 
@@ -259,7 +259,7 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
             resizeColumnWidth();            // 重置列宽
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-            sortByColumn(DC_Name);
+            sortByColumn(DC_Name, Qt::AscendingOrder);
 
             m_vPre.push_back(entry.strFileName); // 保存进入的文件夹名
 
@@ -337,7 +337,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
 
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(DC_Name);
+    sortByColumn(DC_Name, Qt::AscendingOrder);
 
     // 追加时需要选中追加的文件
     if (CT_Add == m_eChangeType) {
@@ -817,7 +817,7 @@ void UnCompressView::slotPreClicked()
 
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(DC_Name);
+    sortByColumn(DC_Name, Qt::AscendingOrder);
 
     //自动选中第一行
     QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex

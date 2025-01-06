@@ -11,15 +11,12 @@ project(${EXE_NAME}_test)
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
 include(FindPkgConfig)
 
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
-include_directories(${DtkWidget_INCLUDE_DIRS})
 
 #指定头文件路径
-include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/${3RDPARTYRELATIVEPATH}/libpigzplugin)
@@ -47,7 +44,7 @@ add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 
 #链接动静态库
 target_link_libraries(${EXE_NAME}_test
-    Qt5::Widgets
+    Qt${QT_DESIRED_VERSION}::Widgets
     compressor-interface
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}

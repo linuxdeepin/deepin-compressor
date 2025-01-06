@@ -725,7 +725,13 @@ void LibzipPlugin::statBuffer2FileEntry(const zip_stat_t &statBuffer, FileEntry 
 
     // 文件名
     if (statBuffer.valid & ZIP_STAT_NAME) {
-        const QStringList pieces = entry.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+        const QStringList pieces = entry.strFullPath.split(QLatin1Char('/'),
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QString::SkipEmptyParts
+        #else
+            Qt::SkipEmptyParts
+        #endif
+            );
         entry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
     }
 

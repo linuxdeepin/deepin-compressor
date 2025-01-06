@@ -23,17 +23,30 @@ set(LIBZIPPLUGINPATH ../../../3rdparty/libzipplugin) #相对于源码路径
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Concurrent)
-find_package(Qt5Test)
-find_package(KF5Codecs REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
 find_package(ZLIB REQUIRED)
 include(FindPkgConfig)
 
+set(qt_required_components Widgets Concurrent Test)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
-include_directories(${DtkWidget_INCLUDE_DIRS})
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+
+set(LINK_LIBS
+    Qt${QT_DESIRED_VERSION}::Widgets
+    Qt${QT_DESIRED_VERSION}::Concurrent
+    Qt${QT_DESIRED_VERSION}::Test
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    KF${KF_VERSION_MAJOR}::Codecs
+)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+endif()
 
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 include_directories(${GOBJECT_INCLUDE_DIRS})
@@ -42,13 +55,6 @@ pkg_search_module(GIO REQUIRED gio-unix-2.0)
 include_directories(${GIO_INCLUDE_DIRS})
 
 
-set(LIBS_INCLUDE_DIRS 
-	${DtkWidget_LIBRARIES}
-	${DtkCore_LIBRARIES}
-	${GOBJECT_LIBRARIES}
-	${GIO_LIBRARIES}
-	${DtkGui_LIBRARIES}
-)
 
  
 #指定头文件路径
@@ -107,7 +113,12 @@ file(GLOB_RECURSE h_files
 )
 
 file(GLOB_RECURSE res_files ${SRCRELATIVEPATH}/*.qrc)
-QT5_ADD_RESOURCES(QRC_MOC ${res_files})
+# 根据Qt版本选择合适的命令
+if (QT_VERSION VERSION_GREATER_EQUAL "6.0")
+    qt_add_resources(QRC_MOC ${res_files})
+else()
+    qt5_add_resources(QRC_MOC ${res_files})
+endif()
 
 #INCLUDE(${QT_USE_FILE})
 #ADD_DEFINITIONS(${QT_DEFINITIONS})
@@ -125,14 +136,10 @@ add_executable(${PROJECT_NAME_TEST}  ${c_files} ${h_files} ${QRC_MOC} ${APP_TS_F
 #target_link_libraries(${PROJECT_NAME_TEST} gmock gmock_main gtest gtest_main)
 
 set_target_properties(${PROJECT_NAME_TEST} PROPERTIES AUTOMOC TRUE)
-qt5_use_modules(${PROJECT_NAME_TEST}  Core  Widgets  Gui)
 
 #链接动静态库
 target_link_libraries(${PROJECT_NAME_TEST}
-    Qt5::Widgets
-    Qt5::Test
-    KF5::Codecs
-    ${DtkWidget_LIBRARIES}
+    ${LINK_LIBS}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
     compressor-interface

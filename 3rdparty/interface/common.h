@@ -7,6 +7,7 @@
 
 #include <QString>
 #include <QLocale>
+#include <QTextCodec>
 #include <libmount/libmount.h>
 
 //文件大小10M

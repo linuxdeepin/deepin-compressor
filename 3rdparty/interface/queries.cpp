@@ -61,7 +61,11 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
     QFont font; // 应用使用字体对象
     QFontMetrics font_label(font);
     QString strText = text;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int titlewidth = font_label.width(strText);
+#else
+    int titlewidth = font_label.horizontalAdvance(strText);
+#endif
     QString str;
     NewStr newstr;
     int width = pDesLbl->width();
@@ -69,11 +73,14 @@ NewStr autoCutText(const QString &text, DLabel *pDesLbl)
         newstr.strList.append(strText);
         newstr.resultStr += strText;
     } else {
-        for (int i = 0; i < strText.count(); i++) {
+        for (int i = 0; i < strText.size(); i++) {
             str += strText.at(i);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             if (font_label.width(str) > width) { //根据label宽度调整每行字符数
-                str.remove(str.count() - 1, 1);
+#else
+            if (font_label.horizontalAdvance(str) > width) { //根据label宽度调整每行字符数
+#endif
+                str.remove(str.size() - 1, 1);
                 newstr.strList.append(str);
                 newstr.resultStr += str + "\n";
                 str.clear();
@@ -314,20 +321,20 @@ void OverwriteQuery::autoFeed(DLabel *label1, DLabel *label2, CustomDDialog *dia
 
 void OverwriteQuery::setWidgetColor(QWidget *pWgt, DPalette::ColorRole ct, double alphaF)
 {
-    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
     QColor color = palette.color(ct);
     color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground, color);
-    DApplicationHelper::instance()->setPalette(pWgt, palette);
+    palette.setColor(DPalette::Window, color);
+    pWgt->setPalette(palette);
 }
 
 void OverwriteQuery::setWidgetType(QWidget *pWgt, DPalette::ColorType ct, double alphaF)
 {
-    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
     QColor color = palette.color(ct);
     color.setAlphaF(alphaF);
-    palette.setColor(DPalette::Foreground, color);
-    DApplicationHelper::instance()->setPalette(pWgt, palette);
+    palette.setColor(DPalette::WindowText, color);
+    pWgt->setPalette(palette);
 }
 
 

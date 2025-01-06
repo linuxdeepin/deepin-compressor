@@ -418,7 +418,12 @@ TEST_F(UT_Cli7zPlugin, test_readListLine_018)
     m_tester->m_parseState = ParseStateEntryInformation;
     m_tester->m_archiveType = Cli7zPlugin::ArchiveType::ArchiveType7z;
     EXPECT_EQ(m_tester->readListLine("Modified = 2021-06-18 15:27:01"), true);
-    EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, QDateTime::fromString("2021-06-18 15:27:01", "yyyy-MM-dd hh:mm:ss").toTime_t());
+    EXPECT_EQ(m_tester->m_fileEntry.uLastModifiedTime, QDateTime::fromString("2021-06-18 15:27:01", "yyyy-MM-dd hh:mm:ss")
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    .toTime_t());
+#else
+    .toSecsSinceEpoch());
+#endif
 }
 
 TEST_F(UT_Cli7zPlugin, test_readListLine_019)

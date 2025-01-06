@@ -11,15 +11,13 @@ project(${EXE_NAME}_test)
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(KF5Codecs REQUIRED)
-find_package(KF5Archive)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(KF${KF_VERSION_MAJOR}Archive REQUIRED)
 include(FindPkgConfig)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
 
 #指定头文件路径
-include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/../${3RDPARTYRELATIVEPATH}/libsinglefileplugin/bz2plugin)
@@ -48,9 +46,9 @@ file(GLOB_RECURSE json_files
 #生成动静态库
 add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 target_link_libraries(${EXE_NAME}_test
-    Qt5::Widgets
-    KF5::Codecs
-    KF5::Archive
+    Qt${QT_DESIRED_VERSION}::Widgets
+    KF${KF_VERSION_MAJOR}::Codecs
+    KF${KF_VERSION_MAJOR}::Archive
 #    compressor-singlefile
 compressor-interface
     ${GTEST_LIBRARIES}

@@ -45,7 +45,11 @@ void CalculateSizeThread::run()
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
         entry.qSize = fileInfo.size();   // 大小
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+#else
+        entry.uLastModifiedTime = fileInfo.lastModified().toSecsSinceEpoch();   // 最后一次修改时间
+#endif
 
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
@@ -76,7 +80,14 @@ void CalculateSizeThread::run()
             mutex.lock();
             m_listAllEntry << entry;
             mutex.unlock();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QtConcurrent::run(this, &CalculateSizeThread::ConstructAddOptionsByThread, file);
+#else
+            QtConcurrent::run([this, file]() {
+                ConstructAddOptionsByThread(file);
+            });
+#endif
+
         }
     }
 
@@ -112,7 +123,11 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
         entry.qSize = fileInfo.size();   // 大小
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+#else   
+        entry.uLastModifiedTime = fileInfo.lastModified().toSecsSinceEpoch();   // 最后一次修改时间
+#endif
 
         // 待压缩文件已经不存在
         if (!fileInfo.exists()) {
@@ -140,7 +155,13 @@ void CalculateSizeThread::ConstructAddOptionsByThread(const QString &path)
             m_listAllEntry << entry;
             mutex.unlock();
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QtConcurrent::run(this, &CalculateSizeThread::ConstructAddOptionsByThread, entry.strFullPath);
+#else
+            QtConcurrent::run([this, entry]() {
+                ConstructAddOptionsByThread(entry.strFullPath);
+            });
+#endif
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小

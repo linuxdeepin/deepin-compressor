@@ -305,12 +305,14 @@ void CommonStub::stub_QThread_wait(Stub &stub, bool bResult)
 
 void CommonStub::stub_QThreadPool_waitForDone(Stub &stub)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     stub.set(ADDR(QThreadPool, waitForDone), qThreadPool_waitForDone_stub);
+#endif
 }
 
 void CommonStub::stub_QProcess_startDetached(Stub &stub)
 {
-#if !defined(Q_QDOC)
+#if !defined(Q_QDOC) && (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     stub.set((bool(*)(const QString &, const QStringList &))ADDR(QProcess, startDetached), qProcess_startDetached_stub);
 #endif
 }

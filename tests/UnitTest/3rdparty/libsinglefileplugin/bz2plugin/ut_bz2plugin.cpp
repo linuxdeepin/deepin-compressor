@@ -136,7 +136,11 @@ bool responseOverwriteAll_false_stub()
     return false;
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QStringList qString_split_stub(QChar, QString::SplitBehavior, Qt::CaseSensitivity)
+#else
+QStringList qString_split_stub(QChar, Qt::SplitBehavior, Qt::CaseSensitivity)
+#endif
 {
     return QStringList() << "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
@@ -224,7 +228,11 @@ TEST_F(UT_LibBzip2Interface, test_extractFiles_005)
 
     Stub stub;
     stub.set(ADDR(OverwriteQuery, waitForResponse), waitForResponse_stub);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     typedef QStringList(QString::*fptr)(QChar, QString::SplitBehavior, Qt::CaseSensitivity) const;
+#else
+    typedef QStringList(QString::*fptr)(QChar, Qt::SplitBehavior, Qt::CaseSensitivity) const;
+#endif
     fptr A_foo = (fptr)(&QString::split);   //获取虚函数地址
     stub.set(A_foo, qString_split_stub);
 

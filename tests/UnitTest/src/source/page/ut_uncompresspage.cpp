@@ -171,7 +171,11 @@ TEST_F(UT_UnCompressPage, test_elidedExtractPath)
 {
     Stub stub;
     stub.set(ADDR(UnCompressPage, width), unCompressPage_width_stub);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     stub.set((int(QFontMetrics::*)(const QString &, int)const)ADDR(QFontMetrics, width), qFontMetrics_width_stub);
+#else
+    stub.set((int(QFontMetrics::*)(const QString &, int)const)ADDR(QFontMetrics, horizontalAdvance), qFontMetrics_width_stub);
+#endif
     stub.set(ADDR(QFontMetrics, elidedText), elidedText_stub);
     QString str = "12345678912";
     EXPECT_EQ(m_tester->elidedExtractPath(str).isEmpty(), false);

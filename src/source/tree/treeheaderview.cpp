@@ -7,7 +7,7 @@
 
 #include <DApplication>
 #include <DStyle>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFontSizeManager>
 
 #include <QPainter>
@@ -87,7 +87,7 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
     QLabel::mouseDoubleClickEvent(event);
 }
 
-void PreviousLabel::enterEvent(QEvent *event)
+void PreviousLabel::enterEvent(EnterEvent *event)
 {
     if(!hasFocus()) {
         focusIn_ = true;
@@ -193,10 +193,15 @@ int TreeHeaderView::sectionSizeHint(int logicalIndex) const
 
     QFontMetrics fm(DApplication::font());
     QString buf = model()->headerData(logicalIndex, Qt::Horizontal, Qt::DisplayRole).toString();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    int width = fm.width(buf);
+#else
+    int width = fm.horizontalAdvance(buf);
+#endif
     if (sortIndicatorSection() == logicalIndex) {
-        return fm.width(buf) + margin * 3 + 8;
+        return width + margin * 3 + 8;
     } else {
-        return fm.width(buf) + margin * 2;
+        return width + margin * 2;
     }
 }
 
@@ -261,7 +266,7 @@ void TreeHeaderView::paintEvent(QPaintEvent *e)
         cg = DPalette::Active;
     #endif
 
-        DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+        DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
         DPalette palette = dAppHelper->applicationPalette();
 
         DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
@@ -301,7 +306,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
         cg = DPalette::Active;
     }
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
 
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());

@@ -7,16 +7,15 @@ project(${LIB_NAME})
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(KF5Codecs REQUIRED)
+
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Core Widget)
 find_package(LibArchive REQUIRED)
 include(FindPkgConfig)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
-#pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 
 #指定头文件路径
-include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
 
@@ -39,8 +38,9 @@ add_library(${LIB_NAME} STATIC ${h_files} ${c_files})
 
 #链接动静态库
 target_link_libraries(${LIB_NAME}
-    Qt5::Widgets
-    KF5::Codecs
+    Qt${QT_DESIRED_VERSION}::Widgets
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    KF${KF_VERSION_MAJOR}::Codecs
     archive
 #    ${GOBJECT_LIBRARIES}
     compressor-interface

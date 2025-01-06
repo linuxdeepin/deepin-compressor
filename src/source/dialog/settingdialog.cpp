@@ -8,7 +8,7 @@
 #include "uitools.h"
 
 #include <DPushButton>
-#include <DApplicationHelper>
+#include <DPaletteHelper>
 #include <DSettingsWidgetFactory>
 #include <DFileDialog>
 #include <DLabel>
@@ -219,7 +219,7 @@ void SettingDialog::createPathBox()
                 {
                     m_curpath = combobox->currentText();
                     QDir dir(m_curpath);
-                    DPalette plt = DApplicationHelper::instance()->palette(combobox);
+                    DPalette plt = DPaletteHelper::instance()->palette(combobox);
 
                     if (!dir.exists()) {
                         plt.setBrush(DPalette::Text, plt.color(DPalette::TextWarning));

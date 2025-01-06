@@ -213,7 +213,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         // 提取:过滤选中的文件以及选中目录下所有文件
         if (!extractAll) {
             bool flag = false;
-            foreach (auto tmp, qAsConst(files)) {
+            foreach (auto tmp, files) {
                 if (tmp.isDirectory) {
                     if (entryName.startsWith(tmp.strFullPath)) {
                         flag = true;
@@ -786,7 +786,12 @@ void LibarchivePlugin::emitEntryForIndex(archive_entry *aentry)
     m_archiveEntryStat.strFullPath = entryName;
 
     // 文件名
-    const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+    const QStringList pieces = m_archiveEntryStat.strFullPath.split(QLatin1Char('/'),
+                                                                    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                                                                    QString::SkipEmptyParts);
+                                                                    #else
+                                                                    Qt::SkipEmptyParts);
+                                                                    #endif
     m_archiveEntryStat.strFileName = pieces.last();
 
 

@@ -7,7 +7,7 @@
 
 #include <DLabel>
 #include <DFontSizeManager>
-#include <DApplicationHelper>
+#include <DPaletteHelper>
 
 #include <QHBoxLayout>
 
@@ -48,9 +48,9 @@ void LoadingPage::initUI()
     m_pTextLbl->setMinimumSize(293, 20);
     m_pTextLbl->setText(tr("Loading, please wait..."));
     DFontSizeManager::instance()->bind(m_pTextLbl, DFontSizeManager::T6, QFont::Medium);  // 设置字体
-    DPalette pa = DApplicationHelper::instance()->palette(m_pTextLbl);
+    DPalette pa = DPaletteHelper::instance()->palette(m_pTextLbl);
     pa.setBrush(DPalette::ButtonText, pa.color(DPalette::TextTitle));   // 设置颜色
-    DApplicationHelper::instance()->setPalette(m_pTextLbl, pa);
+    m_pTextLbl->setPalette(pa);
     m_pTextLbl->setAlignment(Qt::AlignCenter);
 
     // 加载布局

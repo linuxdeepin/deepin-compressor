@@ -170,7 +170,7 @@ TEST_F(UT_OverwriteQuery, test_setWidgetColor)
     QWidget *pWgt = new QWidget;
     DPalette::ColorRole ct = DPalette::ToolTipText;
     double alphaF = 0.5;
-    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
     QColor color = palette.color(ct);
 
     m_tester->setWidgetColor(pWgt, ct, alphaF);
@@ -183,11 +183,11 @@ TEST_F(UT_OverwriteQuery, test_setWidgetType)
     QWidget *pWgt = new QWidget;
     DPalette::ColorType ct;
     double alphaF = 0.5;
-    DPalette palette = DApplicationHelper::instance()->palette(pWgt);
+    DPalette palette = DPaletteHelper::instance()->palette(pWgt);
     QColor color = palette.color(ct);
 
     m_tester->setWidgetType(pWgt, ct, alphaF);
-    EXPECT_EQ(DApplicationHelper::instance()->palette(pWgt).color(ct) == color, true);
+    EXPECT_EQ(DPaletteHelper::instance()->palette(pWgt).color(ct) == color, true);
     delete pWgt;
 }
 

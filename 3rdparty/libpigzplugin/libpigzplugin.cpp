@@ -307,13 +307,14 @@ void LibPigzPlugin::getChildProcessId(qint64 processId, const QStringList &listK
         QList<QByteArray> lines = dd.split('\n');
 
         if (lines.count() > 0 && lines[0].contains(strProcessId.toUtf8())) {   // 从包含有processId这一行开始处理
-            for (const QByteArray &line : qAsConst(lines)) {
-                for (const QString &strKey : qAsConst(listKey)) {
+            for (const QByteArray &line : lines) {
+                for (const QString &strKey : listKey) {
                     QString str = QString("-%1(").arg(strKey);
-                    int iCount = line.count(str.toStdString().c_str());   // 多个子进程都需要获取到
+                    QByteArray ba = str.toUtf8();  // 将QString转换为QByteArray
+                    int iCount = line.count(ba);  // 直接使用QByteArray
                     int iIndex = 0;
                     for (int i = 0; i < iCount; ++i) {
-                        int iStartIndex = line.indexOf(str, iIndex);
+                        int iStartIndex = line.indexOf(ba, iIndex);
                         int iEndIndex = line.indexOf(")", iStartIndex);
                         if (0 < iStartIndex && 0 < iEndIndex) {
                             childprocessid.append(line.mid(iStartIndex + str.length(), iEndIndex - iStartIndex - str.length()).toInt());   // 取-7z(3971)中间的进程号
@@ -346,7 +347,7 @@ void LibPigzPlugin::readStdout(bool)
     QList<QByteArray> lines = m_stdOutData.split('\n');
     m_stdOutData = lines.takeLast();
     // 处理命令行输出
-    for (const QByteArray &line : qAsConst(lines)) {
+    for (const QByteArray &line : lines) {
 
         if (!handleLine(QString::fromLocal8Bit(line))) {
             killProcess();

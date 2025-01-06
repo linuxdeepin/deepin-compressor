@@ -11,8 +11,8 @@ project(${EXE_NAME}_test)
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(KF5Codecs REQUIRED)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
 include(FindPkgConfig)
 
 #指定头文件路径
@@ -43,8 +43,8 @@ add_executable(${EXE_NAME}_test ${h_files} ${c_files} ${json_files})
 
 #链接动静态库
 target_link_libraries(${EXE_NAME}_test
-    Qt5::Widgets
-    KF5::Codecs
+    Qt${QT_DESIRED_VERSION}::Widgets
+    KF${KF_VERSION_MAJOR}::Codecs
     compressor-archive
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
