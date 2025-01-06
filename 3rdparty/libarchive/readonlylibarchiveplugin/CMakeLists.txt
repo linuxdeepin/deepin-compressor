@@ -6,9 +6,9 @@ set(LIB_NAME readonlylibarchiveplugin)
 project(${LIB_NAME})
 
 #查找依赖关系的包信息
-find_package(Qt5Widgets REQUIRED)
-find_package(KF5Codecs REQUIRED)
-find_package(KF5Archive)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(KF${KF_VERSION_MAJOR}Archive REQUIRED)
 
 #指定头文件路径
 include_directories(${PROJECT_SOURCE_DIR})
@@ -27,9 +27,9 @@ add_library(${LIB_NAME} SHARED ${c_files} ${h_files} ${json_files})
 
 #链接动静态库
 target_link_libraries(${LIB_NAME}
-    Qt5::Widgets
-    KF5::Archive
-    KF5::Codecs
+    Qt${QT_DESIRED_VERSION}::Widgets
+    KF${KF_VERSION_MAJOR}::Codecs
+    KF${KF_VERSION_MAJOR}::Archive
     compressor-archive
 )
 

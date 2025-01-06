@@ -248,18 +248,28 @@ bool Cli7zPlugin::readListLine(const QString &line)
             m_fileEntry.strFullPath = entryFilename;
 
             // 文件名称
-            const QStringList pieces = entryFilename.split(QLatin1Char('/'), QString::SkipEmptyParts);
+            const QStringList pieces = entryFilename.split(QLatin1Char('/'),
+            #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                QString::SkipEmptyParts
+            #else
+                Qt::SkipEmptyParts
+            #endif
+                );
             m_fileEntry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
         } else if (line.startsWith(QLatin1String("Size = "))) {
             // 单文件实际大小
-            m_fileEntry.qSize = line.midRef(7).trimmed().toLongLong();
+            m_fileEntry.qSize = line.mid(7).trimmed().toLongLong();
 
             // 压缩包内所有文件总大小
             stArchiveData.qSize += m_fileEntry.qSize;
         } else if (line.startsWith(QLatin1String("Modified = "))) {
             // 文件最后修改时间
             m_fileEntry.uLastModifiedTime = QDateTime::fromString(line.mid(11).trimmed(),
-                                                                  QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
+            #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                QStringLiteral("yyyy-MM-dd hh:mm:ss")).toTime_t();
+            #else
+                QStringLiteral("yyyy-MM-dd hh:mm:ss")).toSecsSinceEpoch();
+            #endif
             if (ArchiveTypeIso == m_archiveType || ArchiveTypeUdf == m_archiveType) { // 读取的压缩包是iso、udf文件，读到Modified的时候已经结束了
 //                QString name = m_fileEntry.strFullPath;
 
@@ -276,7 +286,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
                 m_fileEntry.reset();
             }
         } else if (line.startsWith(QLatin1String("Attributes = "))) {  // 文件权限
-            const QStringRef attributes = line.midRef(13).trimmed();
+            const QString attributes = line.mid(13).trimmed();
 
             // D开头为文件夹
             if (attributes.startsWith(QLatin1Char('D'))) {
@@ -303,7 +313,7 @@ bool Cli7zPlugin::readListLine(const QString &line)
             // clear m_fileEntry
             m_fileEntry.reset();
         } else if (line.startsWith(QLatin1String("Folder = "))) {  // 是否文件夹
-            const QStringRef folder = line.midRef(9, 1);
+            const QString folder = line.mid(9, 1);
 
             // "+" 为文件夹
             if (0 == folder.compare(QLatin1String("+"))) {

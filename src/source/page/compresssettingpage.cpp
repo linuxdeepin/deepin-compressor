@@ -10,11 +10,13 @@
 #include "uistruct.h"
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
+#include "qtcompat.h"
 
 #include <DApplication>
 #include <DFileDialog>
 #include <DFontSizeManager>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
 
 #include <QStandardPaths>
 #include <QFocusEvent>
@@ -25,7 +27,6 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QDebug>
-#include <DApplicationHelper>
 
 #include <cmath>
 #include <QProcess>
@@ -388,7 +389,7 @@ void CompressSettingPage::initConnections()
     connect(m_pPasswordEdt, &DPasswordEdit::echoModeChanged, this, &CompressSettingPage::slotEchoModeChanged);
     connect(m_pPasswordEdt, &DPasswordEdit::textEdited, this, &CompressSettingPage::slotPasswordChanged);
     connect(m_pCommentEdt, &DTextEdit::textChanged, this, &CompressSettingPage::slotCommentTextChanged);
-    connect(DApplicationHelper::instance(), &DApplicationHelper::themeTypeChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &CompressSettingPage::slotRefreshFileNameEdit);
 }
 
 void CompressSettingPage::setTypeImage(const QString &strType)
@@ -762,7 +763,7 @@ void CompressSettingPage::slotTypeChanged(QAction *action)
 
 void CompressSettingPage::slotRefreshFileNameEdit()
 {
-    DPalette plt = DApplicationHelper::instance()->palette(m_pFileNameEdt);
+    DPalette plt = DPaletteHelper::instance()->palette(m_pFileNameEdt);
 
     if (!m_pFileNameEdt->text().isEmpty()) {
         // 检测文件名合法性
@@ -859,7 +860,7 @@ void CompressSettingPage::slotCompressClicked()
     //压缩zip分卷不支持中文密码
     if (m_pSplitCkb->isChecked()
             && "zip" == m_pCompressTypeLbl->text()
-            && (!m_pPasswordEdt->text().isEmpty() && m_pPasswordEdt->text().contains(QRegExp("[\\x4e00-\\x9fa5]+")))) {
+            && (!m_pPasswordEdt->text().isEmpty() && m_pPasswordEdt->text().contains(REG_EXP("[\\x4e00-\\x9fa5]+")))) {
         m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
         return;
     }
@@ -952,16 +953,25 @@ void CompressSettingPage::slotCommentTextChanged()
 
 void CompressSettingPage::slotPasswordChanged()
 {
-    QRegExp reg("^[\\x00-\\x80\\x4e00-\\x9fa5]+$");
+    REG_EXP reg("^[\\x00-\\x80\\x4e00-\\x9fa5]+$");
     QString pwdin = m_pPasswordEdt->lineEdit()->text();
     QString pwdout;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (!pwdin.isEmpty() && !reg.exactMatch(pwdin)) {
         for (int i = 0; i < pwdin.length(); ++i) {
             if (reg.exactMatch(pwdin.at(i))) {
                 pwdout.push_back(pwdin.at(i));
             }
         }
+#else
+    if (!pwdin.isEmpty() && !reg.match(pwdin).hasMatch()) {
+        for (int i = 0; i < pwdin.length(); ++i) {
+            if (reg.match(pwdin.at(i)).hasMatch()) {
+                pwdout.append(pwdin.at(i));
+            }
+        }
+#endif
         m_pPasswordEdt->setText(pwdout);
         // 仅支持中英文字符及部分符号
         m_pPasswordEdt->showAlertMessage(tr("Only Chinese and English characters and some symbols are supported"));

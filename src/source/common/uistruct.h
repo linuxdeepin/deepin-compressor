@@ -59,7 +59,7 @@ enum Archive_OperationType {
 
 // 压缩/解压列表的列号
 enum DataView_Column {
-    DC_Name,            // 名称
+    DC_Name = 0,        // 名称
     DC_Time,            // 修改时间
     DC_Type,            // 类型
     DC_Size,            // 大小

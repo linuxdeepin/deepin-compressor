@@ -72,7 +72,11 @@ TEST_F(UT_PreviousLabel, test_mouseDoubleClickEvent)
 
 TEST_F(UT_PreviousLabel, test_enterEvent)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QEvent *event = new QEvent(QEvent::Enter);
+#else
+    QEnterEvent *event = new QEnterEvent(QPoint(0, 0), QPoint(0, 0), QPoint(0, 0));
+#endif
     m_tester->enterEvent(event);
     delete event;
     EXPECT_EQ(m_tester->focusIn_, true);

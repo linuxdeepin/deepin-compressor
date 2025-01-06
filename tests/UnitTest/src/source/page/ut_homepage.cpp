@@ -11,7 +11,6 @@
 #include <gtest/gtest.h>
 
 #include <DGuiApplicationHelper>
-#include <DApplicationHelper>
 #include <QTest>
 
 DGUI_USE_NAMESPACE
@@ -62,7 +61,11 @@ TEST_F(UT_HomePage, test_slotThemeChanged_001)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::LightType);
     m_tester->slotThemeChanged();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
+#else
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap().toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
+#endif
 }
 
 TEST_F(UT_HomePage, test_slotThemeChanged_002)
@@ -70,7 +73,11 @@ TEST_F(UT_HomePage, test_slotThemeChanged_002)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::DarkType);
     m_tester->slotThemeChanged();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/dark/icons/split_line_dark.svg").toImage(), true);
+#else
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap().toImage() == QPixmap(":assets/icons/deepin/builtin/dark/icons/split_line_dark.svg").toImage(), true);
+#endif
 }
 
 TEST_F(UT_HomePage, test_slotThemeChanged_003)
@@ -78,5 +85,9 @@ TEST_F(UT_HomePage, test_slotThemeChanged_003)
     Stub stub;
     DGuiApplicationHelperStub::stub_DGuiApplicationHelper_themeType(stub, DGuiApplicationHelper::UnknownType);
     m_tester->slotThemeChanged();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     EXPECT_EQ(m_tester->m_pSplitLbl->pixmap()->toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
+#else
+    EXPECT_EQ(m_tester->m_pSplitLbl->pixmap().toImage() == QPixmap(":assets/icons/deepin/builtin/light/icons/split_line.svg").toImage(), true);
+#endif
 }

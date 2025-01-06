@@ -250,7 +250,13 @@ bool LibminizipPlugin::handleArchiveData(unzFile zipfile)
     // 全路径
     entry.strFullPath = name;
     // 文件名
-    const QStringList pieces = entry.strFullPath.split(QLatin1Char('/'), QString::SkipEmptyParts);
+    const QStringList pieces = entry.strFullPath.split(QLatin1Char('/'),
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QString::SkipEmptyParts
+        #else
+            Qt::SkipEmptyParts
+        #endif
+        );
     entry.strFileName = pieces.isEmpty() ? QString() : pieces.last();
     // 是否是文件夹
     entry.isDirectory = name.endsWith(QDir::separator());
@@ -266,7 +272,11 @@ bool LibminizipPlugin::handleArchiveData(unzFile zipfile)
     QDateTime datetime;
     datetime.setDate(QDate(int(file_info.tmu_date.tm_year), int(file_info.tmu_date.tm_mon + 1), int(file_info.tmu_date.tm_mday)));
     datetime.setTime(QTime(int(file_info.tmu_date.tm_hour), int(file_info.tmu_date.tm_min), int(file_info.tmu_date.tm_sec)));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     entry.uLastModifiedTime = uint(datetime.toTime_t());
+#else
+    entry.uLastModifiedTime = uint(datetime.toSecsSinceEpoch());
+#endif
 
     handleEntry(entry);
 

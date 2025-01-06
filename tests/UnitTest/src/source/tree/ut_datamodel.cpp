@@ -96,7 +96,11 @@ TEST_F(UT_DataModel, test_data_002)
     m_tester->m_listEntry << entry;
 
     QModelIndex index = m_tester->index(0, DC_Time);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     EXPECT_EQ(m_tester->data(index, Qt::DisplayRole), QDateTime::fromTime_t(m_tester->m_listEntry[0].uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss"));
+#else
+    EXPECT_EQ(m_tester->data(index, Qt::DisplayRole), QDateTime::fromSecsSinceEpoch(m_tester->m_listEntry[0].uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss"));
+#endif
 }
 
 TEST_F(UT_DataModel, test_data_003)

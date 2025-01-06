@@ -71,7 +71,7 @@ void OpenWithDialogListItem::resizeEvent(QResizeEvent *e)
     m_pIconLbl->setPixmap(m_icon.pixmap(m_pIconLbl->size()));
 }
 
-void OpenWithDialogListItem::enterEvent(QEvent *e)
+void OpenWithDialogListItem::enterEvent(EnterEvent *e)
 {
     Q_UNUSED(e)
 

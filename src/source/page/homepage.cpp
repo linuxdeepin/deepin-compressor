@@ -10,7 +10,7 @@
 #include <DFileDialog>
 #include <DFontSizeManager>
 #include <DGuiApplicationHelper>
-#include <DApplicationHelper>
+#include <DPaletteHelper>
 
 #include <QVBoxLayout>
 #include <QSettings>

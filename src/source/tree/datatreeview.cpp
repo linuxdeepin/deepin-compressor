@@ -10,7 +10,7 @@
 
 #include <DApplication>
 #include <DStyle>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -40,10 +40,10 @@ QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const 
 
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
-        return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
-    } else {
+    if (DGuiApplicationHelper::instance()->isCompactMode()) {
         return QSize(option.rect.width(), TABLE_HEIGHT_CompactMode);
+    } else {
+        return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
     }
 #else
     return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
@@ -79,7 +79,7 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
     int margin = style->pixelMetric(DStyle::PM_ContentsMargins, &option);
     //设置高亮文字色
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     QPen forground;
     forground.setColor(palette.color(cg, DPalette::Text));
@@ -409,13 +409,17 @@ bool DataTreeView::event(QEvent *event)
 
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         if (!m_isPressed && touchEvent && touchEvent->device() && touchEvent->device()->type() == QTouchDevice::TouchScreen && touchEvent->touchPointStates() == Qt::TouchPointPressed) {
-
             QList<QTouchEvent::TouchPoint> points = touchEvent->touchPoints();
+#else
+        if (!m_isPressed && touchEvent && touchEvent->deviceType() == QInputDevice::DeviceType::TouchScreen && touchEvent->touchPointStates() == Qt::TouchPointPressed) {
+            QList<QTouchEvent::TouchPoint> points = touchEvent->points();
+#endif
             //dell触摸屏幕只有一个touchpoint 但却能捕获到pinchevent缩放手势?
             if (points.count() == 1) {
                 QTouchEvent::TouchPoint p = points.at(0);
-                m_lastTouchBeginPos = p.pos();
+                m_lastTouchBeginPos = p.position();
                 m_lastTouchBeginPos.setY(m_lastTouchBeginPos.y() - m_pHeaderView->height());
                 m_lastTouchTime = QTime::currentTime();
                 m_isPressed = true;

@@ -158,7 +158,11 @@ void UnCompressPage::initConnections()
 QString UnCompressPage::elidedExtractPath(const QString &strPath)
 {
     QFontMetrics fontMetrics(this->font());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int fontSize = fontMetrics.width(strPath);//获取之前设置的字符串的像素大小
+#else
+    int fontSize = fontMetrics.horizontalAdvance(strPath);//获取之前设置的字符串的像素大小
+#endif
     QString pathStr = strPath;
     if (fontSize > width()) {
         pathStr = fontMetrics.elidedText(strPath, Qt::ElideMiddle, width());//返回一个带有省略号的字符串

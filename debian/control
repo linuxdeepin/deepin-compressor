@@ -2,7 +2,31 @@ Source: deepin-compressor
 Section: devel
 Priority: optional
 Maintainer: packages <packages@deepin.com>
-Build-Depends: debhelper (>= 11),cmake, libgsettings-qt-dev, libarchive-dev, libsecret-1-dev, libpoppler-cpp-dev, libudisks2-qt5-dev, libdisomaster-dev, libkf5codecs-dev, libzip-dev, qttools5-dev-tools, deepin-gettext-tools, qtbase5-dev, qtchooser (>= 55-gc9562a1-1~), qt5-qmake, libdtkwidget-dev,libqt5svg5-dev, libqt5x11extras5-dev, libkf5archive-dev, libminizip-dev, qttools5-dev, libgtest-dev, libmount-dev
+Build-Depends:
+ debhelper (>= 11),
+ pkg-config,
+ cmake,
+ qt6-5compat-dev | libqt5x11extras5-dev,
+ qt6-base-dev | qtbase5-dev,
+ qt6-tools-dev-tools | qttools5-dev-tools,
+ qt6-tools-dev | qttools5-dev,
+ qt6-svg-dev | libqt5svg5-dev,
+ libdtk6widget-dev | libdtkwidget-dev,
+ libdtk6gui-dev | libdtkgui-dev,
+ libdtk6core-dev | libdtkcore-dev,
+ libudisks2-qt6-dev | libudisks2-qt5-dev,
+ libkf6codecs-dev | libkf5codecs-dev,
+ libkf6archive-dev | libkf5archive-dev,
+ libgtest-dev,
+ deepin-gettext-tools,
+ libgsettings-qt-dev,
+ libarchive-dev,
+ libsecret-1-dev,
+ libpoppler-cpp-dev,
+ libdisomaster-dev,
+ libzip-dev,
+ libmount-dev,
+ libminizip-dev,
 Standards-Version: 4.1.3
 
 Package: deepin-compressor

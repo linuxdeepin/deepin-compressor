@@ -16,7 +16,6 @@
 #include <QCollator>
 #include <QElapsedTimer>
 #include <QItemSelection>
-#include <DApplicationHelper>
 #include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
@@ -73,7 +72,11 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
             }
         }
         case DC_Time: {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             return QDateTime::fromTime_t(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
+#else
+            return QDateTime::fromSecsSinceEpoch(entry.uLastModifiedTime).toString("yyyy/MM/dd hh:mm:ss");
+#endif
         }
         case DC_Type: {
             CustomMimeType mimetype = determineMimeType(entry.strFullPath);  // 根据全路径获取类型

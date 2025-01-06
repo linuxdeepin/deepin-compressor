@@ -26,17 +26,32 @@ endif ()
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Concurrent)
-find_package(Qt5DBus REQUIRED)
-find_package(KF5Codecs REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
-find_package(DtkWidget REQUIRED)
 include(FindPkgConfig)
 
+set(qt_required_components Core DBus Gui Widgets Concurrent)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
-include_directories(${DtkWidget_INCLUDE_DIRS})
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+
+set(LINK_LIBS
+    Qt${QT_DESIRED_VERSION}::Core
+    Qt${QT_DESIRED_VERSION}::DBus
+    Qt${QT_DESIRED_VERSION}::Gui
+    Qt${QT_DESIRED_VERSION}::Widgets
+    Qt${QT_DESIRED_VERSION}::Concurrent
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    KF${KF_VERSION_MAJOR}::Codecs
+)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+endif()
+
 
 pkg_search_module(GOBJECT REQUIRED gobject-2.0)
 include_directories(${GOBJECT_INCLUDE_DIRS})
@@ -60,8 +75,13 @@ file(GLOB_RECURSE c_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.cpp source/*.c
 file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} source/*.h *.h)
 file(GLOB_RECURSE res_files RELATIVE ${PROJECT_SOURCE_DIR} *.qrc)
 
-#添加资源文件
-QT5_ADD_RESOURCES(QRC_FILES ${res_files})
+# 根据Qt版本选择合适的命令
+if (QT_VERSION VERSION_GREATER_EQUAL "6.0")
+    qt_add_resources(QRC_FILES ${res_files})
+else()
+    qt5_add_resources(QRC_FILES ${res_files})
+endif()
+
 
 #链接库路径
 link_directories(${LIBRARY_OUTPUT_PATH})
@@ -71,10 +91,7 @@ add_executable(${EXE_NAME}  ${c_files} ${h_files} ${QRC_FILES})
 
 #链接动静态库
 target_link_libraries(${EXE_NAME}
-    Qt5::Widgets
-    Qt5::DBus
-    KF5::Codecs
-    ${DtkWidget_LIBRARIES}
+    ${LINK_LIBS}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
     compressor-interface
@@ -85,15 +102,23 @@ set(APPID org.deepin.compressor)
 set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.compressor.method.json)
 if (DEFINED DSG_DATA_DIR)
     message("-- DConfig is supported by DTK")
-    dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+    if (DTK_VERSION_MAJOR EQUAL "6")
+        dtk_add_config_meta_files(APPID ${APPID} FILES ${configFile})
+    else()
+        dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+    endif()
 endif()
 
 install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES desktop/deepin-compressor.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
-file(GLOB INSTALL_QM_FILES ../translations/*.qm)
-install(FILES ${INSTALL_QM_FILES} 
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-compressor/translations)
+# translation files
+TRANSLATION_GENERATE(QM_FILES ${CMAKE_SOURCE_DIR}/translations)
+add_custom_target(${PROJECT_NAME}_qm_files DEPENDS ${QM_FILES})
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_qm_files)
+
+# Install translations
+install(FILES ${QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
 
 
 # 自定义右键菜单

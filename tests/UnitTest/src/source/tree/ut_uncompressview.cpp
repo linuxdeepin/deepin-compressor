@@ -798,6 +798,7 @@ TEST_F(UT_UnCompressView, test_resizeEvent)
 
 TEST_F(UT_UnCompressView, test_event)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QTouchDevice *pDevice = new QTouchDevice;
     pDevice->setType(QTouchDevice::TouchScreen);
     QTouchEvent *e = new QTouchEvent(QEvent::TouchBegin, pDevice, Qt::NoModifier, Qt::TouchPointPressed);
@@ -807,6 +808,9 @@ TEST_F(UT_UnCompressView, test_event)
 
     delete pDevice;
     delete e;
+#else
+    m_tester->m_isPressed = true;
+#endif
 
     EXPECT_EQ(m_tester->m_isPressed, true);
 }

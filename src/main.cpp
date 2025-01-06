@@ -12,7 +12,9 @@
 
 #include <DWidgetUtil>
 #include <DLog>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <DApplicationSettings>
+#endif
 
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -137,7 +139,9 @@ int main(int argc, char *argv[])
     app.setProductName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDisplayName(DApplication::translate("Main", "Archive Manager"));
     app.setApplicationDescription(DApplication::translate("Main", "Archive Manager is a fast and lightweight application for creating and extracting archives."));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DApplicationSettings settings(&app);
+#endif
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 

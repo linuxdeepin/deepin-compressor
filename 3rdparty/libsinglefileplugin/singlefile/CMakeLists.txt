@@ -7,15 +7,12 @@ project(${LIB_NAME})
 
 #查找依赖关系的包信息
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-#find_package(LibArchive)
-find_package(KF5Archive)
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS Widgets)
+find_package(KF${KF_VERSION_MAJOR}Archive REQUIRED)
 include(FindPkgConfig)
 
-pkg_search_module(DtkWidget REQUIRED dtkwidget)
 
 #指定头文件路径
-include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${HFILES_OUTPUT_PATH})
 
@@ -29,7 +26,7 @@ file(GLOB_RECURSE h_files RELATIVE ${PROJECT_SOURCE_DIR} *.h)
 #生成动静态库
 add_library(${LIB_NAME} STATIC ${h_files} ${c_files})
 target_link_libraries(${LIB_NAME}
-    Qt5::Widgets
-    KF5::Archive
+    Qt${QT_DESIRED_VERSION}::Widgets
+    KF${KF_VERSION_MAJOR}::Archive
     compressor-interface
 )

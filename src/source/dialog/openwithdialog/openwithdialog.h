@@ -10,6 +10,8 @@
 #include "mimesappsmanager.h"
 #include "singleton.h"
 
+#include "qtcompat.h"
+
 #include <DDialog>
 #include <dflowlayout.h>
 #include <DIconButton>
@@ -34,7 +36,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void enterEvent(EnterEvent *e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
 

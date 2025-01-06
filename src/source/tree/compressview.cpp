@@ -103,7 +103,7 @@ void CompressView::refreshCompressedFiles(bool bChanged, const QString &strFileN
 
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(DC_Name);
+    sortByColumn(DC_Name, Qt::AscendingOrder);
     resetLevel();   // 重置目录层级
 
     // 选中新加的文件
@@ -167,7 +167,11 @@ FileEntry CompressView::fileInfo2Entry(const QFileInfo &fileInfo)
         entry.qSize = fileInfo.size();
     }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+#else
+    entry.uLastModifiedTime = fileInfo.lastModified().toSecsSinceEpoch();   // 最后一次修改时间
+#endif
 
     return entry;
 }
@@ -188,7 +192,7 @@ void CompressView::handleDoubleClick(const QModelIndex &index)
             resizeColumnWidth();        // 重置列宽
             // 重置排序
             m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-            sortByColumn(DC_Name);
+            sortByColumn(DC_Name, Qt::AscendingOrder);
 
             m_vPre.push_back(entry.strFileName);
             // 空目录自动选中返回上一级目录Label bug122305
@@ -520,7 +524,7 @@ void CompressView::slotPreClicked()
     handleLevelChanged();
     // 重置排序
     m_pHeaderView->setSortIndicator(-1, Qt::SortOrder::AscendingOrder);
-    sortByColumn(DC_Name);
+    sortByColumn(DC_Name, Qt::AscendingOrder);
 
     //自动选中第一行
     QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex

@@ -48,7 +48,11 @@ CliInterface::CliInterface(QObject *parent, const QVariantList &args)
 {
     //    m_bHandleCurEntry = true;
     setWaitForFinishedSignal(true);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (QMetaType::type("QProcess::ExitStatus") == 0) {
+#else
+    if (!QMetaType::fromName("QProcess::ExitStatus").isValid()) {
+#endif
         qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
     }
 
@@ -342,7 +346,13 @@ PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const Com
         QDir::setCurrent(m_extractTempDir->path());
 
         // 添加临时路径中的第一层文件（夹）
-        fileList.append(destinationPath.split(QLatin1Char('/'), QString::SkipEmptyParts).at(0));
+fileList.append(destinationPath.split(QLatin1Char('/'), 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QString::SkipEmptyParts
+#else
+    Qt::SkipEmptyParts
+#endif
+).at(0));
     } else {   // 压缩、向压缩包第一层文件追加压缩
         QList<FileEntry> tempfiles = files;
         // 获取待压缩的文件
@@ -768,7 +778,7 @@ void CliInterface::handleProgress(const QString &line)
     if (m_process && m_process->program().at(0).contains("7z")) {   // 解析7z相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
-            int percentage = line.midRef(pos - 3, 3).toInt();
+            int percentage = line.mid(pos - 3, 3).toInt();
             if (percentage > 0) {
                 if (line.contains("\b\b\b\b") == true) {
                     QString strfilename;
@@ -786,7 +796,7 @@ void CliInterface::handleProgress(const QString &line)
                         }
 
                         if (count > 0) {
-                            strfilename = line.midRef(count + 2).toString();   // 文件名
+                            strfilename = line.mid(count + 2);   // 文件名
                             // 右键 解压到当前文件夹
                             if (m_workStatus == WT_Extract && !m_extractOptions.bExistList && m_indexOfListRootEntry == 0) {
                                 m_indexOfListRootEntry++;
@@ -819,18 +829,18 @@ void CliInterface::handleProgress(const QString &line)
     } else if (m_process && m_process->program().at(0).contains("unrar")) {   // 解析rar相关进度、文件名
         int pos = line.indexOf(QLatin1Char('%'));
         if (pos > 1) {
-            int percentage = line.midRef(pos - 3, 3).toInt();
+            int percentage = line.mid(pos - 3, 3).toInt();
             emit signalprogress(percentage);
         }
 
-        QStringRef strfilename;
+        // QStringRef strfilename;
         QString fileName;
         if (line.startsWith("Extracting")) {   // 普通文件
-            strfilename = line.midRef(12, pos - 24);
-            fileName = strfilename.toString();
+            fileName = line.mid(12, pos - 24);
+            // fileName = strfilename.toString();
         } else if (line.startsWith("Creating")) {   // 文件夹
-            strfilename = line.midRef(10, pos - 22);
-            fileName = strfilename.toString();
+            fileName = line.mid(10, pos - 22);
+            // fileName = strfilename.toString();
         }
 
         if (!fileName.isEmpty()) {
@@ -1240,7 +1250,7 @@ void CliInterface::readStdout(bool handleAll)
     }
 
     // 处理命令行输出
-    for (const QByteArray &line : qAsConst(lines)) {
+    for (const QByteArray &line : lines) {
         // 第二个判断条件是处理rar的list，当rar文件含有comment信息的时候需要根据空行解析
         if (!line.isEmpty() || (m_listEmptyLines && m_workStatus == WT_List)) {
             if (!handleLine(QString::fromLocal8Bit(line), m_workStatus)) {
@@ -1343,17 +1353,18 @@ void CliInterface::getChildProcessId(qint64 processId, const QStringList &listKe
         QList<QByteArray> lines = dd.split('\n');
 
         if (lines[0].contains(strProcessId.toUtf8())) {   // 从包含有processId这一行开始处理
-            for (const QByteArray &line : qAsConst(lines)) {
+            for (const QByteArray &line : lines) {
 
-                for (const QString &strKey : qAsConst(listKey)) {
+                for (const QString &strKey : listKey) {
                     QString str = QString("-%1(").arg(strKey);
-                    int iCount = line.count(str.toStdString().c_str());   // 多个子进程都需要获取到
+                    QByteArray strUtf8 = str.toUtf8();   // 将QString转换为QByteArray
+                    int iCount = line.count(strUtf8.constData());   // 多个子进程都需要获取到
                     int iIndex = 0;
                     for (int i = 0; i < iCount; ++i) {
-                        int iStartIndex = line.indexOf(str, iIndex);
+                        int iStartIndex = line.indexOf(strUtf8, iIndex);   // 使用QByteArray类型的参数
                         int iEndIndex = line.indexOf(")", iStartIndex);
                         if (0 < iStartIndex && 0 < iEndIndex) {
-                            childprocessid.append(line.mid(iStartIndex + str.length(), iEndIndex - iStartIndex - str.length()).toInt());   // 取-7z(3971)中间的进程号
+                            childprocessid.append(line.mid(iStartIndex + strUtf8.length(), iEndIndex - iStartIndex - strUtf8.length()).toInt());   // 取-7z(3971)中间的进程号
                         }
                         iIndex = iStartIndex + 1;
                     }

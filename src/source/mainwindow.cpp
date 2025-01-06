@@ -29,6 +29,7 @@
 #include "uitools.h"
 #include "calculatesizethread.h"
 #include "eventlogutils.h"
+#include "qtcompat.h"
 
 #include <DFileDialog>
 #include <DTitlebar>
@@ -70,7 +71,11 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(m_pMainWidget);    // 设置中心面板
     m_pMainWidget->setCurrentIndex(0);
 
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
     m_openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this); // Ctrl+Shift+/
+#else
+    m_openkey = new QShortcut(QKeyCombination(Qt::CTRL | Qt::SHIFT, Qt::Key_Slash), this); // Ctrl+Shift+/
+#endif
     m_openkey->setContext(Qt::ApplicationShortcut);
 
     // 初始化标题栏
@@ -388,7 +393,13 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 #endif
             m_stCompressParameter.qSize += curFileSize;
         } else if (fi.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
+#else
+            QtConcurrent::run([this, file](){
+                calFileSizeByThread(file);
+            });
+#endif
         }
     }
 
@@ -413,7 +424,13 @@ void MainWindow::calFileSizeByThread(const QString &path)
         QFileInfo fileInfo = list.at(i);
         if (fileInfo.isDir()) {
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, fileInfo.filePath());
+#else
+            QtConcurrent::run([this, fileInfo](){
+                calFileSizeByThread(fileInfo.filePath());
+            });
+#endif
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小
@@ -1040,7 +1057,7 @@ void MainWindow::slotCompress(const QVariant &val)
     // 判断zip格式是否使用了中文加密
     bool zipPasswordIsChinese = false;
     if ("application/zip" == m_stCompressParameter.strMimeType) {
-        if (m_stCompressParameter.strPassword.contains(QRegExp("[\\x4e00-\\x9fa5]+"))) {
+        if (m_stCompressParameter.strPassword.contains(REG_EXP("[\\x4e00-\\x9fa5]+"))) {
             zipPasswordIsChinese = true;
         }
     }
@@ -2000,7 +2017,11 @@ void MainWindow::ConstructAddOptions(const QStringList &files)
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
         entry.qSize = fileInfo.size();   // 大小
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+#else
+        entry.uLastModifiedTime = fileInfo.lastModified().toSecsSinceEpoch();   // 最后一次修改时间
+#endif
 
         m_stUpdateOptions.listEntry << entry;
 
@@ -2008,7 +2029,13 @@ void MainWindow::ConstructAddOptions(const QStringList &files)
             qint64 curFileSize = entry.qSize;
             m_stUpdateOptions.qSize += curFileSize;
         } else {    // 如果是文件夹，递归获取所有子文件大小总和
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::ConstructAddOptionsByThread, file);
+#else
+            QtConcurrent::run([this, file]() {
+                ConstructAddOptionsByThread(file);
+            });
+#endif
         }
     }
 
@@ -2033,14 +2060,24 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
         entry.strFileName = fileInfo.fileName();    // 文件名
         entry.isDirectory = fileInfo.isDir();   // 是否是文件夹
         entry.qSize = fileInfo.size();   // 大小
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
         entry.uLastModifiedTime = fileInfo.lastModified().toTime_t();   // 最后一次修改时间
+#else
+        entry.uLastModifiedTime = fileInfo.lastModified().toSecsSinceEpoch();   // 最后一次修改时间
+#endif
 
         if (entry.isDirectory) {
             mutex.lock();
             m_stUpdateOptions.listEntry << entry;
             mutex.unlock();
             // 如果是文件夹 则将此文件夹放入线程池中进行计算
+#if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::ConstructAddOptionsByThread, entry.strFullPath);
+#else
+            QtConcurrent::run([this, entry]() {
+                ConstructAddOptionsByThread(entry.strFullPath);
+            });
+#endif
         } else {
             mutex.lock();
             // 如果是文件则直接计算大小
@@ -2432,7 +2469,7 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             int iIndex = strpath.lastIndexOf(QDir::separator());
             //fixbug:163153 远程挂在目录下压缩多个文件，压缩文件夹存在路径中特殊字符
             //这里使用最后一个文件夹名进行压缩，防止特殊字符压缩不成功
-            QRegExp reg("^\s+|[\\:*\"'?<>|\r\n\t]");
+            REG_EXP reg("^\s+|[\\:*\"'?<>|\r\n\t]");
             if (strpath.mid(iIndex).indexOf(reg) != -1) {
                 QString compressor = strpath.split("=").last() + strSuffix;
                 if (compressor.indexOf(reg) != -1)
@@ -2655,7 +2692,7 @@ bool MainWindow::handleArguments_Append(const QStringList &listParam)
 
     return true;
 }
-
+#include <QSet>
 void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFiles/*, const QString &strTargetPath*/)
 {
     if (listFiles.count() == 0) {
@@ -2689,7 +2726,13 @@ void MainWindow::rightExtract2Path(StartupType eType, const QStringList &listFil
         listTransFiles << strFileName;
         mapType[strFileName] = eSplitVolume;
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     listTransFiles = listTransFiles.toSet().toList();   // 处理重复文件，防止出现重复的分卷文件名
+#else
+    // 使用 QSet 去除重复的文件名，然后再转换回 QStringList
+    QSet<QString> setTransFiles(listTransFiles.begin(), listTransFiles.end());
+    listTransFiles = QStringList(setTransFiles.begin(), setTransFiles.end());
+#endif
 
     if (listTransFiles.count() == 1) {
         // 单个压缩包解压
@@ -3161,7 +3204,11 @@ void MainWindow::slotTitleCommentButtonPressed()
         QString str2 = fontMetrics().elidedText(file.filePath(), Qt::ElideMiddle, 150);
         right3->setText(str2);
         right3->setToolTip(file.filePath());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         DLabel *right4 = new DLabel(file.created().toString("yyyy/MM/dd hh:mm:ss"));
+#else
+        DLabel *right4 = new DLabel(file.birthTime().toString("yyyy/MM/dd hh:mm:ss"));
+#endif
         DLabel *right5 = new DLabel(file.lastRead().toString("yyyy/MM/dd hh:mm:ss"));
         DLabel *right6 = new DLabel(file.lastModified().toString("yyyy/MM/dd hh:mm:ss"));
 
