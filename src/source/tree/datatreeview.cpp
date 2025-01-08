@@ -419,7 +419,11 @@ bool DataTreeView::event(QEvent *event)
             //dell触摸屏幕只有一个touchpoint 但却能捕获到pinchevent缩放手势?
             if (points.count() == 1) {
                 QTouchEvent::TouchPoint p = points.at(0);
+                #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+                m_lastTouchBeginPos = p.pos();
+                #else
                 m_lastTouchBeginPos = p.position();
+                #endif
                 m_lastTouchBeginPos.setY(m_lastTouchBeginPos.y() - m_pHeaderView->height());
                 m_lastTouchTime = QTime::currentTime();
                 m_isPressed = true;
