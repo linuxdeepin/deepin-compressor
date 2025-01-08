@@ -23,7 +23,6 @@ Build-Depends:
  libarchive-dev,
  libsecret-1-dev,
  libpoppler-cpp-dev,
- libdisomaster-dev,
  libzip-dev,
  libmount-dev,
  libminizip-dev,
