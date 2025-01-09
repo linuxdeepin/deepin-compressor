@@ -15,8 +15,6 @@ runtime:
   version: 23.0.0
 
 depends:
-  - id: disomaster
-    version: 5.0.7.1
   - id: kcodecs
     version: 5.54.0
     type: runtime
