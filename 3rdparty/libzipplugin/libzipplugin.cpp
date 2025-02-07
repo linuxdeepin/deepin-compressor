@@ -183,6 +183,12 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
+                //密码错误, 给出错误提示
+                if(ET_WrongPassword == m_eErrorType && !m_strPassword.isEmpty()) {
+                    zip_close(archive);
+                    m_strPassword = "";
+                    return PFT_Error;
+                }
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
                     PasswordNeededQuery query(strFileName);
@@ -227,6 +233,13 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
+                //密码错误, 给出错误提示
+                if(ET_WrongPassword == m_eErrorType && !m_strPassword.isEmpty()) {
+                    zip_close(archive);
+                    m_strPassword = "";
+                    emit error(("Wrong password."));
+                    return PFT_Error;
+                }
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
 
