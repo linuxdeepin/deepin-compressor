@@ -1,3 +1,9 @@
+deepin-compressor (6.5.2) unstable; urgency=medium
+
+  * bump version to 6.5.2.
+
+ -- Wang Yu <wangyu@uniontch.com>  Thu, 06 Mar 2025 20:25:27 +0800
+
 deepin-compressor (6.5.1) unstable; urgency=medium
 
   * bump version to 6.5.1
