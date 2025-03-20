@@ -10,7 +10,6 @@
 #include "uistruct.h"
 #include "popupdialog.h"
 #include "DebugTimeManager.h"
-#include "qtcompat.h"
 
 #include <DApplication>
 #include <DFileDialog>
@@ -858,11 +857,13 @@ void CompressSettingPage::slotCompressClicked()
     }
 
     //压缩zip分卷不支持中文密码
-    if (m_pSplitCkb->isChecked()
-            && "zip" == m_pCompressTypeLbl->text()
-            && (!m_pPasswordEdt->text().isEmpty() && m_pPasswordEdt->text().contains(REG_EXP("[\\x4e00-\\x9fa5]+")))) {
-        m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
-        return;
+    if (m_pSplitCkb->isChecked() && "zip" == m_pCompressTypeLbl->text()) {
+        QString strPassword = m_pPasswordEdt->lineEdit()->text();
+        QRegularExpression chineseRegex("[\\x{4e00}-\\x{9fa5}]+");
+        if (!strPassword.isEmpty() && chineseRegex.match(strPassword).hasMatch()) {
+            m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
+            return;
+        }
     }
 
     // 检查合法性
@@ -953,25 +954,17 @@ void CompressSettingPage::slotCommentTextChanged()
 
 void CompressSettingPage::slotPasswordChanged()
 {
-    REG_EXP reg("^[\\x00-\\x80\\x4e00-\\x9fa5]+$");
+    QRegularExpression reg("^[\\x00-\\x80\\x{4e00}-\\x{9fa5}]+$");
     QString pwdin = m_pPasswordEdt->lineEdit()->text();
     QString pwdout;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    if (!pwdin.isEmpty() && !reg.exactMatch(pwdin)) {
-        for (int i = 0; i < pwdin.length(); ++i) {
-            if (reg.exactMatch(pwdin.at(i))) {
-                pwdout.push_back(pwdin.at(i));
-            }
-        }
-#else
     if (!pwdin.isEmpty() && !reg.match(pwdin).hasMatch()) {
         for (int i = 0; i < pwdin.length(); ++i) {
             if (reg.match(pwdin.at(i)).hasMatch()) {
                 pwdout.append(pwdin.at(i));
             }
         }
-#endif
+
         m_pPasswordEdt->setText(pwdout);
         // 仅支持中英文字符及部分符号
         m_pPasswordEdt->showAlertMessage(tr("Only Chinese and English characters and some symbols are supported"));
