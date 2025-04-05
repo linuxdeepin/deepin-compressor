@@ -1,15 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sq">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ne">
 <context>
     <name>AppendDialog</name>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="438"/>
         <source>Add files to the current archive</source>
-        <translation>Shtoni kartela te arkivi i tanishëm</translation>
+        <translation>वर्तमान अवकाशमा फाइल लागि जोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="443"/>
         <source>Use password</source>
-        <translation>Përdor fjalëkalim</translation>
+        <translation>क्रिप्टोग्राफी गार्ड लागि लाम्ब्रा लगाउनुहोस्</translation>
     </message>
 </context>
 <context>
@@ -18,19 +18,19 @@
         <location filename="../src/source/common/calculatesizethread.cpp" line="68"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="136"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation>Kartela origjinale e %1 s’ekziston, ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>%1 फाइल अवश्यकतया छैन, कृपया तालिकामा जाँच गर्नुहोस् र फिर्सतेहरूमा पुनः प्रयोग गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="70"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="138"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>%1 s’ekziston në disk, ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>&apos;%1 डिस्कमा छैन, कृपया तालिकामा जाँच गर्नुहोस् र फिर्सतेहरूमा पुनः प्रयोग गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="79"/>
         <location filename="../src/source/common/calculatesizethread.cpp" line="147"/>
         <source>You do not have permission to compress %1</source>
-        <translation>S’keni leje për të ngjeshur %1</translation>
+        <translation>%1 निवृत्तिभन्दा घनित्ती गर्न सकिन्छौँ</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="234"/>
         <source>Updating the comment...</source>
-        <translation>Po përditësohet komenti…</translation>
+        <translation>कमेंट अद्यतन गर्न... </translation>
     </message>
 </context>
 <context>
@@ -46,18 +46,18 @@
     <message>
         <location filename="../src/source/page/compresspage.cpp" line="81"/>
         <source>Next</source>
-        <translation>Pasuesja</translation>
+        <translation>अग्रिम</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresspage.cpp" line="122"/>
         <source>Please add files</source>
-        <translation>Ju lutemi, shtoni kartela</translation>
+        <translation>कृपया फाइलहरू लागि जोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresspage.cpp" line="122"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ठीक छ</translation>
     </message>
 </context>
 <context>
@@ -66,208 +66,208 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="146"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="229"/>
         <source>New Archive</source>
-        <translation>Arkiv i Ri</translation>
+        <translation>नयो अवकाश</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="207"/>
         <source>Advanced Options</source>
-        <translation>Mundësi të Mëtejshme</translation>
+        <translation>वैशिष्ट्यको विकल्पहरू</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="211"/>
         <source>Compression method</source>
-        <translation>Metodë ngjeshjeje</translation>
+        <translation>घनित्ती विधि</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="214"/>
         <source>Encrypt the archive</source>
-        <translation>Fshehtëzoje arkivin</translation>
+        <translation>अवकाशलाई क्रिप्टोग्राफी गार्ड गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="216"/>
         <source>CPU threads</source>
-        <translation>Filat CPU</translation>
+        <translation>CPU धाराहरू</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>Encrypt the file list too</source>
-        <translation>Fshehtëzo edhe listën e kartelave</translation>
+        <translation>फाइल तालिकालाई भने क्रिप्टोग्राफी गार्ड गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="220"/>
         <source>Split to volumes</source>
-        <translation>Ndaje në vëllime</translation>
+        <translation>वॉल्यूमहरूमा विभाजन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="222"/>
         <source>Comment</source>
-        <translation>Koment</translation>
+        <translation>कमेंट</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="224"/>
         <source>Compress</source>
         <comment>button</comment>
-        <translation>Ngjeshe</translation>
+        <translation>घनित्ती गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Store</source>
-        <translation>Depozitoje</translation>
+        <translation>पारिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Fastest</source>
-        <translation>Më e shpejta</translation>
+        <translation>सबै तेजोतरो</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Fast</source>
-        <translation>E shpejtë</translation>
+        <translation>तेजोतरो</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>सामान्य</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Good</source>
-        <translation>E mirë</translation>
+        <translation>सुन्दर</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="243"/>
         <source>Best</source>
-        <translation>Më e mira</translation>
+        <translation>सबै अच्छोतरो</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>Single thread</source>
-        <translation>Filat e poënë</translation>
+        <translation>विशेष धारा</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>2 threads</source>
-        <translation>2 filat</translation>
+        <translation>2 सिरोहीहरू</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>4 threads</source>
-        <translation>4 filat</translation>
+        <translation>4 सिरोहीहरू</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="250"/>
         <source>8 threads</source>
-        <translation>8 filat</translation>
+        <translation>8 सिरोहीहरू</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="260"/>
         <source>Support zip, 7z type only</source>
-        <translation>Mbulo zip, vetëm të llojit 7z</translation>
+        <translation>zip, 7z तरिकालाई विशेषबाट समर्थन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="263"/>
         <source>Support 7z type only</source>
-        <translation>Mbulo vetëm llojin 7z</translation>
+        <translation>7z तरिकालाई विशेषबाट समर्थन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="275"/>
         <source>Enter up to %1 characters</source>
-        <translation>Jepni deri %1 shenja</translation>
+        <translation>%1 वटा वर्णहरू दाखिल गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="296"/>
         <source>Name</source>
-        <translation>Emër</translation>
+        <translation>नाम</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="297"/>
         <source>Save to</source>
-        <translation>Ruaje te</translation>
+        <translation>संग्रहण गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="489"/>
         <source>Invalid file name</source>
-        <translation>Emër i pavlefshëm kartele</translation>
+        <translation>वैध फाइल नाम छैन</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="495"/>
         <source>Please enter the path</source>
-        <translation>Ju lutemi, jepni shtegun</translation>
+        <translation>कृपया रास्ता दाखिल गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="500"/>
         <source>The path does not exist, please retry</source>
-        <translation>Shtegu s’ekziston, ju lutemi, riprovoni</translation>
+        <translation>रास्ता छैन, कृपया पुनरार्थ प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="505"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>S’keni leje të ruani kartela këtu, ju lutemi, ndryshoni lejet dhe riprovoni</translation>
+        <translation>यी पाइको फाइल संग्रहण गर्न सकारात्मक छैन, कृपया परिवर्तन गर्दा पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
         <source>Too many volumes, please change and retry</source>
-        <translation>Shumë vëllime, ju lutemi, ndryshojini dhe riprovoni</translation>
+        <translation>मिश्रणहरू अधिक, कृपया परिवर्तन गर्दा पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="522"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="550"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>%1 s’ekziston te disku, ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>&apos;%1 डिस्कमा छैन, कृपया तयारी गर्दा पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="528"/>
         <location filename="../src/source/page/compresssettingpage.cpp" line="557"/>
         <source>You do not have permission to compress %1</source>
-        <translation>S’keni leje të ngjishni %1</translation>
+        <translation>यी %1 विस्तार गर्न सकारात्मक छैन</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>The original file of %1 does not exist, please check and try again</source>
-        <translation>Kartela origjinale %1 s’ekziston, ju lutemi, kontrolloni dhe riprovoni</translation>
+        <translation>%1 वास्तविक फाइल छैन, कृपया तयारी गर्दा पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="583"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ठीक हुनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation>Zëvendësoje</translation>
+        <translation>परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="705"/>
         <source>Total size: %1</source>
-        <translation>Madhësi gjithsej: %1</translation>
+        <translation>कुल आकार: %1</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="725"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Emri është i njëjtë me atë të arkivit të ngjeshur, ju lutemi, përdorni një tjetër</translation>
+        <translation>नाम विस्तारित फाइलको नाम समान हुन्छ, अन्य एक लागुनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="733"/>
         <source>The password for ZIP volumes cannot be in Chinese</source>
-        <translation>Fjalëkalimi për vëllimet ZIP s’mund të jetë në gjuhën kineze</translation>
+        <translation>ZIP मिश्रणहरूको पासवर्ड चीनी वर्णहरूमा छन्न नुक्टेनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="797"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
+        <translation>समान नामको एउटा फाइल छ र उसलाई परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="837"/>
         <source>Only Chinese and English characters and some symbols are supported</source>
-        <translation>Mbulohen vetëm shenja të gjuhës kineze dhe të anglishtes, si dhe disa simbole</translation>
+        <translation>केवल चीनी र अंग्ली वर्णहरू र कुछ चिन्हहरू समर्थन गर्नुपर्छ</translation>
     </message>
 </context>
 <context>
@@ -275,62 +275,64 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="296"/>
         <source>Open</source>
-        <translation>Përzgjidhni kartelën</translation>
+        <translation>पनि खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="309"/>
         <source>Rename</source>
-        <translation>Riemërtojeni</translation>
+        <translation>परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="314"/>
         <source>Delete</source>
-        <translation>Fshije</translation>
+        <translation>ລ RELATED</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="317"/>
         <source>Open with</source>
-        <translation>Hape me</translation>
+        <translation>निवड गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="321"/>
         <location filename="../src/source/tree/compressview.cpp" line="500"/>
         <source>Select default program</source>
-        <translation>Përzgjidhni program parazgjedhje</translation>
+        <translation>स्थानिक प्रोग्राम निवड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation>Do të fshijë përgjithnjë kartelën(at). Jeni i sigurt se doni të vazhdohet?</translation>
+        <translation>यो फाइलहरूको लागि निर्णायक रूपमा हटाउँदछ। आपको यस गर्न अनुमति दिइनु छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <location filename="../src/source/tree/compressview.cpp" line="474"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="364"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>हस्ताक्षर गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="475"/>
         <source>Add</source>
         <comment>button</comment>
-        <translation>Shtoje</translation>
+        <translation>जोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="473"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation>Doni të shtohet arkivi te lista apo të hapet në një dritare të re?</translation>
+        <translation>आपको यस अवलोकनलाई यादीमा जोड्नु वा एउटा नयाँ विंडोमा खोल्नु चाहिने?
+</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Open in new window</source>
-        <translation>Hape në dritare të re</translation>
+        <translation>नयाँ विंडोमा खोल्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -338,24 +340,25 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="312"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation>Nuk mbulohet ndryshime te arkiva me këtë lloj kartelash. Që të ruhen ndryshimet, ju lutemi, shndërroni formatin e arkivit.</translation>
+        <translation>यस फाइल प्रकारको अवलोकनहरूमा कुनै बदल आफ्नो समर्थन छैन। अन्तर्गत बदल्न समर्थक अवलोकन रूपमा परिवर्तन गर्नुहोस्।
+</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="320"/>
         <source>Convert the format to:</source>
-        <translation>Shndërroje formatin në:</translation>
+        <translation>रूपमा परिवर्तन गर्नुहोस्:</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="344"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="345"/>
         <source>Convert</source>
         <comment>button</comment>
-        <translation>Shndërroje</translation>
+        <translation>परिवर्तन गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -363,7 +366,8 @@
     <message>
         <location filename="../src/source/tree/datamodel.cpp" line="70"/>
         <source>item(s)</source>
-        <translation>objekt(e)</translation>
+        <translation>वस्तु(हरू)
+</translation>
     </message>
 </context>
 <context>
@@ -372,23 +376,25 @@
         <location filename="../src/source/page/failurepage.cpp" line="87"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>Përftimi dështoi</translation>
+        <translation>स्थानापन विफल भयो
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="100"/>
         <source>Damaged file, unable to extract</source>
-        <translation>Kartelë e dëmtuar, s’arrihet të përftohet</translation>
+        <translation>भ्रष्ट फाइल, स्थानापन गर्न सकिन्छ भने
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="105"/>
         <source>Retry</source>
         <comment>button</comment>
-        <translation>Riprovoni</translation>
+        <translation>पुन्हा प्रयस्त गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="108"/>
         <source>Back</source>
-        <translation>Mbrapsht</translation>
+        <translation>पछि</translation>
     </message>
 </context>
 <context>
@@ -396,12 +402,14 @@
     <message>
         <location filename="../src/source/page/homepage.cpp" line="56"/>
         <source>Drag file or folder here</source>
-        <translation>Tërhiqni këtu kartelë ose dosje</translation>
+        <translation>यहाँ फाइल वा फोल्डर टाइगर गर्नुहोस्
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/homepage.cpp" line="58"/>
         <source>Select File</source>
-        <translation>Përzgjidhni Kartelë</translation>
+        <translation>फाइल निवड्नुहोस्
+</translation>
     </message>
 </context>
 <context>
@@ -409,18 +417,20 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="525"/>
         <source>The archive is damaged</source>
-        <translation>Arkivi është i dëmtuar</translation>
+        <translation>अवलोकन भ्रष्ट छ
+</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="528"/>
         <source>Open as read-only</source>
-        <translation>Hape si vetëm-për-lexim</translation>
+        <translation> csak प्रवाहन गर्नुहोस्
+</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="529"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -428,7 +438,8 @@
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="65"/>
         <source>Loading, please wait...</source>
-        <translation>Po ngarkohet, ju lutemi, pritni…</translation>
+        <translation>लोडिङ, कृपया तपाईंलाई आश्चर्य गर्नुहोस्...
+</translation>
     </message>
 </context>
 <context>
@@ -437,12 +448,12 @@
         <location filename="../src/main.cpp" line="60"/>
         <location filename="../src/main.cpp" line="61"/>
         <source>Archive Manager</source>
-        <translation>Përgjegjës Arkivash</translation>
+        <translation>आर्काइव मनेजर</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>Përgjegjësi i Kartelave është një aplikacion i shpejtë dhe i peshës së lehtë për krijim dhe përftim arkivash.</translation>
+        <translation>आर्काइव मनेजर एक तेज रूपमा और हल्का एप्लिकेशन है जो आर्काइव बनाने और उन्हें खोलने के लिए।</translation>
     </message>
 </context>
 <context>
@@ -450,65 +461,65 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="75"/>
         <source>Archive Manager</source>
-        <translation>Përgjegjës Arkivash</translation>
+        <translation>आर्काइव मनेजर</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="533"/>
         <source>%1 was changed on the disk, please import it again.</source>
-        <translation>%1 ndryshoi në disk, ju lutemi, riimportojeni.</translation>
+        <translation>%1 डिस्कमा बदलाउँदै हुन्छ, कृपया फिर सँग इनपोर्ट गर्नुहोस्।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="179"/>
         <source>Open file</source>
-        <translation>Hap kartelë</translation>
+        <translation>फाइल खोल्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="180"/>
         <source>Settings</source>
-        <translation>Rregullime</translation>
+        <translation>सेटिङहरू</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="276"/>
         <location filename="../src/source/mainwindow.cpp" line="286"/>
         <source>Create New Archive</source>
-        <translation>Krijoni Arkiv të Ri</translation>
+        <translation>नयाँ आर्काइव बनाउनु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="299"/>
         <source>Adding files to %1</source>
-        <translation>Po shtohen kartela te %1</translation>
+        <translation>%1मा फाइलहरू जोड्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="306"/>
         <source>Compressing</source>
-        <translation>Po ngjishen</translation>
+        <translation>संकुचन गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Extracting</source>
-        <translation>Po përftohet</translation>
+        <translation>खोल्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="320"/>
         <source>Deleting</source>
-        <translation>Po fshihet</translation>
+        <translation>मार्गदर्शिता गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="334"/>
         <source>Converting</source>
-        <translation>Po shndërrohet</translation>
+        <translation>परिवर्तन गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="441"/>
         <location filename="../src/source/mainwindow.cpp" line="603"/>
         <source>You do not have permission to load %1</source>
-        <translation>S’keni leje të ngarkoni%1</translation>
+        <translation>%1 लागि आपलाई लोड गर्न सक्षमता छैन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="493"/>
         <location filename="../src/source/mainwindow.cpp" line="2867"/>
         <source>Loading, please wait...</source>
-        <translation>Po ngarkohet, ju lutemi, pritni…</translation>
+        <translation>लोड गर्दा, कृपया ठाउँ राखनुहोस्...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="503"/>
@@ -516,12 +527,13 @@
         <location filename="../src/source/mainwindow.cpp" line="2097"/>
         <location filename="../src/source/mainwindow.cpp" line="2122"/>
         <source>Plugin error</source>
-        <translation>Gabim shtojce</translation>
+        <translation>प्लगइन त्रुटि</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
         <source>Are you sure you want to stop the ongoing task?</source>
-        <translation>Jeni i sigurt se doni të ndalet akti që është duke u kryer?</translation>
+        <translation>आपलाई चाहिए तरिकोलाई चलने राखेको काम रोक्नु प्रति रहेको छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
@@ -530,48 +542,48 @@
         <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="569"/>
         <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>स्वीकार गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
-        <translation>S’ka kartelë ose drejtori të tillë</translation>
+        <translation>सोचिएको ऐसो फाइल वा दर्जालाई छैन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1284"/>
         <source>Adding successful</source>
-        <translation>Shtim i suksesshëm</translation>
+        <translation>जोडन विनायक</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1290"/>
         <location filename="../src/source/mainwindow.cpp" line="1417"/>
         <location filename="../src/source/mainwindow.cpp" line="1433"/>
         <source>Updating, please wait...</source>
-        <translation>Po përditësohet, ju lutemi, pritni…</translation>
+        <translation>अपडेट गर्दा, कृपया ठाउँ राखनुहोस्...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
-        <translation>Përftim i suksesshëm</translation>
+        <translation>खोलन विनायक</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1542"/>
         <source>Extraction canceled</source>
         <comment>取消提取</comment>
-        <translation>Përftimi u anulua</translation>
+        <translation>खोलन रद्द गरिएको</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1676"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation>Përftimi dështoi: emri i kartelës është shumë i gjatë</translation>
+        <translation>खोलन विफल भएको: फाइलको नाम खेलू छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
@@ -579,111 +591,111 @@
         <location filename="../src/source/mainwindow.cpp" line="2101"/>
         <location filename="../src/source/mainwindow.cpp" line="2126"/>
         <source>The archive is damaged</source>
-        <translation>Arkivi është i dëmtuar</translation>
+        <translation>आर्काइव नुकसान पाईको हो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1825"/>
         <source>Open failed: the file name is too long</source>
-        <translation>Hapja dështoi: emri i kartelës është shumë i gjatë</translation>
+        <translation>फाइल नाम खोलने मा ठूलो छ।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
-        <translation>Përftim i suksesshëm</translation>
+        <translation>फाइल खोलिने सफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2050"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation>Emri i kartelës është shumë i gjatë, ndaj si emri i kartelës janë dhënë 60 shenjat e para.</translation>
+        <translation>फाइल नाम ठूलो छ, तर पहिलो ६० अक्षर फाइल नाम रूपान्तरित गएको छन्।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2079"/>
         <location filename="../src/source/mainwindow.cpp" line="2150"/>
         <source>Insufficient disk space</source>
-        <translation>Hapësirë e pamjaftueshme disku</translation>
+        <translation>कडेमा अपर्याप्त अंतराल</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2083"/>
         <source>The compressed volumes already exist</source>
-        <translation>Vëllimet e ngjeshura ekzistojnë tashmë</translation>
+        <translation>जमाएको आयामका भन्दा रुपान्तरित वॉल्यूम दुईहरू वास्तवमा उपस्थित छन्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>Përftimi dështoi</translation>
+        <translation>फाइल खोलिने असफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2138"/>
         <location filename="../src/source/mainwindow.cpp" line="2162"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation>Emri i kartelës është shumë i gjatë. Ju lutemi, mbajeni emrin brenda 60 shenjave.</translation>
+        <translation>फाइल नाम ठूलो छ। कृपया नाम ६० अक्षर भन्दा छोटो बनाउनुहोस्।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2159"/>
         <source>Conversion failed</source>
-        <translation>Shndërrimi dështoi</translation>
+        <translation>रूपान्तरण असफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2399"/>
         <source>The name is the same as that of the compressed archive, please use another one</source>
-        <translation>Emri është i njëjti me atë të arkivit të ngjeshur, ju lutemi, përdorni një tjetër</translation>
+        <translation>नाम जमाएको आयामको नाम एउटा हो, कृपया अन्य एउटा लागुनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
+        <translation>एउटा फाइल एउटै नाम वास्तवमा उपस्थित छ, उसलाई बदल्नुहोस्?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2550"/>
         <source>You cannot add the archive to itself</source>
-        <translation>S’mund t’i shtoni arkivit vetveten</translation>
+        <translation>आयामकले आफ्ले आयामकलाई जोडिने सक्नुहुन्छौं</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2565"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation>S’mund të shtoni kartela të këtij lloji te arkiva</translation>
+        <translation>यस फाइल रूपमा फाइलहरू जोडिने सक्नुहुन्छौं</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3167"/>
         <source>Enter up to %1 characters</source>
-        <translation>Jepni deri %1 shenja</translation>
+        <translation>%1 अक्षर भन्दा छोटो वाच्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1698"/>
         <source>File name too long</source>
-        <translation>Emër kartele shumë i gjatë</translation>
+        <translation>फाइल नाम ठूलो छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2075"/>
         <source>Failed to create file</source>
-        <translation>S’u arrit të krijohet kartelë</translation>
+        <translation>फाइल बनाइने असफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2044"/>
         <source>Compression successful</source>
-        <translation>Ngjeshje e suksesshme</translation>
+        <translation>जमाइने सफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>Compression failed</source>
-        <translation>Ngjeshja dështoi</translation>
+        <translation>जमाइने असफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2471"/>
         <source>Find directory</source>
-        <translation>Gjej drejtori</translation>
+        <translation>काठिन्यात गाउँदु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
         <source>Open failed</source>
-        <translation>Hapja dështoi</translation>
+        <translation>खोलिने असफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2278"/>
         <source>The archive was changed on the disk, please import it again.</source>
-        <translation>Arkivi ndryshoi në disk, ju lutemi, riimportojeni.</translation>
+        <translation>कडेमा आयामक बदलिने छ, कृपया उसलाई फिर्ता भएको रूपमा वापस इनपोर्ट गर्नुहोस्।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1619"/>
@@ -692,7 +704,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1823"/>
         <location filename="../src/source/mainwindow.cpp" line="2105"/>
         <source>Wrong password</source>
-        <translation>Fjalëkalim i gabuar</translation>
+        <translation>गलत पासवर्ड</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="136"/>
@@ -709,168 +721,168 @@
         <location filename="../src/source/mainwindow.cpp" line="2729"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ठीक छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="612"/>
         <location filename="../src/source/mainwindow.cpp" line="645"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation>Formati i kartelës s’mbulohet nga Përgjegjësi i Arkivave</translation>
+        <translation>फाइल रूप अर्को अनुसार आयामक विनियमनमा पुरानो छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2054"/>
         <source>Conversion successful</source>
-        <translation>Shndërrim i suksesshëm</translation>
+        <translation>रूपान्तरण सफल भयो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2289"/>
         <source>Close</source>
-        <translation>Mbylle</translation>
+        <translation>बन्द</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2293"/>
         <source>Help</source>
-        <translation>Ndihmë</translation>
+        <translation>सहायता</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2301"/>
         <source>Delete</source>
-        <translation>Fshije</translation>
+        <translation>हटाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2309"/>
         <source>Display shortcuts</source>
-        <translation>Shfaq shkurtore</translation>
+        <translation>घोषकहरू दित्छन्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2321"/>
         <source>Shortcuts</source>
-        <translation>Shkurtore</translation>
+        <translation>घोषकहरू</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3043"/>
         <source>File info</source>
-        <translation>Hollësi kartele</translation>
+        <translation>फाइल जानकारी</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="341"/>
         <source>Updating comments</source>
-        <translation>Po përditësohen komentet</translation>
+        <translation>परिवर्तन गर्ने कौनसा</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="327"/>
         <source>Renaming</source>
-        <translation>Riemërtim</translation>
+        <translation>परिच्यात्मक रिनाम</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1316"/>
         <location filename="../src/source/mainwindow.cpp" line="2146"/>
         <source>No data in it</source>
-        <translation>S’ka të dhëna në të</translation>
+        <translation>मध्यममा कुनै डाटा छैन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1521"/>
         <source>Adding canceled</source>
-        <translation>Shtimi u anulua</translation>
+        <translation>जोडिने रद्द गरियो</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1623"/>
         <source>Adding failed</source>
-        <translation>Shtimi dështoi</translation>
+        <translation>जोडिने विफल छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1703"/>
         <location filename="../src/source/mainwindow.cpp" line="2142"/>
         <source>Failed to create &quot;%1&quot;</source>
-        <translation>S’u arrit të krijohet “%1”</translation>
+        <translation>&quot;%1&quot; बनाइने विफल छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2109"/>
         <location filename="../src/source/mainwindow.cpp" line="2130"/>
         <source>Some volumes are missing</source>
-        <translation>Mungojnë disa vëllime</translation>
+        <translation>कुनै लगातार वॉल्यूम अनुपस्थित छन्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2134"/>
         <source>Wrong password, please retry</source>
-        <translation>Fjalëkalim i gabuar, ju lutemi, riprovoni</translation>
+        <translation>गलत पासवर्ड, अनुप्रयोग गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2297"/>
         <source>Select file</source>
-        <translation>Përzgjidhni kartelë</translation>
+        <translation>फाइल पनि चयन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation>Zëvendësoje</translation>
+        <translation>निर्वाचन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2889"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation>Përditësoje</translation>
+        <translation>अद्यतन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3067"/>
         <source>Basic info</source>
-        <translation>Hollësi bazë</translation>
+        <translation>आधिकारिक जानकारी</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3083"/>
         <source>Size</source>
-        <translation>Madhësi</translation>
+        <translation>आकार</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3084"/>
         <source>Type</source>
-        <translation>Lloj</translation>
+        <translation>वर्गीकरण</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3085"/>
         <source>Location</source>
-        <translation>Vendndodhje</translation>
+        <translation>स्थान</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3086"/>
         <source>Time created</source>
-        <translation>Kohë kur u krijua</translation>
+        <translation>सृजन गरिने समय</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3087"/>
         <source>Time accessed</source>
-        <translation>Kohë kur u përdor</translation>
+        <translation>निवडिने समय</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3088"/>
         <source>Time modified</source>
-        <translation>Kohë ndryshimi</translation>
+        <translation>परिवर्तन गरिने समय</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3098"/>
         <source>Archive</source>
-        <translation>Arkiv</translation>
+        <translation>फाइल रकमा</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3129"/>
         <source>Comment</source>
-        <translation>Koment</translation>
+        <translation>कौनसा</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="642"/>
         <source>Please check the file association type in the settings of Archive Manager</source>
-        <translation>Ju lutemi, kontrolloni llojin e përshoqërimit të kartelës te rregullimet e Përgjegjësit të Arkivave</translation>
+        <translation>आर्काइव मनेजर की सेटिङमा फाइल संबंधी प्रकार छैन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="136"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>S’keni leje të ruani kartela këtu, ju lutemi, ndryshoni lejet dhe riprovoni</translation>
+        <translation>यीहाँ फाइल बनाउने प्रमाण छैन, परिवर्तन गर्नुहोस् र पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1393"/>
         <source>Do you want to delete the archive?</source>
-        <translation>Doni të fshihet arkivi?</translation>
+        <translation>आर्काइव छुट्टाउनुहोस् छौं छैन?</translation>
     </message>
 </context>
 <context>
@@ -878,52 +890,52 @@
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="46"/>
         <source>Directory</source>
-        <translation>Drejtori</translation>
+        <translation>पाथराइन</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="47"/>
         <source>Application</source>
-        <translation>Aplikacion</translation>
+        <translation>प्रोग्राम</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="48"/>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>वीडियो</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="49"/>
         <source>Audio</source>
-        <translation>Audio</translation>
+        <translation>आव्यूह</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="50"/>
         <source>Image</source>
-        <translation>Figurë</translation>
+        <translation>आइमेज</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="51"/>
         <source>Archive</source>
-        <translation>Arkiv</translation>
+        <translation>आर्काइव</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="52"/>
         <source>Document</source>
-        <translation>Dokument</translation>
+        <translation>पत्र</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="53"/>
         <source>Executable</source>
-        <translation>E ekzekutueshme</translation>
+        <translation>चालनीय</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="54"/>
         <source>Backup file</source>
-        <translation>Kartelë kopjeruajtje</translation>
+        <translation>संचय फाइल</translation>
     </message>
     <message>
         <location filename="../src/source/common/mimetypedisplaymanager.cpp" line="55"/>
         <source>Unknown</source>
-        <translation>E panjohur</translation>
+        <translation>ज्ञात छैन</translation>
     </message>
 </context>
 <context>
@@ -931,39 +943,39 @@
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="280"/>
         <source>Open with</source>
-        <translation>Hape me</translation>
+        <translation>यो खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="300"/>
         <source>Add other programs</source>
-        <translation>Shtoni programe të tjera</translation>
+        <translation>अन्य प्रोग्रामहरू जोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="301"/>
         <source>Set as default</source>
-        <translation>Caktoje si parazgjedhje</translation>
+        <translation>मानक बनाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="303"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="304"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>पुष्टि गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="308"/>
         <source>Recommended Applications</source>
-        <translation>Aplikacione të Rekomanduar</translation>
+        <translation>सुझाव दिएका प्रोग्रामहरू</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="310"/>
         <source>Other Applications</source>
-        <translation>Aplikacione të Tjera</translation>
+        <translation>अन्य प्रोग्रामहरू</translation>
     </message>
 </context>
 <context>
@@ -971,7 +983,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="394"/>
         <source>Encrypted file, please enter the password</source>
-        <translation>Kartelë e fshehtëzuar, ju lutemi, jepni fjalëkalimin</translation>
+        <translation>लैको खोल्ने पासवर्ड द्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -979,12 +991,12 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="52"/>
         <source>Current path:</source>
-        <translation>Shtegu i tanishëm:</translation>
+        <translation>वर्तमान पथ:</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="60"/>
         <source>Back to: %1</source>
-        <translation>Mbrapsht te: %1</translation>
+        <translation>पुनः वापराउनुहोस्: %1</translation>
     </message>
 </context>
 <context>
@@ -992,36 +1004,37 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="52"/>
         <source>%1 task(s) in progress</source>
-        <translation>%1 punë(ra) në ecuri e sipër</translation>
+        <translation>%1 काम चल्दैन</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="59"/>
         <location filename="../src/source/dialog/progressdialog.cpp" line="102"/>
         <source>Task</source>
-        <translation>Punë</translation>
+        <translation>काम</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="65"/>
         <location filename="../src/source/dialog/progressdialog.cpp" line="113"/>
         <source>Extracting</source>
-        <translation>Po përftohet</translation>
+        <translation>विस्तार गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="192"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>Jeni i sigurt se dëshironi të ndalet përftimi?</translation>
+        <translation>विस्तार राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>निश्चित गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -1033,7 +1046,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="331"/>
         <source>Speed</source>
         <comment>compress</comment>
-        <translation>Shpejtësi</translation>
+        <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="59"/>
@@ -1044,7 +1057,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="72"/>
         <location filename="../src/source/page/progresspage.cpp" line="160"/>
         <source>Calculating...</source>
-        <translation>Po llogariten…</translation>
+        <translation>हालाँकि गणना भइरहेछ...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="61"/>
@@ -1052,7 +1065,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>delete</comment>
-        <translation>Shpejtësi</translation>
+        <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="63"/>
@@ -1060,7 +1073,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="343"/>
         <source>Speed</source>
         <comment>rename</comment>
-        <translation>Shpejtësi</translation>
+        <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="65"/>
@@ -1069,7 +1082,7 @@
         <location filename="../src/source/page/progresspage.cpp" line="359"/>
         <source>Speed</source>
         <comment>convert</comment>
-        <translation>Shpejtësi</translation>
+        <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="69"/>
@@ -1078,44 +1091,44 @@
         <location filename="../src/source/page/progresspage.cpp" line="351"/>
         <source>Speed</source>
         <comment>uncompress</comment>
-        <translation>Shpejtësi</translation>
+        <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="72"/>
         <location filename="../src/source/page/progresspage.cpp" line="321"/>
         <source>Time left</source>
-        <translation>Kohë e mbetur</translation>
+        <translation>बाकी समय</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="131"/>
         <source>Compressing</source>
-        <translation>Po ngjishen</translation>
+        <translation>संपीडन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="133"/>
         <source>Deleting</source>
-        <translation>Po fshihet</translation>
+        <translation>फोड्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="135"/>
         <source>Renaming</source>
-        <translation>Riemërtim</translation>
+        <translation>नाम बदल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="137"/>
         <source>Converting</source>
-        <translation>Po shndërrohet</translation>
+        <translation>परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="139"/>
         <location filename="../src/source/page/progresspage.cpp" line="158"/>
         <source>Updating the comment...</source>
-        <translation>Po përditësohet komenti…</translation>
+        <translation>नोटमा अद्यतन गर्नुहोस्...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="141"/>
         <source>Extracting</source>
-        <translation>Po përftohet</translation>
+        <translation>विस्तार गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="152"/>
@@ -1123,47 +1136,51 @@
         <location filename="../src/source/page/progresspage.cpp" line="375"/>
         <source>Pause</source>
         <comment>button</comment>
-        <translation>Pushim</translation>
+        <translation>पाउस</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="188"/>
         <location filename="../src/source/page/progresspage.cpp" line="404"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="371"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation>Vazhdo</translation>
+        <translation>गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="404"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>निश्चित गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation>Jeni i sigurt se doni të ndalet çngjeshja?</translation>
+        <translation>विस्तार राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="395"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation>Jeni i sigurt se doni të ndalet fshirja?</translation>
+        <translation>फोड्नुहोस् राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="391"/>
         <location filename="../src/source/page/progresspage.cpp" line="397"/>
         <source>Are you sure you want to stop the compression?</source>
-        <translation>Jeni i sigurt se dëshironi të ndalet ngjeshja?</translation>
+        <translation>संपीडन राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
+</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="399"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation>Jeni i sigurt se doni të ndalet shndërrimi?</translation>
+        <translation>परिवर्तन राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
+</translation>
     </message>
 </context>
 <context>
@@ -1174,116 +1191,116 @@
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
-        <translation>Anashkaloje</translation>
+        <translation>सफाइस्ने</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation>Përzieji</translation>
+        <translation>संयोजन</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>Ka tashmë një kartelë me po atë emër, të zëvendësohet?</translation>
+        <translation>समान नामक एउटा फाइल विद्यमान छ, उसले बदलिनुहोस्？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation>Zëvendësoje</translation>
+        <translation>बदल्नु</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
         <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
         <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ठीक छ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation>Ka tashmë një dosje me të njëjtin emër, të zëvendësohet?</translation>
+        <translation>समान नामक एउटा फोल्डर विद्यमान छ, उसले बदलिनुहोस्？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
         <location filename="../3rdparty/interface/queries.cpp" line="226"/>
         <source>Apply to all</source>
-        <translation>Zbatoje për të tëra</translation>
+        <translation>सार्वजनिक प्रयोग गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Name</source>
-        <translation>Emër</translation>
+        <translation>नाम</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Time modified</source>
-        <translation>Kohë ndryshimi</translation>
+        <translation>समय अद्यावस्था</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Type</source>
-        <translation>Lloj</translation>
+        <translation>आकार</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="71"/>
         <source>Size</source>
-        <translation>Madhësi</translation>
+        <translation>आकार</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2886"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation>%1 ndryshoi. Doni të ruhen ndryshimet te arkivi?</translation>
+        <translation>%1 बदलिएको छ। आर्काइवमा बदलाहरू बचाउन सक्नुहोस्？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="26"/>
         <source>General</source>
-        <translation>Të përgjithshme</translation>
+        <translation>सामान्य</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="27"/>
         <source>Extraction</source>
-        <translation>Përftim</translation>
+        <translation>विस्तार</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>Vetëkrijo një dosje për kartela të shumta të përftuara</translation>
+        <translation>एउटाको अधिक फाइलहरूको लागि योजनावरून फोल्डर बनाउने</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
-        <translation>Shfaqi kartelat e përftuara, kur të plotësohet</translation>
+        <translation>पूर्ण भएको बाहेर फाइलहरू दिखाउने</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
         <source>File Management</source>
-        <translation>Administrim Kartelash</translation>
+        <translation>फाइल संचालन</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="31"/>
         <source>Delete files after compression</source>
-        <translation>Fshiji kartelat pas ngjeshjes</translation>
+        <translation>पूर्वावस्थामा फाइलहरू छुपाउने</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="32"/>
         <source>Files Associated</source>
-        <translation>Kartela të Përshoqëruara</translation>
+        <translation>संबन्धित फाइलहरू</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="33"/>
         <source>File Type</source>
-        <translation>Lloj Kartele</translation>
+        <translation>फाइल आकार</translation>
     </message>
 </context>
 <context>
@@ -1291,24 +1308,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="557"/>
         <source>Rename</source>
-        <translation>Riemërtojeni</translation>
+        <translation>पुनरनामनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="608"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="609"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation>ठीक छ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="619"/>
         <source>The name already exists</source>
-        <translation>Emri ekziston tashmë</translation>
+        <translation>नाम पहिले छ</translation>
     </message>
 </context>
 <context>
@@ -1317,63 +1334,63 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="124"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation>Përzgjidhi Krejt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="125"/>
         <source>Clear All</source>
-        <translation>Spastroji Krejt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="126"/>
         <source>Recommended</source>
-        <translation>E këshilluar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="160"/>
         <source>Extract archives to</source>
-        <translation>Përftoji arkivat te</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="195"/>
         <source>Current directory</source>
-        <translation>Drejtoria e tanishme</translation>
+        <translation>वर्तमान निर्देशिका</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="200"/>
         <source>Desktop</source>
-        <translation>Desktop</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="205"/>
         <source>Other directory</source>
-        <translation>Drejtori tjetër</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
         <source>Delete archives after extraction</source>
-        <translation>Fshiji arkivat pas përftimit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="299"/>
         <source>Never</source>
-        <translation>Kurrë</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="302"/>
         <source>Ask for confirmation</source>
-        <translation>Kërko ripohim</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
         <location filename="../src/source/dialog/settingdialog.cpp" line="305"/>
         <source>Always</source>
-        <translation>Përherë</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1381,17 +1398,17 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="79"/>
         <source>Compression successful</source>
-        <translation>Ngjeshje e suksesshme</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="89"/>
         <source>View</source>
-        <translation>Shihni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="92"/>
         <source>Back</source>
-        <translation>Mbrapsht</translation>
+        <translation>पछाडि</translation>
     </message>
 </context>
 <context>
@@ -1400,17 +1417,17 @@
         <location filename="../src/source/mainwindow.cpp" line="3324"/>
         <location filename="../src/source/mainwindow.cpp" line="3381"/>
         <source>Open file</source>
-        <translation>Hape kartelën</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3327"/>
         <source>Back</source>
-        <translation>Mbrapsht</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3386"/>
         <source>File info</source>
-        <translation>Hollësi kartele</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1420,34 +1437,34 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="87"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="116"/>
         <source>Extract to:</source>
-        <translation>Përftoji te:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
         <source>Extract</source>
         <comment>button</comment>
-        <translation>Përftoji</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="193"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>Shtegu parazgjedhje i përftimeve s’ekziston, ju lutemi, riprovoni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="195"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation>S’keni leje të ruani kartela këtu, ju lutemi, ndryshoni lejet dhe riprovoni</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="199"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="213"/>
         <source>Find directory</source>
-        <translation>Gjej drejtori</translation>
+        <translation>निर्देशिका खोज्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -1455,67 +1472,67 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>You cannot add the archive to itself</source>
-        <translation>S’mund ta shtoni arkivin te vetvetja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="401"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="627"/>
         <source>Extract</source>
         <comment>提取</comment>
-        <translation>Përftoji</translation>
+        <translation>प्रतिसाद गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Extract to current directory</source>
-        <translation>Përftoji te drejtoria e tanishme</translation>
+        <translation>वर्तमान मागे छान्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="631"/>
         <source>Open</source>
-        <translation>Përzgjidhni kartelën</translation>
+        <translation>पनि खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
         <source>Rename</source>
-        <translation>Riemërtojeni</translation>
+        <translation>परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="638"/>
         <source>Delete</source>
-        <translation>Fshije</translation>
+        <translation>हटाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="645"/>
         <source>Open with</source>
-        <translation>Hape me</translation>
+        <translation>कायम गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="649"/>
         <location filename="../src/source/tree/uncompressview.cpp" line="790"/>
         <source>Select default program</source>
-        <translation>Përzgjidhni program parazgjedhje</translation>
+        <translation>मानक प्रोग्राम पनि छान्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Anuloje</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation>Ripohojeni</translation>
+        <translation>स्वीकार गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="700"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation>Doni të fshihet kartelat(t) e përzgjedhur?</translation>
+        <translation>चाहनुहोस् तयारीका फाइलहरूलाई हटाउनुहोस्?</translation>
     </message>
 </context>
 </TS>
