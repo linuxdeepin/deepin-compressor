@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %d</source>
-        <translation type="unfinished"/>
+        <translation>%d pakkumine</translation>
     </message>
 </context>
 </TS>
