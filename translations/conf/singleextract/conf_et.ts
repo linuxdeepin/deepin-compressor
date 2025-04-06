@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %b</source>
-        <translation type="unfinished"/>
+        <translation>%b eemalda</translation>
     </message>
 </context>
 </TS>
