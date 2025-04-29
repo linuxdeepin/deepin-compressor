@@ -14,6 +14,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <linux/limits.h>
+#include <QTemporaryFile>
 
 #include <KEncodingProber>
 #include "chardet.h"
@@ -423,6 +424,44 @@ bool Common::isSubpathOfDlnfs(const QString &path)
     return findDlnfsPath(path, [](const QString &target, const QString &compare) {
         return target.startsWith(compare);
     });
+}
+
+bool Common::isSupportSeek(QString sFileName)
+{
+    QFileInfo info(sFileName);
+    if(info.exists()) {
+        QFile file(sFileName);
+        if(file.open(QIODevice::ReadOnly)) {
+            if (file.seek(0)) {
+                file.close();
+                return true; // 支持 seek
+            }
+        }
+        file.close();
+    } else {
+        // 指定临时文件的目录
+        QString tempDir = info.absoluteDir().path(); // 替换为你的目录路径
+        QString fileTemplate = tempDir + "/tempfile_XXXXXX"; // 文件名模板
+        // 创建 QTemporaryFile
+        QTemporaryFile tempFile(fileTemplate);
+        tempFile.setAutoRemove(true);
+        // 尝试打开临时文件
+        if (tempFile.open()) {
+            tempFile.write("test\n");
+            tempFile.flush();
+        }
+        tempFile.close();
+        QString sFileName = tempFile.fileName();
+        QFile file(sFileName);
+        if(file.open(QIODevice::ReadOnly)) {
+            if (file.seek(0)) {
+                file.close();
+                return true; // 支持 seek
+            }
+        }
+        file.close();
+    }
+    return false;
 }
 
 bool Common::findDlnfsPath(const QString &target, Compare func)
