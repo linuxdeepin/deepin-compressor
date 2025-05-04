@@ -542,7 +542,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
         <source>No such file or directory</source>
-        <translation>No hay tal archivo o directorio</translation>
+        <translation>El archivo o carpeta no existe</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1284"/>
