@@ -24,11 +24,12 @@ QAtomicPointer<ArchiveManager> ArchiveManager::m_instance = nullptr;//原子指�
 ArchiveManager::ArchiveManager(QObject *parent)
     : QObject(parent)
 {
-
+    qDebug() << "ArchiveManager instance created";
 }
 
 ArchiveManager::~ArchiveManager()
 {
+    qDebug() << "ArchiveManager instance destroyed";
     SAFE_DELETE_ELE(m_pArchiveJob);
     SAFE_DELETE_ELE(m_pInterface);
     SAFE_DELETE_ELE(m_pTempInterface);
@@ -62,12 +63,15 @@ void ArchiveManager::destory_instance()
 
 bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString &strDestination, const CompressOptions &stOptions, UiTools::AssignPluginType eType)
 {
+    qDebug() << "Starting createArchive operation for destination:" << strDestination;
     // 重新创建压缩包首先释放之前的interface
     if (m_pInterface != nullptr) {
+        qDebug() << "Clearing previous archive interface";
         delete m_pInterface;
         m_pInterface = nullptr;
     }
     if(DFMStandardPaths::pathControl(strDestination)) {
+        qWarning() << "Path control check failed for destination:" << strDestination;
         return false;
     }
     m_pTempInterface = UiTools::createInterface(strDestination, true, eType);
@@ -83,14 +87,17 @@ bool ArchiveManager::createArchive(const QList<FileEntry> &files, const QString 
         m_pArchiveJob = pCreateJob;
         pCreateJob->start();
 
+        qInfo() << "CreateArchive operation started successfully";
         return true;
     }
 
+    qWarning() << "Failed to create archive interface";
     return false;
 }
 
 bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::AssignPluginType eType)
 {
+    qDebug() << "Starting loadArchive operation for file:" << strArchiveFullPath;
     QJsonObject obj{
         {"tid", EventLogUtils::LoadCompressFile},
         {"operate", "LoadCompressFile"},
@@ -99,6 +106,7 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
     EventLogUtils::get().writeLogs(obj);
     // 重新加载首先释放之前的interface
     if (m_pInterface != nullptr) {
+        qDebug() << "Clearing previous archive interface";
         delete m_pInterface;
         m_pInterface = nullptr;
     }
@@ -115,9 +123,11 @@ bool ArchiveManager::loadArchive(const QString &strArchiveFullPath, UiTools::Ass
         m_pArchiveJob = pLoadJob;
         pLoadJob->start();
 
+        qInfo() << "LoadArchive operation started successfully";
         return true;
     }
 
+    qWarning() << "Failed to load archive interface";
     return false;
 }
 
@@ -456,6 +466,10 @@ void ArchiveManager::slotJobFinished()
         PluginFinishType eFinishType = m_pArchiveJob->m_eFinishedType;
         ErrorType eErrorType = m_pArchiveJob->m_eErrorType;
 
+        qInfo() << "Job finished - Type:" << eJobType
+               << "FinishType:" << eFinishType
+               << "ErrorType:" << eErrorType;
+
         // 释放job
         m_pArchiveJob->deleteLater();
         m_pArchiveJob = nullptr;
@@ -466,4 +480,5 @@ void ArchiveManager::slotJobFinished()
 
     // 释放临时记录的interface
     SAFE_DELETE_ELE(m_pTempInterface);
+    qDebug() << "Temporary interface cleared";
 }

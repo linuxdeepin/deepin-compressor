@@ -13,11 +13,12 @@
 BatchJob::BatchJob(QObject *parent)
     : ArchiveJob(parent)
 {
-
+    qDebug() << "BatchJob instance created";
 }
 
 BatchJob::~BatchJob()
 {
+    qDebug() << "BatchJob instance destroyed";
     clearSubjobs();
 }
 
@@ -92,6 +93,7 @@ bool BatchJob::status()
 BatchExtractJob::BatchExtractJob(QObject *parent)
     : BatchJob(parent)
 {
+    qDebug() << "BatchExtractJob instance created";
     m_eJobType = JT_BatchExtract;
 }
 
@@ -102,23 +104,28 @@ BatchExtractJob::~BatchExtractJob()
 
 void BatchExtractJob::start()
 {
+    qDebug() << "Starting batch extraction with" << subjobs().count() << "jobs";
     if (subjobs().count() == 0) {
+        qWarning() << "No subjobs to start";
         return;
     }
 
     m_iCurArchiveIndex = 0;
     m_pCurJob = subjobs().at(0);
+    qDebug() << "Starting first subjob";
     m_pCurJob->start();
 }
 
 void BatchExtractJob::setExtractPath(const QString &strPath/*, bool bAutoCreatDir*/)
 {
+    qDebug() << "Setting extract path to:" << strPath;
     m_strExtractPath = strPath;
 //    m_bAutoCreatDir = bAutoCreatDir;
 }
 
 bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
 {
+    qDebug() << "Setting archive files list, count:" << listFile.count();
     m_listFiles = listFile;
     m_qBatchTotalSize = 0;
     m_iArchiveCount = m_listFiles.count();
@@ -127,13 +134,18 @@ bool BatchExtractJob::setArchiveFiles(const QStringList &listFile)
     // 创建解压元素
     foreach (QString strFileName, listFile) {
         QFileInfo fileInfo(strFileName);
+        qDebug() << "Processing archive file:" << fileInfo.fileName();
         if (addExtractItem(fileInfo)) {
             bResult = true;
             // 计算压缩包总大小
             m_qBatchTotalSize += fileInfo.size();
+            qDebug() << "Added extract item for:" << fileInfo.fileName();
+        } else {
+            qWarning() << "Failed to add extract item for:" << fileInfo.fileName();
         }
     }
 
+    qDebug() << "Total batch size:" << m_qBatchTotalSize << "bytes";
     return bResult;
 }
 
@@ -217,12 +229,16 @@ void BatchExtractJob::slotHandleSingleJobCurFileName(const QString &strName)
 void BatchExtractJob::slotHandleSingleJobFinished()
 {
     if (m_pCurJob != nullptr) {
+        qDebug() << "Single job finished - Type:" << m_pCurJob->m_eJobType
+                << "Result:" << m_pCurJob->m_eFinishedType;
+
         if (PFT_Error == m_pCurJob->m_eFinishedType || PFT_Cancel == m_pCurJob->m_eFinishedType) {
             // 获取结束结果
             m_eJobType = m_pCurJob->m_eJobType;
             m_eFinishedType = m_pCurJob->m_eFinishedType;
             m_eErrorType = m_pCurJob->m_eErrorType;
 
+            qWarning() << "Job failed or cancelled - ErrorType:" << m_eErrorType;
             // 子job错误或取消，发送结束信号
             emit signalJobFinshed();
             return;
@@ -232,12 +248,14 @@ void BatchExtractJob::slotHandleSingleJobFinished()
         removeSubjob(m_pCurJob);
 
         if (!hasSubjobs()) {
+            qDebug() << "All subjobs completed";
             // 若没有子job，发送结束信号
             emit signalJobFinshed();
         } else {
             ++m_iCurArchiveIndex;
             QFileInfo curFileInfo(m_listFiles[m_iCurArchiveIndex]);
 
+            qDebug() << "Starting next subjob for:" << curFileInfo.fileName();
             // 还存在子job，执行子job操作
 
             m_dLastPercentage += double(curFileInfo.size()) / m_qBatchTotalSize * 100;

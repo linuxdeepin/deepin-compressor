@@ -103,3 +103,6 @@ so(cmake).sh
 tests/test_output
 translations/*.qm
 build
+
+# vscode
+.vscode/

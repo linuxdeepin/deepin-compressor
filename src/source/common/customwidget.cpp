@@ -17,17 +17,20 @@
 CustomSuggestButton::CustomSuggestButton(QWidget *parent)
     : DSuggestButton(parent)
 {
+    qDebug() << "CustomSuggestButton initialized";
     setFocusPolicy(Qt::TabFocus);
 }
 
 CustomSuggestButton::CustomSuggestButton(const QString &text, QWidget *parent)
     : DSuggestButton(text, parent)
 {
+    qDebug() << "CustomSuggestButton initialized with text:" << text;
     setFocusPolicy(Qt::TabFocus);
 }
 
 void CustomSuggestButton::keyPressEvent(QKeyEvent *event)
 {
+    qDebug() << "Key press event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行按下按钮
         // 模拟空格键按下事件
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
@@ -39,6 +42,7 @@ void CustomSuggestButton::keyPressEvent(QKeyEvent *event)
 
 void CustomSuggestButton::keyReleaseEvent(QKeyEvent *event)
 {
+    qDebug() << "Key release event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行弹起按钮
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
@@ -50,11 +54,13 @@ void CustomSuggestButton::keyReleaseEvent(QKeyEvent *event)
 
 CustomCombobox::CustomCombobox(QWidget *parent): DComboBox(parent)
 {
+    qDebug() << "CustomCombobox initialized";
     setFocusPolicy(Qt::TabFocus);
 }
 
 void CustomCombobox::keyPressEvent(QKeyEvent *event)
 {
+    qDebug() << "ComboBox key press event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
         // 模拟空格键按下事件
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
@@ -66,6 +72,7 @@ void CustomCombobox::keyPressEvent(QKeyEvent *event)
 
 void CustomCombobox::keyReleaseEvent(QKeyEvent *event)
 {
+    qDebug() << "ComboBox key release event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行打开下拉列表功能
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");
@@ -115,6 +122,7 @@ void CustomCombobox::paintEvent(QPaintEvent *event)
 
 void CustomCombobox::focusInEvent(QFocusEvent *event)
 {
+    qDebug() << "ComboBox focus in, reason:" << event->reason();
     m_reson = event->reason();
     DComboBox::focusInEvent(event);
 }
@@ -122,22 +130,26 @@ void CustomCombobox::focusInEvent(QFocusEvent *event)
 CustomPushButton::CustomPushButton(QWidget *parent)
     : QPushButton(parent)
 {
+    qDebug() << "CustomPushButton initialized";
     setFocusPolicy(Qt::TabFocus);
 }
 
 CustomPushButton::CustomPushButton(const QString &text, QWidget *parent)
     : QPushButton(text, parent)
 {
+    qDebug() << "CustomPushButton initialized with text:" << text;
     setFocusPolicy(Qt::TabFocus);
 }
 
 CustomPushButton::CustomPushButton(const QIcon &icon, const QString &text, QWidget *parent): QPushButton(icon, text, parent)
 {
+    qDebug() << "CustomPushButton initialized with icon and text:" << text;
     setFocusPolicy(Qt::TabFocus);
 }
 
 void CustomPushButton::keyPressEvent(QKeyEvent *event)
 {
+    qDebug() << "PushButton key press event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行按下按钮
         // 模拟空格键按下事件
         QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
@@ -149,6 +161,7 @@ void CustomPushButton::keyPressEvent(QKeyEvent *event)
 
 void CustomPushButton::keyReleaseEvent(QKeyEvent *event)
 {
+    qDebug() << "PushButton key release event, key:" << event->key();
     if (Qt::Key_Enter == event->key() || Qt::Key_Return == event->key()) { //“回车键” 执行弹起按钮
         // 模拟空格键松开事件
         QKeyEvent releaseSpace(QEvent::KeyRelease, Qt::Key_Space, Qt::NoModifier, " ");

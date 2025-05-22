@@ -88,20 +88,24 @@ void TypeLabel::focusOutEvent(QFocusEvent *event)
 CompressSettingPage::CompressSettingPage(QWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "CompressSettingPage constructor called";
     initConfig();
     initUI();
     initConnections();
     slotAdvancedEnabled(m_pAdvancedBtn->isChecked());
+    qDebug() << "CompressSettingPage initialization completed";
 }
 
 CompressSettingPage::~CompressSettingPage()
 {
-
+    qDebug() << "CompressSettingPage destructor called";
 }
 
 void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize)
 {
+    qDebug() << "Setting file size, file count:" << listFiles.count() << "total size:" << qSize;
     if (listFiles.count() == 0) {
+        qWarning() << "Empty file list provided";
         return;
     }
 
@@ -140,8 +144,10 @@ void CompressSettingPage::setFileSize(const QStringList &listFiles, qint64 qSize
 
 void CompressSettingPage::refreshMenu()
 {
+    qDebug() << "Refreshing compression type menu";
     m_pTypeMenu->clear();
     if (m_listSupportedMimeTypes.empty()) {
+        qInfo() << "Loading supported mime types from plugin manager";
         m_listSupportedMimeTypes = PluginManager::get_instance().supportedWriteMimeTypes(PluginManager::SortByComment);     // 获取支持的压缩格式
     }
 
@@ -716,10 +722,13 @@ void CompressSettingPage::slotShowRightMenu(QMouseEvent *e)
 
 void CompressSettingPage::slotTypeChanged(QAction *action)
 {
-    if (nullptr == action)
+    if (nullptr == action) {
+        qWarning() << "Null action in slotTypeChanged";
         return;
+    }
 
     m_strMimeType = action->data().toString();
+    qInfo() << "Compression type changed to:" << action->text() << "mime type:" << m_strMimeType;
 
     QString selectType = action->text();
     setTypeImage(selectType);
@@ -848,10 +857,11 @@ void CompressSettingPage::slotCompressClicked()
     QString strTmpCompresstype = m_pCompressTypeLbl->text();        // 压缩格式
     QString strName = m_pFileNameEdt->text() + "." + strTmpCompresstype;   // 压缩包名称
     PERF_PRINT_BEGIN("POINT-03", "压缩包名：" + strName + " 大小：" + QString::number(m_qFileSize));
-    qInfo() << "点击了压缩按钮";
+    qInfo() << "Compress button clicked, archive:" << strName << "size:" << m_qFileSize << "type:" << strTmpCompresstype;
 
     // 检查源文件中是否包含即将生成的压缩包
     if (m_listFiles.contains(m_pSavePathEdt->text() + QDir::separator() + strName)) {
+        qWarning() << "Archive name conflicts with source file:" << strName;
         showWarningDialog(tr("The name is the same as that of the compressed archive, please use another one"));
         return;
     }
@@ -861,7 +871,9 @@ void CompressSettingPage::slotCompressClicked()
         QString strPassword = m_pPasswordEdt->lineEdit()->text();
         QRegularExpression chineseRegex("[\\x{4e00}-\\x{9fa5}]+");
         if (!strPassword.isEmpty() && chineseRegex.match(strPassword).hasMatch()) {
+            qWarning() << "Chinese password not allowed for ZIP volumes";
             m_pPasswordEdt->showAlertMessage(tr("The password for ZIP volumes cannot be in Chinese"));
+            qWarning() << "Compress options validation failed";
             return;
         }
     }
@@ -925,12 +937,15 @@ void CompressSettingPage::slotCompressClicked()
     // 检测此压缩包名称是否存在
     QFileInfo fileInfo(compressInfo.strTargetPath + QDir::separator() + compressInfo.strArchiveName);
     if (fileInfo.exists()) {
+        qInfo() << "Archive file already exists:" << fileInfo.filePath();
         SimpleQueryDialog dialog(this);
         int iResult = dialog.showDialog(tr("Another file with the same name already exists, replace it?"), tr("Cancel", "button"), DDialog::ButtonNormal, tr("Replace", "button"), DDialog::ButtonWarning);
         if (1 == iResult) {     // 如果点击替换，先移除本地压缩包
+            qInfo() << "Replacing existing archive file";
             QFile file(fileInfo.filePath());
             file.remove();
         } else {    // 点击关闭或者取消，不操作
+            qInfo() << "User canceled replacing existing file";
             return;
         }
     }

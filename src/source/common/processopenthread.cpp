@@ -5,6 +5,7 @@
 
 #include "processopenthread.h"
 #include "kprocess.h"
+#include <QDebug>
 
 ProcessOpenThread::ProcessOpenThread(QObject *parent)
     : QThread(parent)
@@ -14,16 +15,19 @@ ProcessOpenThread::ProcessOpenThread(QObject *parent)
 
 void ProcessOpenThread::setProgramPath(const QString &strProgramPath)
 {
+    qDebug() << "Setting program path:" << strProgramPath;
     m_strProgramPath = strProgramPath;
 }
 
 void ProcessOpenThread::setArguments(const QStringList &listArguments)
 {
+    qDebug() << "Setting arguments, count:" << listArguments.size();
     m_listArguments = listArguments;
 }
 
 void ProcessOpenThread::run()
 {
+    qDebug() << "Starting external process:" << m_strProgramPath;
     // 启动外部进程
     KProcess *cmdprocess = new KProcess;
     cmdprocess->setOutputChannelMode(KProcess::MergedChannels);
@@ -31,5 +35,6 @@ void ProcessOpenThread::run()
     cmdprocess->setProgram(m_strProgramPath, m_listArguments);
     cmdprocess->start();
     cmdprocess->waitForFinished(-1);
-    delete  cmdprocess;
+    qDebug() << "Process finished with exit code:" << cmdprocess->exitCode();
+    delete cmdprocess;
 }

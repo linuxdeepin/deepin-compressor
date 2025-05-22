@@ -14,31 +14,37 @@
 LoadingPage::LoadingPage(QWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "LoadingPage constructor called";
     initUI();
+    qDebug() << "LoadingPage initialization completed";
 }
 
 LoadingPage::~LoadingPage()
 {
-
+    qDebug() << "LoadingPage destructor called";
 }
 
 void LoadingPage::startLoading()
 {
+    qInfo() << "Starting loading animation";
     m_pSpinner->start();
 }
 
 void LoadingPage::stopLoading()
 {
+    qInfo() << "Stopping loading animation";
     m_pSpinner->stop();
 }
 
 void LoadingPage::setDes(const QString &strDes)
 {
+    qInfo() << "Setting loading description:" << strDes;
     m_pTextLbl->setText(strDes);
 }
 
 void LoadingPage::initUI()
 {
+    qDebug() << "Initializing loading page UI";
     // 初始化加载动画
     m_pSpinner = new DSpinner(this);
     m_pSpinner->setMinimumSize(32, 32);

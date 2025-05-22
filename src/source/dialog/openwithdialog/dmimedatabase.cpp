@@ -8,20 +8,24 @@
 
 #include <QFileInfo>
 #include <QUrl>
+#include <QDebug>
 
 DMimeDatabase::DMimeDatabase()
 {
-
+    qDebug() << "DMimeDatabase constructor";
 }
 
 QMimeType DMimeDatabase::mimeTypeForFile(const QString &fileName, QMimeDatabase::MatchMode mode) const
 {
+    qDebug() << "Getting MIME type for file:" << fileName;
     return mimeTypeForFile(QFileInfo(fileName), mode);
 }
 
 QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabase::MatchMode mode) const
 {
+    qDebug() << "Getting MIME type for file info:" << fileInfo.fileName() << "with mode:" << mode;
     QMimeType result = QMimeDatabase::mimeTypeForFile(fileInfo, mode);
+    qDebug() << "Initial MIME type:" << result.name();
 
     // temporary dirty fix, once WPS get installed, the whole mimetype database thing get fscked up.
     // we used to patch our Qt to fix this issue but the patch no longer works, we don't have time to
@@ -40,10 +44,14 @@ QMimeType DMimeDatabase::mimeTypeForFile(const QFileInfo &fileInfo, QMimeDatabas
     if (officeSuffixList.contains(fileInfo.suffix()) && wrongMimeTypeNames.contains(result.name())) {
         QList<QMimeType> results = QMimeDatabase::mimeTypesForFileName(fileInfo.fileName());
         if (!results.isEmpty()) {
+            qInfo() << "Corrected MIME type from" << result.name() << "to" << results.first().name();
             return results.first();
+        } else {
+            qWarning() << "No valid MIME types found for office file";
         }
     }
 
+    qDebug() << "Final MIME type:" << result.name() << "for file:" << fileInfo.fileName();
     return result;
 }
 

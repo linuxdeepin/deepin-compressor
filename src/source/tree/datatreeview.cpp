@@ -147,12 +147,15 @@ void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 DataTreeView::DataTreeView(QWidget *parent)
     : DTreeView(parent)
 {
+    qDebug() << "DataTreeView constructor called";
     initUI();
     initConnections();
+    qDebug() << "DataTreeView initialized";
 }
 
 DataTreeView::~DataTreeView()
 {
+    qDebug() << "DataTreeView destructor called";
 
 }
 
@@ -165,6 +168,7 @@ void DataTreeView::resetLevel()
 
 void DataTreeView::initUI()
 {
+    qDebug() << "Initializing DataTreeView UI";
     setAttribute(Qt::WA_AcceptTouchEvents); // 设置接收触摸屏事件
     setObjectName("TableViewFile");
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -201,6 +205,7 @@ void DataTreeView::initConnections()
 
 void DataTreeView::resizeColumnWidth()
 {
+    qDebug() << "Resizing columns to width:" << width();
     setColumnWidth(0, width() * 25 / 58);
     setColumnWidth(1, width() * 17 / 58);
     setColumnWidth(2, width() * 8 / 58);
@@ -323,6 +328,7 @@ void DataTreeView::focusInEvent(QFocusEvent *event)
 
 void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 {
+    qDebug() << "Drag enter event with mime data:" << e->mimeData()->formats();
     const auto *mime = e->mimeData();
 
     // 判断是否有url
@@ -398,6 +404,8 @@ void DataTreeView::dropEvent(QDropEvent *e)
 
 void DataTreeView::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "Resize event, old size:" << event->oldSize()
+             << "new size:" << event->size();
     Q_UNUSED(event)
     resizeColumnWidth();
 }
@@ -447,6 +455,7 @@ void DataTreeView::mouseReleaseEvent(QMouseEvent *event)
 
 void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 {
+    qDebug() << "Mouse move at position:" << event->pos();
     if (m_isPressed) {
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
@@ -478,6 +487,7 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
+    qDebug() << "Key pressed:" << event->key() << "modifiers:" << event->modifiers();
     // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
     if (Qt::Key_Up == event->key()) {
         // 当前行为0或为空文件夹时，焦点放在返回上一层目录上
