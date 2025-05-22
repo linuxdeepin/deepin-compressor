@@ -27,12 +27,14 @@ SingleJob::SingleJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     , m_pInterface(pInterface)
     , d(new SingleJobThread(this))
 {
-
+    qDebug() << "SingleJob instance created, interface:" << pInterface;
 }
 
 SingleJob::~SingleJob()
 {
+    qDebug() << "SingleJob instance destroyed";
     if (d->isRunning()) {
+        qDebug() << "Stopping worker thread";
         d->quit();      // 线程安全退出，不能使用terminate强行退出
         d->wait();
     }
@@ -42,61 +44,81 @@ SingleJob::~SingleJob()
 
 void SingleJob::start()
 {
+    qDebug() << "Starting job, type:" << m_eJobType;
     jobTimer.start();
 
     // 若插件指针为空，立即异常退出
     if (nullptr == m_pInterface) {
+        qWarning() << "Interface is null, aborting job";
         slotFinished(PFT_Error);
         return;
     }
 
     // 判断是否通过线程的方式调用
     if (m_pInterface->waitForFinished()) {
+        qDebug() << "Executing work directly";
         doWork();   // 直接执行操作
     } else {
+        qDebug() << "Starting worker thread";
         d->start(); // 开启线程，执行操作
     }
 }
 
 void SingleJob::doPause()
 {
+    qDebug() << "Pausing job";
     // 调用插件暂停接口
     if (m_pInterface) {
+        qDebug() << "Calling interface pause operation";
         m_pInterface->pauseOperation();
+    } else {
+        qWarning() << "Interface is null, cannot pause";
     }
 }
 
 void SingleJob::doContinue()
 {
+    qDebug() << "Resuming job";
     // 调用插件继续接口
     if (m_pInterface) {
+        qDebug() << "Calling interface continue operation";
         m_pInterface->continueOperation();
+    } else {
+        qWarning() << "Interface is null, cannot continue";
     }
 }
 
 bool SingleJob::status()
 {
+    qDebug() << "Checking job status";
     // 调用插件继续接口
     if (m_pInterface) {
-        return m_pInterface->status();
+        bool status = m_pInterface->status();
+        qDebug() << "Job status:" << status;
+        return status;
     }
 
+    qWarning() << "Interface is null, returning false status";
     return false;
 }
 
 SingleJobThread *SingleJob::getdptr()
 {
+    qDebug() << "Getting worker thread pointer";
     return d;
 }
 
 bool SingleJob::doKill()
 {
+    qDebug() << "Killing job, type:" << m_eJobType;
     if (nullptr == m_pInterface) {
+        qWarning() << "Interface is null, cannot kill job";
         return false;
     }
 
     const bool killed = m_pInterface->doKill();
     if (killed) {
+        qDebug() << "Job killed successfully";
         return true;
     }
 
@@ -106,25 +128,32 @@ bool SingleJob::doKill()
         d->wait(1000); //阻塞1s或阻塞到线程结束(取小)
     }
 
+    qDebug() << "Job kill completed";
     return true;
 }
 
 void SingleJob::initConnections()
 {
+    qDebug() << "Initializing signal connections";
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFinished, this, &SingleJob::slotFinished, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalprogress, this, &SingleJob::signalprogress, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalCurFileName, this, &SingleJob::signalCurFileName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalFileWriteErrorName, this, &SingleJob::signalFileWriteErrorName, Qt::ConnectionType::UniqueConnection);
     connect(m_pInterface, &ReadOnlyArchiveInterface::signalQuery, this, &SingleJob::signalQuery, Qt::ConnectionType::AutoConnection);
+    qDebug() << "Signal connections initialized";
 }
 
 void SingleJob::slotFinished(PluginFinishType eType)
 {
-    qInfo() << "Job finished, result:" << eType << ", time:" << jobTimer.elapsed() << "ms";
+    qInfo() << "Job finished, type:" << m_eJobType
+           << ", result:" << eType
+           << ", time:" << jobTimer.elapsed() << "ms";
     m_eFinishedType = eType;
 
-    if (m_pInterface)
+    if (m_pInterface) {
         m_eErrorType = m_pInterface->errorType();
+        qDebug() << "Error type:" << m_eErrorType;
+    }
 
     emit signalJobFinshed();
 }
@@ -133,23 +162,29 @@ void SingleJob::slotFinished(PluginFinishType eType)
 LoadJob::LoadJob(ReadOnlyArchiveInterface *pInterface, QObject *parent)
     : SingleJob(pInterface, parent)
 {
+    qDebug() << "LoadJob instance created";
     m_eJobType = JT_Load;
     initConnections();
 }
 
 LoadJob::~LoadJob()
 {
-
+    qDebug() << "LoadJob instance destroyed";
 }
 
 void LoadJob::doWork()
 {
+    qDebug() << "LoadJob starting work";
     if (m_pInterface) {
         PluginFinishType eType = m_pInterface->list();
+        qDebug() << "List operation completed, result:" << eType;
 
         if (!(m_pInterface->waitForFinished())) {
+            qDebug() << "Emitting finished signal";
             slotFinished(eType);
         }
+    } else {
+        qWarning() << "Interface is null in LoadJob";
     }
 }
 
@@ -170,18 +205,21 @@ AddJob::~AddJob()
 
 void AddJob::doWork()
 {
+    qDebug() << "AddJob starting work, files count:" << m_vecFiles.size();
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
     if (nullptr == pWriteInterface) {
+        qWarning() << "Failed to cast to ReadWriteArchiveInterface";
         return;
     }
 
     PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+    qDebug() << "Add files operation completed, result:" << eType;
 
     if (!(pWriteInterface->waitForFinished())) {
+        qDebug() << "Emitting finished signal";
         slotFinished(eType);
     }
-
 }
 
 // 创建压缩包操作
@@ -201,19 +239,22 @@ CreateJob::~CreateJob()
 
 void CreateJob::doWork()
 {
+    qDebug() << "CreateJob starting work, files count:" << m_vecFiles.size();
     ReadWriteArchiveInterface *pWriteInterface = dynamic_cast<ReadWriteArchiveInterface *>(m_pInterface);
 
     if (pWriteInterface == nullptr) {
+        qWarning() << "Failed to cast to ReadWriteArchiveInterface";
         return;
     }
 
     // 调用压缩接口
     PluginFinishType eType = pWriteInterface->addFiles(m_vecFiles, m_stCompressOptions);
+    qDebug() << "Create archive operation completed, result:" << eType;
 
     if (!(pWriteInterface->waitForFinished())) {
+        qDebug() << "Emitting finished signal";
         slotFinished(eType);
     }
-
 }
 
 bool CreateJob::doKill()
@@ -280,16 +321,22 @@ ExtractJob::~ExtractJob()
 
 void ExtractJob::doWork()
 {
+    qDebug() << "ExtractJob starting work, files count:" << m_vecFiles.size();
     if (m_pInterface) {
         PluginFinishType eType = m_pInterface->extractFiles(m_vecFiles, m_stExtractionOptions);
+        qDebug() << "Extract operation completed, result:" << eType;
 
         if (!(m_pInterface->waitForFinished())) {
+            qDebug() << "Emitting finished signal";
             slotFinished(eType);
         } else {
             if (PFT_Error == eType) {
+                qWarning() << "Extract operation failed";
                 errorcode = false;
             }
         }
+    } else {
+        qWarning() << "Interface is null in ExtractJob";
     }
 }
 

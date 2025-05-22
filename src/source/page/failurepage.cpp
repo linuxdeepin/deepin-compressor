@@ -14,25 +14,31 @@
 FailurePage::FailurePage(QWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "FailurePage constructor called";
     initUI();
     initConnections();
+    qDebug() << "FailurePage initialization completed";
 }
 
 FailurePage::~FailurePage()
 {
-
+    qDebug() << "FailurePage destructor called";
 }
 
 void FailurePage::setFailuerDes(const QString &strDes)
 {
+    qDebug() << "Setting failure description:" << strDes;
     m_pFailureLbl->setText(strDes);
 }
 
 void FailurePage::setFailureDetail(const QString &strDetail, const QString &strFileName)
 {
+    qDebug() << "Setting failure details, file:" << strFileName << "detail:" << strDetail;
     if (strFileName.isEmpty()) {
+        qDebug() << "No file name provided, hiding file name label";
         m_pFileNameLbl->setVisible(false);
     } else {
+        qDebug() << "Setting file name:" << strFileName;
         m_pFileNameLbl->setVisible(true);
         m_pFileNameLbl->setToolTip(strFileName);
         QFont font = m_pFileNameLbl->font();
@@ -46,11 +52,13 @@ void FailurePage::setFailureDetail(const QString &strDetail, const QString &strF
 
 void FailurePage::setRetryEnable(bool bEnable)
 {
+    qDebug() << "Setting retry button enabled:" << bEnable;
     m_pRetrybutton->setEnabled(bEnable);
 }
 
 void FailurePage::setFailureInfo(const FailureInfo &failureInfo)
 {
+    qDebug() << "Setting failure info";
     m_failureInfo = failureInfo;
 }
 
@@ -117,6 +125,12 @@ void FailurePage::initUI()
 
 void FailurePage::initConnections()
 {
-    connect(m_pRetrybutton, &DPushButton::clicked, this, &FailurePage::sigFailRetry);
-    connect(commandLinkBackButton, &DCommandLinkButton::clicked, this, &FailurePage::sigBackButtonClickedOnFail);
+    connect(m_pRetrybutton, &DPushButton::clicked, this, [this]() {
+        qDebug() << "Retry button clicked";
+        emit sigFailRetry();
+    });
+    connect(commandLinkBackButton, &DCommandLinkButton::clicked, this, [this]() {
+        qDebug() << "Back button clicked on failure page";
+        emit sigBackButtonClickedOnFail();
+    });
 }

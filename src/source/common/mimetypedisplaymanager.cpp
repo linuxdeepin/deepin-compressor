@@ -20,12 +20,15 @@ QStringList MimeTypeDisplayManager::BackupMimeTypes;
 
 MimeTypeDisplayManager::MimeTypeDisplayManager(QObject *parent) : QObject(parent)
 {
+    qDebug() << "Initializing MimeTypeDisplayManager";
     initData();
     initConnect();
+    qDebug() << "MimeTypeDisplayManager initialized";
 }
 
 void MimeTypeDisplayManager::initData()
 {
+    qDebug() << "Initializing MIME type display data";
     m_displayNames[FileType::Directory] = tr("Directory");
     m_displayNames[FileType::DesktopApplication] = tr("Application");
     m_displayNames[FileType::Videos] = tr("Video");
@@ -63,6 +66,7 @@ QString MimeTypeDisplayManager::displayName(const QString &mimeType)
 
 FileType MimeTypeDisplayManager::displayNameToEnum(const QString &mimeType)
 {
+    qDebug() << "Converting MIME type to enum:" << mimeType;
     if (mimeType == "application/x-desktop") {
         return FileType::DesktopApplication;
     } else if (mimeType == "inode/directory") {
@@ -101,8 +105,10 @@ QStringList MimeTypeDisplayManager::readlines(const QString &path)
     QStringList result;
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Failed to open file:" << path;
         return result;
     }
+    qDebug() << "Reading MIME types from:" << path;
 
     QTextStream in(&file);
     while (!in.atEnd()) {
@@ -118,10 +124,19 @@ QStringList MimeTypeDisplayManager::readlines(const QString &path)
 
     file.close();
     return result;
+    qDebug() << "Supported MIME types loaded:"
+             << "Archive:" << ArchiveMimeTypes.size()
+             << "Text:" << TextMimeTypes.size()
+             << "Video:" << VideoMimeTypes.size()
+             << "Audio:" << AudioMimeTypes.size()
+             << "Image:" << ImageMimeTypes.size()
+             << "Executable:" << ExecutableMimeTypes.size()
+             << "Backup:" << BackupMimeTypes.size();
 }
 
 void MimeTypeDisplayManager::loadSupportMimeTypes()
 {
+    qDebug() << "Loading supported MIME types";
     QString textPath = QString("%1/%2").arg(MIMETYPE_PATH, "text.mimetype");
     QString archivePath = QString("%1/%2").arg(MIMETYPE_PATH, "archive.mimetype");
     QString videoPath = QString("%1/%2").arg(MIMETYPE_PATH, "video.mimetype");

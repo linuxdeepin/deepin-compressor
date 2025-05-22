@@ -15,6 +15,7 @@ const QString SOPENLIST = "openfiles";
 ApplicationAdaptor::ApplicationAdaptor(QApplication *application)
     : QDBusAbstractAdaptor(application), app(application)
 {
+    qDebug() << "ApplicationAdaptor initialized";
     connect(application, SIGNAL(aboutToQuit()), SIGNAL(aboutToQuit()));
     connect(application, SIGNAL(focusChanged(QWidget*, QWidget*)),
             SLOT(focusChangedSlot(QWidget*, QWidget*)));
@@ -27,25 +28,34 @@ ApplicationAdaptor::ApplicationAdaptor(QApplication *application)
  */
 void ApplicationAdaptor::setCompressFile(const QString &sFile)
 {
+    qInfo() << "Set compress file:" << sFile;
     m_sFile = sFile;
 }
 
 
 void ApplicationAdaptor::raise(const QString &sFile)
 {
-    qInfo() << "raise window from dbus";
-    if(m_sFile.isEmpty() || m_sFile.isNull())
+    qDebug() << "Raise window request for file:" << sFile;
+    if(m_sFile.isEmpty() || m_sFile.isNull()) {
+        qWarning() << "No compress file set, cannot raise window";
         return;
+    }
     if(m_curShowWidget && (m_sFile == sFile))
         m_curShowWidget->activateWindow();
 }
 
 void ApplicationAdaptor::onActiveWindow(qint64 pid)
 {
-    qInfo() << "onActiveWindow from dbus: " << "pid is " << pid << ", current pid is " << QGuiApplication::applicationPid();
+    qDebug() << "Active window request from pid:" << pid << ", current pid:" << QGuiApplication::applicationPid();
     m_curShowWidget = nullptr;
-    if(pid != QGuiApplication::applicationPid()) return;
-    if(!app) return;
+    if(pid != QGuiApplication::applicationPid()) {
+        qDebug() << "Pid mismatch, ignoring request";
+        return;
+    }
+    if(!app) {
+        qWarning() << "Application instance is null";
+        return;
+    }
     for(QWidget *w : app->topLevelWidgets()) {
         if(QMainWindow *mainWnd = dynamic_cast<QMainWindow *>(w)) {
             m_curShowWidget = mainWnd;
@@ -57,8 +67,8 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
         m_curShowWidget->raise();
         m_curShowWidget->activateWindow();
     }
-    if(m_curShowWidget && !m_curShowWidget->isActiveWindow())
-    {
+    if(m_curShowWidget && !m_curShowWidget->isActiveWindow()) {
+        qDebug() << "Window not active, trying to activate via Dock DBus";
         qInfo() << "activateWindow by Dock dbus";
         QDBusInterface dockDbusInterfaceV20(
                 "com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", "com.deepin.dde.daemon.Dock");

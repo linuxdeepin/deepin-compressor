@@ -132,6 +132,7 @@ void PreviousLabel::keyPressEvent(QKeyEvent *event)
 TreeHeaderView::TreeHeaderView(Qt::Orientation orientation, QWidget *parent)
     : DHeaderView(orientation, parent)
 {
+    qDebug() << "TreeHeaderView constructor called with orientation:" << orientation;
     viewport()->setAutoFillBackground(false);
     setSectionsClickable(true);
     setHighlightSections(true);
@@ -175,6 +176,7 @@ TreeHeaderView::TreeHeaderView(Qt::Orientation orientation, QWidget *parent)
 
 TreeHeaderView::~TreeHeaderView()
 {
+    qDebug() << "TreeHeaderView destructor called";
 
 }
 
@@ -212,6 +214,7 @@ PreviousLabel *TreeHeaderView::getpreLbl()
 
 void TreeHeaderView::setPreLblVisible(bool bVisible)
 {
+    qDebug() << "Setting previous label visibility:" << bVisible;
     m_pPreLbl->setVisible(bVisible);
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
@@ -239,6 +242,7 @@ void TreeHeaderView::setPreLblVisible(bool bVisible)
 
 void TreeHeaderView::setLabelFocus(bool focus)
 {
+    qDebug() << "Setting label focus:" << focus;
     if (focus) {
         m_pPreLbl->setFocus();
 
@@ -294,6 +298,7 @@ painter.restore();
 */
 void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
+    qDebug() << "Painting section:" << logicalIndex << "with rect:" << rect;
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
@@ -386,6 +391,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
 
 void TreeHeaderView::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "Resize event, new size:" << event->size();
     m_pPreLbl->setFixedWidth(event->size().width() - 2 * SCROLLMARGIN);
     DHeaderView::resizeEvent(event);
 }

@@ -23,23 +23,26 @@
 UnCompressPage::UnCompressPage(QWidget *parent)
     : DWidget(parent)
 {
+    qDebug() << "UnCompressPage constructor called";
     initUI();
     initConnections();
+    qDebug() << "UnCompressPage initialization completed";
 }
 
 UnCompressPage::~UnCompressPage()
 {
-
+    qDebug() << "UnCompressPage destructor called";
 }
 
 void UnCompressPage::setArchiveFullPath(const QString &strArchiveFullPath, UnCompressParameter &unCompressPar)
 {
+    qInfo() << "Setting archive full path:" << strArchiveFullPath;
     if(property(ORDER_JSON).isValid()) {
+        qDebug() << "Processing order JSON property";
         if(m_pUnCompressView) {
             m_pUnCompressView->setMapOrderJson(property(ORDER_JSON).toString());
         }
     }
-    qInfo() << "加载压缩包：" << strArchiveFullPath;
     m_strArchiveFullPath = strArchiveFullPath;
 
     m_pUnCompressView->setArchivePath(m_strArchiveFullPath/*QFileInfo(m_strArchiveFullPath).path()*/);  // 设置压缩包路径
@@ -59,6 +62,7 @@ QString UnCompressPage::archiveFullPath()
 
 void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 {
+    qInfo() << "Setting default uncompress path:" << strPath;
     m_strUnCompressPath = strPath;
     m_pUncompressPathBtn->setToolTip(m_strUnCompressPath);      // 设置解压路径提示信息
     m_pUncompressPathBtn->setText(elidedExtractPath(tr("Extract to:") + m_strUnCompressPath));  // 截取解压路径显示
@@ -145,6 +149,7 @@ void UnCompressPage::initUI()
 
 void UnCompressPage::initConnections()
 {
+    qDebug() << "Initializing uncompress page connections";
     connect(m_pUncompressPathBtn, &DPushButton::clicked, this, &UnCompressPage::slotUnCompressPathClicked);
     connect(m_pUnCompressBtn, &DPushButton::clicked, this, &UnCompressPage::slotUncompressClicked);
     connect(m_pUnCompressView, &UnCompressView::signalExtract2Path, this, &UnCompressPage::signalExtract2Path);
@@ -153,6 +158,7 @@ void UnCompressPage::initConnections()
     connect(m_pUnCompressView, &UnCompressView::signalOpenFile, this, &UnCompressPage::signalOpenFile);
     connect(m_pUnCompressView, &UnCompressView::signalAddFiles2Archive, this, &UnCompressPage::signalAddFiles2Archive);
     connect(this, &UnCompressPage::sigRenameFile, m_pUnCompressView, &UnCompressView::sigRenameFile);
+    qDebug() << "Uncompress page connections initialized";
 }
 
 QString UnCompressPage::elidedExtractPath(const QString &strPath)
@@ -173,6 +179,7 @@ QString UnCompressPage::elidedExtractPath(const QString &strPath)
 
 void UnCompressPage::slotUncompressClicked()
 {
+    qInfo() << "Uncompress button clicked";
     QFileInfo file(m_strArchiveFullPath);
     PERF_PRINT_BEGIN("POINT-04", "压缩包名：" + file.fileName() + " 大小：" + QString::number(file.size()));
 
@@ -183,8 +190,10 @@ void UnCompressPage::slotUncompressClicked()
     if (!m_permission) { // 无法解压到已选中路径
         QString strDes;
         if (!m_fileDestinationPath.exists()) { // 路径不存在
+            qWarning() << "Extraction path does not exist:" << m_strUnCompressPath;
             strDes = tr("The default extraction path does not exist, please retry");
         } else { // 路径无权限
+            qWarning() << "No permission to extract to path:" << m_strUnCompressPath;
             strDes = tr("You do not have permission to save files here, please change and retry");
         }
 
@@ -193,12 +202,14 @@ void UnCompressPage::slotUncompressClicked()
 
         return;
     } else { // 发送解压信号
+        qInfo() << "Emitting uncompress signal for path:" << m_strUnCompressPath;
         emit signalUncompress(m_strUnCompressPath);
     }
 }
 
 void UnCompressPage::slotUnCompressPathClicked()
 {
+    qInfo() << "Uncompress path button clicked, current path:" << m_strUnCompressPath;
     // 创建文件选择对话框
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -209,13 +220,16 @@ void UnCompressPage::slotUnCompressPathClicked()
     const int mode = dialog.exec();
 
     if (mode != QDialog::Accepted) {
+        qDebug() << "User canceled directory selection";
         return;
     }
 
     // 设置默认解压路径为选中的目录
     QList<QUrl> listUrl = dialog.selectedUrls();
     if (listUrl.count() > 0) {
-        setDefaultUncompressPath(listUrl.at(0).toLocalFile());
+        QString newPath = listUrl.at(0).toLocalFile();
+        qInfo() << "User selected new uncompress path:" << newPath;
+        setDefaultUncompressPath(newPath);
     }
 }
 

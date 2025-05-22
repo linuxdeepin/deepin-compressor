@@ -13,6 +13,7 @@
 
 CustomMimeType determineMimeType(const QString &filename)
 {
+    qDebug() << "Determining MIME type for:" << filename;
     QMimeDatabase db;
     CustomMimeType stMimeType;
 
@@ -80,6 +81,7 @@ CustomMimeType determineMimeType(const QString &filename)
     // mimeFromContent will be "application/octet-stream" when file is
     // unreadable, so use extension.
     if (!fileinfo.isReadable()) {
+        qWarning() << "File is not readable, using extension-based MIME type:" << filename;
         stMimeType.m_mimeType = mimeFromExtension;
         return stMimeType;
     }
@@ -117,7 +119,7 @@ CustomMimeType determineMimeType(const QString &filename)
     *  iso：内容检测为"application/octet-stream"，后缀检测为"application/x-cd-image"，file命令探测为"application/x-iso9660-image"
     */
     if (mimeFromContent.isDefault()) {
-
+        qDebug() << "Using file command to detect MIME type for:" << filename;
         QProcess process;
         QStringList args;
         args << "--mime-type" << filename;
@@ -129,18 +131,23 @@ CustomMimeType determineMimeType(const QString &filename)
 
         stMimeType.m_bUnKnown = true;
         if (output.contains("application/octet-stream")) {
+            qDebug() << "File command detected octet-stream, using extension type";
             stMimeType.m_strTypeName = mimeFromExtension.name();
             return stMimeType;
         } else if (output.contains("application/x-chrome-extension")) {
+            qDebug() << "Detected Chrome extension";
             stMimeType.m_strTypeName = "application/x-chrome-extension";
             return stMimeType;
         } else if (output.contains("application/zip")) {
+            qDebug() << "Detected ZIP archive";
             stMimeType.m_strTypeName = "application/zip";
             return stMimeType;
         } else if (output.contains("application/x-iso9660-image")) {
+            qDebug() << "Detected ISO image";
             stMimeType.m_strTypeName = "application/x-iso9660-image";
             return stMimeType;
         } else {        // 对于其余情况，使用已识别出的后缀识别即可
+            qDebug() << "Using extension-based MIME type as fallback";
             stMimeType.m_bUnKnown = false;
             stMimeType.m_mimeType = mimeFromExtension;
             return stMimeType;
@@ -159,5 +166,6 @@ CustomMimeType determineMimeType(const QString &filename)
     }
 
     stMimeType.m_mimeType = mimeFromContent;
+    qDebug() << "Determined MIME type:" << stMimeType.m_mimeType.name();
     return stMimeType;
 }

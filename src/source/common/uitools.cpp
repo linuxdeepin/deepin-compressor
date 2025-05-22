@@ -125,6 +125,7 @@ QString UiTools::humanReadableSize(const qint64 &size, int precision)
 
 bool UiTools::isArchiveFile(const QString &strFileName)
 {
+    qDebug() << "Checking if file is archive:" << strFileName;
     QString strTransFileName = strFileName;
     UnCompressParameter::SplitType type;
     UiTools::transSplitFileName(strTransFileName, type);
@@ -139,18 +140,23 @@ bool UiTools::isArchiveFile(const QString &strFileName)
     if (mime.size() > 0) {
         bool bArchive = false;
         ret = isExistMimeType(mime, bArchive); // 判断是否是归档管理器支持的压缩文件格式
+        qDebug() << "MIME type check result:" << mime << "is" << (ret ? "supported" : "not supported");
     } else {
+        qDebug() << "No valid MIME type found";
         ret = false;
     }
 
     if (strTransFileName.endsWith(".deb")) {    // 对deb文件识别为普通文件
+        qDebug() << "DEB file detected, treating as non-archive";
         ret = false;
     }
 
     if (strTransFileName.endsWith(".crx") || strTransFileName.endsWith(".apk")) {    // 对crx、apk文件识别为压缩包
+        qDebug() << "CRX/APK file detected, treating as archive";
         ret = true;
     }
 
+    qDebug() << "Final archive check result:" << ret;
     return ret;
 }
 
@@ -220,32 +226,21 @@ QString UiTools::toShortString(QString strSrc, int limitCounts, int left)
 
 ReadOnlyArchiveInterface *UiTools::createInterface(const QString &fileName, bool bWrite, AssignPluginType eType/*, bool bUseLibArchive*/)
 {
-//    QFileInfo fileinfo(fileName); // 未使用该变量
-
+    qDebug() << "Creating interface for file:" << fileName << "write mode:" << bWrite << "plugin type:" << eType;
     const CustomMimeType mimeType = determineMimeType(fileName);
+    qDebug() << "Determined MIME type:" << mimeType.name();
 
     QVector<Plugin *> offers;
     if (bWrite) {
         offers = PluginManager::get_instance().preferredWritePluginsFor(mimeType);
-
-//        if (bUseLibArchive == true && mimeType.name() == "application/zip") {
-//            std::sort(offers.begin(), offers.end(), [](Plugin * p1, Plugin * p2) {
-//                if (p1->metaData().name().contains("Libarchive")) {
-//                    return true;
-//                }
-//                if (p2->metaData().name().contains("Libarchive")) {
-//                    return false;
-//                }
-
-//                return p1->priority() > p2->priority();
-//            });
-//        }
+        qDebug() << "Found" << offers.size() << "write plugins for MIME type";
     } else {
         offers = PluginManager::get_instance().preferredPluginsFor(mimeType);
+        qDebug() << "Found" << offers.size() << "read plugins for MIME type";
     }
 
     if (offers.isEmpty()) {
-        qInfo() << "Could not find a plugin to handle" << fileName;
+        qWarning() << "Could not find a plugin to handle" << fileName;
         return nullptr;
     }
 

@@ -17,6 +17,7 @@
 DesktopFile::DesktopFile(const QString &fileName)
     : m_fileName(fileName)
 {
+    qDebug() << "DesktopFile constructor started, file:" << fileName;
     // File validity
     if (m_fileName.isEmpty() || !QFile::exists(fileName)) {
         return;
@@ -29,10 +30,12 @@ DesktopFile::DesktopFile(const QString &fileName)
 
     if (desktop.contains("X-Deepin-AppID")) {
         m_deepinId = desktop.value("X-Deepin-AppID", settings.value("X-Deepin-AppID")).toString();
+        qInfo() << "Loaded X-Deepin-AppID:" << m_deepinId;
     }
 
     if (desktop.contains("X-Deepin-Vendor")) {
         m_deepinVendor = desktop.value("X-Deepin-Vendor", settings.value("X-Deepin-Vendor")).toString();
+        qInfo() << "Loaded X-Deepin-Vendor:" << m_deepinVendor;
     }
 
     if (desktop.contains("NoDisplay")) {
@@ -68,6 +71,7 @@ DesktopFile::DesktopFile(const QString &fileName)
     };
     m_localName = getNameByType("Name");
     m_genericName = getNameByType("GenericName");
+    qDebug() << "Localized name:" << m_localName << "Generic name:" << m_genericName;
 
     m_exec = desktop.value("Exec", settings.value("Exec")).toString();
     m_icon = desktop.value("Icon", settings.value("Icon")).toString();
@@ -81,19 +85,24 @@ DesktopFile::DesktopFile(const QString &fileName)
     // Fix categories
     if (m_categories.first().compare("") == 0) {
         m_categories.removeFirst();
+        qDebug() << "Removed empty category";
     }
+    qDebug() << "DesktopFile constructor finished, loaded" << m_mimeType.size() << "MIME types";
 }
 //---------------------------------------------------------------------------
 
 QString DesktopFile::getFileName() const
 {
+    qDebug() << "Getting desktop file name:" << m_fileName;
     return m_fileName;
 }
 //---------------------------------------------------------------------------
 
 QString DesktopFile::getPureFileName() const
 {
-    return m_fileName.split("/").last().remove(".desktop");
+    QString pureName = m_fileName.split("/").last().remove(".desktop");
+    qDebug() << "Getting pure desktop file name:" << pureName;
+    return pureName;
 }
 //---------------------------------------------------------------------------
 
@@ -118,12 +127,14 @@ QString DesktopFile::getDisplayName() const
 
 QString DesktopFile::getExec() const
 {
+    qDebug() << "Getting desktop file exec command:" << m_exec;
     return m_exec;
 }
 //---------------------------------------------------------------------------
 
 QString DesktopFile::getIcon() const
 {
+    qDebug() << "Getting desktop file icon:" << m_icon;
     return m_icon;
 }
 //---------------------------------------------------------------------------
@@ -152,12 +163,14 @@ bool DesktopFile::getNoShow() const
 
 QStringList DesktopFile::getCategories() const
 {
+    qDebug() << "Getting desktop file categories:" << m_categories;
     return m_categories;
 }
 //---------------------------------------------------------------------------
 
 QStringList DesktopFile::getMimeType() const
 {
+    qDebug() << "Getting desktop file MIME types:" << m_mimeType;
     return m_mimeType;
 }
 //---------------------------------------------------------------------------
