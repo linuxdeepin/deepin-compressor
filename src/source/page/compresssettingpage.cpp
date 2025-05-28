@@ -698,7 +698,7 @@ void CompressSettingPage::initConfig()
     QStringList lines = result.split('\n');
     for (const QString &line : lines) {
         if (line.contains("String 4", Qt::CaseInsensitive)) {
-            m_isOrderMode = line.contains("PGUX", Qt::CaseInsensitive) || line.contains("FXK11", Qt::CaseInsensitive);
+            m_isOrderMode = line.contains("PGUX", Qt::CaseInsensitive) || line.contains("FXK11", Qt::CaseInsensitive)  || line.contains("FXSK11", Qt::CaseInsensitive);
         }
     }
     process.close();
