@@ -690,19 +690,11 @@ void CompressSettingPage::setDefaultName(const QString &strName)
 void CompressSettingPage::initConfig()
 {
 #ifdef DTKCORE_CLASS_DConfigFile
-    QProcess process;
-    process.start("dmidecode");
-    process.waitForStarted();
-    process.waitForFinished();
-    QString result = process.readAll();
-    QStringList lines = result.split('\n');
-    for (const QString &line : lines) {
-        if (line.contains("String 4", Qt::CaseInsensitive)) {
-            m_isOrderMode = line.contains("PGUX", Qt::CaseInsensitive) || line.contains("FXK11", Qt::CaseInsensitive)  || line.contains("FXSK11", Qt::CaseInsensitive);
-        }
-    }
-    process.close();
     m_dconfig = DConfig::create("org.deepin.compressor","org.deepin.compressor.method");
+    DConfig *dconfig = (DConfig *)m_dconfig;
+    if(dconfig && dconfig->isValid() && dconfig->keyList().contains("specialCustomizedType")){
+        m_isOrderMode = dconfig->value("specialCustomizedType").toInt() == 1;
+    }
 #endif
 }
 
