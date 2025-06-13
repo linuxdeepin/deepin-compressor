@@ -72,14 +72,17 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
         qInfo() << "activateWindow by Dock dbus";
         QDBusInterface dockDbusInterfaceV20(
                 "com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", "com.deepin.dde.daemon.Dock");
-            if (dockDbusInterfaceV20.isValid()) {
-                QDBusReply<void> reply = dockDbusInterfaceV20.call("ActivateWindow", m_curShowWidget->winId());
-                if (!reply.isValid()) {
-                    qWarning() << qPrintable("Call v20 com.deepin.dde.daemon.Dock failed") << reply.error();
-                } else {
-                    qInfo() << "Dock dbus activateWindow success!";
-                }
+        QDBusInterface dockDbusInterfaceV23(
+                "org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", "org.deepin.dde.daemon.Dock1");
+        QDBusInterface *dockDbusInterface = dockDbusInterfaceV23.isValid() ? &dockDbusInterfaceV23 : &dockDbusInterfaceV20;
+        if (dockDbusInterface->isValid()) {
+            QDBusReply<void> reply = dockDbusInterface->call("ActivateWindow", m_curShowWidget->winId());
+            if (!reply.isValid()) {
+                qWarning() << "Dock dbus activateWindow failed via" << dockDbusInterface->service() << ", error:" << reply.error();
+            } else {
+                qInfo() << "Dock dbus activateWindow success!";
             }
+        }
     }
 
 }
