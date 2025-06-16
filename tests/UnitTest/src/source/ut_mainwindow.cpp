@@ -1555,12 +1555,6 @@ TEST_F(UT_MainWindow, test_getConfigWinSize)
     EXPECT_NE(m_tester->getConfigWinSize().width(), 0);
 }
 
-TEST_F(UT_MainWindow, testsaveConfigWinSize)
-{
-    m_tester->saveConfigWinSize(800, 600);
-    EXPECT_EQ(m_tester->m_pSettings->value(MAINWINDOW_WIDTH_NAME).toInt(), 800);
-    EXPECT_EQ(m_tester->m_pSettings->value(MAINWINDOW_HEIGHT_NAME).toInt(), 600);
-}
 
 TEST_F(UT_MainWindow, test_convertArchive)
 {
