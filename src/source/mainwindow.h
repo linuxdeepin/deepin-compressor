@@ -84,6 +84,16 @@ public :
      */
     void handleQuit();
 
+    /**
+     * @brief saveConfigWinState    保存窗口状态（大小和最大化状态）
+     */
+    void saveConfigWinState();
+
+    /**
+     * @brief restoreConfigWinState 恢复窗口状态（大小和最大化状态）
+     */
+    void restoreConfigWinState();
+
 private:
     /**
      * @brief initUI    初始化界面
@@ -222,13 +232,6 @@ private:
      * @return  之前保存的窗口大小
      */
     QSize getConfigWinSize();
-
-    /**
-     * @brief saveConfigWinSize     保存窗口尺寸
-     * @param w     宽度
-     * @param h     高度
-     */
-    void saveConfigWinSize(int w, int h);
 
     /**
      * @brief convertArchive 格式转换
