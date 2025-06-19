@@ -33,6 +33,7 @@ endif()
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++11" )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--as-needed -fPIE -fPIC") #-Wl,--as-needed 减少无效的库链接，用不到的库需要清理
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE")
 
 if(DEFINED ENV{PREFIX})
     set(CMAKE_INSTALL_PREFIX $ENV{PREFIX})
