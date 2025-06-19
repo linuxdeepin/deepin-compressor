@@ -1,3 +1,9 @@
+deepin-compressor (6.0.7) unstable; urgency=medium
+
+  * chore: Update dman's resources
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 19 Jun 2025 14:04:21 +0800
+
 deepin-compressor (6.0.6) unstable; urgency=medium
 
   * Update tag to 6.0.6
