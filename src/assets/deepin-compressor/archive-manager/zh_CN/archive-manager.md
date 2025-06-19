@@ -30,7 +30,7 @@
 
 在归档管理器界面，使用快捷键 **Ctrl + Shift + ?** 打开快捷键预览界面。熟练地使用快捷键，将大大提升您的操作效率。
 
-![1|hotkey](fig/hotkey.png)
+<img src="fig/hotkey.png" alt="1|hotkey" style="zoom:50%;" />
 
 
 ## 操作介绍
@@ -51,9 +51,9 @@
 2. 在压缩界面中设置文件名、存储路径、压缩方式等信息。
    > ![notes](../common/notes.svg) 说明：压缩包的默认格式为zip。
 
-   ![1|compressor](fig/compressfile1.png)
+   <img src="fig/compressfile1.png" alt="1|compressor" style="zoom: 67%;" />
    
-   ![compressor](fig/compressfile2.png)
+   <img src="fig/compressfile2.png" alt="compressor" style="zoom:67%;" />
 
 <table border="1">
    <tr>
@@ -91,13 +91,13 @@
 
 3. 单击 **压缩**，在压缩过程中可以暂停/继续压缩操作。
 
-   ![progress](fig/progress.png)
+   <img src="fig/progress.png" alt="progress" style="zoom:67%;" />
 
 4. 压缩成功之后，您可以：
    - 单击 **查看文件**，查看压缩文件的具体存放位置。
    - 单击 **返回**，返回主界面，选择文件进行压缩。
    
-   ![1|compress](fig/compress_success.png)
+   <img src="fig/compress_success.png" alt="1|compress" style="zoom:67%;" />
 
 ### 解压缩
 
@@ -107,7 +107,7 @@
    + 直接将压缩包拖拽到在归档管理器界面上。
       - 添加并加密文件：单击左上角的添加按钮 ![plus](../common/add.svg) 或 ![icon_menu](../common/icon_menu.svg) > **打开文件**，可以添加文件到压缩包。在弹出的对话框中，选择勾选“使用密码”并设置密码，对文件进行加密。不同的文件可以设置不同的密码，仅zip格式的压缩包支持对追加的文件进行加密。
       
-      ![password](fig/password.png)
+      <img src="fig/password.png" alt="password" style="zoom:67%;" />
 
       - 查看信息：单击菜单栏上的图标 ![icon](fig/annotation.png) 可以查看文件信息和注释内容，仅zip格式的压缩包支持重新编辑注释内容。
 
@@ -116,7 +116,7 @@
    - 提取文件：在文件列表中，右键单击文件（夹）选择 **提取** 或 **提取到当前文件夹**，将文件（夹）提取到相应的路径下。
    - 查看或删除文件：在文件列表中，右键单击文件（夹），选择 **打开** 来查看文件（夹）或选择 **删除** 将文件（夹）从列表中移除。
 
-   ![decompression](fig/extract.png)
+   <img src="fig/extract.png" alt="decompression" style="zoom:67%;" />
 
 3. 单击 **解压**，在解压缩过程中可以暂停/继续解压操作。
 
@@ -126,7 +126,7 @@
    - 单击 **查看文件**，查看解压文件的具体存放位置。
    - 单击 **返回**，返回主界面，选择压缩包进行解压缩。
 
-   ![1|decompress](fig/decompress_success.png)
+   <img src="fig/decompress_success.png" alt="1|decompress" style="zoom:67%;" />
 
 
 ## 主菜单
