@@ -3,43 +3,39 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-archive-manager.deepin-archive-manager]
+[o:linuxdeepin:p:deepin-archive-manager:r:268bd03984568dafdc517e85fb27dacc]
 file_filter = translations/deepin-compressor_<lang>.ts
-source_file = translations/deepin-compressor_en.ts
-source_lang = en
+source_file = translations/deepin-compressor.ts
+source_lang = en_US
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-desktop-ts]
+[o:linuxdeepin:p:deepin-archive-manager:r:67435136fd4a1c06955deace84e2627c]
 file_filter = translations/desktop/desktop_<lang>.ts
 source_file = translations/desktop/desktop.ts
-preTranslate_file = src/desktop/deepin-compressor.desktop
-source_lang = en
+source_lang = en_US
 type = QT
 
-[deepin-archive-manager.deepin-archive-manager-conf-singleextract-ts]
-file_filter = translations/conf/singleextract/conf_<lang>.ts
-source_file = translations/conf/singleextract/conf.ts
-preTranslate_file = src/conf/compressor-singleextract.conf
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-conf-singlecompress-ts]
-file_filter = translations/conf/singlecompress/conf_<lang>.ts
-source_file = translations/conf/singlecompress/conf.ts
-preTranslate_file = src/conf/compressor-singlecompress.conf
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-conf-multiextract-ts]
-file_filter = translations/conf/multiextract/conf_<lang>.ts
-source_file = translations/conf/multiextract/conf.ts
-preTranslate_file = src/conf/compressor-multiextract.conf
-source_lang = en
-type = QT
-
-[deepin-archive-manager.deepin-archive-manager-conf-multicompress-ts]
+[o:linuxdeepin:p:deepin-archive-manager:r:4e8de1f89bff632e301b83244930ae6b]
 file_filter = translations/conf/multicompress/conf_<lang>.ts
 source_file = translations/conf/multicompress/conf.ts
-preTranslate_file = src/conf/compressor-multicompress.conf
-source_lang = en
+source_lang = en_US
 type = QT
+
+[o:linuxdeepin:p:deepin-archive-manager:r:374b8240b64f07b11632f0401cad7b53]
+file_filter = translations/conf/multiextract/conf_<lang>.ts
+source_file = translations/conf/multiextract/conf.ts
+source_lang = en_US
+type = QT
+
+[o:linuxdeepin:p:deepin-archive-manager:r:98ae8f5f43cdb6ee95bfa41d8eec4aad]
+file_filter = translations/conf/singlecompress/conf_<lang>.ts
+source_file = translations/conf/singlecompress/conf.ts
+source_lang = en_US
+type = QT
+
+[o:linuxdeepin:p:deepin-archive-manager:r:4d2049f7f81bf1ff9235ecf54ed096c1]
+file_filter = translations/conf/singleextract/conf_<lang>.ts
+source_file = translations/conf/singleextract/conf.ts
+source_lang = en_US
+type = QT
+
