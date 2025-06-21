@@ -594,7 +594,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama file terlalu panjang. Harap jaga nama dalam 60 karakter.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2144"/>
@@ -670,7 +670,7 @@
         <location filename="../src/source/mainwindow.cpp" line="121"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
@@ -720,7 +720,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="312"/>
         <source>Renaming</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengubah nama</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
