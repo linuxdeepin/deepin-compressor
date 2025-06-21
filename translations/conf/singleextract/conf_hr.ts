@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hr">
 <context>
     <name>desktop</name>
     <message>
@@ -14,7 +14,7 @@
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %b</source>
-        <translation type="unfinished"/>
+        <translation>Izvuci u %b</translation>
     </message>
 </context>
 </TS>
