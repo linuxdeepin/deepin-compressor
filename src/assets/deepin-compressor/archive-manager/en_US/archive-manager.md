@@ -1,183 +1,169 @@
-# Archive Manager|deepin-compressor|
+# Archive Manager | deepin-compressor|
 
 ## Overview
 
-
-Archive Manager is a user-friendly and easy-to-use compressing and decompressing software, supporting multiple compressing formats such as 7z, jar, tar, tar.bz2, tar.gz, tar.lz, tar.lzma, tar.lzo, tar.xz, tar.Z, tar.7z, zip and so on as well as encrypted compressing with multiple passwords, volume compressing, adding comments, etc.
+Archive Manager is a user-friendly compression and decompression software that supports various archive formats including 7z, jar, tar, tar.bz2, tar.gz, tar.lz, tar.lzma, tar.lzo, tar.xz, tar.Z, tar.7z, and zip. It also supports multi-password encryption, split-volume compression, and adding comments.
 
 ![1|main](fig/main.png)
 
+## Getting Started
 
+Learn how to launch, close, or create shortcuts for Archive Manager.
 
-## Guide
+### Launching Archive Manager
 
-You can run, exit or create a shortcut for Archive Manager by the following ways.
+1. Click the Launcher icon ![launcher](../common/deepin_launcher.svg) on the taskbar to enter the Launcher interface.
+2. Scroll the mouse wheel or search to find the Archive Manager icon ![deepin_compressor](../common/deepin_compressor.svg), then click to launch.
+3. Right-click ![deepin_compressor](../common/deepin_compressor.svg) to:
+   - Click **Send to Desktop** to create a desktop shortcut.
+   - Click **Send to Taskbar** to pin the application to the taskbar.
+   - Click **Start on Boot** to add the application to startup items, so it runs automatically when the computer starts.
 
-### Run Archive Manager
+### Closing Archive Manager
 
-1.  Click ![launcher](../common/deepin_launcher.svg) on dock  to enter the Launcher interface.
-2.  Locate ![deepin_compressor](../common/deepin_compressor.svg) by scrolling the mouse wheel or searching Archive Manager in the Launcher interface and click it to run.
-3.  Right-click ![deepin_compressor](../common/deepin_compressor.svg) and you can:
- - Click **Send to desktop** to create a desktop shortcut.
- - Click **Send to dock** to fix it on Dock.
- - Click **Add to startup** to add it to startup and it will auto run when the system boots.
+- In the Archive Manager interface, click ![close_icon](../common/close_icon.svg) to exit Archive Manager.
+- Right-click the taskbar icon ![deepin_compressor](../common/deepin_compressor.svg) and select **Close All** to exit Archive Manager.
+- In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg) and select **Exit** to exit Archive Manager.
 
-### Exit Archive Manager
+### Viewing Shortcuts
 
-- Click ![close_icon](../common/close_icon.svg) on the Archive Manager interface to exit Archive Manager.
-- Right-click ![deepin_compressor](../common/deepin_compressor.svg) on dock and select **Close All** to exit.
-- Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface and select  **Exit** to exit.
+In the Archive Manager interface, use the shortcut **Ctrl + Shift + ?** to open the shortcut preview interface. Mastering shortcuts will greatly improve your operational efficiency.
 
-### View Shortcuts
+<img src="fig/hotkey.png" alt="1|hotkey" style="zoom:50%;" />
 
-On the Archive Manager interface, press **Ctrl+ Shift+?** on the keyboard to view shortcuts. Proficiency in shortcuts will greatly improve your efficiency.
+## Operations Guide
 
-![1|hotkey](fig/hotkey.png)
+In the Archive Manager interface, you can compress or decompress single or multiple files/folders, and support multiple windows operating simultaneously.
 
-## Operations
+### Compression
+1. Select files to compress.
 
-In the interface of archive manager, single or multiple files (folders) can be compressed or decompressed, and multiple windows can be operated at the same time.
+   + Right-click the file/folder to be compressed and select **Compress**.
+   + Drag files directly to the Archive Manager interface and click **Next**.
+      - Click the Add button ![plus](../common/add.svg) in the top-left corner or ![icon_menu](../common/icon_menu.svg) > **Open File** to continue adding files/folders to compress.
+      - In the Archive Manager file list, right-click a file/folder to view or delete it.
 
-### Compress
+   ![compressor](fig/compress_add.png)
 
-1. To select files to be compressed:
-   + right-click the files (folder) to be compressed and select **Compress**.
-   + drag the files (folder) directly to the Archive Manager interface and click **Next**.
-      - Click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files (folder) to be compressed.
-      - In the list of files, right-click a file (folder) to view or delete it. 
+2. In the compression interface, set the file name, storage path, compression method, and other information.
+   > ![notes](../common/notes.svg) Note: The default format for compressed files is zip.
 
-   ![1|compressor](fig/compress_add.png)
-
-2. Set the name, storage location, compression method, etc.
+   <img src="fig/compressfile1.png" alt="1|compressor" style="zoom: 67%;" />
    
-   > ![notes](../common/notes.svg) Notes: the default format of compressed packages is .zip. 
-
-   ![1|compressor](fig/compressfile.png)
-
-   ![1|compressor](fig/compressfile2.png)
+   <img src="fig/compressfile2.png" alt="compressor" style="zoom:67%;" />
 
 <table border="1">
    <tr>
-    <th>Option</th>
- <th>Description </th>
+    <th>Name</th>
+    <th>Description</th>
 </tr>
    <tr>
-    <td>Compression method</td>
-    <td>Options include: Store, Fastest, Fast, Normal, Good, Best.
+    <td>Compression Method</td>
+    <td>Options include Store, Fastest, Faster, Standard, Better, Best.
       <ul>
-          <li>Store: click this button to package the files instead of to compress them.</li>
-          <li> Fastest, Fast, Normal, Good, Best: these buttons are ranked in ascending order by  compression rate. The higher the compression rate, the longer it takes to compress the same file.</li>
+          <li>Store: Only packages files without compression.</li>
+          <li>Fastest, Faster, Standard, Better, Best: Gradually increase compression ratio. Higher compression ratio requires more time to compress the same file.</li>
       </ul>
  </td>
 </tr>
    <tr>
     <td>Advanced Options</td>
-    <td>Switch on "Advanced Options", then you can encrypt files/ file lists, split to volumes, and add comments.
+    <td>After enabling advanced options, you can set encryption, split-volume compression, add comments, etc. for files/file lists.
     <ul>
-          <li>CPU threads: You can choose among single thread, 2 threads, 4 threads or 8 threads for compression (for tar.gz format only). The more CPU threads, the higher the compression efficiency.</li>
-          <li>Encrypt the archive: You can encrypt archives. After that, you will have to enter password to view the file contents. Formats such as 7z, tar.7z and zip are supported. You can use numbers, letters, symbols or common Chinese characters to encrypt archives.</li>
-          <li>Encrypt the file list too: you can encrypt file list. After that, you will have to enter password to view the file list contents. Formats such as 7z and tar.7z are supported. The password used here is the same as the one you use for archive encryption. </li>
-          <li>Split to volumes: This option is applicable for large files, which splits the large file into several volumes and is convenient for transferring. At most 200 volumes are supported. Formats such as 7z and zip are supported.</li>
-          <li>Comments: You can only add comments to package in zip format.</li>
+          <li>CPU Threads: Includes single-thread, dual-thread, quad-thread, and octa-thread. More threads mean faster compression speed. Only supported for tar.gz format.</li>
+          <li>Encrypt Files: Encrypt files requiring a password to view content. Supports 7z, tar.7z, zip formats. Can use numbers, letters, symbols, or common Chinese characters for encryption.</li>
+          <li>Encrypt File List: Encrypt file lists requiring a password to view list information. Supports 7z, tar.7z formats. List encryption and file encryption use the same password.</li>
+          <li>Split-volume Compression: Split large files for easier transmission. Can be divided into several split-volume archives, supporting up to 200 split volumes. Supports 7z, zip formats.</li>
+          <li>Comment: Add comments to archives. Only supported for zip format.</li>
       </ul>
  </td>
    </tr>
-   </table>
+</table>
 
+3. Click **Compress**. You can pause/resume compression during the process.
 
+   <img src="fig/progress.png" alt="progress" style="zoom:67%;" />
 
-
-3.  Click **Compress**. You can pause/continue compression during the compressing process.
-
-   ![progress](fig/progress.png)
-
-4.  After compression is successfully finished, you can:
-
-   - Click **View** to view the specific storage location.
-   - Click **Back** to return to the main interface after successful compression.
+4. After successful compression, you can:
+   - Click **View Files** to see the specific storage location of the compressed file.
+   - Click **Back** to return to the main interface and select files for compression.
    
-   ![1|compressor](fig/compresssuccess.png)
-
+   <img src="fig/compress_success.png" alt="1|compress" style="zoom:67%;" />
 
 ### Decompression
 
-1.  Select a package, and then:
-   + right-click and select **Extract**.
-   + drag the package directly to the Archive Manager interface.
-      - Add and encrypt files: click ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add more files to the package. In the pop-up dialog box, you can select **Use password** and set a password. Different passwords can be added to different files. This option is only applicable for packages in zip format.
+1. Select the compressed file.
+
+   + Right-click the compressed file and select **Decompress**.
+   + Drag the compressed file directly to the Archive Manager interface.
+      - Add and encrypt files: Click the Add button ![plus](../common/add.svg) or ![icon_menu](../common/icon_menu.svg) > **Open File** to add files to the compressed file. In the pop-up dialog, check "Use Password" and set a password to encrypt the file. Different files can have different passwords. Only zip format archives support encrypting appended files.
       
-      ![password](fig/password.png)
-      
-      - View: click ![icon](fig/annotation.png) to view detail information and comments. Re-editing comments is only applicable for packages in zip format.
-2.  In the decompression interface, you can set path, file extraction, etc.
-   - set storing path: Click **Extract to:  /home/xxx/Desktop**  to customize the extraction path.
-   - extract files: in the file list, right-click a file(folder) and select **Extract** or **Extract to current directory** to extract the file to the corresponding path.
-   - view or delete files: in the file list, right-click a file(folder) and select **Open** to view it, or select **Delete** to remove it from the list.
+      <img src="fig/password.png" alt="password" style="zoom:67%;" />
 
-   ![1|decompression](fig/extract.png)
-   
-3.  Click **Extract**. During extraction, you can pause/continue extraction.
+      - View information: Click the icon ![icon](fig/annotation.png) on the menu bar to view file information and comment content. Only zip format archives support re-editing comments.
 
-   > ![notes](../common/notes.svg) Notes: When there is one encrypted file in the package, you will have to enter the password to extract.  file to be extracted is encrypted, you need to enter the password to complete extraction. When there are multiple encrypted files in the package, you will have to enter the passwords correspondingly. 
+2. In the decompression interface, you can set paths, extract files, etc.
+   - Set storage path: Click **Extract to: xxx (path)** and select the storage path in the pop-up window.
+   - Extract files: In the file list, right-click a file/folder and select **Extract** or **Extract to Current Folder** to extract to the corresponding path.
+   - View or delete files: In the file list, right-click a file/folder, select **Open** to view it or select **Delete** to remove it from the list.
 
+   <img src="fig/extract.png" alt="decompression" style="zoom:67%;" />
 
+3. Click **Decompress**. You can pause/resume decompression during the process.
 
-4.  After decompression is successfully done, you can:
-   - Click **View** to view the specific storage location.
-   - Click **Back** to return to the main interface.
+   > ![notes](../common/notes.svg) Note: When there are encrypted files in the compressed file, you need to enter the password to decompress. When there are multiple encrypted files, you need to enter passwords one by one to decompress.
 
-   ![1|decompress](fig/decompress_success.png)
+4. After successful decompression, you can:
+   - Click **View Files** to see the specific storage location of the decompressed files.
+   - Click **Back** to return to the main interface and select compressed files for decompression.
 
-  
+   <img src="fig/decompress_success.png" alt="1|decompress" style="zoom:67%;" />
 
 ## Main Menu
 
-In the main menu, you can open the compression interface, switch window themes, view the help manual and get more information about Archive Manager.
+In the main menu, you can open files, modify settings, switch window themes, view help manuals, and learn more about Archive Manager.
 
-### Open file
-1. Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
-2. Select **Open file** and select the file to be compressed or extracted from the file selector.
+### Open
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Open File** to select files to compress or compressed files.
 
 ### Settings
 
-1. Click ![icon_menu](../common/icon_menu.svg) on the Archive Manager interface.
-2. Click **Settings**.
-   - Extraction:
-      + Set the directory where the extracted archives go to;
-      + Check or uncheck **Auto create a folder for multiple extracted files**;
-      + Check or uncheck **Show extracted files when completed**.
-   - File Management:
-      + Set whether to **Delete archives after extraction**, you have options such as **Never**, **Ask for confirmation** and **Always**.
-      + Check or uncheck **Delete files after compression**.
-   - Files Associated:
-      + Check or uncheck file types of associated files.
-3. Click **Restore Defaults** on the interface to restore the initial setting.
-
-
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Settings** to perform the following operations:
+   - Decompression Settings
+     + Set default decompression location: Choose current directory, desktop, or set other directory.
+     + Check or uncheck **Automatically create folders**.
+     + Check or uncheck **Automatically open corresponding folder after decompression**.
+   - File Management Settings
+     + Set whether to **Delete compressed file after decompression**: Choose "Never", "Ask for confirmation", or "Always".
+     + Check or uncheck **Delete original files after compression**.
+   - Associated File Settings
+     + Check or uncheck associated file types. All are checked by default.
+3. Click **Restore Defaults** to reset all settings to initial state.
 
 ### Theme
 
-The window theme includes Light Theme, Dark Theme and System Theme.
+Window themes include Light theme, Dark theme, and System theme.
 
-1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
-2. Click **Theme** to select a theme.
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Theme** and choose a theme color.
 
 ### Help
 
-View Help to get more information about Archive Manager.
+View the help manual to learn more about and use Archive Manager.
 
-1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
-2. Click **Help**.
-3. View the manual.
-
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Help**.
+3. View Archive Manager's help manual.
 
 ### About
 
-1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg). 
-2. Click **About**.
-3. View the version description.
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **About**.
+3. View Archive Manager's version and introduction.
 
 ### Exit
 
-1. On the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
-2. Click **Exit** to exit.
+1. In the Archive Manager interface, click ![icon_menu](../common/icon_menu.svg).
+2. Select **Exit**.
