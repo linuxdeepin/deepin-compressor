@@ -18,19 +18,16 @@
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="53"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="121"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>%1 originalio failo neteisingas, patikrinkite ir bandykite dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="55"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="123"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 neteisingas diske, patikrinkite ir bandykite dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="132"/>
         <source>You do not have permission to compress %1</source>
         <translation>Nėra leidimų išskleisti %1</translation>
     </message>
@@ -66,7 +63,6 @@
     <name>CompressSettingPage</name>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="130"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>New Archive</source>
         <translation>Nauja arkia</translation>
     </message>
@@ -213,13 +209,11 @@
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="541"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>&apos;%1 neegzistuoja priešinguje diske, patikrinkite ir bandykite dar kartą</translation>
+        <translation>'%1 neegzistuoja priešinguje diske, patikrinkite ir bandykite dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="519"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>You do not have permission to compress %1</source>
         <translation>Nepatekite komprimiruoti %1, nes neturiėte teisių</translation>
     </message>
@@ -282,7 +276,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="293"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakeiskti pavadinimą</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="298"/>
@@ -292,22 +286,20 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="301"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>Atverti su</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="502"/>
         <source>Select default program</source>
         <translation type="unfinished">Pasirinkite numatytąjį programinį įrenginį</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tai visiškai pašalins failus. Ar tikrai norite tęsti?</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
-        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Atšaukti</translation>
@@ -322,17 +314,17 @@
         <location filename="../src/source/tree/compressview.cpp" line="477"/>
         <source>Add</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pridėti</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="475"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ar norite pridėti archyvą prie sąrašo ar atverti jį naujoje lange?</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="478"/>
         <source>Open in new window</source>
-        <translation type="unfinished"></translation>
+        <translation>Atverti naujoje lange</translation>
     </message>
 </context>
 <context>
@@ -340,12 +332,12 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="296"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Šiam failų tipui archyvų pakeitimai nepalaikomi. Konvertuokite archyvo formatą, kad išsaugotumėte pakeitimus.</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="304"/>
         <source>Convert the format to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertuoti formatą į:</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
@@ -357,7 +349,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="329"/>
         <source>Convert</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konvertuoti</translation>
     </message>
 </context>
 <context>
@@ -365,7 +357,7 @@
     <message>
         <location filename="../src/source/tree/datamodel.cpp" line="59"/>
         <source>item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>failų (s)</translation>
     </message>
 </context>
 <context>
@@ -385,12 +377,12 @@
         <location filename="../src/source/page/failurepage.cpp" line="89"/>
         <source>Retry</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bandyti dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="92"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Atgal</translation>
     </message>
 </context>
 <context>
@@ -398,12 +390,12 @@
     <message>
         <location filename="../src/source/page/homepage.cpp" line="40"/>
         <source>Drag file or folder here</source>
-        <translation type="unfinished"></translation>
+        <translation>Numesti failą ar aplanką čia</translation>
     </message>
     <message>
         <location filename="../src/source/page/homepage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Pasirinkti failą</translation>
     </message>
 </context>
 <context>
@@ -416,7 +408,7 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="513"/>
         <source>Open as read-only</source>
-        <translation type="unfinished"></translation>
+        <translation>Atverti tik skaitymui</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="514"/>
@@ -437,7 +429,6 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="44"/>
-        <location filename="../src/main.cpp" line="45"/>
         <source>Archive Manager</source>
         <translation>Archivų tvarkyklė</translation>
     </message>
@@ -471,7 +462,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="261"/>
-        <location filename="../src/source/mainwindow.cpp" line="271"/>
         <source>Create New Archive</source>
         <translation>Sukurti naują archį</translation>
     </message>
@@ -502,21 +492,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
         <source>You do not have permission to load %1</source>
         <translation>Nesuteikiama leidimo įkelti %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="478"/>
-        <location filename="../src/source/mainwindow.cpp" line="2879"/>
         <source>Loading, please wait...</source>
         <translation>Įkeliama, prašome palaukti...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>Pridėtojo klaida</translation>
     </message>
@@ -528,16 +513,12 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
-        <location filename="../src/source/mainwindow.cpp" line="2415"/>
-        <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Atšaukti</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Patvirtinti</translation>
@@ -554,8 +535,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1275"/>
-        <location filename="../src/source/mainwindow.cpp" line="1402"/>
-        <location filename="../src/source/mainwindow.cpp" line="1418"/>
         <source>Updating, please wait...</source>
         <translation>Atnaujinama, prašome palaukti...</translation>
     </message>
@@ -578,9 +557,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>Archivius yra nusikaltas</translation>
     </message>
@@ -602,7 +578,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2064"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
         <translation>Neįmanoma išlaikyti duomenų, nėra vietos</translation>
     </message>
@@ -619,7 +594,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>Failo pavadinimas yra per ilgas. Palikite jį 60 simbolimis.</translation>
     </message>
@@ -685,40 +659,22 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Archyvas buvo pakeistas diske, atidarykite jį iš naujo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
         <translation>Neteisingas slaptažodis</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="121"/>
-        <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="521"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="637"/>
-        <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
-        <location filename="../src/source/mainwindow.cpp" line="2738"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Gerai</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="630"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Failo formatas nepalaikomas archyvo tvarkyklėje</translation>
     </message>
@@ -769,7 +725,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>Nėra duomenų</translation>
     </message>
@@ -785,13 +740,11 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Nepavyko sukurti &quot;%1&quot; </translation>
+        <source>Failed to create "%1"</source>
+        <translation>Nepavyko sukurti "%1" </translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
         <translation>Kai kurių taurių yra trūkstama</translation>
     </message>
@@ -1002,13 +955,11 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="44"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="87"/>
         <source>Task</source>
         <translation>Užduotis</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="50"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="98"/>
         <source>Extracting</source>
         <translation>Atsirinkimas</translation>
     </message>
@@ -1034,61 +985,41 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>Greitis</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>Skaičiuojama...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>Greitis</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation>Greitis</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="344"/>
-        <location filename="../src/source/page/progresspage.cpp" line="346"/>
-        <location filename="../src/source/page/progresspage.cpp" line="348"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>Greitis</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="336"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>Greitis</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
         <source>Time left</source>
         <translation>Pabaigos laikas</translation>
     </message>
@@ -1114,7 +1045,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="123"/>
-        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation>Atnaujinama komentaras...</translation>
     </message>
@@ -1125,22 +1055,18 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>Pauzė</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Atšaukti</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="165"/>
-        <location filename="../src/source/page/progresspage.cpp" line="360"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Tęsti</translation>
@@ -1163,7 +1089,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="380"/>
-        <location filename="../src/source/page/progresspage.cpp" line="386"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Ar tikrai norite sustabdyti srautinimą?</translation>
     </message>
@@ -1177,8 +1102,6 @@
     <name>QObject</name>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="229"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Praleisti</translation>
@@ -1191,27 +1114,23 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="206"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Kitas failas su tuo pačiu pavadinimu jau yra, norite jį pakeisti?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="230"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Pakeisti</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="390"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Atšaukti</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="391"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Gerai</translation>
@@ -1223,13 +1142,11 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="211"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <source>Apply to all</source>
         <translation>Taikyti visiems</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="51"/>
         <source>Name</source>
         <translation>Pavadinimas</translation>
     </message>
@@ -1295,43 +1212,29 @@
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="247"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="256"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="265"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished">Greitis</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
         <source>Calculating...</source>
         <translation type="unfinished">Skaičiuojama...</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="274"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="283"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation type="unfinished">Greitis</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="319"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation type="unfinished">Greitis</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="292"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="301"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="310"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished">Greitis</translation>
@@ -1344,12 +1247,12 @@
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
         <source>other</source>
-        <translation type="unfinished"></translation>
+        <translation>kitas</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="159"/>
         <source>item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>failų (s)</translation>
     </message>
 </context>
 <context>
@@ -1383,63 +1286,57 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="108"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pasirinkti visus</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="109"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>Išvalyti viską</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="110"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekomenduojama</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="144"/>
         <source>Extract archives to</source>
-        <translation type="unfinished"></translation>
+        <translation>Ištraukti archyvus į</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Esamas katalogas</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Darbalaukis</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="189"/>
         <source>Other directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Kitas katalogas</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="256"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Pašalinti archyvus po ištraukimo</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Niekada</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="286"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Klausyti patvirtinimo</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="289"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Visada</translation>
     </message>
 </context>
 <context>
@@ -1452,26 +1349,25 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="73"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Peržiūrėti</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="76"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Atgal</translation>
     </message>
 </context>
 <context>
     <name>TitleWidget</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3336"/>
-        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Open file</source>
         <translation type="unfinished">Atidaryti failą</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3339"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Atgal</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3396"/>
@@ -1483,10 +1379,8 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="59"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="71"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="100"/>
         <source>Extract to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ištraukti į:</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="101"/>
@@ -1497,12 +1391,12 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="177"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Numatytoji ištraukimo kelyje nėra, prašome bandyti dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="179"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Jūs neturite teisių išsaugoti failų čia, prašome pakeisti ir bandyti dar kartą</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="183"/>
@@ -1562,7 +1456,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="786"/>
         <source>Select default program</source>
         <translation>Pasirinkite numatytąjį programinį įrenginį</translation>
     </message>

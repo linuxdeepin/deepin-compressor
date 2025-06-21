@@ -18,19 +18,16 @@
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="53"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="121"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>%1 फाइल अवश्यकतया छैन, कृपया तालिकामा जाँच गर्नुहोस् र फिर्सतेहरूमा पुनः प्रयोग गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="55"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="123"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>&apos;%1 डिस्कमा छैन, कृपया तालिकामा जाँच गर्नुहोस् र फिर्सतेहरूमा पुनः प्रयोग गर्नुहोस्</translation>
+        <translation>'%1 डिस्कमा छैन, कृपया तालिकामा जाँच गर्नुहोस् र फिर्सतेहरूमा पुनः प्रयोग गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="132"/>
         <source>You do not have permission to compress %1</source>
         <translation>%1 निवृत्तिभन्दा घनित्ती गर्न सकिन्छौँ</translation>
     </message>
@@ -66,7 +63,6 @@
     <name>CompressSettingPage</name>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="130"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>New Archive</source>
         <translation>नयो अवकाश</translation>
     </message>
@@ -213,13 +209,11 @@
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="541"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>&apos;%1 डिस्कमा छैन, कृपया तयारी गर्दा पुनः प्रयास गर्नुहोस्</translation>
+        <translation>'%1 डिस्कमा छैन, कृपया तयारी गर्दा पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="519"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>You do not have permission to compress %1</source>
         <translation>यी %1 विस्तार गर्न सकारात्मक छैन</translation>
     </message>
@@ -296,7 +290,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="502"/>
         <source>Select default program</source>
         <translation>स्थानिक प्रोग्राम निवड्नुहोस्</translation>
     </message>
@@ -308,7 +301,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
-        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>रद्द गर्नुहोस्</translation>
@@ -448,7 +440,6 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="44"/>
-        <location filename="../src/main.cpp" line="45"/>
         <source>Archive Manager</source>
         <translation>आर्काइव मनेजर</translation>
     </message>
@@ -482,7 +473,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="261"/>
-        <location filename="../src/source/mainwindow.cpp" line="271"/>
         <source>Create New Archive</source>
         <translation>नयाँ आर्काइव बनाउनु</translation>
     </message>
@@ -513,21 +503,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
         <source>You do not have permission to load %1</source>
         <translation>%1 लागि आपलाई लोड गर्न सक्षमता छैन</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="478"/>
-        <location filename="../src/source/mainwindow.cpp" line="2879"/>
         <source>Loading, please wait...</source>
         <translation>लोड गर्दा, कृपया ठाउँ राखनुहोस्...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>प्लगइन त्रुटि</translation>
     </message>
@@ -539,16 +524,12 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
-        <location filename="../src/source/mainwindow.cpp" line="2415"/>
-        <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>रद्द गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>स्वीकार गर्नु</translation>
@@ -565,8 +546,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1275"/>
-        <location filename="../src/source/mainwindow.cpp" line="1402"/>
-        <location filename="../src/source/mainwindow.cpp" line="1418"/>
         <source>Updating, please wait...</source>
         <translation>अपडेट गर्दा, कृपया ठाउँ राखनुहोस्...</translation>
     </message>
@@ -589,9 +568,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>आर्काइव नुकसान पाईको हो</translation>
     </message>
@@ -613,7 +589,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2064"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
         <translation>कडेमा अपर्याप्त अंतराल</translation>
     </message>
@@ -630,7 +605,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>फाइल नाम ठूलो छ। कृपया नाम ६० अक्षर भन्दा छोटो बनाउनुहोस्।</translation>
     </message>
@@ -696,40 +670,22 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>कडेमा आयामक बदलिने छ, कृपया उसलाई फिर्ता भएको रूपमा वापस इनपोर्ट गर्नुहोस्।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
         <translation>गलत पासवर्ड</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="121"/>
-        <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="521"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="637"/>
-        <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
-        <location filename="../src/source/mainwindow.cpp" line="2738"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ठीक छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="630"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>फाइल रूप अर्को अनुसार आयामक विनियमनमा पुरानो छ</translation>
     </message>
@@ -780,7 +736,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>मध्यममा कुनै डाटा छैन</translation>
     </message>
@@ -796,13 +751,11 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; बनाइने विफल छ</translation>
+        <source>Failed to create "%1"</source>
+        <translation>"%1" बनाइने विफल छ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
         <translation>कुनै लगातार वॉल्यूम अनुपस्थित छन्</translation>
     </message>
@@ -1012,13 +965,11 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="44"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="87"/>
         <source>Task</source>
         <translation>काम</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="50"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="98"/>
         <source>Extracting</source>
         <translation>विस्तार गर्नुहोस्</translation>
     </message>
@@ -1045,61 +996,41 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>हालाँकि गणना भइरहेछ...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="344"/>
-        <location filename="../src/source/page/progresspage.cpp" line="346"/>
-        <location filename="../src/source/page/progresspage.cpp" line="348"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="336"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>गति</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
         <source>Time left</source>
         <translation>बाकी समय</translation>
     </message>
@@ -1125,7 +1056,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="123"/>
-        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation>नोटमा अद्यतन गर्नुहोस्...</translation>
     </message>
@@ -1136,22 +1066,18 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>पाउस</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="165"/>
-        <location filename="../src/source/page/progresspage.cpp" line="360"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>गर्नुहोस्</translation>
@@ -1176,7 +1102,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="380"/>
-        <location filename="../src/source/page/progresspage.cpp" line="386"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>संपीडन राहेको छैन भने र त्याग गर्न नयाँ भएको छ?
 </translation>
@@ -1192,8 +1117,6 @@
     <name>QObject</name>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="229"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>सफाइस्ने</translation>
@@ -1206,27 +1129,23 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="206"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>समान नामक एउटा फाइल विद्यमान छ, उसले बदलिनुहोस्？</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="230"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>बदल्नु</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="390"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>रद्द गर्नु</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="391"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ठीक छ</translation>
@@ -1238,13 +1157,11 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="211"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <source>Apply to all</source>
         <translation>सार्वजनिक प्रयोग गर्नु</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="51"/>
         <source>Name</source>
         <translation>नाम</translation>
     </message>
@@ -1310,43 +1227,29 @@
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="247"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="256"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="265"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished">गति</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
         <source>Calculating...</source>
         <translation type="unfinished">हालाँकि गणना भइरहेछ...</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="274"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="283"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation type="unfinished">गति</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="319"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation type="unfinished">गति</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="292"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="301"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="310"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished">गति</translation>
@@ -1354,12 +1257,12 @@
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="383"/>
         <source>Select default program</source>
-        <translation type="unfinished"></translation>
+        <translation>अपनो डिफ़ल्ट प्रोग्राम चयन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
         <source>other</source>
-        <translation type="unfinished"></translation>
+        <translation>अन्य</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="159"/>
@@ -1399,63 +1302,57 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="108"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>सबै चयन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="109"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>सबै खाली गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="110"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>अनुशिलन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="144"/>
         <source>Extract archives to</source>
-        <translation type="unfinished"></translation>
+        <translation>अर्काइव्स खाली गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Current directory</source>
         <translation>वर्तमान निर्देशिका</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>डेस्कटप</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="189"/>
         <source>Other directory</source>
-        <translation type="unfinished"></translation>
+        <translation>अन्य डिरेक्टरी</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="256"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>अर्काइव्स खाली गरेपछि हटाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>कदापि</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="286"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>संमति लिनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="289"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>हरेक</translation>
     </message>
 </context>
 <context>
@@ -1468,7 +1365,7 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="73"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>देख्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="76"/>
@@ -1480,14 +1377,13 @@
     <name>TitleWidget</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3336"/>
-        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Open file</source>
         <translation type="unfinished">फाइल खोल्नु</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3339"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>पछाडि</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3396"/>
@@ -1499,10 +1395,8 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="59"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="71"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="100"/>
         <source>Extract to:</source>
-        <translation type="unfinished"></translation>
+        <translation>खाली गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="101"/>
@@ -1513,18 +1407,18 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="177"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation>डिफ़ल्ट खाली गर्ने मार्ग छैन, कृपया पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="179"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>तपाईं यहाँ फाइलहरू बचत गर्न अनुमति छैन, कृपया बदल अनि पुनः प्रयास गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="183"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ठीक</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
@@ -1543,7 +1437,7 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="385"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ठीक</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="611"/>
@@ -1578,7 +1472,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="786"/>
         <source>Select default program</source>
         <translation>मानक प्रोग्राम पनि छान्नुहोस्</translation>
     </message>

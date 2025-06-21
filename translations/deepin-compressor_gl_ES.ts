@@ -18,19 +18,16 @@
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="53"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="121"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>O ficheiro orixinal de %1 non existe, comproba e téntao de novo</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="55"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="123"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 non existe no disco, comprobe e ténteo de novo</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="132"/>
         <source>You do not have permission to compress %1</source>
         <translation>Non ten permiso para comprimir %1</translation>
     </message>
@@ -66,7 +63,6 @@
     <name>CompressSettingPage</name>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="130"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>New Archive</source>
         <translation>Novo arquivo</translation>
     </message>
@@ -213,13 +209,11 @@
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="541"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 non existe no disco, comprobe e ténteo de novo</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="519"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>You do not have permission to compress %1</source>
         <translation>Non ten permiso para comprimir %1</translation>
     </message>
@@ -296,7 +290,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="502"/>
         <source>Select default program</source>
         <translation>Seleccionar o programa predeterminado</translation>
     </message>
@@ -307,7 +300,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
-        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
@@ -437,7 +429,6 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="44"/>
-        <location filename="../src/main.cpp" line="45"/>
         <source>Archive Manager</source>
         <translation>Xestor de arquivos</translation>
     </message>
@@ -471,7 +462,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="261"/>
-        <location filename="../src/source/mainwindow.cpp" line="271"/>
         <source>Create New Archive</source>
         <translation>Crear novo arquivo</translation>
     </message>
@@ -502,21 +492,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
         <source>You do not have permission to load %1</source>
         <translation>Non ten permiso para cargar %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="478"/>
-        <location filename="../src/source/mainwindow.cpp" line="2879"/>
         <source>Loading, please wait...</source>
         <translation>Cargando, por favor espere...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>Erro no complemento</translation>
     </message>
@@ -527,16 +512,12 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
-        <location filename="../src/source/mainwindow.cpp" line="2415"/>
-        <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>Confirmar</translation>
@@ -553,8 +534,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1275"/>
-        <location filename="../src/source/mainwindow.cpp" line="1402"/>
-        <location filename="../src/source/mainwindow.cpp" line="1418"/>
         <source>Updating, please wait...</source>
         <translation>Actualizando, por favor espere...</translation>
     </message>
@@ -577,9 +556,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>O arquivo está danado</translation>
     </message>
@@ -601,7 +577,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2064"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
         <translation>Espazo no disco insuficiente</translation>
     </message>
@@ -618,7 +593,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation>O nome do ficheiro é demasiado longo. Mantén o nome dentro de 60 caracteres, por favor.</translation>
     </message>
@@ -684,40 +658,22 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Cambiouse o arquivo no disco. Importámolo de novo.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
         <translation>Contrasinal erróneo</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="121"/>
-        <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="521"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="637"/>
-        <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
-        <location filename="../src/source/mainwindow.cpp" line="2738"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="630"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>O formato de ficheiro non é compatible co Xestor de arquivos</translation>
     </message>
@@ -768,7 +724,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>Non hai datos nel</translation>
     </message>
@@ -784,13 +739,11 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Faiou a creación &quot;%1&quot;</translation>
+        <source>Failed to create "%1"</source>
+        <translation>Faiou a creación "%1"</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
         <translation>Faltan algúns volumes</translation>
     </message>
@@ -1000,13 +953,11 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="44"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="87"/>
         <source>Task</source>
         <translation>Tarefa</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="50"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="98"/>
         <source>Extracting</source>
         <translation>Extraendo</translation>
     </message>
@@ -1032,61 +983,41 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>Calculando...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="344"/>
-        <location filename="../src/source/page/progresspage.cpp" line="346"/>
-        <location filename="../src/source/page/progresspage.cpp" line="348"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="336"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
         <source>Time left</source>
         <translation>Tempo restante</translation>
     </message>
@@ -1112,7 +1043,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="123"/>
-        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation>Actualizando o comentario...</translation>
     </message>
@@ -1123,22 +1053,18 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="165"/>
-        <location filename="../src/source/page/progresspage.cpp" line="360"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Continuar</translation>
@@ -1161,7 +1087,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="380"/>
-        <location filename="../src/source/page/progresspage.cpp" line="386"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Está seguro que quere parar a compresión?</translation>
     </message>
@@ -1175,8 +1100,6 @@
     <name>QObject</name>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="229"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>Saltar</translation>
@@ -1189,27 +1112,23 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="206"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>Xa existe outro ficheiro co mesmo nome, substituílo?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="230"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>Substituír</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="390"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="391"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Aceptar</translation>
@@ -1221,13 +1140,11 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="211"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <source>Apply to all</source>
         <translation>Aplicar a todo</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="51"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
@@ -1293,43 +1210,29 @@
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="247"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="256"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="265"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished">Velocidade</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
         <source>Calculating...</source>
         <translation type="unfinished">Calculando...</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="274"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="283"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation type="unfinished">Velocidade</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="319"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation type="unfinished">Velocidade</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="292"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="301"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="310"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished">Velocidade</translation>
@@ -1342,7 +1245,7 @@
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
         <source>other</source>
-        <translation type="unfinished"></translation>
+        <translation>outro</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="159"/>
@@ -1400,19 +1303,16 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Current directory</source>
         <translation>Directorio actual</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Desktop</source>
         <translation>Escritorio</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="189"/>
         <source>Other directory</source>
         <translation>Outro directorio</translation>
     </message>
@@ -1423,19 +1323,16 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="286"/>
         <source>Ask for confirmation</source>
         <translation>Pedir confirmación</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="289"/>
         <source>Always</source>
         <translation>Sempre</translation>
     </message>
@@ -1462,7 +1359,6 @@
     <name>TitleWidget</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3336"/>
-        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Open file</source>
         <translation>Abrir ficheiro</translation>
     </message>
@@ -1481,8 +1377,6 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="59"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="71"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="100"/>
         <source>Extract to:</source>
         <translation>Extraer a:</translation>
     </message>
@@ -1560,7 +1454,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="786"/>
         <source>Select default program</source>
         <translation>Seleccionar o programa predeterminado</translation>
     </message>

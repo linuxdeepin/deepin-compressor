@@ -18,19 +18,16 @@
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="53"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="121"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>File asli dari %1 tidak ada, silakan cek dan coba lagi</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="55"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="123"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation>%1 tidak ada di diska, silakan cek dan coba lagi</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="132"/>
         <source>You do not have permission to compress %1</source>
         <translation>Anda tidak diizinkan untuk mengkompres %1</translation>
     </message>
@@ -59,14 +56,13 @@
         <location filename="../src/source/page/compresspage.cpp" line="106"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
     <name>CompressSettingPage</name>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="130"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>New Archive</source>
         <translation>Arsip baru</translation>
     </message>
@@ -88,7 +84,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="205"/>
         <source>CPU threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Thread CPU</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="207"/>
@@ -98,7 +94,7 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="209"/>
         <source>Split to volumes</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisah ke dalam volume</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="211"/>
@@ -109,7 +105,7 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="213"/>
         <source>Compress</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kompresi</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="232"/>
@@ -144,22 +140,22 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>Single thread</source>
-        <translation type="unfinished"></translation>
+        <translation>Thread tunggal</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>2 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>2 thread</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>4 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>4 thread</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="239"/>
         <source>8 threads</source>
-        <translation type="unfinished"></translation>
+        <translation>8 thread</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="249"/>
@@ -209,17 +205,15 @@
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="504"/>
         <source>Too many volumes, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Terlalu banyak volume, silakan ubah dan coba lagi</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="541"/>
         <source>%1 does not exist on the disk, please check and try again</source>
         <translation type="unfinished">%1 tidak ada di diska, silakan cek dan coba lagi</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="519"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>You do not have permission to compress %1</source>
         <translation>Anda tidak diizinkan untuk mengompres %1</translation>
     </message>
@@ -232,19 +226,19 @@
         <location filename="../src/source/page/compresssettingpage.cpp" line="574"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="788"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="788"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ganti</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="696"/>
@@ -282,7 +276,7 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="293"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubah nama</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="298"/>
@@ -296,7 +290,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="502"/>
         <source>Select default program</source>
         <translation>Pilih program default</translation>
     </message>
@@ -307,22 +300,21 @@
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
-        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="477"/>
         <source>Add</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Tambah</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="475"/>
@@ -351,13 +343,13 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="329"/>
         <source>Convert</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konversi</translation>
     </message>
 </context>
 <context>
@@ -385,7 +377,7 @@
         <location filename="../src/source/page/failurepage.cpp" line="89"/>
         <source>Retry</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Coba lagi</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="92"/>
@@ -422,7 +414,7 @@
         <location filename="../3rdparty/interface/queries.cpp" line="514"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
 </context>
 <context>
@@ -437,7 +429,6 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="44"/>
-        <location filename="../src/main.cpp" line="45"/>
         <source>Archive Manager</source>
         <translation>Manajer Arsip</translation>
     </message>
@@ -471,7 +462,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="261"/>
-        <location filename="../src/source/mainwindow.cpp" line="271"/>
         <source>Create New Archive</source>
         <translation>Buat arsip baru</translation>
     </message>
@@ -502,21 +492,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
         <source>You do not have permission to load %1</source>
         <translation>Anda tidak diizinkan untuk memuat %1</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="478"/>
-        <location filename="../src/source/mainwindow.cpp" line="2879"/>
         <source>Loading, please wait...</source>
         <translation>Memuat, tunggu ...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>Plugin galat</translation>
     </message>
@@ -527,19 +512,15 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
-        <location filename="../src/source/mainwindow.cpp" line="2415"/>
-        <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="582"/>
@@ -553,8 +534,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1275"/>
-        <location filename="../src/source/mainwindow.cpp" line="1402"/>
-        <location filename="../src/source/mainwindow.cpp" line="1418"/>
         <source>Updating, please wait...</source>
         <translation>Memuat, tunggu ...</translation>
     </message>
@@ -573,20 +552,17 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1661"/>
         <source>Extraction failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama file terlalu panjang, sehingga 60 karakter pertama telah diintersepsi sebagai nama file.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>Arsip rusak</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1810"/>
         <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume yang dikompresi sudah ada</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2033"/>
@@ -597,18 +573,17 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2035"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama file terlalu panjang. Harap jaga nama dalam 60 karakter.</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2064"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
         <translation>Ruang diska tidak cukup</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"></translation>
+        <translation>Konversi gagal</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2104"/>
@@ -618,14 +593,13 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2144"/>
         <source>Conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengubah nama</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
@@ -684,40 +658,22 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
         <source>The archive was changed on the disk, please import it again.</source>
         <translation>Arsip telah berubah dalam disk, impor kembali</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
         <translation>Kata sandi salah</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="121"/>
-        <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="521"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="637"/>
-        <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
-        <location filename="../src/source/mainwindow.cpp" line="2738"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="630"/>
         <source>The file format is not supported by Archive Manager</source>
         <translation>Format file tidak didukung oleh Manajer Arsip</translation>
     </message>
@@ -768,7 +724,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>Tidak ada data di dalamnya</translation>
     </message>
@@ -784,15 +739,13 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>Gagal membuat &quot;%1&quot;</translation>
+        <source>Failed to create "%1"</source>
+        <translation>Gagal membuat "%1"</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
-        <translation type="unfinished"></translation>
+        <translation>Beberapa volume hilang</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
@@ -808,13 +761,13 @@
         <location filename="../src/source/mainwindow.cpp" line="2415"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ganti</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Perbarui</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3079"/>
@@ -951,13 +904,13 @@
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="288"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="289"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/openwithdialog/openwithdialog.cpp" line="293"/>
@@ -983,12 +936,12 @@
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="37"/>
         <source>Current path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokasi saat ini:</translation>
     </message>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="45"/>
         <source>Back to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kembali ke: %1</translation>
     </message>
 </context>
 <context>
@@ -996,17 +949,15 @@
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="37"/>
         <source>%1 task(s) in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tugas(s) sedang berlangsung</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="44"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="87"/>
         <source>Task</source>
-        <translation type="unfinished"></translation>
+        <translation>Tugas</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="50"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="98"/>
         <source>Extracting</source>
         <translation>Sedang mengekstak</translation>
     </message>
@@ -1019,74 +970,54 @@
         <location filename="../src/source/dialog/progressdialog.cpp" line="179"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="179"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
 </context>
 <context>
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>Kecepatan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>Mengkalkulasi...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>Kecepatan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation type="unfinished">Kecepatan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="344"/>
-        <location filename="../src/source/page/progresspage.cpp" line="346"/>
-        <location filename="../src/source/page/progresspage.cpp" line="348"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>Kecepatan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="336"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>Kecepatan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
         <source>Time left</source>
         <translation>Waktu tersisa</translation>
     </message>
@@ -1103,7 +1034,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="119"/>
         <source>Renaming</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengubah nama</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="121"/>
@@ -1112,7 +1043,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="123"/>
-        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation type="unfinished">Mutakhirkan komentar...</translation>
     </message>
@@ -1123,111 +1053,98 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Pause</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Jeda</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="165"/>
-        <location filename="../src/source/page/progresspage.cpp" line="360"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Lanjutkan</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="382"/>
         <source>Are you sure you want to stop the decompression?</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda yakin ingin menghentikan decompression?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="384"/>
         <source>Are you sure you want to stop the deletion?</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda yakin ingin menghentikan penghapusan?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="380"/>
-        <location filename="../src/source/page/progresspage.cpp" line="386"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>Apakah anda yakin membatalkan proses kompresi?</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="388"/>
         <source>Are you sure you want to stop the conversion?</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda yakin ingin menghentikan konversi?</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="229"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Skip</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Lewati</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="193"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gabungkan</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="206"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>File dengan nama yang sama sudah ada, ingin menimpanya?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="230"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ganti</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="390"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="391"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="190"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ada folder dengan nama yang sama sudah ada, ganti?</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="211"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <source>Apply to all</source>
         <translation>Terapkan ke semua</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="51"/>
         <source>Name</source>
         <translation>Nama</translation>
     </message>
@@ -1249,7 +1166,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2898"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 berubah. Apakah ingin menyimpan perubahan ke arsip?</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="10"/>
@@ -1269,22 +1186,22 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="13"/>
         <source>Show extracted files when completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan file yang diekstrak saat selesai</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="14"/>
         <source>File Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Manajemen File</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="15"/>
         <source>Delete files after compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus file setelah dikompresi</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="16"/>
         <source>Files Associated</source>
-        <translation type="unfinished"></translation>
+        <translation>File yang Terkait</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="17"/>
@@ -1293,43 +1210,29 @@
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="247"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="256"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="265"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished">Kecepatan</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
         <source>Calculating...</source>
         <translation type="unfinished">Mengkalkulasi...</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="274"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="283"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation type="unfinished">Kecepatan</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="319"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation type="unfinished">Kecepatan</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="292"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="301"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="310"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished">Kecepatan</translation>
@@ -1342,7 +1245,7 @@
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
         <source>other</source>
-        <translation type="unfinished"></translation>
+        <translation>lain</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="159"/>
@@ -1355,24 +1258,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="555"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubah Nama</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="606"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="607"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="617"/>
         <source>The name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama sudah ada</translation>
     </message>
 </context>
 <context>
@@ -1381,17 +1284,17 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="108"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pilih Semua</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="109"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus Semua</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="110"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>Direkomendasikan</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="144"/>
@@ -1400,44 +1303,38 @@
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Current directory</source>
         <translation>Folder saat ini</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Desktop</source>
         <translation>Desktop</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="189"/>
         <source>Other directory</source>
         <translation>Folder lain</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="256"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus arsip setelah ekstraksi</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak Pernah</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="286"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanyakan konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="289"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Selalu</translation>
     </message>
 </context>
 <context>
@@ -1462,7 +1359,6 @@
     <name>TitleWidget</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3336"/>
-        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Open file</source>
         <translation type="unfinished">Buka file</translation>
     </message>
@@ -1481,8 +1377,6 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="59"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="71"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="100"/>
         <source>Extract to:</source>
         <translation>Ekstrak ke:</translation>
     </message>
@@ -1506,7 +1400,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="183"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
@@ -1525,7 +1419,7 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="385"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="611"/>
@@ -1546,7 +1440,7 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="617"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubah Nama</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="622"/>
@@ -1560,7 +1454,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="786"/>
         <source>Select default program</source>
         <translation type="unfinished">Pilih program default</translation>
     </message>
@@ -1568,18 +1461,18 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="696"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="696"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfirmasi</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="696"/>
         <source>Do you want to delete the selected file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation>Apakah Anda ingin menghapus file yang dipilih?</translation>
     </message>
 </context>
 </TS>

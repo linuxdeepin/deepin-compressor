@@ -18,19 +18,16 @@
     <name>CalculateSizeThread</name>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="53"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="121"/>
         <source>The original file of %1 does not exist, please check and try again</source>
         <translation>%1 এর মূল ফাইল নেই, অনুযায়ী পরীক্ষা করুন এবং আবার চেষ্টা করুন</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="55"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="123"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>&apos;%1 ডেস্কটপে নেই, অনুযায়ী পরীক্ষা করুন এবং আবার চেষ্টা করুন</translation>
+        <translation>'%1 ডেস্কটপে নেই, অনুযায়ী পরীক্ষা করুন এবং আবার চেষ্টা করুন</translation>
     </message>
     <message>
         <location filename="../src/source/common/calculatesizethread.cpp" line="64"/>
-        <location filename="../src/source/common/calculatesizethread.cpp" line="132"/>
         <source>You do not have permission to compress %1</source>
         <translation>%1 এর কম্প্রেস অনুমোদন পান নি</translation>
     </message>
@@ -66,7 +63,6 @@
     <name>CompressSettingPage</name>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="130"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="218"/>
         <source>New Archive</source>
         <translation>নতুন অ্যার্কাইভ</translation>
     </message>
@@ -213,13 +209,11 @@
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="513"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="541"/>
         <source>%1 does not exist on the disk, please check and try again</source>
-        <translation>&apos;%1 ডিস্কে নেই, আইস্ট চেক করুন এবং আবার চেষ্টা করুন</translation>
+        <translation>'%1 ডিস্কে নেই, আইস্ট চেক করুন এবং আবার চেষ্টা করুন</translation>
     </message>
     <message>
         <location filename="../src/source/page/compresssettingpage.cpp" line="519"/>
-        <location filename="../src/source/page/compresssettingpage.cpp" line="548"/>
         <source>You do not have permission to compress %1</source>
         <translation>%1 কম্প্রেস করার অধিকার নেই</translation>
     </message>
@@ -287,52 +281,50 @@
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="298"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>মুছুন</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="301"/>
         <source>Open with</source>
-        <translation type="unfinished"></translation>
+        <translation>প্রতিটি সাথে খুলুন</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="305"/>
-        <location filename="../src/source/tree/compressview.cpp" line="502"/>
         <source>Select default program</source>
         <translation type="unfinished">মানদণ্ড প্রোগ্রাম নির্বাচন করুন</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
         <source>It will permanently delete the file(s). Are you sure you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>এটি ফাইলগুলি সর্বাংক মুছে ফেলবে। আপনি আরো অগ্রসর হতে চান কি?</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
-        <location filename="../src/source/tree/compressview.cpp" line="476"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="360"/>
         <source>Confirm</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>প্রমাণ</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="477"/>
         <source>Add</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>যোগ করুন</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="475"/>
         <source>Do you want to add the archive to the list or open it in new window?</source>
-        <translation type="unfinished"></translation>
+        <translation>আপনি আর্কাইভটি তালিকায় যোগ করতে চান কি নতুন উইন্ডোতে খুলতে চান?</translation>
     </message>
     <message>
         <location filename="../src/source/tree/compressview.cpp" line="478"/>
         <source>Open in new window</source>
-        <translation type="unfinished"></translation>
+        <translation>নতুন উইন্ডোতে খুলুন</translation>
     </message>
 </context>
 <context>
@@ -340,24 +332,24 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="296"/>
         <source>Changes to archives in this file type are not supported. Please convert the archive format to save the changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>এই ফাইল ধরনের আর্কাইভে পরিবর্তন সমর্থিত নয়। পরিবর্তন সংরক্ষণের জন্য আর্কাইভ ফরম্যাট পরিবর্তন করুন।</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="304"/>
         <source>Convert the format to:</source>
-        <translation type="unfinished"></translation>
+        <translation>ফরম্যাট পরিবর্তন করুন:</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="328"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="329"/>
         <source>Convert</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>পরিবর্তন</translation>
     </message>
 </context>
 <context>
@@ -365,7 +357,7 @@
     <message>
         <location filename="../src/source/tree/datamodel.cpp" line="59"/>
         <source>item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>পুনরাবৃত্তি(গুলি)</translation>
     </message>
 </context>
 <context>
@@ -374,23 +366,23 @@
         <location filename="../src/source/page/failurepage.cpp" line="71"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation type="unfinished"></translation>
+        <translation>পৃথকীকরণ ব্যর্থ</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="84"/>
         <source>Damaged file, unable to extract</source>
-        <translation type="unfinished"></translation>
+        <translation>বিস্তার করা যাবে না, ক্ষতবিহন ফাইল</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="89"/>
         <source>Retry</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>পুনরায় চেষ্টা</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="92"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>পিছনে</translation>
     </message>
 </context>
 <context>
@@ -398,12 +390,12 @@
     <message>
         <location filename="../src/source/page/homepage.cpp" line="40"/>
         <source>Drag file or folder here</source>
-        <translation type="unfinished"></translation>
+        <translation>এখানে ফাইল বা ফোল্ডার খাঁড়ান</translation>
     </message>
     <message>
         <location filename="../src/source/page/homepage.cpp" line="42"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল নির্বাচন করুন</translation>
     </message>
 </context>
 <context>
@@ -416,13 +408,13 @@
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="513"/>
         <source>Open as read-only</source>
-        <translation type="unfinished"></translation>
+        <translation>পড়ার জন্য কেবল খুলুন</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="514"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>বাতিল</translation>
     </message>
 </context>
 <context>
@@ -437,7 +429,6 @@
     <name>Main</name>
     <message>
         <location filename="../src/main.cpp" line="44"/>
-        <location filename="../src/main.cpp" line="45"/>
         <source>Archive Manager</source>
         <translation>আর্কাইভ ম্যানেজার</translation>
     </message>
@@ -471,7 +462,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="261"/>
-        <location filename="../src/source/mainwindow.cpp" line="271"/>
         <source>Create New Archive</source>
         <translation>নতুন আর্কাইভ তৈরি করুন</translation>
     </message>
@@ -502,21 +492,16 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
         <source>You do not have permission to load %1</source>
         <translation>আপনি %1 লোড করার অনুমতি নেই</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="478"/>
-        <location filename="../src/source/mainwindow.cpp" line="2879"/>
         <source>Loading, please wait...</source>
         <translation>লোড হচ্ছে, ক্লান্তি করুন...</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="2056"/>
-        <location filename="../src/source/mainwindow.cpp" line="2082"/>
-        <location filename="../src/source/mainwindow.cpp" line="2107"/>
         <source>Plugin error</source>
         <translation>প্লাগইন ত্রুটি</translation>
     </message>
@@ -528,16 +513,12 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
-        <location filename="../src/source/mainwindow.cpp" line="2415"/>
-        <location filename="../src/source/mainwindow.cpp" line="2901"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="554"/>
-        <location filename="../src/source/mainwindow.cpp" line="1378"/>
         <source>Confirm</source>
         <comment>button</comment>
         <translation>নিশ্চিত করুন</translation>
@@ -554,8 +535,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1275"/>
-        <location filename="../src/source/mainwindow.cpp" line="1402"/>
-        <location filename="../src/source/mainwindow.cpp" line="1418"/>
         <source>Updating, please wait...</source>
         <translation>আপডেট হচ্ছে, ক্লান্তি করুন...</translation>
     </message>
@@ -578,16 +557,13 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1673"/>
-        <location filename="../src/source/mainwindow.cpp" line="1748"/>
-        <location filename="../src/source/mainwindow.cpp" line="2086"/>
-        <location filename="../src/source/mainwindow.cpp" line="2111"/>
         <source>The archive is damaged</source>
         <translation>আর্কাইভটি নষ্ট হয়েছে</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1810"/>
         <source>Open failed: the file name is too long</source>
-        <translation type="unfinished"></translation>
+        <translation>খুলতে ব্যর্থ: ফাইল নামটি খুব দীর্ঘ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2033"/>
@@ -598,35 +574,33 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2035"/>
         <source>The file name is too long, so the first 60 characters have been intercepted as the file name.</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল নামটি খুব দীর্ঘ, তাই প্রথম ৬০ অক্ষর ফাইল নাম হিসাবে আটকে রাখা হয়েছে।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2064"/>
-        <location filename="../src/source/mainwindow.cpp" line="2135"/>
         <source>Insufficient disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>আপেক্ষিক ডিস্ক স্থান অসম্পূর্ণ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2068"/>
         <source>The compressed volumes already exist</source>
-        <translation type="unfinished"></translation>
+        <translation>কম্প্রেস করা ভলিউমগুলি আগে থেকে অস্তিত্ব রয়েছে</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2104"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation type="unfinished"></translation>
+        <translation>পৃথকীকরণ ব্যর্থ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2123"/>
-        <location filename="../src/source/mainwindow.cpp" line="2147"/>
         <source>The file name is too long. Keep the name within 60 characters please.</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল নামটি খুব দীর্ঘ। দয়া করে নামটি ৬০ অক্ষরের মধ্যে রাখুন।</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2144"/>
         <source>Conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>পরিবর্তন ব্যর্থ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2407"/>
@@ -636,17 +610,17 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2415"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>একই নামের আরেকটি ফাইল আগে থেকে অস্তিত্ব রয়েছে, প্রতিস্থাপন করবেন কি?</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2558"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation>আপনি আর্কাইভটি নিজেকে যোগ করতে পারেন না</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2573"/>
         <source>You cannot add files to archives in this file type</source>
-        <translation type="unfinished"></translation>
+        <translation>আপনি এই ফাইল ধরনে আর্কাইভে ফাইল যোগ করতে পারেন না</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3179"/>
@@ -656,81 +630,63 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1683"/>
         <source>File name too long</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল নাম দীর্ঘ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2060"/>
         <source>Failed to create file</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল তৈরি করতে অস্ফল</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2029"/>
         <source>Compression successful</source>
-        <translation type="unfinished"></translation>
+        <translation>কম্প্রেশন সফল</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2053"/>
         <source>Compression failed</source>
-        <translation type="unfinished"></translation>
+        <translation>কম্প্রেশন ব্যর্থ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2479"/>
         <source>Find directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ডিরেক্টরি খুঁজুন</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2079"/>
         <source>Open failed</source>
-        <translation type="unfinished"></translation>
+        <translation>ওপেন ব্যর্থ</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
         <source>The archive was changed on the disk, please import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>আর্কাইভটি ডিস্কে পরিবর্তিত হয়েছে, দয়া করে আবার আমদানি করুন</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1604"/>
-        <location filename="../src/source/mainwindow.cpp" line="1678"/>
-        <location filename="../src/source/mainwindow.cpp" line="1753"/>
-        <location filename="../src/source/mainwindow.cpp" line="1808"/>
-        <location filename="../src/source/mainwindow.cpp" line="2090"/>
         <source>Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation>ভূল পাসওয়ার্ড</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="121"/>
-        <location filename="../src/source/mainwindow.cpp" line="426"/>
-        <location filename="../src/source/mainwindow.cpp" line="488"/>
-        <location filename="../src/source/mainwindow.cpp" line="521"/>
-        <location filename="../src/source/mainwindow.cpp" line="582"/>
-        <location filename="../src/source/mainwindow.cpp" line="588"/>
-        <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="637"/>
-        <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2263"/>
-        <location filename="../src/source/mainwindow.cpp" line="2276"/>
-        <location filename="../src/source/mainwindow.cpp" line="2573"/>
-        <location filename="../src/source/mainwindow.cpp" line="2738"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ঠিক আছে</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="597"/>
-        <location filename="../src/source/mainwindow.cpp" line="630"/>
         <source>The file format is not supported by Archive Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>ফাইল ফরম্যাটটি আর্কাইভ ম্যানেজার দ্বারা সমর্থিত নয়</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2039"/>
         <source>Conversion successful</source>
-        <translation type="unfinished"></translation>
+        <translation>কনভার্শন সফল</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2287"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2291"/>
@@ -769,7 +725,6 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1301"/>
-        <location filename="../src/source/mainwindow.cpp" line="2131"/>
         <source>No data in it</source>
         <translation>এই মেনুতে কোনো ডেটা নেই</translation>
     </message>
@@ -785,13 +740,11 @@
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1688"/>
-        <location filename="../src/source/mainwindow.cpp" line="2127"/>
-        <source>Failed to create &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; তৈরি করতে সমস্যা হয়েছে</translation>
+        <source>Failed to create "%1"</source>
+        <translation>"%1" তৈরি করতে সমস্যা হয়েছে</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2094"/>
-        <location filename="../src/source/mainwindow.cpp" line="2115"/>
         <source>Some volumes are missing</source>
         <translation>কিছু ভার্জিনিউ হাইন্ড হয়েছে</translation>
     </message>
@@ -1001,13 +954,11 @@
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="44"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="87"/>
         <source>Task</source>
         <translation>কাজ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="50"/>
-        <location filename="../src/source/dialog/progressdialog.cpp" line="98"/>
         <source>Extracting</source>
         <translation>বিস্তার করা</translation>
     </message>
@@ -1033,61 +984,41 @@
     <name>ProgressPage</name>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="314"/>
-        <location filename="../src/source/page/progresspage.cpp" line="317"/>
-        <location filename="../src/source/page/progresspage.cpp" line="320"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation>গতি</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="43"/>
-        <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="144"/>
         <source>Calculating...</source>
         <translation>মূল্যায়ন চলছে...</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="45"/>
-        <location filename="../src/source/page/progresspage.cpp" line="324"/>
-        <location filename="../src/source/page/progresspage.cpp" line="326"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation>গতি</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="47"/>
-        <location filename="../src/source/page/progresspage.cpp" line="330"/>
-        <location filename="../src/source/page/progresspage.cpp" line="332"/>
         <source>Speed</source>
         <comment>rename</comment>
         <translation>গতি</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="49"/>
-        <location filename="../src/source/page/progresspage.cpp" line="344"/>
-        <location filename="../src/source/page/progresspage.cpp" line="346"/>
-        <location filename="../src/source/page/progresspage.cpp" line="348"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation>গতি</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="53"/>
-        <location filename="../src/source/page/progresspage.cpp" line="336"/>
-        <location filename="../src/source/page/progresspage.cpp" line="338"/>
-        <location filename="../src/source/page/progresspage.cpp" line="340"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation>গতি</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="56"/>
-        <location filename="../src/source/page/progresspage.cpp" line="310"/>
         <source>Time left</source>
         <translation>শেষ থেকে সময়</translation>
     </message>
@@ -1113,7 +1044,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="123"/>
-        <location filename="../src/source/page/progresspage.cpp" line="142"/>
         <source>Updating the comment...</source>
         <translation>কমেন্ট আপডেট করা...</translation>
     </message>
@@ -1124,22 +1054,18 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="136"/>
-        <location filename="../src/source/page/progresspage.cpp" line="178"/>
-        <location filename="../src/source/page/progresspage.cpp" line="364"/>
         <source>Pause</source>
         <comment>button</comment>
         <translation>পauses</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="177"/>
-        <location filename="../src/source/page/progresspage.cpp" line="393"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="165"/>
-        <location filename="../src/source/page/progresspage.cpp" line="360"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>পরবর্তী</translation>
@@ -1162,7 +1088,6 @@
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="380"/>
-        <location filename="../src/source/page/progresspage.cpp" line="386"/>
         <source>Are you sure you want to stop the compression?</source>
         <translation>সংক্ষিপ্ত করার প্রক্রিয়াটি রুটি করার ক্ষমতা রয়েছেন?</translation>
     </message>
@@ -1176,8 +1101,6 @@
     <name>QObject</name>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="229"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>পрыথিবী</translation>
@@ -1190,27 +1113,23 @@
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="206"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>অন্য একটি নাম সামান্য ফাইল রয়েছে, তাই বদলাতে চাইলে যান?&#xa0;</translation>
+        <translation>অন্য একটি নাম সামান্য ফাইল রয়েছে, তাই বদলাতে চাইলে যান? </translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="230"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>বদলুন</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="390"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>বাতিল</translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="391"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>হুমকি</translation>
@@ -1218,17 +1137,15 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="190"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation>অন্য একটি নাম সামান্য ফোল্ডার রয়েছে, তাই বদলাতে চাইলে যান?&#xa0;</translation>
+        <translation>অন্য একটি নাম সামান্য ফোল্ডার রয়েছে, তাই বদলাতে চাইলে যান? </translation>
     </message>
     <message>
         <location filename="../3rdparty/interface/queries.cpp" line="211"/>
-        <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
         <source>Apply to all</source>
         <translation>সব এনালাগে প্রয়োগ করুন</translation>
     </message>
     <message>
         <location filename="../src/source/tree/datamodel.h" line="56"/>
-        <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="51"/>
         <source>Name</source>
         <translation>নাম</translation>
     </message>
@@ -1250,7 +1167,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2898"/>
         <source>%1 changed. Do you want to save changes to the archive?</source>
-        <translation>%1 পরিবর্তিত হয়েছে। আর্কাইভে পরিবর্তন সংরক্ষণ করতে চাইলে যান?&#xa0;</translation>
+        <translation>%1 পরিবর্তিত হয়েছে। আর্কাইভে পরিবর্তন সংরক্ষণ করতে চাইলে যান? </translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="10"/>
@@ -1294,43 +1211,29 @@
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="247"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="256"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="265"/>
         <source>Speed</source>
         <comment>compress</comment>
         <translation type="unfinished">গতি</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="44"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
         <source>Calculating...</source>
         <translation type="unfinished">মূল্যায়ন চলছে...</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="50"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="274"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="283"/>
         <source>Speed</source>
         <comment>delete</comment>
         <translation type="unfinished">গতি</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="56"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="319"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="328"/>
         <source>Speed</source>
         <comment>convert</comment>
         <translation type="unfinished">গতি</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="68"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="292"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="301"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="310"/>
-        <location filename="../tests/UnitTest/src/source/page/ut_progresspage.cpp" line="337"/>
         <source>Speed</source>
         <comment>uncompress</comment>
         <translation type="unfinished">গতি</translation>
@@ -1343,12 +1246,12 @@
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_compressview.cpp" line="394"/>
         <source>other</source>
-        <translation type="unfinished"></translation>
+        <translation>অন্য</translation>
     </message>
     <message>
         <location filename="../tests/UnitTest/src/source/tree/ut_datamodel.cpp" line="159"/>
         <source>item(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>আইটেম(গুলি)</translation>
     </message>
 </context>
 <context>
@@ -1382,63 +1285,57 @@
         <location filename="../src/source/dialog/settingdialog.cpp" line="108"/>
         <source>Select All</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>সবগুলো বাছাই করুন</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="109"/>
         <source>Clear All</source>
-        <translation type="unfinished"></translation>
+        <translation>সবগুলো পরিষ্কার করুন</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="110"/>
         <source>Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>পরামর্শ দেওয়া</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="144"/>
         <source>Extract archives to</source>
-        <translation type="unfinished"></translation>
+        <translation>আর্কাইভ পৃথক করুন</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="179"/>
         <source>Current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>বর্তমান ফোল্ডার</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="184"/>
         <source>Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>ডেস্কটপ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="150"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="189"/>
         <source>Other directory</source>
-        <translation type="unfinished"></translation>
+        <translation>অন্য ফোল্ডার</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="256"/>
         <source>Delete archives after extraction</source>
-        <translation type="unfinished"></translation>
+        <translation>পৃথকীকরণের পর আর্কাইভ মুছুন</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="283"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>কখনোই</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="286"/>
         <source>Ask for confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>প্রমাণ চাওয়া</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="262"/>
-        <location filename="../src/source/dialog/settingdialog.cpp" line="289"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>সবসময়</translation>
     </message>
 </context>
 <context>
@@ -1446,31 +1343,30 @@
     <message>
         <location filename="../src/source/page/successpage.cpp" line="63"/>
         <source>Compression successful</source>
-        <translation type="unfinished"></translation>
+        <translation>কম্প্রেশন সফল</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="73"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>দেখুন</translation>
     </message>
     <message>
         <location filename="../src/source/page/successpage.cpp" line="76"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>পিছনে</translation>
     </message>
 </context>
 <context>
     <name>TitleWidget</name>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3336"/>
-        <location filename="../src/source/mainwindow.cpp" line="3392"/>
         <source>Open file</source>
         <translation type="unfinished">ফাইল খুলুন</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3339"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>পিছনে</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="3396"/>
@@ -1482,10 +1378,8 @@
     <name>UnCompressPage</name>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="59"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="71"/>
-        <location filename="../src/source/page/uncompresspage.cpp" line="100"/>
         <source>Extract to:</source>
-        <translation type="unfinished"></translation>
+        <translation>বিয়োগ করুন:</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="101"/>
@@ -1496,23 +1390,23 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="177"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation type="unfinished"></translation>
+        <translation>পূর্বাভিসারিত বিয়োগ পথ অস্তিত্ব রাখে না, আবার চেষ্টা করুন</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="179"/>
         <source>You do not have permission to save files here, please change and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>আপনি এখানে ফাইল সঞ্চয় করার অনুমতি পান না, দুঃখিত করুন এবং আবার চেষ্টা করুন</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="183"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ও.কি.</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="197"/>
         <source>Find directory</source>
-        <translation type="unfinished"></translation>
+        <translation>পাথ খুঁজুন</translation>
     </message>
 </context>
 <context>
@@ -1520,13 +1414,13 @@
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="385"/>
         <source>You cannot add the archive to itself</source>
-        <translation type="unfinished"></translation>
+        <translation>আপনি আর্কাইভটি নিজেকে যোগ করতে পারেন না</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="385"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ও.কি.</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="611"/>
@@ -1561,7 +1455,6 @@
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="633"/>
-        <location filename="../src/source/tree/uncompressview.cpp" line="786"/>
         <source>Select default program</source>
         <translation>মানদণ্ড প্রোগ্রাম নির্বাচন করুন</translation>
     </message>
