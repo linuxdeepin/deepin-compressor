@@ -1,3 +1,9 @@
+deepin-compressor (6.5.7) unstable; urgency=medium
+
+  * update changelog
+
+ -- Liuyangming <liuyangming@uniontech.com>  Mon, 23 Jun 2025 14:10:12 +0800
+
 deepin-compressor (6.5.6) unstable; urgency=medium
 
   * chore: Update CMake configuration for C flags
