@@ -1,4 +1,10 @@
-deepin-compressor (6.5.10.) unstable; urgency=medium
+deepin-compressor (6.5.11) unstable; urgency=medium
+
+  * update version to 6.5.11. 
+
+ -- Tian ShiLin <tianshilin@uniontech.com>  Thu, 03 Jul 2025 20:53:43 +0800
+
+deepin-compressor (6.5.10) unstable; urgency=medium
 
   * update version to 6.5.10. 
 
