@@ -1,4 +1,4 @@
-# 壓縮管理員 | deepin-compressor|
+# 壓縮管理員|deepin-compressor|
 
 ## 概述
 

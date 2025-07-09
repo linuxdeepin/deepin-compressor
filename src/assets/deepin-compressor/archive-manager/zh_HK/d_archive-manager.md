@@ -1,4 +1,4 @@
-# 歸檔管理器 | deepin-compressor|
+# 歸檔管理器|deepin-compressor|
 
 ## 概述
 
