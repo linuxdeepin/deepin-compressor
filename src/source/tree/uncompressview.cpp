@@ -70,19 +70,22 @@ void UnCompressView::refreshArchiveData()
 
 void UnCompressView::setArchivePath(const QString &strPath)
 {
+    qDebug() << "Setting archive path to:" << strPath;
     m_strArchive = strPath;
     m_strArchivePath = QFileInfo(strPath).path();
 }
 
 void UnCompressView::setDefaultUncompressPath(const QString &strPath)
 {
+    qDebug() << "Setting default uncompress path to:" << strPath;
     m_strUnCompressPath = strPath;
 }
 
 void UnCompressView::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "Mouse press event at position:" << event->pos();
+    // qDebug() << "Mouse press event at position:" << event->pos();
     if (event->button() == Qt::MouseButton::LeftButton) {
+        // qDebug() << "Mouse press event at position:" << event->pos();
         m_dragPos = event->pos();
     }
 
@@ -93,8 +96,9 @@ void UnCompressView::mousePressEvent(QMouseEvent *event)
 
 void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 {
-
+    // qDebug() << "Mouse move event at position:" << event->pos();
     if (m_isPressed) {
+        // qDebug() << "Is pressed";
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
         //最大步进距离是因为原地点按马上放开,则会出现-35~-38的不合理位移,加上每次步进距离没有那么大,所以设置为30
@@ -118,15 +122,18 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
     QModelIndexList listSel = selectedIndexes();
 
     if (listSel.size() < 1) {
+        // qDebug() << "No selected index";
         return;
     }
 
     if (!(event->buttons() & Qt::MouseButton::LeftButton) || m_pFileDragServer) {
+        // qDebug() << "No left button pressed or file drag server is not null";
         return;
     }
 
     // 曼哈顿距离处理，避免误操作
     if ((event->pos() - m_dragPos).manhattanLength() < QApplication::startDragDistance()) {
+        // qDebug() << "Manhattan distance is less than start drag distance";
         return;
     }
 
@@ -138,6 +145,7 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
     QVariant value = listSel[0].data(Qt::DecorationRole);
 
     if (value.isValid()) {
+        // qDebug() << "Value is valid";
         if (value.type() == QVariant::Pixmap) {
             m_pDrag->setPixmap(qvariant_cast<QPixmap>(value));
         } else if (value.type() == QVariant::Icon) {
@@ -174,11 +182,13 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
     qInfo() << "sigdragLeave";
 
     if (result == Qt::DropAction::CopyAction) {
+        // qDebug() << "Drag and drop action is CopyAction";
         if (m_bDrop && m_bReceive) {
             extract2Path(m_strSelUnCompressPath);
             clearDragData();
         }
     } else {
+        // qDebug() << "Drag and drop action is not CopyAction";
         clearDragData();
     }
 
@@ -188,13 +198,16 @@ void UnCompressView:: mouseMoveEvent(QMouseEvent *event)
 
 void UnCompressView::clearDragData()
 {
+    qDebug() << "Clear drag data";
     if (m_pDrag) {
+        qDebug() << "delete m_pDrag";
         m_pDrag->disconnect();      // 先断开信号，防止deleteLater过程中还有有一些处理
         m_pDrag->deleteLater();
         m_pDrag = nullptr;
     }
 
     if (m_pFileDragServer) {
+        qDebug() << "delete m_pFileDragServer";
         m_pFileDragServer->setProgress(100);
         m_pFileDragServer->deleteLater();
         m_pFileDragServer = nullptr;
@@ -209,6 +222,7 @@ void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     qDebug() << "Mouse double click event at position:" << event->pos();
     if (event->button() == Qt::MouseButton::LeftButton) {
+        qDebug() << "Left button double clicked";
         handleDoubleClick(indexAt(event->pos()));   // 双击处理
     }
 
@@ -217,11 +231,12 @@ void UnCompressView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void UnCompressView::initUI()
 {
-
+    qDebug() << "Initializing UnCompressView UI";
 }
 
 void UnCompressView::initConnections()
 {
+    qDebug() << "Initializing UnCompressView connections";
     connect(this, &UnCompressView::signalDragFiles, this, &UnCompressView::slotDragFiles, Qt::QueuedConnection);    // wayland下使用Qt::QueuedConnection连接方式，防止对话框exec导致事件阻塞，图标停留在界面上
     connect(this, &UnCompressView::customContextMenuRequested, this, &UnCompressView::slotShowRightMenu);
     connect(this, &UnCompressView::sigRenameFile, this, &UnCompressView::slotRenameFile);
@@ -229,6 +244,7 @@ void UnCompressView::initConnections()
 
 qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
 {
+    qDebug() << "Calculating item count for directory:" << strFilePath;
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     qlonglong qItemCount = 0;
 
@@ -250,6 +266,7 @@ qlonglong UnCompressView::calDirItemCount(const QString &strFilePath)
         }
     }
 
+    qDebug() << "Calculated item count:" << qItemCount;
     return qItemCount;
 }
 
@@ -258,6 +275,7 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
     // qInfo() << index.data(Qt::DisplayRole);
 
     if (index.isValid()) {
+        qDebug() << "Double-clicked item at row:" << index.row();
         FileEntry entry = index.data(Qt::UserRole).value<FileEntry>();
 
         if (entry.isDirectory) {     // 如果是文件夹，进入下一层
@@ -291,8 +309,10 @@ void UnCompressView::handleDoubleClick(const QModelIndex &index)
 void UnCompressView::refreshDataByCurrentPath()
 {
     if (0 == m_iLevel) {
+        qDebug() << "Refreshing data at root level";
         setPreLblVisible(false);
     } else {
+        qDebug() << "Refreshing data at sub level, path:" << m_strCurrentPath;
         QString strTempPath = m_strCurrentPath;
         int iIndex = strTempPath.lastIndexOf(QDir::separator());
         if (iIndex > 0)
@@ -302,6 +322,7 @@ void UnCompressView::refreshDataByCurrentPath()
 
     // 若缓存中找不到下一层数据，从总数据中查找并同步更新到缓存数据中
     if (m_mapShowEntry.find(m_strCurrentPath) == m_mapShowEntry.end()) {
+        qDebug() << "Data not found in cache, path:" << m_strCurrentPath;
         m_mapShowEntry[m_strCurrentPath] = getCurPathFiles();
     }
 
@@ -310,15 +331,19 @@ void UnCompressView::refreshDataByCurrentPath()
 
 void UnCompressView::refreshDataByCurrentPathChanged()
 {
+    qDebug() << "Refreshing data by current path changed";
     if (0 == m_strCurrentPath.compare("/")) { //当前目录是第一层
+        qDebug() << "Current path is root directory";
         m_mapShowEntry.clear();
 
         refreshArchiveData();
     } else { //当前目录非第一层
+        qDebug() << "Current path is not root directory";
         ArchiveData &stArchiveData = DataManager::get_instance().archiveData();
 
         // 删除上一级m_mapShowEntry
         if (1 == m_strCurrentPath.count("/")) { //当前目录是第二层
+            qDebug() << "Current path is second level directory";
             // 刷新第一层文件夹子项的数目
             for (int i = 0; i < stArchiveData.listRootEntry.count(); ++i) {
                 if (stArchiveData.listRootEntry[i].isDirectory) {
@@ -327,6 +352,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
             }
             m_mapShowEntry["/"] = stArchiveData.listRootEntry;
         } else { //当前目录是第三层及之后
+            qDebug() << "Current path is third level directory";
             m_mapShowEntry.remove(m_strCurrentPath.left(m_strCurrentPath.lastIndexOf("/", -2) + 1));
         }
 
@@ -349,6 +375,7 @@ void UnCompressView::refreshDataByCurrentPathChanged()
 
     // 追加时需要选中追加的文件
     if (CT_Add == m_eChangeType) {
+        qDebug() << "Current path is not root directory, append file";
         // 获取所有的追加文件的文件名
         QStringList listSelName;
         foreach (QString strFile, m_listAddFiles) {
@@ -367,8 +394,11 @@ void UnCompressView::refreshDataByCurrentPathChanged()
 
 void UnCompressView::addNewFiles(const QStringList &listFiles)
 {
-    if (listFiles.empty())
+    qDebug() << "Add new files, count:" << listFiles.count();
+    if (listFiles.empty()) {
+        qDebug() << "Add new files, list is empty";
         return;
+    }
 
     m_listAddFiles.clear();
 
@@ -379,6 +409,7 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
 
     // 点击取消按钮时，不进行追加操作
     if (iResult != DDialog::Accepted) {
+        qDebug() << "Add new files, dialog is canceled";
         return;
     }
     strPassword = dialog.password();
@@ -449,8 +480,10 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
     }
 
     // 没有需要追加的文件时，直接返回，防止出现追加根目录的现象
-    if (m_listAddFiles.isEmpty())
+    if (m_listAddFiles.isEmpty()) {
+        qDebug() << "Add new files, list is empty";
         return;
+    }
 
     // 去除同名称文件
     m_listAddFiles = UiTools::removeSameFileName(m_listAddFiles);
@@ -462,11 +495,13 @@ void UnCompressView::addNewFiles(const QStringList &listFiles)
 
 QString UnCompressView::getCurPath()
 {
+    qDebug() << "Getting current path, level:" << m_iLevel;
     return (0 == m_iLevel) ? "" : m_strCurrentPath;     // 根目录提取时上级赋值为空
 }
 
 void UnCompressView::setModifiable(bool bModifiable, bool bMultiplePassword)
 {
+    qDebug() << "Setting modifiable:" << bModifiable;
     m_bModifiable = bModifiable;                // 压缩包数据是否可修改
     m_bMultiplePassword = bMultiplePassword;    // 压缩包是否支持多密码
 
@@ -475,11 +510,13 @@ void UnCompressView::setModifiable(bool bModifiable, bool bMultiplePassword)
 
 bool UnCompressView::isModifiable()
 {
+    qDebug() << "Checking if modifiable:" << m_bModifiable;
     return m_bModifiable;
 }
 
 void UnCompressView::clear()
 {
+    qDebug() << "Clearing UnCompressView data";
     // 重置数据
     m_stRightEntry = FileEntry();
     m_mapShowEntry.clear();
@@ -493,6 +530,7 @@ void UnCompressView::clear()
 
 QList<FileEntry> UnCompressView::getCurPathFiles()
 {
+    qDebug() << "Getting current path files";
     ArchiveData &stArchiveData =  DataManager::get_instance().archiveData();
     QList<FileEntry> listEntry;
 
@@ -518,6 +556,7 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
         }
     }
 
+    qDebug() << "Getting current path files, count:" << listEntry.size();
 //    int iiii = 0; // 未使用
     return listEntry;
 }
@@ -547,6 +586,7 @@ QList<FileEntry> UnCompressView::getCurPathFiles()
 
 QList<FileEntry> UnCompressView::getSelEntry()
 {
+    qDebug() << "Getting selected files";
     QList<FileEntry> listSelEntry;
 
     QModelIndexList listModelIndex = selectionModel()->selectedRows();
@@ -587,6 +627,7 @@ void UnCompressView::extract2Path(const QString &strPath)
 
 void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64 &qSize)
 {
+    qDebug() << "Calculating entry size by parent path:" << strFullPath;
     ArchiveData stArchiveData =  DataManager::get_instance().archiveData();
     qSize = 0;
 
@@ -605,6 +646,7 @@ void UnCompressView::calEntrySizeByParentPath(const QString &strFullPath, qint64
 
 void UnCompressView::slotDragFiles(const QStringList &listFiles)
 {
+    qDebug() << "Dragging files, count:" << listFiles.size();
     addNewFiles(listFiles);
 }
 
@@ -667,6 +709,7 @@ void UnCompressView::slotShowRightMenu(const QPoint &pos)
 
 void UnCompressView::slotExtract()
 {
+    qDebug() << "Extracting files";
     // 创建文件选择对话框
     DFileDialog dialog(this);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
@@ -676,6 +719,7 @@ void UnCompressView::slotExtract()
     const int mode = dialog.exec();
 
     if (mode != QDialog::Accepted) {
+        qDebug() << "Extracting files, dialog canceled";
         return;
     }
 
@@ -689,6 +733,7 @@ void UnCompressView::slotExtract()
 
 void UnCompressView::slotExtract2Here()
 {
+    qDebug() << "Extracting files to current directory";
     extract2Path(m_strArchivePath);
 }
 
@@ -729,13 +774,19 @@ void UnCompressView::slotDeleteFile()
 
 void UnCompressView::slotRenameFile()
 {
-    if (!m_bModifiable) return; // 压缩包数据是否可更改
+    qDebug() << "Renaming files";
+    if (!m_bModifiable) {
+        qDebug() << "Renaming files, not modifiable";
+        return; // 压缩包数据是否可更改
+    }
+    qDebug() << "Renaming files, modifiable";
     // 询问重命名对话框
     // 重命名数据
     QList<FileEntry> listSelEntry = getSelEntry();    // 待重命名的文件数据
 
     // 重命名只操作单个文件
     if(listSelEntry.size() != 1) {
+        qDebug() << "Renaming files, not single file";
         return;
     }
     FileEntry &entry = listSelEntry[0];
@@ -743,13 +794,16 @@ void UnCompressView::slotRenameFile()
     RenameDialog dialog(this);
     QString strShowName;
     if(entry.strAlias.isEmpty() || entry.strAlias.isNull()) {
+        qDebug() << "Renaming files, alias is empty";
         strShowName = entry.strFullPath;
     } else {
+        qDebug() << "Renaming files, alias is not empty";
         strShowName = entry.strAlias;
     }
     bool isRepeat = (sender() == this);
     int iResult = dialog.showDialog(entry.strFileName, entry.strAlias, entry.isDirectory, isRepeat);
     if (1 == iResult) {
+        qDebug() << "Renaming files, dialog confirmed";
         entry.strAlias = QFileInfo(dialog.getNewNameText()).fileName();
         // 获取所有文件数据
         qint64 qSize = 0;       // 所有需要删除的文件总大小
@@ -764,21 +818,25 @@ void UnCompressView::slotRenameFile()
         m_eChangeType = CT_Rename;
         emit signalRenameFile(entry, qSize);
     }
-
+    qDebug() << "Renaming files, dialog canceled";
 }
 
 void UnCompressView::slotOpen()
 {
+    qDebug() << "Opening file or directory";
     // 获取当前点击的文件
     QModelIndex curIndex = currentIndex();
 
     if (curIndex.isValid()) {
+        qDebug() << "Opening file or directory, valid index";
         FileEntry entry = curIndex.data(Qt::UserRole).value<FileEntry>();
 
         if (entry.isDirectory) {
+            qDebug() << "Opening file or directory, directory";
             // 文件夹进入下一层
             handleDoubleClick(curIndex);
         } else {
+            qDebug() << "Opening file or directory, file";
             // 文件 解压再用默认应用程序打开
             emit signalOpenFile(entry);
         }
@@ -787,6 +845,7 @@ void UnCompressView::slotOpen()
 
 void UnCompressView::slotOpenStyleClicked()
 {
+    qDebug() << "Opening file with selected program";
     QAction *pAction = qobject_cast<QAction *>(sender());
     if (nullptr == pAction) {
         return;
@@ -795,6 +854,7 @@ void UnCompressView::slotOpenStyleClicked()
     QString strText = pAction->text();
 
     if (tr("Select default program") == strText) {
+        qDebug() << "select default program";
         // 用选择的应用程序打开
         OpenWithDialog dialog(m_stRightEntry.strFullPath);
         QString str = dialog.showOpenWithDialog(OpenWithDialog::SelectType);
@@ -802,6 +862,7 @@ void UnCompressView::slotOpenStyleClicked()
             // 发送打开信号（以xx应用打开）
             emit signalOpenFile(m_stRightEntry, str);
     } else {
+        qDebug() << "other program";
         // 发送打开信号（以xx应用打开）
         emit signalOpenFile(m_stRightEntry, pAction->data().toString());
     }
@@ -809,11 +870,14 @@ void UnCompressView::slotOpenStyleClicked()
 
 void UnCompressView::slotPreClicked()
 {
+    qDebug() << "Pre clicked";
     m_iLevel--;     // 目录层级减1
 
     if (0 == m_iLevel) {    // 如果返回到根目录，显示待压缩文件
+        qDebug() << "root directory";
         resetLevel();
     } else {        // 否则传递上级目录
+        qDebug() << "not root directory";
         // 如果以'/'结尾,先移除最后一个'/',方便接下来截取倒数第二个'/'
         if (m_strCurrentPath.endsWith(QDir::separator())) {
             m_strCurrentPath.chop(1);
@@ -836,6 +900,7 @@ void UnCompressView::slotPreClicked()
     QModelIndex tmpindex = m_pModel->getListEntryIndex(m_vPre.back()); // 获取上层文件夹对应的QModelIndex
     m_vPre.pop_back();
     if (tmpindex.isValid()) {
+        qDebug() << "Tmp index is valid";
         setCurrentIndex(tmpindex);
         setFocus(); //焦点丢失，需手动设置焦点
     }

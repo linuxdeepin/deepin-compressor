@@ -156,6 +156,7 @@ bool MainWindow::checkHerePath(const QString &strPath)
 
 void MainWindow::initUI()
 {
+    qDebug() << "initUI";
     // 初始化界面
     m_pLoadingPage = new LoadingPage(this);  // 加载界面
 
@@ -189,6 +190,7 @@ void MainWindow::initUI()
 
 void MainWindow::initTitleBar()
 {
+    qDebug() << "MainWindow::initTitleBar";
     // 创建菜单
     QMenu *menu = new QMenu(this);
     m_pOpenAction = menu->addAction(tr("Open file"), this, &MainWindow::slotChoosefiles);
@@ -325,9 +327,12 @@ void MainWindow::refreshPage()
         m_pMainWidget->setCurrentIndex(3);
         bool bShowAddBtn = true;
         if(property(ORDER_JSON).isValid()) {
+            qDebug() << "property ORDER_JSON is valid";
             if(m_pUnCompressPage) {
+                qDebug() << "m_pUnCompressPage is not null";
                 QVariantMap mapdata = m_pUnCompressPage->mapOrderJson();
                 if(mapdata.contains(ORDER_EDIT)) {
+                    qDebug() << "mapdata contains ORDER_EDIT";
                     bShowAddBtn = mapdata.value(ORDER_EDIT).toBool();
                     m_pOpenAction->setEnabled(bShowAddBtn);
                 }
@@ -378,6 +383,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_ConvertProgress: {
+        qDebug() << "MainWindow::refreshPage PI_ConvertProgress";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -385,6 +391,7 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_CommentProgress: {
+        qDebug() << "MainWindow::refreshPage PI_CommentProgress";
         m_pMainWidget->setCurrentIndex(4);
         setTitleButtonStyle(false, false);
         m_pProgressPage->resetProgress();
@@ -392,18 +399,21 @@ void MainWindow::refreshPage()
     }
     break;
     case PI_Success: {
+        qDebug() << "MainWindow::refreshPage PI_Success";
         m_pMainWidget->setCurrentIndex(5);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Failure: {
+        qDebug() << "MainWindow::refreshPage PI_Failure";
         m_pMainWidget->setCurrentIndex(6);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
     }
     break;
     case PI_Loading: {
+        qDebug() << "MainWindow::refreshPage PI_Loading";
         m_pMainWidget->setCurrentIndex(7);
         setTitleButtonStyle(false, false);
         titlebar()->setTitle("");
@@ -412,6 +422,7 @@ void MainWindow::refreshPage()
     }
     //压缩文件焦点需压缩文件名上
     if(m_ePageID == PI_CompressSetting) {
+        qDebug() << "m_ePageID is PI_CompressSetting, return";
         return;
     }
     //切换界面后焦点默认在标题栏上
@@ -430,6 +441,7 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
     foreach (QString file, files) {
         QFileInfo fi(file);
         if (fi.isFile()) {  // 如果为文件，直接获取大小
+            qDebug() << "Calculate file size:" << file;
             qint64 curFileSize = fi.size();
 
 #ifdef __aarch64__
@@ -439,6 +451,7 @@ qint64 MainWindow::calSelectedTotalFileSize(const QStringList &files)
 #endif
             m_stCompressParameter.qSize += curFileSize;
         } else if (fi.isDir()) {    // 如果是文件夹，递归获取所有子文件大小总和
+            qDebug() << "Calculate directory size:" << file;
 #if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
             QtConcurrent::run(this, &MainWindow::calFileSizeByThread, file);
 #else
@@ -502,6 +515,7 @@ void MainWindow::calFileSizeByThread(const QString &path)
 
 void MainWindow::setTitleButtonStyle(bool bVisible, bool bVisible2, DStyle::StandardPixmap pixmap)
 {
+    qDebug() << "MainWindow::setTitleButtonStyle" << bVisible << bVisible2 << pixmap;
     m_pTitleWidget->setVisible(bVisible || bVisible2);
     m_pTitleWidget->setTitleButtonStyle(bVisible, bVisible2, pixmap);
 }
@@ -597,6 +611,7 @@ void MainWindow::loadArchive(const QString &strArchiveFullPath)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
+    // qDebug() << "MainWindow::timerEvent" << event->timerId();
     if (m_iInitUITimer == event->timerId()) {
         if (!m_initFlag) {
             // 初始化界面
@@ -656,6 +671,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // qDebug() << "MainWindow::closeEvent";
     if (m_operationtype != Operation_NULL) {
         qDebug() << "Application close requested with ongoing operation";
         // 保存当前操作的状态以便还原操作
@@ -1031,6 +1047,7 @@ void MainWindow::slotChoosefiles()
 
     // 关闭或取消不处理
     if (mode != QDialog::Accepted) {
+        qDebug() << "File dialog canceled";
         return;
     }
 
@@ -1041,6 +1058,7 @@ void MainWindow::slotChoosefiles()
     // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
     for (const auto &url : listSelFiles) {
         if (!UiTools::isLocalDeviceFile(url)) {
+            qWarning() << "Non-local file selected, aborting:" << url;
             return;
         }
 
@@ -1100,6 +1118,7 @@ void MainWindow::slotDragSelectedFiles(const QStringList &listFiles)
 
 void MainWindow::slotCompressLevelChanged(bool bRootIndex)
 {
+    qDebug() << "MainWindow::slotCompressLevelChanged" << bRootIndex;
     m_pOpenAction->setEnabled(bRootIndex);
     m_pTitleWidget->setTitleButtonVisible(bRootIndex);
 }
@@ -1351,6 +1370,7 @@ void MainWindow::slotReceiveCurFileName(const QString &strName)
 
 void MainWindow::slotReceiveFileWriteErrorName(const QString &strName)
 {
+    qDebug() << "MainWindow::slotReceiveFileWriteErrorName" << strName;
     m_fileWriteErrorName = strName;
 }
 

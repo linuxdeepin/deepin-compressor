@@ -21,8 +21,11 @@ OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString 
     : QWidget(parent)
     , m_icon(icon)
 {
-    if (m_icon.isNull())
+    qDebug() << "Creating OpenWithDialogListItem with text:" << text;
+    if (m_icon.isNull()) {
+        qDebug() << "Icon is null, using default application icon";
         m_icon = QIcon::fromTheme("application-x-desktop");
+    }
 
     m_pCheckBtn = new DIconButton(this);
     m_pCheckBtn->setFixedSize(10, 10);
@@ -42,15 +45,17 @@ OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString 
     layout->addWidget(m_pTextLbl);
 
     setMouseTracking(true);
+    qDebug() << "OpenWithDialogListItem created successfully";
 }
 
 OpenWithDialogListItem::~OpenWithDialogListItem()
 {
-
+    qDebug() << "Destroying OpenWithDialogListItem";
 }
 
 void OpenWithDialogListItem::setChecked(bool checked)
 {
+    qDebug() << "Setting OpenWithDialogListItem checked state to:" << checked;
     if (checked) {
         m_pCheckBtn->setIcon(DStyle::SP_MarkElement);
     } else {
@@ -60,11 +65,14 @@ void OpenWithDialogListItem::setChecked(bool checked)
 
 QString OpenWithDialogListItem::text() const
 {
-    return m_pTextLbl->text();
+    QString text = m_pTextLbl->text();
+    qDebug() << "Getting OpenWithDialogListItem text:" << text;
+    return text;
 }
 
 void OpenWithDialogListItem::resizeEvent(QResizeEvent *e)
 {
+    qDebug() << "OpenWithDialogListItem resize event, new size:" << e->size();
     QWidget::resizeEvent(e);
 
     m_pIconLbl->setFixedSize(e->size().height() - 20, e->size().height() - 20);
@@ -73,6 +81,7 @@ void OpenWithDialogListItem::resizeEvent(QResizeEvent *e)
 
 void OpenWithDialogListItem::enterEvent(EnterEvent *e)
 {
+    qDebug() << "Mouse entered OpenWithDialogListItem";
     Q_UNUSED(e)
 
     update();
@@ -82,6 +91,7 @@ void OpenWithDialogListItem::enterEvent(EnterEvent *e)
 
 void OpenWithDialogListItem::leaveEvent(QEvent *e)
 {
+    qDebug() << "Mouse left OpenWithDialogListItem";
     Q_UNUSED(e)
 
     update();
@@ -93,9 +103,11 @@ void OpenWithDialogListItem::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
-    if (!underMouse())
+    if (!underMouse()) {
         return;
+    }
 
+    qDebug() << "Painting hover effect for OpenWithDialogListItem";
     QPainter pa(this);
     QPainterPath path;
 
@@ -113,6 +125,7 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
     , m_separator(new DHorizontalLine(this))
     , m_title(new QLabel(title, this))
 {
+    qDebug() << "Creating OpenWithDialogListSparerItem with title:" << title;
     QFont font;
     font.setPixelSize(18);
     m_title->setFont(font);
@@ -123,11 +136,12 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
     layout->addWidget(m_title);
     layout->setContentsMargins(20, 0, 20, 0);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    qDebug() << "OpenWithDialogListSparerItem created successfully";
 }
 
 OpenWithDialogListSparerItem::~OpenWithDialogListSparerItem()
 {
-
+    qDebug() << "Destroying OpenWithDialogListSparerItem";
 }
 
 
@@ -157,15 +171,18 @@ OpenWithDialog::~OpenWithDialog()
 
 QList<DesktopFile> OpenWithDialog::getOpenStyle(const QString &strFileName)
 {
+    qDebug() << "Getting open style for file:" << strFileName;
     mimeAppsManager->initMimeTypeApps();
     DMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForFile(strFileName);
     const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(mimeType);
+    qDebug() << "Found" << recommendApps.count() << "recommended apps for MIME type:" << mimeType.name();
 
     QList<DesktopFile> listType;;
 
     for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile &desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
+        qDebug() << "Adding desktop file:" << desktop_info.getDisplayName();
 
 //        if (desktop_info.getFileName().contains("deepin-compressor")) {
 //            continue;
@@ -174,11 +191,13 @@ QList<DesktopFile> OpenWithDialog::getOpenStyle(const QString &strFileName)
         listType << desktop_info;
     }
 
+    qDebug() << "Returning" << listType.size() << "desktop files";
     return listType;
 }
 
 void OpenWithDialog::resizeEvent(QResizeEvent *event)
 {
+    qDebug() << "OpenWithDialog resize event, new size:" << event->size();
     m_titlebar->setFixedWidth(event->size().width());
 
     DAbstractDialog::resizeEvent(event);
@@ -190,15 +209,19 @@ bool OpenWithDialog::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::MouseMove) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+            qDebug() << "Filtered synthesized mouse move event";
             return true;
         }
     }
 
     if (event->type() == QEvent::MouseButtonPress) {
+        qDebug() << "Mouse button press event detected";
 
         if (static_cast<QMouseEvent *>(event)->button() == Qt::LeftButton) {
-            if (OpenWithDialogListItem *item = qobject_cast<OpenWithDialogListItem *>(obj))
+            if (OpenWithDialogListItem *item = qobject_cast<OpenWithDialogListItem *>(obj)) {
+                qDebug() << "Left button clicked on OpenWithDialogListItem";
                 checkItem(item);
+            }
 
             return true;
         }
@@ -246,21 +269,26 @@ QString OpenWithDialog::showOpenWithDialog(OpenWithDialog::ShowType eType)
 
 QString OpenWithDialog::getProgramPathByExec(const QString &strExec)
 {
+    qDebug() << "Getting program path by exec:" << strExec;
     QString strProgramPath;
 
     if (strExec.isEmpty()) {
         // 应用路径为空时，使用默认应用程序
+        qDebug() << "Exec is empty, using xdg-open as default";
         strProgramPath = QStandardPaths::findExecutable("xdg-open"); //查询本地位置
     } else {
         // 以/开头时，做字符串分割处理
         QStringList list = strExec.split(" ");
         if (strExec.startsWith(QDir::separator())) {
+            qDebug() << "Exec starts with separator, using direct path";
             strProgramPath = list[0];
         } else {
+            qDebug() << "Finding executable for:" << list[0];
             strProgramPath = QStandardPaths::findExecutable(list[0]); //查询本地位置
         }
     }
 
+    qDebug() << "Program path resolved to:" << strProgramPath;
     return strProgramPath;
 }
 
@@ -331,9 +359,11 @@ void OpenWithDialog::init()
 
 void OpenWithDialog::initConnections()
 {
+    qDebug() << "Initializing OpenWithDialog connections";
     connect(m_pCancelButton, &QPushButton::clicked, this, &OpenWithDialog::close);
     connect(m_pChooseButton, &QPushButton::clicked, this, &OpenWithDialog::slotOpenFileByApp);
     connect(m_pOpenFileChooseButton, &QCommandLinkButton::clicked, this, &OpenWithDialog::slotUseOtherApplication);
+    qDebug() << "OpenWithDialog connections established";
 }
 
 void OpenWithDialog::initData()
@@ -430,6 +460,7 @@ void OpenWithDialog::checkItem(OpenWithDialogListItem *item)
 
 OpenWithDialogListItem *OpenWithDialog::createItem(const QIcon &icon, const QString &name, const QString &filePath, const QString &strExec)
 {
+    qDebug() << "Creating OpenWithDialogListItem with name:" << name << "file path:" << filePath;
     OpenWithDialogListItem *item = new OpenWithDialogListItem(icon, name, this);
 
     item->setProperty("app", filePath);
@@ -437,6 +468,7 @@ OpenWithDialogListItem *OpenWithDialog::createItem(const QIcon &icon, const QStr
     item->setFixedSize(220, 50);
     item->installEventFilter(this);
 
+    qDebug() << "OpenWithDialogListItem created successfully";
     return item;
 }
 
@@ -452,23 +484,34 @@ void OpenWithDialog::slotUseOtherApplication()
 
     QFileInfo info(file_path);
     QString target_desktop_file_name("%1/%2-custom-open-%3.desktop");
+    qDebug() << "Processing selected file:" << info.fileName();
 
     target_desktop_file_name = target_desktop_file_name.arg(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).arg(qApp->applicationName()).arg(m_mimeType.name().replace("/", "-"));
+    qDebug() << "Target desktop file name:" << target_desktop_file_name;
 
     if (file_path.endsWith(".desktop")) {
+        qDebug() << "Processing .desktop file";
         for (const OpenWithDialog *w : m_pRecommandLayout->parentWidget()->findChildren<OpenWithDialog *>()) {
-            if (w->property("app").toString() == file_path)
+            if (w->property("app").toString() == file_path) {
+                qDebug() << "Desktop file already exists in recommended apps";
                 return;
+            }
         }
 
         Properties desktop(file_path, "Desktop Entry");
 
-        if (desktop.value("MimeType").toString().isEmpty())
+        if (desktop.value("MimeType").toString().isEmpty()) {
+            qWarning() << "Desktop file has no MIME type, skipping";
             return;
+        }
 
-        if (!QFile::link(file_path, target_desktop_file_name))
+        if (!QFile::link(file_path, target_desktop_file_name)) {
+            qWarning() << "Failed to create link to desktop file";
             return;
+        }
+        qDebug() << "Successfully linked desktop file";
     } else if (info.isExecutable()) {
+        qDebug() << "Processing executable file";
         Properties desktop;
 
         desktop.set("Type", "Application");
@@ -477,15 +520,22 @@ void OpenWithDialog::slotUseOtherApplication()
         desktop.set("Exec", file_path);
         desktop.set("MimeType", "*/*");
         desktop.set("X-DDE-File-Manager-Custom-Open", m_mimeType.name());
+        qDebug() << "Created desktop properties for executable";
 
-        if (QFile::exists(target_desktop_file_name))
+        if (QFile::exists(target_desktop_file_name)) {
+            qDebug() << "Removing existing target desktop file";
             QFile(target_desktop_file_name).remove();
+        }
 
-        if (!desktop.save(target_desktop_file_name, "Desktop Entry"))
+        if (!desktop.save(target_desktop_file_name, "Desktop Entry")) {
+            qWarning() << "Failed to save desktop file";
             return;
+        }
+        qDebug() << "Successfully saved desktop file for executable";
     }
 
     // remove old custom item
+    qDebug() << "Removing old custom items from layout";
     for (int i = 0; i < m_pOtherLayout->count(); ++i) {
         QWidget *w = m_pOtherLayout->itemAt(i)->widget();
 
@@ -493,11 +543,13 @@ void OpenWithDialog::slotUseOtherApplication()
             continue;
 
         if (w->property("app").toString() == target_desktop_file_name) {
+            qDebug() << "Removing existing custom item";
             m_pOtherLayout->removeWidget(w);
             w->deleteLater();
         }
     }
 
+    qDebug() << "Creating new custom item for:" << info.fileName();
     OpenWithDialogListItem *item = createItem(QIcon::fromTheme("application-x-desktop"), info.fileName(), target_desktop_file_name, "");
 
     int other_layout_sizeHint_height = m_pOtherLayout->sizeHint().height();
@@ -505,6 +557,7 @@ void OpenWithDialog::slotUseOtherApplication()
     item->show();
     m_pOtherLayout->parentWidget()->setFixedHeight(m_pOtherLayout->parentWidget()->height() + m_pOtherLayout->sizeHint().height() - other_layout_sizeHint_height);
     checkItem(item);
+    qDebug() << "Custom application added successfully";
 }
 
 void OpenWithDialog::slotOpenFileByApp()

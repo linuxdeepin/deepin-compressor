@@ -4,9 +4,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <DSettings>
+#include <QDebug>
 
 void GenerateSettingTranslate()
 {
+    // qDebug() << "Generating setting translations";
     auto setting_Text = QObject::tr("General");  //设置
     auto decompress = QObject::tr("Extraction"); //解压
     auto create_folder = QObject::tr("Auto create a folder for multiple extracted files");  //自动创建文件夹
@@ -15,4 +17,5 @@ void GenerateSettingTranslate()
     auto delete_file = QObject::tr("Delete files after compression");  //压缩后删除原来的文件
     auto file_association = QObject::tr("Files Associated");  //关联文件
     auto file_type = QObject::tr("File Type");  //文件类型
+    // qDebug() << "Setting translations generated successfully";
 }

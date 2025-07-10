@@ -25,7 +25,7 @@ CompressorApplication::~CompressorApplication()
 
 bool CompressorApplication::notify(QObject *watched, QEvent *event)
 {
-    qDebug() << "Processing application event notification";
+    // qDebug() << "Processing application event notification";
     
     if (QEvent::KeyPress == event->type()) {
         QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
@@ -52,7 +52,7 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
             }
         } else if (Qt::Key_Tab == keyOfEvent || Qt::Key_Backtab == keyOfEvent
                    || Qt::Key_Left == keyOfEvent || Qt::Key_Up == keyOfEvent) {
-            qDebug() << "Handling navigation key press";
+            // qDebug() << "Handling navigation key press";
             QWidget *pWgt = activeWindow();
             MainWindow *pWindow = qobject_cast<MainWindow *>(pWgt); //在对应的MainWindow操作
             if (pWindow) {
@@ -66,7 +66,7 @@ bool CompressorApplication::notify(QObject *watched, QEvent *event)
         }
     }
 
-    qDebug() << "Default event notification handling";
+    // qDebug() << "Default event notification handling";
     return DApplication::notify(watched, event);
 }
 

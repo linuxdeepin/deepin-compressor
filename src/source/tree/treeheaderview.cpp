@@ -23,21 +23,24 @@ PreviousLabel::PreviousLabel(TreeHeaderView *parent)
     : DLabel(parent)
     , headerView_(parent)
 {
+    qDebug() << "PreviousLabel constructor";
     setFocusPolicy(Qt::TabFocus);
 }
 
 PreviousLabel::~PreviousLabel()
 {
-
+    qDebug() << "PreviousLabel destructor";
 }
 
 void PreviousLabel::setPrePath(const QString &strPath)
 {
+    qDebug() << "Setting previous path to:" << strPath;
     QString tmp = '/' + strPath;
     setToolTip(tr("Current path:") + tmp); // 悬停提示
 
     tmp = tmp.left(tmp.lastIndexOf('/'));
     if (tmp.isEmpty()) {
+        qDebug() << "Previous path is empty";
         tmp.push_front('/');
     }
     QFontMetrics elideFont(tmp);
@@ -47,23 +50,27 @@ void PreviousLabel::setPrePath(const QString &strPath)
 
 void PreviousLabel::setFocusValue(bool bFocus)
 {
+    qDebug() << "Setting focus value to:" << bFocus;
     focusIn_ = bFocus;
 }
 
 void PreviousLabel::paintEvent(QPaintEvent *e)
 {
+    // qDebug() << "PreviousLabel paint event";
     QRectF rectangle(0, 0, width(), height());
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
     QColor bgColor;
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        // qDebug() << "Light theme type";
         if (focusIn_) {
             bgColor = QColor(212, 212, 212);
         } else {
             bgColor = QColor(247, 247, 247);
         }
     } else if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        // qDebug() << "Dark theme type";
         if (focusIn_) {
             bgColor = QColor(44, 44, 44);
         } else {
@@ -83,13 +90,16 @@ void PreviousLabel::paintEvent(QPaintEvent *e)
 
 void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    qDebug() << "PreviousLabel double clicked";
     emit doubleClickedSignal();
     QLabel::mouseDoubleClickEvent(event);
 }
 
-void PreviousLabel::enterEvent(EnterEvent *event)
+void PreviousLabel::enterEvent(QEnterEvent *event)
 {
+    // qDebug() << "PreviousLabel enter event";
     if(!hasFocus()) {
+        qDebug() << "Entering label, setting focusIn to true";
         focusIn_ = true;
     }
     DLabel::enterEvent(event);
@@ -98,7 +108,9 @@ void PreviousLabel::enterEvent(EnterEvent *event)
 
 void PreviousLabel::leaveEvent(QEvent *event)
 {
+    // qDebug() << "PreviousLabel leave event";
     if(!hasFocus()) {
+        qDebug() << "Leaving label, setting focusIn to false";
         focusIn_ = false;
     }
     DLabel::leaveEvent(event);
@@ -107,19 +119,23 @@ void PreviousLabel::leaveEvent(QEvent *event)
 
 void PreviousLabel::focusInEvent(QFocusEvent *event)
 {
+    // qDebug() << "Focus in event, setting focusIn to true";
     focusIn_ = true;
     DLabel::focusInEvent(event);
 }
 
 void PreviousLabel::focusOutEvent(QFocusEvent *event)
 {
+    // qDebug() << "Focus out event, setting focusIn to false";
     focusIn_ = false;
     DLabel::focusOutEvent(event);
 }
 
 void PreviousLabel::keyPressEvent(QKeyEvent *event)
 {
+    // qDebug() << "PreviousLabel key press event, key:" << event->key();
     if (Qt::Key::Key_Enter == event->key() || Qt::Key::Key_Return == event->key()) {
+        // qDebug() << "PreviousLabel key press event, key: Enter or Return";
         clearFocus(); //返回上一级时需主动移除焦点
         emit doubleClickedSignal();
     } else {
@@ -141,12 +157,14 @@ TreeHeaderView::TreeHeaderView(Qt::Orientation orientation, QWidget *parent)
     m_pPreLbl = new PreviousLabel(this);
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
+        qDebug() << "Normal mode";
         setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
         m_pPreLbl->setFixedHeight(TABLE_HEIGHT_NormalMode);
         m_pPreLbl->setObjectName("gotoPreviousLabel");
         m_pPreLbl->move(SCROLLMARGIN, TABLE_HEIGHT_NormalMode + 2);
         m_pPreLbl->hide();
     } else {
+        qDebug() << "Compact mode";
         setFixedHeight(TABLE_HEIGHT_CompactMode + 2);
         m_pPreLbl->setFixedHeight(TABLE_HEIGHT_CompactMode);
         m_pPreLbl->setObjectName("gotoPreviousLabel");
@@ -182,12 +200,14 @@ TreeHeaderView::~TreeHeaderView()
 
 QSize TreeHeaderView::sizeHint() const
 {
+    // qDebug() << "TreeHeaderView sizeHint called";
     QSize size = sectionSizeFromContents(0);
     return QSize(size.width(), size.height() + m_spacing);
 }
 
 int TreeHeaderView::sectionSizeHint(int logicalIndex) const
 {
+    // qDebug() << "TreeHeaderView sectionSizeHint called with logicalIndex:" << logicalIndex;
     QStyleOptionHeader option;
     initStyleOption(&option);
     DStyle *style = dynamic_cast<DStyle *>(DApplication::style());
@@ -209,6 +229,7 @@ int TreeHeaderView::sectionSizeHint(int logicalIndex) const
 
 PreviousLabel *TreeHeaderView::getpreLbl()
 {
+    qDebug() << "Getting previous label";
     return m_pPreLbl;
 }
 
@@ -219,14 +240,18 @@ void TreeHeaderView::setPreLblVisible(bool bVisible)
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->sizeMode() == DGuiApplicationHelper::NormalMode) {
         if (bVisible) {
+            qDebug() << "Setting normal mode height for visible label";
             setFixedHeight(TABLE_HEIGHT_NormalMode*2 + 4); // 36+38+2 与item间隔2px
         } else {
+            qDebug() << "Setting normal mode height for hidden label";
             setFixedHeight(TABLE_HEIGHT_NormalMode + 2);
         }
     } else {
         if (bVisible) {
+            qDebug() << "Setting compact mode height for visible label";
             setFixedHeight(TABLE_HEIGHT_CompactMode*2 + 4); // 36+38+2 与item间隔2px
         } else {
+            qDebug() << "Setting compact mode height for hidden label";
             setFixedHeight(TABLE_HEIGHT_CompactMode + 2);
         }
     }
@@ -298,7 +323,7 @@ painter.restore();
 */
 void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
-    qDebug() << "Painting section:" << logicalIndex << "with rect:" << rect;
+    // qDebug() << "Painting section:" << logicalIndex << "with rect:" << rect;
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setOpacity(1);
@@ -306,8 +331,10 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     QWidget *wnd = DApplication::activeWindow();
     DPalette::ColorGroup cg;
     if (!wnd) {
+        // qDebug() << "Active window not found";
         cg = DPalette::Inactive;
     } else {
+        // qDebug() << "Active window found";
         cg = DPalette::Active;
     }
 
@@ -346,6 +373,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     painter->fillRect(hSpacingRect, hSpacingBrush);
 
     if (visualIndex(logicalIndex) > 0) {
+        // qDebug() << "Painting section:" << logicalIndex << "with rect:" << rect;
         painter->fillRect(vSpacingRect, clearBrush);
         painter->fillRect(vSpacingRect, vSpacingBrush);
     }
@@ -391,7 +419,7 @@ void TreeHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
 
 void TreeHeaderView::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "Resize event, new size:" << event->size();
+    // qDebug() << "Resize event, new size:" << event->size();
     m_pPreLbl->setFixedWidth(event->size().width() - 2 * SCROLLMARGIN);
     DHeaderView::resizeEvent(event);
 }

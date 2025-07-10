@@ -19,7 +19,7 @@ OpenFileWatcher::OpenFileWatcher(QObject *parent)
 
 OpenFileWatcher::~OpenFileWatcher()
 {
-
+    qDebug() << "Destroying OpenFileWatcher";
 }
 
 void OpenFileWatcher::reset()
@@ -34,6 +34,7 @@ void OpenFileWatcher::reset()
 
 void OpenFileWatcher::setCurOpenFile(const QString &strCurOpenFile)
 {
+    // qDebug() << "Setting current open file:" << strCurOpenFile;
     m_strOpenFile = strCurOpenFile;
 }
 
@@ -58,6 +59,7 @@ void OpenFileWatcher::addWatchFile(const QString &strFile)
 
 QMap<QString, bool> &OpenFileWatcher::getFileHasModified()
 {
+    // qDebug() << "Getting file has modified map";
     return m_mapFileHasModified;
 }
 
@@ -69,5 +71,6 @@ void OpenFileWatcher::setCurFilePassword(const QString &strPassword)
 
 QMap<QString, QString> OpenFileWatcher::getFilePassword()
 {
+    // qDebug() << "Getting file password map";
     return m_mapFilePassword;
 }

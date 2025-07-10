@@ -66,24 +66,30 @@ int TipDialog::showDialog(const QString &strDesText, const QString btnMsg, Butto
 
 void TipDialog::autoFeed(DLabel *label)
 {
+    qDebug() << "Auto-feeding text for TipDialog";
     NewStr newstr = autoCutText(m_strDesText, label);
     label->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
     label->setMinimumHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        qDebug() << "First time adjusting size";
         adjustSize();
     } else {
+        qDebug() << "Adjusting height based on font change";
         setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight + height_lable); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iDialogOldHeight = height();
+    qDebug() << "TipDialog auto-feed completed, new height:" << height();
 }
 
 void TipDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
+        qDebug() << "TipDialog font change event detected";
         Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
         if (nullptr != p) {
+            qDebug() << "Updating TipDialog layout for font change";
             autoFeed(p);
         }
     }
@@ -136,24 +142,30 @@ int SimpleQueryDialog::showDialog(const QString &strDesText, const QString btnMs
 
 void SimpleQueryDialog::autoFeed(DLabel *label)
 {
+    qDebug() << "Auto-feeding text for SimpleQueryDialog";
     NewStr newstr = autoCutText(m_strDesText, label);
     label->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
     label->setMinimumHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        qDebug() << "First time adjusting size";
         adjustSize();
     } else {
+        qDebug() << "Adjusting height based on font change";
         setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight + height_lable); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iDialogOldHeight = height();
+    qDebug() << "SimpleQueryDialog auto-feed completed, new height:" << height();
 }
 
 void SimpleQueryDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
+        qDebug() << "SimpleQueryDialog font change event detected";
         Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
         if (nullptr != p) {
+            qDebug() << "Updating SimpleQueryDialog layout for font change";
             autoFeed(p);
         }
     }
@@ -240,16 +252,19 @@ void OverwriteQueryDialog::showDialog(QString file, bool bDir)
 
 Overwrite_Result OverwriteQueryDialog::getDialogResult()
 {
+    qDebug() << "Getting overwrite dialog result:" << m_retType;
     return m_retType;
 }
 
 bool OverwriteQueryDialog::getApplyAll()
 {
+    qDebug() << "Getting apply all setting:" << m_applyAll;
     return m_applyAll;
 }
 
 void OverwriteQueryDialog::autoFeed(DLabel *label1, DLabel *label2)
 {
+    qDebug() << "Auto-feeding text for OverwriteQueryDialog";
     NewStr newstr = autoCutText(m_strDesText, label2);
     label2->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
@@ -259,25 +274,31 @@ void OverwriteQueryDialog::autoFeed(DLabel *label1, DLabel *label2)
     QFont font;
     QFontMetrics elideFont(font);
     label1->setText(elideFont.elidedText(m_strFilesname, Qt::ElideMiddle, 340));
+    qDebug() << "Elided filename:" << label1->text();
 
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        qDebug() << "First time adjusting size";
         adjustSize();
     } else {
+        qDebug() << "Adjusting height based on font change";
         setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height - m_iCheckboxOld1Height + height_lable + 2 * newstr.fontHeifht); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iLabelOld1Height = newstr.fontHeifht;
     m_iCheckboxOld1Height = newstr.fontHeifht;
     m_iDialogOldHeight = height();
+    qDebug() << "OverwriteQueryDialog auto-feed completed, new height:" << height();
 }
 
 void OverwriteQueryDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
+        qDebug() << "OverwriteQueryDialog font change event detected";
         Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
         if (nullptr != p) {
             Dtk::Widget::DLabel *pNameLabel = findChild<Dtk::Widget::DLabel *>("NameLabel");
             if (nullptr != pNameLabel) {
+                qDebug() << "Updating OverwriteQueryDialog layout for font change";
                 autoFeed(pNameLabel, p);
             }
         }
@@ -290,15 +311,17 @@ void OverwriteQueryDialog::changeEvent(QEvent *event)
 ConvertDialog::ConvertDialog(QWidget *parent)
     : DDialog(parent)
 {
+    qDebug() << "ConvertDialog constructor";
     setFixedWidth(380); // 提示框宽度固定
 
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     setIcon(pixmap);
+    qDebug() << "ConvertDialog initialized with icon";
 }
 
 ConvertDialog::~ConvertDialog()
 {
-
+    qDebug() << "ConvertDialog destroyed";
 }
 
 QStringList ConvertDialog::showDialog()
@@ -387,25 +410,31 @@ QStringList ConvertDialog::showDialog()
 
 void ConvertDialog::autoFeed(DLabel *label)
 {
+    qDebug() << "Auto-feeding text for ConvertDialog";
     NewStr newstr = autoCutText(m_strDesText, label);
     label->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
     label->setMinimumHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        qDebug() << "First time adjusting size";
         adjustSize();
     } else {
+        qDebug() << "Adjusting height based on font change";
         setMinimumHeight(m_iDialogOldHeight - m_iLabelOldHeight - m_iLabelOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iLabelOld1Height = newstr.fontHeifht;
     m_iDialogOldHeight = height();
+    qDebug() << "ConvertDialog auto-feed completed, new height:" << height();
 }
 
 void ConvertDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
+        qDebug() << "ConvertDialog font change event detected";
         Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
         if (nullptr != p) {
+            qDebug() << "Updating ConvertDialog layout for font change";
             autoFeed(p);
         }
     }
@@ -417,15 +446,17 @@ void ConvertDialog::changeEvent(QEvent *event)
 AppendDialog::AppendDialog(QWidget *parent)
     : DDialog(parent)
 {
+    qDebug() << "AppendDialog constructor";
     setFixedWidth(380); // 提示框宽度固定
 
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     setIcon(pixmap);
+    qDebug() << "AppendDialog initialized with icon";
 }
 
 AppendDialog::~AppendDialog()
 {
-
+    qDebug() << "AppendDialog destroyed";
 }
 
 int AppendDialog::showDialog(bool bMultiplePassword)
@@ -503,30 +534,37 @@ int AppendDialog::showDialog(bool bMultiplePassword)
 
 QString AppendDialog::password()
 {
+    qDebug() << "Getting AppendDialog password (length:" << m_strPassword.length() << ")";
     return m_strPassword;
 }
 
 void AppendDialog::autoFeed(DLabel *pLabel)
 {
+    qDebug() << "Auto-feeding text for AppendDialog";
     NewStr newstr = autoCutText(m_strDesText, pLabel);
     pLabel->setText(newstr.resultStr);
     int height_lable = newstr.strList.size() * newstr.fontHeifht;
     pLabel->setMinimumHeight(height_lable);
     if (0 == m_iLabelOldHeight) { // 第一次exec自动调整
+        qDebug() << "First time adjusting size";
         adjustSize();
     } else {
+        qDebug() << "Adjusting width based on font change";
         setMinimumWidth(m_iDialogOldHeight - m_iLabelOldHeight - m_iCheckboxOld1Height + height_lable + newstr.fontHeifht); //字号变化后自适应调整
     }
     m_iLabelOldHeight = height_lable;
     m_iCheckboxOld1Height = newstr.fontHeifht;
     m_iDialogOldHeight = height();
+    qDebug() << "AppendDialog auto-feed completed, new height:" << height();
 }
 
 void AppendDialog::changeEvent(QEvent *event)
 {
     if (QEvent::FontChange == event->type()) {
+        qDebug() << "AppendDialog font change event detected";
         Dtk::Widget::DLabel *p = findChild<Dtk::Widget::DLabel *>("ContentLabel");
         if (nullptr != p) {
+            qDebug() << "Updating AppendDialog layout for font change";
             autoFeed(p);
         }
     }
@@ -536,20 +574,24 @@ void AppendDialog::changeEvent(QEvent *event)
 RenameDialog::RenameDialog(QWidget *parent)
     : DDialog(parent)
 {
+    qDebug() << "RenameDialog constructor";
     m_nOkBtnIndex = -1;
     m_lineEdit = NULL;
     setFixedSize(g_nDlgWidth, g_nDlgHeight); // 提示框宽度固定
     m_isDirectory = false;
     QPixmap pixmap = UiTools::renderSVG(":assets/icons/deepin/builtin/icons/compress_warning_32px.svg", QSize(64, 64));
     setIcon(pixmap);
+    qDebug() << "RenameDialog initialized with icon";
 }
 
 RenameDialog::~RenameDialog()
 {
+    qDebug() << "RenameDialog destructor";
     if(m_lineEdit)  {
         delete m_lineEdit;
         m_lineEdit = NULL;
     }
+    qDebug() << "RenameDialog destroyed";
 }
 
 int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, bool isDirectory, bool isRepeat)
@@ -644,18 +686,29 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
 
 QString RenameDialog::getNewNameText() const
 {
-    if(!m_lineEdit) return "";
+    qDebug() << "Getting new name text from RenameDialog";
+    if(!m_lineEdit) {
+        qWarning() << "Line edit is null, returning empty string";
+        return "";
+    }
     if(m_lineEdit->text().isNull() || m_lineEdit->text().isEmpty()) {
+        qDebug() << "No new name entered, returning original path";
         return QFileInfo(m_strName).absoluteFilePath();
     }
     if(m_isDirectory) {
-        return QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text();
+        QString newPath = QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text();
+        qDebug() << "New directory path:" << newPath;
+        return newPath;
     } else {
         QString strSuffix = QFileInfo(m_strName).suffix();
         if(strSuffix.isNull() || strSuffix.isEmpty()) {
-            return QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text();
+            QString newPath = QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text();
+            qDebug() << "New file path (no suffix):" << newPath;
+            return newPath;
         } else {
-            return QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text() +"."+ QFileInfo(m_strName).suffix();
+            QString newPath = QFileInfo(m_strName).path() + QDir::separator() + m_lineEdit->text() +"."+ QFileInfo(m_strName).suffix();
+            qDebug() << "New file path (with suffix):" << newPath;
+            return newPath;
         }
     }
 }

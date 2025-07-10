@@ -28,6 +28,7 @@ CalculateSizeThread::CalculateSizeThread(const QStringList &listfiles, const QSt
 
 void CalculateSizeThread::set_thread_stop(bool thread_stop)
 {
+    qInfo() << "set_thread_stop:" << thread_stop;
     m_thread_stop = thread_stop;
 }
 

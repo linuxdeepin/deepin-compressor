@@ -36,7 +36,7 @@ DataModel::~DataModel()
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    qDebug() << "Getting header data for section:" << section << "role:" << role;
+    // qDebug() << "Getting header data for section:" << section << "role:" << role;
     Q_UNUSED(orientation)
 
     if (Qt::DisplayRole == role) {
@@ -50,7 +50,7 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << "Getting data for index:" << index << "role:" << role;
+    // qDebug() << "Getting data for index:" << index << "role:" << role;
     int iRow = index.row();
     int iColumn = index.column();
 

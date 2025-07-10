@@ -114,12 +114,14 @@ void SettingDialog::initUI()
 
 void SettingDialog::initConnections()
 {
+    qDebug() << "Initializing SettingDialog connections";
     //m_setting需要setBackend,该信号才会有效
     connect(m_settings, &DSettings::valueChanged, this, &SettingDialog::slotSettingsChanged);
 }
 
 void SettingDialog::createSettingButton()
 {
+    qDebug() << "Creating custom setting button";
     this->widgetFactory()->registerWidget("custom-button", [this](QObject * obj) -> QWidget* {
         m_customButtonOption = qobject_cast<DSettingsOption *>(obj);
         if (m_customButtonOption)
@@ -153,6 +155,7 @@ void SettingDialog::createSettingButton()
 
 void SettingDialog::createPathBox()
 {
+    qDebug() << "Creating path box";
     this->widgetFactory()->registerWidget("pathbox", [this](QObject * obj) -> QWidget* {
         m_extractPathOption = qobject_cast<DSettingsOption *>(obj);
         if (m_extractPathOption)
@@ -265,6 +268,7 @@ void SettingDialog::createPathBox()
 
 void SettingDialog::createDeleteBox()
 {
+    qDebug() << "Creating delete box";
     this->widgetFactory()->registerWidget("deletebox", [this](QObject * obj) -> QWidget* {
         m_deleteArchiveOption = qobject_cast<DSettingsOption *>(obj);
         if (m_deleteArchiveOption)
@@ -330,6 +334,7 @@ void SettingDialog::createDeleteBox()
 
 void SettingDialog::writeConfbf()
 {
+    qDebug() << "Writing configuration to file";
     // 设置配置文件的绝对路径
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     const QString confPath = confDir + QDir::separator() + "deepin-compressor.confbf";

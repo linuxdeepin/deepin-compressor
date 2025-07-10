@@ -26,23 +26,26 @@
 StyleTreeViewDelegate::StyleTreeViewDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-
+    qDebug() << "StyleTreeViewDelegate destructor";
 }
 
 StyleTreeViewDelegate::~StyleTreeViewDelegate()
 {
-
+    qDebug() << "StyleTreeViewDelegate constructor";
 }
 
 QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // qDebug() << "StyleTreeViewDelegate sizeHint";
     Q_UNUSED(index);
 
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::instance()->isCompactMode()) {
+        qDebug() << "Compact mode, returning compact size hint";
         return QSize(option.rect.width(), TABLE_HEIGHT_CompactMode);
     } else {
+        qDebug() << "Normal mode, returning normal size hint";
         return QSize(option.rect.width(), TABLE_HEIGHT_NormalMode);
     }
 #else
@@ -52,7 +55,9 @@ QSize StyleTreeViewDelegate::sizeHint(const QStyleOptionViewItem &option, const 
 
 void StyleTreeViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // qDebug() << "StyleTreeViewDelegate paint";
     if (!index.isValid()) {
+        // qDebug() << "Invalid index, not painting";
         QStyledItemDelegate::paint(painter, option, index);
         return;
     }
@@ -161,6 +166,7 @@ DataTreeView::~DataTreeView()
 
 void DataTreeView::resetLevel()
 {
+    qDebug() << "Resetting level and path";
     m_iLevel = 0;
     m_strCurrentPath = QDir::separator();
     setPreLblVisible(false);
@@ -200,6 +206,7 @@ void DataTreeView::initUI()
 
 void DataTreeView::initConnections()
 {
+    qDebug() << "Initializing DataTreeView connections";
     connect(m_pHeaderView->getpreLbl(), &PreviousLabel::doubleClickedSignal, this, &DataTreeView::slotPreClicked);
 }
 
@@ -214,27 +221,32 @@ void DataTreeView::resizeColumnWidth()
 
 TreeHeaderView *DataTreeView::getHeaderView() const
 {
+    // qDebug() << "Getting header view";
     return m_pHeaderView;
 }
 
 
 void DataTreeView::setMapOrderJson(const QString &sJson)
 {
+    qDebug() << "Setting order JSON";
     QJsonParseError error;
     QJsonObject metaData = QJsonDocument::fromJson(sJson.toLower().toLocal8Bit().data(), &error).object();
     QVariantMap mapdata = metaData.toVariantMap();
     if(mapdata.contains("permission")) {
+        qDebug() << "Setting order JSON permission";
         m_mapOrderJson = mapdata.value("permission").toMap();
     }
 }
 
 QVariantMap DataTreeView::mapOrderJson()
 {
+    // qDebug() << "Getting order JSON map";
     return m_mapOrderJson;
 }
 
 void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const
 {
+    // qDebug() << "Drawing row";
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -310,13 +322,17 @@ void DataTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option
 
 void DataTreeView::focusInEvent(QFocusEvent *event)
 {
+    // qDebug() << "Focus in event";
     m_reson = event->reason();
     // qInfo() << m_reson << model()->rowCount() << currentIndex();
     if (Qt::BacktabFocusReason == m_reson || Qt::TabFocusReason == m_reson) { // 修复不能多选删除
+        // qDebug() << "Focus in with tab or backtab";
         if (model()->rowCount() > 0) {
             if (currentIndex().isValid()) {
+                // qDebug() << "Selecting current index";
                 m_selectionModel->select(currentIndex(), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             } else {
+                // qDebug() << "Selecting first index";
                 QModelIndex firstModelIndex = model()->index(0, 0);
                 m_selectionModel->select(firstModelIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
             }
@@ -333,8 +349,10 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 
     // 判断是否有url
     if (!mime->hasUrls()) {
+        qDebug() << "Drag enter event without urls";
         e->ignore();
     } else {
+        qDebug() << "Drag enter event with urls";
         // 判断是否是本地设备文件，过滤 手机 网络 ftp smb 等
         for (const auto &url : mime->urls()) {
             if (!UiTools::isLocalDeviceFile(url.toLocalFile())) {
@@ -357,6 +375,7 @@ void DataTreeView::dragEnterEvent(QDragEnterEvent *e)
 
 void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 {
+    qDebug() << "Drag move event with mime data:" << e->mimeData()->formats();
     if(m_mapOrderJson.contains(ORDER_EDIT)) {
         if (m_mapOrderJson.value(ORDER_EDIT).toBool()) {
             e->accept();
@@ -370,6 +389,7 @@ void DataTreeView::dragMoveEvent(QDragMoveEvent *e)
 
 void DataTreeView::dropEvent(QDropEvent *e)
 {
+    qDebug() << "Drop event with mime data:" << e->mimeData()->formats();
     auto *const mime = e->mimeData();
 
     if (false == mime->hasUrls()) {
@@ -412,9 +432,10 @@ void DataTreeView::resizeEvent(QResizeEvent *event)
 
 bool DataTreeView::event(QEvent *event)
 {
+    // qDebug() << "Event type:" << event->type();
     switch (event->type()) {
     case QEvent::TouchBegin: {
-
+        // qDebug() << "Touch begin event";
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -449,13 +470,14 @@ bool DataTreeView::event(QEvent *event)
 
 void DataTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
+    // qDebug() << "Mouse release event";
     m_isPressed = false;
     DTreeView::mouseReleaseEvent(event);
 }
 
 void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "Mouse move at position:" << event->pos();
+    // qDebug() << "Mouse move at position:" << event->pos();
     if (m_isPressed) {
         //最小距离为防误触和双向滑动时,只触发横向或者纵向的
         int touchmindistance = 2;
@@ -487,11 +509,13 @@ void DataTreeView::mouseMoveEvent(QMouseEvent *event)
 
 void DataTreeView::keyPressEvent(QKeyEvent *event)
 {
-    qDebug() << "Key pressed:" << event->key() << "modifiers:" << event->modifiers();
+    // qDebug() << "Key pressed:" << event->key() << "modifiers:" << event->modifiers();
     // 当前选中表格第一行，再点击Key_Up,选中返回上一层目录
     if (Qt::Key_Up == event->key()) {
+        qDebug() << "Up key pressed";
         // 当前行为0或为空文件夹时，焦点放在返回上一层目录上
         if (this->currentIndex().row() == 0 || model()->rowCount() == 0) {
+            qDebug() << "Current row is 0 or model is empty, focusing on header";
             if (m_pHeaderView->isVisiable()) {
                 m_pHeaderView->setLabelFocus(true);
                 m_selectionModel->clearSelection();
@@ -501,6 +525,7 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 
     // 当前选中返回上一层目录，再点击Key_Down,选中表格第一行
     if (Qt::Key_Down == event->key()) {
+        qDebug() << "Down key pressed";
         if (m_pHeaderView->isVisiable() && m_pHeaderView->isLabelFocus() && model()->rowCount() > 0) {
             m_pHeaderView->setLabelFocus(false);
             m_selectionModel->setCurrentIndex(m_pModel->index(-1, -1), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
@@ -508,15 +533,18 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
     }
 
     if (Qt::Key_Delete == event->key() && m_selectionModel->selectedRows().count() > 0) { //删除键
+        qDebug() << "Delete key pressed";
         slotDeleteFile();
     } else if (Qt::Key_M == event->key() && Qt::AltModifier == event->modifiers()
                && m_selectionModel->selectedRows().count() > 0) { //Alt+M组合键调用右键菜单
+        qDebug() << "Alt+M key pressed";
         int y =   36 * currentIndex().row() + 36 / 2; //获取选中行y坐标+行高/2,列表行高36
         int x = static_cast<int>(width() * 0.618); //比较合适的x坐标
 
         slotShowRightMenu(QPoint(x, y));
     } else if ((Qt::Key_Enter == event->key() || Qt::Key_Return == event->key())
                && m_selectionModel->selectedRows().count() > 0) { //回车键以默认方式打开文件(夹)
+        qDebug() << "Enter key pressed";
         handleDoubleClick(currentIndex());
     } else {
         DTreeView::keyPressEvent(event);
@@ -525,6 +553,7 @@ void DataTreeView::keyPressEvent(QKeyEvent *event)
 
 void DataTreeView::setPreLblVisible(bool bVisible, const QString &strPath)
 {
+    qDebug() << "setPreLblVisible" << bVisible << strPath;
     m_pHeaderView->getpreLbl()->setPrePath(strPath);
     m_pHeaderView->setPreLblVisible(bVisible);
 }

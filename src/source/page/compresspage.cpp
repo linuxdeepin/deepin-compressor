@@ -71,6 +71,7 @@ void CompressPage::clear()
 
 void CompressPage::initUI()
 {
+    qInfo() << "Initializing compress page UI";
     // 初始化相关变量
     m_pCompressView = new CompressView(this);
     m_pNextBtn = new CustomPushButton(tr("Next"), this);
@@ -103,6 +104,7 @@ void CompressPage::initUI()
 
 void CompressPage::initConnections()
 {
+    qInfo() << "Initializing compress page connections";
     connect(m_pNextBtn, &DPushButton::clicked, this, &CompressPage::slotCompressNextClicked);
     connect(m_pCompressView, &CompressView::signalLevelChanged, this, &CompressPage::slotCompressLevelChanged);
 }
@@ -113,9 +115,11 @@ void CompressPage::slotCompressNextClicked()
 
     // 如果没有待压缩文件，弹出提示框
     if (m_pCompressView->getCompressFiles().isEmpty()) {
+        qInfo() << "No files to compress, showing tip dialog";
         TipDialog dialog(this);
         dialog.showDialog(tr("Please add files"), tr("OK", "button"));
     } else {
+        qInfo() << "Files to compress, emit signalCompressNextClicked";
         emit signalCompressNextClicked();  // 发送下一步信号
     }
 }
@@ -140,10 +144,12 @@ void CompressPage::slotFileChoose()
 
 CustomPushButton *CompressPage::getNextBtn() const
 {
+    // qInfo() << "Getting next button pointer";
     return m_pNextBtn;
 }
 
 CompressView *CompressPage::getCompressView()
 {
+    // qInfo() << "Getting compress view pointer";
     return m_pCompressView;
 }

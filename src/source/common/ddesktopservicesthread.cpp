@@ -26,6 +26,7 @@ void DDesktopServicesThread::setOpenFiles(const QStringList &listFiles)
 
 bool DDesktopServicesThread::hasFiles()
 {
+    // qInfo() << "Check if there are files to open, count:" << m_listFiles.size();
     return !m_listFiles.isEmpty();
 }
 

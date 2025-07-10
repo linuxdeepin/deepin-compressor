@@ -71,37 +71,44 @@ void UnCompressPage::setDefaultUncompressPath(const QString &strPath)
 
 void UnCompressPage::refreshArchiveData()
 {
+    // qDebug() << "refreshArchiveData";
     m_pUnCompressView->refreshArchiveData();
 }
 
 void UnCompressPage::resizeEvent(QResizeEvent *e)
 {
+    // qDebug() << "resizeEvent";
     Q_UNUSED(e)
     m_pUncompressPathBtn->setText(elidedExtractPath(tr("Extract to:") + m_strUnCompressPath));
 }
 
 void UnCompressPage::refreshDataByCurrentPathChanged()
 {
+    qDebug() << "refreshDataByCurrentPathChanged";
     m_pUnCompressView->refreshDataByCurrentPathChanged();
 }
 
 void UnCompressPage::addNewFiles(const QStringList &listFiles)
 {
+    qDebug() << "addNewFiles";
     m_pUnCompressView->addNewFiles(listFiles);
 }
 
 QString UnCompressPage::getCurPath()
 {
+    qDebug() << "getCurPath";
     return m_pUnCompressView->getCurPath();
 }
 
 void UnCompressPage::clear()
 {
+    qDebug() << "clear";
     m_pUnCompressView->clear();
 }
 
 void UnCompressPage::initUI()
 {
+    qDebug() << "initUI";
     m_strUnCompressPath = "~/Desktop";
 
     // 初始化相关变量
@@ -171,6 +178,7 @@ QString UnCompressPage::elidedExtractPath(const QString &strPath)
 #endif
     QString pathStr = strPath;
     if (fontSize > width()) {
+        qDebug() << "Path is too long, elide it";
         pathStr = fontMetrics.elidedText(strPath, Qt::ElideMiddle, width());//返回一个带有省略号的字符串
     }
 
@@ -235,26 +243,32 @@ void UnCompressPage::slotUnCompressPathClicked()
 
 void UnCompressPage::slotFileChoose()
 {
-    if (m_pUnCompressView->isModifiable())
+    if (m_pUnCompressView->isModifiable()) {
+        qDebug() << "View is modifiable, emitting signalFileChoose";
         emit signalFileChoose();
+    }
 }
 
 CustomCommandLinkButton *UnCompressPage::getUncompressPathBtn() const
 {
+    qDebug() << "getUncompressPathBtn";
     return m_pUncompressPathBtn;
 }
 
 QVariantMap UnCompressPage::mapOrderJson()
 {
+    qDebug() << "mapOrderJson";
     return m_pUnCompressView->mapOrderJson();
 }
 
 CustomPushButton *UnCompressPage::getUnCompressBtn() const
 {
+    qDebug() << "getUnCompressBtn";
     return m_pUnCompressBtn;
 }
 
 UnCompressView *UnCompressPage::getUnCompressView() const
 {
+    qDebug() << "getUnCompressView";
     return m_pUnCompressView;
 }
