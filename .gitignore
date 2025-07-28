@@ -87,7 +87,7 @@ CMakeLists.txt.user*
 
 
 
-# QtCreator 4.8< compilation database 
+# QtCreator 4.8< compilation database
 
 compile_commands.json
 
@@ -103,3 +103,10 @@ so(cmake).sh
 tests/test_output
 translations/*.qm
 build
+release
+obj-x86_64-linux-gnu
+debian/.debhelper
+debian/deepin-compressor
+debian/deepin-compressor.debhelper.log
+debian/deepin-compressor.substvars
+debian/files
