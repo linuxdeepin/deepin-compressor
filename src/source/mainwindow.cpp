@@ -2253,7 +2253,7 @@ void MainWindow::saveConfigWinState()
         // 使用默认尺寸或之前保存的正常尺寸
         QVariant tempWidth = m_pSettings->value(MAINWINDOW_WIDTH_NAME);
         QVariant tempHeight = m_pSettings->value(MAINWINDOW_HEIGHT_NAME);
-        
+
         if (!tempWidth.isValid() || !tempHeight.isValid()) {
             // 如果没有之前保存的尺寸，使用默认尺寸
             m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, MAINWINDOW_DEFAULTW);
@@ -2279,10 +2279,10 @@ void MainWindow::restoreConfigWinState()
     // 获取保存的窗口状态
     Qt::WindowState savedState = static_cast<Qt::WindowState>(
         m_pSettings->value(MAINWINDOW_STATE_NAME, Qt::WindowNoState).toInt());
-    
+
     // 先设置正常尺寸
     resize(getConfigWinSize());
-    
+
     // 然后应用状态
     if (savedState == Qt::WindowMaximized) {
         // 使用QTimer延迟执行，确保窗口完全初始化后再最大化
@@ -2498,12 +2498,22 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             //这里使用最后一个文件夹名进行压缩，防止特殊字符压缩不成功
             QRegExp reg("^\s+|[\\:*\"'?<>|\r\n\t]");
             if (strpath.mid(iIndex).indexOf(reg) != -1) {
-                QString compressor = strpath.split("=").last() + strSuffix;
+                QString folderName = strpath.split("=").last();
+                // 处理长文件夹名称，避免超出系统限制
+                if (folderName.length() + strSuffix.length() > FILE_TRUNCATION_LENGTH) {
+                    folderName = folderName.left(FILE_TRUNCATION_LENGTH - strSuffix.length());
+                }
+                QString compressor = folderName + strSuffix;
                 if (compressor.indexOf(reg) != -1)
                     compressor.remove(reg);
                 strArchivePath += QDir::separator() + compressor;
             } else {
-                strArchivePath += strpath.mid(iIndex) + strSuffix;
+                QString folderName = strpath.mid(iIndex + 1); // 去掉前面的分隔符
+                // 处理长文件夹名称，避免超出系统限制
+                if (folderName.length() + strSuffix.length() > FILE_TRUNCATION_LENGTH) {
+                    folderName = folderName.left(FILE_TRUNCATION_LENGTH - strSuffix.length());
+                }
+                strArchivePath += QDir::separator() + folderName + strSuffix;
             }
         }
 
