@@ -419,9 +419,9 @@ QString Common::handleLongNameforPath(const QString &strFilePath, const QString 
      return sDir;
 }
 
-bool Common::isSubpathOfDlnfs(const QString &path)
+bool Common::isSubpathOfLnfs(const QString &path)
 {
-    return findDlnfsPath(path, [](const QString &target, const QString &compare) {
+    return findLnfsPath(path, [](const QString &target, const QString &compare) {
         return target.startsWith(compare);
     });
 }
@@ -464,7 +464,7 @@ bool Common::isSupportSeek(QString sFileName)
     return false;
 }
 
-bool Common::findDlnfsPath(const QString &target, Compare func)
+bool Common::findLnfsPath(const QString &target, Compare func)
 {
     Q_ASSERT(func);
     libmnt_table *tab { mnt_new_table() };
@@ -486,13 +486,29 @@ bool Common::findDlnfsPath(const QString &target, Compare func)
     while (mnt_table_next_fs(tab, iter, &fs) == 0) {
         if (!fs)
             continue;
-        qInfo() << unifyPath(mnt_fs_get_target(fs));
-        if (strcmp("dlnfs", mnt_fs_get_source(fs)) == 0) {
-            QString mpt = unifyPath(mnt_fs_get_target(fs));
-            if (func(unifyPath(target), mpt))
+
+        const char* fsType = mnt_fs_get_fstype(fs);
+        const char* mountPoint = mnt_fs_get_target(fs);
+
+        if (!mountPoint)
+            continue;
+
+        QString fsTypeStr = fsType ? QString(fsType) : "";
+        QString mountPointStr = unifyPath(mountPoint);
+
+        qInfo() << "Checking filesystem - Type:" << fsTypeStr
+                << "Mount:" << mountPointStr;
+
+        // 检查是否是支持长文件名的文件系统类型
+        bool isLongFileNameFS = (fsTypeStr == "fuse.dlnfs") ||
+                               (fsTypeStr == "ulnfs");
+
+        if (isLongFileNameFS) {
+            if (func(unifyPath(target), mountPointStr)) {
                 if (tab) mnt_free_table(tab);
                 if (iter) mnt_free_iter(iter);
                 return true;
+            }
         }
     }
 

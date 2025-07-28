@@ -415,7 +415,19 @@ bool UiTools::isLocalDeviceFile(const QString &strFileName)
 {
     QStorageInfo info(strFileName);
     QString sDevice = info.device();
-    return sDevice.startsWith("/dev/") || sDevice.startsWith("dlnfs"); //长文件名开启后以dlnfs方式挂载
+    QString sFileSystemType = info.fileSystemType();
+
+    // 检查传统的本地设备（以 /dev/ 开头）
+    if (sDevice.startsWith("/dev/")) {
+        return true;
+    }
+
+    // 检查长文件名文件系统类型
+    if (sFileSystemType == "fuse.dlnfs" || sFileSystemType == "ulnfs") {
+        return true;
+    }
+
+    return false;
 }
 
 QStringList UiTools::removeSameFileName(const QStringList &listFiles)

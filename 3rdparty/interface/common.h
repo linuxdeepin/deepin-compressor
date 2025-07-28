@@ -40,7 +40,7 @@ public:
     //长文件夹处理
     QString handleLongNameforPath(const QString &strFilePath, const QString &entryName, QMap<QString, int> &mapLongDirName, QMap<QString, int> &mapRealDirValue);
     //当前文件系统是否支持长文件
-    bool isSubpathOfDlnfs(const QString &path);
+    bool isSubpathOfLnfs(const QString &path);
     /**
      * @brief isSupportSeek    是否支持seek操作
      * @param sFileName            文件名
@@ -48,7 +48,7 @@ public:
     bool isSupportSeek(QString sFileName);
 private:
     //通过mount对应方法判断文件系统是否支持长文件
-    bool findDlnfsPath(const QString &target, Compare func);
+    bool findLnfsPath(const QString &target, Compare func);
 };
 
 /**

@@ -161,7 +161,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     } else {
         m_dScaleSize = 100.0 / options.qSize;
     }
-    m_bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
+    m_bLnfs = m_common->isSubpathOfLnfs(options.strTargetPath);
 
     // 执行解压操作
     bool bHandleLongName = false;
@@ -812,7 +812,7 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     QString tempFilePathName;
-    if(!m_bDlnfs) {
+    if(!m_bLnfs) {
         QString sDir = m_common->handleLongNameforPath(strFilePath, strFileName, m_mapLongDirName, m_mapRealDirValue);
         if(sDir.length() > 0) {
            strFilePath = sDir.endsWith(QDir::separator())?sDir.left(sDir.length() -1):sDir;
