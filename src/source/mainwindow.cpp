@@ -2118,6 +2118,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("No compression support in current directory. Download the files to a local device."));
         }
         break;
+        case EI_LongFileName: {
+            m_pFailurePage->setFailureDetail(tr("The file name is too long. Keep the name within 60 characters please."));
+        }
+        break;
         default:
             break;
         }
