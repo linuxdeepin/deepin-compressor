@@ -1032,8 +1032,23 @@ void MainWindow::slotCompress(const QVariant &val)
 
     bool bUseLibarchive = false;
 #ifdef __aarch64__ // 华为arm平台 zip压缩 性能提升. 在多线程场景下使用7z,单线程场景下使用libarchive
-    double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
-    bUseLibarchive = maxFileSizeProportion > 0.6;
+    // 最大文件超过50MB使用libarchive
+    if (maxFileSize_ > 50 * 1024 * 1024) {
+        bUseLibarchive = true;
+    }
+    // 总大小超过200MB使用libarchive
+    else if (m_stCompressParameter.qSize > 200 * 1024 * 1024) {
+        bUseLibarchive = true;
+    }
+    // 总大小超过100MB且最大文件超过10MB使用libarchive（处理均匀分布的大文件）
+    else if (m_stCompressParameter.qSize > 100 * 1024 * 1024 && maxFileSize_ > 10 * 1024 * 1024) {
+        bUseLibarchive = true;
+    }
+    // 大文件占比超过60%使用libarchive
+    else {
+        double maxFileSizeProportion = static_cast<double>(maxFileSize_) / static_cast<double>(m_stCompressParameter.qSize);
+        bUseLibarchive = maxFileSizeProportion > 0.6;
+    }
 #else
     bUseLibarchive = false;
 #endif
