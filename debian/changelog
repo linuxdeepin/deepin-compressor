@@ -1,3 +1,9 @@
+deepin-compressor (6.5.15) unstable; urgency=medium
+
+  * chore: Update version to 6.5.14
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Wed, 13 Aug 2025 17:35:01 +0800
+
 deepin-compressor (6.5.14) unstable; urgency=medium
 
   * chore: Update Lao translations in compressor configuration files
