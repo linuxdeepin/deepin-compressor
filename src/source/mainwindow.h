@@ -35,6 +35,7 @@ class OpenFileWatcher;
 class QFileSystemWatcher;
 class CalculateSizeThread;
 class TitleWidget;
+class ApplicationAdaptor;
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
@@ -345,13 +346,13 @@ private Q_SLOTS:
      * @brief slotTitleBtnClicked   选择文件触发
      */
     void slotChoosefiles();
-
+public Q_SLOTS:
     /**
      * @brief slotDragSelectedFiles     拖拽添加文件
      * @param listFiles     拖拽的文件
      */
     void slotDragSelectedFiles(const QStringList &listFiles);
-
+private Q_SLOTS:
     /**
      * @brief compressLevelChanged  处理压缩层级变化
      * @param bRootIndex    是否是根目录
@@ -375,13 +376,13 @@ private Q_SLOTS:
      * @param eErrorType            错误类型
      */
     void slotJobFinished(ArchiveJob::JobType eJobType, PluginFinishType eFinishType, ErrorType eErrorType);
-
+public Q_SLOTS:
     /**
      * @brief slotUncompressClicked     解压按钮点击，执行解压操作
      * @param strUncompressPath         解压路径
      */
     void slotUncompressClicked(const QString &strUncompressPath);
-
+private Q_SLOTS:
     /**
      * @brief slotReceiveProgress   进度信号处理
      * @param dPercentage   进度值
@@ -572,6 +573,8 @@ private:
 #endif
 
     QString m_strCurrentName;
+    
+    ApplicationAdaptor *m_compressorInterface = nullptr;  // DBus interface
 };
 
 class TitleWidget : public QWidget

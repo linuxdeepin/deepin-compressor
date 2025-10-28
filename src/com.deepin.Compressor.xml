@@ -1,0 +1,35 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="com.deepin.Compressor">
+    <method name="showWindow">
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="hideWindow">
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="raiseWindow">
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="raise">
+      <arg direction="in" type="s" name="sFile"/>
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="quitWindow">
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="compressFiles">
+      <arg direction="in" type="as" name="filePaths"/>
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="extractFiles">
+      <arg direction="in" type="s" name="archivePath"/>
+      <arg direction="in" type="s" name="destinationPath"/>
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="previewArchive">
+      <arg direction="in" type="s" name="archivePath"/>
+      <arg direction="out" type="b"/>
+    </method>
+  </interface>
+</node>

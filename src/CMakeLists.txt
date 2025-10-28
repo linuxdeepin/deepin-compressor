@@ -135,3 +135,11 @@ install(DIRECTORY assets/deepin-compressor DESTINATION ${CMAKE_INSTALL_DATADIR}/
 
 # 支持压缩的格式
 #install(FILES conf/compressor-singlecompress.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-compressor/compressedformat/)
+
+# Install DBus service file
+install(FILES ${CMAKE_CURRENT_LIST_DIR}/com.deepin.Compressor.service
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services/)
+
+# Install DBus interface XML file
+install(FILES ${CMAKE_CURRENT_LIST_DIR}/com.deepin.Compressor.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/interfaces/)

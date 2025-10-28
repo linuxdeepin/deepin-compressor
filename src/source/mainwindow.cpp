@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwindow.h"
+#include "common/dbusadpator.h"
 #include "loadingpage.h"
 #include "homepage.h"
 #include "compresspage.h"
@@ -74,6 +75,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_pMainWidget->setCurrentIndex(0);
     qDebug() << "Main UI components created";
 
+    // Initialize DBus interface
+    qDebug() << "Initializing DBus interface";
+    // m_compressorInterface = new ApplicationAdaptor(qApp);
+    // m_compressorInterface->setMainWindow(this);
+    qDebug() << "DBus interface initialized";
+
 #if QT_VERSION < QT_VERSION_CHECK(6 ,0, 0)
     qDebug() << "Creating shortcut for Qt5";
     m_openkey = new QShortcut(QKeySequence(Qt::Key_Slash + Qt::CTRL + Qt::SHIFT), this); // Ctrl+Shift+/
@@ -111,6 +118,13 @@ MainWindow::~MainWindow()
 
     qDebug() << "Destroying ArchiveManager instance";
     ArchiveManager::get_instance()->destory_instance();
+
+    // Clean up DBus interface
+    qDebug() << "Cleaning up DBus interface";
+    // if (m_compressorInterface) {
+    //     delete m_compressorInterface;
+    //     m_compressorInterface = nullptr;
+    // }
 
     // 清除缓存数据
     qDebug() << "Cleaning up temporary files";

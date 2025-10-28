@@ -3,24 +3,30 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "dbusadpator.h"
+#include "mainwindow.h"
+#include "archivemanager.h"
+
 #include <QFileInfo>
 #include <QtDebug>
 #include <DSettings>
-#include "dbusadpator.h"
 #include <QMainWindow>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QDir>
+
 const QString SOPENLIST = "openfiles";
 
-ApplicationAdaptor::ApplicationAdaptor(QApplication *application)
-    : QDBusAbstractAdaptor(application), app(application)
+ApplicationAdaptor::ApplicationAdaptor(MainWindow *mainwindow)
+    : QDBusAbstractAdaptor(mainwindow), m_mainWindow(mainwindow)
 {
     qDebug() << "ApplicationAdaptor initialized";
-    connect(application, SIGNAL(aboutToQuit()), SIGNAL(aboutToQuit()));
-    connect(application, SIGNAL(focusChanged(QWidget*, QWidget*)),
-            SLOT(focusChangedSlot(QWidget*, QWidget*)));
 }
 
+void ApplicationAdaptor::setMainWindow(MainWindow *mainWindow)
+{
+    m_mainWindow = mainWindow;
+}
 
 /**
  * @brief setCurOpenFile    设置当前的压缩包文件名
@@ -32,16 +38,18 @@ void ApplicationAdaptor::setCompressFile(const QString &sFile)
     m_sFile = sFile;
 }
 
-
-void ApplicationAdaptor::raise(const QString &sFile)
+bool ApplicationAdaptor::raise(const QString &sFile)
 {
     qDebug() << "Raise window request for file:" << sFile;
     if(m_sFile.isEmpty() || m_sFile.isNull()) {
         qWarning() << "No compress file set, cannot raise window";
-        return;
+        return false;
     }
-    if(m_curShowWidget && (m_sFile == sFile))
+    if(m_curShowWidget && (m_sFile == sFile)) {
         m_curShowWidget->activateWindow();
+        return true;
+    }
+    return false;
 }
 
 void ApplicationAdaptor::onActiveWindow(qint64 pid)
@@ -84,5 +92,109 @@ void ApplicationAdaptor::onActiveWindow(qint64 pid)
             }
         }
     }
+}
 
+// Window management methods
+bool ApplicationAdaptor::showWindow()
+{
+    if (m_mainWindow) {
+        m_mainWindow->show();
+        m_mainWindow->raise();
+        m_mainWindow->activateWindow();
+        return true;
+    }
+    return false;
+}
+
+bool ApplicationAdaptor::hideWindow()
+{
+    if (m_mainWindow) {
+        m_mainWindow->hide();
+        return true;
+    }
+    return false;
+}
+
+bool ApplicationAdaptor::raiseWindow()
+{
+    if (m_mainWindow) {
+        m_mainWindow->raise();
+        m_mainWindow->activateWindow();
+        return true;
+    }
+    return false;
+}
+
+bool ApplicationAdaptor::quitWindow()
+{
+    if (m_mainWindow) {
+        m_mainWindow->close();
+        return true;
+    }
+    return false;
+}
+
+bool ApplicationAdaptor::compressFiles(const QStringList &filePaths)
+{
+    if (filePaths.isEmpty()) {
+        qWarning() << "No files provided for compression";
+        return false;
+    }
+    
+    if (!m_mainWindow) {
+        qWarning() << "MainWindow not available";
+        return false;
+    }
+
+    for (const QString &filePath : filePaths) {
+        if (!QFileInfo::exists(filePath)) {
+            qWarning() << "File does not exist:" << filePath;
+            return false;
+        }
+    }
+
+    showWindow();
+    m_mainWindow->slotDragSelectedFiles(QStringList{filePaths});
+    return true;
+}
+
+bool ApplicationAdaptor::extractFiles(const QString &archivePath, const QString &destinationPath)
+{
+    if (!QFileInfo::exists(archivePath)) {
+        qWarning() << "Archive file does not exist:" << archivePath;
+        return false;
+    }
+    
+    if (!m_mainWindow) {
+        qWarning() << "MainWindow not available";
+        return false;
+    }
+
+    QFileInfo destInfo(destinationPath);
+    if (!destInfo.isDir() || !destInfo.isWritable()) {
+        qWarning() << "Destination path is not a writable directory:" << destinationPath;
+        return false;
+    }
+
+    showWindow();
+    m_mainWindow->slotDragSelectedFiles(QStringList{archivePath});
+    m_mainWindow->slotUncompressClicked(destinationPath);
+    return true;
+}
+
+bool ApplicationAdaptor::previewArchive(const QString &archivePath)
+{
+    if (!QFileInfo::exists(archivePath)) {
+        qWarning() << "Archive file does not exist:" << archivePath;
+        return false;
+    }
+    
+    if (!m_mainWindow) {
+        qWarning() << "MainWindow not available";
+        return false;
+    }
+
+    showWindow();
+    m_mainWindow->slotDragSelectedFiles(QStringList{archivePath});
+    return true;
 }

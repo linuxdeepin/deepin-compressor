@@ -5,6 +5,10 @@
 
 #include "compressorapplication.h"
 #include "mainwindow.h"
+#include "common/dbusadpator.h"
+
+#include <QDBusConnection>
+#include <QDBusError>
 
 #include <DCheckBox>
 #include <DSuggestButton>
@@ -16,6 +20,14 @@ CompressorApplication::CompressorApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     qDebug() << "CompressorApplication constructor";
+    
+    // Register DBus service
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    if (!connection.registerService("com.deepin.Compressor")) {
+        qWarning() << "Failed to register DBus service:" << connection.lastError().message();
+    } else {
+        qDebug() << "DBus service registered successfully";
+    }
 }
 
 CompressorApplication::~CompressorApplication()

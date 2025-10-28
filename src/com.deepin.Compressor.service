@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.Compressor
+Exec=/usr/bin/deepin-compressor

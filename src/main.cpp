@@ -217,30 +217,31 @@ int main(int argc, char *argv[])
     showWatermark(sJsonStr, &w);
 
     qDebug() << "Creating DBus adaptor and connecting to session bus";
-    ApplicationAdaptor adaptor(&app);
+    ApplicationAdaptor adaptor(&w);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     
     if(!orderObject){
         qDebug() << "Registering standard DBus service";
-        if (dbus.registerService("com.deepin.compressor")) {
+        if (dbus.registerService("com.deepin.Compressor")) {
+            dbus.registerObject("/com/deepin/Compressor", &w);
             qDebug() << "DBus service registered successfully, moving window to center";
             Dtk::Widget::moveToCenter(&w);
         } else {
-            qWarning() << "Failed to register standard DBus service";
+            qWarning() << "Failed to register standard DBus service:" << dbus.lastError().message();
         }
     } else {
         qDebug() << "Registering WPS-specific DBus service";
-        QString serviceName = "com.deepin.compressor"+QString::number(QGuiApplication::applicationPid());
+        QString serviceName = "com.deepin.Compressor"+QString::number(QGuiApplication::applicationPid());
         if (dbus.registerService(serviceName)) {
             qDebug() << "WPS DBus service registered successfully";
-            QString objectPath = "/"+QString::number(QGuiApplication::applicationPid());
-            dbus.registerObject(objectPath, &app);
+            QString objectPath = "/com/deepin/Compressor/"+QString::number(QGuiApplication::applicationPid());
+            dbus.registerObject(objectPath, &w);
             adaptor.setCompressFile(newfilelist.first());
             Dtk::Widget::moveToCenter(&w);
             w.setProperty(ORDER_JSON, sJsonStr);
             qDebug() << "Window properties set for WPS mode";
         } else {
-            qWarning() << "Failed to register WPS DBus service";
+            qWarning() << "Failed to register WPS DBus service:" << dbus.lastError().message();
         }
 
         qDebug() << "Connecting to WPS cryptfs DBus interface";
