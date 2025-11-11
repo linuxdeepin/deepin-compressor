@@ -215,6 +215,18 @@ private:
     void ConstructAddOptionsByThread(const QString &path);
 
     /**
+     * @brief prepareCompressAliasEntries  为重命名文件准备临时别名文件
+     * @param listEntry 待压缩的文件信息
+     * @return 是否准备成功
+     */
+    bool prepareCompressAliasEntries(QList<FileEntry> &listEntry);
+
+    /**
+     * @brief cleanupCompressAliasEntries 清理临时别名文件
+     */
+    void cleanupCompressAliasEntries();
+
+    /**
      * @brief showSuccessInfo   显示成功信息
      * @param eSuccessInfo      成功信息
      */
@@ -575,6 +587,8 @@ private:
 #endif
 
     QString m_strCurrentName;
+    QString m_strCompressAliasRoot;
+    bool m_needCleanupCompressAlias = false;
 };
 
 class TitleWidget : public QWidget
