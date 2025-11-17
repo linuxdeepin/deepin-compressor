@@ -1180,7 +1180,7 @@
         <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation>合 並</translation>
+        <translation>合 併</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
