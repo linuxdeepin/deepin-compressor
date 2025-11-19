@@ -46,9 +46,11 @@ KPtyProcess::KPtyProcess(QObject *parent) :
     d->pty->open();
     connect(this, SIGNAL(stateChanged(QProcess::ProcessState)),
             SLOT(_k_onStateChanged(QProcess::ProcessState)));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     setChildProcessModifier([this](){
         setupChildProcessImpl();
     });
+#endif
 }
 
 KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
@@ -60,9 +62,11 @@ KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
     d->pty->open(ptyMasterFd);
     connect(this, SIGNAL(stateChanged(QProcess::ProcessState)),
             SLOT(_k_onStateChanged(QProcess::ProcessState)));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     setChildProcessModifier([this](){
         setupChildProcessImpl();
     });
+#endif
 }
 
 KPtyProcess::~KPtyProcess()

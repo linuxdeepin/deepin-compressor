@@ -95,7 +95,11 @@ void PreviousLabel::mouseDoubleClickEvent(QMouseEvent *event)
     QLabel::mouseDoubleClickEvent(event);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+void PreviousLabel::enterEvent(QEvent *event)
+#else
 void PreviousLabel::enterEvent(QEnterEvent *event)
+#endif
 {
     // qDebug() << "PreviousLabel enter event";
     if(!hasFocus()) {
