@@ -2,6 +2,16 @@
   "magic": "dsg.config.meta",
   "version": "1.0",
   "contents": {
+      "specialCustomizedType": {
+          "value": -1,
+          "serial": 0,
+          "flags": ["global"],
+          "name": "Special Customized Type",
+          "name[zh_CN]": "定制类型",
+          "description": "Customized Type",
+          "permissions": "readwrite",
+          "visibility": "private"
+      },
       "specialCompressorType": {
           "value": 11,
           "serial": 0,
