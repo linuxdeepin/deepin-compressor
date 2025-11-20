@@ -40,6 +40,10 @@
 #include <DFontSizeManager>
 #include <denhancedwidget.h>
 #include <DSysInfo>
+#ifdef DTKCORE_CLASS_DConfigFile
+#include <DConfig>
+DCORE_USE_NAMESPACE
+#endif
 
 #include <QStackedWidget>
 #include <QKeyEvent>
@@ -51,10 +55,6 @@
 #include <QFormLayout>
 #include <QShortcut>
 #include <QJsonObject>
-#ifdef DTKCORE_CLASS_DConfigFile
-#include <DConfig>
-DCORE_USE_NAMESPACE
-#endif
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 #define FILE_TRUNCATION_LENGTH 70
@@ -114,7 +114,7 @@ MainWindow::~MainWindow()
     qDebug() << "MainWindow destructor started";
     // 保存窗口大小状态
     qDebug() << "Saving window size configuration";
-    saveConfigWinSize(width(), height());
+    saveConfigWinState();
 
     qDebug() << "Destroying ArchiveManager instance";
     ArchiveManager::get_instance()->destory_instance();
@@ -241,7 +241,7 @@ void MainWindow::initData()
     }
 
     qDebug() << "Setting window size and minimum size";
-    resize(getConfigWinSize()); // 设置窗口尺寸
+    restoreConfigWinState(); // 恢复窗口状态（大小和最大化状态）
     setMinimumSize(620, 300);   // task 16309调整最小大小
     qDebug() << "Application data initialized";
 }
@@ -2459,13 +2459,52 @@ QSize MainWindow::getConfigWinSize()
     return QSize(winWidth, winHeight);
 }
 
-void MainWindow::saveConfigWinSize(int w, int h)
+void MainWindow::saveConfigWinState()
 {
-    int winWidth = w > MAINWINDOW_DEFAULTW ? w : MAINWINDOW_DEFAULTW;
-    int winHeight = h > MAINWINDOW_DEFAULTH ? h : MAINWINDOW_DEFAULTH;
-    m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, winHeight);
-    m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, winWidth);
+    // 如果窗口是最大化状态，保存最大化标志和正常尺寸
+    if (isMaximized()) {
+        m_pSettings->setValue(MAINWINDOW_STATE_NAME, Qt::WindowMaximized);
+        // 对于最大化窗口，我们需要保存正常尺寸而不是最大化尺寸
+        // 使用默认尺寸或之前保存的正常尺寸
+        QVariant tempWidth = m_pSettings->value(MAINWINDOW_WIDTH_NAME);
+        QVariant tempHeight = m_pSettings->value(MAINWINDOW_HEIGHT_NAME);
+
+        if (!tempWidth.isValid() || !tempHeight.isValid()) {
+            // 如果没有之前保存的尺寸，使用默认尺寸
+            m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, MAINWINDOW_DEFAULTW);
+            m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, MAINWINDOW_DEFAULTH);
+        }
+        // 如果有之前保存的尺寸，保持不变（不更新为最大化尺寸）
+    } else {
+        // 正常状态，保存当前尺寸和状态
+        m_pSettings->setValue(MAINWINDOW_STATE_NAME, Qt::WindowNoState);
+        // 保存窗口尺寸
+        int w = width();
+        int h = height();
+        int winWidth = w > MAINWINDOW_DEFAULTW ? w : MAINWINDOW_DEFAULTW;
+        int winHeight = h > MAINWINDOW_DEFAULTH ? h : MAINWINDOW_DEFAULTH;
+        m_pSettings->setValue(MAINWINDOW_HEIGHT_NAME, winHeight);
+        m_pSettings->setValue(MAINWINDOW_WIDTH_NAME, winWidth);
+    }
     m_pSettings->sync();
+}
+
+void MainWindow::restoreConfigWinState()
+{
+    // 获取保存的窗口状态
+    Qt::WindowState savedState = static_cast<Qt::WindowState>(
+                m_pSettings->value(MAINWINDOW_STATE_NAME, Qt::WindowNoState).toInt());
+
+    // 先设置正常尺寸
+    resize(getConfigWinSize());
+
+    // 然后应用状态
+    if (savedState == Qt::WindowMaximized) {
+        // 使用QTimer延迟执行，确保窗口完全初始化后再最大化
+        QTimer::singleShot(0, this, [this]() {
+            showMaximized();
+        });
+    }
 }
 
 void MainWindow::convertArchive(const QString &convertType)
