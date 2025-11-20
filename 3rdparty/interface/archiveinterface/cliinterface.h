@@ -182,7 +182,7 @@ protected:
     /**
      * @brief extractFiles 业务解压
      */
-    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bDlnfs);
+    PluginFinishType extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bLnfs);
 
 private:
     /**

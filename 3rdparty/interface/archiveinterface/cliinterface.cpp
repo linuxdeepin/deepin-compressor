@@ -110,13 +110,13 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         return PFT_Nomral;
     }
 
-    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
-    setProperty("dlnfs", bDlnfs);
+    bool bLnfs = m_common->isSubpathOfLnfs(options.strTargetPath);
+    setProperty("lnfs", bLnfs);
     ArchiveData arcData = DataManager::get_instance().archiveData();
     m_files = files;
     m_extractOptions = options;
 
-    if (!bDlnfs) {
+    if (!bLnfs) {
         if (arcData.listRootEntry.isEmpty() && options.qSize < FILE_MAX_SIZE) {
             emit signalprogress(1);
             setProperty("list", "tmpList");
@@ -125,10 +125,10 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             return PFT_Nomral;
         }
     }
-    return extractFiles(files, options, bDlnfs);
+    return extractFiles(files, options, bLnfs);
 }
 
-PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bDlnfs)
+PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options, bool bLnfs)
 {
     ArchiveData arcData = DataManager::get_instance().archiveData();
     setProperty("list", "");
@@ -193,7 +193,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
             }
         }
         //长文件解压
-        if (!bDlnfs) {
+        if (!bLnfs) {
             for (FileEntry entry : m_files) {
                 if (NAME_MAX < entry.strFileName.toLocal8Bit().length() || NAME_MAX < entry.strFullPath.toLocal8Bit().length()) {
                     bHandleLongName = true;
@@ -242,7 +242,7 @@ PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const
         } else {
             password = options.password;
         }
-        if (!bDlnfs) {
+        if (!bLnfs) {
             for (QMap<QString, FileEntry>::const_iterator iter = arcData.mapFileEntry.begin(); iter != arcData.mapFileEntry.end(); iter++) {
                 if (NAME_MAX < iter.value().strFileName.toLocal8Bit().length()) {
                     bHandleLongName = true;
@@ -764,7 +764,7 @@ bool CliInterface::runProcess(const QString &programName, const QStringList &arg
                             emit signalFinished(PFT_Error);
                         }
                         deleteProcess();
-                        extractFiles(m_files, m_extractOptions, property("dlnfs").toBool());
+                        extractFiles(m_files, m_extractOptions, property("lnfs").toBool());
                     }
                 });
     }

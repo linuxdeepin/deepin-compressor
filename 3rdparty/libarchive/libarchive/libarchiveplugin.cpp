@@ -168,7 +168,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
     struct archive_entry *entry = nullptr;
 
     QString extractDst;
-    bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
+    bool bLnfs = m_common->isSubpathOfLnfs(options.strTargetPath);
     // Iterate through all entries in archive.
     int iIndex = 0;     // 存储索引值
     while (!QThread::currentThread()->isInterruptionRequested() && (archive_read_next_header(m_archiveReader.data(), &entry) == ARCHIVE_OK)) {
@@ -265,7 +265,7 @@ PluginFinishType LibarchivePlugin::extractFiles(const QList<FileEntry> &files, c
         bool bLongName = false;
         QString tempFilePathName;
         QString strOriginName = entryName;
-        if(!bDlnfs) {
+        if(!bLnfs) {
             QString sDir = m_common->handleLongNameforPath(strFilePath, entryName, m_mapLongDirName, m_mapRealDirValue);
             if(sDir.length() > 0) {
                strFilePath = sDir.endsWith(QDir::separator())?sDir.left(sDir.length() -1):sDir;
