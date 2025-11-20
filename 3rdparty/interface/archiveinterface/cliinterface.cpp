@@ -39,6 +39,7 @@
 #include <QUrl>
 #include <QScopedPointer>
 #include <QTemporaryDir>
+#include <QTimer>
 
 #include "common.h"
 #include <linux/limits.h>
@@ -73,6 +74,16 @@ PluginFinishType CliInterface::list()
 
     m_workStatus = WT_List;
 
+    // 是否支持seek
+    if(!m_common->isSupportSeek(m_strArchiveName)) {
+        QTimer::singleShot(1000, this, [=]() {
+            m_eErrorType = ET_FileSeekError;
+            emit signalprogress(100);
+            emit signalFinished(PFT_Error);
+        });
+        return PFT_Error;
+    }
+
     bool ret = false;
 
     ret = runProcess(m_cliProps->property("listProgram").toString(), m_cliProps->listArgs(m_strArchiveName, DataManager::get_instance().archiveData().strPassword));
@@ -89,6 +100,16 @@ PluginFinishType CliInterface::testArchive()
 
 PluginFinishType CliInterface::extractFiles(const QList<FileEntry> &files, const ExtractionOptions &options)
 {
+    // 是否支持seek
+    if(!m_common->isSupportSeek(m_strArchiveName)) {
+        QTimer::singleShot(1000, this, [=]() {
+            m_eErrorType = ET_FileSeekError;
+            emit signalprogress(100);
+            emit signalFinished(PFT_Error);
+        });
+        return PFT_Nomral;
+    }
+
     bool bDlnfs = m_common->isSubpathOfDlnfs(options.strTargetPath);
     setProperty("dlnfs", bDlnfs);
     ArchiveData arcData = DataManager::get_instance().archiveData();
@@ -302,6 +323,16 @@ bool CliInterface::doKill()
 
 PluginFinishType CliInterface::addFiles(const QList<FileEntry> &files, const CompressOptions &options)
 {
+    // 是否支持seek
+    if (!files.isEmpty() && !m_common->isSupportSeek(m_strArchiveName)) {
+        QTimer::singleShot(1000, this, [=]() {
+            m_eErrorType = ET_FileSeekError;
+            emit signalprogress(100);
+            emit signalFinished(PFT_Error);
+        });
+        return PFT_Nomral;
+    }
+
     setPassword(QString());
     m_workStatus = WT_Add;
     m_files = files;

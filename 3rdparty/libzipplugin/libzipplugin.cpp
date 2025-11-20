@@ -83,6 +83,12 @@ PluginFinishType LibzipPlugin::list()
     int errcode = 0;
     zip_error_t err;
 
+    // 是否支持seek
+    if (!m_common->isSupportSeek(m_strArchiveName)) {
+        m_eErrorType = ET_FileSeekError;
+        return PFT_Error;
+    }
+
     // 打开压缩包文件
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);   // 打开压缩包文件
     zip_error_init_with_code(&err, errcode);
@@ -135,6 +141,12 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     m_mapRealDirValue.clear();
 //    m_bHandleCurEntry = false; //false:提取使用选中文件及子文件 true:提取使用选中文件
     zip_error_t err;
+
+    // 是否支持seek
+    if (!m_common->isSupportSeek(m_strArchiveName)) {
+        m_eErrorType = ET_FileSeekError;
+        return PFT_Error;
+    }
 
     // 打开压缩包
     zip_t *archive = zip_open(QFile::encodeName(m_strArchiveName).constData(), ZIP_RDONLY, &errcode);

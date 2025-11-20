@@ -1808,6 +1808,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         case ET_ExistVolume:
             showErrorMessage(FI_Compress, EI_ExistVolume, true);
             break;
+        // ftp目录不支持seek操作
+        case ET_FileSeekError:
+            showErrorMessage(FI_Compress, EI_FileSeekError, true);
+            break;
         default: {
             showErrorMessage(FI_Compress, EI_CreatArchiveFailed, true);
             break;
@@ -1862,6 +1866,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
         // 密码错误
         case ET_WrongPassword:
             showErrorMessage(FI_Load, EI_WrongPassword);
+            break;
+        // ftp目录不支持seek操作
+        case ET_FileSeekError:
+            showErrorMessage(FI_Load, EI_FileSeekError);
             break;
         default:
             showErrorMessage(FI_Load, EI_ArchiveDamaged);
@@ -1949,6 +1957,10 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
                                  !(StartupType::ST_ExtractHere == m_eStartupType || StartupType::ST_Extractto == m_eStartupType));
                 break;
             }
+            // ftp目录不支持seek操作
+            case ET_FileSeekError:
+                showErrorMessage(FI_Uncompress, EI_FileSeekError);
+                break;
             case ET_PluginError: {
                 // 无可用插件
                 showErrorMessage(FI_Uncompress, EI_NoPlugin);
@@ -2317,6 +2329,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("The compressed volumes already exist"));
         }
         break;
+        case EI_FileSeekError: {
+            m_pFailurePage->setFailureDetail(tr("No compression support in current directory. Download the files to a local device."));
+        }
+            break;
         default:
             break;
         }
@@ -2343,6 +2359,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Some volumes are missing"));
         }
         break;
+        case EI_FileSeekError: {
+            m_pFailurePage->setFailureDetail(tr("Can't open compressed packages in current directory. Download the compressed package to a local device."));
+        }
+            break;
         default:
             break;
         }
@@ -2384,6 +2404,10 @@ void MainWindow::showErrorMessage(FailureInfo fFailureInfo, ErrorInfo eErrorInfo
             m_pFailurePage->setFailureDetail(tr("Insufficient disk space"));
         }
         break;
+        case EI_FileSeekError: {
+            m_pFailurePage->setFailureDetail(tr("No extraction support in current directory. Download the compressed package to a local device."));
+        }
+            break;
         default:
             break;
         }

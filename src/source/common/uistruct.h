@@ -181,6 +181,7 @@ enum ErrorInfo {
     EI_InsufficientDiskSpace,      // 磁盘空间不足
     EI_ArchiveNoData,           // 压缩包无数据
     EI_ExistVolume,      // 分卷已存在
+    EI_FileSeekError      // seek失败
 };
 
 // 启动应用的方式

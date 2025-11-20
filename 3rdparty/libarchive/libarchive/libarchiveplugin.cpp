@@ -69,6 +69,11 @@ PluginFinishType LibarchivePlugin::list()
     QString fileName = fInfo.fileName();
     //因为tar.bz2、tar.lzma、tar.Z直接list时间较长，所以先用7z解压再list处理
     if (fileName.endsWith(".tar.bz2") || fileName.endsWith(".tar.lzma") || fileName.endsWith(".tar.Z")) {
+        // 是否支持seek
+        if (!m_common->isSupportSeek(m_strArchiveName)) {
+            m_eErrorType = ET_FileSeekError;
+            return PFT_Error;
+        }
         // 设置解压临时路径
         QString strProcessID = QString::number(QCoreApplication::applicationPid());   // 获取应用进程号
         QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
