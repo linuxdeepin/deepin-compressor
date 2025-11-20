@@ -2674,12 +2674,22 @@ bool MainWindow::handleArguments_RightMenu(const QStringList &listParam)
             //这里使用最后一个文件夹名进行压缩，防止特殊字符压缩不成功
             REG_EXP reg("^\s+|[\\:*\"'?<>|\r\n\t]");
             if (strpath.mid(iIndex).indexOf(reg) != -1) {
-                QString compressor = strpath.split("=").last() + strSuffix;
+                QString folderName = strpath.split("=").last();
+                // 处理长文件夹名称，避免超出系统限制
+                if (folderName.length() + strSuffix.length() > FILE_TRUNCATION_LENGTH) {
+                    folderName = folderName.left(FILE_TRUNCATION_LENGTH - strSuffix.length());
+                }
+                QString compressor = folderName + strSuffix;
                 if (compressor.indexOf(reg) != -1)
                     compressor.remove(reg);
                 strArchivePath += QDir::separator() + compressor;
             } else {
-                strArchivePath += strpath.mid(iIndex) + strSuffix;
+                QString folderName = strpath.mid(iIndex + 1); // 去掉前面的分隔符
+                // 处理长文件夹名称，避免超出系统限制
+                if (folderName.length() + strSuffix.length() > FILE_TRUNCATION_LENGTH) {
+                    folderName = folderName.left(FILE_TRUNCATION_LENGTH - strSuffix.length());
+                }
+                strArchivePath += QDir::separator() + folderName + strSuffix;
             }
         }
 
