@@ -103,6 +103,13 @@ so(cmake).sh
 tests/test_output
 translations/*.qm
 build
+release
+obj-x86_64-linux-gnu
+debian/.debhelper
+debian/deepin-compressor
+debian/deepin-compressor.debhelper.log
+debian/deepin-compressor.substvars
+debian/files
 
 # vscode
 .vscode/
