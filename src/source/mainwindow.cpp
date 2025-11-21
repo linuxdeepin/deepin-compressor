@@ -55,9 +55,48 @@ DCORE_USE_NAMESPACE
 #include <QFormLayout>
 #include <QShortcut>
 #include <QJsonObject>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
+#include <QDirIterator>
+#include <QUuid>
 
 static QMutex mutex; // 静态全局变量只在定义该变量的源文件内有效
 #define FILE_TRUNCATION_LENGTH 70
+
+namespace {
+
+bool copyDirectoryRecursively(const QString &sourcePath, const QString &targetPath)
+{
+    QDir sourceDir(sourcePath);
+    if (!sourceDir.exists()) {
+        return false;
+    }
+
+    if (!QDir().mkpath(targetPath)) {
+        return false;
+    }
+
+    const QFileInfoList entries = sourceDir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System);
+    for (const QFileInfo &info : entries) {
+        const QString srcFilePath = info.absoluteFilePath();
+        const QString dstFilePath = targetPath + QDir::separator() + info.fileName();
+        if (info.isDir()) {
+            if (!copyDirectoryRecursively(srcFilePath, dstFilePath)) {
+                return false;
+            }
+        } else {
+            QFile::remove(dstFilePath);
+            if (!QFile::copy(srcFilePath, dstFilePath)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+} // namespace
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
@@ -1181,6 +1220,9 @@ void MainWindow::slotCompress(const QVariant &val)
 
     // 构建压缩文件数据
     listEntry = m_pCompressPage->getEntrys();
+    if (!prepareCompressAliasEntries(listEntry)) {
+        return;
+    }
     strDestination = m_stCompressParameter.strTargetPath + QDir::separator() + m_stCompressParameter.strArchiveName;
 
     // 构建压缩参数
@@ -1255,6 +1297,7 @@ void MainWindow::slotCompress(const QVariant &val)
         m_ePageID = PI_CompressProgress;
         refreshPage();
     } else {
+        cleanupCompressAliasEntries();
         // 无可用插件
         showErrorMessage(FI_Compress, EI_NoPlugin);
     }
@@ -1494,6 +1537,8 @@ void MainWindow::handleJobNormalFinished(ArchiveJob::JobType eType, ErrorType eE
         // zip压缩包添加注释
         qDebug() << "Adding archive comment";
         addArchiveComment();
+
+        cleanupCompressAliasEntries();
     }
     break;
     // 添加文件至压缩包
@@ -1734,6 +1779,7 @@ void MainWindow::handleJobCancelFinished(ArchiveJob::JobType eType)
         } else {
             m_ePageID = PI_Compress;
         }
+        cleanupCompressAliasEntries();
     }
     break;
     // 添加文件至压缩包
@@ -1832,7 +1878,7 @@ void MainWindow::handleJobErrorFinished(ArchiveJob::JobType eJobType, ErrorType 
             break;
         }
         }
-
+        cleanupCompressAliasEntries();
     }
     break;
     // 压缩包追加文件错误
@@ -2129,6 +2175,8 @@ void MainWindow::resetMainwindow()
     maxFileSize_ = 0;
 #endif
 
+    cleanupCompressAliasEntries();
+
     m_ePageID = PI_Home;
     m_operationtype = Operation_NULL;   // 重置操作类型
     m_iCompressedWatchTimerID = 0;      // 初始化定时器返回值
@@ -2292,6 +2340,92 @@ void MainWindow::ConstructAddOptionsByThread(const QString &path)
             mutex.unlock();
         }
     }
+}
+
+bool MainWindow::prepareCompressAliasEntries(QList<FileEntry> &listEntry)
+{
+    m_needCleanupCompressAlias = false;
+    m_strCompressAliasRoot.clear();
+
+    bool hasAlias = false;
+    QString aliasRoot;
+
+    for (FileEntry &entry : listEntry) {
+        if (entry.strAlias.isEmpty()) {
+            continue;
+        }
+
+        if (entry.strFullPath.isEmpty()) {
+            continue;
+        }
+
+        if (!hasAlias) {
+            const QString baseDir = TEMPPATH + QDir::separator() + m_strProcessID + QDir::separator() + "compress_alias";
+            if (!QDir().mkpath(baseDir)) {
+                showWarningDialog(tr("Failed to create temporary directory, please check and try again."));
+                return false;
+            }
+            aliasRoot = baseDir + QDir::separator() + QUuid::createUuid().toString(QUuid::WithoutBraces);
+            if (!QDir().mkpath(aliasRoot)) {
+                showWarningDialog(tr("Failed to create temporary directory, please check and try again."));
+                return false;
+            }
+        }
+
+        const QString aliasName = entry.strAlias;
+        const QString targetPath = aliasRoot + QDir::separator() + aliasName;
+
+        if (entry.isDirectory) {
+            QDir(targetPath).removeRecursively();
+            if (!copyDirectoryRecursively(entry.strFullPath, targetPath)) {
+                showWarningDialog(tr("Failed to prepare renamed item \"%1\" for compression, please check permissions and available space.")
+                                  .arg(aliasName));
+                if (!aliasRoot.isEmpty()) {
+                    QDir(aliasRoot).removeRecursively();
+                }
+                return false;
+            }
+        } else {
+            QFile::remove(targetPath);
+            if (!QFile::copy(entry.strFullPath, targetPath)) {
+                showWarningDialog(tr("Failed to prepare renamed item \"%1\" for compression, please check permissions and available space.")
+                                  .arg(aliasName));
+                if (!aliasRoot.isEmpty()) {
+                    QDir(aliasRoot).removeRecursively();
+                }
+                return false;
+            }
+        }
+
+        entry.strFullPath = targetPath;
+        entry.strAlias.clear();
+        hasAlias = true;
+    }
+
+    if (hasAlias) {
+        m_strCompressAliasRoot = aliasRoot;
+        m_needCleanupCompressAlias = true;
+    } else {
+        m_strCompressAliasRoot.clear();
+        m_needCleanupCompressAlias = false;
+    }
+
+    return true;
+}
+
+void MainWindow::cleanupCompressAliasEntries()
+{
+    if (m_strCompressAliasRoot.isEmpty()) {
+        m_needCleanupCompressAlias = false;
+        return;
+    }
+
+    QDir aliasRoot(m_strCompressAliasRoot);
+    if (aliasRoot.exists()) {
+        aliasRoot.removeRecursively();
+    }
+    m_strCompressAliasRoot.clear();
+    m_needCleanupCompressAlias = false;
 }
 
 void MainWindow::showSuccessInfo(SuccessInfo eSuccessInfo, ErrorType eErrorType)
