@@ -171,6 +171,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
     if (options.bAllExtract) {  // 全部解压
         qlonglong qExtractSize = 0;
         zip_int64_t nofEntries = zip_get_num_entries(archive, 0);
+        zip_int64_t lastNeedPasswordIndex = -1;
         for (zip_int64_t i = 0; i < nofEntries; ++i) {
             if (QThread::currentThread()->isInterruptionRequested()) {
                 m_bCancel = false;      // 重置标志位
@@ -195,14 +196,16 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                 zip_close(archive);
                 return PFT_Cancel;
             } else {    // 处理错误
-                // 密码错误, 给出错误提示
-                if(ET_WrongPassword == m_eErrorType && !m_strPassword.isEmpty()) {
-                    zip_close(archive);
-                    m_strPassword = "";
-                    return PFT_Error;
-                }
                 // 判断是否需要密码，若需要密码，弹出密码输入对话框，用户输入密码之后，重新解压当前文件
                 if (ET_WrongPassword == m_eErrorType || ET_NeedPassword == m_eErrorType) {
+
+                    // 询问输入密码后，仍然输入错误密码，则直接返回,给出错误提示
+                    if (lastNeedPasswordIndex == i) {
+                        zip_close(archive);
+                        m_strPassword = "";
+                        return PFT_Error;
+                    }
+
                     PasswordNeededQuery query(strFileName);
                     emit signalQuery(&query);
                     query.waitForResponse();
@@ -214,6 +217,7 @@ PluginFinishType LibzipPlugin::extractFiles(const QList<FileEntry> &files, const
                     } else {
                         setPassword(query.password());
                         zip_set_default_password(archive, m_strPassword.toUtf8().constData());
+                        lastNeedPasswordIndex = i;
                         i--;
                     }
                 }  else {
