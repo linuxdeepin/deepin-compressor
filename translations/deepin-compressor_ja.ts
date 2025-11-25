@@ -372,12 +372,12 @@
         <location filename="../src/source/page/failurepage.cpp" line="87"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>伸張に失敗しました</translation>
+        <translation>展開に失敗しました</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="100"/>
         <source>Damaged file, unable to extract</source>
-        <translation>ファイルが破損しています。伸張できません</translation>
+        <translation>ファイルが破損しているため、展開できませんでした。</translation>
     </message>
     <message>
         <location filename="../src/source/page/failurepage.cpp" line="105"/>
@@ -442,7 +442,7 @@
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Archive Manager is a fast and lightweight application for creating and extracting archives.</source>
-        <translation>アーカイブ マネージャーは、アーカイブの作成および伸張するための高速で軽量なアプリケーションです。</translation>
+        <translation>アーカイブ マネージャーは、アーカイブの作成および展開するための高速で軽量なアプリケーションです。</translation>
     </message>
 </context>
 <context>
@@ -486,7 +486,7 @@
     <message>
         <location filename="../src/source/mainwindow.cpp" line="313"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="320"/>
@@ -560,7 +560,7 @@
         <location filename="../src/source/mainwindow.cpp" line="1332"/>
         <source>Extraction successful</source>
         <comment>提取成功</comment>
-        <translation>伸張が完了しました</translation>
+        <translation>展開が完了しました</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="1542"/>
@@ -590,7 +590,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2048"/>
         <source>Extraction successful</source>
         <comment>解压成功</comment>
-        <translation>伸張が完了しました</translation>
+        <translation>展開が完了しました</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2050"/>
@@ -612,7 +612,7 @@
         <location filename="../src/source/mainwindow.cpp" line="2119"/>
         <source>Extraction failed</source>
         <comment>解压失败</comment>
-        <translation>伸張に失敗しました</translation>
+        <translation>展開できませんでした</translation>
     </message>
     <message>
         <location filename="../src/source/mainwindow.cpp" line="2138"/>
@@ -1004,12 +1004,12 @@
         <location filename="../src/source/dialog/progressdialog.cpp" line="65"/>
         <location filename="../src/source/dialog/progressdialog.cpp" line="113"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="192"/>
         <source>Are you sure you want to stop the extraction?</source>
-        <translation>伸張を停止してもよろしいですか？</translation>
+        <translation>展開を停止してもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/progressdialog.cpp" line="194"/>
@@ -1115,7 +1115,7 @@
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="141"/>
         <source>Extracting</source>
-        <translation>伸張中</translation>
+        <translation>展開中</translation>
     </message>
     <message>
         <location filename="../src/source/page/progresspage.cpp" line="152"/>
@@ -1174,45 +1174,45 @@
         <location filename="../3rdparty/interface/queries.cpp" line="244"/>
         <source>Skip</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>スキップ</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="209"/>
         <source>Merge</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>統合</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="212"/>
         <location filename="../3rdparty/interface/queries.cpp" line="221"/>
         <source>Another file with the same name already exists, replace it?</source>
-        <translation>同じ名前の別ファイルが既に存在します。置き換えますか？</translation>
+        <translation>同じ名前のファイルが既に存在します。置き換えますか？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="215"/>
         <location filename="../3rdparty/interface/queries.cpp" line="245"/>
         <source>Replace</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>置き換える</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="483"/>
         <location filename="../3rdparty/interface/queries.cpp" line="405"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="484"/>
         <location filename="../3rdparty/interface/queries.cpp" line="406"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="206"/>
         <source>Another folder with the same name already exists, replace it?</source>
-        <translation type="unfinished"/>
+        <translation>同じ名前のフォルダが既に存在します。置き換えますか？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="218"/>
@@ -1253,17 +1253,17 @@
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="27"/>
         <source>Extraction</source>
-        <translation>伸張</translation>
+        <translation>展開</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="28"/>
         <source>Auto create a folder for multiple extracted files</source>
-        <translation>複数の伸張されたファイル用のフォルダを自動で作成する</translation>
+        <translation>複数の展開されたファイル用のフォルダを自動で作成する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="29"/>
         <source>Show extracted files when completed</source>
-        <translation>完了時に伸張されたファイルを表示する</translation>
+        <translation>完了時に展開されたファイルを表示する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settings_translation.cpp" line="30"/>
@@ -1332,7 +1332,7 @@
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="160"/>
         <source>Extract archives to</source>
-        <translation>アーカイブの伸張先</translation>
+        <translation>アーカイブの展開先</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="166"/>
@@ -1355,7 +1355,7 @@
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="272"/>
         <source>Delete archives after extraction</source>
-        <translation>伸張後にアーカイブを削除する</translation>
+        <translation>展開後にアーカイブを削除する</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/settingdialog.cpp" line="278"/>
@@ -1420,7 +1420,7 @@
         <location filename="../src/source/page/uncompresspage.cpp" line="87"/>
         <location filename="../src/source/page/uncompresspage.cpp" line="116"/>
         <source>Extract to:</source>
-        <translation>伸張先:</translation>
+        <translation>展開先:</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="117"/>
@@ -1431,7 +1431,7 @@
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="193"/>
         <source>The default extraction path does not exist, please retry</source>
-        <translation>既定の伸張パスが存在しません。再試行してください</translation>
+        <translation>既定の展開パスが存在しません。もう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../src/source/page/uncompresspage.cpp" line="195"/>
@@ -1467,12 +1467,12 @@
         <location filename="../src/source/tree/uncompressview.cpp" line="627"/>
         <source>Extract</source>
         <comment>提取</comment>
-        <translation>伸張</translation>
+        <translation>展開</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="629"/>
         <source>Extract to current directory</source>
-        <translation>カレントディレクトリへ伸張</translation>
+        <translation>カレントディレクトリへ展開</translation>
     </message>
     <message>
         <location filename="../src/source/tree/uncompressview.cpp" line="631"/>
