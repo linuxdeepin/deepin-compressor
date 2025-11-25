@@ -4,17 +4,17 @@
     <message>
         <location filename="Menu Action Zero]Name" line="0"/>
         <source>Extract</source>
-        <translation>伸張</translation>
+        <translation>展開</translation>
     </message>
     <message>
         <location filename="Menu Action One]Name" line="0"/>
         <source>Extract here</source>
-        <translation>ここに伸張</translation>
+        <translation>ここに展開</translation>
     </message>
     <message>
         <location filename="Menu Action Two]Name" line="0"/>
         <source>Extract to %b</source>
-        <translation type="unfinished"/>
+        <translation>%dに展開</translation>
     </message>
 </context>
 </TS>
