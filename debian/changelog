@@ -1,3 +1,9 @@
+deepin-compressor (6.5.17) unstable; urgency=medium
+
+  * chore: Update compiler flags for security enhancements
+
+ -- wangrong <wangrong@uniontech.com>  Tue, 02 Dec 2025 16:42:19 +0800
+
 deepin-compressor (6.5.16) unstable; urgency=medium
 
   * chore: Update version to 6.5.16
