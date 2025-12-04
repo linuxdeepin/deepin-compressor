@@ -787,8 +787,8 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
     }
 
     strFileName = m_common->trans2uft8(statBuffer.name, m_mapFileCode[index]);    // 解压文件名（压缩包中）
-    //fix 232873
-    if(strFileName.indexOf("../") != -1) {
+    //fix 232873 - Remove all "../" components to prevent path traversal attacks
+    while(strFileName.contains("../")) {
         qInfo() << "skipped ../ path component(s) in " << strFileName;
         strFileName = strFileName.replace("../", "");
     }
@@ -885,6 +885,15 @@ ErrorType LibzipPlugin::extractEntry(zip_t *archive, zip_int64_t index, const Ex
 
     // 解压完整文件名（含路径）
     QString strDestFileName = options.strTargetPath + QDir::separator() + strFileName;
+
+    // Additional security check: ensure the final path is within the target directory
+    QString cleanTargetPath = QDir::cleanPath(QDir(options.strTargetPath).absolutePath());
+    QString cleanDestPath = QDir::cleanPath(QDir(strDestFileName).absolutePath());
+    if (!cleanDestPath.startsWith(cleanTargetPath + QDir::separator()) &&
+        cleanDestPath != cleanTargetPath) {
+        qInfo() << "Path traversal detected! Rejected path: " << strFileName;
+        return ET_FileWriteError;
+    }
 
     QFile file(strDestFileName);
 
