@@ -409,17 +409,20 @@
 <context>
     <name>LoadCorruptQuery</name>
     <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="510"/>
         <source>The archive is damaged</source>
-        <translation type="vanished">当前压缩包文件已损坏</translation>
+        <translation>当前压缩包文件已损坏</translation>
     </message>
     <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="513"/>
         <source>Open as read-only</source>
-        <translation type="vanished">以只读模式打开</translation>
+        <translation>以只读模式打开</translation>
     </message>
     <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="514"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="vanished">取 消</translation>
+        <translation>取 消</translation>
     </message>
 </context>
 <context>
@@ -998,8 +1001,9 @@
 <context>
     <name>PasswordNeededQuery</name>
     <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="379"/>
         <source>Encrypted file, please enter the password</source>
-        <translation type="vanished">此文件已加密，请输入解压密码</translation>
+        <translation>此文件已加密，请输入解压密码</translation>
     </message>
 </context>
 <context>
@@ -1265,6 +1269,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="229"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation>跳 过</translation>
@@ -1277,23 +1282,27 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation>文件已存在，是否替换？</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="230"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation>替 换</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="390"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>确 定</translation>
@@ -1305,6 +1314,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="211"/>
         <source>Apply to all</source>
         <translation>应用到全部文件</translation>
     </message>

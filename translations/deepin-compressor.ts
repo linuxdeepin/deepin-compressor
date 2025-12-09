@@ -407,6 +407,25 @@
     </message>
 </context>
 <context>
+    <name>LoadCorruptQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="510"/>
+        <source>The archive is damaged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="513"/>
+        <source>Open as read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="514"/>
+        <source>Cancel</source>
+        <comment>button</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LoadingPage</name>
     <message>
         <location filename="../src/source/page/loadingpage.cpp" line="49"/>
@@ -980,6 +999,14 @@
     </message>
 </context>
 <context>
+    <name>PasswordNeededQuery</name>
+    <message>
+        <location filename="../3rdparty/interface/queries.cpp" line="379"/>
+        <source>Encrypted file, please enter the password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PreviousLabel</name>
     <message>
         <location filename="../src/source/tree/treeheaderview.cpp" line="37"/>
@@ -1177,6 +1204,7 @@
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="192"/>
         <location filename="../src/source/dialog/popupdialog.cpp" line="198"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="229"/>
         <source>Skip</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
@@ -1189,23 +1217,27 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="196"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="206"/>
         <source>Another file with the same name already exists, replace it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="199"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="230"/>
         <source>Replace</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="467"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="390"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="468"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="391"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
@@ -1217,6 +1249,7 @@
     </message>
     <message>
         <location filename="../src/source/dialog/popupdialog.cpp" line="202"/>
+        <location filename="../3rdparty/interface/queries.cpp" line="211"/>
         <source>Apply to all</source>
         <translation type="unfinished"></translation>
     </message>
