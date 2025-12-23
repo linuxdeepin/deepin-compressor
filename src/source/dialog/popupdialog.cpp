@@ -536,16 +536,30 @@ int RenameDialog::showDialog(const QString &strReName, const QString &strAlias, 
     if(m_lineEdit == NULL) {//创建DLineEdit,设定显示规则。
         m_lineEdit = new DLineEdit(this);
         //输入字符格式与文管保持一致
-        connect(m_lineEdit, &DLineEdit::textChanged,[=](){
-            QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
+        connect(m_lineEdit, &DLineEdit::textChanged, [=](){
             QString text = m_lineEdit->text();
-            m_lineEdit->setText(text.remove(QRegularExpression(name)));
             if(m_nOkBtnIndex >= 0) { //重命名输入文字为空时确认按钮不可点击，输入文字后恢复
                 if(text.isNull()||text.isEmpty()){
                     getButton(m_nOkBtnIndex)->setEnabled(false);
                 } else {
                     getButton(m_nOkBtnIndex)->setEnabled(true);
                 }
+            }
+        });
+
+        // 失去焦点时，检查并清理非法字符
+        connect(m_lineEdit->lineEdit(), &QLineEdit::editingFinished, [=](){
+            QString name = "(^\\s+|[/\\\\:*\"'?<>|\r\n\t])";
+            QRegularExpression regex(name);
+            QLineEdit *lineEdit = m_lineEdit->lineEdit();
+            QString text = lineEdit->text();
+
+            // 检查是否有非法字符
+            if(regex.match(text).hasMatch() || text.startsWith(" ")) {
+                QString cleanedText = text;
+                cleanedText.remove(regex);
+
+                lineEdit->setText(cleanedText);
             }
         });
     }
