@@ -86,6 +86,8 @@ set(configFile ${PROJECT_SOURCE_DIR}/assets/org.deepin.compressor.method.json)
 if (DEFINED DSG_DATA_DIR)
     message("-- DConfig is supported by DTK")
     dconfig_meta_files(APPID ${APPID} FILES ${configFile})
+else()
+    install(FILES ${configFile} DESTINATION ${CMAKE_INSTALL_DATADIR}/dsg/configs/org.deepin.compressor/)
 endif()
 
 install(TARGETS deepin-compressor DESTINATION ${CMAKE_INSTALL_BINDIR})
