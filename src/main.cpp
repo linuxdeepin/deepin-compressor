@@ -62,8 +62,8 @@ void showWatermark(const QString &sJson, MainWindow *w)
     WaterMarkData data = ins->data();
     // DTKWidget 主线和定制线的水印接口不同，通过版本进行区分
     // 主线水印接口在 5.6.9 之后引入.
-    // 因此，判断定制线：存在水印接口，版本不低于 5.4.42.7 且低于 5.6.9
-#if DTK_VERSION_CHECK(5, 4, 42, 7) <= DTK_VERSION && DTK_VERSION < DTK_VERSION_CHECK(5, 6, 9, 0)
+    // 因此，判断定制线：存在水印接口，版本不低于 5.4.42.7 且低于 5.6.9（部分镜像上存在5.6.8.10版本，也存在该接口）
+#if DTK_VERSION_CHECK(5, 4, 42, 7) <= DTK_VERSION && DTK_VERSION < DTK_VERSION_CHECK(5, 6, 8, 10)
     //接口变动为结构体
     data.text = mapwaterMark.value("text").toString();
     data.type = WaterMarkType::Text;
