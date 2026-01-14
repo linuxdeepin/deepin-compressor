@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <iomanip>
 #include <getopt.h>
 
 void printUsage(const char* progName) {

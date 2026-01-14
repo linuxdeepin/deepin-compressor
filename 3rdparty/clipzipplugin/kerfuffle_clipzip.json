@@ -1,5 +1,7 @@
 {
     "KPlugin": {
+        "Description": "High-performance parallel ZIP compression using pzip",
+        "Description[zh_CN]": "使用 pzip 进行高性能并行 ZIP 压缩",
         "Id": "kerfuffle_clipzip",
         "MimeTypes": [
             "application/zip"
@@ -12,6 +14,17 @@
         "Version": "1.0"
     },
     "X-KDE-Priority": 200,
-    "X-KDE-Kerfuffle-ReadWrite": true
+    "X-KDE-Kerfuffle-ReadWrite": true,
+    "application/zip": {
+        "CompressionLevelDefault": 6,
+        "CompressionLevelMax": 9,
+        "CompressionLevelMin": 1,
+        "CompressionMethodDefault": "Deflate",
+        "CompressionMethods": {
+            "Deflate": "Deflate",
+            "Store": "Store"
+        },
+        "SupportsTesting": false,
+        "SupportsWriteComment": false
+    }
 }
-
