@@ -149,8 +149,12 @@ PluginFinishType CliPzipPlugin::extractFiles(const QList<FileEntry> &files, cons
         readStdout();
     });
 
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), 
-            this, SLOT(processFinished(int, QProcess::ExitStatus)));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, &CliPzipPlugin::processFinished);
+#else
+    connect(m_process, &QProcess::finished, this, &CliPzipPlugin::processFinished);
+#endif
 
     m_process->start();
 
@@ -186,9 +190,14 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
     // 静默模式
     arguments << "-q";
 
+    // 压缩级别（如果指定）
+    if (options.iCompressionLevel >= 1 && options.iCompressionLevel <= 9) {
+        arguments << "-l" << QString::number(options.iCompressionLevel);
+    }
+
     // 线程数（如果指定）
     if (options.iCPUTheadNum > 0) {
-        arguments << "-j" << QString::number(options.iCPUTheadNum);
+        arguments << "-c" << QString::number(options.iCPUTheadNum);
     }
 
     // 输出文件
@@ -217,8 +226,12 @@ PluginFinishType CliPzipPlugin::addFiles(const QList<FileEntry> &files, const Co
         qDebug() << "pzip stderr:" << QString::fromLocal8Bit(errorOutput);
     });
 
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), 
-            this, SLOT(processFinished(int, QProcess::ExitStatus)));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this, &CliPzipPlugin::processFinished);
+#else
+    connect(m_process, &QProcess::finished, this, &CliPzipPlugin::processFinished);
+#endif
 
     m_process->start();
 
@@ -435,16 +448,23 @@ void CliPzipPlugin::readStdout(bool handleAll)
     }
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void CliPzipPlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qInfo() << "pzip process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
+#else
+void CliPzipPlugin::processFinished(int exitCode)
+{
+    QProcess::ExitStatus exitStatus = m_process ? m_process->exitStatus() : QProcess::NormalExit;
+    qInfo() << "pzip process finished, exitcode:" << exitCode << "exitstatus:" << exitStatus;
+#endif
 
     deleteProcess();
     m_timer->stop();
 
     PluginFinishType eFinishType;
 
-    if (0 == exitCode) {
+    if (0 == exitCode && exitStatus == QProcess::NormalExit) {
         eFinishType = PFT_Nomral;
     } else {
         eFinishType = PFT_Error;
