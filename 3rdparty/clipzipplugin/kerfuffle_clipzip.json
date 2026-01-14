@@ -16,7 +16,7 @@
     "X-KDE-Priority": 200,
     "X-KDE-Kerfuffle-ReadWrite": true,
     "application/zip": {
-        "CompressionLevelDefault": 6,
+        "CompressionLevelDefault": 1,
         "CompressionLevelMax": 9,
         "CompressionLevelMin": 1,
         "CompressionMethodDefault": "Deflate",
