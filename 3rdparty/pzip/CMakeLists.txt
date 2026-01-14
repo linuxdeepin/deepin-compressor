@@ -36,7 +36,7 @@ set(PZIP_SOURCES
 # 编译成静态库
 add_library(pzip_core_lib STATIC ${PZIP_SOURCES})
 target_include_directories(pzip_core_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(pzip_core_lib ${ZLIB_LIBRARIES} Threads::Threads)
+target_link_libraries(pzip_core_lib ${ZLIB_LIBRARIES} Threads::Threads stdc++fs)
 
 # 强制使用 C++17（覆盖父项目的 C++11 设置）
 target_compile_features(pzip_core_lib PUBLIC cxx_std_17)

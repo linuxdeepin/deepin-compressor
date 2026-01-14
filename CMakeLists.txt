@@ -116,6 +116,9 @@ install(TARGETS compressor-interface DESTINATION ${COMPRESSOR_PLUGIN_PATH})
 install(TARGETS bz2plugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
 install(TARGETS gzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
 install(TARGETS xzplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
-# pzip 高性能压缩插件
-install(TARGETS clipzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+
+# pzip 高性能压缩插件（仅 ARM 环境）
+if((CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm"))
+    install(TARGETS clipzipplugin DESTINATION ${COMPRESSOR_PLUGIN_PATH})
+endif()
 
