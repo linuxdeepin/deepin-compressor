@@ -1,0 +1,17 @@
+{
+    "KPlugin": {
+        "Id": "kerfuffle_clipzip",
+        "MimeTypes": [
+            "application/zip"
+        ],
+        "Name": "pzip plugin",
+        "Name[zh_CN]": "pzip 高性能压缩插件",
+        "ServiceTypes": [
+            "Kerfuffle/Plugin"
+        ],
+        "Version": "1.0"
+    },
+    "X-KDE-Priority": 200,
+    "X-KDE-Kerfuffle-ReadWrite": true
+}
+
