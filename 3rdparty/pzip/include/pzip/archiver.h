@@ -16,8 +16,8 @@ namespace pzip {
  * @brief 压缩器选项
  */
 struct ArchiverOptions {
-    size_t concurrency = 0;         // 并发数（0 = CPU 核心数）
-    int compressionLevel = -1;       // 压缩级别（-1 = 默认，0-9）
+    size_t concurrency = 0;         // 并发数（0 = 自动使用全部 CPU 核心）
+    int compressionLevel = 1;       // 压缩级别（1 = 最快，默认值）
     bool preservePermissions = true; // 保留文件权限
     ProgressCallback progress;       // 进度回调
 };

@@ -21,8 +21,8 @@ void printUsage(const char* progName) {
     std::cout << "pzip - Parallel ZIP Archiver v" << pzip::version() << "\n\n"
               << "用法: " << progName << " [选项] <archive.zip> <文件或目录...>\n\n"
               << "选项:\n"
-              << "  -c, --concurrency <n>  设置并发线程数（默认: CPU 核心数）\n"
-              << "  -l, --level <0-9>      设置压缩级别（默认: 6）\n"
+              << "  -c, --concurrency <n>  设置并发线程数（默认: 全部 CPU 核心）\n"
+              << "  -l, --level <1-9>      设置压缩级别（默认: 1，最快）\n"
               << "  -v, --verbose          显示详细信息\n"
               << "  -q, --quiet            静默模式\n"
               << "  -h, --help             显示帮助信息\n"
@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
         std::cout << "创建压缩文件: " << archivePath << "\n";
         if (verbose) {
             std::cout << "并发线程数: " << (options.concurrency > 0 ? options.concurrency : std::thread::hardware_concurrency()) << "\n";
-            std::cout << "压缩级别: " << (options.compressionLevel < 0 ? 6 : options.compressionLevel) << "\n";
+            std::cout << "压缩级别: " << options.compressionLevel << "\n";
         }
     }
     
