@@ -1,3 +1,9 @@
+deepin-compressor (6.5.18) unstable; urgency=medium
+
+  * C++ port of Go's pzip for parallel ZIP compression with streaming I/O and ZIP64 support.
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Thu, 15 Jan 2026 20:54:38 +0800
+
 deepin-compressor (6.5.17) unstable; urgency=medium
 
   * chore: Update compiler flags for security enhancements
